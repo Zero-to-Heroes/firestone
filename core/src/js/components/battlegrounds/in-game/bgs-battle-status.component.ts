@@ -43,7 +43,7 @@ export class BgsBattleStatusComponent {
 		}
 		if (value === 'empty') {
 			// console.log('result empty', value);
-			this.temporaryBattleTooltip = null;
+			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
 			this.battleSimulationResult = '--';
 		} else if (value === 'waiting-for-result') {
 			// console.log('result waiting', value);

@@ -121,7 +121,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// console.log('game event', gameEvent.Type, gameEvent);
+		console.log('game event', gameEvent.Type, gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');

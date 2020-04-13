@@ -12,6 +12,7 @@ import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BattlegroundsResetBattleStateParser } from './event-parsers/battlegrounds-reset-battle-state-parser';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
+import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
 import { BgsDamageDealtParser } from './event-parsers/bgs-damage-dealt-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
@@ -31,6 +32,7 @@ import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parse
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { EventParser } from './event-parsers/_event-parser';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
+import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
 import { BgsGameEndEvent } from './events/bgs-game-end-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
@@ -119,9 +121,8 @@ export class BattlegroundsStoreService {
 				);
 			} else if (gameEvent.type === GameEvent.MAIN_STEP_READY) {
 				this.battlegroundsUpdater.next(new BgsResetBattleStateEvent());
-				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
-				// 	if (this.state.currentGame.battleInfo.isReady()) {
-				// 		this.simulation.startBgsBattleSimulation(this.state.currentGame.battleInfo);
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
+				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
 				// 	} else {
 				// 		console.warn('not ready to send battle simulation')
 				// 	}
@@ -245,6 +246,7 @@ export class BattlegroundsStoreService {
 			new BgsPostMatchStatsFilterChangeParser(),
 			new BgsDamageDealtParser(),
 			new BgsLeaderboardPlaceParser(),
+			new BgsCombatStartParser(),
 		];
 	}
 }
