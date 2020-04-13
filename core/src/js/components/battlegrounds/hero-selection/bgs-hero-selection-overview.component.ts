@@ -79,8 +79,10 @@ export class BgsHeroSelectionOverviewComponent {
 			.map(cardId => this._panel.heroOverview.find(overview => overview.heroCardId === cardId))
 			// Add null-safe in case the heroes have been updated but not the code
 			.filter(hero => hero);
-		while (this.heroOverviews.length < 4) {
-			this.heroOverviews.push(null);
+		if (this.heroOverviews.length === 2) {
+			this.heroOverviews = [null, ...this.heroOverviews, null];
+		} else if (this.heroOverviews.length === 3) {
+			this.heroOverviews = [...this.heroOverviews, null];
 		}
 	}
 
