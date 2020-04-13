@@ -15,24 +15,24 @@
 	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
 	color: white;
 	position: absolute;
-	top: 0;
-	width: 100%;
-	height: 100%;
+	bottom: 13%;
+	width: 45%;
+	height: 20%;
+	right: -10%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
 	.icon {
 		position: absolute;
-		bottom: 8%;
-		width: 44%;
+		width: 100%;
 		z-index: 1;
-		left: 65%;
 	}
 
 	.value {
-		position: absolute;
 		z-index: 2;
 		font-size: 10px;
-		left: 79%;
-		top: 64%;
+		margin-top: 19%;
 	}
 
 	&.damaged {
