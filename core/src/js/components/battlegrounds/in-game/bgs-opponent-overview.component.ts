@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { OpponentInfo } from './opponent-info';
 
 declare let amplitude: any;
@@ -42,8 +43,20 @@ export class BgsOpponentOverviewComponent {
 
 	@Input() currentTurn: number;
 
-	@Input() set opponentInfo(value: OpponentInfo) {
-		this._opponentInfo = value;
+	@Input() set opponent(value: BgsPlayer) {
+		this._opponentInfo = {
+			id: value.cardId,
+			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`,
+			heroPowerCardId: value.heroPowerCardId,
+			name: value.name,
+			health: value.initialHealth - value.damageTaken,
+			maxHealth: value.initialHealth,
+			tavernTier: '' + value.getCurrentTavernTier(),
+			boardMinions: value.getLastKnownBoardState(),
+			boardTurn: value.getLastBoardStateTurn(),
+			tavernUpgrades: [...value.tavernUpgradeHistory],
+			triples: [...value.tripleHistory],
+		} as OpponentInfo;
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { OpponentFaceOff } from './opponent-face-off';
+import { BgsFaceOff } from '../../../models/battlegrounds/bgs-face-off';
+import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 
 declare let amplitude: any;
 
@@ -38,17 +39,21 @@ export class BgsHeroFaceOffComponent {
 	wins: number;
 	losses: number;
 	ties: number;
-	isNextOpponent: boolean;
 
-	@Input() set faceOff(value: OpponentFaceOff) {
+	@Input() isNextOpponent: boolean;
+
+	@Input() set opponent(value: BgsPlayer) {
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
 		this.heroPowerIcon = value.heroPowerCardId;
 		this.name = value.name;
-		this.wins = value.wins;
-		this.losses = value.losses;
-		this.ties = value.ties;
-		this.health = value.health;
-		this.maxHealth = value.maxHealth;
-		this.isNextOpponent = value.isNextOpponent;
+		this.health = Math.max(value.initialHealth - value.damageTaken, 0);
+		this.maxHealth = value.initialHealth;
+	}
+
+	@Input() set faceOffs(value: readonly BgsFaceOff[]) {
+		// console.log('setting face offs', this.name, value?.length, value);
+		this.wins = value?.filter(faceOff => faceOff.result === 'won').length || 0;
+		this.losses = value?.filter(faceOff => faceOff.result === 'lost').length || 0;
+		this.ties = value?.filter(faceOff => faceOff.result === 'tied').length || 0;
 	}
 }

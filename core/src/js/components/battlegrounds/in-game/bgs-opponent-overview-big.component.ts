@@ -7,7 +7,6 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import rdiff from 'recursive-diff';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BattleResult, OpponentInfo } from './opponent-info';
@@ -88,7 +87,7 @@ export class BgsOpponentOverviewBigComponent {
 			console.warn('using same big input', value, this._opponent);
 			return;
 		}
-		console.log('setting next opponent info', rdiff.getDiff(value, this._opponent), value, this._opponent);
+		// console.log('setting next opponent info', rdiff.getDiff(value, this._opponent), value, this._opponent);
 		this._opponent = value;
 		this._opponentInfo = {
 			id: value.cardId,
