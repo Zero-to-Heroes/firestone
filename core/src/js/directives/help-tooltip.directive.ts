@@ -31,7 +31,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		}
 	}
 
-	@Input() bindTooltipToGameWindow: boolean = false;
+	@Input() bindTooltipToGameWindow = false;
 
 	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
