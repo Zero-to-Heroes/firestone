@@ -13,7 +13,7 @@ declare let amplitude: any;
 		`../../../../css/global/scrollbar.scss`,
 	],
 	template: `
-		<div class="face-offs" *ngIf="opponents?.length">
+		<div class="face-offs" *ngIf="opponents?.length" scrollable>
 			<div class="header entry">
 				<div class="hero">Hero</div>
 				<div class="won">Won</div>

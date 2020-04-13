@@ -33,6 +33,7 @@ import { ComponentTooltipDirective } from '../../directives/component-tooltip.di
 import { GrowOnClickDirective } from '../../directives/grow-on-click.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { PulseDirective } from '../../directives/pulse.directive';
+import { ScrollableDirective } from '../../directives/scrollable.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 @NgModule({
@@ -65,6 +66,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		PulseDirective,
 		AskConfirmationDirective,
 		GrowOnClickDirective,
+		ScrollableDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,
@@ -106,6 +108,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		PulseDirective,
 		AskConfirmationDirective,
 		GrowOnClickDirective,
+		ScrollableDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,

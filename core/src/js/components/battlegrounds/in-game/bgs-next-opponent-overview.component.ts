@@ -1,12 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, Renderer2 } from '@angular/core';
 import { BgsFaceOff } from '../../../models/battlegrounds/bgs-face-off';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
@@ -43,7 +35,7 @@ declare let amplitude: any;
 				></bgs-opponent-overview-big>
 				<div class="other-opponents">
 					<div class="subtitle">Other opponents</div>
-					<div class="opponents">
+					<div class="opponents" scrollable>
 						<bgs-opponent-overview
 							*ngFor="let opponent of opponents.slice(1); trackBy: trackByOpponentInfoFn"
 							[opponent]="opponent"
