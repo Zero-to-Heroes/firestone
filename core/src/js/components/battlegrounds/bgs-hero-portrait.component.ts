@@ -27,7 +27,7 @@ export class BgsHeroPortraitComponent {
 	}
 
 	@Input() set health(value: number) {
-		this._health = value;
+		this._health = Math.max(value, 0);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
