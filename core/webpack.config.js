@@ -6,6 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
 const DefinePlugin = require('webpack').DefinePlugin;
+const BannerPlugin = require('webpack').BannerPlugin;
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -19,6 +20,23 @@ function getRoot(args) {
 	args = Array.prototype.slice.call(arguments, 0);
 	return path.join.apply(path, [_root].concat(args));
 }
+
+const entry = {
+	// Keep polyfills at the top so that it's imported first in the HTML
+	polyfills: './src/polyfills.ts',
+	background: './src/js/modules/background/main.ts',
+	collection: './src/js/modules/collection/main.ts',
+	loading: './src/js/modules/loading/main.ts',
+	notifications: './src/js/modules/notifications/main.ts',
+	decktracker: './src/js/modules/decktracker/main.ts',
+	decktrackeropponent: './src/js/modules/decktracker-opponent/main.ts',
+	secretshelper: './src/js/modules/secrets-helper/main.ts',
+	opponentHand: './src/js/modules/opponent-hand/main.ts',
+	settings: './src/js/modules/settings/main.ts',
+	twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
+	battlegrounds: './src/js/modules/battlegrounds/main.ts',
+	'bgsbattlesimulation.worker': './src/js/workers/bgs-simulation.worker.ts',
+};
 
 module.exports = function(env, argv) {
 	const plugins = [
@@ -42,11 +60,15 @@ module.exports = function(env, argv) {
 				'./src/js/modules/settings/settings.module#SettingsModule',
 				'./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule',
 				'./src/js/modules/battlegrounds/battlegrounds.module#BattlegroundsModule',
-				// './src/js/modules/battlegrounds-player-summary/battlegrounds-player-summary.module#BattlegroundsPlayerSummaryModule',
-				// './src/js/modules/battlegrounds-leaderboard-overlay/battlegrounds-leaderboard-overlay.module#BattlegroundsLeaderboardOverlayModule',
-				// './src/js/modules/battlegrounds-hero-selection-overlay/battlegrounds-hero-selection-overlay.module#BattlegroundsHeroSelectionOverlayModule',
 			],
 			sourceMap: true,
+		}),
+
+		new BannerPlugin({
+			banner: `var window = self;importScripts("./vendor.js");`,
+			raw: true,
+			entryOnly: true,
+			test: /bgsbattlesimulationworker/,
 		}),
 
 		new MiniCssExtractPlugin({
@@ -63,292 +85,17 @@ module.exports = function(env, argv) {
 			{ from: path.join(process.cwd(), 'overwolf/*'), to: '..', flatten: true },
 		]),
 
-		new HtmlWebpackPlugin({
-			filename: 'background.html',
-			template: 'src/html/background.html',
-			// Exclude the other modules. This will still import all the other chunks,
-			// thus probably importing some unrelated stuff, but they should be
-			// small enough that it should not matter (and we're serving them from
-			// the local filesystem, so in the end it doesn't really matter)
-			excludeChunks: [
-				'collection',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'loading',
-				'notifications',
-				'settings',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'collection.html',
-			template: 'src/html/collection.html',
-			excludeChunks: [
-				'background',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'loading',
-				'notifications',
-				'settings',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'loading.html',
-			template: 'src/html/loading.html',
-			excludeChunks: [
-				'collection',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'background',
-				'notifications',
-				'settings',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'notifications.html',
-			template: 'src/html/notifications.html',
-			excludeChunks: [
-				'collection',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'background',
-				'loading',
-				'settings',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'decktracker.html',
-			template: 'src/html/decktracker.html',
-			excludeChunks: [
-				'collection',
-				'notifications',
-				'background',
-				'decktrackeropponent',
-				'secretshelper',
-				'loading',
-				'settings',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'decktracker_opponent.html',
-			template: 'src/html/decktracker_opponent.html',
-			excludeChunks: [
-				'collection',
-				'notifications',
-				'background',
-				'secretshelper',
-				'loading',
-				'decktracker',
-				'settings',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'secrets_helper.html',
-			template: 'src/html/secrets_helper.html',
-			excludeChunks: [
-				'collection',
-				'notifications',
-				'background',
-				'decktrackeropponent',
-				'loading',
-				'decktracker',
-				'settings',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'settings.html',
-			template: 'src/html/settings.html',
-			excludeChunks: [
-				'collection',
-				'notifications',
-				'background',
-				'loading',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'twitchauthcallback',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'twitch-auth-callback.html',
-			template: 'src/html/twitch-auth-callback.html',
-			excludeChunks: [
-				'collection',
-				'notifications',
-				'background',
-				'loading',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'settings',
-				'opponentHand',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'match_overlay_opponent_hand.html',
-			template: 'src/html/match_overlay_opponent_hand.html',
-			excludeChunks: [
-				'collection',
-				'notifications',
-				'background',
-				'loading',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'settings',
-				'twitchauthcallback',
-				'matchStats',
-				'battlegrounds',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		new HtmlWebpackPlugin({
-			filename: 'battlegrounds.html',
-			template: 'src/html/battlegrounds.html',
-			excludeChunks: [
-				'collection',
-				'notifications',
-				'background',
-				'loading',
-				'decktracker',
-				'decktrackeropponent',
-				'secretshelper',
-				'settings',
-				'twitchauthcallback',
-				'matchStats',
-				'opponentHand',
-				// 'battlegroundsplayersummary',
-				// 'battlegroundsleaderboardoverlay',
-				// 'battlegroundsheroselectionoverlay',
-			],
-			chunksSortMode: 'manual',
-		}),
-		// new HtmlWebpackPlugin({
-		// 	filename: 'battlegrounds_player_info.html',
-		// 	template: 'src/html/battlegrounds_player_info.html',
-		// 	excludeChunks: [
-		// 		'collection',
-		// 		'notifications',
-		// 		'background',
-		// 		'loading',
-		// 		'decktracker',
-		// 		'decktrackeropponent',
-		// 		'secretshelper',
-		// 		'settings',
-		// 		'twitchauthcallback',
-		// 		'matchStats',
-		// 		'opponentHand',
-		// 		'battlegroundsleaderboardoverlay',
-		// 		'battlegroundsheroselectionoverlay',
-		// 	],
-		// 	chunksSortMode: 'manual',
-		// }),
-		// new HtmlWebpackPlugin({
-		// 	filename: 'battlegrounds_leaderboard_overlay.html',
-		// 	template: 'src/html/battlegrounds_leaderboard_overlay.html',
-		// 	excludeChunks: [
-		// 		'collection',
-		// 		'notifications',
-		// 		'background',
-		// 		'loading',
-		// 		'decktracker',
-		// 		'decktrackeropponent',
-		// 		'secretshelper',
-		// 		'settings',
-		// 		'twitchauthcallback',
-		// 		'matchStats',
-		// 		'opponentHand',
-		// 		'battlegroundsplayersummary',
-		// 		'battlegroundsheroselectionoverlay',
-		// 	],
-		// 	chunksSortMode: 'manual',
-		// }),
-		// new HtmlWebpackPlugin({
-		// 	filename: 'battlegrounds_hero_selection_overlay.html',
-		// 	template: 'src/html/battlegrounds_hero_selection_overlay.html',
-		// 	excludeChunks: [
-		// 		'collection',
-		// 		'notifications',
-		// 		'background',
-		// 		'loading',
-		// 		'decktracker',
-		// 		'decktrackeropponent',
-		// 		'secretshelper',
-		// 		'settings',
-		// 		'twitchauthcallback',
-		// 		'matchStats',
-		// 		'opponentHand',
-		// 		'battlegroundsplayersummary',
-		// 		'battlegroundsleaderboardoverlay',
-		// 	],
-		// 	chunksSortMode: 'manual',
-		// }),
+		buildHtmlWebpackPluginConf('background.html', 'background'),
+		buildHtmlWebpackPluginConf('collection.html', 'collection'),
+		buildHtmlWebpackPluginConf('loading.html', 'loading'),
+		buildHtmlWebpackPluginConf('notifications.html', 'notifications'),
+		buildHtmlWebpackPluginConf('decktracker.html', 'decktracker'),
+		buildHtmlWebpackPluginConf('decktracker_opponent.html', 'decktrackeropponent'),
+		buildHtmlWebpackPluginConf('secrets_helper.html', 'secretshelper'),
+		buildHtmlWebpackPluginConf('settings.html', 'settings'),
+		buildHtmlWebpackPluginConf('twitch-auth-callback.html', 'twitchauthcallback'),
+		buildHtmlWebpackPluginConf('match_overlay_opponent_hand.html', 'opponentHand'),
+		buildHtmlWebpackPluginConf('battlegrounds.html', 'battlegrounds'),
 
 		// Replace the version in the manifest
 		new ReplaceInFileWebpackPlugin([
@@ -379,38 +126,9 @@ module.exports = function(env, argv) {
 		// new BundleAnalyzerPlugin(),
 	];
 
-	// if (env.production) {
-	// 	plugins.push(
-	// 		new SentryWebpackPlugin({
-	// 			include: '.',
-	// 			ignoreFile: '.sentrycliignore',
-	// 			ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
-	// 			configFile: 'sentry.properties',
-	// 		}),
-	// 	);
-	// }
-
 	return {
 		mode: env.production ? 'production' : 'development',
-
-		entry: {
-			// Keep polyfills at the top so that it's imported first in the HTML
-			polyfills: './src/polyfills.ts',
-			background: './src/js/modules/background/main.ts',
-			collection: './src/js/modules/collection/main.ts',
-			loading: './src/js/modules/loading/main.ts',
-			notifications: './src/js/modules/notifications/main.ts',
-			decktracker: './src/js/modules/decktracker/main.ts',
-			decktrackeropponent: './src/js/modules/decktracker-opponent/main.ts',
-			secretshelper: './src/js/modules/secrets-helper/main.ts',
-			opponentHand: './src/js/modules/opponent-hand/main.ts',
-			settings: './src/js/modules/settings/main.ts',
-			twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
-			battlegrounds: './src/js/modules/battlegrounds/main.ts',
-			// battlegroundsplayersummary: './src/js/modules/battlegrounds-player-summary/main.ts',
-			// battlegroundsleaderboardoverlay: './src/js/modules/battlegrounds-leaderboard-overlay/main.ts',
-			// battlegroundsheroselectionoverlay: './src/js/modules/battlegrounds-hero-selection-overlay/main.ts',
-		},
+		entry: entry,
 
 		// https://hackernoon.com/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758
 		optimization: {
@@ -460,17 +178,42 @@ module.exports = function(env, argv) {
 			rules: [
 				{
 					test: /\.ts$/,
+					exclude: [/node_modules/, /test/, /\.worker.ts$/],
+					use: ['@artonge/webpack', 'ts-loader'],
+				},
+				{
+					test: /\.worker.ts$/,
 					exclude: [/node_modules/, /test/],
-					use: ['@artonge/webpack'],
+					use: ['ts-loader'],
 				},
 				{
 					test: /\.scss$/,
 					exclude: /node_modules/,
 					use: ['css-to-string-loader', 'css-loader', 'sass-loader'],
 				},
+				{
+					test: /\.worker\.js$/,
+					use: { loader: 'worker-loader' },
+				},
 			],
 		},
 
 		plugins: plugins,
 	};
+};
+
+const buildHtmlWebpackPluginConf = (filename, chunkName) => {
+	// Exclude the other modules. This will still import all the other chunks,
+	// thus probably importing some unrelated stuff, but they should be
+	// small enough that it should not matter (and we're serving them from
+	// the local filesystem, so in the end it doesn't really matter)
+	const excludedChunks = Object.keys(entry)
+		.filter(chunk => chunk !== chunkName)
+		.filter(chunk => chunk !== 'polyfills');
+	return new HtmlWebpackPlugin({
+		filename: filename,
+		template: `src/html/${filename}`,
+		excludeChunks: excludedChunks,
+		chunksSortMode: 'manual',
+	});
 };

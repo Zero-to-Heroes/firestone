@@ -7,7 +7,6 @@ import { AchievementsLocalDbService as AchievementsDb } from './achievement/inde
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
 import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BattlegroundsStoreService } from './battlegrounds/store/battlegrounds-store.service';
-// import { BattlegroundsStateService } from './battlegrounds/old/battlegrounds-state.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
 import { PackHistoryService } from './collection/pack-history.service';
@@ -72,18 +71,17 @@ export class AppBootstrapService {
 		private init_endGameListenerService: EndGameListenerService,
 		private init_GlobalStatsNotifierService: GlobalStatsNotifierService,
 		private init_ReplaysNotificationService: ReplaysNotificationService,
-		// private init_BattlegroundsStateService: BattlegroundsStateService,
 		private init_AchievementsBootstrapService: AchievementsBootstrapService,
 		private init_CollectionBootstrapService: CollectionBootstrapService,
 		private init_GameStatsBootstrapService: GameStatsBootstrapService,
 		private init_GlobalStatsBootstrapService: GlobalStatsBootstrapService,
 		private init_BgsStoreService: BattlegroundsStoreService,
-		// private init_bgsBattleService: BgsBattleSimulationService,
 		private init_BgsInitService: BgsInitService,
 	) {}
 
 	public async init() {
 		console.log('[bootstrap] in init');
+
 		if (!this.loadingWindowShown) {
 			console.log('[bootstrap] initializing loading window');
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');

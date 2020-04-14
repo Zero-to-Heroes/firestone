@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { simulateBattle } from '@firestone-hs/simulate-bgs-battle';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
+import Worker from 'worker-loader!../../workers/bgs-simulation.worker';
 import { BgsBattleSimulationResult } from '../../models/battlegrounds/bgs-battle-simulation-result';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
@@ -16,6 +16,7 @@ const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://tsu2ztwayc.execute-api.us-west-2
 export class BgsBattleSimulationService {
 	private stateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 	private cardsData: CardsData;
+	private worker: Worker;
 
 	constructor(
 		private readonly http: HttpClient,
@@ -28,6 +29,9 @@ export class BgsBattleSimulationService {
 		});
 		this.cardsData = new CardsData(cards.service, false);
 		this.cardsData.inititialize();
+		// this.worker = new Worker();
+
+		// this.startBgsBattleSimulation({ hop: 'test' } as any);
 	}
 
 	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo) {
@@ -38,12 +42,27 @@ export class BgsBattleSimulationService {
 			prefs.bgsUseLocalSimulator,
 			JSON.stringify(battleInfo, null, 4),
 		);
+
 		const result: BgsBattleSimulationResult = prefs.bgsUseLocalSimulator
-			? simulateBattle(battleInfo, this.cards.service, this.cardsData)
+			? await this.simulateLocalBattle(battleInfo)
 			: ((await this.http
 					.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfo)
 					.toPromise()) as BgsBattleSimulationResult);
 		console.log('[bgs-simulation] battle simulation result', result);
 		this.stateUpdater.next(new BattlegroundsBattleSimulationEvent(result));
+	}
+
+	private async simulateLocalBattle(battleInfo: BgsBattleInfo): Promise<BgsBattleSimulationResult> {
+		return new Promise<BgsBattleSimulationResult>(resolve => {
+			const worker = new Worker();
+			worker.onmessage = (ev: MessageEvent) => {
+				// console.log('received worker message', ev);
+				worker.terminate();
+				resolve(JSON.parse(ev.data));
+			};
+			// console.log('created worker', worker);
+			worker.postMessage(battleInfo);
+			// console.log('posted worker message');
+		});
 	}
 }
