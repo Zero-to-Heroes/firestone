@@ -17,12 +17,15 @@ import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 	selector: 'bgs-board',
 	styleUrls: [`../../../css/component/battlegrounds/bgs-board.component.scss`],
 	template: `
-		<div class="board-turn" *ngIf="_entities?.length">
+		<div class="board-turn" *ngIf="_entities">
 			Board as seen
 			{{ currentTurn - boardTurn === 0 ? 'just now' : currentTurn - boardTurn + ' turns ago' }}
 		</div>
-		<div class="board-turn empty" *ngIf="!_entities?.length">
+		<div class="board-turn empty" *ngIf="!_entities">
 			You have not fought that player yet
+		</div>
+		<div class="board-turn empty" *ngIf="_entities && _entities.length === 0">
+			Last board was empty
 		</div>
 		<ul class="board" *ngIf="_entities?.length">
 			<li
@@ -47,7 +50,7 @@ import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBoardComponent implements AfterViewInit {
-	_entities: readonly Entity[];
+	_entities: readonly Entity[] = [];
 	_enchantmentCandidates: readonly Entity[];
 	_options: readonly number[];
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
@@ -74,7 +77,7 @@ export class BgsBoardComponent implements AfterViewInit {
 		// - in common.js, this causes NgForOf.prototype._applyChanges to try and get a view with a negative index
 		// Resetting the view first seems to do the trick. This is fine since we almost never capitalize on the
 		// fact that items that move around are kept alive in these cases
-		this._entities = [];
+		this._entities = !entities ? undefined : [];
 		setTimeout(() => {
 			this._entities = entities;
 			this.previousBoardWidth = undefined;
@@ -136,26 +139,9 @@ export class BgsBoardComponent implements AfterViewInit {
 		if (this.previousBoardWidth === rect.width) {
 			return;
 		}
-		// if (this.debug) {
-		// 	console.log(
-		// 		'resizing  board',
-		// 		rect,
-		// 		boardContainer,
-		// 		this.previousBoardWidth,
-		// 		this.previousNumberOfEntities,
-		// 		this._entities?.length,
-		// 	);
-		// }
-		// console.log('keeping the resize loop', this.previousBoardWidth, rect.width, rect);
 		this.previousBoardWidth = rect.width;
-		// this.previousNumberOfEntities = this._entities?.length;
-		// console.log('boardContainer', boardContainer, rect);
-		// const constrainedByWidth = rect.width <
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
 		if (cardElements.length !== this._entities?.length) {
-			// if (this.debug) {
-			// 	console.log('opponent board not ready yet', cardElements.length, this._entities?.length);
-			// }
 			setTimeout(() => this.onResize(), 300);
 			return;
 		}
@@ -166,9 +152,6 @@ export class BgsBoardComponent implements AfterViewInit {
 			cardWidth = cardHeight / 1.48;
 		}
 		for (const cardElement of cardElements) {
-			// if (this.debug) {
-			// 	console.log('resizing card element', cardElement);
-			// }
 			this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 			this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
 		}

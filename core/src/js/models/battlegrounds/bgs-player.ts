@@ -14,7 +14,7 @@ export class BgsPlayer {
 	readonly tavernUpgradeHistory: readonly BgsTavernUpgrade[] = [];
 	readonly tripleHistory: readonly BgsTriple[] = [];
 	readonly compositionHistory: readonly BgsComposition[] = [];
-	readonly boardHistory: readonly BgsBoard[] = [];
+	readonly boardHistory: readonly BgsBoard[];
 	readonly initialHealth: number;
 	readonly damageTaken: number = 0;
 	readonly leaderboardPlace: number;
@@ -38,11 +38,15 @@ export class BgsPlayer {
 	}
 
 	public getLastKnownBoardState(): readonly Entity[] {
-		return this.boardHistory.length === 0 ? [] : this.boardHistory[this.boardHistory.length - 1].board;
+		return !this.boardHistory
+			? null
+			: this.boardHistory.length === 0
+			? []
+			: this.boardHistory[this.boardHistory.length - 1].board;
 	}
 
 	public getLastBoardStateTurn(): number {
-		return this.boardHistory.length === 0 ? undefined : this.boardHistory[this.boardHistory.length - 1].turn;
+		return !this.boardHistory?.length ? undefined : this.boardHistory[this.boardHistory.length - 1].turn;
 	}
 
 	public buildBgsEntities(logEntities: readonly any[]): BoardEntity[] {

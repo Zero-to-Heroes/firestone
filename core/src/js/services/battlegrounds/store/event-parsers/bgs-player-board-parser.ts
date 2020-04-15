@@ -23,7 +23,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		const playerToUpdate = currentState.currentGame.players.find(player => player.cardId === event.heroCardId);
 		console.log('finding player board', playerToUpdate, event, currentState);
 		const newHistory: readonly BgsBoard[] = [
-			...playerToUpdate.boardHistory,
+			...(playerToUpdate.boardHistory || []),
 			BgsBoard.create({
 				board: this.buildEntities(event.board),
 				turn: currentState.currentGame.currentTurn,

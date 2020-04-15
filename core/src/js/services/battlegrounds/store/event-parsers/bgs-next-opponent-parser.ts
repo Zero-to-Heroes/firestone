@@ -49,15 +49,6 @@ export class BgsNextOpponentParser implements EventParser {
 		const opponentOverview: BgsOpponentOverview = BgsOpponentOverview.create({
 			// Just use the cardId, and let the UI reconstruct from the state to avoid duplicating the info
 			cardId: cardId,
-			// currentTavernTier:
-			// 	nextOpponent.tavernUpgradeHistory.length === 0
-			// 		? 1
-			// 		: nextOpponent.tavernUpgradeHistory[nextOpponent.tavernUpgradeHistory.length - 1].tavernTier,
-			// tavernHistory: nextOpponent.tavernUpgradeHistory,
-			// lastKnownBoardState: nextOpponent.boardHistory
-			// 	? nextOpponent.boardHistory[nextOpponent.boardHistory.length - 1].board
-			// 	: null,
-			// tripleHistory: nextOpponent.tripleHistory,
 		});
 		return BgsNextOpponentOverviewPanel.create({
 			opponentOverview: opponentOverview,
