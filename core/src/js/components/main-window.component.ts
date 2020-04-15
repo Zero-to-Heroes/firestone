@@ -22,7 +22,7 @@ declare let amplitude: any;
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper *ngIf="state" [activeTheme]="activeTheme" [allowResize]="true">
+		<window-wrapper *ngIf="state && cardsInitDone" [activeTheme]="activeTheme" [allowResize]="true">
 			<section class="menu-bar" [ngClass]="{ 'ftue': state.showFtue }">
 				<!-- <main-window-navigation [navigation]="state.navigation"></main-window-navigation> -->
 				<div class="first">
@@ -91,6 +91,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	state: MainWindowState;
 	windowId: string;
 	activeTheme: CurrentAppType;
+	cardsInitDone: boolean;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
@@ -103,7 +104,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly debug: DebugService,
 		private readonly cards: AllCardsService,
 	) {
-		cards.initializeCardsDb();
+		this.init();
 	}
 
 	async ngAfterViewInit() {
@@ -171,5 +172,13 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 		this.storeSubscription.unsubscribe();
+	}
+
+	private async init() {
+		await this.cards.initializeCardsDb();
+		this.cardsInitDone = true;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
