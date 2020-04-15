@@ -13,7 +13,7 @@ declare let amplitude: any;
 		<div class="battle-simulation">
 			<div class="winning-chance">
 				<div class="label">Your chance of winning</div>
-				<div class="value" [helpTooltip]="temporaryBattleTooltip">{{ battleSimulationResult }}%</div>
+				<div class="value" [helpTooltip]="temporaryBattleTooltip">{{ battleSimulationResult }}</div>
 			</div>
 			<div class="damage">
 				<div class="label">Avg damage</div>
@@ -49,7 +49,7 @@ export class BgsBattleStatusComponent {
 			console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.tempInterval = setInterval(() => {
-				this.battleSimulationResult = (99 * Math.random()).toFixed(1);
+				this.battleSimulationResult = (99 * Math.random()).toFixed(1) + '%';
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -61,7 +61,7 @@ export class BgsBattleStatusComponent {
 	}
 
 	@Input() set nextBattle(value: BattleResult) {
-		this.battleSimulationResult = value?.wonPercent?.toFixed(1);
+		this.battleSimulationResult = (value?.wonPercent?.toFixed(1) || '--') + '%';
 		this.damageWon = value != null ? value.averageDamageWon?.toFixed(1) : '--';
 		this.damageLost = value != null ? value.averageDamageLost?.toFixed(1) : '--';
 	}
