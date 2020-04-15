@@ -20,7 +20,7 @@ declare let amplitude: any;
 				<div class="win" helpTooltip="Expected average damage in case you win the fight">
 					{{ damageWon }}
 				</div>
-				/
+				<div class="separation">-</div>
 				<div class="lose" helpTooltip="Expected average damage in case you lose the fight">
 					{{ damageLost }}
 				</div>
