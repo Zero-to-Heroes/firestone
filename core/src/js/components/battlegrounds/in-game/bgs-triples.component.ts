@@ -1,15 +1,6 @@
-import {
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { groupByFunction } from '../../../services/utils';
-import { OpponentInfo } from './opponent-info';
 
 declare let amplitude: any;
 
@@ -46,20 +37,28 @@ declare let amplitude: any;
 export class BgsTriplesComponent {
 	tierTriples: { minionTier: number; quantity: number }[];
 
-	@Input() set opponentInfo(value: OpponentInfo) {
-		const triplesSinceLastBoard = value.triples.filter(triple => triple.turn >= value.boardTurn);
+	allTriples: readonly BgsTriple[];
+	_boardTurn: number;
+
+	@Input() set triples(value: readonly BgsTriple[]) {
+		this.allTriples = value;
+		this.filterTriples();
+	}
+
+	@Input() set boardTurn(value: number) {
+		this._boardTurn = value;
+		this.filterTriples();
+	}
+
+	private filterTriples() {
+		if (!this.allTriples || this._boardTurn == null) {
+			return;
+		}
+		const triplesSinceLastBoard = this.allTriples.filter(triple => triple.turn >= this._boardTurn);
 		const groupedByTier = groupByFunction((triple: BgsTriple) => '' + triple.tierOfTripledMinion)(
 			triplesSinceLastBoard,
 		);
 		// See bgs-board
-		// console.log(
-		// 	'setting triples',
-		// 	this.tierTriples,
-		// 	Object.keys(groupedByTier).map(minionTier => ({
-		// 		minionTier: parseInt(minionTier),
-		// 		quantity: groupedByTier[minionTier].length as number,
-		// 	})),
-		// );
 		this.tierTriples = [];
 		setTimeout(() => {
 			this.tierTriples = Object.keys(groupedByTier).map(minionTier => ({
@@ -72,5 +71,5 @@ export class BgsTriplesComponent {
 		});
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 }

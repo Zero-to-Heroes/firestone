@@ -3,7 +3,7 @@ import { BgsFaceOff } from '../../../models/battlegrounds/bgs-face-off';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
-import { BattleResult } from './opponent-info';
+import { BattleResult } from './battle-result';
 
 declare let amplitude: any;
 
@@ -49,11 +49,9 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsNextOpponentOverviewComponent {
-	// opponentInfos: readonly OpponentInfo[] = [];
 	players: readonly BgsPlayer[];
 	opponents: readonly BgsPlayer[];
 	faceOffs: readonly BgsFaceOff[];
-	// opponentFaceOffs: readonly OpponentFaceOff[];
 	currentTurn: number;
 	nextBattle: BattleResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';

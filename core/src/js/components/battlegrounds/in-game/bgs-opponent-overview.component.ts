@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import { Entity } from '@firestone-hs/replay-parser';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { OpponentInfo } from './opponent-info';
+import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
+import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 
 declare let amplitude: any;
 
@@ -15,48 +17,54 @@ declare let amplitude: any;
 			<div class="portrait">
 				<bgs-hero-portrait
 					class="icon"
-					[icon]="_opponentInfo.icon"
-					[health]="_opponentInfo.health"
-					[maxHealth]="_opponentInfo.maxHealth"
-					[cardTooltip]="_opponentInfo.heroPowerCardId"
-					[cardTooltipText]="_opponentInfo.name"
+					[icon]="icon"
+					[health]="health"
+					[maxHealth]="maxHealth"
+					[cardTooltip]="heroPowerCardId"
+					[cardTooltipText]="name"
 					[cardTooltipClass]="'bgs-hero-power'"
 				></bgs-hero-portrait>
-				<!-- <div class="name">{{ _opponentInfo.name }}</div> -->
-				<tavern-level-icon [level]="_opponentInfo.tavernTier" class="tavern"></tavern-level-icon>
+				<!-- <div class="name">{{ name }}</div> -->
+				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="main-info">
 				<bgs-board
-					[entities]="_opponentInfo.boardMinions"
+					[entities]="boardMinions"
 					[currentTurn]="currentTurn"
-					[boardTurn]="_opponentInfo.boardTurn"
+					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
 				></bgs-board>
 			</div>
-			<bgs-triples [opponentInfo]="_opponentInfo"></bgs-triples>
+			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsOpponentOverviewComponent {
-	_opponentInfo: OpponentInfo;
+	icon: string;
+	health: number;
+	maxHealth: number;
+	heroPowerCardId: string;
+	name: string;
+	tavernTier: number;
+	boardMinions: readonly Entity[];
+	boardTurn: number;
+	tavernUpgrades: readonly BgsTavernUpgrade[];
+	triples: readonly BgsTriple[];
 
 	@Input() currentTurn: number;
 
 	@Input() set opponent(value: BgsPlayer) {
-		this._opponentInfo = {
-			id: value.cardId,
-			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`,
-			heroPowerCardId: value.heroPowerCardId,
-			name: value.name,
-			health: value.initialHealth - value.damageTaken,
-			maxHealth: value.initialHealth,
-			tavernTier: '' + value.getCurrentTavernTier(),
-			boardMinions: value.getLastKnownBoardState(),
-			boardTurn: value.getLastBoardStateTurn(),
-			tavernUpgrades: [...value.tavernUpgradeHistory],
-			triples: [...value.tripleHistory],
-		} as OpponentInfo;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
+		this.health = value.initialHealth - value.damageTaken;
+		this.maxHealth = value.initialHealth;
+		this.heroPowerCardId = value.heroPowerCardId;
+		this.name = value.name;
+		this.tavernTier = value.getCurrentTavernTier();
+		this.boardMinions = value.getLastKnownBoardState();
+		this.boardTurn = value.getLastBoardStateTurn();
+		this.tavernUpgrades = value.tavernUpgradeHistory;
+		this.triples = value.tripleHistory;
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}

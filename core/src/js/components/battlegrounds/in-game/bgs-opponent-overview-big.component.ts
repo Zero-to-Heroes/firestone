@@ -7,9 +7,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { Entity } from '@firestone-hs/replay-parser';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
-import { BattleResult, OpponentInfo } from './opponent-info';
+import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
+import { BattleResult } from './battle-result';
 
 declare let amplitude: any;
 
@@ -28,28 +30,26 @@ declare let amplitude: any;
 			<div class="portrait">
 				<bgs-hero-portrait
 					class="icon"
-					[icon]="_opponentInfo.icon"
-					[health]="_opponentInfo.health"
-					[maxHealth]="_opponentInfo.maxHealth"
-					[cardTooltip]="_opponentInfo.heroPowerCardId"
-					[cardTooltipText]="_opponentInfo.name"
+					[icon]="icon"
+					[health]="health"
+					[maxHealth]="maxHealth"
+					[cardTooltip]="heroPowerCardId"
+					[cardTooltipText]="name"
 					[cardTooltipClass]="'bgs-hero-power'"
 				></bgs-hero-portrait>
-				<!-- <div class="name">{{ _opponentInfo.name }}</div> -->
-				<!-- <img [src]="taverTierIcon" class="tavern-tier" /> -->
-				<tavern-level-icon [level]="_opponentInfo.tavernTier" class="tavern"></tavern-level-icon>
+				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="opponent-info">
 				<div class="main-info">
 					<bgs-board
-						[entities]="_opponentInfo.boardMinions"
+						[entities]="boardMinions"
 						[currentTurn]="currentTurn"
-						[boardTurn]="_opponentInfo.boardTurn"
+						[boardTurn]="boardTurn"
 						[debug]="true"
-						*ngIf="_opponentInfo.boardMinions"
+						*ngIf="boardMinions"
 					></bgs-board>
 					<div class="bottom-info">
-						<bgs-triples [opponentInfo]="_opponentInfo"></bgs-triples>
+						<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 						<bgs-battle-status
 							[nextBattle]="nextBattle"
 							[battleSimulationStatus]="battleSimulationStatus"
@@ -58,11 +58,8 @@ declare let amplitude: any;
 				</div>
 				<div class="tavern-upgrades">
 					<div class="title">Tavern upgrades</div>
-					<div class="upgrades" *ngIf="_opponentInfo.tavernUpgrades?.length > 0">
-						<div
-							class="tavern-upgrade"
-							*ngFor="let upgrade of _opponentInfo.tavernUpgrades; trackBy: trackByUpgradeFn"
-						>
+					<div class="upgrades" *ngIf="tavernUpgrades?.length > 0">
+						<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades; trackBy: trackByUpgradeFn">
 							<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 							<div class="label">Turn {{ upgrade.turn }}</div>
 						</div>
@@ -74,35 +71,33 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsOpponentOverviewBigComponent {
-	_opponent: BgsPlayer;
-	_opponentInfo: OpponentInfo;
+	icon: string;
+	health: number;
+	maxHealth: number;
+	heroPowerCardId: string;
+	name: string;
+	tavernTier: number;
+	boardMinions: readonly Entity[];
+	boardTurn: number;
+	tavernUpgrades: readonly BgsTavernUpgrade[];
+	triples: readonly BgsTriple[];
 
 	@Input() currentTurn: number;
 	@Input() nextBattle: BattleResult;
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 
-	// @Input() set opponentInfo(value: OpponentInfo) {
 	@Input() set opponent(value: BgsPlayer) {
-		if (value === this._opponent) {
-			console.warn('using same big input', value, this._opponent);
-			return;
-		}
-		// console.log('setting next opponent info', rdiff.getDiff(value, this._opponent), value, this._opponent);
-		this._opponent = value;
-		this._opponentInfo = {
-			id: value.cardId,
-			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`,
-			heroPowerCardId: value.heroPowerCardId,
-			name: value.name,
-			health: value.initialHealth - value.damageTaken,
-			maxHealth: value.initialHealth,
-			tavernTier: '' + value.getCurrentTavernTier(),
-			boardMinions: value.getLastKnownBoardState(),
-			boardTurn: value.getLastBoardStateTurn(),
-			tavernUpgrades: [...value.tavernUpgradeHistory],
-			triples: [...value.tripleHistory],
-			// isNextOpponent: opponent.cardId === this._panel.opponentOverview.cardId,
-		} as OpponentInfo;
+		console.log('setting next opponent info', value, value.getCurrentTavernTier());
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
+		this.health = value.initialHealth - value.damageTaken;
+		this.maxHealth = value.initialHealth;
+		this.heroPowerCardId = value.heroPowerCardId;
+		this.name = value.name;
+		this.tavernTier = value.getCurrentTavernTier();
+		this.boardMinions = value.getLastKnownBoardState();
+		this.boardTurn = value.getLastBoardStateTurn();
+		this.tavernUpgrades = value.tavernUpgradeHistory;
+		this.triples = value.tripleHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

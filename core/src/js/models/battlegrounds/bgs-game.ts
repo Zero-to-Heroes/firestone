@@ -39,7 +39,7 @@ export class BgsGame {
 			battleInfo.opponentBoard = bgsInfo;
 			console.log('Set battle info', JSON.stringify(battleInfo, null, 4));
 		} else {
-			console.error('trying to set bgsinfo in full data', this, bgsInfo);
+			console.warn('trying to set bgsinfo in full data', this, bgsInfo);
 			return this;
 		}
 		return Object.assign(new BgsGame(), this, {
@@ -52,6 +52,7 @@ export class BgsGame {
 		return Object.assign(new BgsGame(), this, {
 			battleInfo: undefined,
 			battleResult: undefined,
+			battleInfoStatus: 'empty',
 		} as BgsGame);
 	}
 }

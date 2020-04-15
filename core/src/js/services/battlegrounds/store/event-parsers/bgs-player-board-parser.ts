@@ -29,7 +29,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				turn: currentState.currentGame.currentTurn,
 			}),
 		];
-		const newPlayer = playerToUpdate.update({
+		const newPlayer: BgsPlayer = playerToUpdate.update({
 			boardHistory: newHistory,
 		} as BgsPlayer);
 
@@ -40,9 +40,11 @@ export class BgsPlayerBoardParser implements EventParser {
 			newPlayer,
 		);
 		const bgsBoard: BoardEntity[] = newPlayer.buildBgsEntities(event.board);
-		let tavernTier = event.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value;
+		let tavernTier =
+			event.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
+			newPlayer.getCurrentTavernTier();
 		if (!tavernTier) {
-			console.log('[bgs-simulation] no tavern tier', event);
+			console.warn('[bgs-simulation] no tavern tier', event);
 			tavernTier = 1;
 		}
 		const bgsInfo: BgsBoardInfo = {

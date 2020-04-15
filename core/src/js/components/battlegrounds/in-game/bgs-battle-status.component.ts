@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BattleResult } from './opponent-info';
+import { BattleResult } from './battle-result';
 
 declare let amplitude: any;
 
@@ -41,12 +41,12 @@ export class BgsBattleStatusComponent {
 		if (this.tempInterval) {
 			clearInterval(this.tempInterval);
 		}
-		if (value === 'empty') {
-			// console.log('result empty', value);
+		if (!value || value === 'empty') {
+			console.log('result empty', value);
 			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
 			this.battleSimulationResult = '--';
 		} else if (value === 'waiting-for-result') {
-			// console.log('result waiting', value);
+			console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.tempInterval = setInterval(() => {
 				this.battleSimulationResult = (99 * Math.random()).toFixed(1);
@@ -55,7 +55,7 @@ export class BgsBattleStatusComponent {
 				}
 			}, 30);
 		} else {
-			// console.log('result done', value);
+			console.log('result done', value);
 			this.temporaryBattleTooltip = null;
 		}
 	}

@@ -9,7 +9,6 @@ import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { OverwolfService } from '../../overwolf.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
-import { BattlegroundsResetBattleStateParser } from './event-parsers/battlegrounds-reset-battle-state-parser';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
@@ -25,7 +24,6 @@ import { BgsNextOpponentParser } from './event-parsers/bgs-next-opponent-parser'
 import { BgsOpponentRevealedParser } from './event-parsers/bgs-opponent-revealed-parser';
 import { BgsPlayerBoardParser } from './event-parsers/bgs-player-board-parser';
 import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-match-stats-filter-change-parser';
-import { BgsResetBattleStateParser } from './event-parsers/bgs-reset-battle-state-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
@@ -42,7 +40,6 @@ import { BgsMatchStartEvent } from './events/bgs-match-start-event';
 import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
 import { BgsOpponentRevealedEvent } from './events/bgs-opponent-revealed-event';
 import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
-import { BgsResetBattleStateEvent } from './events/bgs-reset-battle-state-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
 import { BgsTripleCreatedEvent } from './events/bgs-triple-created-event';
 import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
@@ -119,8 +116,8 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.hero,
 					),
 				);
-			} else if (gameEvent.type === GameEvent.MAIN_STEP_READY) {
-				this.battlegroundsUpdater.next(new BgsResetBattleStateEvent());
+				// } else if (gameEvent.type === GameEvent.MAIN_STEP_READY) {
+				// 	this.battlegroundsUpdater.next(new BgsResetBattleStateEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
 				// 	} else {
@@ -226,7 +223,7 @@ export class BattlegroundsStoreService {
 
 	private buildEventParsers(): readonly EventParser[] {
 		return [
-			new BattlegroundsResetBattleStateParser(),
+			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(),
 			new BgsHeroSelectionParser(),
 			new BgsHeroSelectedParser(),
@@ -241,7 +238,7 @@ export class BattlegroundsStoreService {
 			new BgsGameEndParser(),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(),
-			new BgsResetBattleStateParser(),
+			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(),
 			new BgsPostMatchStatsFilterChangeParser(),
 			new BgsDamageDealtParser(),
