@@ -56,7 +56,8 @@ export class BgsBattleStatusComponent {
 			}, 30);
 		} else {
 			console.log('result done', value);
-			this.temporaryBattleTooltip = null;
+			this.temporaryBattleTooltip =
+				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
 		}
 	}
 
