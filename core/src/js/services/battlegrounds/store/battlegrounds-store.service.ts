@@ -4,9 +4,11 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
+import { Preferences } from '../../../models/preferences';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { OverwolfService } from '../../overwolf.service';
+import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
@@ -60,6 +62,7 @@ export class BattlegroundsStoreService {
 
 	private requeueTimeout;
 	private closedByUser: boolean;
+	private bgsActive: boolean = true;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -67,6 +70,7 @@ export class BattlegroundsStoreService {
 		private events: Events,
 		private simulation: BgsBattleSimulationService,
 		private ow: OverwolfService,
+		private prefs: PreferencesService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -100,6 +104,15 @@ export class BattlegroundsStoreService {
 					await this.ow.hideWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 				}
 			}
+		});
+		this.handleDisplayPreferences();
+		setTimeout(() => {
+			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+			preferencesEventBus.subscribe(event => {
+				if (event) {
+					this.handleDisplayPreferences(event.preferences);
+				}
+			});
 		});
 	}
 
@@ -232,17 +245,22 @@ export class BattlegroundsStoreService {
 		}
 	}
 
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.bgsActive = preferences.bgsEnableApp;
+		this.updateOverlay();
+	}
+
 	private async updateOverlay() {
 		const inGame = this.state && this.state.inGame;
 
 		const battlegroundsWindow = await this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW);
-		const shouldShowOverlay = true;
-		if (inGame && shouldShowOverlay && battlegroundsWindow.window_state_ex === 'closed' && !this.closedByUser) {
+		if (inGame && this.bgsActive && battlegroundsWindow.window_state_ex === 'closed' && !this.closedByUser) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
-		} else if (battlegroundsWindow.window_state_ex !== 'closed' && (!shouldShowOverlay || !inGame)) {
-			console.log('[bgs-store] closing overlay', shouldShowOverlay, inGame);
+		} else if (battlegroundsWindow.window_state_ex !== 'closed' && (!this.bgsActive || !inGame)) {
+			console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
 	}
