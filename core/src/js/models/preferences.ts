@@ -62,7 +62,9 @@ export class Preferences {
 	readonly battlegroundsShowLastOpponentBoard = false;
 	readonly batlegroundsShowHeroSelectionPref = false;
 
+	readonly bgsEnableApp = true;
 	readonly bgsUseLocalSimulator = true;
+	readonly bgsSimulatorNumberOfSims = 2500;
 
 	readonly launchAppOnGameStart: boolean = true;
 

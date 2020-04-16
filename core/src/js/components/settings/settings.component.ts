@@ -40,6 +40,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 					[selectedMenu]="selectedMenu"
 				></settings-decktracker>
 				<settings-replays *ngSwitchCase="'replays'" [selectedMenu]="selectedMenu"></settings-replays>
+				<settings-battlegrounds
+					*ngSwitchCase="'battlegrounds'"
+					[selectedMenu]="selectedMenu"
+				></settings-battlegrounds>
 			</ng-container>
 			<settings-modal></settings-modal>
 		</window-wrapper>

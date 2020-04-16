@@ -2,10 +2,10 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	Input,
 	OnDestroy,
 	ViewRef,
-	ElementRef,
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -20,7 +20,7 @@ import { PreferencesService } from '../../services/preferences.service';
 	],
 	template: `
 		<div class="preference-slider" [ngClass]="{ 'disabled': !enabled }">
-			<label for="{{ field }}-slider" *ngIf="label">
+			<!-- <label for="{{ field }}-slider" *ngIf="label">
 				<span>{{ label }}</span>
 				<i class="info" *ngIf="tooltip || tooltipDisabled">
 					<svg>
@@ -35,7 +35,7 @@ import { PreferencesService } from '../../services/preferences.service';
 						</svg>
 					</div>
 				</i>
-			</label>
+			</label> -->
 			<input
 				[disabled]="!enabled"
 				type="range"
@@ -53,9 +53,9 @@ import { PreferencesService } from '../../services/preferences.service';
 				<div class="currentValue" *ngIf="showCurrentValue">{{ displayedValue }}</div>
 			</div>
 			<div class="knobs" *ngIf="knobs">
-				<div *ngFor="let knob of knobs" class="knob" [style.left.%]="getKnobRealValue(knob.percentageValue)">
+				<div *ngFor="let knob of knobs" class="knob" [style.left.%]="getKnobRealValue(knob)">
 					<div class="circle"></div>
-					<div class="label">{{ knob.label }}</div>
+					<div class="label" *ngIf="knob.label">{{ knob.label }}</div>
 				</div>
 			</div>
 		</div>
@@ -73,6 +73,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 	@Input() snapSensitivity = 3;
 	@Input() knobs: readonly Knob[];
 	@Input() showCurrentValue: boolean;
+	@Input() displayedValueUnit: string = '%';
 
 	value: number;
 	progress: number;
@@ -93,7 +94,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 			.subscribe(model => {
 				this.value = model;
 				this.updateValueElements();
-				// console.log('changing scale value', this.value);
+				console.log('changing slider value', this.value, this.progress);
 				this.prefs.setValue(this.field, this.value);
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();
@@ -118,20 +119,30 @@ export class PreferenceSliderComponent implements OnDestroy {
 		this.snapValue();
 	}
 
-	getKnobRealValue(initialValue: number) {
-		return Math.min(98.4, Math.max(1.6, initialValue));
+	getKnobRealValue(knob: Knob) {
+		const valueInPercent = knob.absoluteValue
+			? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
+			: knob.percentageValue;
+		console.log('knob percent', valueInPercent);
+		return Math.min(98.4, Math.max(1.6, valueInPercent));
 	}
 
 	private snapValue() {
 		// Add snapping
 		if (this.knobs) {
 			for (const knob of this.knobs) {
-				if (Math.abs(this.progress - knob.percentageValue) < this.snapSensitivity) {
-					// console.log('snapping', this.value, this.progress);
+				const snapTestValue = knob.absoluteValue
+					? this.value - knob.absoluteValue
+					: this.progress - knob.percentageValue;
+				if (Math.abs(snapTestValue) < this.snapSensitivity) {
+					console.log('snapping', this.value, this.progress, knob, this.snapSensitivity);
 					// this.progress = knob.percentageValue;
-					this.value = (knob.percentageValue * (this.max - this.min)) / 100 + this.min;
+					const valueInPercent = knob.absoluteValue
+						? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
+						: knob.percentageValue;
+					this.value = (valueInPercent * (this.max - this.min)) / 100 + this.min;
 					this.updateValueElements();
-					// console.log('to', this.value, this.progress);
+					console.log('to', this.value, this.progress);
 					this.prefs.setValue(this.field, this.value);
 					if (!(this.cdr as ViewRef).destroyed) {
 						this.cdr.detectChanges();
@@ -152,7 +163,8 @@ export class PreferenceSliderComponent implements OnDestroy {
 
 	private updateValueElements() {
 		this.progress = ((this.value - this.min) / (this.max - this.min)) * 100;
-		this.displayedValue = this.value.toFixed(0) + '%';
+		console.log('updating progress', this.progress, this.value, this.min, this.max);
+		this.displayedValue = this.value.toFixed(0) + this.displayedValueUnit;
 		const width = this.el.nativeElement.querySelector('input').getBoundingClientRect().width - 8;
 		// console.log('updating left', width, this.el.nativeElement.getBoundingClientRect(), this.progress);
 		this.left =
@@ -164,6 +176,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 }
 
 export interface Knob {
-	readonly percentageValue: number;
-	readonly label: string;
+	readonly absoluteValue?: number;
+	readonly percentageValue?: number;
+	readonly label?: string;
 }

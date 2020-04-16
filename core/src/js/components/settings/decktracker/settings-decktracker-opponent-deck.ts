@@ -112,8 +112,6 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, OnDestroy {
-	sliderEnabled = false;
-	showTitleBar: boolean;
 	overlayGroupByZone: boolean;
 	opponentOverlayGroupByZone: boolean;
 	opponentTracker: boolean;
@@ -147,8 +145,6 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.loadDefaultValues();
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
-			// console.log('should display', shouldDisplay);
-			this.sliderEnabled = shouldDisplay;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -190,7 +186,6 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
 		this.opponentTracker = prefs.opponentTracker;
 		this.secretsHelper = prefs.secretsHelper;
-		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -1,0 +1,17 @@
+.battlegrounds-general {
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+
+	.text {
+		margin-bottom: 10px;
+	}
+
+	::ng-deep .settings-p {
+		width: 215px;
+	}
+
+	::ng-deep preference-slider .knobs .knob.knob.knob.knob {
+		padding-right: 7px;
+	}
+}

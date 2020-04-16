@@ -5,6 +5,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
 import Worker from 'worker-loader!../../workers/bgs-simulation.worker';
 import { BgsBattleSimulationResult } from '../../models/battlegrounds/bgs-battle-simulation-result';
+import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
@@ -44,7 +45,7 @@ export class BgsBattleSimulationService {
 		);
 
 		const result: BgsBattleSimulationResult = prefs.bgsUseLocalSimulator
-			? await this.simulateLocalBattle(battleInfo)
+			? await this.simulateLocalBattle(battleInfo, prefs)
 			: ((await this.http
 					.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfo)
 					.toPromise()) as BgsBattleSimulationResult);
@@ -52,7 +53,10 @@ export class BgsBattleSimulationService {
 		this.stateUpdater.next(new BattlegroundsBattleSimulationEvent(result));
 	}
 
-	private async simulateLocalBattle(battleInfo: BgsBattleInfo): Promise<BgsBattleSimulationResult> {
+	private async simulateLocalBattle(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+	): Promise<BgsBattleSimulationResult> {
 		return new Promise<BgsBattleSimulationResult>(resolve => {
 			const worker = new Worker();
 			worker.onmessage = (ev: MessageEvent) => {
@@ -61,7 +65,12 @@ export class BgsBattleSimulationService {
 				resolve(JSON.parse(ev.data));
 			};
 			// console.log('created worker', worker);
-			worker.postMessage(battleInfo);
+			worker.postMessage({
+				...battleInfo,
+				options: {
+					numberOfSimulations: Math.floor(prefs.bgsSimulatorNumberOfSims),
+				},
+			} as BgsBattleInfo);
 			// console.log('posted worker message');
 		});
 	}

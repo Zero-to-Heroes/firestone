@@ -27,6 +27,12 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ 'selected': selectedApp === 'replays' }" (mousedown)="changeSelection('replays')">
 				<span>Replays</span>
 			</li>
+			<li
+				[ngClass]="{ 'selected': selectedApp === 'battlegrounds' }"
+				(mousedown)="changeSelection('battlegrounds')"
+			>
+				<span>Battlegrounds</span>
+			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

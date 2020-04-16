@@ -12,6 +12,9 @@ import { SettingsAchievementsSoundCaptureComponent } from '../../components/sett
 import { SettingsAchievementsStorageComponent } from '../../components/settings/achievements/settings-achievements-storage.component';
 import { SettingsAchievementsVideoCaptureComponent } from '../../components/settings/achievements/settings-achievements-video-capture.component';
 import { SettingsAchievementsComponent } from '../../components/settings/achievements/settings-achievements.component';
+import { SettingsBattlegroundsGeneralComponent } from '../../components/settings/battlegrounds/settings-battlegrounds-general.component';
+import { SettingsBattlegroundsMenuComponent } from '../../components/settings/battlegrounds/settings-battlegrounds-menu.component';
+import { SettingsBattlegroundsComponent } from '../../components/settings/battlegrounds/settings-battlegrounds.component';
 import { SettingsCollectionMenuComponent } from '../../components/settings/collection/settings-collection-menu.component';
 import { SettingsCollectionNotificationComponent } from '../../components/settings/collection/settings-collection-notification';
 import { SettingsCollectionComponent } from '../../components/settings/collection/settings-collection.component';
@@ -105,6 +108,10 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsReplaysComponent,
 		SettingsReplaysGeneralComponent,
 		SettingsReplaysMenuComponent,
+
+		SettingsBattlegroundsComponent,
+		SettingsBattlegroundsGeneralComponent,
+		SettingsBattlegroundsMenuComponent,
 
 		PreferenceSliderComponent,
 	],
