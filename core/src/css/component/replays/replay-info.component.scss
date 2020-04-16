@@ -15,6 +15,14 @@
 			position: relative;
 		}
 	}
+
+	&.battlegrounds,
+	&.arena {
+		::ng-deep .rank-text {
+			bottom: -57%;
+			padding-right: 13px;
+		}
+	}
 }
 
 .group {
