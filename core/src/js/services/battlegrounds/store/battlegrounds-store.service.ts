@@ -260,19 +260,18 @@ export class BattlegroundsStoreService {
 		if (
 			inGame &&
 			this.bgsActive &&
-			['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) !== -1 &&
+			['closed', 'hidden'].indexOf(battlegroundsWindow.stateEx) !== -1 &&
 			!this.closedByUser
 		) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
-		} else if (
-			['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) === -1 &&
-			(!this.bgsActive || !inGame)
-		) {
-			console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
-			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
+		// In fact we don't want to close the window when the game ends
+		// else if (['closed', 'hidden'].indexOf(battlegroundsWindow.stateEx) === -1 && (!this.bgsActive || !inGame)) {
+		// 	console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
+		// 	await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+		// }
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
