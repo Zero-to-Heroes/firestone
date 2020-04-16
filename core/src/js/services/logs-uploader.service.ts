@@ -39,9 +39,9 @@ export class LogsUploaderService {
 
 	public async uploadAppLogs(): Promise<string> {
 		try {
-			const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
-			const firestoneLogKey = await this.s3.postBinaryFile(firestoneLogs, '.app.zip');
-			// console.log('posted Firestone logs', firestoneLogKey);
+			const firestoneLogs: Blob = await this.io.zipAppLogFolder('Firestone');
+			const firestoneLogKey = await this.s3.postBlob(firestoneLogs, '.app.zip');
+			console.log('posted Firestone logs', firestoneLogKey);
 			return firestoneLogKey;
 		} catch (e) {
 			console.error('Exception while uploading logs for troubleshooting', e);
