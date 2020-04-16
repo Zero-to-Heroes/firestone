@@ -92,13 +92,14 @@ export class BattlegroundsStoreService {
 					return;
 				}
 
-				if (window.window_state_ex === 'closed') {
+				console.warn(window);
+				if (['closed', 'hidden'].indexOf(window.stateEx) !== -1) {
 					console.log('[bgs-store] showing BVS window', window);
 					this.closedByUser = false;
 					await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 					await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 					await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
-				} else if (window.window_state_ex !== 'closed') {
+				} else if (['closed', 'hidden'].indexOf(window.stateEx) === -1) {
 					console.log('[bgs-store] closing overlay', shouldShowOverlay, inGame, window);
 					this.closedByUser = true;
 					await this.ow.hideWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
@@ -255,11 +256,20 @@ export class BattlegroundsStoreService {
 		const inGame = this.state && this.state.inGame;
 
 		const battlegroundsWindow = await this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW);
-		if (inGame && this.bgsActive && battlegroundsWindow.window_state_ex === 'closed' && !this.closedByUser) {
+		console.warn(battlegroundsWindow);
+		if (
+			inGame &&
+			this.bgsActive &&
+			['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) !== -1 &&
+			!this.closedByUser
+		) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
-		} else if (battlegroundsWindow.window_state_ex !== 'closed' && (!this.bgsActive || !inGame)) {
+		} else if (
+			['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) === -1 &&
+			(!this.bgsActive || !inGame)
+		) {
 			console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
