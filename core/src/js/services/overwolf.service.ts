@@ -658,6 +658,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async listFilesInAppDirectory(appName: string): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.io.dir(`${overwolf.io.paths.localAppData}/overwolf/Log/Apps/${appName}`, res => {
+				resolve(res);
+			});
+		});
+	}
+
 	public async fileExists(filePathOnDisk: string): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
 			overwolf.io.fileExists(filePathOnDisk, (res, error) => {
