@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Input,
 	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
@@ -20,6 +21,7 @@ import { OverwolfService } from '../services/overwolf.service';
 })
 export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	hotkeyHtml = '';
+	@Input() hotkeyName = 'collection';
 
 	private hotkey = 'Alt+C';
 	private hotkeyChangedListener;
@@ -39,7 +41,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async detectHotKey() {
-		this.hotkey = await this.ow.getHotKey('collection');
+		this.hotkey = await this.ow.getHotKey(this.hotkeyName);
 		if (this.hotkey === 'Unassigned') {
 			this.hotkeyHtml = '<span class="no-hotkey">No hotkey assigned</span>';
 		} else {

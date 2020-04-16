@@ -35,10 +35,10 @@ declare let amplitude: any;
 						<menu-selection-bgs [selectedStage]="currentStage?.id"></menu-selection-bgs>
 					</div>
 				</div>
-				<!-- <hotkey-bgs></hotkey-bgs> -->
+				<hotkey [hotkeyName]="'battlegrounds'"></hotkey>
 				<div class="controls">
 					<control-bug></control-bug>
-					<control-settings [windowId]="windowId"></control-settings>
+					<control-settings [windowId]="windowId" [settingsApp]="'battlegrounds'"></control-settings>
 					<control-discord></control-discord>
 					<control-minimize [windowId]="windowId"></control-minimize>
 					<control-maximize

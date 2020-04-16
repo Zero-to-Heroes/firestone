@@ -192,6 +192,11 @@
 				"title": "Show/hide main window",
 				"action-type": "custom",
 				"default": "Alt+C"
+			},
+			"battlegrounds": {
+				"title": "Show/hide battlegrounds window",
+				"action-type": "custom",
+				"default": "Alt+B"
 			}
 		}
 	}
