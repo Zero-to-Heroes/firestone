@@ -58,7 +58,11 @@ export class EndGameListenerService {
 					break;
 				case GameEvent.LOCAL_PLAYER:
 					this.currentDeckstring = this.deckService.currentDeck.deckstring;
-					this.currentDeckname = this.deckService.currentDeck.name;
+					// First remove the diacritics, then remove the weird unicode characters (deck names can't be fun!)
+					this.currentDeckname = this.deckService.currentDeck.name
+						?.normalize('NFKD')
+						?.replace(/[^\w]/g, '')
+						?.replace(/[^\x20-\x7E]/g, '');
 					break;
 				case GameEvent.MATCH_METADATA:
 					this.currentBuildNumber = gameEvent.additionalData.metaData.BuildNumber;
