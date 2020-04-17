@@ -17,9 +17,10 @@ export class LogsUploaderService {
 			}
 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
 			const logLines = await this.ow.getFileContents(logsLocation);
+			console.log('uploaded logs with size', logLines.length);
 			const jszip = new JSZip.default();
-			console.log('ready to zip', jszip);
 			jszip.file('power.log', logLines);
+			console.log('ready to zip', logLines?.length, logsLocation);
 			const content: Blob = await jszip.generateAsync({
 				type: 'blob',
 				compression: 'DEFLATE',
