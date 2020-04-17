@@ -59,7 +59,7 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle
 						field="overlayGroupByZone"
 						label="Group cards by zone"
-						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
+						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other. Otherwise, the tracker will only show the cards that are left in the deck."
 					></preference-toggle>
 					<preference-toggle
 						[ngClass]="{ 'disabled': overlayGroupByZone }"
