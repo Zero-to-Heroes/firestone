@@ -14,10 +14,10 @@ export class SelectCollectionFormatProcessor implements Processor {
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'sets',
 			menuDisplayType: 'menu',
-			selectedSet: undefined,
+			selectedSetId: undefined,
 			selectedFormat: event.format,
 			searchString: undefined,
-			selectedCard: undefined,
+			selectedCardId: undefined,
 		} as NavigationCollection);
 		return [
 			null,

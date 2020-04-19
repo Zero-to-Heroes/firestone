@@ -35,17 +35,16 @@ export class NewPackProcessor implements Processor {
 				newSets.push(set);
 			}
 		}
-		console.error('TODO: change this logic to only store the ID in the navigation, like we do for achievements');
-		const newSelectedSet =
-			navigationState.navigationCollection.selectedSet &&
-			navigationState.navigationCollection.selectedSet.id === updatedSet.id
-				? updatedSet
-				: navigationState.navigationCollection.selectedSet;
+		// console.error('TODO: change this logic to only store the ID in the navigation, like we do for achievements');
+		// const newSelectedSet =
+		// 	navigationState.navigationCollection.selectedSetId === updatedSet.id
+		// 		? updatedSet
+		// 		: navigationState.navigationCollection.selectedSet;
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: newSets as readonly Set[],
 		} as BinderState);
 		const newCollection = navigationState.navigationCollection.update({
-			selectedSet: newSelectedSet,
+			selectedSetId: updatedSet.id,
 		} as NavigationCollection);
 		return [
 			Object.assign(new MainWindowState(), currentState, {

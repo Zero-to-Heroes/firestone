@@ -16,11 +16,11 @@ export class SelectCollectionSetProcessor implements Processor {
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',
-			selectedSet: selectedSet,
+			selectedSetId: event.setId,
 			selectedFormat: selectedSet.standard ? 'standard' : 'wild',
 			cardList: selectedSet.allCards,
 			searchString: undefined,
-			selectedCard: undefined,
+			selectedCardId: undefined,
 		} as NavigationCollection);
 		return [
 			null,

@@ -20,8 +20,8 @@ export class ShowCardDetailsProcessor implements Processor {
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'card-details',
 			menuDisplayType: 'breadcrumbs',
-			selectedSet: selectedSet,
-			selectedCard: selectedCard,
+			selectedSetId: selectedSet.id,
+			selectedCardId: event.cardId,
 			selectedFormat: selectedSet.standard ? 'standard' : 'wild',
 			searchString: undefined,
 		} as NavigationCollection);
