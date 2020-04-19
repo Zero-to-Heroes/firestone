@@ -40,6 +40,7 @@ export class CollectionBootstrapService {
 			totalHistoryLength: await this.cardHistoryStorage.countHistory(),
 			isLoading: false,
 		} as BinderState);
+		// console.warn('loading card history', cardHistory, newState);
 		this.stateUpdater.next(new CollectionInitEvent(newState));
 	}
 

@@ -2,6 +2,8 @@ import { AchievementCategory } from '../../../../models/achievement-category';
 import { AchievementSet } from '../../../../models/achievement-set';
 import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
 import { AchievementsRepository } from '../../../achievement/achievements-repository.service';
 import { AchievementStateHelper } from './achievement-state-helper';
@@ -9,9 +11,16 @@ import { AchievementStateHelper } from './achievement-state-helper';
 export class AchievementUpdateHelper {
 	constructor(private achievementsRepository: AchievementsRepository, private helper: AchievementStateHelper) {}
 
-	public async rebuildAchievements(currentState: MainWindowState): Promise<AchievementsState> {
+	public async rebuildAchievements(
+		dataState: MainWindowState,
+		navigationState: NavigationState,
+	): Promise<[AchievementsState, NavigationAchievements]> {
 		const globalCategories = await this.buildGlobalCategories(true);
-		return this.helper.updateStateFromNewGlobalCategories(currentState.achievements, globalCategories);
+		return this.helper.updateStateFromNewGlobalCategories(
+			dataState.achievements,
+			navigationState.navigationAchievements,
+			globalCategories,
+		);
 	}
 
 	public async buildGlobalCategories(useCache = false): Promise<readonly VisualAchievementCategory[]> {

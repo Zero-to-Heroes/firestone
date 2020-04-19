@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DecktrackerState } from '../../models/mainwindow/decktracker/decktracker-state';
-import { Navigation } from '../../models/mainwindow/navigation';
+import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 
 @Component({
 	selector: 'decktracker',
@@ -13,12 +13,12 @@ import { Navigation } from '../../models/mainwindow/navigation';
 			<section class="main divider">
 				<with-loading [isLoading]="state.isLoading">
 					<decktracker-menu
-						[displayType]="state.menuDisplayType"
-						[currentView]="state.currentView"
+						[displayType]="navigation.navigationDecktracker.menuDisplayType"
+						[currentView]="navigation.navigationDecktracker.currentView"
 					></decktracker-menu>
 					<decktracker-filters [state]="state.filters"></decktracker-filters>
 					<decktracker-decks
-						[hidden]="state.currentView !== 'decks'"
+						[hidden]="navigation.navigationDecktracker.currentView !== 'decks'"
 						[decks]="state.decks"
 					></decktracker-decks>
 				</with-loading>
@@ -30,5 +30,5 @@ import { Navigation } from '../../models/mainwindow/navigation';
 })
 export class DecktrackerComponent {
 	@Input() state: DecktrackerState;
-	@Input() navigation: Navigation;
+	@Input() navigation: NavigationState;
 }

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { NavigationReplays } from '../../models/mainwindow/navigation/navigation-replays';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
+import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 
 @Component({
 	selector: 'match-details',
@@ -23,7 +24,9 @@ export class MatchDetailsComponent {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	@Input() set state(value: ReplaysState) {
+	@Input() set state(value: ReplaysState) {}
+
+	@Input() set navigation(value: NavigationReplays) {
 		this.selectedReplay = value.selectedReplay;
 		this.replayInfo = value.selectedReplay ? value.selectedReplay.replayInfo : null;
 	}

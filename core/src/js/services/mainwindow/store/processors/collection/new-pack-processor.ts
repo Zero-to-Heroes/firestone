@@ -1,6 +1,8 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PackHistory } from '../../../../../models/pack-history';
 import { PityTimer } from '../../../../../models/pity-timer';
 import { Set } from '../../../../../models/set';
@@ -12,7 +14,12 @@ import { Processor } from '../processor';
 export class NewPackProcessor implements Processor {
 	constructor(private indexedDb: IndexedDbService, private allCards: AllCardsService) {}
 
-	public async process(event: NewPackEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: NewPackEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		// Save the new pack info
 		const newPack: PackHistory = new PackHistory(event.setId, event.packCards);
 		await this.indexedDb.saveNewPack(newPack);
@@ -28,17 +35,26 @@ export class NewPackProcessor implements Processor {
 				newSets.push(set);
 			}
 		}
+		console.error('TODO: change this logic to only store the ID in the navigation, like we do for achievements');
 		const newSelectedSet =
-			currentState.binder.selectedSet && currentState.binder.selectedSet.id === updatedSet.id
+			navigationState.navigationCollection.selectedSet &&
+			navigationState.navigationCollection.selectedSet.id === updatedSet.id
 				? updatedSet
-				: currentState.binder.selectedSet;
+				: navigationState.navigationCollection.selectedSet;
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: newSets as readonly Set[],
-			selectedSet: newSelectedSet,
 		} as BinderState);
-		return Object.assign(new MainWindowState(), currentState, {
-			binder: newBinder,
-		} as MainWindowState);
+		const newCollection = navigationState.navigationCollection.update({
+			selectedSet: newSelectedSet,
+		} as NavigationCollection);
+		return [
+			Object.assign(new MainWindowState(), currentState, {
+				binder: newBinder,
+			} as MainWindowState),
+			navigationState.update({
+				navigationCollection: newCollection,
+			} as NavigationState),
+		];
 	}
 
 	private async updatePityTimer(setToUpdate: Set, packCards: readonly any[]) {

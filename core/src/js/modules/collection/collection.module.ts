@@ -42,7 +42,6 @@ import { RarityComponent } from '../../components/collection/rarity.component';
 import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainer } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
-import { MainWindowNavigationComponent } from '../../components/controls/main-window-navigation.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
@@ -104,7 +103,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		SharedServicesModule.forRoot(),
 	],
 	declarations: [
-		MainWindowNavigationComponent,
 		GlobalHeaderComponent,
 
 		FsTimeDisplay,

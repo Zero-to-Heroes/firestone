@@ -1,7 +1,6 @@
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 
 export interface StateHistory {
-	readonly state: MainWindowState;
+	readonly state: NavigationState;
 	readonly event: string;
-	readonly navigation: boolean;
 }

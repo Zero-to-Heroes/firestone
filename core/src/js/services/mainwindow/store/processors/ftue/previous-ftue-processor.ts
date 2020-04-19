@@ -1,12 +1,18 @@
 import { CurrentAppType } from '../../../../../models/mainwindow/current-app.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreviousFtueEvent } from '../../events/ftue/previous-ftue-event';
 import { Processor } from '../processor';
 
 export class PreviousFtueProcessor implements Processor {
-	public async process(event: PreviousFtueEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: PreviousFtueEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		let nextStep: CurrentAppType = undefined;
-		switch (currentState.currentApp) {
+		switch (navigationState.currentApp) {
 			case undefined:
 				nextStep = undefined;
 				break;
@@ -23,8 +29,6 @@ export class PreviousFtueProcessor implements Processor {
 				nextStep = 'decktracker';
 				break;
 		}
-		return Object.assign(new MainWindowState(), currentState, {
-			currentApp: nextStep,
-		} as MainWindowState);
+		return [null, navigationState.update({ currentApp: nextStep } as NavigationState)];
 	}
 }

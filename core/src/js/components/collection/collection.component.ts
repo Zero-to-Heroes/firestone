@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BinderState } from '../../models/mainwindow/binder-state';
-import { Navigation } from '../../models/mainwindow/navigation';
+import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { Set } from '../../models/set';
 import { SetsService } from '../../services/sets-service.service';
 
@@ -12,38 +12,41 @@ import { SetsService } from '../../services/sets-service.service';
 	],
 	template: `
 		<div class="app-section collection">
-			<section class="main" [ngClass]="{ 'divider': _state.currentView === 'cards' }">
-				<with-loading [isLoading]="_state.isLoading">
+			<section class="main" [ngClass]="{ 'divider': navigation.navigationCollection.currentView === 'cards' }">
+				<with-loading [isLoading]="dataState.isLoading">
 					<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 					<sets
-						[selectedFormat]="_state.selectedFormat"
+						[selectedFormat]="navigation.navigationCollection.selectedFormat"
 						[standardSets]="standardSets"
 						[wildSets]="wildSets"
-						[hidden]="_state.currentView !== 'sets'"
+						[hidden]="navigation.navigationCollection.currentView !== 'sets'"
 					>
 					</sets>
 					<cards
-						[cardList]="_state.cardList"
-						[set]="_state.selectedSet"
-						[searchString]="_state.searchString"
-						[hidden]="_state.currentView !== 'cards'"
+						[cardList]="navigation.navigationCollection.cardList"
+						[set]="navigation.navigationCollection.selectedSet"
+						[searchString]="navigation.navigationCollection.searchString"
+						[hidden]="navigation.navigationCollection.currentView !== 'cards'"
 					>
 					</cards>
 					<full-card
 						class="full-card"
-						[selectedCard]="_state.selectedCard"
-						[hidden]="_state.currentView !== 'card-details'"
+						[selectedCard]="navigation.navigationCollection.selectedCard"
+						[hidden]="navigation.navigationCollection.currentView !== 'card-details'"
 					>
 					</full-card>
 				</with-loading>
 			</section>
 			<section class="secondary">
-				<card-search [searchString]="_state.searchString" [searchResults]="_state.searchResults"></card-search>
+				<card-search
+					[searchString]="navigation.navigationCollection.searchString"
+					[searchResults]="navigation.navigationCollection.searchResults"
+				></card-search>
 				<card-history
-					[selectedCard]="_state.selectedCard"
-					[cardHistory]="_state.cardHistory"
-					[shownHistory]="_state.shownCardHistory"
-					[totalHistoryLength]="_state.totalHistoryLength"
+					[selectedCard]="navigation.navigationCollection.selectedCard"
+					[cardHistory]="dataState.cardHistory"
+					[shownHistory]="navigation.navigationCollection.shownCardHistory"
+					[totalHistoryLength]="dataState.totalHistoryLength"
 				>
 				</card-history>
 			</section>
@@ -52,8 +55,8 @@ import { SetsService } from '../../services/sets-service.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionComponent {
-	_state: BinderState;
-	@Input() navigation: Navigation;
+	dataState: BinderState;
+	@Input() navigation: NavigationState;
 
 	standardSets: Set[];
 	wildSets: Set[];
@@ -71,7 +74,7 @@ export class CollectionComponent {
 	@Input('state') set state(state: BinderState) {
 		this.standardSets = state.allSets.filter(set => set.standard);
 		this.wildSets = state.allSets.filter(set => !set.standard);
-		this._state = state;
+		this.dataState = state;
 		// console.log('set state in collection', this._state);
 	}
 }

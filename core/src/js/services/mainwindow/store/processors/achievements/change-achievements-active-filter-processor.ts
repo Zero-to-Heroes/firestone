@@ -1,5 +1,6 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NonNavigationState } from '../../../../../models/mainwindow/non-navigation-state';
+import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { ChangeAchievementsActiveFilterEvent } from '../../events/achievements/change-achievements-active-filter-event';
 import { Processor } from '../processor';
 
@@ -7,13 +8,17 @@ export class ChangeAchievementsActiveFilterProcessor implements Processor {
 	public async process(
 		event: ChangeAchievementsActiveFilterEvent,
 		currentState: MainWindowState,
-	): Promise<MainWindowState> {
-		console.log('setting new filter', event.newFilter);
-		const newState = Object.assign(new NonNavigationState(), currentState.nonNavigationState, {
+		history,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
+		const newAchievements = navigationState.navigationAchievements.update({
 			achievementActiveFilter: event.newFilter,
-		} as NonNavigationState);
-		return Object.assign(new MainWindowState(), currentState, {
-			nonNavigationState: newState,
-		} as MainWindowState);
+		} as NavigationAchievements);
+		return [
+			null,
+			navigationState.update({
+				navigationAchievements: newAchievements,
+			} as NavigationState),
+		];
 	}
 }

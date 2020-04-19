@@ -1,155 +1,139 @@
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { Navigation } from '../../../../../models/mainwindow/navigation';
-import { ReplaysState } from '../../../../../models/mainwindow/replays/replays-state';
+import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
+import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { NavigationBackEvent } from '../../events/navigation/navigation-back-event';
-import { StateHistory } from '../../state-history';
+import { NavigationHistory } from '../../navigation-history';
 import { Processor } from '../processor';
 
 export class NavigationBackProcessor implements Processor {
 	public async process(
 		event: NavigationBackEvent,
 		currentState: MainWindowState,
-		history: readonly StateHistory[],
-	): Promise<MainWindowState> {
-		// console.log('returning state', NavigationBackProcessor.buildParentState(currentState), currentState);
-		// return NavigationBackProcessor.buildParentState(currentState);
-		const nonNavigationState = currentState.nonNavigationState;
-		const targetIndex = NavigationBackProcessor.getTargetIndex(currentState, history);
+		history: NavigationHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const newState =
-			targetIndex === -1
-				? NavigationBackProcessor.buildParentState(currentState) || currentState
-				: history[targetIndex].state;
-		return Object.assign(new MainWindowState(), newState, {
-			nonNavigationState: nonNavigationState,
-		} as MainWindowState);
+			history.currentIndexInHistory > 0
+				? NavigationBackProcessor.buildParentState(navigationState, currentState)
+				: history.stateHistory[history.currentIndexInHistory - 1].state;
+		return [null, newState];
 	}
 
-	public static getTargetIndex(currentState: MainWindowState, history: readonly StateHistory[]): number {
-		let currentIndex = history.map(history => history.state).indexOf(currentState);
-		while (currentIndex >= 0 && !history[currentIndex].navigation) {
-			currentIndex--;
-		}
-		// We go back until we find an item that is a navigation state
-		let targetIndex = -1;
-		for (let i = currentIndex - 1; i >= 0; i--) {
-			if (history[i].navigation) {
-				targetIndex = i;
-				break;
-			}
-		}
-		return targetIndex;
-	}
-
-	// Since the navigation itself is not modeled inside the state, I don't have any choice
-	// but to add big if/else statements here
-	public static buildParentState(currentState: MainWindowState): MainWindowState {
-		switch (currentState.currentApp) {
+	public static buildParentState(navigationState: NavigationState, dataState: MainWindowState): NavigationState {
+		switch (navigationState.currentApp) {
 			case 'achievements':
-				return NavigationBackProcessor.buildParentAchievementsState(currentState);
+				return NavigationBackProcessor.buildParentAchievementsState(navigationState, dataState);
 			case 'collection':
-				return NavigationBackProcessor.buildParentCollectionState(currentState);
+				return NavigationBackProcessor.buildParentCollectionState(navigationState, dataState);
 			case 'decktracker':
-				return NavigationBackProcessor.buildParentDecktrackerState(currentState);
+				return NavigationBackProcessor.buildParentDecktrackerState(navigationState, dataState);
 			case 'replays':
-				return NavigationBackProcessor.buildParentReplaysState(currentState);
+				return NavigationBackProcessor.buildParentReplaysState(navigationState, dataState);
 			default:
-				return currentState;
+				return navigationState;
 		}
 	}
 
-	private static buildParentAchievementsState(currentState: MainWindowState): MainWindowState {
-		switch (currentState.achievements.currentView) {
+	private static buildParentAchievementsState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+	): NavigationState {
+		switch (navigationState.navigationAchievements.currentView) {
 			case 'categories':
 				return null;
 			case 'category':
-				return Object.assign(new MainWindowState(), currentState, {
-					achievements: Object.assign(new AchievementsState(), currentState.achievements, {
+				return navigationState.update({
+					navigationAchievements: navigationState.navigationAchievements.update({
 						currentView: 'categories',
-					} as AchievementsState),
-					navigation: Object.assign(new Navigation(), currentState.navigation, {
-						text: 'Categories',
-					} as Navigation),
-				} as MainWindowState);
+					} as NavigationAchievements),
+					text: 'Categories',
+				} as NavigationState);
 			case 'list':
-				const category = currentState.achievements.globalCategories.find(
-					cat => cat.id === currentState.achievements.selectedGlobalCategoryId,
+				const category = dataState.achievements.globalCategories.find(
+					cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
 				);
 				if (category.achievementSets.length === 1) {
-					return Object.assign(new MainWindowState(), currentState, {
-						achievements: Object.assign(new AchievementsState(), currentState.achievements, {
+					return navigationState.update({
+						navigationAchievements: navigationState.navigationAchievements.update({
 							currentView: 'categories',
-						} as AchievementsState),
-						navigation: Object.assign(new Navigation(), currentState.navigation, {
-							text: 'Categories',
-						} as Navigation),
-					} as MainWindowState);
+						} as NavigationAchievements),
+						text: 'Categories',
+					} as NavigationState);
 				}
-				return Object.assign(new MainWindowState(), currentState, {
-					achievements: Object.assign(new AchievementsState(), currentState.achievements, {
+				return navigationState.update({
+					navigationAchievements: navigationState.navigationAchievements.update({
 						currentView: 'category',
-					} as AchievementsState),
+					} as NavigationAchievements),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in
-					navigation: Object.assign(new Navigation(), currentState.navigation, {
-						text: currentState.achievements.globalCategories.find(
-							cat => cat.id === currentState.achievements.selectedGlobalCategoryId,
-						).name,
-					} as Navigation),
-				} as MainWindowState);
+					text: dataState.achievements.globalCategories.find(
+						cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
+					).name,
+				} as NavigationState);
 			default:
 				return null;
 		}
 	}
 
-	private static buildParentCollectionState(currentState: MainWindowState): MainWindowState {
-		switch (currentState.binder.currentView) {
+	private static buildParentCollectionState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+	): NavigationState {
+		switch (navigationState.navigationCollection.currentView) {
 			case 'sets':
 				return null;
 			case 'cards':
-				return Object.assign(new MainWindowState(), currentState, {
-					binder: Object.assign(new BinderState(), currentState.binder, {
+				return navigationState.update({
+					navigationCollection: navigationState.navigationCollection.update({
 						currentView: 'sets',
-					} as BinderState),
-					navigation: Object.assign(new Navigation(), currentState.navigation, {
-						text: null,
-					} as Navigation),
-				} as MainWindowState);
+					} as NavigationCollection),
+					text: null,
+				} as NavigationState);
 			case 'card-details':
-				const selectedSet = currentState.binder.allSets.find(
-					set => set.allCards.find(card => card.id === currentState.binder.selectedCard.id) != null,
+				const selectedSet = dataState.binder.allSets.find(
+					set =>
+						set.allCards.find(card => card.id === navigationState.navigationCollection.selectedCard.id) !=
+						null,
 				);
-				console.log('selected set', selectedSet, currentState);
-				return Object.assign(new MainWindowState(), currentState, {
-					binder: Object.assign(new BinderState(), currentState.binder, {
+				console.log('selected set', selectedSet);
+				return navigationState.update({
+					navigationCollection: navigationState.navigationCollection.update({
 						currentView: 'cards',
 						selectedSet: selectedSet,
 						cardList: selectedSet.allCards,
-					} as BinderState),
-					navigation: Object.assign(new Navigation(), currentState.navigation, {
-						text: currentState.binder.selectedSet.name,
-					} as Navigation),
-				} as MainWindowState);
+					} as NavigationCollection),
+					// This is starting to be weird. It would probably be best to have an FSM,
+					// and derive the name of the current navigation from the state we are in
+					text: navigationState.navigationCollection.selectedSet.name,
+				} as NavigationState);
 			default:
 				return null;
 		}
 	}
 
-	private static buildParentDecktrackerState(currentState: MainWindowState): MainWindowState {
+	private static buildParentDecktrackerState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+	): NavigationState {
 		return null;
 	}
 
-	private static buildParentReplaysState(currentState: MainWindowState): MainWindowState {
-		switch (currentState.replays.currentView) {
+	private static buildParentReplaysState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+	): NavigationState {
+		switch (navigationState.navigationReplays.currentView) {
 			case 'list':
 				return null;
 			case 'match-details':
-				return Object.assign(new MainWindowState(), currentState, {
-					replays: Object.assign(new ReplaysState(), currentState.replays, {
+				return navigationState.update({
+					navigationReplays: navigationState.navigationReplays.update({
 						currentView: 'list',
-					} as ReplaysState),
-				} as MainWindowState);
+					} as NavigationReplays),
+					text: null,
+				} as NavigationState);
 			default:
 				return null;
 		}

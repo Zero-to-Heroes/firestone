@@ -3,23 +3,16 @@ import { AchievementSet } from '../achievement-set';
 import { AchievementHistory } from '../achievement/achievement-history';
 import { VisualAchievement } from '../visual-achievement';
 import { VisualAchievementCategory } from '../visual-achievement-category';
-import { CurrentView } from './achievement/current-view.type';
-import { SharingAchievement } from './achievement/sharing-achievement';
 
 export class AchievementsState {
-	readonly currentView: CurrentView = 'categories';
-	readonly menuDisplayType: string = 'menu';
 	readonly globalCategories: readonly VisualAchievementCategory[] = [];
-	readonly selectedGlobalCategoryId: string;
-	readonly selectedCategoryId: string;
 	// Holds the IDs of all the relevant achievements. The real data is somewhere in the achievements catergories
-	readonly achievementsList: readonly string[] = [];
-	// Holds the IDs of the achievements to display
-	readonly displayedAchievementsList: readonly string[] = [];
-	readonly selectedAchievementId: string;
 	readonly achievementHistory: readonly AchievementHistory[] = [];
-	readonly sharingAchievement: SharingAchievement;
 	readonly isLoading: boolean = true;
+
+	public update(base: AchievementsState): AchievementsState {
+		return Object.assign(new AchievementsState(), this, base);
+	}
 
 	public updateAchievement(newAchievement: Achievement): AchievementsState {
 		return Object.assign(new AchievementsState(), this, {

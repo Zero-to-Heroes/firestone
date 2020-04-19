@@ -1,14 +1,19 @@
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { Navigation } from '../../../../../models/mainwindow/navigation';
+import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Set } from '../../../../../models/set';
 import { SelectCollectionSetEvent } from '../../events/collection/select-collection-set-event';
 import { Processor } from '../processor';
 
 export class SelectCollectionSetProcessor implements Processor {
-	public async process(event: SelectCollectionSetEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: SelectCollectionSetEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const selectedSet: Set = currentState.binder.allSets.find(set => set.id === event.setId);
-		const newBinder = Object.assign(new BinderState(), currentState.binder, {
+		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',
 			selectedSet: selectedSet,
@@ -16,16 +21,16 @@ export class SelectCollectionSetProcessor implements Processor {
 			cardList: selectedSet.allCards,
 			searchString: undefined,
 			selectedCard: undefined,
-		} as BinderState);
-		const navigation = Object.assign(new Navigation(), currentState.navigation, {
-			text: selectedSet.name,
-			image: `/Files/assets/images/sets/${selectedSet.id}.png`,
-		} as Navigation);
-		return Object.assign(new MainWindowState(), currentState, {
-			isVisible: true,
-			currentApp: 'collection',
-			binder: newBinder,
-			navigation: navigation,
-		} as MainWindowState);
+		} as NavigationCollection);
+		return [
+			null,
+			navigationState.update({
+				isVisible: true,
+				currentApp: 'collection',
+				navigationCollection: newCollection,
+				text: selectedSet.name,
+				image: `/Files/assets/images/sets/${selectedSet.id}.png`,
+			} as NavigationState),
+		];
 	}
 }

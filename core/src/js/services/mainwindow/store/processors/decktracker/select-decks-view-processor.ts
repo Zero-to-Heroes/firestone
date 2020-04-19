@@ -1,15 +1,24 @@
-import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationDecktracker } from '../../../../../models/mainwindow/navigation/navigation-decktracker';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { SelectDecksViewEvent } from '../../events/decktracker/select-decks-view-event';
 import { Processor } from '../processor';
 
 export class SelectDeckViewProcessor implements Processor {
-	public async process(event: SelectDecksViewEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
+	public async process(
+		event: SelectDecksViewEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
+		const newDecktracker = navigationState.navigationDecktracker.update({
 			currentView: event.newView,
-		} as DecktrackerState);
-		return Object.assign(new MainWindowState(), currentState, {
-			decktracker: newState,
-		} as MainWindowState);
+		} as NavigationDecktracker);
+		return [
+			null,
+			navigationState.update({
+				navigationDecktracker: newDecktracker,
+			} as NavigationState),
+		];
 	}
 }

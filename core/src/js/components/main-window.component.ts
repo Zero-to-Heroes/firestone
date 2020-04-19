@@ -12,6 +12,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
+import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 
@@ -22,9 +23,8 @@ declare let amplitude: any;
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper *ngIf="state" [activeTheme]="activeTheme" [allowResize]="true">
-			<section class="menu-bar" [ngClass]="{ 'ftue': state.showFtue }">
-				<!-- <main-window-navigation [navigation]="state.navigation"></main-window-navigation> -->
+		<window-wrapper *ngIf="dataState && navigationState" [activeTheme]="activeTheme" [allowResize]="true">
+			<section class="menu-bar" [ngClass]="{ 'ftue': dataState.showFtue }">
 				<div class="first">
 					<div class="navigation">
 						<i class="i-117X33 gold-theme logo">
@@ -33,69 +33,74 @@ declare let amplitude: any;
 							</svg>
 						</i>
 						<menu-selection
-							[selectedModule]="state.currentApp"
-							[currentUser]="state.currentUser"
+							[selectedModule]="navigationState.currentApp"
+							[currentUser]="dataState.currentUser"
 						></menu-selection>
 					</div>
 				</div>
 				<hotkey></hotkey>
 				<div class="controls">
 					<control-bug></control-bug>
-					<control-settings [windowId]="windowId" [settingsApp]="state.currentApp"></control-settings>
+					<control-settings
+						[windowId]="windowId"
+						[settingsApp]="navigationState.currentApp"
+					></control-settings>
 					<control-discord></control-discord>
 					<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 					<control-maximize [windowId]="windowId"></control-maximize>
 					<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
 				</div>
 			</section>
-			<ftue *ngIf="state.showFtue" [selectedModule]="state.currentApp"> </ftue>
-			<section class="content-container" *ngIf="!state.showFtue">
+			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
+			<section class="content-container" *ngIf="!dataState.showFtue">
 				<replays
 					class="main-section"
-					[state]="state.replays"
-					[navigation]="state.navigation"
-					[hidden]="state.currentApp !== 'replays'"
+					[state]="dataState.replays"
+					[navigation]="navigationState"
+					[hidden]="navigationState.currentApp !== 'replays'"
 				></replays>
 				<achievements
 					class="main-section"
-					[state]="state.achievements"
-					[nonNavigationState]="state.nonNavigationState"
-					[navigation]="state.navigation"
-					[currentUser]="state.currentUser"
-					[socialShareUserInfo]="state.socialShareUserInfo"
-					[hidden]="state.currentApp !== 'achievements'"
-					[globalStats]="state.globalStats"
+					[state]="dataState.achievements"
+					[navigation]="navigationState"
+					[currentUser]="dataState.currentUser"
+					[socialShareUserInfo]="dataState.socialShareUserInfo"
+					[hidden]="navigationState.currentApp !== 'achievements'"
+					[globalStats]="dataState.globalStats"
 				>
 				</achievements>
 				<collection
 					class="main-section"
-					[state]="state.binder"
-					[navigation]="state.navigation"
-					[hidden]="state.currentApp !== 'collection'"
+					[state]="dataState.binder"
+					[navigation]="navigationState"
+					[hidden]="navigationState.currentApp !== 'collection'"
 				></collection>
 				<decktracker
 					class="main-section"
-					[state]="state.decktracker"
-					[navigation]="state.navigation"
-					[hidden]="state.currentApp !== 'decktracker'"
+					[state]="dataState.decktracker"
+					[navigation]="navigationState"
+					[hidden]="navigationState.currentApp !== 'decktracker'"
 				>
 				</decktracker>
 			</section>
 			<tooltips></tooltips>
-			<ads [parentComponent]="'main-window'" *ngIf="!state.showFtue"></ads>
+			<ads [parentComponent]="'main-window'" *ngIf="!dataState.showFtue"></ads>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainWindowComponent implements AfterViewInit, OnDestroy {
-	state: MainWindowState;
+	dataState: MainWindowState;
+	navigationState: NavigationState;
 	windowId: string;
 	activeTheme: CurrentAppType;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
+	private navigationStateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
-	private storeSubscription: Subscription;
+	private dataStoreSubscription: Subscription;
+	private navigationStoreSubscription: Subscription;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -131,18 +136,34 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		});
 		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
 		// console.log('retrieved storeBus');
-		this.storeSubscription = storeBus.subscribe((newState: MainWindowState) => {
+		this.dataStoreSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				// First update the state before restoring the window
 				// console.log('received state', newState);
-				this.state = newState;
-				this.activeTheme = this.state.showFtue ? 'general' : this.state.currentApp;
+				this.dataState = newState;
+				this.activeTheme = this.dataState.showFtue ? 'general' : this.navigationState?.currentApp;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+		});
+		const navigationStoreBus: BehaviorSubject<NavigationState> = this.ow.getMainWindow().mainWindowStoreNavigation;
+		// console.log('retrieved storeBus');
+		this.navigationStoreSubscription = navigationStoreBus.subscribe((newState: NavigationState) => {
+			setTimeout(async () => {
+				// First update the state before restoring the window
+				// console.log('received state', newState);
+				this.navigationState = newState;
+				this.activeTheme = this.dataState?.showFtue ? 'general' : this.navigationState.currentApp;
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();
 				}
 				const window = await this.ow.getCurrentWindow();
 				const currentlyVisible = window.isVisible;
-				if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
+				if (
+					newState.isVisible &&
+					(!this.navigationState || !this.navigationState.isVisible || !currentlyVisible)
+				) {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 					console.log('restoring window', this.isMaximized);
 					await this.ow.restoreWindow(this.windowId);
@@ -153,7 +174,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					console.log('hiding main window', newState);
 					await this.ow.hideWindow(this.windowId);
 				}
-				if (this.state && newState.currentApp !== this.state.currentApp) {
+				if (this.navigationState && newState.currentApp !== this.navigationState.currentApp) {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 				}
 			});
@@ -170,6 +191,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
-		this.storeSubscription.unsubscribe();
+		this.dataStoreSubscription.unsubscribe();
 	}
 }

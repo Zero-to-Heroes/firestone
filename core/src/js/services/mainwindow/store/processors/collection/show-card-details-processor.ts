@@ -1,7 +1,7 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { Navigation } from '../../../../../models/mainwindow/navigation';
+import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Set, SetCard } from '../../../../../models/set';
 import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
 import { Processor } from '../processor';
@@ -9,27 +9,32 @@ import { Processor } from '../processor';
 export class ShowCardDetailsProcessor implements Processor {
 	constructor(private cards: AllCardsService) {}
 
-	public async process(event: ShowCardDetailsEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: ShowCardDetailsEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const selectedSet: Set = this.pickSet(currentState.binder.allSets, event.cardId);
 		const selectedCard: SetCard = this.pickCard(selectedSet, event.cardId);
-		const newBinder = Object.assign(new BinderState(), currentState.binder, {
+		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'card-details',
 			menuDisplayType: 'breadcrumbs',
 			selectedSet: selectedSet,
 			selectedCard: selectedCard,
 			selectedFormat: selectedSet.standard ? 'standard' : 'wild',
 			searchString: undefined,
-		} as BinderState);
-		const navigation = Object.assign(new Navigation(), currentState.navigation, {
-			text: selectedCard.name,
-			image: null,
-		} as Navigation);
-		return Object.assign(new MainWindowState(), currentState, {
-			isVisible: true,
-			currentApp: 'collection',
-			binder: newBinder,
-			navigation: navigation,
-		} as MainWindowState);
+		} as NavigationCollection);
+		return [
+			null,
+			navigationState.update({
+				isVisible: true,
+				currentApp: 'collection',
+				navigationCollection: newCollection,
+				text: selectedCard.name,
+				image: null,
+			} as NavigationState),
+		];
 	}
 
 	private pickCard(selectedSet: Set, cardId: string): SetCard {

@@ -1,4 +1,5 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreferencesService } from '../../../../preferences.service';
 import { SkipFtueEvent } from '../../events/ftue/skip-ftue-event';
 import { Processor } from '../processor';
@@ -6,11 +7,20 @@ import { Processor } from '../processor';
 export class SkipFtueProcessor implements Processor {
 	constructor(private readonly prefs: PreferencesService) {}
 
-	public async process(event: SkipFtueEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: SkipFtueEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.setGlobalFtueDone();
-		return Object.assign(new MainWindowState(), currentState, {
-			showFtue: false,
-			currentApp: 'achievements',
-		} as MainWindowState);
+		return [
+			Object.assign(new MainWindowState(), currentState, {
+				showFtue: false,
+			} as MainWindowState),
+			navigationState.update({
+				currentApp: 'achievements',
+			} as NavigationState),
+		];
 	}
 }
