@@ -1,6 +1,7 @@
-import { Processor } from '../processor';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { TriggerSocialNetworkLoginToggleEvent } from '../../events/social/trigger-social-network-login-toggle-event';
+import { Processor } from '../processor';
 
 declare let overwolf;
 
@@ -8,7 +9,9 @@ export class TriggerSocialNetworkLoginToggleProcessor implements Processor {
 	public async process(
 		event: TriggerSocialNetworkLoginToggleEvent,
 		currentState: MainWindowState,
-	): Promise<MainWindowState> {
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		if (event.network === 'twitter') {
 			const twitter = currentState.socialShareUserInfo.twitter;
 			if (twitter.id) {
@@ -17,6 +20,6 @@ export class TriggerSocialNetworkLoginToggleProcessor implements Processor {
 				overwolf.social.twitter.performUserLogin();
 			}
 		}
-		return currentState;
+		return [null, null];
 	}
 }

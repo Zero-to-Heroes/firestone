@@ -1,6 +1,7 @@
 import { Card } from '../../../../../models/card';
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { SetCard } from '../../../../../models/set';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { SetsService } from '../../../../sets-service.service';
@@ -10,7 +11,12 @@ import { Processor } from '../processor';
 export class UpdateCardSearchResultsProcessor implements Processor {
 	constructor(private collectionManager: CollectionManager, private cards: SetsService) {}
 
-	public async process(event: UpdateCardSearchResultsEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: UpdateCardSearchResultsEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const collection = await this.collectionManager.getCollection();
 		const searchResults: readonly SetCard[] = this.cards.searchCards(event.searchString).map(card => {
 			const collectionCard: Card = this.findCollectionCard(collection, card);
@@ -24,13 +30,16 @@ export class UpdateCardSearchResultsProcessor implements Processor {
 				collectionCard ? collectionCard.premiumCount : 0,
 			);
 		});
-		const newBinder = Object.assign(new BinderState(), currentState.binder, {
+		const newCollection = navigationState.navigationCollection.update({
 			searchResults: searchResults,
-		} as BinderState);
-		return Object.assign(new MainWindowState(), currentState, {
-			binder: newBinder,
-			isVisible: true,
-		} as MainWindowState);
+		} as NavigationCollection);
+		return [
+			null,
+			navigationState.update({
+				isVisible: true,
+				navigationCollection: newCollection,
+			} as NavigationState),
+		];
 	}
 
 	private findCollectionCard(collection: Card[], card: SetCard): Card {

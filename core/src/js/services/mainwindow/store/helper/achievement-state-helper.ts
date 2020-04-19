@@ -1,31 +1,25 @@
 import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
+import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
 import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
 
 export class AchievementStateHelper {
 	public updateStateFromNewGlobalCategories(
-		currentState: AchievementsState,
+		dataState: AchievementsState,
+		navigationState: NavigationAchievements,
 		newGlobalCategories: readonly VisualAchievementCategory[],
-	): AchievementsState {
+	): [AchievementsState, NavigationAchievements] {
 		// const achievementCategories = this.updateCategories(currentState.achievementCategories, newGlobalCategories);
-		const achievementsList = this.updateAchievementsList(currentState.achievementsList, newGlobalCategories);
-		return Object.assign(new AchievementsState(), currentState, {
-			globalCategories: newGlobalCategories,
-			// achievementCategories: achievementCategories,
-			achievementsList: achievementsList,
-			displayedAchievementsList: achievementsList,
-		} as AchievementsState);
+		const achievementsList = this.updateAchievementsList(navigationState.achievementsList, newGlobalCategories);
+		return [
+			Object.assign(new AchievementsState(), dataState, {
+				globalCategories: newGlobalCategories,
+			} as AchievementsState),
+			navigationState.update({
+				achievementsList: achievementsList,
+				displayedAchievementsList: achievementsList,
+			} as NavigationAchievements),
+		];
 	}
-
-	// private updateCategories(
-	// 	existingCategories: readonly AchievementSet[],
-	// 	globalCategories: readonly VisualAchievementCategory[],
-	// ): readonly AchievementSet[] {
-	// 	const existingCategoryIds = existingCategories.map(cat => cat.id);
-	// 	return globalCategories
-	// 		.map(cat => cat.achievementSets)
-	// 		.reduce((a, b) => a.concat(b), [])
-	// 		.filter(set => existingCategoryIds.indexOf(set.id) !== -1);
-	// }
 
 	private updateAchievementsList(
 		existingList: readonly string[],

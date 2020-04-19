@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { Navigation } from '../../../models/mainwindow/navigation';
+import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
 import { AchievementsLocalStorageService } from '../../achievement/achievements-local-storage.service';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
@@ -78,6 +78,7 @@ import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-eve
 import { TriggerPopulateStoreEvent } from './events/trigger-populate-store-event';
 import { AchievementStateHelper } from './helper/achievement-state-helper';
 import { AchievementUpdateHelper } from './helper/achievement-update-helper';
+import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
 import { AchievementRecordedProcessor } from './processors/achievements/achievement-recorded-processor';
@@ -136,11 +137,14 @@ const MAX_HISTORY_SIZE = 30;
 export class MainWindowStoreService {
 	public stateUpdater = new EventEmitter<MainWindowStoreEvent>();
 	public state: MainWindowState = new MainWindowState();
+	public navigationState = new NavigationState();
+
+	private navigationHistory = new NavigationHistory();
+	// private stateHistory: readonly StateHistory[] = [];
 
 	private stateEmitter = new BehaviorSubject<MainWindowState>(this.state);
+	private navigationStateEmitter = new BehaviorSubject<NavigationState>(this.navigationState);
 	private processors: Map<string, Processor>;
-
-	private stateHistory: readonly StateHistory[] = [];
 
 	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
 		eventQueue => this.processQueue(eventQueue),
@@ -176,6 +180,7 @@ export class MainWindowStoreService {
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
+		window['mainWindowStoreNavigation'] = this.navigationStateEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
 
@@ -212,16 +217,34 @@ export class MainWindowStoreService {
 		// Don't modify the current state here, as it could make state lookup impossible
 		// (for back / forward arrows for instance)
 		try {
-			const newState = await processor.process(event, this.state, this.stateHistory);
-			if (newState) {
-				this.addStateToHistory(newState, event);
-				this.state = newState;
+			const [newState, newNavState] = await processor.process(
+				event,
+				this.state,
+				this.navigationHistory,
+				this.navigationState,
+			);
+			if (newNavState) {
+				if (event.eventName() === NavigationBackEvent.eventName()) {
+					this.navigationHistory.currentIndexInHistory--;
+				} else if (event.eventName() === NavigationNextEvent.eventName()) {
+					this.navigationHistory.currentIndexInHistory++;
+				} else {
+					this.addStateToHistory(newNavState, event);
+				}
 				// We don't want to store the status of the navigation arrows, as when going back
 				// or forward with the history arrows, the state of these arrows will change
 				// vs what they originally were when the state was stored
-				const stateWithNavigation = this.updateNavigationArrows(newState);
+				this.navigationState = newNavState;
+				const stateWithNavigation: NavigationState = this.updateNavigationArrows(
+					this.navigationState,
+					newState,
+				);
+				this.navigationStateEmitter.next(stateWithNavigation);
+			}
+			if (newState) {
+				this.state = newState;
 				// console.log('emitting new state', stateWithNavigation);
-				this.stateEmitter.next(stateWithNavigation);
+				this.stateEmitter.next(this.state);
 				if (Date.now() - start > 1000) {
 					this.logger.warn(
 						'[store] Event',
@@ -239,61 +262,48 @@ export class MainWindowStoreService {
 		return eventQueue.slice(1);
 	}
 
-	private addStateToHistory(newState: MainWindowState, originalEvent: MainWindowStoreEvent): void {
-		const navigation = originalEvent.isNavigationEvent();
+	private addStateToHistory(newNavigationState: NavigationState, originalEvent: MainWindowStoreEvent): void {
+		// const navigation = originalEvent.isNavigationEvent();
 		const event = originalEvent.eventName();
 		// Because the history stores the state + the navigation state
 		// If we go back in time, we will override the current state with a past state
 		// and this can cause some info to disappear until we restart the app
 		// So all events that cause an actual update to the state data should
 		// reset the history, until we have a better solution
-		const isResetHistory = originalEvent.isResetHistoryEvent();
-		if (isResetHistory) {
-			this.stateHistory = [];
-		}
-		const newIndex = this.stateHistory.map(state => state.state).indexOf(newState);
-		// console.log('newIndex', newIndex, this.stateHistory);
-		// We just did a "next" or "previous", so we don't modify the history
-		if (newIndex !== -1) {
-			// console.log('[store] moving through history, so not modifying history', newIndex);
-			return;
-		} else {
-			if (navigation) {
-				amplitude.getInstance().logEvent('navigation', {
-					'event': event,
-				});
-			}
-			// Build a new history with the current state as tail
-			const currentIndex = this.stateHistory.map(state => state.state).indexOf(this.state);
-			const historyTrunk = this.stateHistory.slice(0, currentIndex + 1);
-			const newHistory = {
-				event: event,
-				navigation: navigation,
-				state: newState,
-			} as StateHistory;
-			this.stateHistory = [...historyTrunk, newHistory];
-		}
-		if (this.stateHistory.length > MAX_HISTORY_SIZE) {
-			this.stateHistory = this.stateHistory.slice(1);
+		// const isResetHistory = originalEvent.isResetHistoryEvent();
+		// if (isResetHistory) {
+		// 	this.stateHistory = [];
+		// }
+		const historyTrunk = this.navigationHistory.stateHistory.slice(
+			0,
+			this.navigationHistory.currentIndexInHistory + 1,
+		);
+		const newHistory = {
+			event: event,
+			state: newNavigationState,
+		} as StateHistory;
+		this.navigationHistory.stateHistory = [...historyTrunk, newHistory];
+		this.navigationHistory.currentIndexInHistory = this.navigationHistory.stateHistory.length - 1;
+
+		if (this.navigationHistory.stateHistory.length > MAX_HISTORY_SIZE) {
+			this.navigationHistory.stateHistory = this.navigationHistory.stateHistory.slice(1);
 		}
 	}
 
-	private updateNavigationArrows(state: MainWindowState): MainWindowState {
-		const targetIndex = NavigationBackProcessor.getTargetIndex(state, this.stateHistory);
+	private updateNavigationArrows(navigationState: NavigationState, dataState: MainWindowState): NavigationState {
 		const backArrowEnabled =
-			(targetIndex !== -1 && this.stateHistory[targetIndex].state.currentApp === state.currentApp) ||
-			NavigationBackProcessor.buildParentState(state) != null;
-		// const backArrowEnabled = NavigationBackProcessor.buildParentState(state) != null;
-		const nextArrowEnabled = NavigationNextProcessor.getTargetIndex(state, this.stateHistory) !== -1;
-
-		// console.log('navigation arrows', backArrowEnabled, nextArrowEnabled, this.stateHistory);
-		const newNavigation: Navigation = Object.assign(new Navigation(), state.navigation, {
+			// Only allow back / next within the same app (at least for now)
+			(this.navigationHistory.currentIndexInHistory > 0 &&
+				this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1].state
+					.currentApp === navigationState.currentApp) ||
+			// We allow a "back" to the parent in case there is no back history
+			NavigationBackProcessor.buildParentState(navigationState, dataState) != null;
+		const nextArrowEnabled =
+			this.navigationHistory.currentIndexInHistory < this.navigationHistory.stateHistory.length - 1;
+		return navigationState.update({
 			backArrowEnabled: backArrowEnabled,
 			nextArrowEnabled: nextArrowEnabled,
-		} as Navigation);
-		return Object.assign(new MainWindowState(), state, {
-			navigation: newNavigation,
-		} as MainWindowState);
+		} as NavigationState);
 	}
 
 	private buildProcessors(): Map<string, Processor> {

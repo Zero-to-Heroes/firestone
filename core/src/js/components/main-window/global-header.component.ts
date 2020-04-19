@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { Navigation } from '../../models/mainwindow/navigation';
+import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
@@ -33,7 +33,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GlobalHeaderComponent implements AfterViewInit {
-	@Input() navigation: Navigation;
+	@Input() navigation: NavigationState;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

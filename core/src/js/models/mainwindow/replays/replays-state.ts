@@ -1,17 +1,13 @@
 import { IOption } from 'ng-select';
-import { CurrentViewType } from './current-view.type';
+import { GameStat } from '../stats/game-stat';
 import { GroupedReplays } from './grouped-replays';
-import { MatchDetail } from './match-detail';
 import { ReplaysFilter } from './replays-filter';
 import { ReplaysFilterCategoryType } from './replays-filter-category.type';
-import { GameStat } from '../stats/game-stat';
 
 export class ReplaysState {
-	readonly currentView: CurrentViewType = 'list';
 	readonly allReplays: readonly GameStat[];
 	readonly groupedReplays: readonly GroupedReplays[];
 	readonly groupByCriteria: 'creation-date' = 'creation-date';
-	readonly selectedReplay: MatchDetail;
 	readonly filters: readonly ReplaysFilter[];
 	readonly isLoading: boolean = true;
 

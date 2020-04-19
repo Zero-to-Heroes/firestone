@@ -1,5 +1,6 @@
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { VisualAchievement } from '../../../../../models/visual-achievement';
 import { FilterShownAchievementsEvent } from '../../events/achievements/filter-shown-achievements-event';
 import { Processor } from '../processor';
@@ -7,7 +8,12 @@ import { Processor } from '../processor';
 declare let amplitude;
 
 export class FilterShownAchievementsProcessor implements Processor {
-	public async process(event: FilterShownAchievementsEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: FilterShownAchievementsEvent,
+		currentState: MainWindowState,
+		history,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const searchString = (event.searchString || '').toLowerCase();
 		amplitude.getInstance().logEvent('search', {
 			'page': 'achievements',
@@ -15,7 +21,7 @@ export class FilterShownAchievementsProcessor implements Processor {
 		});
 		console.log('[filter-shown-achievements] filtering shown achievements', searchString);
 		const allAchievements: readonly VisualAchievement[] =
-			currentState.achievements.findAchievements(currentState.achievements.achievementsList) || [];
+			currentState.achievements.findAchievements(navigationState.navigationAchievements.achievementsList) || [];
 		const displayedAchievementsList: readonly string[] = allAchievements
 			.filter(
 				achv =>
@@ -23,11 +29,14 @@ export class FilterShownAchievementsProcessor implements Processor {
 					achv.text.toLowerCase().indexOf(searchString) !== -1,
 			)
 			.map(ach => ach.id);
-		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
+		const newState = navigationState.navigationAchievements.update({
 			displayedAchievementsList: displayedAchievementsList,
-		} as AchievementsState);
-		return Object.assign(new MainWindowState(), currentState, {
-			achievements: newState,
-		} as MainWindowState);
+		} as NavigationAchievements);
+		return [
+			null,
+			navigationState.update({
+				navigationAchievements: newState,
+			} as NavigationState),
+		];
 	}
 }

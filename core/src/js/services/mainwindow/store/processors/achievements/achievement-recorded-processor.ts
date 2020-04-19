@@ -2,6 +2,7 @@ import { Achievement } from '../../../../../models/achievement';
 import { AchievementSet } from '../../../../../models/achievement-set';
 import { CompletedAchievement } from '../../../../../models/completed-achievement';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { ReplayInfo } from '../../../../../models/replay-info';
 import { VisualAchievement } from '../../../../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
@@ -20,7 +21,12 @@ export class AchievementRecordedProcessor implements Processor {
 		private events: Events,
 	) {}
 
-	public async process(event: AchievementRecordedEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: AchievementRecordedEvent,
+		currentState: MainWindowState,
+		history,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		// console.log('[achievement-recorded-processor] processing achievement recorded', event, currentState);
 		const achievementId: string = event.achievementId;
 		const replayInfo: ReplayInfo = event.replayInfo;
@@ -34,6 +40,7 @@ export class AchievementRecordedProcessor implements Processor {
 		// console.log('[achievement-recorded-processor] newGlobalCategories', newGlobalCategories);
 		const newState = this.achievementStateHelper.updateStateFromNewGlobalCategories(
 			currentState.achievements,
+			navigationState.navigationAchievements,
 			newGlobalCategories,
 		);
 		// console.log('[achievement-recorded-processor] newState', newState);
@@ -48,9 +55,12 @@ export class AchievementRecordedProcessor implements Processor {
 		// console.log('found full achievement to broadcast', achievement, updatedAchievement);
 		// TODO: Raising events here feels weird, and it's probably a design flaw.
 		this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievementWithReplayInfo);
-		return Object.assign(new MainWindowState(), currentState, {
-			achievements: newState,
-		});
+		return [
+			Object.assign(new MainWindowState(), currentState, {
+				achievements: newState,
+			}),
+			null,
+		];
 	}
 
 	private updateGlobalCategories(

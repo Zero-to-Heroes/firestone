@@ -1,6 +1,6 @@
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { Navigation } from '../../../../../models/mainwindow/navigation';
+import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
 import { SelectAchievementCategoryEvent } from '../../events/achievements/select-achievement-category-event';
 import { SelectAchievementSetEvent } from '../../events/achievements/select-achievement-set-event';
@@ -11,30 +11,33 @@ export class SelectAchievementCategoryProcessor implements Processor {
 	public async process(
 		event: SelectAchievementCategoryEvent,
 		currentState: MainWindowState,
-	): Promise<MainWindowState> {
+		history,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const globalCategory: VisualAchievementCategory = currentState.achievements.globalCategories.find(
 			cat => cat.id === event.globalCategoryId,
 		);
 		// If there is a single sub-category, we diretly display it
 		if (globalCategory.achievementSets.length === 1) {
 			const singleEvent = new SelectAchievementSetEvent(globalCategory.achievementSets[0].id);
-			return new SelectAchievementSetProcessor().process(singleEvent, currentState);
+			return new SelectAchievementSetProcessor().process(singleEvent, currentState, history, navigationState);
 		}
-		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
+		const newAchievements = navigationState.navigationAchievements.update({
 			currentView: 'category',
 			menuDisplayType: 'breadcrumbs',
 			selectedGlobalCategoryId: event.globalCategoryId,
 			// achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
 			selectedCategoryId: undefined,
 			selectedAchievementId: undefined,
-		} as AchievementsState);
-		return Object.assign(new MainWindowState(), currentState, {
-			achievements: newState,
-			isVisible: true,
-			navigation: Object.assign(new Navigation(), currentState.navigation, {
+		} as NavigationAchievements);
+		return [
+			null,
+			navigationState.update({
+				isVisible: true,
+				navigationAchievements: newAchievements,
 				text: globalCategory.name,
 				image: null,
-			} as Navigation),
-		} as MainWindowState);
+			} as NavigationState),
+		];
 	}
 }

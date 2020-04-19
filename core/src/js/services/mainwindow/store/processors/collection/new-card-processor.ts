@@ -2,6 +2,8 @@ import { Card } from '../../../../../models/card';
 import { CardHistory } from '../../../../../models/card-history';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PityTimer } from '../../../../../models/pity-timer';
 import { Set, SetCard } from '../../../../../models/set';
 import { CardHistoryStorageService } from '../../../../collection/card-history-storage.service';
@@ -23,7 +25,12 @@ export class NewCardProcessor implements Processor {
 		private cards: SetsService,
 	) {}
 
-	public async process(event: NewCardEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: NewCardEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const collection = await this.memoryReading.getCollection();
 		if (collection && collection.length > 0) {
 			await this.indexedDb.saveCollection(collection);
@@ -38,11 +45,18 @@ export class NewCardProcessor implements Processor {
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: await this.buildSetsFromCollection(collection),
 			cardHistory: cardHistory,
-			shownCardHistory: cardHistory,
 		} as BinderState);
-		return Object.assign(new MainWindowState(), currentState, {
-			binder: newBinder,
-		} as MainWindowState);
+		const newCollection = navigationState.navigationCollection.update({
+			shownCardHistory: cardHistory,
+		} as NavigationCollection);
+		return [
+			Object.assign(new MainWindowState(), currentState, {
+				binder: newBinder,
+			} as MainWindowState),
+			navigationState.update({
+				navigationCollection: newCollection,
+			} as NavigationState),
+		];
 	}
 
 	private async buildSetsFromCollection(collection: readonly Card[]): Promise<readonly Set[]> {

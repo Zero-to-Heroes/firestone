@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { Navigation } from '../../models/mainwindow/navigation';
+import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -16,8 +16,15 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<section class="main divider">
 				<with-loading [isLoading]="state.isLoading">
 					<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
-					<replays-list [state]="state" [hidden]="state.currentView !== 'list'"></replays-list>
-					<match-details [state]="state" [hidden]="state.currentView !== 'match-details'"></match-details>
+					<replays-list
+						[state]="state"
+						[hidden]="navigation.navigationReplays.currentView !== 'list'"
+					></replays-list>
+					<match-details
+						[state]="state"
+						[navigation]="navigation.navigationReplays"
+						[hidden]="navigation.navigationReplays.currentView !== 'match-details'"
+					></match-details>
 				</with-loading>
 			</section>
 			<section class="secondary"></section>
@@ -26,7 +33,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplaysComponent {
-	@Input() navigation: Navigation;
+	@Input() navigation: NavigationState;
 	@Input() state: ReplaysState;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

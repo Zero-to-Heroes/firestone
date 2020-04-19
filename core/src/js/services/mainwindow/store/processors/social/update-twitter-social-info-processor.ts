@@ -1,17 +1,26 @@
-import { Processor } from '../processor';
-import { UpdateTwitterSocialInfoEvent } from '../../events/social/update-twitter-social-info-event';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { OverwolfService } from '../../../../overwolf.service';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { SocialShareUserInfo } from '../../../../../models/mainwindow/social-share-user-info';
+import { OverwolfService } from '../../../../overwolf.service';
+import { UpdateTwitterSocialInfoEvent } from '../../events/social/update-twitter-social-info-event';
+import { Processor } from '../processor';
 
 export class UpdateTwitterSocialInfoProcessor implements Processor {
 	constructor(private ow: OverwolfService) {}
 
-	public async process(event: UpdateTwitterSocialInfoEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: UpdateTwitterSocialInfoEvent,
+		currentState: MainWindowState,
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		const socialShareUserInfo = await this.initializeSocialShareUserInfo(currentState.socialShareUserInfo);
-		return Object.assign(new MainWindowState(), currentState, {
-			socialShareUserInfo: socialShareUserInfo,
-		} as MainWindowState);
+		return [
+			Object.assign(new MainWindowState(), currentState, {
+				socialShareUserInfo: socialShareUserInfo,
+			} as MainWindowState),
+			null,
+		];
 	}
 
 	private async initializeSocialShareUserInfo(

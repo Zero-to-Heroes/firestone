@@ -1,5 +1,6 @@
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { OverwolfService } from '../../../../overwolf.service';
 import { ShareVideoOnSocialNetworkEvent } from '../../events/social/share-video-on-social-network-event';
 import { Processor } from '../processor';
@@ -12,7 +13,9 @@ export class ShareVideoOnSocialNetworkProcessor implements Processor {
 	public async process(
 		event: ShareVideoOnSocialNetworkEvent,
 		currentState: MainWindowState,
-	): Promise<MainWindowState> {
+		stateHistory,
+		navigationState: NavigationState,
+	): Promise<[MainWindowState, NavigationState]> {
 		amplitude.getInstance().logEvent('share-video', {
 			'network': event.network,
 		});
@@ -21,11 +24,14 @@ export class ShareVideoOnSocialNetworkProcessor implements Processor {
 				await this.ow.twitterShare(event.videoPathOnDisk, event.message);
 				break;
 		}
-		const achievementState = Object.assign(new AchievementsState(), currentState.achievements, {
+		const newAchievements = navigationState.navigationAchievements.update({
 			sharingAchievement: undefined,
-		} as AchievementsState);
-		return Object.assign(new MainWindowState(), currentState, {
-			achievements: achievementState,
-		} as MainWindowState);
+		} as NavigationAchievements);
+		return [
+			null,
+			navigationState.update({
+				navigationAchievements: newAchievements,
+			} as NavigationState),
+		];
 	}
 }
