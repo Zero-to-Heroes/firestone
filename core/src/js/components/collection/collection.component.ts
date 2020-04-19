@@ -12,40 +12,40 @@ import { SetsService } from '../../services/sets-service.service';
 	],
 	template: `
 		<div class="app-section collection">
-			<section class="main" [ngClass]="{ 'divider': navigation.navigationCollection.currentView === 'cards' }">
+			<section class="main" [ngClass]="{ 'divider': _navigation.navigationCollection.currentView === 'cards' }">
 				<with-loading [isLoading]="dataState.isLoading">
-					<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
+					<global-header [navigation]="_navigation" *ngIf="_navigation.text"> </global-header>
 					<sets
-						[selectedFormat]="navigation.navigationCollection.selectedFormat"
+						[selectedFormat]="_navigation.navigationCollection.selectedFormat"
 						[standardSets]="standardSets"
 						[wildSets]="wildSets"
-						[hidden]="navigation.navigationCollection.currentView !== 'sets'"
+						[hidden]="_navigation.navigationCollection.currentView !== 'sets'"
 					>
 					</sets>
 					<cards
-						[cardList]="navigation.navigationCollection.cardList"
-						[set]="getSelectedSet()"
-						[searchString]="navigation.navigationCollection.searchString"
-						[hidden]="navigation.navigationCollection.currentView !== 'cards'"
+						[cardList]="_navigation.navigationCollection.cardList"
+						[set]="selectedSet"
+						[searchString]="_navigation.navigationCollection.searchString"
+						[hidden]="_navigation.navigationCollection.currentView !== 'cards'"
 					>
 					</cards>
 					<full-card
 						class="full-card"
-						[selectedCard]="getSelectedCard()"
-						[hidden]="navigation.navigationCollection.currentView !== 'card-details'"
+						[selectedCard]="selectedCard"
+						[hidden]="_navigation.navigationCollection.currentView !== 'card-details'"
 					>
 					</full-card>
 				</with-loading>
 			</section>
 			<section class="secondary">
 				<card-search
-					[searchString]="navigation.navigationCollection.searchString"
-					[searchResults]="navigation.navigationCollection.searchResults"
+					[searchString]="_navigation.navigationCollection.searchString"
+					[searchResults]="searchResults"
 				></card-search>
 				<card-history
-					[selectedCard]="getSelectedCard()"
+					[selectedCard]="selectedCard"
 					[cardHistory]="dataState.cardHistory"
-					[shownHistory]="navigation.navigationCollection.shownCardHistory"
+					[shownHistory]="_navigation.navigationCollection.shownCardHistory"
 					[totalHistoryLength]="dataState.totalHistoryLength"
 				>
 				</card-history>
@@ -56,37 +56,50 @@ import { SetsService } from '../../services/sets-service.service';
 })
 export class CollectionComponent {
 	dataState: BinderState;
-	@Input() navigation: NavigationState;
+	_navigation: NavigationState;
 
 	standardSets: Set[];
 	wildSets: Set[];
 
-	@Input('state') set state(state: BinderState) {
+	selectedSet: Set;
+	selectedCard: SetCard;
+	searchResults: readonly SetCard[];
+
+	@Input() set state(state: BinderState) {
 		this.dataState = state;
 		this.standardSets = state.allSets.filter(set => set.standard);
 		this.wildSets = state.allSets.filter(set => !set.standard);
 		// console.log('set state in collection', this._state);
+		this.updateValues();
+	}
+
+	@Input() set navigation(value: NavigationState) {
+		this._navigation = value;
+		this.updateValues();
 	}
 
 	constructor(private cards: SetsService, private cdr: ChangeDetectorRef) {
 		this.init();
 	}
 
-	getSelectedSet(): Set {
-		if (!this.dataState || !this.navigation?.navigationCollection?.selectedSetId) {
-			return null;
+	private updateValues() {
+		if (!this.dataState || !this._navigation) {
+			return;
 		}
-		return this.dataState.allSets.find(set => set.id === this.navigation.navigationCollection.selectedSetId);
-	}
-
-	getSelectedCard(): SetCard {
-		if (!this.dataState || !this.navigation?.navigationCollection?.selectedCardId) {
-			return null;
-		}
-		return this.dataState.allSets
+		this.selectedSet = this.dataState.allSets.find(
+			set => set.id === this._navigation.navigationCollection?.selectedSetId,
+		);
+		this.selectedCard = this.dataState.allSets
 			.map(set => set.allCards)
 			.reduce((a, b) => a.concat(b), [])
-			.find(card => card.id === this.navigation.navigationCollection.selectedCardId);
+			.find(card => card.id === this._navigation.navigationCollection?.selectedCardId);
+		this.searchResults =
+			this._navigation.navigationCollection.searchResults?.length > 0
+				? this.dataState.allSets
+						.map(set => set.allCards)
+						.reduce((a, b) => a.concat(b), [])
+						.filter(card => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
+				: null;
 	}
 
 	private async init() {
