@@ -39,7 +39,7 @@ export class GroupedDeckListComponent {
 	// private hand: readonly DeckCard[];
 	private _deckState: DeckState;
 	private _cardsGoToBottom: boolean;
-	private _showCardsInHand: boolean = false;
+	private _showCardsInHand = false;
 	private showWarning: boolean;
 
 	@Input('deckState') set deckState(deckState: DeckState) {
