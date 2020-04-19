@@ -94,19 +94,19 @@ export class NavigationBackProcessor implements Processor {
 			case 'card-details':
 				const selectedSet = dataState.binder.allSets.find(
 					set =>
-						set.allCards.find(card => card.id === navigationState.navigationCollection.selectedCard.id) !=
+						set.allCards.find(card => card.id === navigationState.navigationCollection.selectedCardId) !=
 						null,
 				);
 				console.log('selected set', selectedSet);
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({
 						currentView: 'cards',
-						selectedSet: selectedSet,
+						selectedSetId: selectedSet.id,
 						cardList: selectedSet.allCards,
 					} as NavigationCollection),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in
-					text: navigationState.navigationCollection.selectedSet.name,
+					text: selectedSet.name,
 				} as NavigationState);
 			default:
 				return null;
