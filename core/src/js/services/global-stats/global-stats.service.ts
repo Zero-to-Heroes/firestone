@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
+import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { OverwolfService } from '../overwolf.service';
 
-const GLOBAL_STATS_ENDPOINT = 'https://dozgz6y7pf.execute-api.us-west-2.amazonaws.com/Prod';
+const GLOBAL_STATS_ENDPOINT = 'https://dozgz6y7pf.execute-api.us-west-2.amazonaws.com/Prod/globalStats';
 
 @Injectable()
 export class GlobalStatsService {
@@ -22,37 +23,45 @@ export class GlobalStatsService {
 			if (!user.userId || !user.username) {
 				this.logger.warn('[global-stats] user not logged in', user);
 			}
-			this.getGlobalStatsInternal(user.userId, stats => resolve(stats), 20);
+			this.getGlobalStatsInternal(user, stats => resolve(stats), 20);
 		});
 	}
 
-	private getGlobalStatsInternal(userId: string, callback, retriesLeft = 30, shouldLogError = false) {
+	private getGlobalStatsInternal(currentUser: CurrentUser, callback, retriesLeft = 30, shouldLogError = false) {
+		const postEvent = {
+			userName: currentUser.username,
+			userId: currentUser.userId,
+			machineId: currentUser.machineId,
+		};
 		if (retriesLeft <= 0) {
 			if (shouldLogError) {
-				this.logger.error('[global-stats] could not retrieve stats', `${GLOBAL_STATS_ENDPOINT}/${userId}`);
+				this.logger.error('[global-stats] could not retrieve stats', postEvent);
 			} else {
-				this.logger.info('[global-stats] could not retrieve stats', `${GLOBAL_STATS_ENDPOINT}/${userId}`);
+				this.logger.info('[global-stats] could not retrieve stats', postEvent);
 			}
 			callback(null);
 			return;
 		}
-		this.http.get(`${GLOBAL_STATS_ENDPOINT}/${userId}`).subscribe(
+		this.http.post(`${GLOBAL_STATS_ENDPOINT}`, postEvent).subscribe(
 			(data: any) => {
 				// Stats are guaranteed to change between two games betwen they record
 				// the time spend in games
 				const areEqual = this.areEqual(data.result, this.cachedStats);
 				if (!data || !data.result || areEqual) {
 					this.logger.debug('[global-stats] invalid stats received', data == null, areEqual);
-					setTimeout(() => this.getGlobalStatsInternal(userId, callback, retriesLeft - 1, !areEqual), 1000);
+					setTimeout(
+						() => this.getGlobalStatsInternal(currentUser, callback, retriesLeft - 1, !areEqual),
+						1000,
+					);
 					return;
 				}
-				this.logger.debug('[global-stats] received stats');
+				this.logger.debug('[global-stats] received stats', data);
 				const stats: GlobalStats = data.result;
 				this.cachedStats = stats;
 				callback(stats);
 			},
 			error => {
-				setTimeout(() => this.getGlobalStatsInternal(userId, callback, retriesLeft - 1), 1000);
+				setTimeout(() => this.getGlobalStatsInternal(currentUser, callback, retriesLeft - 1), 1000);
 			},
 		);
 	}
