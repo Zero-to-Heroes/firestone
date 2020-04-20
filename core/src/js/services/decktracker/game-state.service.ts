@@ -21,6 +21,8 @@ import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
+import { CardChangedInDeckParser } from './event-parser/card-changed-in-deck-parser';
+import { CardChangedInHandParser } from './event-parser/card-changed-in-hand-parser';
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
 import { CardCreatorChangedParser } from './event-parser/card-creator-changed-parser';
 import { CardDrawParser } from './event-parser/card-draw-parser';
@@ -337,7 +339,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			// this.logger.debug('[game-state] will emit event', emittedEvent);
+			this.logger.debug('[game-state] will emit event', emittedEvent);
 			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 			// this.logger.debug(
 			// 	'[game-state] emitted deck event',
@@ -539,6 +541,8 @@ export class GameStateService {
 			new CardRemovedFromHandParser(this.helper),
 			new CardRemovedFromBoardParser(this.helper),
 			new CardChangedOnBoardParser(this.helper, this.allCards),
+			new CardChangedInHandParser(this.helper, this.allCards),
+			new CardChangedInDeckParser(this.helper, this.allCards),
 			new CardPlayedFromHandParser(this.helper, this.allCards),
 			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
 			new EndOfEchoInHandParser(this.helper),

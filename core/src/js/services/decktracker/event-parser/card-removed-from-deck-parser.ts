@@ -19,13 +19,14 @@ export class CardRemovedFromDeckParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
+		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			previousDeck,
 			cardId,
 			entityId,
 			deck.deckList.length === 0,
+			true,
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',

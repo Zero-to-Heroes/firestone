@@ -531,6 +531,12 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'CARD_CHANGED_IN_HAND':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_IN_HAND, gameEvent));
+				break;
+			case 'CARD_CHANGED_IN_DECK':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_IN_DECK, gameEvent));
+				break;
 			case 'ARMOR_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {

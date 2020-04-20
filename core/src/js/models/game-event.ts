@@ -38,6 +38,8 @@ export class GameEvent {
 	public static readonly HERO_POWER_CHANGED = 'HERO_POWER_CHANGED';
 	public static readonly CARD_REVEALED = 'CARD_REVEALED';
 	public static readonly CARD_CHANGED_ON_BOARD = 'CARD_CHANGED_ON_BOARD';
+	public static readonly CARD_CHANGED_IN_HAND = 'CARD_CHANGED_IN_HAND';
+	public static readonly CARD_CHANGED_IN_DECK = 'CARD_CHANGED_IN_DECK';
 	public static readonly SECRET_PLAYED = 'SECRET_PLAYED';
 	public static readonly SECRET_TRIGGERED = 'SECRET_TRIGGERED';
 	public static readonly SECRET_DESTROYED = 'SECRET_DESTROYED';
