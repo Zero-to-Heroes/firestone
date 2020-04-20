@@ -51,6 +51,8 @@ export class RemoteAchievementsService {
 		this.logger.debug(
 			'[remote-achievements] loaded from server',
 			result && result.results && result.results.length,
+			// postEvent,
+			// result.results.filter(ach => ach.id.indexOf('global_mana_spent_') !== -1),
 		);
 		if (!result || !result.results) {
 			return [];
