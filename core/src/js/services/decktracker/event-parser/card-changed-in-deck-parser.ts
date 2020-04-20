@@ -1,26 +1,25 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-export class CardDrawParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+export class CardChangedInDeckParser implements EventParser {
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK;
+		return state && gameEvent.type === GameEvent.CARD_CHANGED_IN_DECK;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.log('drawing from deck', cardId, gameEvent);
+
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
-		console.log('found card in zone', card, deck, cardId, entityId);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			previousDeck,
@@ -29,22 +28,26 @@ export class CardDrawParser implements EventParser {
 			deck.deckList.length === 0,
 			true,
 		)[0];
-		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
-			previousHand,
-			isPlayer ? card : this.helper.obfuscateCard(card),
-		);
-		// console.log('added card to hand', newHand);
+		// When card is changed in deck (eg Galakrond), a new card is created
+		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
+		const newCard = DeckCard.create({
+			cardId: isPlayer ? cardId : undefined,
+			entityId: entityId,
+			cardName: cardData.name,
+			manaCost: cardData ? cardData.cost : undefined,
+			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+		} as DeckCard);
+		const deckWithNewCard: readonly DeckCard[] = this.helper.addSingleCardToZone(newDeck, newCard);
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			deck: newDeck,
-			hand: newHand,
-		});
+			deck: deckWithNewCard,
+		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
 	}
 
 	event(): string {
-		return DeckEvents.CARD_DRAW;
+		return GameEvent.CARD_CHANGED_IN_DECK;
 	}
 }

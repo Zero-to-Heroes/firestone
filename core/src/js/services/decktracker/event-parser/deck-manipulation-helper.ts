@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
@@ -16,7 +17,9 @@ export class DeckManipulationHelper {
 		cardId: string,
 		entityId: number,
 		removeFillerCard = false,
+		normalizeUpgradedCards = false,
 	): readonly [readonly DeckCard[], DeckCard] {
+		const normalizedCardId = normalizeUpgradedCards ? this.normalizeCardId(cardId) : cardId;
 		const debug = false; // entityId === 2098;
 		// We have the entityId, so we just remove it
 		if (zone.some(card => card.entityId === entityId)) {
@@ -84,7 +87,7 @@ export class DeckManipulationHelper {
 		const result = [];
 		for (const card of zone) {
 			// We don't want to remove a card if it has a different entityId
-			if (card.cardId === cardId && !card.entityId && !hasRemovedOnce) {
+			if (card.cardId === normalizedCardId && !card.entityId && !hasRemovedOnce) {
 				if (debug) {
 					console.debug('removing card', card);
 				}
@@ -171,16 +174,22 @@ export class DeckManipulationHelper {
 		return zone.map(card => (card.entityId !== entityId ? card : card.update({ cardId: cardId } as DeckCard)));
 	}
 
-	public findCardInZone(zone: readonly DeckCard[], cardId: string, entityId: number): DeckCard {
+	public findCardInZone(
+		zone: readonly DeckCard[],
+		cardId: string,
+		entityId: number,
+		normalizeUpgradedCards = false,
+	): DeckCard {
+		const normalizedCardId = normalizeUpgradedCards ? this.normalizeCardId(cardId) : cardId;
 		// Explicit search by entity id
 		if (entityId) {
 			const found = zone.find(card => card.entityId === entityId);
 			if (!found) {
 				// Card hasn't been found, so we provide a default return
 				if (cardId) {
-					const idByCardId = zone.find(card => card.cardId === cardId && !card.entityId);
+					const idByCardId = zone.find(card => card.cardId === normalizedCardId && !card.entityId);
 					if (idByCardId) {
-						const card = this.allCards.getCard(cardId);
+						const card = this.allCards.getCard(normalizedCardId);
 						return idByCardId.update({
 							entityId: entityId,
 							cardId: cardId,
@@ -192,6 +201,7 @@ export class DeckManipulationHelper {
 							cardId,
 							entityId,
 							zone.map(card => card.entityId),
+							zone,
 						);
 					}
 				} else if (cardId == null) {
@@ -227,7 +237,7 @@ export class DeckManipulationHelper {
 		// Search by cardId only
 		if (cardId) {
 			// console.log('trying to get a card without providing an entityId', cardId, zone);
-			const found = zone.find(card => card.cardId === cardId);
+			const found = zone.find(card => card.cardId === normalizedCardId);
 			if (!found) {
 				// console.log('could not find card, creating card with default template', cardId, entityId);
 				const card = this.allCards.getCard(cardId);
@@ -361,6 +371,29 @@ export class DeckManipulationHelper {
 			case 'FB_Champs_LOOT_080t2':
 			case 'FB_Champs_LOOT_080t3':
 				return 'FB_Champs_LOOT_080';
+
+			default:
+				return cardId;
+		}
+	}
+
+	private normalizeCardId(cardId: string): string {
+		switch (cardId) {
+			case CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondTheApocalypseToken:
+			case CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondAzerothsEndToken:
+				return CardIds.Collectible.Shaman.GalakrondTheTempest;
+			case CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondTheApocalypseToken:
+			case CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondAzerothsEndToken:
+				return CardIds.Collectible.Warlock.GalakrondTheWretched;
+			case CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondTheApocalypseToken:
+			case CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondAzerothsEndToken:
+				return CardIds.Collectible.Priest.GalakrondTheUnspeakable;
+			case CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondTheApocalypseToken:
+			case CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondAzerothsEndToken:
+				return CardIds.Collectible.Rogue.GalakrondTheNightmare;
+			case CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondTheApocalypseToken:
+			case CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken:
+				return CardIds.Collectible.Warrior.GalakrondTheUnbreakable;
 			default:
 				return cardId;
 		}
