@@ -94,7 +94,7 @@ export class CardComponent implements AfterViewInit {
 		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
 		this.showPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
 		this.updateImage();
-		console.log('set card', card, this.image);
+		// console.log('set card', card, this.image);
 	}
 
 	@Input() set loadImage(value: boolean) {
