@@ -15,10 +15,11 @@
 	}
 
 	.real-achievement {
-		width: 100%;
+		width: 115%;
 		margin: auto;
 		position: absolute;
-		clip-path: ellipse(34% 48% at 50% 50%);
+		// clip-path: ellipse(34% 48% at 50% 50%);
+		clip-path: ellipse(28% 41% at 50% 50%);
 
 		&.spell {
 			width: 120%;
