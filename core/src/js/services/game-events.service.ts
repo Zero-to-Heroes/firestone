@@ -284,7 +284,11 @@ export class GameEvents {
 				break;
 			case 'MINION_BACK_ON_BOARD':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
 				break;
 			case 'SECRET_PLAYED_FROM_DECK':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);

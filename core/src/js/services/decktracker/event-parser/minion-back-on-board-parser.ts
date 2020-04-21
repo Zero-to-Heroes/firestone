@@ -15,6 +15,7 @@ export class MinionBackOnBoardParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const creatorCardId = gameEvent.additionalData?.creatorCardId;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -32,6 +33,7 @@ export class MinionBackOnBoardParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'PLAY',
+			creatorCardId: creatorCardId,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);
