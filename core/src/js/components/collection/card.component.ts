@@ -32,6 +32,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					src="{{ image }}"
 					class="real-card"
 					(load)="imageLoadedHandler()"
+					[cardTooltip]="_card.id"
 				/>
 				<div
 					[hidden]="showPlaceholder"
@@ -117,20 +118,20 @@ export class CardComponent implements AfterViewInit {
 		}
 	}
 
-	@HostListener('mouseenter') onMouseEnter() {
-		if (this.tooltips && this._loadImage) {
-			const rect = this.el.nativeElement.getBoundingClientRect();
-			const x = rect.left + rect.width - 20;
-			const y = rect.top + rect.height / 2;
-			this.events.broadcast(Events.SHOW_TOOLTIP, this._card.id, x, y, this._card.isOwned());
-		}
-	}
+	// @HostListener('mouseenter') onMouseEnter() {
+	// 	if (this.tooltips && this._loadImage) {
+	// 		const rect = this.el.nativeElement.getBoundingClientRect();
+	// 		const x = rect.left + rect.width - 20;
+	// 		const y = rect.top + rect.height / 2;
+	// 		this.events.broadcast(Events.SHOW_TOOLTIP, this._card.id, x, y, this._card.isOwned());
+	// 	}
+	// }
 
-	@HostListener('mouseleave') onMouseLeave() {
-		if (this.tooltips) {
-			this.events.broadcast(Events.HIDE_TOOLTIP, this._card.id);
-		}
-	}
+	// @HostListener('mouseleave') onMouseLeave() {
+	// 	if (this.tooltips) {
+	// 		this.events.broadcast(Events.HIDE_TOOLTIP, this._card.id);
+	// 	}
+	// }
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
