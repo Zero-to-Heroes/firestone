@@ -123,7 +123,7 @@ export class ReplaysListComponent {
 				// this.logger.debug('[replays-list] currentReplays', currentReplays);
 			}
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
-			// this.logger.debug('[replays-list] displayedReplays', this.displayedReplays);
+			// this.logger.debug('[replays-list] displayedReplays', this.displayedReplays, workingReplays);
 			this.isLoading = true;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -138,6 +138,9 @@ export class ReplaysListComponent {
 		}
 		this.isLoading = false;
 		// this.logger.debug('[replays-list] everything loaded');
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 		return;
 	}
 
