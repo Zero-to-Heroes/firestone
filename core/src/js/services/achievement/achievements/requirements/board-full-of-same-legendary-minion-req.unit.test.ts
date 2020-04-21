@@ -123,6 +123,6 @@ describe('board-full-of-same-legendary-minion-req', () => {
 
 function buildCardsService() {
 	const service = new AllCardsService();
-	service['allCards'] = [...(cardsJson as any[])];
+	service['service']['allCards'] = [...(cardsJson as any[])];
 	return service;
 }
