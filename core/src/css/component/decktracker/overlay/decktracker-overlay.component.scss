@@ -138,6 +138,12 @@
 				display: none;
 			}
 		}
+
+		&.hide-control-bar {
+			decktracker-control-bar {
+				display: none;
+			}
+		}
 	}
 
 	tooltips {

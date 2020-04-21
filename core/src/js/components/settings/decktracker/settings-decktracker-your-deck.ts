@@ -76,12 +76,7 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDestroy {
-	sliderEnabled = false;
-	showTitleBar: boolean;
 	overlayGroupByZone: boolean;
-	opponentOverlayGroupByZone: boolean;
-	opponentTracker: boolean;
-	secretsHelper: boolean;
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
@@ -97,7 +92,6 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 		},
 	];
 
-	private displaySubscription: Subscription;
 	private preferencesSubscription: Subscription;
 
 	constructor(
@@ -109,22 +103,10 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 
 	ngAfterViewInit() {
 		this.loadDefaultValues();
-		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
-			// console.log('should display', shouldDisplay);
-			this.sliderEnabled = shouldDisplay;
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
 			const preferences: Preferences = event.preferences;
 			this.overlayGroupByZone = preferences.overlayGroupByZone;
-			this.opponentTracker = preferences.opponentTracker;
-			this.secretsHelper = preferences.secretsHelper;
-			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -132,7 +114,6 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 	}
 
 	ngOnDestroy() {
-		this.displaySubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
 	}
 
@@ -151,10 +132,6 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.overlayGroupByZone = prefs.overlayGroupByZone;
-		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
-		this.opponentTracker = prefs.opponentTracker;
-		this.secretsHelper = prefs.secretsHelper;
-		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
