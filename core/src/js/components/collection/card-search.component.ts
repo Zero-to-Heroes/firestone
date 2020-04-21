@@ -70,7 +70,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe(data => {
-				console.log('value changed?', data);
+				// console.log('value changed?', data);
 				this._searchString = data;
 				this.onSearchStringChange();
 			});
@@ -100,7 +100,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 
 	onSearchStringChange() {
 		this.showSearchResults = false;
-		console.log('searchstring changed', this._searchString);
+		// console.log('searchstring changed', this._searchString);
 		if (!this._searchString || this._searchString.length < 2) {
 			return;
 		}
@@ -109,7 +109,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 
 	onValidateSearch(event: KeyboardEvent) {
 		if (event.keyCode === 13 && this._searchString) {
-			console.log('validating search', this.searchResults, this._searchString);
+			// console.log('validating search', this.searchResults, this._searchString);
 			this.stateUpdater.next(new SearchCardsEvent(this._searchString));
 			this.showSearchResults = false;
 			if (!(this.cdr as ViewRef).destroyed) {

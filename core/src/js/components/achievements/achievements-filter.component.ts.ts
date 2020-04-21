@@ -43,7 +43,7 @@ export class AchievementsFilterComponent implements AfterViewInit, OnDestroy {
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe(data => {
-				console.log('value changed?', data);
+				// console.log('value changed?', data);
 				this.onSearchStringChange();
 			});
 	}
@@ -53,7 +53,7 @@ export class AchievementsFilterComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onSearchStringChange() {
-		console.log('[achievements-filter] searchstring changed', this.searchString);
+		// console.log('[achievements-filter] searchstring changed', this.searchString);
 		this.stateUpdater.next(new FilterShownAchievementsEvent(this.searchString));
 	}
 

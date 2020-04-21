@@ -231,6 +231,6 @@ export class AchievementsListComponent implements AfterViewInit {
 		this._activeFilter =
 			this.filterFromPrefs ||
 			(this.filterOptions && this.filterOptions.length > 0 ? this.filterOptions[0].value : null);
-		console.log('updated active filter', this._activeFilter, this.filterFromPrefs, this.filterOptions);
+		// console.log('updated active filter', this._activeFilter, this.filterFromPrefs, this.filterOptions);
 	}
 }
