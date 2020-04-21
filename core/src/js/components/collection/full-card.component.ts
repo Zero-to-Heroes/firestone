@@ -8,6 +8,7 @@ import {
 	Output,
 	ViewEncapsulation,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { SetCard } from '../../models/set';
 import { Events } from '../../services/events.service';
 import { SetsService } from '../../services/sets-service.service';
@@ -61,7 +62,7 @@ declare let amplitude;
 					</div>
 					<div class="card-info flavor-text">
 						<span class="sub-title">Flavor Text:</span>
-						<span class="value">{{ card.flavor }}</span>
+						<span class="value" [innerHTML]="flavor"></span>
 					</div>
 				</div>
 			</div>
@@ -80,11 +81,17 @@ export class FullCardComponent {
 	audioClips: any[];
 	// TODO: get rid of this and use a typed model for our own components at least
 	card: any;
+	flavor;
 
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips = [];
 
-	constructor(private events: Events, private elRef: ElementRef, private cards: SetsService) {}
+	constructor(
+		private events: Events,
+		private elRef: ElementRef,
+		private cards: SetsService,
+		private sanitizer: DomSanitizer,
+	) {}
 
 	@Input('selectedCard') set selectedCard(selectedCard: SetCard) {
 		if (!selectedCard) {
@@ -126,6 +133,7 @@ export class FullCardComponent {
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
 		this.rarity = card.rarity;
+		this.flavor = card.flavor ? this.sanitizer.bypassSecurityTrustHtml(card.flavor) : null;
 	}
 
 	playSound(audioClip) {
