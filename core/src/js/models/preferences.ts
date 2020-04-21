@@ -26,6 +26,7 @@ export class Preferences {
 
 	// readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
+	readonly overlayShowControlBar: boolean = true;
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
 	readonly overlayShowGiftedCardsInSeparateLine: boolean = false;

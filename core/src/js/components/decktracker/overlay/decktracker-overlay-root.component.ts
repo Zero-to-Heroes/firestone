@@ -52,7 +52,7 @@ declare let amplitude;
 						class="decktracker"
 						*ngIf="gameState"
 						[style.width.px]="overlayWidthInPx"
-						[ngClass]="{ 'hide-title-bar': !showTitleBar }"
+						[ngClass]="{ 'hide-title-bar': !showTitleBar, 'hide-control-bar': !showControlBar }"
 					>
 						<div class="background"></div>
 						<decktracker-control-bar
@@ -101,6 +101,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	// overlayDisplayed: boolean;
 	displayMode: string;
 	showTitleBar: boolean;
+	showControlBar: boolean;
 	overlayWidthInPx: number;
 	opacity: number;
 	// showTracker: boolean;
@@ -229,6 +230,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		// console.log('updating prefs', preferences);
 		this.displayMode = this.overlayDisplayModeExtractor(preferences);
 		this.showTitleBar = preferences.overlayShowTitleBar;
+		this.showControlBar = preferences.overlayShowControlBar;
 		this.overlayWidthInPx = 227; // this.overlayWidthExtractor(preferences);
 		this.opacity = this.opacityExtractor(preferences) / 100;
 		this.scale = this.scaleExtractor(preferences);

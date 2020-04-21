@@ -35,6 +35,11 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Show/hide the deck name and cards left in hand and deck"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayShowControlBar"
+						label="Show control bar"
+						tooltip="Show/hide the bar with the logo and the control buttons"
+					></preference-toggle>
+					<preference-toggle
 						[field]="'overlayShowTooltipsOnHover'"
 						[label]="'Show card tooltips'"
 					></preference-toggle>
