@@ -46,6 +46,7 @@ export class SetsService {
 		'HERO_07',
 		'HERO_08',
 		'HERO_09',
+		'HERO_10',
 	];
 
 	constructor(private logger: NGXLogger, private allCards: AllCardsService) {
