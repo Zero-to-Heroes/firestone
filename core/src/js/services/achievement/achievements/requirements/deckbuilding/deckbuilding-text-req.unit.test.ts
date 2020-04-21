@@ -188,6 +188,6 @@ describe('deckbuilding-text-req', () => {
 
 function buildCardsService() {
 	const service = new AllCardsService();
-	service['allCards'] = [...(cardsJson as any[])];
+	service['service']['allCards'] = [...(cardsJson as any[])];
 	return service;
 }
