@@ -10,7 +10,7 @@ export class SetsService {
 		['core', 'Basic'],
 		['expert1', 'Classic'],
 		['demon_hunter_initiate', 'Demon Hunter Initiate'],
-		['dalaran', 'Rise of hadows'],
+		['dalaran', 'Rise of Shadows'],
 		['uldum', 'Saviors of Uldum'],
 		['dragons', 'Descent of Dragons'],
 		['yod', "Galakrond's Awakening"],
