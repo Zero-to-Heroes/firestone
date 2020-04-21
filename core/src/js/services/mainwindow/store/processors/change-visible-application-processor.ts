@@ -13,9 +13,9 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		if (event.module === navigationState.currentApp) {
-			return [null, null];
-		}
+		// if (event.module === navigationState.currentApp) {
+		// 	return [null, null];
+		// }
 		const binder =
 			event.module === 'collection'
 				? navigationState.navigationCollection.update({
