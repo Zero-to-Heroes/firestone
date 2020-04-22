@@ -458,7 +458,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent, {
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
-						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 					}),
 				);
 				break;

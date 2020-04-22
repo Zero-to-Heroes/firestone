@@ -20,6 +20,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<control-bug></control-bug>
 				<control-settings
 					[settingsApp]="'decktracker'"
+					[settingsSection]="settingsSection"
 					[shouldMoveSettingsWindow]="false"
 					[windowId]="windowId"
 				>
@@ -43,9 +44,20 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerControlBarComponent {
+	settingsSection: string = 'your-deck';
+
+	@Output() onMinimize: EventEmitter<void> = new EventEmitter<void>();
+
 	@Input() windowId: string;
 	@Input() closeEvent: string;
-	@Output() onMinimize: EventEmitter<void> = new EventEmitter<void>();
+	@Input() set settingsCategory(value: string) {
+		if (value === 'opponent') {
+			this.settingsSection = 'opponent-deck';
+		} else {
+			this.settingsSection = 'your-deck';
+		}
+	}
+
 	closeHandler: () => void;
 
 	private deckUpdater: EventEmitter<GameEvent>;

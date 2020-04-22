@@ -57,6 +57,7 @@ declare let amplitude;
 						<div class="background"></div>
 						<decktracker-control-bar
 							[windowId]="windowId"
+							[settingsCategory]="player"
 							[closeEvent]="closeEvent"
 							(onMinimize)="onMinimize()"
 						></decktracker-control-bar>
