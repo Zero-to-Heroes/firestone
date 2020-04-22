@@ -25,7 +25,6 @@ import { PreferencesService } from '../../../core/src/js/services/preferences.se
 import { GameStatsLoaderService } from '../../../core/src/js/services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../../core/src/js/services/stats/game/game-stats-updater.service';
 import cardsJson from '../../../core/test/cards.json';
-import { GenericChallenge } from '../../../core/src/js/services/achievement/achievements/challenges/generic-challenge';
 
 export const achievementsValidation = async (
 	rawAchievements: RawAchievement[],
@@ -34,7 +33,10 @@ export const achievementsValidation = async (
 	collaborators?: {
 		gameStats?: GameStats;
 		deckstring?: string;
-		playerRank?: number;
+		playerRank?: {
+			leagueId: number,
+			rank: number,
+		};
 	},
 ) => {
 	const cards = buildCardsService();
@@ -46,7 +48,10 @@ export const achievementsValidation = async (
 					collaborators && collaborators.playerRank
 						? {
 								localPlayer: {
-									standardRank: collaborators.playerRank,
+									standard: {
+										leagueId: collaborators.playerRank?.leagueId,
+										rankValue: collaborators.playerRank?.rank,
+									}
 								} as PlayerInfo,
 								opponent: {} as PlayerInfo,
 						  }
@@ -199,7 +204,7 @@ function sleep(ms) {
 }
 
 function buildCardsService() {
-	const service = new AllCardsService(null, null);
+	const service = new AllCardsService();
 	service['allCards'] = [...(cardsJson as any[])];
 	return service;
 }

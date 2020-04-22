@@ -9,7 +9,10 @@ import rawAchievement from './raw_achievement.json';
 describe('Amazing Play - Discard', () => {
 	test('is completed when full events created by CSharp plugin and GEP are emitted', async () => {
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
-			playerRank: 5,
+			playerRank: {
+				leagueId: 1,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBe(true);
 	});

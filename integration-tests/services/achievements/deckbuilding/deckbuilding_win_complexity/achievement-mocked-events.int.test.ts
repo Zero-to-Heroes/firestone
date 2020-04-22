@@ -11,7 +11,10 @@ describe('Deckbuilding - Complexity', () => {
 		const deckstring = 'AAECAf0EBu4CyQOmhwOWmgOKngPYoAMMwwGxCKP9AoOWA6aYA5+bA6CbA+KbA4ukA76kA9alA/SrAwA=';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBe(true);
 	});

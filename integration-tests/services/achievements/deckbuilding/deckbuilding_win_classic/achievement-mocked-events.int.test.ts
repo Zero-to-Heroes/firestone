@@ -11,7 +11,10 @@ describe('Deckbuilding - Classic', () => {
 		const deckstring = 'AAECAf0EApUDuAgOTXHDAbsC7gKLA6sEtATmBJYF7AXsB78IyQ0A';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBe(true);
 	});
@@ -25,7 +28,10 @@ describe('Deckbuilding - Classic', () => {
 		const deckstring = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});
@@ -34,7 +40,10 @@ describe('Deckbuilding - Classic', () => {
 		const deckstring = undefined;
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});

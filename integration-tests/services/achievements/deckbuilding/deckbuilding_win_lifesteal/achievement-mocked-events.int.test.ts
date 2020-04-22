@@ -12,7 +12,10 @@ describe('Deckbuilding - Lifesteal', () => {
 			'AAECAZ8FDowB+gb7/gKggAO9hgPshgP5kwOKmgOQmgO0mwOGnAODoAOYqAOWrAMIhuwC9uwCj+8C4O8CkPYC14kDoKEDoakDAA==';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBe(true);
 	});
@@ -26,7 +29,10 @@ describe('Deckbuilding - Lifesteal', () => {
 		const deckstring = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});
@@ -35,7 +41,10 @@ describe('Deckbuilding - Lifesteal', () => {
 		const deckstring = undefined;
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});

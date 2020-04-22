@@ -25,7 +25,10 @@ export const gameStateBuilder = async (
 	pluginEvents,
 	collaborators?: {
 		deckstring?: string;
-		playerRank?: number;
+		playerRank?: {
+			leagueId: number,
+			rank: number,
+		};
 	},
 ): Promise<GameState> => {
 	const cards = buildCardsService();
@@ -48,7 +51,10 @@ export const gameStateBuilder = async (
 					collaborators && collaborators.playerRank
 						? {
 								localPlayer: {
-									standardRank: collaborators.playerRank,
+									standard: {
+										leagueId: collaborators.playerRank?.leagueId,
+										rankValue: collaborators.playerRank?.rank,
+									}
 								} as PlayerInfo,
 								opponent: {} as PlayerInfo,
 						  }
@@ -128,7 +134,7 @@ function sleep(ms) {
 }
 
 function buildCardsService() {
-	const service = new AllCardsService(null, null);
+	const service = new AllCardsService();
 	service['allCards'] = [...(cardsJson as any[])];
 	return service;
 }
