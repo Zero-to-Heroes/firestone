@@ -23,7 +23,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				<span>{{ manaCost === undefined ? '?' : manaCost }}</span>
 			</div>
 			<div class="card-name">
-				<span>{{ cardName || 'Unkown card' }}</span>
+				<span>{{ cardName || 'Unknown card' }}</span>
 			</div>
 			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
 				<div class="inner-border">
