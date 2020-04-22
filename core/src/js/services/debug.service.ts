@@ -42,9 +42,7 @@ export class DebugService {
 	private overrideError(oldConsoleLogFunc: any, debugMode: boolean) {
 		if (debugMode) {
 			return function() {
-				amplitude.getInstance().logEvent('error-logged', {
-					'message': arguments && arguments[0],
-				});
+				amplitude.getInstance().logEvent('error-logged');
 				const stack = new Error().stack;
 				// oldConsoleLogFunc.apply(console, arguments, stack);
 				let argsString = stack + '\n|';
