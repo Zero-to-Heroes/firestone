@@ -11,7 +11,10 @@ describe('Deckbuilding - Death by a Thousand Cuts', () => {
 		const deckstring = 'AAECAZICAsmcA67SAg6zAfIBzpQDmA31Bf2nA6miA9WDA8CGA4vuAs+UA575Au2iA9kEAA==';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBe(true);
 	});
@@ -20,7 +23,10 @@ describe('Deckbuilding - Death by a Thousand Cuts', () => {
 		const deckstring = 'AAECAaoIBsUDrwSn7gLv9wLiiQP9pwMMuwPbA/4D7/ECtJEDjJQDtZgDxpkD1KUD+aUDr6cDyqsDAA==';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBe(true);
 	});
@@ -34,7 +40,10 @@ describe('Deckbuilding - Death by a Thousand Cuts', () => {
 		const deckstring = 'AAECAZICBP4BqaIDyZwDrtICDbMB8gHOlAOYDfUF/acD1YMDwIYDi+4Cz5QDnvkC7aID2QQA';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});
@@ -43,7 +52,10 @@ describe('Deckbuilding - Death by a Thousand Cuts', () => {
 		const deckstring = 'AAECAZICBqmiA8mcA67SAvX8Asv1AtmpAwzyAc6UA/UF/acD1YMDwIYDi+4Cz5QDnvkC7aID2QTvogMA';
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});
@@ -52,7 +64,10 @@ describe('Deckbuilding - Death by a Thousand Cuts', () => {
 		const deckstring = undefined;
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
-			playerRank: 10,
+			playerRank: {
+				leagueId: 2,
+				rank: 10,
+			},
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});

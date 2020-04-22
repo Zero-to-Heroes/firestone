@@ -9,7 +9,10 @@ import rawAchievement from './raw_achievement.json';
 describe('Amazing Play - Win with your full HP left', () => {
 	test('is completed when full events created by CSharp plugin and GEP are emitted', async () => {
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
-			playerRank: 1,
+			playerRank: {
+				leagueId: 1,
+				rank: 1,
+			},
 		});
 		expect(isAchievementComplete).toBe(true);
 	});
