@@ -95,10 +95,13 @@ export class GameStat {
 	}
 
 	public buildRankText(): string {
+		if (!this.playerRank) {
+			return null;
+		}
 		if (this.gameMode === 'ranked') {
-			if (this.playerRank?.indexOf('legend-') !== -1) {
+			if (this.playerRank.indexOf('legend-') !== -1) {
 				return this.playerRank.split('legend-')[1];
-			} else if (this.playerRank?.indexOf('-') > -1) {
+			} else if (this.playerRank.indexOf('-') > -1) {
 				return this.playerRank.split('-')[1];
 			}
 			return this.playerRank;
