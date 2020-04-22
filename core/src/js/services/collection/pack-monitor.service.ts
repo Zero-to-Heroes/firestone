@@ -283,7 +283,7 @@ export class PackMonitor {
 			newLabel = 'Second copy';
 		}
 		console.log('[pack-monitor] displaying new card toast notification for ' + cardName);
-		const rarity = dbCard && dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free';
+		const rarity = dbCard?.rarity?.toLowerCase() || 'free';
 		this.notificationService.html({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
