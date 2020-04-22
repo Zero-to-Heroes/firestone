@@ -24,7 +24,9 @@ export class MatchDetailsComponent {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	@Input() set state(value: ReplaysState) {}
+	@Input() set state(value: ReplaysState) {
+		// Do nothing, will remove
+	}
 
 	@Input() set navigation(value: NavigationReplays) {
 		this.selectedReplay = value.selectedReplay;
