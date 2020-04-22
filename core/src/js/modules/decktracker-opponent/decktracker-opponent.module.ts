@@ -18,7 +18,7 @@ import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker
 import { SharedModule } from '../shared/shared.module';
 
 init({
-	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
+	dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
 	enabled: process.env.NODE_ENV === 'production',
 	release: process.env.APP_VERSION,
 	attachStacktrace: true,
