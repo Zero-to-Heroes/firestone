@@ -267,12 +267,9 @@ export class AppBootstrapService {
 		}
 		// Log an event for each of the prefs
 		console.log('pref status', prefs);
-		for (const key of Object.keys(prefs)) {
-			amplitude.getInstance().logEvent('preference-status', {
-				'key': key,
-				'value': prefs[key],
-			});
-		}
+		amplitude.getInstance().logEvent('preferences', {
+			...prefs,
+		});
 		const monitorsList = await this.ow.getMonitorsList();
 		// console.log('monitorsList', monitorsList);
 		const numberOfMonitors = monitorsList && monitorsList.displays ? monitorsList.displays.length : -1;
