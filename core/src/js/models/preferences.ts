@@ -68,6 +68,7 @@ export class Preferences {
 	readonly bgsSimulatorNumberOfSims = 2500;
 
 	readonly launchAppOnGameStart: boolean = true;
+	readonly shareGamesWithVS: boolean = true;
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
