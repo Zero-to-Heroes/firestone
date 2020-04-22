@@ -27,7 +27,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@Input('helpTooltip') set text(value: string) {
 		this._text = value;
 		if (!this._text && this.overlayRef) {
-			this.overlayRef.detach();
+			this.overlayRef?.detach();
 		}
 	}
 
@@ -108,7 +108,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		if (this.overlayRef) {
-			this.overlayRef.detach();
+			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -188,7 +188,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		if (this.overlayRef) {
-			this.overlayRef.detach();
+			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
