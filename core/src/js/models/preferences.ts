@@ -64,6 +64,7 @@ export class Preferences {
 	readonly batlegroundsShowHeroSelectionPref = false;
 
 	readonly launchAppOnGameStart: boolean = true;
+	readonly shareGamesWithVS: boolean = true;
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
