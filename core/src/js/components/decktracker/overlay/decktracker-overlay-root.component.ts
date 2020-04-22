@@ -155,6 +155,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
+				await this.restoreWindowPosition(true);
 			}
 		});
 		this.events.on(Events.SHOW_MODAL).subscribe(() => {
@@ -180,7 +181,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('handled after view init');
+		// console.log('handled after view init');
 	}
 
 	ngOnDestroy(): void {
@@ -192,7 +193,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	}
 
 	onMinimize() {
-		console.log('minimizing in root');
+		// console.log('minimizing in root');
 		this.onDecktrackerToggle(false);
 	}
 
@@ -257,7 +258,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		}
 	}
 
-	private async restoreWindowPosition(): Promise<void> {
+	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
 		const width = 252 * 2;
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
@@ -267,14 +268,15 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		const dpi = gameWidth / gameInfo.width;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = this.trackerPositionExtractor(prefs);
+		console.log('window position', await this.ow.getCurrentWindow(), gameInfo);
 		console.log('loaded tracker position', trackerPosition, this.player);
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 		const newLeft =
-			trackerPosition && trackerPosition.left < gameWidth
+			trackerPosition && trackerPosition.left < gameWidth && !forceTrackerReposition
 				? trackerPosition.left || 0
 				: this.defaultTrackerPositionLeftProvider(gameWidth, width, dpi);
 		const newTop =
-			trackerPosition && trackerPosition.top < gameInfo.logicalHeight
+			trackerPosition && trackerPosition.top < gameInfo.logicalHeight && !forceTrackerReposition
 				? trackerPosition.top || 0
 				: this.defaultTrackerPositionTopProvider(gameWidth, width, dpi);
 		console.log('updating tracker position', newLeft, newTop);
