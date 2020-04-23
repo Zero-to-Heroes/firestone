@@ -57,7 +57,7 @@ export class GameEvents {
 					!this.hasSentToS3 &&
 					(first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1)
 				) {
-					console.error('sending logs to S3', first, second);
+					console.info('sending logs to S3', first, second);
 					// Avoid race conditions
 					setTimeout(() => this.uploadLogsAndSendException(first, second), Math.random() * 10000);
 				}
