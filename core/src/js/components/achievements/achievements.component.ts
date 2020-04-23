@@ -100,10 +100,11 @@ export class AchievementsComponent {
 
 	getDisplayedAchievements(): readonly VisualAchievement[] {
 		if (
-			!this.navigation.navigationAchievements.displayedAchievementsList ||
-			!this.navigation.navigationAchievements.achievementsList
+			!this.navigation?.navigationAchievements?.displayedAchievementsList ||
+			!this.navigation?.navigationAchievements?.achievementsList ||
+			!this.state?.globalCategories
 		) {
-			return null;
+			return [];
 		}
 		return this.state.globalCategories
 			.map(globalCategory => globalCategory.achievementSets)
