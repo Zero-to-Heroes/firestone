@@ -257,7 +257,7 @@ export class MainWindowStoreService {
 				console.log('[store] no new state to emit');
 			}
 		} catch (e) {
-			console.error('[store] exception while processing event', event.eventName(), event, processor, e);
+			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
 		}
 		return eventQueue.slice(1);
 	}

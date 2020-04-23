@@ -33,7 +33,7 @@ export class LogsUploaderService {
 			console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
 			return s3LogFileKey;
 		} catch (e) {
-			console.error('Exception while uploading logs for troubleshooting', e);
+			console.warn('Exception while uploading logs for troubleshooting', e);
 			return null;
 		}
 	}
@@ -45,7 +45,7 @@ export class LogsUploaderService {
 			console.log('posted Firestone logs', firestoneLogKey);
 			return firestoneLogKey;
 		} catch (e) {
-			console.error('Exception while uploading logs for troubleshooting', e);
+			console.warn('Exception while uploading logs for troubleshooting', e);
 			return null;
 		}
 	}

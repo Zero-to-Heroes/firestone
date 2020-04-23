@@ -39,7 +39,7 @@ export class NewCardProcessor implements Processor {
 		const history = this.isDust(event.card, event.type)
 			? new CardHistory(event.card.id, event.type === 'GOLDEN', false, -1)
 			: new CardHistory(event.card.id, event.type === 'GOLDEN', true, relevantCount);
-		await this.cardHistoryStorage.newHistory(history);
+		this.cardHistoryStorage.newHistory(history);
 		const cardHistory = [history, ...currentState.binder.cardHistory] as readonly CardHistory[];
 		// console.log('new cardHistory', cardHistory);
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
@@ -118,7 +118,6 @@ export class NewCardProcessor implements Processor {
 			console.warn('unknown card', card.id, card);
 			return false;
 		}
-		// The collection is updated immediately, so when we query it the new card has already been inserted
 		if ((type === 'NORMAL' && dbCard.rarity === 'Legendary' && card.count >= 2) || card.count >= 3) {
 			return true;
 		}
