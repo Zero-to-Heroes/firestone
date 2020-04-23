@@ -100,8 +100,8 @@ export class AchievementsComponent {
 
 	getDisplayedAchievements(): readonly VisualAchievement[] {
 		if (
-			!this.navigation.navigationAchievements.displayedAchievementsList ||
-			!this.navigation.navigationAchievements.achievementsList
+			!this.navigation?.navigationAchievements?.displayedAchievementsList ||
+			!this.navigation?.navigationAchievements?.achievementsList
 		) {
 			return null;
 		}
