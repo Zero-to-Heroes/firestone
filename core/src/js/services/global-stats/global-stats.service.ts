@@ -48,9 +48,15 @@ export class GlobalStatsService {
 				// the time spend in games
 				const areEqual = this.areEqual(data.result, this.cachedStats);
 				if (!data || !data.result || areEqual) {
-					this.logger.debug('[global-stats] invalid stats received', data == null, areEqual);
+					// this.logger.debug('[global-stats] invalid stats received', data == null, areEqual);
 					setTimeout(
-						() => this.getGlobalStatsInternal(currentUser, callback, retriesLeft - 1, !areEqual),
+						() =>
+							this.getGlobalStatsInternal(
+								currentUser,
+								callback,
+								retriesLeft - 1,
+								!areEqual && !data.expectedEmpty,
+							),
 						1000,
 					);
 					return;
