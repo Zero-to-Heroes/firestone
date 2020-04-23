@@ -201,7 +201,7 @@ export class DeckManipulationHelper {
 							cardId,
 							entityId,
 							zone.map(card => card.entityId),
-							zone,
+							zone.map(card => card.cardId),
 						);
 					}
 				} else if (cardId == null) {

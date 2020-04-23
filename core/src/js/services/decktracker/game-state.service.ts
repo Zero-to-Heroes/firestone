@@ -328,7 +328,7 @@ export class GameStateService {
 					}
 				}
 			} catch (e) {
-				this.logger.error('[game-state] Exception while applying parser', parser.event(), e);
+				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e);
 			}
 		}
 		if (previousState !== this.state) {
