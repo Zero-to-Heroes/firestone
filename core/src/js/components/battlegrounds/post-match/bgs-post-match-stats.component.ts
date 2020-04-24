@@ -8,7 +8,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Entity } from '@firestone-hs/replay-parser';
+import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -16,6 +16,7 @@ import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { normalizeCardId } from './card-utils';
 
 declare let amplitude: any;
 
@@ -52,6 +53,7 @@ declare let amplitude: any;
 								[entities]="boardMinions"
 								[finalBoard]="true"
 								[minionStats]="minionStats"
+								[maxBoardHeight]="0.7"
 							></bgs-board>
 						</div>
 					</div>
@@ -123,6 +125,9 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.boardMinions = value.player.getLastKnownBoardState();
 		this.tabs = value.tabs;
 		this.selectedTab = value.selectedStat;
+
+		this.addMinionStats();
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -144,6 +149,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
+		private readonly allCards: AllCardsService,
 	) {
 		console.log('in construftor');
 	}
@@ -176,5 +182,33 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			case 'warband-total-stats-by-turn':
 				return 'Warband stats';
 		}
+	}
+
+	// Only needed in dev when hard refreshing the page
+	private async addMinionStats() {
+		await this.allCards.initializeCardsDb();
+		const normalizedIds = [
+			...new Set(this.boardMinions.map(entity => normalizeCardId(entity.cardID, this.allCards))),
+		];
+		this.minionStats = normalizedIds.map(
+			cardId =>
+				({
+					cardId: cardId,
+					damageDealt: this.extractDamage(cardId, this._panel.stats.totalMinionsDamageDealt),
+					damageTaken: this.extractDamage(cardId, this._panel.stats.totalMinionsDamageTaken),
+				} as MinionStat),
+		);
+		console.log('minion stats', this.minionStats);
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private extractDamage(normalizedCardId: string, totalMinionsDamageDealt: { [cardId: string]: number }): number {
+		return Object.keys(totalMinionsDamageDealt)
+			.filter(cardId => normalizeCardId(cardId, this.allCards) === normalizedCardId)
+			.map(cardId => totalMinionsDamageDealt[cardId])
+			.reduce((a, b) => a + b, 0);
 	}
 }

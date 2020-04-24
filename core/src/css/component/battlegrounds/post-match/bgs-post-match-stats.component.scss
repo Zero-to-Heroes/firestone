@@ -34,7 +34,7 @@
 }
 
 .opponent-overview {
-	height: 35%;
+	height: 37%;
 	flex-grow: 0;
 	flex-shrink: 0;
 
@@ -43,7 +43,7 @@
 		width: 100%;
 
 		::ng-deep .board {
-			width: 80%;
+			width: 100%;
 			justify-content: space-between;
 			margin: auto;
 		}
@@ -112,4 +112,8 @@
 		flex-grow: 1;
 		width: 100%;
 	}
+}
+
+::ng-deep bgs-board minion-container {
+	margin-right: 3%;
 }

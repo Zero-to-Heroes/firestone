@@ -24,6 +24,7 @@ li {
 	margin-right: 1%;
 	display: flex;
 	width: 7%;
+	flex-direction: column;
 
 	img {
 		height: 68%;
@@ -57,5 +58,39 @@ li {
 ::ng-deep {
 	board-card-stats .stat {
 		color: #fff;
+	}
+}
+
+.minion-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.minion-stats {
+	display: flex;
+	flex-direction: column;
+
+	.header {
+		color: var(--default-text-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.values {
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+	}
+
+	.damage-dealt {
+		color: #61ff47;
+		justify-content: space-evenly;
+	}
+
+	.damage-taken {
+		color: #ff4747;
 	}
 }
