@@ -1,6 +1,6 @@
+import { BgsBoard } from '../in-game/bgs-board';
 import { BgsTavernUpgrade } from '../in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../in-game/bgs-triple';
-import { BgsCompositionForTurn } from './bgs-composition-for-turn';
 import { NumericTurnInfo } from './numeric-turn-info';
 
 export class BgsPostMatchStats {
@@ -11,7 +11,8 @@ export class BgsPostMatchStats {
 
 	readonly replayLink: string;
 
-	readonly compositionsOverTurn: readonly BgsCompositionForTurn[];
+	readonly boardHistory: readonly BgsBoard[];
+	// readonly compositionsOverTurn: readonly BgsCompositionForTurn[];
 	readonly rerollsOverTurn: readonly NumericTurnInfo[];
 	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };

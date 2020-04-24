@@ -19,6 +19,7 @@ declare let amplitude: any;
 	selector: 'bgs-chart-hp',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/battlegrounds/post-match/bgs-common-chart.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-chart-hp.component.scss`,
 	],
 	template: `
@@ -62,6 +63,7 @@ export class BgsChartHpComponent {
 	lineChartColors: Color[] = [];
 
 	@Input() set stats(value: BgsPostMatchStats) {
+		console.log('setting stats', value);
 		this.setStats(value);
 	}
 
@@ -77,7 +79,7 @@ export class BgsChartHpComponent {
 		const rect = chartContainer.getBoundingClientRect();
 		console.log('chartContainer', chartContainer, rect);
 		this.chartWidth = rect.width;
-		this.chartHeight = rect.width / 2;
+		this.chartHeight = rect.height;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

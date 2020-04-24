@@ -74,14 +74,16 @@ export class BgsChartWarbandStatsComponent {
 
 	@HostListener('window:resize')
 	onResize() {
-		const chartContainer = this.el.nativeElement.querySelector('.chart-container');
-		const rect = chartContainer.getBoundingClientRect();
-		console.log('chartContainer', chartContainer, rect);
-		this.chartWidth = rect.width;
-		this.chartHeight = rect.width / 2;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		setTimeout(() => {
+			const chartContainer = this.el.nativeElement.querySelector('.chart-container');
+			const rect = chartContainer.getBoundingClientRect();
+			console.log('chartContainer', chartContainer, rect);
+			this.chartWidth = rect.width;
+			this.chartHeight = rect.height;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 1000);
 	}
 
 	private async setStats(value: BgsPostMatchStatsPanel) {

@@ -7,9 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Label } from 'aws-sdk/clients/cloudhsm';
-import { ChartDataSets, ChartOptions } from 'chart.js';
-import { Color } from 'ng2-charts';
+import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 
 declare let amplitude: any;
@@ -18,53 +16,86 @@ declare let amplitude: any;
 	selector: 'bgs-chart-warband-composition',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/battlegrounds/post-match/bgs-common-chart.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-composition.component.scss`,
 	],
 	template: `
-		<div class="chart-container">
-			<div style="display: block;">
-				<canvas
-					baseChart
-					*ngIf="chartData"
-					[style.width.px]="chartWidth"
-					[style.height.px]="chartHeight"
-					[datasets]="chartData"
-					[labels]="chartLabels"
-					[options]="chartOptions"
-					[colors]="chartColors"
-					[legend]="true"
-					[chartType]="'bar'"
-				></canvas>
+		<div class="legend">
+			<div class="item beast">
+				<div class="node"></div>
+				Beast
 			</div>
+			<div class="item mech">
+				<div class="node"></div>
+				Mech
+			</div>
+			<div class="item dragon">
+				<div class="node"></div>
+				Dragon
+			</div>
+			<div class="item demon">
+				<div class="node"></div>
+				Demon
+			</div>
+			<div class="item murloc">
+				<div class="node"></div>
+				Murloc
+			</div>
+			<div class="item blank">
+				<div class="node"></div>
+				No tribe
+			</div>
+		</div>
+		<div class="chart-container">
+			<ngx-charts-bar-vertical-stacked
+				[view]="dimensions"
+				[results]="chartData"
+				[scheme]="colorScheme"
+				[legend]="false"
+				[xAxis]="true"
+				[trimXAxisTicks]="false"
+				[xAxisTickFormatting]="axisTickFormatter"
+				[yAxis]="true"
+				[trimYAxisTicks]="false"
+				[yAxisTicks]="[0, 1, 2, 3, 4, 5, 6, 7]"
+				[yAxisTickFormatting]="axisTickFormatter"
+				[showGridLines]="true"
+				[rotateXAxisTicks]="false"
+				[barPadding]="barPadding"
+			>
+				<ng-template #tooltipTemplate let-model="model">
+					<div class="bgs-tribe-composition-tooltip">
+						<minion-icon
+							*ngFor="let minion of getMinions(model.tribeCode, model.series)"
+							[entity]="minion"
+						></minion-icon>
+					</div>
+				</ng-template>
+			</ngx-charts-bar-vertical-stacked>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsChartWarbandCompositionComponent {
-	chartWidth: number;
-	chartHeight: number;
-	chartData: ChartDataSets[];
-	chartLabels: Label[];
-	chartOptions: ChartOptions = {
-		responsive: true,
-		scales: {
-			// We use this empty structure as a placeholder for dynamic theming.
-			xAxes: [{}],
-			yAxes: [
-				{
-					id: 'delta-stats',
-					position: 'left',
-				},
-			],
-		},
+	dimensions: number[];
+	chartData: object[];
+	colorScheme = {
+		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#D9C3AB'],
 	};
-	chartColors: Color[] = [];
+	barPadding: number;
+
+	private _stats: BgsPostMatchStats;
 
 	@Input() set stats(value: BgsPostMatchStats) {
+		this._stats = value;
 		this.setStats(value);
 	}
 
-	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly el: ElementRef,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly allCards: AllCardsService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.onResize();
@@ -72,77 +103,84 @@ export class BgsChartWarbandCompositionComponent {
 
 	@HostListener('window:resize')
 	onResize() {
-		const chartContainer = this.el.nativeElement.querySelector('.chart-container');
-		const rect = chartContainer.getBoundingClientRect();
-		console.log('chartContainer', chartContainer, rect);
-		this.chartWidth = rect.width;
-		this.chartHeight = rect.width / 2;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		setTimeout(() => {
+			const chartContainer = this.el.nativeElement.querySelector('.chart-container');
+			const rect = chartContainer.getBoundingClientRect();
+			console.log('chartContainer', chartContainer, rect, rect.width, rect.height);
+			this.dimensions = [rect.width, rect.height - 15];
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+	}
+
+	axisTickFormatter(text: string): string {
+		// console.log('formatting', text);
+		return parseInt(text).toFixed(0);
+	}
+
+	getMinions(tribe: string, turn: number): readonly Entity[] {
+		return this._stats.boardHistory
+			.find(history => history.turn === turn)
+			.board.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe);
 	}
 
 	private async setStats(value: BgsPostMatchStats) {
-		this.chartData = await this.buildChartData(value);
-		this.chartLabels = await this.buildChartLabels(value);
-		this.chartColors = []; // await this.buildChartColors(value);
-		console.log('built line colors', this.chartColors);
+		await this.allCards.initializeCardsDb();
+		this.chartData = this.buildChartData(value);
+		console.log('chartData', this.chartData, value.boardHistory);
+		this.barPadding = Math.min(40, 40 - 2 * (value.boardHistory.length - 12));
+		// this.chartLabels = await this.buildChartLabels(value);
+		// this.chartColors = this.buildChartColors(value);
+		// console.log('built line colors', this.chartColors);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+		// this.onResize();
 	}
 
-	private buildChartData(value: BgsPostMatchStats): ChartDataSets[] {
-		const beastValues = value.compositionsOverTurn.map(turnCompo => turnCompo.beast);
-		const mechValues = value.compositionsOverTurn.map(turnCompo => turnCompo.mech);
-		const dragonValues = value.compositionsOverTurn.map(turnCompo => turnCompo.dragon);
-		const demonValues = value.compositionsOverTurn.map(turnCompo => turnCompo.demon);
-		const murlocValues = value.compositionsOverTurn.map(turnCompo => turnCompo.murloc);
-		const blankValues = value.compositionsOverTurn.map(turnCompo => turnCompo.blank);
-		return [
-			{
-				data: beastValues,
-				label: 'Beast',
-				stack: 'a',
-			},
-			{
-				data: mechValues,
-				label: 'Mech',
-				stack: 'a',
-			},
-			{
-				data: dragonValues,
-				label: 'Dragon',
-				stack: 'a',
-			},
-			{
-				data: demonValues,
-				label: 'Demon',
-				stack: 'a',
-			},
-			{
-				data: murlocValues,
-				label: 'Murloc',
-				stack: 'a',
-			},
-			{
-				data: blankValues,
-				label: 'No tribe',
-				stack: 'a',
-			},
-		];
+	private buildChartData(value: BgsPostMatchStats): object[] {
+		return value.boardHistory
+			.filter(history => history.turn > 0)
+			.map(history => ({
+				name: history.turn,
+				series: [
+					{
+						name: 'Beast',
+						tribeCode: 'beast',
+						value: this.getTribe('beast', history.board),
+					},
+					{
+						name: 'Mech',
+						tribeCode: 'mech',
+						value: this.getTribe('mech', history.board),
+					},
+					{
+						name: 'Dragon',
+						tribeCode: 'dragon',
+						value: this.getTribe('dragon', history.board),
+					},
+					{
+						name: 'Demon',
+						tribeCode: 'demon',
+						value: this.getTribe('demon', history.board),
+					},
+					{
+						name: 'Murloc',
+						tribeCode: 'murloc',
+						value: this.getTribe('murloc', history.board),
+					},
+					{
+						name: 'No tribe',
+						tribeCode: null,
+						value: this.getTribe(null, history.board),
+					},
+				],
+			}));
 	}
 
-	private buildChartLabels(value: BgsPostMatchStats): Label[] {
-		return value.compositionsOverTurn.map(value => '' + value.turn);
+	private getTribe(tribe: string, board: readonly Entity[]): number {
+		// Don't use === because tribe can be null / undefined
+		return board.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe).length;
 	}
-
-	// private async buildChartColors(value: BgsPostMatchStats): Promise<Color[]> {
-	// 	return await Promise.all(
-	// 		Object.keys(value.hpOverTurn).map(async playerId => ({
-	// 			backgroundColor: 'rgba(255, 255, 255, 0)',
-	// 			borderColor: await ChartUtils.colorFor(playerId),
-	// 		})),
-	// 	);
-	// }
 }

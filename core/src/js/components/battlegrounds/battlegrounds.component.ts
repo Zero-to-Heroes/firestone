@@ -20,6 +20,7 @@ declare let amplitude: any;
 	selector: 'battlegrounds',
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
+		`../../../css/component/battlegrounds/ngx-tooltips.scss`,
 		`../../../css/component/battlegrounds/battlegrounds.component.scss`,
 	],
 	encapsulation: ViewEncapsulation.None,

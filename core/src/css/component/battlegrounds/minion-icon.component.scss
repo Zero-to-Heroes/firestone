@@ -1,0 +1,18 @@
+.minion-icon {
+	position: relative;
+	height: 100px;
+	width: 80px;
+
+	.icon {
+		width: 120%;
+		clip-path: ellipse(32% 41% at 50% 50%);
+		// border: 2px solid #dfb3d3;
+	}
+
+	.tavern {
+		position: absolute;
+		left: 8%;
+		top: 15%;
+		width: 35%;
+	}
+}

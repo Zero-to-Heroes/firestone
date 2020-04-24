@@ -11,15 +11,19 @@ import {
 } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
+import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 
 @Component({
 	selector: 'bgs-board',
 	styleUrls: [`../../../css/component/battlegrounds/bgs-board.component.scss`],
 	template: `
-		<div class="board-turn" *ngIf="_entities">
+		<div class="board-turn" *ngIf="_entities && !finalBoard">
 			Board as seen
 			{{ currentTurn - boardTurn === 0 ? 'just now' : currentTurn - boardTurn + ' turns ago' }}
+		</div>
+		<div class="board-turn" *ngIf="_entities && finalBoard">
+			Your final board
 		</div>
 		<div class="board-turn empty" *ngIf="!_entities">
 			You have not fought that player yet
@@ -60,16 +64,10 @@ export class BgsBoardComponent implements AfterViewInit {
 	@Input() isRecruitPhase: boolean;
 	@Input() currentTurn: number;
 	@Input() boardTurn: number;
+	@Input() finalBoard: boolean;
 	@Input() tooltipPosition: 'left' | 'right' | 'top' | 'bottom' = 'right';
 
 	@Input('entities') set entities(entities: readonly Entity[]) {
-		// console.log(
-		// 	'setting new entities',
-		// 	entities == this._entities,
-		// 	rdiff.getDiff(entities, this._entities, true),
-		// 	this._entities,
-		// 	entities,
-		// );
 		// That's a big hack, and it looks like I have to do it for all changing arrays (!).
 		// Otherwise, there is an issue when removing all items from the first list then adding another:
 		// - in core.js DefaultIterableDiffer.prototype.forEachOperation, the adjPreviousIndex gets negative for the
@@ -86,6 +84,10 @@ export class BgsBoardComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		});
+	}
+
+	@Input() set minionStats(value: readonly MinionStat[]) {
+		// Do nothing for now
 	}
 
 	@Input('enchantmentCandidates') set enchantmentCandidates(value: readonly Entity[]) {

@@ -1,3 +1,7 @@
+:host() {
+	top: 0;
+}
+
 .container {
 	display: flex;
 	height: 100%;
@@ -23,9 +27,61 @@
 	flex-shrink: 1;
 	width: calc(100% - 410px);
 	min-height: 0;
-	overflow: auto;
+	overflow: hidden;
 	// So that the divine shields are the top are not truncated
 	padding-top: 20px;
 	position: relative;
-	top: -20px;
+}
+
+.opponent-overview {
+	height: 35%;
+	flex-grow: 0;
+	flex-shrink: 0;
+
+	.opponent-info .main-info {
+		border: none;
+		width: 100%;
+
+		::ng-deep .board {
+			width: 80%;
+			justify-content: space-between;
+			margin: auto;
+		}
+	}
+}
+
+.stats {
+	flex-grow: 1;
+	flex-shrink: 1;
+	display: flex;
+	min-height: 0;
+	flex-direction: column;
+	margin-top: 30px;
+
+	.tabs {
+		display: flex;
+		list-style: none;
+		flex-grow: 0;
+		flex-shrink: 0;
+
+		.tab {
+			margin-right: 30px;
+			color: var(--color-3);
+
+			&.active,
+			&:hover {
+				color: var(--default-title-color);
+			}
+		}
+	}
+
+	.stat {
+		display: flex;
+		flex-grow: 1;
+		flex-shrink: 1;
+		min-height: 0;
+		position: relative;
+		background: rgba(255, 255, 255, 0.08);
+		padding: 15px;
+	}
 }

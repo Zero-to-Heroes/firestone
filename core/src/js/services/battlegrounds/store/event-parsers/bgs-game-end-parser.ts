@@ -59,7 +59,8 @@ export class BgsGameEndParser implements EventParser {
 			tripleTimings: player.tripleHistory, // TODO: add the cards when relevant
 			coinsWasted: this.buildCoinsWasted(currentState, replay, structure.minionsSoldOverTurn),
 			rerolls: structure.rerollsOverTurn.map(turnInfo => turnInfo.value).reduce((a, b) => a + b, 0),
-			compositionsOverTurn: structure.compositionsOverTurn,
+			boardHistory: player.boardHistory,
+			// compositionsOverTurn: structure.compositionsOverTurn,
 			rerollsOverTurn: structure.rerollsOverTurn,
 			hpOverTurn: structure.hpOverTurn,
 			totalStatsOverTurn: structure.totalStatsOverTurn,
@@ -70,7 +71,8 @@ export class BgsGameEndParser implements EventParser {
 			stats: postMatchStats,
 			globalStats: currentState.globalStats,
 			player: currentState.currentGame.getMainPlayer(),
-			selectedStat: 'hp-by-turn',
+			selectedStat: 'warband-composition-by-turn',
+			tabs: ['hp-by-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn', 'stats'],
 		} as BgsPostMatchStatsPanel);
 	}
 

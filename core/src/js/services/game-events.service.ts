@@ -286,7 +286,7 @@ export class GameEvents {
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent, {
-						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
 					}),
 				);
 				break;

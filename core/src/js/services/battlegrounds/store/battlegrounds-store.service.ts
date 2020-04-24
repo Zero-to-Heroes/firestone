@@ -260,7 +260,7 @@ export class BattlegroundsStoreService {
 		if (
 			inGame &&
 			this.bgsActive &&
-			['closed', 'hidden'].indexOf(battlegroundsWindow.stateEx) !== -1 &&
+			['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) !== -1 &&
 			!this.closedByUser
 		) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);

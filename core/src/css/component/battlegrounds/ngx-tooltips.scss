@@ -1,0 +1,25 @@
+.ngx-charts-tooltip-content.ngx-charts-tooltip-content.ngx-charts-tooltip-content {
+	background: #ce73b4;
+
+	.tooltip-caret {
+		&.position-left {
+			border-left-color: #ce73b4;
+		}
+
+		&.position-top {
+			border-top-color: #ce73b4;
+		}
+
+		&.position-right {
+			border-right-color: #ce73b4;
+		}
+
+		&.position-bottom {
+			border-bottom-color: #ce73b4;
+		}
+	}
+
+	.bgs-tribe-composition-tooltip {
+		display: flex;
+	}
+}

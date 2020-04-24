@@ -12,6 +12,7 @@ export class BgsPostMatchStatsPanel implements BgsPanel {
 	readonly stats: BgsPostMatchStats;
 	readonly globalStats: BgsStats;
 	readonly player: BgsPlayer;
+	readonly tabs: BgsStatsFilterId[];
 	readonly selectedStat: BgsStatsFilterId;
 
 	public static create(base: BgsPostMatchStatsPanel): BgsPostMatchStatsPanel {

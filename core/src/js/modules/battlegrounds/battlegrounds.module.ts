@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
@@ -31,6 +32,7 @@ import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/
 import { BgsOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview.component';
 import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
+import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
 import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/bgs-chart-hp.component';
 import { BgsChartStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-stats.component';
 import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
@@ -71,6 +73,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		ReactiveFormsModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.WARN }),
 		ChartsModule,
+		NgxChartsModule,
 		SharedServicesModule.forRoot(),
 		ColiseumComponentsModule,
 	],
@@ -101,6 +104,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
+		MinionIconComponent,
 	],
 	entryComponents: [BgsHeroSelectionTooltipComponent, BgsCardTooltipComponent],
 	bootstrap: [BattlegroundsComponent],
