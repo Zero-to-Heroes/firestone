@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
+import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
@@ -84,21 +85,20 @@ declare let amplitude: any;
 						</bgs-chart-stats>
 					</ng-container>
 				</div>
-				<!-- <filter
-					[filterOptions]="filterOptions"
-					[activeFilter]="activeFilter"
-					[placeholder]="placeholder"
-					[delegateFullControl]="true"
-					[filterChangeFunction]="filterChangeFunction"
-				></filter> -->
 			</div>
-			<div class="left"></div>
+			<div class="left">
+				<div class="title">
+					Last Match Stats
+				</div>
+				<bgs-post-match-stats-recap [stats]="_panel" [game]="game"></bgs-post-match-stats-recap>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsPostMatchStatsComponent implements AfterViewInit {
 	_panel: BgsPostMatchStatsPanel;
+	@Input() game: BgsGame;
 
 	icon: string;
 	health: number;

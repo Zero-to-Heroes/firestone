@@ -123,7 +123,7 @@ export class DevService {
 			// console.log('sending events', events);
 			for (const event of events) {
 				if (event.Type === 'BATTLEGROUNDS_NEXT_OPPONENT') {
-					await sleep(3000);
+					await sleep(1000);
 				}
 				// console.log('dispatching', event);
 				if (awaitEvents) {

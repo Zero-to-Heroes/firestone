@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Replay } from '@firestone-hs/hs-replay-xml-parser';
+import { extractTotalDamageDealtToEnemyHero, Replay } from '@firestone-hs/hs-replay-xml-parser';
 import { BlockType, CardType, GameTag, Step, Zone } from '@firestone-hs/reference-data';
 import { Element } from 'elementtree';
 import { Map } from 'immutable';
@@ -9,11 +9,13 @@ import { ParsingStructure } from './parsing-structure';
 export const reparseReplay = (
 	replay: Replay,
 ): {
-	// compositionsOverTurn: readonly BgsCompositionForTurn[];
 	rerollsOverTurn: readonly NumericTurnInfo[];
 	minionsSoldOverTurn: readonly NumericTurnInfo[];
 	hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	totalStatsOverTurn: readonly NumericTurnInfo[];
+	totalMinionsDamageDealt: { [cardId: string]: number };
+	totalMinionsDamageTaken: { [cardId: string]: number };
+	totalDamageDealtToEnemyHeroes: number;
 } => {
 	const opponentPlayerElement = replay.replay
 		.findall('.//Player')
@@ -35,6 +37,8 @@ export const reparseReplay = (
 		leaderboardPositions: {},
 		minionsSoldForTurn: 0,
 		minionsSoldIds: [],
+		minionsDamageDealt: {},
+		minionsDamageReceived: {},
 	};
 
 	const playerEntities = replay.replay
@@ -64,14 +68,15 @@ export const reparseReplay = (
 		null,
 		{ currentTurn: 0 },
 		[
-			// compositionForTurnParse(structure),
+			compositionForTurnParse(structure),
 			rerollsForTurnParse(structure),
 			minionsSoldForTurnParse(structure),
 			hpForTurnParse(structure, playerEntities),
 			leaderboardForTurnParse(structure, playerEntities),
+			damageDealtByMinionsParse(structure, replay),
 		],
 		[
-			// compositionForTurnPopulate(structure, replay),
+			compositionForTurnPopulate(structure, replay),
 			rerollsForTurnPopulate(structure, replay),
 			minionsSoldForTurnPopulate(structure, replay),
 			// Order is important, because we want to first populate the leaderboard (for which it's easy
@@ -132,6 +137,9 @@ export const reparseReplay = (
 		minionsSoldOverTurn: minionsSoldOverTurn,
 		hpOverTurn: hpOverTurn,
 		totalStatsOverTurn: totalStatsOverTurn,
+		totalDamageDealtToEnemyHeroes: extractTotalDamageDealtToEnemyHero(replay).opponent,
+		totalMinionsDamageDealt: structure.minionsDamageDealt,
+		totalMinionsDamageTaken: structure.minionsDamageReceived,
 	};
 };
 
@@ -241,44 +249,6 @@ const minionsSoldForTurnPopulate = (structure: ParsingStructure, replay: Replay)
 	};
 };
 
-// const compositionForTurnParse = (structure: ParsingStructure) => {
-// 	return element => {
-// 		if (element.tag === 'FullEntity') {
-// 			structure.entities[element.get('id')] = {
-// 				cardId: element.get('cardID'),
-// 				controller: parseInt(element.find(`.Tag[@tag='${GameTag.CONTROLLER}']`)?.get('value') || '-1'),
-// 				zone: parseInt(element.find(`.Tag[@tag='${GameTag.ZONE}']`)?.get('value') || '-1'),
-// 				zonePosition: parseInt(element.find(`.Tag[@tag='${GameTag.ZONE_POSITION}']`)?.get('value') || '-1'),
-// 				cardType: parseInt(element.find(`.Tag[@tag='${GameTag.CARDTYPE}']`)?.get('value') || '-1'),
-// 				tribe: parseInt(element.find(`.Tag[@tag='${GameTag.CARDRACE}']`)?.get('value') || '-1'),
-// 				atk: parseInt(element.find(`.Tag[@tag='${GameTag.ATK}']`)?.get('value') || '0'),
-// 				health: parseInt(element.find(`.Tag[@tag='${GameTag.HEALTH}']`)?.get('value') || '0'),
-// 			};
-// 		}
-// 		if (structure.entities[element.get('entity')]) {
-// 			if (parseInt(element.get('tag')) === GameTag.CONTROLLER) {
-// 				structure.entities[element.get('entity')].controller = parseInt(element.get('value'));
-// 			}
-// 			if (parseInt(element.get('tag')) === GameTag.ZONE) {
-// 				// console.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
-// 				structure.entities[element.get('entity')].zone = parseInt(element.get('value'));
-// 			}
-// 			if (parseInt(element.get('tag')) === GameTag.ZONE_POSITION) {
-// 				// console.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
-// 				structure.entities[element.get('entity')].zonePosition = parseInt(element.get('value'));
-// 			}
-// 			if (parseInt(element.get('tag')) === GameTag.ATK) {
-// 				// ATK.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
-// 				structure.entities[element.get('entity')].atk = parseInt(element.get('value'));
-// 			}
-// 			if (parseInt(element.get('tag')) === GameTag.HEALTH) {
-// 				// console.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
-// 				structure.entities[element.get('entity')].health = parseInt(element.get('value'));
-// 			}
-// 		}
-// 	};
-// };
-
 const totalStatsForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
 	return currentTurn => {
 		const totalStatsOnBoard = Object.values(structure.entities)
@@ -291,21 +261,120 @@ const totalStatsForTurnPopulate = (structure: ParsingStructure, replay: Replay) 
 	};
 };
 
-// const compositionForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
-// 	return currentTurn => {
-// 		const playerEntitiesOnBoard = Object.values(structure.entities)
-// 			.map(entity => entity as any)
-// 			.filter(entity => entity.controller === replay.mainPlayerId)
-// 			.filter(entity => entity.zone === Zone.PLAY)
-// 			.filter(entity => entity.cardType === CardType.MINION)
-// 			.map(entity => ({
-// 				cardId: entity.cardId,
-// 				tribe: entity.tribe,
-// 			}));
-// 		structure.boardOverTurn = structure.boardOverTurn.set(currentTurn, playerEntitiesOnBoard);
-// 		// console.log('updated', structure.boardOverTurn.toJS(), playerEntitiesOnBoard);
-// 	};
-// };
+const damageDealtByMinionsParse = (structure: ParsingStructure, replay: Replay) => {
+	return element => {
+		// For now we only consider damage in attacks / powers, which should cover most cases
+		if (element.tag === 'Block') {
+			const actionEntity = structure.entities[element.get('entity')];
+			if (!actionEntity) {
+				console.warn('could not find entity', element.get('entity'));
+				return;
+			}
+			const damageTags = element.findall(`.//MetaData[@meta='1']`);
+			// If it's an attack, the attacker deals to the def, and vice versa
+			if ([BlockType.ATTACK].indexOf(parseInt(element.get('type'))) !== -1) {
+				damageTags.forEach(tag => {
+					const infos = tag.findall(`.Info`);
+					infos.forEach(info => {
+						const damagedEntity = structure.entities[info.get('entity')];
+						if (
+							info.get('entity') === element.get('entity') &&
+							damagedEntity.controller === replay.mainPlayerId
+						) {
+							structure.minionsDamageReceived[damagedEntity.cardId] =
+								(structure.minionsDamageReceived[damagedEntity.cardId] || 0) +
+								parseInt(tag.get('data'));
+						} else if (actionEntity.controller === replay.mainPlayerId) {
+							structure.minionsDamageDealt[actionEntity.cardId] =
+								(structure.minionsDamageDealt[actionEntity.cardId] || 0) + parseInt(tag.get('data'));
+						}
+					});
+				});
+			}
+			// Otherwise, it goes one way
+			else {
+				// We do the damage
+				if (actionEntity.controller === replay.mainPlayerId && actionEntity.cardType === CardType.MINION) {
+					const newDamage = damageTags.map(tag => parseInt(tag.get('data'))).reduce((a, b) => a + b, 0);
+					structure.minionsDamageDealt[actionEntity.cardId] =
+						(structure.minionsDamageDealt[actionEntity.cardId] || 0) + newDamage;
+				}
+				// Damage is done to us
+				else if (actionEntity.controller !== replay.mainPlayerId && actionEntity.cardType === CardType.MINION) {
+					damageTags.forEach(tag => {
+						const infos = tag.findall(`.Info`);
+						infos.forEach(info => {
+							const damagedEntity = structure.entities[info.get('entity')];
+							if (
+								damagedEntity.controller === replay.mainPlayerId &&
+								damagedEntity.cardType === CardType.MINION
+							) {
+								structure.minionsDamageReceived[damagedEntity.cardId] =
+									(structure.minionsDamageReceived[damagedEntity.cardId] || 0) +
+									parseInt(tag.get('data'));
+							}
+						});
+					});
+				}
+			}
+		}
+	};
+};
+
+// While we don't use the metric, the entity info that is populated is useful for other extractors
+const compositionForTurnParse = (structure: ParsingStructure) => {
+	return element => {
+		if (element.tag === 'FullEntity') {
+			structure.entities[element.get('id')] = {
+				cardId: element.get('cardID'),
+				controller: parseInt(element.find(`.Tag[@tag='${GameTag.CONTROLLER}']`)?.get('value') || '-1'),
+				zone: parseInt(element.find(`.Tag[@tag='${GameTag.ZONE}']`)?.get('value') || '-1'),
+				zonePosition: parseInt(element.find(`.Tag[@tag='${GameTag.ZONE_POSITION}']`)?.get('value') || '-1'),
+				cardType: parseInt(element.find(`.Tag[@tag='${GameTag.CARDTYPE}']`)?.get('value') || '-1'),
+				tribe: parseInt(element.find(`.Tag[@tag='${GameTag.CARDRACE}']`)?.get('value') || '-1'),
+				atk: parseInt(element.find(`.Tag[@tag='${GameTag.ATK}']`)?.get('value') || '0'),
+				health: parseInt(element.find(`.Tag[@tag='${GameTag.HEALTH}']`)?.get('value') || '0'),
+			};
+		}
+		if (structure.entities[element.get('entity')]) {
+			if (parseInt(element.get('tag')) === GameTag.CONTROLLER) {
+				structure.entities[element.get('entity')].controller = parseInt(element.get('value'));
+			}
+			if (parseInt(element.get('tag')) === GameTag.ZONE) {
+				// console.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
+				structure.entities[element.get('entity')].zone = parseInt(element.get('value'));
+			}
+			if (parseInt(element.get('tag')) === GameTag.ZONE_POSITION) {
+				// console.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
+				structure.entities[element.get('entity')].zonePosition = parseInt(element.get('value'));
+			}
+			if (parseInt(element.get('tag')) === GameTag.ATK) {
+				// ATK.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
+				structure.entities[element.get('entity')].atk = parseInt(element.get('value'));
+			}
+			if (parseInt(element.get('tag')) === GameTag.HEALTH) {
+				// console.log('entity', child.get('entity'), structure.entities[child.get('entity')]);
+				structure.entities[element.get('entity')].health = parseInt(element.get('value'));
+			}
+		}
+	};
+};
+
+const compositionForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
+	return currentTurn => {
+		const playerEntitiesOnBoard = Object.values(structure.entities)
+			.map(entity => entity as any)
+			.filter(entity => entity.controller === replay.mainPlayerId)
+			.filter(entity => entity.zone === Zone.PLAY)
+			.filter(entity => entity.cardType === CardType.MINION)
+			.map(entity => ({
+				cardId: entity.cardId,
+				tribe: entity.tribe,
+			}));
+		structure.boardOverTurn = structure.boardOverTurn.set(currentTurn, playerEntitiesOnBoard);
+		// console.log('updated', structure.boardOverTurn.toJS(), playerEntitiesOnBoard);
+	};
+};
 
 const parseElement = (
 	element: Element,

@@ -5,7 +5,7 @@ export interface ParsingStructure {
 	currentTurn: number;
 
 	entities: {
-		[cardId: string]: {
+		[entityId: string]: {
 			cardId: string;
 			tribe: number;
 			controller: number;
@@ -28,6 +28,8 @@ export interface ParsingStructure {
 	minionsSoldForTurn: number;
 
 	boardOverTurn: Map<number, readonly { cardId: string; tribe: number }[]>;
+	minionsDamageDealt: { [cardId: string]: number };
+	minionsDamageReceived: { [cardId: string]: number };
 	rerollOverTurn: Map<number, number>;
 	minionsSoldOverTurn: Map<number, number>;
 	totalStatsOverTurn: Map<number, number>;

@@ -59,7 +59,11 @@ declare let amplitude: any;
 						[game]="_state.currentGame"
 					>
 					</bgs-next-opponent-overview>
-					<bgs-post-match-stats *ngSwitchCase="'bgs-post-match-stats'" [panel]="currentPanel">
+					<bgs-post-match-stats
+						*ngSwitchCase="'bgs-post-match-stats'"
+						[panel]="currentPanel"
+						[game]="_state.currentGame"
+					>
 					</bgs-post-match-stats>
 				</ng-container>
 			</section>

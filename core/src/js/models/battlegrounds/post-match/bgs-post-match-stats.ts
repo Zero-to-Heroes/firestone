@@ -19,6 +19,9 @@ export class BgsPostMatchStats {
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[];
 
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[];
+
+	readonly totalMinionsDamageDealt: { [cardId: string]: number };
+	readonly totalMinionsDamageTaken: { [cardId: string]: number };
 	// readonly minionsKilled: number;
 	// readonly heroesTakenDown: number;
 	// readonly minionsBought: number;

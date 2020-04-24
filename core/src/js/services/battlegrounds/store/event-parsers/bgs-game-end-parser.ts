@@ -65,6 +65,8 @@ export class BgsGameEndParser implements EventParser {
 			hpOverTurn: structure.hpOverTurn,
 			totalStatsOverTurn: structure.totalStatsOverTurn,
 			minionsSoldOverTurn: structure.minionsSoldOverTurn,
+			totalMinionsDamageDealt: structure.totalMinionsDamageDealt,
+			totalMinionsDamageTaken: structure.totalMinionsDamageTaken,
 		} as BgsPostMatchStats);
 		console.log('post match stats', postMatchStats);
 		return BgsPostMatchStatsPanel.create({

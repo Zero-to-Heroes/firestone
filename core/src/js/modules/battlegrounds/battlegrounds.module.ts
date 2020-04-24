@@ -37,6 +37,7 @@ import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/b
 import { BgsChartStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-stats.component';
 import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
 import { BgsChartWarbandStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-stats.component';
+import { BgsPostMatchStatsRecapComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats-recap.component';
 import { BgsPostMatchStatsComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats.component';
 import { AdService } from '../../services/ad.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
@@ -85,6 +86,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsHeroWarbandStatsComponent,
 		BgsNextOpponentOverviewComponent,
 		BgsPostMatchStatsComponent,
+		BgsPostMatchStatsRecapComponent,
 		BgsHeroMiniComponent,
 		BgsHeroFaceOffComponent,
 		BgsOpponentOverviewComponent,
