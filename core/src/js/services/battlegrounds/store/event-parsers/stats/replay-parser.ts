@@ -267,7 +267,7 @@ const damageDealtByMinionsParse = (structure: ParsingStructure, replay: Replay) 
 		if (element.tag === 'Block') {
 			const actionEntity = structure.entities[element.get('entity')];
 			if (!actionEntity) {
-				console.warn('could not find entity', element.get('entity'));
+				// console.warn('could not find entity', element.get('entity'));
 				return;
 			}
 			const damageTags = element.findall(`.//MetaData[@meta='1']`);

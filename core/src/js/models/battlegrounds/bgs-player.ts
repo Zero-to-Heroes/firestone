@@ -18,6 +18,8 @@ export class BgsPlayer {
 	readonly initialHealth: number;
 	readonly damageTaken: number = 0;
 	readonly leaderboardPlace: number;
+	readonly currentWinStreak: number;
+	readonly highestWinStreak: number;
 
 	public static create(base: BgsPlayer): BgsPlayer {
 		const startingHealth = base.cardId === CardIds.NonCollectible.Neutral.PatchwerkTavernBrawl2 ? 50 : 40;
@@ -33,7 +35,7 @@ export class BgsPlayer {
 			this.tavernUpgradeHistory.length === 0
 				? 1
 				: this.tavernUpgradeHistory[this.tavernUpgradeHistory.length - 1].tavernTier;
-		console.log('getting current tavern tier', this.cardId, result, this.tavernUpgradeHistory);
+		// console.log('getting current tavern tier', this.cardId, result, this.tavernUpgradeHistory);
 		return result;
 	}
 

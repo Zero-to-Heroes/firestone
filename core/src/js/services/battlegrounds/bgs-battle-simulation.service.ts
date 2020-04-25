@@ -38,6 +38,7 @@ export class BgsBattleSimulationService {
 	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo) {
 		const prefs = await this.prefs.getPreferences();
 		console.log(
+			'no-format',
 			'[bgs-simulation] battle simulation request prepared',
 			battleInfo,
 			prefs.bgsUseLocalSimulator,

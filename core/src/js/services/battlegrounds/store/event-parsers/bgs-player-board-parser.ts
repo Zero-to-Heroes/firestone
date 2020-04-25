@@ -21,7 +21,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsPlayerBoardEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.players.find(player => player.cardId === event.heroCardId);
-		console.log('finding player board', playerToUpdate, event, currentState);
+		// console.log('finding player board', playerToUpdate, event, currentState);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
 			BgsBoard.create({
@@ -33,12 +33,12 @@ export class BgsPlayerBoardParser implements EventParser {
 			boardHistory: newHistory,
 		} as BgsPlayer);
 
-		console.log(
-			'building board to add to battle board',
-			newPlayer.getLastKnownBoardState(),
-			event.board,
-			newPlayer,
-		);
+		// console.log(
+		// 	'building board to add to battle board',
+		// 	newPlayer.getLastKnownBoardState(),
+		// 	event.board,
+		// 	newPlayer,
+		// );
 		const bgsBoard: BoardEntity[] = newPlayer.buildBgsEntities(event.board);
 		let tavernTier =
 			event.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||

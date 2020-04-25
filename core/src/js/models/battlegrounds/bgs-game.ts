@@ -37,7 +37,7 @@ export class BgsGame {
 			battleInfo.playerBoard = bgsInfo;
 		} else if (!battleInfo.opponentBoard) {
 			battleInfo.opponentBoard = bgsInfo;
-			console.log('Set battle info', JSON.stringify(battleInfo, null, 4));
+			// console.log('Set battle info', JSON.stringify(battleInfo, null, 4));
 		} else {
 			console.warn('trying to set bgsinfo in full data', this, bgsInfo);
 			return this;

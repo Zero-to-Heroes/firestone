@@ -8,14 +8,15 @@ import { Preferences } from '../../../models/preferences';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { OverwolfService } from '../../overwolf.service';
+import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
-import { BgsDamageDealtParser } from './event-parsers/bgs-damage-dealt-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
+import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-updated-parser';
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
 import { BgsHeroSelectionDoneParser } from './event-parsers/bgs-hero-selection-done-parser';
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
@@ -35,6 +36,7 @@ import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
 import { BgsGameEndEvent } from './events/bgs-game-end-event';
+import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
 import { BgsHeroSelectionEvent } from './events/bgs-hero-selection-event';
 import { BgsLeaderboardPlaceEvent } from './events/bgs-leaderboard-place-event';
@@ -71,6 +73,7 @@ export class BattlegroundsStoreService {
 		private simulation: BgsBattleSimulationService,
 		private ow: OverwolfService,
 		private prefs: PreferencesService,
+		private memory: MemoryInspectionService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -171,6 +174,12 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.damage,
 					),
 				);
+				setTimeout(async () => {
+					const info = await this.memory.getBattlegroundsInfo();
+					console.log('bgs info', JSON.stringify(info, null, 4));
+					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
+					console.log('BgsGlobalInfoUpdatedEvent emit done');
+				}, 5000);
 				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				// 	this.battlegroundsUpdater.next(new BgsCombatStartEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE) {
@@ -256,7 +265,7 @@ export class BattlegroundsStoreService {
 		const inGame = this.state && this.state.inGame;
 
 		const battlegroundsWindow = await this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW);
-		console.warn(battlegroundsWindow);
+		// console.warn(battlegroundsWindow);
 		if (
 			inGame &&
 			this.bgsActive &&
@@ -294,9 +303,10 @@ export class BattlegroundsStoreService {
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(),
 			new BgsPostMatchStatsFilterChangeParser(),
-			new BgsDamageDealtParser(),
+			// new BgsDamageDealtParser(),
 			new BgsLeaderboardPlaceParser(),
 			new BgsCombatStartParser(),
+			new BgsGlobalInfoUpdatedParser(),
 		];
 	}
 }

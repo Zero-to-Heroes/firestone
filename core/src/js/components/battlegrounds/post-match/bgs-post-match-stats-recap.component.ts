@@ -40,7 +40,7 @@ declare let amplitude: any;
 				<div class="value">{{ totalHeroDamageDealt }}</div>
 			</div>
 			<div class="entry cell">
-				<div class="label">Win streak</div>
+				<div class="label">Highest Win streak</div>
 				<div class="value">{{ winStreak }}</div>
 			</div>
 			<div class="entry cell">
@@ -82,6 +82,7 @@ export class BgsPostMatchStatsRecapComponent {
 		this.wins = this._game.faceOffs.filter(faceOff => faceOff.result === 'won').length || 0;
 		this.losses = this._game.faceOffs.filter(faceOff => faceOff.result === 'lost').length || 0;
 		this.ties = this._game.faceOffs.filter(faceOff => faceOff.result === 'tied').length || 0;
+		this.winStreak = this._stats.player.highestWinStreak;
 		this.totalMinionsDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)
 			.filter(cardId => cardId !== this._game.getMainPlayer().cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageDealt[cardId])
