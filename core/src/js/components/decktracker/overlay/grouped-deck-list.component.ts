@@ -45,7 +45,7 @@ export class GroupedDeckListComponent {
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
 		this.showWarning = deckState.showDecklistWarning;
-		// console.log('setting deck state', deckState, this.deck);
+		// console.log('setting deck state', deckState);
 		this.buildGroupedList();
 	}
 
@@ -84,7 +84,7 @@ export class GroupedDeckListComponent {
 		);
 		const base = [];
 		for (const cardId of Array.from(groupedFromDecklist.keys())) {
-			const cardsInHand = (hand || []).filter(card => card.cardId === cardId);
+			// const cardsInHand = (hand || []).filter(card => card.cardId === cardId);
 			const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
 			//console.log('cards', cardsInHand, cardsInDeck, groupedFromDeck.get(cardId) || []);
 			// const isAtLeastOneCardInHand = cardsInHand > 0;
@@ -106,19 +106,19 @@ export class GroupedDeckListComponent {
 				} as VisualDeckCard);
 				// console.log('base is now', base);
 			}
-			for (let i = 0; i < cardsInHand.length; i++) {
-				// console.log('pushing');
-				base.push({
-					cardId: groupedFromDecklist.get(cardId)[0].cardId,
-					cardName: groupedFromDecklist.get(cardId)[0].cardName,
-					manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
-					rarity: groupedFromDecklist.get(cardId)[0].rarity,
-					highlight: this._showCardsInHand ? 'in-hand' : 'normal',
-					creatorCardIds: creatorCardIds,
-				} as VisualDeckCard);
-				// console.log('base is now', base);
-			}
-			if (cardsInDeck === 0 && cardsInHand.length === 0) {
+			// for (let i = 0; i < cardsInHand.length; i++) {
+			// 	console.log('pushing card in hand');
+			// 	base.push({
+			// 		cardId: groupedFromDecklist.get(cardId)[0].cardId,
+			// 		cardName: groupedFromDecklist.get(cardId)[0].cardName,
+			// 		manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
+			// 		rarity: groupedFromDecklist.get(cardId)[0].rarity,
+			// 		highlight: this._showCardsInHand ? 'in-hand' : 'normal',
+			// 		creatorCardIds: creatorCardIds,
+			// 	} as VisualDeckCard);
+			// 	// console.log('base is now', base);
+			// }
+			if (cardsInDeck === 0) {
 				// console.log('pushing dim version');
 				base.push({
 					cardId: groupedFromDecklist.get(cardId)[0].cardId,
@@ -131,7 +131,7 @@ export class GroupedDeckListComponent {
 			}
 		}
 		for (const cardId of Array.from(groupedFromNotInBaseDeck.keys())) {
-			const cardsInHand = (hand || []).filter(card => card.cardId === cardId).length;
+			// const cardsInHand = (hand || []).filter(card => card.cardId === cardId).length;
 			const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
 			// const isAtLeastOneCardInHand = (hand || []).filter(card => card.cardId === cardId).length > 0;
 			const isInOtherZone =
@@ -153,18 +153,18 @@ export class GroupedDeckListComponent {
 				} as VisualDeckCard);
 				// console.log('base is now', base);
 			}
-			for (let i = 0; i < cardsInHand; i++) {
-				// console.log('pushing');
-				base.push({
-					cardId: groupedFromDeck.get(cardId)[i].cardId,
-					cardName: groupedFromDeck.get(cardId)[i].cardName,
-					manaCost: groupedFromDeck.get(cardId)[i].manaCost,
-					rarity: groupedFromDeck.get(cardId)[i].rarity,
-					highlight: 'in-hand',
-					creatorCardIds: creatorCardIds,
-				} as VisualDeckCard);
-				// console.log('base is now', base);
-			}
+			// for (let i = 0; i < cardsInHand; i++) {
+			// 	// console.log('pushing');
+			// 	base.push({
+			// 		cardId: groupedFromDeck.get(cardId)[i].cardId,
+			// 		cardName: groupedFromDeck.get(cardId)[i].cardName,
+			// 		manaCost: groupedFromDeck.get(cardId)[i].manaCost,
+			// 		rarity: groupedFromDeck.get(cardId)[i].rarity,
+			// 		highlight: 'in-hand',
+			// 		creatorCardIds: creatorCardIds,
+			// 	} as VisualDeckCard);
+			// 	// console.log('base is now', base);
+			// }
 		}
 		const sortingFunction = this._cardsGoToBottom
 			? (a: VisualDeckCard, b: VisualDeckCard) => this.sortOrder(a) - this.sortOrder(b) || a.manaCost - b.manaCost
