@@ -9,6 +9,7 @@ declare let amplitude: any;
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats-recap.component.scss`,
+		`../../../../css/global/scrollbar.scss`,
 	],
 	template: `
 		<div class="stats-recap" scrollable>
@@ -34,6 +35,18 @@ declare let amplitude: any;
 				<div class="label">Total dmg taken (minions)</div>
 				<div class="value">{{ totalMinionsDamageTaken }}</div>
 			</div>
+			<div class="entry cell">
+				<div class="label">Total dmg dealt (hero)</div>
+				<div class="value">{{ totalHeroDamageDealt }}</div>
+			</div>
+			<div class="entry cell">
+				<div class="label">Win streak</div>
+				<div class="value">{{ winStreak }}</div>
+			</div>
+			<div class="entry cell">
+				<div class="label">Triples created</div>
+				<div class="value">{{ triples }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,6 +58,9 @@ export class BgsPostMatchStatsRecapComponent {
 
 	totalMinionsDamageDealt: number;
 	totalMinionsDamageTaken: number;
+	totalHeroDamageDealt: number;
+	winStreak: number;
+	triples: number;
 
 	private _stats: BgsPostMatchStatsPanel;
 	private _game: BgsGame;
@@ -74,5 +90,10 @@ export class BgsPostMatchStatsRecapComponent {
 			.filter(cardId => cardId !== this._game.getMainPlayer().cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageTaken[cardId])
 			.reduce((a, b) => a + b, 0);
+		this.totalHeroDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)
+			.filter(cardId => cardId === this._game.getMainPlayer().cardId)
+			.map(cardId => this._stats.stats.totalMinionsDamageDealt[cardId])
+			.reduce((a, b) => a + b, 0);
+		this.triples = this._game.getMainPlayer().tripleHistory.length;
 	}
 }

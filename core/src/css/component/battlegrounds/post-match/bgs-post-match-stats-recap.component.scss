@@ -9,15 +9,16 @@
 	color: var(--color-8);
 	font-size: 20px;
 	position: relative;
-	display: flex;
 
 	.entry {
-		border-bottom: 1px solid var(--color-3);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		height: 14%;
 		min-height: 60px;
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--color-3);
+		}
 	}
 
 	.cell {

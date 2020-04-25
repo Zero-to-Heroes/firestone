@@ -49,12 +49,18 @@ import { normalizeCardId } from './post-match/card-utils';
 					>
 					</card-on-board>
 				</li>
-				<div
-					class="minion-stats"
-					*ngIf="minionStats && minionStats.length > 0"
-					helpTooltip="Damage dealt and damage taken by this minion's card during the run. ATTENTION: multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)"
-				>
-					<div class="header">Total Dmg</div>
+				<div class="minion-stats" *ngIf="_minionStats && _minionStats.length > 0">
+					<div
+						class="header"
+						[helpTooltip]="
+							'Damage dealt and damage taken by this minion card during the run' +
+							(_minionStats.length !== _entities.length
+								? '. ATTENTION: multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)'
+								: '')
+						"
+					>
+						Total Dmg
+					</div>
 					<div class="values">
 						<div class="damage-dealt">{{ getDamageDealt(entity) }}</div>
 						<div class="damage-taken">{{ getDamageTaken(entity) }}</div>
@@ -69,6 +75,7 @@ export class BgsBoardComponent implements AfterViewInit {
 	_entities: readonly Entity[] = [];
 	_enchantmentCandidates: readonly Entity[];
 	_options: readonly number[];
+	_minionStats: readonly MinionStat[];
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
 	@Input() isMainPlayer: boolean;
@@ -78,8 +85,11 @@ export class BgsBoardComponent implements AfterViewInit {
 	@Input() boardTurn: number;
 	@Input() finalBoard: boolean;
 	@Input() tooltipPosition: 'left' | 'right' | 'top' | 'bottom' = 'right';
-	@Input() minionStats: readonly MinionStat[];
 	@Input() maxBoardHeight: number = 1;
+
+	@Input() set minionStats(value: readonly MinionStat[]) {
+		this._minionStats = value;
+	}
 
 	@Input('entities') set entities(entities: readonly Entity[]) {
 		// That's a big hack, and it looks like I have to do it for all changing arrays (!).
@@ -133,11 +143,13 @@ export class BgsBoardComponent implements AfterViewInit {
 	}
 
 	getDamageDealt(entity: Entity): number {
-		return this.minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards)).damageDealt;
+		return this._minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+			.damageDealt;
 	}
 
 	getDamageTaken(entity: Entity): number {
-		return this.minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards)).damageTaken;
+		return this._minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+			.damageTaken;
 	}
 
 	onResize() {
