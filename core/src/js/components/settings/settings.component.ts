@@ -41,6 +41,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				></settings-decktracker>
 				<settings-replays *ngSwitchCase="'replays'" [selectedMenu]="selectedMenu"></settings-replays>
 			</ng-container>
+			<settings-advanced-toggle></settings-advanced-toggle>
 			<settings-modal></settings-modal>
 		</window-wrapper>
 	`,

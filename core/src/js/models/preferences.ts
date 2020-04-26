@@ -2,6 +2,9 @@ import { Ftue } from './preferences/ftue';
 
 export class Preferences {
 	readonly id: number = 1;
+
+	readonly advancedModeToggledOn: boolean;
+
 	readonly dontConfirmVideoReplayDeletion: boolean;
 	readonly dontRecordAchievements: boolean = true;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;

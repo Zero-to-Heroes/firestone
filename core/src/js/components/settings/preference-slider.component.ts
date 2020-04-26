@@ -2,10 +2,10 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	Input,
 	OnDestroy,
 	ViewRef,
-	ElementRef,
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';

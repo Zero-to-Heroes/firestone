@@ -12,6 +12,7 @@ import { SettingsAchievementsSoundCaptureComponent } from '../../components/sett
 import { SettingsAchievementsStorageComponent } from '../../components/settings/achievements/settings-achievements-storage.component';
 import { SettingsAchievementsVideoCaptureComponent } from '../../components/settings/achievements/settings-achievements-video-capture.component';
 import { SettingsAchievementsComponent } from '../../components/settings/achievements/settings-achievements.component';
+import { AdvancedSettingDirective } from '../../components/settings/advanced-setting.directive';
 import { SettingsCollectionMenuComponent } from '../../components/settings/collection/settings-collection-menu.component';
 import { SettingsCollectionNotificationComponent } from '../../components/settings/collection/settings-collection-notification';
 import { SettingsCollectionComponent } from '../../components/settings/collection/settings-collection.component';
@@ -33,6 +34,7 @@ import { PreferenceSliderComponent } from '../../components/settings/preference-
 import { SettingsReplaysGeneralComponent } from '../../components/settings/replays/settings-replays-general.component';
 import { SettingsReplaysMenuComponent } from '../../components/settings/replays/settings-replays-menu.component';
 import { SettingsReplaysComponent } from '../../components/settings/replays/settings-replays.component';
+import { SettingsAdvancedToggleComponent } from '../../components/settings/settings-advanced-toggle.component';
 import { SettingsAppSelectionComponent } from '../../components/settings/settings-app-selection.component';
 import { SettingsComponent } from '../../components/settings/settings.component';
 import { DebugService } from '../../services/debug.service';
@@ -71,6 +73,7 @@ console.log('version is ' + process.env.APP_VERSION);
 	declarations: [
 		SettingsComponent,
 		SettingsAppSelectionComponent,
+		SettingsAdvancedToggleComponent,
 
 		SettingsGeneralComponent,
 		SettingsGeneralMenuComponent,
@@ -105,6 +108,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsReplaysMenuComponent,
 
 		PreferenceSliderComponent,
+
+		AdvancedSettingDirective,
 	],
 	bootstrap: [SettingsComponent],
 	providers: [

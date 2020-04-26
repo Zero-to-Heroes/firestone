@@ -56,6 +56,12 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async updateAdvancedSettings(advancedSettings: boolean) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, advancedModeToggledOn: advancedSettings };
+		this.savePreferences(newPrefs);
+	}
+
 	public async setHasSeenVideoCaptureChangeNotif(pref: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, hasSeenVideoCaptureChangeNotif: pref };
