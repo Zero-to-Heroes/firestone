@@ -23,6 +23,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					field="resetAchievementsOnAppStart"
 					label="Streamer mode"
 					tooltip="Reset your achievements for the session, so that notifications will show even for unlocked achievements. Uncheck to get all your old achievements back. App restart required"
+					advancedSetting
 				></preference-toggle>
 			</section>
 		</div>

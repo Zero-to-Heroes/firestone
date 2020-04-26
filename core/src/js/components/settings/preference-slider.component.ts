@@ -94,7 +94,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 			.subscribe(model => {
 				this.value = model;
 				this.updateValueElements();
-				console.log('changing slider value', this.value, this.progress);
+				// console.log('changing slider value', this.value, this.progress);
 				this.prefs.setValue(this.field, this.value);
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();
@@ -123,7 +123,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 		const valueInPercent = knob.absoluteValue
 			? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
 			: knob.percentageValue;
-		console.log('knob percent', valueInPercent);
+		// console.log('knob percent', valueInPercent);
 		return Math.min(98.4, Math.max(1.6, valueInPercent));
 	}
 
@@ -135,14 +135,14 @@ export class PreferenceSliderComponent implements OnDestroy {
 					? this.value - knob.absoluteValue
 					: this.progress - knob.percentageValue;
 				if (Math.abs(snapTestValue) < this.snapSensitivity) {
-					console.log('snapping', this.value, this.progress, knob, this.snapSensitivity);
+					// console.log('snapping', this.value, this.progress, knob, this.snapSensitivity);
 					// this.progress = knob.percentageValue;
 					const valueInPercent = knob.absoluteValue
 						? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
 						: knob.percentageValue;
 					this.value = (valueInPercent * (this.max - this.min)) / 100 + this.min;
 					this.updateValueElements();
-					console.log('to', this.value, this.progress);
+					// console.log('to', this.value, this.progress);
 					this.prefs.setValue(this.field, this.value);
 					if (!(this.cdr as ViewRef).destroyed) {
 						this.cdr.detectChanges();
@@ -163,7 +163,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 
 	private updateValueElements() {
 		this.progress = ((this.value - this.min) / (this.max - this.min)) * 100;
-		console.log('updating progress', this.progress, this.value, this.min, this.max);
+		// console.log('updating progress', this.progress, this.value, this.min, this.max);
 		this.displayedValue = this.value.toFixed(0) + this.displayedValueUnit;
 		const width = this.el.nativeElement.querySelector('input').getBoundingClientRect().width - 8;
 		// console.log('updating left', width, this.el.nativeElement.getBoundingClientRect(), this.progress);

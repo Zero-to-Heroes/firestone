@@ -1,0 +1,19 @@
+.settings-advanced-toggle {
+	padding: 5px 15px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	color: #a89782;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #a89782;
+	width: 160px;
+
+	&:hover {
+		background: #d9c3ab;
+		border-color: #d9c3ab;
+		color: #2f0d0d;
+	}
+}

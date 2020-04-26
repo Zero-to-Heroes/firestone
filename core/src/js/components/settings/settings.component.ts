@@ -45,6 +45,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					[selectedMenu]="selectedMenu"
 				></settings-battlegrounds>
 			</ng-container>
+			<settings-advanced-toggle></settings-advanced-toggle>
 			<settings-modal></settings-modal>
 		</window-wrapper>
 	`,
