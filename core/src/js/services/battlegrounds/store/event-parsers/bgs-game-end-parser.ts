@@ -68,6 +68,7 @@ export class BgsGameEndParser implements EventParser {
 			totalMinionsDamageDealt: structure.totalMinionsDamageDealt,
 			totalMinionsDamageTaken: structure.totalMinionsDamageTaken,
 		} as BgsPostMatchStats);
+		const finalPosition = player.leaderboardPlace;
 		console.log('post match stats', postMatchStats);
 		return BgsPostMatchStatsPanel.create({
 			stats: postMatchStats,
@@ -75,6 +76,7 @@ export class BgsGameEndParser implements EventParser {
 			player: currentState.currentGame.getMainPlayer(),
 			selectedStat: 'warband-composition-by-turn',
 			tabs: ['hp-by-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn', 'stats'],
+			name: 'You finished #' + finalPosition,
 		} as BgsPostMatchStatsPanel);
 	}
 
