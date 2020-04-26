@@ -57,6 +57,9 @@ import { Knob } from '../preference-slider.component';
 						field="decktrackerCloseOnGameEnd"
 						label="Close tracker on game end"
 						tooltip="Automatically close the tracker when the game ends. If disabled, the tracker needs to be closed manually"
+						advancedSetting
+						messageWhenToggleValue="Got it, Firestone won't close the tracker when the match ends"
+						[valueToDisplayMessageOn]="false"
 					></preference-toggle>
 				</div>
 			</div>

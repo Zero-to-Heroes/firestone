@@ -24,6 +24,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					label="Streamer mode"
 					tooltip="Reset your achievements for the session, so that notifications will show even for unlocked achievements. Uncheck to get all your old achievements back. App restart required"
 					advancedSetting
+					messageWhenToggleValue="Got it, we won't load your existing achievements next time you start Firestone"
+					[valueToDisplayMessageOn]="true"
 				></preference-toggle>
 			</section>
 		</div>

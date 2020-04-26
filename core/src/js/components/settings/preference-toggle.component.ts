@@ -29,6 +29,12 @@ import { PreferencesService } from '../../services/preferences.service';
 				</p>
 				<b></b>
 			</label>
+			<div class="info-message" *ngIf="messageWhenToggleValue && valueToDisplayMessageOn === value">
+				<svg class="attention-icon">
+					<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
+				</svg>
+				{{ messageWhenToggleValue }}
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,6 +43,8 @@ export class PreferenceToggleComponent {
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
+	@Input() messageWhenToggleValue: string;
+	@Input() valueToDisplayMessageOn: string | boolean | number;
 	@Input() toggleFunction: (newValue: boolean) => void;
 
 	value: boolean;
