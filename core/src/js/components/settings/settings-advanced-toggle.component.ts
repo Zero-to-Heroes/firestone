@@ -19,9 +19,11 @@ import { PreferencesService } from '../../services/preferences.service';
 		`../../../css/component/settings/settings-advanced-toggle.component.scss`,
 	],
 	template: `
-		<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
-			{{ advancedModeToggledOn ? 'Back to standard mode' : 'Show advanced settings' }}
-		</button>
+		<div class="container">
+			<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
+				{{ advancedModeToggledOn ? 'Back to standard mode' : 'Show advanced settings' }}
+			</button>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

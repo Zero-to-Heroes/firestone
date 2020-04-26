@@ -46,6 +46,8 @@ import { Knob } from '../preference-slider.component';
 						label="Ignore decklist"
 						tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
 						advancedSetting
+						messageWhenToggleValue="Got it, the tracker will ignore your decklist"
+						[valueToDisplayMessageOn]="true"
 					></preference-toggle>
 				</div>
 			</div>

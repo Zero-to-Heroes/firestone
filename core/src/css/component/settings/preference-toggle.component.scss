@@ -13,6 +13,23 @@
 		width: 180px;
 	}
 
+	.info-message {
+		color: #d9c3ab;
+		font-size: 10px;
+		margin-top: 5px;
+		text-indent: 10px;
+		display: flex;
+		align-items: center;
+		margin-left: 10px;
+
+		.attention-icon {
+			fill: transparent;
+			width: 15px;
+			height: 15px;
+			margin-right: 5px;
+		}
+	}
+
 	.info {
 		margin-left: 5px;
 		margin-top: 2px;
