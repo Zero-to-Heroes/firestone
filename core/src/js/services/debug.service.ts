@@ -15,22 +15,22 @@ export class DebugService {
 		if (debugMode) {
 			return function() {
 				let argsString = '';
+				const shouldFormat = arguments.length > 0 && arguments[0] !== 'no-format';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
-					argsString +=
-						(
-							JSON.stringify(arguments[i], function(key, value) {
-								if (typeof value === 'object' && value !== null) {
-									if (cache.indexOf(value) !== -1) {
-										// Circular reference found, discard key
-										return;
-									}
-									// Store value in our collection
-									cache.push(value);
+					const argAsString =
+						JSON.stringify(arguments[i], function(key, value) {
+							if (typeof value === 'object' && value !== null) {
+								if (cache.indexOf(value) !== -1) {
+									// Circular reference found, discard key
+									return;
 								}
-								return value;
-							}) || ''
-						).substring(0, 1000) + ' | ';
+								// Store value in our collection
+								cache.push(value);
+							}
+							return value;
+						}) || '';
+					argsString += (shouldFormat ? argAsString.substring(0, 1000) : argAsString) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
 				oldConsoleLogFunc.apply(console, [argsString]);
