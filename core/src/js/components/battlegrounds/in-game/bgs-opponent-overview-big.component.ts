@@ -45,8 +45,6 @@ declare let amplitude: any;
 						[entities]="boardMinions"
 						[currentTurn]="currentTurn"
 						[boardTurn]="boardTurn"
-						[debug]="true"
-						*ngIf="boardMinions"
 					></bgs-board>
 					<div class="bottom-info">
 						<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
@@ -58,8 +56,11 @@ declare let amplitude: any;
 				</div>
 				<div class="tavern-upgrades">
 					<div class="title">Tavern upgrades</div>
-					<div class="upgrades" *ngIf="tavernUpgrades?.length > 0">
-						<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades; trackBy: trackByUpgradeFn">
+					<div class="upgrades">
+						<div
+							class="tavern-upgrade"
+							*ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn"
+						>
 							<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 							<div class="label">Turn {{ upgrade.turn }}</div>
 						</div>
@@ -87,6 +88,13 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 
 	@Input() set opponent(value: BgsPlayer) {
+		if (value === this._opponent) {
+			return;
+		}
+		this._opponent = value;
+		if (!value) {
+			return;
+		}
 		console.log('setting next opponent info', value, value.getCurrentTavernTier());
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
 		this.health = value.initialHealth - value.damageTaken;
@@ -96,12 +104,20 @@ export class BgsOpponentOverviewBigComponent {
 		this.tavernTier = value.getCurrentTavernTier();
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
-		this.tavernUpgrades = value.tavernUpgradeHistory;
+		this.tavernUpgrades = [];
 		this.triples = value.tripleHistory;
+		setTimeout(() => {
+			this.tavernUpgrades = value.tavernUpgradeHistory;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
+
+	private _opponent: BgsPlayer;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
 

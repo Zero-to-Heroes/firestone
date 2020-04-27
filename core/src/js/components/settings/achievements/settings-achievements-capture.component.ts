@@ -67,7 +67,7 @@ export class SettingsAchievementsCaptureComponent {
 	toggleVideoCapture(event) {
 		this.captureVideo = !this.captureVideo;
 		this.changeVideoSettings();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		amplitude.getInstance().logEvent('video-capture-toggle', { 'state': this.captureVideo });
@@ -91,7 +91,7 @@ export class SettingsAchievementsCaptureComponent {
 
 	private async updateDefaultValues() {
 		this.captureVideo = !(await this.prefs.getPreferences()).dontRecordAchievements;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

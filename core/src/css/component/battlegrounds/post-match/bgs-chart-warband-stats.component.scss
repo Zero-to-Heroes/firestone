@@ -1,0 +1,13 @@
+.container-1 {
+	width: 120%;
+	transform: none;
+	// display: flex;
+	// min-height: 0;
+	position: relative;
+
+	.container-div {
+		display: flex;
+		min-height: 0;
+		flex-grow: 1;
+	}
+}

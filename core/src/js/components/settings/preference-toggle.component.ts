@@ -59,7 +59,7 @@ export class PreferenceToggleComponent {
 		if (this.toggleFunction) {
 			this.toggleFunction(this.value);
 		}
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -67,7 +67,7 @@ export class PreferenceToggleComponent {
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.value = prefs[this.field];
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

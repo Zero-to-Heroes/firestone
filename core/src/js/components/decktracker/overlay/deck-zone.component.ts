@@ -77,7 +77,7 @@ export class DeckZoneComponent {
 
 	toggleZone() {
 		this.open = !this.open;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

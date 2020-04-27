@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
 import { BgsFaceOff } from '../../../models/battlegrounds/bgs-face-off';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
@@ -26,9 +34,9 @@ declare let amplitude: any;
 					[nextOpponentCardId]="nextOpponentCardId"
 				></bgs-hero-face-offs>
 			</div>
-			<div class="content" *ngIf="opponents?.length > 0">
+			<div class="content">
 				<bgs-opponent-overview-big
-					[opponent]="opponents[0]"
+					[opponent]="opponents && opponents[0]"
 					[currentTurn]="currentTurn"
 					[nextBattle]="nextBattle"
 					[battleSimulationStatus]="battleSimulationStatus"
@@ -37,7 +45,7 @@ declare let amplitude: any;
 					<div class="subtitle">Other opponents</div>
 					<div class="opponents" scrollable>
 						<bgs-opponent-overview
-							*ngFor="let opponent of opponents.slice(1); trackBy: trackByOpponentInfoFn"
+							*ngFor="let opponent of otherOpponents; trackBy: trackByOpponentInfoFn"
 							[opponent]="opponent"
 							[currentTurn]="currentTurn"
 						></bgs-opponent-overview>
@@ -51,6 +59,7 @@ declare let amplitude: any;
 export class BgsNextOpponentOverviewComponent {
 	players: readonly BgsPlayer[];
 	opponents: readonly BgsPlayer[];
+	otherOpponents: readonly BgsPlayer[];
 	faceOffs: readonly BgsFaceOff[];
 	currentTurn: number;
 	nextBattle: BattleResult;
@@ -61,6 +70,13 @@ export class BgsNextOpponentOverviewComponent {
 	private _game: BgsGame;
 
 	@Input() set panel(value: BgsNextOpponentOverviewPanel) {
+		if (value && !value.opponentOverview) {
+			// console.log('invalid panel', value);
+			return;
+		}
+		if (value === this._panel) {
+			return;
+		}
 		this._panel = value;
 		this.updateInfo();
 	}
@@ -75,6 +91,10 @@ export class BgsNextOpponentOverviewComponent {
 		private readonly renderer: Renderer2,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
+
+	ngAfterViewInit() {
+		console.log('after view init in next-opponent(view');
+	}
 
 	trackByOpponentInfoFn(index, item: BgsPlayer) {
 		return item.cardId;
@@ -94,23 +114,33 @@ export class BgsNextOpponentOverviewComponent {
 		this.nextBattle = this._game.battleResult;
 		this.battleSimulationStatus = this._game.battleInfoStatus;
 		this.faceOffs = this._game.faceOffs;
-		this.opponents = this._game.players
-			.filter(player => !player.isMainPlayer)
-			.sort((a, b) => {
-				if (a.leaderboardPlace < b.leaderboardPlace) {
-					return -1;
-				}
-				if (b.leaderboardPlace < a.leaderboardPlace) {
-					return 1;
-				}
-				if (a.damageTaken < b.damageTaken) {
-					return -1;
-				}
-				if (b.damageTaken < a.damageTaken) {
-					return 1;
-				}
-				return 0;
-			})
-			.sort((a, b) => (a.cardId === this.nextOpponentCardId ? -1 : b.cardId === this.nextOpponentCardId ? 1 : 0));
+		this.opponents = [];
+		this.otherOpponents = [];
+		setTimeout(() => {
+			this.opponents = this._game.players
+				.filter(player => !player.isMainPlayer)
+				.sort((a, b) => {
+					if (a.leaderboardPlace < b.leaderboardPlace) {
+						return -1;
+					}
+					if (b.leaderboardPlace < a.leaderboardPlace) {
+						return 1;
+					}
+					if (a.damageTaken < b.damageTaken) {
+						return -1;
+					}
+					if (b.damageTaken < a.damageTaken) {
+						return 1;
+					}
+					return 0;
+				})
+				.sort((a, b) =>
+					a.cardId === this.nextOpponentCardId ? -1 : b.cardId === this.nextOpponentCardId ? 1 : 0,
+				);
+			this.otherOpponents = this.opponents.slice(1);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
 
 declare let amplitude: any;
@@ -11,12 +11,12 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tribes.component.scss`,
 	],
 	template: `
-		<div class="tribes" *ngIf="tribes?.length">
+		<div class="tribes">
 			<div class="title" helpTooltip="Percentage of each tribe present in average in winning warbands">
 				Winning tribes
 			</div>
 			<div class="composition">
-				<div *ngFor="let tribe of tribes; trackBy: trackByTribeFn" class="tribe">
+				<div *ngFor="let tribe of tribes || []; trackBy: trackByTribeFn" class="tribe">
 					<div class="icon-container">
 						<img class="icon" [src]="getIcon(tribe.tribe)" [helpTooltip]="tribe.tribe" />
 					</div>
@@ -34,11 +34,19 @@ export class BgsHeroTribesComponent {
 
 	@Input() set hero(value: BgsHeroOverview) {
 		this._hero = value;
-		this.tribes = [...value.tribesStat]
-			.sort((a, b) => b.percent - a.percent)
-			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
-			.slice(0, 5);
+		this.tribes = [];
+		setTimeout(() => {
+			this.tribes = [...value.tribesStat]
+				.sort((a, b) => b.percent - a.percent)
+				.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
+				.slice(0, 5);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	getIcon(tribe: string): string {
 		let referenceCardId: string;

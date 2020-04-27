@@ -59,7 +59,7 @@ export class ReplaysListComponent {
 		this.displayedReplays = [];
 		this._replays = value.groupedReplays || [];
 		this.handleProgressiveDisplay();
-		// if (!(this.cdr as ViewRef).destroyed) {
+		// if (!(this.cdr as ViewRef)?.destroyed) {
 		// 	this.cdr.detectChanges();
 		// }
 	}
@@ -125,7 +125,7 @@ export class ReplaysListComponent {
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
 			// this.logger.debug('[replays-list] displayedReplays', this.displayedReplays, workingReplays);
 			this.isLoading = true;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			// this.logger.debug(
@@ -138,7 +138,7 @@ export class ReplaysListComponent {
 		}
 		this.isLoading = false;
 		// this.logger.debug('[replays-list] everything loaded');
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		return;

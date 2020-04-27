@@ -101,7 +101,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			positionStrategy: this.positionStrategy,
 			scrollStrategy: this.overlay.scrollStrategies.reposition(),
 		});
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -109,7 +109,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		if (this.overlayRef) {
 			this.overlayRef?.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}
@@ -131,7 +131,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		// console.log('setting tooltip text', this._text, tooltipRef);
 		this.positionStrategy.apply();
 
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 
@@ -189,7 +189,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	onMouseLeave() {
 		if (this.overlayRef) {
 			this.overlayRef?.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}

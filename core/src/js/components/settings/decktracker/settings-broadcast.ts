@@ -137,7 +137,7 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 		this.twitchUserName = (await this.prefs.getPreferences()).twitchUserName;
 		this.twitchLoginUrl = this.twitch.buildLoginUrl();
 		console.log('twitch login url', this.twitchLoginUrl);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

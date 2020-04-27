@@ -22,9 +22,8 @@ declare let amplitude: any;
 		`../../../css/component/battlegrounds/battlegrounds-content.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds" *ngIf="_state">
+		<div class="battlegrounds">
 			<section class="menu-bar">
-				<!-- <main-window-navigation [navigation]="state.navigation"></main-window-navigation> -->
 				<div class="first">
 					<div class="navigation">
 						<i class="i-117X33 gold-theme logo">
@@ -48,24 +47,24 @@ declare let amplitude: any;
 					<control-close [windowId]="windowId"></control-close>
 				</div>
 			</section>
-			<section class="content-container" *ngIf="currentPanel">
-				<div class="title">{{ currentPanel.name }}</div>
+			<section class="content-container">
+				<div class="title">{{ currentPanel?.name }}</div>
 				<ng-container>
 					<bgs-hero-selection-overview
-						[hidden]="currentPanel.id !== 'bgs-hero-selection-overview'"
+						[hidden]="currentPanel?.id !== 'bgs-hero-selection-overview'"
 						[panel]="currentPanel"
 					>
 					</bgs-hero-selection-overview>
 					<bgs-next-opponent-overview
-						[hidden]="currentPanel.id !== 'bgs-next-opponent-overview'"
+						[hidden]="currentPanel?.id !== 'bgs-next-opponent-overview'"
 						[panel]="currentPanel"
-						[game]="_state.currentGame"
+						[game]="_state?.currentGame"
 					>
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
-						[hidden]="currentPanel.id !== 'bgs-post-match-stats'"
+						[hidden]="currentPanel?.id !== 'bgs-post-match-stats'"
 						[panel]="currentPanel"
-						[game]="_state.currentGame"
+						[game]="_state?.currentGame"
 					>
 					</bgs-post-match-stats>
 				</ng-container>
@@ -85,10 +84,7 @@ export class BattlegroundsContentComponent implements AfterViewInit {
 		this.currentStage = value?.stages?.find(stage => stage.id === value.currentStageId);
 		this.currentPanel = this.currentStage?.panels?.find(panel => panel.id === value.currentPanelId);
 
-		// console.log('setting state', value, this.currentStage, this.currentPanel);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		console.log('setting stateeee', value, this.currentStage, this.currentPanel);
 	}
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
@@ -98,6 +94,7 @@ export class BattlegroundsContentComponent implements AfterViewInit {
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+		console.log('after view init in bgs content');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

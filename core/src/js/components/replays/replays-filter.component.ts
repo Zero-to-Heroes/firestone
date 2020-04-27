@@ -82,7 +82,7 @@ export class ReplaysFilterComponent {
 			caretEl.classList.add('caret');
 		});
 		setTimeout(() => {
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -93,7 +93,7 @@ export class ReplaysFilterComponent {
 	}
 
 	refresh() {
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -95,12 +95,12 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 			if (message.id === 'ready') {
 				this.title = 'Your abilities are ready!';
 				this.loading = false;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			}
 		});
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -104,7 +104,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 				this.gameState && this.gameState.opponentDeck && this.gameState.opponentDeck.secretHelperActive;
 			this.secrets = this.gameState && this.gameState.opponentDeck ? this.gameState.opponentDeck.secrets : null;
 			// console.log('game state', this.secrets, this.gameState);
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -122,7 +122,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		await this.changeWindowSize();
 		await this.restoreWindowPosition();
 		await this.handleDisplayPreferences();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		console.log('handled after view init');
@@ -140,7 +140,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	dragMove() {
 		// console.log('starting drag');
 		this.tooltipPosition = 'none';
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		this.ow.dragMove(this.windowId, async result => {
@@ -170,7 +170,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);
 		this.onResized();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -179,7 +179,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		const newScale = this.scale / 100;
 		const element = this.el.nativeElement.querySelector('.scalable');
 		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -240,7 +240,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 			this.tooltipPosition = 'left';
 		}
 		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

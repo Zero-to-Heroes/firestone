@@ -1,12 +1,12 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-	Component,
-	Input,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	ViewRef,
+	Component,
+	Input,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
-import { trigger, state, transition, style, animate } from '@angular/animations';
 
 @Component({
 	selector: 'achievement-image',
@@ -81,7 +81,7 @@ export class AchievementImageComponent {
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

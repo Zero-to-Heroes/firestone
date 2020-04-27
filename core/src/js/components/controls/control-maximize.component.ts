@@ -59,13 +59,13 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 			console.log('received message', message);
 			if (message.window_state === 'maximized') {
 				this.maximized = true;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			} else {
 				this.maximized = false;
 				console.log('showing not maximied');
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			}
@@ -96,7 +96,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 		if (this.maximized) {
 			await this.ow.restoreWindow(this.windowId);
 			this.maximized = false;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		} else {
@@ -105,7 +105,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 			// this.previousHeight = window.height;
 			await this.ow.maximizeWindow(this.windowId);
 			this.maximized = true;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}

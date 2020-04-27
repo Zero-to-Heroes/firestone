@@ -71,7 +71,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 		});
 		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
 		this.refreshAds();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -127,7 +127,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 					};
 					this.adRef.addEventListener('impression', this.impressionListener);
 					this.logger.info('[ads] init OwAd');
-					if (!(this.cdr as ViewRef).destroyed) {
+					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
 				}
@@ -139,7 +139,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 			}
 			this.logger.info('[ads] refreshed ads');
 			this.adRef.refreshAd();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		} catch (e) {

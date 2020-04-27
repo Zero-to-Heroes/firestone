@@ -96,7 +96,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 				this.updateValueElements();
 				// console.log('changing slider value', this.value, this.progress);
 				this.prefs.setValue(this.field, this.value);
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			});
@@ -144,7 +144,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 					this.updateValueElements();
 					// console.log('to', this.value, this.progress);
 					this.prefs.setValue(this.field, this.value);
-					if (!(this.cdr as ViewRef).destroyed) {
+					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
 				}
@@ -156,7 +156,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 		const prefs = await this.prefs.getPreferences();
 		this.value = prefs[this.field];
 		this.updateValueElements();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

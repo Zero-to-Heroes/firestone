@@ -144,7 +144,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			this.gameState = event ? event.state : undefined;
 			this.deck = this.gameState ? this.deckExtractor(this.gameState) : null;
 			// console.log('received new game state', event?.event?.name);
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -161,13 +161,13 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		});
 		this.events.on(Events.SHOW_MODAL).subscribe(() => {
 			this.showBackdrop = true;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
 		this.events.on(Events.HIDE_MODAL).subscribe(() => {
 			this.showBackdrop = false;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -179,7 +179,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			'display-mode': this.displayMode,
 			'player': this.player,
 		});
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		// console.log('handled after view init');
@@ -209,7 +209,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	dragMove() {
 		// console.log('starting drag');
 		this.tooltipPosition = 'none';
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		this.ow.dragMove(this.windowId, async result => {
@@ -245,7 +245,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);
 		this.onResized();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -254,7 +254,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		const newScale = this.scale / 100;
 		const element = this.el.nativeElement.querySelector('.scalable');
 		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -313,7 +313,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			this.tooltipPosition = 'left';
 		}
 		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -112,7 +112,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 			// console.log('validating search', this.searchResults, this._searchString);
 			this.stateUpdater.next(new SearchCardsEvent(this._searchString));
 			this.showSearchResults = false;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}
@@ -127,7 +127,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 		setTimeout(() => {
 			console.log('focus lost');
 			this.showSearchResults = false;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}, 500);

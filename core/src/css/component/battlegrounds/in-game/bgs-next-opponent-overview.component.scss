@@ -30,8 +30,8 @@
 }
 
 bgs-opponent-overview-big {
-	max-height: 42%;
-	height: 42%;
+	max-height: 19vw;
+	height: 19vw;
 	flex-shrink: 0;
 }
 
@@ -41,6 +41,10 @@ bgs-hero-face-off {
 	flex-grow: 0;
 	flex-shrink: 0;
 	display: flex;
+}
+
+::ng-deep bgs-opponent-overview bgs-board .board {
+	top: -4px;
 }
 
 .content {

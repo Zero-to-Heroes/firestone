@@ -187,7 +187,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			}, 5000);
 		}
 
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -219,7 +219,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
 			toast.theClass = messageObject.theClass;
 			// console.log('created toast', toast.id, messageObject.notificationId);
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			// console.log('running toast message in zone', toast);
@@ -299,7 +299,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 						this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
 					}
 				}
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			});
@@ -342,7 +342,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		}
 		notification.classList.add('fade-out');
 		console.log('manually fading out notification', notificationId);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		const toast = activeNotif.toast;

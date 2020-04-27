@@ -114,7 +114,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -122,7 +122,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	ngOnDestroy() {
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}
@@ -150,7 +150,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		tooltipRef.instance.additionalClass = this.cardTooltipClass;
 		// console.log('tooltip class', this.cardTooltipClass);
 		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -159,7 +159,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	onMouseLeave() {
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}

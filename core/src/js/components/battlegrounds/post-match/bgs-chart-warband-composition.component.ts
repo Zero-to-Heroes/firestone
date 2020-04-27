@@ -87,28 +87,43 @@ export class BgsChartWarbandCompositionComponent {
 	private _stats: BgsPostMatchStats;
 
 	@Input() set stats(value: BgsPostMatchStats) {
-		console.log('[warband-composition] setting value', value);
+		if (value === this._stats) {
+			return;
+		}
+		if (!value?.boardHistory) {
+			return;
+		}
+		// console.log('[warband-composition] setting value', value);
 		this._stats = value;
 		this.setStats(value);
+		this.onResize();
 	}
 
 	constructor(
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: AllCardsService,
-	) {}
+	) {
+		allCards.initializeCardsDb();
+	}
 
 	async ngAfterViewInit() {
-		this.onResize();
+		// this.onResize();
 	}
 
 	@HostListener('window:resize')
 	onResize() {
-		console.log('detected resize event');
+		// console.log('detected resize event');
 		setTimeout(() => {
 			const chartContainer = this.el.nativeElement.querySelector('.chart-container');
-			const rect = chartContainer.getBoundingClientRect();
-			console.log('chartContainer', chartContainer, rect, rect.width, rect.height);
+			const rect = chartContainer?.getBoundingClientRect();
+			if (!rect?.width || !rect?.height) {
+				setTimeout(() => {
+					this.onResize();
+				}, 500);
+				return;
+			}
+			// console.log('chartContainer', chartContainer, rect, rect.width, rect.height);
 			this.dimensions = [rect.width, rect.height - 15];
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -128,9 +143,13 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	private async setStats(value: BgsPostMatchStats) {
-		await this.allCards.initializeCardsDb();
+		if (!value || !value.boardHistory) {
+			this.allCards.initializeCardsDb();
+			return;
+		}
+		// await this.allCards.initializeCardsDb();
 		this.chartData = this.buildChartData(value);
-		console.log('chartData', this.chartData, value?.boardHistory);
+		// console.log('chartData', this.chartData, value?.boardHistory);
 		this.barPadding = Math.min(40, 40 - 2 * (value.boardHistory.length - 12));
 		// this.chartLabels = await this.buildChartLabels(value);
 		// this.chartColors = this.buildChartColors(value);
@@ -143,7 +162,7 @@ export class BgsChartWarbandCompositionComponent {
 
 	private buildChartData(value: BgsPostMatchStats): object[] {
 		if (!value || !value.boardHistory) {
-			return [];
+			return null;
 		}
 		return value.boardHistory
 			.filter(history => history.turn > 0)

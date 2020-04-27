@@ -115,7 +115,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			caretEl.classList.add('caret');
 		});
 		setTimeout(() => {
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -132,7 +132,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			// console.log('[achievements-list] set active filter', this.activeFilter);
 			this.updateShownAchievements();
 		}
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -197,7 +197,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	refresh() {
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -222,7 +222,7 @@ export class AchievementsListComponent implements AfterViewInit {
 		`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
 		// console.log('[achievements-list] updated activeAchievements', this.activeAchievements);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

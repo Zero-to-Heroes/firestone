@@ -15,8 +15,8 @@ declare let amplitude: any;
 			<div class="tier {{ _tier?.toLowerCase() }}">
 				{{ _tier }}
 			</div>
-			<div class="heroes" *ngIf="heroes?.length">
-				<bgs-hero-mini *ngFor="let hero of heroes; trackBy: trackByHeroFn" [hero]="hero"></bgs-hero-mini>
+			<div class="heroes">
+				<bgs-hero-mini *ngFor="let hero of heroes || []; trackBy: trackByHeroFn" [hero]="hero"></bgs-hero-mini>
 			</div>
 		</div>
 	`,

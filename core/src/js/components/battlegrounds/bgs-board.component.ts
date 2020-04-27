@@ -32,8 +32,8 @@ import { normalizeCardId } from './post-match/card-utils';
 		<div class="board-turn empty" *ngIf="_entities && _entities.length === 0">
 			Last board was empty
 		</div>
-		<ul class="board" *ngIf="_entities?.length">
-			<div class="minion-container" *ngFor="let entity of _entities; trackBy: trackByFn">
+		<ul class="board">
+			<div class="minion-container" *ngFor="let entity of _entities || []; trackBy: trackByFn">
 				<li>
 					<card-on-board
 						transition-group-item
@@ -54,7 +54,7 @@ import { normalizeCardId } from './post-match/card-utils';
 						class="header"
 						[helpTooltip]="
 							'Damage dealt and damage taken by this minion card during the run' +
-							(_minionStats.length !== _entities.length
+							(_minionStats.length !== _entities?.length
 								? '. ATTENTION: multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)'
 								: '')
 						"
@@ -72,7 +72,7 @@ import { normalizeCardId } from './post-match/card-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBoardComponent implements AfterViewInit {
-	_entities: readonly Entity[] = [];
+	_entities: readonly Entity[];
 	_enchantmentCandidates: readonly Entity[];
 	_options: readonly number[];
 	_minionStats: readonly MinionStat[];
@@ -92,6 +92,12 @@ export class BgsBoardComponent implements AfterViewInit {
 	}
 
 	@Input('entities') set entities(entities: readonly Entity[]) {
+		if (this._entities === entities) {
+			return;
+		}
+		if (this.debug) {
+			console.log('setting entities', this._entities, entities);
+		}
 		// That's a big hack, and it looks like I have to do it for all changing arrays (!).
 		// Otherwise, there is an issue when removing all items from the first list then adding another:
 		// - in core.js DefaultIterableDiffer.prototype.forEachOperation, the adjPreviousIndex gets negative for the
@@ -121,6 +127,7 @@ export class BgsBoardComponent implements AfterViewInit {
 	}
 
 	private previousBoardWidth: number;
+	private setValidCardElements: boolean;
 	// private previousNumberOfEntities: number;
 
 	constructor(
@@ -131,6 +138,9 @@ export class BgsBoardComponent implements AfterViewInit {
 	) {}
 
 	ngAfterViewInit() {
+		if (this.debug) {
+			console.log('after view init');
+		}
 		setTimeout(() => {
 			this.onResize();
 		}, 100);
@@ -158,9 +168,9 @@ export class BgsBoardComponent implements AfterViewInit {
 		const boardContainer = this.el.nativeElement.querySelector('.board');
 		if (!boardContainer) {
 			if (this._entities?.length) {
-				// if (this.debug) {
-				// 	console.log('no  board container, retrying', this.el.nativeElement);
-				// }
+				if (this.debug) {
+					console.log('no  board container, retrying', this.el.nativeElement);
+				}
 				setTimeout(() => this.onResize(), 300);
 				return;
 			}
@@ -169,8 +179,11 @@ export class BgsBoardComponent implements AfterViewInit {
 		const rect = boardContainer.getBoundingClientRect();
 		// We have to resize even though we have the same number of entities, because the resize is
 		// set on the DOM elements, which are teared down and recreated
-		if (this.previousBoardWidth === rect.width) {
+		if (this.previousBoardWidth === rect.width && this.setValidCardElements) {
 			return;
+		}
+		if (this.debug) {
+			console.log('updated board width', rect.width, this.previousBoardWidth);
 		}
 		this.previousBoardWidth = rect.width;
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
@@ -181,12 +194,18 @@ export class BgsBoardComponent implements AfterViewInit {
 		let cardWidth = rect.width / 8;
 		let cardHeight = 1.48 * cardWidth;
 		if (cardHeight > rect.height * this.maxBoardHeight) {
+			if (this.debug) {
+				console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
+			}
 			cardHeight = rect.height * this.maxBoardHeight;
 			cardWidth = cardHeight / 1.48;
 		}
 		for (const cardElement of cardElements) {
 			this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 			this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
+		}
+		if (cardWidth > 0 && cardHeight > 0) {
+			this.setValidCardElements = true;
 		}
 		// Continue resizing until the board size has stabilized
 		setTimeout(() => this.onResize(), 300);

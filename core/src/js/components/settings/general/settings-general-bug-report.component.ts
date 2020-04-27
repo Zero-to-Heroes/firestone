@@ -65,7 +65,7 @@ export class SettingsGeneralBugReportComponent {
 
 	onBodyChange(newBody: string) {
 		this.body = newBody;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -76,7 +76,7 @@ export class SettingsGeneralBugReportComponent {
 		}
 		this.buttonDisabled = true;
 		this.status = 'Uploading log files';
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		try {
@@ -94,7 +94,7 @@ export class SettingsGeneralBugReportComponent {
 				gameLogsKey: gameLogs,
 			};
 			this.status = 'Log files uploaded, sending feedback';
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			console.log('Sending bug / feedback', submission);
@@ -104,7 +104,7 @@ export class SettingsGeneralBugReportComponent {
 			this.buttonDisabled = false;
 			this.body = null;
 			this.email = null;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		} catch (e) {

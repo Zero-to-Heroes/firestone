@@ -109,7 +109,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	}
 
 	refresh() {
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -131,7 +131,7 @@ export class AchievementViewComponent implements AfterViewInit {
 	toggleRecordings() {
 		if (this._achievement && this._achievement.replayInfo.length > 0) {
 			this.showRecordings = !this.showRecordings;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}

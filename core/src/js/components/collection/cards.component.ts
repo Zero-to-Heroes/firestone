@@ -193,7 +193,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			caretEl.classList.add('caret');
 		});
 		setTimeout(() => {
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -245,7 +245,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	refresh() {
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -285,7 +285,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			setTimeout(() => {
 				// console.log('requesting to load more images', this.imagesLoaded, this.imagestoLoad);
 				this.imagestoLoad += 7;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			}, 200);
@@ -328,7 +328,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	private *doGradualLoad(cards: SetCard[]): IterableIterator<void> {
 		console.log('starting loading cards');
 		this.loading = true;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		this._activeCards = [];
@@ -338,7 +338,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			// console.log('working with array of', workingCards.length);
 			const cardsToAdd = workingCards.splice(0, Math.min(step, workingCards.length));
 			this._activeCards.push(...cardsToAdd);
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			yield;
@@ -347,7 +347,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		this.imagestoLoad = 10;
 		this.imagesLoaded = 0;
 		console.log('init images to load', this.imagestoLoad);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		// console.log('dragual load over', this._activeCards.length);

@@ -69,22 +69,24 @@ declare let amplitude: any;
 							{{ getLabel(tab) }}
 						</li>
 					</ul>
-					<ng-container [ngSwitch]="selectedTab">
-						<bgs-chart-hp *ngSwitchCase="'hp-by-turn'" class="stat" [stats]="_panel?.stats"> </bgs-chart-hp>
+					<ng-container>
+						<!-- <bgs-chart-hp *ngSwitchCase="'hp-by-turn'" class="stat" [stats]="_panel?.stats"> </bgs-chart-hp> -->
 						<bgs-chart-warband-stats
-							*ngSwitchCase="'warband-total-stats-by-turn'"
 							class="stat"
-							[stats]="_panel"
+							[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
+							[player]="_panel?.player"
+							[globalStats]="_panel?.globalStats"
+							[stats]="_panel?.stats"
 						>
 						</bgs-chart-warband-stats>
 						<bgs-chart-warband-composition
-							*ngSwitchCase="'warband-composition-by-turn'"
-							[stats]="_panel?.stats"
 							class="stat"
+							[hidden]="selectedTab !== 'warband-composition-by-turn'"
+							[stats]="_panel?.stats"
 						>
 						</bgs-chart-warband-composition>
-						<bgs-chart-stats *ngSwitchCase="'stats'" class="stat" [stats]="_panel?.stats">
-						</bgs-chart-stats>
+						<!-- <bgs-chart-stats *ngSwitchCase="'stats'" class="stat" [stats]="_panel?.stats">
+						</bgs-chart-stats> -->
 					</ng-container>
 				</div>
 			</div>
@@ -92,7 +94,7 @@ declare let amplitude: any;
 				<div class="title">
 					Last Match Stats
 				</div>
-				<bgs-post-match-stats-recap [stats]="_panel" [game]="game"></bgs-post-match-stats-recap>
+				<bgs-post-match-stats-recap [stats]="_panel" [game]="_game"></bgs-post-match-stats-recap>
 			</div>
 		</div>
 	`,
@@ -100,7 +102,7 @@ declare let amplitude: any;
 })
 export class BgsPostMatchStatsComponent implements AfterViewInit {
 	_panel: BgsPostMatchStatsPanel;
-	@Input() game: BgsGame;
+	_game: BgsGame;
 
 	icon: string;
 	health: number;
@@ -113,12 +115,26 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	tabs: readonly BgsStatsFilterId[];
 	selectedTab: BgsStatsFilterId;
 
-	@Input() set panel(value: BgsPostMatchStatsPanel) {
-		console.log('setting panel');
-		this._panel = value;
-		if (!value?.player) {
+	@Input() set game(value: BgsGame) {
+		if (value === this._game) {
+			console.log('same game');
 			return;
 		}
+		this._game = value;
+	}
+
+	@Input() set panel(value: BgsPostMatchStatsPanel) {
+		// console.log('will set panel?', value);
+		if (!value?.player) {
+			// console.log('no player, returning');
+			return;
+		}
+		if (value === this._panel) {
+			// console.log('same panel');
+			return;
+		}
+		// console.log('setting panel');
+		this._panel = value;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.cardId}.png`;
 		this.health = value.player.initialHealth - value.player.damageTaken;
 		this.maxHealth = value.player.initialHealth;
@@ -128,23 +144,12 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.boardMinions = value.player.getLastKnownBoardState();
 		this.tabs = value.tabs;
 		this.selectedTab = value.selectedStat;
-
 		this.addMinionStats();
-
+		console.log('panel info set');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
-
-	// filterOptions: readonly IOption[] = [
-	// 	{ label: 'HP by turn', value: 'hp-by-turn' },
-	// 	{ label: 'Board total stats', value: 'warband-total-stats-by-turn' },
-	// 	{ label: 'Warband composition', value: 'warband-composition-by-turn' },
-	// 	{ label: 'Stats', value: 'stats' },
-	// ];
-	// activeFilter: BgsStatsFilterId;
-	// placeholder = 'Select stats';
-	// filterChangeFunction: (option: IOption) => void;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
@@ -155,16 +160,12 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly allCards: AllCardsService,
 	) {
 		console.log('in construftor');
+		allCards.initializeCardsDb();
 	}
 
 	async ngAfterViewInit() {
 		console.log('after view init');
-		// this.onResize();
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
-
-		// this.filterChangeFunction = (option: IOption) =>
-		// 	this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(option.value as BgsStatsFilterId));
-		// console.log('filterChangeFunction', this.filterChangeFunction);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -187,11 +188,14 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		}
 	}
 
-	// Only needed in dev when hard refreshing the page
-	private async addMinionStats() {
-		console.log('starting db init');
-		await this.allCards.initializeCardsDb();
-		console.log('db init done');
+	private addMinionStats() {
+		// // Only needed in dev when hard refreshing the page
+		// if (!this.allCards.getCards()?.length) {
+		// 	console.log('starting db init');
+		// 	await this.allCards.initializeCardsDb();
+		// 	console.log('db init done');
+		// }
+		console.log('cards ready', this.allCards.getCards()?.length);
 		const normalizedIds = [
 			...new Set(this.boardMinions.map(entity => normalizeCardId(entity.cardID, this.allCards))),
 		];
@@ -204,7 +208,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 				} as MinionStat),
 		);
 		console.log('minion stats', this.minionStats);
-
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

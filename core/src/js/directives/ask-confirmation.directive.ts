@@ -85,7 +85,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 			backdropClass: 'confirmation-backdrop',
 		});
 		this.overlayRef.backdropClick().subscribe(() => this.cancel());
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -94,7 +94,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		if (this.overlayRef) {
 			this.positionStrategy.detach();
 			// this.overlayRef.dispose();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}
@@ -113,7 +113,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 
 		this.events.broadcast(Events.SHOW_MODAL);
 		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -128,7 +128,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		this.overlayRef.detach();
 		this.events.broadcast(Events.HIDE_MODAL);
 		// this.overlayRef.dispose();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

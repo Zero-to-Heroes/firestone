@@ -179,7 +179,7 @@ export class GroupedDeckListComponent {
 			showWarning: this.showWarning,
 		} as DeckZone;
 		//console.log('setting final zone', this.zone);
-		// if (!(this.cdr as ViewRef).destroyed) {
+		// if (!(this.cdr as ViewRef)?.destroyed) {
 		// 	this.cdr.detectChanges();
 		// }
 	}

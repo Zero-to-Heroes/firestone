@@ -137,7 +137,7 @@ export class CardComponent implements AfterViewInit {
 		this.showPlaceholder = false;
 		//console.log('image loaded', this.image);
 		this.imageLoaded.next(true);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -154,7 +154,7 @@ export class CardComponent implements AfterViewInit {
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;
 		//console.log('updated image', this.image, this.overlayMaskImage);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

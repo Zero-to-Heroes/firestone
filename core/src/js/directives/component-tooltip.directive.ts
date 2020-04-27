@@ -78,7 +78,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
 
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -87,7 +87,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		// console.log('on destroy for component tooltip');
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}
@@ -107,7 +107,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 		this.positionStrategy.apply();
 		// console.log('created tooltip instance', tooltipRef);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -116,7 +116,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	onMouseLeave() {
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}

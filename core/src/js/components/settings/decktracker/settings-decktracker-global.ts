@@ -105,7 +105,7 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
 			// console.log('should display', shouldDisplay);
 			this.sliderEnabled = shouldDisplay;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -117,7 +117,7 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 			this.opponentTracker = preferences.opponentTracker;
 			this.secretsHelper = preferences.secretsHelper;
 			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -147,7 +147,7 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		this.opponentTracker = prefs.opponentTracker;
 		this.secretsHelper = prefs.secretsHelper;
 		this.showTitleBar = prefs.overlayShowTitleBar;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

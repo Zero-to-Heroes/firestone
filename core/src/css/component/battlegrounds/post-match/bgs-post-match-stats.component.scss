@@ -46,6 +46,14 @@
 			width: 100%;
 			justify-content: space-between;
 			margin: auto;
+
+			.minion-container {
+				width: 11%;
+
+				li {
+					width: 100%;
+				}
+			}
 		}
 	}
 }

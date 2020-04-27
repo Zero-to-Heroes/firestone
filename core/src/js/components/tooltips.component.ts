@@ -65,7 +65,7 @@ export class Tooltip {
 	}
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -147,7 +147,7 @@ export class TooltipsComponent implements AfterViewInit, OnDestroy {
 			this.tooltip.instance.top = top + 'px';
 			this.tooltip.instance.position = 'absolute';
 			this.tooltip.instance.missing = !owned;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			// console.log('Created tooltip after', (Date.now() - start));
@@ -181,7 +181,7 @@ export class TooltipsComponent implements AfterViewInit, OnDestroy {
 			this.tooltip.instance.removing = true;
 			this.tooltip.instance.display = 'none';
 		}
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

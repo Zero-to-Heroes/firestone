@@ -18,7 +18,7 @@ export class HelpTooltipComponent {
 		// console.log('setting tooltip', value);
 		this._text = this.sanitizer.bypassSecurityTrustHtml(`<div>${value}</div>`);
 		// console.log('updated tooltip', this._text);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

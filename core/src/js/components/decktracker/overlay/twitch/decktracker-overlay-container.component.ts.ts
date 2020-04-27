@@ -57,21 +57,21 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		});
 		console.log('init done');
 		this.addDebugGameState();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	onDragStart() {
 		// this.dragging = true;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	onDragEnd() {
 		// this.dragging = false;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -89,7 +89,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 				} else {
 					this.gameState = result.state;
 				}
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			},
@@ -104,14 +104,14 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			case DeckEvents.GAME_END:
 				console.log('received GAME_END event');
 				this.gameState = undefined;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 				break;
 			default:
 				console.log('received deck event');
 				this.gameState = event.state;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 				break;

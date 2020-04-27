@@ -103,7 +103,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 			year: '2-digit',
 		});
 		// FIXME: Why do I need this?
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

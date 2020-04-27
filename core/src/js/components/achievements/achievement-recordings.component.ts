@@ -209,7 +209,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 				this.api.getDefaultMedia().currentTime = 0;
 			}
 			// this.api.getDefaultMedia().play();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -253,7 +253,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		// 	});
 		// 	console.log('[achievement-recordings] full screen change', event);
 		// 	this.fullscreen = !this.fullscreen;
-		// 	if (!(this.cdr as ViewRef).destroyed) {
+		// 	if (!(this.cdr as ViewRef)?.destroyed) {
 		// 		this.cdr.detectChanges();
 		// 	}
 		// });
@@ -275,7 +275,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		// this.api.play();
 		this.api.getDefaultMedia().currentTime = 0;
 		// this.api.getDefaultMedia().play();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -294,7 +294,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		});
 		this.indexOfFirstShown = Math.max(0, this.indexOfFirstShown - this.THUMBNAILS_PER_PAGE);
 		this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -309,7 +309,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		);
 		this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
 		// console.log('thumnailOffset', this.thumbnailsOffsetX);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -329,7 +329,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			this.confirmationTop = event.top - container.top + 55;
 			this.confirmationLeft = event.left - container.left + 130;
 		}
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -341,13 +341,13 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		this.stateUpdater.next(new VideoReplayDeletionRequestEvent(thumbnail.stepId, thumbnail.videoPath));
 		thumbnail.inDeletion = true;
 		this.showDeleteNotification = true;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		setTimeout(() => {
 			thumbnail.inDeletion = false;
 			this.showDeleteNotification = false;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}, 1500);
@@ -357,7 +357,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		event.stopPropagation();
 		this.dontAsk = !this.dontAsk;
 		this.prefs.setDontConfirmVideoDeletion(this.dontAsk);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -367,7 +367,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		event.stopPropagation();
 		this.showConfirmationPopup = false;
 		this.pendingDeletion = undefined;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -390,7 +390,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	// 		'action': 'full-screen',
 	// 	});
 	// 	this.fullscreen = !this.fullscreen;
-	// 	if (!(this.cdr as ViewRef).destroyed) {
+	// 	if (!(this.cdr as ViewRef)?.destroyed) {
 	// 		this.cdr.detectChanges();
 	// 	}
 	// }
@@ -420,7 +420,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
 		console.log('updated thumbnails', this.thumbnails);
 		this.updateThumbnail(this.thumbnails[this.indexOfFirstShown]);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		setTimeout(() => this.cdr.detectChanges());

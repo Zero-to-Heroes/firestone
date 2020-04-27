@@ -189,13 +189,13 @@ export class DeckCardComponent {
 			const creatorCard = this.cards.getCard(this.creatorCardIds[0]);
 			if (creatorCard) {
 				this.giftTooltip = `Created by <br /> ${creatorCard.name}`;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			}
 		} else if (this.creatorCardIds && this.creatorCardIds.length > 1) {
 			this.giftTooltip = `Created by <br /> multiple entities`;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}

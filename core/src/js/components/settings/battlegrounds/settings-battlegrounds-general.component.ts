@@ -83,7 +83,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
 			const preferences: Preferences = event.preferences;
 			this.useLocalSimulator = preferences.bgsUseLocalSimulator;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -96,7 +96,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.useLocalSimulator = prefs.bgsUseLocalSimulator;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -68,7 +68,7 @@ export class FilterComponent {
 			caretEl.classList.add('caret');
 		});
 		setTimeout(() => {
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -83,7 +83,7 @@ export class FilterComponent {
 	}
 
 	refresh() {
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

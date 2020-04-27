@@ -52,7 +52,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 		setTimeout(() => {
 			this.copied = false;
 			this.copyText = null;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}, 3000);
@@ -63,7 +63,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 			return;
 		}
 		this.copyText = 'Copy';
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -73,7 +73,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 			return;
 		}
 		this.copyText = null;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -64,13 +64,13 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 			if (message.window_state_ex === 'maximized') {
 				// console.log('maximized');
 				this.maximized = true;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			} else {
 				// console.log('not maximized');
 				this.maximized = false;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			}

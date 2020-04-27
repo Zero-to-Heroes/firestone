@@ -110,7 +110,7 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
 			const preferences: Preferences = event.preferences;
 			this.overlayGroupByZone = preferences.overlayGroupByZone;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -135,7 +135,7 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.overlayGroupByZone = prefs.overlayGroupByZone;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

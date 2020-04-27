@@ -87,14 +87,14 @@ export class MenuSelectionComponent implements AfterViewInit {
 
 	toggleLoginPopup() {
 		this.loginPopupActive = !this.loginPopupActive;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	cancel() {
 		this.loginPopupActive = false;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -105,7 +105,7 @@ export class MenuSelectionComponent implements AfterViewInit {
 		amplitude.getInstance().logEvent('log-in', {
 			'source': 'menu-icon',
 		});
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

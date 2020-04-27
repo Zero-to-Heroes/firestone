@@ -18,7 +18,7 @@ export class CardTooltipComponent {
 
 	@Input() set additionalClass(value: string) {
 		this._additionalClass = value;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -26,14 +26,14 @@ export class CardTooltipComponent {
 	@Input() set cardId(value: string) {
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${value}.png`;
 		// console.log('setting tooltip', value, this.image);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	@Input() set text(value: string) {
 		this._text = value;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -41,7 +41,7 @@ export class CardTooltipComponent {
 	constructor(private cdr: ChangeDetectorRef) {}
 
 	refresh() {
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -147,7 +147,7 @@ export class AchievementSharingModal implements AfterViewInit, OnDestroy {
 		}
 		this.player.load();
 		this.player.play();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

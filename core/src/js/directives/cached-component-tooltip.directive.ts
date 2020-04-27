@@ -79,7 +79,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -89,7 +89,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		this.tooltipRef = null;
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}
@@ -115,7 +115,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		this.tooltipRef.instance.visible = true;
 		this.positionStrategy.apply();
 		// console.log('created tooltip instance', tooltipRef);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -123,7 +123,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		this.tooltipRef.instance.visible = false;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

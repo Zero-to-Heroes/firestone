@@ -145,7 +145,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.loadDefaultValues();
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -157,7 +157,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 			this.opponentTracker = preferences.opponentTracker;
 			this.secretsHelper = preferences.secretsHelper;
 			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -186,7 +186,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
 		this.opponentTracker = prefs.opponentTracker;
 		this.secretsHelper = prefs.secretsHelper;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

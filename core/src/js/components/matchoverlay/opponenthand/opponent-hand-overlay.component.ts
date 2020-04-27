@@ -66,14 +66,14 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				return;
 			}
 			this.gameState = event.state;
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.setDisplayPreferences(event.preferences);
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -85,7 +85,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.changeWindowSize();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		console.log('handled after view init');

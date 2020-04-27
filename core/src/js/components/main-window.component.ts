@@ -147,7 +147,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				// console.log('received state', newState);
 				this.dataState = newState;
 				this.activeTheme = this.dataState.showFtue ? 'general' : this.navigationState?.currentApp;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			});
@@ -160,7 +160,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				// console.log('received state', newState);
 				this.navigationState = newState;
 				this.activeTheme = this.dataState?.showFtue ? 'general' : this.navigationState.currentApp;
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 				const window = await this.ow.getCurrentWindow();
@@ -202,7 +202,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	private async init() {
 		await this.cards.initializeCardsDb();
 		this.cardsInitDone = true;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

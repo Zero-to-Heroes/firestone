@@ -212,7 +212,7 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 				this.fps,
 				this.settingsForm.controls['videoQuality'].value,
 			);
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		}

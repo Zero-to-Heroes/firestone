@@ -86,7 +86,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 			const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
 			const element = this.el.nativeElement.querySelector('.scalable');
 			this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
-			if (!(this.cdr as ViewRef).destroyed) {
+			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			this.keepOverlayInBounds();
@@ -141,7 +141,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 		console.log('starting dragging');
 		// this.events.broadcast(Events.HIDE_TOOLTIP);
 		this.dragStart.next();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -151,7 +151,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 		console.log('stopped dragging');
 		this.dragEnd.next();
 		await this.updateTooltipPosition();
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		this.keepOverlayInBounds();
@@ -167,7 +167,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 		}
 		console.log('updated tooltip position', rect, this.tooltipPosition);
 		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

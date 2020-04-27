@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
@@ -44,11 +44,20 @@ export class BgsChartStatsComponent {
 	rerolls: number;
 
 	@Input() set stats(value: BgsPostMatchStats) {
-		this.tavernUpgrades = value.tavernTimings;
-		this.triples = value.tripleTimings;
+		this.tavernUpgrades = [];
+		this.triples = [];
 		this.coinsWasted = value.coinsWasted;
 		this.rerolls = value.rerolls;
+		setTimeout(() => {
+			this.tavernUpgrades = value.tavernTimings;
+			this.triples = value.tripleTimings;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	trackByTripleFn(index, item: { minionTier: number; quantity: number }) {
 		return item.minionTier;

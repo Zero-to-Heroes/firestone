@@ -26,7 +26,7 @@ declare let amplitude: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true">
-			<battlegrounds-content [state]="state"> </battlegrounds-content>
+			<battlegrounds-content [state]="state" *ngIf="cardsLoaded"> </battlegrounds-content>
 			<ads [parentComponent]="'battlegrounds'"></ads>
 		</window-wrapper>
 	`,
@@ -36,6 +36,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	windowId: string;
 	// activeTheme: CurrentAppType;
 	state: BattlegroundsState;
+	cardsLoaded: boolean = false;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
@@ -48,9 +49,15 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		private readonly debug: DebugService,
 		private readonly cards: AllCardsService,
 	) {
-		cards.initializeCardsDb();
-		// debug
-		window['ow'] = this.ow;
+		this.init();
+	}
+
+	private async init() {
+		await this.cards.initializeCardsDb();
+		this.cardsLoaded = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	async ngAfterViewInit() {
@@ -74,7 +81,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
 				this.state = newState;
-				// console.log('received state', this.state);
+				console.log('received state a', this.state);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

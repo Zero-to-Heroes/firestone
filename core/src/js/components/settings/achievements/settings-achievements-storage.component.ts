@@ -50,7 +50,7 @@ export class SettingsAchievementsStorageComponent implements OnDestroy {
 		const sizeResult = await this.ow.getAppVideoCaptureFolderSize();
 		this.usedSizeInGB = sizeResult.totalVideosSizeMB / 1024;
 		console.log('sizeResult', sizeResult);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

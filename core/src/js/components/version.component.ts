@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class VersionComponent implements AfterViewInit {
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.version = await this.ow.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
