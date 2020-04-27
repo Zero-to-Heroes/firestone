@@ -39,6 +39,9 @@ export class BgsHeroSelectionOverviewComponent {
 	// Mouse over on graph
 	@Input() set panel(value: BgsHeroSelectionOverview) {
 		this._panel = value;
+		if (!value?.heroOverview) {
+			return;
+		}
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.heroCardId !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroOverview) => overview.tier);
 		const groupedByTier: BgsHeroOverview[][] = Object.values(groupingByTier(allOverviews));
@@ -87,14 +90,7 @@ export class BgsHeroSelectionOverviewComponent {
 	}
 
 	getOverviewWidth(): number {
-		switch (this._panel.heroOptionCardIds.length) {
-			case 2:
-			// return 45;
-			case 3:
-			// return 30;
-			case 4:
-				return 24;
-		}
+		return 24;
 	}
 
 	isAvailableHero(hero: BgsHeroOverview): boolean {

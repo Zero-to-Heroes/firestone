@@ -76,7 +76,7 @@ export class BgsPostMatchStatsRecapComponent {
 	}
 
 	private updateStats() {
-		if (!this._stats || !this._game) {
+		if (!this._stats?.player || !this._game) {
 			return;
 		}
 		this.wins = this._game.faceOffs.filter(faceOff => faceOff.result === 'won').length || 0;

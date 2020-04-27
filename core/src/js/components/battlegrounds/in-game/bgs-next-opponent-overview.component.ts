@@ -26,7 +26,7 @@ declare let amplitude: any;
 					[nextOpponentCardId]="nextOpponentCardId"
 				></bgs-hero-face-offs>
 			</div>
-			<div class="content" *ngIf="opponents.length > 0">
+			<div class="content" *ngIf="opponents?.length > 0">
 				<bgs-opponent-overview-big
 					[opponent]="opponents[0]"
 					[currentTurn]="currentTurn"

@@ -116,6 +116,9 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
 		console.log('setting panel');
 		this._panel = value;
+		if (!value?.player) {
+			return;
+		}
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.cardId}.png`;
 		this.health = value.player.initialHealth - value.player.damageTaken;
 		this.maxHealth = value.player.initialHealth;
@@ -186,7 +189,9 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 
 	// Only needed in dev when hard refreshing the page
 	private async addMinionStats() {
+		console.log('starting db init');
 		await this.allCards.initializeCardsDb();
+		console.log('db init done');
 		const normalizedIds = [
 			...new Set(this.boardMinions.map(entity => normalizeCardId(entity.cardID, this.allCards))),
 		];

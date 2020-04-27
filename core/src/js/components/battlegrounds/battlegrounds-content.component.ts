@@ -50,17 +50,20 @@ declare let amplitude: any;
 			</section>
 			<section class="content-container" *ngIf="currentPanel">
 				<div class="title">{{ currentPanel.name }}</div>
-				<ng-container [ngSwitch]="currentPanel.id">
-					<bgs-hero-selection-overview *ngSwitchCase="'bgs-hero-selection-overview'" [panel]="currentPanel">
+				<ng-container>
+					<bgs-hero-selection-overview
+						[hidden]="currentPanel.id !== 'bgs-hero-selection-overview'"
+						[panel]="currentPanel"
+					>
 					</bgs-hero-selection-overview>
 					<bgs-next-opponent-overview
-						*ngSwitchCase="'bgs-next-opponent-overview'"
+						[hidden]="currentPanel.id !== 'bgs-next-opponent-overview'"
 						[panel]="currentPanel"
 						[game]="_state.currentGame"
 					>
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
-						*ngSwitchCase="'bgs-post-match-stats'"
+						[hidden]="currentPanel.id !== 'bgs-post-match-stats'"
 						[panel]="currentPanel"
 						[game]="_state.currentGame"
 					>
