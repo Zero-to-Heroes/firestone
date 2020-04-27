@@ -25,7 +25,7 @@ declare let amplitude: any;
 	template: `
 		<div class="chart-container">
 			<div style="display: block;">
-				<canvas
+				<!-- <canvas
 					baseChart
 					*ngIf="lineChartData"
 					[style.width.px]="chartWidth"
@@ -36,7 +36,7 @@ declare let amplitude: any;
 					[colors]="lineChartColors"
 					[legend]="true"
 					[chartType]="'line'"
-				></canvas>
+				></canvas> -->
 			</div>
 		</div>
 	`,
