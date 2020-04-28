@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { extractTotalDamageDealtToEnemyHero, Replay } from '@firestone-hs/hs-replay-xml-parser';
-import { BlockType, CardType, GameTag, Step, Zone } from '@firestone-hs/reference-data';
+import { BlockType, CardType, GameTag, MetaTags, Step, Zone } from '@firestone-hs/reference-data';
 import { Element } from 'elementtree';
 import { Map } from 'immutable';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
@@ -270,7 +270,7 @@ const damageDealtByMinionsParse = (structure: ParsingStructure, replay: Replay) 
 				// console.warn('could not find entity', element.get('entity'));
 				return;
 			}
-			const damageTags = element.findall(`.//MetaData[@meta='1']`);
+			const damageTags = element.findall(`.//MetaData[@meta='${MetaTags.DAMAGE}']`);
 			// If it's an attack, the attacker deals to the def, and vice versa
 			if ([BlockType.ATTACK].indexOf(parseInt(element.get('type'))) !== -1) {
 				damageTags.forEach(tag => {
