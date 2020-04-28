@@ -12,8 +12,10 @@ declare let amplitude: any;
 	template: `
 		<div class="battle-simulation">
 			<div class="winning-chance">
-				<div class="label">Your chance of winning</div>
-				<div class="value" [helpTooltip]="temporaryBattleTooltip">{{ battleSimulationResult }}</div>
+				<div class="label">Your chance of winning<span class="tie">(tie)</span></div>
+				<div class="value" [helpTooltip]="temporaryBattleTooltip">
+					{{ battleSimulationResult }}<span class="tie">({{ battleSimulationResultTie }})</span>
+				</div>
 			</div>
 			<div class="damage">
 				<div class="label">Avg damage</div>
@@ -31,6 +33,7 @@ declare let amplitude: any;
 })
 export class BgsBattleStatusComponent {
 	battleSimulationResult: string;
+	battleSimulationResultTie: string;
 	temporaryBattleTooltip: string;
 	damageWon: string;
 	damageLost: string;
@@ -45,6 +48,7 @@ export class BgsBattleStatusComponent {
 			console.log('result empty', value);
 			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
 			this.battleSimulationResult = '--';
+			this.battleSimulationResultTie = '--';
 		} else if (value === 'waiting-for-result') {
 			console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
@@ -63,6 +67,7 @@ export class BgsBattleStatusComponent {
 
 	@Input() set nextBattle(value: BattleResult) {
 		this.battleSimulationResult = (value?.wonPercent?.toFixed(1) || '--') + '%';
+		this.battleSimulationResultTie = (value?.tiedPercent?.toFixed(1) || '--') + '%';
 		this.damageWon = value != null ? value.averageDamageWon?.toFixed(1) : '--';
 		this.damageLost = value != null ? value.averageDamageLost?.toFixed(1) : '--';
 	}

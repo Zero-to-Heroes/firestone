@@ -8,6 +8,7 @@
 	border-left: 1px solid var(--color-3);
 	margin-right: 20px;
 	padding-left: 3%;
+	width: 250px;
 
 	.winning-chance {
 		display: flex;
@@ -21,6 +22,14 @@
 			color: var(--default-title-color);
 			font-size: 30px;
 			width: 85px;
+			display: flex;
+			align-items: baseline;
+		}
+
+		.tie {
+			color: #dfb3d3;
+			font-size: 10px;
+			margin-left: 5px;
 		}
 	}
 
