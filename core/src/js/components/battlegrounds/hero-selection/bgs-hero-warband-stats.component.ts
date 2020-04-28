@@ -137,14 +137,14 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 	}
 
 	private getBackgroundColor() {
-		console.log('setting gradient', Math.round(this.chartHeight));
+		// console.log('setting gradient', Math.round(this.chartHeight));
 		const gradient = this.chart.nativeElement
 			.getContext('2d')
 			.createLinearGradient(0, 0, 0, Math.round(this.chartHeight));
 		gradient.addColorStop(0, 'rgba(206, 115, 180, 1)'); // #CE73B4
 		gradient.addColorStop(0.4, 'rgba(206, 115, 180, 0.4)');
 		gradient.addColorStop(1, 'rgba(206, 115, 180, 0)');
-		console.log('returning gradient', gradient);
+		// console.log('returning gradient', gradient);
 		return gradient;
 	}
 }

@@ -1,9 +1,47 @@
+:host() {
+	display: flex;
+	flex-direction: column;
+}
+
+.legend {
+	height: 20px;
+	display: flex;
+	margin-bottom: 15px;
+	flex-shrink: 0;
+	flex-grow: 0;
+
+	.item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 25px;
+		font-size: 11px;
+
+		.node {
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			margin-right: 5px;
+		}
+
+		&.average {
+			.node {
+				background: #ce73b4;
+			}
+		}
+		&.current {
+			.node {
+				background: #ffb948;
+			}
+		}
+	}
+}
+
 .container-1 {
-	width: 120%;
+	flex-grow: 1;
 	transform: none;
-	// display: flex;
-	// min-height: 0;
 	position: relative;
+	min-height: 0;
 
 	.container-div {
 		display: flex;
