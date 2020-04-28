@@ -10,11 +10,15 @@ export class BgsTurnStartParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsTurnStartEvent): Promise<BattlegroundsState> {
-		console.log('updating turn', currentState);
+		// console.log('updating turn', currentState);
+		const newStageId = event.turnNumber === 1 ? 'in-game' : currentState.currentStageId;
+		const newPanelId = event.turnNumber === 1 ? 'bgs-next-opponent-overview' : currentState.currentPanelId;
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				currentTurn: Math.ceil(event.turnNumber / 2),
 			} as BgsGame),
+			currentStageId: newStageId,
+			currentPanelId: newPanelId,
 		} as BattlegroundsState);
 	}
 }

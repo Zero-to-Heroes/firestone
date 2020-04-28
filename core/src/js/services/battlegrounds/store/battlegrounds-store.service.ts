@@ -131,7 +131,7 @@ export class BattlegroundsStoreService {
 				gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS
 			) {
 				this.battlegroundsUpdater.next(new BgsMatchStartEvent());
-			} else if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
+				// } else if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
 				// this.battlegroundsUpdater.next(new BgsHeroSelectionDoneEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
 				this.maybeHandleNextOpponent(gameEvent);
@@ -176,9 +176,9 @@ export class BattlegroundsStoreService {
 				);
 				setTimeout(async () => {
 					const info = await this.memory.getBattlegroundsInfo();
-					console.log('bgs info', JSON.stringify(info, null, 4));
+					// console.log('bgs info', JSON.stringify(info, null, 4));
 					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-					console.log('BgsGlobalInfoUpdatedEvent emit done');
+					// console.log('BgsGlobalInfoUpdatedEvent emit done');
 				}, 5000);
 				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				// 	this.battlegroundsUpdater.next(new BgsCombatStartEvent());

@@ -66,10 +66,13 @@ export class BgsBattleStatusComponent {
 	}
 
 	@Input() set nextBattle(value: BattleResult) {
-		this.battleSimulationResult = (value?.wonPercent?.toFixed(1) || '--') + '%';
-		this.battleSimulationResultTie = (value?.tiedPercent?.toFixed(1) || '--') + '%';
-		this.damageWon = value != null ? value.averageDamageWon?.toFixed(1) : '--';
-		this.damageLost = value != null ? value.averageDamageLost?.toFixed(1) : '--';
+		console.log('setting next battle', value);
+		if (value?.wonPercent != null) {
+			this.battleSimulationResult = value.wonPercent.toFixed(1) + '%';
+			this.battleSimulationResultTie = value.tiedPercent.toFixed(1) + '%';
+			this.damageWon = value.averageDamageWon?.toFixed(1);
+			this.damageLost = value.averageDamageLost?.toFixed(1);
+		}
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

@@ -1,4 +1,5 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
 import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-game-stage';
@@ -20,8 +21,11 @@ export class BgsNextOpponentParser implements EventParser {
 		);
 		return currentState.update({
 			stages: stages,
-			currentStageId: 'in-game',
-			currentPanelId: 'bgs-next-opponent-overview',
+			// currentStageId: 'in-game',
+			// currentPanelId: 'bgs-next-opponent-overview',
+			currentGame: currentState.currentGame.update({
+				battleInfoStatus: 'empty',
+			} as BgsGame),
 		} as BattlegroundsState);
 	}
 
