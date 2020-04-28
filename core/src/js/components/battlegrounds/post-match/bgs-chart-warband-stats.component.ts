@@ -26,6 +26,19 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-stats.component.scss`,
 	],
 	template: `
+		<div class="legend">
+			<div
+				class="item average"
+				helpTooltip="Average total stats (attack + health) on board at the beginning of each turn's battle (6000+ MMR)"
+			>
+				<div class="node"></div>
+				Average for hero
+			</div>
+			<div class="item current" helpTooltip="Your values for this run">
+				<div class="node"></div>
+				Current run
+			</div>
+		</div>
 		<div class="container-1">
 			<div style="display: block; position: relative; height: 100%; width: 100%;">
 				<canvas
@@ -190,6 +203,35 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 			setTimeout(() => this.ngAfterViewInit(), 200);
 			return;
 		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
+	}
+
+	previousWidth: number;
+
+	@HostListener('window:resize')
+	onResize() {
+		const chartContainer = this.el.nativeElement.querySelector('.container-1');
+		const rect = chartContainer?.getBoundingClientRect();
+		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {
+			setTimeout(() => {
+				this.onResize();
+			}, 500);
+			return;
+		}
+		if (rect.width === this.chartWidth && rect.height === this.chartHeight) {
+			// console.log('correct container size', this.previousWidth, this.chartWidth, this.chartHeight);
+			return;
+		}
+		// this.previousWidth = rect.width;
+		// console.log('chartContainer', chartContainer, rect);
+		this.chartWidth = rect.width;
+		this.chartHeight = rect.height;
+		// if (this.chartHeight > rect.height) {
+		// 	this.chartHeight = rect.height;
+		// 	this.chartWidth = 2 * this.chartHeight;
+		// }
 		this.lineChartColors = [
 			{
 				backgroundColor: this.getBackgroundColor(),
@@ -208,40 +250,11 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 				pointHoverBorderColor: 'transparent',
 			},
 		];
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	previousWidth: number;
-
-	@HostListener('window:resize')
-	onResize() {
-		const chartContainer = this.el.nativeElement.querySelector('.container-1');
-		const rect = chartContainer?.getBoundingClientRect();
-		if (!rect?.width || !rect?.height) {
-			setTimeout(() => {
-				this.onResize();
-			}, 500);
-			return;
-		}
-		if (rect.width === this.previousWidth) {
-			// console.log('correct container size', this.previousWidth, this.chartWidth, this.chartHeight);
-			return;
-		}
-		this.previousWidth = rect.width;
-		// console.log('chartContainer', chartContainer, rect);
-		this.chartWidth = rect.width;
-		this.chartHeight = rect.width / 2;
-		if (this.chartHeight > rect.height) {
-			this.chartHeight = rect.height;
-			this.chartWidth = 2 * this.chartHeight;
-		}
 		// console.log('setting chart dimensions', this.chartHeight, this.chartWidth);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// setTimeout(() => this.onResize(), 200);
+		setTimeout(() => this.onResize(), 200);
 	}
 
 	private getBackgroundColor() {
@@ -252,7 +265,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 		gradient.addColorStop(0, 'rgba(206, 115, 180, 1)'); // #CE73B4
 		gradient.addColorStop(0.4, 'rgba(206, 115, 180, 0.4)');
 		gradient.addColorStop(1, 'rgba(206, 115, 180, 0)');
-		console.log('returning gradient', gradient);
+		// console.log('returning gradient', gradient, this.chartHeight);
 		return gradient;
 	}
 }
