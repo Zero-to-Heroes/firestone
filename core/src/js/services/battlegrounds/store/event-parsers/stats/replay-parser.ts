@@ -262,9 +262,10 @@ const totalStatsForTurnPopulate = (structure: ParsingStructure, replay: Replay) 
 };
 
 const damageDealtByMinionsParse = (structure: ParsingStructure, replay: Replay) => {
-	return element => {
+	return (element: Element) => {
 		// For now we only consider damage in attacks / powers, which should cover most cases
-		if (element.tag === 'Block') {
+		if (element.tag?.toString() === 'Block') {
+			// console.log('handling block', element.tag, element.get('type'), element.get('entity'));
 			const actionEntity = structure.entities[element.get('entity')];
 			if (!actionEntity) {
 				// console.warn('could not find entity', element.get('entity'));
@@ -273,20 +274,73 @@ const damageDealtByMinionsParse = (structure: ParsingStructure, replay: Replay) 
 			const damageTags = element.findall(`.//MetaData[@meta='${MetaTags.DAMAGE}']`);
 			// If it's an attack, the attacker deals to the def, and vice versa
 			if ([BlockType.ATTACK].indexOf(parseInt(element.get('type'))) !== -1) {
+				// const debug = element.get('entity') === '6205';
+				// console.log('handling attack', element.get('entity'), '6205', damageTags.length);
+				const attackerEntityId = element.find(`.//TagChange[@tag='${GameTag.ATTACKING}']`)?.get('entity');
+				const defenderEntityId = element.find(`.//TagChange[@tag='${GameTag.DEFENDING}']`)?.get('entity');
 				damageTags.forEach(tag => {
 					const infos = tag.findall(`.Info`);
+					// if (debug) {
+					// 	// console.log('handling damage tag', tag);
+					// }
 					infos.forEach(info => {
+						// if (debug) {
+						// 	// console.log('handling info', info);
+						// }
 						const damagedEntity = structure.entities[info.get('entity')];
-						if (
-							info.get('entity') === element.get('entity') &&
-							damagedEntity.controller === replay.mainPlayerId
-						) {
+						// if (info.get('entity') === '6205') {
+						// 	console.log(
+						// 		'damage in attack',
+						// 		info.get('entity'),
+						// 		element.get('entity'),
+						// 		damagedEntity.controller,
+						// 		replay.mainPlayerId,
+						// 		actionEntity.controller,
+						// 		damagedEntity,
+						// 		info,
+						// 	);
+						// }
+						// We are damaged, so add the info
+						if (damagedEntity.controller === replay.mainPlayerId) {
+							// if (debug) {
+							// 	console.log(
+							// 		'damage dealt to us',
+							// 		damagedEntity.cardId,
+							// 		structure.minionsDamageReceived[damagedEntity.cardId],
+							// 		parseInt(tag.get('data')),
+							// 	);
+							// }
 							structure.minionsDamageReceived[damagedEntity.cardId] =
 								(structure.minionsDamageReceived[damagedEntity.cardId] || 0) +
 								parseInt(tag.get('data'));
-						} else if (actionEntity.controller === replay.mainPlayerId) {
+						}
+						// We are not damaged, so the Info represents the opponent's entity
+						// First case, we attack so we add the damage to our count
+						else if (actionEntity.controller === replay.mainPlayerId) {
+							// if (debug) {
+							// 	console.log(
+							// 		'damage dealt by us while we attack',
+							// 		actionEntity.cardId,
+							// 		structure.minionsDamageDealt[actionEntity.cardId],
+							// 		parseInt(tag.get('data')),
+							// 	);
+							// }
 							structure.minionsDamageDealt[actionEntity.cardId] =
 								(structure.minionsDamageDealt[actionEntity.cardId] || 0) + parseInt(tag.get('data'));
+						}
+						// Second case, we are attacked so we need to find out who did the damage to the enemy
+						else {
+							const defenderEntity = structure.entities[defenderEntityId];
+							// if (debug) {
+							// 	console.log(
+							// 		'damage dealt by us while we are attacked',
+							// 		defenderEntity.cardId,
+							// 		structure.minionsDamageDealt[defenderEntityId],
+							// 		parseInt(tag.get('data')),
+							// 	);
+							// }
+							structure.minionsDamageDealt[defenderEntity.cardId] =
+								(structure.minionsDamageDealt[defenderEntity.cardId] || 0) + parseInt(tag.get('data'));
 						}
 					});
 				});
@@ -305,6 +359,9 @@ const damageDealtByMinionsParse = (structure: ParsingStructure, replay: Replay) 
 						const infos = tag.findall(`.Info`);
 						infos.forEach(info => {
 							const damagedEntity = structure.entities[info.get('entity')];
+							// if (damagedEntity.cardId === 'BGS_038') {
+							// 	console.log('handling damage done to us', tag, element);
+							// }
 							if (
 								damagedEntity.controller === replay.mainPlayerId &&
 								damagedEntity.cardType === CardType.MINION
