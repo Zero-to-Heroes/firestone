@@ -20,6 +20,9 @@ export class BgsHeroPortraitComponent {
 	_maxHealth: number;
 
 	@Input() set icon(value: string) {
+		if (value === this._icon) {
+			return;
+		}
 		this._icon = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -27,6 +30,9 @@ export class BgsHeroPortraitComponent {
 	}
 
 	@Input() set health(value: number) {
+		if (value === this._health) {
+			return;
+		}
 		this._health = Math.max(value, 0);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -34,11 +40,16 @@ export class BgsHeroPortraitComponent {
 	}
 
 	@Input() set maxHealth(value: number) {
+		if (value === this._maxHealth) {
+			return;
+		}
 		this._maxHealth = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef) {
+		cdr.detach();
+	}
 }

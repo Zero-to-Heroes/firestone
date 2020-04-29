@@ -27,10 +27,16 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			if (!playerFromMemory) {
 				return player;
 			}
+			const newDamage = playerFromMemory.Damage as number;
+			const newWinStreak = (playerFromMemory.WinStreak as number) || 0;
+			const newHighestWinStreak = Math.max(
+				player.highestWinStreak || 0,
+				(playerFromMemory.WinStreak as number) || 0,
+			);
 			return player.update({
-				damageTaken: playerFromMemory.Damage as number,
-				currentWinStreak: (playerFromMemory.WinStreak as number) || 0,
-				highestWinStreak: Math.max(player.highestWinStreak || 0, (playerFromMemory.WinStreak as number) || 0),
+				damageTaken: newDamage,
+				currentWinStreak: newWinStreak,
+				highestWinStreak: newHighestWinStreak,
 				compositionHistory: [
 					...player.compositionHistory,
 					{

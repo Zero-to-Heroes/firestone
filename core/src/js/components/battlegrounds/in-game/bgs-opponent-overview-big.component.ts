@@ -95,7 +95,7 @@ export class BgsOpponentOverviewBigComponent {
 		if (!value) {
 			return;
 		}
-		console.log('setting next opponent info', value, value.getCurrentTavernTier());
+		// console.log('setting next opponent info', value, value.getCurrentTavernTier());
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;

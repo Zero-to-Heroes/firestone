@@ -168,9 +168,9 @@ export class BgsBoardComponent implements AfterViewInit {
 		const boardContainer = this.el.nativeElement.querySelector('.board');
 		if (!boardContainer) {
 			if (this._entities?.length) {
-				if (this.debug) {
-					console.log('no  board container, retrying', this.el.nativeElement);
-				}
+				// if (this.debug) {
+				// 	console.log('no  board container, retrying', this.el.nativeElement);
+				// }
 				setTimeout(() => this.onResize(), 300);
 				return;
 			}
@@ -182,21 +182,24 @@ export class BgsBoardComponent implements AfterViewInit {
 		if (this.previousBoardWidth === rect.width && this.setValidCardElements) {
 			return;
 		}
-		if (this.debug) {
-			console.log('updated board width', rect.width, this.previousBoardWidth);
-		}
+		// if (this.debug) {
+		// 	console.log('updated board width', rect.width, this.previousBoardWidth, this.setValidCardElements);
+		// }
 		this.previousBoardWidth = rect.width;
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
-		if (cardElements.length !== this._entities?.length) {
+		if (cardElements.length !== (this._entities?.length || 0)) {
+			// if (this.debug) {
+			// 	console.log('card elements not displayed yet', cardElements, this._entities);
+			// }
 			setTimeout(() => this.onResize(), 300);
 			return;
 		}
 		let cardWidth = rect.width / 8;
 		let cardHeight = 1.48 * cardWidth;
 		if (cardHeight > rect.height * this.maxBoardHeight) {
-			if (this.debug) {
-				console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
-			}
+			// if (this.debug) {
+			// 	console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
+			// }
 			cardHeight = rect.height * this.maxBoardHeight;
 			cardWidth = cardHeight / 1.48;
 		}
@@ -206,8 +209,22 @@ export class BgsBoardComponent implements AfterViewInit {
 		}
 		if (cardWidth > 0 && cardHeight > 0) {
 			this.setValidCardElements = true;
+		} else {
+			// if (this.debug) {
+			// 	console.log(
+			// 		'card elements not valid yet',
+			// 		this.setValidCardElements,
+			// 		cardWidth,
+			// 		cardHeight,
+			// 		rect,
+			// 		this.maxBoardHeight,
+			// 	);
+			// }
 		}
 		// Continue resizing until the board size has stabilized
+		// if (this.debug) {
+		// 	console.log('continuing resize loop');
+		// }
 		setTimeout(() => this.onResize(), 300);
 	}
 

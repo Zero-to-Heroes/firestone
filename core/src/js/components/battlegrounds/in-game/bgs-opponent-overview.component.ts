@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+} from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
@@ -33,6 +41,7 @@ declare let amplitude: any;
 					[currentTurn]="currentTurn"
 					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
+					[debug]="debug"
 				></bgs-board>
 			</div>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
@@ -40,7 +49,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsOpponentOverviewComponent {
+export class BgsOpponentOverviewComponent implements AfterViewInit {
 	icon: string;
 	health: number;
 	maxHealth: number;
@@ -51,10 +60,19 @@ export class BgsOpponentOverviewComponent {
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
+	debug: boolean = false;
 
 	@Input() currentTurn: number;
 
 	@Input() set opponent(value: BgsPlayer) {
+		if (value === this._opponent) {
+			return;
+		}
+		this.debug = false; //value.cardId === 'TB_BaconShop_HERO_01';
+		if (this.debug) {
+			console.log('setting new opponent', value, this._opponent);
+		}
+		this._opponent = value;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
@@ -67,5 +85,13 @@ export class BgsOpponentOverviewComponent {
 		this.triples = value.tripleHistory;
 	}
 
+	private _opponent: BgsPlayer;
+
 	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+
+	ngAfterViewInit() {
+		if (this.debug) {
+			console.log('after view init in overview');
+		}
+	}
 }

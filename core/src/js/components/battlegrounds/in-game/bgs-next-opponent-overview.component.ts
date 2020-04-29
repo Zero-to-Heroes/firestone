@@ -116,31 +116,29 @@ export class BgsNextOpponentOverviewComponent {
 		this.faceOffs = this._game.faceOffs;
 		this.opponents = [];
 		this.otherOpponents = [];
-		setTimeout(() => {
-			this.opponents = this._game.players
-				.filter(player => !player.isMainPlayer)
-				.sort((a, b) => {
-					if (a.leaderboardPlace < b.leaderboardPlace) {
-						return -1;
-					}
-					if (b.leaderboardPlace < a.leaderboardPlace) {
-						return 1;
-					}
-					if (a.damageTaken < b.damageTaken) {
-						return -1;
-					}
-					if (b.damageTaken < a.damageTaken) {
-						return 1;
-					}
-					return 0;
-				})
-				.sort((a, b) =>
-					a.cardId === this.nextOpponentCardId ? -1 : b.cardId === this.nextOpponentCardId ? 1 : 0,
-				);
-			this.otherOpponents = this.opponents.slice(1);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// setTimeout(() => {
+		this.opponents = this._game.players
+			.filter(player => !player.isMainPlayer)
+			.sort((a, b) => {
+				if (a.leaderboardPlace < b.leaderboardPlace) {
+					return -1;
+				}
+				if (b.leaderboardPlace < a.leaderboardPlace) {
+					return 1;
+				}
+				if (a.damageTaken < b.damageTaken) {
+					return -1;
+				}
+				if (b.damageTaken < a.damageTaken) {
+					return 1;
+				}
+				return 0;
+			})
+			.sort((a, b) => (a.cardId === this.nextOpponentCardId ? -1 : b.cardId === this.nextOpponentCardId ? 1 : 0));
+		this.otherOpponents = this.opponents.slice(1);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		// });
 	}
 }

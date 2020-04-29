@@ -79,7 +79,7 @@ module.exports = function(env, argv) {
 			{ from: path.join(process.cwd(), 'src/assets'), to: 'assets', ignore: ['**/twitch*/*'] },
 			// { from: path.join(process.cwd(), 'dependencies/cards.json') },
 			{ from: path.join(process.cwd(), 'dependencies/coliseum.js') },
-			// { from: path.join(process.cwd(), 'plugins'), to: 'plugins' },
+			{ from: path.join(process.cwd(), 'plugins'), to: 'plugins' },
 			{ from: path.join(process.cwd(), 'dependencies/achievements'), to: 'achievements' },
 			// All the OW stuff, like manifest.json
 			{ from: path.join(process.cwd(), 'overwolf/*'), to: '..', flatten: true },
