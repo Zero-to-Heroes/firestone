@@ -25,7 +25,7 @@
 		"@angular/material": "^8.2.3",
 		"@angular/platform-browser": "^8.2.9",
 		"@angular/platform-browser-dynamic": "^8.2.9",
-		"@firestone-hs/coliseum-components": "0.0.4",
+		"@firestone-hs/coliseum-components": "0.0.6",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.33",
 		"@firestone-hs/reference-data": "^0.1.32",
 		"@firestone-hs/replay-parser": "^1.1.16",

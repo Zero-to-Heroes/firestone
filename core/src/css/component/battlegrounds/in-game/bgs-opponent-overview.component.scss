@@ -59,30 +59,31 @@
 	}
 
 	::ng-deep bgs-triples {
-		.triples-section {
+		.triples-section.triples-section.triples-section {
 			flex-direction: column;
 			align-items: center;
 			width: 100%;
-		}
-		.title {
-			width: auto;
-			margin: 0;
-		}
-		.subtitle {
-			margin: auto;
-		}
-		.triple-tiers {
-			justify-content: space-around;
-			align-items: center;
-			width: 100%;
-			flex-grow: 1;
-		}
-		.triple {
-			width: 2vw;
-			height: 2.3vw;
-		}
-		.number {
-			font-size: 1vw;
+
+			.title {
+				width: auto;
+				margin: 0;
+			}
+			.subtitle {
+				margin: auto;
+			}
+			.triple-tiers {
+				justify-content: space-around;
+				align-items: center;
+				width: 100%;
+				flex-grow: 1;
+				.triple {
+					width: 2vw;
+					height: 2.3vw;
+					.number {
+						font-size: 1vw;
+					}
+				}
+			}
 		}
 	}
 }
