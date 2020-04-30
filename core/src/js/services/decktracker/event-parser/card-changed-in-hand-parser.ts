@@ -24,11 +24,11 @@ export class CardChangedInHandParser implements EventParser {
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const newCardInHand = cardInHand
 			? cardInHand.update({
-					cardId: cardId,
+					cardId: isPlayer ? cardId : cardInHand.cardId,
 					entityId: entityId,
-					cardName: cardData.name,
-					manaCost: cardData ? cardData.cost : undefined,
-					rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+					cardName: isPlayer ? cardData.name : cardInHand.cardName,
+					manaCost: isPlayer && cardData ? cardData.cost : undefined,
+					rarity: isPlayer && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : cardInHand.rarity,
 			  } as DeckCard)
 			: null;
 		console.log('newCardInHand', newCardInHand);
