@@ -42,6 +42,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[colorManaCost]="colorManaCost"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[cardsGoToBottom]="cardsGoToBottom"
+					[darkenUsedCards]="darkenUsedCards"
 					[tooltipPosition]="_tooltipPosition"
 				>
 				</grouped-deck-list>
@@ -55,6 +56,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() colorManaCost: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() cardsGoToBottom: boolean;
+	@Input() darkenUsedCards: boolean;
 
 	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;
