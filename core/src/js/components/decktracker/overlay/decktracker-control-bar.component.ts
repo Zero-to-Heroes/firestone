@@ -44,7 +44,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerControlBarComponent {
-	settingsSection: string = 'your-deck';
+	settingsSection = 'your-deck';
 
 	@Output() onMinimize: EventEmitter<void> = new EventEmitter<void>();
 

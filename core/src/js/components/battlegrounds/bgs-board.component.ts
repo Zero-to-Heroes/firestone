@@ -85,7 +85,7 @@ export class BgsBoardComponent implements AfterViewInit {
 	@Input() boardTurn: number;
 	@Input() finalBoard: boolean;
 	@Input() tooltipPosition: 'left' | 'right' | 'top' | 'bottom' = 'right';
-	@Input() maxBoardHeight: number = 1;
+	@Input() maxBoardHeight = 1;
 
 	@Input() set minionStats(value: readonly MinionStat[]) {
 		this._minionStats = value;

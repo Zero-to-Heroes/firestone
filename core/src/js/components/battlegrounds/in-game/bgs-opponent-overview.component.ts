@@ -60,7 +60,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
-	debug: boolean = false;
+	debug = false;
 
 	@Input() currentTurn: number;
 

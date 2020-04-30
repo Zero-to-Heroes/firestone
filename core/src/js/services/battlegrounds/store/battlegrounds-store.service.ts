@@ -64,7 +64,7 @@ export class BattlegroundsStoreService {
 
 	private requeueTimeout;
 	private closedByUser: boolean;
-	private bgsActive: boolean = true;
+	private bgsActive = true;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,

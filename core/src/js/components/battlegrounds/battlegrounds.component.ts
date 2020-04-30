@@ -36,7 +36,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	windowId: string;
 	// activeTheme: CurrentAppType;
 	state: BattlegroundsState;
-	cardsLoaded: boolean = false;
+	cardsLoaded = false;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;

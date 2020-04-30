@@ -16,7 +16,7 @@ ctx.onmessage = async ev => {
 	cardsData.inititialize();
 	// console.log('cards info initialized', ev);
 
-	let battleInfo: BgsBattleInfo = ev.data;
+	const battleInfo: BgsBattleInfo = ev.data;
 	// console.log('received message in worker', battleInfo, ev);
 
 	const result: BgsBattleSimulationResult = simulateBattle(battleInfo, cards, cardsData);

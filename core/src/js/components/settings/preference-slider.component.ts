@@ -73,7 +73,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 	@Input() snapSensitivity = 3;
 	@Input() knobs: readonly Knob[];
 	@Input() showCurrentValue: boolean;
-	@Input() displayedValueUnit: string = '%';
+	@Input() displayedValueUnit = '%';
 
 	value: number;
 	progress: number;
