@@ -740,6 +740,7 @@ export class GameEvents {
 							cardId: gameEvent.Value.CardId,
 							board: gameEvent.Value.Board, // as is
 							hero: gameEvent.Value.Hero, // as is
+							heroPowerCardId: gameEvent.Value.HeroPowerCardId,
 						},
 					} as GameEvent),
 				);

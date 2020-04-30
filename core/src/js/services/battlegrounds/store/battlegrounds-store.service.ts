@@ -157,6 +157,7 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.cardId,
 						gameEvent.additionalData.board,
 						gameEvent.additionalData.hero,
+						gameEvent.additionalData.heroPowerCardId,
 					),
 				);
 				// } else if (gameEvent.type === GameEvent.MAIN_STEP_READY) {

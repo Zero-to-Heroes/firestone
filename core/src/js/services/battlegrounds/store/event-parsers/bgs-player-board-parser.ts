@@ -51,6 +51,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			player: {
 				tavernTier: tavernTier,
 				cardId: event.hero?.CardId, // In case it's the ghost, the hero power is not active
+				heroPowerId: event.heroPowerCardId,
 			},
 			board: bgsBoard,
 		};
