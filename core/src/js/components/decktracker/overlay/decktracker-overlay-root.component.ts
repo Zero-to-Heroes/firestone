@@ -69,6 +69,7 @@ declare let amplitude;
 							[showGiftsSeparately]="showGiftsSeparately"
 							[cardsGoToBottom]="cardsGoToBottom"
 							[tooltipPosition]="tooltipPosition"
+							[darkenUsedCards]="darkenUsedCards"
 						>
 						</decktracker-deck-list>
 						<div class="backdrop" *ngIf="showBackdrop"></div>
@@ -84,6 +85,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@Input() overlayDisplayModeExtractor: (prefs: Preferences) => string;
 	@Input() opacityExtractor: (prefs: Preferences) => number;
 	@Input() cardsGoToBottomExtractor: (prefs: Preferences) => boolean;
+	@Input() darkenUsedCardsExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
@@ -110,6 +112,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	colorManaCost: boolean;
 	showGiftsSeparately: boolean;
 	cardsGoToBottom: boolean;
+	darkenUsedCards: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
@@ -241,6 +244,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
+		this.darkenUsedCards = this.darkenUsedCardsExtractor(preferences);
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);

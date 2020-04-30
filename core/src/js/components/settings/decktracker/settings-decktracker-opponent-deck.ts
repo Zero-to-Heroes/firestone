@@ -54,6 +54,13 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, the cards that have been used are shown at the bottom of the list. It can only be activated if the Group cards by zone option is disabled"
 					></preference-toggle>
 					<preference-toggle
+						[ngClass]="{ 'disabled': !opponentTracker || opponentOverlayGroupByZone }"
+						class="indented"
+						field="opponentOverlayDarkenUsedCards"
+						label="Darken used cards"
+						tooltip="When active, the cards that have been used are darkened, to add focus to the cards still in the deck. It can only be activated if the Group cards by zone option is disabled"
+					></preference-toggle>
+					<preference-toggle
 						field="dectrackerShowOpponentTurnDraw"
 						label="Card turn draw"
 						tooltip="Show the turn at which a card in the opponent's hand was drawn"

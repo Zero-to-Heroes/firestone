@@ -39,6 +39,7 @@ export class GroupedDeckListComponent {
 	// private hand: readonly DeckCard[];
 	private _deckState: DeckState;
 	private _cardsGoToBottom: boolean;
+	private _darkenUsedCards: boolean;
 	private _showCardsInHand = false;
 	private showWarning: boolean;
 
@@ -51,6 +52,11 @@ export class GroupedDeckListComponent {
 
 	@Input() set cardsGoToBottom(value: boolean) {
 		this._cardsGoToBottom = value;
+		this.buildGroupedList();
+	}
+
+	@Input() set darkenUsedCards(value: boolean) {
+		this._darkenUsedCards = value;
 		this.buildGroupedList();
 	}
 
@@ -125,7 +131,7 @@ export class GroupedDeckListComponent {
 					cardName: groupedFromDecklist.get(cardId)[0].cardName,
 					manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
 					rarity: groupedFromDecklist.get(cardId)[0].rarity,
-					highlight: 'dim',
+					highlight: this._darkenUsedCards ? 'dim' : 'normal',
 				} as VisualDeckCard);
 				// console.log('base is now', base);
 			}
@@ -148,7 +154,7 @@ export class GroupedDeckListComponent {
 					cardName: groupedFromDeck.get(cardId)[i].cardName,
 					manaCost: groupedFromDeck.get(cardId)[i].manaCost,
 					rarity: groupedFromDeck.get(cardId)[i].rarity,
-					highlight: !isInBaseDeck && isInOtherZone ? 'dim' : 'normal',
+					highlight: !isInBaseDeck && this._darkenUsedCards && isInOtherZone ? 'dim' : 'normal',
 					creatorCardIds: creatorCardIds,
 				} as VisualDeckCard);
 				// console.log('base is now', base);

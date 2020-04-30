@@ -14,6 +14,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[opacityExtractor]="opacityExtractor"
 			[scaleExtractor]="scaleExtractor"
 			[cardsGoToBottomExtractor]="cardsGoToBottomExtractor"
+			[darkenUsedCardsExtractor]="darkenUsedCardsExtractor"
 			[deckExtractor]="deckExtractor"
 			[trackerPositionUpdater]="trackerPositionUpdater"
 			[trackerPositionExtractor]="trackerPositionExtractor"
@@ -33,6 +34,7 @@ export class DeckTrackerOverlayPlayerComponent {
 	opacityExtractor = (prefs: Preferences) => prefs.overlayOpacityInPercent;
 	scaleExtractor = (prefs: Preferences) => prefs.decktrackerScale;
 	cardsGoToBottomExtractor = (prefs: Preferences) => prefs.overlayCardsGoToBottom;
+	darkenUsedCardsExtractor = (prefs: Preferences) => false;
 	deckExtractor = (state: GameState) => state.playerDeck;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
