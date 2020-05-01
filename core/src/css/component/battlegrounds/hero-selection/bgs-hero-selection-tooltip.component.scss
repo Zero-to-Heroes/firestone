@@ -23,6 +23,7 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+		width: 300px; // So that the display isn't weird while all images are not loaded
 	}
 
 	.name {
