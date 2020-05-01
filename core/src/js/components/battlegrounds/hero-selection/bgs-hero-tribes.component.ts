@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
 
 declare let amplitude: any;
@@ -52,22 +53,22 @@ export class BgsHeroTribesComponent {
 		let referenceCardId: string;
 		switch (tribe) {
 			case 'Mech':
-				referenceCardId = 'GVG_027';
+				referenceCardId = CardIds.Collectible.Rogue.IronSensei;
 				break;
 			case 'Beast':
-				referenceCardId = 'BGS_021';
+				referenceCardId = CardIds.NonCollectible.Neutral.MamaBear;
 				break;
 			case 'Demon':
-				referenceCardId = 'TB_BaconUps_060';
+				referenceCardId = CardIds.Collectible.Warlock.Malganis;
 				break;
 			case 'Dragon':
-				referenceCardId = 'BGS_036';
+				referenceCardId = CardIds.NonCollectible.Neutral.Razorgore;
 				break;
 			case 'Murloc':
-				referenceCardId = 'BGS_030';
+				referenceCardId = CardIds.NonCollectible.Neutral.KingBagurgle;
 				break;
 			default:
-				referenceCardId = 'BGS_009';
+				referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
 				break;
 		}
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
