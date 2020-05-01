@@ -24,6 +24,8 @@ export class BgsNextOpponentParser implements EventParser {
 			// currentStageId: 'in-game',
 			// currentPanelId: 'bgs-next-opponent-overview',
 			currentGame: currentState.currentGame.update({
+				battleInfo: undefined,
+				battleResult: undefined,
 				battleInfoStatus: 'empty',
 			} as BgsGame),
 		} as BattlegroundsState);
