@@ -177,6 +177,10 @@ export class BgsBoardComponent implements AfterViewInit {
 			return;
 		}
 		const rect = boardContainer.getBoundingClientRect();
+		if (!rect.width || !rect.height) {
+			setTimeout(() => this.onResize(), 1000);
+			return;
+		}
 		// We have to resize even though we have the same number of entities, because the resize is
 		// set on the DOM elements, which are teared down and recreated
 		if (this.previousBoardWidth === rect.width && this.setValidCardElements) {

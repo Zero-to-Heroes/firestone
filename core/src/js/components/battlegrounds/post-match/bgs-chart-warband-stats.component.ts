@@ -167,10 +167,13 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 		}
 		const averageStats: readonly { turn: number; totalStats: number }[] = this._globalStats.heroStats.find(
 			stat => stat.id === 'average',
-		).warbandStats;
+		)?.warbandStats;
 		const warbandStats: readonly { turn: number; totalStats: number }[] = this._globalStats.heroStats.find(
 			stat => stat.id === this._player.cardId,
-		).warbandStats;
+		)?.warbandStats;
+		if (!averageStats || !warbandStats) {
+			return;
+		}
 		const lastTurn = Math.min(warbandStats.length, this._stats.totalStatsOverTurn.length);
 		this.lineChartLabels = [...Array(lastTurn).keys()].map(turn => '' + turn);
 		this.lineChartData = [

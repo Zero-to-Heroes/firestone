@@ -69,7 +69,8 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			// If hidden, restore window to as it was
 			if (message.window_previous_state_ex === 'hidden') {
 				// console.log('window was previously hidden, keeping the previosu state', this.isMaximized);
-			} else if (message.window_state === 'maximized') {
+			}
+			if (message.window_state === 'maximized') {
 				this.isMaximized = true;
 			} else if (message.window_state !== 'minimized') {
 				// When minimized we want to remember the last position

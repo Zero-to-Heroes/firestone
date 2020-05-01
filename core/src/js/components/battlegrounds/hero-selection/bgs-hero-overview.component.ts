@@ -25,7 +25,7 @@ declare let amplitude: any;
 			<div class="profile">
 				<div
 					class="title"
-					helpTooltip="Board stats per turn, compared to the average board stats between all heroes"
+					helpTooltip="Board stats per turn, compared to the average board stats between all heroes (6000+ MMR)"
 				>
 					Warband stats
 				</div>
@@ -51,6 +51,7 @@ export class BgsHeroOverviewComponent {
 	warbandStats: readonly { turn: number; totalStats: number }[];
 
 	@Input() set hero(value: BgsHeroOverview) {
+		// console.log('setting hero', value, this._hero);
 		this._hero = value;
 		if (!value) {
 			return;

@@ -38,9 +38,15 @@ export class BgsBattleStatusComponent {
 	damageWon: string;
 	damageLost: string;
 
+	private _previousStatus: string;
+	private _previousBattle;
 	private tempInterval;
 
 	@Input() set battleSimulationStatus(value: 'empty' | 'waiting-for-result' | 'done') {
+		if (value === this._previousStatus) {
+			return;
+		}
+		this._previousStatus = value;
 		if (this.tempInterval) {
 			clearInterval(this.tempInterval);
 		}
@@ -66,6 +72,10 @@ export class BgsBattleStatusComponent {
 	}
 
 	@Input() set nextBattle(value: BattleResult) {
+		if (value === this._previousBattle) {
+			return;
+		}
+		this._previousBattle = value;
 		console.log('setting next battle', value);
 		if (value?.wonPercent != null) {
 			this.battleSimulationResult = value.wonPercent.toFixed(1) + '%';
@@ -76,4 +86,8 @@ export class BgsBattleStatusComponent {
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
+
+	ngAfterViewInit() {
+		// console.log('after battle status init');
+	}
 }
