@@ -181,6 +181,14 @@ export class BgsBoardComponent implements AfterViewInit {
 			setTimeout(() => this.onResize(), 1000);
 			return;
 		}
+		const cardElements: any[] = boardContainer.querySelectorAll('li');
+		if (cardElements.length !== (this._entities?.length || 0)) {
+			// if (this.debug) {
+			// 	console.log('card elements not displayed yet', cardElements, this._entities);
+			// }
+			setTimeout(() => this.onResize(), 300);
+			return;
+		}
 		// We have to resize even though we have the same number of entities, because the resize is
 		// set on the DOM elements, which are teared down and recreated
 		if (this.previousBoardWidth === rect.width && this.setValidCardElements) {
@@ -190,14 +198,6 @@ export class BgsBoardComponent implements AfterViewInit {
 		// 	console.log('updated board width', rect.width, this.previousBoardWidth, this.setValidCardElements);
 		// }
 		this.previousBoardWidth = rect.width;
-		const cardElements: any[] = boardContainer.querySelectorAll('li');
-		if (cardElements.length !== (this._entities?.length || 0)) {
-			// if (this.debug) {
-			// 	console.log('card elements not displayed yet', cardElements, this._entities);
-			// }
-			setTimeout(() => this.onResize(), 300);
-			return;
-		}
 		let cardWidth = rect.width / 8;
 		let cardHeight = 1.48 * cardWidth;
 		if (cardHeight > rect.height * this.maxBoardHeight) {
@@ -207,6 +207,9 @@ export class BgsBoardComponent implements AfterViewInit {
 			cardHeight = rect.height * this.maxBoardHeight;
 			cardWidth = cardHeight / 1.48;
 		}
+		// if (this.debug) {
+		// 	console.log('will set card dimensions', cardWidth, cardHeight);
+		// }
 		for (const cardElement of cardElements) {
 			this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 			this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
