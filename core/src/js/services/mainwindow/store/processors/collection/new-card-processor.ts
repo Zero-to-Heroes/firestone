@@ -7,9 +7,9 @@ import { NavigationState } from '../../../../../models/mainwindow/navigation/nav
 import { PityTimer } from '../../../../../models/pity-timer';
 import { Set, SetCard } from '../../../../../models/set';
 import { CardHistoryStorageService } from '../../../../collection/card-history-storage.service';
+import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { IndexedDbService } from '../../../../collection/indexed-db.service';
 import { PackHistoryService } from '../../../../collection/pack-history.service';
-import { MemoryInspectionService } from '../../../../plugins/memory-inspection.service';
 import { SetsService } from '../../../../sets-service.service';
 import { NewCardEvent } from '../../events/collection/new-card-event';
 import { Processor } from '../processor';
@@ -19,7 +19,7 @@ import { Processor } from '../processor';
 export class NewCardProcessor implements Processor {
 	constructor(
 		private indexedDb: IndexedDbService,
-		private memoryReading: MemoryInspectionService,
+		private collectionManager: CollectionManager,
 		private cardHistoryStorage: CardHistoryStorageService,
 		private pityTimer: PackHistoryService,
 		private cards: SetsService,
@@ -31,7 +31,7 @@ export class NewCardProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const collection = await this.memoryReading.getCollection();
+		const collection = await this.collectionManager.getCollection();
 		if (collection && collection.length > 0) {
 			await this.indexedDb.saveCollection(collection);
 		}

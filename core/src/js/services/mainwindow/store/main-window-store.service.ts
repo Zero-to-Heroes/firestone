@@ -371,7 +371,7 @@ export class MainWindowStoreService {
 			NewCardEvent.eventName(),
 			new NewCardProcessor(
 				this.collectionDb,
-				this.memoryReading,
+				this.collectionManager,
 				this.cardHistoryStorage,
 				this.pityTimer,
 				this.sets,
