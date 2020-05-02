@@ -154,12 +154,12 @@ export class BgsBoardComponent implements AfterViewInit {
 
 	getDamageDealt(entity: Entity): number {
 		return this._minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
-			.damageDealt;
+			?.damageDealt;
 	}
 
 	getDamageTaken(entity: Entity): number {
 		return this._minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
-			.damageTaken;
+			?.damageTaken;
 	}
 
 	onResize() {
