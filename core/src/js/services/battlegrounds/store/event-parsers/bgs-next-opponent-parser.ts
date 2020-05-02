@@ -54,7 +54,7 @@ export class BgsNextOpponentParser implements EventParser {
 			// Just use the cardId, and let the UI reconstruct from the state to avoid duplicating the info
 			cardId: cardId,
 		});
-		const currentTurn = currentState.currentGame.currentTurn;
+		const currentTurn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		return BgsNextOpponentOverviewPanel.create({
 			opponentOverview: opponentOverview,
 			name: `Next opponent - Turn ${currentTurn}`,

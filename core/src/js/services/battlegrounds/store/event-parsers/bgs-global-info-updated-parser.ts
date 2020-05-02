@@ -40,7 +40,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 				compositionHistory: [
 					...player.compositionHistory,
 					{
-						turn: currentState.currentGame.currentTurn,
+						turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 						tribe:
 							playerFromMemory.BoardCompositionRace === 0
 								? 'mixed'

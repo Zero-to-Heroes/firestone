@@ -17,7 +17,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 			...playerToUpdate.tavernUpgradeHistory,
 			BgsTavernUpgrade.create({
 				tavernTier: event.tavernTier,
-				turn: currentState.currentGame.currentTurn,
+				turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			}),
 		];
 		const newPlayer = playerToUpdate.update({

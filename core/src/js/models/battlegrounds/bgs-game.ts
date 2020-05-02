@@ -31,6 +31,14 @@ export class BgsGame {
 		return this.players.find(player => player.isMainPlayer);
 	}
 
+	// Not all players finish their turns at the same time.
+	public getCurrentTurnAdjustedForAsyncPlay(): number {
+		if (this.battleInfo) {
+			return this.currentTurn + 1;
+		}
+		return this.currentTurn;
+	}
+
 	public addBattleBoardInfo(bgsInfo: BgsBoardInfo): BgsGame {
 		const battleInfo: any = this.battleInfo || {};
 		if (!battleInfo.playerBoard) {
