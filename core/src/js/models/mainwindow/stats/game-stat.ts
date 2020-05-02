@@ -29,25 +29,31 @@ export class GameStat {
 	readonly matchStat: MatchStats;
 
 	public buildPlayerRankImage(): [string, string, string] {
+		if (!this.playerRank) {
+			return [null, null, null];
+		}
 		let rankIcon;
 		let rankIconTooltip;
+		// console.log('no-format', 'building player rank image for', JSON.stringify(this, null, 4));
 		if (this.gameMode === 'ranked') {
 			const standard = 'standard_ranked';
 			// console.log('playerRank', this.playerRank);
-			if (this.playerRank?.indexOf('legend') !== -1) {
+			if (this.playerRank.indexOf('legend') !== -1) {
 				rankIcon = `${standard}/legend`;
 				rankIconTooltip = 'Legend';
-			} else if (this.playerRank?.indexOf('-') > -1) {
+				// console.log('assigning legend', this.playerRank?.indexOf('legend'));
+			} else if (this.playerRank.indexOf('-') > -1) {
 				const leagueId = parseInt(this.playerRank.split('-')[0]);
 				const rank = this.playerRank.split('-')[1];
 				const paddedRank = rank.padStart(2, '0');
 				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId);
+				// console.log('leagueFrame, leagueName', leagueFrame, leagueName);
 				return [
 					leagueFrame,
 					`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
 					`${leagueName} ${rank}`,
 				];
-			} else if (this.playerRank && this.playerRank.indexOf('-') === -1) {
+			} else if (this.playerRank.indexOf('-') === -1) {
 				rankIcon = `${standard}/rank${this.playerRank}_small`;
 				rankIconTooltip = 'Rank ' + this.playerRank;
 			} else {
@@ -91,6 +97,7 @@ export class GameStat {
 		} else {
 			rankIcon = 'arenadraft';
 		}
+		// console.log('returning', rankIcon, null, rankIconTooltip);
 		return [`/Files/assets/images/deck/ranks/${rankIcon}.png`, null, rankIconTooltip];
 	}
 
