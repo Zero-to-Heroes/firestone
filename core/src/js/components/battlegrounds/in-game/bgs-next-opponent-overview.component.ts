@@ -38,6 +38,7 @@ declare let amplitude: any;
 				<bgs-opponent-overview-big
 					[opponent]="opponents && opponents[0]"
 					[currentTurn]="currentTurn"
+					[enableSimulation]="enableSimulation"
 					[nextBattle]="nextBattle"
 					[battleSimulationStatus]="battleSimulationStatus"
 				></bgs-opponent-overview-big>
@@ -65,6 +66,8 @@ export class BgsNextOpponentOverviewComponent {
 	nextBattle: BattleResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	nextOpponentCardId: string;
+
+	@Input() enableSimulation: boolean;
 
 	private _panel: BgsNextOpponentOverviewPanel;
 	private _game: BgsGame;

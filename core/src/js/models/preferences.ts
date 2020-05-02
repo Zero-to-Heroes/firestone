@@ -69,6 +69,7 @@ export class Preferences {
 
 	readonly bgsEnableApp = true;
 	readonly bgsUseLocalSimulator = true;
+	readonly bgsEnableSimulation = true;
 	readonly bgsSimulatorNumberOfSims = 2500;
 
 	readonly launchAppOnGameStart: boolean = true;

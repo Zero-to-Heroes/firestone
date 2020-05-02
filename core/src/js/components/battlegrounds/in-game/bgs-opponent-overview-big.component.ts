@@ -49,6 +49,7 @@ declare let amplitude: any;
 					<div class="bottom-info">
 						<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 						<bgs-battle-status
+							*ngIf="enableSimulation"
 							[nextBattle]="nextBattle"
 							[battleSimulationStatus]="battleSimulationStatus"
 						></bgs-battle-status>
@@ -83,6 +84,7 @@ export class BgsOpponentOverviewBigComponent {
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 
+	@Input() enableSimulation: boolean;
 	@Input() currentTurn: number;
 	@Input() nextBattle: BattleResult;
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';

@@ -5,13 +5,17 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../models/battlegrounds/bgs-stage';
+import { Preferences } from '../../models/preferences';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 declare let amplitude: any;
 
@@ -59,6 +63,7 @@ declare let amplitude: any;
 						[hidden]="currentPanel?.id !== 'bgs-next-opponent-overview'"
 						[panel]="currentPanel"
 						[game]="_state?.currentGame"
+						[enableSimulation]="enableSimulation"
 					>
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
@@ -73,10 +78,11 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsContentComponent implements AfterViewInit {
+export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	_state: BattlegroundsState;
 	currentStage: BgsStage;
 	currentPanel: BgsPanel;
+	enableSimulation: boolean;
 	windowId: string;
 
 	@Input() set state(value: BattlegroundsState) {
@@ -88,13 +94,36 @@ export class BattlegroundsContentComponent implements AfterViewInit {
 	}
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
+	private preferencesSubscription: Subscription;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		console.log('after view init in bgs content');
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handleDisplayPreferences(event.preferences);
+		});
+		await this.handleDisplayPreferences();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	ngOnDestroy() {
+		this.preferencesSubscription.unsubscribe();
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		// console.log('updating prefs', preferences);
+		this.enableSimulation = preferences.bgsEnableSimulation;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

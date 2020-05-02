@@ -11,7 +11,8 @@
 		width: 215px;
 	}
 
+	// Hack because I can't manage to make the knobs always align perfectly with the snap value
 	::ng-deep preference-slider .knobs .knob.knob.knob.knob {
-		padding-right: 7px;
+		padding-right: 10px;
 	}
 }

@@ -29,28 +29,37 @@ import { Knob } from '../preference-slider.component';
 				<div class="subgroup">
 					<preference-toggle field="bgsEnableApp" label="Enable Battlegrounds"></preference-toggle>
 					<preference-toggle
+						field="bgsEnableSimulation"
+						label="Enable battle simulation"
+						tooltip="When active, you will know your chances to win / tie / lose each battle at the start of the battle"
+					></preference-toggle>
+					<preference-toggle
 						field="bgsUseLocalSimulator"
+						[ngClass]="{ 'disabled': !enableSimulation }"
 						label="Use local battle simulator"
 						tooltip="Turning that off will run the battle simulations on a remote server, thus freeing your machine up. On the other hand, the results will take a bit longer to arrive"
 					></preference-toggle>
 				</div>
 			</div>
-			<div
-				class="title"
-				helpTooltip="The number of simulations ran for each battle. The more simulations, the better the results, but the heavier the load on your PC. The default value of 2500 iterations is usually a good compromise."
-			>
+			<div class="title">
 				Local simulator configuration
 			</div>
 			<div class="settings-group">
-				<div class="text" [ngClass]="{ 'disabled': !useLocalSimulator }">Number of simulations</div>
+				<div
+					class="text"
+					[ngClass]="{ 'disabled': !useLocalSimulator || !enableSimulation }"
+					helpTooltip="The number of simulations ran for each battle. The more simulations, the better the results, but the heavier the load on your PC. The default value of 2500 iterations is usually a good compromise."
+				>
+					Number of simulations
+				</div>
 				<preference-slider
 					class="first-slider"
 					field="bgsSimulatorNumberOfSims"
 					[enabled]="useLocalSimulator"
 					[showCurrentValue]="true"
 					displayedValueUnit=""
-					[min]="1500"
-					[max]="10000"
+					[min]="700"
+					[max]="5000"
 					[snapSensitivity]="200"
 					[knobs]="numberOfSimsKnobs"
 				>
@@ -62,6 +71,7 @@ import { Knob } from '../preference-slider.component';
 })
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
 	useLocalSimulator: boolean;
+	enableSimulation: boolean;
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
 			absoluteValue: 2500,
@@ -83,6 +93,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
 			const preferences: Preferences = event.preferences;
 			this.useLocalSimulator = preferences.bgsUseLocalSimulator;
+			this.enableSimulation = preferences.bgsEnableSimulation;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -96,6 +107,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.useLocalSimulator = prefs.bgsUseLocalSimulator;
+		this.enableSimulation = prefs.bgsEnableSimulation;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

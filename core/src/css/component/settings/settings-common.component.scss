@@ -192,3 +192,9 @@ input[type='range'] {
 ::ng-deep preference-toggle .preference-toggle {
 	margin-top: 15px;
 }
+
+::ng-deep preference-toggle.disabled .preference-toggle,
+::ng-deep preference-slider.disabled .preference-slider {
+	opacity: 0.4;
+	pointer-events: none;
+}
