@@ -61,7 +61,8 @@ export class EndGameListenerService {
 					// First remove the diacritics, then remove the weird unicode characters (deck names can't be fun!)
 					this.currentDeckname = this.deckService.currentDeck.name
 						?.normalize('NFKD')
-						?.replace(/[^\w]/g, '')
+						// Allow some characters
+						?.replace(/[^\w^\{^\}^\[^\]$^/^\s]/g, '')
 						?.replace(/[^\x20-\x7E]/g, '');
 					break;
 				case GameEvent.MATCH_METADATA:
