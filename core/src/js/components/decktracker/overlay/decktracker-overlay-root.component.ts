@@ -287,6 +287,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		console.log('updating tracker position', newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		console.log('after window position update', await this.ow.getCurrentWindow());
+		// console.log('monitors list', await this.ow.getMonitorsList());
+		// console.log('game info', await this.ow.getRunningGameInfo());
 		await this.updateTooltipPosition();
 	}
 

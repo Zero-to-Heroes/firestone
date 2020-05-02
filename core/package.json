@@ -105,7 +105,11 @@
 		"typescript": "^3.8.3",
 		"webpack": "4.41.1",
 		"webpack-bundle-analyzer": "3.4.1",
+<<<<<<< HEAD
 		"webpack-cli": "^3.3.11",
 		"worker-loader": "^2.0.0"
+=======
+		"webpack-cli": "^3.3.11"
+>>>>>>> 50d82f9a... BUG (app): don't show a Legend icon in replays when there is no player rank
 	}
 }
