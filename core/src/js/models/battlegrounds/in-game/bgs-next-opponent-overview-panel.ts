@@ -11,4 +11,8 @@ export class BgsNextOpponentOverviewPanel implements BgsPanel {
 	public static create(base: BgsNextOpponentOverviewPanel): BgsNextOpponentOverviewPanel {
 		return Object.assign(new BgsNextOpponentOverviewPanel(), base);
 	}
+
+	public update(base: BgsNextOpponentOverviewPanel): BgsNextOpponentOverviewPanel {
+		return Object.assign(new BgsNextOpponentOverviewPanel(), this, base);
+	}
 }
