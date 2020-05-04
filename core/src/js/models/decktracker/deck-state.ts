@@ -1,3 +1,4 @@
+import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
 import { HeroCard } from './hero-card';
@@ -19,6 +20,12 @@ export class DeckState {
 
 	readonly secrets: readonly BoardSecret[] = [];
 	readonly secretHelperActive: boolean = true;
+
+	readonly totalAttackOnBoard: AttackOnBoard;
+	readonly galakrondInvokesCount: number;
+	readonly cthunSize: number;
+	readonly jadeGolemSize: number;
+	readonly pogoHopperSize: number;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that

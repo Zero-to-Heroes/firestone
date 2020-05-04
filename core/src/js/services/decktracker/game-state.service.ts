@@ -3,6 +3,7 @@ import { GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
+import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
@@ -51,6 +52,7 @@ import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-parser';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
+import { MinionOnBoardAttackUpdatedParser } from './event-parser/minion-on-board-attack-updated-parser';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
@@ -331,24 +333,30 @@ export class GameStateService {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
-		if (previousState !== this.state) {
-			await this.updateOverlays();
-			const emittedEvent = {
-				event: {
-					name: gameEvent.type,
-				},
-				state: this.state,
-			};
-			// this.logger.debug('[game-state] will emit event', emittedEvent);
-			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-			// this.logger.debug(
-			// 	'[game-state] emitted deck event',
-			// 	emittedEvent.event.name,
-			// 	this.state.opponentDeck.secrets,
-			// 	this.state,
-			// 	gameEvent,
-			// );
-		}
+		// if (previousState !== this.state) {
+		await this.updateOverlays();
+		const emittedEvent = {
+			event: {
+				name: gameEvent.type,
+			},
+			state: this.state,
+		};
+		// this.logger.debug(
+		// 	'[game-state] will emit event',
+		// 	this.state.playerDeck.totalAttackOnBoard,
+		// 	this.state.opponentDeck.totalAttackOnBoard,
+		// 	gameEvent,
+		// 	emittedEvent,
+		// );
+		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+		// this.logger.debug(
+		// 	'[game-state] emitted deck event',
+		// 	emittedEvent.event.name,
+		// 	this.state.opponentDeck.secrets,
+		// 	this.state,
+		// 	gameEvent,
+		// );
+		// }
 	}
 
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
@@ -362,6 +370,12 @@ export class GameStateService {
 		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
 		// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
+		const totalAttackOnBoard = deck.board
+			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
+			.filter(entity => entity && entity.attack > 0)
+			.map(entity => entity.attack || 0)
+			.reduce((a, b) => a + b, 0);
+		const heroAttack = playerFromTracker?.Hero?.attack > 0 ? playerFromTracker?.Hero?.attack : 0;
 		// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
 		// this.logger.debug(
 		// 	'[game-state] updating cards left in deck',
@@ -371,6 +385,10 @@ export class GameStateService {
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
 					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
+					totalAttackOnBoard: {
+						board: totalAttackOnBoard,
+						hero: heroAttack,
+					} as AttackOnBoard,
 			  } as DeckState)
 			: playerDeckWithZonesOrdered;
 	}
@@ -574,6 +592,7 @@ export class GameStateService {
 			new QuestDestroyedParser(),
 			new QuestPlayedFromDeckParser(this.helper),
 			new QuestPlayedFromHandParser(this.helper),
+			new MinionOnBoardAttackUpdatedParser(this.helper),
 		];
 	}
 }
