@@ -658,6 +658,14 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'GALAKROND_INVOKED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.GALAKROND_INVOKED, gameEvent, {
+						totalInvoke: gameEvent.Value.AdditionalProps.TotalInvoke,
+					}),
+				);
+				break;
 			case 'BATTLEGROUNDS_HERO_SELECTION':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
 				this.gameEventsEmitter.allEvents.next(

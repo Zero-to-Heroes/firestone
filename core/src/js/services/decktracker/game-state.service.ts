@@ -43,6 +43,7 @@ import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
 import { EventParser } from './event-parser/event-parser';
 import { FirstPlayerParser } from './event-parser/first-player-parser';
+import { GalakrondInvokedParser } from './event-parser/galakrond-invoked-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
 import { GameRunningParser } from './event-parser/game-running-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
@@ -341,13 +342,15 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		// this.logger.debug(
-		// 	'[game-state] will emit event',
-		// 	this.state.playerDeck.totalAttackOnBoard,
-		// 	this.state.opponentDeck.totalAttackOnBoard,
-		// 	gameEvent,
-		// 	emittedEvent,
-		// );
+		this.logger.debug(
+			'[game-state] will emit event',
+			this.state.playerDeck.totalAttackOnBoard,
+			this.state.opponentDeck.totalAttackOnBoard,
+			this.state.playerDeck.galakrondInvokesCount,
+			this.state.opponentDeck.galakrondInvokesCount,
+			gameEvent,
+			emittedEvent,
+		);
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		// this.logger.debug(
 		// 	'[game-state] emitted deck event',
@@ -593,6 +596,7 @@ export class GameStateService {
 			new QuestPlayedFromDeckParser(this.helper),
 			new QuestPlayedFromHandParser(this.helper),
 			new MinionOnBoardAttackUpdatedParser(this.helper),
+			new GalakrondInvokedParser(),
 		];
 	}
 }

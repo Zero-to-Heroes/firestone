@@ -71,6 +71,7 @@ export class GameEvent {
 	public static readonly RUMBLE_RUN_STEP = 'RUMBLE_RUN_STEP';
 	public static readonly DUNGEON_RUN_STEP = 'DUNGEON_RUN_STEP';
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';
+	public static readonly GALAKROND_INVOKED = 'GALAKROND_INVOKED';
 
 	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
 	public static readonly BATTLEGROUNDS_HERO_SELECTION = 'BATTLEGROUNDS_HERO_SELECTION';
