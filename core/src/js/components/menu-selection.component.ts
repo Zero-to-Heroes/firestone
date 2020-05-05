@@ -62,6 +62,12 @@ declare let amplitude;
 			<li [ngClass]="{ 'selected': selectedModule === 'replays' }" (mousedown)="selectModule('replays')">
 				<span>Replays</span>
 			</li>
+			<li
+				[ngClass]="{ 'selected': selectedModule === 'battlegrounds' }"
+				(mousedown)="selectModule('battlegrounds')"
+			>
+				<span>Battlegrounds</span>
+			</li>
 		</ul>
 	`,
 	encapsulation: ViewEncapsulation.None,

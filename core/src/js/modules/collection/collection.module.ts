@@ -29,6 +29,7 @@ import { AchievementsGlobalCategoriesComponent } from '../../components/achievem
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
 import { AchievementsComponent } from '../../components/achievements/achievements.component';
+import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
 import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
@@ -157,6 +158,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		MatchDetailsComponent,
 		GameReplayComponent,
 		RankImageComponent,
+
+		BattlegroundsDesktopComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,

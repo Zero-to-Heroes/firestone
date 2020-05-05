@@ -86,6 +86,8 @@ declare let amplitude: any;
 					[hidden]="navigationState.currentApp !== 'decktracker'"
 				>
 				</decktracker>
+				<battlegrounds-desktop class="main-section" [hidden]="navigationState.currentApp !== 'battlegrounds'">
+				</battlegrounds-desktop>
 			</section>
 			<tooltips></tooltips>
 			<ads [parentComponent]="'main-window'" *ngIf="!dataState.showFtue"></ads>
