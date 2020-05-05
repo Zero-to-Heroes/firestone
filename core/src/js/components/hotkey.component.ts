@@ -41,7 +41,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async detectHotKey() {
-		this.hotkey = await this.ow.getHotKey(this.hotkeyName);
+		this.hotkey = (await this.ow.getHotKey(this.hotkeyName)).binding || 'Unassigned';
 		if (this.hotkey === 'Unassigned') {
 			this.hotkeyHtml = '<span class="no-hotkey">No hotkey assigned</span>';
 		} else {

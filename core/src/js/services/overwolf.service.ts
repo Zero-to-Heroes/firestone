@@ -366,12 +366,25 @@ export class OverwolfService {
 		});
 	}
 
+	// public async getHotKey(hotkeyName: string) {
+	// 	return new Promise<any>(resolve => {
+	// 		overwolf.settings.getHotKey(hotkeyName, (res: any) => {
+	// 			if (res.status === 'success') {
+	// 				resolve(res.hotkey);
+	// 			}
+	// 		});
+	// 	});
+	// }
+
 	public async getHotKey(hotkeyName: string) {
 		return new Promise<any>(resolve => {
-			overwolf.settings.getHotKey(hotkeyName, (res: any) => {
-				if (res.status === 'success') {
-					resolve(res.hotkey);
-				}
+			overwolf.settings.hotkeys.get((res: any) => {
+				// if (res.status === 'success') {
+				const game: any[] = res.games[HEARTHSTONE_GAME_ID];
+				const hotkey = game.find((key: any) => key.name === hotkeyName);
+				console.log('found hotkey', hotkey, res, game);
+				resolve(hotkey);
+				// }
 			});
 		});
 	}
@@ -692,7 +705,7 @@ export class OverwolfService {
 	public async getFileContents(filePathOnDisk: string): Promise<string> {
 		return new Promise<string>(resolve => {
 			overwolf.io.readFileContents(filePathOnDisk, 'UTF8', (res, error) => {
-				console.log('[overwolf-service] file contents', res);
+				console.log('[overwolf-service] file contents');
 				resolve(res.status === 'success' ? res.content : null);
 			});
 		});

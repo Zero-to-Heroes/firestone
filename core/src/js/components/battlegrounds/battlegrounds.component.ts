@@ -40,8 +40,10 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
+	private hotkeyPressedHandler;
 	// private messageReceivedListener: (message: any) => void;
 	private storeSubscription: Subscription;
+	private hotkey;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -78,6 +80,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
+		this.hotkeyPressedHandler = this.ow.getMainWindow().bgsHotkeyPressed;
 		// console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
@@ -90,7 +93,29 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 				console.error('Exception while handling new state', e);
 			}
 		});
+		this.hotkey = await this.ow.getHotKey('battlegrounds');
 		this.positionWindowOnSecondScreen();
+	}
+
+	@HostListener('window:keydown', ['$event'])
+	async onKeyDown(e: KeyboardEvent) {
+		// console.log('keydown event', e, this.hotkey);
+		if (!this.hotkey || this.hotkey.IsUnassigned) {
+			return;
+		}
+		const isAltKey = [1, 3, 5, 7].indexOf(this.hotkey.modifierKeys) !== -1;
+		const isCtrlKey = [2, 3, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
+		const isShiftKey = [4, 5, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
+
+		if (
+			e.shiftKey === isShiftKey &&
+			e.altKey === isAltKey &&
+			e.ctrlKey === isCtrlKey &&
+			e.keyCode == this.hotkey.virtualKeycode
+		) {
+			// console.log('handling hotkey press');
+			this.hotkeyPressedHandler();
+		}
 	}
 
 	@HostListener('mousedown')
