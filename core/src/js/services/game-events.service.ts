@@ -5,6 +5,7 @@ import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { LogsUploaderService } from './logs-uploader.service';
+import { OverwolfService } from './overwolf.service';
 import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { PreferencesService } from './preferences.service';
@@ -35,6 +36,7 @@ export class GameEvents {
 		private gameEventsEmitter: GameEventsEmitterService,
 		private deckParser: DeckParserService,
 		private prefs: PreferencesService,
+		private ow: OverwolfService,
 	) {
 		this.init();
 		// window['fakeEvent'] = () => {
@@ -99,14 +101,22 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			// console.log('[bootstrap] updated game status', res);
+			if (this.ow.exitGame(res)) {
+				this.spectating = false;
+			}
+		});
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
 		if (eventQueue.some(data => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
+		if (!this.spectating) {
+			await this.processLogs(eventQueue);
+		}
 		// console.log('process queue', eventQueue);
-		await this.processLogs(eventQueue);
 		return [];
 	}
 
@@ -859,6 +869,13 @@ export class GameEvents {
 			console.log('[game-events] [existing] end spectating', existingLine);
 			this.spectating = false;
 		}
+
+		if (this.spectating) {
+			// For now we're not interested in spectating events, but that will come out later
+			// console.log('spectating, doing nothing');
+			return;
+		}
+
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
 			// There is no automatic reconnect when spectating, so we can always safely say
 			// that when we finish catching up with the actual contents of the file, we are
@@ -899,10 +916,10 @@ export class GameEvents {
 			return;
 		}
 
-		if (this.spectating) {
-			// For now we're not interested in spectating events, but that will come out later
-			return;
-		}
+		// if (this.spectating) {
+		// 	// For now we're not interested in spectating events, but that will come out later
+		// 	return;
+		// }
 
 		if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
 			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
