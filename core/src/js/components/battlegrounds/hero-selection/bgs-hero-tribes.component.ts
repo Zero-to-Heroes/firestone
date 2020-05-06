@@ -13,7 +13,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="tribes">
-			<div class="title" helpTooltip="Percentage of each tribe present in average in winning warbands">
+			<div class="title" helpTooltip="Percentage of each tribe present in average in top 4 warbands (6000+ MMR)">
 				Winning tribes
 			</div>
 			<div class="composition">
