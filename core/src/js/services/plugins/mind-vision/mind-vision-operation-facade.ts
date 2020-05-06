@@ -64,7 +64,7 @@ export class MindVisionOperationFacade<T> {
 		});
 	}
 
-	public async call(): Promise<T> {
+	public async call(numberOfRetries?: number): Promise<T> {
 		if (this.cachedValue) {
 			// this.log('returning cached value', this.cachedValue);
 			return this.cachedValue;
@@ -74,7 +74,7 @@ export class MindVisionOperationFacade<T> {
 		}
 		return new Promise<T>(resolve => {
 			this.processingQueue.enqueue({
-				retriesLeft: this.numberOfRetries,
+				retriesLeft: numberOfRetries || this.numberOfRetries,
 				// When processing the full queue in one go, we can use this to notify
 				// all pending processes
 				resolve: resolve,

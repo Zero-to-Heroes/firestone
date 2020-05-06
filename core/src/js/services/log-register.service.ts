@@ -50,5 +50,11 @@ export class LogRegisterService {
 				console.log('[log-register] status for decks', status);
 			})
 			.start();
+		new LogListenerService(this.ow)
+			.configure('FullScreenFX.log', data => this.decksService.queueingIntoMatch(data))
+			.subscribe(status => {
+				console.log('[log-register] status for FullScreenFX', status);
+			})
+			.start();
 	}
 }

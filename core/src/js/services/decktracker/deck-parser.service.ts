@@ -3,11 +3,14 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { GameEvent } from '../../models/game-event';
+import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 
 @Injectable()
 export class DeckParserService {
+	private readonly goingIntoQueueRegex = new RegExp('D \\d*:\\d*:\\d*.\\d* BeginEffect blur \\d => 1');
+
 	private readonly deckContentsRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Deck Contents Received(.*)');
 	private readonly deckEditOverRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Finished Editing Deck(.*)');
 
@@ -23,12 +26,26 @@ export class DeckParserService {
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
 		private allCards: AllCardsService,
+		private events: Events,
 	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				this.reset();
 			}
 		});
+	}
+
+	public async queueingIntoMatch(logLine: string) {
+		// console.log('will detect active deck from queue?', logLine);
+		if (this.goingIntoQueueRegex.exec(logLine)) {
+			// console.log('matching, getting active deck');
+			const activeDeck = await this.memory.getActiveDeck(2);
+			// console.log('active deck after queue', activeDeck);
+			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
+				// console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
+			}
+		}
 	}
 
 	public async getCurrentDeck(): Promise<any> {
@@ -44,8 +61,9 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	private explodeDecklist(decklist: number[]): any[] {
-		return decklist.map(dbfId => [dbfId, 1]);
+	private explodeDecklist(decklist: string[]): any[] {
+		// Can be either a dbfId or a cardId, depending on the situation
+		return decklist.map(id => [id, 1]);
 	}
 
 	public parseActiveDeck(data: string) {
@@ -152,7 +170,11 @@ export class DeckParserService {
 	}
 
 	public buildDeckCards(pair): DeckCard[] {
-		const card = this.allCards.getCardFromDbfId(pair[0]);
+		let dbfId = -1;
+		try {
+			dbfId = parseInt(pair[0]);
+		} catch (e) {}
+		const card = dbfId !== -1 ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
 		const result: DeckCard[] = [];
 		if (!card) {
 			console.error('Could not build deck card', pair);
