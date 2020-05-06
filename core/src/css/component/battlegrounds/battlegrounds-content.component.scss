@@ -50,7 +50,7 @@
 		flex-grow: 1;
 	}
 
-	hotkey {
+	::ng-deep hotkey {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
