@@ -54,7 +54,7 @@ import { normalizeCardId } from './post-match/card-utils';
 						class="header"
 						[helpTooltip]="
 							'Damage dealt and damage taken by this minion card during the run' +
-							(_minionStats.length !== _entities?.length
+							(showTooltipWarning(entity)
 								? '. ATTENTION: multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)'
 								: '')
 						"
@@ -150,6 +150,14 @@ export class BgsBoardComponent implements AfterViewInit {
 			// console.log('detected window resize');
 			this.onResize();
 		});
+	}
+
+	showTooltipWarning(entity: Entity): boolean {
+		return (
+			this._entities
+				.map(e => normalizeCardId(e.cardID, this.allCards))
+				.filter(cardId => cardId === normalizeCardId(entity.cardID, this.allCards)).length > 1
+		);
 	}
 
 	getDamageDealt(entity: Entity): number {
