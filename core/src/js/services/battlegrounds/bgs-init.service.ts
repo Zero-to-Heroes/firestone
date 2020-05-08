@@ -75,7 +75,7 @@ export class BgsInitService {
 		const statsWithPlayer = bgsGlobalStats.update({
 			heroStats: heroStatsWithPlayer,
 		} as BgsStats);
-		console.log('will send bgs init event', statsWithPlayer);
+		// console.log('will send bgs init event', statsWithPlayer);
 		this.stateUpdater.next(new BgsInitEvent(bgsStatsForCurrentPatch, statsWithPlayer));
 	}
 }

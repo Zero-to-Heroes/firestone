@@ -342,15 +342,15 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		this.logger.debug(
-			'[game-state] will emit event',
-			this.state.playerDeck.totalAttackOnBoard,
-			this.state.opponentDeck.totalAttackOnBoard,
-			this.state.playerDeck.galakrondInvokesCount,
-			this.state.opponentDeck.galakrondInvokesCount,
-			gameEvent,
-			emittedEvent,
-		);
+		// this.logger.debug(
+		// 	'[game-state] will emit event',
+		// 	this.state.playerDeck.totalAttackOnBoard,
+		// 	this.state.opponentDeck.totalAttackOnBoard,
+		// 	this.state.playerDeck.galakrondInvokesCount,
+		// 	this.state.opponentDeck.galakrondInvokesCount,
+		// 	gameEvent,
+		// 	emittedEvent,
+		// );
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		// this.logger.debug(
 		// 	'[game-state] emitted deck event',

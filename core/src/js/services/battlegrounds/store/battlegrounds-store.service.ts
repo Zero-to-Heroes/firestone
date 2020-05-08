@@ -107,19 +107,19 @@ export class BattlegroundsStoreService {
 		const inGame = this.state && this.state.inGame;
 		const shouldShowOverlay = true;
 		if (!inGame || !shouldShowOverlay) {
-			console.log('[bgs-store] not in game or shouldnt show overlay', inGame, shouldShowOverlay);
+			// console.log('[bgs-store] not in game or shouldnt show overlay', inGame, shouldShowOverlay);
 			return;
 		}
 
 		// console.warn(window);
 		if (['closed', 'hidden'].indexOf(window.stateEx) !== -1) {
-			console.log('[bgs-store] showing BVS window', window);
+			// console.log('[bgs-store] showing BVS window', window);
 			this.closedByUser = false;
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
 		} else if (['closed', 'hidden'].indexOf(window.stateEx) === -1) {
-			console.log('[bgs-store] closing overlay', shouldShowOverlay, inGame, window);
+			// console.log('[bgs-store] closing overlay', shouldShowOverlay, inGame, window);
 			this.closedByUser = true;
 			await this.ow.hideWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
@@ -218,12 +218,12 @@ export class BattlegroundsStoreService {
 	private maybeHandleNextOpponent(gameEvent: GameEvent): void {
 		// Battle not over yet, deferring the event
 		if (this.state.currentGame?.battleInfo?.opponentBoard) {
-			console.log(
-				'requeueing next opponent',
-				this.state,
-				this.state.currentGame?.battleInfo?.opponentBoard,
-				gameEvent,
-			);
+			// console.log(
+			// 	'requeueing next opponent',
+			// 	this.state,
+			// 	this.state.currentGame?.battleInfo?.opponentBoard,
+			// 	gameEvent,
+			// );
 			if (this.requeueTimeout) {
 				clearTimeout(this.requeueTimeout);
 			}
@@ -249,7 +249,7 @@ export class BattlegroundsStoreService {
 					const newState = await parser.parse(this.state, gameEvent);
 					if (newState !== this.state) {
 						this.state = newState;
-						console.log('updated state', gameEvent.type, this.state, gameEvent);
+						// console.log('updated state', gameEvent.type, this.state, gameEvent);
 						this.battlegroundsStoreEventBus.next(this.state);
 						// this.battlegroundsStoreEventBus.
 						this.updateOverlay();
