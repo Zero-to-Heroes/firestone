@@ -211,7 +211,7 @@ export class AchievementsListComponent implements AfterViewInit {
 		const filterOption = this._achievementSet.filterOptions.filter(
 			option => option.value === this._activeFilter,
 		)[0];
-		const filterFunction: (VisualAchievement) => boolean = filterOption.filterFunction;
+		const filterFunction: (VisualAchievement) => boolean = filterOption?.filterFunction || (achievement => true);
 		this.emptyStateIcon = filterOption.emptyStateIcon;
 		this.emptyStateTitle = filterOption.emptyStateTitle;
 		this.emptyStateText = filterOption.emptyStateText;
