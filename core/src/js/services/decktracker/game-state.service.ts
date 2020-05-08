@@ -567,7 +567,7 @@ export class GameStateService {
 			new CardPlayedFromHandParser(this.helper, this.allCards),
 			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
 			new EndOfEchoInHandParser(this.helper),
-			new GameEndParser(),
+			new GameEndParser(this.prefs, this.deckParser),
 			new DiscardedCardParser(this.helper),
 			new CardRecruitedParser(this.helper),
 			new MinionBackOnBoardParser(this.helper),

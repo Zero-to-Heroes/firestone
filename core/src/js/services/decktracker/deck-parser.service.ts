@@ -49,6 +49,9 @@ export class DeckParserService {
 	}
 
 	public async getCurrentDeck(): Promise<any> {
+		if (this.currentDeck) {
+			return this.currentDeck;
+		}
 		if (this.memory) {
 			// console.log('[deck-parser] ready to get active deck');
 			const activeDeck = await this.memory.getActiveDeck();
