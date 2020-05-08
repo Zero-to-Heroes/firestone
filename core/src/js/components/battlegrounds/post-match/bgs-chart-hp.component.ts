@@ -63,7 +63,7 @@ export class BgsChartHpComponent {
 	lineChartColors: Color[] = [];
 
 	@Input() set stats(value: BgsPostMatchStats) {
-		console.log('setting stats', value);
+		// console.log('setting stats', value);
 		this.setStats(value);
 	}
 
@@ -77,7 +77,7 @@ export class BgsChartHpComponent {
 	onResize() {
 		const chartContainer = this.el.nativeElement.querySelector('.chart-container');
 		const rect = chartContainer.getBoundingClientRect();
-		console.log('chartContainer', chartContainer, rect);
+		// console.log('chartContainer', chartContainer, rect);
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.height;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -89,7 +89,7 @@ export class BgsChartHpComponent {
 		this.lineChartData = await this.buildChartData(value);
 		this.lineChartLabels = await this.buildChartLabels(value);
 		this.lineChartColors = await this.buildChartColors(value);
-		console.log('built line colors', this.lineChartColors);
+		// console.log('built line colors', this.lineChartColors);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

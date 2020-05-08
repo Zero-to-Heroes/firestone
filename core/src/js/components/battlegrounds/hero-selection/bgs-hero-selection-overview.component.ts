@@ -42,7 +42,7 @@ export class BgsHeroSelectionOverviewComponent {
 		if (value === this._panel) {
 			return;
 		}
-		console.log('setting panel', value, this._panel);
+		// console.log('setting panel', value, this._panel);
 		this._panel = value;
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.heroCardId !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroOverview) => overview.tier);
@@ -85,7 +85,7 @@ export class BgsHeroSelectionOverviewComponent {
 						?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
 				},
 			].filter(tier => tier.heroes);
-			console.log('setting hero overviews', this._panel);
+			// console.log('setting hero overviews', this._panel);
 			this.heroOverviews = this._panel.heroOptionCardIds
 				.map(cardId => this._panel.heroOverview.find(overview => overview.heroCardId === cardId))
 				// Add null-safe in case the heroes have been updated but not the code

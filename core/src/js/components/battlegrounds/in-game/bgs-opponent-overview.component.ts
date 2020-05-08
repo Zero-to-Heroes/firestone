@@ -70,7 +70,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		}
 		this.debug = false; //value.cardId === 'TB_BaconShop_HERO_01';
 		if (this.debug) {
-			console.log('setting new opponent', value, this._opponent);
+			// console.log('setting new opponent', value, this._opponent);
 		}
 		this._opponent = value;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
@@ -91,7 +91,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		if (this.debug) {
-			console.log('after view init in overview');
+			// console.log('after view init in overview');
 		}
 	}
 }

@@ -105,7 +105,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		console.log('after view init in bgs content');
+		// console.log('after view init in bgs content');
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.handleDisplayPreferences(event.preferences);

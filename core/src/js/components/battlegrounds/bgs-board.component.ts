@@ -96,7 +96,7 @@ export class BgsBoardComponent implements AfterViewInit {
 			return;
 		}
 		if (this.debug) {
-			console.log('setting entities', this._entities, entities);
+			// console.log('setting entities', this._entities, entities);
 		}
 		// That's a big hack, and it looks like I have to do it for all changing arrays (!).
 		// Otherwise, there is an issue when removing all items from the first list then adding another:
@@ -139,7 +139,7 @@ export class BgsBoardComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		if (this.debug) {
-			console.log('after view init');
+			// console.log('after view init');
 		}
 		setTimeout(() => {
 			this.onResize();

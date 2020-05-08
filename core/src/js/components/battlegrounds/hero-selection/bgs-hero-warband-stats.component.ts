@@ -118,7 +118,7 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 	onResize() {
 		const chartContainer = this.el.nativeElement.querySelector('.container');
 		const rect = chartContainer.getBoundingClientRect();
-		console.log('chartContainer', chartContainer, rect);
+		// console.log('chartContainer', chartContainer, rect);
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.width / 2;
 		this.lineChartColors = [

@@ -127,7 +127,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 
 	@Input() set game(value: BgsGame) {
 		if (value === this._game) {
-			console.log('same game');
+			// console.log('same game');
 			return;
 		}
 		this._game = value;
@@ -155,7 +155,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.tabs = value.tabs;
 		this.selectedTab = value.selectedStat;
 		this.addMinionStats();
-		console.log('panel info set');
+		// console.log('panel info set');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -169,12 +169,12 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly ow: OverwolfService,
 		private readonly allCards: AllCardsService,
 	) {
-		console.log('in construftor');
+		// console.log('in construftor');
 		allCards.initializeCardsDb();
 	}
 
 	async ngAfterViewInit() {
-		console.log('after view init');
+		// console.log('after view init');
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -205,7 +205,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		// 	await this.allCards.initializeCardsDb();
 		// 	console.log('db init done');
 		// }
-		console.log('cards ready', this.allCards.getCards()?.length);
+		// console.log('cards ready', this.allCards.getCards()?.length);
 		const normalizedIds = [
 			...new Set(this.boardMinions.map(entity => normalizeCardId(entity.cardID, this.allCards))),
 		];
@@ -217,7 +217,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 					damageTaken: this.extractDamage(cardId, this._panel.stats.totalMinionsDamageTaken),
 				} as MinionStat),
 		);
-		console.log('minion stats', this.minionStats);
+		// console.log('minion stats', this.minionStats);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
