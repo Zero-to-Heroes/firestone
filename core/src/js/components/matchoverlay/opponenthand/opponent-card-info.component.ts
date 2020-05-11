@@ -10,12 +10,20 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	template: `
 		<div class="opponent-card-info" [style.left.vh]="leftVhOffset" [style.top.vh]="topVhOffset">
 			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="_card"></opponent-card-turn-number>
-			<opponent-card-info-id *ngIf="displayGuess" [card]="_card"></opponent-card-info-id>
+			<opponent-card-info-id
+				*ngIf="displayGuess || displayBuff"
+				[displayGuess]="displayGuess"
+				[displayBuff]="displayBuff"
+				[maxBuffsToShow]="maxBuffsToShow"
+				[card]="_card"
+			></opponent-card-info-id>
 		</div>
 	`,
 })
 export class OpponentCardInfoComponent {
 	@Input() displayGuess: boolean;
+	@Input() displayBuff: boolean;
+	@Input() maxBuffsToShow: number;
 	@Input() displayTurnNumber: boolean;
 	// Weuse vh instead of vw here, because the height of the playing area is not affected when
 	// you resize the window. The width on the other hand changes, because the border outside of

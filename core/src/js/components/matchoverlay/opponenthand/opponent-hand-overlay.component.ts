@@ -30,6 +30,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 				[cards]="gameState.opponentDeck.hand"
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
+				[displayBuff]="displayBuff"
+				[maxBuffsToShow]="maxBuffsToShow"
 			></opponent-card-infos>
 		</div>
 	`,
@@ -41,6 +43,8 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	windowId: string;
 	displayTurnNumber = true;
 	displayGuess = true;
+	displayBuff = true;
+	maxBuffsToShow = 0;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -56,7 +60,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-		this.cdr.detach();
+		// this.cdr.detach();
 
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
@@ -101,6 +105,14 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	private setDisplayPreferences(preferences: Preferences) {
 		this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
 		this.displayGuess = preferences.dectrackerShowOpponentGuess;
+		this.displayBuff = preferences.dectrackerShowOpponentBuff;
+		this.maxBuffsToShow = preferences.dectrackerLimitOpponentBuff
+			? preferences.dectrackerMaxOpponentsBuffToShow
+			: 0;
+		console.log('maxBuffsToShow', this.maxBuffsToShow, this.displayBuff);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async changeWindowSize(): Promise<void> {

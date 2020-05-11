@@ -70,6 +70,17 @@ import { Knob } from '../preference-slider.component';
 						label="Guessed cards"
 						tooltip="Show what card is in the opponent's hand when we know it (after it has been sent back to their hand with a Sap for instance)"
 					></preference-toggle>
+					<preference-toggle
+						field="dectrackerShowOpponentBuff"
+						label="Show buff in hand"
+						tooltip="Show buffs affecting cards in the opponent's hand"
+					></preference-toggle>
+					<preference-toggle
+						[ngClass]="{ 'disabled': !dectrackerShowOpponentBuff }"
+						field="dectrackerLimitOpponentBuff"
+						label="Limit number of buffs"
+						tooltip="Show at most 3 buffs in the opponent's hand"
+					></preference-toggle>
 				</div>
 				<div class="subtitle">Secrets Helper</div>
 				<div class="subgroup">
@@ -122,6 +133,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 	overlayGroupByZone: boolean;
 	opponentOverlayGroupByZone: boolean;
 	opponentTracker: boolean;
+	dectrackerShowOpponentBuff: boolean;
 	secretsHelper: boolean;
 	sizeKnobs: readonly Knob[] = [
 		{
@@ -164,6 +176,8 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 			this.opponentTracker = preferences.opponentTracker;
 			this.secretsHelper = preferences.secretsHelper;
 			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
+			this.dectrackerShowOpponentBuff = preferences.dectrackerShowOpponentBuff;
+			console.log('updated prefs', this.dectrackerShowOpponentBuff, preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -193,6 +207,8 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
 		this.opponentTracker = prefs.opponentTracker;
 		this.secretsHelper = prefs.secretsHelper;
+		this.dectrackerShowOpponentBuff = prefs.dectrackerShowOpponentBuff;
+		// console.log('updated prefs', this.dectrackerShowOpponentBuff, prefs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

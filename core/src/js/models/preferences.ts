@@ -26,6 +26,9 @@ export class Preferences {
 
 	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly dectrackerShowOpponentGuess: boolean = true;
+	readonly dectrackerShowOpponentBuff: boolean = true;
+	readonly dectrackerLimitOpponentBuff: boolean = true;
+	readonly dectrackerMaxOpponentsBuffToShow: number = 3;
 
 	// readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;

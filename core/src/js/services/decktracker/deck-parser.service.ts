@@ -36,13 +36,13 @@ export class DeckParserService {
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		// console.log('will detect active deck from queue?', logLine);
+		console.log('will detect active deck from queue?', logLine);
 		if (this.goingIntoQueueRegex.exec(logLine)) {
-			// console.log('matching, getting active deck');
+			console.log('matching, getting active deck');
 			const activeDeck = await this.memory.getActiveDeck(2);
-			// console.log('active deck after queue', activeDeck);
+			console.log('active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-				// console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}
@@ -177,10 +177,11 @@ export class DeckParserService {
 		try {
 			dbfId = parseInt(pair[0]);
 		} catch (e) {}
-		const card = dbfId !== -1 ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
+		const card =
+			dbfId !== NaN && dbfId !== -1 ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
 		const result: DeckCard[] = [];
 		if (!card) {
-			console.error('Could not build deck card', pair);
+			console.error('Could not build deck card', dbfId, pair);
 			return result;
 		}
 		// Don't include passive buffs in the decklist

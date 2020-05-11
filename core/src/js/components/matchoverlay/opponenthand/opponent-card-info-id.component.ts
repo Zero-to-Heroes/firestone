@@ -11,7 +11,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	template: `
 		<div
 			class="opponent-card-info-id"
-			*ngIf="cardId"
+			*ngIf="cardId && displayGuess"
 			[cardTooltip]="cardId"
 			cardTooltipPosition="right"
 			[cardTooltipText]="createdBy ? 'Created by' : undefined"
@@ -19,7 +19,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		>
 			<img [src]="cardUrl" class="card-image" />
 		</div>
-		<div class="buffs" *ngIf="buffs">
+		<div class="buffs" *ngIf="buffs && displayBuff">
 			<div
 				*ngFor="let buff of buffs"
 				class="buff"
@@ -38,18 +38,40 @@ export class OpponentCardInfoIdComponent {
 	createdBy: boolean;
 	buffs: readonly string[];
 
+	@Input() displayGuess: boolean;
+	@Input() displayBuff: boolean;
+
+	private _buffingCardIds: readonly string[];
+	private _maxBuffsToShow: number;
+
 	@Input() set card(value: DeckCard) {
 		this.cardId = value.cardId || value.creatorCardId;
 		this.createdBy = value.creatorCardId && !value.cardId;
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
+		this._buffingCardIds = value.buffingEntityCardIds;
+		console.log('set buffing card ids', this._buffingCardIds);
+		this.updateBuffs();
+	}
+
+	@Input() set maxBuffsToShow(value: number) {
+		this._maxBuffsToShow = value;
+		console.log('set _maxBuffsToShow', this._maxBuffsToShow);
+		this.updateBuffs();
+	}
+
+	constructor(private logger: NGXLogger, private cdr: ChangeDetectorRef) {}
+
+	private updateBuffs() {
 		this.buffs =
-			value.buffingEntityCardIds && value.buffingEntityCardIds.length > 0 ? value.buffingEntityCardIds : null;
+			this._buffingCardIds && this._buffingCardIds.length > 0
+				? this._maxBuffsToShow > 0
+					? this._buffingCardIds.slice(0, this._maxBuffsToShow)
+					: this._buffingCardIds
+				: null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
-
-	constructor(private logger: NGXLogger, private cdr: ChangeDetectorRef) {}
 }
