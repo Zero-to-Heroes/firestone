@@ -22,6 +22,7 @@ import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
+import { CardBuffedInHandParser } from './event-parser/card-buffed-in-hand-parser';
 import { CardChangedInDeckParser } from './event-parser/card-changed-in-deck-parser';
 import { CardChangedInHandParser } from './event-parser/card-changed-in-hand-parser';
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
@@ -352,14 +353,13 @@ export class GameStateService {
 		// 	emittedEvent,
 		// );
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-		// this.logger.debug(
-		// 	'[game-state] emitted deck event',
-		// 	emittedEvent.event.name,
-		// 	this.state.opponentDeck.secrets,
-		// 	this.state,
-		// 	gameEvent,
-		// );
-		// }
+		this.logger.debug(
+			'[game-state] emitted deck event',
+			emittedEvent.event.name,
+			this.state.opponentDeck.secrets,
+			this.state,
+			gameEvent,
+		);
 	}
 
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
@@ -597,6 +597,7 @@ export class GameStateService {
 			new QuestPlayedFromHandParser(this.helper),
 			new MinionOnBoardAttackUpdatedParser(this.helper),
 			new GalakrondInvokedParser(),
+			new CardBuffedInHandParser(this.helper, this.allCards),
 		];
 	}
 }

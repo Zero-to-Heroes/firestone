@@ -7,6 +7,7 @@ export class DeckCard {
 	readonly manaCost: number;
 	readonly rarity: string;
 	readonly creatorCardId?: string;
+	readonly buffingEntityCardIds?: readonly string[];
 	// readonly totalQuantity: number;
 	// Optional, should only be read when in the Other zone
 	readonly zone:

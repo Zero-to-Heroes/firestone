@@ -2,6 +2,7 @@
 	position: relative;
 	top: 15px;
 	left: -14px;
+	width: 60px;
 }
 
 .opponent-card-info-id {
@@ -24,6 +25,35 @@
 			width: 250%;
 			clip-path: none;
 		}
+	}
+}
+
+.buffs {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	position: relative;
+	top: 3px;
+
+	&:not(:first-child) {
+		top: -6px;
+		left: -5px;
+	}
+}
+
+.buff {
+	background: #07081f;
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed #5a5f87;
+	overflow: hidden;
+	border-radius: 50%;
+
+	img {
+		width: 220%;
 	}
 }
 

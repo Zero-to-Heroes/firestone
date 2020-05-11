@@ -389,6 +389,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'CARD_BUFFED_IN_HAND':
+				// console.log('will emit ', GameEvent.CARD_BUFFED_IN_HAND);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_BUFFED_IN_HAND, gameEvent, {
+						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
+					}),
+				);
+				break;
 			case 'CARD_CREATOR_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_CREATOR_CHANGED, gameEvent, {

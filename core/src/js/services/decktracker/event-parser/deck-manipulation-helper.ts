@@ -277,9 +277,10 @@ export class DeckManipulationHelper {
 	}
 
 	public replaceCardInZone(zone: readonly DeckCard[], newCard: DeckCard): readonly DeckCard[] {
-		const zoneWithoutCard = zone.filter(card => card.entityId !== newCard.entityId);
-		// console.debug('zone without card', zone);
-		return [...zoneWithoutCard, newCard];
+		const cardIndex = zone.map(card => card.entityId).indexOf(newCard.entityId);
+		const newZone = [...zone];
+		newZone[cardIndex] = newCard;
+		return newZone;
 	}
 
 	// We can't always make a connection between the card in hand and the card that started in the deck
