@@ -59,7 +59,7 @@ import { Knob } from '../preference-slider.component';
 					[showCurrentValue]="true"
 					displayedValueUnit=""
 					[min]="700"
-					[max]="5000"
+					[max]="15000"
 					[snapSensitivity]="200"
 					[knobs]="numberOfSimsKnobs"
 				>
