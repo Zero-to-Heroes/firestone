@@ -15,13 +15,13 @@ export class CardBuffedInHandParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.log('buffing card in hand', cardId, controllerId, localPlayer, entityId, gameEvent);
+		// console.log('buffing card in hand', cardId, controllerId, localPlayer, entityId, gameEvent);
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const cardInHand = this.helper.findCardInZone(deck.hand, null, entityId);
-		console.log('card in hand', cardInHand);
+		// console.log('card in hand', cardInHand);
 		const newCardInHand = cardInHand
 			? cardInHand.update({
 					buffingEntityCardIds: [
@@ -30,7 +30,7 @@ export class CardBuffedInHandParser implements EventParser {
 					] as readonly string[],
 			  } as DeckCard)
 			: null;
-		console.log('newCardInHand', newCardInHand);
+		// console.log('newCardInHand', newCardInHand);
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

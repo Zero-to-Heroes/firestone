@@ -109,7 +109,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.maxBuffsToShow = preferences.dectrackerLimitOpponentBuff
 			? preferences.dectrackerMaxOpponentsBuffToShow
 			: 0;
-		console.log('maxBuffsToShow', this.maxBuffsToShow, this.displayBuff);
+		// console.log('maxBuffsToShow', this.maxBuffsToShow, this.displayBuff);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

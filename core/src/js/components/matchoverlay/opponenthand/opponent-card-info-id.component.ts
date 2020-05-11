@@ -38,7 +38,12 @@ export class OpponentCardInfoIdComponent {
 	createdBy: boolean;
 	buffs: readonly string[];
 
-	@Input() displayGuess: boolean;
+	_displayGuess: boolean;
+	_displayBuff: boolean;
+
+	@Input() set displayGuess(value: boolean) {
+		this._displayGuess = value;
+	}
 	@Input() displayBuff: boolean;
 
 	private _buffingCardIds: readonly string[];
@@ -51,13 +56,13 @@ export class OpponentCardInfoIdComponent {
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
 		this._buffingCardIds = value.buffingEntityCardIds;
-		console.log('set buffing card ids', this._buffingCardIds);
+		// console.log('set buffing card ids', this._buffingCardIds);
 		this.updateBuffs();
 	}
 
 	@Input() set maxBuffsToShow(value: number) {
 		this._maxBuffsToShow = value;
-		console.log('set _maxBuffsToShow', this._maxBuffsToShow);
+		// console.log('set _maxBuffsToShow', this._maxBuffsToShow);
 		this.updateBuffs();
 	}
 
