@@ -53,13 +53,12 @@ import { normalizeCardId } from './post-match/card-utils';
 					<div
 						class="header"
 						[helpTooltip]="
-							'Damage dealt and damage taken by this minion card during the run' +
-							(showTooltipWarning(entity)
-								? '. ATTENTION: multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)'
-								: '')
+							showTooltipWarning(entity)
+								? 'Multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)'
+								: null
 						"
 					>
-						Total Dmg
+						Total Dmg <span *ngIf="showTooltipWarning(entity)">*</span>
 					</div>
 					<div class="values">
 						<div class="damage-dealt">{{ getDamageDealt(entity) }}</div>
