@@ -47,7 +47,6 @@ export class BgsBattleSimulationService {
 			battleInfo,
 			prefs.bgsEnableSimulation,
 			prefs.bgsUseLocalSimulator,
-			JSON.stringify(battleInfo, null, 4),
 		);
 
 		const result: BgsBattleSimulationResult = prefs.bgsUseLocalSimulator

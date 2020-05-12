@@ -23,11 +23,17 @@ export class BgsBattleResultParser implements EventParser {
 		if (
 			currentState.currentGame.battleResult &&
 			currentState.currentGame.battleResult.wonPercent != null &&
-			currentState.currentGame.battleResult.wonPercent < 0.05 &&
+			currentState.currentGame.battleResult.wonPercent === 0 &&
 			event.result === 'won'
 		) {
+			console.warn(
+				'no-format',
+				'Impossible battle victory',
+				currentState.currentGame.battleInfo,
+				currentState.currentGame.battleResult,
+			);
 			captureEvent({
-				message: 'Unlikely battle victory',
+				message: 'Impossible battle victory',
 				extra: {
 					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
 					battleResult: JSON.stringify(currentState.currentGame.battleResult),
@@ -37,11 +43,17 @@ export class BgsBattleResultParser implements EventParser {
 		if (
 			currentState.currentGame.battleResult &&
 			currentState.currentGame.battleResult.lostPercent != null &&
-			currentState.currentGame.battleResult.lostPercent < 0.05 &&
+			currentState.currentGame.battleResult.lostPercent === 0 &&
 			event.result === 'lost'
 		) {
+			console.warn(
+				'no-format',
+				'Impossible battle loss',
+				currentState.currentGame.battleInfo,
+				currentState.currentGame.battleResult,
+			);
 			captureEvent({
-				message: 'Unlikely battle loss',
+				message: 'Impossible battle loss',
 				extra: {
 					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
 					battleResult: JSON.stringify(currentState.currentGame.battleResult),
