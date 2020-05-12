@@ -224,7 +224,7 @@ const leaderboardForTurnPopulate = (structure: ParsingStructure, replay: Replay)
 
 const hpForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
 	return currentTurn => {
-		for (const playerCardId of Object.keys(structure.leaderboardPositions)) {
+		for (const playerCardId of Object.keys(structure.playerHps)) {
 			const currentHps = [...(structure.hpOverTurn[playerCardId] || [])];
 			currentHps.push({
 				turn: currentTurn,

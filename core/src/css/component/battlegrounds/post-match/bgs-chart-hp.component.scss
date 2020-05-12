@@ -1,0 +1,151 @@
+:host() {
+	display: flex;
+	flex-direction: column;
+}
+
+.legend {
+	height: 50px;
+	display: flex;
+	margin-bottom: 15px;
+	flex-shrink: 0;
+	flex-grow: 0;
+
+	.item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 25px;
+		font-size: 11px;
+		position: relative;
+
+		.portrait {
+			width: 60px;
+		}
+
+		.position {
+			position: absolute;
+			left: -10px;
+			top: -10px;
+			border-radius: 50%;
+			border: 2px solid var(--legend-icon-border-color);
+			background: var(--legend-icon-background-color);
+			color: var(--legend-icon-border-color);
+			--legend-icon-background-color: var(--color-7);
+			width: 30px;
+			height: 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&.position-1 {
+				--legend-icon-border-color: var(--color-common-2);
+			}
+
+			&.position-2 {
+				--legend-icon-border-color: #ff8a48;
+			}
+
+			&.position-3 {
+				--legend-icon-border-color: #42d8a2;
+			}
+
+			&.position-4 {
+				--legend-icon-border-color: #55d6ff;
+			}
+
+			&.position-5 {
+				--legend-icon-border-color: #4376d8;
+			}
+
+			&.position-6 {
+				--legend-icon-border-color: #b346e7;
+			}
+
+			&.position-7 {
+				--legend-icon-border-color: #f44ccf;
+			}
+
+			&.position-8 {
+				--legend-icon-border-color: #f44c60;
+			}
+
+			&.player {
+				border-color: var(--legend-icon-border-color);
+				background: var(--legend-icon-border-color);
+				color: var(--legend-icon-background-color);
+			}
+		}
+	}
+}
+
+.container-1 {
+	flex-grow: 1;
+	transform: none;
+	position: relative;
+	min-height: 0;
+
+	.container-div {
+		display: flex;
+		min-height: 0;
+		flex-grow: 1;
+	}
+}
+
+::ng-deep {
+	#chartjs-tooltip {
+		position: absolute;
+		height: auto;
+		pointer-events: none;
+
+		.hp-tooltip {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: flex-start;
+			font-family: Open Sans;
+			font-style: normal;
+			font-size: 13px;
+			color: #40032e;
+			min-width: 80px;
+			background: #ce73b4;
+
+			.content {
+				padding: 5px;
+			}
+
+			.tooltip-arrow {
+				position: absolute;
+				left: calc(50% - 14px);
+				width: 16px;
+				height: 9px;
+				fill: #ce73b4;
+				overflow: visible;
+			}
+
+			.title {
+				font-weight: bold;
+			}
+
+			.line {
+				display: flex;
+				align-items: center;
+			}
+
+			.node {
+				width: 6px;
+				height: 6px;
+				border-radius: 50%;
+				margin-right: 5px;
+			}
+		}
+
+		&.top {
+			.tooltip-arrow {
+				position: absolute;
+				transform: rotate(180deg);
+				top: auto;
+				bottom: 5px;
+			}
+		}
+	}
+}

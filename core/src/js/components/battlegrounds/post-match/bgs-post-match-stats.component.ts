@@ -79,7 +79,13 @@ declare let amplitude: any;
 						</li>
 					</ul>
 					<ng-container>
-						<!-- <bgs-chart-hp *ngSwitchCase="'hp-by-turn'" class="stat" [stats]="_panel?.stats"> </bgs-chart-hp> -->
+						<bgs-chart-hp
+							class="stat"
+							[hidden]="selectedTab !== 'hp-by-turn'"
+							[stats]="_panel?.stats"
+							[game]="_game"
+						>
+						</bgs-chart-hp>
 						<bgs-chart-warband-stats
 							class="stat"
 							[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
@@ -188,7 +194,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	getLabel(tab: BgsStatsFilterId): string {
 		switch (tab) {
 			case 'hp-by-turn':
-				return 'HP by turn';
+				return 'Health by turn';
 			case 'stats':
 				return 'Stats';
 			case 'warband-composition-by-turn':

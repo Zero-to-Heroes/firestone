@@ -1,7 +1,5 @@
-.chart-container {
-	flex-grow: 1;
-	position: relative;
-	width: 100%;
-	min-height: 0;
-	display: flex;
+.container {
+	// width: 100%;
+	width: 120%;
+	transform: translateX(-10%);
 }
