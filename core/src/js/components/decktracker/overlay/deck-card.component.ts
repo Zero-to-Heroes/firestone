@@ -40,20 +40,6 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				</div>
 			</div>
 			<div
-				class="icon-symbol graveyard"
-				*ngIf="isGraveyard"
-				[helpTooltip]="'In graveyard'"
-				[bindTooltipToGameWindow]="true"
-			>
-				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
-						</svg>
-					</i>
-				</div>
-			</div>
-			<div
 				class="icon-symbol discard"
 				*ngIf="isDiscarded"
 				[helpTooltip]="'Card discarded'"
@@ -100,6 +86,20 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					<i>
 						<svg>
 							<use xlink:href="assets/svg/sprite.svg#legendary_star" />
+						</svg>
+					</i>
+				</div>
+			</div>
+			<div
+				class="icon-symbol graveyard"
+				*ngIf="isGraveyard"
+				[helpTooltip]="'In graveyard'"
+				[bindTooltipToGameWindow]="true"
+			>
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
 						</svg>
 					</i>
 				</div>
