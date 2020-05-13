@@ -10,13 +10,10 @@ describe('BGS Replay-parser - basic test', () => {
 
 		const stats = reparseReplay(replay);
 
-		// console.debug(stats);
-		// BGS_038
-		// console.log(stats.totalMinionsDamageDealt['BGS_038']);
-		// console.log(stats.totalMinionsDamageDealt['TB_BaconUps_108']);
-
 		expect(stats).not.toBe(null);
-		expect(stats.totalMinionsDamageDealt['BGS_038']).toBe(5 + 5 + 4 + 5 + 6 + 6 + 6);
-		expect(stats.totalMinionsDamageTaken['BGS_038']).toBe(3 + 11 + 8 + 4 + 6 + 6 + 2 + 11);
+		console.debug(stats.hpOverTurn['TB_BaconShop_HERO_56']);
+
+		expect(stats.hpOverTurn['TB_BaconShop_HERO_56'].length).toBe(14);
+		expect(stats.hpOverTurn['TB_BaconShop_HERO_56'][13].value).toBeLessThanOrEqual(0);
 	});
 });

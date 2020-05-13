@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { extractTotalDamageDealtToEnemyHero, Replay } from '@firestone-hs/hs-replay-xml-parser';
-import { BlockType, CardType, GameTag, MetaTags, Step, Zone } from '@firestone-hs/reference-data';
+import { BlockType, CardType, GameTag, MetaTags, PlayState, Step, Zone } from '@firestone-hs/reference-data';
 import { Element } from 'elementtree';
 import { Map } from 'immutable';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
@@ -454,6 +454,15 @@ const parseElement = (
 				turnCountWrapper.currentTurn++;
 			}
 			// console.log('board for turn', structure.currentTurn, mainPlayerId, '\n', playerEntitiesOnBoard);
+		}
+		if (
+			parseInt(element.get('tag')) === GameTag.PLAYSTATE &&
+			[PlayState.WON, PlayState.LOST].indexOf(parseInt(element.get('value'))) !== -1
+		) {
+			if (element.get('entity') === opponentPlayerEntityId) {
+				populateFunctions.forEach(populateFunction => populateFunction(turnCountWrapper.currentTurn));
+				turnCountWrapper.currentTurn++;
+			}
 		}
 	}
 
