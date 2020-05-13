@@ -49,7 +49,8 @@ export class DeckParserService {
 	}
 
 	public async getCurrentDeck(): Promise<any> {
-		if (this.currentDeck) {
+		// console.log('[deck-parser] getting current deck', this.currentDeck);
+		if (this.currentDeck?.deck) {
 			return this.currentDeck;
 		}
 		if (this.memory) {
@@ -107,12 +108,12 @@ export class DeckParserService {
 		}
 		match = this.deckstringRegex.exec(data);
 		if (match) {
-			// console.log('[decks] parsing deckstring', match);
+			//console.log('[decks] parsing deckstring', match);
 			this.currentDeck = this.currentDeck || {};
 			this.currentDeck.deckstring = match[1];
-			// console.log('[decks] current deck', this.currentDeck);
+			//console.log('[decks] current deck', this.currentDeck);
 			this.decodeDeckString();
-			// console.log('[decks] deckstring decoded', this.currentDeck);
+			//console.log('[decks] deckstring decoded', this.currentDeck);
 			return;
 		}
 	}
