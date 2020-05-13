@@ -39,53 +39,50 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol graveyard" *ngIf="isGraveyard" [helpTooltip]="'In graveyard'">
-				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
-						</svg>
-					</i>
-				</div>
-			</div>
 			<div class="icon-symbol discard" *ngIf="isDiscarded" [helpTooltip]="'Card discarded'">
-				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_discarded" />
-						</svg>
-					</i>
+				<div class="icon-symbol trasnformed" *ngIf="isTransformed" [helpTooltip]="'Card transformed'">
+					<div class="inner-border">
+						<i>
+							<svg>
+								<use xlink:href="assets/svg/sprite.svg#card_transformed" />
+							</svg>
+						</i>
+					</div>
 				</div>
-			</div>
-			<div class="icon-symbol trasnformed" *ngIf="isTransformed" [helpTooltip]="'Card transformed'">
-				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_transformed" />
-						</svg>
-					</i>
+				<div
+					class="gift-symbol"
+					*ngIf="creatorCardIds && creatorCardIds.length > 0"
+					[helpTooltip]="giftTooltip"
+				>
+					<div class="inner-border">
+						<i>
+							<svg>
+								<use xlink:href="assets/svg/sprite.svg#card_gift_icon" />
+							</svg>
+						</i>
+					</div>
 				</div>
-			</div>
-			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0" [helpTooltip]="giftTooltip">
-				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_gift_icon" />
-						</svg>
-					</i>
+				<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
+					<div class="inner-border">
+						<i>
+							<svg>
+								<use xlink:href="assets/svg/sprite.svg#legendary_star" />
+							</svg>
+						</i>
+					</div>
 				</div>
-			</div>
-			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
-				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#legendary_star" />
-						</svg>
-					</i>
+				<div class="icon-symbol graveyard" *ngIf="isGraveyard" [helpTooltip]="'In graveyard'">
+					<div class="inner-border">
+						<i>
+							<svg>
+								<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
+							</svg>
+						</i>
+					</div>
 				</div>
+				<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
+				<div class="mouse-over"></div>
 			</div>
-			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
-			<div class="mouse-over"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
