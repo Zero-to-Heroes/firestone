@@ -116,7 +116,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 			enabled: false,
 			custom: function(tooltip) {
 				// Tooltip Element
-				var tooltipEl = document.getElementById('chartjs-tooltip');
+				let tooltipEl = document.getElementById('chartjs-tooltip');
 
 				if (!tooltipEl) {
 					tooltipEl = document.createElement('div');
@@ -132,10 +132,10 @@ export class BgsChartHpComponent implements AfterViewInit {
 				}
 
 				// Hide if no tooltip
-				// if (tooltip.opacity === 0) {
-				// 	tooltipEl.style.opacity = '0';
-				// 	return;
-				// }
+				if (tooltip.opacity === 0) {
+					tooltipEl.style.opacity = '0';
+					return;
+				}
 
 				// Set caret Position
 				tooltipEl.classList.remove('above', 'below', 'no-transform');
@@ -147,10 +147,10 @@ export class BgsChartHpComponent implements AfterViewInit {
 
 				// Set Text
 				if (tooltip.body) {
-					var titleLines = tooltip.title || [];
-					var bodyLines = tooltip.beforeBody;
+					const titleLines = tooltip.title || [];
+					const bodyLines = tooltip.beforeBody;
 
-					var innerHtml = '<div class="title">';
+					let innerHtml = '<div class="title">';
 
 					titleLines.forEach(function(title) {
 						innerHtml += '<span>' + title + '</span>';
@@ -159,32 +159,32 @@ export class BgsChartHpComponent implements AfterViewInit {
 					innerHtml += '<div class="body">';
 
 					bodyLines.forEach(function(body, i) {
-						var colors = tooltip.labelColors[i];
+						const colors = tooltip.labelColors[i];
 						// console.log('colors for', i, colors, body);
 						innerHtml += '<span class="line">' + body + '</span>';
 					});
 					innerHtml += '</div>';
 
-					var tableRoot = tooltipEl.querySelector('.content');
+					const tableRoot = tooltipEl.querySelector('.content');
 					tableRoot.innerHTML = innerHtml;
 				}
 
-				var positionY = this._chart.canvas.offsetTop;
-				var positionX = this._chart.canvas.offsetLeft;
+				const positionY = this._chart.canvas.offsetTop;
+				const positionX = this._chart.canvas.offsetLeft;
 
-				var position = 'bottom';
-				console.log(
-					'adjusting?',
-					tooltip,
-					this._chart.canvas.height,
-					positionY,
-					tooltip.caretY,
-					tooltip.height,
-				);
+				let position = 'bottom';
+				// console.log(
+				// 	'adjusting?',
+				// 	tooltip,
+				// 	this._chart.canvas.height,
+				// 	positionY,
+				// 	tooltip.caretY,
+				// 	tooltip.height,
+				// );
 				const tooltipHeight = 220;
 				if (positionY + tooltip.caretY + tooltipHeight > this._chart.canvas.height) {
 					position = 'top';
-					console.log('will adjust');
+					// console.log('will adjust');
 					tooltipEl.classList.remove('bottom');
 					tooltipEl.classList.add('top');
 				} else {
@@ -199,7 +199,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 				tooltipEl.style.top =
 					position === 'bottom'
 						? positionY + tooltip.caretY + 4 + 'px'
-						: positionY + tooltip.caretY + 4 - 203 + 24 + 'px';
+						: positionY + tooltip.caretY + 4 - 203 + 24 - 51 + 'px';
 				tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
 				tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
 				tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
@@ -207,7 +207,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 			},
 			callbacks: {
 				title: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					console.log('title for', item, data);
+					// console.log('title for', item, data);
 					return 'Turn ' + item[0].label;
 					// return data.datasets[item[0].datasetIndex].label;
 				},
@@ -308,7 +308,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 			.map(player => player.cardId);
 		console.log('playerOrder', playerOrder);
 		const hpOverTurn = {};
-		for (let playerCardId of playerOrder) {
+		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
 		}
 		console.log('hpOverTurn', hpOverTurn);
