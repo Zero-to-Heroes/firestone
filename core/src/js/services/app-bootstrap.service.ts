@@ -265,7 +265,7 @@ export class AppBootstrapService {
 			amplitude.getInstance().logEvent('beta', { 'feature': 'battlegroundsShowLastOpponentBoard' });
 		}
 		// Log an event for each of the prefs
-		console.log('pref status', prefs);
+		console.log('no-format', 'pref status', prefs);
 		amplitude.getInstance().logEvent('preferences', {
 			...prefs,
 		});
