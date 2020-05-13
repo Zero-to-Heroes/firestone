@@ -148,7 +148,7 @@ export class GameStateService {
 				.decktrackerDisplayEventBus;
 			decktrackerDisplayEventBus.subscribe(event => {
 				this.showDecktracker = event;
-				// this.logger.debug('decktracker display update', event);
+				this.logger.debug('decktracker display update', event);
 				this.updateOverlays();
 			});
 		});
@@ -381,7 +381,7 @@ export class GameStateService {
 			return;
 		}
 		const prefs = await this.prefs.getPreferences();
-		const inGame = (await this.ow.inGame()) && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
+		const inGame = await this.ow.inGame(); // && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
 		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
@@ -397,7 +397,15 @@ export class GameStateService {
 				(this.state.playerDeck.hand && this.state.playerDeck.hand.length > 0) ||
 				(this.state.playerDeck.board && this.state.playerDeck.board.length > 0) ||
 				(this.state.playerDeck.otherZone && this.state.playerDeck.otherZone.length > 0));
-		// console.log('[game-state] should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
+		// console.log(
+		// 	'[game-state] should show tracker?',
+		// 	inGame,
+		// 	shouldShowTracker,
+		// 	decktrackerWindow.window_state_ex,
+		// 	this.showDecktracker,
+		// 	this.state,
+		// 	this.closedByUser,
+		// );
 		if (
 			inGame &&
 			shouldShowTracker &&
