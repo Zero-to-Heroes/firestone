@@ -445,8 +445,9 @@ const parseElement = (
 	parseFunctions.forEach(parseFunction => parseFunction(element));
 	if (element.tag === 'TagChange') {
 		if (
-			parseInt(element.get('tag')) === GameTag.NEXT_STEP &&
-			parseInt(element.get('value')) === Step.MAIN_START_TRIGGERS
+			(parseInt(element.get('tag')) === GameTag.NEXT_STEP &&
+				parseInt(element.get('value')) === Step.MAIN_START_TRIGGERS) ||
+			parseInt(element.get('tag')) === GameTag.GOLD_REWARD_STATE
 		) {
 			// console.log('considering parent', parent.get('entity'), parent);
 			if (parent && parent.get('entity') === opponentPlayerEntityId) {
