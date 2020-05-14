@@ -86,14 +86,14 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 		this.settingsSubscription.unsubscribe();
 	}
 
-	onAppSelected(selectedApp: string) {
-		this.selectedApp = selectedApp;
+	onAppSelected(selectedApp: string, selectedMenu?: string) {
+		this.selectApp(selectedApp, selectedMenu);
 	}
 
-	selectApp(selectedApp: string, selectedMenu: string) {
+	selectApp(selectedApp: string, selectedMenu?: string) {
 		console.log('selectApp', selectedApp, selectedMenu);
 		this.selectedApp = selectedApp;
-		this.selectedMenu = selectedMenu;
+		this.selectedMenu = selectedMenu || this.getDefaultMenu(selectedApp);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -102,5 +102,23 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 	@HostListener('mousedown', ['$event'])
 	dragMove(event: MouseEvent) {
 		this.ow.dragMove(this.thisWindowId);
+	}
+
+	private getDefaultMenu(selectedApp: string): string {
+		switch (selectedApp) {
+			case 'general':
+				return 'launch';
+			case 'achievements':
+				return 'notifications';
+			case 'collection':
+				return 'notification';
+			case 'decktracker':
+				return 'your-deck';
+			case 'replays':
+				return 'general';
+			case 'battlegrounds':
+				return 'general';
+		}
+		return null;
 	}
 }

@@ -2,6 +2,10 @@
 	display: flex;
 	width: 100%;
 
+	settings-achievements-notifications {
+		flex-grow: 1;
+	}
+
 	settings-achievements-capture {
 		flex-grow: 1;
 		display: flex;
