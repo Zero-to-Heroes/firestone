@@ -46,7 +46,16 @@ export abstract class SetProvider {
 			.filter(achievement => this.supportsAchievement(mergedAchievements, achievement.id))
 			.filter(achievement => this.isAchievementVisualRoot(achievement))
 			.map((achievement, index) => this.convertToVisual(achievement, index, mergedAchievements))
-			.map(obj => obj.achievement);
+			.map(obj => obj.achievement)
+			.sort((a, b) => {
+				if (a.id < b.id) {
+					return -1;
+				}
+				if (a.id > b.id) {
+					return 1;
+				}
+				return 0;
+			});
 		// console.log('[perf] returning result');
 		return fullAchievements;
 	}
