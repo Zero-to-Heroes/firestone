@@ -21,7 +21,7 @@ declare let amplitude: any;
 				<div class="value">
 					{{ battleSimulationResultWin }}
 				</div>
-				<div class="damage" helpTooltip="Average damage dealt">
+				<div class="damage" helpTooltip="Average damage dealt" *ngIf="damageWon != null">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
@@ -51,7 +51,7 @@ declare let amplitude: any;
 				<div class="value">
 					{{ battleSimulationResultLose }}
 				</div>
-				<div class="damage" helpTooltip="Average damage received">
+				<div class="damage" helpTooltip="Average damage received" *ngIf="damageLost != null">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
@@ -90,6 +90,8 @@ export class BgsBattleStatusComponent {
 			this.battleSimulationResultWin = '--';
 			this.battleSimulationResultTie = '--';
 			this.battleSimulationResultLose = '--';
+			this.damageWon = null;
+			this.damageLost = null;
 		} else if (value === 'waiting-for-result') {
 			// console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
