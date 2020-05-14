@@ -381,7 +381,7 @@ export class GameStateService {
 			return;
 		}
 		const prefs = await this.prefs.getPreferences();
-		const inGame = await this.ow.inGame(); // && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
+		const inGame = (await this.ow.inGame()) && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
 		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
