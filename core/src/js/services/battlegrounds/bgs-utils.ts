@@ -77,6 +77,12 @@ export class BgsUtils {
 				return 'TB_BaconShop_HP_063';
 			case 'TB_BaconShop_HERO_58':
 				return 'TB_BaconShop_HP_052';
+			case 'TB_BaconShop_HERO_60':
+				return 'TB_BaconShop_HP_066';
+			case 'TB_BaconShop_HERO_61':
+				return 'TB_BaconShop_HP_067';
+			case 'TB_BaconShop_HERO_62':
+				return 'TB_BaconShop_HP_068';
 		}
 	}
 }
