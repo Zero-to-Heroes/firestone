@@ -11,7 +11,9 @@ export const normalizeCardId = (cardId: string, allCards: AllCardsService) => {
 			.filter(card => card.name === premiumCard.name);
 		if (normalCards.length !== 1) {
 			// When the card is reprinted for BGS
-			const bgsOnly = normalCards.filter(card => card.id.startsWith('BGS'));
+			const bgsOnly = normalCards
+				.filter(card => card.id.startsWith('BGS'))
+				.filter(card => card.set !== 'Wild_event');
 			if (bgsOnly.length > 0) {
 				normalCards = bgsOnly;
 			}
