@@ -6,7 +6,7 @@ import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
 declare let amplitude;
 
-const REPLAY_API = 'https://s3-us-west-2.amazonaws.com/com.zerotoheroes.output/';
+const REPLAY_API = 'http://xml.firestoneapp.com/';
 
 @Component({
 	selector: 'game-replay',
