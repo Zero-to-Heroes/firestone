@@ -31,6 +31,7 @@ import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
+import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
 import { EventParser } from './event-parsers/_event-parser';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
@@ -47,6 +48,7 @@ import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
 import { BgsTripleCreatedEvent } from './events/bgs-triple-created-event';
 import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
+import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 
 @Injectable()
@@ -119,7 +121,7 @@ export class BattlegroundsStoreService {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
 		} else if (['closed', 'hidden'].indexOf(window.stateEx) === -1) {
-			// console.log('[bgs-store] closing overlay', shouldShowOverlay, inGame, window);
+			// console.log('[bgs-store] hiding BVS window', window);
 			this.closedByUser = true;
 			await this.ow.hideWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
@@ -131,13 +133,14 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId));
-			} else if (
-				gameEvent.type === GameEvent.MATCH_METADATA &&
-				gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS
-			) {
-				this.battlegroundsUpdater.next(new BgsMatchStartEvent());
-				// } else if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
-				// this.battlegroundsUpdater.next(new BgsHeroSelectionDoneEvent());
+			} else if (gameEvent.type === GameEvent.MATCH_METADATA) {
+				if (gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS) {
+					this.battlegroundsUpdater.next(new BgsMatchStartEvent());
+					// } else if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
+					// this.battlegroundsUpdater.next(new BgsHeroSelectionDoneEvent());
+				} else {
+					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
+				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
 				this.maybeHandleNextOpponent(gameEvent);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
@@ -243,6 +246,10 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
+		if (gameEvent.type === 'BgsCloseWindowEvent') {
+			this.closedByUser = true;
+			this.updateOverlay();
+		}
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state)) {
@@ -268,9 +275,13 @@ export class BattlegroundsStoreService {
 	}
 
 	private async updateOverlay() {
-		const inGame = this.state && this.state.inGame;
-
 		const battlegroundsWindow = await this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW);
+		// Minimize is only triggered by a user action, so if they minimize it we don't touch it
+		if (battlegroundsWindow.window_state_ex === 'minimized') {
+			return;
+		}
+
+		const inGame = this.state && this.state.inGame;
 		// console.warn(battlegroundsWindow);
 		if (
 			inGame &&
@@ -283,14 +294,15 @@ export class BattlegroundsStoreService {
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
 		// In fact we don't want to close the window when the game ends
-		// else if (['closed', 'hidden'].indexOf(battlegroundsWindow.stateEx) === -1 && (!this.bgsActive || !inGame)) {
-		// 	console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
-		// 	await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
-		// }
+		else if (['closed'].indexOf(battlegroundsWindow.stateEx) === -1 && this.closedByUser) {
+			console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
+			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+		}
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
 		return [
+			new NoBgsMatchParser(),
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(),
 			new BgsHeroSelectionParser(),

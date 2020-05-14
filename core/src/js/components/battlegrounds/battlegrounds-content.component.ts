@@ -13,6 +13,7 @@ import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-sta
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../models/battlegrounds/bgs-stage';
 import { Preferences } from '../../models/preferences';
+import { BgsCloseWindowEvent } from '../../services/battlegrounds/store/events/bgs-close-window-event';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -48,7 +49,7 @@ declare let amplitude: any;
 						[windowId]="windowId"
 						[doubleClickListenerParentClass]="'menu-bar'"
 					></control-maximize>
-					<control-close [windowId]="windowId"></control-close>
+					<control-close [windowId]="windowId" [eventProvider]="closeHandler"></control-close>
 				</div>
 			</section>
 			<section class="content-container">
@@ -85,6 +86,8 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	enableSimulation: boolean;
 	windowId: string;
 
+	closeHandler: () => void;
+
 	@Input() set state(value: BattlegroundsState) {
 		this._state = value;
 		this.currentStage = value?.stages?.find(stage => stage.id === value.currentStageId);
@@ -110,6 +113,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.handleDisplayPreferences(event.preferences);
 		});
+		this.closeHandler = () => this.battlegroundsUpdater.next(new BgsCloseWindowEvent());
 		await this.handleDisplayPreferences();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
