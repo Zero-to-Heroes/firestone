@@ -11,20 +11,53 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="battle-simulation">
-			<div class="winning-chance">
-				<div class="label">Your chance of winning<span class="tie">(tie)</span></div>
-				<div class="value" [helpTooltip]="temporaryBattleTooltip">
-					{{ battleSimulationResult }}<span class="tie">({{ battleSimulationResultTie }})</span>
+			<div class="win item">
+				<div
+					class="label"
+					helpTooltip="Your chances of winning the current battle (assumes all hero powers are active)"
+				>
+					Win
+				</div>
+				<div class="value">
+					{{ battleSimulationResultWin }}
+				</div>
+				<div class="damage" helpTooltip="Average damage dealt">
+					<div class="damage-icon">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
+						</svg>
+					</div>
+					<div class="damage-value">{{ damageWon }}</div>
 				</div>
 			</div>
-			<div class="damage">
-				<div class="label">Avg damage</div>
-				<div class="win" helpTooltip="Expected average damage in case you win the fight">
-					{{ damageWon }}
+			<div class="tie item">
+				<div
+					class="label"
+					helpTooltip="Your chances of tying the current battle (assumes all hero powers are active)"
+				>
+					Tie
 				</div>
-				<div class="separation">-</div>
-				<div class="lose" helpTooltip="Expected average damage in case you lose the fight">
-					{{ damageLost }}
+				<div class="value">
+					{{ battleSimulationResultTie }}
+				</div>
+			</div>
+			<div class="lose item">
+				<div
+					class="label"
+					helpTooltip="Your chances of losing the current battle (assumes all hero powers are active)"
+				>
+					Loss
+				</div>
+				<div class="value">
+					{{ battleSimulationResultLose }}
+				</div>
+				<div class="damage" helpTooltip="Average damage received">
+					<div class="damage-icon">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
+						</svg>
+					</div>
+					<div class="damage-value">{{ damageLost }}</div>
 				</div>
 			</div>
 		</div>
@@ -32,8 +65,9 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattleStatusComponent {
-	battleSimulationResult: string;
+	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
+	battleSimulationResultLose: string;
 	temporaryBattleTooltip: string;
 	damageWon: string;
 	damageLost: string;
@@ -53,13 +87,16 @@ export class BgsBattleStatusComponent {
 		if (!value || value === 'empty') {
 			// console.log('result empty', value);
 			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
-			this.battleSimulationResult = '--';
+			this.battleSimulationResultWin = '--';
 			this.battleSimulationResultTie = '--';
+			this.battleSimulationResultLose = '--';
 		} else if (value === 'waiting-for-result') {
 			// console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.tempInterval = setInterval(() => {
-				this.battleSimulationResult = (99 * Math.random()).toFixed(1) + '%';
+				this.battleSimulationResultWin = (99 * Math.random()).toFixed(1) + '%';
+				this.battleSimulationResultTie = (99 * Math.random()).toFixed(1) + '%';
+				this.battleSimulationResultLose = (99 * Math.random()).toFixed(1) + '%';
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -78,8 +115,9 @@ export class BgsBattleStatusComponent {
 		this._previousBattle = value;
 		// console.log('setting next battle', value);
 		if (value?.wonPercent != null) {
-			this.battleSimulationResult = value.wonPercent.toFixed(1) + '%';
+			this.battleSimulationResultWin = value.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = value.tiedPercent.toFixed(1) + '%';
+			this.battleSimulationResultLose = value.lostPercent.toFixed(1) + '%';
 			this.damageWon = value.averageDamageWon?.toFixed(1);
 			this.damageLost = value.averageDamageLost?.toFixed(1);
 		}

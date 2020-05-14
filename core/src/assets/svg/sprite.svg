@@ -109,6 +109,12 @@
 		<circle cx="10" cy="10" r="9.5" stroke="var(--icon-color, currentcolor)"/>
 		<path d="M10 13C8.3 13 7 11.7 7 10C7 8.3 8.3 7 10 7C11.7 7 13 8.3 13 10C13 11.7 11.7 13 10 13Z" fill="var(--icon-color-secondary, currentcolor)"/>
 	</symbol>
+	<symbol id="sword" viewBox="0 0 25 25">
+		<path d="M11.3162 16.0522L8.94792 13.6839L18.2238 4.40806L21.1842 3.81599L20.5921 6.77637L11.3162 16.0522Z" fill="var(--icon-color, currentcolor)"/>
+		<path d="M13.6496 18.7805L6.18769 11.3185C5.96969 11.1005 5.61625 11.1005 5.39825 11.3185C5.18026 11.5365 5.18026 11.89 5.39825 12.108L12.8602 19.5699C13.0782 19.7879 13.4316 19.7879 13.6496 19.5699C13.8676 19.3519 13.8676 18.9985 13.6496 18.7805Z" fill="var(--icon-color, currentcolor)"/>
+		<path d="M9.50757 16.613L8.35352 15.459L4.99842 18.8141L6.15248 19.9681L9.50757 16.613Z" fill="var(--icon-color, currentcolor)"/>
+		<rect x="4.60547" y="18.1484" width="3.01698" height="1.31579" transform="rotate(45 4.60547 18.1484)" fill="var(--icon-color, currentcolor)"/>
+	</symbol>
 	<!-- 26x22 -->
 	<symbol id="cards_in_hand" viewBox="0 0 26 22">
 		<rect x="3.39191" y="5.90792" width="8.51924" height="12.4023" transform="rotate(-14.6618 3.39191 5.90792)" fill="#101530" stroke="#9FB6D7" stroke-width="0.8"/>
