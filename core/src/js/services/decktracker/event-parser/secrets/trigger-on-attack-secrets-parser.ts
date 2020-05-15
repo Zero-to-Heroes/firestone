@@ -156,7 +156,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
 			}
 		}
-		console.log('considering secret', isDefenderMinion, isDefenderDivineShield, gameEvent);
+		// console.log('considering secret', isDefenderMinion, isDefenderDivineShield, gameEvent);
 		const allEntities = [
 			gameEvent.gameState.Player.Hero,
 			...gameEvent.gameState.Player.Board,
