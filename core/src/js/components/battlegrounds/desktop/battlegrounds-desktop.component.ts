@@ -16,9 +16,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 								<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
 							</svg>
 						</i>
-						<span class="title">Battlegrounds in-game app is now live!</span>
+						<span class="title">Battlegrounds in-game app is now live! </span>
 						<span class="subtitle"
-							>Start a run to play with it, and further stats will be coming along soon</span
+							>It will show up as another window once you start a Battlegrounds run (it's only available
+							during a Battlegrounds run), and this page will have Battlegrounds stats in the
+							future.</span
 						>
 					</div>
 				</with-loading>
