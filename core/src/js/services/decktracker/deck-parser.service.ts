@@ -179,10 +179,10 @@ export class DeckParserService {
 			dbfId = parseInt(pair[0]);
 		} catch (e) {}
 		const card =
-			dbfId !== NaN && dbfId !== -1 ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
+			!isNaN(dbfId) && dbfId !== -1 ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
 		const result: DeckCard[] = [];
 		if (!card) {
-			console.error('Could not build deck card', dbfId, pair);
+			console.error('Could not build deck card', dbfId, isNaN(dbfId), dbfId !== -1, pair);
 			return result;
 		}
 		// Don't include passive buffs in the decklist
