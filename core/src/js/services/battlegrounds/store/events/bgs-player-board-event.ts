@@ -6,6 +6,7 @@ export class BgsPlayerBoardEvent extends BattlegroundsStoreEvent {
 		public readonly board: readonly any[],
 		public readonly hero: any,
 		public readonly heroPowerCardId: string,
+		public readonly heroPowerUsed: boolean,
 	) {
 		super('BgsPlayerBoardEvent');
 	}

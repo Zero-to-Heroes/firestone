@@ -749,16 +749,16 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_PLAYER_BOARD':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_PLAYER_BOARD,
 						additionalData: {
-							// turn =
 							cardId: gameEvent.Value.CardId,
 							board: gameEvent.Value.Board, // as is
 							hero: gameEvent.Value.Hero, // as is
 							heroPowerCardId: gameEvent.Value.HeroPowerCardId,
+							heroPowerUsed: gameEvent.Value.HeroPowerUsed,
 						},
 					} as GameEvent),
 				);

@@ -166,6 +166,7 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.board,
 						gameEvent.additionalData.hero,
 						gameEvent.additionalData.heroPowerCardId,
+						gameEvent.additionalData.heroPowerUsed,
 					),
 				);
 				// } else if (gameEvent.type === GameEvent.MAIN_STEP_READY) {
@@ -263,7 +264,7 @@ export class BattlegroundsStoreService {
 					}
 				}
 			} catch (e) {
-				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e);
+				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e.message, e);
 			}
 		}
 	}
