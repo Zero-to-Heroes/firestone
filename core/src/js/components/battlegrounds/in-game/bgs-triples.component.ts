@@ -13,9 +13,9 @@ declare let amplitude: any;
 	template: `
 		<div class="triples-section">
 			<div class="title" *ngIf="tierTriples?.length">New triples</div>
-			<div class="triple-tiers" *ngIf="tierTriples?.length > 0">
+			<div class="triple-tiers">
 				<div
-					*ngFor="let triple of tierTriples"
+					*ngFor="let triple of tierTriples || []; trackBy: trackByFn"
 					class="triple"
 					[helpTooltip]="
 						'That player got ' +
@@ -48,6 +48,10 @@ export class BgsTriplesComponent {
 	@Input() set boardTurn(value: number) {
 		this._boardTurn = value;
 		this.filterTriples();
+	}
+
+	trackByFn(index, item: { minionTier: number; quantity: number }) {
+		return item.minionTier;
 	}
 
 	private filterTriples() {

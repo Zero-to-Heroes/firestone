@@ -108,8 +108,6 @@ declare let amplitude: any;
 							[stats]="_panel?.stats"
 						>
 						</bgs-chart-warband-composition>
-						<!-- <bgs-chart-stats *ngSwitchCase="'stats'" class="stat" [stats]="_panel?.stats">
-						</bgs-chart-stats> -->
 					</ng-container>
 				</div>
 			</div>
