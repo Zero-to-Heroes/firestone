@@ -21,12 +21,12 @@ declare let amplitude: any;
 						'That player got ' +
 						triple.quantity +
 						' tier ' +
-						triple.minionTier +
+						(triple.minionTier + 1) +
 						' minions since last time you fought them'
 					"
 				>
 					<div class="number">x{{ triple.quantity }}</div>
-					<tavern-level-icon [level]="triple.minionTier" class="tavern"></tavern-level-icon>
+					<tavern-level-icon [level]="triple.minionTier + 1" class="tavern"></tavern-level-icon>
 				</div>
 			</div>
 			<div class="subtitle" *ngIf="!tierTriples?.length">No new triple since the last encounter</div>
