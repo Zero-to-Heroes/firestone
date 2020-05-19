@@ -36,13 +36,13 @@ export class DeckParserService {
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		console.log('will detect active deck from queue?', logLine);
+		// console.log('will detect active deck from queue?', logLine);
 		if (this.goingIntoQueueRegex.exec(logLine)) {
-			console.log('matching, getting active deck');
+			// console.log('matching, getting active deck');
 			const activeDeck = await this.memory.getActiveDeck(2);
-			console.log('active deck after queue', activeDeck);
+			// console.log('active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+				// console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}

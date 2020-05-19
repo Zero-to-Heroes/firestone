@@ -243,7 +243,7 @@ export class MainWindowStoreService {
 			}
 			if (newState) {
 				this.state = newState;
-				// console.log('emitting new state', stateWithNavigation);
+				// console.log('emitting new state', newState);
 				this.stateEmitter.next(this.state);
 				if (Date.now() - start > 1000) {
 					this.logger.warn(
