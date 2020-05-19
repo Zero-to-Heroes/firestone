@@ -19,7 +19,8 @@
 		position: relative;
 
 		.portrait {
-			width: 60px;
+			max-width: 60px;
+			width: 4vw;
 		}
 
 		.position {
@@ -73,6 +74,75 @@
 				border-color: var(--legend-icon-border-color);
 				background: var(--legend-icon-border-color);
 				color: var(--legend-icon-background-color);
+			}
+		}
+	}
+}
+
+.toggles {
+	display: flex;
+	flex-wrap: wrap;
+	border-left: 1px solid var(--color-3);
+	margin-left: calc(1.5vw - 20px);
+	padding-left: 1.5vw;
+	min-width: 240px;
+	color: var(--color-6);
+	font-size: 14px;
+	align-items: center;
+
+	.toggle {
+		margin-right: 1vw;
+
+		input {
+			display: none;
+		}
+		label {
+			display: flex;
+
+			p {
+				margin-right: 4px;
+			}
+
+			i {
+				width: 20px;
+				height: 20px;
+			}
+
+			svg {
+				fill: transparent;
+				--icon-color-secondary: var(--legend-icon-border-color);
+			}
+
+			&.position-1 {
+				--legend-icon-border-color: var(--color-common-2);
+			}
+
+			&.position-2 {
+				--legend-icon-border-color: #ff8a48;
+			}
+
+			&.position-3 {
+				--legend-icon-border-color: #42d8a2;
+			}
+
+			&.position-4 {
+				--legend-icon-border-color: #55d6ff;
+			}
+
+			&.position-5 {
+				--legend-icon-border-color: #4376d8;
+			}
+
+			&.position-6 {
+				--legend-icon-border-color: #b346e7;
+			}
+
+			&.position-7 {
+				--legend-icon-border-color: #f44ccf;
+			}
+
+			&.position-8 {
+				--legend-icon-border-color: #f44c60;
 			}
 		}
 	}

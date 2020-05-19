@@ -34,6 +34,32 @@ declare let amplitude: any;
 					#{{ player.position }}
 				</div>
 			</div>
+			<div class="toggles">
+				<div *ngFor="let player of legend" class="toggle position">
+					<input
+						type="checkbox"
+						name="player-toggled-{{ player.position }}"
+						id="player-toggled-{{ player.position }}"
+					/>
+					<label
+						for="player-toggled-{{ player.position }}"
+						class="position-{{ player.position }}"
+						(click)="togglePlayer(player.cardId)"
+					>
+						<p>#{{ player.position }}</p>
+						<i class="unselected" *ngIf="!player.shown">
+							<svg>
+								<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+							</svg>
+						</i>
+						<i class="checked" *ngIf="player.shown">
+							<svg>
+								<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+							</svg>
+						</i>
+					</label>
+				</div>
+			</div>
 		</div>
 		<div class="container-1">
 			<div style="display: block; position: relative; height: 100%; width: 100%;">
@@ -59,7 +85,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
 	playerColors = ['#FFB948', '#FF8A48', '#42D8A2', '#55D6FF', '#4376D8', '#B346E7', '#F44CCF', '#F44C60'];
-	legend: readonly { cardId: string; icon: string; position: number; isPlayer: boolean }[];
+	legend: readonly { cardId: string; icon: string; position: number; isPlayer: boolean; shown: boolean }[];
 
 	chartWidth: number;
 	chartHeight: number;
@@ -268,6 +294,18 @@ export class BgsChartHpComponent implements AfterViewInit {
 		}
 	}
 
+	togglePlayer(playerCardId: string) {
+		this.legend = this.legend.map(playerInfo =>
+			playerInfo.cardId === playerCardId ? { ...playerInfo, shown: !playerInfo.shown } : playerInfo,
+		);
+		this.lineChartData = this.lineChartData.map(data =>
+			(data as any).cardId === playerCardId ? { ...data, hidden: !data.hidden } : data,
+		);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	previousWidth: number;
 
 	@HostListener('window:resize')
@@ -317,6 +355,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${cardId}.png`,
 			position: playerOrder.indexOf(cardId) + 1,
 			isPlayer: cardId === this._game.getMainPlayer().cardId,
+			shown: true,
 		}));
 
 		this.lineChartData = await this.buildChartData(hpOverTurn);
@@ -345,6 +384,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 			borderJoinStyle: 'miter',
 			lineTension: 0,
 			borderWidth: 2,
+			hidden: false,
 		}));
 	}
 
