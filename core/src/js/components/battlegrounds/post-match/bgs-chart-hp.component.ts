@@ -252,7 +252,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 						const playerName = this.allCards.getCard((dataForPlayer as any).cardId).name;
 						const playerItem = item[datasetIndex];
 						const color = this.playerColors[datasetIndex];
-						return `<div class="node" style="background: ${color}"></div> ${playerItem.value} health`;
+						return `<div class="node" style="background: ${color}"></div> ${playerItem?.value} health`;
 					});
 				},
 				label: (item: ChartTooltipItem, data: ChartData): string | string[] => {
