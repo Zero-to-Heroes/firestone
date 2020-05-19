@@ -29,7 +29,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="container">
-			<div class="content empty-state" *ngIf="!_panel?.player">
+			<div class="content empty-state" *ngIf="!_panel?.isComputing && !_panel?.player">
 				<i>
 					<svg>
 						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
@@ -38,7 +38,15 @@ declare let amplitude: any;
 				<span class="title">Nothing here yet</span>
 				<span class="subtitle">Finish the run to get some stats!</span>
 			</div>
-			<div class="content" *ngIf="_panel?.player">
+			<div class="content empty-state" *ngIf="_panel?.isComputing">
+				<i>
+					<svg>
+						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
+					</svg>
+				</i>
+				<span class="title">We are building the post-match stats, it should only take a few seconds</span>
+			</div>
+			<div class="content" *ngIf="!_panel?.isComputing && _panel?.player">
 				<div class="opponent-overview">
 					<div class="background-additions">
 						<div class="top"></div>

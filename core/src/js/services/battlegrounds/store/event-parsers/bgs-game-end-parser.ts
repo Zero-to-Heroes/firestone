@@ -75,12 +75,8 @@ export class BgsGameEndParser implements EventParser {
 			globalStats: currentState.globalStats,
 			player: currentState.currentGame.getMainPlayer(),
 			selectedStat: 'warband-composition-by-turn',
-			tabs: [
-				'hp-by-turn',
-				'warband-total-stats-by-turn',
-				'warband-composition-by-turn',
-				// 'stats',
-			],
+			tabs: ['hp-by-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
+			isComputing: false,
 			name: 'You finished #' + finalPosition,
 		} as BgsPostMatchStatsPanel);
 	}

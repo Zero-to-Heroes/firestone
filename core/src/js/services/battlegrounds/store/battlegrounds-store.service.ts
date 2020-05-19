@@ -28,6 +28,7 @@ import { BgsOpponentRevealedParser } from './event-parsers/bgs-opponent-revealed
 import { BgsPlayerBoardParser } from './event-parsers/bgs-player-board-parser';
 import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-match-stats-filter-change-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
+import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
@@ -45,6 +46,7 @@ import { BgsMatchStartEvent } from './events/bgs-match-start-event';
 import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
 import { BgsOpponentRevealedEvent } from './events/bgs-opponent-revealed-event';
 import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
+import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
 import { BgsTripleCreatedEvent } from './events/bgs-triple-created-event';
 import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
@@ -197,6 +199,8 @@ export class BattlegroundsStoreService {
 				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {
 				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
+				console.log('[bgs-store] Game ended');
+				this.battlegroundsUpdater.next(new BgsStartComputingPostMatchStatsEvent());
 				this.battlegroundsUpdater.next(new BgsGameEndEvent(gameEvent.additionalData.replayXml));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
@@ -254,10 +258,11 @@ export class BattlegroundsStoreService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state)) {
+					console.log('parser will apply for', gameEvent.type);
 					const newState = await parser.parse(this.state, gameEvent);
 					if (newState !== this.state) {
 						this.state = newState;
-						// console.log('updated state', gameEvent.type, this.state, gameEvent);
+						console.log('updated state after', gameEvent.type);
 						this.battlegroundsStoreEventBus.next(this.state);
 						// this.battlegroundsStoreEventBus.
 						this.updateOverlay();
@@ -326,6 +331,7 @@ export class BattlegroundsStoreService {
 			new BgsLeaderboardPlaceParser(),
 			new BgsCombatStartParser(),
 			new BgsGlobalInfoUpdatedParser(),
+			new BgsStartComputingPostMatchStatsParser(),
 		];
 	}
 }
