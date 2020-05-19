@@ -25,6 +25,7 @@ export class BgsStartComputingPostMatchStatsParser implements EventParser {
 			stages: stages,
 			currentStageId: 'post-match',
 			currentPanelId: 'bgs-post-match-stats',
+			forceOpen: true,
 		} as BattlegroundsState);
 	}
 

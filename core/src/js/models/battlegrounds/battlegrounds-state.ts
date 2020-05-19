@@ -12,6 +12,7 @@ export class BattlegroundsState {
 	readonly globalStats: BgsStats;
 	readonly currentGame: BgsGame;
 	readonly inGame: boolean;
+	readonly forceOpen: boolean;
 	readonly postMatchStats: BgsPostMatchStats;
 
 	public static create(base: BattlegroundsState): BattlegroundsState {

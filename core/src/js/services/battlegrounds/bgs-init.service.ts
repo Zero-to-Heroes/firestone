@@ -34,6 +34,7 @@ export class BgsInitService {
 		const bgsMatchStats = matchStats.stats.filter(stat => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
 			console.log('no bgs match stats', matchStats);
+			this.stateUpdater.next(new BgsInitEvent([], bgsGlobalStats));
 			return;
 		}
 		const buildNumber = bgsMatchStats[0].buildNumber;

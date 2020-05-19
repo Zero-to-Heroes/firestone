@@ -253,16 +253,19 @@ export class BattlegroundsStoreService {
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
 			this.closedByUser = true;
+			this.state = this.state.update({
+				forceOpen: false,
+			} as BattlegroundsState);
 			this.updateOverlay();
 		}
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state)) {
-					console.log('parser will apply for', gameEvent.type);
+					// console.log('parser will apply for', gameEvent.type);
 					const newState = await parser.parse(this.state, gameEvent);
 					if (newState !== this.state) {
 						this.state = newState;
-						console.log('updated state after', gameEvent.type);
+						// console.log('updated state after', gameEvent.type);
 						this.battlegroundsStoreEventBus.next(this.state);
 						// this.battlegroundsStoreEventBus.
 						this.updateOverlay();
@@ -283,25 +286,34 @@ export class BattlegroundsStoreService {
 	private async updateOverlay() {
 		const battlegroundsWindow = await this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW);
 		// Minimize is only triggered by a user action, so if they minimize it we don't touch it
-		if (battlegroundsWindow.window_state_ex === 'minimized') {
+		if (battlegroundsWindow.window_state_ex === 'minimized' && !this.state.forceOpen) {
 			return;
 		}
 
 		const inGame = this.state && this.state.inGame;
 		// console.warn(battlegroundsWindow);
+		// console.log(
+		// 	'[bgs-store] forcing display?',
+		// 	inGame,
+		// 	this.bgsActive,
+		// 	battlegroundsWindow.window_state_ex,
+		// 	this.state.forceOpen,
+		// 	this.closedByUser,
+		// );
 		if (
 			inGame &&
 			this.bgsActive &&
-			['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) !== -1 &&
-			!this.closedByUser
+			(this.state.forceOpen ||
+				(['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) !== -1 && !this.closedByUser))
 		) {
+			// console.log('[bgs-store] showing window');
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
 		// In fact we don't want to close the window when the game ends
 		else if (['closed'].indexOf(battlegroundsWindow.stateEx) === -1 && this.closedByUser) {
-			console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
+			// console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
 	}
