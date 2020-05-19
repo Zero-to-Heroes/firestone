@@ -96,7 +96,7 @@ export class BgsChartWarbandCompositionComponent {
 		// console.log('[warband-composition] setting value', value);
 		this._stats = value;
 		this.setStats(value);
-		this.onResize();
+		window.dispatchEvent(new Event('resize'));
 	}
 
 	constructor(
