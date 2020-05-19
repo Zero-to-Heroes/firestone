@@ -19,7 +19,7 @@ export class AchievementCompletedProcessor implements Processor {
 		event: AchievementCompletedEvent,
 		currentState: MainWindowState,
 	): Promise<[MainWindowState, NavigationState]> {
-		// console.log('[achievement-completed-processor] ready to handle event', event, currentState);
+		console.log('[achievement-completed-processor] ready to handle event', event, currentState);
 		const achievement = event.achievement;
 		const historyItem = {
 			achievementId: achievement.id,
@@ -29,9 +29,9 @@ export class AchievementCompletedProcessor implements Processor {
 			creationTimestamp: Date.now(),
 			displayName: achievement.displayName,
 		} as AchievementHistory;
-		console.log('[achievement-completed-processor] saving history item', historyItem);
+		console.log('[achievement-completed-processor] saving history item', historyItem, currentState.achievements);
 		this.historyStorage.save(historyItem);
-		const newHistory = [historyItem, ...currentState.achievements.achievementHistory];
+		const newHistory = [historyItem, ...(currentState.achievements.achievementHistory || [])];
 		// console.log('[achievement-completed-processor] ready to update achievement', achievement);
 		const newAchievementState: AchievementsState = currentState.achievements.updateAchievement(achievement);
 		console.log('[achievement-completed-processor] rebuilt achievement state', newAchievementState);

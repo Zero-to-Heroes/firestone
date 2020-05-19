@@ -32,13 +32,17 @@ export class AchievementRecordedProcessor implements Processor {
 		const replayInfo: ReplayInfo = event.replayInfo;
 		const cachedAchievement = await this.saveReplayInfo(achievementId, replayInfo);
 		// console.log('[achievement-recorded-processor] cachedAchievement', cachedAchievement);
+		if (!currentState.achievements.globalCategories) {
+			console.error('no global category when processing recorded achievement', currentState.achievements);
+			return [currentState, navigationState];
+		}
 		const newGlobalCategories = this.updateGlobalCategories(
 			currentState.achievements.globalCategories,
 			achievementId,
 			replayInfo,
 		);
 		// console.log('[achievement-recorded-processor] newGlobalCategories', newGlobalCategories);
-		const newState = this.achievementStateHelper.updateStateFromNewGlobalCategories(
+		const [newState, newNavigationState] = this.achievementStateHelper.updateStateFromNewGlobalCategories(
 			currentState.achievements,
 			navigationState.navigationAchievements,
 			newGlobalCategories,
