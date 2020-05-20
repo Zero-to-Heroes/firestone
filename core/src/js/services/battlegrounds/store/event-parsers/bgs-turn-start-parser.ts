@@ -38,7 +38,7 @@ export class BgsTurnStartParser implements EventParser {
 		const panelToRebuild: BgsNextOpponentOverviewPanel = (stageToRebuild.panels.find(
 			panel => panel.id === 'bgs-next-opponent-overview',
 		) as BgsNextOpponentOverviewPanel).update({
-			name: `Next opponent - Turn ${newCurrentTurn}`,
+			name: `Turn ${newCurrentTurn} - Next opponent`,
 		} as BgsNextOpponentOverviewPanel);
 
 		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>

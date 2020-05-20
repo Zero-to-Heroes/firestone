@@ -57,7 +57,7 @@ export class BgsNextOpponentParser implements EventParser {
 		const currentTurn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		return BgsNextOpponentOverviewPanel.create({
 			opponentOverview: opponentOverview,
-			name: `Next opponent - Turn ${currentTurn}`,
+			name: `Turn ${currentTurn} - Next opponent`,
 		} as BgsNextOpponentOverviewPanel);
 	}
 }
