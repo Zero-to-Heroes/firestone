@@ -109,8 +109,8 @@
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,
-				"size": { "width": 1170, "height": 720 },
-				"min_size": { "width": 1170, "height": 720 },
+				"size": { "width": 1130, "height": 700 },
+				"min_size": { "width": 1130, "height": 700 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true
