@@ -39,26 +39,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div
-				class="icon-symbol discard"
-				*ngIf="isDiscarded"
-				[helpTooltip]="'Card discarded'"
-				[bindTooltipToGameWindow]="true"
-			>
-				<div class="inner-border">
-					<i>
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#card_discarded" />
-						</svg>
-					</i>
-				</div>
-			</div>
-			<div
-				class="icon-symbol trasnformed"
-				*ngIf="isTransformed"
-				[helpTooltip]="'Card transformed'"
-				[bindTooltipToGameWindow]="true"
-			>
+			<div class="icon-symbol transformed" *ngIf="isTransformed" [helpTooltip]="'Card transformed'">
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -67,12 +48,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div
-				class="gift-symbol"
-				*ngIf="creatorCardIds && creatorCardIds.length > 0"
-				[helpTooltip]="giftTooltip"
-				[bindTooltipToGameWindow]="true"
-			>
+			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0" [helpTooltip]="giftTooltip">
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -90,12 +66,16 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div
-				class="icon-symbol graveyard"
-				*ngIf="isGraveyard"
-				[helpTooltip]="'In graveyard'"
-				[bindTooltipToGameWindow]="true"
-			>
+			<div class="icon-symbol discard" *ngIf="isDiscarded" [helpTooltip]="'Card discarded'">
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_discarded" />
+						</svg>
+					</i>
+				</div>
+			</div>
+			<div class="icon-symbol graveyard" *ngIf="isGraveyard" [helpTooltip]="'In graveyard'">
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -149,6 +129,7 @@ export class DeckCardComponent {
 		this.giftTooltip = null;
 		this.updateGiftTooltip();
 		this.highlight = card.highlight;
+		// console.log('setting card', this.highlight, card.cardName, card);
 		this.isBurned = card.zone === 'BURNED';
 		this.isDiscarded = card.zone === 'DISCARD';
 		this.isGraveyard = card.zone === 'GRAVEYARD';

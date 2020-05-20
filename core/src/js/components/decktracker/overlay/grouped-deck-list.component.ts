@@ -68,6 +68,7 @@ export class GroupedDeckListComponent {
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	private buildGroupedList() {
+		// console.log('darken used cards', this._darkenUsedCards);
 		// When we don't have the decklist, we just show all the cards in hand + deck
 		//console.log('building grouped list from state', this._deckState);
 		const knownDeck = this._deckState.deck;
