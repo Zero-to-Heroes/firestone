@@ -41,7 +41,7 @@ declare let amplitude: any;
 					[currentTurn]="currentTurn"
 					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
-					[debug]="debug"
+					[maxBoardHeight]="1"
 				></bgs-board>
 			</div>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>

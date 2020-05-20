@@ -104,15 +104,15 @@ export class BgsBoardComponent implements AfterViewInit {
 		// - in common.js, this causes NgForOf.prototype._applyChanges to try and get a view with a negative index
 		// Resetting the view first seems to do the trick. This is fine since we almost never capitalize on the
 		// fact that items that move around are kept alive in these cases
-		this._entities = !entities ? undefined : [];
-		setTimeout(() => {
-			this._entities = entities;
-			this.previousBoardWidth = undefined;
-			this.onResize();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// this._entities = !entities ? undefined : [];
+		// setTimeout(() => {
+		this._entities = entities;
+		this.previousBoardWidth = undefined;
+		this.onResize();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		// });
 	}
 
 	@Input('enchantmentCandidates') set enchantmentCandidates(value: readonly Entity[]) {
@@ -126,6 +126,7 @@ export class BgsBoardComponent implements AfterViewInit {
 	}
 
 	private previousBoardWidth: number;
+	private previousBoardHeight: number;
 	private setValidCardElements: boolean;
 	// private previousNumberOfEntities: number;
 
@@ -141,6 +142,9 @@ export class BgsBoardComponent implements AfterViewInit {
 			// console.log('after view init');
 		}
 		setTimeout(() => {
+			// if (this.debug) {
+			// 	console.log('after view init');
+			// }
 			this.onResize();
 		}, 100);
 		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
@@ -184,39 +188,53 @@ export class BgsBoardComponent implements AfterViewInit {
 			return;
 		}
 		const rect = boardContainer.getBoundingClientRect();
+		// if (this.debug) {
+		// 	console.log('board container', boardContainer, rect);
+		// }
 		if (!rect.width || !rect.height) {
+			if (this.debug) {
+				console.log('no dimensions, retrying');
+			}
 			setTimeout(() => this.onResize(), 1000);
 			return;
 		}
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
 		if (cardElements.length !== (this._entities?.length || 0)) {
-			// if (this.debug) {
-			// 	console.log('card elements not displayed yet', cardElements, this._entities);
-			// }
+			if (this.debug) {
+				console.log('card elements not displayed yet', cardElements, this._entities);
+			}
 			setTimeout(() => this.onResize(), 300);
 			return;
 		}
 		// We have to resize even though we have the same number of entities, because the resize is
 		// set on the DOM elements, which are teared down and recreated
-		if (this.previousBoardWidth === rect.width && this.setValidCardElements) {
+		if (
+			this.previousBoardWidth === rect.width &&
+			this.previousBoardHeight === rect.height &&
+			this.setValidCardElements
+		) {
+			if (this.debug) {
+				console.log('all good', this.previousBoardWidth, rect);
+			}
 			return;
 		}
-		// if (this.debug) {
-		// 	console.log('updated board width', rect.width, this.previousBoardWidth, this.setValidCardElements);
-		// }
+		if (this.debug) {
+			console.log('updated board width', rect.width, this.previousBoardWidth, this.setValidCardElements);
+		}
 		this.previousBoardWidth = rect.width;
-		let cardWidth = rect.width / 8;
+		this.previousBoardHeight = rect.height;
+		let cardWidth = rect.width / 7;
 		let cardHeight = 1.48 * cardWidth;
 		if (cardHeight > rect.height * this.maxBoardHeight) {
-			// if (this.debug) {
-			// 	console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
-			// }
+			if (this.debug) {
+				console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
+			}
 			cardHeight = rect.height * this.maxBoardHeight;
 			cardWidth = cardHeight / 1.48;
 		}
-		// if (this.debug) {
-		// 	console.log('will set card dimensions', cardWidth, cardHeight);
-		// }
+		if (this.debug) {
+			console.log('will set card dimensions', cardWidth, cardHeight);
+		}
 		for (const cardElement of cardElements) {
 			this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 			this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
@@ -236,9 +254,9 @@ export class BgsBoardComponent implements AfterViewInit {
 			// }
 		}
 		// Continue resizing until the board size has stabilized
-		// if (this.debug) {
-		// 	console.log('continuing resize loop');
-		// }
+		if (this.debug) {
+			console.log('continuing resize loop');
+		}
 		setTimeout(() => this.onResize(), 300);
 	}
 

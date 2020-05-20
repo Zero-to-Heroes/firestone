@@ -8,6 +8,7 @@
 	display: flex;
 	align-content: center;
 	justify-content: space-evenly;
+	justify-content: flex-start;
 	list-style: none;
 	padding: 0;
 	margin: 0;
@@ -20,6 +21,7 @@
 
 .minion-container {
 	width: 11%;
+	margin-right: 3.5%;
 }
 
 li {

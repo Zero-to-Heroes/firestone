@@ -76,7 +76,8 @@
 			justify-content: space-evenly;
 
 			::ng-deep bgs-board .board {
-				padding-bottom: 20px;
+				margin-bottom: 20px;
+				height: 7vw;
 			}
 		}
 
