@@ -21,7 +21,7 @@ import { PreferencesService } from '../../services/preferences.service';
 	template: `
 		<div class="container">
 			<button class="settings-advanced-toggle" (click)="toggleAdvancedSettings()">
-				{{ advancedModeToggledOn ? 'Back to standard mode' : 'Show advanced settings' }}
+				{{ advancedModeToggledOn ? 'Hide advanced settings' : 'Show advanced settings' }}
 			</button>
 		</div>
 	`,
