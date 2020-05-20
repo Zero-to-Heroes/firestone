@@ -16,4 +16,8 @@
 		position: relative;
 		top: 5px;
 	}
+
+	::ng-deep bgs-hero-portrait .health .value {
+		font-size: 16px;
+	}
 }
