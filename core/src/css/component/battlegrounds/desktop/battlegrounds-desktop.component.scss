@@ -50,10 +50,12 @@ loading-state {
 	min-height: 0;
 	overflow: hidden;
 	font-size: 13px;
+	max-width: 500px;
+	margin: auto;
 
 	i {
-		width: 30vw;
-		height: 20vw;
+		width: 22vw;
+		height: 25vw;
 		margin-bottom: 30px;
 		--icon-color: var(--color-1);
 	}
@@ -65,6 +67,7 @@ loading-state {
 
 	.subtitle {
 		color: var(--color-1);
+		text-align: center;
 	}
 
 	svg {
