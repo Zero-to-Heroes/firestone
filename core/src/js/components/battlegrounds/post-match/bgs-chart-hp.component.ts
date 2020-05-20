@@ -139,6 +139,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 			yPadding: 5,
 			caretSize: 10,
 			caretPadding: 2,
+			cornerRadius: 0,
 			enabled: false,
 			custom: function(tooltip) {
 				// Tooltip Element

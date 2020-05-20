@@ -91,9 +91,10 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 			caretSize: 10,
 			caretPadding: 2,
 			displayColors: false,
+			cornerRadius: 0,
 			callbacks: {
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					return ['Turn: ' + item[0].label, 'Stats: ' + item[0].value];
+					return ['Turn ' + item[0].label, 'Stats ' + item[0].value];
 				},
 				label: (tooltipItem: ChartTooltipItem, data: ChartData): string | string[] => {
 					return null;

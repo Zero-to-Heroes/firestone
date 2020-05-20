@@ -112,6 +112,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 			yPadding: 5,
 			caretSize: 10,
 			caretPadding: 2,
+			cornerRadius: 0,
 			displayColors: false,
 			callbacks: {
 				title: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
