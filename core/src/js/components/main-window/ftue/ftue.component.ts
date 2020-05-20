@@ -66,7 +66,7 @@ export class FtueComponent implements AfterViewInit {
 			id: 'collection',
 			title: 'Collection',
 			text:
-				'Here your can find all the cards in the game, with detailed information (you can even play the sounds they make)',
+				'Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)',
 			icon: `/Files/assets/svg/ftue/collection.svg`,
 			progressIndex: 1,
 		},
