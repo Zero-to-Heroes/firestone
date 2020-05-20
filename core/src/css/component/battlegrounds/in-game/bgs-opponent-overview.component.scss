@@ -41,6 +41,10 @@
 		margin-right: 3%;
 		overflow: hidden;
 		overflow: visible;
+
+		::ng-deep bgs-board .board {
+			height: 3vw;
+		}
 	}
 
 	bgs-triples {
