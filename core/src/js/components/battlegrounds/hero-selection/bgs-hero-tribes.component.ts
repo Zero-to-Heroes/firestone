@@ -35,16 +35,16 @@ export class BgsHeroTribesComponent {
 
 	@Input() set hero(value: BgsHeroOverview) {
 		this._hero = value;
-		this.tribes = [];
-		setTimeout(() => {
-			this.tribes = [...value.tribesStat]
-				.sort((a, b) => b.percent - a.percent)
-				.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
-				.slice(0, 5);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// this.tribes = [];
+		// setTimeout(() => {
+		this.tribes = [...value.tribesStat]
+			.sort((a, b) => b.percent - a.percent)
+			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
+			.slice(0, 5);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		// });
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { groupByFunction } from '../../../services/utils';
 
@@ -63,16 +63,16 @@ export class BgsTriplesComponent {
 			triplesSinceLastBoard,
 		);
 		// See bgs-board
-		this.tierTriples = [];
-		setTimeout(() => {
-			this.tierTriples = Object.keys(groupedByTier).map(minionTier => ({
-				minionTier: parseInt(minionTier),
-				quantity: groupedByTier[minionTier].length as number,
-			}));
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// this.tierTriples = [];
+		// setTimeout(() => {
+		this.tierTriples = Object.keys(groupedByTier).map(minionTier => ({
+			minionTier: parseInt(minionTier),
+			quantity: groupedByTier[minionTier].length as number,
+		}));
+		// 	if (!(this.cdr as ViewRef)?.destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// });
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

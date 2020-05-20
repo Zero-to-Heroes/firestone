@@ -47,58 +47,58 @@ export class BgsHeroSelectionOverviewComponent {
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.heroCardId !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroOverview) => overview.tier);
 		const groupedByTier: BgsHeroOverview[][] = Object.values(groupingByTier(allOverviews));
-		this.tiers = [];
-		this.heroOverviews = [];
 		if (!value?.heroOptionCardIds || !groupedByTier) {
 			return;
 		}
-		setTimeout(() => {
-			this.tiers = [
-				{
-					tier: 'S' as BgsHeroTier,
-					heroes: groupedByTier
-						.find(heroes => heroes.find(hero => hero.tier === 'S'))
-						?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
-				},
-				{
-					tier: 'A' as BgsHeroTier,
-					heroes: groupedByTier
-						.find(heroes => heroes.find(hero => hero.tier === 'A'))
-						?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
-				},
-				{
-					tier: 'B' as BgsHeroTier,
-					heroes: groupedByTier
-						.find(heroes => heroes.find(hero => hero.tier === 'B'))
-						?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
-				},
-				{
-					tier: 'C' as BgsHeroTier,
-					heroes: groupedByTier
-						.find(heroes => heroes.find(hero => hero.tier === 'C'))
-						?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
-				},
-				{
-					tier: 'D' as BgsHeroTier,
-					heroes: groupedByTier
-						.find(heroes => heroes.find(hero => hero.tier === 'D'))
-						?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
-				},
-			].filter(tier => tier.heroes);
-			// console.log('setting hero overviews', this._panel);
-			this.heroOverviews = this._panel.heroOptionCardIds
-				.map(cardId => this._panel.heroOverview.find(overview => overview.heroCardId === cardId))
-				// Add null-safe in case the heroes have been updated but not the code
-				.filter(hero => hero);
-			if (this.heroOverviews.length === 2) {
-				this.heroOverviews = [null, ...this.heroOverviews, null];
-			} else if (this.heroOverviews.length === 3) {
-				this.heroOverviews = [...this.heroOverviews, null];
-			}
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// this.tiers = [];
+		// this.heroOverviews = [];
+		// setTimeout(() => {
+		this.tiers = [
+			{
+				tier: 'S' as BgsHeroTier,
+				heroes: groupedByTier
+					.find(heroes => heroes.find(hero => hero.tier === 'S'))
+					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+			},
+			{
+				tier: 'A' as BgsHeroTier,
+				heroes: groupedByTier
+					.find(heroes => heroes.find(hero => hero.tier === 'A'))
+					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+			},
+			{
+				tier: 'B' as BgsHeroTier,
+				heroes: groupedByTier
+					.find(heroes => heroes.find(hero => hero.tier === 'B'))
+					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+			},
+			{
+				tier: 'C' as BgsHeroTier,
+				heroes: groupedByTier
+					.find(heroes => heroes.find(hero => hero.tier === 'C'))
+					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+			},
+			{
+				tier: 'D' as BgsHeroTier,
+				heroes: groupedByTier
+					.find(heroes => heroes.find(hero => hero.tier === 'D'))
+					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+			},
+		].filter(tier => tier.heroes);
+		// console.log('setting hero overviews', this._panel);
+		this.heroOverviews = this._panel.heroOptionCardIds
+			.map(cardId => this._panel.heroOverview.find(overview => overview.heroCardId === cardId))
+			// Add null-safe in case the heroes have been updated but not the code
+			.filter(hero => hero);
+		if (this.heroOverviews.length === 2) {
+			this.heroOverviews = [null, ...this.heroOverviews, null];
+		} else if (this.heroOverviews.length === 3) {
+			this.heroOverviews = [...this.heroOverviews, null];
+		}
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		// });
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

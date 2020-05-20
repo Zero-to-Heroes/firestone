@@ -42,30 +42,30 @@ export class BgsHeroFaceOffsComponent {
 	}
 
 	@Input() set players(value: readonly BgsPlayer[]) {
-		this.opponents = [];
-		setTimeout(() => {
-			this.opponents = value
-				.filter(player => !player.isMainPlayer)
-				.sort((a, b) => {
-					if (a.leaderboardPlace < b.leaderboardPlace) {
-						return -1;
-					}
-					if (b.leaderboardPlace < a.leaderboardPlace) {
-						return 1;
-					}
-					if (a.damageTaken < b.damageTaken) {
-						return -1;
-					}
-					if (b.damageTaken < a.damageTaken) {
-						return 1;
-					}
-					return 0;
-				});
+		// this.opponents = [];
+		// setTimeout(() => {
+		this.opponents = value
+			.filter(player => !player.isMainPlayer)
+			.sort((a, b) => {
+				if (a.leaderboardPlace < b.leaderboardPlace) {
+					return -1;
+				}
+				if (b.leaderboardPlace < a.leaderboardPlace) {
+					return 1;
+				}
+				if (a.damageTaken < b.damageTaken) {
+					return -1;
+				}
+				if (b.damageTaken < a.damageTaken) {
+					return 1;
+				}
+				return 0;
+			});
 
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		// });
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

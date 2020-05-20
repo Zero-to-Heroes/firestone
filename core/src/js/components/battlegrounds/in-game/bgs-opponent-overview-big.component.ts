@@ -106,17 +106,17 @@ export class BgsOpponentOverviewBigComponent {
 		this.tavernTier = value.getCurrentTavernTier();
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
-		this.tavernUpgrades = [];
+		// this.tavernUpgrades = [];
 		this.triples = value.tripleHistory;
-		setTimeout(() => {
-			this.tavernUpgrades = value.tavernUpgradeHistory;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// setTimeout(() => {
+		this.tavernUpgrades = value.tavernUpgradeHistory;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+		// });
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	private _opponent: BgsPlayer;
