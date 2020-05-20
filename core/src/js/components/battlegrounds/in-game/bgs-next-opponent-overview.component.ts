@@ -96,7 +96,7 @@ export class BgsNextOpponentOverviewComponent {
 	) {}
 
 	ngAfterViewInit() {
-		console.log('after view init in next-opponent(view');
+		// console.log('after view init in next-opponent(view');
 	}
 
 	trackByOpponentInfoFn(index, item: BgsPlayer) {

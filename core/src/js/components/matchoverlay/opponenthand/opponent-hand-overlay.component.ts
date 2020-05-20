@@ -93,7 +93,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('handled after view init');
+		// console.log('handled after view init');
 	}
 
 	ngOnDestroy(): void {

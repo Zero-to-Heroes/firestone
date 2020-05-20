@@ -10,7 +10,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { default as isEqual, default as sortBy } from 'lodash-es/sortBy';
+import { default as sortBy } from 'lodash-es/sortBy';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
@@ -182,7 +182,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
-		console.log('after view init', isEqual(1, 1));
+		// console.log('after view init', isEqual(1, 1));
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
 		singleEls.forEach(singleEl => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
