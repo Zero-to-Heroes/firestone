@@ -29,6 +29,8 @@ export class TwitchAuthService {
 		'twitch-emitter',
 	);
 
+	private lastProcessTimestamp: number = 0;
+
 	constructor(
 		private prefs: PreferencesService,
 		private http: HttpClient,
@@ -48,6 +50,11 @@ export class TwitchAuthService {
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
+		// Debounce events
+		if (Date.now() - this.lastProcessTimestamp < 1000) {
+			return eventQueue;
+		}
+		this.lastProcessTimestamp = Date.now();
 		const mostRecentEvent = eventQueue[eventQueue.length - 1];
 		await this.emitEvent(mostRecentEvent);
 		return [];
@@ -96,6 +103,7 @@ export class TwitchAuthService {
 			// console.log('no twitch access token, returning');
 			return;
 		}
+		console.log('sending twitch event', newEvent);
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			() => {
