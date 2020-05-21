@@ -29,7 +29,7 @@ export class TwitchAuthService {
 		'twitch-emitter',
 	);
 
-	private lastProcessTimestamp: number = 0;
+	private lastProcessTimestamp = 0;
 
 	constructor(
 		private prefs: PreferencesService,
