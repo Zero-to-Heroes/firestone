@@ -301,7 +301,7 @@ export class BattlegroundsStoreService {
 		) {
 			//console.log('[bgs-store] showing window', battlegroundsWindow);
 			if (this.state.forceOpen) {
-				this.state = this.state.update({forceOpen: false } as BattlegroundsState);
+				this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
 			}
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
