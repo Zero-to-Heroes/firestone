@@ -14,6 +14,7 @@ export class BgsMatchStartParser implements EventParser {
 		return currentState.update({
 			inGame: true,
 			currentGame: newGame,
+			forceOpen: true,
 		} as BattlegroundsState);
 	}
 }

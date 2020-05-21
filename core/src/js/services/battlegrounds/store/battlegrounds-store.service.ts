@@ -293,15 +293,11 @@ export class BattlegroundsStoreService {
 
 		const inGame = this.state && this.state.inGame;
 		// console.warn(battlegroundsWindow);
-		if (
-			inGame &&
-			this.bgsActive &&
-			(this.state.forceOpen ||
-				(['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) !== -1 && !this.closedByUser))
-		) {
+		if (inGame && this.bgsActive && this.state.forceOpen) {
 			//console.log('[bgs-store] showing window', battlegroundsWindow);
 			if (this.state.forceOpen) {
 				this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
+				this.closedByUser = false;
 			}
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
