@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Events } from './events.service';
-import { OverwolfService, ListenObject } from './overwolf.service';
+import { ListenObject, OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class LogListenerService {
@@ -83,7 +83,7 @@ export class LogListenerService {
 			this.fileInitiallyPresent = false;
 			setTimeout(() => {
 				this.listenOnFileCreation(logsLocation);
-			}, 1000);
+			}, 2000);
 		}
 	}
 
