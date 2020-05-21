@@ -72,13 +72,13 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 					<preference-toggle
 						field="dectrackerShowOpponentBuff"
-						label="Show buff in hand"
-						tooltip="Show buffs affecting cards in the opponent's hand"
+						label="Show buff in hand (beta)"
+						tooltip="Show buffs affecting cards in the opponent's hand (the design is still being worked on)"
 					></preference-toggle>
 					<preference-toggle
 						[ngClass]="{ 'disabled': !dectrackerShowOpponentBuff }"
 						field="dectrackerLimitOpponentBuff"
-						label="Limit number of buffs"
+						label="Limit number of buffs (beta)"
 						tooltip="Show at most 3 buffs in the opponent's hand"
 					></preference-toggle>
 				</div>
