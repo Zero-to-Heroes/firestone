@@ -22,7 +22,11 @@ declare let amplitude: any;
 						triple.quantity +
 						' tier ' +
 						(triple.minionTier + 1) +
-						' minions since last time you fought them'
+						' minions (and ' +
+						triple.quantity +
+						' tier ' +
+						triple.minionTier +
+						' golden minions) since last time you fought them'
 					"
 				>
 					<div class="number">x{{ triple.quantity }}</div>
