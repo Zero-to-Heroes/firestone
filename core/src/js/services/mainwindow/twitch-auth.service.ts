@@ -103,7 +103,7 @@ export class TwitchAuthService {
 			// console.log('no twitch access token, returning');
 			return;
 		}
-		console.log('sending twitch event', newEvent);
+		// console.log('sending twitch event', newEvent);
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			() => {
