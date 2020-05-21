@@ -18,7 +18,7 @@
 	top: -30px;
 
 	.title {
-		font-size: 25px;
+		font-size: var(--variable-title-font-size-big);
 		color: var(--color-8);
 		display: flex;
 		margin-bottom: 20px;
