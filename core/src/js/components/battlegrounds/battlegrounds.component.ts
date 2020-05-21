@@ -26,8 +26,8 @@ declare let amplitude: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true">
-			<battlegrounds-content [state]="state" *ngIf="cardsLoaded"> </battlegrounds-content>
 			<ads [parentComponent]="'battlegrounds'"></ads>
+			<battlegrounds-content [state]="state" *ngIf="cardsLoaded"> </battlegrounds-content>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -30,10 +30,11 @@
 	flex-shrink: 1;
 	width: calc(100% - 410px);
 	min-height: 0;
-	overflow: hidden;
+	// overflow: hidden;
 	// So that the divine shields are the top are not truncated
 	padding-top: 20px;
 	position: relative;
+	z-index: 1;
 }
 
 .opponent-overview {
@@ -99,7 +100,7 @@
 
 .left {
 	width: 400px;
-	height: calc(100% - 290px);
+	height: calc(100% - 300px);
 	flex-shrink: 0;
 	order: 2;
 	font-size: 20px;
