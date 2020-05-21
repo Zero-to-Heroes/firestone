@@ -8,7 +8,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
-import { NGXLogger } from 'ngx-logger';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
 
@@ -49,12 +48,7 @@ export class FilterComponent {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(
-		private readonly logger: NGXLogger,
-		private ow: OverwolfService,
-		private el: ElementRef,
-		private cdr: ChangeDetectorRef,
-	) {}
+	constructor(private ow: OverwolfService, private el: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

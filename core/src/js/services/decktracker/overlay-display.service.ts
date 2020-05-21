@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
 import { Preferences } from '../../models/preferences';
@@ -16,7 +15,7 @@ export class OverlayDisplayService implements OnDestroy {
 	private preferencesSubscription: Subscription;
 	private deckSubscription: Subscription;
 
-	constructor(private prefs: PreferencesService, private ow: OverwolfService, private logger: NGXLogger) {
+	constructor(private prefs: PreferencesService, private ow: OverwolfService) {
 		this.init();
 		window['decktrackerDisplayEventBus'] = this.decktrackerDisplayEventBus;
 	}
@@ -46,11 +45,11 @@ export class OverlayDisplayService implements OnDestroy {
 	private async processEvent(event) {
 		switch (event.name) {
 			case DeckEvents.MATCH_METADATA:
-				// this.logger.debug('[overlay-display] received MATCH_METADATA event');
+				// console.log('[overlay-display] received MATCH_METADATA event');
 				this.handleDisplayPreferences(this.gameState);
 				break;
 			case DeckEvents.GAME_END:
-				// this.logger.debug('[overlay-display] received GAME_END event, sending false');
+				// console.log('[overlay-display] received GAME_END event, sending false');
 				this.decktrackerDisplayEventBus.next(false);
 				break;
 		}
@@ -59,13 +58,13 @@ export class OverlayDisplayService implements OnDestroy {
 	private async handleDisplayPreferences(gameState: GameState, preferences: Preferences = null): Promise<void> {
 		const prefs = preferences || (await this.prefs.getPreferences());
 		const shouldDisplay = this.shouldDisplay(gameState, prefs);
-		// this.logger.debug('[overlay-display] should display?', shouldDisplay, prefs, gameState);
+		// console.log('[overlay-display] should display?', shouldDisplay, prefs, gameState);
 		this.decktrackerDisplayEventBus.next(shouldDisplay);
 	}
 
 	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {
 		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck) {
-			this.logger.debug('[overlay-display] not enough info to display');
+			console.log('[overlay-display] not enough info to display');
 			return false;
 		}
 		switch (gameState.metadata.gameType as GameType) {
@@ -90,7 +89,7 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameType.GT_BATTLEGROUNDS:
 				return false;
 		}
-		this.logger.debug('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
+		console.log('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
 		return gameState.playerDeck.deckList.length > 0;
 	}
 }

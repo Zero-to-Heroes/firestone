@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { NGXLogger } from 'ngx-logger';
 import { Set, SetCard } from '../models/set';
 
 @Injectable()
@@ -49,7 +48,7 @@ export class SetsService {
 		'HERO_10',
 	];
 
-	constructor(private logger: NGXLogger, private allCards: AllCardsService) {
+	constructor(private allCards: AllCardsService) {
 		// We don't call it in the constructor because we want the app to be in control
 		// of how they load the cards, and for it to be aware of when cards have been loaded
 		// this.retrieveAllCards();

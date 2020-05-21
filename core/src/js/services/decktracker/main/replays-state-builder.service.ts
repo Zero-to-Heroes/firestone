@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GroupedReplays } from '../../../models/mainwindow/replays/grouped-replays';
 import { ReplaysFilter } from '../../../models/mainwindow/replays/replays-filter';
 import { ReplaysFilterCategoryType } from '../../../models/mainwindow/replays/replays-filter-category.type';
@@ -10,8 +9,6 @@ import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 
 @Injectable()
 export class ReplaysStateBuilderService {
-	constructor(private readonly logger: NGXLogger) {}
-
 	public buildState(replayState: ReplaysState, stats: StatsState): ReplaysState {
 		if (!stats || !stats.gameStats || !stats.gameStats.stats) {
 			console.error('Could not build replay state from empty stats', stats);
@@ -77,7 +74,7 @@ export class ReplaysStateBuilderService {
 		};
 		const groupByDate = groupByFunction(groupingFunction);
 		const replaysByDate = groupByDate(allReplays);
-		// this.logger.debug('[replays-state-builder] loaded replays by date');
+		// console.log('[replays-state-builder] loaded replays by date');
 		return Object.keys(replaysByDate).map(date => this.buildGroupedReplays(date, replaysByDate[date]));
 	}
 

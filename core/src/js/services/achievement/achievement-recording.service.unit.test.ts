@@ -1,4 +1,3 @@
-import { NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { Achievement } from '../../models/achievement';
 import { Preferences } from '../../models/preferences';
 import { ReplayInfo } from '../../models/replay-info';
@@ -7,7 +6,6 @@ import { AchievementRecordingService } from './achievement-recording.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 describe('Achievement Recording Service', () => {
-	const logger = () => new NGXLoggerMock() as NGXLogger;
 	const loader = achievements =>
 		({
 			getAchievements: async () => {
@@ -68,7 +66,7 @@ describe('Achievement Recording Service', () => {
 			const refAchievement = Object.assign(new Achievement(), baseAchievementLow);
 			const achievement: Achievement = Object.assign(new Achievement(), refAchievement);
 			const achievements: readonly Achievement[] = [refAchievement];
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -85,7 +83,7 @@ describe('Achievement Recording Service', () => {
 				] as readonly ReplayInfo[],
 			} as Achievement);
 			const achievements: readonly Achievement[] = [refAchievement];
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -105,7 +103,7 @@ describe('Achievement Recording Service', () => {
 				] as readonly ReplayInfo[],
 			} as Achievement);
 			const achievements: readonly Achievement[] = [refAchievement];
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -128,7 +126,7 @@ describe('Achievement Recording Service', () => {
 				] as readonly ReplayInfo[],
 			} as Achievement);
 			const achievements: readonly Achievement[] = [refAchievement];
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -142,7 +140,7 @@ describe('Achievement Recording Service', () => {
 			const refAchievementHigh = Object.assign(new Achievement(), baseAchievementHigh);
 			const achievements: readonly Achievement[] = [refAchievementLow, refAchievementHigh];
 			const achievement: Achievement = Object.assign(new Achievement(), refAchievementHigh);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -160,7 +158,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -181,7 +179,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -205,7 +203,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -221,7 +219,7 @@ describe('Achievement Recording Service', () => {
 			} as Achievement);
 			const achievements: readonly Achievement[] = [refAchievementLow, refAchievementHigh];
 			const achievement: Achievement = Object.assign(new Achievement(), refAchievementLow);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -241,7 +239,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -264,7 +262,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -290,7 +288,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -306,7 +304,7 @@ describe('Achievement Recording Service', () => {
 			} as Achievement);
 			const achievements: readonly Achievement[] = [refAchievementLow, refAchievementHigh];
 			const achievement: Achievement = Object.assign(new Achievement(), refAchievementLow);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -326,7 +324,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -349,7 +347,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -375,7 +373,7 @@ describe('Achievement Recording Service', () => {
 					} as ReplayInfo,
 				] as readonly ReplayInfo[],
 			} as Achievement);
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(true));
+			const service = new AchievementRecordingService(loader(achievements), prefs(true));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 
@@ -388,7 +386,7 @@ describe('Achievement Recording Service', () => {
 			const refAchievement = Object.assign(new Achievement(), baseAchievementLow);
 			const achievement: Achievement = Object.assign(new Achievement(), refAchievement);
 			const achievements: readonly Achievement[] = [refAchievement];
-			const service = new AchievementRecordingService(logger(), loader(achievements), prefs(false));
+			const service = new AchievementRecordingService(loader(achievements), prefs(false));
 
 			const shouldRecord = await service.shouldRecord(achievement);
 

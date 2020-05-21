@@ -8,7 +8,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
-import { NGXLogger } from 'ngx-logger';
 import { ReplaysFilterCategoryType } from '../../models/mainwindow/replays/replays-filter-category.type';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -63,12 +62,7 @@ export class ReplaysFilterComponent {
 		this.updateFilters();
 	}
 
-	constructor(
-		private readonly logger: NGXLogger,
-		private ow: OverwolfService,
-		private el: ElementRef,
-		private cdr: ChangeDetectorRef,
-	) {}
+	constructor(private ow: OverwolfService, private el: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

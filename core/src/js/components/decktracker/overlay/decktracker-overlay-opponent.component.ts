@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -42,5 +41,5 @@ export class DeckTrackerOverlayOpponentComponent {
 	defaultTrackerPositionLeftProvider = (gameWidth: number, width: number, dpi: number) => -200;
 	defaultTrackerPositionTopProvider = (gameWidth: number, width: number, dpi: number) => 150;
 
-	constructor(private logger: NGXLogger, private prefs: PreferencesService) {}
+	constructor(private prefs: PreferencesService) {}
 }

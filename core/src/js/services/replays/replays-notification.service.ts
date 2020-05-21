@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Events } from '../events.service';
@@ -12,7 +11,6 @@ declare let amplitude;
 @Injectable()
 export class ReplaysNotificationService {
 	constructor(
-		private logger: NGXLogger,
 		private notificationService: OwNotificationsService,
 		private prefs: PreferencesService,
 		private events: Events,
@@ -22,20 +20,20 @@ export class ReplaysNotificationService {
 			.subscribe(data => this.showNewMatchEndNotification(Object.assign(new GameStats(), data.data[0])));
 		this.events.on(Events.GAME_END).subscribe(data => this.showReplayRecordingStart(data.data[0]));
 
-		this.logger.debug('[replays-notification] listening for achievement completion events');
+		console.log('[replays-notification] listening for achievement completion events');
 	}
 
 	private async showReplayRecordingStart(reviewId: string) {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.replaysShowNotification) {
-			this.logger.debug(
+			console.log(
 				'[replays-notification] preference is turned off, not showing replay start notification',
 				reviewId,
 			);
 			return;
 		}
-		this.logger.debug('[replays-notification] preparing replay start notification', reviewId);
-		// this.logger.debug('[replays-notification] will emit notif notification', stat);
+		console.log('[replays-notification] preparing replay start notification', reviewId);
+		// console.log('[replays-notification] will emit notif notification', stat);
 		this.notificationService.emitNewNotification({
 			notificationId: `replay-${reviewId}`,
 			content: this.buildStartNotificationTemplate(reviewId),
@@ -50,15 +48,12 @@ export class ReplaysNotificationService {
 	private async showNewMatchEndNotification(stats: GameStats) {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.replaysShowNotification) {
-			this.logger.debug(
-				'[replays-notification] preference is turned off, not showing replay notification',
-				stats,
-			);
+			console.log('[replays-notification] preference is turned off, not showing replay notification', stats);
 			return;
 		}
 		const stat = Object.assign(new GameStat(), stats.stats[0]);
 		console.log('[replays-notification] preparing new game stat notification', stat);
-		// this.logger.debug('[replays-notification] will emit notif notification', stat);
+		// console.log('[replays-notification] will emit notif notification', stat);
 		this.notificationService.emitNewNotification({
 			notificationId: `replay-${stat.reviewId}`,
 			content: this.buildNotificationTemplate(stat),
@@ -95,10 +90,10 @@ export class ReplaysNotificationService {
 
 	private buildNotificationTemplate(stat: GameStat): string {
 		const [playerRankFrame, playerRankArt, playerRankTooltip] = stat.buildPlayerRankImage();
-		// this.logger.debug('[replays-notification] preparing playerRankImage', playerRankImage);
+		// console.log('[replays-notification] preparing playerRankImage', playerRankImage);
 		const rankText = stat.buildRankText() || '';
 		const playerRankImage = playerRankArt ? `<img class="art" src="${playerRankArt}" />` : ``;
-		// this.logger.debug('[replays-notification] preparing rankText', rankText);
+		// console.log('[replays-notification] preparing rankText', rankText);
 		return `
 			<div class="match-stats-message-container replay-${stat.reviewId}">
 				<div class="mode rank-image">

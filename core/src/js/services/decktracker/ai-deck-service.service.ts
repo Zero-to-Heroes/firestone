@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 
 const AI_DECKSTRINGS_URL = 'https://static.zerotoheroes.com/hearthstone/data/ai_decks';
 
@@ -8,16 +7,15 @@ const AI_DECKSTRINGS_URL = 'https://static.zerotoheroes.com/hearthstone/data/ai_
 export class AiDeckService {
 	private aiDecks: readonly AiDeck[];
 
-	constructor(private readonly http: HttpClient, private readonly logger: NGXLogger) {
+	constructor(private readonly http: HttpClient) {
 		this.init();
 	}
 
 	public getAiDeck(opponentCardId: string, scenarioId: number): AiDeck {
 		if (!this.aiDecks || this.aiDecks.length === 0) {
-			this.logger.warn('[ai-decks] decks not initialized yet', opponentCardId, scenarioId);
+			console.warn('[ai-decks] decks not initialized yet', opponentCardId, scenarioId);
 			return null;
 		}
-		// this.logger.log('[ai-decks] getting deck for', opponentCardId, scenarioId, this.aiDecks);
 		const deck =
 			this.aiDecks.find(
 				deck =>
@@ -39,11 +37,11 @@ export class AiDeckService {
 		return new Promise<readonly string[]>(resolve => {
 			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json`).subscribe(
 				(result: any[]) => {
-					// this.logger.debug('[ai-decks] retrieved ai deck from CDN', fileName, result);
+					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
 				error => {
-					this.logger.error('[ai-decks] could not retrieve ai decks from CDN', error);
+					console.error('[ai-decks] could not retrieve ai decks from CDN', error);
 					resolve([]);
 				},
 			);
@@ -54,11 +52,11 @@ export class AiDeckService {
 		return new Promise<readonly AiDeck[]>(resolve => {
 			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json`).subscribe(
 				(result: any[]) => {
-					// this.logger.debug('[ai-decks] retrieved ai deck from CDN', fileName, result);
+					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
 				error => {
-					this.logger.error('[ai-decks] could not retrieve ai decks from CDN', fileName, error);
+					console.error('[ai-decks] could not retrieve ai decks from CDN', fileName, error);
 					resolve([]);
 				},
 			);

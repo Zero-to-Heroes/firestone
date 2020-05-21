@@ -11,7 +11,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
@@ -83,7 +82,6 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	private preferencesSubscription: Subscription;
 
 	constructor(
-		private logger: NGXLogger,
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
@@ -114,7 +112,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
-				this.logger.debug('[decktracker-overlay] received new game info', res);
+				console.log('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
 			}
 		});

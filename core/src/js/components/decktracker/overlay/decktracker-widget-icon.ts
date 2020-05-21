@@ -7,7 +7,6 @@ import {
 	Input,
 	Output,
 } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -44,7 +43,7 @@ export class DecktrackerWidgetIconComponent implements AfterViewInit {
 	private isDragging: boolean;
 	private isDebounce: boolean;
 
-	constructor(private logger: NGXLogger, private prefs: PreferencesService, private ow: OverwolfService) {}
+	constructor(private prefs: PreferencesService, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;

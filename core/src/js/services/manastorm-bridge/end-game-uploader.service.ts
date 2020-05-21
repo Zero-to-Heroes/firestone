@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../models/game-event';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -13,7 +12,6 @@ export class EndGameUploaderService {
 	private readonly supportedModesDeckRetrieve = ['practice', 'friendly', 'ranked', 'casual', 'arena', 'tavernbrawl'];
 
 	constructor(
-		private logger: NGXLogger,
 		private gameHelper: GameHelper,
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
@@ -30,7 +28,7 @@ export class EndGameUploaderService {
 		buildNumber: number,
 		scenarioId: string,
 	): Promise<void> {
-		this.logger.debug('[manastorm-bridge] Uploading game info');
+		console.log('[manastorm-bridge] Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,
 			currentReviewId,
@@ -55,21 +53,16 @@ export class EndGameUploaderService {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
 		if (!replayXml) {
-			this.logger.warn('[manastorm-bridge] could not convert replay');
+			console.warn('[manastorm-bridge] could not convert replay');
 		}
-		this.logger.debug(
-			'[manastorm-bridge] Creating new game',
-			currentGameId,
-			'with replay length',
-			replayXml.length,
-		);
+		console.log('[manastorm-bridge] Creating new game', currentGameId, 'with replay length', replayXml.length);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentGameId);
-		this.logger.debug('[manastorm-bridge] Created new game');
+		console.log('[manastorm-bridge] Created new game');
 		game.reviewId = currentReviewId;
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
-		this.logger.debug('[manastorm-bridge] parsed format');
+		console.log('[manastorm-bridge] parsed format');
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
-		this.logger.debug('[manastorm-bridge] parsed type');
+		console.log('[manastorm-bridge] parsed type');
 		game.reviewId = currentReviewId;
 		game.buildNumber = buildNumber;
 		game.scenarioId = scenarioId;
@@ -77,14 +70,14 @@ export class EndGameUploaderService {
 			game.deckstring = deckstring;
 			game.deckName = deckName;
 		}
-		this.logger.debug('[manastorm-bridge] added meta data');
+		console.log('[manastorm-bridge] added meta data');
 		this.gameHelper.setXmlReplay(game, replayXml);
-		this.logger.debug('[manastorm-bridge] set xml replay');
+		console.log('[manastorm-bridge] set xml replay');
 		game.uncompressedXmlReplay = replayXml;
 		this.gameParserService.extractMatchup(game);
-		this.logger.debug('[manastorm-bridge] extracted matchup');
+		console.log('[manastorm-bridge] extracted matchup');
 		this.gameParserService.extractDuration(game);
-		this.logger.debug('[manastorm-bridge] extracted duration');
+		console.log('[manastorm-bridge] extracted duration');
 
 		let playerRank;
 		if (game.gameMode === 'battlegrounds') {
@@ -130,7 +123,7 @@ export class EndGameUploaderService {
 		}
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
-		this.logger.debug('[manastorm-bridge] game ready');
+		console.log('[manastorm-bridge] game ready');
 		return game;
 	}
 }

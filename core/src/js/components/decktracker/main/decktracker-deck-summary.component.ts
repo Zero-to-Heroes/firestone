@@ -1,5 +1,4 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -41,7 +40,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set deck(value: DeckSummary) {
-		// this.logger.debug('[decktracker-deck-summary] setting value', value);
+		// console.log('[decktracker-deck-summary] setting value', value);
 		this._deck = value;
 		this.deckName = value.deckName || 'Deck name';
 		this.totalGames = value.totalGames;
@@ -53,7 +52,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.skin}.jpg`;
 	}
 
-	constructor(private logger: NGXLogger, private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

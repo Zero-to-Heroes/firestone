@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -38,7 +37,7 @@ export class ReplaysComponent {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly logger: NGXLogger, private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

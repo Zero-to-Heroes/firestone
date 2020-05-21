@@ -117,12 +117,12 @@ export class BgsBoardComponent implements AfterViewInit {
 	}
 
 	@Input('enchantmentCandidates') set enchantmentCandidates(value: readonly Entity[]) {
-		// this.logger.debug('[board] setting enchantmentCandidates', value);
+		// console.log('[board] setting enchantmentCandidates', value);
 		this._enchantmentCandidates = value;
 	}
 
 	@Input('options') set options(value: readonly number[]) {
-		// this.logger.debug('[board] setting options', value);
+		// console.log('[board] setting options', value);
 		this._options = value;
 	}
 

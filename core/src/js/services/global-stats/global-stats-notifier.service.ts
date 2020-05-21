@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { Events } from '../events.service';
 import { GlobalStatsUpdatedEvent } from '../mainwindow/store/events/stats/global/global-stats-updated-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
@@ -11,7 +10,6 @@ import { GlobalStatsService } from './global-stats.service';
 export class GlobalStatsNotifierService {
 	constructor(
 		private readonly store: MainWindowStoreService,
-		private readonly logger: NGXLogger,
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly globalStats: GlobalStatsService,
@@ -25,7 +23,7 @@ export class GlobalStatsNotifierService {
 
 	private async listenForEndGame() {
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
-			this.logger.debug('[global-stats] Replay created, received info');
+			console.log('[global-stats] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review') {
 				this.handleNewGlobalStats();
@@ -39,7 +37,7 @@ export class GlobalStatsNotifierService {
 		}
 		const user = await this.ow.getCurrentUser();
 		if (!user.userId || !user.username) {
-			this.logger.warn('[global-stats] user not logged in', user);
+			console.warn('[global-stats] user not logged in', user);
 		}
 		const stats = await this.globalStats.getGlobalStats();
 		if (stats) {

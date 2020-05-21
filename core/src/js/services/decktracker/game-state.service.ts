@@ -1,7 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
 import { DeckState } from '../../models/decktracker/deck-state';
@@ -107,7 +106,6 @@ export class GameStateService {
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private events: Events,
-		// private logger: NGXLogger,
 		private dynamicZoneHelper: DynamicZoneHelperService,
 		private gameStateMetaInfos: GameStateMetaInfoService,
 		private zoneOrdering: ZoneOrderingService,
@@ -116,7 +114,6 @@ export class GameStateService {
 		private twitch: TwitchAuthService,
 		private deckCardService: DeckCardService,
 		private ow: OverwolfService,
-		private logger: NGXLogger,
 		private deckParser: DeckParserService,
 		private helper: DeckManipulationHelper,
 		private aiDecks: AiDeckService,
@@ -133,7 +130,7 @@ export class GameStateService {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe(async event => {
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-				this.logger.debug('rebuilding event emitters');
+				console.log('rebuilding event emitters');
 				this.buildEventEmitters();
 				return;
 			}
@@ -145,14 +142,14 @@ export class GameStateService {
 		window['deckUpdater'] = this.deckUpdater;
 		// window['deckDebug'] = this;
 		window['logGameState'] = () => {
-			this.logger.debug(JSON.stringify(this.state));
+			console.log(JSON.stringify(this.state));
 		};
 		setTimeout(() => {
 			const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow()
 				.decktrackerDisplayEventBus;
 			decktrackerDisplayEventBus.subscribe(event => {
 				this.showDecktracker = event;
-				this.logger.debug('decktracker display update', event);
+				console.log('decktracker display update', event);
 				this.updateOverlays();
 			});
 		});
@@ -184,7 +181,7 @@ export class GameStateService {
 
 	private async getCurrentReviewIdInternal(callback, retriesLeft = 15) {
 		if (retriesLeft <= 0) {
-			this.logger.error('[game-state] Could not get current review id');
+			console.error('[game-state] Could not get current review id');
 			callback(null);
 			return;
 		}
@@ -192,23 +189,22 @@ export class GameStateService {
 			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 2000);
 			return;
 		}
-		// this.logger.log('[game-state] returning review id', this.currentReviewId);
 		callback(this.currentReviewId);
 	}
 
 	private registerGameEvents() {
 		this.gameEvents.onGameStart.subscribe(event => {
-			this.logger.debug('[game-state] game start event received, resetting currentReviewId');
+			console.log('[game-state] game start event received, resetting currentReviewId');
 			this.currentReviewId = undefined;
 		});
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
-			this.logger.debug('[game-state] Received review finalized event, doing nothing');
+			console.log('[game-state] Received review finalized event, doing nothing');
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
-			this.logger.debug('[game-state] Received new review id event');
+			console.log('[game-state] Received new review id event');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
 				this.currentReviewId = info.reviewId;
@@ -233,20 +229,20 @@ export class GameStateService {
 	private async processEvent(gameEvent: GameEvent) {
 		const previousState = this.state;
 		// if (!this.state) {
-		// 	this.logger.error('null state before processing event', gameEvent, this.state);
+		// 	console.error('null state before processing event', gameEvent, this.state);
 		// 	return;
 		// }
-		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
+		// console.log('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
-			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = true;
 			this.updateOverlays();
 		} else if (gameEvent.type === 'CLOSE_OPPONENT_TRACKER') {
-			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.opponentTrackerClosedByUser = true;
 			this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER') {
-			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.state = this.state.update({
 				opponentDeck: this.state.opponentDeck.update({
 					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
@@ -254,7 +250,7 @@ export class GameStateService {
 			} as GameState);
 			this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
-			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			// this.state = this.state.update({
 			// 	opponentDeck: this.state.opponentDeck.update({
 			// 		secretHelperActiveHover: true,
@@ -262,7 +258,7 @@ export class GameStateService {
 			// } as GameState);
 			// this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
-			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			// this.state = this.state.update({
 			// 	opponentDeck: this.state.opponentDeck.update({
 			// 		secretHelperActiveHover: false,
@@ -270,17 +266,17 @@ export class GameStateService {
 			// } as GameState);
 			// this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
-			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = false;
 			this.opponentTrackerClosedByUser = false;
 			this.gameEnded = false;
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_END) {
-			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.gameEnded = true;
 			this.updateOverlays(true);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type, gameEvent);
+			console.log('[game-state] handling overlay for event', gameEvent.type, gameEvent);
 			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
 			this.updateOverlays();
 		}
@@ -289,7 +285,7 @@ export class GameStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state, await this.prefs.getPreferences())) {
-					// this.logger.debug(
+					// console.log(
 					// 	'[game-state] will apply parser',
 					// 	parser.event(),
 					// 	gameEvent.cardId,
@@ -299,9 +295,9 @@ export class GameStateService {
 					// if (debug) {
 					// 	console.debug('stateAfterParser', stateAfterParser.opponentDeck.board);
 					// }
-					// this.logger.debug('[game-state] applied parser', stateAfterParser);
+					// console.log('[game-state] applied parser', stateAfterParser);
 					// if (!stateAfterParser) {
-					// 	this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
+					// 	console.error('null state after processing event', gameEvent.type, parser, gameEvent);
 					// 	await this.updateOverlays();
 					// 	continue;
 					// }
@@ -318,7 +314,7 @@ export class GameStateService {
 							stateAfterParser,
 							(gameEvent.gameState || ({} as any)).Opponent,
 						);
-						// this.logger.debug('[game-state] opponentDeckWithZonesOrdered', opponentDeckWithZonesOrdered);
+						// console.log('[game-state] opponentDeckWithZonesOrdered', opponentDeckWithZonesOrdered);
 						this.state = Object.assign(new GameState(), stateAfterParser, {
 							playerDeck: updatedPlayerDeck,
 							opponentDeck: udpatedOpponentDeck,
@@ -326,7 +322,7 @@ export class GameStateService {
 						// if (debug) {
 						// 	console.debug('end state', this.state.opponentDeck.board);
 						// }
-						// this.logger.debug('[game-state] this.state', gameEvent.type, this.state);
+						// console.log('[game-state] this.state', gameEvent.type, this.state);
 					} else {
 						this.state = null;
 					}
@@ -343,7 +339,7 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		// this.logger.debug(
+		// console.log(
 		// 	'[game-state] will emit event',
 		// 	this.state.playerDeck.totalAttackOnBoard,
 		// 	this.state.opponentDeck.totalAttackOnBoard,
@@ -353,7 +349,7 @@ export class GameStateService {
 		// 	emittedEvent,
 		// );
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-		// this.logger.debug(
+		// console.log(
 		// 	'[game-state] emitted deck event',
 		// 	emittedEvent.event.name,
 		// 	this.state.opponentDeck.secrets,
@@ -363,15 +359,15 @@ export class GameStateService {
 	}
 
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
-		// this.logger.debug('[game-state] updating deck', deck, gameState, playerFromTracker);
+		// console.log('[game-state] updating deck', deck, gameState, playerFromTracker);
 		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
-		// this.logger.debug('[game-state] stateWithMetaInfos', stateWithMetaInfos);
+		// console.log('[game-state] stateWithMetaInfos', stateWithMetaInfos);
 		// Add missing info like card names, if the card added doesn't come from a deck state
 		// (like with the Chess brawl)
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
-		// this.logger.debug('[game-state] newState', newState);
+		// console.log('[game-state] newState', newState);
 		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
-		// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
+		// console.log('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
 		const totalAttackOnBoard = deck.board
 			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
@@ -379,8 +375,8 @@ export class GameStateService {
 			.map(entity => entity.attack || 0)
 			.reduce((a, b) => a + b, 0);
 		const heroAttack = playerFromTracker?.Hero?.attack > 0 ? playerFromTracker?.Hero?.attack : 0;
-		// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
-		// this.logger.debug(
+		// console.log('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
+		// console.log(
 		// 	'[game-state] updating cards left in deck',
 		// 	playerDeckWithZonesOrdered,
 		// 	playerFromTracker && playerFromTracker.Deck,
@@ -410,7 +406,7 @@ export class GameStateService {
 			this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WINDOW),
 		]);
 
-		// this.logger.debug('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
+		// console.log('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
 		const shouldShowTracker =
 			this.state &&
 			this.state.playerDeck &&
@@ -543,7 +539,7 @@ export class GameStateService {
 	private async buildEventEmitters() {
 		const result = [event => this.deckEventBus.next(event)];
 		const prefs = await this.prefs.getPreferences();
-		this.logger.debug('is logged in to Twitch?', prefs.twitchAccessToken);
+		console.log('is logged in to Twitch?', prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {

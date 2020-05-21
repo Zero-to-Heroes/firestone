@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Map } from 'immutable';
-import { NGXLogger } from 'ngx-logger';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../../services/events.service';
 
@@ -53,7 +52,7 @@ export class StateMouseOverComponent {
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 
-	constructor(private logger: NGXLogger, private events: Events) {}
+	constructor(private events: Events) {}
 
 	@Input('gameState') set gameState(value: GameState) {
 		this._gameState = value;
@@ -65,7 +64,7 @@ export class StateMouseOverComponent {
 		this.bottomBoardCards = this._gameState.playerDeck.board.map(card => card.cardId);
 		this.bottomHeroPowerCard = this._gameState.playerDeck.heroPower && this._gameState.playerDeck.heroPower.cardId;
 		this.bottomHandCards = this._gameState.playerDeck.hand.map(card => card.cardId);
-		this.logger.debug('upodated', this.bottomHeroPowerCard, this.topHeroPowerCard);
+		console.log('upodated', this.bottomHeroPowerCard, this.topHeroPowerCard);
 	}
 
 	handRotation(i: number) {
@@ -76,7 +75,7 @@ export class StateMouseOverComponent {
 			!this.handAdjustment.get(totalCards, Adjustment.create()).handRotation ||
 			!this.handAdjustment.get(totalCards, Adjustment.create()).handRotation.has(i)
 		) {
-			// this.logger.warn('could not get handrotation', i);
+			// console.warn('could not get handrotation', i);
 			return `rotate(0deg)`;
 		}
 		const rotation = this.handAdjustment.get(totalCards, Adjustment.create()).handRotation.get(i, 0);
@@ -91,7 +90,7 @@ export class StateMouseOverComponent {
 			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionLeft ||
 			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionLeft.has(i)
 		) {
-			// this.logger.warn('could not get handPositionLeft', i);
+			// console.warn('could not get handPositionLeft', i);
 			return `rotate(0deg)`;
 		}
 		return this.handAdjustment.get(totalCards, Adjustment.create()).handPositionLeft.get(i, 0);
@@ -105,7 +104,7 @@ export class StateMouseOverComponent {
 			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionTop ||
 			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionTop.has(i)
 		) {
-			// this.logger.warn('could not get handPositionTop', i);
+			// console.warn('could not get handPositionTop', i);
 			return `rotate(0deg)`;
 		}
 		return this.handAdjustment.get(totalCards, Adjustment.create()).handPositionTop.get(i, 0);

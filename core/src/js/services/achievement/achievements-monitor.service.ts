@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
@@ -26,7 +25,6 @@ export class AchievementsMonitor {
 		private gameEvents: GameEventsEmitterService,
 		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
-		private logger: NGXLogger,
 		private store: MainWindowStoreService,
 		private achievementStats: RemoteAchievementsService,
 		private achievementsStorage: AchievementsLocalStorageService,
@@ -104,16 +102,16 @@ export class AchievementsMonitor {
 		// Don't process an event if we've just received one, as it could indicate that other
 		// related events will come soon as well
 		if (Date.now() - this.lastReceivedTimestamp < 500) {
-			// this.logger.debug('[achievements-monitor] too soon, waiting before processing');
+			// console.log('[achievements-monitor] too soon, waiting before processing');
 			return eventQueue;
 		}
 		const candidate: InternalEvent = eventQueue[0];
-		// this.logger.debug('[achievements-monitor] found a candidate', candidate);
+		// console.log('[achievements-monitor] found a candidate', candidate);
 		// Is there a better candidate?
 		const betterCandidate: InternalEvent = eventQueue
 			.filter(event => event.achievement.type === candidate.achievement.type)
 			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
-		// this.logger.debug(
+		// console.log(
 		// 	'[achievements-monitor] emitted achievement completed event',
 		// 	betterCandidate,
 		// 	betterCandidate.achievement.id,

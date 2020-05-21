@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../models/game-event';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
@@ -21,7 +20,6 @@ export class EndGameListenerService {
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private events: Events,
-		private logger: NGXLogger,
 		private deckService: DeckParserService,
 		private endGameUploader: EndGameUploaderService,
 		private gameState: GameStateService,
@@ -32,9 +30,9 @@ export class EndGameListenerService {
 	}
 
 	private init(): void {
-		this.logger.debug('[manastorm-bridge] stgarting end-game-listener init');
+		console.log('[manastorm-bridge] stgarting end-game-listener init');
 		this.events.on(Events.NEW_GAME_ID).subscribe(async event => {
-			this.logger.debug('[manastorm-bridge] Received new game id event', event);
+			console.log('[manastorm-bridge] Received new game id event', event);
 			this.currentGameId = event.data[0];
 		});
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
@@ -43,10 +41,10 @@ export class EndGameListenerService {
 					// const isManastormRunning = await this.ow.isManastormRunning();
 					// if (isManastormRunning) {
 					// 	// Upload is handled by manastorm
-					// 	this.logger.debug('[manastorm-bridge] Manastorm is running, no need to init empty review');
+					// 	console.log('[manastorm-bridge] Manastorm is running, no need to init empty review');
 					// 	return;
 					// }
-					this.logger.debug('[manastorm-bridge] Creating empty review');
+					console.log('[manastorm-bridge] Creating empty review');
 					const currentReviewId = await this.replayUpload.createEmptyReview();
 					console.log('[manastorm-bridge] built currentReviewId', currentReviewId);
 					const info = {
@@ -70,7 +68,7 @@ export class EndGameListenerService {
 					this.currentScenarioId = gameEvent.additionalData.metaData.ScenarioID;
 					break;
 				case GameEvent.GAME_END:
-					this.logger.debug('[manastorm-bridge] end game, uploading?');
+					console.log('[manastorm-bridge] end game, uploading?');
 					const reviewId = await this.gameState.getCurrentReviewId();
 					this.events.broadcast(Events.GAME_END, reviewId);
 					await this.endGameUploader.upload(

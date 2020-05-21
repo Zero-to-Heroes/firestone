@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { NGXLogger } from 'ngx-logger';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -68,7 +67,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set replay(value: GameStat) {
-		// this.logger.debug('[deck-replay-info] setting value', value);
+		// console.log('[deck-replay-info] setting value', value);
 		this.replayInfo = value;
 		this.gameMode = value.gameMode;
 		// this.deckName = value.playerDeckName || value.playerName;
@@ -82,7 +81,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 	}
 
 	constructor(
-		private readonly logger: NGXLogger,
 		private readonly ow: OverwolfService,
 		private readonly sanitizer: DomSanitizer,
 		private readonly allCards: AllCardsService,

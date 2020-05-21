@@ -1,7 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
-import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -172,7 +171,6 @@ export class MainWindowStoreService {
 		private notifs: OwNotificationsService,
 		private userService: UserService,
 		private decktrackerStateLoader: DecktrackerStateLoaderService,
-		private readonly logger: NGXLogger,
 		private readonly globalStats: GlobalStatsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly prefs: PreferencesService,
@@ -211,7 +209,7 @@ export class MainWindowStoreService {
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
 		if (!processor) {
-			this.logger.error('[store] missing processor for event', event.eventName());
+			console.error('[store] missing processor for event', event.eventName());
 			return;
 		}
 		// Don't modify the current state here, as it could make state lookup impossible
@@ -246,7 +244,7 @@ export class MainWindowStoreService {
 				// console.log('emitting new state', newState);
 				this.stateEmitter.next(this.state);
 				if (Date.now() - start > 1000) {
-					this.logger.warn(
+					console.warn(
 						'[store] Event',
 						event.eventName(),
 						'processing took too long, consider splitting it',

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { ReplayInfo } from '../../models/replay-info';
 import { OverwolfService } from '../overwolf.service';
@@ -8,12 +7,7 @@ import { AchievementsLocalDbService } from './indexed-db.service';
 
 @Injectable()
 export class AchievementsLocalStorageService {
-	constructor(
-		private logger: NGXLogger,
-		private http: HttpClient,
-		private ow: OverwolfService,
-		private indexedDb: AchievementsLocalDbService,
-	) {}
+	constructor(private http: HttpClient, private ow: OverwolfService, private indexedDb: AchievementsLocalDbService) {}
 
 	// Here we just load from the local cache. The only time we refresh from the remote is when
 	// we initialize the app.

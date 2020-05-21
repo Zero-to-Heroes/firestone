@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { Events } from '../../events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeReplaysEvent } from '../../mainwindow/store/events/replays/recompute-replays-event';
@@ -11,7 +10,7 @@ export class GameStatsUpdaterService {
 	// This is set directly by the store
 	public stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private events: Events, private logger: NGXLogger, private statsLoader: GameStatsLoaderService) {
+	constructor(private events: Events, private statsLoader: GameStatsLoaderService) {
 		this.init();
 	}
 

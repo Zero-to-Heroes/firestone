@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { Achievement } from 'src/js/models/achievement';
 import { Events } from '../events.service';
 import { Message, OwNotificationsService } from '../notifications.service';
@@ -12,7 +11,6 @@ declare let amplitude;
 @Injectable()
 export class AchievementsNotificationService {
 	constructor(
-		private logger: NGXLogger,
 		private notificationService: OwNotificationsService,
 		private prefs: PreferencesService,
 		private achievementLoader: AchievementsLoaderService,
@@ -27,18 +25,18 @@ export class AchievementsNotificationService {
 		this.events
 			.on(Events.ACHIEVEMENT_RECORDED)
 			.subscribe(data => this.handleAchievementRecordCompleted(data.data[0]));
-		this.logger.debug('[achievements-notification] listening for achievement completion events');
+		console.log('[achievements-notification] listening for achievement completion events');
 	}
 
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
-		this.logger.debug(
+		console.log(
 			'[achievements-notification] preparing achievement completed notification',
 			achievement.id,
 			achievement.numberOfCompletions,
 		);
 		const prefs = await this.prefs.getPreferences();
 		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
-			this.logger.debug(
+			console.log(
 				'[achievements-notification] achievement already completed or pref turned off, not sending any notif',
 				achievement.id,
 				prefs.achievementsDisplayNotifications,
@@ -47,7 +45,7 @@ export class AchievementsNotificationService {
 		}
 		amplitude.getInstance().logEvent('new-achievement', { 'id': achievement.id });
 		const notificationTimeout = challenge.notificationTimeout();
-		this.logger.debug('[achievements-notification] sending new achievement completed notification', achievement.id);
+		console.log('[achievements-notification] sending new achievement completed notification', achievement.id);
 		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;
 		const recapText = recordingOff
 			? `Achievement saved! Click to recap`
@@ -66,17 +64,17 @@ export class AchievementsNotificationService {
 	}
 
 	private async handleAchievementRecordingStarted(achievement: Achievement, challenge: Challenge) {
-		this.logger.debug('[achievements-notification] in pre-record notification');
+		console.log('[achievements-notification] in pre-record notification');
 		const prefs = await this.prefs.getPreferences();
 		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
-			this.logger.debug(
+			console.log(
 				'[achievements-notification] achievement already completed or pref turned off, not sending any notif',
 				achievement.id,
 				prefs.achievementsDisplayNotifications,
 			);
 			return;
 		}
-		this.logger.debug('[achievements-notification] sending new notification', achievement.id);
+		console.log('[achievements-notification] sending new notification', achievement.id);
 		const recapText = `Your replay is being recorded...<span class="loader"></span>`;
 		this.notificationService.html({
 			notificationId: achievement.id,
@@ -91,11 +89,11 @@ export class AchievementsNotificationService {
 	}
 
 	private async handleAchievementRecordCompleted(achievement: Achievement) {
-		this.logger.debug('[achievements-notification] in post-record notification', achievement);
+		console.log('[achievements-notification] in post-record notification', achievement);
 		const prefs = await this.prefs.getPreferences();
 		// const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
 		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
-			this.logger.debug(
+			console.log(
 				'[achievements-notification] achievement already completed or pref turned off, not sending any notif',
 				achievement.id,
 				prefs.achievementsDisplayNotifications,

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { OverwolfService } from '../../overwolf.service';
@@ -11,7 +10,7 @@ const GAME_STATS_ENDPOINT = 'https://p3mfx6jmhc.execute-api.us-west-2.amazonaws.
 export class GameStatsLoaderService {
 	private gameStats: GameStats;
 
-	constructor(private http: HttpClient, private ow: OverwolfService, private logger: NGXLogger) {}
+	constructor(private http: HttpClient, private ow: OverwolfService) {}
 
 	public async retrieveStats(expectedReviewId: string = undefined, retriesLeft = 10): Promise<GameStats> {
 		console.log(

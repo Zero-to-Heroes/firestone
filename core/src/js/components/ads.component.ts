@@ -7,7 +7,6 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { AdService } from '../services/ad.service';
 import { OverwolfService } from '../services/overwolf.service';
 
@@ -49,12 +48,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private stateChangedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
 
-	constructor(
-		private cdr: ChangeDetectorRef,
-		private logger: NGXLogger,
-		private adService: AdService,
-		private ow: OverwolfService,
-	) {}
+	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
@@ -62,10 +56,10 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, message => {
 			// console.log('state changed', message);
 			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
-				this.logger.info('[ads] removing ad', message.window_state);
+				console.log('[ads] removing ad', message.window_state);
 				this.removeAds();
 			} else if (message.window_previous_state !== 'normal' && message.window_previous_state !== 'maximized') {
-				this.logger.info('[ads] refreshing ad', message.window_state, message);
+				console.log('[ads] refreshing ad', message.window_state, message);
 				this.refreshAds();
 			}
 		});
@@ -87,24 +81,24 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 
 	private async refreshAds() {
 		try {
-			// this.logger.info('[ads] refreshing ads');
+			// console.log('[ads] refreshing ads');
 			if (!this.shouldDisplayAds) {
-				this.logger.info('[ads] ad-free app, not showing ads and returning');
+				console.log('[ads] ad-free app, not showing ads and returning');
 				return;
 			}
 			if (this.adInit) {
-				this.logger.info('[ads] already initializing ads, returning');
+				console.log('[ads] already initializing ads, returning');
 				return;
 			}
 			if (!adsReady || !OwAd) {
-				this.logger.info('[ads] ads container not ready, returning');
+				console.log('[ads] ads container not ready, returning');
 				setTimeout(() => {
 					this.refreshAds();
 				}, 1000);
 				return;
 			}
 			if (!document.getElementById('ad-div')) {
-				this.logger.info('[ads] ad-div not ready, returning');
+				console.log('[ads] ad-div not ready, returning');
 				setTimeout(() => {
 					this.refreshAds();
 				}, 1000);
@@ -120,13 +114,13 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 				this.adInit = true;
 				const window = await this.ow.getCurrentWindow();
 				if (window.isVisible) {
-					this.logger.info('[ads] first time init ads, creating OwAd');
+					console.log('[ads] first time init ads, creating OwAd');
 					this.adRef = new OwAd(document.getElementById('ad-div'));
 					this.impressionListener = data => {
 						amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
 					};
 					this.adRef.addEventListener('impression', this.impressionListener);
-					this.logger.info('[ads] init OwAd');
+					console.log('[ads] init OwAd');
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
 					}
@@ -137,13 +131,13 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 				}, 1000);
 				return;
 			}
-			this.logger.info('[ads] refreshed ads');
+			console.log('[ads] refreshed ads');
 			this.adRef.refreshAd();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		} catch (e) {
-			this.logger.warn('[ads] exception while initializing ads, retrying', e);
+			console.warn('[ads] exception while initializing ads, retrying', e);
 			setTimeout(() => {
 				this.refreshAds();
 			}, 2000);
@@ -154,7 +148,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 		if (!this.adRef) {
 			return;
 		}
-		this.logger.info('removing ads');
+		console.log('removing ads');
 		this.adRef.removeAd();
 	}
 }

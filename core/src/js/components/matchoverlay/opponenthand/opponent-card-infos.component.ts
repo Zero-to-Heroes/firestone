@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { Map } from 'immutable';
-import { NGXLogger } from 'ngx-logger';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -35,7 +34,7 @@ export class OpponentCardInfosComponent {
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 
-	constructor(private logger: NGXLogger, private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService) {}
 
 	@Input() set cards(value: readonly DeckCard[]) {
 		this._cards = value;

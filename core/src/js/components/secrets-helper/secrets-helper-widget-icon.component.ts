@@ -1,5 +1,4 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, HostListener, Input } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../models/game-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -30,7 +29,7 @@ export class SecretsHelperWidgetIconComponent implements AfterViewInit {
 	private draggingTimeout;
 	private isDragging: boolean;
 
-	constructor(private logger: NGXLogger, private prefs: PreferencesService, private ow: OverwolfService) {}
+	constructor(private prefs: PreferencesService, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.deckUpdater = this.ow.getMainWindow().deckUpdater;

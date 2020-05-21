@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { NavigationReplays } from '../../models/mainwindow/navigation/navigation-replays';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
@@ -33,7 +32,7 @@ export class MatchDetailsComponent {
 		this.replayInfo = value.selectedReplay ? value.selectedReplay.replayInfo : null;
 	}
 
-	constructor(private readonly logger: NGXLogger, private ow: OverwolfService, private el: ElementRef) {}
+	constructor(private ow: OverwolfService, private el: ElementRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

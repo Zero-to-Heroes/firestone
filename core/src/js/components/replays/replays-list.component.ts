@@ -8,7 +8,6 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -54,7 +53,7 @@ export class ReplaysListComponent {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set state(value: ReplaysState) {
-		// this.logger.debug('[replays-list] setting state', value);
+		// console.log('[replays-list] setting state', value);
 		this._state = value;
 		this.displayedReplays = [];
 		this._replays = value.groupedReplays || [];
@@ -65,7 +64,6 @@ export class ReplaysListComponent {
 	}
 
 	constructor(
-		private readonly logger: NGXLogger,
 		private readonly ow: OverwolfService,
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
@@ -96,22 +94,22 @@ export class ReplaysListComponent {
 	}
 
 	onScroll() {
-		// this.logger.debug('[replays-list]', 'arrived at the end of display, loading more elements');
+		// console.log('[replays-list]', 'arrived at the end of display, loading more elements');
 		this.replaysIterator && this.replaysIterator.next();
 	}
 
 	// We load the first replays, and load the rest only when the user scrolls down
 	private handleProgressiveDisplay() {
-		// this.logger.debug('[replays-list] handleProgressiveDisplay');
+		// console.log('[replays-list] handleProgressiveDisplay');
 		this.replaysIterator = this.buildIterator();
 		this.onScroll();
-		// this.logger.debug('[replays-list] handleProgressiveDisplay done');
+		// console.log('[replays-list] handleProgressiveDisplay done');
 	}
 
 	private *buildIterator(): IterableIterator<void> {
-		// this.logger.debug('[replays-list]', 'starting loading replays');
+		// console.log('[replays-list]', 'starting loading replays');
 		const workingReplays = [...this._replays];
-		// this.logger.debug('[replays-list] workingReplays', workingReplays);
+		// console.log('[replays-list] workingReplays', workingReplays);
 		const step = 100;
 		while (workingReplays.length > 0) {
 			const currentReplays = [];
@@ -120,15 +118,15 @@ export class ReplaysListComponent {
 				(currentReplays.length === 0 || this.getTotalReplaysLength(currentReplays) < step)
 			) {
 				currentReplays.push(...workingReplays.splice(0, 1));
-				// this.logger.debug('[replays-list] currentReplays', currentReplays);
+				// console.log('[replays-list] currentReplays', currentReplays);
 			}
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
-			// this.logger.debug('[replays-list] displayedReplays', this.displayedReplays, workingReplays);
+			// console.log('[replays-list] displayedReplays', this.displayedReplays, workingReplays);
 			this.isLoading = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-			// this.logger.debug(
+			// console.log(
 			// 	'[replays-list]',
 			// 	'loaded replays',
 			// 	this.displayedReplays,
@@ -137,7 +135,7 @@ export class ReplaysListComponent {
 			yield;
 		}
 		this.isLoading = false;
-		// this.logger.debug('[replays-list] everything loaded');
+		// console.log('[replays-list] everything loaded');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { of } from 'rxjs';
 import { catchError, timeout } from 'rxjs/operators';
 import { Achievement } from '../../../models/achievement';
@@ -17,11 +16,7 @@ export class AchievementsLoaderService {
 
 	private achievements: readonly Achievement[];
 
-	constructor(
-		private http: HttpClient,
-		private challengeBuilder: ChallengeBuilderService,
-		private logger: NGXLogger,
-	) {}
+	constructor(private http: HttpClient, private challengeBuilder: ChallengeBuilderService) {}
 
 	public async getAchievement(achievementId: string): Promise<Achievement> {
 		await this.waitForInit();
@@ -81,28 +76,25 @@ export class AchievementsLoaderService {
 		];
 		const achievementsArray = await Promise.all(achievementFiles.map(fileName => this.loadAchievements(fileName)));
 		const result = achievementsArray.reduce((a, b) => a.concat(b), []);
-		this.logger.debug('[achievements-loader] returning full achievements', result && result.length);
+		console.log('[achievements-loader] returning full achievements', result && result.length);
 		return result;
 	}
 
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
 		return new Promise<readonly RawAchievement[]>((resolve, reject) => {
-			this.logger.debug('[achievements-loader] retrieving local achievements', fileName);
+			console.log('[achievements-loader] retrieving local achievements', fileName);
 			this.http
 				.get(`./achievements/${fileName}.json`)
 				.pipe(
 					timeout(500),
 					catchError((error, caught) => {
-						// this.logger.debug(
+						// console.log(
 						// 	'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
 						// 	fileName,
 						// );
 						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=2`).subscribe(
 							(result: any[]) => {
-								this.logger.debug(
-									'[achievements-loader] retrieved all achievements from CDN',
-									fileName,
-								);
+								console.log('[achievements-loader] retrieved all achievements from CDN', fileName);
 								resolve(result);
 								return of(null);
 							},
@@ -121,12 +113,12 @@ export class AchievementsLoaderService {
 				.subscribe(
 					(result: any[]) => {
 						if (result) {
-							this.logger.debug('[achievements-loader] retrieved all cards locally', fileName);
+							console.log('[achievements-loader] retrieved all cards locally', fileName);
 							resolve(result);
 						}
 					},
 					error => {
-						this.logger.warn('[achievements-loader] could not load cards', error);
+						console.warn('[achievements-loader] could not load cards', error);
 					},
 				);
 		});

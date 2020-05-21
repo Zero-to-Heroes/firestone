@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -8,10 +7,8 @@ import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 
 @Injectable()
 export class DecksStateBuilderService {
-	constructor(private readonly logger: NGXLogger) {}
-
 	public buildState(stats: StatsState, filters: DeckFilters): readonly DeckSummary[] {
-		// this.logger.debug('[decktracker-stats-loader] update with stats');
+		// console.log('[decktracker-stats-loader] update with stats');
 		if (!stats || !stats.gameStats) {
 			return [];
 		}
@@ -21,8 +18,8 @@ export class DecksStateBuilderService {
 			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined');
 		const groupByDeckstring = groupBy('playerDecklist');
 		const statsByDeck = groupByDeckstring(standardRanked);
-		// this.logger.debug('[decktracker-stats-loader] statsByDeck');
-		// this.logger.debug('[decktracker-stats-loader] statsByDeck', statsByDeck);
+		// console.log('[decktracker-stats-loader] statsByDeck');
+		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
 		const deckstrings = Object.keys(statsByDeck);
 		const decks: readonly DeckSummary[] = deckstrings.map(deckstring =>
 			this.buildDeckSummary(deckstring, statsByDeck[deckstring]),

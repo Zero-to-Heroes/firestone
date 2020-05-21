@@ -8,7 +8,6 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
@@ -51,7 +50,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	private preferencesSubscription: Subscription;
 
 	constructor(
-		private logger: NGXLogger,
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
@@ -84,7 +82,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
-				this.logger.debug('[decktracker-overlay] received new game info', res);
+				console.log('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
 			}
 		});
@@ -123,7 +121,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		// Window takes 30% of the size of the screen width
 		const gameWidth = gameInfo.width;
 		const width = gameWidth * 1;
-		this.logger.debug(
+		console.log(
 			'[opponent-hand-overlay] new game width is',
 			gameWidth,
 			'with dpi',

@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameStateService } from '../decktracker/game-state.service';
@@ -19,7 +18,6 @@ export class RemoteAchievementsService {
 	// private username: string;
 
 	constructor(
-		private logger: NGXLogger,
 		private http: HttpClient,
 		private indexedDb: AchievementsLocalDbService,
 		private ow: OverwolfService,
@@ -35,7 +33,7 @@ export class RemoteAchievementsService {
 	public async loadAchievements(): Promise<readonly CompletedAchievement[]> {
 		const prefs = this.prefs.getPreferences();
 		if (process.env.NODE_ENV !== 'production' && (await prefs).resetAchievementsOnAppStart) {
-			this.logger.debug('[remote-achievements] not loading achievements from remote - streamer mode');
+			console.log('[remote-achievements] not loading achievements from remote - streamer mode');
 			await this.indexedDb.setAll([]);
 			return [];
 		}
@@ -46,9 +44,9 @@ export class RemoteAchievementsService {
 			userId: currentUser.userId,
 			machineId: currentUser.machineId,
 		};
-		this.logger.debug('[remote-achievements] loading from server');
+		console.log('[remote-achievements] loading from server');
 		const result = await this.loadRemoteAchievements(postEvent);
-		this.logger.debug(
+		console.log(
 			'[remote-achievements] loaded from server',
 			result && result.results && result.results.length,
 			// postEvent,
@@ -62,7 +60,7 @@ export class RemoteAchievementsService {
 		const achievements = result.results.map(ach => CompletedAchievement.create(ach));
 		await this.indexedDb.setAll(achievements);
 		// await Promise.all(result.results.map(completedAchievement => this.indexedDb.saveAll(completedAchievement)));
-		this.logger.debug('[remote-achievements] updated local cache');
+		console.log('[remote-achievements] updated local cache');
 
 		return result.results;
 	}

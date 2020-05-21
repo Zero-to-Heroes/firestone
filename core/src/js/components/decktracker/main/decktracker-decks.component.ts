@@ -7,7 +7,6 @@ import {
 	HostListener,
 	Input,
 } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -46,11 +45,11 @@ export class DecktrackerDecksComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set decks(value: readonly DeckSummary[]) {
-		// this.logger.debug('[decktracker-decks] setting decks', value);
+		// console.log('[decktracker-decks] setting decks', value);
 		this._decks = value;
 	}
 
-	constructor(private readonly logger: NGXLogger, private ow: OverwolfService, private el: ElementRef) {}
+	constructor(private ow: OverwolfService, private el: ElementRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

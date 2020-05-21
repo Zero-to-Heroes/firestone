@@ -82,7 +82,7 @@ export class BattlegroundsStoreService {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
 		this.battlegroundsUpdater.subscribe((event: GameEvent | BattlegroundsStoreEvent) => {
-			// this.logger.debug('[battlegrounds-state] enqueueing', event);
+			// console.log('[battlegrounds-state] enqueueing', event);
 			this.processingQueue.enqueue(event);
 		});
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;

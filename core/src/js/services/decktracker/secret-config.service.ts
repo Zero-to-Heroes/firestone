@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameFormat, GameType } from '@firestone-hs/reference-data';
-import { NGXLogger } from 'ngx-logger';
 import { Metadata } from '../../models/decktracker/metadata';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json';
@@ -10,13 +9,13 @@ const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secr
 export class SecretConfigService {
 	private secretConfigs: readonly SecretsConfig[];
 
-	constructor(private readonly http: HttpClient, private readonly logger: NGXLogger) {
+	constructor(private readonly http: HttpClient) {
 		this.init();
 	}
 
 	public getValidSecrets(metadata: Metadata, playerClass: string): readonly string[] {
 		if (!this.secretConfigs || this.secretConfigs.length === 0) {
-			this.logger.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
+			console.warn('[secrets-config] secrets config not initialized yet', metadata, playerClass);
 			return null;
 		}
 		const mode: string = this.getMode(metadata);
@@ -35,11 +34,11 @@ export class SecretConfigService {
 		return new Promise<readonly SecretsConfig[]>(resolve => {
 			this.http.get(`${SECRET_CONFIG_URL}`).subscribe(
 				(result: any[]) => {
-					// this.logger.debug('[ai-decks] retrieved ai deck from CDN', fileName, result);
+					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
 				error => {
-					this.logger.error('[secrets-config] could not retrieve secrets-config from CDN', error);
+					console.error('[secrets-config] could not retrieve secrets-config from CDN', error);
 					resolve([]);
 				},
 			);

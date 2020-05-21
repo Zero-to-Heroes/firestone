@@ -1,5 +1,4 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
@@ -61,7 +60,7 @@ export class OpponentCardInfoIdComponent {
 		this.updateBuffs();
 	}
 
-	constructor(private logger: NGXLogger, private cdr: ChangeDetectorRef) {}
+	constructor(private cdr: ChangeDetectorRef) {}
 
 	private updateBuffs() {
 		this.buffs =
