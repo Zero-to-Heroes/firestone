@@ -34,7 +34,7 @@ export class GameStatsLoaderService {
 	}
 
 	private doRetrieve(userId: string, retrievesLeft: number, resolve, expectedReviewId: string) {
-		console.log('[game-stats-loader] in doRetrieve', userId, retrievesLeft);
+		// console.log('[game-stats-loader] in doRetrieve', userId, retrievesLeft);
 		if (retrievesLeft <= 0) {
 			console.error('[game-stats-loader] could not load stats');
 			resolve(null);
@@ -43,7 +43,7 @@ export class GameStatsLoaderService {
 		const expectedReviewPath = expectedReviewId ? `/${expectedReviewId}` : '';
 		this.http.get(`${GAME_STATS_ENDPOINT}/overwolf-${userId}${expectedReviewPath}`).subscribe(
 			data => {
-				console.log('[game-stats-loader] received http data');
+				// console.log('[game-stats-loader] received http data');
 				const endpointResult: readonly GameStat[] = (data as any).results;
 				if (!expectedReviewId || endpointResult.some(stat => stat.reviewId === expectedReviewId)) {
 					this.gameStats = Object.assign(new GameStats(), {
@@ -52,11 +52,11 @@ export class GameStatsLoaderService {
 					console.log('[game-stats-loader] Retrieved game stats for user');
 					resolve(this.gameStats);
 				} else {
-					console.log(
-						'[game-stats-loader] Could not retrieve game stats for user, retrying',
-						expectedReviewId,
-						endpointResult.length,
-					);
+					// console.log(
+					// 	'[game-stats-loader] Could not retrieve game stats for user, retrying',
+					// 	expectedReviewId,
+					// 	endpointResult.length,
+					// );
 					setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 2000);
 				}
 			},

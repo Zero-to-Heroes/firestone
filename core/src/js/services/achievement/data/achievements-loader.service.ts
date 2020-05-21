@@ -93,10 +93,10 @@ export class AchievementsLoaderService {
 				.pipe(
 					timeout(500),
 					catchError((error, caught) => {
-						this.logger.debug(
-							'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
-							fileName,
-						);
+						// this.logger.debug(
+						// 	'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
+						// 	fileName,
+						// );
 						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=2`).subscribe(
 							(result: any[]) => {
 								this.logger.debug(
@@ -107,7 +107,7 @@ export class AchievementsLoaderService {
 								return of(null);
 							},
 							error => {
-								this.logger.debug(
+								console.error(
 									'[achievements-loader] Could not retrieve achievements from CDN',
 									fileName,
 									error,

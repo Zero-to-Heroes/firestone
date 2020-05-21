@@ -16,7 +16,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsGlobalInfoUpdatedEvent,
 	): Promise<BattlegroundsState> {
-		console.log('in BgsGlobalInfoUpdatedParser', event.info);
+		// console.log('in BgsGlobalInfoUpdatedParser', event.info);
 		const players = event.info?.game?.Players;
 		if (!players || players.length === 0) {
 			console.log('no players, returning&');

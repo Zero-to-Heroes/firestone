@@ -109,7 +109,7 @@ export class AppBootstrapService {
 		}
 		console.log('[bootstrap] app init starting');
 		this.ow.addHotKeyPressedListener('collection', async hotkeyResult => {
-			console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
+			// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
 			if (this.currentState !== 'READY') {
 				return;
 			}

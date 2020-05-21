@@ -61,7 +61,7 @@ export class GlobalStatsService {
 					);
 					return;
 				}
-				this.logger.debug('[global-stats] received stats', data);
+				this.logger.debug('[global-stats] received stats');
 				const stats: GlobalStats = data.result;
 				this.cachedStats = stats;
 				callback(stats);

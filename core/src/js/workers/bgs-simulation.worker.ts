@@ -4,7 +4,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
 import { BgsBattleSimulationResult } from '../models/battlegrounds/bgs-battle-simulation-result';
 
-console.log('creating worker');
+// console.log('creating worker');
 const ctx: Worker = self as any;
 
 const cards = new AllCardsService();

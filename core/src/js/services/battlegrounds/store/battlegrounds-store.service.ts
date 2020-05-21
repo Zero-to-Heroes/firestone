@@ -90,7 +90,7 @@ export class BattlegroundsStoreService {
 		window['bgsHotkeyPressed'] = this.handleHotkeyPressed;
 
 		this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
-			console.log('[bootstrap] hotkey pressed', hotkeyResult);
+			// console.log('[bootstrap] hotkey pressed', hotkeyResult);
 			if (hotkeyResult.status === 'success') {
 				this.handleHotkeyPressed();
 			}

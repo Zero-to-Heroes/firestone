@@ -430,7 +430,7 @@ export class OverwolfService {
 	public async sendMessageWithName(windowName: string, messageType: string, messageBody?: string): Promise<void> {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<void>(resolve => {
-			console.log('[overwolf-service] sending message with name', window.id, messageType);
+			// console.log('[overwolf-service] sending message with name', window.id, messageType);
 			overwolf.windows.sendMessage(window.id, messageType, messageBody, () => {
 				resolve();
 			});
@@ -439,7 +439,7 @@ export class OverwolfService {
 
 	public async sendMessage(windowId: string, messageType: string, messageBody?: any): Promise<void> {
 		return new Promise<void>(resolve => {
-			console.log('[overwolf-service] sending message', windowId, messageType);
+			// console.log('[overwolf-service] sending message', windowId, messageType);
 			overwolf.windows.sendMessage(windowId, messageType, messageBody, () => {
 				resolve();
 			});

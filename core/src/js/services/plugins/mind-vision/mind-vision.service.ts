@@ -31,7 +31,7 @@ export class MindVisionService {
 
 	public async getMatchInfo(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
-			console.log('[mind-vision] retrieving matchInfo');
+			// console.log('[mind-vision] retrieving matchInfo');
 			const plugin = await this.get();
 			try {
 				plugin.getMatchInfo(matchInfo => {
@@ -78,11 +78,11 @@ export class MindVisionService {
 
 	public async getActiveDeck(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
-			console.log('[mind-vision] retrieving activeDeck');
+			// console.log('[mind-vision] retrieving activeDeck');
 			const plugin = await this.get();
 			try {
 				plugin.getActiveDeck(activeDeck => {
-					console.log('[mind-vision] retrieved activeDeck', activeDeck);
+					// console.log('[mind-vision] retrieved activeDeck', activeDeck);
 					resolve(activeDeck ? JSON.parse(activeDeck) : null);
 				});
 			} catch (e) {

@@ -25,7 +25,7 @@ export class BgsGlobalStatsService {
 				const globalStats = BgsStats.create({
 					heroStats: result.result.heroStats,
 				} as BgsStats);
-				console.log('loaded bgs-global-stats', globalStats, result);
+				console.log('loaded bgs-global-stats');
 				callback(globalStats);
 			},
 			error => {

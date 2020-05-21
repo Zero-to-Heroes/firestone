@@ -28,12 +28,12 @@ export class BgsInitService {
 	}
 
 	private async init(matchStats: GameStats) {
-		console.log('bgs init starting', matchStats);
+		console.log('bgs init starting');
 		const bgsGlobalStats: BgsStats = await this.bgsGlobalStats.loadGlobalStats();
-		console.log('bgs got global stats', bgsGlobalStats);
+		console.log('bgs got global stats');
 		const bgsMatchStats = matchStats.stats.filter(stat => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
-			console.log('no bgs match stats', matchStats);
+			console.log('no bgs match stats');
 			this.stateUpdater.next(new BgsInitEvent([], bgsGlobalStats));
 			return;
 		}
