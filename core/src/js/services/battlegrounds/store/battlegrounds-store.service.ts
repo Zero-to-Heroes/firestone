@@ -300,7 +300,9 @@ export class BattlegroundsStoreService {
 				this.closedByUser = false;
 			}
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
-			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+			if (battlegroundsWindow.stateEx !== 'maximized') {
+				await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+			}
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
 		// In fact we don't want to close the window when the game ends
