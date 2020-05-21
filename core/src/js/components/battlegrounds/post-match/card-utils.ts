@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 // Used to make the mapping between premium / normal minions
@@ -19,7 +20,15 @@ export const normalizeCardId = (cardId: string, allCards: AllCardsService) => {
 			}
 		}
 		if (normalCards.length !== 1) {
-			console.warn('too many matches', cardId, normalCards);
+			if (cardId === CardIds.NonCollectible.Hunter.SavannahHighmane_HyenaTokenTavernBrawl) {
+				normalCards = normalCards.filter(
+					card => card.id === CardIds.NonCollectible.Hunter.SavannahHighmane_HyenaToken,
+				);
+			} else if (cardId === CardIds.NonCollectible.Hunter.RatPack_RatTokenTavernBrawl) {
+				normalCards = normalCards.filter(card => card.id === CardIds.NonCollectible.Hunter.RatPack_RatToken);
+			} else {
+				console.warn('too many matches', cardId, normalCards);
+			}
 		}
 		if (normalCards.length > 0) {
 			return normalCards[0].id;

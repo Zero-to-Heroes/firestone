@@ -285,7 +285,7 @@ export class OverwolfService {
 	public maximizeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.maximize(windowId, result => {
-				console.log('[overwolf-service] maximized window', windowId);
+				// console.log('[overwolf-service] maximized window', windowId);
 				resolve(result);
 			});
 		});
