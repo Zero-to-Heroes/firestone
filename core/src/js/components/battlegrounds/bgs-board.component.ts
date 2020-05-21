@@ -95,34 +95,19 @@ export class BgsBoardComponent implements AfterViewInit {
 		if (this._entities === entities) {
 			return;
 		}
-		if (this.debug) {
-			// console.log('setting entities', this._entities, entities);
-		}
-		// That's a big hack, and it looks like I have to do it for all changing arrays (!).
-		// Otherwise, there is an issue when removing all items from the first list then adding another:
-		// - in core.js DefaultIterableDiffer.prototype.forEachOperation, the adjPreviousIndex gets negative for the
-		// first item to add in the new list (all the other parameters stay at 0)
-		// - in common.js, this causes NgForOf.prototype._applyChanges to try and get a view with a negative index
-		// Resetting the view first seems to do the trick. This is fine since we almost never capitalize on the
-		// fact that items that move around are kept alive in these cases
-		// this._entities = !entities ? undefined : [];
-		// setTimeout(() => {
 		this._entities = entities;
 		this.previousBoardWidth = undefined;
 		this.onResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// });
 	}
 
 	@Input('enchantmentCandidates') set enchantmentCandidates(value: readonly Entity[]) {
-		// console.log('[board] setting enchantmentCandidates', value);
 		this._enchantmentCandidates = value;
 	}
 
 	@Input('options') set options(value: readonly number[]) {
-		// console.log('[board] setting options', value);
 		this._options = value;
 	}
 
@@ -137,13 +122,7 @@ export class BgsBoardComponent implements AfterViewInit {
 	) {}
 
 	ngAfterViewInit() {
-		if (this.debug) {
-			// console.log('after view init');
-		}
 		setTimeout(() => {
-			// if (this.debug) {
-			// 	console.log('after view init');
-			// }
 			this.onResize();
 		}, 100);
 		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
@@ -174,65 +153,68 @@ export class BgsBoardComponent implements AfterViewInit {
 
 	@HostListener('window:resize')
 	onResize() {
-		// return;
 		// console.log('on window resize');
 		const boardContainer = this.el.nativeElement.querySelector('.board');
 		if (!boardContainer) {
 			if (this._entities?.length) {
-				// if (this.debug) {
-				// 	console.log('no  board container, retrying', this.el.nativeElement);
-				// }
+				if (this.debug) {
+					console.log('no  board container, retrying', this.el.nativeElement);
+				}
 				setTimeout(() => this.onResize(), 300);
 				return;
 			}
 			return;
 		}
 		const rect = boardContainer.getBoundingClientRect();
-		// if (this.debug) {
-		// 	console.log('board container', boardContainer, rect);
-		// }
+		if (this.debug) {
+			console.log('board container', boardContainer, rect);
+		}
 		if (!rect.width || !rect.height) {
-			// if (this.debug) {
-			// 	console.log('no dimensions, retrying');
-			// }
+			if (this.debug) {
+				console.log('no dimensions, retrying');
+			}
 			setTimeout(() => this.onResize(), 1000);
 			return;
 		}
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
 		if (cardElements.length !== (this._entities?.length || 0)) {
-			// if (this.debug) {
-			// 	console.log('card elements not displayed yet', cardElements, this._entities);
-			// }
+			if (this.debug) {
+				console.log('card elements not displayed yet', cardElements, this._entities);
+			}
 			setTimeout(() => this.onResize(), 300);
 			return;
 		}
 		// We have to resize even though we have the same number of entities, because the resize is
 		// set on the DOM elements, which are teared down and recreated
 		if (this.previousBoardWidth === rect.width && this.previousBoardHeight === rect.height) {
-			// if (this.debug) {
-			// 	console.log('all good, drawing cards', this.previousBoardWidth, rect);
-			// }
+			if (this.debug) {
+				console.log('all good, drawing cards', this.previousBoardWidth, rect);
+			}
 			// The board size is fixed, now we add the cards
 			let cardWidth = rect.width / 8;
 			let cardHeight = 1.48 * cardWidth;
 			if (cardHeight > rect.height * this.maxBoardHeight) {
-				// if (this.debug) {
-				// 	console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
-				// }
+				if (this.debug) {
+					console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
+				}
 				cardHeight = rect.height * this.maxBoardHeight;
 				cardWidth = cardHeight / 1.48;
 			}
-			// if (this.debug) {
-			// 	console.log('will set card dimensions', cardWidth, cardHeight);
-			// }
+			if (this.debug) {
+				console.log('will set card dimensions', cardWidth, cardHeight);
+			}
 			for (const cardElement of cardElements) {
 				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 				this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
 			}
 			return;
 		}
+		if (this.debug) {
+			console.log('dimensions are changing', this.previousBoardWidth, this.previousBoardHeight, rect);
+		}
 		this.previousBoardWidth = rect.width;
 		this.previousBoardHeight = rect.height;
+		setTimeout(() => this.onResize(), 300);
 	}
 
 	isOption(entity: Entity): boolean {
