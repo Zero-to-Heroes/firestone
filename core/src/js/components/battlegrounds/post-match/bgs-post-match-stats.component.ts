@@ -70,7 +70,7 @@ declare let amplitude: any;
 								[entities]="boardMinions"
 								[finalBoard]="true"
 								[minionStats]="minionStats"
-								[maxBoardHeight]="0.7"
+								[maxBoardHeight]="1"
 							></bgs-board>
 						</div>
 					</div>
