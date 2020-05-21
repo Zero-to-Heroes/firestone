@@ -1,14 +1,16 @@
 :host() {
 	display: flex;
 	flex-direction: column;
+	padding-bottom: 0 !important;
 }
 
 .legend {
-	height: 50px;
+	height: 65px;
 	display: flex;
 	margin-bottom: 15px;
 	flex-shrink: 0;
 	flex-grow: 0;
+	position: relative;
 
 	.item {
 		display: flex;
@@ -26,7 +28,7 @@
 		.position {
 			position: absolute;
 			left: -10px;
-			top: -10px;
+			top: 0;
 			border-radius: 50%;
 			border: 2px solid var(--legend-icon-border-color);
 			background: var(--legend-icon-background-color);
