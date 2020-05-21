@@ -108,6 +108,7 @@ export class BattlegroundsStoreService {
 
 	private async handleHotkeyPressed() {
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+		//console.warn('hotkey pressed', window);
 		const inGame = this.state && this.state.inGame;
 		const shouldShowOverlay = true;
 		if (!inGame || !shouldShowOverlay) {
@@ -115,15 +116,14 @@ export class BattlegroundsStoreService {
 			return;
 		}
 
-		// console.warn(window);
 		if (['closed', 'hidden'].indexOf(window.stateEx) !== -1) {
-			// console.log('[bgs-store] showing BVS window', window);
+			//console.log('[bgs-store] showing BVS window', window);
 			this.closedByUser = false;
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
 		} else if (['closed', 'hidden'].indexOf(window.stateEx) === -1) {
-			// console.log('[bgs-store] hiding BVS window', window);
+			//console.log('[bgs-store] hiding BVS window', window);
 			this.closedByUser = true;
 			await this.ow.hideWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
@@ -285,6 +285,7 @@ export class BattlegroundsStoreService {
 
 	private async updateOverlay() {
 		const battlegroundsWindow = await this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW);
+		//console.warn('updazting overlay', window);
 		// Minimize is only triggered by a user action, so if they minimize it we don't touch it
 		if (battlegroundsWindow.window_state_ex === 'minimized' && !this.state.forceOpen) {
 			return;
@@ -292,21 +293,16 @@ export class BattlegroundsStoreService {
 
 		const inGame = this.state && this.state.inGame;
 		// console.warn(battlegroundsWindow);
-		// console.log(
-		// 	'[bgs-store] forcing display?',
-		// 	inGame,
-		// 	this.bgsActive,
-		// 	battlegroundsWindow.window_state_ex,
-		// 	this.state.forceOpen,
-		// 	this.closedByUser,
-		// );
 		if (
 			inGame &&
 			this.bgsActive &&
 			(this.state.forceOpen ||
 				(['closed', 'hidden'].indexOf(battlegroundsWindow.window_state_ex) !== -1 && !this.closedByUser))
 		) {
-			// console.log('[bgs-store] showing window');
+			//console.log('[bgs-store] showing window', battlegroundsWindow);
+			if (this.state.forceOpen) {
+				this.state = this.state.update({forceOpen: false } as BattlegroundsState);
+			}
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);

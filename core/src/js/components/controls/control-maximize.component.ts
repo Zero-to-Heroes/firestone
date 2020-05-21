@@ -78,6 +78,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 			}
 			if (parent && (parent.classList as DOMTokenList).contains(this.doubleClickListenerParentClass)) {
 				parent.addEventListener('dblclick', () => {
+					// console.log('toggling with double click');
 					this.toggleMaximizeWindow();
 				});
 			}
@@ -87,13 +88,16 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	async toggleMaximizeWindow() {
 		const windowName = (await this.ow.getCurrentWindow()).name;
 		amplitude.getInstance().logEvent('maximize', { 'window': windowName });
+		console.log('toggling maximize');
 
 		// Delegate all the logic
 		if (this.eventProvider) {
+			console.log('delegating logic', this.eventProvider);
 			this.stateUpdater.next(this.eventProvider());
 			return;
 		}
 		if (this.maximized) {
+			console.log('restoring');
 			await this.ow.restoreWindow(this.windowId);
 			this.maximized = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -103,7 +107,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 			// const window = await this.ow.getCurrentWindow();
 			// this.previousWidth = window.width;
 			// this.previousHeight = window.height;
-			//console.log('maximizing window', await this.ow.getCurrentWindow());
+			console.log('maximizing window', await this.ow.getCurrentWindow());
 			await this.ow.maximizeWindow(this.windowId);
 			this.maximized = true;
 			//console.log('maximized window', await this.ow.getCurrentWindow());

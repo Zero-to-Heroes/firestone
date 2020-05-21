@@ -75,9 +75,14 @@
 			border-right: 1px solid var(--color-3);
 			justify-content: space-evenly;
 
-			::ng-deep bgs-board .board {
-				margin-bottom: 20px;
-				height: 7vw;
+			::ng-deep bgs-board {
+				.board {
+					margin-bottom: 20px;
+					height: 7vw;
+				}
+				.board-turn {
+					font-size: var(--variable-title-font-size);
+				}
 			}
 		}
 
@@ -93,6 +98,7 @@
 				.title {
 					width: 90px;
 					margin-right: 30px;
+					font-size: var(--variable-title-font-size);
 				}
 
 				.triple-tiers {
