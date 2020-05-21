@@ -19,8 +19,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 						<span class="title">Battlegrounds in-game app is now live! </span>
 						<span class="subtitle"
 							>It will show up as another window once you start a Battlegrounds run (it's only available
-							during a Battlegrounds run), and this page will have Battlegrounds stats in the
-							future.</span
+							during a Battlegrounds run, and can be controlled by another hotkey, Alt+B by default). This
+							page will have Battlegrounds stats in the future.</span
 						>
 					</div>
 				</with-loading>
