@@ -47,8 +47,6 @@ module.exports = function(env, argv) {
 			template: 'src/html/decktracker-twitch.html',
 			chunksSortMode: 'manual',
 		}),
-
-		new BundleAnalyzerPlugin(),
 	];
 
 	return {
