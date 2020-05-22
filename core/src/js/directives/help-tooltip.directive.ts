@@ -9,6 +9,7 @@ import {
 	Input,
 	OnDestroy,
 	OnInit,
+	Optional,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -42,7 +43,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		private elementRef: ElementRef,
 		private overlay: Overlay,
 		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
+		@Optional() private ow: OverwolfService,
 		private renderer: Renderer2,
 	) {}
 
@@ -138,7 +139,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		// These are used by the decktracker, since the window has some transparent space to the left
 		// and right that can go out of the game's window
 		// For all other cases, it should not be needed
-		if (this.bindTooltipToGameWindow) {
+		if (this.bindTooltipToGameWindow && this.ow) {
 			const window = await this.ow.getCurrentWindow();
 			const gameInfo = await this.ow.getRunningGameInfo();
 			const tooltipLeft =

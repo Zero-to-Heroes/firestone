@@ -8,6 +8,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
+	Optional,
 	ViewRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -78,14 +79,16 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 		private el: ElementRef,
 		private cdr: ChangeDetectorRef,
 		private events: Events,
-		private ow: OverwolfService,
+		@Optional() private ow: OverwolfService,
 	) {}
 
 	ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			this.refreshScroll();
-		});
+		if (this.ow) {
+			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+			this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+				this.refreshScroll();
+			});
+		}
 	}
 
 	ngOnDestroy() {

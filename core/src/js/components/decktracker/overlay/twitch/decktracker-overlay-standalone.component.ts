@@ -27,7 +27,7 @@ import { Events } from '../../../../services/events.service';
 	template: `
 		<div
 			*ngIf="gameState"
-			class="root"
+			class="root active"
 			[ngClass]="{ 'dragging': dragging }"
 			[activeTheme]="'decktracker'"
 			cdkDrag

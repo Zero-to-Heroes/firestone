@@ -21,6 +21,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 				(mousedown)="copyDeckstring()"
 				(mouseenter)="onMouseEnter()"
 				(mouseleave)="onMouseLeave()"
+				helpTooltip="Copy the current deck code to the clipboard"
 			>
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
@@ -33,22 +34,52 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 				</svg>
 			</button>
 		</div>
+		<textarea readonly class="deckstring-code" *ngIf="shouldShowDeckstring" (mousedown)="stopBubbling($event)"
+			>{{ this.deckState.deckstring }} 
+			Please manually copy the deck code above. This is a temporary workaround until copying to the clipboard is once again possible on Twitch when using Chrome.
+			(click on the Copy button to close)			
+		</textarea
+		>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerTwitchTitleBarComponent {
 	@Input() deckState: DeckState;
 	copyText: string;
+	shouldShowDeckstring = false;
 	copied = false;
 
 	constructor(private cdr: ChangeDetectorRef) {}
 
-	copyDeckstring() {
-		(navigator as any).clipboard.writeText(this.deckState.deckstring);
-		this.copyText = 'Copied';
-		this.copied = true;
-		console.log('copied deckstring to clipboard', this.deckState.deckstring);
-		this.cdr.detectChanges();
+	async copyDeckstring() {
+		if (this.shouldShowDeckstring) {
+			this.shouldShowDeckstring = false;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			return;
+		}
+		const copyPermission = await (navigator as any).permissions.query({
+			name: 'clipboard-write',
+			allowWithoutSanitization: false,
+			allowWithoutGesture: false,
+		});
+		if (true || copyPermission.state === 'denied') {
+			// See https://github.com/HearthSim/twitch-hdt-frontend/issues/50
+			this.copyText = 'Manual copy';
+			this.shouldShowDeckstring = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		} else {
+			(navigator as any).clipboard.writeText(this.deckState.deckstring);
+			this.copyText = 'Copied';
+			this.copied = true;
+			console.log('copied deckstring to clipboard', this.deckState.deckstring);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
 		setTimeout(() => {
 			this.copied = false;
 			this.copyText = null;
@@ -56,6 +87,10 @@ export class DeckTrackerTwitchTitleBarComponent {
 				this.cdr.detectChanges();
 			}
 		}, 3000);
+	}
+
+	stopBubbling(event: MouseEvent) {
+		event.stopPropagation();
 	}
 
 	onMouseEnter() {
