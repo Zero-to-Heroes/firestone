@@ -31,10 +31,22 @@
 	.close-button {
 		background: #1f2142;
 		color: #9fb6d7;
+		width: 30px;
+		height: 30px;
 
 		&:hover {
 			background: #9fb6d7;
 			color: #101530;
 		}
 	}
+}
+
+.deckstring-code {
+	overflow: hidden;
+	background: #1f2142;
+	color: #9fb6d7;
+	padding: 10px;
+	padding-top: 0;
+	height: 230px;
+	resize: none;
 }
