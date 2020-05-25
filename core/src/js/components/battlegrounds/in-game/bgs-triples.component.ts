@@ -33,7 +33,7 @@ declare let amplitude: any;
 					<tavern-level-icon [level]="triple.minionTier + 1" class="tavern"></tavern-level-icon>
 				</div>
 			</div>
-			<div class="subtitle" *ngIf="!tierTriples?.length">No new triple since the last encounter</div>
+			<div class="subtitle" *ngIf="!tierTriples?.length">No new triple</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
