@@ -13,7 +13,7 @@ declare let amplitude: any;
 	template: `
 		<div class="triples-section">
 			<div class="title" *ngIf="tierTriples?.length">New triples</div>
-			<div class="triple-tiers">
+			<div class="triple-tiers" *ngIf="tierTriples?.length">
 				<div
 					*ngFor="let triple of tierTriples || []; trackBy: trackByFn"
 					class="triple"
