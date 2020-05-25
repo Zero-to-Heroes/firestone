@@ -704,9 +704,9 @@ export class OverwolfService {
 
 	public async getFileContents(filePathOnDisk: string): Promise<string> {
 		return new Promise<string>(resolve => {
-			overwolf.io.readFileContents(filePathOnDisk, 'UTF8', (res, error) => {
+			overwolf.io.readTextFile(filePathOnDisk, { encoding: 'UTF8' }, (res, error) => {
 				// console.log('[overwolf-service] file contents', res, error);
-				resolve(res.status === 'success' ? res.content : null);
+				resolve(res.success ? res.content : null);
 			});
 		});
 	}

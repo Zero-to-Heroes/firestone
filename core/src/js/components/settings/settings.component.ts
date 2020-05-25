@@ -68,7 +68,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 		this.settingsSubscription = this.settingsEventBus.subscribe(([selectedApp, selectedMenu]) => {
 			// No replays screen yet
-			console.log('selecting app', selectedApp, selectedMenu);
+			// console.log('selecting app', selectedApp, selectedMenu);
 			this.selectApp(selectedApp, selectedMenu);
 		});
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(async message => {
@@ -91,7 +91,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	selectApp(selectedApp: string, selectedMenu?: string) {
-		console.log('selectApp', selectedApp, selectedMenu);
+		// console.log('selectApp', selectedApp, selectedMenu);
 		this.selectedApp = selectedApp;
 		this.selectedMenu = selectedMenu || this.getDefaultMenu(selectedApp);
 		if (!(this.cdr as ViewRef)?.destroyed) {
