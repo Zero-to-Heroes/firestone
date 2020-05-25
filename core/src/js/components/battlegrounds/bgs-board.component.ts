@@ -33,7 +33,7 @@ import { normalizeCardId } from './post-match/card-utils';
 		<div class="board-turn empty" *ngIf="_entities && _entities.length === 0">
 			Last board was empty
 		</div>
-		<ul class="board">
+		<ul class="board" *ngIf="_entities && _entities.length > 0">
 			<div class="minion-container" *ngFor="let entity of _entities || []; trackBy: trackByFn">
 				<li>
 					<card-on-board
