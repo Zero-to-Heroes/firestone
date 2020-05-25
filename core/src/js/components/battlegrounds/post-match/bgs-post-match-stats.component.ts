@@ -81,7 +81,7 @@ declare let amplitude: any;
 							*ngFor="let tab of tabs"
 							class="tab"
 							[ngClass]="{ 'active': tab === selectedTab }"
-							(click)="selectTab(tab)"
+							(mousedown)="selectTab(tab)"
 						>
 							{{ getLabel(tab) }}
 						</li>
@@ -194,6 +194,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	selectTab(tab: BgsStatsFilterId) {
+		// console.log('selecting tab', tab);
 		this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab));
 	}
 
