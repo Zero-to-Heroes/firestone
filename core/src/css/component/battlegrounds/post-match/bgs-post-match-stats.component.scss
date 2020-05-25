@@ -52,7 +52,7 @@
 			margin: auto;
 
 			.minion-container {
-				width: 11%;
+				// width: 11%;
 
 				li {
 					width: 100%;
@@ -75,6 +75,7 @@
 		list-style: none;
 		flex-grow: 0;
 		flex-shrink: 0;
+		font-size: var(--variable-title-font-size);
 
 		.tab {
 			margin-right: 30px;

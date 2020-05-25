@@ -15,10 +15,11 @@
 	.item {
 		display: flex;
 		align-items: center;
-		justify-content: center;
+		justify-content: flex-start;
 		margin-right: 25px;
 		font-size: 11px;
 		position: relative;
+		flex-grow: 1;
 
 		.portrait {
 			max-width: 60px;
@@ -90,7 +91,15 @@
 	min-width: 240px;
 	color: var(--color-6);
 	font-size: 14px;
+	font-size: var(--variable-title-font-size);
 	align-items: center;
+	max-width: 300px;
+
+	.subtitle {
+		width: 100%;
+		// font-size: 11px;
+		color: var(--color-common-1);
+	}
 
 	.toggle {
 		margin-right: 1vw;
@@ -101,7 +110,7 @@
 		label {
 			display: flex;
 
-			p {
+			.position-item {
 				margin-right: 4px;
 			}
 
@@ -221,3 +230,21 @@
 		}
 	}
 }
+
+@media (max-width: 1450px) {
+	.toggles {
+		max-width: 180px;
+		min-width: 180px;
+	}
+	.position-item {
+		display: none;
+	}
+}
+
+// @media (max-height: 900px) {
+// 	.toggles {
+// 		.subtitle {
+// 			font-size: 11px;
+// 		}
+// 	}
+// }

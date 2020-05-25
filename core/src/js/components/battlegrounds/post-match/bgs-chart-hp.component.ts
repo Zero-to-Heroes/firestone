@@ -35,6 +35,7 @@ declare let amplitude: any;
 				</div>
 			</div>
 			<div class="toggles">
+				<div class="subtitle">Show me:</div>
 				<div *ngFor="let player of legend" class="toggle position">
 					<input
 						type="checkbox"
@@ -46,7 +47,7 @@ declare let amplitude: any;
 						class="position-{{ player.position }}"
 						(click)="togglePlayer(player.cardId)"
 					>
-						<p>#{{ player.position }}</p>
+						<p class="position-item">#{{ player.position }}</p>
 						<i class="unselected" *ngIf="!player.shown">
 							<svg>
 								<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
