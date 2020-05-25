@@ -37,8 +37,8 @@ export class Events {
 	public static readonly GLOBAL_STATS_UPDATED = 'global-stats-updated';
 	public static readonly MATCH_STATS_UPDATED = 'EVENTS_MATCH_STATS_UPDATED';
 
-	public static readonly SHOW_TOOLTIP = 'show-tooltip';
-	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
+	// public static readonly SHOW_TOOLTIP = 'show-tooltip';
+	// public static readonly HIDE_TOOLTIP = 'hide-tooltip';
 
 	// An intermediate layer for decktracker, so that we have better control on the display
 	public static readonly DECK_SHOW_TOOLTIP = 'deck-show-tooltip';

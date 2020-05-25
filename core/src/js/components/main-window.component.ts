@@ -89,7 +89,6 @@ declare let amplitude: any;
 				<battlegrounds-desktop class="main-section" [hidden]="navigationState.currentApp !== 'battlegrounds'">
 				</battlegrounds-desktop>
 			</section>
-			<tooltips></tooltips>
 			<ads [parentComponent]="'main-window'" *ngIf="!dataState.showFtue"></ads>
 		</window-wrapper>
 	`,

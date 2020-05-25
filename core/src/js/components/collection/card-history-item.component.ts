@@ -113,7 +113,6 @@ export class CardHistoryItemComponent implements AfterViewInit {
 			'page': 'collection',
 		});
 		this.stateUpdater.next(new ShowCardDetailsEvent(this.cardId));
-		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}
 
 	private getDust(dbCard: any, isPremium: boolean) {

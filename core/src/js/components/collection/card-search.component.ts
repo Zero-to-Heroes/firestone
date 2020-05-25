@@ -120,7 +120,6 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 
 	showCard(result: SetCard) {
 		this.stateUpdater.next(new ShowCardDetailsEvent(result.id));
-		this.events.broadcast(Events.HIDE_TOOLTIP, result.id);
 	}
 
 	onFocusLost() {

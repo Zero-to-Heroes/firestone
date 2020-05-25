@@ -21,7 +21,6 @@ import { PreferenceToggleComponent } from '../../components/settings/preference-
 import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
 import { ConfirmationComponent } from '../../components/tooltip/confirmation.component';
 import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
-import { Tooltip, TooltipsComponent } from '../../components/tooltips.component';
 import { VersionComponent } from '../../components/version.component';
 import { WindowWrapperComponent } from '../../components/window-wrapper.component';
 import { WithLoadingComponent } from '../../components/with-loading.component';
@@ -52,8 +51,6 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		HotkeyComponent,
 		VersionComponent,
 
-		Tooltip,
-		TooltipsComponent,
 		CardTooltipComponent,
 		HelpTooltipComponent,
 		ConfirmationComponent,
@@ -79,7 +76,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		AdsComponent,
 	],
-	entryComponents: [Tooltip, HelpTooltipComponent, CardTooltipComponent, ConfirmationComponent],
+	entryComponents: [HelpTooltipComponent, CardTooltipComponent, ConfirmationComponent],
 	exports: [
 		WindowWrapperComponent,
 
@@ -94,8 +91,6 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		HotkeyComponent,
 		VersionComponent,
 
-		Tooltip,
-		TooltipsComponent,
 		CardTooltipComponent,
 		HelpTooltipComponent,
 		ConfirmationComponent,

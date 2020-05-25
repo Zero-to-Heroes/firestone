@@ -99,7 +99,6 @@ export class FullCardComponent {
 		}
 		this.previousClips = this.audioClips || [];
 		this.audioClips = [];
-		this.events.broadcast(Events.HIDE_TOOLTIP);
 		const card = this.cards.getCard(selectedCard.id);
 		// console.log('setting full card', card, selectedCard);
 		if (card.audio) {
