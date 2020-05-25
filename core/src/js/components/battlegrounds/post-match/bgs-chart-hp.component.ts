@@ -239,22 +239,29 @@ export class BgsChartHpComponent implements AfterViewInit {
 					// return data.datasets[item[0].datasetIndex].label;
 				},
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					return this.legend.map(legendItem => {
-						const cardId = legendItem.cardId;
-						const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
-						const dataForPlayer = data.datasets[datasetIndex];
-						// console.log(
-						// 	'dataForPlayer',
-						// 	dataForPlayer,
-						// 	datasetIndex,
-						// 	cardId,
-						// 	data.datasets.map(dataset => (dataset as any).cardId),
-						// );
-						const playerName = this.allCards.getCard((dataForPlayer as any).cardId).name;
-						const playerItem = item[datasetIndex];
-						const color = this.playerColors[datasetIndex];
-						return `<div class="node" style="background: ${color}"></div> ${playerItem?.value} health`;
-					});
+					return this.legend
+						.filter(legendItem => {
+							const cardId = legendItem.cardId;
+							const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
+							const playerItem = item[datasetIndex];
+							return playerItem?.value != null;
+						})
+						.map(legendItem => {
+							const cardId = legendItem.cardId;
+							const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
+							const dataForPlayer = data.datasets[datasetIndex];
+							// console.log(
+							// 	'dataForPlayer',
+							// 	dataForPlayer,
+							// 	datasetIndex,
+							// 	cardId,
+							// 	data.datasets.map(dataset => (dataset as any).cardId),
+							// );
+							const playerName = this.allCards.getCard((dataForPlayer as any).cardId).name;
+							const playerItem = item[datasetIndex];
+							const color = this.playerColors[datasetIndex];
+							return `<div class="node" style="background: ${color}"></div> ${playerItem?.value} health`;
+						});
 				},
 				label: (item: ChartTooltipItem, data: ChartData): string | string[] => {
 					// console.log('label for', item, data);
