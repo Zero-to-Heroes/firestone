@@ -28,7 +28,11 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 				</svg>
 			</i>
 			<div class="copy-text" [ngClass]="{ 'copied': copied }">{{ copyText }}</div>
-			<button class="i-30 close-button" (mousedown)="closeWindow()">
+			<button
+				class="i-30 close-button"
+				(mousedown)="closeWindow()"
+				helpTooltip="Minimize the tracker. You can reactivate it with the Extension Settings button at the bottom"
+			>
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#window-control_minimize"></use>
 				</svg>
@@ -64,7 +68,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 			allowWithoutSanitization: false,
 			allowWithoutGesture: false,
 		});
-		if (true || copyPermission.state === 'denied') {
+		if (copyPermission.state === 'denied') {
 			// See https://github.com/HearthSim/twitch-hdt-frontend/issues/50
 			this.copyText = 'Manual copy';
 			this.shouldShowDeckstring = true;

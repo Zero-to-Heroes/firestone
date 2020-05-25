@@ -1,12 +1,6 @@
 .container {
-    width: 1000px;
-    height: 605px;
-    // background: url('https://i.imgur.com/VoPhfFX.png');
-    // background: url('./assets/images/twitch-dev/board3.jpg');
-    // background: url('./assets/images/twitch-dev/board4.jpg');
-    // background: url('./assets/images/twitch-dev/bg5.webp');
-    // background: url('./assets/images/twitch-dev/board6.png');
-    background: url('./assets/images/twitch-dev/board7.jpg');
-    // background: url('./assets/images/twitch-dev/board10.jpg');
-    background-size: 100%;
+	width: 1000px;
+	height: 605px;
+	background: url('/core/src/assets/images/twitch-dev/board7.jpg');
+	background-size: 100%;
 }

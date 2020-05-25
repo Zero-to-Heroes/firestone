@@ -21,7 +21,7 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 			<state-mouse-over [gameState]="gameState" *ngIf="gameState"></state-mouse-over>
 			<decktracker-overlay-standalone [gameState]="gameState" (dragStart)="onDragStart()" (dragEnd)="onDragEnd()">
 			</decktracker-overlay-standalone>
-			<tooltips [module]="'decktracker'" [position]="'outside'"></tooltips>
+			<!-- <tooltips [module]="'decktracker'" [position]="'outside'"></tooltips> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,7 +56,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			});
 		});
 		console.log('init done');
-		this.addDebugGameState();
+		// this.addDebugGameState();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

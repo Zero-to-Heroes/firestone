@@ -1,446 +1,1037 @@
 {
-    "playerDeck": {
-        "deckList": [
-            {
-                "cardId": "CFM_759",
-                "cardName": "Meanstreet Marshal",
-                "manaCost": 1,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "UNG_954",
-                "cardName": "The Last Kaleidosaur",
-                "manaCost": 1,
-                "rarity": "legendary"
-            },
-            {
-                "cardId": "ICC_038",
-                "cardName": "Righteous Protector",
-                "manaCost": 1,
-                "rarity": "common"
-            },
-            {
-                "cardId": "ICC_038",
-                "cardName": "Righteous Protector",
-                "manaCost": 1,
-                "rarity": "common"
-            },
-            {
-                "cardId": "UNG_953",
-                "cardName": "Primalfin Champion",
-                "manaCost": 2,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "UNG_953",
-                "cardName": "Primalfin Champion",
-                "manaCost": 2,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "ICC_039",
-                "cardName": "Dark Conviction",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "ICC_039",
-                "cardName": "Dark Conviction",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "ICC_244",
-                "cardName": "Desperate Stand",
-                "manaCost": 2,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "ICC_244",
-                "cardName": "Desperate Stand",
-                "manaCost": 2,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "LOOT_088",
-                "cardName": "Potion of Heroism",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "LOOT_088",
-                "cardName": "Potion of Heroism",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "GIL_145",
-                "cardName": "Sound the Bells!",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "GIL_145",
-                "cardName": "Sound the Bells!",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "TRL_306",
-                "cardName": "Immortal Prelate",
-                "manaCost": 2,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "DAL_568",
-                "cardName": "Lightforged Blessing",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "DAL_568",
-                "cardName": "Lightforged Blessing",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "AT_074",
-                "cardName": "Seal of Champions",
-                "manaCost": 3,
-                "rarity": "common"
-            },
-            {
-                "cardId": "AT_074",
-                "cardName": "Seal of Champions",
-                "manaCost": 3,
-                "rarity": "common"
-            },
-            {
-                "cardId": "OG_310",
-                "cardName": "Steward of Darkshire",
-                "manaCost": 3,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "OG_310",
-                "cardName": "Steward of Darkshire",
-                "manaCost": 3,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "CFM_815",
-                "cardName": "Wickerflame Burnbristle",
-                "manaCost": 3,
-                "rarity": "legendary"
-            },
-            {
-                "cardId": "DAL_573",
-                "cardName": "Commander Rhyssa",
-                "manaCost": 3,
-                "rarity": "legendary"
-            },
-            {
-                "cardId": "CS2_092",
-                "cardName": "Blessing of Kings",
-                "manaCost": 4,
-                "rarity": "free"
-            },
-            {
-                "cardId": "CS2_092",
-                "cardName": "Blessing of Kings",
-                "manaCost": 4,
-                "rarity": "free"
-            },
-            {
-                "cardId": "AT_076",
-                "cardName": "Murloc Knight",
-                "manaCost": 4,
-                "rarity": "common"
-            },
-            {
-                "cardId": "GIL_634",
-                "cardName": "Bellringer Sentry",
-                "manaCost": 4,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "GIL_634",
-                "cardName": "Bellringer Sentry",
-                "manaCost": 4,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "BOT_911",
-                "cardName": "Annoy-o-Module",
-                "manaCost": 4,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "BOT_911",
-                "cardName": "Annoy-o-Module",
-                "manaCost": 4,
-                "rarity": "rare"
-            }
-        ],
-        "hand": [
-            {
-                "cardId": "DAL_568",
-                "entityId": 19,
-                "cardName": "Lightforged Blessing",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "DAL_568",
-                "entityId": 19,
-                "cardName": "Lightforged Blessing",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "ICC_039",
-                "entityId": 22,
-                "cardName": "Dark Conviction",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "OG_310",
-                "entityId": 21,
-                "cardName": "Steward of Darkshire",
-                "manaCost": 3,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "DAL_568",
-                "entityId": 13,
-                "cardName": "Lightforged Blessing",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "DAL_568",
-                "entityId": 13,
-                "cardName": "Lightforged Blessing",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "DAL_568",
-                "entityId": 13,
-                "cardName": "Lightforged Blessing",
-                "manaCost": 2,
-                "rarity": "common"
-            }
-        ],
-        "deck": [
-            {
-                "cardId": "CFM_759",
-                "cardName": "Meanstreet Marshal",
-                "manaCost": 1,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "ICC_038",
-                "cardName": "Righteous Protector",
-                "manaCost": 1,
-                "rarity": "common"
-            },
-            {
-                "cardId": "ICC_038",
-                "cardName": "Righteous Protector",
-                "manaCost": 1,
-                "rarity": "common"
-            },
-            {
-                "cardId": "UNG_953",
-                "cardName": "Primalfin Champion",
-                "manaCost": 2,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "UNG_953",
-                "cardName": "Primalfin Champion",
-                "manaCost": 2,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "ICC_039",
-                "cardName": "Dark Conviction",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "ICC_244",
-                "cardName": "Desperate Stand",
-                "manaCost": 2,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "LOOT_088",
-                "cardName": "Potion of Heroism",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "LOOT_088",
-                "cardName": "Potion of Heroism",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "GIL_145",
-                "cardName": "Sound the Bells!",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "GIL_145",
-                "cardName": "Sound the Bells!",
-                "manaCost": 2,
-                "rarity": "common"
-            },
-            {
-                "cardId": "TRL_306",
-                "cardName": "Immortal Prelate",
-                "manaCost": 2,
-                "rarity": "epic"
-            },
-            {
-                "cardId": "AT_074",
-                "cardName": "Seal of Champions",
-                "manaCost": 3,
-                "rarity": "common"
-            },
-            {
-                "cardId": "AT_074",
-                "cardName": "Seal of Champions",
-                "manaCost": 3,
-                "rarity": "common"
-            },
-            {
-                "cardId": "OG_310",
-                "cardName": "Steward of Darkshire",
-                "manaCost": 3,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "CFM_815",
-                "cardName": "Wickerflame Burnbristle",
-                "manaCost": 3,
-                "rarity": "legendary"
-            },
-            {
-                "cardId": "DAL_573",
-                "cardName": "Commander Rhyssa",
-                "manaCost": 3,
-                "rarity": "legendary"
-            },
-            {
-                "cardId": "CS2_092",
-                "cardName": "Blessing of Kings",
-                "manaCost": 4,
-                "rarity": "free"
-            },
-            {
-                "cardId": "CS2_092",
-                "cardName": "Blessing of Kings",
-                "manaCost": 4,
-                "rarity": "free"
-            },
-            {
-                "cardId": "AT_076",
-                "cardName": "Murloc Knight",
-                "manaCost": 4,
-                "rarity": "common"
-            },
-            {
-                "cardId": "GIL_634",
-                "cardName": "Bellringer Sentry",
-                "manaCost": 4,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "GIL_634",
-                "cardName": "Bellringer Sentry",
-                "manaCost": 4,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "BOT_911",
-                "cardName": "Annoy-o-Module",
-                "manaCost": 4,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "BOT_911",
-                "cardName": "Annoy-o-Module",
-                "manaCost": 4,
-                "rarity": "rare"
-            },
-            {
-                "cardId": "ICC_244",
-                "entityId": 31,
-                "cardName": "Desperate Stand",
-                "manaCost": 2,
-                "rarity": "rare"
-            }
-        ],
-        "board": [
-            {
-                "cardId": "CS2_101t",
-                "entityId": 81,
-                "cardName": "Silver Hand Recruit",
-                "manaCost": 1,
-                "rarity": "Free",
-                "zone": "PLAY"
-            }
-        ],
-        "otherZone": [
-            {
-                "cardId": "UNG_954",
-                "entityId": 27,
-                "cardName": "The Last Kaleidosaur",
-                "manaCost": 1,
-                "rarity": "legendary"
-            }
-        ],
-        "dynamicZones": [],
-        "deckstring": "AAEBAZ8FBt8Ugb0CvL0CjMcC5oYDlJoDDK8HnRX/rwKKxwLjywLlywLIzgLt0gL57AKt8gLh/gKKmgMA",
-        "name": "Custom Paladin",
-        "hero": {
-            "cardId": "HERO_04",
-            "name": "Uther Lightbringer"
-        },
-        "graveyard": []
-    },
-    "opponentDeck": {
-        "deckList": [],
-        "hand": [],
-        "deck": [],
-        "board": [
-            {
-                "cardId": "CS1_042",
-                "entityId": 50
-            },
-            {
-                "cardId": "CS2_189",
-                "entityId": 60
-            }
-        ],
-        "otherZone": [
-            {
-                "cardId": "GAME_005",
-                "entityId": 68
-            }
-        ],
-        "dynamicZones": [],
-        "graveyard": []
-    },
-    "mulliganOver": true,
-    "metadata": {
-        "gameType": 1,
-        "formatType": 1,
-        "scenarioId": 257
-    }
+	"playerDeck": {
+		"deckList": [
+			{
+				"metaInfo": {},
+				"cardId": "EX1_144",
+				"cardName": "Shadowstep",
+				"manaCost": 0,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_144",
+				"cardName": "Shadowstep",
+				"manaCost": 0,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_146",
+				"cardName": "Southsea Deckhand",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_146",
+				"cardName": "Southsea Deckhand",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "ULD_186",
+				"cardName": "Pharaoh Cat",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "ULD_186",
+				"cardName": "Pharaoh Cat",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_030",
+				"cardName": "Praise Galakrond!",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_030",
+				"cardName": "Praise Galakrond!",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_035",
+				"cardName": "Bloodsail Flybooter",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_035",
+				"cardName": "Bloodsail Flybooter",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_124",
+				"cardName": "Eviscerate",
+				"manaCost": 2,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_124",
+				"cardName": "Eviscerate",
+				"manaCost": 2,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "BT_707",
+				"cardName": "Ambush",
+				"manaCost": 2,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_203",
+				"cardName": "Ironbeak Owl",
+				"manaCost": 3,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_134",
+				"cardName": "SI:7 Agent",
+				"manaCost": 3,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_134",
+				"cardName": "SI:7 Agent",
+				"manaCost": 3,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DAL_415",
+				"cardName": "EVIL Miscreant",
+				"manaCost": 3,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DAL_415",
+				"cardName": "EVIL Miscreant",
+				"manaCost": 3,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DAL_773",
+				"cardName": "Magic Carpet",
+				"manaCost": 3,
+				"rarity": "epic"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_247",
+				"cardName": "Seal Fate",
+				"manaCost": 3,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_247",
+				"cardName": "Seal Fate",
+				"manaCost": 3,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_050",
+				"cardName": "Devoted Maniac",
+				"manaCost": 4,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_050",
+				"cardName": "Devoted Maniac",
+				"manaCost": 4,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_242",
+				"cardName": "Shield of Galakrond",
+				"manaCost": 5,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_242",
+				"cardName": "Shield of Galakrond",
+				"manaCost": 5,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_076",
+				"cardName": "Faceless Corruptor",
+				"manaCost": 5,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_076",
+				"cardName": "Faceless Corruptor",
+				"manaCost": 5,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_037",
+				"cardName": "Flik Skyshiv",
+				"manaCost": 6,
+				"rarity": "legendary"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "ULD_178",
+				"cardName": "Siamat",
+				"manaCost": 7,
+				"rarity": "legendary"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_610",
+				"cardName": "Galakrond, the Nightmare",
+				"manaCost": 7,
+				"rarity": "legendary"
+			}
+		],
+		"secrets": [],
+		"secretHelperActive": true,
+		"hand": [
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"cardId": "DAL_415",
+				"entityId": 18,
+				"cardName": "EVIL Miscreant",
+				"manaCost": 3,
+				"rarity": "common",
+				"creatorCardId": null
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": 0
+				},
+				"cardId": "BT_707",
+				"entityId": 13,
+				"cardName": "Ambush",
+				"manaCost": 2,
+				"rarity": "rare",
+				"creatorCardId": null
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"cardId": "CS2_146",
+				"entityId": 27,
+				"cardName": "Southsea Deckhand",
+				"manaCost": 1,
+				"rarity": "common",
+				"creatorCardId": null
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"cardId": "GAME_005",
+				"entityId": 69,
+				"cardName": "The Coin",
+				"manaCost": 0,
+				"creatorCardId": null
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"cardId": "DRG_247",
+				"entityId": 23,
+				"cardName": "Seal Fate",
+				"manaCost": 3,
+				"rarity": "rare",
+				"creatorCardId": null
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"cardId": "DRG_035",
+				"entityId": 7,
+				"cardName": "Bloodsail Flybooter",
+				"manaCost": 1,
+				"rarity": "common",
+				"creatorCardId": null
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"cardId": "DAL_415",
+				"entityId": 28,
+				"cardName": "EVIL Miscreant",
+				"manaCost": 3,
+				"rarity": "common",
+				"creatorCardId": null
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": 1
+				},
+				"cardId": "DRG_076",
+				"entityId": 9,
+				"cardName": "Faceless Corruptor",
+				"manaCost": 5,
+				"rarity": "rare",
+				"creatorCardId": null
+			}
+		],
+		"deck": [
+			{
+				"metaInfo": {},
+				"cardId": "EX1_144",
+				"cardName": "Shadowstep",
+				"manaCost": 0,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_144",
+				"cardName": "Shadowstep",
+				"manaCost": 0,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_146",
+				"cardName": "Southsea Deckhand",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "ULD_186",
+				"cardName": "Pharaoh Cat",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "ULD_186",
+				"cardName": "Pharaoh Cat",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_030",
+				"cardName": "Praise Galakrond!",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_030",
+				"cardName": "Praise Galakrond!",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_035",
+				"cardName": "Bloodsail Flybooter",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_124",
+				"cardName": "Eviscerate",
+				"manaCost": 2,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_124",
+				"cardName": "Eviscerate",
+				"manaCost": 2,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_203",
+				"cardName": "Ironbeak Owl",
+				"manaCost": 3,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_134",
+				"cardName": "SI:7 Agent",
+				"manaCost": 3,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_134",
+				"cardName": "SI:7 Agent",
+				"manaCost": 3,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DAL_773",
+				"cardName": "Magic Carpet",
+				"manaCost": 3,
+				"rarity": "epic"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_050",
+				"cardName": "Devoted Maniac",
+				"manaCost": 4,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_050",
+				"cardName": "Devoted Maniac",
+				"manaCost": 4,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_242",
+				"cardName": "Shield of Galakrond",
+				"manaCost": 5,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_242",
+				"cardName": "Shield of Galakrond",
+				"manaCost": 5,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_076",
+				"cardName": "Faceless Corruptor",
+				"manaCost": 5,
+				"rarity": "rare"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_037",
+				"cardName": "Flik Skyshiv",
+				"manaCost": 6,
+				"rarity": "legendary"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "ULD_178",
+				"cardName": "Siamat",
+				"manaCost": 7,
+				"rarity": "legendary"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "DRG_247",
+				"entityId": 16,
+				"cardName": "Seal Fate",
+				"manaCost": 3,
+				"rarity": "rare",
+				"creatorCardId": null
+			}
+		],
+		"board": [],
+		"otherZone": [
+			{
+				"metaInfo": {},
+				"cardId": "DRG_610",
+				"entityId": 5,
+				"cardName": "Galakrond, the Nightmare",
+				"manaCost": 7,
+				"rarity": "legendary",
+				"zone": "SETASIDE"
+			}
+		],
+		"dynamicZones": [],
+		"deckstring": "AAECAaIHBqICtZ8DhKcDwa4DzLkDy8ADDO0C1AWIB90Ij5cD9acDua4Dv64D/q4Dqq8Dzq8DgrEDAA==",
+		"name": "Custom Rogue",
+		"hero": {
+			"playerName": "Daedin",
+			"playerClass": "rogue"
+		},
+		"isFirstPlayer": true,
+		"heroPower": {
+			"metaInfo": {},
+			"cardId": "HERO_03bp",
+			"entityId": 66,
+			"cardName": "Dagger Mastery",
+			"manaCost": 2,
+			"rarity": "Free",
+			"zone": "PLAY"
+		},
+		"cardsLeftInDeck": 27,
+		"totalAttackOnBoard": {
+			"board": 0,
+			"hero": 0
+		}
+	},
+	"opponentDeck": {
+		"deckList": [
+			{
+				"metaInfo": {},
+				"cardId": "CS2_004",
+				"cardName": "Power Word: Shield",
+				"manaCost": 0,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_004",
+				"cardName": "Power Word: Shield",
+				"manaCost": 0,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_011",
+				"cardName": "Voodoo Doctor",
+				"manaCost": 1,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_011",
+				"cardName": "Voodoo Doctor",
+				"manaCost": 1,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS1_130",
+				"cardName": "Holy Smite",
+				"manaCost": 1,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS1_130",
+				"cardName": "Holy Smite",
+				"manaCost": 1,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_189",
+				"cardName": "Elven Archer",
+				"manaCost": 1,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_189",
+				"cardName": "Elven Archer",
+				"manaCost": 1,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_235",
+				"cardName": "Northshire Cleric",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_235",
+				"cardName": "Northshire Cleric",
+				"manaCost": 1,
+				"rarity": "common"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_121",
+				"cardName": "Frostwolf Grunt",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_121",
+				"cardName": "Frostwolf Grunt",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_172",
+				"cardName": "Bloodfen Raptor",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_172",
+				"cardName": "Bloodfen Raptor",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_622",
+				"cardName": "Shadow Word: Death",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_622",
+				"cardName": "Shadow Word: Death",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_234",
+				"cardName": "Shadow Word: Pain",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_234",
+				"cardName": "Shadow Word: Pain",
+				"manaCost": 2,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_127",
+				"cardName": "Silverback Patriarch",
+				"manaCost": 3,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_127",
+				"cardName": "Silverback Patriarch",
+				"manaCost": 3,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_019",
+				"cardName": "Shattered Sun Cleric",
+				"manaCost": 3,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_019",
+				"cardName": "Shattered Sun Cleric",
+				"manaCost": 3,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_182",
+				"cardName": "Chillwind Yeti",
+				"manaCost": 4,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_182",
+				"cardName": "Chillwind Yeti",
+				"manaCost": 4,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_179",
+				"cardName": "Sen'jin Shieldmasta",
+				"manaCost": 4,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_179",
+				"cardName": "Sen'jin Shieldmasta",
+				"manaCost": 4,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_399",
+				"cardName": "Gurubashi Berserker",
+				"manaCost": 5,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_399",
+				"cardName": "Gurubashi Berserker",
+				"manaCost": 5,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_201",
+				"cardName": "Core Hound",
+				"manaCost": 7,
+				"rarity": "free"
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_201",
+				"cardName": "Core Hound",
+				"manaCost": 7,
+				"rarity": "free"
+			}
+		],
+		"secrets": [],
+		"secretHelperActive": true,
+		"hand": [
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"entityId": 61
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"entityId": 44
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"entityId": 45
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"entityId": 42
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"entityId": 51,
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"entityId": 36,
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {
+					"turnAtWhichCardEnteredCurrentZone": "mulligan"
+				},
+				"entityId": 54,
+				"inInitialDeck": true
+			}
+		],
+		"deck": [
+			{
+				"metaInfo": {},
+				"cardId": "CS2_004",
+				"cardName": "Power Word: Shield",
+				"manaCost": 0,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_004",
+				"cardName": "Power Word: Shield",
+				"manaCost": 0,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_011",
+				"cardName": "Voodoo Doctor",
+				"manaCost": 1,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_011",
+				"cardName": "Voodoo Doctor",
+				"manaCost": 1,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS1_130",
+				"cardName": "Holy Smite",
+				"manaCost": 1,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS1_130",
+				"cardName": "Holy Smite",
+				"manaCost": 1,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_189",
+				"cardName": "Elven Archer",
+				"manaCost": 1,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_189",
+				"cardName": "Elven Archer",
+				"manaCost": 1,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_235",
+				"cardName": "Northshire Cleric",
+				"manaCost": 1,
+				"rarity": "common",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_235",
+				"cardName": "Northshire Cleric",
+				"manaCost": 1,
+				"rarity": "common",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_121",
+				"cardName": "Frostwolf Grunt",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_121",
+				"cardName": "Frostwolf Grunt",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_172",
+				"cardName": "Bloodfen Raptor",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_172",
+				"cardName": "Bloodfen Raptor",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_622",
+				"cardName": "Shadow Word: Death",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_622",
+				"cardName": "Shadow Word: Death",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_234",
+				"cardName": "Shadow Word: Pain",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_234",
+				"cardName": "Shadow Word: Pain",
+				"manaCost": 2,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_127",
+				"cardName": "Silverback Patriarch",
+				"manaCost": 3,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_127",
+				"cardName": "Silverback Patriarch",
+				"manaCost": 3,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_019",
+				"cardName": "Shattered Sun Cleric",
+				"manaCost": 3,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_019",
+				"cardName": "Shattered Sun Cleric",
+				"manaCost": 3,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_182",
+				"cardName": "Chillwind Yeti",
+				"manaCost": 4,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_182",
+				"cardName": "Chillwind Yeti",
+				"manaCost": 4,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_179",
+				"cardName": "Sen'jin Shieldmasta",
+				"manaCost": 4,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_179",
+				"cardName": "Sen'jin Shieldmasta",
+				"manaCost": 4,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_399",
+				"cardName": "Gurubashi Berserker",
+				"manaCost": 5,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "EX1_399",
+				"cardName": "Gurubashi Berserker",
+				"manaCost": 5,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_201",
+				"cardName": "Core Hound",
+				"manaCost": 7,
+				"rarity": "free",
+				"inInitialDeck": true
+			},
+			{
+				"metaInfo": {},
+				"cardId": "CS2_201",
+				"cardName": "Core Hound",
+				"manaCost": 7,
+				"rarity": "free",
+				"inInitialDeck": true
+			}
+		],
+		"board": [],
+		"otherZone": [],
+		"dynamicZones": [],
+		"isFirstPlayer": true,
+		"isOpponent": true,
+		"heroPower": {
+			"metaInfo": {},
+			"cardId": "HERO_06bp",
+			"entityId": 68,
+			"cardName": "Shapeshift",
+			"manaCost": 2,
+			"rarity": "Free",
+			"zone": "PLAY"
+		},
+		"cardsLeftInDeck": 26,
+		"hero": {
+			"playerName": "Anduin Wrynn",
+			"playerClass": "priest"
+		},
+		"deckstring": "AAEBAa0GAA8pQ1qEAdgBlwKFA+AE5QT7BIAG0wrXCvIMlw0A",
+		"showDecklistWarning": false,
+		"totalAttackOnBoard": {
+			"board": 0,
+			"hero": 0
+		}
+	},
+	"mulliganOver": true,
+	"metadata": {
+		"gameType": 1,
+		"formatType": 1,
+		"scenarioId": 261
+	},
+	"currentTurn": 1,
+	"gameStarted": true
 }

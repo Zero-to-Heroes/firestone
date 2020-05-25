@@ -23,6 +23,7 @@
 
 	empty-card {
 		margin-left: 0.5%;
+		width: 7%;
 	}
 }
 
@@ -75,15 +76,18 @@
 	align-items: center;
 	justify-content: center;
 	// Total is not 100% because the overlay doesn't go all the way to the bottom of the screen
-	top: 89%;
-	height: 16%;
+	top: 85%;
+	height: 20%;
 
 	// So that it's easier to mouse over the card
 	empty-card {
-		height: 150%;
+		position: absolute;
+		left: 50%;
+		top: 0;
+		// height: 150%;
 	}
 
-	::ng-deep empty-card img {
-		height: 74%;
+	::ng-deep empty-card .card.card.card img {
+		height: 64%;
 	}
 }
