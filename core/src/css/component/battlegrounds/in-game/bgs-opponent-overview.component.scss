@@ -42,10 +42,16 @@
 		overflow: hidden;
 		overflow: visible;
 
-		::ng-deep bgs-board .board {
-			// height: 3vw;
-			height: 6vh;
-			max-height: 6vh;
+		::ng-deep bgs-board {
+			.board-turn {
+				font-size: 14px;
+			}
+
+			.board {
+				// height: 3vw;
+				height: 6vh;
+				max-height: 6vh;
+			}
 		}
 	}
 
