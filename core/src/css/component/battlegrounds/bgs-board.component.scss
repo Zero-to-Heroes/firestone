@@ -20,7 +20,7 @@
 }
 
 .minion-container {
-	width: 11%;
+	// width: 11%;
 	margin-right: 3.5%;
 }
 
@@ -53,6 +53,7 @@ li {
 	margin-bottom: 10px;
 	flex-grow: 0;
 	flex-shrink: 0;
+	font-size: var(--variable-title-font-size);
 
 	&.empty {
 		// margin: auto;
@@ -80,6 +81,7 @@ li {
 .minion-stats {
 	display: flex;
 	flex-direction: column;
+	font-size: var(--variable-title-font-size);
 
 	.header {
 		color: var(--default-text-color);

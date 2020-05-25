@@ -78,7 +78,8 @@
 			::ng-deep bgs-board {
 				.board {
 					margin-bottom: 20px;
-					height: 7vw;
+					height: 15vh;
+					max-height: 15vh;
 				}
 			}
 		}

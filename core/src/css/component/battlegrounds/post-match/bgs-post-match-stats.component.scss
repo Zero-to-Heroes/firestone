@@ -38,7 +38,7 @@
 }
 
 .opponent-overview {
-	height: 40%;
+	height: 33%;
 	flex-grow: 0;
 	flex-shrink: 0;
 
@@ -46,10 +46,12 @@
 		border: none;
 		width: 100%;
 
-		::ng-deep .board {
+		::ng-deep bgs-board .board {
 			width: 100%;
 			justify-content: space-between;
 			margin: auto;
+			max-height: 80%;
+			height: auto;
 
 			.minion-container {
 				// width: 11%;

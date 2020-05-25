@@ -191,13 +191,13 @@ export class BgsBoardComponent implements AfterViewInit {
 				console.log('all good, drawing cards', this.previousBoardWidth, rect);
 			}
 			// The board size is fixed, now we add the cards
-			let cardWidth = rect.width / 8;
+			let cardWidth = (rect.width / 8) * 0.85; // take the margin into account
 			let cardHeight = 1.48 * cardWidth;
 			if (cardHeight > rect.height * this.maxBoardHeight) {
 				if (this.debug) {
 					console.log('cropping cards to height', cardHeight, rect.height, this.maxBoardHeight);
 				}
-				cardHeight = rect.height * this.maxBoardHeight;
+				cardHeight = 0.85 * rect.height * this.maxBoardHeight;
 				cardWidth = cardHeight / 1.48;
 			}
 			if (this.debug) {

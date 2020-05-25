@@ -43,7 +43,9 @@
 		overflow: visible;
 
 		::ng-deep bgs-board .board {
-			height: 3vw;
+			// height: 3vw;
+			height: 6vh;
+			max-height: 6vh;
 		}
 	}
 
