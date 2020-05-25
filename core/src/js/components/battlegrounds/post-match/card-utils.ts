@@ -9,12 +9,12 @@ export const normalizeCardId = (cardId: string, allCards: AllCardsService) => {
 			.getCards()
 			.filter(card => card.type === 'Minion')
 			.filter(card => !card.id.startsWith('TB_BaconUps_'))
-			.filter(card => card.name === premiumCard.name);
+			.filter(card => card.name === premiumCard.name)
+			.filter(card => card.set !== 'Wild_event')
+			.filter(card => card.set !== 'Tb');
 		if (normalCards.length !== 1) {
 			// When the card is reprinted for BGS
-			const bgsOnly = normalCards
-				.filter(card => card.id.startsWith('BGS'))
-				.filter(card => card.set !== 'Wild_event');
+			const bgsOnly = normalCards.filter(card => card.id.startsWith('BGS'));
 			if (bgsOnly.length > 0) {
 				normalCards = bgsOnly;
 			}
