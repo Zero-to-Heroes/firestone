@@ -141,18 +141,23 @@
 			}
 
 			.upgrades {
-				display: flex;
-				flex-wrap: wrap;
-				align-items: center;
-				justify-content: flex-start;
+				// display: flex;
+				// flex-wrap: wrap;
+				// align-items: center;
+				// justify-content: flex-start;
+				display: grid;
+				grid-template-columns: 50% 50%;
 			}
 
 			.tavern-upgrade {
-				width: 40%;
+				// width: 40%;
+				width: 80%;
+				margin: auto;
+				margin-bottom: 10%;
 			}
 
 			.label {
-				margin-top: -15%;
+				margin-top: -10%;
 				text-align: center;
 			}
 
