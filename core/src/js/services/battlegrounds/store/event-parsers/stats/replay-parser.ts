@@ -10,6 +10,7 @@ export const reparseReplay = (
 	replay: Replay,
 ): {
 	rerollsOverTurn: readonly NumericTurnInfo[];
+	coinsWastedOverTurn: readonly NumericTurnInfo[];
 	minionsSoldOverTurn: readonly NumericTurnInfo[];
 	hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	totalStatsOverTurn: readonly NumericTurnInfo[];
@@ -26,6 +27,7 @@ export const reparseReplay = (
 		currentTurn: 0,
 		boardOverTurn: Map.of(),
 		rerollOverTurn: Map.of(),
+		coinsWastedOverTurn: Map.of(),
 		minionsSoldOverTurn: Map.of(),
 		hpOverTurn: {},
 		leaderboardPositionOverTurn: {},
@@ -33,6 +35,8 @@ export const reparseReplay = (
 		entities: {},
 		rerollsForTurn: 0,
 		rerollsIds: [],
+		resourcesForTurn: 0,
+		resourcesUsedForTurn: 0,
 		playerHps: {},
 		leaderboardPositions: {},
 		minionsSoldForTurn: 0,
@@ -54,6 +58,8 @@ export const reparseReplay = (
 					fullEntity.get('cardID'),
 				) === -1,
 		);
+	const mainPlayerEntityId: string = replay.replay.find('.//Player[@isMainPlayer="true"]').get('id');
+	console.debug('mainPlayerEntityId', mainPlayerEntityId);
 	const playerCardIds: readonly string[] = [
 		...new Set(playerEntities.map(entity => entity.get('cardID'))),
 	] as readonly string[];
@@ -70,6 +76,7 @@ export const reparseReplay = (
 		[
 			compositionForTurnParse(structure),
 			rerollsForTurnParse(structure),
+			coinsWastedForTurnParse(structure, mainPlayerEntityId),
 			minionsSoldForTurnParse(structure),
 			hpForTurnParse(structure, playerEntities),
 			leaderboardForTurnParse(structure, playerEntities),
@@ -78,6 +85,7 @@ export const reparseReplay = (
 		[
 			compositionForTurnPopulate(structure, replay),
 			rerollsForTurnPopulate(structure, replay),
+			coinsWastedForTurnPopulate(structure, replay),
 			minionsSoldForTurnPopulate(structure, replay),
 			// Order is important, because we want to first populate the leaderboard (for which it's easy
 			// to filter out the mulligan choices) and use this to iterate on the other elements
@@ -111,6 +119,16 @@ export const reparseReplay = (
 		)
 		.valueSeq()
 		.toArray();
+	const coinsWastedOverTurn: readonly NumericTurnInfo[] = structure.coinsWastedOverTurn
+		.map(
+			(waste, turn: number) =>
+				({
+					turn: turn,
+					value: waste,
+				} as NumericTurnInfo),
+		)
+		.valueSeq()
+		.toArray();
 	const minionsSoldOverTurn: readonly NumericTurnInfo[] = structure.minionsSoldOverTurn
 		.map(
 			(minions, turn: number) =>
@@ -134,6 +152,7 @@ export const reparseReplay = (
 	return {
 		// compositionsOverTurn: compositionsOverTurn,
 		rerollsOverTurn: rerollsOverTurn,
+		coinsWastedOverTurn: coinsWastedOverTurn,
 		minionsSoldOverTurn: minionsSoldOverTurn,
 		hpOverTurn: hpOverTurn,
 		totalStatsOverTurn: totalStatsOverTurn,
@@ -193,6 +212,18 @@ const rerollsForTurnParse = (structure: ParsingStructure) => {
 	};
 };
 
+const coinsWastedForTurnParse = (structure: ParsingStructure, mainPlayerEntityId: string) => {
+	return (element: Element) => {
+		if (element.tag === 'TagChange' && mainPlayerEntityId === element.get('entity')) {
+			if (parseInt(element.get('tag')) === GameTag.RESOURCES) {
+				structure.resourcesForTurn = parseInt(element.get('value'));
+			} else if (parseInt(element.get('tag')) === GameTag.RESOURCES_USED) {
+				structure.resourcesUsedForTurn = parseInt(element.get('value'));
+			}
+		}
+	};
+};
+
 const minionsSoldForTurnParse = (structure: ParsingStructure) => {
 	return element => {
 		if (element.tag === 'FullEntity' && element.get('cardID') === 'TB_BaconShop_DragSell') {
@@ -239,6 +270,26 @@ const rerollsForTurnPopulate = (structure: ParsingStructure, replay: Replay) => 
 	return currentTurn => {
 		structure.rerollOverTurn = structure.rerollOverTurn.set(currentTurn, structure.rerollsForTurn);
 		structure.rerollsForTurn = 0;
+	};
+};
+
+const coinsWastedForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
+	return currentTurn => {
+		const totalResourcesGained = structure.resourcesForTurn + structure.minionsSoldForTurn;
+		console.debug(
+			'totalResourcesGained',
+			currentTurn,
+			totalResourcesGained,
+			structure.resourcesForTurn,
+			structure.minionsSoldForTurn,
+			structure.resourcesUsedForTurn,
+		);
+		structure.coinsWastedOverTurn = structure.coinsWastedOverTurn.set(
+			currentTurn,
+			Math.max(0, totalResourcesGained - structure.resourcesUsedForTurn),
+		);
+		structure.resourcesForTurn = 0;
+		structure.resourcesUsedForTurn = 0;
 	};
 };
 

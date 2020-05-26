@@ -24,6 +24,8 @@ export interface ParsingStructure {
 	};
 	rerollsIds: string[];
 	rerollsForTurn: number;
+	resourcesForTurn: number;
+	resourcesUsedForTurn: number;
 	minionsSoldIds: string[];
 	minionsSoldForTurn: number;
 
@@ -31,6 +33,7 @@ export interface ParsingStructure {
 	minionsDamageDealt: { [cardId: string]: number };
 	minionsDamageReceived: { [cardId: string]: number };
 	rerollOverTurn: Map<number, number>;
+	coinsWastedOverTurn: Map<number, number>;
 	minionsSoldOverTurn: Map<number, number>;
 	totalStatsOverTurn: Map<number, number>;
 	hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };

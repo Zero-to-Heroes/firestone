@@ -6,7 +6,6 @@ import { NumericTurnInfo } from './numeric-turn-info';
 export class BgsPostMatchStats {
 	readonly tavernTimings: readonly BgsTavernUpgrade[];
 	readonly tripleTimings: readonly BgsTriple[];
-	readonly coinsWasted: number;
 	readonly rerolls: number;
 
 	readonly replayLink: string;
@@ -14,6 +13,7 @@ export class BgsPostMatchStats {
 	readonly boardHistory: readonly BgsBoard[];
 	// readonly compositionsOverTurn: readonly BgsCompositionForTurn[];
 	readonly rerollsOverTurn: readonly NumericTurnInfo[];
+	readonly coinsWastedOverTurn: readonly NumericTurnInfo[];
 	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[];

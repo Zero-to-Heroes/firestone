@@ -1,4 +1,4 @@
-import { extractTotalManaSpent, parseHsReplayString, Replay } from '@firestone-hs/hs-replay-xml-parser';
+import { parseHsReplayString, Replay } from '@firestone-hs/hs-replay-xml-parser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -7,7 +7,6 @@ import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-
 import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { NumericTurnInfo } from '../../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { reparseReplay } from './stats/replay-parser';
@@ -58,7 +57,7 @@ export class BgsGameEndParser implements EventParser {
 		const postMatchStats: BgsPostMatchStats = BgsPostMatchStats.create({
 			tavernTimings: player.tavernUpgradeHistory,
 			tripleTimings: player.tripleHistory, // TODO: add the cards when relevant
-			coinsWasted: this.buildCoinsWasted(currentState, replay, structure.minionsSoldOverTurn),
+			coinsWastedOverTurn: structure.coinsWastedOverTurn,
 			rerolls: structure.rerollsOverTurn.map(turnInfo => turnInfo.value).reduce((a, b) => a + b, 0),
 			boardHistory: player.boardHistory,
 			// compositionsOverTurn: structure.compositionsOverTurn,
@@ -80,21 +79,5 @@ export class BgsGameEndParser implements EventParser {
 			isComputing: false,
 			name: 'You finished #' + finalPosition,
 		} as BgsPostMatchStatsPanel);
-	}
-
-	private buildCoinsWasted(
-		currentState: BattlegroundsState,
-		replay: Replay,
-		minionsSoldOverTurn: readonly NumericTurnInfo[],
-	): number {
-		let totalResourcesAvailable = 0;
-		for (let i = 0; i < currentState.currentGame.currentTurn; i++) {
-			totalResourcesAvailable += Math.min(10, 3 + i);
-		}
-		// TODO: this doesn't take into account the sold
-		const spent = extractTotalManaSpent(replay).player;
-		const earnedWithMinions = minionsSoldOverTurn.map(sold => sold.value).reduce((a, b) => a + b, 0);
-		console.log('earned', earnedWithMinions, 'by selling minions');
-		return totalResourcesAvailable + earnedWithMinions - spent;
 	}
 }
