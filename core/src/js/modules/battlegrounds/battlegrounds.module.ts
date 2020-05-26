@@ -34,7 +34,6 @@ import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
 import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
 import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/bgs-chart-hp.component';
-import { BgsChartStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-stats.component';
 import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
 import { BgsChartWarbandStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-stats.component';
 import { BgsPostMatchStatsRecapComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats-recap.component';
@@ -93,7 +92,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsChartHpComponent,
 		BgsChartWarbandStatsComponent,
 		BgsChartWarbandCompositionComponent,
-		BgsChartStatsComponent,
 		MenuSelectionBgsComponent,
 		BgsHeroTierComponent,
 		BgsHeroSelectionTooltipComponent,
