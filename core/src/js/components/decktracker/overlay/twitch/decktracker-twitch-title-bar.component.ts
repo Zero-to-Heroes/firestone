@@ -40,7 +40,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 		</div>
 		<textarea readonly class="deckstring-code" *ngIf="shouldShowDeckstring" (mousedown)="stopBubbling($event)"
 			>{{ this.deckState.deckstring }} 
-			Please manually copy the deck code above. This is a temporary workaround until copying to the clipboard is once again possible on Twitch when using Chrome.
+			Copy is temporarily down please copy the code manually.
 			(click on the Copy button to close)			
 		</textarea
 		>
@@ -63,10 +63,8 @@ export class DeckTrackerTwitchTitleBarComponent {
 			}
 			return;
 		}
-		const copyPermission = await (navigator as any).permissions.query({
-			name: 'clipboard-write',
-			allowWithoutSanitization: false,
-			allowWithoutGesture: false,
+		const copyPermission = await navigator.permissions.query({
+			name: 'clipboard',
 		});
 		if (copyPermission.state === 'denied') {
 			// See https://github.com/HearthSim/twitch-hdt-frontend/issues/50
