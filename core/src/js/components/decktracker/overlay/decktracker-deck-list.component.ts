@@ -85,14 +85,16 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	ngAfterViewInit() {
 		if (this.ow) {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-			this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-				this.refreshScroll();
-			});
+			this.preferencesSubscription =
+				preferencesEventBus &&
+				preferencesEventBus.subscribe(event => {
+					this.refreshScroll();
+				});
 		}
 	}
 
 	ngOnDestroy() {
-		this.preferencesSubscription.unsubscribe();
+		this.preferencesSubscription && this.preferencesSubscription.unsubscribe();
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click

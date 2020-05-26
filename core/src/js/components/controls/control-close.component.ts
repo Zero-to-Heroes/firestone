@@ -48,20 +48,29 @@ export class ControlCloseComponent implements AfterViewInit {
 			this.stateUpdater.next(new CloseMainWindowEvent());
 		}
 		// Delegate all the logic
-		if (this.eventProvider) {
-			console.log('delegating closing logic');
-			this.eventProvider();
-			return;
-		}
 		// If game is not running, we close all other windows
 		const isRunning: boolean = await this.ow.inGame();
-		if (this.closeAll && !isRunning) {
+		// Temp
+		const [mainWindow, bgsWindow] = await Promise.all([
+			this.ow.getWindowState(OverwolfService.COLLECTION_WINDOW),
+			this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW),
+		]);
+		const areBothMainAndBgWindowsOpen =
+			mainWindow.window_state_ex !== 'closed' &&
+			mainWindow.window_state_ex !== 'hidden' &&
+			bgsWindow.window_state_ex !== 'closed' &&
+			bgsWindow.window_state_ex !== 'hidden';
+		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen) {
 			console.log('[control-close] closing all app windows');
 			this.ow.hideWindow(this.windowId);
 			const openWindows = await this.ow.getOpenWindows();
 			for (const [name] of Object.entries(openWindows)) {
 				this.ow.closeWindowFromName(name);
 			}
+		} else if (this.eventProvider) {
+			console.log('delegating closing logic');
+			this.eventProvider();
+			return;
 		} else {
 			console.log('[control-close] requested window close', this.windowId);
 			if (this.shouldHide) {

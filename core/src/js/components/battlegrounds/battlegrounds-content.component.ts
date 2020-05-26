@@ -49,7 +49,11 @@ declare let amplitude: any;
 						[windowId]="windowId"
 						[doubleClickListenerParentClass]="'menu-bar'"
 					></control-maximize>
-					<control-close [windowId]="windowId" [eventProvider]="closeHandler"></control-close>
+					<control-close
+						[windowId]="windowId"
+						[eventProvider]="closeHandler"
+						[closeAll]="true"
+					></control-close>
 				</div>
 			</section>
 			<section class="content-container">
