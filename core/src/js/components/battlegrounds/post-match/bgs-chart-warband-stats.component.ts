@@ -252,17 +252,17 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 	}
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {
-		this.cdr.detach();
+		// this.cdr.detach();
 	}
 
 	ngAfterViewInit() {
 		// console.log('after view init in warband stats');
 		this.onResize();
-		if (!this.chartHeight || !this.chart?.nativeElement?.getContext('2d')) {
-			// console.log('chart not present', this.chartHeight, this.chart);
-			setTimeout(() => this.ngAfterViewInit(), 200);
-			return;
-		}
+		// if (!this.chartHeight || !this.chartWidth || !this.chart?.nativeElement?.getContext('2d')) {
+		// 	// console.log('chart not present', this.chartHeight, this.chart);
+		// 	setTimeout(() => this.ngAfterViewInit(), 200);
+		// 	return;
+		// }
 		// if (!(this.cdr as ViewRef)?.destroyed) {
 		// 	this.cdr.detectChanges();
 		// }
@@ -273,6 +273,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 	@HostListener('window:resize')
 	onResize() {
 		const chartContainer = this.el.nativeElement.querySelector('.container-1');
+		// console.log('chartContainer', chartContainer);
 		const rect = chartContainer?.getBoundingClientRect();
 		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {
 			setTimeout(() => {
@@ -285,7 +286,6 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 			return;
 		}
 		// this.previousWidth = rect.width;
-		// console.log('chartContainer', chartContainer, rect);
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.height;
 		// if (this.chartHeight > rect.height) {
