@@ -33,7 +33,7 @@ import { normalizeCardId } from './post-match/card-utils';
 		<div class="board-turn empty" *ngIf="_entities && _entities.length === 0">
 			Last board was empty
 		</div>
-		<ul class="board" *ngIf="_entities && _entities.length > 0">
+		<ul class="board" *ngIf="_entities && _entities.length > 0" [style.opacity]="boardReady ? 1 : 0">
 			<div class="minion-container" *ngFor="let entity of _entities || []; trackBy: trackByFn">
 				<li>
 					<card-on-board
@@ -76,6 +76,7 @@ export class BgsBoardComponent implements AfterViewInit {
 	_enchantmentCandidates: readonly Entity[];
 	_options: readonly number[];
 	_minionStats: readonly MinionStat[];
+	boardReady: boolean;
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
 	@Input() isMainPlayer: boolean;
@@ -97,6 +98,8 @@ export class BgsBoardComponent implements AfterViewInit {
 		}
 		this._entities = entities;
 		this.previousBoardWidth = undefined;
+		this.boardReady = false;
+		// console.log('setting board ready', this.boardReady);
 		this.onResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -206,6 +209,11 @@ export class BgsBoardComponent implements AfterViewInit {
 			for (const cardElement of cardElements) {
 				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 				this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
+			}
+			this.boardReady = true;
+			// console.log('setting board ready', this.boardReady);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
 			}
 			return;
 		}
