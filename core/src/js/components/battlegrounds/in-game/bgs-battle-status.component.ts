@@ -21,13 +21,13 @@ declare let amplitude: any;
 				<div class="value">
 					{{ battleSimulationResultWin }}
 				</div>
-				<div class="damage" helpTooltip="Average damage dealt" *ngIf="damageWon != null">
+				<div class="damage" helpTooltip="Average damage dealt">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
 						</svg>
 					</div>
-					<div class="damage-value">{{ damageWon }}</div>
+					<div class="damage-value">{{ damageWon || '--' }}</div>
 				</div>
 			</div>
 			<div class="tie item">
@@ -51,13 +51,13 @@ declare let amplitude: any;
 				<div class="value">
 					{{ battleSimulationResultLose }}
 				</div>
-				<div class="damage" helpTooltip="Average damage received" *ngIf="damageLost != null">
+				<div class="damage" helpTooltip="Average damage received">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
 						</svg>
 					</div>
-					<div class="damage-value">{{ damageLost }}</div>
+					<div class="damage-value">{{ damageLost || '--' }}</div>
 				</div>
 			</div>
 		</div>
@@ -113,6 +113,7 @@ export class BgsBattleStatusComponent {
 
 	@Input() set nextBattle(value: BattleResult) {
 		if (value === this._previousBattle) {
+			// console.log('not setting next battle', value, this._previousBattle);
 			return;
 		}
 		this._previousBattle = value;
