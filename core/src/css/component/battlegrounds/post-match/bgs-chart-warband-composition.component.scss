@@ -58,6 +58,10 @@
 	}
 }
 
+.chart-container {
+	overflow: hidden;
+}
+
 ::ng-deep ngx-charts-bar-vertical-stacked {
 	display: flex;
 
