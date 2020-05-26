@@ -63,10 +63,18 @@ export class DeckTrackerTwitchTitleBarComponent {
 			}
 			return;
 		}
-		const copyPermission = await navigator.permissions.query({
-			name: 'clipboard',
-		});
-		if (copyPermission.state === 'denied') {
+		console.log('navigator.userAgent', navigator.userAgent);
+		const sUsrAg = navigator.userAgent;
+		const copyPermission = await (navigator as any).permissions
+			.query({
+				// Firefox supports "clipboard", while chrome is "clipboard-write"
+				name: 'clipboard-write',
+			})
+			.catch(err => {
+				console.warn('could not receive permission', err);
+			});
+		console.log('copyPermission', copyPermission);
+		if (copyPermission?.state === 'denied') {
 			// See https://github.com/HearthSim/twitch-hdt-frontend/issues/50
 			this.copyText = 'Manual copy';
 			this.shouldShowDeckstring = true;
