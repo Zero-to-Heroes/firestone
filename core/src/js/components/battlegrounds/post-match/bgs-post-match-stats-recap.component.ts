@@ -51,6 +51,10 @@ declare let amplitude: any;
 				<div class="label">Coins wasted</div>
 				<div class="value">{{ coinsWasted }}</div>
 			</div>
+			<div class="entry cell">
+				<div class="label">Rerolls</div>
+				<div class="value">{{ rerolls }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,5 +107,6 @@ export class BgsPostMatchStatsRecapComponent {
 			.reduce((a, b) => a + b, 0);
 		this.triples = this._game.getMainPlayer().tripleHistory.length;
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		this.rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 	}
 }
