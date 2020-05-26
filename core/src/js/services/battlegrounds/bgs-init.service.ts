@@ -33,7 +33,7 @@ export class BgsInitService {
 		console.log('bgs init starting');
 		const bgsGlobalStats: BgsStats = await this.bgsGlobalStats.loadGlobalStats();
 		console.log('bgs got global stats');
-		const bgsMatchStats = matchStats.stats.filter(stat => stat.gameMode === 'battlegrounds');
+		const bgsMatchStats = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
 			console.log('no bgs match stats');
 			this.stateUpdater.next(new BgsInitEvent([], bgsGlobalStats));

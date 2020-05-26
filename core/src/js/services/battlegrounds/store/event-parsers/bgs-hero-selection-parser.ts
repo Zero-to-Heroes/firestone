@@ -39,34 +39,35 @@ export class BgsHeroSelectionParser implements EventParser {
 	}
 
 	private buildBgsHeroSelectionOverview(heroCardIds: readonly string[], stats: BgsStats): BgsHeroSelectionOverview {
-		const heroOverview: readonly BgsHeroOverview[] = stats.heroStats.map(stat =>
-			BgsHeroOverview.create({
-				heroCardId: stat.id,
-				heroPowerCardId: BgsUtils.getHeroPower(stat.id),
-				name: stat.name,
-				globalAveragePosition: stat.averagePosition,
-				globalPopularity: stat.popularity,
-				globalTop4: stat.top4 || 0,
-				globalTop1: stat.top1 || 0,
-				tier: stat.tier,
-				ownAveragePosition: stat.playerAveragePosition,
-				ownPopularity: stat.playerPopularity,
-				ownGamesPlayed: stat.playerGamesPlayed,
-				ownTop4: stat.playerTop4 || 0,
-				ownTop4Percentage:
-					stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop4 || 0)) / stat.playerGamesPlayed,
-				ownTop1: stat.playerTop1 || 0,
-				ownTop1Percentage:
-					stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop1 || 0)) / stat.playerGamesPlayed,
-				tribesStat: stat.tribesStat,
-				warbandStats: stat.warbandStats,
-			}),
-		);
+		const heroOverview: readonly BgsHeroOverview[] =
+			stats?.heroStats?.map(stat =>
+				BgsHeroOverview.create({
+					heroCardId: stat.id,
+					heroPowerCardId: BgsUtils.getHeroPower(stat.id),
+					name: stat.name,
+					globalAveragePosition: stat.averagePosition,
+					globalPopularity: stat.popularity,
+					globalTop4: stat.top4 || 0,
+					globalTop1: stat.top1 || 0,
+					tier: stat.tier,
+					ownAveragePosition: stat.playerAveragePosition,
+					ownPopularity: stat.playerPopularity,
+					ownGamesPlayed: stat.playerGamesPlayed,
+					ownTop4: stat.playerTop4 || 0,
+					ownTop4Percentage:
+						stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop4 || 0)) / stat.playerGamesPlayed,
+					ownTop1: stat.playerTop1 || 0,
+					ownTop1Percentage:
+						stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop1 || 0)) / stat.playerGamesPlayed,
+					tribesStat: stat.tribesStat,
+					warbandStats: stat.warbandStats,
+				}),
+			) || [];
 		console.log('created hero overview', heroOverview);
 		return BgsHeroSelectionOverview.create({
 			heroOverview: heroOverview,
 			heroOptionCardIds: heroCardIds,
-			patchNumber: stats.currentBattlegroundsMetaPatch,
+			patchNumber: stats?.currentBattlegroundsMetaPatch,
 		} as BgsHeroSelectionOverview);
 	}
 }

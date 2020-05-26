@@ -21,13 +21,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero.globalAveragePosition.toFixed(2) }}
+					{{ _hero?.globalAveragePosition?.toFixed(2) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero.ownAveragePosition.toFixed(2) }})
+					({{ _hero?.ownAveragePosition?.toFixed(2) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -38,13 +38,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero.globalTop4.toFixed(0) }}%
+					{{ _hero?.globalTop4?.toFixed(0) }}%
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero.ownTop4Percentage.toFixed(0) }}%)
+					({{ _hero?.ownTop4Percentage?.toFixed(0) }}%)
 				</div>
 			</div>
 			<div class="entry">
@@ -55,13 +55,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero.globalTop1.toFixed(0) }}%
+					{{ _hero?.globalTop1?.toFixed(0) }}%
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero.ownTop1Percentage.toFixed(0) }}%)
+					({{ _hero?.ownTop1Percentage?.toFixed(0) }}%)
 				</div>
 			</div>
 			<div class="entry">
@@ -72,13 +72,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero.globalPopularity.toFixed(0) }}%
+					{{ _hero?.globalPopularity?.toFixed(0) }}%
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero.ownPopularity.toFixed(0) }}%)
+					({{ _hero?.ownPopularity?.toFixed(0) }}%)
 				</div>
 			</div>
 		</div>
