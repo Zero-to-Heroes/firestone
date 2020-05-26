@@ -21,11 +21,14 @@ declare let amplitude: any;
 				[cardTooltip]="_hero.heroPowerCardId"
 				[cardTooltipClass]="'bgs-hero-select'"
 			/>
-			<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
+			<bgs-hero-stats [hero]="_hero" [patchNumber]="patchNumber"></bgs-hero-stats>
 			<div class="profile">
 				<div
 					class="title"
-					helpTooltip="Board stats per turn, compared to the average board stats between all heroes (top4 6000+ MMR)"
+					[helpTooltip]="
+						'Board stats per turn, compared to the average board stats between all heroes (top4 6000+ MMR) since patch ' +
+						patchNumber
+					"
 				>
 					Warband stats
 				</div>
@@ -49,6 +52,7 @@ export class BgsHeroOverviewComponent {
 	tier: BgsHeroTier;
 	tribes: readonly { tribe: string; percent: string }[];
 	warbandStats: readonly { turn: number; totalStats: number }[];
+	@Input() patchNumber: number;
 
 	@Input() set hero(value: BgsHeroOverview) {
 		// console.log('setting hero', value, this._hero);

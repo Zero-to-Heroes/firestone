@@ -66,6 +66,7 @@ export class BgsHeroSelectionParser implements EventParser {
 		return BgsHeroSelectionOverview.create({
 			heroOverview: heroOverview,
 			heroOptionCardIds: heroCardIds,
+			patchNumber: stats.currentBattlegroundsMetaPatch,
 		} as BgsHeroSelectionOverview);
 	}
 }

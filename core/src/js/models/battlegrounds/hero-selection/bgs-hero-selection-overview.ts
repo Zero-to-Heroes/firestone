@@ -8,6 +8,7 @@ export class BgsHeroSelectionOverview implements BgsPanel {
 	readonly icon: string;
 	readonly heroOverview: readonly BgsHeroOverview[];
 	readonly heroOptionCardIds: readonly string[];
+	readonly patchNumber: number;
 
 	public static create(base: BgsHeroSelectionOverview): BgsHeroSelectionOverview {
 		return Object.assign(new BgsHeroSelectionOverview(), base);

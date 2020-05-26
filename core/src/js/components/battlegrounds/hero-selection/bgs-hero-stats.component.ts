@@ -19,11 +19,14 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
+					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
 					{{ _hero.globalAveragePosition.toFixed(2) }}
 				</div>
-				<div class="player-value" helpTooltip="Your value, based on all your games since the last patch">
+				<div
+					class="player-value"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+				>
 					({{ _hero.ownAveragePosition.toFixed(2) }})
 				</div>
 			</div>
@@ -33,11 +36,14 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
+					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
 					{{ _hero.globalTop4.toFixed(0) }}%
 				</div>
-				<div class="player-value" helpTooltip="Your value, based on all your games since the last patch">
+				<div
+					class="player-value"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+				>
 					({{ _hero.ownTop4Percentage.toFixed(0) }}%)
 				</div>
 			</div>
@@ -47,11 +53,14 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
+					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
 					{{ _hero.globalTop1.toFixed(0) }}%
 				</div>
-				<div class="player-value" helpTooltip="Your value, based on all your games since the last patch">
+				<div
+					class="player-value"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+				>
 					({{ _hero.ownTop1Percentage.toFixed(0) }}%)
 				</div>
 			</div>
@@ -61,11 +70,14 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
+					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
 					{{ _hero.globalPopularity.toFixed(0) }}%
 				</div>
-				<div class="player-value" helpTooltip="Your value, based on all the games since the last patch">
+				<div
+					class="player-value"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+				>
 					({{ _hero.ownPopularity.toFixed(0) }}%)
 				</div>
 			</div>
@@ -75,6 +87,7 @@ declare let amplitude: any;
 })
 export class BgsHeroStatsComponent {
 	_hero: BgsHeroOverview;
+	@Input() patchNumber: number;
 
 	@Input() set hero(value: BgsHeroOverview) {
 		this._hero = value;

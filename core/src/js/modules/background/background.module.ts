@@ -55,6 +55,7 @@ import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game
 import { GameHelper } from '../../services/manastorm-bridge/game-helper.service';
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
+import { PatchesConfigService } from '../../services/patches-config.service';
 import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { ReplaysNotificationService } from '../../services/replays/replays-notification.service';
@@ -152,6 +153,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		AiDeckService,
 		SecretConfigService,
+		PatchesConfigService,
 
 		GameStatsBootstrapService,
 		GameStatsLoaderService,

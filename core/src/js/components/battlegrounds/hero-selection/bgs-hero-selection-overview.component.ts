@@ -22,6 +22,7 @@ declare let amplitude: any;
 				<bgs-hero-overview
 					*ngFor="let hero of heroOverviews || []; trackBy: trackByHeroFn"
 					[hero]="hero"
+					[patchNumber]="patchNumber"
 					[style.width.%]="getOverviewWidth()"
 				></bgs-hero-overview>
 			</div>
@@ -34,6 +35,7 @@ export class BgsHeroSelectionOverviewComponent {
 	smallOverviews: readonly BgsHeroOverview[];
 	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroOverview[] }[] = [];
 	_panel: BgsHeroSelectionOverview;
+	patchNumber: number;
 
 	@Input() set panel(value: BgsHeroSelectionOverview) {
 		if (!value?.heroOverview) {
@@ -44,6 +46,7 @@ export class BgsHeroSelectionOverviewComponent {
 		}
 		// console.log('setting panel', value, this._panel);
 		this._panel = value;
+		this.patchNumber = value.patchNumber;
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.heroCardId !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroOverview) => overview.tier);
 		const groupedByTier: BgsHeroOverview[][] = Object.values(groupingByTier(allOverviews));
