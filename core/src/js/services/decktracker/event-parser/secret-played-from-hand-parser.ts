@@ -25,7 +25,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 			zone: 'SECRET',
 		} as DeckCard);
 		const secretClass: string = gameEvent.additionalData.playerClass;
-		console.log('secretClass', secretClass, gameEvent);
+		// console.log('secretClass', secretClass, gameEvent);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
 		const previousOtherZone = deck.otherZone;
