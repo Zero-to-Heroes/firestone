@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Label } from 'aws-sdk/clients/cloudhsm';
-import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
+import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color } from 'ng2-charts';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
@@ -29,7 +29,7 @@ declare let amplitude: any;
 		<div class="legend">
 			<div
 				class="item average"
-				helpTooltip="Average total stats (attack + health) on board at the beginning of each turn's battle (6000+ MMR)"
+				helpTooltip="Average total stats (attack + health) on board at the beginning of each turn's battle (top4 6000+ MMR)"
 			>
 				<div class="node"></div>
 				Average for hero
@@ -101,6 +101,8 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 			],
 		},
 		tooltips: {
+			mode: 'index',
+			position: 'nearest',
 			intersect: false,
 			backgroundColor: '#CE73B4',
 			// titleFontSize: 0,
@@ -114,18 +116,72 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 			caretPadding: 2,
 			cornerRadius: 0,
 			displayColors: false,
-			callbacks: {
-				title: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					// console.log('title for', data.datasets[item[0].datasetIndex].label, item, data);
-					return data.datasets[item[0].datasetIndex].label;
-				},
-				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					return ['Turn: ' + item[0].label, 'Stats: ' + item[0].value];
-				},
-				label: (item: ChartTooltipItem, data: ChartData): string | string[] => {
-					// console.log('label for', item, data);
-					return null;
-				},
+			enabled: false,
+			custom: function(tooltip) {
+				// Tooltip Element
+				let tooltipEl = document.getElementById('chartjs-tooltip');
+
+				if (!tooltipEl) {
+					tooltipEl = document.createElement('div');
+					tooltipEl.id = 'chartjs-tooltip';
+					tooltipEl.innerHTML = `
+					<div class="stats-tooltip">					
+						<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+							<polygon points="0,0 8,-9 16,0"/>
+						</svg>
+						<div class="content"></div>
+					</div>`;
+					this._chart.canvas.parentNode.appendChild(tooltipEl);
+				}
+
+				// Hide if no tooltip
+				if (tooltip.opacity === 0) {
+					tooltipEl.style.opacity = '0';
+					return;
+				}
+
+				// Set caret Position
+				tooltipEl.classList.remove('above', 'below', 'no-transform');
+				if (tooltip.yAlign) {
+					tooltipEl.classList.add(tooltip.yAlign);
+				} else {
+					tooltipEl.classList.add('no-transform');
+				}
+				tooltipEl.classList.add('top');
+
+				// Set Text
+				if (tooltip.body) {
+					// const titleLines = tooltip.title || [];
+					const bodyLines = tooltip.beforeBody;
+					console.log('adding text', tooltip, tooltip.body, bodyLines);
+
+					const innerHtml = `
+						<div class="body">
+							<div class="section player">
+								<div class="subtitle">Current run</div>
+								<div class="value">Turn ${tooltip.dataPoints[0].label}</div>
+								<div class="value">Stats ${tooltip.dataPoints[0].value}</div>
+							</div>
+							<div class="section average">
+								<div class="subtitle">Average for hero</div>
+								<div class="value">Turn ${tooltip.dataPoints[1].label}</div>
+								<div class="value">Stats ${tooltip.dataPoints[1].value}</div>							
+							</div>
+						</div>
+					`;
+
+					const tableRoot = tooltipEl.querySelector('.content');
+					tableRoot.innerHTML = innerHtml;
+				}
+				// Display, position, and set styles for font
+				tooltipEl.style.opacity = '1';
+				tooltipEl.style.left = tooltip.caretX - 110 + 'px'; // positionX + tooltip.caretX - 100 + 'px';
+				tooltipEl.style.top = tooltip.caretY + 8 - 100 + 'px';
+				// position === 'bottom' ? tooltip.caretY + 8 + 'px' :
+				tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
+				tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
+				tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
+				tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
 			},
 		},
 	};

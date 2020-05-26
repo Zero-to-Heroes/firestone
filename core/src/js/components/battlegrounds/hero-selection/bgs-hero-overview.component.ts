@@ -25,7 +25,7 @@ declare let amplitude: any;
 			<div class="profile">
 				<div
 					class="title"
-					helpTooltip="Board stats per turn, compared to the average board stats between all heroes (6000+ MMR)"
+					helpTooltip="Board stats per turn, compared to the average board stats between all heroes (top4 6000+ MMR)"
 				>
 					Warband stats
 				</div>
