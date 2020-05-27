@@ -80,6 +80,12 @@ declare let amplitude: any;
 				<div class="label">Enemy Heroes killed</div>
 				<div class="value">{{ heroesKilled }}</div>
 			</div>
+			<div class="entry cell">
+				<div class="label" helpTooltip="Percentage of battles where you attacked first">
+					Battles going first
+				</div>
+				<div class="value">{{ percentageOfBattlesGoingFirst.toFixed(1) }}%</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -102,6 +108,7 @@ export class BgsPostMatchStatsRecapComponent {
 	minionsSold: number;
 	minionsKilled: number;
 	heroesKilled: number;
+	percentageOfBattlesGoingFirst: number;
 
 	private _stats: BgsPostMatchStatsPanel;
 	private _game: BgsGame;
@@ -149,5 +156,10 @@ export class BgsPostMatchStatsRecapComponent {
 			.reduce((a, b) => a + b, 0);
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;
 		this.heroesKilled = this._stats.stats.totalEnemyHeroesKilled;
+		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter(value => value.value === true)
+			.length;
+		const battlesGoingSecond = this._stats.stats.wentFirstInBattleOverTurn.filter(value => value.value === false)
+			.length;
+		this.percentageOfBattlesGoingFirst = (100 * battlesGoingFirst) / (battlesGoingFirst + battlesGoingSecond);
 	}
 }

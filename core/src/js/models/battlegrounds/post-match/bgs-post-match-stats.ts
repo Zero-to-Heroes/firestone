@@ -1,6 +1,7 @@
 import { BgsBoard } from '../in-game/bgs-board';
 import { BgsTavernUpgrade } from '../in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../in-game/bgs-triple';
+import { BooleanTurnInfo } from './boolean-turn-info';
 import { NumericTurnInfo } from './numeric-turn-info';
 
 export class BgsPostMatchStats {
@@ -19,6 +20,7 @@ export class BgsPostMatchStats {
 	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[];
+	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[];
 
 	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[];

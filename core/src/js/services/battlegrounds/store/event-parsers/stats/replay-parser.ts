@@ -8,6 +8,7 @@ import {
 import { BlockType, CardType, GameTag, MetaTags, PlayState, Step, Zone } from '@firestone-hs/reference-data';
 import { Element } from 'elementtree';
 import { Map } from 'immutable';
+import { BooleanTurnInfo } from '../../../../../models/battlegrounds/post-match/boolean-turn-info';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
 import { ParsingStructure } from './parsing-structure';
 
@@ -20,6 +21,7 @@ export const reparseReplay = (
 	minionsBoughtOverTurn: readonly NumericTurnInfo[];
 	minionsSoldOverTurn: readonly NumericTurnInfo[];
 	mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[];
+	wentFirstInBattleOverTurn: readonly BooleanTurnInfo[];
 	hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	totalStatsOverTurn: readonly NumericTurnInfo[];
 	totalMinionsDamageDealt: { [cardId: string]: number };
@@ -38,6 +40,7 @@ export const reparseReplay = (
 		boardOverTurn: Map.of(),
 		rerollOverTurn: Map.of(),
 		freezeOverTurn: Map.of(),
+		wentFirstInBattleOverTurn: Map.of(),
 		mainPlayerHeroPowerOverTurn: Map.of(),
 		coinsWastedOverTurn: Map.of(),
 		minionsBoughtOverTurn: Map.of(),
@@ -46,10 +49,12 @@ export const reparseReplay = (
 		leaderboardPositionOverTurn: {},
 		totalStatsOverTurn: Map.of(),
 		entities: {},
+		mainEnchantEntityIds: [],
 		mainPlayerHeroPowerIds: [],
 		mainPlayerHeroPowersForTurn: 0,
 		rerollsForTurn: 0,
 		rerollsIds: [],
+		wentFirstInBattleThisTurn: undefined,
 		freezesForTurn: 0,
 		freezesIds: [],
 		resourcesForTurn: 0,
@@ -104,6 +109,7 @@ export const reparseReplay = (
 			hpForTurnParse(structure, playerEntities),
 			leaderboardForTurnParse(structure, playerEntities),
 			damageDealtByMinionsParse(structure, replay),
+			wentFirstInBattleForTurnParse(structure, replay.mainPlayerId),
 		],
 		[
 			compositionForTurnPopulate(structure, replay),
@@ -118,6 +124,7 @@ export const reparseReplay = (
 			leaderboardForTurnPopulate(structure, replay),
 			hpForTurnPopulate(structure, replay),
 			totalStatsForTurnPopulate(structure, replay),
+			wentFirstInBattleForTurnPopulate(structure, replay),
 		],
 	);
 
@@ -185,6 +192,16 @@ export const reparseReplay = (
 		)
 		.valueSeq()
 		.toArray();
+	const wentFirstInBattleOverTurn: readonly BooleanTurnInfo[] = structure.wentFirstInBattleOverTurn
+		.map(
+			(wentFirst, turn: number) =>
+				({
+					turn: turn,
+					value: wentFirst,
+				} as BooleanTurnInfo),
+		)
+		.valueSeq()
+		.toArray();
 	const minionsBoughtOverTurn: readonly NumericTurnInfo[] = structure.minionsBoughtOverTurn
 		.map(
 			(minions, turn: number) =>
@@ -222,6 +239,7 @@ export const reparseReplay = (
 		totalMinionsDamageTaken: structure.minionsDamageReceived,
 		totalEnemyMinionsKilled: totalEnemyMinionsKilled,
 		totalEnemyHeroesKilled: totalEnemyHeroesKilled,
+		wentFirstInBattleOverTurn: wentFirstInBattleOverTurn,
 	};
 };
 
@@ -380,6 +398,38 @@ const freezesForTurnPopulate = (structure: ParsingStructure, replay: Replay) => 
 	return currentTurn => {
 		structure.freezeOverTurn = structure.freezeOverTurn.set(currentTurn, structure.freezesForTurn);
 		structure.freezesForTurn = 0;
+	};
+};
+
+const wentFirstInBattleForTurnParse = (structure: ParsingStructure, mainPlayerPlayerId: number) => {
+	return element => {
+		if (element.tag === 'FullEntity' && element.get('cardID') === 'TB_BaconShop_8P_PlayerE') {
+			structure.mainEnchantEntityIds = [...structure.mainEnchantEntityIds, element.get('id')];
+			// console.debug('freezesIds', structure.freezesIds);
+		}
+		if (
+			element.tag === 'Block' &&
+			structure.mainEnchantEntityIds.indexOf(element.get('entity')) !== -1 &&
+			// element.get('cardID') === 'TB_BaconShop_8P_PlayerE' &&
+			parseInt(element.get('type')) == BlockType.TRIGGER &&
+			element.find(`.Block[@type='${BlockType.ATTACK}']`)
+		) {
+			const firstAttack = element.find(`.Block[@type='${BlockType.ATTACK}']`);
+			const attackingEntity = structure.entities[firstAttack.get('entity')];
+			const wentFirst = attackingEntity.controller === mainPlayerPlayerId;
+			structure.wentFirstInBattleThisTurn = wentFirst;
+			// console.debug('wentFirstInBattleThisTurn', structure.wentFirstInBattleThisTurn);
+		}
+	};
+};
+
+const wentFirstInBattleForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
+	return currentTurn => {
+		structure.wentFirstInBattleOverTurn = structure.wentFirstInBattleOverTurn.set(
+			currentTurn,
+			structure.wentFirstInBattleThisTurn,
+		);
+		structure.wentFirstInBattleThisTurn = undefined;
 	};
 };
 

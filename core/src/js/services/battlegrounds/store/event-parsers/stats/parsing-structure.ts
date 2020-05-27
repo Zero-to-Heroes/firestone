@@ -22,6 +22,7 @@ export interface ParsingStructure {
 	leaderboardPositions: {
 		[cardId: string]: number;
 	};
+	mainEnchantEntityIds: string[];
 	mainPlayerHeroPowerIds: string[];
 	mainPlayerHeroPowersForTurn: number;
 	rerollsIds: string[];
@@ -34,12 +35,14 @@ export interface ParsingStructure {
 	minionsSoldForTurn: number;
 	minionsBoughtIds: string[];
 	minionsBoughtForTurn: number;
+	wentFirstInBattleThisTurn: boolean;
 
 	boardOverTurn: Map<number, readonly { cardId: string; tribe: number }[]>;
 	minionsDamageDealt: { [cardId: string]: number };
 	minionsDamageReceived: { [cardId: string]: number };
 	rerollOverTurn: Map<number, number>;
 	freezeOverTurn: Map<number, number>;
+	wentFirstInBattleOverTurn: Map<number, boolean>;
 	mainPlayerHeroPowerOverTurn: Map<number, number>;
 	coinsWastedOverTurn: Map<number, number>;
 	minionsSoldOverTurn: Map<number, number>;

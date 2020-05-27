@@ -12,8 +12,7 @@ describe('BGS Replay-parser - basic test', () => {
 		const stats = reparseReplay(replay);
 
 		expect(stats).not.toBe(null);
-		console.debug(stats.minionsBoughtOverTurn);
-		console.debug(stats.minionsSoldOverTurn);
+		console.debug(stats.wentFirstInBattleOverTurn);
 
 		// expect(stats.hpOverTurn['TB_BaconShop_HERO_56'].length).toBe(14);
 		// expect(stats.hpOverTurn['TB_BaconShop_HERO_56'][13].value).toBeLessThanOrEqual(0);
