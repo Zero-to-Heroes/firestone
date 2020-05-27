@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import {
+	extractNumberOfKilledEnemyHeroes,
 	extractTotalDamageDealtToEnemyHero,
 	extractTotalMinionDeaths,
 	Replay,
@@ -25,6 +26,7 @@ export const reparseReplay = (
 	totalMinionsDamageTaken: { [cardId: string]: number };
 	totalDamageDealtToEnemyHeroes: number;
 	totalEnemyMinionsKilled: number;
+	totalEnemyHeroesKilled: number;
 } => {
 	const opponentPlayerElement = replay.replay
 		.findall('.//Player')
@@ -204,6 +206,7 @@ export const reparseReplay = (
 		.valueSeq()
 		.toArray();
 	const totalEnemyMinionsKilled = extractTotalMinionDeaths(replay).opponent;
+	const totalEnemyHeroesKilled = extractNumberOfKilledEnemyHeroes(replay);
 	return {
 		// compositionsOverTurn: compositionsOverTurn,
 		rerollsOverTurn: rerollsOverTurn,
@@ -218,6 +221,7 @@ export const reparseReplay = (
 		totalMinionsDamageDealt: structure.minionsDamageDealt,
 		totalMinionsDamageTaken: structure.minionsDamageReceived,
 		totalEnemyMinionsKilled: totalEnemyMinionsKilled,
+		totalEnemyHeroesKilled: totalEnemyHeroesKilled,
 	};
 };
 

@@ -76,6 +76,10 @@ declare let amplitude: any;
 				<div class="label">Enemy Minions killed</div>
 				<div class="value">{{ minionsKilled }}</div>
 			</div>
+			<div class="entry cell">
+				<div class="label">Enemy Heroes killed</div>
+				<div class="value">{{ heroesKilled }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,6 +101,7 @@ export class BgsPostMatchStatsRecapComponent {
 	minionsBought: number;
 	minionsSold: number;
 	minionsKilled: number;
+	heroesKilled: number;
 
 	private _stats: BgsPostMatchStatsPanel;
 	private _game: BgsGame;
@@ -143,5 +148,6 @@ export class BgsPostMatchStatsRecapComponent {
 			.map(value => value.value)
 			.reduce((a, b) => a + b, 0);
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;
+		this.heroesKilled = this._stats.stats.totalEnemyHeroesKilled;
 	}
 }

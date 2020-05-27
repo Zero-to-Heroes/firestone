@@ -71,6 +71,7 @@ export class BgsGameEndParser implements EventParser {
 			totalMinionsDamageDealt: structure.totalMinionsDamageDealt,
 			totalMinionsDamageTaken: structure.totalMinionsDamageTaken,
 			totalEnemyMinionsKilled: structure.totalEnemyMinionsKilled,
+			totalEnemyHeroesKilled: structure.totalEnemyHeroesKilled,
 		} as BgsPostMatchStats);
 		const finalPosition = player.leaderboardPlace;
 		console.log('post match stats', postMatchStats);
