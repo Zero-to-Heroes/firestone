@@ -60,8 +60,9 @@ export class BgsBattleResultParser implements EventParser {
 				},
 			});
 		}
-		const newGame = currentState.currentGame.update({
-			faceOffs: [...currentState.currentGame.faceOffs, faceOff] as readonly BgsFaceOff[],
+		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
+		const newGame = gameWithActualBattleResult.update({
+			faceOffs: [...gameWithActualBattleResult.faceOffs, faceOff] as readonly BgsFaceOff[],
 			battleInfo: undefined,
 			// battleResult: undefined,
 		} as BgsGame);

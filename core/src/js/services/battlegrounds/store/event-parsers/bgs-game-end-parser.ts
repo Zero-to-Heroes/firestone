@@ -51,6 +51,7 @@ export class BgsGameEndParser implements EventParser {
 	}
 
 	private createNewPanel(currentState: BattlegroundsState, replayXml: string): BgsPostMatchStatsPanel {
+		console.warn('battleResultHistory', currentState.currentGame.battleResultHistory);
 		const replay: Replay = parseHsReplayString(replayXml);
 		const player: BgsPlayer = currentState.currentGame.getMainPlayer();
 		const structure = reparseReplay(replay);

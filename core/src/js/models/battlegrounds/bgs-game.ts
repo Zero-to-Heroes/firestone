@@ -11,6 +11,7 @@ export class BgsGame {
 	readonly battleInfo: BgsBattleInfo;
 	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
 	readonly battleResult: BgsBattleSimulationResult;
+	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 
 	public static create(base: BgsGame): BgsGame {
 		return Object.assign(new BgsGame(), base);
@@ -29,6 +30,21 @@ export class BgsGame {
 
 	public getMainPlayer(): BgsPlayer {
 		return this.players.find(player => player.isMainPlayer);
+	}
+
+	public updateActualBattleResult(result: string): BgsGame {
+		const newBattleResultHistory: readonly BattleResultHistory[] = [
+			...(this.battleResultHistory || []),
+			{
+				turn: this.currentTurn,
+				simulationResult: this.battleResult,
+				actualResult: result,
+			},
+		] as readonly BattleResultHistory[];
+		console.warn('updatedBattleHistory', result, this.battleResult, this.battleResultHistory);
+		return Object.assign(new BgsGame(), this, {
+			battleResultHistory: newBattleResultHistory,
+		} as BgsGame);
 	}
 
 	// Not all players finish their turns at the same time.
@@ -55,12 +71,10 @@ export class BgsGame {
 			battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',
 		} as BgsGame);
 	}
+}
 
-	public resetBattleBoardInfo(): BgsGame {
-		return Object.assign(new BgsGame(), this, {
-			battleInfo: undefined,
-			battleResult: undefined,
-			battleInfoStatus: 'empty',
-		} as BgsGame);
-	}
+interface BattleResultHistory {
+	readonly turn: number;
+	readonly simulationResult: BgsBattleSimulationResult;
+	readonly actualResult: string;
 }
