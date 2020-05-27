@@ -13,6 +13,10 @@
 	height: 100%;
 }
 
+empty-card {
+	pointer-events: none;
+}
+
 .board {
 	position: absolute;
 	width: 100%;
