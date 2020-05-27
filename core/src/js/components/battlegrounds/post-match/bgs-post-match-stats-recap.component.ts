@@ -86,6 +86,15 @@ declare let amplitude: any;
 				</div>
 				<div class="value">{{ percentageOfBattlesGoingFirst.toFixed(1) }}%</div>
 			</div>
+			<div class="entry cell">
+				<div
+					class="label"
+					helpTooltip="How lucky you were in this run as regards to battle outcomes, between -100% (impossibly unlucky) and +100% (impossibly lucky). For more details, see http://shorturl.at/kmxMV"
+				>
+					Battle luck
+				</div>
+				<div class="value">{{ luckFactor.toFixed(1) }}%</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -109,6 +118,7 @@ export class BgsPostMatchStatsRecapComponent {
 	minionsKilled: number;
 	heroesKilled: number;
 	percentageOfBattlesGoingFirst: number;
+	luckFactor: number;
 
 	private _stats: BgsPostMatchStatsPanel;
 	private _game: BgsGame;
@@ -161,5 +171,6 @@ export class BgsPostMatchStatsRecapComponent {
 		const battlesGoingSecond = this._stats.stats.wentFirstInBattleOverTurn.filter(value => value.value === false)
 			.length;
 		this.percentageOfBattlesGoingFirst = (100 * battlesGoingFirst) / (battlesGoingFirst + battlesGoingSecond);
+		this.luckFactor = 100 * this._stats.stats.luckFactor;
 	}
 }

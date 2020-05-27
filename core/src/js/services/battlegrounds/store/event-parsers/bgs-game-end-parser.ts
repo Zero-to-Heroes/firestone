@@ -1,5 +1,6 @@
 import { parseHsReplayString, Replay } from '@firestone-hs/hs-replay-xml-parser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BattleResultHistory } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
@@ -55,6 +56,9 @@ export class BgsGameEndParser implements EventParser {
 		const replay: Replay = parseHsReplayString(replayXml);
 		const player: BgsPlayer = currentState.currentGame.getMainPlayer();
 		const structure = reparseReplay(replay);
+		const winLuckFactor = buildWinLuckFactor(currentState.currentGame.battleResultHistory);
+		const tieLuckFactor = buildTieLuckFactor(currentState.currentGame.battleResultHistory);
+		console.warn('luckFactor', winLuckFactor, tieLuckFactor, currentState.currentGame.battleResultHistory);
 		const postMatchStats: BgsPostMatchStats = BgsPostMatchStats.create({
 			tavernTimings: player.tavernUpgradeHistory,
 			tripleTimings: player.tripleHistory, // TODO: add the cards when relevant
@@ -74,6 +78,7 @@ export class BgsGameEndParser implements EventParser {
 			totalEnemyMinionsKilled: structure.totalEnemyMinionsKilled,
 			totalEnemyHeroesKilled: structure.totalEnemyHeroesKilled,
 			wentFirstInBattleOverTurn: structure.wentFirstInBattleOverTurn,
+			luckFactor: (2 * winLuckFactor + tieLuckFactor) / 3,
 		} as BgsPostMatchStats);
 		const finalPosition = player.leaderboardPlace;
 		console.log('post match stats', postMatchStats);
@@ -88,3 +93,27 @@ export class BgsGameEndParser implements EventParser {
 		} as BgsPostMatchStatsPanel);
 	}
 }
+
+// Returns -1 if had the worst possible luck, and 1 if had the best possible luck
+const buildWinLuckFactor = (battleResultHistory: readonly BattleResultHistory[]): number => {
+	return (
+		battleResultHistory
+			.map(history => {
+				const victory = history.actualResult === 'won' ? 1 : 0;
+				const chance = history.simulationResult.wonPercent / 100;
+				return victory - chance;
+			})
+			.reduce((a, b) => a + b, 0) / battleResultHistory.length
+	);
+};
+const buildTieLuckFactor = (battleResultHistory: readonly BattleResultHistory[]): number => {
+	return (
+		battleResultHistory
+			.map(history => {
+				const victory = history.actualResult === 'won' || history.actualResult === 'tied' ? 1 : 0;
+				const chance = (history.simulationResult.wonPercent + history.simulationResult.tiedPercent) / 100;
+				return victory - chance;
+			})
+			.reduce((a, b) => a + b, 0) / battleResultHistory.length
+	);
+};

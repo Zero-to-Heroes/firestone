@@ -73,7 +73,7 @@ export class BgsGame {
 	}
 }
 
-interface BattleResultHistory {
+export interface BattleResultHistory {
 	readonly turn: number;
 	readonly simulationResult: BgsBattleSimulationResult;
 	readonly actualResult: string;

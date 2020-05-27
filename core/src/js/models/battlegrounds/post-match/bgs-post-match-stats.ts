@@ -30,6 +30,7 @@ export class BgsPostMatchStats {
 
 	readonly totalEnemyMinionsKilled: number;
 	readonly totalEnemyHeroesKilled: number;
+	readonly luckFactor: number;
 
 	public static create(base: BgsPostMatchStats): BgsPostMatchStats {
 		return Object.assign(new BgsPostMatchStats(), base);
