@@ -25,14 +25,8 @@ export class BgsPostMatchStats {
 
 	readonly totalMinionsDamageDealt: { [cardId: string]: number };
 	readonly totalMinionsDamageTaken: { [cardId: string]: number };
-	// readonly minionsKilled: number;
-	// readonly heroesTakenDown: number;
-	// readonly minionsBought: number;
-	// readonly minionsSold: number;
-	// readonly heroPowersUsed: number;
-	// readonly freezes: number;
 
-	// readonly percentageOfGoingFirst: number;
+	readonly totalEnemyMinionsKilled: number;
 
 	public static create(base: BgsPostMatchStats): BgsPostMatchStats {
 		return Object.assign(new BgsPostMatchStats(), base);

@@ -70,6 +70,7 @@ export class BgsGameEndParser implements EventParser {
 			minionsSoldOverTurn: structure.minionsSoldOverTurn,
 			totalMinionsDamageDealt: structure.totalMinionsDamageDealt,
 			totalMinionsDamageTaken: structure.totalMinionsDamageTaken,
+			totalEnemyMinionsKilled: structure.totalEnemyMinionsKilled,
 		} as BgsPostMatchStats);
 		const finalPosition = player.leaderboardPlace;
 		console.log('post match stats', postMatchStats);

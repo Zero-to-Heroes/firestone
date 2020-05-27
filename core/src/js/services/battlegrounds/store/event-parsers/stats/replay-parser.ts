@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { extractTotalDamageDealtToEnemyHero, Replay } from '@firestone-hs/hs-replay-xml-parser';
+import {
+	extractTotalDamageDealtToEnemyHero,
+	extractTotalMinionDeaths,
+	Replay,
+} from '@firestone-hs/hs-replay-xml-parser';
 import { BlockType, CardType, GameTag, MetaTags, PlayState, Step, Zone } from '@firestone-hs/reference-data';
 import { Element } from 'elementtree';
 import { Map } from 'immutable';
@@ -20,6 +24,7 @@ export const reparseReplay = (
 	totalMinionsDamageDealt: { [cardId: string]: number };
 	totalMinionsDamageTaken: { [cardId: string]: number };
 	totalDamageDealtToEnemyHeroes: number;
+	totalEnemyMinionsKilled: number;
 } => {
 	const opponentPlayerElement = replay.replay
 		.findall('.//Player')
@@ -198,6 +203,7 @@ export const reparseReplay = (
 		})
 		.valueSeq()
 		.toArray();
+	const totalEnemyMinionsKilled = extractTotalMinionDeaths(replay).opponent;
 	return {
 		// compositionsOverTurn: compositionsOverTurn,
 		rerollsOverTurn: rerollsOverTurn,
@@ -211,6 +217,7 @@ export const reparseReplay = (
 		totalDamageDealtToEnemyHeroes: extractTotalDamageDealtToEnemyHero(replay).opponent,
 		totalMinionsDamageDealt: structure.minionsDamageDealt,
 		totalMinionsDamageTaken: structure.minionsDamageReceived,
+		totalEnemyMinionsKilled: totalEnemyMinionsKilled,
 	};
 };
 
