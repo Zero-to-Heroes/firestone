@@ -20,6 +20,7 @@ export class BgsPostMatchStats {
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[];
 
+	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[];
 
 	readonly totalMinionsDamageDealt: { [cardId: string]: number };

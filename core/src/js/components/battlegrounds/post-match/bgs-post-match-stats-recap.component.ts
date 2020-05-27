@@ -64,6 +64,14 @@ declare let amplitude: any;
 				<div class="label">Hero Power used</div>
 				<div class="value">{{ heroPowers }}</div>
 			</div>
+			<div class="entry cell">
+				<div class="label">Minions bought</div>
+				<div class="value">{{ minionsBought }}</div>
+			</div>
+			<div class="entry cell">
+				<div class="label">Minions sold</div>
+				<div class="value">{{ minionsSold }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,6 +90,8 @@ export class BgsPostMatchStatsRecapComponent {
 	rerolls: number;
 	freezes: number;
 	heroPowers: number;
+	minionsBought: number;
+	minionsSold: number;
 
 	private _stats: BgsPostMatchStatsPanel;
 	private _game: BgsGame;
@@ -120,6 +130,10 @@ export class BgsPostMatchStatsRecapComponent {
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		this.minionsBought = this._stats.stats.minionsBoughtOverTurn
+			.map(value => value.value)
+			.reduce((a, b) => a + b, 0);
+		this.minionsSold = this._stats.stats.minionsSoldOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.heroPowers = this._stats.stats.mainPlayerHeroPowersOverTurn
 			.map(value => value.value)
 			.reduce((a, b) => a + b, 0);

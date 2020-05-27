@@ -12,6 +12,7 @@ export const reparseReplay = (
 	rerollsOverTurn: readonly NumericTurnInfo[];
 	freezesOverTurn: readonly NumericTurnInfo[];
 	coinsWastedOverTurn: readonly NumericTurnInfo[];
+	minionsBoughtOverTurn: readonly NumericTurnInfo[];
 	minionsSoldOverTurn: readonly NumericTurnInfo[];
 	mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[];
 	hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
@@ -32,6 +33,7 @@ export const reparseReplay = (
 		freezeOverTurn: Map.of(),
 		mainPlayerHeroPowerOverTurn: Map.of(),
 		coinsWastedOverTurn: Map.of(),
+		minionsBoughtOverTurn: Map.of(),
 		minionsSoldOverTurn: Map.of(),
 		hpOverTurn: {},
 		leaderboardPositionOverTurn: {},
@@ -49,6 +51,8 @@ export const reparseReplay = (
 		leaderboardPositions: {},
 		minionsSoldForTurn: 0,
 		minionsSoldIds: [],
+		minionsBoughtForTurn: 0,
+		minionsBoughtIds: [],
 		minionsDamageDealt: {},
 		minionsDamageReceived: {},
 	};
@@ -89,6 +93,7 @@ export const reparseReplay = (
 			mainPlayerHeroPowerForTurnParse(structure, replay.mainPlayerId),
 			coinsWastedForTurnParse(structure, mainPlayerEntityId),
 			minionsSoldForTurnParse(structure),
+			minionsBoughtForTurnParse(structure),
 			hpForTurnParse(structure, playerEntities),
 			leaderboardForTurnParse(structure, playerEntities),
 			damageDealtByMinionsParse(structure, replay),
@@ -100,6 +105,7 @@ export const reparseReplay = (
 			mainPlayerHeroPowerForTurnPopulate(structure, replay),
 			coinsWastedForTurnPopulate(structure, replay),
 			minionsSoldForTurnPopulate(structure, replay),
+			minionsBoughtForTurnPopulate(structure, replay),
 			// Order is important, because we want to first populate the leaderboard (for which it's easy
 			// to filter out the mulligan choices) and use this to iterate on the other elements
 			leaderboardForTurnPopulate(structure, replay),
@@ -172,6 +178,16 @@ export const reparseReplay = (
 		)
 		.valueSeq()
 		.toArray();
+	const minionsBoughtOverTurn: readonly NumericTurnInfo[] = structure.minionsBoughtOverTurn
+		.map(
+			(minions, turn: number) =>
+				({
+					turn: turn,
+					value: minions,
+				} as NumericTurnInfo),
+		)
+		.valueSeq()
+		.toArray();
 	const hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = structure.hpOverTurn;
 	const totalStatsOverTurn: readonly NumericTurnInfo[] = structure.totalStatsOverTurn
 		.map((stats: number, turn: number) => {
@@ -189,6 +205,7 @@ export const reparseReplay = (
 		mainPlayerHeroPowersOverTurn: mainPlayerHeroPowersOverTurn,
 		coinsWastedOverTurn: coinsWastedOverTurn,
 		minionsSoldOverTurn: minionsSoldOverTurn,
+		minionsBoughtOverTurn: minionsBoughtOverTurn,
 		hpOverTurn: hpOverTurn,
 		totalStatsOverTurn: totalStatsOverTurn,
 		totalDamageDealtToEnemyHeroes: extractTotalDamageDealtToEnemyHero(replay).opponent,
@@ -255,22 +272,6 @@ const coinsWastedForTurnParse = (structure: ParsingStructure, mainPlayerEntityId
 			} else if (parseInt(element.get('tag')) === GameTag.RESOURCES_USED) {
 				structure.resourcesUsedForTurn = parseInt(element.get('value'));
 			}
-		}
-	};
-};
-
-const minionsSoldForTurnParse = (structure: ParsingStructure) => {
-	return element => {
-		if (element.tag === 'FullEntity' && element.get('cardID') === 'TB_BaconShop_DragSell') {
-			structure.minionsSoldIds = [...structure.minionsSoldIds, element.get('id')];
-		}
-		if (
-			element.tag === 'Block' &&
-			parseInt(element.get('type')) === BlockType.POWER &&
-			structure.minionsSoldIds.indexOf(element.get('entity')) !== -1
-		) {
-			// console.log('adding one reroll', structure.rerollsForTurn, element);
-			structure.minionsSoldForTurn = structure.minionsSoldForTurn + 1;
 		}
 	};
 };
@@ -391,10 +392,53 @@ const coinsWastedForTurnPopulate = (structure: ParsingStructure, replay: Replay)
 	};
 };
 
+const minionsSoldForTurnParse = (structure: ParsingStructure) => {
+	return element => {
+		if (element.tag === 'FullEntity' && element.get('cardID') === 'TB_BaconShop_DragSell') {
+			structure.minionsSoldIds = [...structure.minionsSoldIds, element.get('id')];
+		}
+		if (
+			element.tag === 'Block' &&
+			parseInt(element.get('type')) === BlockType.POWER &&
+			structure.minionsSoldIds.indexOf(element.get('entity')) !== -1
+		) {
+			// console.log('adding one reroll', structure.rerollsForTurn, element);
+			structure.minionsSoldForTurn = structure.minionsSoldForTurn + 1;
+		}
+	};
+};
+
 const minionsSoldForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
 	return currentTurn => {
 		structure.minionsSoldOverTurn = structure.minionsSoldOverTurn.set(currentTurn, structure.minionsSoldForTurn);
 		structure.minionsSoldForTurn = 0;
+	};
+};
+
+const minionsBoughtForTurnParse = (structure: ParsingStructure) => {
+	return element => {
+		if (element.tag === 'FullEntity' && element.get('cardID') === 'TB_BaconShop_DragBuy') {
+			structure.minionsBoughtIds = [...structure.minionsBoughtIds, element.get('id')];
+		}
+		if (
+			element.tag === 'Block' &&
+			parseInt(element.get('type')) === BlockType.POWER &&
+			element.find(`.TagChange[@tag='${GameTag.CONTROLLER}']`) &&
+			structure.minionsBoughtIds.indexOf(element.get('entity')) !== -1
+		) {
+			// TODO: here we can add some logic to store which minion has been bought for each turn
+			structure.minionsBoughtForTurn = structure.minionsBoughtForTurn + 1;
+		}
+	};
+};
+
+const minionsBoughtForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
+	return currentTurn => {
+		structure.minionsBoughtOverTurn = structure.minionsBoughtOverTurn.set(
+			currentTurn,
+			structure.minionsBoughtForTurn,
+		);
+		structure.minionsBoughtForTurn = 0;
 	};
 };
 
