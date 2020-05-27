@@ -55,6 +55,10 @@ declare let amplitude: any;
 				<div class="label">Rerolls</div>
 				<div class="value">{{ rerolls }}</div>
 			</div>
+			<div class="entry cell">
+				<div class="label">Freezes</div>
+				<div class="value">{{ freezes }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,6 +75,7 @@ export class BgsPostMatchStatsRecapComponent {
 	triples: number;
 	coinsWasted: number;
 	rerolls: number;
+	freezes: number;
 
 	private _stats: BgsPostMatchStatsPanel;
 	private _game: BgsGame;
@@ -108,5 +113,6 @@ export class BgsPostMatchStatsRecapComponent {
 		this.triples = this._game.getMainPlayer().tripleHistory.length;
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 	}
 }

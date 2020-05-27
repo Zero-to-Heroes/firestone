@@ -62,6 +62,7 @@ export class BgsGameEndParser implements EventParser {
 			boardHistory: player.boardHistory,
 			// compositionsOverTurn: structure.compositionsOverTurn,
 			rerollsOverTurn: structure.rerollsOverTurn,
+			freezesOverTurn: structure.freezesOverTurn,
 			hpOverTurn: structure.hpOverTurn,
 			totalStatsOverTurn: structure.totalStatsOverTurn,
 			minionsSoldOverTurn: structure.minionsSoldOverTurn,

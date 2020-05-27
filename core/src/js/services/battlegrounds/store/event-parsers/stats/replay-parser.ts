@@ -10,6 +10,7 @@ export const reparseReplay = (
 	replay: Replay,
 ): {
 	rerollsOverTurn: readonly NumericTurnInfo[];
+	freezesOverTurn: readonly NumericTurnInfo[];
 	coinsWastedOverTurn: readonly NumericTurnInfo[];
 	minionsSoldOverTurn: readonly NumericTurnInfo[];
 	hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
@@ -27,6 +28,7 @@ export const reparseReplay = (
 		currentTurn: 0,
 		boardOverTurn: Map.of(),
 		rerollOverTurn: Map.of(),
+		freezeOverTurn: Map.of(),
 		coinsWastedOverTurn: Map.of(),
 		minionsSoldOverTurn: Map.of(),
 		hpOverTurn: {},
@@ -35,6 +37,8 @@ export const reparseReplay = (
 		entities: {},
 		rerollsForTurn: 0,
 		rerollsIds: [],
+		freezesForTurn: 0,
+		freezesIds: [],
 		resourcesForTurn: 0,
 		resourcesUsedForTurn: 0,
 		playerHps: {},
@@ -76,6 +80,7 @@ export const reparseReplay = (
 		[
 			compositionForTurnParse(structure),
 			rerollsForTurnParse(structure),
+			freezesForTurnParse(structure),
 			coinsWastedForTurnParse(structure, mainPlayerEntityId),
 			minionsSoldForTurnParse(structure),
 			hpForTurnParse(structure, playerEntities),
@@ -85,6 +90,7 @@ export const reparseReplay = (
 		[
 			compositionForTurnPopulate(structure, replay),
 			rerollsForTurnPopulate(structure, replay),
+			freezesForTurnPopulate(structure, replay),
 			coinsWastedForTurnPopulate(structure, replay),
 			minionsSoldForTurnPopulate(structure, replay),
 			// Order is important, because we want to first populate the leaderboard (for which it's easy
@@ -115,6 +121,16 @@ export const reparseReplay = (
 				({
 					turn: turn,
 					value: rerolls,
+				} as NumericTurnInfo),
+		)
+		.valueSeq()
+		.toArray();
+	const freezesOverTurn: readonly NumericTurnInfo[] = structure.freezeOverTurn
+		.map(
+			(freezes, turn: number) =>
+				({
+					turn: turn,
+					value: freezes,
 				} as NumericTurnInfo),
 		)
 		.valueSeq()
@@ -152,6 +168,7 @@ export const reparseReplay = (
 	return {
 		// compositionsOverTurn: compositionsOverTurn,
 		rerollsOverTurn: rerollsOverTurn,
+		freezesOverTurn: freezesOverTurn,
 		coinsWastedOverTurn: coinsWastedOverTurn,
 		minionsSoldOverTurn: minionsSoldOverTurn,
 		hpOverTurn: hpOverTurn,
@@ -273,17 +290,43 @@ const rerollsForTurnPopulate = (structure: ParsingStructure, replay: Replay) => 
 	};
 };
 
+const freezesForTurnParse = (structure: ParsingStructure) => {
+	return element => {
+		if (element.tag === 'FullEntity' && element.get('cardID') === 'TB_BaconShopLockAll_Button') {
+			structure.freezesIds = [...structure.freezesIds, element.get('id')];
+			// console.debug('freezesIds', structure.freezesIds);
+		}
+		if (
+			element.tag === 'Block' &&
+			parseInt(element.get('type')) === BlockType.POWER &&
+			structure.freezesIds.indexOf(element.get('entity')) !== -1 &&
+			element.findall(`.TagChange[@tag='${GameTag.FROZEN}']`).length > 0
+		) {
+			// console.log('adding one reroll', structure.rerollsForTurn, element);
+			structure.freezesForTurn = structure.freezesForTurn + 1;
+			// console.debug('freezesForTurn', structure.freezesForTurn);
+		}
+	};
+};
+
+const freezesForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
+	return currentTurn => {
+		structure.freezeOverTurn = structure.freezeOverTurn.set(currentTurn, structure.freezesForTurn);
+		structure.freezesForTurn = 0;
+	};
+};
+
 const coinsWastedForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
 	return currentTurn => {
 		const totalResourcesGained = structure.resourcesForTurn + structure.minionsSoldForTurn;
-		console.debug(
-			'totalResourcesGained',
-			currentTurn,
-			totalResourcesGained,
-			structure.resourcesForTurn,
-			structure.minionsSoldForTurn,
-			structure.resourcesUsedForTurn,
-		);
+		// console.debug(
+		// 	'totalResourcesGained',
+		// 	currentTurn,
+		// 	totalResourcesGained,
+		// 	structure.resourcesForTurn,
+		// 	structure.minionsSoldForTurn,
+		// 	structure.resourcesUsedForTurn,
+		// );
 		structure.coinsWastedOverTurn = structure.coinsWastedOverTurn.set(
 			currentTurn,
 			Math.max(0, totalResourcesGained - structure.resourcesUsedForTurn),

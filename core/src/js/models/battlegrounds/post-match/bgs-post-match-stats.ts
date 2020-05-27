@@ -13,6 +13,7 @@ export class BgsPostMatchStats {
 	readonly boardHistory: readonly BgsBoard[];
 	// readonly compositionsOverTurn: readonly BgsCompositionForTurn[];
 	readonly rerollsOverTurn: readonly NumericTurnInfo[];
+	readonly freezesOverTurn: readonly NumericTurnInfo[];
 	readonly coinsWastedOverTurn: readonly NumericTurnInfo[];
 	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
