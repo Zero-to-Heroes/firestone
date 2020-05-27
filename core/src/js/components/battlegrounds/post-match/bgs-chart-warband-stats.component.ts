@@ -140,20 +140,11 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 					return;
 				}
 
-				// Set caret Position
-				tooltipEl.classList.remove('above', 'below', 'no-transform');
-				if (tooltip.yAlign) {
-					tooltipEl.classList.add(tooltip.yAlign);
-				} else {
-					tooltipEl.classList.add('no-transform');
-				}
-				tooltipEl.classList.add('top');
-
 				// Set Text
 				if (tooltip.body) {
 					// const titleLines = tooltip.title || [];
 					const bodyLines = tooltip.beforeBody;
-					console.log('adding text', tooltip, tooltip.body, bodyLines);
+					// console.log('adding text', tooltip, tooltip.body, bodyLines);
 
 					const innerHtml = `
 						<div class="body">
@@ -182,6 +173,10 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 				tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
 				tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
 				tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+
+				// Set caret Position
+				tooltipEl.classList.remove('above', 'below', 'no-transform');
+				tooltipEl.classList.add('top');
 			},
 		},
 	};
