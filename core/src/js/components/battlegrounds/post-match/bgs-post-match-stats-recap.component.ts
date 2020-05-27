@@ -59,6 +59,11 @@ declare let amplitude: any;
 				<div class="label">Freezes</div>
 				<div class="value">{{ freezes }}</div>
 			</div>
+			<!-- hero power: only show if not a passive one -->
+			<div class="entry cell" *ngIf="heroPowers">
+				<div class="label">Hero Power used</div>
+				<div class="value">{{ heroPowers }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,6 +81,7 @@ export class BgsPostMatchStatsRecapComponent {
 	coinsWasted: number;
 	rerolls: number;
 	freezes: number;
+	heroPowers: number;
 
 	private _stats: BgsPostMatchStatsPanel;
 	private _game: BgsGame;
@@ -114,5 +120,8 @@ export class BgsPostMatchStatsRecapComponent {
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		this.heroPowers = this._stats.stats.mainPlayerHeroPowersOverTurn
+			.map(value => value.value)
+			.reduce((a, b) => a + b, 0);
 	}
 }

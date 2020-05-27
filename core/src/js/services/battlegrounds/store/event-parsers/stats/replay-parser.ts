@@ -13,6 +13,7 @@ export const reparseReplay = (
 	freezesOverTurn: readonly NumericTurnInfo[];
 	coinsWastedOverTurn: readonly NumericTurnInfo[];
 	minionsSoldOverTurn: readonly NumericTurnInfo[];
+	mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[];
 	hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	totalStatsOverTurn: readonly NumericTurnInfo[];
 	totalMinionsDamageDealt: { [cardId: string]: number };
@@ -29,12 +30,15 @@ export const reparseReplay = (
 		boardOverTurn: Map.of(),
 		rerollOverTurn: Map.of(),
 		freezeOverTurn: Map.of(),
+		mainPlayerHeroPowerOverTurn: Map.of(),
 		coinsWastedOverTurn: Map.of(),
 		minionsSoldOverTurn: Map.of(),
 		hpOverTurn: {},
 		leaderboardPositionOverTurn: {},
 		totalStatsOverTurn: Map.of(),
 		entities: {},
+		mainPlayerHeroPowerIds: [],
+		mainPlayerHeroPowersForTurn: 0,
 		rerollsForTurn: 0,
 		rerollsIds: [],
 		freezesForTurn: 0,
@@ -70,6 +74,7 @@ export const reparseReplay = (
 	for (const playerCardId of playerCardIds) {
 		structure.playerHps[playerCardId] = playerCardId === 'TB_BaconShop_HERO_34' ? 50 : 40;
 	}
+	console.log('mainPlayerId', replay.mainPlayerId);
 
 	parseElement(
 		replay.replay.getroot(),
@@ -81,6 +86,7 @@ export const reparseReplay = (
 			compositionForTurnParse(structure),
 			rerollsForTurnParse(structure),
 			freezesForTurnParse(structure),
+			mainPlayerHeroPowerForTurnParse(structure, replay.mainPlayerId),
 			coinsWastedForTurnParse(structure, mainPlayerEntityId),
 			minionsSoldForTurnParse(structure),
 			hpForTurnParse(structure, playerEntities),
@@ -91,6 +97,7 @@ export const reparseReplay = (
 			compositionForTurnPopulate(structure, replay),
 			rerollsForTurnPopulate(structure, replay),
 			freezesForTurnPopulate(structure, replay),
+			mainPlayerHeroPowerForTurnPopulate(structure, replay),
 			coinsWastedForTurnPopulate(structure, replay),
 			minionsSoldForTurnPopulate(structure, replay),
 			// Order is important, because we want to first populate the leaderboard (for which it's easy
@@ -135,6 +142,16 @@ export const reparseReplay = (
 		)
 		.valueSeq()
 		.toArray();
+	const mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[] = structure.mainPlayerHeroPowerOverTurn
+		.map(
+			(heroPower, turn: number) =>
+				({
+					turn: turn,
+					value: heroPower,
+				} as NumericTurnInfo),
+		)
+		.valueSeq()
+		.toArray();
 	const coinsWastedOverTurn: readonly NumericTurnInfo[] = structure.coinsWastedOverTurn
 		.map(
 			(waste, turn: number) =>
@@ -169,6 +186,7 @@ export const reparseReplay = (
 		// compositionsOverTurn: compositionsOverTurn,
 		rerollsOverTurn: rerollsOverTurn,
 		freezesOverTurn: freezesOverTurn,
+		mainPlayerHeroPowersOverTurn: mainPlayerHeroPowersOverTurn,
 		coinsWastedOverTurn: coinsWastedOverTurn,
 		minionsSoldOverTurn: minionsSoldOverTurn,
 		hpOverTurn: hpOverTurn,
@@ -287,6 +305,43 @@ const rerollsForTurnPopulate = (structure: ParsingStructure, replay: Replay) => 
 	return currentTurn => {
 		structure.rerollOverTurn = structure.rerollOverTurn.set(currentTurn, structure.rerollsForTurn);
 		structure.rerollsForTurn = 0;
+	};
+};
+
+const mainPlayerHeroPowerForTurnParse = (structure: ParsingStructure, mainPlayerPlayerId: number) => {
+	return element => {
+		if (
+			element.tag === 'FullEntity' &&
+			element.find(`.Tag[@tag='${GameTag.CARDTYPE}'][@value='${CardType.HERO_POWER}']`) &&
+			element.find(`.Tag[@tag='${GameTag.CONTROLLER}'][@value='${mainPlayerPlayerId}']`)
+		) {
+			structure.mainPlayerHeroPowerIds = [...structure.mainPlayerHeroPowerIds, element.get('id')];
+			// console.debug('mainPlayerHeroPowerIds', structure.mainPlayerHeroPowerIds);
+		}
+		if (
+			element.tag === 'Block' &&
+			parseInt(element.get('type')) === BlockType.POWER &&
+			structure.mainPlayerHeroPowerIds.indexOf(element.get('entity')) !== -1
+		) {
+			structure.mainPlayerHeroPowersForTurn = structure.mainPlayerHeroPowersForTurn + 1;
+			// console.debug('mainPlayerHeroPowersForTurn', structure.mainPlayerHeroPowersForTurn);
+		}
+	};
+};
+
+const mainPlayerHeroPowerForTurnPopulate = (structure: ParsingStructure, replay: Replay) => {
+	return currentTurn => {
+		structure.mainPlayerHeroPowerOverTurn = structure.mainPlayerHeroPowerOverTurn.set(
+			currentTurn,
+			structure.mainPlayerHeroPowersForTurn,
+		);
+		// console.log(
+		// 	'hero power over turn',
+		// 	currentTurn,
+		// 	structure.mainPlayerHeroPowersForTurn,
+		// 	structure.mainPlayerHeroPowerOverTurn.toJS(),
+		// );
+		structure.mainPlayerHeroPowersForTurn = 0;
 	};
 };
 

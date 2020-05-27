@@ -40377,4 +40377,4 @@ export const replayXmlTest = `<?xml version="1.0" encoding="utf-8"?>
 		<Block effectIndex="12" entity="55" index="0" subOption="-1" triggerKeyword="0" ts="13:06:45.175745" type="5"/>
 		<Block effectIndex="14" entity="55" index="0" subOption="-1" triggerKeyword="0" ts="13:06:45.175745" type="5"/>
 	</Game>
-</HSReplay>`
+</HSReplay>`;

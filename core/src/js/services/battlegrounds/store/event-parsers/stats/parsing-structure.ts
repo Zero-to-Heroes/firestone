@@ -22,6 +22,8 @@ export interface ParsingStructure {
 	leaderboardPositions: {
 		[cardId: string]: number;
 	};
+	mainPlayerHeroPowerIds: string[];
+	mainPlayerHeroPowersForTurn: number;
 	rerollsIds: string[];
 	rerollsForTurn: number;
 	freezesIds: string[];
@@ -36,6 +38,7 @@ export interface ParsingStructure {
 	minionsDamageReceived: { [cardId: string]: number };
 	rerollOverTurn: Map<number, number>;
 	freezeOverTurn: Map<number, number>;
+	mainPlayerHeroPowerOverTurn: Map<number, number>;
 	coinsWastedOverTurn: Map<number, number>;
 	minionsSoldOverTurn: Map<number, number>;
 	totalStatsOverTurn: Map<number, number>;

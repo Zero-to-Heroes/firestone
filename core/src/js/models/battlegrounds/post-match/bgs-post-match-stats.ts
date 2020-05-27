@@ -15,6 +15,7 @@ export class BgsPostMatchStats {
 	readonly rerollsOverTurn: readonly NumericTurnInfo[];
 	readonly freezesOverTurn: readonly NumericTurnInfo[];
 	readonly coinsWastedOverTurn: readonly NumericTurnInfo[];
+	readonly mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[];
 	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[];
