@@ -96,24 +96,31 @@ export class BgsGameEndParser implements EventParser {
 
 // Returns -1 if had the worst possible luck, and 1 if had the best possible luck
 const buildWinLuckFactor = (battleResultHistory: readonly BattleResultHistory[]): number => {
-	return (
+	return spreadAroundZero(
 		battleResultHistory
+			.filter(history => history.simulationResult) // Mostly for dev, shouldn't happen in real life
 			.map(history => {
 				const victory = history.actualResult === 'won' ? 1 : 0;
 				const chance = history.simulationResult.wonPercent / 100;
 				return victory - chance;
 			})
-			.reduce((a, b) => a + b, 0) / battleResultHistory.length
+			.reduce((a, b) => a + b, 0) / battleResultHistory.length,
 	);
 };
 const buildTieLuckFactor = (battleResultHistory: readonly BattleResultHistory[]): number => {
-	return (
+	return spreadAroundZero(
 		battleResultHistory
+			.filter(history => history.simulationResult)
 			.map(history => {
 				const victory = history.actualResult === 'won' || history.actualResult === 'tied' ? 1 : 0;
 				const chance = (history.simulationResult.wonPercent + history.simulationResult.tiedPercent) / 100;
 				return victory - chance;
 			})
-			.reduce((a, b) => a + b, 0) / battleResultHistory.length
+			.reduce((a, b) => a + b, 0) / battleResultHistory.length,
 	);
+};
+// Keep the value between -1 and 1 but make it spread more around 0, since the limit cases
+// are really rare
+const spreadAroundZero = (value: number): number => {
+	return Math.sign(value) * Math.pow(Math.abs(value), 0.3);
 };
