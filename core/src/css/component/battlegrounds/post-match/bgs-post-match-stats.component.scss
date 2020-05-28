@@ -161,6 +161,14 @@
 	}
 }
 
+with-loading {
+	display: flex;
+	flex-grow: 1;
+	flex-shrink: 1;
+	position: relative;
+	z-index: 1;
+}
+
 @media (min-width: 1700px) {
 	.opponent-overview {
 		height: 40%;

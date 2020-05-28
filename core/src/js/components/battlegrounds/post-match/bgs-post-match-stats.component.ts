@@ -38,79 +38,82 @@ declare let amplitude: any;
 				<span class="title">Nothing here yet</span>
 				<span class="subtitle">Finish the run to get some stats!</span>
 			</div>
-			<div class="content empty-state" *ngIf="computing">
-				<i>
-					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
-					</svg>
-				</i>
-				<span class="title">We are building the post-match stats (usually about 20-30s)</span>
-			</div>
-			<div class="content" *ngIf="!computing && _panel?.player">
-				<div class="opponent-overview">
-					<div class="background-additions">
-						<div class="top"></div>
-						<div class="bottom"></div>
-					</div>
-					<div class="portrait">
-						<bgs-hero-portrait
-							class="icon"
-							[icon]="icon"
-							[health]="health"
-							[maxHealth]="maxHealth"
-							[cardTooltip]="heroPowerCardId"
-							[cardTooltipText]="name"
-							[cardTooltipClass]="'bgs-hero-power'"
-						></bgs-hero-portrait>
-						<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
-					</div>
-					<div class="opponent-info">
-						<div class="main-info">
-							<bgs-board
-								[entities]="boardMinions"
-								[finalBoard]="true"
-								[minionStats]="minionStats"
-								[maxBoardHeight]="0.8"
-							></bgs-board>
+			<with-loading
+				*ngIf="_panel?.player || computing"
+				[isLoading]="computing"
+				title="We're building the stats"
+				[subtitle]="
+					'We are building the post-match stats, please wait a bit - ' +
+					loadingElapsed?.toFixed(0) +
+					's elapsed (it usually takes about 20-30s)'
+				"
+			>
+				<div class="content">
+					<div class="opponent-overview">
+						<div class="background-additions">
+							<div class="top"></div>
+							<div class="bottom"></div>
+						</div>
+						<div class="portrait">
+							<bgs-hero-portrait
+								class="icon"
+								[icon]="icon"
+								[health]="health"
+								[maxHealth]="maxHealth"
+								[cardTooltip]="heroPowerCardId"
+								[cardTooltipText]="name"
+								[cardTooltipClass]="'bgs-hero-power'"
+							></bgs-hero-portrait>
+							<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
+						</div>
+						<div class="opponent-info">
+							<div class="main-info">
+								<bgs-board
+									[entities]="boardMinions"
+									[finalBoard]="true"
+									[minionStats]="minionStats"
+									[maxBoardHeight]="0.8"
+								></bgs-board>
+							</div>
 						</div>
 					</div>
+					<div class="stats">
+						<ul class="tabs">
+							<li
+								*ngFor="let tab of tabs"
+								class="tab"
+								[ngClass]="{ 'active': tab === selectedTab }"
+								(mousedown)="selectTab(tab)"
+							>
+								{{ getLabel(tab) }}
+							</li>
+						</ul>
+						<ng-container>
+							<bgs-chart-hp
+								class="stat"
+								[hidden]="selectedTab !== 'hp-by-turn'"
+								[stats]="_panel?.stats"
+								[game]="_game"
+							>
+							</bgs-chart-hp>
+							<bgs-chart-warband-stats
+								class="stat"
+								[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
+								[player]="_panel?.player"
+								[globalStats]="_panel?.globalStats"
+								[stats]="_panel?.stats"
+							>
+							</bgs-chart-warband-stats>
+							<bgs-chart-warband-composition
+								class="stat"
+								[hidden]="selectedTab !== 'warband-composition-by-turn'"
+								[stats]="_panel?.stats"
+							>
+							</bgs-chart-warband-composition>
+						</ng-container>
+					</div>
 				</div>
-				<div class="stats">
-					<ul class="tabs">
-						<li
-							*ngFor="let tab of tabs"
-							class="tab"
-							[ngClass]="{ 'active': tab === selectedTab }"
-							(mousedown)="selectTab(tab)"
-						>
-							{{ getLabel(tab) }}
-						</li>
-					</ul>
-					<ng-container>
-						<bgs-chart-hp
-							class="stat"
-							[hidden]="selectedTab !== 'hp-by-turn'"
-							[stats]="_panel?.stats"
-							[game]="_game"
-						>
-						</bgs-chart-hp>
-						<bgs-chart-warband-stats
-							class="stat"
-							[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
-							[player]="_panel?.player"
-							[globalStats]="_panel?.globalStats"
-							[stats]="_panel?.stats"
-						>
-						</bgs-chart-warband-stats>
-						<bgs-chart-warband-composition
-							class="stat"
-							[hidden]="selectedTab !== 'warband-composition-by-turn'"
-							[stats]="_panel?.stats"
-						>
-						</bgs-chart-warband-composition>
-					</ng-container>
-				</div>
-			</div>
+			</with-loading>
 			<div class="left empty" *ngIf="!_panel?.player"></div>
 			<div class="left" *ngIf="_panel?.player">
 				<div class="title">
@@ -138,6 +141,11 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	selectedTab: BgsStatsFilterId;
 	computing: boolean;
 
+	loadingElapsed: number = 0;
+
+	private loadingStart: number;
+	private loadingInterval;
+
 	@Input() set game(value: BgsGame) {
 		if (value === this._game) {
 			// console.log('same game');
@@ -150,6 +158,18 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		console.log('will set panel?', value);
 		if (value) {
 			this.computing = value.isComputing;
+			if (this.computing) {
+				if (this.loadingInterval) {
+					clearInterval(this.loadingInterval);
+				}
+				this.loadingStart = Date.now();
+				this.loadingInterval = setInterval(() => {
+					this.loadingElapsed = (Date.now() - this.loadingStart) / 1000;
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 500);
+			}
 		}
 		if (!value?.player) {
 			// console.log('no player, returning');
