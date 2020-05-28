@@ -37,6 +37,13 @@
 			color: var(--default-title-color);
 		}
 
+		.hint {
+			position: relative;
+			top: 30px;
+			font-size: 12px;
+			color: var(--default-text-color);
+		}
+
 		.loading-icon {
 			fill: transparent;
 		}

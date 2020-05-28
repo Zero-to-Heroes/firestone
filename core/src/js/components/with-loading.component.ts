@@ -9,7 +9,13 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			<ng-container *ngIf="!isLoading" [@fadeInOut]>
 				<ng-content></ng-content>
 			</ng-container>
-			<loading-state *ngIf="isLoading" [title]="title" [subtitle]="subtitle" [@fadeInOut]></loading-state>
+			<loading-state
+				*ngIf="isLoading"
+				[title]="title"
+				[subtitle]="subtitle"
+				[hint]="hint"
+				[@fadeInOut]
+			></loading-state>
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,5 +34,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class WithLoadingComponent {
 	@Input() isLoading: boolean;
 	@Input() title = "We're loading all the goods";
-	@Input() subtitle = "Please wait while we're collecting the informatio";
+	@Input() subtitle = "Please wait while we're collecting the information";
+	@Input() hint: boolean;
 }
