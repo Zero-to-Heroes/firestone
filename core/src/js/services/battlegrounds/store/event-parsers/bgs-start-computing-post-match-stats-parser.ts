@@ -1,4 +1,5 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
 import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-game-stage';
@@ -26,6 +27,9 @@ export class BgsStartComputingPostMatchStatsParser implements EventParser {
 			currentStageId: 'post-match',
 			currentPanelId: 'bgs-post-match-stats',
 			forceOpen: true,
+			currentGame: currentState.currentGame.update({
+				replayXml: event.replayXml,
+			} as BgsGame),
 		} as BattlegroundsState);
 	}
 

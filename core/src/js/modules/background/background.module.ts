@@ -16,6 +16,7 @@ import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { BgsGlobalStatsService } from '../../services/battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from '../../services/battlegrounds/bgs-init.service';
+import { BgsRunStatsService } from '../../services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from '../../services/battlegrounds/store/battlegrounds-store.service';
 import { LogParserService } from '../../services/collection/log-parser.service';
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
@@ -150,6 +151,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		BgsInitService,
 		BgsGlobalStatsService,
 		BgsBattleSimulationService,
+		BgsRunStatsService,
 
 		AiDeckService,
 		SecretConfigService,

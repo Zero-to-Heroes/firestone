@@ -12,6 +12,7 @@ export class BgsGame {
 	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
 	readonly battleResult: BgsBattleSimulationResult;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
+	readonly replayXml: string;
 
 	public static create(base: BgsGame): BgsGame {
 		return Object.assign(new BgsGame(), base);
@@ -41,7 +42,7 @@ export class BgsGame {
 				actualResult: result,
 			},
 		] as readonly BattleResultHistory[];
-		console.warn('updatedBattleHistory', result, this.battleResult, this.battleResultHistory);
+		// console.warn('updatedBattleHistory', result, this.battleResult, this.battleResultHistory);
 		return Object.assign(new BgsGame(), this, {
 			battleResultHistory: newBattleResultHistory,
 		} as BgsGame);

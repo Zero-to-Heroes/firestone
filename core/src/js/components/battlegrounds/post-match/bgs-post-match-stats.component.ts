@@ -29,7 +29,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="container">
-			<div class="content empty-state" *ngIf="!_panel?.isComputing && !_panel?.player">
+			<div class="content empty-state" *ngIf="!computing && !_panel?.player">
 				<i>
 					<svg>
 						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
@@ -38,15 +38,15 @@ declare let amplitude: any;
 				<span class="title">Nothing here yet</span>
 				<span class="subtitle">Finish the run to get some stats!</span>
 			</div>
-			<div class="content empty-state" *ngIf="_panel?.isComputing">
+			<div class="content empty-state" *ngIf="computing">
 				<i>
 					<svg>
 						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
 					</svg>
 				</i>
-				<span class="title">We are building the post-match stats, it should only take a few seconds</span>
+				<span class="title">We are building the post-match stats, it should only take a few moments</span>
 			</div>
-			<div class="content" *ngIf="!_panel?.isComputing && _panel?.player">
+			<div class="content" *ngIf="!computing && _panel?.player">
 				<div class="opponent-overview">
 					<div class="background-additions">
 						<div class="top"></div>
@@ -136,6 +136,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	minionStats: readonly MinionStat[];
 	tabs: readonly BgsStatsFilterId[];
 	selectedTab: BgsStatsFilterId;
+	computing: boolean;
 
 	@Input() set game(value: BgsGame) {
 		if (value === this._game) {
@@ -146,7 +147,10 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
-		// console.log('will set panel?', value);
+		console.log('will set panel?', value);
+		if (value) {
+			this.computing = value.isComputing;
+		}
 		if (!value?.player) {
 			// console.log('no player, returning');
 			return;
@@ -155,7 +159,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			// console.log('same panel');
 			return;
 		}
-		// console.log('setting panel');
+		console.log('setting panel', value);
 		this._panel = value;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.cardId}.png`;
 		this.health = value.player.initialHealth - value.player.damageTaken;

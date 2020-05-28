@@ -1,6 +1,4 @@
-import { parseHsReplayString, Replay } from '@firestone-hs/hs-replay-xml-parser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
-import { BattleResultHistory } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
@@ -10,7 +8,6 @@ import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/b
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
-import { reparseReplay } from './stats/replay-parser';
 import { EventParser } from './_event-parser';
 
 // TODO: coins wasted doesn't take into account hero powers that let you have more coins (Bel'ial)
@@ -20,7 +17,8 @@ export class BgsGameEndParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
-		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(event.replayXml, currentState);
+		console.warn('will build post-match info', event);
+		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(event.postMatchStats, currentState);
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
 			stage.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : stage,
 		);
@@ -32,10 +30,13 @@ export class BgsGameEndParser implements EventParser {
 		} as BattlegroundsState);
 	}
 
-	private buildPostMatchStage(replayXml: string, currentState: BattlegroundsState): BgsPostMatchStage {
+	private buildPostMatchStage(
+		postMatchStats: BgsPostMatchStats,
+		currentState: BattlegroundsState,
+	): BgsPostMatchStage {
 		const stageToRebuild =
 			currentState.stages.find(stage => stage.id === 'post-match') || this.createNewStage(currentState);
-		const panelToRebuild = this.createNewPanel(currentState, replayXml);
+		const panelToRebuild = this.createNewPanel(currentState, postMatchStats);
 
 		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>
 			panel.id === 'bgs-post-match-stats' ? panelToRebuild : panel,
@@ -51,35 +52,11 @@ export class BgsGameEndParser implements EventParser {
 		} as BgsPostMatchStage);
 	}
 
-	private createNewPanel(currentState: BattlegroundsState, replayXml: string): BgsPostMatchStatsPanel {
-		console.warn('battleResultHistory', currentState.currentGame.battleResultHistory);
-		const replay: Replay = parseHsReplayString(replayXml);
+	private createNewPanel(
+		currentState: BattlegroundsState,
+		postMatchStats: BgsPostMatchStats,
+	): BgsPostMatchStatsPanel {
 		const player: BgsPlayer = currentState.currentGame.getMainPlayer();
-		const structure = reparseReplay(replay);
-		const winLuckFactor = buildWinLuckFactor(currentState.currentGame.battleResultHistory);
-		const tieLuckFactor = buildTieLuckFactor(currentState.currentGame.battleResultHistory);
-		console.warn('luckFactor', winLuckFactor, tieLuckFactor, currentState.currentGame.battleResultHistory);
-		const postMatchStats: BgsPostMatchStats = BgsPostMatchStats.create({
-			tavernTimings: player.tavernUpgradeHistory,
-			tripleTimings: player.tripleHistory, // TODO: add the cards when relevant
-			coinsWastedOverTurn: structure.coinsWastedOverTurn,
-			rerolls: structure.rerollsOverTurn.map(turnInfo => turnInfo.value).reduce((a, b) => a + b, 0),
-			boardHistory: player.boardHistory,
-			// compositionsOverTurn: structure.compositionsOverTurn,
-			rerollsOverTurn: structure.rerollsOverTurn,
-			freezesOverTurn: structure.freezesOverTurn,
-			mainPlayerHeroPowersOverTurn: structure.mainPlayerHeroPowersOverTurn,
-			hpOverTurn: structure.hpOverTurn,
-			totalStatsOverTurn: structure.totalStatsOverTurn,
-			minionsBoughtOverTurn: structure.minionsBoughtOverTurn,
-			minionsSoldOverTurn: structure.minionsSoldOverTurn,
-			totalMinionsDamageDealt: structure.totalMinionsDamageDealt,
-			totalMinionsDamageTaken: structure.totalMinionsDamageTaken,
-			totalEnemyMinionsKilled: structure.totalEnemyMinionsKilled,
-			totalEnemyHeroesKilled: structure.totalEnemyHeroesKilled,
-			wentFirstInBattleOverTurn: structure.wentFirstInBattleOverTurn,
-			luckFactor: (2 * winLuckFactor + tieLuckFactor) / 3,
-		} as BgsPostMatchStats);
 		const finalPosition = player.leaderboardPlace;
 		console.log('post match stats', postMatchStats);
 		return BgsPostMatchStatsPanel.create({
@@ -93,34 +70,3 @@ export class BgsGameEndParser implements EventParser {
 		} as BgsPostMatchStatsPanel);
 	}
 }
-
-// Returns -1 if had the worst possible luck, and 1 if had the best possible luck
-const buildWinLuckFactor = (battleResultHistory: readonly BattleResultHistory[]): number => {
-	return spreadAroundZero(
-		battleResultHistory
-			.filter(history => history.simulationResult) // Mostly for dev, shouldn't happen in real life
-			.map(history => {
-				const victory = history.actualResult === 'won' ? 1 : 0;
-				const chance = history.simulationResult.wonPercent / 100;
-				return victory - chance;
-			})
-			.reduce((a, b) => a + b, 0) / battleResultHistory.length,
-	);
-};
-const buildTieLuckFactor = (battleResultHistory: readonly BattleResultHistory[]): number => {
-	return spreadAroundZero(
-		battleResultHistory
-			.filter(history => history.simulationResult)
-			.map(history => {
-				const victory = history.actualResult === 'won' || history.actualResult === 'tied' ? 1 : 0;
-				const chance = (history.simulationResult.wonPercent + history.simulationResult.tiedPercent) / 100;
-				return victory - chance;
-			})
-			.reduce((a, b) => a + b, 0) / battleResultHistory.length,
-	);
-};
-// Keep the value between -1 and 1 but make it spread more around 0, since the limit cases
-// are really rare
-const spreadAroundZero = (value: number): number => {
-	return Math.sign(value) * Math.pow(Math.abs(value), 0.3);
-};

@@ -7,11 +7,13 @@ import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
+import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
+import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
@@ -37,7 +39,6 @@ import { EventParser } from './event-parsers/_event-parser';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
-import { BgsGameEndEvent } from './events/bgs-game-end-event';
 import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
 import { BgsHeroSelectionEvent } from './events/bgs-hero-selection-event';
@@ -78,6 +79,7 @@ export class BattlegroundsStoreService {
 		private ow: OverwolfService,
 		private prefs: PreferencesService,
 		private memory: MemoryInspectionService,
+		private init_BgsRunStatsService: BgsRunStatsService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -200,8 +202,9 @@ export class BattlegroundsStoreService {
 				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				console.log('[bgs-store] Game ended');
-				this.battlegroundsUpdater.next(new BgsStartComputingPostMatchStatsEvent());
-				this.battlegroundsUpdater.next(new BgsGameEndEvent(gameEvent.additionalData.replayXml));
+				this.battlegroundsUpdater.next(
+					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
+				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
 					new BgsLeaderboardPlaceEvent(
@@ -209,6 +212,13 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.leaderboardPlace,
 					),
 				);
+			}
+		});
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
+			console.log('[bgs-run-stats] Replay created, received info');
+			const info: ManastormInfo = event.data[0];
+			if (info && info.type === 'new-review' && this.state && this.state.inGame && this.state.currentGame) {
+				this.events.broadcast(Events.START_BGS_RUN_STATS, info.reviewId, this.state.currentGame);
 			}
 		});
 	}
