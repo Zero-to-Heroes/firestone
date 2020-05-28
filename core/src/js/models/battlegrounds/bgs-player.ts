@@ -1,12 +1,12 @@
+import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsBoard } from './in-game/bgs-board';
 import { BgsComposition } from './in-game/bgs-composition';
 import { BgsTavernUpgrade } from './in-game/bgs-tavern-upgrade';
 import { BgsTriple } from './in-game/bgs-triple';
 
-export class BgsPlayer {
+export class BgsPlayer implements IBgsPlayer {
 	readonly cardId: string;
 	readonly heroPowerCardId: string;
 	readonly name: string;

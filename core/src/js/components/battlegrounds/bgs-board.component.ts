@@ -93,10 +93,11 @@ export class BgsBoardComponent implements AfterViewInit {
 	}
 
 	@Input('entities') set entities(entities: readonly Entity[]) {
-		if (this._entities === entities) {
+		if (this.inputEntities === entities) {
 			return;
 		}
-		this._entities = entities;
+		this.inputEntities = entities;
+		this._entities = entities?.map(entity => Entity.create({ ...entity } as Entity));
 		this.previousBoardWidth = undefined;
 		this.boardReady = false;
 		// console.log('setting board ready', this.boardReady);
@@ -116,6 +117,7 @@ export class BgsBoardComponent implements AfterViewInit {
 
 	private previousBoardWidth: number;
 	private previousBoardHeight: number;
+	private inputEntities: readonly Entity[];
 
 	constructor(
 		private readonly el: ElementRef,

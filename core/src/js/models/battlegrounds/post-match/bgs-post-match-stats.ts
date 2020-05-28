@@ -1,10 +1,11 @@
+import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBoard } from '../in-game/bgs-board';
 import { BgsTavernUpgrade } from '../in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../in-game/bgs-triple';
 import { BooleanTurnInfo } from './boolean-turn-info';
 import { NumericTurnInfo } from './numeric-turn-info';
 
-export class BgsPostMatchStats {
+export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly tavernTimings: readonly BgsTavernUpgrade[];
 	readonly tripleTimings: readonly BgsTriple[];
 	readonly rerolls: number;

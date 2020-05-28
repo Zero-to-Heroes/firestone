@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { BattleResultHistory, BgsGame } from '../../models/battlegrounds/bgs-game';
+import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
+import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { PreferencesService } from '../preferences.service';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
@@ -18,6 +21,7 @@ export class BgsRunStatsService {
 		private readonly http: HttpClient,
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async event => {
 			this.computeRunStats(event.data[0], event.data[1]);
@@ -28,17 +32,38 @@ export class BgsRunStatsService {
 	}
 
 	private async computeRunStats(reviewId: string, currentGame: BgsGame) {
-		const player: BgsPlayer = currentGame.getMainPlayer();
+		const prefs = await this.prefs.getPreferences();
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
 			battleResultHistory: currentGame.battleResultHistory,
-			mainPlayer: player,
+			mainPlayer: currentGame.getMainPlayer(),
 		};
-		const postMatchStats: BgsPostMatchStats = (await this.http
-			.post(BGS_RUN_STATS_ENDPOINT, input)
-			.toPromise()) as BgsPostMatchStats;
+
+		const postMatchStats: BgsPostMatchStats = prefs.bgsUseLocalPostMatchStats
+			? await this.buildStatsLocally(currentGame)
+			: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as BgsPostMatchStats);
 		console.log('postMatchStats', postMatchStats);
 		this.stateUpdater.next(new BgsGameEndEvent(postMatchStats));
+	}
+
+	private async buildStatsLocally(currentGame: BgsGame): Promise<BgsPostMatchStats> {
+		return new Promise<BgsPostMatchStats>(resolve => {
+			const worker = new Worker();
+			worker.onmessage = (ev: MessageEvent) => {
+				// console.log('received worker message', ev);
+				worker.terminate();
+				resolve(JSON.parse(ev.data));
+			};
+
+			const input = {
+				replayXml: currentGame.replayXml,
+				mainPlayer: currentGame.getMainPlayer(),
+				battleResultHistory: currentGame.battleResultHistory,
+			};
+			console.log('created worker', worker);
+			worker.postMessage(input);
+			console.log('posted worker message');
+		});
 	}
 }
 

@@ -7,7 +7,8 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 
 declare let amplitude: any;
@@ -133,6 +134,7 @@ export class BgsChartWarbandCompositionComponent {
 
 	axisTickFormatter(text: string): string {
 		// console.log('formatting', text);
+
 		return parseInt(text).toFixed(0);
 	}
 

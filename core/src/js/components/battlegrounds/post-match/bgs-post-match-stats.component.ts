@@ -8,7 +8,8 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -47,6 +48,7 @@ declare let amplitude: any;
 					loadingElapsed?.toFixed(0) +
 					's elapsed (it usually takes about 20-30s)'
 				"
+				[hint]="true"
 			>
 				<div class="content">
 					<div class="opponent-overview">

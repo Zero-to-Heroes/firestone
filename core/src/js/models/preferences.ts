@@ -72,6 +72,7 @@ export class Preferences {
 
 	readonly bgsEnableApp = true;
 	readonly bgsUseLocalSimulator = true;
+	readonly bgsUseLocalPostMatchStats = true;
 	readonly bgsEnableSimulation = true;
 	readonly bgsSimulatorNumberOfSims = 2500;
 

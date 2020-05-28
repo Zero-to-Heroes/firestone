@@ -1,6 +1,6 @@
-import { Entity } from '@firestone-hs/replay-parser';
+import { BgsBoard as IBgsBoard, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 
-export class BgsBoard {
+export class BgsBoard implements IBgsBoard {
 	readonly turn: number;
 	readonly board: readonly Entity[] = [];
 

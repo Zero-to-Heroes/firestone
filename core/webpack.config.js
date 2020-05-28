@@ -36,6 +36,7 @@ const entry = {
 	twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
 	battlegrounds: './src/js/modules/battlegrounds/main.ts',
 	'bgsbattlesimulation.worker': './src/js/workers/bgs-simulation.worker.ts',
+	'bgspostmatchstats.worker': './src/js/workers/bgs-post-match-stats.worker.ts',
 };
 
 module.exports = function(env, argv) {
@@ -69,6 +70,12 @@ module.exports = function(env, argv) {
 			raw: true,
 			entryOnly: true,
 			test: /bgsbattlesimulationworker/,
+		}),
+		new BannerPlugin({
+			banner: `var window = self;importScripts("./vendor.js");`,
+			raw: true,
+			entryOnly: true,
+			test: /bgspostmatchstatsworker/,
 		}),
 
 		new MiniCssExtractPlugin({

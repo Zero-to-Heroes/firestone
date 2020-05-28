@@ -17,7 +17,6 @@ const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://tsu2ztwayc.execute-api.us-west-2
 export class BgsBattleSimulationService {
 	private stateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 	private cardsData: CardsData;
-	private worker: Worker;
 
 	constructor(
 		private readonly http: HttpClient,

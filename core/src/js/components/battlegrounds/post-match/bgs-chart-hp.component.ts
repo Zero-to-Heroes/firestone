@@ -277,13 +277,13 @@ export class BgsChartHpComponent implements AfterViewInit {
 	private _game: BgsGame;
 
 	@Input() set stats(value: BgsPostMatchStats) {
-		console.log('setting stats', value);
+		// console.log('setting stats', value);
 		this._stats = value;
 		this.setStats();
 	}
 
 	@Input() set game(value: BgsGame) {
-		console.log('setting game', value);
+		// console.log('setting game', value);
 		this._game = value;
 		this.setStats();
 	}

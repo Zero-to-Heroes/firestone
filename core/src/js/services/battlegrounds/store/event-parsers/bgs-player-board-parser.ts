@@ -1,5 +1,5 @@
+import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { Map } from 'immutable';
@@ -75,11 +75,11 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	private buildEntity(logEntity): Entity {
-		return Object.assign(new Entity(), {
-			cardID: logEntity.CardId,
-			id: logEntity.Entity,
+		return {
+			cardID: logEntity.CardId as string,
+			id: logEntity.Entity as number,
 			tags: this.buildTags(logEntity.Tags),
-		} as Entity);
+		} as Entity;
 	}
 
 	private buildTags(tags: { Name: number; Value: number }[]): Map<string, number> {

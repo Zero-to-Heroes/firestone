@@ -1,3 +1,4 @@
+import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BgsBattleSimulationResult } from './bgs-battle-simulation-result';
@@ -72,10 +73,4 @@ export class BgsGame {
 			battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',
 		} as BgsGame);
 	}
-}
-
-export interface BattleResultHistory {
-	readonly turn: number;
-	readonly simulationResult: BgsBattleSimulationResult;
-	readonly actualResult: string;
 }
