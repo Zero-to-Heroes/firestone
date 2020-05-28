@@ -14,27 +14,29 @@ import { SetsService } from '../../services/sets-service.service';
 		<div class="app-section collection">
 			<section class="main" [ngClass]="{ 'divider': _navigation.navigationCollection.currentView === 'cards' }">
 				<with-loading [isLoading]="dataState.isLoading">
-					<global-header [navigation]="_navigation" *ngIf="_navigation.text"> </global-header>
-					<sets
-						[selectedFormat]="_navigation.navigationCollection.selectedFormat"
-						[standardSets]="standardSets"
-						[wildSets]="wildSets"
-						[hidden]="_navigation.navigationCollection.currentView !== 'sets'"
-					>
-					</sets>
-					<cards
-						[cardList]="_navigation.navigationCollection.cardList"
-						[set]="selectedSet"
-						[searchString]="_navigation.navigationCollection.searchString"
-						[hidden]="_navigation.navigationCollection.currentView !== 'cards'"
-					>
-					</cards>
-					<full-card
-						class="full-card"
-						[selectedCard]="selectedCard"
-						[hidden]="_navigation.navigationCollection.currentView !== 'card-details'"
-					>
-					</full-card>
+					<div class="content">
+						<global-header [navigation]="_navigation" *ngIf="_navigation.text"> </global-header>
+						<sets
+							[selectedFormat]="_navigation.navigationCollection.selectedFormat"
+							[standardSets]="standardSets"
+							[wildSets]="wildSets"
+							[hidden]="_navigation.navigationCollection.currentView !== 'sets'"
+						>
+						</sets>
+						<cards
+							[cardList]="_navigation.navigationCollection.cardList"
+							[set]="selectedSet"
+							[searchString]="_navigation.navigationCollection.searchString"
+							[hidden]="_navigation.navigationCollection.currentView !== 'cards'"
+						>
+						</cards>
+						<full-card
+							class="full-card"
+							[selectedCard]="selectedCard"
+							[hidden]="_navigation.navigationCollection.currentView !== 'card-details'"
+						>
+						</full-card>
+					</div>
 				</with-loading>
 			</section>
 			<section class="secondary">

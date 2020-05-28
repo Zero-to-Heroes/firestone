@@ -6,9 +6,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/with-loading.component.scss`],
 	template: `
 		<ng-container class="with-loading">
-			<div class="content" *ngIf="!isLoading" [@fadeInOut]>
+			<ng-container *ngIf="!isLoading" [@fadeInOut]>
 				<ng-content></ng-content>
-			</div>
+			</ng-container>
 			<loading-state *ngIf="isLoading" [@fadeInOut]></loading-state>
 		</ng-container>
 	`,

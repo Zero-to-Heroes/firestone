@@ -12,15 +12,17 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 		<div class="app-section decktracker">
 			<section class="main divider">
 				<with-loading [isLoading]="state.isLoading">
-					<decktracker-menu
-						[displayType]="navigation.navigationDecktracker.menuDisplayType"
-						[currentView]="navigation.navigationDecktracker.currentView"
-					></decktracker-menu>
-					<decktracker-filters [state]="state.filters"></decktracker-filters>
-					<decktracker-decks
-						[hidden]="navigation.navigationDecktracker.currentView !== 'decks'"
-						[decks]="state.decks"
-					></decktracker-decks>
+					<div class="content">
+						<decktracker-menu
+							[displayType]="navigation.navigationDecktracker.menuDisplayType"
+							[currentView]="navigation.navigationDecktracker.currentView"
+						></decktracker-menu>
+						<decktracker-filters [state]="state.filters"></decktracker-filters>
+						<decktracker-decks
+							[hidden]="navigation.navigationDecktracker.currentView !== 'decks'"
+							[decks]="state.decks"
+						></decktracker-decks>
+					</div>
 				</with-loading>
 			</section>
 			<section class="secondary"></section>

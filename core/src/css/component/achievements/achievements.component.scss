@@ -29,6 +29,30 @@
 	}
 }
 
+.content {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+
+	& > * {
+		display: flex;
+		min-height: 0;
+		opacity: 1;
+	}
+
+	& > ::ng-deep * {
+		display: flex;
+		min-height: 0;
+		opacity: 1;
+	}
+
+	::ng-deep & > * {
+		display: flex;
+		min-height: 0;
+		opacity: 1;
+	}
+}
+
 achievement-history {
 	flex-grow: 1;
 	flex-shrink: 1;

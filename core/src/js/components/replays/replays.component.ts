@@ -14,16 +14,18 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="app-section replays">
 			<section class="main divider">
 				<with-loading [isLoading]="state.isLoading">
-					<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
-					<replays-list
-						[state]="state"
-						[hidden]="navigation.navigationReplays.currentView !== 'list'"
-					></replays-list>
-					<match-details
-						[state]="state"
-						[navigation]="navigation.navigationReplays"
-						[hidden]="navigation.navigationReplays.currentView !== 'match-details'"
-					></match-details>
+					<div class="content">
+						<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
+						<replays-list
+							[state]="state"
+							[hidden]="navigation.navigationReplays.currentView !== 'list'"
+						></replays-list>
+						<match-details
+							[state]="state"
+							[navigation]="navigation.navigationReplays"
+							[hidden]="navigation.navigationReplays.currentView !== 'match-details'"
+						></match-details>
+					</div>
 				</with-loading>
 			</section>
 			<section class="secondary"></section>

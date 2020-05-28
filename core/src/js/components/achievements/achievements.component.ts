@@ -18,33 +18,35 @@ import { VisualAchievement } from '../../models/visual-achievement';
 		<div class="app-section achievements">
 			<section class="main" [ngClass]="{ 'divider': navigation.navigationAchievements.currentView === 'list' }">
 				<with-loading [isLoading]="state.isLoading">
-					<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
-					<achievements-global-categories
-						[hidden]="navigation.navigationAchievements.currentView !== 'categories'"
-						[globalCategories]="state.globalCategories"
-					>
-					</achievements-global-categories>
-					<achievements-categories
-						[hidden]="navigation.navigationAchievements.currentView !== 'category'"
-						[achievementSets]="getAchievementSets()"
-					>
-					</achievements-categories>
-					<achievements-list
-						[hidden]="navigation.navigationAchievements.currentView !== 'list'"
-						[socialShareUserInfo]="socialShareUserInfo"
-						[achievementsList]="getDisplayedAchievements()"
-						[selectedAchievementId]="navigation.navigationAchievements.selectedAchievementId"
-						[achievementSet]="getAchievementSet()"
-						[activeFilter]="navigation.navigationAchievements.achievementActiveFilter"
-						[globalStats]="globalStats"
-					>
-					</achievements-list>
-					<achievement-sharing-modal
-						[hidden]="!navigation.navigationAchievements.sharingAchievement"
-						[socialShareUserInfo]="socialShareUserInfo"
-						[sharingAchievement]="navigation.navigationAchievements.sharingAchievement"
-					>
-					</achievement-sharing-modal>
+					<div class="content">
+						<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
+						<achievements-global-categories
+							[hidden]="navigation.navigationAchievements.currentView !== 'categories'"
+							[globalCategories]="state.globalCategories"
+						>
+						</achievements-global-categories>
+						<achievements-categories
+							[hidden]="navigation.navigationAchievements.currentView !== 'category'"
+							[achievementSets]="getAchievementSets()"
+						>
+						</achievements-categories>
+						<achievements-list
+							[hidden]="navigation.navigationAchievements.currentView !== 'list'"
+							[socialShareUserInfo]="socialShareUserInfo"
+							[achievementsList]="getDisplayedAchievements()"
+							[selectedAchievementId]="navigation.navigationAchievements.selectedAchievementId"
+							[achievementSet]="getAchievementSet()"
+							[activeFilter]="navigation.navigationAchievements.achievementActiveFilter"
+							[globalStats]="globalStats"
+						>
+						</achievements-list>
+						<achievement-sharing-modal
+							[hidden]="!navigation.navigationAchievements.sharingAchievement"
+							[socialShareUserInfo]="socialShareUserInfo"
+							[sharingAchievement]="navigation.navigationAchievements.sharingAchievement"
+						>
+						</achievement-sharing-modal>
+					</div>
 				</with-loading>
 			</section>
 			<section class="secondary">
