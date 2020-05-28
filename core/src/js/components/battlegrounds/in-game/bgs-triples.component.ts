@@ -18,14 +18,14 @@ declare let amplitude: any;
 					*ngFor="let triple of tierTriples || []; trackBy: trackByFn"
 					class="triple"
 					[helpTooltip]="
-						'That player got ' +
-						triple.quantity +
-						' tier ' +
-						(triple.minionTier + 1) +
-						' minions (and ' +
+						'This player got ' +
 						triple.quantity +
 						' tier ' +
 						triple.minionTier +
+						' minions (and ' +
+						triple.quantity +
+						' tier ' +
+						(triple.minionTier - 1) +
 						' golden minions) since last time you fought them'
 					"
 				>
