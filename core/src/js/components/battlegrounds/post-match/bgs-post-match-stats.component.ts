@@ -44,7 +44,7 @@ declare let amplitude: any;
 						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
 					</svg>
 				</i>
-				<span class="title">We are building the post-match stats, it should only take a few moments</span>
+				<span class="title">We are building the post-match stats (usually about 20-30s)</span>
 			</div>
 			<div class="content" *ngIf="!computing && _panel?.player">
 				<div class="opponent-overview">
