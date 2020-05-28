@@ -42,7 +42,12 @@ export class BgsRunStatsService {
 		const postMatchStats: BgsPostMatchStats = prefs.bgsUseLocalPostMatchStats
 			? await this.buildStatsLocally(currentGame)
 			: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as BgsPostMatchStats);
-		console.log('postMatchStats', postMatchStats);
+		// Even if stats are computed locally, we still do it on the server so that we can
+		// archive the data. However, this is non-blocking
+		if (!prefs.bgsUseLocalPostMatchStats) {
+			this.http.post(BGS_RUN_STATS_ENDPOINT, input);
+		}
+		console.log('postMatchStats', prefs.bgsUseLocalPostMatchStats, postMatchStats);
 		this.stateUpdater.next(new BgsGameEndEvent(postMatchStats));
 	}
 

@@ -39,6 +39,11 @@ import { Knob } from '../preference-slider.component';
 						label="Use local battle simulator"
 						tooltip="Turning that off will run the battle simulations on a remote server, thus freeing your machine up. On the other hand, the results will take a bit longer to arrive"
 					></preference-toggle>
+					<preference-toggle
+						field="bgsUseLocalPostMatchStats"
+						label="Compute post-match stats locally"
+						tooltip="When turned on, the stats that appear on the post-match screen will be computed locally, which is faster but can be CPU intensive. Turn it off to compute the stats on the cloud (it will take a bit more time though)"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">
