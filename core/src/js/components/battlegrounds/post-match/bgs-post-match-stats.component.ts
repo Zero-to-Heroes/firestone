@@ -143,7 +143,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	selectedTab: BgsStatsFilterId;
 	computing: boolean;
 
-	loadingElapsed: number = 0;
+	loadingElapsed = 0;
 
 	private loadingStart: number;
 	private loadingInterval;
