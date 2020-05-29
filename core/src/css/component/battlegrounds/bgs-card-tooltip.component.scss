@@ -2,16 +2,19 @@
 	pointer-events: none;
 }
 
-::ng-deep card.tooltip .card {
-	height: 300px;
+::ng-deep card.tooltip {
+	pointer-events: none !important;
+	.card {
+		height: 300px;
 
-	&::before {
-		padding-top: 0;
+		&::before {
+			padding-top: 0;
+		}
 	}
 }
 
 ::ng-deep card.tooltip.hidden {
-	pointer-events: none !important;
+	// pointer-events: none !important;
 	.card {
 		opacity: 0 !important;
 	}
