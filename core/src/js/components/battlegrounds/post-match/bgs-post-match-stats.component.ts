@@ -157,7 +157,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
-		console.log('will set panel?', value);
+		// console.log('will set panel?', value);
 		if (value) {
 			this.computing = value.isComputing;
 			if (this.computing) {
@@ -181,7 +181,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			// console.log('same panel');
 			return;
 		}
-		console.log('setting panel', value);
+		// console.log('setting panel', value);
 		this._panel = value;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.cardId}.png`;
 		this.health = value.player.initialHealth - value.player.damageTaken;

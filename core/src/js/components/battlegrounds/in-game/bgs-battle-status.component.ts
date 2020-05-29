@@ -77,7 +77,7 @@ export class BgsBattleStatusComponent {
 	private tempInterval;
 
 	@Input() set battleSimulationStatus(value: 'empty' | 'waiting-for-result' | 'done') {
-		console.log('setting battle sim status', value, this._previousStatus);
+		// console.log('setting battle sim status', value, this._previousStatus);
 		if (value === this._previousStatus) {
 			return;
 		}
@@ -86,7 +86,7 @@ export class BgsBattleStatusComponent {
 			clearInterval(this.tempInterval);
 		}
 		if (!value || value === 'empty') {
-			console.log('result empty', value);
+			// console.log('result empty', value);
 			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
 			this.battleSimulationResultWin = '--';
 			this.battleSimulationResultTie = '--';
@@ -94,7 +94,7 @@ export class BgsBattleStatusComponent {
 			this.damageWon = null;
 			this.damageLost = null;
 		} else if (value === 'waiting-for-result') {
-			console.log('result waiting', value);
+			// console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.tempInterval = setInterval(() => {
 				this.battleSimulationResultWin = (99 * Math.random()).toFixed(1) + '%';
@@ -105,7 +105,7 @@ export class BgsBattleStatusComponent {
 				}
 			}, 30);
 		} else {
-			console.log('result done', value);
+			// console.log('result done', value);
 			this.temporaryBattleTooltip =
 				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
 		}
@@ -117,7 +117,7 @@ export class BgsBattleStatusComponent {
 			return;
 		}
 		this._previousBattle = value;
-		console.log('setting next battle', value);
+		// console.log('setting next battle', value);
 		if (value?.wonPercent != null) {
 			this.battleSimulationResultWin = value.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = value.tiedPercent.toFixed(1) + '%';
