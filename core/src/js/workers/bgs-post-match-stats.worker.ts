@@ -10,14 +10,14 @@ const ctx: Worker = self as any;
 // Respond to message from parent thread
 ctx.onmessage = async ev => {
 	const input = ev.data;
-	console.log('received message in worker', input, ev);
+	console.log('received message in worker');
 
 	const replayXml: string = input.replayXml;
 	const mainPlayer: BgsPlayer = input.mainPlayer;
 	const battleResultHistory: readonly BattleResultHistory[] = input.battleResultHistory;
 	const result: BgsPostMatchStats = parseBattlegroundsGame(replayXml, mainPlayer, battleResultHistory);
 
-	console.log('worker result', result);
+	console.log('worker result');
 
 	ctx.postMessage(JSON.stringify(result));
 };

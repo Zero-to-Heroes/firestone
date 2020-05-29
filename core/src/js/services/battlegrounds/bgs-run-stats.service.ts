@@ -44,8 +44,12 @@ export class BgsRunStatsService {
 			: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as BgsPostMatchStats);
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
-		if (!prefs.bgsUseLocalPostMatchStats) {
-			this.http.post(BGS_RUN_STATS_ENDPOINT, input);
+		if (prefs.bgsUseLocalPostMatchStats) {
+			// console.log('posting to endpoint');
+			this.http.post(BGS_RUN_STATS_ENDPOINT, input).subscribe(
+				result => console.log('request remote post-match stats success'),
+				error => console.error('issue while posting post-match stats', error),
+			);
 		}
 		console.log('postMatchStats', prefs.bgsUseLocalPostMatchStats, postMatchStats);
 		this.stateUpdater.next(new BgsGameEndEvent(postMatchStats));
@@ -65,7 +69,7 @@ export class BgsRunStatsService {
 				mainPlayer: currentGame.getMainPlayer(),
 				battleResultHistory: currentGame.battleResultHistory,
 			};
-			console.log('created worker', worker);
+			console.log('created worker');
 			worker.postMessage(input);
 			console.log('posted worker message');
 		});
