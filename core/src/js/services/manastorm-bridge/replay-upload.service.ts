@@ -14,28 +14,28 @@ const BUCKET = 'com.zerotoheroes.batch';
 export class ReplayUploadService {
 	constructor(private http: HttpClient, private ow: OverwolfService, private readonly events: Events) {}
 
-	public async createEmptyReview(): Promise<string> {
-		return new Promise<string>(resolve => {
-			this.createEmptyReviewInternal(reviewId => resolve(reviewId), 10);
-		});
-	}
+	// public async createEmptyReview(): Promise<string> {
+	// 	return new Promise<string>(resolve => {
+	// 		this.createEmptyReviewInternal(reviewId => resolve(reviewId), 10);
+	// 	});
+	// }
 
-	private createEmptyReviewInternal(callback, retriesLeft = 10) {
-		if (retriesLeft < 0) {
-			console.error('[manastorm-bridge] Could not create empty review');
-			callback(null);
-		}
-		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
-			res => {
-				const reviewId: string = res as string;
-				console.log('[manastorm-bridge] Created empty shell review', res, reviewId);
-				callback(reviewId);
-			},
-			error => {
-				setTimeout(() => this.createEmptyReviewInternal(callback, retriesLeft - 1), 1000);
-			},
-		);
-	}
+	// private createEmptyReviewInternal(callback, retriesLeft = 10) {
+	// 	if (retriesLeft < 0) {
+	// 		console.error('[manastorm-bridge] Could not create empty review');
+	// 		callback(null);
+	// 	}
+	// 	this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
+	// 		res => {
+	// 			const reviewId: string = res as string;
+	// 			console.log('[manastorm-bridge] Created empty shell review', res, reviewId);
+	// 			callback(reviewId);
+	// 		},
+	// 		error => {
+	// 			setTimeout(() => this.createEmptyReviewInternal(callback, retriesLeft - 1), 1000);
+	// 		},
+	// 	);
+	// }
 
 	public async uploadGame(game: GameForUpload) {
 		if (!game.reviewId) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import S3 from 'aws-sdk/clients/s3';
 import AWS from 'aws-sdk/global';
-import { v4 as uuid } from 'uuid';
+import { uuid } from './utils';
 
 const BUCKET = 'com.zerotoheroes.support';
 

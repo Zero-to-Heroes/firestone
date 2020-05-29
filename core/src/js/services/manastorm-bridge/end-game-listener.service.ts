@@ -5,6 +5,7 @@ import { GameStateService } from '../decktracker/game-state.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
+import { uuid } from '../utils';
 import { EndGameUploaderService } from './end-game-uploader.service';
 import { ReplayUploadService } from './replay-upload.service';
 
@@ -45,7 +46,7 @@ export class EndGameListenerService {
 					// 	return;
 					// }
 					console.log('[manastorm-bridge] Creating empty review');
-					const currentReviewId = await this.replayUpload.createEmptyReview();
+					const currentReviewId = uuid();
 					console.log('[manastorm-bridge] built currentReviewId', currentReviewId);
 					const info = {
 						type: 'new-empty-review',
