@@ -24,19 +24,18 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="container">
-			<div class="left">
-				<div class="title" helpTooltip="Recap of all the encounters you had with the other players">
-					Score Board
-				</div>
-				<bgs-hero-face-offs
-					[faceOffs]="faceOffs"
-					[players]="players"
-					[nextOpponentCardId]="nextOpponentCardId"
-				></bgs-hero-face-offs>
+			<div class="content empty-state" *ngIf="!opponents || !opponents[0]">
+				<i>
+					<svg>
+						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
+					</svg>
+				</i>
+				<span class="title">Nothing here yet</span>
+				<span class="subtitle">Pick a hero and wait for your opponents!</span>
 			</div>
-			<div class="content">
+			<div class="content" *ngIf="opponents && opponents[0]">
 				<bgs-opponent-overview-big
-					[opponent]="opponents && opponents[0]"
+					[opponent]="opponents[0]"
 					[currentTurn]="currentTurn"
 					[enableSimulation]="enableSimulation"
 					[nextBattle]="nextBattle"
@@ -52,6 +51,16 @@ declare let amplitude: any;
 						></bgs-opponent-overview>
 					</div>
 				</div>
+			</div>
+			<div class="left">
+				<div class="title" helpTooltip="Recap of all the encounters you had with the other players">
+					Score Board
+				</div>
+				<bgs-hero-face-offs
+					[faceOffs]="faceOffs"
+					[players]="players"
+					[nextOpponentCardId]="nextOpponentCardId"
+				></bgs-hero-face-offs>
 			</div>
 		</div>
 	`,

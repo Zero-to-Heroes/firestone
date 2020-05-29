@@ -26,6 +26,7 @@
 
 	bgs-hero-face-offs {
 		min-height: 0;
+		height: 100%;
 	}
 }
 
@@ -92,5 +93,32 @@ bgs-hero-face-off {
 			margin-bottom: 10px;
 			height: 9vw;
 		}
+	}
+}
+
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 10vh;
+
+	i {
+		width: 30vw;
+		height: 20vw;
+		margin-bottom: 30px;
+		--icon-color: var(--color-1);
+	}
+
+	.title {
+		margin-bottom: 15px;
+		color: var(--color-1);
+	}
+
+	.subtitle {
+		color: var(--color-1);
+	}
+
+	svg {
+		fill: transparent;
 	}
 }
