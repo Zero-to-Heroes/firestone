@@ -28,6 +28,9 @@ export class PreviousFtueProcessor implements Processor {
 			case 'replays':
 				nextStep = 'decktracker';
 				break;
+			case 'battlegrounds':
+				nextStep = 'replays';
+				break;
 		}
 		return [null, navigationState.update({ currentApp: nextStep } as NavigationState)];
 	}

@@ -84,6 +84,14 @@ export class FtueComponent implements AfterViewInit {
 			icon: `/Files/assets/svg/ftue/replays.svg`,
 			progressIndex: 3,
 		},
+		{
+			id: 'battlegrounds',
+			title: 'Battlegrounds',
+			text:
+				'Nothing here yet, but the in-game app will appear as soon as you start a Battlegrounds run (hotkey Alt + B)',
+			icon: `/Files/assets/svg/ftue/battlegrounds.svg`,
+			progressIndex: 4,
+		},
 	];
 
 	@Input() set selectedModule(value: CurrentAppType) {

@@ -30,10 +30,13 @@ export class NextFtueProcessor implements Processor {
 				nextStep = 'replays';
 				break;
 			case 'replays':
+				nextStep = 'battlegrounds';
+				break;
+			case 'battlegrounds':
 				nextStep = 'achievements'; // Default page
 				break;
 		}
-		if (navigationState.currentApp === 'replays') {
+		if (navigationState.currentApp === 'battlegrounds') {
 			await this.prefs.setGlobalFtueDone();
 			showFtue = false;
 		}
