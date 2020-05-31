@@ -96,6 +96,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 						fontColor: '#D9C3AB',
 						fontFamily: 'Open Sans',
 						fontStyle: 'normal',
+						beginAtZero: true,
 					},
 				},
 			],
