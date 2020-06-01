@@ -1,9 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
-import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import {
+	BattleResultHistory,
+	BgsPostMatchStats as IBgsPostMatchStats,
+} from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { Entity } from '@firestone-hs/replay-parser';
+import { Map } from 'immutable';
 import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
+import { BgsBoard } from '../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
@@ -40,7 +46,7 @@ export class BgsRunStatsService {
 		};
 
 		const postMatchStats: BgsPostMatchStats = prefs.bgsUseLocalPostMatchStats
-			? await this.buildStatsLocally(currentGame)
+			? this.populateObject(await this.buildStatsLocally(currentGame))
 			: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as BgsPostMatchStats);
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
@@ -55,13 +61,14 @@ export class BgsRunStatsService {
 		this.stateUpdater.next(new BgsGameEndEvent(postMatchStats));
 	}
 
-	private async buildStatsLocally(currentGame: BgsGame): Promise<BgsPostMatchStats> {
-		return new Promise<BgsPostMatchStats>(resolve => {
+	private async buildStatsLocally(currentGame: BgsGame): Promise<IBgsPostMatchStats> {
+		return new Promise<IBgsPostMatchStats>(resolve => {
 			const worker = new Worker();
 			worker.onmessage = (ev: MessageEvent) => {
 				// console.log('received worker message', ev);
 				worker.terminate();
-				resolve(JSON.parse(ev.data));
+				const resultData: IBgsPostMatchStats = JSON.parse(ev.data);
+				resolve(resultData);
 			};
 
 			const input = {
@@ -73,6 +80,27 @@ export class BgsRunStatsService {
 			worker.postMessage(input);
 			console.log('posted worker message');
 		});
+	}
+
+	private populateObject(data: IBgsPostMatchStats): BgsPostMatchStats {
+		const result: BgsPostMatchStats = BgsPostMatchStats.create({
+			...data,
+			boardHistory: data.boardHistory.map(history =>
+				BgsBoard.create({
+					turn: history.turn,
+					board: (history.board || []).map(entity => this.buildEntity(entity)),
+				} as BgsBoard),
+			),
+		});
+		return result;
+	}
+
+	private buildEntity(source): Entity {
+		return Object.assign(new Entity(), {
+			cardID: source.cardID,
+			id: source.id,
+			tags: Map(source.tags),
+		} as Entity);
 	}
 }
 

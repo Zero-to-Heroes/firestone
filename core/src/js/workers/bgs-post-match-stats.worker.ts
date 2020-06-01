@@ -1,9 +1,9 @@
 import {
 	BattleResultHistory,
 	BgsPlayer,
+	BgsPostMatchStats as IBgsPostMatchStats,
 	parseBattlegroundsGame,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsPostMatchStats } from '../models/battlegrounds/post-match/bgs-post-match-stats';
 
 const ctx: Worker = self as any;
 
@@ -15,7 +15,8 @@ ctx.onmessage = async ev => {
 	const replayXml: string = input.replayXml;
 	const mainPlayer: BgsPlayer = input.mainPlayer;
 	const battleResultHistory: readonly BattleResultHistory[] = input.battleResultHistory;
-	const result: BgsPostMatchStats = parseBattlegroundsGame(replayXml, mainPlayer, battleResultHistory);
+	// Here it's serialized, so we lose the methods and only keey the data
+	const result: IBgsPostMatchStats = parseBattlegroundsGame(replayXml, mainPlayer, battleResultHistory);
 
 	console.log('worker result');
 

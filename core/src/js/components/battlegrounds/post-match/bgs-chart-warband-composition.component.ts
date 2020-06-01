@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AllCardsService, Entity as ParserEntity } from '@firestone-hs/replay-parser';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 
 declare let amplitude: any;
@@ -86,6 +86,7 @@ export class BgsChartWarbandCompositionComponent {
 	barPadding: number;
 
 	private _stats: BgsPostMatchStats;
+	private boardHistory: readonly ParserEntity[];
 
 	@Input() set stats(value: BgsPostMatchStats) {
 		if (value === this._stats) {
@@ -138,10 +139,11 @@ export class BgsChartWarbandCompositionComponent {
 		return parseInt(text).toFixed(0);
 	}
 
-	getMinions(tribe: string, turn: number): readonly Entity[] {
+	getMinions(tribe: string, turn: number): readonly ParserEntity[] {
 		return this._stats.boardHistory
 			.find(history => history.turn === turn)
-			.board.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe);
+			.board.map(entity => ParserEntity.create(entity as ParserEntity))
+			.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe);
 	}
 
 	private async setStats(value: BgsPostMatchStats) {
