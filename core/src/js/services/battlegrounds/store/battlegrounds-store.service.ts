@@ -261,6 +261,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
+		//console.log('processing', gameEvent.type, this.battlegroundsStoreEventBus.observers.length);
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
 			this.closedByUser = true;
 			this.state = this.state.update({
@@ -269,16 +270,19 @@ export class BattlegroundsStoreService {
 			this.updateOverlay();
 		}
 		for (const parser of this.eventParsers) {
+			//console.log('considering parser', parser, this.battlegroundsStoreEventBus.observers.length);
 			try {
 				if (parser.applies(gameEvent, this.state)) {
 					// console.log('parser will apply for', gameEvent.type);
 					const newState = await parser.parse(this.state, gameEvent);
+					//console.log('built new state', this.battlegroundsStoreEventBus.observers.length);
 					if (newState !== this.state) {
 						this.state = newState;
-						// console.log('updated state after', gameEvent.type);
+						//console.log('updated state after', this.battlegroundsStoreEventBus.observers.length);
 						this.battlegroundsStoreEventBus.next(this.state);
-						// this.battlegroundsStoreEventBus.
+						//console.log('emitted state', this.battlegroundsStoreEventBus.observers.length);
 						this.updateOverlay();
+						//console.log('updqted overlays', this.battlegroundsStoreEventBus.observers.length);
 					}
 				}
 			} catch (e) {
@@ -318,7 +322,7 @@ export class BattlegroundsStoreService {
 		// In fact we don't want to close the window when the game ends
 		else if (['closed'].indexOf(battlegroundsWindow.stateEx) === -1 && this.closedByUser) {
 			// console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
-			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+			await this.ow.hideWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
 	}
 
