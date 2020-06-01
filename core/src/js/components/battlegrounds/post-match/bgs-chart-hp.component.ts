@@ -168,11 +168,11 @@ export class BgsChartHpComponent implements AfterViewInit {
 
 				// Set caret Position
 				tooltipEl.classList.remove('above', 'below', 'no-transform');
-				if (tooltip.yAlign) {
-					tooltipEl.classList.add(tooltip.yAlign);
-				} else {
-					tooltipEl.classList.add('no-transform');
-				}
+				// if (tooltip.yAlign) {
+				// 	tooltipEl.classList.add(tooltip.yAlign);
+				// } else {
+				// 	tooltipEl.classList.add('no-transform');
+				// }
 
 				// Set Text
 				if (tooltip.body) {
@@ -225,10 +225,17 @@ export class BgsChartHpComponent implements AfterViewInit {
 				// Display, position, and set styles for font
 				tooltipEl.style.opacity = '1';
 				tooltipEl.style.left = positionX + tooltip.caretX - 40 + 'px';
-				tooltipEl.style.top =
-					position === 'bottom'
-						? positionY + tooltip.caretY + 4 + 'px'
-						: positionY + tooltip.caretY + 4 - 203 + 24 - 51 + 'px';
+				if (position === 'bottom') {
+					tooltipEl.style.top = positionY + tooltip.caretY + 8 + 'px';
+					tooltipEl.style.bottom = 'auto';
+				} else {
+					tooltipEl.style.bottom = positionY + this._chart.canvas.height - tooltip.caretY + 8 + 'px';
+					tooltipEl.style.top = 'auto';
+				}
+				// tooltipEl.style.top =
+				// 	position === 'bottom'
+				// 		? positionY + tooltip.caretY + 4 + 'px'
+				// 		: positionY + tooltip.caretY + 4 + tooltip.y - 325 + (138 - tooltip.height) + 'px';
 				tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
 				tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
 				tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
