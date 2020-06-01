@@ -1,5 +1,9 @@
-import { parseHsReplayString, Replay } from '@firestone-hs/hs-replay-xml-parser';
-import { reparseReplay } from '../../core/src/js/services/battlegrounds/store/event-parsers/stats/replay-parser';
+import {
+	parseBattlegroundsGame,
+	parseHsReplayString,
+	Replay,
+} from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsPlayer } from '../../core/src/js/models/battlegrounds/bgs-player';
 import { replayXmlTest } from './replay';
 
 describe('BGS Replay-parser - basic test', () => {
@@ -9,7 +13,7 @@ describe('BGS Replay-parser - basic test', () => {
 		const replay: Replay = parseHsReplayString(replayXml);
 		console.timeEnd('startParsing');
 
-		const stats = reparseReplay(replay);
+		const stats = parseBattlegroundsGame(replayXml, BgsPlayer.create({} as BgsPlayer), []);
 
 		expect(stats).not.toBe(null);
 		console.debug(stats.wentFirstInBattleOverTurn);

@@ -18,7 +18,7 @@
 		"@angular/platform-browser": "8.1.1",
 		"@angular/platform-browser-dynamic": "8.1.1",
 		"@firestone-hs/coliseum-components": "0.0.4",
-		"@firestone-hs/hs-replay-xml-parser": "0.0.36",
+		"@firestone-hs/hs-replay-xml-parser": "0.0.43",
 		"@firestone-hs/reference-data": "^0.1.32",
 		"@firestone-hs/replay-parser": "^1.1.16",
 		"@sentry/browser": "^5.7.1",
