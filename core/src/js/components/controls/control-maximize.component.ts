@@ -42,6 +42,7 @@ declare let amplitude;
 export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	@Input() windowId: string;
 	@Input() doubleClickListenerParentClass: string;
+	@Input() exludeClassForDoubleClick: string;
 	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	maximized = false;
@@ -77,8 +78,14 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 				parent = parent.parentNode;
 			}
 			if (parent && (parent.classList as DOMTokenList).contains(this.doubleClickListenerParentClass)) {
-				parent.addEventListener('dblclick', () => {
-					// console.log('toggling with double click');
+				parent.addEventListener('dblclick', (event: MouseEvent) => {
+					let parent: any = event.srcElement;
+					while (parent) {
+						if ((parent.classList as DOMTokenList)?.contains(this.exludeClassForDoubleClick)) {
+							return;
+						}
+						parent = parent.parentNode;
+					}
 					this.toggleMaximizeWindow();
 				});
 			}

@@ -39,8 +39,8 @@ declare let amplitude: any;
 						<menu-selection-bgs [selectedStage]="currentStage?.id"></menu-selection-bgs>
 					</div>
 				</div>
-				<hotkey [hotkeyName]="'battlegrounds'"></hotkey>
-				<div class="controls">
+				<hotkey class="exclude-dbclick" [hotkeyName]="'battlegrounds'"></hotkey>
+				<div class="controls exclude-dbclick">
 					<control-bug></control-bug>
 					<control-settings [windowId]="windowId" [settingsApp]="'battlegrounds'"></control-settings>
 					<control-discord></control-discord>
@@ -48,6 +48,7 @@ declare let amplitude: any;
 					<control-maximize
 						[windowId]="windowId"
 						[doubleClickListenerParentClass]="'menu-bar'"
+						[exludeClassForDoubleClick]="'exclude-dbclick'"
 					></control-maximize>
 					<control-close
 						[windowId]="windowId"
@@ -97,7 +98,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 		this.currentStage = value?.stages?.find(stage => stage.id === value.currentStageId);
 		this.currentPanel = this.currentStage?.panels?.find(panel => panel.id === value.currentPanelId);
 
-		// console.log('setting stateeee', value, this.currentStage, this.currentPanel);
+		console.log('sett state in -content', value, this.currentStage, this.currentPanel);
 	}
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
