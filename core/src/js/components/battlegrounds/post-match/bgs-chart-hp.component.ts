@@ -168,11 +168,6 @@ export class BgsChartHpComponent implements AfterViewInit {
 
 				// Set caret Position
 				tooltipEl.classList.remove('above', 'below', 'no-transform');
-				// if (tooltip.yAlign) {
-				// 	tooltipEl.classList.add(tooltip.yAlign);
-				// } else {
-				// 	tooltipEl.classList.add('no-transform');
-				// }
 
 				// Set Text
 				if (tooltip.body) {
@@ -188,8 +183,6 @@ export class BgsChartHpComponent implements AfterViewInit {
 					innerHtml += '<div class="body">';
 
 					bodyLines.forEach(function(body, i) {
-						const colors = tooltip.labelColors[i];
-						// console.log('colors for', i, colors, body);
 						innerHtml += '<span class="line">' + body + '</span>';
 					});
 					innerHtml += '</div>';
@@ -221,8 +214,6 @@ export class BgsChartHpComponent implements AfterViewInit {
 					tooltipEl.classList.remove('top');
 				}
 
-				// console.log('top', positionY, tooltip.caretY, this._chart.canvas.getBoundingClientRect(), tooltip);
-				// Display, position, and set styles for font
 				tooltipEl.style.opacity = '1';
 				tooltipEl.style.left = positionX + tooltip.caretX - 40 + 'px';
 				if (position === 'bottom') {
@@ -232,10 +223,6 @@ export class BgsChartHpComponent implements AfterViewInit {
 					tooltipEl.style.bottom = positionY + this._chart.canvas.height - tooltip.caretY + 8 + 'px';
 					tooltipEl.style.top = 'auto';
 				}
-				// tooltipEl.style.top =
-				// 	position === 'bottom'
-				// 		? positionY + tooltip.caretY + 4 + 'px'
-				// 		: positionY + tooltip.caretY + 4 + tooltip.y - 325 + (138 - tooltip.height) + 'px';
 				tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
 				tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
 				tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
@@ -243,37 +230,31 @@ export class BgsChartHpComponent implements AfterViewInit {
 			},
 			callbacks: {
 				title: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					// console.log('title for', item, data);
 					return 'Turn ' + item[0].label;
-					// return data.datasets[item[0].datasetIndex].label;
 				},
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					return this.legend
-						.filter(legendItem => {
-							const cardId = legendItem.cardId;
-							const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
-							const playerItem = item[datasetIndex];
-							return playerItem?.value != null;
-						})
-						.map(legendItem => {
-							const cardId = legendItem.cardId;
-							const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
-							const dataForPlayer = data.datasets[datasetIndex];
-							// console.log(
-							// 	'dataForPlayer',
-							// 	dataForPlayer,
-							// 	datasetIndex,
-							// 	cardId,
-							// 	data.datasets.map(dataset => (dataset as any).cardId),
-							// );
-							const playerName = this.allCards.getCard((dataForPlayer as any).cardId).name;
-							const playerItem = item[datasetIndex];
-							const color = this.playerColors[datasetIndex];
-							return `<div class="node" style="background: ${color}"></div> ${playerItem?.value} health`;
-						});
+					return this.legend.map(legendItem => {
+						const cardId = legendItem.cardId;
+						const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
+						const playerItem = item.find(it => it.datasetIndex === datasetIndex);
+						if (!playerItem) {
+							return `<div></div>`;
+						}
+						const colorIndex = this.legend.map(leg => leg.cardId).indexOf(cardId);
+						// console.log(
+						// 	'before tooltip',
+						// 	datasetIndex,
+						// 	colorIndex,
+						// 	legendItem,
+						// 	item,
+						// 	data,
+						// 	this.legend,
+						// );
+						const color = this.playerColors[colorIndex];
+						return `<div class="node" style="background: ${color}"></div> ${playerItem?.value} health`;
+					});
 				},
 				label: (item: ChartTooltipItem, data: ChartData): string | string[] => {
-					// console.log('label for', item, data);
 					return null;
 				},
 			},
@@ -318,6 +299,15 @@ export class BgsChartHpComponent implements AfterViewInit {
 		this.lineChartData = this.lineChartData.map(data =>
 			(data as any).cardId === playerCardId ? { ...data, hidden: !data.hidden } : data,
 		);
+		// for (let i = 0; i < this.lineChartData)
+		// this.lineChartColors = this.playerColors.map(color => ({
+		// 	backgroundColor: 'transparent',
+		// 	borderColor: color,
+		// 	pointBackgroundColor: 'transparent',
+		// 	pointBorderColor: 'transparent',
+		// 	pointHoverBackgroundColor: 'transparent',
+		// 	pointHoverBorderColor: 'transparent',
+		// }));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
