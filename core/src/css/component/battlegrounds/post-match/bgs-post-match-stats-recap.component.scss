@@ -33,6 +33,27 @@
 		}
 	}
 
+	.battle-luck .label {
+		display: flex;
+		flex-direction: column;
+		position: relative;
+	}
+
+	.explain-link {
+		display: inline-block;
+		color: var(--default-title-color);
+		font-size: 12px;
+		width: auto;
+		text-indent: 2px;
+		position: absolute;
+		top: 20px;
+
+		&:hover {
+			text-decoration: underline;
+			background: transparent;
+		}
+	}
+
 	.face-offs {
 		.cell {
 			width: 75px;

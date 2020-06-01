@@ -86,12 +86,15 @@ declare let amplitude: any;
 				</div>
 				<div class="value">{{ percentageOfBattlesGoingFirst.toFixed(1) }}%</div>
 			</div>
-			<div class="entry cell">
-				<div
-					class="label"
-					helpTooltip="How lucky you were in this run as regards to battle outcomes, between -100% (impossibly unlucky) and +100% (impossibly lucky). For more details, see http://shorturl.at/kmxMV"
-				>
+			<div class="entry cell battle-luck">
+				<div class="label">
 					Battle luck
+					<a
+						class="explain-link"
+						href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Battle-Luck-stat"
+						target="_blank"
+						>What is this?</a
+					>
 				</div>
 				<div class="value">{{ luckFactor.toFixed(1) }}%</div>
 			</div>
