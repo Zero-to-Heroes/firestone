@@ -145,11 +145,12 @@ export class BgsChartHpComponent implements AfterViewInit {
 			enabled: false,
 			custom: function(tooltip) {
 				// Tooltip Element
-				let tooltipEl = document.getElementById('chartjs-tooltip');
+				// console.log('requesting tooltip', tooltip);
+				let tooltipEl = document.getElementById('chartjs-tooltip-hp');
 
 				if (!tooltipEl) {
 					tooltipEl = document.createElement('div');
-					tooltipEl.id = 'chartjs-tooltip';
+					tooltipEl.id = 'chartjs-tooltip-hp';
 					tooltipEl.innerHTML = `
 					<div class="hp-tooltip">					
 						<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
@@ -264,6 +265,8 @@ export class BgsChartHpComponent implements AfterViewInit {
 
 	private _stats: BgsPostMatchStats;
 	private _game: BgsGame;
+	private _visible: boolean;
+	private _dirty: boolean = true;
 
 	@Input() set stats(value: BgsPostMatchStats) {
 		// console.log('setting stats', value);
@@ -277,6 +280,16 @@ export class BgsChartHpComponent implements AfterViewInit {
 		this.setStats();
 	}
 
+	@Input() set visible(value: boolean) {
+		if (value === this._visible) {
+			return;
+		}
+		this._visible = value;
+		if (this._visible) {
+			this.onResize();
+		}
+	}
+
 	constructor(
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
@@ -284,12 +297,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 	) {}
 
 	async ngAfterViewInit() {
-		this.onResize();
-		if (!this.chartHeight || !this.chart?.nativeElement?.getContext('2d')) {
-			// console.log('chart not present', this.chartHeight, this.chart);
-			setTimeout(() => this.ngAfterViewInit(), 200);
-			return;
-		}
+		// this.onResize();
 	}
 
 	togglePlayer(playerCardId: string) {
@@ -317,6 +325,15 @@ export class BgsChartHpComponent implements AfterViewInit {
 
 	@HostListener('window:resize')
 	onResize() {
+		if (!this._visible) {
+			this._dirty = true;
+			return;
+		}
+		if (!this._dirty) {
+			return;
+		}
+
+		// console.log('on chart hp resize');
 		const chartContainer = this.el.nativeElement.querySelector('.container-1');
 		const rect = chartContainer?.getBoundingClientRect();
 		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {

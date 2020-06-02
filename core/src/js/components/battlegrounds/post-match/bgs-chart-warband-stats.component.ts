@@ -119,12 +119,13 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 			displayColors: false,
 			enabled: false,
 			custom: function(tooltip) {
+				console.log('requesting tooltip', tooltip, this._chart?.canvas?.parentNode);
 				// Tooltip Element
-				let tooltipEl = document.getElementById('chartjs-tooltip');
+				let tooltipEl = document.getElementById('chartjs-tooltip-stats');
 
 				if (!tooltipEl) {
 					tooltipEl = document.createElement('div');
-					tooltipEl.id = 'chartjs-tooltip';
+					tooltipEl.id = 'chartjs-tooltip-stats';
 					tooltipEl.innerHTML = `
 					<div class="stats-tooltip">					
 						<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
@@ -133,6 +134,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 						<div class="content"></div>
 					</div>`;
 					this._chart.canvas.parentNode.appendChild(tooltipEl);
+					console.log('adding tooltip el', tooltipEl);
 				}
 
 				// Hide if no tooltip
@@ -186,6 +188,8 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 	private _globalStats: BgsStats;
 	private _stats: BgsPostMatchStats;
 	private _player: BgsPlayer;
+	private _visible: boolean;
+	private _dirty: boolean = true;
 
 	@Input() set globalStats(value: BgsStats) {
 		if (value === this._globalStats) {
@@ -212,6 +216,16 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 		// console.log('setting value', value, this._player);
 		this._player = value;
 		this.updateInfo();
+	}
+
+	@Input() set visible(value: boolean) {
+		if (value === this._visible) {
+			return;
+		}
+		this._visible = value;
+		if (this._visible) {
+			setTimeout(() => window.dispatchEvent(new Event('resize')));
+		}
 	}
 
 	private updateInfo() {
@@ -252,22 +266,21 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		// console.log('after view init in warband stats');
-		this.onResize();
-		// if (!this.chartHeight || !this.chartWidth || !this.chart?.nativeElement?.getContext('2d')) {
-		// 	// console.log('chart not present', this.chartHeight, this.chart);
-		// 	setTimeout(() => this.ngAfterViewInit(), 200);
-		// 	return;
-		// }
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
+		// this.onResize();
 	}
 
 	previousWidth: number;
 
 	@HostListener('window:resize')
 	onResize() {
+		// console.log('resize in stats', this._visible, this._dirty);
+		if (!this._visible) {
+			this._dirty = true;
+			return;
+		}
+		if (!this._dirty) {
+			return;
+		}
 		const chartContainer = this.el.nativeElement.querySelector('.container-1');
 		// console.log('chartContainer', chartContainer);
 		const rect = chartContainer?.getBoundingClientRect();

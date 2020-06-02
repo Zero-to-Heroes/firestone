@@ -96,6 +96,7 @@ declare let amplitude: any;
 								[hidden]="selectedTab !== 'hp-by-turn'"
 								[stats]="_panel?.stats"
 								[game]="_game"
+								[visible]="selectedTab === 'hp-by-turn'"
 							>
 							</bgs-chart-hp>
 							<bgs-chart-warband-stats
@@ -104,12 +105,14 @@ declare let amplitude: any;
 								[player]="_panel?.player"
 								[globalStats]="_panel?.globalStats"
 								[stats]="_panel?.stats"
+								[visible]="selectedTab === 'warband-total-stats-by-turn'"
 							>
 							</bgs-chart-warband-stats>
 							<bgs-chart-warband-composition
 								class="stat"
 								[hidden]="selectedTab !== 'warband-composition-by-turn'"
 								[stats]="_panel?.stats"
+								[visible]="selectedTab === 'warband-composition-by-turn'"
 							>
 							</bgs-chart-warband-composition>
 						</ng-container>

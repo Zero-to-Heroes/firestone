@@ -87,6 +87,8 @@ export class BgsChartWarbandCompositionComponent {
 
 	private _stats: BgsPostMatchStats;
 	private boardHistory: readonly ParserEntity[];
+	private _visible: boolean;
+	private _dirty: boolean = true;
 
 	@Input() set stats(value: BgsPostMatchStats) {
 		if (value === this._stats) {
@@ -98,7 +100,17 @@ export class BgsChartWarbandCompositionComponent {
 		// console.log('[warband-composition] setting value', value);
 		this._stats = value;
 		this.setStats(value);
-		window.dispatchEvent(new Event('resize'));
+	}
+
+	@Input() set visible(value: boolean) {
+		// console.log('setting visible', value);
+		if (value === this._visible) {
+			return;
+		}
+		this._visible = value;
+		if (this._visible) {
+			setTimeout(() => window.dispatchEvent(new Event('resize')));
+		}
 	}
 
 	constructor(
@@ -110,12 +122,19 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	async ngAfterViewInit() {
-		window.dispatchEvent(new Event('resize'));
+		// setTimeout(() => window.dispatchEvent(new Event('resize')));
 	}
 
 	@HostListener('window:resize')
 	onResize() {
-		// console.log('detected resize event');
+		if (!this._visible) {
+			this._dirty = true;
+			return;
+		}
+		if (!this._dirty) {
+			return;
+		}
+		// console.log('detected resize event', this._visible, this._dirty);
 		setTimeout(() => {
 			const chartContainer = this.el.nativeElement.querySelector('.chart-container');
 			const rect = chartContainer?.getBoundingClientRect();
@@ -126,6 +145,7 @@ export class BgsChartWarbandCompositionComponent {
 				return;
 			}
 			// console.log('chartContainer', chartContainer, rect, rect.width, rect.height);
+			this._dirty = false;
 			this.dimensions = [rect.width, rect.height - 15];
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
