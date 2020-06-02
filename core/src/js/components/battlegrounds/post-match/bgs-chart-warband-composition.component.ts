@@ -110,7 +110,7 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	async ngAfterViewInit() {
-		// this.onResize();
+		window.dispatchEvent(new Event('resize'));
 	}
 
 	@HostListener('window:resize')
