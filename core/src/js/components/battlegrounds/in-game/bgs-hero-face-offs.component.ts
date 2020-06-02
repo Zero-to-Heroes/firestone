@@ -42,8 +42,6 @@ export class BgsHeroFaceOffsComponent {
 	}
 
 	@Input() set players(value: readonly BgsPlayer[]) {
-		// this.opponents = [];
-		// setTimeout(() => {
 		this.opponents = value
 			.filter(player => !player.isMainPlayer)
 			.sort((a, b) => {
@@ -65,7 +63,6 @@ export class BgsHeroFaceOffsComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// });
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

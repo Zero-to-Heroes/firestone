@@ -53,9 +53,6 @@ export class BgsHeroSelectionOverviewComponent {
 		if (!value?.heroOptionCardIds || !groupedByTier) {
 			return;
 		}
-		// this.tiers = [];
-		// this.heroOverviews = [];
-		// setTimeout(() => {
 		this.tiers = [
 			{
 				tier: 'S' as BgsHeroTier,

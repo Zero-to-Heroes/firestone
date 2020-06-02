@@ -126,9 +126,6 @@ export class BgsNextOpponentOverviewComponent {
 		this.nextBattle = this._game.battleResult;
 		this.battleSimulationStatus = this._game.battleInfoStatus;
 		this.faceOffs = this._game.faceOffs;
-		// this.opponents = [];
-		// this.otherOpponents = [];
-		// setTimeout(() => {
 		this.opponents = this._game.players
 			.filter(player => !player.isMainPlayer)
 			.sort((a, b) => {
@@ -151,6 +148,5 @@ export class BgsNextOpponentOverviewComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// });
 	}
 }
