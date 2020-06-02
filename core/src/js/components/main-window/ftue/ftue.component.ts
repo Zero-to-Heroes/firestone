@@ -88,7 +88,7 @@ export class FtueComponent implements AfterViewInit {
 			id: 'battlegrounds',
 			title: 'Battlegrounds',
 			text:
-				'Nothing here yet, but the in-game app will appear as soon as you start a Battlegrounds run (hotkey Alt + B)',
+				'Our in game helper will appear once you start a game! We will accompany you along your game from hero selection to post match.',
 			icon: `/Files/assets/svg/ftue/battlegrounds.svg`,
 			progressIndex: 4,
 		},
