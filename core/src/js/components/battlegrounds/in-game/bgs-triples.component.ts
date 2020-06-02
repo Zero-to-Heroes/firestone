@@ -18,15 +18,11 @@ declare let amplitude: any;
 					*ngFor="let triple of tierTriples || []; trackBy: trackByFn"
 					class="triple"
 					[helpTooltip]="
-						'This player got ' +
+						'Since last fight, this opponent got ' +
 						triple.quantity +
 						' tier ' +
-						triple.minionTier +
-						' minions (and ' +
-						triple.quantity +
-						' tier ' +
-						(triple.minionTier - 1) +
-						' golden minions) since last time you fought them'
+						(triple.minionTier + 1) +
+						' minions by tripling'
 					"
 				>
 					<div class="number">x{{ triple.quantity }}</div>
@@ -66,17 +62,10 @@ export class BgsTriplesComponent {
 		const groupedByTier = groupByFunction((triple: BgsTriple) => '' + triple.tierOfTripledMinion)(
 			triplesSinceLastBoard,
 		);
-		// See bgs-board
-		// this.tierTriples = [];
-		// setTimeout(() => {
 		this.tierTriples = Object.keys(groupedByTier).map(minionTier => ({
 			minionTier: parseInt(minionTier),
 			quantity: groupedByTier[minionTier].length as number,
 		}));
-		// 	if (!(this.cdr as ViewRef)?.destroyed) {
-		// 		this.cdr.detectChanges();
-		// 	}
-		// });
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
