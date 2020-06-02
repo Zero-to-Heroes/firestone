@@ -41,15 +41,16 @@
 
 	.explain-link {
 		display: inline-block;
-		color: var(--default-title-color);
+		// color: var(--default-title-color);
 		font-size: 12px;
 		width: auto;
 		text-indent: 2px;
 		position: absolute;
 		top: 20px;
+		opacity: 0.4;
 
 		&:hover {
-			text-decoration: underline;
+			opacity: 0.7;
 			background: transparent;
 		}
 	}

@@ -92,6 +92,7 @@ declare let amplitude: any;
 					<a
 						class="explain-link"
 						href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Battle-Luck-stat"
+						helpTooltip="An indicator that tells you how lucky you were in your battles during the run. Click for more info"
 						target="_blank"
 						>What is this?</a
 					>
