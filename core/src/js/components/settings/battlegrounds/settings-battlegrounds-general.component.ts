@@ -53,7 +53,7 @@ import { Knob } from '../preference-slider.component';
 				<div
 					class="text"
 					[ngClass]="{ 'disabled': !useLocalSimulator || !enableSimulation }"
-					helpTooltip="The number of simulations ran for each battle. The more simulations, the better the results, but the heavier the load on your PC. The default value of 2500 iterations is usually a good compromise."
+					helpTooltip="The number of simulations ran for each battle. We found 2,500 simulations to be a perfect spot. Increasing the number will increase the accuracy of the calculation but will require more resources from your PC."
 				>
 					Number of simulations
 				</div>
