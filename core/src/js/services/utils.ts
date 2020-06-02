@@ -12,3 +12,7 @@ export const uuid = () => {
 		return v.toString(16);
 	});
 };
+
+export const sleep = ms => {
+	return new Promise(resolve => setTimeout(resolve, ms));
+};

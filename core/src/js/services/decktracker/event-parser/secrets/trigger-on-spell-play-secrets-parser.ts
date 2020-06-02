@@ -19,21 +19,39 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Rogue.DirtyTricks,
 	];
 
+	private counterSpellTriggered: boolean;
+
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
 			gameEvent.gameState &&
-			(gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.SECRET_PLAYED)
+			(gameEvent.type === GameEvent.CARD_PLAYED ||
+				gameEvent.type === GameEvent.SECRET_PLAYED ||
+				gameEvent.type === GameEvent.QUEST_PLAYED ||
+				gameEvent.type === GameEvent.SECRET_TRIGGERED)
 		);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		console.warn('parsing event', gameEvent.type);
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		if (gameEvent.type === GameEvent.SECRET_TRIGGERED) {
+			this.counterSpellTriggered = cardId === CardIds.Collectible.Mage.Counterspell;
+			console.warn('counterspell triggered', this.counterSpellTriggered);
+			return currentState;
+		}
+
 		const isSpellPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const spellCard = this.allCards.getCard(cardId);
 		if (!spellCard || !spellCard.type || spellCard.type.toLowerCase() !== CardType[CardType.SPELL].toLowerCase()) {
+			return currentState;
+		}
+
+		// If a counterspell has been triggered, the other secrets won't trigger
+		if (this.counterSpellTriggered) {
+			this.counterSpellTriggered = false;
 			return currentState;
 		}
 
@@ -91,6 +109,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		const newPlayerDeck = deckWithSecretToCheck.update({
 			secrets: secrets as readonly BoardSecret[],
 		} as DeckState);
+
 		return Object.assign(new GameState(), currentState, {
 			[isSpellPlayedByPlayer ? 'opponentDeck' : 'playerDeck']: newPlayerDeck,
 		});

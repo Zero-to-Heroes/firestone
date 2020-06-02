@@ -226,7 +226,7 @@ export class GameStateService {
 		return eventQueue.slice(1);
 	}
 
-	private async processEvent(gameEvent: GameEvent) {
+	private async processEvent(gameEvent: GameEvent, allowRequeue = true) {
 		const previousState = this.state;
 		// if (!this.state) {
 		// 	console.error('null state before processing event', gameEvent, this.state);
@@ -250,21 +250,7 @@ export class GameStateService {
 			} as GameState);
 			this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
-			// console.log('[game-state] handling overlay for event', gameEvent.type);
-			// this.state = this.state.update({
-			// 	opponentDeck: this.state.opponentDeck.update({
-			// 		secretHelperActiveHover: true,
-			// 	} as DeckState),
-			// } as GameState);
-			// this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
-			// console.log('[game-state] handling overlay for event', gameEvent.type);
-			// this.state = this.state.update({
-			// 	opponentDeck: this.state.opponentDeck.update({
-			// 		secretHelperActiveHover: false,
-			// 	} as DeckState),
-			// } as GameState);
-			// this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = false;
@@ -280,8 +266,19 @@ export class GameStateService {
 			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
 			this.updateOverlays();
 		}
+
+		// Delay all "card played" and "secret played" events to give Counterspell a chance to apply first
+		// Only do so when a secret has been played to avoid impacting the overall experience
+		if (
+			allowRequeue &&
+			(this.state.playerDeck.secrets.length > 0 || this.state.opponentDeck.secrets.length > 0) &&
+			[GameEvent.CARD_PLAYED || GameEvent.SECRET_PLAYED || GameEvent.QUEST_PLAYED].indexOf(gameEvent.type) !== -1
+		) {
+			setTimeout(() => this.processEvent(gameEvent, false), 1500);
+			return;
+		}
 		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent);
-		// const debug = gameEvent.type === GameEvent.CARD_STOLEN && gameEvent.entityId === 2098;
+
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state, await this.prefs.getPreferences())) {
@@ -398,7 +395,7 @@ export class GameStateService {
 			return;
 		}
 		const prefs = await this.prefs.getPreferences();
-		const inGame = (await this.ow.inGame()) && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
+		const inGame = true; // (await this.ow.inGame()) && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
 		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
