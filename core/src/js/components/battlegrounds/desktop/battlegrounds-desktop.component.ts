@@ -18,9 +18,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 						</i>
 						<span class="title">Battlegrounds in-game app is now live! </span>
 						<span class="subtitle"
-							>It will show up as another window once you start a Battlegrounds run (it's only available
-							during a Battlegrounds run, and can be controlled by another hotkey, Alt+B by default). This
-							page will have Battlegrounds stats in the future.</span
+							>Our new Battlegrounds in-game feature is now available and will appear once you start a
+							match! It uses your second screen (if you have one) for a better experience and can be
+							easily controlled with hotkeys (Alt + B by default)</span
+						>
+						<span class="subtitle"
+							>Coming soon: personal stats and the ability to review all past match stats!</span
 						>
 					</div>
 				</with-loading>
