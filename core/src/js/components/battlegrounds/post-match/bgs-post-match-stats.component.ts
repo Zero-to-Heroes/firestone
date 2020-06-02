@@ -42,7 +42,7 @@ declare let amplitude: any;
 			<with-loading
 				*ngIf="_panel?.player || computing"
 				[isLoading]="computing"
-				title="We're building the stats"
+				mainTitle="We're building the stats"
 				[subtitle]="
 					'We are building the post-match stats, please wait a bit - ' +
 					loadingElapsed?.toFixed(0) +

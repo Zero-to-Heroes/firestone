@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			</ng-container>
 			<loading-state
 				*ngIf="isLoading"
-				[title]="title"
+				[mainTitle]="mainTitle"
 				[subtitle]="subtitle"
 				[hint]="hint"
 				[@fadeInOut]
@@ -33,7 +33,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class WithLoadingComponent {
 	@Input() isLoading: boolean;
-	@Input() title = "We're loading all the goods";
+	@Input() mainTitle = "We're loading all the goods";
 	@Input() subtitle = "Please wait while we're collecting the information";
 	@Input() hint: boolean;
 }
