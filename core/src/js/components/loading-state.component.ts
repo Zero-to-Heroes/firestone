@@ -58,6 +58,6 @@ export class LoadingStateComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private pickDisplayHint(): string {
-		return 'Did you know? You can compute the BGS post-match stats locally (faster, but uses CPU) or remotely';
+		return 'You can select between local and cloud computing. Local computing will generate faster results while cloud computing will use less resources.';
 	}
 }
