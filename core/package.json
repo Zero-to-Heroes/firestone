@@ -1,18 +1,18 @@
 {
 	"name": "firestone",
-	"version": "5.0.21",
+	"version": "5.0.22",
 	"scripts": {
-		"lint": "node --max_old_space_size=6000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
-		"test": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --colors",
-		"singleTest": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --runInBand -t",
+		"lint": "node --max_old_space_size=8000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
+		"test": "node --max_old_space_size=8000 ./node_modules/jest/bin/jest.js --colors",
+		"singleTest": "node --max_old_space_size=8000 ./node_modules/jest/bin/jest.js --runInBand -t",
 		"remove_evil:sentry-types": "rimraf node_modules/@sentry/integrations/node_modules/@sentry/types",
-		"dev": "npm run postinstall && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
-		"dev:clean": "rimraf dist && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
-		"local-test": "rimraf dist && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.localTest --progress --profile --bail --colors",
-		"build": "rimraf dist && npm audit fix && npm run lint && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
+		"dev": "npm run postinstall && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
+		"dev:clean": "rimraf dist && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
+		"local-test": "rimraf dist && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.localTest --progress --profile --bail --colors",
+		"build": "rimraf dist && npm audit fix && npm run lint && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
 		"postinstall": "npm run remove_evil:sentry-types",
-		"dev-twitch": "rimraf dist-twitch && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
-		"build-twitch": "rimraf dist-twitch && npm audit fix && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
+		"dev-twitch": "rimraf dist-twitch && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
+		"build-twitch": "rimraf dist-twitch && npm audit fix && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
 	},
 	"license": "MIT",
 	"dependencies": {
