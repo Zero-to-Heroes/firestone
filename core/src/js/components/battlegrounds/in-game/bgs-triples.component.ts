@@ -21,12 +21,15 @@ declare let amplitude: any;
 						'Since last fight, this opponent got ' +
 						triple.quantity +
 						' tier ' +
-						(triple.minionTier + 1) +
+						getMinionTripleLevel(triple.minionTier) +
 						' minions by tripling'
 					"
 				>
 					<div class="number">x{{ triple.quantity }}</div>
-					<tavern-level-icon [level]="triple.minionTier + 1" class="tavern"></tavern-level-icon>
+					<tavern-level-icon
+						[level]="getMinionTripleLevel(triple.minionTier)"
+						class="tavern"
+					></tavern-level-icon>
 				</div>
 			</div>
 			<div class="subtitle" *ngIf="!tierTriples?.length">No new triple</div>
@@ -48,6 +51,10 @@ export class BgsTriplesComponent {
 	@Input() set boardTurn(value: number) {
 		this._boardTurn = value;
 		this.filterTriples();
+	}
+
+	getMinionTripleLevel(level: number): number {
+		return Math.min(level + 1, 6);
 	}
 
 	trackByFn(index, item: { minionTier: number; quantity: number }) {
