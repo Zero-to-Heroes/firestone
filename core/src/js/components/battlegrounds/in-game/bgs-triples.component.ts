@@ -22,7 +22,7 @@ declare let amplitude: any;
 						triple.quantity +
 						' tier ' +
 						getMinionTripleLevel(triple.minionTier) +
-						' minions by tripling'
+						' minions as rewards for tripling'
 					"
 				>
 					<div class="number">x{{ triple.quantity }}</div>
