@@ -195,7 +195,7 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
-		console.log('getting minions', tribe, turn, model);
+		// console.log('getting minions', tribe, turn, model);
 		return (
 			this._stats?.boardHistory
 				?.find(history => history.turn === turn)
