@@ -22,9 +22,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 							match! It uses your second screen (if you have one) for a better experience and can be
 							easily controlled with hotkeys (Alt + B by default)</span
 						>
-						<span class="subtitle"
-							>Coming soon: personal stats and the ability to review all past match stats!</span
-						>
+						<span class="subtitle">Coming soon: Personal stats and Match stats review!</span>
 					</div>
 				</with-loading>
 			</section>
