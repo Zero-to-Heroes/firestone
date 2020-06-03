@@ -1,4 +1,5 @@
 import {
+	ApplicationRef,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -9,6 +10,7 @@ import {
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { AllCardsService, Entity as ParserEntity } from '@firestone-hs/replay-parser';
+import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 
 declare let amplitude: any;
@@ -63,19 +65,19 @@ declare let amplitude: any;
 				[showGridLines]="true"
 				[rotateXAxisTicks]="false"
 				[barPadding]="barPadding"
+				(activate)="onActivate($event)"
+				(deactivate)="onDeactivate($event)"
 			>
 				<ng-template #tooltipTemplate let-model="model">
 					<div class="bgs-tribe-composition-tooltip">
-						<minion-icon
-							*ngFor="let minion of getMinions(model.tribeCode, model.series)"
-							[entity]="minion"
-						></minion-icon>
+						<minion-icon *ngFor="let minion of model.minions" [entity]="minion"></minion-icon>
 					</div>
 				</ng-template>
 			</ngx-charts-bar-vertical-stacked>
 		</div>
 	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	// changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.Default,
 })
 export class BgsChartWarbandCompositionComponent {
 	dimensions: number[];
@@ -88,7 +90,7 @@ export class BgsChartWarbandCompositionComponent {
 	private _stats: BgsPostMatchStats;
 	private boardHistory: readonly ParserEntity[];
 	private _visible: boolean;
-	private _dirty: boolean = true;
+	private _dirty = true;
 
 	@Input() set stats(value: BgsPostMatchStats) {
 		if (value === this._stats) {
@@ -109,7 +111,16 @@ export class BgsChartWarbandCompositionComponent {
 		}
 		this._visible = value;
 		if (this._visible) {
-			setTimeout(() => window.dispatchEvent(new Event('resize')));
+			setTimeout(() => {
+				this._dirty = true;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+				setTimeout(() => {
+					this.doResize();
+				});
+			}, 1000);
+		} else {
 		}
 	}
 
@@ -117,6 +128,7 @@ export class BgsChartWarbandCompositionComponent {
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: AllCardsService,
+		private readonly appRef: ApplicationRef,
 	) {
 		allCards.initializeCardsDb();
 	}
@@ -125,22 +137,45 @@ export class BgsChartWarbandCompositionComponent {
 		// setTimeout(() => window.dispatchEvent(new Event('resize')));
 	}
 
+	onActivate(event) {
+		setTimeout(() => {
+			console.log('showing tooltip', event);
+			this.appRef.tick();
+		}, 200);
+	}
+
+	onDeactivate(event) {
+		setTimeout(() => {
+			console.log('hiding tooltip', event);
+			this.appRef.tick();
+		}, 200);
+	}
+
 	@HostListener('window:resize')
 	onResize() {
+		console.log('window resize');
+		this._dirty = true;
+		this.doResize();
+	}
+
+	private doResize() {
 		if (!this._visible) {
+			console.log('not visible');
 			this._dirty = true;
 			return;
 		}
 		if (!this._dirty) {
+			console.log('not dirty');
 			return;
 		}
 		// console.log('detected resize event', this._visible, this._dirty);
 		setTimeout(() => {
+			console.log('handling resize');
 			const chartContainer = this.el.nativeElement.querySelector('.chart-container');
 			const rect = chartContainer?.getBoundingClientRect();
 			if (!rect?.width || !rect?.height) {
 				setTimeout(() => {
-					this.onResize();
+					this.doResize();
 				}, 500);
 				return;
 			}
@@ -159,11 +194,14 @@ export class BgsChartWarbandCompositionComponent {
 		return parseInt(text).toFixed(0);
 	}
 
-	getMinions(tribe: string, turn: number): readonly ParserEntity[] {
-		return this._stats.boardHistory
-			.find(history => history.turn === turn)
-			.board.map(entity => ParserEntity.create(entity as ParserEntity))
-			.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe);
+	getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
+		console.log('getting minions', tribe, turn, model);
+		return (
+			this._stats?.boardHistory
+				?.find(history => history.turn === turn)
+				?.board?.map(entity => ParserEntity.create(entity as ParserEntity))
+				?.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe) || []
+		);
 	}
 
 	private async setStats(value: BgsPostMatchStats) {
@@ -181,7 +219,6 @@ export class BgsChartWarbandCompositionComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// this.onResize();
 	}
 
 	private buildChartData(value: BgsPostMatchStats): object[] {
@@ -193,38 +230,23 @@ export class BgsChartWarbandCompositionComponent {
 			.map(history => ({
 				name: history.turn,
 				series: [
-					{
-						name: 'Beast',
-						tribeCode: 'beast',
-						value: this.getTribe('beast', history.board),
-					},
-					{
-						name: 'Mech',
-						tribeCode: 'mech',
-						value: this.getTribe('mech', history.board),
-					},
-					{
-						name: 'Dragon',
-						tribeCode: 'dragon',
-						value: this.getTribe('dragon', history.board),
-					},
-					{
-						name: 'Demon',
-						tribeCode: 'demon',
-						value: this.getTribe('demon', history.board),
-					},
-					{
-						name: 'Murloc',
-						tribeCode: 'murloc',
-						value: this.getTribe('murloc', history.board),
-					},
-					{
-						name: 'No tribe',
-						tribeCode: null,
-						value: this.getTribe(null, history.board),
-					},
+					this.buildSeries('Beast', 'beast', history),
+					this.buildSeries('Mech', 'mech', history),
+					this.buildSeries('Dragon', 'dragon', history),
+					this.buildSeries('Demon', 'demon', history),
+					this.buildSeries('Murloc', 'murloc', history),
+					this.buildSeries('No tribe', null, history),
 				],
 			}));
+	}
+
+	private buildSeries(tribeName: string, tribeCode: string, history: BgsBoard) {
+		return {
+			name: tribeName,
+			tribeCode: tribeCode,
+			value: this.getTribe(tribeCode, history.board),
+			minions: this.getMinions(tribeCode, history.turn),
+		};
 	}
 
 	private getTribe(tribe: string, board: readonly Entity[]): number {

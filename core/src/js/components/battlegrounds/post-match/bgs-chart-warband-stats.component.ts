@@ -1,5 +1,4 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -59,7 +58,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsChartWarbandStatsComponent implements AfterViewInit {
+export class BgsChartWarbandStatsComponent {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
 	chartWidth: number;
@@ -189,7 +188,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 	private _stats: BgsPostMatchStats;
 	private _player: BgsPlayer;
 	private _visible: boolean;
-	private _dirty: boolean = true;
+	private _dirty = true;
 
 	@Input() set globalStats(value: BgsStats) {
 		if (value === this._globalStats) {
@@ -265,14 +264,15 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 		// this.cdr.detach();
 	}
 
-	ngAfterViewInit() {
-		// this.onResize();
-	}
-
 	previousWidth: number;
 
 	@HostListener('window:resize')
 	onResize() {
+		this._dirty = true;
+		this.doResize();
+	}
+
+	private doResize() {
 		// console.log('resize in stats', this._visible, this._dirty);
 		if (!this._visible) {
 			this._dirty = true;
@@ -286,7 +286,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 		const rect = chartContainer?.getBoundingClientRect();
 		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {
 			setTimeout(() => {
-				this.onResize();
+				this.doResize();
 			}, 500);
 			return;
 		}
@@ -323,7 +323,7 @@ export class BgsChartWarbandStatsComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		setTimeout(() => this.onResize(), 200);
+		setTimeout(() => this.doResize(), 200);
 	}
 
 	private getBackgroundColor() {

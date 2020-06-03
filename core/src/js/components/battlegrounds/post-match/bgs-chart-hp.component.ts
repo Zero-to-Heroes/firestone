@@ -1,5 +1,4 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -82,7 +81,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsChartHpComponent implements AfterViewInit {
+export class BgsChartHpComponent {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
 	playerColors = ['#FFB948', '#FF8A48', '#42D8A2', '#55D6FF', '#4376D8', '#B346E7', '#F44CCF', '#F44C60'];
@@ -266,7 +265,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 	private _stats: BgsPostMatchStats;
 	private _game: BgsGame;
 	private _visible: boolean;
-	private _dirty: boolean = true;
+	private _dirty = true;
 
 	@Input() set stats(value: BgsPostMatchStats) {
 		// console.log('setting stats', value);
@@ -286,7 +285,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 		}
 		this._visible = value;
 		if (this._visible) {
-			this.onResize();
+			this.doResize();
 		}
 	}
 
@@ -295,10 +294,6 @@ export class BgsChartHpComponent implements AfterViewInit {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: AllCardsService,
 	) {}
-
-	async ngAfterViewInit() {
-		// this.onResize();
-	}
 
 	togglePlayer(playerCardId: string) {
 		this.legend = this.legend.map(playerInfo =>
@@ -325,6 +320,11 @@ export class BgsChartHpComponent implements AfterViewInit {
 
 	@HostListener('window:resize')
 	onResize() {
+		this._dirty = true;
+		this.doResize();
+	}
+
+	private doResize() {
 		if (!this._visible) {
 			this._dirty = true;
 			return;
@@ -338,7 +338,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 		const rect = chartContainer?.getBoundingClientRect();
 		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {
 			setTimeout(() => {
-				this.onResize();
+				this.doResize();
 			}, 500);
 			return;
 		}
@@ -358,7 +358,7 @@ export class BgsChartHpComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		setTimeout(() => this.onResize(), 200);
+		setTimeout(() => this.doResize(), 200);
 	}
 
 	private async setStats() {
