@@ -15,6 +15,9 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		const [globalCategory, achievementSet, visualAchievement] = currentState.achievements.findAchievementHierarchy(
 			event.achievementId,
 		);
+		if (!globalCategory || !achievementSet || !visualAchievement) {
+			return [null, null];
+		}
 		// console.log('[show-achievement-details] showing achievement', event, achievementSet, visualAchievement);
 		const achievement = visualAchievement.completionSteps[0].id;
 		// console.log('[show-achievement-details] achievement', achievement, currentState);

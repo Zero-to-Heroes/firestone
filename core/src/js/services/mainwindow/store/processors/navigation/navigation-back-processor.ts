@@ -40,6 +40,10 @@ export class NavigationBackProcessor implements Processor {
 		navigationState: NavigationState,
 		dataState: MainWindowState,
 	): NavigationState {
+		if (!navigationState || !dataState) {
+			console.warn('Missing state for processing back navigation', navigationState, dataState);
+			return null;
+		}
 		switch (navigationState.navigationAchievements.currentView) {
 			case 'categories':
 				return null;
