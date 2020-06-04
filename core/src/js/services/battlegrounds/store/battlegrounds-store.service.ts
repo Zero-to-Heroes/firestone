@@ -280,7 +280,7 @@ export class BattlegroundsStoreService {
 						this.state = newState;
 						//console.log('updated state after', this.battlegroundsStoreEventBus.observers.length);
 						this.battlegroundsStoreEventBus.next(this.state);
-						//console.log('emitted state', this.battlegroundsStoreEventBus.observers.length);
+						// console.log('emitted state', gameEvent.type);
 						this.updateOverlay();
 						//console.log('updqted overlays', this.battlegroundsStoreEventBus.observers.length);
 					}
@@ -299,7 +299,7 @@ export class BattlegroundsStoreService {
 
 	private async updateOverlay() {
 		const battlegroundsWindow = await this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW);
-		// console.warn('updazting overlay', battlegroundsWindow, this.state);
+		// console.warn('updazting overlay', battlegroundsWindow);
 		// Minimize is only triggered by a user action, so if they minimize it we don't touch it
 		if (battlegroundsWindow.window_state_ex === 'minimized' && !this.state.forceOpen) {
 			return;
@@ -316,6 +316,8 @@ export class BattlegroundsStoreService {
 			await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
 				await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+			} else {
+				console.log('not restoring window', battlegroundsWindow.window_state_ex);
 			}
 			await this.ow.bringToFront(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
@@ -325,7 +327,7 @@ export class BattlegroundsStoreService {
 			['closed'].indexOf(battlegroundsWindow.stateEx) === -1 &&
 			this.closedByUser
 		) {
-			// console.log('[bgs-store] closing overlay', this.bgsActive, inGame);
+			// console.log('[bgs-store] closing overlay', this.bgsActive, inGame, this.state.forceOpen);
 			await this.ow.hideWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
 		}
 	}
