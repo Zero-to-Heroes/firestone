@@ -32,13 +32,15 @@ export class PlayersInfoService {
 		return infoFromGep.localPlayer;
 	}
 
+	// This always happen after the player_info event, so we only want to
+	// look at the cache
 	public async getOpponentInfo(): Promise<PlayerInfo> {
 		// if (this.opponentInfo) {
 		// 	return this.opponentInfo;
 		// }
 		// It's usually less important to have the opponent info, so we only add this as a log
 		// console.log('[players-info] opponentInfo not present in cache, fetching it from GEP');
-		const infoFromGep = this.cachedInfo || (await this.memoryService.getPlayerInfo());
+		const infoFromGep = this.cachedInfo; // || (await this.memoryService.getPlayerInfo());
 		if (!infoFromGep) {
 			console.warn('[players-info] No player info returned by mindvision');
 			return null;

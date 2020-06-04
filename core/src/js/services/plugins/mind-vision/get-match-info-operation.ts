@@ -19,6 +19,7 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<{ localPlay
 				};
 				return result;
 			},
+			10,
 		);
 	}
 
