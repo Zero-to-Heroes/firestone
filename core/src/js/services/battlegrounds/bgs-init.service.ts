@@ -43,40 +43,42 @@ export class BgsInitService {
 		// const buildNumber = bgsMatchStats[0].buildNumber;
 		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
 
-		const heroStatsWithPlayer: readonly BgsHeroStat[] = bgsGlobalStats.heroStats.map(heroStat => {
-			const playerGamesPlayed = bgsStatsForCurrentPatch.filter(stat => stat.playerCardId === heroStat.id).length;
-			const playerPopularity = (100 * playerGamesPlayed) / bgsStatsForCurrentPatch.length;
-			return BgsHeroStat.create({
-				...heroStat,
-				top4: heroStat.top4 || 0,
-				top1: heroStat.top1 || 0,
-				name: this.cards.getCard(heroStat.id)?.name,
-				playerGamesPlayed: playerGamesPlayed,
-				playerPopularity: playerPopularity,
-				playerAveragePosition:
-					playerPopularity === 0
-						? 0
-						: bgsStatsForCurrentPatch
-								.filter(stat => stat.playerCardId === heroStat.id)
-								.map(stat => parseInt(stat.additionalResult))
-								.reduce((a, b) => a + b, 0) / playerGamesPlayed,
-				playerTop4:
-					playerPopularity === 0
-						? 0
-						: bgsStatsForCurrentPatch
-								.filter(stat => stat.playerCardId === heroStat.id)
-								.map(stat => parseInt(stat.additionalResult))
-								.filter(position => position <= 4).length / playerGamesPlayed,
-				playerTop1:
-					playerPopularity === 0
-						? 0
-						: bgsStatsForCurrentPatch
-								.filter(stat => stat.playerCardId === heroStat.id)
-								.map(stat => parseInt(stat.additionalResult))
-								.filter(position => position == 1).length / playerGamesPlayed,
-			} as BgsHeroStat);
-		});
-		const statsWithPlayer = bgsGlobalStats.update({
+		const heroStatsWithPlayer: readonly BgsHeroStat[] =
+			bgsGlobalStats?.heroStats?.map(heroStat => {
+				const playerGamesPlayed = bgsStatsForCurrentPatch.filter(stat => stat.playerCardId === heroStat.id)
+					.length;
+				const playerPopularity = (100 * playerGamesPlayed) / bgsStatsForCurrentPatch.length;
+				return BgsHeroStat.create({
+					...heroStat,
+					top4: heroStat.top4 || 0,
+					top1: heroStat.top1 || 0,
+					name: this.cards.getCard(heroStat.id)?.name,
+					playerGamesPlayed: playerGamesPlayed,
+					playerPopularity: playerPopularity,
+					playerAveragePosition:
+						playerPopularity === 0
+							? 0
+							: bgsStatsForCurrentPatch
+									.filter(stat => stat.playerCardId === heroStat.id)
+									.map(stat => parseInt(stat.additionalResult))
+									.reduce((a, b) => a + b, 0) / playerGamesPlayed,
+					playerTop4:
+						playerPopularity === 0
+							? 0
+							: bgsStatsForCurrentPatch
+									.filter(stat => stat.playerCardId === heroStat.id)
+									.map(stat => parseInt(stat.additionalResult))
+									.filter(position => position <= 4).length / playerGamesPlayed,
+					playerTop1:
+						playerPopularity === 0
+							? 0
+							: bgsStatsForCurrentPatch
+									.filter(stat => stat.playerCardId === heroStat.id)
+									.map(stat => parseInt(stat.additionalResult))
+									.filter(position => position == 1).length / playerGamesPlayed,
+				} as BgsHeroStat);
+			}) || [];
+		const statsWithPlayer = bgsGlobalStats?.update({
 			heroStats: heroStatsWithPlayer,
 			currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
 		} as BgsStats);

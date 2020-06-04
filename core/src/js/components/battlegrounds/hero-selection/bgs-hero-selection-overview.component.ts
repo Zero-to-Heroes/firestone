@@ -44,7 +44,7 @@ export class BgsHeroSelectionOverviewComponent {
 		if (value === this._panel) {
 			return;
 		}
-		// console.log('setting panel', value, this._panel);
+		console.log('setting panel', value, this._panel);
 		this._panel = value;
 		this.patchNumber = value.patchNumber;
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.heroCardId !== 'average');
@@ -86,10 +86,18 @@ export class BgsHeroSelectionOverviewComponent {
 			},
 		].filter(tier => tier.heroes);
 		// console.log('setting hero overviews', this._panel);
-		this.heroOverviews = this._panel.heroOptionCardIds
-			.map(cardId => this._panel.heroOverview.find(overview => overview.heroCardId === cardId))
-			// Add null-safe in case the heroes have been updated but not the code
-			.filter(hero => hero);
+		this.heroOverviews = this._panel.heroOptionCardIds.map(cardId => {
+			const existingStat = this._panel.heroOverview.find(overview => overview.heroCardId === cardId);
+			return (
+				existingStat ||
+				BgsHeroOverview.create({
+					heroCardId: cardId,
+					tribesStat: [] as readonly { tribe: string; percent: number }[],
+				} as BgsHeroOverview)
+			);
+		});
+		// Add null-safe in case the heroes have been updated but not the code
+		// .filter(hero => hero);
 		if (this.heroOverviews.length === 2) {
 			this.heroOverviews = [null, ...this.heroOverviews, null];
 		} else if (this.heroOverviews.length === 3) {

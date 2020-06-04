@@ -21,13 +21,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero?.globalAveragePosition?.toFixed(2) }}
+					{{ buildValue(_hero?.globalAveragePosition) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero?.ownAveragePosition?.toFixed(2) }})
+					({{ buildValue(_hero?.ownAveragePosition) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -38,13 +38,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero?.globalTop4?.toFixed(0) }}%
+					{{ buildPercents(_hero?.globalTop4) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero?.ownTop4Percentage?.toFixed(0) }}%)
+					({{ buildPercents(_hero?.ownTop4Percentage) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -55,13 +55,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero?.globalTop1?.toFixed(0) }}%
+					{{ buildPercents(_hero?.globalTop1) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero?.ownTop1Percentage?.toFixed(0) }}%)
+					({{ buildPercents(_hero?.ownTop1Percentage) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -72,13 +72,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ _hero?.globalPopularity?.toFixed(0) }}%
+					{{ buildPercents(_hero?.globalPopularity) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ _hero?.ownPopularity?.toFixed(0) }}%)
+					({{ buildPercents(_hero?.ownPopularity) }})
 				</div>
 			</div>
 		</div>
@@ -122,5 +122,13 @@ export class BgsHeroStatsComponent {
 				break;
 		}
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+	}
+
+	buildPercents(value: number): string {
+		return value == null ? 'N/A' : value.toFixed(1) + '%';
+	}
+
+	buildValue(value: number): string {
+		return value == null ? 'N/A' : value.toFixed(2);
 	}
 }

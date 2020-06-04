@@ -22,7 +22,7 @@ declare let amplitude: any;
 				[cardTooltipClass]="'bgs-hero-select'"
 			/>
 			<bgs-hero-stats [hero]="_hero" [patchNumber]="patchNumber"></bgs-hero-stats>
-			<div class="profile">
+			<div class="profile" *ngIf="warbandStats">
 				<div
 					class="title"
 					[helpTooltip]="
