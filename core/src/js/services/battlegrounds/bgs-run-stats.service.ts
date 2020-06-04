@@ -85,12 +85,13 @@ export class BgsRunStatsService {
 	private populateObject(data: IBgsPostMatchStats): BgsPostMatchStats {
 		const result: BgsPostMatchStats = BgsPostMatchStats.create({
 			...data,
-			boardHistory: data.boardHistory.map(history =>
-				BgsBoard.create({
-					turn: history.turn,
-					board: (history.board || []).map(entity => this.buildEntity(entity)),
-				} as BgsBoard),
-			),
+			boardHistory:
+				data.boardHistory?.map(history =>
+					BgsBoard.create({
+						turn: history.turn,
+						board: (history.board || []).map(entity => this.buildEntity(entity)),
+					} as BgsBoard),
+				) || [],
 		});
 		return result;
 	}
