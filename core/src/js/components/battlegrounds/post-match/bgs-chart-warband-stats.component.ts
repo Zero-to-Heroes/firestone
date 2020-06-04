@@ -118,7 +118,7 @@ export class BgsChartWarbandStatsComponent {
 			displayColors: false,
 			enabled: false,
 			custom: function(tooltip) {
-				console.log('requesting tooltip', tooltip, this._chart?.canvas?.parentNode);
+				// console.log('requesting tooltip', tooltip, this._chart?.canvas?.parentNode);
 				// Tooltip Element
 				let tooltipEl = document.getElementById('chartjs-tooltip-stats');
 
@@ -133,8 +133,17 @@ export class BgsChartWarbandStatsComponent {
 						<div class="content"></div>
 					</div>`;
 					this._chart.canvas.parentNode.appendChild(tooltipEl);
-					console.log('adding tooltip el', tooltipEl);
+					// console.log('adding tooltip el', tooltipEl);
 				}
+				// 230 is the current tooltip width
+				const left = Math.max(
+					0,
+					Math.min(tooltip.caretX - 110, this._chart.canvas.parentNode.getBoundingClientRect().right - 230),
+				);
+				const caretOffset = tooltip.caretX - 110 - left;
+				// console.log('caretOffset', caretOffset, tooltip.caretX, left);
+				// console.log('svg child', tooltipEl.querySelector('.tooltip-arrow'));
+				(tooltipEl.querySelector('.tooltip-arrow') as any).style.marginLeft = caretOffset + 'px';
 
 				// Hide if no tooltip
 				if (tooltip.opacity === 0) {
@@ -166,9 +175,15 @@ export class BgsChartWarbandStatsComponent {
 					const tableRoot = tooltipEl.querySelector('.content');
 					tableRoot.innerHTML = innerHtml;
 				}
+				// console.log(
+				// 	'left position',
+				// 	tooltip.caretX - 110,
+				// 	this._chart.canvas.parentNode,
+				// 	this._chart.canvas.parentNode.getBoundingClientRect(),
+				// );
 				// Display, position, and set styles for font
 				tooltipEl.style.opacity = '1';
-				tooltipEl.style.left = tooltip.caretX - 110 + 'px'; // positionX + tooltip.caretX - 100 + 'px';
+				tooltipEl.style.left = left + 'px';
 				tooltipEl.style.top = tooltip.caretY + 8 - 100 + 'px';
 				// position === 'bottom' ? tooltip.caretY + 8 + 'px' :
 				tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
