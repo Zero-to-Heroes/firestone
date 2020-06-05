@@ -146,7 +146,7 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
-				this.maybeHandleNextOpponent(gameEvent);
+				this.maybeHandleNextEvent(new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(new BgsOpponentRevealedEvent(gameEvent.additionalData.cardId));
 			} else if (gameEvent.type === GameEvent.TURN_START) {
@@ -202,9 +202,7 @@ export class BattlegroundsStoreService {
 				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				console.log('[bgs-store] Game ended');
-				this.battlegroundsUpdater.next(
-					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
-				);
+				this.maybeHandleNextEvent(new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
 					new BgsLeaderboardPlaceEvent(
@@ -233,30 +231,18 @@ export class BattlegroundsStoreService {
 		return eventQueue.slice(1);
 	}
 
-	private maybeHandleNextOpponent(gameEvent: GameEvent): void {
+	private maybeHandleNextEvent(gameEvent: BattlegroundsStoreEvent): void {
 		// Battle not over yet, deferring the event
 		if (this.state.currentGame?.battleInfo?.opponentBoard) {
-			// console.log(
-			// 	'requeueing next opponent',
-			// 	this.state,
-			// 	this.state.currentGame?.battleInfo?.opponentBoard,
-			// 	gameEvent,
-			// );
 			if (this.requeueTimeout) {
 				clearTimeout(this.requeueTimeout);
 			}
 			this.requeueTimeout = setTimeout(() => {
-				this.maybeHandleNextOpponent(gameEvent);
+				this.maybeHandleNextEvent(gameEvent);
 			}, 2000);
 		} else {
 			clearTimeout(this.requeueTimeout);
-			// console.log(
-			// 	'will process next opponent',
-			// 	this.state,
-			// 	this.state.currentGame?.battleInfo?.opponentBoard,
-			// 	gameEvent,
-			// );
-			this.battlegroundsUpdater.next(new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId));
+			this.battlegroundsUpdater.next(gameEvent);
 		}
 	}
 
