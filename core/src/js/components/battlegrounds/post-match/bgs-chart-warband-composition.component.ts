@@ -139,14 +139,14 @@ export class BgsChartWarbandCompositionComponent {
 
 	onActivate(event) {
 		setTimeout(() => {
-			console.log('showing tooltip', event);
+			// console.log('showing tooltip', event);
 			this.appRef.tick();
 		}, 200);
 	}
 
 	onDeactivate(event) {
 		setTimeout(() => {
-			console.log('hiding tooltip', event);
+			// console.log('hiding tooltip', event);
 			this.appRef.tick();
 		}, 200);
 	}
