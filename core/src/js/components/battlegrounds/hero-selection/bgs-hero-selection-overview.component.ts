@@ -44,7 +44,7 @@ export class BgsHeroSelectionOverviewComponent {
 		if (value === this._panel) {
 			return;
 		}
-		console.log('setting panel', value, this._panel);
+		// console.log('setting panel', value, this._panel);
 		this._panel = value;
 		this.patchNumber = value.patchNumber;
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.heroCardId !== 'average');
