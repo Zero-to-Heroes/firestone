@@ -11,7 +11,7 @@ import { PreferencesService } from '../preferences.service';
 import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
-const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://tsu2ztwayc.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+const BGS_BATTLE_SIMULATION_ENDPOINT = 'https://o5gz4ktmfl.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 
 @Injectable()
 export class BgsBattleSimulationService {
