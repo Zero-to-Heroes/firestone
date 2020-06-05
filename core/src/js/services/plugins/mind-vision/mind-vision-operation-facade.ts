@@ -66,7 +66,7 @@ export class MindVisionOperationFacade<T> {
 
 	public async call(numberOfRetries?: number): Promise<T> {
 		if (this.cachedValue) {
-			this.log('returning cached value', this.cachedValue);
+			// this.log('returning cached value', this.cachedValue);
 			return this.cachedValue;
 		}
 		if (!(await this.ow.inGame())) {
