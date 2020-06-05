@@ -157,7 +157,7 @@ export class BgsPostMatchStatsRecapComponent {
 			.filter(cardId => cardId === this._stats.player.cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
-		this.triples = this._game.getMainPlayer().tripleHistory.length;
+		this.triples = this._stats.player.tripleHistory.length;
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);

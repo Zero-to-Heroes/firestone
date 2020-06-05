@@ -73,6 +73,10 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 			// console.log('setting new opponent', value, this._opponent);
 		}
 		this._opponent = value;
+		if (!value) {
+			console.error('opponent overview is missing');
+			return;
+		}
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;

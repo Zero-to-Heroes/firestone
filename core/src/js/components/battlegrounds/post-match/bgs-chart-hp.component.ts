@@ -417,6 +417,10 @@ export class BgsChartHpComponent {
 	}
 
 	private buildChartLabels(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): Label[] {
+		if (!value || !Object.values(value)) {
+			console.error('Could not build chart label for', value);
+			return [];
+		}
 		const max: number = Math.max(
 			...Object.values(value)
 				.map(turnInfos => turnInfos.map(turnInfo => turnInfo.turn))
