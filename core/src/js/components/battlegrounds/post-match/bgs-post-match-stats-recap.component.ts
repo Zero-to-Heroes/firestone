@@ -146,15 +146,15 @@ export class BgsPostMatchStatsRecapComponent {
 		this.ties = this._game.faceOffs.filter(faceOff => faceOff.result === 'tied').length || 0;
 		this.winStreak = this._stats.player.highestWinStreak;
 		this.totalMinionsDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)
-			.filter(cardId => cardId !== this._game.getMainPlayer().cardId)
+			.filter(cardId => cardId !== this._stats.player.cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
 		this.totalMinionsDamageTaken = Object.keys(this._stats.stats.totalMinionsDamageTaken)
-			.filter(cardId => cardId !== this._game.getMainPlayer().cardId)
+			.filter(cardId => cardId !== this._stats.player.cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageTaken[cardId])
 			.reduce((a, b) => a + b, 0);
 		this.totalHeroDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)
-			.filter(cardId => cardId === this._game.getMainPlayer().cardId)
+			.filter(cardId => cardId === this._stats.player.cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
 		this.triples = this._game.getMainPlayer().tripleHistory.length;

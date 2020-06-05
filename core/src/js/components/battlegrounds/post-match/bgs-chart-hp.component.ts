@@ -400,8 +400,12 @@ export class BgsChartHpComponent {
 	}
 
 	private buildChartData(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): ChartDataSets[] {
+		if (!value || !Object.keys(value)) {
+			console.error('Could not build chart data for', value);
+			return [];
+		}
 		return Object.keys(value).map(playerId => ({
-			data: value[playerId].map(turnInfo => turnInfo.value),
+			data: value[playerId]?.map(turnInfo => turnInfo.value) || [],
 			cardId: playerId,
 			label: playerId,
 			borderCapStyle: 'square',
