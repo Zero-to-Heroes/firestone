@@ -256,7 +256,7 @@ export class GameStateService {
 			this.closedByUser = false;
 			this.opponentTrackerClosedByUser = false;
 			this.gameEnded = false;
-			this.updateOverlays();
+			this.updateOverlays(false, true);
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.gameEnded = true;
@@ -381,7 +381,7 @@ export class GameStateService {
 			: playerDeckWithZonesOrdered;
 	}
 
-	private async updateOverlays(shouldForceCloseSecretsHelper = false) {
+	private async updateOverlays(shouldForceCloseSecretsHelper = false, forceLogs = false) {
 		if (!this.ow) {
 			console.log('ow not defined, returning');
 			return;
@@ -397,7 +397,9 @@ export class GameStateService {
 			this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WINDOW),
 		]);
 
-		// console.log('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
+		if (forceLogs) {
+			console.log('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
+		}
 		const shouldShowTracker =
 			this.state &&
 			this.state.playerDeck &&
@@ -405,15 +407,17 @@ export class GameStateService {
 				(this.state.playerDeck.hand && this.state.playerDeck.hand.length > 0) ||
 				(this.state.playerDeck.board && this.state.playerDeck.board.length > 0) ||
 				(this.state.playerDeck.otherZone && this.state.playerDeck.otherZone.length > 0));
-		// console.log(
-		// 	'[game-state] should show tracker?',
-		// 	inGame,
-		// 	shouldShowTracker,
-		// 	decktrackerWindow.window_state_ex,
-		// 	this.showDecktracker,
-		// 	this.state,
-		// 	this.closedByUser,
-		// );
+		if (forceLogs) {
+			console.log(
+				'[game-state] should show tracker?',
+				inGame,
+				shouldShowTracker,
+				decktrackerWindow.window_state_ex,
+				this.showDecktracker,
+				this.state,
+				this.closedByUser,
+			);
+		}
 		if (
 			inGame &&
 			shouldShowTracker &&
@@ -421,17 +425,23 @@ export class GameStateService {
 			this.showDecktracker &&
 			!this.closedByUser
 		) {
-			// console.log('[game-state] showing tracker');
+			if (forceLogs) {
+				console.log('[game-state] showing tracker');
+			}
 			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
 		} else if (
 			decktrackerWindow.window_state_ex !== 'closed' &&
 			(!shouldShowTracker || !this.showDecktracker || this.closedByUser || !inGame)
 		) {
-			// console.log('[game-state] closing tracker');
+			if (forceLogs) {
+				console.log('[game-state] closing tracker');
+			}
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
-		// console.log('[game-state] tracker window handled');
+		if (forceLogs) {
+			console.log('[game-state] tracker window handled');
+		}
 
 		const shouldShowOpponentTracker =
 			this.state &&
