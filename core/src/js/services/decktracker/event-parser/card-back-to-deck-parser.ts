@@ -35,7 +35,7 @@ export class CardBackToDeckParser implements EventParser {
 		// console.log('shouldKeepDeckAsIs', shouldKeepDeckAsIs, deck.deckstring, card.isFiller(), deck, card);
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
-			: this.helper.addSingleCardToZone(previousDeck, isPlayer ? card : this.helper.obfuscateCard(card));
+			: this.helper.addSingleCardToZone(previousDeck, card);
 		// console.log('updated deck', isPlayer, newDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,

@@ -20,23 +20,21 @@ export class CardDrawParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
-		// console.log('found card in zone', card, deck, cardId, entityId);
+
+		const isCardInfoPublic = isPlayer;
+		// console.log('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
 		const cardWithCreator = card.update({
-			creatorCardId: gameEvent.additionalData?.creatorCardId,
+			creatorCardId: isCardInfoPublic ? gameEvent.additionalData?.creatorCardId : undefined,
+			cardId: isCardInfoPublic ? card.cardId : undefined,
 		} as DeckCard);
+		// console.log('cardWithCreator', cardWithCreator);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
-			previousDeck,
-			cardId,
-			entityId,
-			deck.deckList.length === 0,
-			true,
-		)[0];
+		const newDeck: readonly DeckCard[] = isCardInfoPublic
+			? this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId, deck.deckList.length === 0, true)[0]
+			: this.helper.removeSingleCardFromZone(previousDeck, cardId, -1, deck.deckList.length === 0, true)[0];
+		// console.log('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
-			previousHand,
-			isPlayer ? cardWithCreator : this.helper.obfuscateCard(cardWithCreator),
-		);
+		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
 		// console.log('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,

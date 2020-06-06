@@ -253,13 +253,14 @@ export class DeckManipulationHelper {
 		return DeckCard.create();
 	}
 
-	public obfuscateCard(card: DeckCard): DeckCard {
-		// console.log('ofuscating card', card);
-		return card.update({
-			cardId: undefined,
-			creatorCardId: undefined,
-		} as DeckCard);
-	}
+	// public obfuscateCard(card: DeckCard): DeckCard {
+	// 	// console.log('ofuscating card', card);
+	// 	return card.update({
+	// 		// entityId: undefined,
+	// 		cardId: undefined,
+	// 		creatorCardId: undefined,
+	// 	} as DeckCard);
+	// }
 
 	public assignCardIdToEntity(deck: DeckState, entityId: number, cardId: string): DeckState {
 		const cardInHand = this.findCardInZone(deck.hand, null, entityId);

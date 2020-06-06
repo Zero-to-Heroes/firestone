@@ -336,15 +336,7 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		// console.log(
-		// 	'[game-state] will emit event',
-		// 	this.state.playerDeck.totalAttackOnBoard,
-		// 	this.state.opponentDeck.totalAttackOnBoard,
-		// 	this.state.playerDeck.galakrondInvokesCount,
-		// 	this.state.opponentDeck.galakrondInvokesCount,
-		// 	gameEvent,
-		// 	emittedEvent,
-		// );
+		// console.log('[game-state] will emit event', gameEvent.type, emittedEvent);
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		// console.log(
 		// 	'[game-state] emitted deck event',
@@ -395,7 +387,9 @@ export class GameStateService {
 			return;
 		}
 		const prefs = await this.prefs.getPreferences();
-		const inGame = true; // (await this.ow.inGame()) && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
+		// TODO: don't forget to change this
+		// For now, it looks like the scene_state event from the GEP isn't fired anymore?
+		const inGame = await this.ow.inGame(); //&& (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
 		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),

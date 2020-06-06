@@ -21,6 +21,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
+		const isCardInfoPublic = isPlayer;
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
 		const otherCard = this.helper.findCardInZone(deck.otherZone, null, entityId);

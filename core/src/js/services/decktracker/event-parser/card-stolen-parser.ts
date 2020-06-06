@@ -71,10 +71,7 @@ export class CardStolenParser implements EventParser {
 			? this.helper.addSingleCardToZone(stealingToDeck.board, cardInBoard)
 			: stealingToDeck.board;
 		const stealingDeck = cardInDeck
-			? this.helper.addSingleCardToZone(
-					stealingToDeck.deck,
-					isPlayerStolenFrom ? this.helper.obfuscateCard(cardInDeck) : cardInDeck,
-			  )
+			? this.helper.addSingleCardToZone(stealingToDeck.deck, cardInDeck)
 			: stealingToDeck.deck;
 		const stealingSecrets = secret ? [...stealingToDeck.secrets, secret] : stealingToDeck.secrets;
 		// console.log('new stealing deck', stealingDeck, cardInDeck);

@@ -24,7 +24,7 @@ export class CreateCardInDeckParser implements EventParser {
 		// console.debug('adding card to deck', cardId, controllerId, entityId, isPlayer, deck.deck.length);
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const card = DeckCard.create({
-			cardId: isPlayer ? cardId : undefined,
+			cardId: cardId,
 			entityId: entityId,
 			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
 			manaCost: cardData ? cardData.cost : undefined,
