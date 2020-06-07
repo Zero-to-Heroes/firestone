@@ -329,7 +329,7 @@ export class GameStateService {
 			}
 		}
 		// if (previousState !== this.state) {
-		await this.updateOverlays();
+		await this.updateOverlays(false, gameEvent.type === GameEvent.MATCH_METADATA);
 		const emittedEvent = {
 			event: {
 				name: gameEvent.type,
@@ -414,7 +414,7 @@ export class GameStateService {
 				shouldShowTracker,
 				decktrackerWindow.window_state_ex,
 				this.showDecktracker,
-				this.state,
+				this.state?.playerDeck,
 				this.closedByUser,
 			);
 		}
