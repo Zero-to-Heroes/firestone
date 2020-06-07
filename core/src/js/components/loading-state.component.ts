@@ -15,7 +15,7 @@ import {
 	template: `
 		<div class="loading-state">
 			<div class="state-container">
-				<div class="loading-icon" [inlineSVG]="'/Files/assets/svg/loading_state.svg'"></div>
+				<div class="loading-icon" [inlineSVG]="loadingStateSvgName"></div>
 				<span class="title" *ngIf="mainTitle"> {{ mainTitle }} </span>
 				<span class="subtitle" *ngIf="subtitle">{{ subtitle }}</span>
 				<span class="subtitle hint" *ngIf="hint && displayedHint">{{ displayedHint }}</span>
@@ -29,6 +29,13 @@ export class LoadingStateComponent implements AfterViewInit, OnDestroy {
 	@Input() mainTitle = "We're loading all the goods";
 	@Input() subtitle = "Please wait while we're collecting the information";
 	@Input() hint: boolean;
+	@Input() set svgName(value: string) {
+		if (value) {
+			this.loadingStateSvgName = `/Files/assets/svg/${value}.svg`;
+		}
+	}
+
+	loadingStateSvgName = '/Files/assets/svg/loading_state.svg';
 	displayedHint: string;
 
 	private interval;

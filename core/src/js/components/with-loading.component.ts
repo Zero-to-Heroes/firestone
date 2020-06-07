@@ -14,6 +14,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				[mainTitle]="mainTitle"
 				[subtitle]="subtitle"
 				[hint]="hint"
+				[svgName]="svgName"
 				[@fadeInOut]
 			></loading-state>
 		</ng-container>
@@ -36,4 +37,5 @@ export class WithLoadingComponent {
 	@Input() mainTitle = "We're loading all the goods";
 	@Input() subtitle = "Please wait while we're collecting the information";
 	@Input() hint: boolean;
+	@Input() svgName: string;
 }

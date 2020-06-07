@@ -48,6 +48,7 @@ declare let amplitude: any;
 					loadingElapsed?.toFixed(0) +
 					's elapsed (it usually takes about 20-30s)'
 				"
+				svgName="ftue/battlegrounds"
 				[hint]="true"
 			>
 				<div class="content">
