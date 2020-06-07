@@ -135,7 +135,7 @@ export class DevService {
 					this.gameEvents.dispatchGameEvent(event);
 				}
 
-				if (deckstring && event.Type === 'OPPONENT_PLAYER') {
+				if (deckstring && event.Type === 'LOCAL_PLAYER') {
 					await sleep(500);
 					const decklist = this.deckParser.buildDeckList(deckstring);
 					// console.log('[opponent-player] parsed decklist', decklist);
@@ -143,28 +143,21 @@ export class DevService {
 					// whatever we can
 					let newDeck = decklist;
 					const currentState = this.gameState.state;
-					for (const card of [
-						...currentState.opponentDeck.hand,
-						...currentState.opponentDeck.otherZone,
-						...currentState.opponentDeck.board,
-					]) {
+					const deck = currentState.playerDeck;
+					for (const card of [...deck.hand, ...deck.otherZone, ...deck.board]) {
 						newDeck = this.helper.removeSingleCardFromZone(newDeck, card.cardId, card.entityId)[0];
 					}
 					// console.log('[opponent-player] newDeck', newDeck);
-					const newPlayerDeck = currentState.opponentDeck.update({
+					const newPlayerDeck = deck.update({
 						deckstring: deckstring,
 						deckList: decklist,
 						deck: deckstring ? this.flagCards(newDeck) : newDeck,
-						hand: deckstring
-							? this.flagCards(currentState.opponentDeck.hand)
-							: currentState.opponentDeck.hand,
-						otherZone: deckstring
-							? this.flagCards(currentState.opponentDeck.otherZone)
-							: currentState.opponentDeck.otherZone,
+						hand: deckstring ? this.flagCards(deck.hand) : deck.hand,
+						otherZone: deckstring ? this.flagCards(deck.otherZone) : deck.otherZone,
 					} as DeckState);
-					// console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
+					console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
 					this.gameState.state = currentState.update({
-						opponentDeck: newPlayerDeck,
+						playerDeck: newPlayerDeck,
 					} as GameState);
 					console.log('updated decklist', this.gameState.state);
 				}

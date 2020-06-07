@@ -44,7 +44,7 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private async processEvent(event) {
 		switch (event.name) {
-			// In case one event is missing, we have fallback
+			// In case one event is missing or arrives too fast, we have fallback
 			case GameEvent.MATCH_METADATA:
 			case GameEvent.LOCAL_PLAYER:
 			case GameEvent.OPPONENT:
