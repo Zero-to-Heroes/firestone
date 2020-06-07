@@ -35,10 +35,6 @@ export class GlobalStatsNotifierService {
 		if (retriesLeft <= 0) {
 			return;
 		}
-		const user = await this.ow.getCurrentUser();
-		if (!user.userId || !user.username) {
-			console.warn('[global-stats] user not logged in', user);
-		}
 		const stats = await this.globalStats.getGlobalStats();
 		if (stats) {
 			this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(stats));

@@ -20,7 +20,7 @@ export class GameStatsUpdaterService {
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async data => {
 			// We do it this way to avoid doing the costly retrieveStats operation as part of
 			// the store processing, as it blocks other events
-			const gameStats = await this.statsLoader.retrieveStats(data.data[0] ? data.data[0].reviewId : null);
+			const gameStats = await this.statsLoader.retrieveStats(data.data[0] ? data.data[0].reviewId : null, 20);
 			this.events.broadcast(Events.GAME_STATS_UPDATED, gameStats);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(gameStats));
 			this.stateUpdater.next(new RecomputeReplaysEvent(gameStats));
