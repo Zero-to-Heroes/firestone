@@ -2,10 +2,10 @@ import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
+import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
-import { DeckEvents } from './event-parser/deck-events';
 
 @Injectable()
 export class OverlayDisplayService implements OnDestroy {
@@ -44,11 +44,16 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private async processEvent(event) {
 		switch (event.name) {
-			case DeckEvents.MATCH_METADATA:
+			// In case one event is missing, we have fallback
+			case GameEvent.MATCH_METADATA:
+			case GameEvent.LOCAL_PLAYER:
+			case GameEvent.OPPONENT:
+			case GameEvent.GAME_RUNNING:
+			case GameEvent.FIRST_PLAYER:
 				// console.log('[overlay-display] received MATCH_METADATA event');
 				this.handleDisplayPreferences(this.gameState);
 				break;
-			case DeckEvents.GAME_END:
+			case GameEvent.GAME_END:
 				// console.log('[overlay-display] received GAME_END event, sending false');
 				this.decktrackerDisplayEventBus.next(false);
 				break;
@@ -64,7 +69,7 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {
 		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck) {
-			console.log('[overlay-display] not enough info to display');
+			console.warn('[overlay-display] not enough info to display');
 			return false;
 		}
 		switch (gameState.metadata.gameType as GameType) {

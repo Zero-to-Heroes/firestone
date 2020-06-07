@@ -6,7 +6,6 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
 import { PreferencesService } from '../../preferences.service';
 import { DeckParserService } from '../deck-parser.service';
-import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class GameStartParser implements EventParser {
@@ -56,7 +55,7 @@ export class GameStartParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.GAME_START;
+		return GameEvent.GAME_START;
 	}
 
 	private buildHero(currentDeck: any): HeroCard {

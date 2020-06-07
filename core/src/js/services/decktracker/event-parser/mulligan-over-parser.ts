@@ -1,6 +1,5 @@
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class MulliganOverParser implements EventParser {
@@ -16,6 +15,6 @@ export class MulliganOverParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.MULLIGAN_OVER;
+		return GameEvent.MAIN_STEP_READY;
 	}
 }

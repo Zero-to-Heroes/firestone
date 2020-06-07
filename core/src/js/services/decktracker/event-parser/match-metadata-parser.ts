@@ -1,7 +1,6 @@
 import { GameState } from '../../../models/decktracker/game-state';
 import { Metadata } from '../../../models/decktracker/metadata';
 import { GameEvent } from '../../../models/game-event';
-import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class MatchMetadataParser implements EventParser {
@@ -20,6 +19,6 @@ export class MatchMetadataParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.MATCH_METADATA;
+		return GameEvent.MATCH_METADATA;
 	}
 }

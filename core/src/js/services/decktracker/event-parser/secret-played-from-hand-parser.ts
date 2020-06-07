@@ -4,7 +4,6 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { SecretConfigService } from '../secret-config.service';
-import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -48,6 +47,6 @@ export class SecretPlayedFromHandParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.SECRET_PLAYED_FROM_HAND;
+		return GameEvent.SECRET_PLAYED;
 	}
 }

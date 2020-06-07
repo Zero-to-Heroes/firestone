@@ -1,7 +1,6 @@
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class FirstPlayerParser implements EventParser {
@@ -22,6 +21,6 @@ export class FirstPlayerParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.FIRST_PLAYER;
+		return GameEvent.FIRST_PLAYER;
 	}
 }

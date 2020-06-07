@@ -2,7 +2,6 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -45,6 +44,6 @@ export class BurnedCardParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.BURNED_CARD;
+		return GameEvent.BURNED_CARD;
 	}
 }

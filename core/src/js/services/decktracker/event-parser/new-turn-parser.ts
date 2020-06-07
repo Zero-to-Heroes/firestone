@@ -1,6 +1,5 @@
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class NewTurnParser implements EventParser {
@@ -20,6 +19,6 @@ export class NewTurnParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.TURN_START;
+		return GameEvent.TURN_START;
 	}
 }

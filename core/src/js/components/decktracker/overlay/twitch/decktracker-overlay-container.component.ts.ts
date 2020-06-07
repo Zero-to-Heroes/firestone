@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
-import { DeckEvents } from '../../../../services/decktracker/event-parser/deck-events';
+import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../../services/events.service';
 import fakeState from './gameState.json';
 
@@ -84,7 +84,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		this.http.get(EBS_URL, options).subscribe(
 			(result: any) => {
 				console.log('successfully retrieved initial state', result);
-				if (result.event === DeckEvents.GAME_END) {
+				if (result.event === GameEvent.GAME_END) {
 					this.gameState = undefined;
 				} else {
 					this.gameState = result.state;
@@ -101,7 +101,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 
 	private async processEvent(event) {
 		switch (event.event.name) {
-			case DeckEvents.GAME_END:
+			case GameEvent.GAME_END:
 				console.log('received GAME_END event');
 				this.gameState = undefined;
 				if (!(this.cdr as ViewRef)?.destroyed) {

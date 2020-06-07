@@ -3,7 +3,6 @@ import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 import { PreferencesService } from '../../preferences.service';
 import { DeckParserService } from '../deck-parser.service';
-import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class GameEndParser implements EventParser {
@@ -23,6 +22,6 @@ export class GameEndParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.GAME_END;
+		return GameEvent.GAME_END;
 	}
 }

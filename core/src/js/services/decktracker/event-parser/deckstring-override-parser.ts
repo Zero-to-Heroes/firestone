@@ -5,7 +5,6 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
 import { DeckParserService } from '../deck-parser.service';
-import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class DeckstringOverrideParser implements EventParser {
@@ -68,7 +67,7 @@ export class DeckstringOverrideParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.CARD_ID_ASSIGNED;
+		return 'DECKSTRING_OVERRIDE';
 	}
 
 	private buildHero(currentDeck: any): HeroCard {
