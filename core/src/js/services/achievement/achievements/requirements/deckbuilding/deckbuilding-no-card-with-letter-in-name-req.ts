@@ -32,12 +32,22 @@ export class DeckbuildingNoCardWithLetterInNameReq implements Requirement {
 
 	private handleEvent(gameEvent: GameEvent) {
 		const deck = gameEvent.localPlayer.deck ? gameEvent.localPlayer.deck.deck : null;
-		if (deck && deck.cards && deck.cards.length > 0) {
+		if (deck && deck.cards && deck.cards.length > 0 && this.letterToAvoid) {
 			const dbfIds = deck.cards.map(pair => pair[0]);
 			const cards: any[] = this.cards.getCardsFromDbfIds(dbfIds);
-			this.doesDeckMeetSpec = cards.every(
-				card => card.name.toLowerCase().indexOf(this.letterToAvoid.toLowerCase()) === -1,
-			);
+			this.doesDeckMeetSpec =
+				cards.length > 0 &&
+				cards.every(card => card.name.toLowerCase().indexOf(this.letterToAvoid.toLowerCase()) === -1);
+			if (this.doesDeckMeetSpec) {
+				console.log(
+					'[deckbuilding-no-card-req',
+					'deck matches condition',
+					this.doesDeckMeetSpec,
+					this.letterToAvoid,
+					deck,
+					cards,
+				);
+			}
 		} else {
 			this.doesDeckMeetSpec = false;
 		}

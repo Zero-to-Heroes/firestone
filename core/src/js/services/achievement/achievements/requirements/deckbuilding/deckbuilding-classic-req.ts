@@ -35,9 +35,12 @@ export class DeckbuildingClassicReq implements Requirement {
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const dbfIds = deck.cards.map(pair => pair[0]);
 			const cards: any[] = this.cards.getCardsFromDbfIds(dbfIds);
-			this.doesDeckMeetSpec = cards.every(
-				card => card.set && ['core', 'expert1'].indexOf(card.set.toLowerCase()) !== -1,
-			);
+			this.doesDeckMeetSpec =
+				cards.length > 0 &&
+				cards.every(card => card.set && ['core', 'expert1'].indexOf(card.set.toLowerCase()) !== -1);
+			if (this.doesDeckMeetSpec) {
+				console.log('[deckbuilding-classic-req', 'deck matches condition', this.doesDeckMeetSpec, deck, cards);
+			}
 		} else {
 			this.doesDeckMeetSpec = false;
 		}
