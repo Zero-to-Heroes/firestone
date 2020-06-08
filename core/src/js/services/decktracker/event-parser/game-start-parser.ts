@@ -24,6 +24,7 @@ export class GameStartParser implements EventParser {
 		if (noDeckMode) {
 			console.log('[game-start-parser] no deck mode is active, not loading current deck');
 		}
+		console.log('[game-start-parser] will get current deck');
 		const currentDeck = noDeckMode ? undefined : await this.deckParser.getCurrentDeck();
 		console.log(
 			'[game-start-parser] init game with deck',

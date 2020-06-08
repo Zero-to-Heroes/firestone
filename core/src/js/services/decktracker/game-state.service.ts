@@ -151,8 +151,8 @@ export class GameStateService {
 				if (this.showDecktracker === event) {
 					return;
 				}
-				this.showDecktracker = event;
 				console.log('decktracker display update', event);
+				this.showDecktracker = event;
 				this.updateOverlays(this.state);
 			});
 		});
@@ -345,13 +345,7 @@ export class GameStateService {
 		};
 		// console.log('[game-state] will emit event', gameEvent.type, emittedEvent);
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-		// console.log(
-		// 	'[game-state] emitted deck event',
-		// 	emittedEvent.event.name,
-		// 	this.state.opponentDeck.secrets,
-		// 	this.state,
-		// 	gameEvent,
-		// );
+		// console.log('[game-state] emitted deck event', emittedEvent.event.name, this.state, gameEvent);
 	}
 
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
@@ -393,7 +387,7 @@ export class GameStateService {
 			console.log('ow not defined, returning');
 			return;
 		}
-		const prefs = await this.prefs.getPreferences();
+		// const prefs = await this.prefs.getPreferences();
 		// TODO: don't forget to change this
 		// For now, it looks like the scene_state event from the GEP isn't fired anymore?
 		const inGame = await this.ow.inGame(); //(this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
@@ -421,8 +415,8 @@ export class GameStateService {
 				shouldShowTracker,
 				decktrackerWindow.window_state_ex,
 				this.showDecktracker,
-				state?.playerDeck,
 				this.closedByUser,
+				state?.playerDeck,
 			);
 		}
 		if (
@@ -432,18 +426,18 @@ export class GameStateService {
 			this.showDecktracker &&
 			!this.closedByUser
 		) {
-			if (forceLogs) {
-				console.log('[game-state] showing tracker');
-			}
+			// if (forceLogs) {
+			console.log('[game-state] showing tracker');
+			// }
 			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
 		} else if (
 			decktrackerWindow.window_state_ex !== 'closed' &&
 			(!shouldShowTracker || !this.showDecktracker || this.closedByUser || !inGame)
 		) {
-			if (forceLogs) {
-				console.log('[game-state] closing tracker');
-			}
+			// if (forceLogs) {
+			console.log('[game-state] closing tracker');
+			// }
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
 		if (forceLogs) {
