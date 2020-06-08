@@ -148,6 +148,9 @@ export class GameStateService {
 			const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow()
 				.decktrackerDisplayEventBus;
 			decktrackerDisplayEventBus.subscribe(event => {
+				if (this.showDecktracker === event) {
+					return;
+				}
 				this.showDecktracker = event;
 				console.log('decktracker display update', event);
 				this.updateOverlays(this.state);
