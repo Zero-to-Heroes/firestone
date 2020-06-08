@@ -97,6 +97,7 @@ export class BgsOpponentOverviewBigComponent {
 		}
 		this._opponent = value;
 		if (!value) {
+			console.warn('[opponent-big] setting empty value');
 			return;
 		}
 		// console.log('setting next opponent info', value, value.getCurrentTavernTier());

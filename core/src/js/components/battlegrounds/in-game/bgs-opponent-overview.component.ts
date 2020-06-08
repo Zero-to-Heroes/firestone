@@ -74,7 +74,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		}
 		this._opponent = value;
 		if (!value) {
-			console.error('opponent overview is missing');
+			console.warn('[opponent-overview] setting empty value');
 			return;
 		}
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;

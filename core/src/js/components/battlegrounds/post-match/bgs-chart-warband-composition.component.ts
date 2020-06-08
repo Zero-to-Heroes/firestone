@@ -170,7 +170,7 @@ export class BgsChartWarbandCompositionComponent {
 		}
 		// console.log('detected resize event', this._visible, this._dirty);
 		setTimeout(() => {
-			console.log('handling resize');
+			// console.log('handling resize');
 			const chartContainer = this.el.nativeElement.querySelector('.chart-container');
 			const rect = chartContainer?.getBoundingClientRect();
 			if (!rect?.width || !rect?.height) {

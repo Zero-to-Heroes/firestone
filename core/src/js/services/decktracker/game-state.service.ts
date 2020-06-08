@@ -260,7 +260,7 @@ export class GameStateService {
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.gameEnded = true;
-			this.updateOverlays(this.state, true);
+			this.updateOverlays(this.state, true, true);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
 			console.log('[game-state] handling overlay for event', gameEvent.type, gameEvent);
 			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
@@ -393,7 +393,7 @@ export class GameStateService {
 		const prefs = await this.prefs.getPreferences();
 		// TODO: don't forget to change this
 		// For now, it looks like the scene_state event from the GEP isn't fired anymore?
-		const inGame = await this.ow.inGame(); //&& (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
+		const inGame = await this.ow.inGame(); //(this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
 		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),

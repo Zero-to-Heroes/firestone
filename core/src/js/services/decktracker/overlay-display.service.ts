@@ -50,11 +50,11 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameEvent.OPPONENT:
 			case GameEvent.GAME_RUNNING:
 			case GameEvent.FIRST_PLAYER:
-				// console.log('[overlay-display] received MATCH_METADATA event');
+				console.log('[overlay-display] received event', event.name);
 				this.handleDisplayPreferences(this.gameState);
 				break;
 			case GameEvent.GAME_END:
-				// console.log('[overlay-display] received GAME_END event, sending false');
+				console.log('[overlay-display] received GAME_END event, sending false');
 				this.decktrackerDisplayEventBus.next(false);
 				break;
 		}
