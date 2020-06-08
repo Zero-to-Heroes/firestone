@@ -192,7 +192,7 @@ module.exports = function(env, argv) {
 
 		target: 'web',
 
-		devtool: 'inline-source-map',
+		devtool: env.production ? false : 'inline-source-map',
 
 		// Doesn't work, for some reason the code loaded after refresh is still the old one
 		watch: false,
