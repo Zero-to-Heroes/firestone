@@ -37,7 +37,9 @@ export class LogRegisterService {
 			.configure(
 				'Power.log',
 				data => this.gameEvents.receiveLogLine(data),
-				existingLine => this.gameEvents.receiveExistingLogLine(existingLine),
+				// From what I've seen, HS deletes the game log every time you
+				// start the game, so we pro
+				existingLine => this.gameEvents.receiveLogLine(existingLine), //this.gameEvents.receiveExistingLogLine(existingLine),
 			)
 			.subscribe(status => {
 				console.log('[log-register] status for power.log', status);
