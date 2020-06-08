@@ -42,15 +42,16 @@ export class DeckParserService {
 			const activeDeck = await this.memory.getActiveDeck(2);
 			//console.log('active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-				// console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}
 	}
 
 	public async getCurrentDeck(): Promise<any> {
-		// console.log('[deck-parser] getting current deck', this.currentDeck);
+		console.log('[deck-parser] getting current deck', this.currentDeck);
 		if (this.currentDeck?.deck) {
+			console.log('[deck-parser] returning cached deck', this.currentDeck);
 			return this.currentDeck;
 		}
 		if (this.memory) {
@@ -61,7 +62,7 @@ export class DeckParserService {
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}
-		// console.log('returning current deck', this.currentDeck);
+		console.log('returning current deck', this.currentDeck);
 		return this.currentDeck;
 	}
 
@@ -91,29 +92,29 @@ export class DeckParserService {
 			Date.now() - this.lastDeckTimestamp < 1000 &&
 			this.currentBlock !== 'DECK_SLECTED'
 		) {
-			// console.log('[decks] Doesnt look like a deck selection, exiting block', this.currentBlock);
+			console.log('[decks] Doesnt look like a deck selection, exiting block', this.currentBlock);
 			this.reset();
 			return;
 		}
 
-		// console.log('[decks] received log line', data);
+		console.log('[decks] received log line', data);
 		match = this.deckNameRegex.exec(data);
 		if (match) {
 			// console.log('[decks] matching log line for deck name', data);
 			this.currentDeck = {
 				name: match[1],
 			};
-			// console.log('[decks] deck init', this.currentDeck);
+			console.log('[decks] deck init', this.currentDeck);
 			return;
 		}
 		match = this.deckstringRegex.exec(data);
 		if (match) {
-			//console.log('[decks] parsing deckstring', match);
+			console.log('[decks] parsing deckstring', match);
 			this.currentDeck = this.currentDeck || {};
 			this.currentDeck.deckstring = match[1];
-			//console.log('[decks] current deck', this.currentDeck);
+			console.log('[decks] current deck', this.currentDeck);
 			this.decodeDeckString();
-			//console.log('[decks] deckstring decoded', this.currentDeck);
+			console.log('[decks] deckstring decoded', this.currentDeck);
 			return;
 		}
 	}
@@ -134,8 +135,8 @@ export class DeckParserService {
 	// By doing this we make sure we don't get a leftover deckstring caused by
 	// a game mode that doesn't interact with the Decks.log
 	public reset() {
+		console.log('[decks] resetting deck');
 		this.currentDeck = {};
-		// console.log('[decks] resetting deck');
 	}
 
 	public buildDeck(currentDeck: any): readonly DeckCard[] {

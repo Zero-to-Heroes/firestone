@@ -855,82 +855,82 @@ export class GameEvents {
 		this.processingQueue.enqueue(data);
 	}
 
-	// private existingLogLines: string[] = [];
+	private existingLogLines: string[] = [];
 
-	// // Handles reading a log file mid-game, i.e. this data is already
-	// // present in the log file when we're trying to read it
-	// public receiveExistingLogLine(existingLine: string) {
-	// 	// console.log('received existing', existingLine);
-	// 	if (existingLine.indexOf('Begin Spectating') !== -1) {
-	// 		console.log('[game-events] [existing] begin spectating', existingLine);
-	// 		this.spectating = true;
-	// 	}
-	// 	if (existingLine.indexOf('End Spectator Mode') !== -1) {
-	// 		console.log('[game-events] [existing] end spectating', existingLine);
-	// 		this.spectating = false;
-	// 	}
+	// Handles reading a log file mid-game, i.e. this data is already
+	// present in the log file when we're trying to read it
+	public receiveExistingLogLine(existingLine: string) {
+		// console.log('received existing', existingLine);
+		if (existingLine.indexOf('Begin Spectating') !== -1) {
+			console.log('[game-events] [existing] begin spectating', existingLine);
+			this.spectating = true;
+		}
+		if (existingLine.indexOf('End Spectator Mode') !== -1) {
+			console.log('[game-events] [existing] end spectating', existingLine);
+			this.spectating = false;
+		}
 
-	// 	if (this.spectating) {
-	// 		// For now we're not interested in spectating events, but that will come out later
-	// 		// console.log('spectating, doing nothing');
-	// 		return;
-	// 	}
+		if (this.spectating) {
+			// For now we're not interested in spectating events, but that will come out later
+			// console.log('spectating, doing nothing');
+			return;
+		}
 
-	// 	if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
-	// 		// There is no automatic reconnect when spectating, so we can always safely say
-	// 		// that when we finish catching up with the actual contents of the file, we are
-	// 		// not spectating
-	// 		this.spectating = false;
-	// 		const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
-	// 		console.log(
-	// 			'[game-events] [existing] last line timestamp',
-	// 			lastLineTimestamp,
-	// 			Date.now(),
-	// 			this.existingLogLines[this.existingLogLines.length - 1],
-	// 		);
-	// 		// Sometimes there is a one hour offset that breaks everything, and I couldn't find where it came from
-	// 		// See the following log lines that produced the issue
-	// 		// 2019-12-11 12:46:06,017 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] received CREATE_GAME log" | "D 12:46:05.5537105 GameState.DebugPrintPower() - CREATE_GAME" |
-	// 		// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line timestamp" | 1576075565000 | 1576079166026 | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
-	// 		// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line is too old, not doing anything" | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
-	// 		// 2019-12-11 12:46:06,223 (INFO) </Files/vendor.js> (:1620) - "[game-events] received CREATE_GAME log" | "D 12:46:06.1966960 PowerTaskList.DebugPrintPower() -     CREATE_GAME" |
-	// 		// DISCARDED COMMENT: However (20/01/2020), having a 1-hour timeout on this is too long, and I'd rather have some missing reconnects
-	// 		// than some issues after a long reconnect where part of the tracker remains visible on home screen
-	// 		if (lastLineTimestamp && Date.now() - lastLineTimestamp > 5 * 60 * 1000) {
-	// 			console.log(
-	// 				'[game-events] [existing] last line is too old, not doing anything',
-	// 				this.existingLogLines[this.existingLogLines.length - 1],
-	// 			);
-	// 			this.existingLogLines = [];
-	// 			return;
-	// 		}
-	// 		console.log(
-	// 			'[game-events] [existing] caught up, enqueueing all events',
-	// 			this.existingLogLines.length,
-	// 			this.spectating,
-	// 		);
-	// 		if (this.existingLogLines.length > 0) {
-	// 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
-	// 		}
-	// 		this.existingLogLines = [];
-	// 		return;
-	// 	}
+		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
+			// There is no automatic reconnect when spectating, so we can always safely say
+			// that when we finish catching up with the actual contents of the file, we are
+			// not spectating
+			this.spectating = false;
+			const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
+			console.log(
+				'[game-events] [existing] last line timestamp',
+				lastLineTimestamp,
+				Date.now(),
+				this.existingLogLines[this.existingLogLines.length - 1],
+			);
+			// Sometimes there is a one hour offset that breaks everything, and I couldn't find where it came from
+			// See the following log lines that produced the issue
+			// 2019-12-11 12:46:06,017 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] received CREATE_GAME log" | "D 12:46:05.5537105 GameState.DebugPrintPower() - CREATE_GAME" |
+			// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line timestamp" | 1576075565000 | 1576079166026 | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
+			// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line is too old, not doing anything" | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
+			// 2019-12-11 12:46:06,223 (INFO) </Files/vendor.js> (:1620) - "[game-events] received CREATE_GAME log" | "D 12:46:06.1966960 PowerTaskList.DebugPrintPower() -     CREATE_GAME" |
+			// DISCARDED COMMENT: However (20/01/2020), having a 1-hour timeout on this is too long, and I'd rather have some missing reconnects
+			// than some issues after a long reconnect where part of the tracker remains visible on home screen
+			if (lastLineTimestamp && Date.now() - lastLineTimestamp > 5 * 60 * 1000) {
+				console.log(
+					'[game-events] [existing] last line is too old, not doing anything',
+					this.existingLogLines[this.existingLogLines.length - 1],
+				);
+				this.existingLogLines = [];
+				return;
+			}
+			console.log(
+				'[game-events] [existing] caught up, enqueueing all events',
+				this.existingLogLines.length,
+				this.spectating,
+			);
+			if (this.existingLogLines.length > 0) {
+				this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
+			}
+			this.existingLogLines = [];
+			return;
+		}
 
-	// 	// if (this.spectating) {
-	// 	// 	// For now we're not interested in spectating events, but that will come out later
-	// 	// 	return;
-	// 	// }
+		// if (this.spectating) {
+		// 	// For now we're not interested in spectating events, but that will come out later
+		// 	return;
+		// }
 
-	// 	if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
-	// 		console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
-	// 		this.existingLogLines = [];
-	// 	}
-	// 	if (existingLine.indexOf('GOLD_REWARD_STATE') !== -1) {
-	// 		// Complete game, we don't handle it
-	// 		this.existingLogLines = [];
-	// 	}
-	// 	this.existingLogLines.push(existingLine);
-	// }
+		if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
+			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
+			this.existingLogLines = [];
+		}
+		if (existingLine.indexOf('GOLD_REWARD_STATE') !== -1) {
+			// Complete game, we don't handle it
+			this.existingLogLines = [];
+		}
+		this.existingLogLines.push(existingLine);
+	}
 
 	private extractLastTimestamp(lines: string[]): number | undefined {
 		for (let i = lines.length - 1; i >= 0; i--) {
