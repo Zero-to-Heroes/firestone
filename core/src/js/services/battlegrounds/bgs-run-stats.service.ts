@@ -13,6 +13,7 @@ import { BgsBoard } from '../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
@@ -28,6 +29,7 @@ export class BgsRunStatsService {
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly memoryService: MemoryInspectionService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async event => {
 			this.computeRunStats(event.data[0], event.data[1]);
@@ -39,10 +41,13 @@ export class BgsRunStatsService {
 
 	private async computeRunStats(reviewId: string, currentGame: BgsGame) {
 		const prefs = await this.prefs.getPreferences();
+		const newMmr = await this.getNewRating(currentGame.mmrAtStart);
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
 			battleResultHistory: currentGame.battleResultHistory,
 			mainPlayer: currentGame.getMainPlayer(),
+			oldMmr: currentGame.mmrAtStart,
+			newMmr: newMmr,
 		};
 
 		const postMatchStats: BgsPostMatchStats = this.populateObject(
@@ -105,10 +110,31 @@ export class BgsRunStatsService {
 			tags: Map(source.tags),
 		} as Entity);
 	}
+
+	private async getNewRating(previousRating: number): Promise<number> {
+		return new Promise<number>(resolve => {
+			this.getNewRatingInternal(previousRating, newRating => resolve(newRating));
+		});
+	}
+
+	private async getNewRatingInternal(previousRating: number, callback, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('Could not get new rating', previousRating);
+			callback(previousRating);
+		}
+		const newRating = (await this.memoryService.getBattlegroundsInfo()).rating;
+		if (newRating === previousRating) {
+			setTimeout(() => this.getNewRatingInternal(previousRating, callback, retriesLeft - 1), 1000);
+			return;
+		}
+		callback(newRating);
+	}
 }
 
 interface BgsComputeRunStatsInput {
 	readonly reviewId: string;
 	readonly battleResultHistory: readonly BattleResultHistory[];
 	readonly mainPlayer: BgsPlayer;
+	readonly oldMmr: number;
+	readonly newMmr: number;
 }

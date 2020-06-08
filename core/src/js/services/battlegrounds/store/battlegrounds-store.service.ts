@@ -22,6 +22,7 @@ import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-upda
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
 import { BgsHeroSelectionDoneParser } from './event-parsers/bgs-hero-selection-done-parser';
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
+import { BgsInitMmrParser } from './event-parsers/bgs-init-mmr-parser';
 import { BgsInitParser } from './event-parsers/bgs-init-parser';
 import { BgsLeaderboardPlaceParser } from './event-parsers/bgs-leaderboard-place-parser';
 import { BgsMatchStartParser } from './event-parsers/bgs-match-start-parser';
@@ -42,6 +43,7 @@ import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
 import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
 import { BgsHeroSelectionEvent } from './events/bgs-hero-selection-event';
+import { BgsInitMmrEvent } from './events/bgs-init-mmr-event';
 import { BgsLeaderboardPlaceEvent } from './events/bgs-leaderboard-place-event';
 import { BgsMatchStartEvent } from './events/bgs-match-start-event';
 import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
@@ -135,13 +137,13 @@ export class BattlegroundsStoreService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
+				// TODO: retrieve current MMR
+				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId));
 			} else if (gameEvent.type === GameEvent.MATCH_METADATA) {
 				if (gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS) {
 					this.battlegroundsUpdater.next(new BgsMatchStartEvent());
-					// } else if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
-					// this.battlegroundsUpdater.next(new BgsHeroSelectionDoneEvent());
 				} else {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
@@ -344,6 +346,7 @@ export class BattlegroundsStoreService {
 			new BgsCombatStartParser(),
 			new BgsGlobalInfoUpdatedParser(),
 			new BgsStartComputingPostMatchStatsParser(),
+			new BgsInitMmrParser(this.memory),
 		];
 	}
 }
