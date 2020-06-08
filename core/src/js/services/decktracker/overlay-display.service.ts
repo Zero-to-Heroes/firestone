@@ -44,18 +44,20 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private async processEvent(event) {
 		switch (event.name) {
+			case GameEvent.GAME_END:
+				console.log('[overlay-display] received GAME_END event, sending false');
+				this.decktrackerDisplayEventBus.next(false);
+				break;
 			// In case one event is missing or arrives too fast, we have fallback
 			case GameEvent.MATCH_METADATA:
 			case GameEvent.LOCAL_PLAYER:
 			case GameEvent.OPPONENT:
 			case GameEvent.GAME_RUNNING:
 			case GameEvent.FIRST_PLAYER:
-				console.log('[overlay-display] received event', event.name);
+				console.log('[overlay-display] received key event', event.name);
+			// Fall-through
+			default:
 				this.handleDisplayPreferences(this.gameState);
-				break;
-			case GameEvent.GAME_END:
-				console.log('[overlay-display] received GAME_END event, sending false');
-				this.decktrackerDisplayEventBus.next(false);
 				break;
 		}
 	}
@@ -69,7 +71,7 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {
 		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck) {
-			console.warn('[overlay-display] not enough info to display');
+			console.warn('[overlay-display] not enough info to display', gameState?.metadata, gameState?.playerDeck);
 			return false;
 		}
 		switch (gameState.metadata.gameType as GameType) {
