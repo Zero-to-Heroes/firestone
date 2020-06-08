@@ -121,6 +121,7 @@ export class BgsRunStatsService {
 		if (retriesLeft <= 0) {
 			console.error('Could not get new rating', previousRating);
 			callback(previousRating);
+			return;
 		}
 		const newRating = (await this.memoryService.getBattlegroundsInfo()).rating;
 		if (newRating === previousRating) {
