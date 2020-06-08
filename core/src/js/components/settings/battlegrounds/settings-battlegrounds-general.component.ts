@@ -44,6 +44,11 @@ import { Knob } from '../preference-slider.component';
 						label="Compute post-match stats locally"
 						tooltip="When turned on, the stats that appear on the post-match screen will be computed locally, which is faster but can be CPU intensive. Turn it off to compute the stats on the cloud (it will take a bit more time though)"
 					></preference-toggle>
+					<preference-toggle
+						field="bgsUseOverlay"
+						label="Use game overlay"
+						tooltip="When turned on, the battlegrounds window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">

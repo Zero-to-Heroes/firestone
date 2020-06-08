@@ -13,6 +13,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 declare let amplitude: any;
 
@@ -50,6 +51,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
 		private readonly cards: AllCardsService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 	}
@@ -132,8 +134,12 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async positionWindowOnSecondScreen() {
-		const [monitorsList, gameInfo] = await Promise.all([this.ow.getMonitorsList(), this.ow.getRunningGameInfo()]);
-		if (monitorsList.displays.length === 1) {
+		const [monitorsList, gameInfo, prefs] = await Promise.all([
+			this.ow.getMonitorsList(),
+			this.ow.getRunningGameInfo(),
+			this.prefs.getPreferences(),
+		]);
+		if (monitorsList.displays.length === 1 || prefs.bgsUseOverlay) {
 			return;
 		}
 		console.log('monitors', monitorsList);

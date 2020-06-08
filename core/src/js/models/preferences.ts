@@ -71,6 +71,7 @@ export class Preferences {
 	readonly batlegroundsShowHeroSelectionPref = false;
 
 	readonly bgsEnableApp = true;
+	readonly bgsUseOverlay = false;
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsUseLocalPostMatchStats = true;
 	readonly bgsEnableSimulation = true;

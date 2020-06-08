@@ -51,15 +51,18 @@ export class ControlCloseComponent implements AfterViewInit {
 		// If game is not running, we close all other windows
 		const isRunning: boolean = await this.ow.inGame();
 		// Temp
-		const [mainWindow, bgsWindow] = await Promise.all([
+		const [mainWindow, bgsWindow, bgsWindowOverlay] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.COLLECTION_WINDOW),
 			this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW),
+			this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY),
 		]);
 		const areBothMainAndBgWindowsOpen =
 			mainWindow.window_state_ex !== 'closed' &&
 			mainWindow.window_state_ex !== 'hidden' &&
 			bgsWindow.window_state_ex !== 'closed' &&
-			bgsWindow.window_state_ex !== 'hidden';
+			bgsWindow.window_state_ex !== 'hidden' &&
+			bgsWindowOverlay.window_state_ex !== 'closed' &&
+			bgsWindowOverlay.window_state_ex !== 'hidden';
 		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen) {
 			console.log('[control-close] closing all app windows');
 			this.ow.hideWindow(this.windowId);

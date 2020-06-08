@@ -115,6 +115,17 @@
 				"popup_blocker": true,
 				"mute": true
 			},
+			"BattlegroundsOverlayWindow": {
+				"file": "Files/battlegrounds.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": true,
+				"size": { "width": 1300, "height": 720 },
+				"min_size": { "width": 1300, "height": 720 },
+				"block_top_window_navigation": true,
+				"popup_blocker": true,
+				"mute": true
+			},
 			"BattlegroundsWindow": {
 				"file": "Files/battlegrounds.html",
 				"transparent": true,
