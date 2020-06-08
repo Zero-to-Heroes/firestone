@@ -101,9 +101,7 @@ export class DeckZoneComponent {
 		this.cardsInZone = this._zone.numberOfCards;
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
 		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(this._zone.cards, (card: VisualDeckCard) =>
-			this._showGiftsSeparately
-				? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
-				: card.cardId,
+			this.buildGroupingKey(card),
 		);
 		// console.log('grouped', grouped);
 		this.cards = Array.from(grouped.values(), cards => {
@@ -128,6 +126,14 @@ export class DeckZoneComponent {
 			this.cards = [...this.cards].sort(this._zone.sortingFunction);
 		}
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
+	}
+
+	private buildGroupingKey(card: VisualDeckCard): string {
+		const keyWithGift = this._showGiftsSeparately
+			? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
+			: card.cardId;
+		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithGift + '-graveyard' : keyWithGift;
+		return keyWithGraveyard;
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
