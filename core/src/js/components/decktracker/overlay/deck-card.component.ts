@@ -85,7 +85,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				</div>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
-			<div class="mouse-over"></div>
+			<div class="mouse-over" [style.right.px]="mouseOverRight"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -108,6 +108,7 @@ export class DeckCardComponent {
 	isDiscarded: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
+	mouseOverRight: number = 0;
 
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly cards: AllCardsService) {}
@@ -148,6 +149,29 @@ export class DeckCardComponent {
 			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 			image.src = imageUrl;
 		}
+
+		if (this.numberOfCopies > 1) {
+			this.mouseOverRight += 25;
+		}
+		if (this.rarity === 'legendary') {
+			this.mouseOverRight += 25;
+		}
+		if (this.creatorCardIds && this.creatorCardIds.length > 0) {
+			this.mouseOverRight += 25;
+		}
+		if (this.isBurned) {
+			this.mouseOverRight += 25;
+		}
+		if (this.isDiscarded) {
+			this.mouseOverRight += 25;
+		}
+		if (this.isGraveyard) {
+			this.mouseOverRight += 25;
+		}
+		if (this.isTransformed) {
+			this.mouseOverRight += 25;
+		}
+		this.mouseOverRight = Math.min(100, this.mouseOverRight);
 		this.cdr.detectChanges();
 	}
 
