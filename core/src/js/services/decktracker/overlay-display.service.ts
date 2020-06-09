@@ -71,7 +71,13 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {
 		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck) {
-			console.warn('[overlay-display] not enough info to display', gameState?.metadata, gameState?.playerDeck);
+			if (gameState?.metadata?.gameType) {
+				console.warn(
+					'[overlay-display] not enough info to display',
+					gameState?.metadata,
+					gameState?.playerDeck,
+				);
+			}
 			return false;
 		}
 		switch (gameState.metadata.gameType as GameType) {

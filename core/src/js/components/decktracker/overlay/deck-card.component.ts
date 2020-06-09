@@ -108,7 +108,7 @@ export class DeckCardComponent {
 	isDiscarded: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
-	mouseOverRight: number = 0;
+	mouseOverRight = 0;
 
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly cards: AllCardsService) {}

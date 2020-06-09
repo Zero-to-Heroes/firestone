@@ -42,7 +42,7 @@ export class DeckParserService {
 			const activeDeck = await this.memory.getActiveDeck(2);
 			//console.log('active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+				console.log('[deck-parser] updating active deck after queue', activeDeck, this.currentDeck);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}
@@ -76,14 +76,14 @@ export class DeckParserService {
 		if (match) {
 			this.lastDeckTimestamp = Date.now();
 			this.currentBlock = 'DECK_CONTENTS';
-			console.log('[decks] finished listing deck content');
+			console.log('[deck-parser] finished listing deck content');
 			return;
 		}
 		match = this.deckEditOverRegex.exec(data);
 		if (match) {
 			this.lastDeckTimestamp = Date.now();
 			this.currentBlock = 'DECK_EDIT_OVER';
-			console.log('[decks] finished editing deck');
+			console.log('[deck-parser] finished editing deck');
 			return;
 		}
 
@@ -92,29 +92,29 @@ export class DeckParserService {
 			Date.now() - this.lastDeckTimestamp < 1000 &&
 			this.currentBlock !== 'DECK_SLECTED'
 		) {
-			console.log('[decks] Doesnt look like a deck selection, exiting block', this.currentBlock);
+			console.log('[deck-parser] Doesnt look like a deck selection, exiting block', this.currentBlock);
 			this.reset();
 			return;
 		}
 
-		console.log('[decks] received log line', data);
+		console.log('[deck-parser] received log line', data);
 		match = this.deckNameRegex.exec(data);
 		if (match) {
-			// console.log('[decks] matching log line for deck name', data);
+			// console.log('[deck-parser] matching log line for deck name', data);
 			this.currentDeck = {
 				name: match[1],
 			};
-			console.log('[decks] deck init', this.currentDeck);
+			console.log('[deck-parser] deck init', this.currentDeck);
 			return;
 		}
 		match = this.deckstringRegex.exec(data);
 		if (match) {
-			console.log('[decks] parsing deckstring', match);
+			console.log('[deck-parser] parsing deckstring', match);
 			this.currentDeck = this.currentDeck || {};
 			this.currentDeck.deckstring = match[1];
-			console.log('[decks] current deck', this.currentDeck);
+			console.log('[deck-parser] current deck', this.currentDeck);
 			this.decodeDeckString();
-			console.log('[decks] deckstring decoded', this.currentDeck);
+			console.log('[deck-parser] deckstring decoded', this.currentDeck);
 			return;
 		}
 	}
@@ -122,7 +122,7 @@ export class DeckParserService {
 	public decodeDeckString() {
 		if (this.currentDeck) {
 			if (this.currentDeck.deckstring) {
-				// console.debug('[decks] deck updated', this.currentDeck);
+				// console.debug('[deck-parser] deck updated', this.currentDeck);
 				const deck = decode(this.currentDeck.deckstring);
 				this.currentDeck.deck = deck;
 				return;
@@ -135,7 +135,7 @@ export class DeckParserService {
 	// By doing this we make sure we don't get a leftover deckstring caused by
 	// a game mode that doesn't interact with the Decks.log
 	public reset() {
-		console.log('[decks] resetting deck');
+		console.log('[deck-parser] resetting deck');
 		this.currentDeck = {};
 	}
 
