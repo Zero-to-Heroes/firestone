@@ -160,6 +160,7 @@ export class DeckManipulationHelper {
 			rarity: cardTemplate.rarity,
 			zone: cardTemplate.zone,
 			creatorCardId: cardTemplate.creatorCardId,
+			lastAffectedByCardId: cardTemplate.lastAffectedByCardId,
 		} as DeckCard);
 		if (debug) {
 			console.debug('adding card to zone', [...zone, newCard], cardTemplate);

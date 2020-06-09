@@ -82,6 +82,9 @@ export class DeckListByZoneComponent {
 			cards: zone.cards.map(card =>
 				Object.assign(new VisualDeckCard(), card, {
 					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+					lastAffectedByCardIds: (card.lastAffectedByCardId
+						? [card.lastAffectedByCardId]
+						: []) as readonly string[],
 				} as VisualDeckCard),
 			),
 			numberOfCards: zone.cards.length,
@@ -103,6 +106,9 @@ export class DeckListByZoneComponent {
 			.map(card =>
 				Object.assign(new VisualDeckCard(), card, {
 					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+					lastAffectedByCardIds: (card.lastAffectedByCardId
+						? [card.lastAffectedByCardId]
+						: []) as readonly string[],
 					highlight: highlight,
 				} as VisualDeckCard),
 			)

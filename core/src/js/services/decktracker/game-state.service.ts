@@ -343,7 +343,7 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		// console.log('[game-state] will emit event', gameEvent.type, emittedEvent);
+		console.log('[game-state] will emit event', gameEvent.type, emittedEvent);
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		// console.log('[game-state] emitted deck event', emittedEvent.event.name, this.state, gameEvent);
 	}

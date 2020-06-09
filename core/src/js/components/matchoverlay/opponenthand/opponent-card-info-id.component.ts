@@ -44,8 +44,8 @@ export class OpponentCardInfoIdComponent {
 	private _maxBuffsToShow: number;
 
 	@Input() set card(value: DeckCard) {
-		this.cardId = value.cardId || value.creatorCardId;
-		this.createdBy = value.creatorCardId && !value.cardId;
+		this.cardId = value.cardId || value.creatorCardId || value.lastAffectedByCardId;
+		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
