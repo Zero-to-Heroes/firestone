@@ -119,7 +119,7 @@
 				"file": "Files/battlegrounds.html",
 				"transparent": true,
 				"resizable": true,
-				"show_in_taskbar": true,
+				"show_in_taskbar": false,
 				"size": { "width": 1300, "height": 720 },
 				"min_size": { "width": 1300, "height": 720 },
 				"block_top_window_navigation": true,
