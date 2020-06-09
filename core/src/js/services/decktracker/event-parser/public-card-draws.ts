@@ -1,30 +1,30 @@
 import { CardIds } from '@firestone-hs/reference-data';
 
 export const publicCardCreators = [
-	CardIds.Collectible.Druid.FungalFortunes,
-	CardIds.Collectible.Druid.JuicyPsychmelon,
-	CardIds.Collectible.Druid.LunarVisions,
+	CardIds.Collectible.Druid.FungalFortunes, // tested
+	CardIds.Collectible.Druid.JuicyPsychmelon, // tested
+	CardIds.Collectible.Druid.LunarVisions, // tested
 	CardIds.Collectible.Druid.PredatoryInstincts, // tested
-	CardIds.Collectible.Hunter.ArcaneFletcher,
-	CardIds.Collectible.Hunter.CallPet,
-	CardIds.Collectible.Hunter.DivingGryphon,
+	CardIds.Collectible.Hunter.ArcaneFletcher, // tested
+	CardIds.Collectible.Hunter.CallPet, // tested
+	CardIds.Collectible.Hunter.DivingGryphon, // tested
 	CardIds.Collectible.Hunter.KingsElekk,
-	CardIds.Collectible.Hunter.MastersCall,
-	CardIds.Collectible.Hunter.ScavengersIngenuity,
-	CardIds.Collectible.Hunter.TolvirWarden,
-	CardIds.Collectible.Hunter.Ursatron,
-	CardIds.Collectible.Mage.AncientMysteries,
-	CardIds.Collectible.Mage.Arcanologist,
-	CardIds.Collectible.Mage.ArchmageArugal,
-	CardIds.Collectible.Mage.BookOfSpecters,
-	CardIds.Collectible.Mage.ElementalAllies,
+	CardIds.Collectible.Hunter.MastersCall, // tested
+	CardIds.Collectible.Hunter.ScavengersIngenuity, // tested
+	CardIds.Collectible.Hunter.TolvirWarden, // tested
+	CardIds.Collectible.Hunter.Ursatron, // tested
+	CardIds.Collectible.Mage.AncientMysteries, // tested
+	CardIds.Collectible.Mage.Arcanologist, // tested
+	CardIds.Collectible.Mage.ArchmageArugal, // tested
+	CardIds.Collectible.Mage.BookOfSpecters, // tested
+	CardIds.Collectible.Mage.ElementalAllies, // tested
 	CardIds.Collectible.Mage.RavenFamiliar,
-	CardIds.Collectible.Mage.Starscryer,
-	CardIds.Collectible.Paladin.CallToAdventure,
+	CardIds.Collectible.Mage.Starscryer, // tested
+	CardIds.Collectible.Paladin.CallToAdventure, // tested
 	CardIds.Collectible.Paladin.Crystology,
 	CardIds.Collectible.Paladin.HowlingCommander,
 	CardIds.Collectible.Paladin.PrismaticLens,
-	CardIds.Collectible.Paladin.SalhetsPride,
+	CardIds.Collectible.Paladin.SalhetsPride, // tested
 	CardIds.Collectible.Paladin.SmallTimeRecruits,
 	CardIds.Collectible.Priest.BwonsamdiTheDead,
 	CardIds.Collectible.Priest.DeadRinger,
@@ -55,17 +55,17 @@ export const publicCardCreators = [
 	CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken,
 	CardIds.Collectible.Warrior.TownCrier,
 	CardIds.Collectible.Warrior.VarianWrynn,
-	CardIds.Collectible.Neutral.BrightEyedScout,
+	CardIds.Collectible.Neutral.BrightEyedScout, // tested
 	CardIds.Collectible.Neutral.CaptainsParrot,
-	CardIds.Collectible.Neutral.CountessAshmore,
-	CardIds.Collectible.Neutral.JepettoJoybuzz,
+	CardIds.Collectible.Neutral.CountessAshmore, // tested
+	CardIds.Collectible.Neutral.JepettoJoybuzz, // tested
 	CardIds.Collectible.Neutral.KronxDragonhoof,
-	CardIds.Collectible.Neutral.MurlocTastyfin,
+	CardIds.Collectible.Neutral.MurlocTastyfin, // tested
 	CardIds.Collectible.Neutral.Sandbinder,
-	CardIds.Collectible.Neutral.Subject9,
-	CardIds.Collectible.Neutral.TentacledMenace,
-	CardIds.Collectible.Neutral.TheCurator,
-	CardIds.Collectible.Neutral.UtgardeGrapplesniper,
-	CardIds.Collectible.Neutral.WitchwoodPiper,
-	CardIds.Collectible.Neutral.Wrathion,
+	CardIds.Collectible.Neutral.Subject9, // tested
+	CardIds.Collectible.Neutral.TentacledMenace, // tested
+	CardIds.Collectible.Neutral.TheCurator, // tested
+	CardIds.Collectible.Neutral.UtgardeGrapplesniper, // tested
+	CardIds.Collectible.Neutral.WitchwoodPiper, // tested
+	CardIds.Collectible.Neutral.Wrathion, // tested
 ];
