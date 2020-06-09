@@ -69,6 +69,7 @@ export class BgsPlayer implements IBgsPlayer {
 			cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator
 			windfury: logEntity.Tags.find(tag => tag.Name === GameTag.WINDFURY)?.Value === 1,
 			megaWindfury: logEntity.Tags.find(tag => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1,
+			friendly: true,
 		};
 	}
 

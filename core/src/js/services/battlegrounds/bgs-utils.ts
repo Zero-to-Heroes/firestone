@@ -20,7 +20,7 @@ export class BgsUtils {
 			case 'TB_BaconShop_HERO_17':
 				return 'TB_BaconShop_HP_015';
 			case 'TB_BaconShop_HERO_18':
-				return 'TB_BaconShop_HP_027';
+				return 'TB_BaconShop_HP_072';
 			case 'TB_BaconShop_HERO_20':
 				return 'TB_BaconShop_HP_018';
 			case 'TB_BaconShop_HERO_21':
@@ -83,6 +83,12 @@ export class BgsUtils {
 				return 'TB_BaconShop_HP_067';
 			case 'TB_BaconShop_HERO_62':
 				return 'TB_BaconShop_HP_068';
+			case 'TB_BaconShop_HERO_64':
+				return 'TB_BaconShop_HP_074';
+			case 'TB_BaconShop_HERO_67':
+				return 'TB_BaconShop_HP_075';
+			case 'TB_BaconShop_HERO_68':
+				return 'TB_BaconShop_HP_076';
 		}
 	}
 }

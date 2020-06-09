@@ -119,13 +119,16 @@ export class BgsRunStatsService {
 
 	private async getNewRatingInternal(previousRating: number, callback, retriesLeft = 10) {
 		if (retriesLeft <= 0) {
-			console.error('Could not get new rating', previousRating);
+			// This actually happens quite a lot, as you can't get the new rating before
+			// moving on to the next screen?
+			// Check BaconEndGameScreen
+			console.warn('Could not get new rating', previousRating);
 			callback(previousRating);
 			return;
 		}
 		const newRating = (await this.memoryService.getBattlegroundsInfo()).rating;
 		if (newRating === previousRating) {
-			setTimeout(() => this.getNewRatingInternal(previousRating, callback, retriesLeft - 1), 1000);
+			setTimeout(() => this.getNewRatingInternal(previousRating, callback, retriesLeft - 1), 500);
 			return;
 		}
 		callback(newRating);

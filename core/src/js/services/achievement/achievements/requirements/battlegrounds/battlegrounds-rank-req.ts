@@ -45,7 +45,9 @@ export class BattlegroundsRankReq implements Requirement {
 	}
 
 	private async handleMetaData(gameEvent: GameEvent) {
-		this.isBgs = gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS;
+		this.isBgs =
+			gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS ||
+			gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY;
 		if (this.isBgs) {
 			const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
 			// console.log('[battlegrounds-rank-req]got battlegrounds info in req', this);

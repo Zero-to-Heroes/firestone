@@ -85,7 +85,11 @@ export class TwitchAuthService {
 			});
 			// console.log('fixed event to send', newEvent, event);
 		}
-		if (newEvent.state && newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS) {
+		if (
+			newEvent.state &&
+			(newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS ||
+				newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY)
+		) {
 			// Don't show anything in the deck itself
 			const newPlayerDeck = Object.assign(new DeckState(), newEvent.state.playerDeck, {
 				deck: [] as readonly DeckCard[],

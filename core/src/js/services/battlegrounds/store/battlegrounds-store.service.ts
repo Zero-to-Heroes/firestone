@@ -146,7 +146,10 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId));
 			} else if (gameEvent.type === GameEvent.MATCH_METADATA) {
-				if (gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS) {
+				if (
+					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS ||
+					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
+				) {
 					this.battlegroundsUpdater.next(new BgsMatchStartEvent());
 				} else {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());

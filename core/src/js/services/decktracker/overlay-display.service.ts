@@ -100,6 +100,7 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameType.GT_TAVERNBRAWL:
 				return prefs.decktrackerShowTavernBrawl;
 			case GameType.GT_BATTLEGROUNDS:
+			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 				return false;
 		}
 		console.log('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);

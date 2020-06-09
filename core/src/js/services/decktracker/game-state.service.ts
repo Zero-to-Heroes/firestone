@@ -343,7 +343,7 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		console.log('[game-state] will emit event', gameEvent.type, emittedEvent);
+		// console.log('[game-state] will emit event', gameEvent.type, emittedEvent);
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		// console.log('[game-state] emitted deck event', emittedEvent.event.name, this.state, gameEvent);
 	}
@@ -448,6 +448,7 @@ export class GameStateService {
 			state &&
 			state.opponentDeck &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
+			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
 			((state.opponentDeck.deck && state.opponentDeck.deck.length > 0) ||
 				(state.opponentDeck.hand && state.opponentDeck.hand.length > 0) ||
 				(state.opponentDeck.board && state.opponentDeck.board.length > 0) ||
@@ -478,6 +479,7 @@ export class GameStateService {
 			state.gameStarted &&
 			state.metadata &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
+			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
 			!this.gameEnded &&
 			opponentHandWindow.window_state_ex === 'closed' &&
 			this.showOpponentHand
@@ -491,7 +493,9 @@ export class GameStateService {
 				!state.gameStarted ||
 				!this.showOpponentHand ||
 				!inGame ||
-				(state.metadata && state.metadata.gameType === GameType.GT_BATTLEGROUNDS))
+				(state.metadata &&
+					(state.metadata.gameType === GameType.GT_BATTLEGROUNDS ||
+						state.metadata.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY)))
 		) {
 			await this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		}
@@ -502,7 +506,8 @@ export class GameStateService {
 			state.opponentDeck &&
 			state.opponentDeck.secrets &&
 			state.opponentDeck.secrets.length > 0 &&
-			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS;
+			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
+			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY;
 		// console.log(
 		// 	'[game-state] should show secrets helper?',
 		// 	shouldShowSecretsHelper,
