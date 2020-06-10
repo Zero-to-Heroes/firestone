@@ -44,6 +44,10 @@ declare let amplitude: any;
 				<div class="node"></div>
 				Murloc
 			</div>
+			<div class="item pirate">
+				<div class="node"></div>
+				Pirate
+			</div>
 			<div class="item blank">
 				<div class="node"></div>
 				No tribe
@@ -83,7 +87,7 @@ export class BgsChartWarbandCompositionComponent {
 	dimensions: number[];
 	chartData: object[];
 	colorScheme = {
-		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#D9C3AB'],
+		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#43403d', '#D9C3AB'],
 	};
 	barPadding: number;
 
@@ -235,6 +239,7 @@ export class BgsChartWarbandCompositionComponent {
 					this.buildSeries('Dragon', 'dragon', history),
 					this.buildSeries('Demon', 'demon', history),
 					this.buildSeries('Murloc', 'murloc', history),
+					this.buildSeries('Pirate', 'pirate', history),
 					this.buildSeries('No tribe', null, history),
 				],
 			}));

@@ -64,6 +64,9 @@ export class BgsHeroTribesComponent {
 			case 'Murloc':
 				referenceCardId = CardIds.NonCollectible.Neutral.KingBagurgle;
 				break;
+			case 'Pirate':
+				referenceCardId = 'BGS_080';
+				break;
 			default:
 				referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
 				break;

@@ -117,6 +117,9 @@ export class BgsHeroStatsComponent {
 			case 'Murloc':
 				referenceCardId = 'BGS_030';
 				break;
+			case 'Pirate':
+				referenceCardId = 'BGS_080';
+				break;
 			default:
 				referenceCardId = 'BGS_009';
 				break;
