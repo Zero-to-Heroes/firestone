@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 
@@ -160,7 +161,6 @@ export class BgsPostMatchStatsRecapComponent {
 			.reduce((a, b) => a + b, 0);
 		this.triples = this._stats.player.tripleHistory.length;
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
-		this.rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.minionsBought = this._stats.stats.minionsBoughtOverTurn
 			.map(value => value.value)
@@ -169,6 +169,13 @@ export class BgsPostMatchStatsRecapComponent {
 		this.heroPowers = this._stats.stats.mainPlayerHeroPowersOverTurn
 			.map(value => value.value)
 			.reduce((a, b) => a + b, 0);
+		// Hack for Toki, to avoid counting the hero power as a refresh (even though it technically
+		// is a refresh)
+		const rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		this.rerolls =
+			this._stats.player.cardId === CardIds.NonCollectible.Neutral.InfiniteTokiTavernBrawl
+				? rerolls - this.heroPowers
+				: rerolls;
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;
 		this.heroesKilled = this._stats.stats.totalEnemyHeroesKilled;
 		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter(value => value.value === true)
