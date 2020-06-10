@@ -16,7 +16,8 @@ describe('BGS Replay-parser - basic test', () => {
 		const stats = parseBattlegroundsGame(replayXml, BgsPlayer.create({} as BgsPlayer), []);
 
 		expect(stats).not.toBe(null);
-		console.debug(stats.wentFirstInBattleOverTurn);
+		console.debug(stats.mainPlayerHeroPowersOverTurn);
+		console.debug(stats.rerollsOverTurn);
 
 		// expect(stats.hpOverTurn['TB_BaconShop_HERO_56'].length).toBe(14);
 		// expect(stats.hpOverTurn['TB_BaconShop_HERO_56'][13].value).toBeLessThanOrEqual(0);
