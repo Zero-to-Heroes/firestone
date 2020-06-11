@@ -260,7 +260,7 @@ export class BgsChartWarbandStatsComponent {
 		this.lineChartData = [
 			{
 				data: warbandStats.map(
-					stat => stat.totalStats + averageStats.find(avg => avg.turn === stat.turn).totalStats,
+					stat => stat.totalStats + averageStats.find(avg => avg.turn === stat.turn)?.totalStats || 0,
 				),
 				label: 'Average stats for hero',
 			},

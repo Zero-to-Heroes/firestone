@@ -405,7 +405,7 @@ export class BgsChartHpComponent {
 			return [];
 		}
 		return Object.keys(value).map(playerId => ({
-			data: value[playerId]?.map(turnInfo => turnInfo.value) || [],
+			data: value[playerId]?.filter(turnInfo => turnInfo).map(turnInfo => turnInfo.value) || [],
 			cardId: playerId,
 			label: playerId,
 			borderCapStyle: 'square',
@@ -423,6 +423,7 @@ export class BgsChartHpComponent {
 		}
 		const max: number = Math.max(
 			...Object.values(value)
+				.filter(turnInfos => turnInfos)
 				.map(turnInfos => turnInfos.map(turnInfo => turnInfo.turn))
 				.reduce((a, b) => a.concat(b), []),
 		);
