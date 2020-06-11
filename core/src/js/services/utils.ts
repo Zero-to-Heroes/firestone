@@ -16,3 +16,7 @@ export const uuid = () => {
 export const sleep = ms => {
 	return new Promise(resolve => setTimeout(resolve, ms));
 };
+
+export const isWindowClosed = (state: string): boolean => {
+	return state === 'closed' || state === 'hidden';
+};

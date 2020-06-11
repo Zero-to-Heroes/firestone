@@ -12,6 +12,7 @@ import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
+import { isWindowClosed } from '../../utils';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
@@ -124,13 +125,13 @@ export class BattlegroundsStoreService {
 			return;
 		}
 
-		if (['closed', 'hidden'].indexOf(window.stateEx) !== -1) {
+		if (isWindowClosed(window.stateEx)) {
 			//console.log('[bgs-store] showing BVS window', window);
 			this.closedByUser = false;
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);
 			await this.ow.bringToFront(windowId);
-		} else if (['closed', 'hidden'].indexOf(window.stateEx) === -1) {
+		} else if (!isWindowClosed(window.stateEx)) {
 			//console.log('[bgs-store] hiding BVS window', window);
 			this.closedByUser = true;
 			await this.ow.hideWindow(windowId);
@@ -323,8 +324,8 @@ export class BattlegroundsStoreService {
 		}
 		// In fact we don't want to close the window when the game ends
 		else if (
-			['closed'].indexOf(battlegroundsWindow.window_state_ex) === -1 &&
-			['closed'].indexOf(battlegroundsWindow.stateEx) === -1 &&
+			!isWindowClosed(battlegroundsWindow.window_state_ex) &&
+			!isWindowClosed(battlegroundsWindow.stateEx) &&
 			this.closedByUser
 		) {
 			// console.log('[bgs-store] closing overlay', this.bgsActive, inGame, this.state.forceOpen);

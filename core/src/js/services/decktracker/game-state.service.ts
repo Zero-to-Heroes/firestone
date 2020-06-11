@@ -14,6 +14,7 @@ import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
+import { isWindowClosed } from '../utils';
 import { AiDeckService } from './ai-deck-service.service';
 import { DeckCardService } from './deck-card.service';
 import { DeckParserService } from './deck-parser.service';
@@ -422,22 +423,18 @@ export class GameStateService {
 		if (
 			inGame &&
 			shouldShowTracker &&
-			decktrackerWindow.window_state_ex === 'closed' &&
+			isWindowClosed(decktrackerWindow.window_state_ex) &&
 			this.showDecktracker &&
 			!this.closedByUser
 		) {
-			// if (forceLogs) {
 			console.log('[game-state] showing tracker');
-			// }
 			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
 		} else if (
-			decktrackerWindow.window_state_ex !== 'closed' &&
+			isWindowClosed(decktrackerWindow.window_state_ex) &&
 			(!shouldShowTracker || !this.showDecktracker || this.closedByUser || !inGame)
 		) {
-			// if (forceLogs) {
 			console.log('[game-state] closing tracker');
-			// }
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
 		if (forceLogs) {
@@ -460,7 +457,7 @@ export class GameStateService {
 		if (
 			inGame &&
 			shouldShowOpponentTracker &&
-			opponentTrackerWindow.window_state_ex === 'closed' &&
+			isWindowClosed(opponentTrackerWindow.window_state_ex) &&
 			this.showOpponentTracker &&
 			!this.opponentTrackerClosedByUser
 		) {
@@ -468,7 +465,7 @@ export class GameStateService {
 			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 		} else if (
-			opponentTrackerWindow.window_state_ex !== 'closed' &&
+			!isWindowClosed(opponentTrackerWindow.window_state_ex) &&
 			(!shouldShowOpponentTracker || !this.showOpponentTracker || this.opponentTrackerClosedByUser || !inGame)
 		) {
 			// console.log('[game-state] closing tracker');
@@ -484,13 +481,13 @@ export class GameStateService {
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
 			!this.gameEnded &&
-			opponentHandWindow.window_state_ex === 'closed' &&
+			isWindowClosed(opponentHandWindow.window_state_ex) &&
 			this.showOpponentHand
 		) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		} else if (
-			opponentHandWindow.window_state_ex !== 'closed' &&
+			!isWindowClosed(opponentHandWindow.window_state_ex) &&
 			(this.gameEnded ||
 				!state ||
 				!state.gameStarted ||
@@ -522,14 +519,14 @@ export class GameStateService {
 		if (
 			inGame &&
 			shouldShowSecretsHelper &&
-			secretsHelperWindow.window_state_ex === 'closed' &&
+			isWindowClosed(secretsHelperWindow.window_state_ex) &&
 			this.showSecretsHelper
 		) {
 			// console.log('[game-state] showing secrets helper');
 			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WINDOW);
 		} else if (
-			secretsHelperWindow.window_state_ex !== 'closed' &&
+			!isWindowClosed(secretsHelperWindow.window_state_ex) &&
 			(!shouldShowSecretsHelper || !inGame || !this.showSecretsHelper)
 		) {
 			// console.log('[game-state] closing secrets helper');

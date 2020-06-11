@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { isWindowClosed } from '../../services/utils';
 
 declare let amplitude;
 
@@ -57,12 +58,9 @@ export class ControlCloseComponent implements AfterViewInit {
 			this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY),
 		]);
 		const areBothMainAndBgWindowsOpen =
-			mainWindow.window_state_ex !== 'closed' &&
-			mainWindow.window_state_ex !== 'hidden' &&
-			bgsWindow.window_state_ex !== 'closed' &&
-			bgsWindow.window_state_ex !== 'hidden' &&
-			bgsWindowOverlay.window_state_ex !== 'closed' &&
-			bgsWindowOverlay.window_state_ex !== 'hidden';
+			!isWindowClosed(mainWindow.window_state_ex) &&
+			!isWindowClosed(bgsWindow.window_state_ex) &&
+			!isWindowClosed(bgsWindowOverlay.window_state_ex);
 		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen) {
 			console.log('[control-close] closing all app windows');
 			this.ow.hideWindow(this.windowId);
