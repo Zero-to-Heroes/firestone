@@ -4,12 +4,9 @@ import {
 	BattleResultHistory,
 	BgsPostMatchStats as IBgsPostMatchStats,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { Entity } from '@firestone-hs/replay-parser';
-import { Map } from 'immutable';
 import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
-import { BgsBoard } from '../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
@@ -54,6 +51,7 @@ export class BgsRunStatsService {
 			prefs.bgsUseLocalPostMatchStats
 				? await this.buildStatsLocally(currentGame)
 				: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats),
+			input,
 		);
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
@@ -89,26 +87,13 @@ export class BgsRunStatsService {
 		});
 	}
 
-	private populateObject(data: IBgsPostMatchStats): BgsPostMatchStats {
+	private populateObject(data: IBgsPostMatchStats, input: BgsComputeRunStatsInput): BgsPostMatchStats {
 		const result: BgsPostMatchStats = BgsPostMatchStats.create({
 			...data,
-			boardHistory:
-				data.boardHistory?.map(history =>
-					BgsBoard.create({
-						turn: history.turn,
-						board: (history.board || []).map(entity => this.buildEntity(entity)),
-					} as BgsBoard),
-				) || [],
+			// We do this because the immutable maps are all messed up when going back and forth
+			boardHistory: input.mainPlayer.boardHistory,
 		});
 		return result;
-	}
-
-	private buildEntity(source): Entity {
-		return Object.assign(new Entity(), {
-			cardID: source.cardID,
-			id: source.id,
-			tags: Map(source.tags),
-		} as Entity);
 	}
 
 	private async getNewRating(previousRating: number): Promise<number> {
@@ -126,7 +111,7 @@ export class BgsRunStatsService {
 			callback(previousRating);
 			return;
 		}
-		const newRating = (await this.memoryService.getBattlegroundsInfo()).rating;
+		const newRating = (await this.memoryService.getBattlegroundsInfo())?.rating;
 		if (newRating === previousRating) {
 			setTimeout(() => this.getNewRatingInternal(previousRating, callback, retriesLeft - 1), 500);
 			return;

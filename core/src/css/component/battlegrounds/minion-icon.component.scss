@@ -5,7 +5,7 @@
 
 	.icon {
 		width: 120%;
-		clip-path: ellipse(32% 41% at 50% 50%);
+		clip-path: ellipse(35% 41% at 50% 50%);
 		// border: 2px solid #dfb3d3;
 	}
 
@@ -14,5 +14,23 @@
 		left: 8%;
 		top: 15%;
 		width: 35%;
+	}
+
+	.frame {
+		--icon-color: #7b7b7b;
+		--icon-color-secondary: #e1e1e1;
+		position: absolute;
+		top: 9%;
+		left: 17%;
+		width: 87%;
+
+		svg {
+			fill: transparent;
+		}
+	}
+
+	&.premium .frame {
+		--icon-color: #ffb948;
+		--icon-color-secondary: #fde0b1;
 	}
 }

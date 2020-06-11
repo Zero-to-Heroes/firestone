@@ -8,6 +8,7 @@ import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
@@ -76,6 +77,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		NgxChartsModule,
 		SharedServicesModule.forRoot(),
 		ColiseumComponentsModule,
+		InlineSVGModule.forRoot(),
 	],
 	declarations: [
 		BattlegroundsComponent,

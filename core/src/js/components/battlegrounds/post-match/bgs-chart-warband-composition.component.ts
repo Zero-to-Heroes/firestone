@@ -143,14 +143,12 @@ export class BgsChartWarbandCompositionComponent {
 
 	onActivate(event) {
 		setTimeout(() => {
-			// console.log('showing tooltip', event);
 			this.appRef.tick();
 		}, 200);
 	}
 
 	onDeactivate(event) {
 		setTimeout(() => {
-			// console.log('hiding tooltip', event);
 			this.appRef.tick();
 		}, 200);
 	}
@@ -196,16 +194,6 @@ export class BgsChartWarbandCompositionComponent {
 		// console.log('formatting', text);
 
 		return parseInt(text).toFixed(0);
-	}
-
-	getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
-		// console.log('getting minions', tribe, turn, model);
-		return (
-			this._stats?.boardHistory
-				?.find(history => history.turn === turn)
-				?.board?.map(entity => ParserEntity.create(entity as ParserEntity))
-				?.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe) || []
-		);
 	}
 
 	private async setStats(value: BgsPostMatchStats) {
@@ -257,5 +245,21 @@ export class BgsChartWarbandCompositionComponent {
 	private getTribe(tribe: string, board: readonly Entity[]): number {
 		// Don't use === because tribe can be null / undefined
 		return board.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe).length;
+	}
+
+	private getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
+		// console.log(
+		// 	'getting minions',
+		// 	tribe,
+		// 	turn,
+		// 	this._stats?.boardHistory?.find(history => history.turn === turn)?.board,
+		// 	this._stats?.boardHistory?.find(history => history.turn === turn)?.board[0].tags.toJS(),
+		// );
+		return (
+			this._stats?.boardHistory
+				?.find(history => history.turn === turn)
+				?.board?.map(entity => ParserEntity.create(entity as ParserEntity))
+				?.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe) || []
+		);
 	}
 }

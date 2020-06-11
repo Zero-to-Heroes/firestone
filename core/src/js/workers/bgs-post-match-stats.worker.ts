@@ -18,7 +18,7 @@ ctx.onmessage = async ev => {
 	// Here it's serialized, so we lose the methods and only keey the data
 	const result: IBgsPostMatchStats = parseBattlegroundsGame(replayXml, mainPlayer, battleResultHistory);
 
-	console.log('worker result');
+	// console.log('worker result', JSON.stringify(result, null, 4));
 
 	ctx.postMessage(JSON.stringify(result));
 };

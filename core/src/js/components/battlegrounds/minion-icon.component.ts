@@ -8,6 +8,7 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 	template: `
 		<div class="minion-icon" [ngClass]="{ 'premium': premium }">
 			<img [src]="icon" class="icon" />
+			<div class="frame" [inlineSVG]="'/Files/assets/svg/bg_ellipsis.svg'"></div>
 			<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 		</div>
 	`,
@@ -22,6 +23,14 @@ export class MinionIconComponent {
 	private _entity: Entity;
 
 	@Input() set entity(value: Entity) {
+		// console.log(
+		// 	'setting entity',
+		// 	value.cardID,
+		// 	value.getTag(GameTag.PREMIUM),
+		// 	value.tags.toJS(),
+		// 	value.tags,
+		// 	value,
+		// );
 		this._entity = value;
 		// this.cardId = value.cardID;
 		this.premium = value.getTag(GameTag.PREMIUM) === 1;
