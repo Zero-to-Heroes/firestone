@@ -441,7 +441,10 @@ export class GameStateService {
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
 		if (forceLogs) {
-			console.log('[game-state] tracker window handled');
+			console.log(
+				'[game-state] tracker window handled',
+				await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW),
+			);
 		}
 
 		const shouldShowOpponentTracker =

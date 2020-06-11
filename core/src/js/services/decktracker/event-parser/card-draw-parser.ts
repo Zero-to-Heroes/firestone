@@ -15,7 +15,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		console.log('drawing from deck', cardId, gameEvent);
+		// console.log('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -32,15 +32,15 @@ export class CardDrawParser implements EventParser {
 			cardName: isCardInfoPublic ? card.cardName : undefined,
 			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
 		} as DeckCard);
-		console.log('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
+		// console.log('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId, deck.deckList.length === 0, true)[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, cardId, -1, deck.deckList.length === 0, true)[0];
-		console.log('newDeck', newDeck, isCardInfoPublic, previousDeck);
+		// console.log('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
-		console.log('added card to hand', newHand);
+		// console.log('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,
