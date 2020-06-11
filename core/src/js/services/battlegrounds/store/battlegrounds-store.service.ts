@@ -95,7 +95,7 @@ export class BattlegroundsStoreService {
 		window['bgsHotkeyPressed'] = this.handleHotkeyPressed;
 
 		this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
-			// console.log('[bootstrap] hotkey pressed', hotkeyResult);
+			console.log('[bootstrap] hotkey pressed', hotkeyResult);
 			if (hotkeyResult.status === 'success') {
 				this.handleHotkeyPressed();
 			}
@@ -121,18 +121,18 @@ export class BattlegroundsStoreService {
 		const inGame = this.state && this.state.inGame;
 		const shouldShowOverlay = true;
 		if (!inGame || !shouldShowOverlay) {
-			// console.log('[bgs-store] not in game or shouldnt show overlay', inGame, shouldShowOverlay);
+			console.log('[bgs-store] not in game or shouldnt show overlay', inGame, shouldShowOverlay);
 			return;
 		}
 
-		if (isWindowClosed(window.stateEx)) {
-			//console.log('[bgs-store] showing BVS window', window);
+		if (isWindowClosed(window.stateEx) || window.stateEx === 'minimized') {
+			console.log('[bgs-store] showing BGS window', window);
 			this.closedByUser = false;
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);
 			await this.ow.bringToFront(windowId);
 		} else if (!isWindowClosed(window.stateEx)) {
-			//console.log('[bgs-store] hiding BVS window', window);
+			console.log('[bgs-store] hiding BGS window', window);
 			this.closedByUser = true;
 			await this.ow.hideWindow(windowId);
 		}
@@ -309,7 +309,13 @@ export class BattlegroundsStoreService {
 		const inGame = this.state && this.state.inGame;
 		// console.warn(battlegroundsWindow);
 		if (inGame && this.bgsActive && this.state.forceOpen) {
-			// console.log('[bgs-store] showing window', battlegroundsWindow, inGame);
+			console.log(
+				'[bgs-store] showing window',
+				battlegroundsWindow,
+				inGame,
+				this.bgsActive,
+				this.state.forceOpen,
+			);
 			if (this.state.forceOpen) {
 				this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
 				this.closedByUser = false;
@@ -328,7 +334,13 @@ export class BattlegroundsStoreService {
 			!isWindowClosed(battlegroundsWindow.stateEx) &&
 			this.closedByUser
 		) {
-			// console.log('[bgs-store] closing overlay', this.bgsActive, inGame, this.state.forceOpen);
+			console.log(
+				'[bgs-store] showing window',
+				battlegroundsWindow,
+				inGame,
+				this.bgsActive,
+				this.state.forceOpen,
+			);
 			await this.ow.hideWindow(windowId);
 		}
 	}
