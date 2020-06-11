@@ -154,20 +154,22 @@ export class BgsChartWarbandStatsComponent {
 				// Set Text
 				if (tooltip.body) {
 					// const titleLines = tooltip.title || [];
-					const bodyLines = tooltip.beforeBody;
-					// console.log('adding text', tooltip, tooltip.body, bodyLines);
+					// const bodyLines = tooltip.beforeBody;
+					// console.log('adding text', tooltip, tooltip.dataPoints);
 
+					const averageDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
+					const currentRunDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
 					const innerHtml = `
 						<div class="body">
 							<div class="section player">
 								<div class="subtitle">Current run</div>
-								<div class="value">Turn ${tooltip.dataPoints[0].label}</div>
-								<div class="value">Stats ${tooltip.dataPoints[0].value}</div>
+								<div class="value">Turn ${currentRunDatapoint.label}</div>
+								<div class="value">Stats ${currentRunDatapoint.value}</div>
 							</div>
 							<div class="section average">
 								<div class="subtitle">Average for hero</div>
-								<div class="value">Turn ${tooltip.dataPoints[1].label}</div>
-								<div class="value">Stats ${tooltip.dataPoints[1].value}</div>							
+								<div class="value">Turn ${averageDatapoint.label}</div>
+								<div class="value">Stats ${averageDatapoint.value}</div>							
 							</div>
 						</div>
 					`;
@@ -209,7 +211,7 @@ export class BgsChartWarbandStatsComponent {
 		if (value === this._globalStats) {
 			return;
 		}
-		// console.log('setting value', value, this._globalStats);
+		//console.log('setting value', value, this._globalStats);
 		this._globalStats = value;
 		this.updateInfo();
 	}
@@ -218,7 +220,7 @@ export class BgsChartWarbandStatsComponent {
 		if (value === this._stats) {
 			return;
 		}
-		// console.log('setting value', value, this._stats);
+		//console.log('setting value', value, this._stats);
 		this._stats = value;
 		this.updateInfo();
 	}
@@ -227,7 +229,7 @@ export class BgsChartWarbandStatsComponent {
 		if (value === this._player) {
 			return;
 		}
-		// console.log('setting value', value, this._player);
+		//console.log('setting value', value, this._player);
 		this._player = value;
 		this.updateInfo();
 	}
