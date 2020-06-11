@@ -431,7 +431,7 @@ export class GameStateService {
 			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
 		} else if (
-			isWindowClosed(decktrackerWindow.window_state_ex) &&
+			!isWindowClosed(decktrackerWindow.window_state_ex) &&
 			(!shouldShowTracker || !this.showDecktracker || this.closedByUser || !inGame)
 		) {
 			console.log('[game-state] closing tracker');
