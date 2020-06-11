@@ -17,8 +17,8 @@
 	}
 
 	.frame {
-		--icon-color: #7b7b7b;
-		--icon-color-secondary: #e1e1e1;
+		// --icon-color: #7b7b7b;
+		// --icon-color-secondary: #e1e1e1;
 		position: absolute;
 		top: 9%;
 		left: 17%;
@@ -30,7 +30,7 @@
 	}
 
 	&.premium .frame {
-		--icon-color: #ffb948;
-		--icon-color-secondary: #fde0b1;
+		// --icon-color: #ffb948;
+		// --icon-color-secondary: #fde0b1;
 	}
 }

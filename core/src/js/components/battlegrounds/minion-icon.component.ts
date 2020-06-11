@@ -8,7 +8,7 @@ import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 	template: `
 		<div class="minion-icon" [ngClass]="{ 'premium': premium }">
 			<img [src]="icon" class="icon" />
-			<div class="frame" [inlineSVG]="'/Files/assets/svg/bg_ellipsis.svg'"></div>
+			<div class="frame" [inlineSVG]="frameSvg"></div>
 			<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 		</div>
 	`,
@@ -19,6 +19,7 @@ export class MinionIconComponent {
 	premium: boolean;
 	tavernTier: number;
 	icon: string;
+	frameSvg: string;
 
 	private _entity: Entity;
 
@@ -36,6 +37,10 @@ export class MinionIconComponent {
 		this.premium = value.getTag(GameTag.PREMIUM) === 1;
 		this.tavernTier = this.allCards.getCard(value.cardID)?.techLevel;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardID}.jpg`;
+		this.frameSvg = this.premium
+			? '/Files/assets/svg/bg_ellipsis_premium.svg'
+			: '/Files/assets/svg/bg_ellipsis.svg';
+		console.log('frameSvg', this.frameSvg);
 	}
 
 	constructor(private readonly allCards: AllCardsService) {}

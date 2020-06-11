@@ -1,0 +1,11 @@
+<svg width="50" height="57" viewBox="0 0 50 57" fill="none"
+	xmlns="http://www.w3.org/2000/svg">
+	<path d="M49 28.5C49 43.8149 38.1358 56 25 56C11.8642 56 1 43.8149 1 28.5C1 13.1851 11.8642 1 25 1C38.1358 1 49 13.1851 49 28.5Z" stroke="url(#bg_ellipsis_premium_paint0_linear)" stroke-width="2"/>
+	<defs>
+		<linearGradient id="bg_ellipsis_premium_paint0_linear" x1="25" y1="0" x2="25" y2="57" gradientUnits="userSpaceOnUse">
+			<stop stop-color="#ffb948"/>
+			<stop offset="0.458333" stop-color="#fde0b1"/>
+			<stop offset="1" stop-color="#ffb948"/>
+		</linearGradient>
+	</defs>
+</svg>
