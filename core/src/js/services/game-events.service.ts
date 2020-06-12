@@ -853,6 +853,10 @@ export class GameEvents {
 			console.log('[game-events] received CREATE_GAME log', data);
 		}
 
+		if (data.indexOf('GOLD_REWARD_STATE') !== -1) {
+			console.log('[game-events] received GOLD_REWARD_STATE log', data);
+		}
+
 		this.processingQueue.enqueue(data);
 	}
 
