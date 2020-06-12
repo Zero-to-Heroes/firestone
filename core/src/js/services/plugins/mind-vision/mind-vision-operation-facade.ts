@@ -94,13 +94,12 @@ export class MindVisionOperationFacade<T> {
 			callback(this.cachedValue, 0);
 			return;
 		}
-		// if (retriesLeft <= 0) {
-		// 	// There are cases where not retrieving the info it totally valid,
-		// 	// like trying to get the BattlegroundsInfo right after logging in
-		// 	this.log('coult not perform operation', new Error().stack);
-		// 	callback(null);
-		// 	return;
-		// }
+		if (retriesLeft <= 0) {
+			// There are cases where not retrieving the info it totally valid,
+			// like trying to get the BattlegroundsInfo right after logging in
+			callback(null, retriesLeft);
+			return;
+		}
 		if (!(await this.ow.inGame())) {
 			callback(null, 0);
 			return;
@@ -109,7 +108,7 @@ export class MindVisionOperationFacade<T> {
 		const resultFromMemory = await this.mindVisionOperation();
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
 			this.log('result from memory is empty, retying', resultFromMemory);
-			callback(null, retriesLeft - 1);
+			setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay);
 			return;
 		}
 		// this.log('retrieved info from memory', resultFromMemory);

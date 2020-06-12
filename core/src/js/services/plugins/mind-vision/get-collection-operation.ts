@@ -30,7 +30,7 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 						} as Card),
 				),
 			20,
-			10000,
+			5000,
 		);
 	}
 
