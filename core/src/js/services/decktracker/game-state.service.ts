@@ -69,11 +69,11 @@ import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-ha
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
-import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler.service';
-import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler.service';
+import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
+import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
-import { PlayerDeckOverlayHandler } from './overlays/player-deck-overlay-handler.service';
-import { SecretsHelperOverlayHandler } from './overlays/secrets-helper-overlay-handler.service';
+import { PlayerDeckOverlayHandler } from './overlays/player-deck-overlay-handler';
+import { SecretsHelperOverlayHandler } from './overlays/secrets-helper-overlay-handler';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
 
