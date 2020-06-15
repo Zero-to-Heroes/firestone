@@ -110,6 +110,8 @@ module.exports = function(env, argv) {
 		buildHtmlWebpackPluginConf('counter_opponent_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_pogo.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_pogo.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_player_attack.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_opponent_attack.html', 'gamecounters'),
 
 		// Replace the version in the manifest
 		new ReplaceInFileWebpackPlugin([

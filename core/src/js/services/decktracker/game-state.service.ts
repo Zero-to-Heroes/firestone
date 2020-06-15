@@ -70,8 +70,10 @@ import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-ha
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
+import { AttackOpponentCounterOverlayHandler } from './overlays/counter-opponent-attack-handler';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
+import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
 import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
 import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
@@ -388,6 +390,8 @@ export class GameStateService {
 			new GalakroundOpponentCounterOverlayHandler(this.ow, this.allCards),
 			new PogoPlayerCounterOverlayHandler(this.ow, this.allCards),
 			new PogoOpponentCounterOverlayHandler(this.ow, this.allCards),
+			new AttackPlayerCounterOverlayHandler(this.ow, this.allCards),
+			new AttackOpponentCounterOverlayHandler(this.ow, this.allCards),
 		];
 	}
 

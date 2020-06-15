@@ -193,6 +193,26 @@
 				"min_size": { "width": 200, "height": 200 },
 				"start_position": { "top": 500, "left": 600 },
 				"in_game_only": true
+			},
+			"CounterPlayerAttack": {
+				"file": "Files/counter_player_attack.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterOpponentAttack": {
+				"file": "Files/counter_opponent_attack.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
 			}
 		},
 		"game_targeting": {

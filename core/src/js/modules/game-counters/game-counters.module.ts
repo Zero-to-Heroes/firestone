@@ -6,8 +6,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
+import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { AttackCountersComponent } from '../../components/game-counters/attack-counter.component';
 import { GalakrondCountersComponent } from '../../components/game-counters/galakrond-counter.component';
 import { GameCountersComponent } from '../../components/game-counters/game-counters.component';
 import { PogoHopperCountersComponent } from '../../components/game-counters/pogo-counter.component';
@@ -50,8 +52,14 @@ console.log('version is ' + process.env.APP_VERSION);
 		ReactiveFormsModule,
 		SharedDeckTrackerModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+		InlineSVGModule.forRoot(),
 	],
-	declarations: [GameCountersComponent, GalakrondCountersComponent, PogoHopperCountersComponent],
+	declarations: [
+		GameCountersComponent,
+		GalakrondCountersComponent,
+		PogoHopperCountersComponent,
+		AttackCountersComponent,
+	],
 	bootstrap: [GameCountersComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })

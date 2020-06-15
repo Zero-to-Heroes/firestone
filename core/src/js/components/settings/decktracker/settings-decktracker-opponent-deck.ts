@@ -102,6 +102,11 @@ import { Knob } from '../preference-slider.component';
 						label="Pogo-Hopper"
 						tooltip="Show the number of times your opponent played a Pogo-Hopper"
 					></preference-toggle>
+					<preference-toggle
+						field="opponentAttackCounter"
+						label="Attack on board"
+						tooltip="Show the total attack of minions on their board + their hero"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

@@ -33,13 +33,14 @@ declare let amplitude;
 				[side]="side"
 			></galakrond-counter>
 			<pogo-counter *ngIf="activeCounter === 'pogo'" [state]="gameState" [side]="side"></pogo-counter>
+			<attack-counter *ngIf="activeCounter === 'attack'" [state]="gameState" [side]="side"></attack-counter>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
-	activeCounter: 'galakrond' | 'pogo';
+	activeCounter: 'galakrond' | 'pogo' | 'attack';
 	side: 'player' | 'opponent';
 
 	// private gameInfoUpdatedListener: (message: any) => void;
@@ -98,23 +99,35 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 		const trackerPosition = await this.prefs.getCounterPosition(this.activeCounter, this.side);
-		const newLeft = (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft());
-		const newTop = (trackerPosition && trackerPosition.top) || (await this.getDefaultTop());
+		const newLeft = await this.getDefaultLeft(); //(trackerPosition && trackerPosition.left) || (await this.getDefaultLeft());
+		const newTop = await this.getDefaultTop(); //(trackerPosition && trackerPosition.top) || (await this.getDefaultTop());
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 
 	private async getDefaultLeft() {
 		const gameInfo = await this.ow.getRunningGameInfo();
-		const offset = this.activeCounter === 'galakrond' ? 0 : 150;
-		return gameInfo.logicalWidth * 0.5 + gameInfo.logicalHeight * 0.2 + offset;
+		if (this.activeCounter === 'attack') {
+			return gameInfo.logicalWidth * 0.5 + gameInfo.logicalHeight * 0.16;
+		} else {
+			const offset = this.activeCounter === 'galakrond' ? 0 : 150;
+			return gameInfo.logicalWidth * 0.5 + gameInfo.logicalHeight * 0.2 + offset;
+		}
 	}
 
 	private async getDefaultTop() {
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (this.side === 'player') {
-			return gameInfo.logicalHeight * 0.7;
+			if (this.activeCounter === 'attack') {
+				return gameInfo.logicalHeight * 0.65;
+			} else {
+				return gameInfo.logicalHeight * 0.7;
+			}
 		} else {
-			return gameInfo.logicalHeight * 0.1;
+			if (this.activeCounter === 'attack') {
+				return gameInfo.logicalHeight * 0.1;
+			} else {
+				return gameInfo.logicalHeight * 0.1;
+			}
 		}
 	}
 }
