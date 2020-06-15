@@ -28,7 +28,7 @@ export class AttackPlayerCounterOverlayHandler implements OverlayHandler {
 	) {
 		const inGame = await this.ow.inGame();
 		const theWindow = await this.ow.getWindowState(OverwolfService.COUNTER_PLAYER_ATTACK_WINDOW);
-		const shouldShowWindow = !forceCloseWidgets;
+		const shouldShowWindow = !forceCloseWidgets && state.gameStarted;
 		if (
 			inGame &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&

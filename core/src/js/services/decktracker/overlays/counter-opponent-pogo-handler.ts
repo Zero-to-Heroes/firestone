@@ -29,7 +29,8 @@ export class PogoOpponentCounterOverlayHandler implements OverlayHandler {
 		const theWindow = await this.ow.getWindowState(OverwolfService.COUNTER_OPPONENT_POGO_WINDOW);
 		const shouldShowWindow =
 			!forceCloseWidgets &&
-			(state?.opponentDeck?.pogoHopperSize > 0 || state?.opponentDeck?.containsPogoHopper());
+			(state?.opponentDeck?.pogoHopperSize > 0 || state?.opponentDeck?.containsPogoHopper()) &&
+			state.gameStarted;
 		// console.log(
 		// 	'should show counter?',
 		// 	state?.playerDeck?.galakrondInvokesCount,
