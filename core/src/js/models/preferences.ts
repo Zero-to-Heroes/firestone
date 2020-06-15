@@ -59,8 +59,12 @@ export class Preferences {
 	readonly secretsHelperScale: number = 80;
 	readonly secretsHelperCardsGoToBottom: boolean = true;
 	readonly secretsHelperPosition: { left: number; top: number };
-
 	readonly secretsHelperWidgetPosition: { left: number; top: number };
+
+	readonly playerGalakrondCounter: boolean = true;
+	readonly playerGalakrondCounterWidgetPosition: { left: number; top: number };
+	readonly opponentGalakrondCounter: boolean = true;
+	readonly opponentGalakrondCounterWidgetPosition: { left: number; top: number };
 
 	readonly replaysShowNotification: boolean = true;
 

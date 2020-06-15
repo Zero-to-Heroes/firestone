@@ -30,14 +30,6 @@ export class OpponentHandOverlayHandler implements OverlayHandler {
 		shouldForceCloseSecretsHelper = false,
 		forceLogs = false,
 	) {
-		if (forceLogs) {
-			console.log(
-				'[opponent-hand-overlay] will consider overlay for player deck',
-				state,
-				showDecktrackerFromGameMode,
-				shouldForceCloseSecretsHelper,
-			);
-		}
 		const inGame = await this.ow.inGame();
 		const opponentHandWindow = await this.ow.getWindowState(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		if (

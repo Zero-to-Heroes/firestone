@@ -12,7 +12,9 @@ export class SecretsHelperOverlayHandler implements OverlayHandler {
 
 	constructor(private readonly ow: OverwolfService) {}
 
-	public processEvent(gameEvent: GameEvent, state: GameState, showDecktrackerFromGameMode: boolean) {}
+	public processEvent(gameEvent: GameEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
+		// Do nothing
+	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
 		this.showSecretsHelper = preferences.secretsHelper;
@@ -24,14 +26,6 @@ export class SecretsHelperOverlayHandler implements OverlayHandler {
 		shouldForceCloseSecretsHelper = false,
 		forceLogs = false,
 	) {
-		if (forceLogs) {
-			console.log(
-				'[secrets-overlay] will consider overlay for player deck',
-				state,
-				showDecktrackerFromGameMode,
-				shouldForceCloseSecretsHelper,
-			);
-		}
 		const inGame = await this.ow.inGame();
 		const secretsHelperWindow = await this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WINDOW);
 		const shouldShowSecretsHelper =

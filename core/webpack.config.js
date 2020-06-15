@@ -32,6 +32,7 @@ const entry = {
 	decktracker: './src/js/modules/decktracker/main.ts',
 	decktrackeropponent: './src/js/modules/decktracker-opponent/main.ts',
 	secretshelper: './src/js/modules/secrets-helper/main.ts',
+	gamecounters: './src/js/modules/game-counters/main.ts',
 	opponentHand: './src/js/modules/opponent-hand/main.ts',
 	settings: './src/js/modules/settings/main.ts',
 	twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
@@ -62,6 +63,7 @@ module.exports = function(env, argv) {
 				'./src/js/modules/settings/settings.module#SettingsModule',
 				'./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule',
 				'./src/js/modules/battlegrounds/battlegrounds.module#BattlegroundsModule',
+				'./src/js/modules/game-counters/game-counters.module#GameCountersModule',
 			],
 			sourceMap: true,
 		}),
@@ -104,6 +106,8 @@ module.exports = function(env, argv) {
 		buildHtmlWebpackPluginConf('twitch-auth-callback.html', 'twitchauthcallback'),
 		buildHtmlWebpackPluginConf('match_overlay_opponent_hand.html', 'opponentHand'),
 		buildHtmlWebpackPluginConf('battlegrounds.html', 'battlegrounds'),
+		buildHtmlWebpackPluginConf('counter_player_galakrond.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_opponent_galakrond.html', 'gamecounters'),
 
 		// Replace the version in the manifest
 		new ReplaceInFileWebpackPlugin([

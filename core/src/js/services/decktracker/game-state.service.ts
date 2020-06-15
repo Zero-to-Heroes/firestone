@@ -69,6 +69,8 @@ import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-ha
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
+import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
+import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
 import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
 import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
@@ -213,6 +215,7 @@ export class GameStateService {
 			}
 		});
 		// Reset the deck if it exists
+		//console.log('[game-state] Enqueueing default game_end event');
 		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}
 
@@ -292,6 +295,7 @@ export class GameStateService {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
+		//console.log('[game-state] will emit event', gameEvent.type, this.state);
 		await this.updateOverlays(
 			this.state,
 			false,
@@ -303,7 +307,6 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		// console.log('[game-state] will emit event', gameEvent.type, emittedEvent);
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 	}
 
@@ -336,17 +339,9 @@ export class GameStateService {
 			console.log('ow not defined, returning');
 			return;
 		}
-		// if (forceLogs) {
-		// 	console.log('will call all overlay handlers', state, shouldForceCloseSecretsHelper, this.overlayHandlers);
-		// }
 		await Promise.all(
 			this.overlayHandlers.map(handler =>
-				handler.updateOverlay(
-					state,
-					this.showDecktrackerFromGameMode,
-					shouldForceCloseSecretsHelper,
-					forceLogs,
-				),
+				handler.updateOverlay(state, this.showDecktrackerFromGameMode, shouldForceCloseSecretsHelper, true),
 			),
 		);
 	}
@@ -381,6 +376,8 @@ export class GameStateService {
 			new OpponentDeckOverlayHandler(this.ow),
 			new OpponentHandOverlayHandler(this.ow),
 			new SecretsHelperOverlayHandler(this.ow),
+			new GalakroundPlayerCounterOverlayHandler(this.ow, this.allCards),
+			new GalakroundOpponentCounterOverlayHandler(this.ow, this.allCards),
 		];
 	}
 

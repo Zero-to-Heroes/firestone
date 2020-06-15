@@ -20,6 +20,8 @@ export class OverwolfService {
 	public static SECRETS_HELPER_WINDOW = 'SecretsHelperWindow';
 	public static BATTLEGROUNDS_WINDOW = 'BattlegroundsWindow';
 	public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
+	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
+	public static COUNTER_OPPONENT_GALAKROND_WINDOW = 'CounterOpponentGalakrond';
 
 	public getMainWindow(): any {
 		return overwolf.windows.getMainWindow();

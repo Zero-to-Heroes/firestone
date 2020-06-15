@@ -8,7 +8,7 @@ export interface OverlayHandler {
 	updateOverlay(
 		state: GameState,
 		showDecktrackerFromGameMode: boolean,
-		shouldForceCloseSecretsHelper?: boolean,
+		forceCloseWidgets?: boolean,
 		forceLogs?: boolean,
 	): Promise<void>;
 }

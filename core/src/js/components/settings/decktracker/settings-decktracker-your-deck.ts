@@ -50,6 +50,14 @@ import { Knob } from '../preference-slider.component';
 						[valueToDisplayMessageOn]="true"
 					></preference-toggle>
 				</div>
+				<div class="subtitle">Counters</div>
+				<div class="subgroup">
+					<preference-toggle
+						field="playerGalakrondCounter"
+						label="Galakrond Invoke"
+						tooltip="Show the number of times you have invoked Galakrond (appears only if the deck contains Galakrond or cards that Invoke Galakrond)"
+					></preference-toggle>
+				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>
 			<div class="settings-group">

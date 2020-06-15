@@ -3,6 +3,7 @@ import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OverwolfService } from './overwolf.service';
+import { capitalizeFirstLetter } from './utils';
 
 declare let amplitude;
 
@@ -112,6 +113,18 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async updateCounterPosition(activeCounter: string, side: string, left: any, top: any) {
+		const prefs = await this.getPreferences();
+		const propertyName = this.buildCounterPropertyName(activeCounter, side);
+		const newPrefs: Preferences = { ...prefs, [propertyName]: { left, top } };
+		this.savePreferences(newPrefs);
+	}
+
+	public async getCounterPosition(activeCounter: string, side: string) {
+		const prefs = await this.getPreferences();
+		return prefs[this.buildCounterPropertyName(activeCounter, side)];
+	}
+
 	public async updateSecretsHelperWidgetPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, secretsHelperWidgetPosition: { left, top } };
@@ -126,5 +139,9 @@ export class PreferencesService {
 			name: eventName,
 			preferences: userPrefs,
 		});
+	}
+
+	private buildCounterPropertyName(activeCounter: string, side: string): string {
+		return side + capitalizeFirstLetter(activeCounter) + 'CounterWidgetPosition';
 	}
 }

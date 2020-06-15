@@ -1,3 +1,5 @@
+import { CardIds } from '@firestone-hs/reference-data';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -5,6 +7,24 @@ import { HeroCard } from './hero-card';
 import { DynamicZone } from './view/dynamic-zone';
 
 export class DeckState {
+	private static readonly GALAKROND_CARD_IDS = [
+		CardIds.Collectible.Priest.GalakrondTheUnspeakable,
+		CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondAzerothsEndToken,
+		CardIds.Collectible.Rogue.GalakrondTheNightmare,
+		CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondAzerothsEndToken,
+		CardIds.Collectible.Shaman.GalakrondTheTempest,
+		CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondAzerothsEndToken,
+		CardIds.Collectible.Warlock.GalakrondTheWretched,
+		CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondAzerothsEndToken,
+		CardIds.Collectible.Warrior.GalakrondTheUnbreakable,
+		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken,
+	];
+
 	readonly isFirstPlayer: boolean;
 	readonly isOpponent: boolean;
 	readonly deckstring?: string;
@@ -45,5 +65,32 @@ export class DeckState {
 
 	public update(value: DeckState): DeckState {
 		return Object.assign(new DeckState(), this, value);
+	}
+
+	// TODO: Probably not the place for this method
+	public containsGalakrond(allCards?: AllCardsService): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const isGalakrond = allCardsInDeck.some(
+			card =>
+				DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
+				(allCards &&
+					allCards.getCard(card.cardId)?.text &&
+					allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
+		);
+		if (isGalakrond) {
+			console.log(
+				'galakrond in deck',
+				allCardsInDeck
+					.filter(
+						card =>
+							DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
+							(allCards &&
+								allCards.getCard(card.cardId)?.text &&
+								allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
+					)
+					.map(card => allCards.getCard(card.cardId)),
+			);
+		}
+		return isGalakrond;
 	}
 }

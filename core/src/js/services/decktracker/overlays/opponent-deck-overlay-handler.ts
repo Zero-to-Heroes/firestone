@@ -35,20 +35,8 @@ export class OpponentDeckOverlayHandler implements OverlayHandler {
 		shouldForceCloseSecretsHelper = false,
 		forceLogs = false,
 	) {
-		if (forceLogs) {
-			console.log(
-				'[opponent-overlay] will consider overlay for player deck',
-				state,
-				showDecktrackerFromGameMode,
-				shouldForceCloseSecretsHelper,
-			);
-		}
 		const inGame = await this.ow.inGame();
 		const decktrackerWindow = await this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
-		if (forceLogs) {
-			console.log('[game-state] retrieved window', decktrackerWindow);
-		}
-
 		const shouldShowTracker =
 			state &&
 			state.opponentDeck &&

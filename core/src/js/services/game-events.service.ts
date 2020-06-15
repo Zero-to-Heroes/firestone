@@ -889,6 +889,7 @@ export class GameEvents {
 			// There is no automatic reconnect when spectating, so we can always safely say
 			// that when we finish catching up with the actual contents of the file, we are
 			// not spectating
+			console.log('[game-events] [existing] end_of_existing_data');
 			this.spectating = false;
 			this.triggerCatchUp();
 			return;
@@ -905,6 +906,7 @@ export class GameEvents {
 		}
 		if (existingLine.indexOf('GOLD_REWARD_STATE') !== -1) {
 			// Complete game, we don't handle it
+			console.log('[game-events] [existing] complete game, trashing all logs');
 			this.existingLogLines = [];
 		}
 		this.existingLogLines.push(existingLine);

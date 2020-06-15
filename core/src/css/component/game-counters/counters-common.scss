@@ -1,0 +1,44 @@
+:host {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+}
+
+.counter {
+	width: 80px;
+	height: 80px;
+}
+
+.image {
+	width: 100%;
+	height: 100%;
+	clip-path: ellipse(50% 50% at 50% 50%);
+}
+
+.frame {
+	width: 80px;
+	height: 80px;
+	border: 5px solid var(--counter-border-color);
+	border-radius: 50%;
+	position: absolute;
+	top: 0;
+}
+
+.value {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background: var(--counter-border-color);
+	font-family: Sumana;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 15px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--counter-value-color);
+	position: absolute;
+	top: -12px;
+	left: 22px;
+}

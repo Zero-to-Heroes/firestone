@@ -20,3 +20,7 @@ export const sleep = ms => {
 export const isWindowClosed = (state: string): boolean => {
 	return state === 'closed' || state === 'hidden';
 };
+
+export const capitalizeFirstLetter = (input: string): string => {
+	return input.charAt(0).toUpperCase() + input.slice(1);
+};

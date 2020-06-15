@@ -90,6 +90,14 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, a popup with all possible secrets will appear whenever the opponent plays a secret."
 					></preference-toggle>
 				</div>
+				<div class="subtitle">Counters</div>
+				<div class="subgroup">
+					<preference-toggle
+						field="opponentGalakrondCounter"
+						label="Galakrond Invoke"
+						tooltip="Show the number of times your opponent has invoked Galakrond (appears only when the opponent plays Galakrond or a card that Invokes Galakrond)"
+					></preference-toggle>
+				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>
 			<div class="settings-group">
