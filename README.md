@@ -1,4 +1,4 @@
-[<img src="https://overwolf.github.io/docs/assets/GetItOnOW-Base.png">](https://www.overwolf.com/app/sebastien_tromp-hs_collection_companion)
+[<img src="https://overwolf.github.io/docs/assets/GetItOnOW-Dark.png" width="166px" height="49px"> ](https://www.overwolf.com/app/sebastien_tromp-hs_collection_companion)
 
 # What is Firestone?
 
