@@ -5,6 +5,7 @@ import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
 import { LogsUploaderService } from './logs-uploader.service';
+import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
 import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
@@ -37,6 +38,7 @@ export class GameEvents {
 		private deckParser: DeckParserService,
 		private prefs: PreferencesService,
 		private ow: OverwolfService,
+		private store: MainWindowStoreService,
 	) {
 		this.init();
 	}
@@ -127,7 +129,12 @@ export class GameEvents {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
 				this.hasSentToS3 = false;
-				const event = Object.assign(new GameEvent(), { type: GameEvent.GAME_START } as GameEvent);
+				const event = Object.assign(new GameEvent(), {
+					type: GameEvent.GAME_START,
+					additionalData: {
+						stats: this.store.state.stats,
+					},
+				} as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.gameEventsEmitter.allEvents.next(event);
 				break;
@@ -442,6 +449,9 @@ export class GameEvents {
 			case 'SECRET_DESTROYED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_DESTROYED, gameEvent));
+				break;
+			case 'MINION_GO_DORMANT':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_GO_DORMANT, gameEvent));
 				break;
 			case 'QUEST_PLAYED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);

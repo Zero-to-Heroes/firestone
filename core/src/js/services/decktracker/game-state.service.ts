@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
@@ -52,6 +53,7 @@ import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-parser';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
+import { MinionGoDormantParser } from './event-parser/minion-go-dormant-parser';
 import { MinionOnBoardAttackUpdatedParser } from './event-parser/minion-on-board-attack-updated-parser';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
@@ -324,9 +326,18 @@ export class GameStateService {
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
 		const totalAttackOnBoard = deck.board
 			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
-			.filter(entity => entity && entity.attack > 0)
+			.filter(entity => entity)
+			.filter(entity => !this.hasTag(entity, GameTag.DORMANT))
 			.map(entity => entity.attack || 0)
 			.reduce((a, b) => a + b, 0);
+		// console.log(
+		// 	'total attack on board',
+		// 	playerFromTracker?.Board,
+		// 	deck.board
+		// 		.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
+		// 		.filter(entity => entity && entity.attack > 0)
+		// 		.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
+		// );
 		const heroAttack = playerFromTracker?.Hero?.attack > 0 ? playerFromTracker?.Hero?.attack : 0;
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
@@ -446,6 +457,15 @@ export class GameStateService {
 			new GalakrondInvokedParser(),
 			new PogoPlayedParser(),
 			new CardBuffedInHandParser(this.helper, this.allCards),
+			new MinionGoDormantParser(this.helper),
 		];
+	}
+
+	private hasTag(entity, tag: number): boolean {
+		if (!entity.tags) {
+			return false;
+		}
+		const matches = entity.tags.some(t => t.Name === tag && t.Value === 1);
+		return matches;
 	}
 }
