@@ -65,6 +65,10 @@ export class Preferences {
 	readonly playerGalakrondCounterWidgetPosition: { left: number; top: number };
 	readonly opponentGalakrondCounter: boolean = true;
 	readonly opponentGalakrondCounterWidgetPosition: { left: number; top: number };
+	readonly playerPogoCounter: boolean = true;
+	readonly playerPogoCounterWidgetPosition: { left: number; top: number };
+	readonly opponentPogoCounter: boolean = true;
+	readonly opponentPogoCounterWidgetPosition: { left: number; top: number };
 
 	readonly replaysShowNotification: boolean = true;
 

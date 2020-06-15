@@ -24,6 +24,11 @@ export class DeckState {
 		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondTheApocalypseToken,
 		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken,
 	];
+	private static readonly POGO_CARD_IDS = [
+		CardIds.Collectible.Rogue.PogoHopper,
+		CardIds.NonCollectible.Rogue.PogoHopper,
+		CardIds.NonCollectible.Rogue.PogoHopperTavernBrawl,
+	];
 
 	readonly isFirstPlayer: boolean;
 	readonly isOpponent: boolean;
@@ -70,27 +75,23 @@ export class DeckState {
 	// TODO: Probably not the place for this method
 	public containsGalakrond(allCards?: AllCardsService): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
-		const isGalakrond = allCardsInDeck.some(
-			card =>
-				DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
-				(allCards &&
-					allCards.getCard(card.cardId)?.text &&
-					allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
-		);
-		if (isGalakrond) {
-			console.log(
-				'galakrond in deck',
-				allCardsInDeck
-					.filter(
-						card =>
-							DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
-							(allCards &&
-								allCards.getCard(card.cardId)?.text &&
-								allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
-					)
-					.map(card => allCards.getCard(card.cardId)),
+		const isGalakrond = allCardsInDeck
+			.filter(card => card.cardId)
+			.some(
+				card =>
+					DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
+					(allCards &&
+						allCards.getCard(card.cardId)?.text &&
+						allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
 			);
-		}
 		return isGalakrond;
+	}
+
+	public containsPogoHopper(): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const isPogo = allCardsInDeck
+			.filter(card => card.cardId)
+			.some(card => DeckState.POGO_CARD_IDS.indexOf(card.cardId) !== -1);
+		return isPogo;
 	}
 }

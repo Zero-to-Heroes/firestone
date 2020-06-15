@@ -32,13 +32,14 @@ declare let amplitude;
 				[state]="gameState"
 				[side]="side"
 			></galakrond-counter>
+			<pogo-counter *ngIf="activeCounter === 'pogo'" [state]="gameState" [side]="side"></pogo-counter>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
-	activeCounter: 'galakrond';
+	activeCounter: 'galakrond' | 'pogo';
 	side: 'player' | 'opponent';
 
 	// private gameInfoUpdatedListener: (message: any) => void;
@@ -104,11 +105,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 
 	private async getDefaultLeft() {
 		const gameInfo = await this.ow.getRunningGameInfo();
-		if (this.side === 'player') {
-			return gameInfo.logicalWidth * 0.5 + gameInfo.logicalHeight * 0.2;
-		} else {
-			return gameInfo.logicalWidth * 0.5 - gameInfo.logicalHeight * 0.4;
-		}
+		const offset = this.activeCounter === 'galakrond' ? 0 : 150;
+		return gameInfo.logicalWidth * 0.5 + gameInfo.logicalHeight * 0.2 + offset;
 	}
 
 	private async getDefaultTop() {

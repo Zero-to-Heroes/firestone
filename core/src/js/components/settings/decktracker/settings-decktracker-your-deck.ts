@@ -57,6 +57,11 @@ import { Knob } from '../preference-slider.component';
 						label="Galakrond Invoke"
 						tooltip="Show the number of times you have invoked Galakrond (appears only if the deck contains Galakrond or cards that Invoke Galakrond)"
 					></preference-toggle>
+					<preference-toggle
+						field="playerPogoCounter"
+						label="Pogo-Hopper"
+						tooltip="Show the number of times you played a Pogo-Hopper (includes Battlegrounds)"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

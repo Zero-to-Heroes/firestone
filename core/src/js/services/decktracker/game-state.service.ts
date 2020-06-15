@@ -57,6 +57,7 @@ import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
 import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
+import { PogoPlayedParser } from './event-parser/pogo-played-parser';
 import { QuestCreatedInGameParser } from './event-parser/quest-created-in-game-parser';
 import { QuestDestroyedParser } from './event-parser/quest-destroyed-parser';
 import { QuestPlayedFromDeckParser } from './event-parser/quest-played-from-deck-parser';
@@ -70,7 +71,9 @@ import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
+import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
+import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
 import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
 import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
@@ -341,7 +344,12 @@ export class GameStateService {
 		}
 		await Promise.all(
 			this.overlayHandlers.map(handler =>
-				handler.updateOverlay(state, this.showDecktrackerFromGameMode, shouldForceCloseSecretsHelper, true),
+				handler.updateOverlay(
+					state,
+					this.showDecktrackerFromGameMode,
+					shouldForceCloseSecretsHelper,
+					forceLogs,
+				),
 			),
 		);
 	}
@@ -378,6 +386,8 @@ export class GameStateService {
 			new SecretsHelperOverlayHandler(this.ow),
 			new GalakroundPlayerCounterOverlayHandler(this.ow, this.allCards),
 			new GalakroundOpponentCounterOverlayHandler(this.ow, this.allCards),
+			new PogoPlayerCounterOverlayHandler(this.ow, this.allCards),
+			new PogoOpponentCounterOverlayHandler(this.ow, this.allCards),
 		];
 	}
 
@@ -430,6 +440,7 @@ export class GameStateService {
 			new QuestPlayedFromHandParser(this.helper),
 			new MinionOnBoardAttackUpdatedParser(this.helper),
 			new GalakrondInvokedParser(),
+			new PogoPlayedParser(),
 			new CardBuffedInHandParser(this.helper, this.allCards),
 		];
 	}

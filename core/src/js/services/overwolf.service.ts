@@ -22,6 +22,8 @@ export class OverwolfService {
 	public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
 	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
 	public static COUNTER_OPPONENT_GALAKROND_WINDOW = 'CounterOpponentGalakrond';
+	public static COUNTER_PLAYER_POGO_WINDOW = 'CounterPlayerPogo';
+	public static COUNTER_OPPONENT_POGO_WINDOW = 'CounterOpponentPogo';
 
 	public getMainWindow(): any {
 		return overwolf.windows.getMainWindow();

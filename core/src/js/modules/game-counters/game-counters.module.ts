@@ -10,6 +10,7 @@ import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { GalakrondCountersComponent } from '../../components/game-counters/galakrond-counter.component';
 import { GameCountersComponent } from '../../components/game-counters/game-counters.component';
+import { PogoHopperCountersComponent } from '../../components/game-counters/pogo-counter.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
@@ -50,7 +51,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SharedDeckTrackerModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
-	declarations: [GameCountersComponent, GalakrondCountersComponent],
+	declarations: [GameCountersComponent, GalakrondCountersComponent, PogoHopperCountersComponent],
 	bootstrap: [GameCountersComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })
