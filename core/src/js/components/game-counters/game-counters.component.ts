@@ -99,8 +99,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 		const trackerPosition = await this.prefs.getCounterPosition(this.activeCounter, this.side);
-		const newLeft = await this.getDefaultLeft(); //(trackerPosition && trackerPosition.left) || (await this.getDefaultLeft());
-		const newTop = await this.getDefaultTop(); //(trackerPosition && trackerPosition.top) || (await this.getDefaultTop());
+		const newLeft = (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft());
+		const newTop = (trackerPosition && trackerPosition.top) || (await this.getDefaultTop());
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 
