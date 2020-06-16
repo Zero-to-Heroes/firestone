@@ -13,6 +13,19 @@
 				width: 75px;
 			}
 		}
+		.player-controls-content-left {
+			position: relative;
+		}
+		.replay-location-text.replay-location-text.replay-location-text {
+			position: absolute;
+			top: 35px;
+			display: block;
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 10px;
+			color: var(--color-1);
+		}
 		turn-narrator,
 		.player-controls-content,
 		.player-control-element {
