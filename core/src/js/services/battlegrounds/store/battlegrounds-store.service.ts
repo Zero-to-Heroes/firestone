@@ -12,7 +12,6 @@ import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
-import { isWindowClosed } from '../../utils';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
@@ -39,6 +38,7 @@ import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
 import { EventParser } from './event-parsers/_event-parser';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
+import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
 import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
 import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
@@ -56,6 +56,8 @@ import { BgsTripleCreatedEvent } from './events/bgs-triple-created-event';
 import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
 import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
+import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
+import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
 
 @Injectable()
 export class BattlegroundsStoreService {
@@ -71,8 +73,7 @@ export class BattlegroundsStoreService {
 	);
 
 	private requeueTimeout;
-	private closedByUser: boolean;
-	private bgsActive = true;
+	private overlayHandlers: BattlegroundsOverlay[];
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -86,6 +87,7 @@ export class BattlegroundsStoreService {
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
+		this.buildOverlayHandlers();
 		this.battlegroundsUpdater.subscribe((event: GameEvent | BattlegroundsStoreEvent) => {
 			// console.log('[battlegrounds-state] enqueueing', event);
 			this.processingQueue.enqueue(event);
@@ -100,6 +102,7 @@ export class BattlegroundsStoreService {
 				this.handleHotkeyPressed();
 			}
 		});
+
 		this.handleDisplayPreferences();
 		setTimeout(() => {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
@@ -112,30 +115,11 @@ export class BattlegroundsStoreService {
 	}
 
 	private async handleHotkeyPressed() {
-		const prefs = await this.prefs.getPreferences();
-		const windowId = prefs.bgsUseOverlay
-			? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
-			: OverwolfService.BATTLEGROUNDS_WINDOW;
-		const window = await this.ow.obtainDeclaredWindow(windowId);
-		//console.warn('hotkey pressed', window);
-		const inGame = this.state && this.state.inGame;
-		const shouldShowOverlay = true;
-		if (!inGame || !shouldShowOverlay) {
-			console.log('[bgs-store] not in game or shouldnt show overlay', inGame, shouldShowOverlay);
-			return;
-		}
+		await Promise.all(this.overlayHandlers.map(handler => handler.handleHotkeyPressed(this.state)));
+	}
 
-		if (isWindowClosed(window.stateEx) || window.stateEx === 'minimized') {
-			console.log('[bgs-store] showing BGS window', window);
-			this.closedByUser = false;
-			await this.ow.obtainDeclaredWindow(windowId);
-			await this.ow.restoreWindow(windowId);
-			await this.ow.bringToFront(windowId);
-		} else if (!isWindowClosed(window.stateEx)) {
-			console.log('[bgs-store] hiding BGS window', window);
-			this.closedByUser = true;
-			await this.ow.hideWindow(windowId);
-		}
+	private buildOverlayHandlers() {
+		this.overlayHandlers = [new BgsMainWindowOverlay(this.prefs, this.ow)];
 	}
 
 	private registerGameEvents() {
@@ -210,6 +194,10 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsTripleCreatedEvent(gameEvent.cardId));
 				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {
 				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
+			} else if (gameEvent.type === GameEvent.CARD_PLAYED) {
+				this.battlegroundsUpdater.next(new BgsCardPlayedEvent(gameEvent));
+				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {
+				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				console.log('[bgs-store] Game ended');
 				this.maybeHandleNextEvent(new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml));
@@ -258,8 +246,8 @@ export class BattlegroundsStoreService {
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
 		//console.log('processing', gameEvent.type, this.battlegroundsStoreEventBus.observers.length);
+		await Promise.all(this.overlayHandlers.map(handler => handler.processEvent(gameEvent)));
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
-			this.closedByUser = true;
 			this.state = this.state.update({
 				forceOpen: false,
 			} as BattlegroundsState);
@@ -289,60 +277,12 @@ export class BattlegroundsStoreService {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
-		this.bgsActive = preferences.bgsEnableApp;
+		await Promise.all(this.overlayHandlers.map(handler => handler.handleDisplayPreferences(preferences)));
 		this.updateOverlay();
 	}
 
 	private async updateOverlay() {
-		const prefs = await this.prefs.getPreferences();
-		const windowId = prefs.bgsUseOverlay
-			? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
-			: OverwolfService.BATTLEGROUNDS_WINDOW;
-		const battlegroundsWindow = await this.ow.getWindowState(windowId);
-		// console.log('use overlay?', prefs.bgsUseOverlay, battlegroundsWindow);
-		// console.warn('updazting overlay', battlegroundsWindow);
-		// Minimize is only triggered by a user action, so if they minimize it we don't touch it
-		if (battlegroundsWindow.window_state_ex === 'minimized' && !this.state.forceOpen) {
-			return;
-		}
-
-		const inGame = this.state && this.state.inGame;
-		// console.warn(battlegroundsWindow);
-		if (inGame && this.bgsActive && this.state.forceOpen) {
-			console.log(
-				'[bgs-store] showing window',
-				battlegroundsWindow,
-				inGame,
-				this.bgsActive,
-				this.state.forceOpen,
-			);
-			if (this.state.forceOpen) {
-				this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
-				this.closedByUser = false;
-			}
-			await this.ow.obtainDeclaredWindow(windowId);
-			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
-				await this.ow.restoreWindow(windowId);
-			} else {
-				console.log('not restoring window', battlegroundsWindow.window_state_ex);
-			}
-			await this.ow.bringToFront(windowId);
-		}
-		// In fact we don't want to close the window when the game ends
-		else if (
-			!isWindowClosed(battlegroundsWindow.window_state_ex) &&
-			!isWindowClosed(battlegroundsWindow.stateEx) &&
-			this.closedByUser
-		) {
-			console.log(
-				'[bgs-store] showing window',
-				battlegroundsWindow,
-				inGame,
-				this.bgsActive,
-				this.state.forceOpen,
-			);
-			await this.ow.hideWindow(windowId);
-		}
+		await Promise.all(this.overlayHandlers.map(handler => handler.updateOverlay(this.state)));
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
