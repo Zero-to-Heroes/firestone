@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -32,7 +33,11 @@ declare let amplitude;
 				[state]="gameState"
 				[side]="side"
 			></galakrond-counter>
-			<pogo-counter *ngIf="activeCounter === 'pogo'" [state]="gameState" [side]="side"></pogo-counter>
+			<pogo-counter
+				*ngIf="activeCounter === 'pogo' || activeCounter === 'bgsPogo'"
+				[state]="gameState || bgsGameState"
+				[side]="side"
+			></pogo-counter>
 			<attack-counter *ngIf="activeCounter === 'attack'" [state]="gameState" [side]="side"></attack-counter>
 		</div>
 	`,
@@ -40,12 +45,13 @@ declare let amplitude;
 })
 export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
-	activeCounter: 'galakrond' | 'pogo' | 'attack';
+	bgsGameState: BattlegroundsState;
+	activeCounter: 'galakrond' | 'pogo' | 'bgsPogo' | 'attack';
 	side: 'player' | 'opponent';
 
 	// private gameInfoUpdatedListener: (message: any) => void;
 	private windowId: string;
-	private deckSubscription: Subscription;
+	private stateSubscription: Subscription;
 	private preferencesSubscription: Subscription;
 
 	constructor(
@@ -63,13 +69,23 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	}
 
 	async ngAfterViewInit() {
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		this.deckSubscription = deckEventBus.subscribe(async event => {
-			this.gameState = event ? event.state : undefined;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		if (!this.activeCounter.includes('bgs')) {
+			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
+			this.stateSubscription = deckEventBus.subscribe(async event => {
+				this.gameState = event ? event.state : undefined;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+		} else {
+			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().battlegroundsStore;
+			this.stateSubscription = deckEventBus.subscribe(async newState => {
+				this.bgsGameState = newState;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
+		}
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		await this.restoreWindowPosition();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -78,7 +94,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
-		this.deckSubscription.unsubscribe();
+		this.stateSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
 	}
 

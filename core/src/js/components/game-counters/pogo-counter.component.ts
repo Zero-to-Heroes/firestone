@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
+import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
 
 declare let amplitude;
@@ -32,9 +33,9 @@ export class PogoHopperCountersComponent {
 	image: string;
 	_side: 'player' | 'opponent';
 
-	private _state: GameState;
+	private _state: GameState | BattlegroundsState;
 
-	@Input() set state(value: GameState) {
+	@Input() set state(value: GameState | BattlegroundsState) {
 		this._state = value;
 		this.updateInfo();
 	}
@@ -53,20 +54,33 @@ export class PogoHopperCountersComponent {
 			return;
 		}
 
-		const deck = this._side === 'player' ? this._state.playerDeck : this._state.opponentDeck;
-		if (!deck) {
-			return;
+		if (this.isBgsState(this._state)) {
+			if ((this._state.currentGame.pogoHoppersCount || 0) === this.pogoCount) {
+				return;
+			}
+			this.pogoCount = this._state.currentGame.pogoHoppersCount || 0;
+		} else {
+			const deck = this._side === 'player' ? this._state.playerDeck : this._state.opponentDeck;
+			if (!deck) {
+				return;
+			}
+			if ((deck.pogoHopperSize || 0) === this.pogoCount) {
+				return;
+			}
+			this.pogoCount = deck.pogoHopperSize || 0;
 		}
 
-		if ((deck.pogoHopperSize || 0) === this.pogoCount) {
-			return;
-		}
-
-		this.pogoCount = deck.pogoHopperSize || 0;
 		const card = CardIds.Collectible.Rogue.PogoHopper;
 		this.image = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card}.jpg`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private isBgsState(state: GameState | BattlegroundsState): state is BattlegroundsState {
+		if ((state as BattlegroundsState).currentGame) {
+			return true;
+		}
+		return false;
 	}
 }
