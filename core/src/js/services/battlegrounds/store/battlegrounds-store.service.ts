@@ -16,6 +16,7 @@ import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
+import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
 import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-updated-parser';
@@ -58,6 +59,7 @@ import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
+import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
 
 @Injectable()
 export class BattlegroundsStoreService {
@@ -116,10 +118,6 @@ export class BattlegroundsStoreService {
 
 	private async handleHotkeyPressed() {
 		await Promise.all(this.overlayHandlers.map(handler => handler.handleHotkeyPressed(this.state)));
-	}
-
-	private buildOverlayHandlers() {
-		this.overlayHandlers = [new BgsMainWindowOverlay(this.prefs, this.ow)];
 	}
 
 	private registerGameEvents() {
@@ -283,6 +281,9 @@ export class BattlegroundsStoreService {
 
 	private async updateOverlay() {
 		await Promise.all(this.overlayHandlers.map(handler => handler.updateOverlay(this.state)));
+		if (this.state.forceOpen) {
+			this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
+		}
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
@@ -312,6 +313,11 @@ export class BattlegroundsStoreService {
 			new BgsGlobalInfoUpdatedParser(),
 			new BgsStartComputingPostMatchStatsParser(),
 			new BgsInitMmrParser(this.memory),
+			new BgsCardPlayedParser(),
 		];
+	}
+
+	private buildOverlayHandlers() {
+		this.overlayHandlers = [new BgsMainWindowOverlay(this.prefs, this.ow), new BgsPlayerPogoOverlay(this.ow)];
 	}
 }

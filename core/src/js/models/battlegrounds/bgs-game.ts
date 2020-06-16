@@ -15,6 +15,7 @@ export class BgsGame {
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly replayXml: string;
 	readonly mmrAtStart: number;
+	readonly pogoHoppersCount: number;
 
 	public static create(base: BgsGame): BgsGame {
 		return Object.assign(new BgsGame(), base);

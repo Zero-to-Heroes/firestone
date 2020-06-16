@@ -42,14 +42,13 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		if (inGame && this.bgsActive && state.forceOpen) {
 			console.log('[bgs-store] showing window', battlegroundsWindow, inGame, this.bgsActive, state.forceOpen);
 			if (state.forceOpen) {
-				state = state.update({ forceOpen: false } as BattlegroundsState);
 				this.closedByUser = false;
 			}
 			await this.ow.obtainDeclaredWindow(windowId);
 			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
 				await this.ow.restoreWindow(windowId);
 			} else {
-				console.log('not restoring window', battlegroundsWindow.window_state_ex);
+				// console.log('not restoring window', battlegroundsWindow.window_state_ex);
 			}
 			await this.ow.bringToFront(windowId);
 		}
@@ -59,7 +58,7 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 			!isWindowClosed(battlegroundsWindow.stateEx) &&
 			this.closedByUser
 		) {
-			console.log('[bgs-store] showing window', battlegroundsWindow, inGame, this.bgsActive, state.forceOpen);
+			// console.log('[bgs-store] closing window', battlegroundsWindow, inGame, this.bgsActive, state.forceOpen);
 			await this.ow.hideWindow(windowId);
 		}
 	}

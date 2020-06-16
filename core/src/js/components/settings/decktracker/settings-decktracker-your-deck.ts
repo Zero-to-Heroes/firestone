@@ -60,7 +60,7 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle
 						field="playerPogoCounter"
 						label="Pogo-Hopper"
-						tooltip="Show the number of times you played a Pogo-Hopper (includes Battlegrounds)"
+						tooltip="Show the number of times you played a Pogo-Hopper (excluding Battlegrounds)"
 					></preference-toggle>
 					<preference-toggle
 						field="playerAttackCounter"

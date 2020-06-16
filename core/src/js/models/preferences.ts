@@ -74,6 +74,9 @@ export class Preferences {
 	readonly opponentAttackCounter: boolean = true;
 	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerBgsPogoCounter: boolean = true;
+	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
+
 	readonly replaysShowNotification: boolean = true;
 
 	readonly achievementsDisplayNotifications = true;

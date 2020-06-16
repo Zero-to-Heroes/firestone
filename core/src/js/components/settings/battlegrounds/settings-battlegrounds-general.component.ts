@@ -49,6 +49,11 @@ import { Knob } from '../preference-slider.component';
 						label="Use game overlay"
 						tooltip="When turned on, the battlegrounds window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app"
 					></preference-toggle>
+					<preference-toggle
+						field="playerBgsPogoCounter"
+						label="Pogo-Hopper counter"
+						tooltip="Show the number of times you played a Pogo-Hopper in Battlegrounds"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">
