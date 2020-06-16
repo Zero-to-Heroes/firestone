@@ -21,7 +21,7 @@ export class BgsPlayerPogoOverlay implements BattlegroundsOverlay {
 	public async updateOverlay(state: BattlegroundsState) {
 		const inGame = await this.ow.inGame();
 		const theWindow = await this.ow.getWindowState(OverwolfService.BGS_COUNTER_PLAYER_POGO_WINDOW);
-		const shouldShowWindow = state.currentGame.replayXml == null && state.currentGame.pogoHoppersCount > 0;
+		const shouldShowWindow = state.currentGame?.replayXml == null && state.currentGame?.pogoHoppersCount > 0;
 		console.log('should show pogo counter?', inGame, theWindow, shouldShowWindow, state);
 		if (inGame && shouldShowWindow && isWindowClosed(theWindow.window_state_ex) && this.showCounter) {
 			console.log('showing pogo');
