@@ -24,3 +24,7 @@ export const isWindowClosed = (state: string): boolean => {
 export const capitalizeFirstLetter = (input: string): string => {
 	return input.charAt(0).toUpperCase() + input.slice(1);
 };
+
+export const capitalizeEachWord = (input: string): string => {
+	return input.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+};

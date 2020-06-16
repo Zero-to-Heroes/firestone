@@ -3,12 +3,14 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
+import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { GameEvent } from '../../../models/game-event';
 import { PreferencesService } from '../../preferences.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { DeckParserService } from '../deck-parser.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { MatchMetadataParser } from './match-metadata-parser';
 
 export class OpponentPlayerParser implements EventParser {
 	constructor(
@@ -24,6 +26,7 @@ export class OpponentPlayerParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		console.log('will process OPPONENT event');
 		const battleTag = gameEvent.opponentPlayer && gameEvent.opponentPlayer.Name;
 		const playerName = this.extractNameFromBTag(battleTag) || this.getNameFromCard(gameEvent.opponentPlayer.CardID);
 		const playerClass = this.allCards.getCard(gameEvent.opponentPlayer.CardID).playerClass;
@@ -31,12 +34,24 @@ export class OpponentPlayerParser implements EventParser {
 			playerName: playerName,
 			playerClass: playerClass ? playerClass.toLowerCase() : null,
 		} as HeroCard);
+
+		let matchupStatsRecap = currentState.matchupStatsRecap;
+		console.log('parsing opponent', currentState.metadata, currentState.deckStats, currentState);
+		if (currentState.metadata.formatType && currentState.deckStats) {
+			const convertedFormat = MatchMetadataParser.convertFormat(currentState.metadata.formatType);
+			const statsAgainstOpponent = currentState.deckStats.filter(
+				stat => stat.opponentClass === newHero.playerClass,
+			);
+			matchupStatsRecap = StatsRecap.from(statsAgainstOpponent, convertedFormat, newHero.playerClass);
+		}
+
 		// Total cards before setting the decklist
 		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;
 		// console.log('[opponent-player] total cards in actual deck + hand', cardsInDeck);
 		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
 		const aiDeck = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
 		const aiDeckString = shouldLoadDecklist && aiDeck ? aiDeck.deckstring : null;
+
 		// console.log('[opponent-player] got deckstring', aiDeckString, aiDeck, currentState.metadata);
 		// No deckstring, so don't change anything
 		if (!aiDeckString) {
@@ -46,6 +61,7 @@ export class OpponentPlayerParser implements EventParser {
 			// console.log('[opponent-player] newPlayerDeck without ai deckstring', newPlayerDeck);
 			return currentState.update({
 				opponentDeck: newPlayerDeck,
+				matchupStatsRecap: matchupStatsRecap,
 			} as GameState);
 		}
 
@@ -66,6 +82,7 @@ export class OpponentPlayerParser implements EventParser {
 		// console.log('[opponent-player] newDeck', newDeck);
 		const hand = aiDeckString ? this.flagCards(currentState.opponentDeck.hand) : currentState.opponentDeck.hand;
 		const deck = aiDeckString ? this.flagCards(newDeck) : newDeck;
+
 		const newPlayerDeck = currentState.opponentDeck.update({
 			hero: newHero,
 			deckstring: aiDeckString,
@@ -80,6 +97,7 @@ export class OpponentPlayerParser implements EventParser {
 		// console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
 		return currentState.update({
 			opponentDeck: newPlayerDeck,
+			matchupStatsRecap: matchupStatsRecap,
 		} as GameState);
 	}
 

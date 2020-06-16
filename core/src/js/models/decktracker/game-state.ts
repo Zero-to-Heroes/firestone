@@ -1,9 +1,14 @@
+import { GameStat } from '../mainwindow/stats/game-stat';
 import { DeckState } from './deck-state';
 import { Metadata } from './metadata';
+import { StatsRecap } from './stats-recap';
 
 export class GameState {
 	readonly playerDeck: DeckState = new DeckState();
 	readonly opponentDeck: DeckState = new DeckState();
+	readonly deckStats: readonly GameStat[] = [];
+	readonly deckStatsRecap: StatsRecap;
+	readonly matchupStatsRecap: StatsRecap;
 	readonly mulliganOver: boolean = false;
 	readonly metadata: Metadata = new Metadata();
 	readonly currentTurn: number | 'mulligan' = 'mulligan';

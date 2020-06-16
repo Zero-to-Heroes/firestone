@@ -1,0 +1,53 @@
+.winrate-recap {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 0;
+	width: 100%;
+}
+
+.recap {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 60px;
+	height: 30px;
+	border: 1px solid var(--color-1);
+	background: var(--color-5);
+	padding: 2px;
+	flex-grow: 0;
+	flex-shrink: 0;
+	font-family: Sumana;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 14px;
+	color: var(--color-1);
+
+	&.text {
+		justify-content: flex-start;
+		text-indent: 7px;
+	}
+}
+
+.value {
+	max-width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	&.wins {
+		color: #61ff47;
+	}
+	&.losses {
+		color: #ff4747;
+	}
+}
+
+.winrate,
+.details {
+	background: var(--color-7);
+}
+
+.details {
+	justify-content: space-evenly;
+}

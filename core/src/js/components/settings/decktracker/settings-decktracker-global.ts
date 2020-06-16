@@ -49,6 +49,16 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, the mana cost of cards in the tracker will be colored based on the card's rarity"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayShowDeckWinrate"
+						label="Show deck winrate"
+						tooltip="When active, it shows the deck overall Ranked winrate above the tracker if we have data (in either Standard or Wild, based on the current game mode)"
+					></preference-toggle>
+					<preference-toggle
+						field="overlayShowMatchupWinrate"
+						label="Show matchup winrate"
+						tooltip="When active, it shows the deck overall Ranked winrate against the opponent's class above the tracker if we have data (in either Standard or Wild, based on the current game mode)"
+					></preference-toggle>
+					<preference-toggle
 						field="overlayShowGiftedCardsInSeparateLine"
 						label="Show gifts separately"
 						tooltip="When active, cards that have been created are displayed in their own lines (one line for each different creator)"

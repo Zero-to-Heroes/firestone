@@ -21,6 +21,7 @@ import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/
 import { DeckTrackerOverlayRootComponent } from '../../components/decktracker/overlay/decktracker-overlay-root.component';
 import { DeckTrackerTitleBarComponent } from '../../components/decktracker/overlay/decktracker-title-bar';
 import { DecktrackerWidgetIconComponent } from '../../components/decktracker/overlay/decktracker-widget-icon';
+import { DeckTrackerWinrateRecapComponent } from '../../components/decktracker/overlay/decktracker-winrate-recap.component';
 import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
 import { SecretsHelperListComponent } from '../../components/secrets-helper/secrets-helper-list.component';
 import { SharedModule } from '../shared/shared.module';
@@ -58,6 +59,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerCardsRecapComponent,
 		SecretsHelperListComponent,
 		DecktrackerWidgetIconComponent,
+		DeckTrackerWinrateRecapComponent,
 	],
 	exports: [
 		DeckTrackerOverlayRootComponent,
@@ -73,6 +75,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerTitleBarComponent,
 		DeckTrackerCardsRecapComponent,
 		SecretsHelperListComponent,
+		DeckTrackerWinrateRecapComponent,
 	],
 	providers: [
 		{

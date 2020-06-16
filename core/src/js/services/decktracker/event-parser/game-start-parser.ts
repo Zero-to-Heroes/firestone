@@ -19,7 +19,7 @@ export class GameStartParser implements EventParser {
 		return gameEvent.type === GameEvent.GAME_START;
 	}
 
-	async parse(): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
 		if (noDeckMode) {
 			console.log('[game-start-parser] no deck mode is active, not loading current deck');

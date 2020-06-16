@@ -302,7 +302,7 @@ export class GameStateService {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
-		//console.log('[game-state] will emit event', gameEvent.type, this.state);
+		// console.log('[game-state] will emit event', gameEvent.type, this.state);
 		await this.updateOverlays(
 			this.state,
 			false,

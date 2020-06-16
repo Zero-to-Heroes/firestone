@@ -37,6 +37,8 @@ export class DeckTrackerOverlayOpponentComponent {
 	deckExtractor = (state: GameState) => state.opponentDeck;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
+	showDeckWinrateExtractor = (prefs: Preferences) => false;
+	showMatchupWinrateExtractor = (prefs: Preferences) => false;
 	// Because whitespace for the tooltips
 	defaultTrackerPositionLeftProvider = (gameWidth: number, width: number, dpi: number) => -200;
 	defaultTrackerPositionTopProvider = (gameWidth: number, width: number, dpi: number) => 150;

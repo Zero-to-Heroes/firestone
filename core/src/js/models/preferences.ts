@@ -36,6 +36,8 @@ export class Preferences {
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
 	readonly overlayShowGiftedCardsInSeparateLine: boolean = false;
+	readonly overlayShowDeckWinrate: boolean = true;
+	readonly overlayShowMatchupWinrate: boolean = true;
 
 	readonly overlayGroupByZone: boolean = true;
 	// readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?

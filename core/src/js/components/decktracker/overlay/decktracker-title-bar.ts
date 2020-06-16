@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { StatsRecap } from '../../../models/decktracker/stats-recap';
 
 @Component({
 	selector: 'decktracker-title-bar',
@@ -11,10 +12,24 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 		<div class="title-bar">
 			<decktracker-deck-name [deck]="deck"></decktracker-deck-name>
 			<decktracker-cards-recap [deck]="deck"></decktracker-cards-recap>
+			<decktracker-winrate-recap
+				*ngIf="showDeckWinrate"
+				[stats]="deckWinrate"
+				[type]="'deck'"
+			></decktracker-winrate-recap>
+			<decktracker-winrate-recap
+				*ngIf="showMatchupWinrate"
+				[stats]="matchupWinrate"
+				[type]="'matchup'"
+			></decktracker-winrate-recap>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerTitleBarComponent {
 	@Input() deck: DeckState;
+	@Input() showDeckWinrate: boolean;
+	@Input() showMatchupWinrate: boolean;
+	@Input() deckWinrate: StatsRecap;
+	@Input() matchupWinrate: StatsRecap;
 }

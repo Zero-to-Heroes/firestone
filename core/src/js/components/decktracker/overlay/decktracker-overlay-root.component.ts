@@ -60,7 +60,13 @@ declare let amplitude;
 							[closeEvent]="closeEvent"
 							(onMinimize)="onMinimize()"
 						></decktracker-control-bar>
-						<decktracker-title-bar [deck]="deck"></decktracker-title-bar>
+						<decktracker-title-bar
+							[deck]="deck"
+							[showDeckWinrate]="showDeckWinrate"
+							[showMatchupWinrate]="showMatchupWinrate"
+							[deckWinrate]="gameState.deckStatsRecap"
+							[matchupWinrate]="gameState.matchupStatsRecap"
+						></decktracker-title-bar>
 						<decktracker-deck-list
 							[deckState]="deck"
 							[displayMode]="displayMode"
@@ -91,6 +97,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
 	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number, dpi: number) => number;
 	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number, dpi: number) => number;
+	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
+	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
 
@@ -112,6 +120,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	showGiftsSeparately: boolean;
 	cardsGoToBottom: boolean;
 	darkenUsedCards: boolean;
+	showDeckWinrate: boolean;
+	showMatchupWinrate: boolean;
+
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
@@ -142,7 +153,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			console.log('received new game state', event?.event?.name);
+			console.log('received new game state', event?.event?.name, event?.state);
 			this.gameState = event ? event.state : undefined;
 			this.deck = this.gameState ? this.deckExtractor(this.gameState) : null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -242,6 +253,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
+		this.showDeckWinrate = this.showDeckWinrateExtractor(preferences);
+		this.showMatchupWinrate = this.showMatchupWinrateExtractor(preferences);
 		this.darkenUsedCards = this.darkenUsedCardsExtractor(preferences);
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();

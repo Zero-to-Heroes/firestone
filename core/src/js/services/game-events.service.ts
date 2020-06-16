@@ -131,9 +131,6 @@ export class GameEvents {
 				this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
-					additionalData: {
-						stats: this.store.state.stats,
-					},
 				} as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.gameEventsEmitter.allEvents.next(event);
@@ -145,6 +142,7 @@ export class GameEvents {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
 							metaData: gameEvent.Value,
+							stats: this.store.state.stats,
 						},
 					} as GameEvent),
 				);

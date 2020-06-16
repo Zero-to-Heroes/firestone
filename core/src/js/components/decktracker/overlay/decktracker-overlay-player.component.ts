@@ -17,6 +17,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[deckExtractor]="deckExtractor"
 			[trackerPositionUpdater]="trackerPositionUpdater"
 			[trackerPositionExtractor]="trackerPositionExtractor"
+			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
+			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
 			[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
 			[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 			closeEvent="CLOSE_TRACKER"
@@ -37,6 +39,8 @@ export class DeckTrackerOverlayPlayerComponent {
 	deckExtractor = (state: GameState) => state.playerDeck;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
+	showDeckWinrateExtractor = (prefs: Preferences) => prefs.overlayShowDeckWinrate;
+	showMatchupWinrateExtractor = (prefs: Preferences) => prefs.overlayShowMatchupWinrate;
 	defaultTrackerPositionLeftProvider = (gameWidth: number, width: number, dpi: number) =>
 		gameWidth - width * dpi - 40;
 	defaultTrackerPositionTopProvider = (gameWidth: number, width: number, dpi: number) => 10;
