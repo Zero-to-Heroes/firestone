@@ -7,7 +7,7 @@ declare let amplitude: any;
 @Component({
 	selector: 'bgs-hero-tier',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tier.component.scss`,
 	],
 	template: `

@@ -16,7 +16,7 @@ declare let amplitude: any;
 
 @Component({
 	selector: 'ads',
-	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/ads.component.scss`],
+	styleUrls: [`../../css/global/reset-styles.scss`, `../../css/component/ads.component.scss`],
 	template: `
 		<div class="ads-container">
 			<div class="subscription-link" *ngIf="shouldDisplayAds" (click)="showSubscription()">

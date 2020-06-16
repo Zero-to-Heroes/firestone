@@ -20,7 +20,7 @@ declare let amplitude: any;
 @Component({
 	selector: 'battlegrounds',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
+		`../../../css/global/reset-styles.scss`,
 		`../../../css/component/battlegrounds/ngx-tooltips.scss`,
 		`../../../css/component/battlegrounds/battlegrounds.component.scss`,
 	],

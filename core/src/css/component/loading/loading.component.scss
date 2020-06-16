@@ -1,6 +1,33 @@
 @import '../../global/variables';
 @import '../../global/fonts';
 
+i,
+button {
+	// --icon-color: rgb(204, 162, 179);
+	// --icon-bg: transparent;
+
+	color: var(--icon-color);
+	background-color: var(--icon-bg);
+
+	position: relative;
+	width: var(--size, 30px);
+	height: var(--size, 30px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+	transition: $fast-hover;
+
+	// svg {
+	// 	width: 100%;
+	// 	height: 100%;
+	// 	flex: 0 0 auto;
+	// 	pointer-events: none;
+	// 	user-select: none;
+	// }
+}
+
 .menu-bar {
 	background: transparent;
 	display: flex;

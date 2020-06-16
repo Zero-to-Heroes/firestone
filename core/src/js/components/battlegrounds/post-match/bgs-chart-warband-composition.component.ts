@@ -18,7 +18,7 @@ declare let amplitude: any;
 @Component({
 	selector: 'bgs-chart-warband-composition',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-common-chart.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-composition.component.scss`,
 	],

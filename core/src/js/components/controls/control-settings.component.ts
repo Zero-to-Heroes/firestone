@@ -1,11 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	Component,
-	EventEmitter,
-	Input,
-	ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -15,7 +8,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-settings.component.scss`,
 	],
-	encapsulation: ViewEncapsulation.None,
 	template: `
 		<button (mousedown)="showSettings()">
 			<svg class="svg-icon-fill">

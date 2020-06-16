@@ -7,7 +7,7 @@ declare let amplitude: any;
 @Component({
 	selector: 'bgs-hero-face-off',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/in-game/bgs-hero-face-off.component.scss`,
 	],
 	template: `

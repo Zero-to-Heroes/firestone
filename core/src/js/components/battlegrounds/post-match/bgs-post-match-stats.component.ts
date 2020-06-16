@@ -24,7 +24,7 @@ declare let amplitude: any;
 @Component({
 	selector: 'bgs-post-match-stats',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,
 		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats.component.scss`,
 	],

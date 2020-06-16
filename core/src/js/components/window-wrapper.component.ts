@@ -13,7 +13,7 @@ import { OverwolfService } from '../services/overwolf.service';
 @Component({
 	selector: 'window-wrapper',
 	styleUrls: [
-		`../../css/global/components-global.scss`,
+		`../../css/global/reset-styles.scss`,
 		`../../css/global/cdk-overlay.scss`,
 		`../../css/component/window-wrapper.component.scss`,
 		`../../css/themes/collection-theme.scss`,

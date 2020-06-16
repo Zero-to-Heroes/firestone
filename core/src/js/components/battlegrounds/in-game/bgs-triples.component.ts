@@ -7,7 +7,7 @@ declare let amplitude: any;
 @Component({
 	selector: 'bgs-triples',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/in-game/bgs-triples.component.scss`,
 	],
 	template: `

@@ -18,7 +18,7 @@ declare let amplitude: any;
 @Component({
 	selector: 'bgs-next-opponent-overview',
 	styleUrls: [
-		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`,
 		`../../../../css/global/scrollbar.scss`,
 	],
