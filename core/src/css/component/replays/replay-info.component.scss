@@ -25,6 +25,20 @@
 	}
 }
 
+.result-color-code {
+	height: 40px;
+	width: 3px;
+	position: relative;
+	left: -10px;
+
+	&.won {
+		background: #61ff47;
+	}
+	&.lost {
+		background: #ff4747;
+	}
+}
+
 .group {
 	border-right: 1px solid var(--default-text-color);
 	display: flex;

@@ -12,6 +12,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/replay-info.component.scss`],
 	template: `
 		<div class="replay-info {{ gameMode }}">
+			<div class="result-color-code {{ visualResult }}"></div>
+
 			<div class="group mode">
 				<rank-image class="player-rank" [stat]="replayInfo"></rank-image>
 			</div>
@@ -51,6 +53,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class ReplayInfoComponent implements AfterViewInit {
 	replayInfo: GameStat;
+	visualResult: string;
 	gameMode: StatGameModeType;
 	// deckName: string;
 	playerClassImage: string;
@@ -78,6 +81,8 @@ export class ReplayInfoComponent implements AfterViewInit {
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(value);
 		this.reviewId = value.reviewId;
 		this.opponentName = value.gameMode !== 'battlegrounds' ? this.sanitizeName(value.opponentName) : null;
+		this.visualResult =
+			value.gameMode !== 'battlegrounds' ? value.result : parseInt(value.additionalResult) <= 4 ? 'won' : 'lost';
 	}
 
 	constructor(
