@@ -10,7 +10,7 @@ export class BgsUtils {
 			case 'TB_BaconShop_HERO_11':
 				return 'TB_BaconShop_HP_019';
 			case 'TB_BaconShop_HERO_12':
-				return 'TB_BaconShop_HP_041a';
+				return 'TB_BaconShop_HP_041';
 			case 'TB_BaconShop_HERO_14':
 				return 'TB_BaconShop_HP_037a';
 			case 'TB_BaconShop_HERO_15':
