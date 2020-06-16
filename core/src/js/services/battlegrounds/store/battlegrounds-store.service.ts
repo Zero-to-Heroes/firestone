@@ -243,7 +243,6 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
-		//console.log('processing', gameEvent.type, this.battlegroundsStoreEventBus.observers.length);
 		await Promise.all(this.overlayHandlers.map(handler => handler.processEvent(gameEvent)));
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
 			this.state = this.state.update({
@@ -252,19 +251,14 @@ export class BattlegroundsStoreService {
 			this.updateOverlay();
 		}
 		for (const parser of this.eventParsers) {
-			//console.log('considering parser', parser, this.battlegroundsStoreEventBus.observers.length);
 			try {
 				if (parser.applies(gameEvent, this.state)) {
-					// console.log('parser will apply for', gameEvent.type);
 					const newState = await parser.parse(this.state, gameEvent);
-					//console.log('built new state', this.battlegroundsStoreEventBus.observers.length);
 					if (newState !== this.state) {
 						this.state = newState;
-						//console.log('updated state after', this.battlegroundsStoreEventBus.observers.length);
 						this.battlegroundsStoreEventBus.next(this.state);
-						// console.log('emitted state', gameEvent.type);
+						// console.log('emitted state', gameEvent.type, this.state);
 						this.updateOverlay();
-						//console.log('updqted overlays', this.battlegroundsStoreEventBus.observers.length);
 					}
 				}
 			} catch (e) {
