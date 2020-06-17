@@ -835,6 +835,9 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'BLOCK_END':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BLOCK_END, gameEvent));
+				break;
 			default:
 				console.log('unsupported game event', gameEvent);
 		}

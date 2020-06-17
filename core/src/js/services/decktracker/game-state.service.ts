@@ -276,31 +276,33 @@ export class GameStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state, await this.prefs.getPreferences())) {
-					const stateAfterParser = await parser.parse(this.state, gameEvent);
-					if (stateAfterParser) {
-						// Add information that is not linked to events, like the number of turns the
-						// card has been present in the zone
-						const updatedPlayerDeck = this.updateDeck(
-							stateAfterParser.playerDeck,
-							stateAfterParser,
-							(gameEvent.gameState || ({} as any)).Player,
-						);
-						const udpatedOpponentDeck = this.updateDeck(
-							stateAfterParser.opponentDeck,
-							stateAfterParser,
-							(gameEvent.gameState || ({} as any)).Opponent,
-						);
-						this.state = Object.assign(new GameState(), stateAfterParser, {
-							playerDeck: updatedPlayerDeck,
-							opponentDeck: udpatedOpponentDeck,
-						} as GameState);
-					} else {
-						this.state = null;
-					}
+					this.state = await parser.parse(this.state, gameEvent);
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
+		}
+		try {
+			if (this.state) {
+				// Add information that is not linked to events, like the number of turns the
+				// card has been present in the zone
+				const updatedPlayerDeck = this.updateDeck(
+					this.state.playerDeck,
+					this.state,
+					(gameEvent.gameState || ({} as any)).Player,
+				);
+				const udpatedOpponentDeck = this.updateDeck(
+					this.state.opponentDeck,
+					this.state,
+					(gameEvent.gameState || ({} as any)).Opponent,
+				);
+				this.state = Object.assign(new GameState(), this.state, {
+					playerDeck: updatedPlayerDeck,
+					opponentDeck: udpatedOpponentDeck,
+				} as GameState);
+			}
+		} catch (e) {
+			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
 		// console.log('[game-state] will emit event', gameEvent.type, this.state);
 		await this.updateOverlays(
@@ -327,18 +329,22 @@ export class GameStateService {
 		const totalAttackOnBoard = deck.board
 			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
 			.filter(entity => entity)
-			.filter(entity => !this.hasTag(entity, GameTag.DORMANT))
+			.filter(entity => this.canAttack(entity))
 			.map(entity => entity.attack || 0)
 			.reduce((a, b) => a + b, 0);
-		// console.log(
-		// 	'total attack on board',
-		// 	playerFromTracker?.Board,
-		// 	deck.board
-		// 		.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
-		// 		.filter(entity => entity && entity.attack > 0)
-		// 		.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
-		// );
-		const heroAttack = playerFromTracker?.Hero?.attack > 0 ? playerFromTracker?.Hero?.attack : 0;
+		console.log(
+			'total attack on board',
+			playerFromTracker?.Board,
+			deck.board
+				.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
+				.filter(entity => entity && entity.attack > 0)
+				.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
+		);
+		const heroAttack =
+			playerFromTracker?.Hero?.attack > 0 && this.canAttack(playerFromTracker?.Hero)
+				? playerFromTracker?.Hero?.attack
+				: 0;
+		console.log('heroAttack', playerFromTracker?.Hero, this.canAttack(playerFromTracker?.Hero));
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
 					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
@@ -461,8 +467,18 @@ export class GameStateService {
 		];
 	}
 
+	private canAttack(entity): boolean {
+		// charge / rush?
+		return (
+			!this.hasTag(entity, GameTag.DORMANT) &&
+			!this.hasTag(entity, GameTag.EXHAUSTED) &&
+			!this.hasTag(entity, GameTag.FROZEN) &&
+			!this.hasTag(entity, GameTag.CANT_ATTACK)
+		);
+	}
+
 	private hasTag(entity, tag: number): boolean {
-		if (!entity.tags) {
+		if (!entity?.tags) {
 			return false;
 		}
 		const matches = entity.tags.some(t => t.Name === tag && t.Value === 1);
