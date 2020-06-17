@@ -1,7 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	Optional,
+	ViewRef,
+} from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'deck-zone',
@@ -44,7 +53,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckZoneComponent {
+export class DeckZoneComponent implements AfterViewInit {
 	@Input() colorManaCost: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
@@ -62,6 +71,8 @@ export class DeckZoneComponent {
 		this.refreshZone();
 	}
 
+	@Input() side: 'player' | 'opponent';
+
 	_tooltipPosition: CardTooltipPositionType;
 	className: string;
 	zoneName: string;
@@ -73,10 +84,22 @@ export class DeckZoneComponent {
 	private _showGiftsSeparately = true;
 	private _zone: DeckZone;
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly prefs: PreferencesService) {}
+
+	async ngAfterViewInit() {
+		if (this.prefs) {
+			this.open = !(await this.prefs.getZoneToggleDefaultClose(this._zone.name, this.side));
+		}
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	toggleZone() {
 		this.open = !this.open;
+		if (this.prefs) {
+			this.prefs.setZoneToggleDefaultClose(this._zone.name, this.side, !this.open);
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

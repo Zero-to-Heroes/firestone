@@ -75,6 +75,7 @@ declare let amplitude;
 							[cardsGoToBottom]="cardsGoToBottom"
 							[tooltipPosition]="tooltipPosition"
 							[darkenUsedCards]="darkenUsedCards"
+							[side]="player"
 						>
 						</decktracker-deck-list>
 						<div class="backdrop" *ngIf="showBackdrop"></div>

@@ -17,6 +17,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[deckExtractor]="deckExtractor"
 			[trackerPositionUpdater]="trackerPositionUpdater"
 			[trackerPositionExtractor]="trackerPositionExtractor"
+			[showDeckWinrateExtractor]="showDeckWinrateExtractor"
+			[showMatchupWinrateExtractor]="showMatchupWinrateExtractor"
 			[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
 			[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 			closeEvent="CLOSE_OPPONENT_TRACKER"

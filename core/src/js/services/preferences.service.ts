@@ -131,6 +131,19 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async setZoneToggleDefaultClose(name: string, side: string, close: boolean) {
+		const prefs = await this.getPreferences();
+		const propertyName = 'overlayZoneToggleDefaultClose_' + side + '_' + name;
+		const newPrefs: Preferences = { ...prefs, [propertyName]: close };
+		this.savePreferences(newPrefs);
+	}
+
+	public async getZoneToggleDefaultClose(name: string, side: string) {
+		const prefs = await this.getPreferences();
+		const propertyName = 'overlayZoneToggleDefaultClose_' + side + '_' + name;
+		return prefs[propertyName];
+	}
+
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		await this.indexedDb.saveUserPreferences(userPrefs);
 		// console.log('broadcasting new prefs', userPrefs);

@@ -35,6 +35,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[colorManaCost]="colorManaCost"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[tooltipPosition]="_tooltipPosition"
+					[side]="side"
 				>
 				</deck-list-by-zone>
 				<grouped-deck-list
@@ -45,6 +46,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[cardsGoToBottom]="cardsGoToBottom"
 					[darkenUsedCards]="darkenUsedCards"
 					[tooltipPosition]="_tooltipPosition"
+					[side]="side"
 				>
 				</grouped-deck-list>
 			</ng-container>
@@ -58,6 +60,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() showGiftsSeparately: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() darkenUsedCards: boolean;
+	@Input() side: 'player' | 'opponent';
 
 	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;
