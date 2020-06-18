@@ -189,9 +189,9 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('mousedown')
 	dragMove() {
-		if (!this.isMaximized) {
-			this.ow.dragMove(this.windowId);
-		}
+		// if (!this.isMaximized) {
+		this.ow.dragMove(this.windowId);
+		// }
 	}
 
 	ngOnDestroy(): void {
