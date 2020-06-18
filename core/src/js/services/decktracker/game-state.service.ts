@@ -332,19 +332,19 @@ export class GameStateService {
 			.filter(entity => this.canAttack(entity))
 			.map(entity => entity.attack || 0)
 			.reduce((a, b) => a + b, 0);
-		console.log(
-			'total attack on board',
-			playerFromTracker?.Board,
-			deck.board
-				.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
-				.filter(entity => entity && entity.attack > 0)
-				.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
-		);
+		// console.log(
+		// 	'total attack on board',
+		// 	playerFromTracker?.Board,
+		// 	deck.board
+		// 		.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
+		// 		.filter(entity => entity && entity.attack > 0)
+		// 		.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
+		// );
 		const heroAttack =
 			playerFromTracker?.Hero?.attack > 0 && this.canAttack(playerFromTracker?.Hero)
 				? playerFromTracker?.Hero?.attack
 				: 0;
-		console.log('heroAttack', playerFromTracker?.Hero, this.canAttack(playerFromTracker?.Hero));
+		// console.log('heroAttack', playerFromTracker?.Hero, this.canAttack(playerFromTracker?.Hero));
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
 					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
