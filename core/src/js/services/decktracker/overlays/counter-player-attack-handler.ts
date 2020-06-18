@@ -28,13 +28,13 @@ export class AttackPlayerCounterOverlayHandler implements OverlayHandler {
 	) {
 		const inGame = await this.ow.inGame();
 		const theWindow = await this.ow.getWindowState(OverwolfService.COUNTER_PLAYER_ATTACK_WINDOW);
-		const shouldShowWindow = !forceCloseWidgets && state.gameStarted;
+		const shouldShowWindow = !forceCloseWidgets && state && state.gameStarted;
 		if (
 			inGame &&
+			shouldShowWindow &&
+			showDecktrackerFromGameMode &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
-			showDecktrackerFromGameMode &&
-			shouldShowWindow &&
 			isWindowClosed(theWindow.window_state_ex) &&
 			this.showCounter
 		) {

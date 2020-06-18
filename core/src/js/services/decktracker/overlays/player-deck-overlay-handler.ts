@@ -31,7 +31,7 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 	public async updateOverlay(
 		state: GameState,
 		showDecktrackerFromGameMode: boolean,
-		shouldForceCloseSecretsHelper = false,
+		forceCloseWidgets = false,
 		forceLogs = false,
 	) {
 		if (forceLogs) {
@@ -39,7 +39,7 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 				'[player-overlay] will consider overlay for player deck',
 				state,
 				showDecktrackerFromGameMode,
-				shouldForceCloseSecretsHelper,
+				forceCloseWidgets,
 			);
 		}
 		// TODO: don't forget to change this

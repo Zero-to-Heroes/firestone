@@ -29,7 +29,8 @@ export class GalakroundOpponentCounterOverlayHandler implements OverlayHandler {
 		const theWindow = await this.ow.getWindowState(OverwolfService.COUNTER_OPPONENT_GALAKROND_WINDOW);
 		const shouldShowWindow =
 			!forceCloseWidgets &&
-			(state?.opponentDeck?.galakrondInvokesCount > 0 || state?.opponentDeck?.containsGalakrond(this.allCards)) &&
+			state &&
+			(state.opponentDeck?.galakrondInvokesCount > 0 || state.opponentDeck?.containsGalakrond(this.allCards)) &&
 			state.gameStarted;
 		// console.log(
 		// 	'[opponent-galakrond] should show counter?',
