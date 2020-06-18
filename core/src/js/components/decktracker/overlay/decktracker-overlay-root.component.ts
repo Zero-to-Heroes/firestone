@@ -185,9 +185,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			}
 		});
 
-		await this.changeWindowSize();
-		// await this.restoreWindowPosition();
 		await this.handleDisplayPreferences();
+		await this.changeWindowSize();
 		amplitude.getInstance().logEvent('match-start', {
 			'display-mode': this.displayMode,
 			'player': this.player,
@@ -289,11 +288,17 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		console.log('loaded tracker position', trackerPosition, this.player);
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 		const newLeft =
-			trackerPosition && trackerPosition.left < gameWidth && !forceTrackerReposition
+			trackerPosition &&
+			trackerPosition.left < gameWidth &&
+			trackerPosition.left > -width &&
+			!forceTrackerReposition
 				? trackerPosition.left || 0
 				: this.defaultTrackerPositionLeftProvider(gameWidth, width, dpi);
 		const newTop =
-			trackerPosition && trackerPosition.top < gameInfo.logicalHeight && !forceTrackerReposition
+			trackerPosition &&
+			trackerPosition.top < gameInfo.logicalHeight &&
+			trackerPosition.top > -100 &&
+			!forceTrackerReposition
 				? trackerPosition.top || 0
 				: this.defaultTrackerPositionTopProvider(gameWidth, width, dpi);
 		console.log('updating tracker position', newLeft, newTop);
