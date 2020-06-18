@@ -56,7 +56,7 @@ export class DeckParserService {
 		}
 		if (this.memory) {
 			//console.log('[deck-parser] ready to get active deck', new Error().stack);
-			const activeDeck = await this.memory.getActiveDeck();
+			const activeDeck = await this.memory.getActiveDeck(3);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };

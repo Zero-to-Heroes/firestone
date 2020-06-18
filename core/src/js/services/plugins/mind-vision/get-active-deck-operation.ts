@@ -10,7 +10,8 @@ export class GetActiveDeckOperation extends MindVisionOperationFacade<any> {
 			() => mindVision.getActiveDeck(),
 			deck => !deck,
 			deck => deck,
-			20,
+			5,
+			2000,
 		);
 	}
 }
