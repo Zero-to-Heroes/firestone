@@ -330,7 +330,7 @@ export class GameStateService {
 			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
 			.filter(entity => entity)
 			.filter(entity => this.canAttack(entity))
-			.map(entity => entity.attack || 0)
+			.map(entity => (entity.attack > 0 ? entity.attack : 0))
 			.reduce((a, b) => a + b, 0);
 		// console.log(
 		// 	'total attack on board',
