@@ -74,7 +74,7 @@ export class BattlegroundsStoreService {
 		'battlegrounds-queue',
 	);
 
-	private requeueTimeout;
+	private queuedEvents: { event: BattlegroundsStoreEvent; trigger: string }[] = [];
 	private overlayHandlers: BattlegroundsOverlay[];
 
 	constructor(
@@ -129,6 +129,7 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId));
 			} else if (gameEvent.type === GameEvent.MATCH_METADATA) {
+				this.queuedEvents = [];
 				if (
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS ||
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
@@ -138,7 +139,10 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
-				this.maybeHandleNextEvent(new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId));
+				this.maybeHandleNextEvent(
+					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
+					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
+				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(new BgsOpponentRevealedEvent(gameEvent.additionalData.cardId));
 			} else if (gameEvent.type === GameEvent.TURN_START) {
@@ -198,7 +202,10 @@ export class BattlegroundsStoreService {
 				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				console.log('[bgs-store] Game ended');
-				this.maybeHandleNextEvent(new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml));
+				this.maybeHandleNextEvent(
+					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
+					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
+				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
 					new BgsLeaderboardPlaceEvent(
@@ -207,6 +214,7 @@ export class BattlegroundsStoreService {
 					),
 				);
 			}
+			this.processPendingEvents(gameEvent);
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
 			console.log('[bgs-run-stats] Replay created, received info');
@@ -219,6 +227,7 @@ export class BattlegroundsStoreService {
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {
 		const gameEvent = eventQueue[0];
+		// console.log('[bgs-store] processing', gameEvent.type, gameEvent);
 		try {
 			await this.processEvent(gameEvent);
 		} catch (e) {
@@ -227,17 +236,32 @@ export class BattlegroundsStoreService {
 		return eventQueue.slice(1);
 	}
 
-	private maybeHandleNextEvent(gameEvent: BattlegroundsStoreEvent): void {
+	private processPendingEvents(gameEvent: BattlegroundsStoreEvent) {
+		const eventsToProcess = this.queuedEvents.filter(event => event.trigger === gameEvent.type);
+		this.queuedEvents = this.queuedEvents.filter(event => event.trigger !== gameEvent.type);
+		for (const event of eventsToProcess) {
+			// console.log('[bgs-store] enqueueing pending event', event.event.type, event.trigger);
+			this.battlegroundsUpdater.next(event.event);
+		}
+	}
+
+	private maybeHandleNextEvent(gameEvent: BattlegroundsStoreEvent, nextTrigger: string): void {
 		// Battle not over yet, deferring the event
+		// console.log('should handle event?', this.state.currentGame, gameEvent);
 		if (this.state.currentGame?.battleInfo?.opponentBoard) {
-			if (this.requeueTimeout) {
-				clearTimeout(this.requeueTimeout);
-			}
-			this.requeueTimeout = setTimeout(() => {
-				this.maybeHandleNextEvent(gameEvent);
-			}, 2000);
+			// console.log('requeueing', gameEvent);
+			this.queuedEvents.push({ event: gameEvent, trigger: nextTrigger });
+			// if (this.requeueTimeout) {
+			// 	clearTimeout(this.requeueTimeout);
+			// }
+			// this.requeueTimeout = setTimeout(() => {
+			// 	this.maybeHandleNextEvent(gameEvent);
+			// }, 2000);
 		} else {
-			clearTimeout(this.requeueTimeout);
+			// console.log('sending event', gameEvent);
+			// if (this.requeueTimeout) {
+			// 	clearTimeout(this.requeueTimeout);
+			// }
 			this.battlegroundsUpdater.next(gameEvent);
 		}
 	}
