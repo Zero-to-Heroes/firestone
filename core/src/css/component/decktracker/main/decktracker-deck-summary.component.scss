@@ -5,7 +5,7 @@
 	height: 100%;
 	background: rgba(255, 255, 255, 0.08);
 	position: relative;
-	padding-top: 10px;
+	padding: 10px;
 	padding-bottom: 12px;
 
 	&:hover {
@@ -13,6 +13,7 @@
 	}
 
 	.deck-name {
+		width: 100%;
 		font-family: Open Sans;
 		font-style: normal;
 		font-weight: normal;
@@ -25,10 +26,13 @@
 		flex-grow: 0;
 		flex-shrink: 0;
 		margin-bottom: 10px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	.deck-image {
-		width: 48%;
+		width: 60%;
 		position: relative;
 		flex-grow: 1;
 		margin-bottom: 10px;

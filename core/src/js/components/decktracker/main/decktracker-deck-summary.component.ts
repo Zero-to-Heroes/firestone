@@ -15,7 +15,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			helpTooltip="Detailed deck stats coming soon, stay tuned!"
 			helpTooltipPosition="right"
 		>
-			<div class="deck-name">{{ deckName }}</div>
+			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
 			<div class="deck-image">
 				<img class="skin" [src]="skin" />
 				<img class="frame" src="/Files/assets/images/deck/hero_frame.png" />
@@ -32,6 +32,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	_deck: DeckSummary;
 	deckName: string;
+	deckNameClass: string;
 	totalGames: number;
 	winRatePercentage: string;
 	lastUsed: string;
