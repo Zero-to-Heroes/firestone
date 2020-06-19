@@ -3,6 +3,7 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsComposition } from '../../../../models/battlegrounds/in-game/bgs-composition';
+import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -23,7 +24,9 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			return currentState;
 		}
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map(player => {
-			const playerFromMemory = players.find(mem => mem.CardId === player.cardId);
+			const playerFromMemory = players.find(
+				mem => normalizeHeroCardId(mem.CardId) === normalizeHeroCardId(player.cardId),
+			);
 			if (!playerFromMemory) {
 				return player;
 			}

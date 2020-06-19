@@ -1,5 +1,6 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
+import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsLeaderboardPlaceEvent } from '../events/bgs-leaderboard-place-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -10,7 +11,9 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsLeaderboardPlaceEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find(player => player.cardId === event.heroCardId);
+		const playerToUpdate = currentState.currentGame.players.find(
+			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
+		);
 		if (!playerToUpdate) {
 			return currentState;
 		}

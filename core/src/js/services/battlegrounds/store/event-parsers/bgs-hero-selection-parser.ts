@@ -5,7 +5,7 @@ import { BgsHeroOverview } from '../../../../models/battlegrounds/hero-selection
 import { BgsHeroSelectionOverview } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroSelectionStage } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-stage';
 import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
-import { BgsUtils } from '../../bgs-utils';
+import { getHeroPower } from '../../bgs-utils';
 import { BgsHeroSelectionEvent } from '../events/bgs-hero-selection-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -43,7 +43,7 @@ export class BgsHeroSelectionParser implements EventParser {
 			stats?.heroStats?.map(stat =>
 				BgsHeroOverview.create({
 					heroCardId: stat.id,
-					heroPowerCardId: BgsUtils.getHeroPower(stat.id),
+					heroPowerCardId: getHeroPower(stat.id),
 					name: stat.name,
 					globalAveragePosition: stat.averagePosition,
 					globalPopularity: stat.popularity,

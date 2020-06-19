@@ -8,6 +8,7 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
+import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsPlayerBoardEvent } from '../events/bgs-player-board-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -20,7 +21,9 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsPlayerBoardEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find(player => player.cardId === event.heroCardId);
+		const playerToUpdate = currentState.currentGame.players.find(
+			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
+		);
 		// console.log('finding player board', playerToUpdate, event, currentState);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
@@ -57,7 +60,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			board: bgsBoard,
 		};
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map(player =>
-			player.cardId === newPlayer.cardId ? newPlayer : player,
+			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame).addBattleBoardInfo(bgsInfo);
 		const result = currentState.update({

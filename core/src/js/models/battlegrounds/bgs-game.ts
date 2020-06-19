@@ -1,6 +1,7 @@
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { BgsBattleSimulationResult } from './bgs-battle-simulation-result';
 import { BgsFaceOff } from './bgs-face-off';
 import { BgsPlayer } from './bgs-player';
@@ -27,7 +28,7 @@ export class BgsGame {
 
 	public updatePlayer(newPlayer: BgsPlayer): BgsGame {
 		const newPlayers: readonly BgsPlayer[] = this.players.map(player =>
-			player.cardId === newPlayer.cardId ? newPlayer : player,
+			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
 		);
 		return this.update({ players: newPlayers } as BgsGame);
 	}
