@@ -52,7 +52,7 @@ export class BgsInitService {
 					...heroStat,
 					top4: heroStat.top4 || 0,
 					top1: heroStat.top1 || 0,
-					name: this.cards.getCard(heroStat.id)?.name,
+					name: heroStat.id !== 'average' ? this.cards.getCard(heroStat.id)?.name : heroStat.id,
 					playerGamesPlayed: playerGamesPlayed,
 					playerPopularity: playerPopularity,
 					playerAveragePosition:
