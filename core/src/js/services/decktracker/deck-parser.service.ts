@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
@@ -24,6 +25,8 @@ export class DeckParserService {
 	private lastDeckTimestamp;
 	private currentBlock: string;
 
+	private currentGameType: GameType;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
@@ -33,14 +36,24 @@ export class DeckParserService {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				this.reset();
+			} else if (event.type === GameEvent.MATCH_METADATA) {
+				this.currentGameType = event.additionalData.metaData.GameType;
+			} else if (event.type === GameEvent.GAME_END) {
+				this.currentGameType = undefined;
 			}
 		});
 	}
 
 	public async queueingIntoMatch(logLine: string) {
 		// console.log('will detect active deck from queue?', logLine);
+		if (
+			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
+			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
+		) {
+			return;
+		}
 		if (this.goingIntoQueueRegex.exec(logLine)) {
-			//console.log('matching, getting active deck');
+			console.log('getting active deck from going into queue');
 			const activeDeck = await this.memory.getActiveDeck(2);
 			//console.log('active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
