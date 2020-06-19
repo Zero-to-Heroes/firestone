@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
+import { DeckParserService } from '../../decktracker/deck-parser.service';
 import { OverwolfService } from '../../overwolf.service';
 
 const GAME_STATS_ENDPOINT = 'https://p3mfx6jmhc.execute-api.us-west-2.amazonaws.com/Prod';
@@ -10,7 +11,7 @@ const GAME_STATS_ENDPOINT = 'https://p3mfx6jmhc.execute-api.us-west-2.amazonaws.
 export class GameStatsLoaderService {
 	private gameStats: GameStats;
 
-	constructor(private http: HttpClient, private ow: OverwolfService) {}
+	constructor(private http: HttpClient, private ow: OverwolfService, private deckParser: DeckParserService) {}
 
 	public async retrieveStats(expectedReviewId: string = undefined, retriesLeft = 10): Promise<GameStats> {
 		console.log(
@@ -46,7 +47,15 @@ export class GameStatsLoaderService {
 				const endpointResult: readonly GameStat[] = (data as any).results;
 				if (!expectedReviewId || endpointResult.some(stat => stat.reviewId === expectedReviewId)) {
 					this.gameStats = Object.assign(new GameStats(), {
-						stats: endpointResult.map(stat => Object.assign(new GameStat(), stat)),
+						stats: endpointResult
+							.map(stat => ({
+								...stat,
+								playerDecklist: this.deckParser.normalizeDeckstring(
+									stat.playerDecklist,
+									stat.playerCardId,
+								),
+							}))
+							.map(stat => Object.assign(new GameStat(), stat)),
 					} as GameStats);
 					console.log('[game-stats-loader] Retrieved game stats for user');
 					resolve(this.gameStats);

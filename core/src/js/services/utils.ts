@@ -28,3 +28,7 @@ export const capitalizeFirstLetter = (input: string): string => {
 export const capitalizeEachWord = (input: string): string => {
 	return input.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 };
+
+export const isCharLowerCase = (character: string): boolean => {
+	return character === character.toLowerCase() && character !== character.toUpperCase();
+};

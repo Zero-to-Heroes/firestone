@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { decode } from 'deckstrings';
+import { decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { isCharLowerCase } from '../utils';
 
 @Injectable()
 export class DeckParserService {
@@ -111,7 +113,7 @@ export class DeckParserService {
 		if (match) {
 			console.log('[deck-parser] parsing deckstring', match);
 			this.currentDeck = this.currentDeck || {};
-			this.currentDeck.deckstring = match[1];
+			this.currentDeck.deckstring = this.normalizeDeckstring(match[1]);
 			console.log('[deck-parser] current deck', this.currentDeck);
 			this.decodeDeckString();
 			console.log('[deck-parser] deckstring decoded', this.currentDeck);
@@ -201,5 +203,48 @@ export class DeckParserService {
 			);
 		}
 		return result;
+	}
+
+	public normalizeDeckstring(deckstring: string, heroCardId?: string): string {
+		try {
+			// console.log('normalizing deckstring', deckstring, heroCardId);
+			const deck = decode(deckstring);
+			// console.log('deck from deckstring', deckstring, deck);
+			deck.heroes = deck.heroes?.map(heroDbfId => this.normalizeHero(heroDbfId, heroCardId));
+			const newDeckstring = encode(deck);
+			// console.log('normalized deck', newDeckstring, deck);
+			return newDeckstring;
+		} catch (e) {
+			if (deckstring) {
+				console.warn('trying to normalize invalid deckstring', deckstring, e);
+			}
+			return deckstring;
+		}
+	}
+
+	private normalizeHero(heroDbfId: number, heroCardId?: string): number {
+		let card: ReferenceCard;
+		// console.log('normalizing hero', heroDbfId, heroCardId);
+		if (heroDbfId) {
+			card = this.allCards.getCardFromDbfId(heroDbfId);
+		}
+		// console.log('found card for hero', card);
+		if (!card || !card.id) {
+			// console.log('fallbacking to heroCardId', heroCardId);
+			card = this.allCards.getCard(heroCardId);
+			if (!card || !card.id) {
+				return heroDbfId;
+			}
+		}
+		// This is the case for the non-standard heroes
+		if (isCharLowerCase(card.id.charAt(card.id.length - 1))) {
+			const canonicalHeroId = card.id.slice(0, -1);
+			// console.log('trying to find canonical hero card', card, canonicalHeroId);
+			const canonicalCard = this.allCards.getCard(canonicalHeroId);
+			if (canonicalCard) {
+				return canonicalCard.dbfId;
+			}
+		}
+		return heroDbfId;
 	}
 }
