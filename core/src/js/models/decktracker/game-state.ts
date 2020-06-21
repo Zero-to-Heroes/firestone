@@ -1,3 +1,4 @@
+import { GameType } from '@firestone-hs/reference-data';
 import { GameStat } from '../mainwindow/stats/game-stat';
 import { DeckState } from './deck-state';
 import { Metadata } from './metadata';
@@ -20,5 +21,12 @@ export class GameState {
 
 	public update(value: GameState): GameState {
 		return Object.assign(new GameState(), this, value);
+	}
+
+	public isBattlegrounds(): boolean {
+		return (
+			this.metadata.gameType === GameType.GT_BATTLEGROUNDS ||
+			this.metadata.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
+		);
 	}
 }

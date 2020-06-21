@@ -1,4 +1,3 @@
-import { GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -33,14 +32,16 @@ export class AttackPlayerCounterOverlayHandler implements OverlayHandler {
 			inGame &&
 			shouldShowWindow &&
 			showDecktrackerFromGameMode &&
-			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
-			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
+			!state.isBattlegrounds() &&
 			isWindowClosed(theWindow.window_state_ex) &&
 			this.showCounter
 		) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.COUNTER_PLAYER_ATTACK_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.COUNTER_PLAYER_ATTACK_WINDOW);
-		} else if (!isWindowClosed(theWindow.window_state_ex) && (!shouldShowWindow || !inGame || !this.showCounter)) {
+		} else if (
+			!isWindowClosed(theWindow.window_state_ex) &&
+			(!shouldShowWindow || !inGame || !this.showCounter || state.isBattlegrounds())
+		) {
 			await this.ow.closeWindow(OverwolfService.COUNTER_PLAYER_ATTACK_WINDOW);
 		}
 	}
