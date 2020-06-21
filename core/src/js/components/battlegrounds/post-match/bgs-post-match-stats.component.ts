@@ -72,6 +72,7 @@ declare let amplitude: any;
 						<div class="opponent-info">
 							<div class="main-info">
 								<bgs-board
+									[debug]="true"
 									[entities]="boardMinions"
 									[finalBoard]="true"
 									[minionStats]="minionStats"
@@ -194,6 +195,9 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.name = value.player.name;
 		this.tavernTier = value.player.getCurrentTavernTier();
 		this.boardMinions = value.player.getLastKnownBoardState();
+		if (!this.boardMinions || this.boardMinions.length === 0) {
+			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
+		}
 		this.tabs = value.tabs;
 		this.selectedTab = value.selectedStat;
 		this.addMinionStats();

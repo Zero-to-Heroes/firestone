@@ -17,7 +17,7 @@ export class BgsGameEndParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
-		console.warn('will build post-match info', event);
+		console.warn('will build post-match info');
 		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(event.postMatchStats, currentState);
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
 			stage.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : stage,

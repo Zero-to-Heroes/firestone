@@ -94,13 +94,18 @@ export class BgsBoardComponent implements AfterViewInit {
 
 	@Input('entities') set entities(entities: readonly Entity[]) {
 		if (this.inputEntities === entities) {
+			if (this.debug) {
+				console.log('getting the same input entities, returning', entities);
+			}
 			return;
 		}
 		this.inputEntities = entities;
 		this._entities = entities?.map(entity => Entity.create({ ...entity } as Entity));
 		this.previousBoardWidth = undefined;
-		this.boardReady = false;
-		// console.log('setting board ready', this.boardReady);
+		if (this.debug) {
+			this.boardReady = false;
+			console.log('[bgs-board] setting board ready', this.boardReady);
+		}
 		this.onResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -171,9 +176,9 @@ export class BgsBoardComponent implements AfterViewInit {
 			return;
 		}
 		const rect = boardContainer.getBoundingClientRect();
-		if (this.debug) {
-			console.log('board container', boardContainer, rect);
-		}
+		// if (this.debug) {
+		// 	console.log('board container', boardContainer, rect);
+		// }
 		if (!rect.width || !rect.height) {
 			if (this.debug) {
 				console.log('no dimensions, retrying');
@@ -192,7 +197,9 @@ export class BgsBoardComponent implements AfterViewInit {
 		// We have to resize even though we have the same number of entities, because the resize is
 		// set on the DOM elements, which are teared down and recreated
 		if (this.previousBoardWidth === rect.width && this.previousBoardHeight === rect.height) {
+			this.boardReady = true;
 			if (this.debug) {
+				console.log('[bgs-board] setting board ready', this.boardReady);
 				console.log('all good, drawing cards', this.previousBoardWidth, rect);
 			}
 			// The board size is fixed, now we add the cards
@@ -212,7 +219,6 @@ export class BgsBoardComponent implements AfterViewInit {
 				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 				this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
 			}
-			this.boardReady = true;
 			// console.log('setting board ready', this.boardReady);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

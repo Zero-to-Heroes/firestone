@@ -368,12 +368,12 @@ export class BgsChartHpComponent {
 		const playerOrder = [...this._game.players]
 			.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
 			.map(player => player.cardId);
-		console.log('playerOrder', playerOrder);
+		// console.log('playerOrder', playerOrder);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
 		}
-		console.log('hpOverTurn', hpOverTurn);
+		// console.log('hpOverTurn', hpOverTurn);
 		this.legend = playerOrder.map(cardId => ({
 			cardId: cardId,
 			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${cardId}.png`,
