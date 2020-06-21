@@ -26,6 +26,10 @@ export const normalizeCardId = (cardId: string, allCards: AllCardsService) => {
 				);
 			} else if (cardId === CardIds.NonCollectible.Hunter.RatPack_RatTokenTavernBrawl) {
 				normalCards = normalCards.filter(card => card.id === CardIds.NonCollectible.Hunter.RatPack_RatToken);
+			} else if (cardId === CardIds.NonCollectible.Warlock.ImpGangBoss_ImpTokenTavernBrawl) {
+				normalCards = normalCards.filter(
+					card => card.id === CardIds.NonCollectible.Warlock.ImpGangBoss_ImpToken,
+				);
 			} else {
 				console.warn('too many matches', cardId, normalCards);
 			}
