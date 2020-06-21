@@ -16,6 +16,8 @@ export class GetBattlegroundsInfoOperation extends MindVisionOperationFacade<Bat
 					game: battlegroundsInfo.Game,
 					// previousRating: battlegroundsInfo.PreviousRating,
 				} as BattlegroundsInfo),
+			5,
+			2000,
 		);
 	}
 }

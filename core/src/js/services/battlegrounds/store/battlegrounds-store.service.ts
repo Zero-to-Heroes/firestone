@@ -185,13 +185,11 @@ export class BattlegroundsStoreService {
 					),
 				);
 				setTimeout(async () => {
-					const info = await this.memory.getBattlegroundsInfo();
+					const info = await this.memory.getBattlegroundsInfo(1);
 					// console.log('bgs info', JSON.stringify(info, null, 4));
 					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
 					// console.log('BgsGlobalInfoUpdatedEvent emit done');
 				}, 5000);
-				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
-				// 	this.battlegroundsUpdater.next(new BgsCombatStartEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE) {
 				this.battlegroundsUpdater.next(new BgsTripleCreatedEvent(gameEvent.cardId));
 				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {

@@ -45,8 +45,8 @@ export class MemoryInspectionService {
 		return this.getPlayerInfoOperation.call();
 	}
 
-	public async getBattlegroundsInfo(): Promise<BattlegroundsInfo> {
-		return this.getBattlegroundsInfoOperation.call();
+	public async getBattlegroundsInfo(numberOfRetries?: number): Promise<BattlegroundsInfo> {
+		return this.getBattlegroundsInfoOperation.call(numberOfRetries);
 	}
 
 	public async getActiveDeck(numberOfRetries?: number): Promise<any> {
