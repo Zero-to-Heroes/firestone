@@ -468,20 +468,28 @@ export class GameStateService {
 	}
 
 	private canAttack(entity): boolean {
+		const impossibleToAttack =
+			this.hasTag(entity, GameTag.DORMANT) ||
+			(this.hasTag(entity, GameTag.EXHAUSTED) && !this.hasTag(entity, GameTag.ATTACKABLE_BY_RUSH)) ||
+			this.hasTag(entity, GameTag.FROZEN) ||
+			this.hasTag(entity, GameTag.CANT_ATTACK);
+		// console.log(
+		// 	'can attack?',
+		// 	!impossibleToAttack,
+		// 	entity.cardId,
+		// 	this.hasTag(entity, GameTag.EXHAUSTED),
+		// 	this.hasTag(entity, GameTag.ATTACKABLE_BY_RUSH),
+		// 	entity,
+		// );
 		// charge / rush?
-		return (
-			!this.hasTag(entity, GameTag.DORMANT) &&
-			!this.hasTag(entity, GameTag.EXHAUSTED) &&
-			!this.hasTag(entity, GameTag.FROZEN) &&
-			!this.hasTag(entity, GameTag.CANT_ATTACK)
-		);
+		return !impossibleToAttack;
 	}
 
-	private hasTag(entity, tag: number): boolean {
+	private hasTag(entity, tag: number, value = 1): boolean {
 		if (!entity?.tags) {
 			return false;
 		}
-		const matches = entity.tags.some(t => t.Name === tag && t.Value === 1);
+		const matches = entity.tags.some(t => t.Name === tag && t.Value === value);
 		return matches;
 	}
 }

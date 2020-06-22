@@ -75,7 +75,7 @@ export class GameEvent {
 	public static readonly GALAKROND_INVOKED = 'GALAKROND_INVOKED';
 	public static readonly MINION_GO_DORMANT = 'MINION_GO_DORMANT';
 
-	public static readonly BLOCK_END = 'BLOCK_END';
+	public static readonly GAME_STATE_UPDATE = 'GAME_STATE_UPDATE';
 
 	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
 	public static readonly BATTLEGROUNDS_HERO_SELECTION = 'BATTLEGROUNDS_HERO_SELECTION';
