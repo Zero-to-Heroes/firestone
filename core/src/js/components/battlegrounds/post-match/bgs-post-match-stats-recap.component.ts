@@ -48,6 +48,13 @@ declare let amplitude: any;
 				<div class="label">Triples created</div>
 				<div class="value">{{ triples }}</div>
 			</div>
+			<div
+				class="entry cell"
+				helpTooltip="The maximum total stats (attack + health) of your board at the beginning of a battle"
+			>
+				<div class="label">Max board stats</div>
+				<div class="value">{{ maxBoardStats }}</div>
+			</div>
 			<div class="entry cell">
 				<div class="label">Coins wasted</div>
 				<div class="value">{{ coinsWasted }}</div>
@@ -114,6 +121,7 @@ export class BgsPostMatchStatsRecapComponent {
 	totalHeroDamageDealt: number;
 	winStreak: number;
 	triples: number;
+	maxBoardStats: number;
 	coinsWasted: number;
 	rerolls: number;
 	freezes: number;
@@ -169,6 +177,7 @@ export class BgsPostMatchStatsRecapComponent {
 		this.heroPowers = this._stats.stats.mainPlayerHeroPowersOverTurn
 			.map(value => value.value)
 			.reduce((a, b) => a + b, 0);
+		this.maxBoardStats = Math.max(...this._stats.stats.totalStatsOverTurn.map(stat => stat.value));
 		// Hack for Toki, to avoid counting the hero power as a refresh (even though it technically
 		// is a refresh)
 		const rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
