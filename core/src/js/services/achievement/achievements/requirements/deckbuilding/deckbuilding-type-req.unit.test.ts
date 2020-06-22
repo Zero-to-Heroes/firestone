@@ -9,6 +9,27 @@ describe('deckbuilding-type-req', () => {
 	const cards = buildCardsService();
 
 	describe('type is spell', () => {
+		describe('qualifier is AT_LEAST', () => {
+			const fullSpellDeckstring = 'AAECAf0EAr+kA8W4Aw67AqsEywSWBZ+bA6CbA/+dA/SrA/GvA8G4A8K4A4y5A4G/A97EAwA=';
+
+			test('is completed when deckstring contains as many cards of specified type', () => {
+				const req = new DeckbuildingTypeReq(0, 'SPELL', 'AT_LEAST', cards);
+				const event = Object.assign(new GameEvent(), {
+					type: GameEvent.LOCAL_PLAYER,
+					localPlayer: {
+						deck: {
+							deckstring: fullSpellDeckstring,
+							deck: decode(fullSpellDeckstring),
+						},
+					},
+				} as GameEvent);
+
+				req.test(event);
+
+				expect(req.isCompleted()).toBe(true);
+			});
+		});
+
 		describe('qualifier is AT_MOST', () => {
 			const noSpellDeckstring =
 				'AAECAZICBMmcA67SAvX8ArQFDc6UA5iGA6miA9WDA8CGA4vuAs+UA575Au2iA9kE76IDt+4Cu58DAA==';

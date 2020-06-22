@@ -36,7 +36,7 @@ export class FormatTypeReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		if (this.formatTypes.indexOf(gameEvent.additionalData.metaData.FormatType) !== -1) {
+		if (this.formatTypes.includes(gameEvent.additionalData.metaData.FormatType)) {
 			this.isCorrectFormatType = true;
 		}
 	}
