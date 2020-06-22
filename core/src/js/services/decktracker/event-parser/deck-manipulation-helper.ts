@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
+import { CardMetaInfo } from '../../../models/decktracker/card-meta-info';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -153,14 +154,9 @@ export class DeckManipulationHelper {
 			return zone;
 		}
 		const newCard = DeckCard.create({
-			cardId: cardTemplate.cardId,
-			entityId: cardTemplate.entityId,
-			cardName: cardTemplate.cardName,
-			manaCost: cardTemplate.manaCost,
-			rarity: cardTemplate.rarity,
-			zone: cardTemplate.zone,
-			creatorCardId: cardTemplate.creatorCardId,
-			lastAffectedByCardId: cardTemplate.lastAffectedByCardId,
+			...cardTemplate,
+			buffingEntityCardIds: undefined,
+			metaInfo: new CardMetaInfo(),
 		} as DeckCard);
 		if (debug) {
 			console.debug('adding card to zone', [...zone, newCard], cardTemplate);

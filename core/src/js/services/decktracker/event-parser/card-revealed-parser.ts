@@ -26,6 +26,7 @@ export class CardRevealedParser implements EventParser {
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			zone: 'SETASIDE',
+			temporaryCard: true,
 		} as DeckCard);
 
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, card);

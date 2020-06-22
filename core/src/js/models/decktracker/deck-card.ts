@@ -23,6 +23,7 @@ export class DeckCard {
 		| 'TRANSFORMED_INTO_OTHER';
 	readonly metaInfo: CardMetaInfo = new CardMetaInfo();
 	readonly inInitialDeck: boolean;
+	readonly temporaryCard?: boolean;
 
 	public static create(base: DeckCard = {} as DeckCard) {
 		if (base.cardId && !base.cardName) {

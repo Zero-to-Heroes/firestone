@@ -59,9 +59,14 @@ export class DeckListByZoneComponent {
 					null,
 					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
 					// not show them in the zones
-					(a: VisualDeckCard) => a.zone !== 'SETASIDE',
+					// (a: VisualDeckCard) => a.zone !== 'SETASIDE',
+					// Cards like Tracking put cards from the deck to the SETASIDE zone, so we want to
+					// keep them in fact. We have added a specific flag for cards that are just here
+					// for technical reasons
+					(a: VisualDeckCard) => !a.temporaryCard,
 				),
 			);
+			// console.log('zones', zones, otherZone);
 		}
 		// Otherwise, we add all the dynamic zones
 		deckState.dynamicZones.forEach(zone => {
