@@ -1,4 +1,4 @@
-import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -21,21 +21,9 @@ export class PogoPlayedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.log('preparing to handle pogo played');
-
 		const isPlayer = controllerId === localPlayer.PlayerId;
-		// console.log(
-		// 	'is player',
-		// 	isPlayer,
-		// 	currentState.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
-		// 		currentState.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY,
-		// );
-		if (
-			!isPlayer &&
-			// Don't show the opponent's pogo counter in battlegrounds
-			currentState.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
-			currentState.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY
-		) {
+		// Don't show the opponent's pogo counter in battlegrounds
+		if (!isPlayer && currentState.isBattlegrounds()) {
 			return currentState;
 		}
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
