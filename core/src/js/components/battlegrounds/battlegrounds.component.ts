@@ -101,6 +101,10 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:keydown', ['$event'])
 	async onKeyDown(e: KeyboardEvent) {
+		const currentWindow = await this.ow.getCurrentWindow();
+		if (currentWindow.id.includes('Overlay')) {
+			return;
+		}
 		// console.log('keydown event', e, this.hotkey);
 		if (!this.hotkey || this.hotkey.IsUnassigned) {
 			return;
