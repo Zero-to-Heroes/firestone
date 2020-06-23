@@ -17,6 +17,7 @@ import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collec
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { Message } from '../services/notifications.service';
 import { OverwolfService } from '../services/overwolf.service';
+import { PreferencesService } from '../services/preferences.service';
 import { ProcessingQueue } from '../services/processing-queue.service';
 
 declare let amplitude;
@@ -71,6 +72,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		private debugService: DebugService,
 		private ow: OverwolfService,
 		private elRef: ElementRef,
+		private prefs: PreferencesService,
 	) {}
 
 	async ngAfterViewInit() {
@@ -200,6 +202,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const type: string = messageObject.type;
 			const additionalTimeout: number = messageObject.timeout || 0;
 			await this.ow.restoreWindow(this.windowId);
+			this.ow.bringToFront(this.windowId);
 			const override: any = {
 				// Achievement apps are timed out manually
 				// timeOut: messageObject.app === 'achievement' ? 999999 : this.timeout + additionalTimeout,
@@ -380,8 +383,10 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private async showSettings() {
 		console.log('showing settings');
 		this.settingsEventBus.next(['achievements', 'capture']);
-		const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
+		const prefs = await this.prefs.getPreferences();
+		const window = await this.ow.getSettingsWindow(prefs);
 		await this.ow.restoreWindow(window.id);
+		this.ow.bringToFront(window.id);
 	}
 
 	private waitForInit(): Promise<void> {

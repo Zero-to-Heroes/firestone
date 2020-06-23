@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
@@ -108,20 +109,15 @@ export class AppBootstrapService {
 			return;
 		}
 		console.log('[bootstrap] app init starting');
+		window['mainWindowHotkeyPressed'] = () => this.onHotkeyPress();
+		window['reloadWindows'] = () => this.reloadWindows();
 		this.ow.addHotKeyPressedListener('collection', async hotkeyResult => {
 			// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
 			if (this.currentState !== 'READY') {
 				return;
 			}
 			if (hotkeyResult.status === 'success') {
-				const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-				if (window.isVisible) {
-					this.store.stateUpdater.next(new CloseMainWindowEvent());
-					await this.ow.hideCollectionWindow();
-					// await this.ow.closeWindow(window.id);
-				} else {
-					this.showCollectionWindow();
-				}
+				this.onHotkeyPress();
 			} else {
 				console.log('could not trigger hotkey', hotkeyResult, this.currentState);
 			}
@@ -134,7 +130,9 @@ export class AppBootstrapService {
 				if (this.ow.inAnotherGame(res)) {
 					// console.log('in another game, hiding app', res);
 					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW);
+					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
 					this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
+					this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW_OVERLAY);
 				} else if (res.runningChanged) {
 					this.loadingWindowShown = false;
 					this.closeLoadingScreen();
@@ -150,7 +148,8 @@ export class AppBootstrapService {
 			}
 		});
 		// const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		await this.ow.hideCollectionWindow();
+		const prefs = await this.prefs.getPreferences();
+		await this.ow.hideCollectionWindow(prefs);
 		// await this.ow.hideWindow(collectionWindow.id);
 		this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
@@ -159,30 +158,42 @@ export class AppBootstrapService {
 		});
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
-		// await this.ow.restoreWindow(settingsWindow.id);
+		const settingsWindow = await this.ow.getSettingsWindow(prefs);
 		await this.ow.hideWindow(settingsWindow.id);
-		// const [
-		// 	settingsWindow,
-		// 	// battlegroundsPlayerInfoWindow,
-		// 	// battlegroundsLeaderboardOverwlayWindow,
-		// ] = await Promise.all([
-		// 	this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW),
-		// 	// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
-		// 	// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW),
-		// ]);
-		// await Promise.all([
-		// 	this.ow.restoreWindow(settingsWindow.id),
-		// 	// this.ow.restoreWindow(battlegroundsPlayerInfoWindow.id),
-		// 	// this.ow.restoreWindow(battlegroundsLeaderboardOverwlayWindow.id),
-		// ]);
-		// await Promise.all([
-		// 	this.ow.hideWindow(settingsWindow.id),
-		// 	// this.ow.hideWindow(battlegroundsPlayerInfoWindow.id),
-		// 	// this.ow.hideWindow(battlegroundsLeaderboardOverwlayWindow.id),
-		// ]);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
 		setTimeout(() => this.addAnalytics());
+	}
+
+	private async reloadWindows() {
+		console.log('reloading windows in app bootstrap');
+		const prefs: Preferences = await this.prefs.getPreferences();
+		this.ow.closeWindow(OverwolfService.COLLECTION_WINDOW);
+		this.ow.closeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
+		this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
+		this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW_OVERLAY);
+		const [mainWindow, settingsWindow] = await Promise.all([
+			this.ow.getCollectionWindow(prefs),
+			this.ow.getSettingsWindow(prefs),
+		]);
+		await this.ow.restoreWindow(mainWindow.id);
+		// this.ow.bringToFront(mainWindow.id);
+		await this.ow.restoreWindow(settingsWindow.id);
+		this.ow.bringToFront(settingsWindow.id);
+	}
+
+	private async onHotkeyPress() {
+		const prefs = await this.prefs.getPreferences();
+		// console.log('pressing hotkey', prefs.collectionUseOverlay);
+		const window = await this.ow.getCollectionWindow(prefs);
+		// console.log('retrieved', prefs, window);
+		if (window.isVisible) {
+			// console.log('closing main window', this.store, this);
+			this.store.stateUpdater.next(new CloseMainWindowEvent());
+			await this.ow.hideCollectionWindow(prefs);
+			// await this.ow.closeWindow(window.id);
+		} else {
+			this.showCollectionWindow();
+		}
 	}
 
 	private async showLoadingScreen() {
@@ -191,7 +202,8 @@ export class AppBootstrapService {
 		}
 		this.loadingWindowShown = true;
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
-		this.ow.hideCollectionWindow();
+		const prefs = await this.prefs.getPreferences();
+		this.ow.hideCollectionWindow(prefs);
 		// if (this.currentState === 'READY') {
 		// 	return;
 		// }
@@ -234,10 +246,12 @@ export class AppBootstrapService {
 	// }
 
 	private async showCollectionWindow() {
-		console.log('[bootstrap] reading to show collection window');
+		console.log('[bootstrap] reading to show collection window', this.store, this);
 		// We do both store and direct restore to keep things snappier
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+		const prefs = await this.prefs.getPreferences();
+		const window = await this.ow.getCollectionWindow(prefs);
 		this.ow.restoreWindow(window.id);
+		this.ow.bringToFront(window.id);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		this.ow.closeWindow(OverwolfService.LOADING_WINDOW);
 	}

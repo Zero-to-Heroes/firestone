@@ -189,11 +189,12 @@ export class MainWindowStoreService {
 			this.processingQueue.enqueue(event);
 		});
 
-		this.ow.addGameInfoUpdatedListener((res: any) => {
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.gameLaunched(res)) {
 				console.log('[store] game launched, populating store', res);
 				// Do both so that it's hidden right away
-				this.ow.hideCollectionWindow();
+				const prefs = await this.prefs.getPreferences();
+				this.ow.hideCollectionWindow(prefs);
 				this.stateUpdater.next(new CloseMainWindowEvent());
 				this.populateStore();
 			}

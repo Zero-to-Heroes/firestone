@@ -29,7 +29,7 @@ import { PreferencesService } from '../../services/preferences.service';
 				</p>
 				<b></b>
 			</label>
-			<div class="info-message" *ngIf="messageWhenToggleValue && valueToDisplayMessageOn === value">
+			<div class="info-message" *ngIf="messageWhenToggleValue && shouldDisplayMessage()">
 				<svg class="attention-icon">
 					<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
 				</svg>
@@ -48,15 +48,18 @@ export class PreferenceToggleComponent {
 	@Input() toggleFunction: (newValue: boolean) => void;
 
 	value: boolean;
+	toggled: boolean = false;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef) {
 		this.loadDefaultValues();
 	}
 
-	toggleValue() {
+	async toggleValue() {
 		this.value = !this.value;
-		this.prefs.setValue(this.field, this.value);
+		this.toggled = true;
+		await this.prefs.setValue(this.field, this.value);
 		if (this.toggleFunction) {
+			console.log('calling toggle function', this.toggleFunction);
 			this.toggleFunction(this.value);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -64,9 +67,16 @@ export class PreferenceToggleComponent {
 		}
 	}
 
+	shouldDisplayMessage(): boolean {
+		return (
+			this.valueToDisplayMessageOn === this.value || (this.toggled && this.valueToDisplayMessageOn === 'onToggle')
+		);
+	}
+
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.value = prefs[this.field];
+		this.toggled = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

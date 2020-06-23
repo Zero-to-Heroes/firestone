@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 import { isWindowClosed } from '../../services/utils';
 
 declare let amplitude;
@@ -35,7 +36,7 @@ export class ControlCloseComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -52,13 +53,15 @@ export class ControlCloseComponent implements AfterViewInit {
 		// If game is not running, we close all other windows
 		const isRunning: boolean = await this.ow.inGame();
 		// Temp
-		const [mainWindow, bgsWindow, bgsWindowOverlay] = await Promise.all([
+		const [mainWindow, mainWindowOverlay, bgsWindow, bgsWindowOverlay] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.COLLECTION_WINDOW),
+			this.ow.getWindowState(OverwolfService.COLLECTION_WINDOW_OVERLAY),
 			this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW),
 			this.ow.getWindowState(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY),
 		]);
 		const areBothMainAndBgWindowsOpen =
 			!isWindowClosed(mainWindow.window_state_ex) &&
+			!isWindowClosed(mainWindowOverlay.window_state_ex) &&
 			!isWindowClosed(bgsWindow.window_state_ex) &&
 			!isWindowClosed(bgsWindowOverlay.window_state_ex);
 		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen) {
@@ -77,7 +80,8 @@ export class ControlCloseComponent implements AfterViewInit {
 			if (this.shouldHide) {
 				this.ow.hideWindow(this.windowId);
 			} else if (this.isMainWindow) {
-				this.ow.hideCollectionWindow();
+				const prefs = await this.prefs.getPreferences();
+				this.ow.hideCollectionWindow(prefs);
 			} else {
 				this.ow.closeWindow(this.windowId);
 			}

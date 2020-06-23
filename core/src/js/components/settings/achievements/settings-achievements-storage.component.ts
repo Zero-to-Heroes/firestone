@@ -1,5 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'settings-achievements-storage',
@@ -22,15 +30,19 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAchievementsStorageComponent implements OnDestroy {
+export class SettingsAchievementsStorageComponent implements AfterViewInit, OnDestroy {
 	mediaFolder: string;
 	usedSizeInGB: number;
 
 	private stateChangedListener: (message: any) => void;
 
-	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {
+	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef, private prefs: PreferencesService) {}
+
+	async ngAfterViewInit() {
 		this.loadStorageInfo();
-		this.stateChangedListener = this.ow.addStateChangedListener('SettingsWindow', message => {
+		const prefs = await this.prefs.getPreferences();
+		const window = this.ow.getSettingsWindowName(prefs);
+		this.stateChangedListener = this.ow.addStateChangedListener(window, message => {
 			this.loadStorageInfo();
 		});
 	}

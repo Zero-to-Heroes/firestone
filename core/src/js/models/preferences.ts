@@ -14,6 +14,8 @@ export class Preferences {
 	readonly showCardsOutsideOfPacks: boolean = true;
 	readonly collectionHistoryShowOnlyNewCards: boolean = false;
 
+	readonly collectionUseOverlay: boolean;
+
 	readonly decktrackerShowArena: boolean = true;
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowTavernBrawl: boolean = true;

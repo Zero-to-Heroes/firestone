@@ -15,6 +15,7 @@ import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
+import { PreferencesService } from '../services/preferences.service';
 
 declare let amplitude: any;
 
@@ -107,12 +108,15 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private dataStoreSubscription: Subscription;
 	private navigationStoreSubscription: Subscription;
+	private hotkeyPressedHandler;
+	private hotkey;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
 		private readonly cards: AllCardsService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.init();
 	}
@@ -128,7 +132,9 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				this.ow.changeWindowPosition(this.windowId, newX, newY);
 			}
 		});
-		this.stateChangedListener = this.ow.addStateChangedListener(OverwolfService.COLLECTION_WINDOW, message => {
+		const prefs = await this.prefs.getPreferences();
+		const windowName = await this.ow.getCollectionWindowName(prefs);
+		this.stateChangedListener = this.ow.addStateChangedListener(windowName, message => {
 			console.log('received collection window message', message, this.isMaximized);
 			// If hidden, restore window to as it was
 			if (message.window_previous_state_ex === 'hidden') {
@@ -173,6 +179,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 					console.log('restoring window', this.isMaximized);
 					await this.ow.restoreWindow(this.windowId);
+					this.ow.bringToFront(this.windowId);
 					if (this.isMaximized) {
 						await this.ow.maximizeWindow(this.windowId);
 					}
@@ -185,6 +192,35 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				}
 			});
 		});
+		this.hotkey = await this.ow.getHotKey('collection');
+		console.log('assigned hotkey', this.hotkey);
+		this.hotkeyPressedHandler = this.ow.getMainWindow().mainWindowHotkeyPressed;
+	}
+
+	@HostListener('window:keydown', ['$event'])
+	async onKeyDown(e: KeyboardEvent) {
+		const currentWindow = await this.ow.getCurrentWindow();
+		if (currentWindow.id.includes('Overlay')) {
+			return;
+		}
+		// console.log('keydown event', e, this.hotkey, await this.ow.getCurrentWindow());
+
+		if (!this.hotkey || this.hotkey.IsUnassigned) {
+			return;
+		}
+		const isAltKey = [1, 3, 5, 7].indexOf(this.hotkey.modifierKeys) !== -1;
+		const isCtrlKey = [2, 3, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
+		const isShiftKey = [4, 5, 6, 7].indexOf(this.hotkey.modifierKeys) !== -1;
+
+		if (
+			e.shiftKey === isShiftKey &&
+			e.altKey === isAltKey &&
+			e.ctrlKey === isCtrlKey &&
+			e.keyCode == this.hotkey.virtualKeycode
+		) {
+			console.log('handling hotkey press');
+			this.hotkeyPressedHandler();
+		}
 	}
 
 	@HostListener('mousedown')

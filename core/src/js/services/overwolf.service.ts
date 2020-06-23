@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
 import { ActiveSubscriptionPlan } from '../models/overwolf/profile/active-subscription-plan';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
+import { Preferences } from '../models/preferences';
 
 declare let overwolf: any;
 
@@ -11,7 +12,9 @@ const HEARTHSTONE_GAME_ID = 9898;
 export class OverwolfService {
 	public static MAIN_WINDOW = 'MainWindow';
 	public static COLLECTION_WINDOW = 'CollectionWindow';
+	public static COLLECTION_WINDOW_OVERLAY = 'CollectionOverlayWindow';
 	public static SETTINGS_WINDOW = 'SettingsWindow';
+	public static SETTINGS_WINDOW_OVERLAY = 'SettingsOverlayWindow';
 	public static LOADING_WINDOW = 'LoadingWindow';
 	public static DECKTRACKER_WINDOW = 'DeckTrackerWindow';
 	public static DECKTRACKER_OPPONENT_WINDOW = 'DeckTrackerOpponentWindow';
@@ -30,6 +33,26 @@ export class OverwolfService {
 
 	public getMainWindow(): any {
 		return overwolf.windows.getMainWindow();
+	}
+
+	public getCollectionWindow(prefs: Preferences) {
+		const windowName = this.getCollectionWindowName(prefs);
+		return this.obtainDeclaredWindow(windowName);
+	}
+
+	public getSettingsWindow(prefs: Preferences) {
+		const windowName = this.getSettingsWindowName(prefs);
+		return this.obtainDeclaredWindow(windowName);
+	}
+
+	public getCollectionWindowName(prefs: Preferences) {
+		return prefs.collectionUseOverlay
+			? OverwolfService.COLLECTION_WINDOW_OVERLAY
+			: OverwolfService.COLLECTION_WINDOW;
+	}
+
+	public getSettingsWindowName(prefs: Preferences) {
+		return prefs.collectionUseOverlay ? OverwolfService.SETTINGS_WINDOW_OVERLAY : OverwolfService.SETTINGS_WINDOW;
 	}
 
 	public addStateChangedListener(targetWindowName: string, callback): (message: any) => void {
@@ -223,15 +246,6 @@ export class OverwolfService {
 				overwolf.windows.restore(windowId, async result => {
 					// console.log('[overwolf-service] restored window', windowId, new Error().stack);
 					resolve(result);
-					// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
-					// try {
-					// 	overwolf.windows.bringToFront(windowId, false, result => {
-					// 		// console.log('[overwolf-service] restored window', windowId);
-					// 		resolve(result);
-					// 	});
-					// } catch (e) {
-					// 	console.warn('exception when setting topmost', windowId, e);
-					// }
 				});
 			} catch (e) {
 				// This doesn't seem to prevent the window from being restored, so let's ignore it
@@ -272,9 +286,9 @@ export class OverwolfService {
 		});
 	}
 
-	public async hideCollectionWindow() {
-		const collectionWindow = await this.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		const settingsWindow = await this.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+	public async hideCollectionWindow(prefs: Preferences) {
+		const collectionWindow = await this.getCollectionWindow(prefs);
+		const settingsWindow = await this.getSettingsWindow(prefs);
 		return new Promise<any>(async resolve => {
 			await Promise.all([this.hideWindow(collectionWindow.id), this.hideWindow(settingsWindow.id)]);
 			resolve();

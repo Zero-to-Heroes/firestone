@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'control-bug',
@@ -24,7 +25,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class ControlBugComponent {
 	private settingsEventBus: EventEmitter<[string, string]>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}
 
 	async ngAfterViewInit() {
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
@@ -34,14 +35,10 @@ export class ControlBugComponent {
 		this.settingsEventBus.next(['general', 'bugreport']);
 		// Avoid flickering
 		setTimeout(async () => {
-			// const window = await this.ow.getCurrentWindow();
-			// const center = {
-			// 	x: window.left + window.width / 2,
-			// 	y: window.top + window.height / 2,
-			// };
-			const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
-			// await this.ow.sendMessage(settingsWindow.id, 'move', center);
+			const prefs = await this.prefs.getPreferences();
+			const settingsWindow = await this.ow.getSettingsWindow(prefs);
 			this.ow.restoreWindow(settingsWindow.id);
+			this.ow.bringToFront(settingsWindow.id);
 		}, 10);
 	}
 }

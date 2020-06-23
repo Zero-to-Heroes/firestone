@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'settings-general-launch',
@@ -21,9 +22,29 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					label="Contribute to the VS meta report"
 					tooltip="When turned on, you contribute to build the Vicious Syndicate meta report. The server parses your games and extracts some global info (like the game's rank, the cards played) and anonymously sends this aggregated data to Vicious Syndicate. We don't get paid for this, but we do get some exposure since they then talk about us :)"
 				></preference-toggle>
+				<preference-toggle
+					field="collectionUseOverlay"
+					label="Use main window overlay"
+					tooltip="When turned on, the main window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app. Changing this value will close then reopen the Settings window and the Main window"
+					[toggleFunction]="toggleOverlay"
+				></preference-toggle>
 			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralLaunchComponent {}
+export class SettingsGeneralLaunchComponent implements AfterViewInit {
+	private reloadWindows;
+
+	constructor(private readonly ow: OverwolfService) {}
+
+	ngAfterViewInit() {
+		this.reloadWindows = this.ow.getMainWindow().reloadWindows;
+		console.log('setting reloadWindows', this.reloadWindows, this.ow.getMainWindow());
+	}
+
+	toggleOverlay = () => {
+		console.log('reloading windows', this.reloadWindows, this);
+		this.reloadWindows();
+	};
+}

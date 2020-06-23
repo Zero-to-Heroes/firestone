@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'control-settings',
@@ -29,16 +30,10 @@ export class ControlSettingsComponent implements AfterViewInit {
 	// private settingsWindowId: string;
 	private settingsEventBus: EventEmitter<[string, string]>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}
 
 	async ngAfterViewInit() {
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-		// try {
-		// 	const window = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
-		// 	this.settingsWindowId = window.id;
-		// } catch (e) {
-		// 	this.ngAfterViewInit();
-		// }
 	}
 
 	async showSettings() {
@@ -46,21 +41,16 @@ export class ControlSettingsComponent implements AfterViewInit {
 			console.log('showing settings app', this.settingsApp, this.settingsSection);
 			this.settingsEventBus.next([this.settingsApp, this.settingsSection]);
 		}
-		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+		const prefs = await this.prefs.getPreferences();
+		const windowName = await this.ow.getSettingsWindowName(prefs);
+		const settingsWindow = await this.ow.obtainDeclaredWindow(windowName);
 		console.log('settings window', settingsWindow);
 		// Window hidden, we show it
 		if (settingsWindow.stateEx !== 'normal') {
 			// Avoid flickering
 			setTimeout(async () => {
-				// const window = await this.ow.getCurrentWindow();
-				// const center = {
-				// 	x: window.left + window.width / 2,
-				// 	y: window.top + window.height / 2,
-				// };
 				await this.ow.restoreWindow(settingsWindow.id);
-				// if (this.shouldMoveSettingsWindow) {
-				// 	await this.ow.sendMessage(settingsWindow.id, 'move', center);
-				// }
+				this.ow.bringToFront(settingsWindow.id);
 			}, 10);
 		}
 		// Otherwise we hide it

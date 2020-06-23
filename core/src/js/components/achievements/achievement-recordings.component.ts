@@ -215,7 +215,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		});
 	}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		// console.log('[achievement-recordings] init');
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.player = this.elRef.nativeElement.querySelector('video');
@@ -224,7 +224,9 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			return;
 		}
 		// auto pause the video when window is closed / minimized
-		this.stateChangedListener = this.ow.addStateChangedListener(OverwolfService.COLLECTION_WINDOW, message => {
+		const prefs = await this.prefs.getPreferences();
+		const windowName = await this.ow.getCollectionWindowName(prefs);
+		this.stateChangedListener = this.ow.addStateChangedListener(windowName, message => {
 			if (message.window_state !== 'normal') {
 				this.player.pause();
 			}
