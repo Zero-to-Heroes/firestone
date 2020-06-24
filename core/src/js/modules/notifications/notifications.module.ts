@@ -8,6 +8,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
@@ -32,6 +33,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot()],
 	declarations: [NotificationsComponent],
 	bootstrap: [NotificationsComponent],
-	providers: [DebugService, OverwolfService],
+	providers: [DebugService, OverwolfService, PreferencesService],
 })
 export class NotificationsModule {}
