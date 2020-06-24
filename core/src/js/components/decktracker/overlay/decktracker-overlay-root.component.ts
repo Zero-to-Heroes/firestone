@@ -75,6 +75,8 @@ declare let amplitude;
 							[cardsGoToBottom]="cardsGoToBottom"
 							[tooltipPosition]="tooltipPosition"
 							[darkenUsedCards]="darkenUsedCards"
+							[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
+							[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
 							[side]="player"
 						>
 						</decktracker-deck-list>
@@ -92,6 +94,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@Input() opacityExtractor: (prefs: Preferences) => number;
 	@Input() cardsGoToBottomExtractor: (prefs: Preferences) => boolean;
 	@Input() darkenUsedCardsExtractor: (prefs: Preferences) => boolean;
+	@Input() hideGeneratedCardsInOtherZoneExtractor: (prefs: Preferences) => boolean;
+	@Input() sortCardsByManaCostInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
@@ -121,6 +125,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	showGiftsSeparately: boolean;
 	cardsGoToBottom: boolean;
 	darkenUsedCards: boolean;
+	hideGeneratedCardsInOtherZone: boolean;
+	sortCardsByManaCostInOtherZone: boolean;
 	showDeckWinrate: boolean;
 	showMatchupWinrate: boolean;
 
@@ -256,6 +262,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.showDeckWinrate = this.showDeckWinrateExtractor(preferences);
 		this.showMatchupWinrate = this.showMatchupWinrateExtractor(preferences);
 		this.darkenUsedCards = this.darkenUsedCardsExtractor(preferences);
+		this.hideGeneratedCardsInOtherZone = this.hideGeneratedCardsInOtherZoneExtractor(preferences);
+		this.sortCardsByManaCostInOtherZone = this.sortCardsByManaCostInOtherZoneExtractor(preferences);
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);

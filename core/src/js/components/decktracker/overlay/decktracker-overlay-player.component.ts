@@ -14,6 +14,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[scaleExtractor]="scaleExtractor"
 			[cardsGoToBottomExtractor]="cardsGoToBottomExtractor"
 			[darkenUsedCardsExtractor]="darkenUsedCardsExtractor"
+			[hideGeneratedCardsInOtherZoneExtractor]="hideGeneratedCardsInOtherZoneExtractor"
+			[sortCardsByManaCostInOtherZoneExtractor]="sortCardsByManaCostInOtherZoneExtractor"
 			[deckExtractor]="deckExtractor"
 			[trackerPositionUpdater]="trackerPositionUpdater"
 			[trackerPositionExtractor]="trackerPositionExtractor"
@@ -36,6 +38,8 @@ export class DeckTrackerOverlayPlayerComponent {
 	scaleExtractor = (prefs: Preferences) => prefs.decktrackerScale;
 	cardsGoToBottomExtractor = (prefs: Preferences) => prefs.overlayCardsGoToBottom;
 	darkenUsedCardsExtractor = (prefs: Preferences) => true;
+	hideGeneratedCardsInOtherZoneExtractor = (prefs: Preferences) => prefs.overlayHideGeneratedCardsInOtherZone;
+	sortCardsByManaCostInOtherZoneExtractor = (prefs: Preferences) => prefs.overlaySortByManaInOtherZone;
 	deckExtractor = (state: GameState) => state.playerDeck;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;

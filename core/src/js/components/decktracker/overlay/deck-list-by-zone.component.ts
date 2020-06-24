@@ -34,28 +34,62 @@ export class DeckListByZoneComponent {
 	zones: readonly DeckZone[];
 	_tooltipPosition: CardTooltipPositionType;
 
+	private _hideGeneratedCardsInOtherZone: boolean;
+	private _sortCardsByManaCostInOtherZone: boolean;
+	private _deckState: DeckState;
+
+	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
+		if (value === this._hideGeneratedCardsInOtherZone) {
+			return;
+		}
+		this._hideGeneratedCardsInOtherZone = value;
+		this.updateInfo();
+	}
+
+	@Input() set sortCardsByManaCostInOtherZone(value: boolean) {
+		if (value === this._sortCardsByManaCostInOtherZone) {
+			return;
+		}
+		this._sortCardsByManaCostInOtherZone = value;
+		this.updateInfo();
+	}
+
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		// console.log('[deck-list-by-zone] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 
-	@Input('deckState') set deckState(deckState: DeckState) {
+	@Input() set deckState(value: DeckState) {
+		if (value === this._deckState) {
+			return;
+		}
+		this._deckState = value;
+		this.updateInfo();
+	}
+
+	private updateInfo() {
+		if (!this._deckState) {
+			return;
+		}
 		// console.log('deck state', deckState);
 		const zones = [
-			Object.assign(this.buildZone(deckState.deck, 'deck', 'In deck', null, deckState.cardsLeftInDeck), {
-				showWarning: deckState.showDecklistWarning,
-			} as DeckZone),
-			this.buildZone(deckState.hand, 'hand', 'In hand', null, deckState.hand.length, null, 'in-hand'),
+			Object.assign(
+				this.buildZone(this._deckState.deck, 'deck', 'In deck', null, this._deckState.cardsLeftInDeck),
+				{
+					showWarning: this._deckState.showDecklistWarning,
+				} as DeckZone,
+			),
+			this.buildZone(this._deckState.hand, 'hand', 'In hand', null, this._deckState.hand.length, null, 'in-hand'),
 		];
 		// If there are no dynamic zones, we use the standard "other" zone
-		if (deckState.dynamicZones.length === 0) {
-			const otherZone = [...deckState.otherZone, ...deckState.board];
+		if (this._deckState.dynamicZones.length === 0) {
+			const otherZone = [...this._deckState.otherZone, ...this._deckState.board];
 			zones.push(
 				this.buildZone(
 					otherZone,
 					'other',
 					'Other',
-					null,
+					this._sortCardsByManaCostInOtherZone ? (a, b) => a.manaCost - b.manaCost : null,
 					null,
 					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
 					// not show them in the zones
@@ -63,13 +97,16 @@ export class DeckListByZoneComponent {
 					// Cards like Tracking put cards from the deck to the SETASIDE zone, so we want to
 					// keep them in fact. We have added a specific flag for cards that are just here
 					// for technical reasons
-					(a: VisualDeckCard) => !a.temporaryCard,
+					(a: VisualDeckCard) =>
+						!a.temporaryCard &&
+						!(this._hideGeneratedCardsInOtherZone && a.creatorCardId) &&
+						!(this._hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
 				),
 			);
 			// console.log('zones', zones, otherZone);
 		}
 		// Otherwise, we add all the dynamic zones
-		deckState.dynamicZones.forEach(zone => {
+		this._deckState.dynamicZones.forEach(zone => {
 			zones.push(this.buildDynamicZone(zone, null));
 		});
 		this.zones = zones as readonly DeckZone[];

@@ -61,6 +61,20 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, the cards that have been used are darkened, to add focus to the cards still in the deck. It can only be activated if the Group cards by zone option is disabled"
 					></preference-toggle>
 					<preference-toggle
+						[ngClass]="{ 'disabled': !opponentTracker || !opponentOverlayGroupByZone }"
+						class="indented"
+						field="opponentOverlaySortByManaInOtherZone"
+						label="Sort cards by mana cost"
+						tooltip="When active, the cards will be sorted by mana cost in the Other zone. Otherwise, the zone will first show the cards on the board, then the graveyard, then the others."
+					></preference-toggle>
+					<preference-toggle
+						[ngClass]="{ 'disabled': !opponentTracker || !opponentOverlayGroupByZone }"
+						class="indented"
+						field="opponentOverlayHideGeneratedCardsInOtherZone"
+						label="Hide generated cards in Other zone"
+						tooltip="When active, the cards that didn't start in your opponent's deck won't appear in the Other zone"
+					></preference-toggle>
+					<preference-toggle
 						field="dectrackerShowOpponentTurnDraw"
 						label="Card turn draw"
 						tooltip="Show the turn at which a card in the opponent's hand was drawn"

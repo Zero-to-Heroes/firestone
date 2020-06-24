@@ -34,6 +34,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[deckState]="_deckState"
 					[colorManaCost]="colorManaCost"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
+					[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
 					[tooltipPosition]="_tooltipPosition"
 					[side]="side"
 				>
@@ -60,6 +62,8 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() showGiftsSeparately: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() darkenUsedCards: boolean;
+	@Input() hideGeneratedCardsInOtherZone: boolean;
+	@Input() sortCardsByManaCostInOtherZone: boolean;
 	@Input() side: 'player' | 'opponent';
 
 	_tooltipPosition: CardTooltipPositionType;

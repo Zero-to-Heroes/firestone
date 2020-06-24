@@ -44,12 +44,16 @@ export class Preferences {
 	readonly overlayGroupByZone: boolean = true;
 	// readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
 	readonly overlayCardsGoToBottom: boolean = false;
+	readonly overlayHideGeneratedCardsInOtherZone: boolean = false;
+	readonly overlaySortByManaInOtherZone: boolean = false;
 	readonly decktrackerNoDeckMode: boolean = false;
 	readonly overlayOpacityInPercent: number = 100;
 	readonly overlayWidthInPx: number = 227; // No UI
 
 	readonly opponentOverlayGroupByZone: boolean = true;
 	readonly opponentOverlayCardsGoToBottom: boolean = true;
+	readonly opponentOverlayHideGeneratedCardsInOtherZone: boolean = false;
+	readonly opponentOverlaySortByManaInOtherZone: boolean = false;
 	readonly opponentOverlayDarkenUsedCards: boolean = true;
 	readonly opponentTracker: boolean = true;
 	readonly opponentOverlayWidthInPx: number = 227;

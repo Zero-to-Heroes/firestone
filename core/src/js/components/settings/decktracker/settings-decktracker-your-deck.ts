@@ -42,6 +42,20 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, the cards that have been used are shown at the bottom of the list. It can only be activated if the Group cards by zone option is disabled"
 					></preference-toggle>
 					<preference-toggle
+						[ngClass]="{ 'disabled': !overlayGroupByZone }"
+						class="indented"
+						field="overlaySortByManaInOtherZone"
+						label="Sort cards by mana cost"
+						tooltip="When active, the cards will be sorted by mana cost in the Other zone. Otherwise, the zone will first show the cards on the board, then the graveyard, then the others."
+					></preference-toggle>
+					<preference-toggle
+						[ngClass]="{ 'disabled': !overlayGroupByZone }"
+						class="indented"
+						field="overlayHideGeneratedCardsInOtherZone"
+						label="Hide generated cards in Other zone"
+						tooltip="When active, the cards that didn't start in your deck won't appear in the Other zone"
+					></preference-toggle>
+					<preference-toggle
 						field="decktrackerNoDeckMode"
 						label="Ignore decklist"
 						tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
