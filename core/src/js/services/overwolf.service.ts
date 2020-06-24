@@ -123,15 +123,17 @@ export class OverwolfService {
 	}
 
 	public addHotkeyChangedListener(callback: (message: any) => void): (message: any) => void {
+		// console.log('register hotkey change listener');
 		const listener = message => {
+			console.log('got hotkey change message', message);
 			callback(message);
 		};
-		overwolf.settings.OnHotKeyChanged.addListener(listener);
+		overwolf.settings.hotkeys.onChanged.addListener(listener);
 		return listener;
 	}
 
 	public removeHotkeyChangedListener(listener: (message: any) => void): void {
-		overwolf.settings.OnHotKeyChanged.removeListener(listener);
+		overwolf.settings.hotkeys.onChanged.removeListener(listener);
 	}
 
 	public addMouseUpListener(callback) {
@@ -388,25 +390,13 @@ export class OverwolfService {
 		});
 	}
 
-	// public async getHotKey(hotkeyName: string) {
-	// 	return new Promise<any>(resolve => {
-	// 		overwolf.settings.getHotKey(hotkeyName, (res: any) => {
-	// 			if (res.status === 'success') {
-	// 				resolve(res.hotkey);
-	// 			}
-	// 		});
-	// 	});
-	// }
-
 	public async getHotKey(hotkeyName: string) {
 		return new Promise<any>(resolve => {
 			overwolf.settings.hotkeys.get((res: any) => {
-				// if (res.status === 'success') {
 				const game: any[] = res.games[HEARTHSTONE_GAME_ID];
 				const hotkey = game.find((key: any) => key.name === hotkeyName);
-				console.log('found hotkey', hotkey, res, game);
+				// console.log('found hotkey', hotkey, res, game);
 				resolve(hotkey);
-				// }
 			});
 		});
 	}
