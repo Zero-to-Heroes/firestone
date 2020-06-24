@@ -14,29 +14,6 @@ const BUCKET = 'com.zerotoheroes.batch';
 export class ReplayUploadService {
 	constructor(private http: HttpClient, private ow: OverwolfService, private readonly events: Events) {}
 
-	// public async createEmptyReview(): Promise<string> {
-	// 	return new Promise<string>(resolve => {
-	// 		this.createEmptyReviewInternal(reviewId => resolve(reviewId), 10);
-	// 	});
-	// }
-
-	// private createEmptyReviewInternal(callback, retriesLeft = 10) {
-	// 	if (retriesLeft < 0) {
-	// 		console.error('[manastorm-bridge] Could not create empty review');
-	// 		callback(null);
-	// 	}
-	// 	this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
-	// 		res => {
-	// 			const reviewId: string = res as string;
-	// 			console.log('[manastorm-bridge] Created empty shell review', res, reviewId);
-	// 			callback(reviewId);
-	// 		},
-	// 		error => {
-	// 			setTimeout(() => this.createEmptyReviewInternal(callback, retriesLeft - 1), 1000);
-	// 		},
-	// 	);
-	// }
-
 	public async uploadGame(game: GameForUpload) {
 		if (!game.reviewId) {
 			console.error('[manastorm-bridge] Could not upload game, no review id is associated to it');
@@ -88,6 +65,7 @@ export class ReplayUploadService {
 				'deckstring': game.deckstring,
 				'deck-name': game.deckName,
 				'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
+				'should-zip': 'true',
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);
