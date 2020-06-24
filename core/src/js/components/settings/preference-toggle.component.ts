@@ -48,7 +48,7 @@ export class PreferenceToggleComponent {
 	@Input() toggleFunction: (newValue: boolean) => void;
 
 	value: boolean;
-	toggled: boolean = false;
+	toggled = false;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef) {
 		this.loadDefaultValues();

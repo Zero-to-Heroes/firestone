@@ -246,7 +246,7 @@ export class AppBootstrapService {
 	// }
 
 	private async showCollectionWindow() {
-		console.log('[bootstrap] reading to show collection window', this.store, this);
+		console.log('[bootstrap] reading to show collection window');
 		// We do both store and direct restore to keep things snappier
 		const prefs = await this.prefs.getPreferences();
 		const window = await this.ow.getCollectionWindow(prefs);
