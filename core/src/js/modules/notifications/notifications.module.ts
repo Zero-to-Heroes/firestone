@@ -7,6 +7,7 @@ import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { DebugService } from '../../services/debug.service';
+import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
@@ -33,6 +34,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot()],
 	declarations: [NotificationsComponent],
 	bootstrap: [NotificationsComponent],
-	providers: [DebugService, OverwolfService, PreferencesService],
+	providers: [DebugService, OverwolfService, PreferencesService, GenericIndexedDbService],
 })
 export class NotificationsModule {}
