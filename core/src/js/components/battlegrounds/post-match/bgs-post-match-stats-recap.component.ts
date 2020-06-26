@@ -149,6 +149,7 @@ export class BgsPostMatchStatsRecapComponent {
 	private updateStats() {
 		if (!this._stats?.player || !this._game) {
 			// console.warn('[stats-recap] missing player or game', this._stats?.player, this._game);
+			this.reset();
 			return;
 		}
 		this.wins = this._game.faceOffs.filter(faceOff => faceOff.result === 'won').length || 0;
@@ -193,5 +194,27 @@ export class BgsPostMatchStatsRecapComponent {
 			.length;
 		this.percentageOfBattlesGoingFirst = (100 * battlesGoingFirst) / (battlesGoingFirst + battlesGoingSecond);
 		this.luckFactor = 100 * this._stats.stats.luckFactor;
+	}
+
+	private reset() {
+		this.wins = undefined;
+		this.losses = undefined;
+		this.ties = undefined;
+		this.totalMinionsDamageDealt = undefined;
+		this.totalMinionsDamageTaken = undefined;
+		this.totalHeroDamageDealt = undefined;
+		this.winStreak = undefined;
+		this.triples = undefined;
+		this.maxBoardStats = undefined;
+		this.coinsWasted = undefined;
+		this.rerolls = undefined;
+		this.freezes = undefined;
+		this.heroPowers = undefined;
+		this.minionsBought = undefined;
+		this.minionsSold = undefined;
+		this.minionsKilled = undefined;
+		this.heroesKilled = undefined;
+		this.percentageOfBattlesGoingFirst = undefined;
+		this.luckFactor = undefined;
 	}
 }

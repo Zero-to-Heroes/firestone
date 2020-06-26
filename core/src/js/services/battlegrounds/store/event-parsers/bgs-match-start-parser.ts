@@ -2,6 +2,7 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsMatchStartEvent } from '../events/bgs-match-start-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsInitParser } from './bgs-init-parser';
 import { EventParser } from './_event-parser';
 
 export class BgsMatchStartParser implements EventParser {
@@ -15,6 +16,7 @@ export class BgsMatchStartParser implements EventParser {
 			inGame: true,
 			currentGame: newGame,
 			forceOpen: true,
+			stages: BgsInitParser.buildEmptyStages(),
 		} as BattlegroundsState);
 	}
 }

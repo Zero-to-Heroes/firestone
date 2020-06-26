@@ -18,52 +18,56 @@ export class BgsInitParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsInitEvent): Promise<BattlegroundsState> {
-		const emptyStages: readonly BgsStage[] = [
-			this.buildHeroSelectionStage(),
-			this.buildInGameStage(),
-			this.buildPostMatchStage(),
-		];
+		const emptyStages: readonly BgsStage[] = BgsInitParser.buildEmptyStages();
 		return currentState.update({
 			globalStats: event.bgsGlobalStats,
 			stages: currentState.stages || emptyStages,
 		} as BattlegroundsState);
 	}
 
-	private buildHeroSelectionStage(): BgsHeroSelectionStage {
-		const panels: readonly BgsPanel[] = [this.buildBgsHeroSelectionOverview()];
+	public static buildEmptyStages(): readonly BgsStage[] {
+		return [
+			BgsInitParser.buildHeroSelectionStage(),
+			BgsInitParser.buildInGameStage(),
+			BgsInitParser.buildPostMatchStage(),
+		];
+	}
+
+	private static buildHeroSelectionStage(): BgsHeroSelectionStage {
+		const panels: readonly BgsPanel[] = [BgsInitParser.buildBgsHeroSelectionOverview()];
 		return BgsHeroSelectionStage.create({
 			panels: panels,
 		} as BgsHeroSelectionStage);
 	}
 
-	private buildBgsHeroSelectionOverview(): BgsHeroSelectionOverview {
+	private static buildBgsHeroSelectionOverview(): BgsHeroSelectionOverview {
 		const heroOverview: readonly BgsHeroOverview[] = [];
 		return BgsHeroSelectionOverview.create({
 			heroOverview: heroOverview,
 		} as BgsHeroSelectionOverview);
 	}
 
-	private buildInGameStage(): BgsInGameStage {
-		const panels: readonly BgsPanel[] = [this.buildBgsNextOpponentOverviewPanel()];
+	private static buildInGameStage(): BgsInGameStage {
+		const panels: readonly BgsPanel[] = [BgsInitParser.buildBgsNextOpponentOverviewPanel()];
 		return BgsInGameStage.create({
 			panels: panels,
 		} as BgsInGameStage);
 	}
 
-	private buildBgsNextOpponentOverviewPanel(): BgsNextOpponentOverviewPanel {
+	private static buildBgsNextOpponentOverviewPanel(): BgsNextOpponentOverviewPanel {
 		return BgsNextOpponentOverviewPanel.create({
 			opponentOverview: null,
 		} as BgsNextOpponentOverviewPanel);
 	}
 
-	private buildPostMatchStage(): BgsPostMatchStage {
-		const panels: readonly BgsPanel[] = [this.buildBgsPostMatchStatsPanel()];
+	private static buildPostMatchStage(): BgsPostMatchStage {
+		const panels: readonly BgsPanel[] = [BgsInitParser.buildBgsPostMatchStatsPanel()];
 		return BgsPostMatchStage.create({
 			panels: panels,
 		} as BgsPostMatchStage);
 	}
 
-	private buildBgsPostMatchStatsPanel(): BgsPostMatchStatsPanel {
+	private static buildBgsPostMatchStatsPanel(): BgsPostMatchStatsPanel {
 		return BgsPostMatchStatsPanel.create({
 			stats: null,
 		} as BgsPostMatchStatsPanel);
