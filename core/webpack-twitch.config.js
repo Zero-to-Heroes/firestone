@@ -10,6 +10,7 @@ const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 var path = require('path');
 
@@ -59,23 +60,56 @@ module.exports = function(env, argv) {
 		},
 
 		// https://hackernoon.com/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758
-		optimization: {
-			runtimeChunk: 'single',
-			splitChunks: {
-				chunks: 'all',
-				maxInitialRequests: Infinity,
-				minSize: 1 * 1000, // Don't split the really small chunks
-				cacheGroups: {
-					vendor: {
-						test: /node_modules/,
-						chunks: 'initial',
-						name: 'vendor',
-						priority: 10,
-						enforce: true,
+		optimization: env.production
+			? {
+					runtimeChunk: 'single',
+					minimize: true,
+					minimizer: [
+						new TerserPlugin({
+							cache: true,
+							parallel: true,
+							sourceMap: true, // Must be set to true if using source-maps in production
+							terserOptions: {
+								mangle: false,
+								keep_classnames: true,
+								keep_fnames: true,
+							},
+						}),
+					],
+					namedModules: true,
+					namedChunks: true,
+					splitChunks: {
+						chunks: 'all',
+						maxInitialRequests: Infinity,
+						minSize: 1 * 1000, // Don't split the really small chunks
+						cacheGroups: {
+							vendor: {
+								test: /node_modules/,
+								chunks: 'initial',
+								name: 'vendor',
+								priority: 10,
+								enforce: true,
+							},
+						},
 					},
-				},
-			},
-		},
+			  }
+			: {
+					runtimeChunk: 'single',
+					splitChunks: {
+						chunks: 'all',
+						maxInitialRequests: Infinity,
+						minSize: 1 * 1000, // Don't split the really small chunks
+						cacheGroups: {
+							vendor: {
+								test: /node_modules/,
+								chunks: 'initial',
+								name: 'vendor',
+								priority: 10,
+								enforce: true,
+							},
+						},
+					},
+			  },
 
 		target: 'web',
 
