@@ -4,7 +4,6 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
-import { Events } from '../../../../services/events.service';
 import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
 import { TwitchBgsState } from './twitch-bgs-state';
@@ -28,7 +27,6 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 			></state-mouse-over>
 			<decktracker-overlay-standalone [gameState]="gameState" (dragStart)="onDragStart()" (dragEnd)="onDragEnd()">
 			</decktracker-overlay-standalone>
-			<!-- <tooltips [module]="'decktracker'" [position]="'outside'"></tooltips> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,14 +39,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	private twitch;
 	private token: string;
 
-	// private dragging = false;
-
-	constructor(
-		private cdr: ChangeDetectorRef,
-		private events: Events,
-		private http: HttpClient,
-		private allCards: AllCardsService,
-	) {}
+	constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private allCards: AllCardsService) {}
 
 	async ngAfterViewInit() {
 		if (!(window as any).Twitch) {
@@ -77,14 +68,12 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	}
 
 	onDragStart() {
-		// this.dragging = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	onDragEnd() {
-		// this.dragging = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -116,7 +105,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	private async processEvent(event) {
 		if (event.type === 'bgs') {
 			this.bgsState = event.state;
-			// console.log('bgs state', this.bgsState);
+			console.log('bgs state', this.bgsState);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
