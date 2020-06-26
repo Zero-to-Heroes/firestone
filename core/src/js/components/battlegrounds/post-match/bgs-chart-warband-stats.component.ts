@@ -259,6 +259,7 @@ export class BgsChartWarbandStatsComponent {
 		}
 		const lastTurn = Math.max(warbandStats.length, this._stats.totalStatsOverTurn.length);
 		this.lineChartLabels = [...Array(lastTurn).keys()].map(turn => '' + turn);
+		console.log('last turn is', lastTurn, this.lineChartLabels);
 		this.lineChartData = [
 			{
 				data: warbandStats.map(
