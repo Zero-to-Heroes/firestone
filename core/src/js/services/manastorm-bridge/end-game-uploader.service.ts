@@ -105,7 +105,9 @@ export class EndGameUploaderService {
 			}
 		}
 		let opponentRank;
-		if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
+		if (game.gameMode === 'battlegrounds') {
+			// Do nothing
+		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			const opponentInfo = await this.playersInfo.getOpponentInfo();
 			if (opponentInfo && game.gameFormat === 'standard') {
 				if (opponentInfo.standard?.legendRank > 0) {
