@@ -168,8 +168,8 @@ export class BgsChartWarbandStatsComponent {
 							</div>
 							<div class="section average">
 								<div class="subtitle">Average for hero</div>
-								<div class="value">Turn ${averageDatapoint.label}</div>
-								<div class="value">Stats ${averageDatapoint.value}</div>							
+								<div class="value">Turn ${currentRunDatapoint.label}</div>
+								<div class="value">Stats ${averageDatapoint?.value || 'No data'}</div>							
 							</div>
 						</div>
 					`;
@@ -257,7 +257,7 @@ export class BgsChartWarbandStatsComponent {
 		if (!averageStats || !warbandStats) {
 			return;
 		}
-		const lastTurn = Math.min(warbandStats.length, this._stats.totalStatsOverTurn.length);
+		const lastTurn = Math.max(warbandStats.length, this._stats.totalStatsOverTurn.length);
 		this.lineChartLabels = [...Array(lastTurn).keys()].map(turn => '' + turn);
 		this.lineChartData = [
 			{
