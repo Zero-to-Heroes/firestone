@@ -63,7 +63,7 @@ export class AchievementsMonitor {
 			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
 		// console.log('[achievement-monitor] will grant achievements?', allAchievements, achievement);
 		for (const achv of allAchievements) {
-			console.log('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
+			// console.log('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
 			const existingAchievement: CompletedAchievement = await this.achievementsStorage.loadAchievementFromCache(
 				achv.id,
 			);
@@ -78,7 +78,7 @@ export class AchievementsMonitor {
 				existingAchievement.replayInfo || [],
 			);
 			if (achv.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
-				console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+				// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
 				continue;
 			}
 			// Don't grant a linked achievement more than once
@@ -95,7 +95,7 @@ export class AchievementsMonitor {
 				// );
 				continue;
 			}
-			console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
+			// console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
 			const mergedAchievement = Object.assign(new Achievement(), achv, {
 				numberOfCompletions: completedAchievement.numberOfCompletions,
 				replayInfo: completedAchievement.replayInfo,
