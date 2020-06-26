@@ -95,3 +95,14 @@ empty-card {
 		height: 64%;
 	}
 }
+
+.bgs-leaderboard {
+	position: absolute;
+	height: 73%;
+	width: 7%;
+	left: 12%;
+	top: 15%;
+	display: flex;
+	flex-direction: column;
+	z-index: 1;
+}

@@ -1,0 +1,1801 @@
+{
+        "leaderboard": [
+            {
+                "cardId": "TB_BaconShop_HERO_39",
+                "heroPowerCardId": "TB_BaconShop_HP_040",
+                "name": "Pyramad",
+                "isMainPlayer": true,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 1,
+                "lastBoard": {
+                    "turn": 16,
+                    "board": [
+                        {
+                            "id": 5776,
+                            "cardID": "TB_BaconUps_141",
+                            "tags": {
+                                "undefined": 0,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "CANT_ATTACK": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 47,
+                                "NUM_TURNS_IN_PLAY": 4,
+                                "CREATOR_DBID": 57980,
+                                "ZONE": 1,
+                                "COST": 1,
+                                "DEATH_RATTLE": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5776,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 1,
+                                "ATK": 21,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 1,
+                                "HEALTH": 16,
+                                "CONTROLLER": 2,
+                                "COPIED_FROM_ENTITY_ID": 5332
+                            }
+                        },
+                        {
+                            "id": 5782,
+                            "cardID": "TB_BaconUps_138",
+                            "tags": {
+                                "undefined": 0,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "CANT_ATTACK": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 47,
+                                "NUM_TURNS_IN_PLAY": 4,
+                                "CREATOR_DBID": 57980,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "BATTLECRY": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5782,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 16,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 2,
+                                "HEALTH": 14,
+                                "CONTROLLER": 2,
+                                "COPIED_FROM_ENTITY_ID": 5338
+                            }
+                        },
+                        {
+                            "id": 5786,
+                            "cardID": "TB_BaconUps_126",
+                            "tags": {
+                                "undefined": 0,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "CANT_ATTACK": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 47,
+                                "NUM_TURNS_IN_PLAY": 4,
+                                "CREATOR_DBID": 57980,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "BATTLECRY": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5786,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 21,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 3,
+                                "HEALTH": 6,
+                                "CONTROLLER": 2,
+                                "COPIED_FROM_ENTITY_ID": 5342
+                            }
+                        },
+                        {
+                            "id": 5790,
+                            "cardID": "TB_BaconUps_130",
+                            "tags": {
+                                "undefined": 0,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "CANT_ATTACK": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 47,
+                                "NUM_TURNS_IN_PLAY": 4,
+                                "CREATOR_DBID": 57980,
+                                "ZONE": 1,
+                                "COST": 5,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5790,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 5,
+                                "ATK": 141,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 4,
+                                "HEALTH": 142,
+                                "CONTROLLER": 2,
+                                "COPIED_FROM_ENTITY_ID": 5346
+                            }
+                        },
+                        {
+                            "id": 5997,
+                            "cardID": "TB_BaconUps_137",
+                            "tags": {
+                                "undefined": 0,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CANT_ATTACK": 1,
+                                "JUST_PLAYED": 0,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "MODULAR": 0,
+                                "CREATOR": 5972,
+                                "NUM_TURNS_IN_PLAY": 3,
+                                "CREATOR_DBID": 58736,
+                                "ZONE": 1,
+                                "COST": 7,
+                                "DEATH_RATTLE": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5997,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 0,
+                                "ATK": 12,
+                                "TECH_LEVEL": 6,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 8,
+                                "CONTROLLER": 2,
+                                "COPIED_FROM_ENTITY_ID": 5996
+                            }
+                        },
+                        {
+                            "id": 5800,
+                            "cardID": "BGS_060",
+                            "tags": {
+                                "undefined": 0,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "CANT_ATTACK": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 47,
+                                "NUM_TURNS_IN_PLAY": 4,
+                                "CREATOR_DBID": 57980,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "TAUNT": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5800,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 21,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 26,
+                                "CONTROLLER": 2,
+                                "COPIED_FROM_ENTITY_ID": 5356
+                            }
+                        },
+                        {
+                            "id": 5806,
+                            "cardID": "TB_BaconUps_136",
+                            "tags": {
+                                "undefined": 0,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "CANT_ATTACK": 1,
+                                "AURA": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 4,
+                                "CREATOR": 47,
+                                "NUM_TURNS_IN_PLAY": 4,
+                                "CREATOR_DBID": 57980,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5806,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 27,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 7,
+                                "HEALTH": 6,
+                                "CONTROLLER": 2,
+                                "COPIED_FROM_ENTITY_ID": 5362
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 2,
+                        "turn": 5
+                    },
+                    {
+                        "tierOfTripledMinion": 4,
+                        "turn": 10
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 12
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 13
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 13
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 14
+                    },
+                    {
+                        "tierOfTripledMinion": 6,
+                        "turn": 16
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 3
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 5
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 6
+                    },
+                    {
+                        "tavernTier": 5,
+                        "turn": 10
+                    },
+                    {
+                        "tavernTier": 6,
+                        "turn": 14
+                    }
+                ]
+            },
+            {
+                "cardId": "TB_BaconShop_HERO_30",
+                "heroPowerCardId": "TB_BaconShop_HP_043",
+                "name": "Nefarian",
+                "isMainPlayer": false,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 2,
+                "lastBoard": {
+                    "turn": 16,
+                    "board": [
+                        {
+                            "id": 6102,
+                            "cardID": "LOOT_013",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "IS_BACON_POOL_MINION": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 1,
+                                "CREATOR": 5858,
+                                "CREATOR_DBID": 43121,
+                                "ZONE": 1,
+                                "COST": 2,
+                                "TAUNT": 1,
+                                "BATTLECRY": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 6102,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 2,
+                                "ATK": 27,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 1,
+                                "FACTION": 3,
+                                "HEALTH": 30,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5858
+                            }
+                        },
+                        {
+                            "id": 6113,
+                            "cardID": "BGS_010",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 4,
+                                "CREATOR": 5869,
+                                "CREATOR_DBID": 59714,
+                                "ZONE": 1,
+                                "COST": 8,
+                                "BATTLECRY": 1,
+                                "ENTITY_ID": 6113,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 8,
+                                "ATK": 4,
+                                "TECH_LEVEL": 5,
+                                "ZONE_POSITION": 2,
+                                "HEALTH": 28,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5869
+                            }
+                        },
+                        {
+                            "id": 6115,
+                            "cardID": "LOOT_368",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 4,
+                                "CREATOR": 5871,
+                                "CREATOR_DBID": 46056,
+                                "ZONE": 1,
+                                "COST": 9,
+                                "TAUNT": 1,
+                                "DEATH_RATTLE": 1,
+                                "ENTITY_ID": 6115,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 9,
+                                "ATK": 4,
+                                "TECH_LEVEL": 5,
+                                "ZONE_POSITION": 3,
+                                "HEALTH": 9,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5871
+                            }
+                        },
+                        {
+                            "id": 6116,
+                            "cardID": "TB_BaconUps_079",
+                            "tags": {
+                                "undefined": 3,
+                                "SPAWN_TIME_COUNT": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 1,
+                                "CREATOR": 5872,
+                                "CREATOR_DBID": 59679,
+                                "ZONE": 1,
+                                "COST": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 6116,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 1,
+                                "ATK": 62,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 4,
+                                "FACTION": 3,
+                                "HEALTH": 62,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5872
+                            }
+                        },
+                        {
+                            "id": 6118,
+                            "cardID": "GVG_100",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 1,
+                                "CREATOR": 5874,
+                                "CREATOR_DBID": 2068,
+                                "ZONE": 1,
+                                "COST": 5,
+                                "ENTITY_ID": 6118,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 5,
+                                "ATK": 15,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 14,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5874
+                            }
+                        },
+                        {
+                            "id": 6120,
+                            "cardID": "EX1_185",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "AURA": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 3,
+                                "CREATOR": 5876,
+                                "CREATOR_DBID": 54835,
+                                "ZONE": 1,
+                                "COST": 7,
+                                "TAUNT": 1,
+                                "ENTITY_ID": 6120,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 7,
+                                "ATK": 5,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 8,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5876
+                            }
+                        },
+                        {
+                            "id": 6125,
+                            "cardID": "GVG_100",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 1,
+                                "CREATOR": 5877,
+                                "CREATOR_DBID": 2068,
+                                "ZONE": 1,
+                                "COST": 5,
+                                "ENTITY_ID": 6125,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 5,
+                                "ATK": 11,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 7,
+                                "HEALTH": 10,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5877
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 1,
+                        "turn": 3
+                    },
+                    {
+                        "tierOfTripledMinion": 2,
+                        "turn": 6
+                    },
+                    {
+                        "tierOfTripledMinion": 4,
+                        "turn": 8
+                    },
+                    {
+                        "tierOfTripledMinion": 4,
+                        "turn": 10
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 4
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 7
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 8
+                    },
+                    {
+                        "tavernTier": 5,
+                        "turn": 11
+                    },
+                    {
+                        "tavernTier": 6,
+                        "turn": 15
+                    }
+                ]
+            },
+            {
+                "cardId": "TB_BaconShop_HERO_22",
+                "heroPowerCardId": "TB_BaconShop_HP_024",
+                "name": "The Lich King",
+                "isMainPlayer": false,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 3,
+                "lastBoard": {
+                    "turn": 14,
+                    "board": [
+                        {
+                            "id": 5320,
+                            "cardID": "BGS_040",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4958,
+                                "CREATOR_DBID": 60629,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "ELITE": 1,
+                                "DEATH_RATTLE": 1,
+                                "ENTITY_ID": 5320,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 7,
+                                "TECH_LEVEL": 6,
+                                "ZONE_POSITION": 1,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4958
+                            }
+                        },
+                        {
+                            "id": 5321,
+                            "cardID": "BGS_022",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "HIDE_WATERMARK": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4959,
+                                "CREATOR_DBID": 60040,
+                                "ZONE": 1,
+                                "COST": 8,
+                                "ELITE": 1,
+                                "ENTITY_ID": 5321,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 8,
+                                "ATK": 7,
+                                "TECH_LEVEL": 6,
+                                "ZONE_POSITION": 2,
+                                "HEALTH": 10,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4959,
+                                "WINDFURY": 1
+                            }
+                        },
+                        {
+                            "id": 5322,
+                            "cardID": "TB_BaconUps_108",
+                            "tags": {
+                                "undefined": 3,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4960,
+                                "CREATOR_DBID": 60665,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "TAUNT": 1,
+                                "BATTLECRY": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5322,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 8,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 3,
+                                "HEALTH": 8,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4960
+                            }
+                        },
+                        {
+                            "id": 5323,
+                            "cardID": "TB_BaconUps_102",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "TRIGGER_VISUAL": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4963,
+                                "CREATOR_DBID": 60642,
+                                "ZONE": 1,
+                                "COST": 1,
+                                "TAG_SCRIPT_DATA_NUM_2": 3,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5323,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 1,
+                                "ATK": 10,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 4,
+                                "HEALTH": 12,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4963,
+                                "START_OF_COMBAT": 1
+                            }
+                        },
+                        {
+                            "id": 5327,
+                            "cardID": "TB_BaconUps_107",
+                            "tags": {
+                                "undefined": 3,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4967,
+                                "CREATOR_DBID": 60663,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5327,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 6,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 8,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4967
+                            }
+                        },
+                        {
+                            "id": 5328,
+                            "cardID": "TB_BaconUps_105",
+                            "tags": {
+                                "undefined": 3,
+                                "SPAWN_TIME_COUNT": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4968,
+                                "CREATOR_DBID": 60647,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "ELITE": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 5328,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 2,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4968
+                            }
+                        },
+                        {
+                            "id": 5329,
+                            "cardID": "BGS_079",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 5283,
+                                "CREATOR_DBID": 62232,
+                                "ZONE": 1,
+                                "COST": 7,
+                                "DEATH_RATTLE": 1,
+                                "ENTITY_ID": 5329,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 7,
+                                "ATK": 6,
+                                "TECH_LEVEL": 6,
+                                "ZONE_POSITION": 7,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 5283
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 2,
+                        "turn": 4
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 11
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 11
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 12
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 3
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 6
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 8
+                    },
+                    {
+                        "tavernTier": 5,
+                        "turn": 10
+                    },
+                    {
+                        "tavernTier": 6,
+                        "turn": 13
+                    }
+                ]
+            },
+            {
+                "cardId": "TB_BaconShop_HERO_15",
+                "heroPowerCardId": "TB_BaconShop_HP_010",
+                "name": "George the Fallen",
+                "isMainPlayer": false,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 4,
+                "lastBoard": {
+                    "turn": 12,
+                    "board": [
+                        {
+                            "id": 4385,
+                            "cardID": "BGS_080",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4163,
+                                "CREATOR_DBID": 62458,
+                                "ZONE": 1,
+                                "COST": 7,
+                                "OVERKILL": 1,
+                                "ENTITY_ID": 4385,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 7,
+                                "ATK": 6,
+                                "DIVINE_SHIELD": 1,
+                                "TECH_LEVEL": 5,
+                                "ZONE_POSITION": 1,
+                                "HEALTH": 7,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4163,
+                                "WINDFURY": 1
+                            }
+                        },
+                        {
+                            "id": 4386,
+                            "cardID": "TB_BaconUps_128",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4164,
+                                "CREATOR_DBID": 62189,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 4386,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 4,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 2,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4164
+                            }
+                        },
+                        {
+                            "id": 4387,
+                            "cardID": "BGS_060",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4165,
+                                "CREATOR_DBID": 61060,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "TAUNT": 1,
+                                "ENTITY_ID": 4387,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 2,
+                                "DIVINE_SHIELD": 1,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 3,
+                                "HEALTH": 8,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4165
+                            }
+                        },
+                        {
+                            "id": 4388,
+                            "cardID": "BGS_081",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4167,
+                                "CREATOR_DBID": 62734,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "ENTITY_ID": 4388,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 8,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 4,
+                                "HEALTH": 8,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4167
+                            }
+                        },
+                        {
+                            "id": 4394,
+                            "cardID": "BGS_066",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4171,
+                                "CREATOR_DBID": 61066,
+                                "ZONE": 1,
+                                "COST": 5,
+                                "ENTITY_ID": 4394,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 5,
+                                "ATK": 26,
+                                "DIVINE_SHIELD": 1,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 26,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4171
+                            }
+                        },
+                        {
+                            "id": 4397,
+                            "cardID": "BGS_056",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4244,
+                                "CREATOR_DBID": 61056,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "ENTITY_ID": 4397,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 3,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4244
+                            }
+                        },
+                        {
+                            "id": 4398,
+                            "cardID": "BGS_056",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 4174,
+                                "CREATOR_DBID": 61056,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "ENTITY_ID": 4398,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 3,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 7,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 4174
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 2,
+                        "turn": 5
+                    },
+                    {
+                        "tierOfTripledMinion": 3,
+                        "turn": 6
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 14
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 3
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 6
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 7
+                    },
+                    {
+                        "tavernTier": 5,
+                        "turn": 11
+                    }
+                ]
+            },
+            {
+                "cardId": "TB_BaconShop_HERO_56",
+                "heroPowerCardId": "TB_BaconShop_HP_064",
+                "name": "Alexstrasza",
+                "isMainPlayer": false,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 5,
+                "lastBoard": {
+                    "turn": 9,
+                    "board": [
+                        {
+                            "id": 3113,
+                            "cardID": "BGS_032",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2946,
+                                "CREATOR_DBID": 60498,
+                                "ZONE": 1,
+                                "COST": 5,
+                                "OVERKILL": 1,
+                                "ENTITY_ID": 3113,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 5,
+                                "ATK": 5,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 1,
+                                "HEALTH": 6,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2946
+                            }
+                        },
+                        {
+                            "id": 3114,
+                            "cardID": "BGS_045",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2530,
+                                "CREATOR_DBID": 61029,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "ENTITY_ID": 3114,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 4,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 2,
+                                "HEALTH": 6,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2530
+                            }
+                        },
+                        {
+                            "id": 3116,
+                            "cardID": "BGS_032",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2531,
+                                "CREATOR_DBID": 60498,
+                                "ZONE": 1,
+                                "COST": 5,
+                                "OVERKILL": 1,
+                                "ENTITY_ID": 3116,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 5,
+                                "ATK": 5,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 3,
+                                "HEALTH": 6,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2531
+                            }
+                        },
+                        {
+                            "id": 3117,
+                            "cardID": "BGS_039",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "IS_BACON_POOL_MINION": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2532,
+                                "CREATOR_DBID": 60628,
+                                "ZONE": 1,
+                                "COST": 2,
+                                "TAUNT": 1,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 3117,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 2,
+                                "ATK": 5,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 4,
+                                "HEALTH": 7,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2532
+                            }
+                        },
+                        {
+                            "id": 3119,
+                            "cardID": "BGS_038",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 3039,
+                                "CREATOR_DBID": 60626,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "TAUNT": 1,
+                                "BATTLECRY": 1,
+                                "ENTITY_ID": 3119,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 4,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 3039
+                            }
+                        },
+                        {
+                            "id": 3120,
+                            "cardID": "BGS_034",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2534,
+                                "CREATOR_DBID": 60558,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "ENTITY_ID": 3120,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 3,
+                                "DIVINE_SHIELD": 1,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 2,
+                                "CONTROLLER": 10,
+                                "REBORN": 1,
+                                "COPIED_FROM_ENTITY_ID": 2534
+                            }
+                        },
+                        {
+                            "id": 3122,
+                            "cardID": "BGS_035",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2537,
+                                "CREATOR_DBID": 60559,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "ELITE": 1,
+                                "ENTITY_ID": 3122,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 1,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 7,
+                                "HEALTH": 2,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2537
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 3,
+                        "turn": 8
+                    },
+                    {
+                        "tierOfTripledMinion": 5,
+                        "turn": 10
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 2
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 5
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 8
+                    },
+                    {
+                        "tavernTier": 5,
+                        "turn": 10
+                    }
+                ]
+            },
+            {
+                "cardId": "TB_BaconShop_HERO_59",
+                "heroPowerCardId": "TB_BaconShop_HP_065",
+                "name": "Aranna Starseeker",
+                "isMainPlayer": false,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 6,
+                "lastBoard": {
+                    "turn": 10,
+                    "board": [
+                        {
+                            "id": 3631,
+                            "cardID": "BGS_009",
+                            "tags": {
+                                "undefined": 59711,
+                                "SPAWN_TIME_COUNT": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 4,
+                                "CREATOR": 3563,
+                                "CREATOR_DBID": 59707,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "ENTITY_ID": 3631,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 2,
+                                "TECH_LEVEL": 5,
+                                "ZONE_POSITION": 1,
+                                "HEALTH": 2,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 3563
+                            }
+                        },
+                        {
+                            "id": 3632,
+                            "cardID": "TB_BaconUps_030",
+                            "tags": {
+                                "undefined": 3,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "TRIGGER_VISUAL": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 1,
+                                "CREATOR": 3538,
+                                "CREATOR_DBID": 58372,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 3632,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 6,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 2,
+                                "HEALTH": 10,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 3538
+                            }
+                        },
+                        {
+                            "id": 3634,
+                            "cardID": "BGS_010",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 4,
+                                "CREATOR": 3284,
+                                "CREATOR_DBID": 59714,
+                                "ZONE": 1,
+                                "COST": 8,
+                                "BATTLECRY": 1,
+                                "ENTITY_ID": 3634,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 8,
+                                "ATK": 3,
+                                "TECH_LEVEL": 5,
+                                "ZONE_POSITION": 3,
+                                "HEALTH": 34,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 3284
+                            }
+                        },
+                        {
+                            "id": 3636,
+                            "cardID": "BGS_014",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 3,
+                                "CREATOR": 3479,
+                                "CREATOR_DBID": 59937,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "TAUNT": 1,
+                                "DEATH_RATTLE": 1,
+                                "ENTITY_ID": 3636,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 5,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 4,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 3479
+                            }
+                        },
+                        {
+                            "id": 3638,
+                            "cardID": "BGS_014",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 15,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 3,
+                                "CREATOR": 3473,
+                                "CREATOR_DBID": 59937,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "TAUNT": 1,
+                                "DEATH_RATTLE": 1,
+                                "ENTITY_ID": 3638,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 3,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 3,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 3473
+                            }
+                        },
+                        {
+                            "id": 3639,
+                            "cardID": "TB_BaconUps_075",
+                            "tags": {
+                                "undefined": 3,
+                                "SPAWN_TIME_COUNT": 1,
+                                "TRIGGER_VISUAL": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 3286,
+                                "CREATOR_DBID": 59661,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 3639,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 6,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 6,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 3286
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 3,
+                        "turn": 5
+                    },
+                    {
+                        "tierOfTripledMinion": 3,
+                        "turn": 8
+                    },
+                    {
+                        "tierOfTripledMinion": 4,
+                        "turn": 10
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 2
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 5
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 8
+                    }
+                ]
+            },
+            {
+                "cardId": "TB_BaconShop_HERO_45",
+                "heroPowerCardId": "TB_BaconShop_HP_053",
+                "name": "Arch-Villain Rafaam",
+                "isMainPlayer": false,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 7,
+                "lastBoard": {
+                    "turn": 4,
+                    "board": [
+                        {
+                            "id": 860,
+                            "cardID": "BGS_075",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 20,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 686,
+                                "CREATOR_DBID": 62162,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "ENTITY_ID": 860,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 3,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 1,
+                                "HEALTH": 1,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 686
+                            }
+                        },
+                        {
+                            "id": 861,
+                            "cardID": "EX1_506",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 14,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 2,
+                                "CREATOR": 775,
+                                "CREATOR_DBID": 976,
+                                "ZONE": 1,
+                                "COST": 2,
+                                "BATTLECRY": 1,
+                                "ENTITY_ID": 861,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 2,
+                                "ATK": 2,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 2,
+                                "FACTION": 3,
+                                "HEALTH": 1,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 775
+                            }
+                        },
+                        {
+                            "id": 862,
+                            "cardID": "EX1_506a",
+                            "tags": {
+                                "undefined": 57339,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 14,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 1,
+                                "CREATOR": 817,
+                                "CREATOR_DBID": 1078,
+                                "ZONE": 1,
+                                "COST": 1,
+                                "ENTITY_ID": 862,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 1,
+                                "ATK": 1,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 3,
+                                "FACTION": 3,
+                                "HEALTH": 1,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 817
+                            }
+                        },
+                        {
+                            "id": 863,
+                            "cardID": "BGS_019",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 685,
+                                "CREATOR_DBID": 59968,
+                                "ZONE": 1,
+                                "COST": 1,
+                                "TAG_SCRIPT_DATA_NUM_2": 2,
+                                "ENTITY_ID": 863,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 1,
+                                "ATK": 1,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 4,
+                                "HEALTH": 2,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 685,
+                                "START_OF_COMBAT": 1
+                            }
+                        },
+                        {
+                            "id": 864,
+                            "cardID": "ICC_038",
+                            "tags": {
+                                "undefined": 47,
+                                "SPAWN_TIME_COUNT": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 1,
+                                "CREATOR": 687,
+                                "CREATOR_DBID": 42467,
+                                "ZONE": 1,
+                                "COST": 1,
+                                "TAUNT": 1,
+                                "ENTITY_ID": 864,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 1,
+                                "ATK": 1,
+                                "DIVINE_SHIELD": 1,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 1,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 687
+                            }
+                        },
+                        {
+                            "id": 865,
+                            "cardID": "BGS_039",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 24,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 702,
+                                "CREATOR_DBID": 60628,
+                                "ZONE": 1,
+                                "COST": 2,
+                                "TAUNT": 1,
+                                "ENTITY_ID": 865,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 2,
+                                "ATK": 2,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 3,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 702
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 4,
+                        "turn": 8
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 4
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 5
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 7
+                    },
+                    {
+                        "tavernTier": 5,
+                        "turn": 9
+                    }
+                ]
+            },
+            {
+                "cardId": "TB_BaconShop_HERO_18",
+                "heroPowerCardId": "TB_BaconShop_HP_072",
+                "name": "Patches the Pirate",
+                "isMainPlayer": false,
+                "initialHealth": 40,
+                "damageTaken": 0,
+                "leaderboardPlace": 8,
+                "lastBoard": {
+                    "turn": 8,
+                    "board": [
+                        {
+                            "id": 2543,
+                            "cardID": "BGS_061",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2264,
+                                "CREATOR_DBID": 61061,
+                                "ZONE": 1,
+                                "COST": 1,
+                                "DEATH_RATTLE": 1,
+                                "ENTITY_ID": 2543,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 1,
+                                "ATK": 4,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 1,
+                                "HEALTH": 3,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2264
+                            }
+                        },
+                        {
+                            "id": 2544,
+                            "cardID": "BGS_081",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2500,
+                                "CREATOR_DBID": 62734,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "ENTITY_ID": 2544,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 6,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 2,
+                                "HEALTH": 6,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2500
+                            }
+                        },
+                        {
+                            "id": 2546,
+                            "cardID": "BGS_060",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2472,
+                                "CREATOR_DBID": 61060,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "TAUNT": 1,
+                                "ENTITY_ID": 2546,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 4,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 3,
+                                "HEALTH": 10,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2472
+                            }
+                        },
+                        {
+                            "id": 2547,
+                            "cardID": "BGS_055",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2021,
+                                "CREATOR_DBID": 61055,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "BATTLECRY": 1,
+                                "ENTITY_ID": 2547,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 4,
+                                "TECH_LEVEL": 1,
+                                "ZONE_POSITION": 4,
+                                "HEALTH": 4,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2021
+                            }
+                        },
+                        {
+                            "id": 2548,
+                            "cardID": "BGS_060",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2493,
+                                "CREATOR_DBID": 61060,
+                                "ZONE": 1,
+                                "COST": 6,
+                                "TAUNT": 1,
+                                "ENTITY_ID": 2548,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 6,
+                                "ATK": 4,
+                                "TECH_LEVEL": 3,
+                                "ZONE_POSITION": 5,
+                                "HEALTH": 10,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2493
+                            }
+                        },
+                        {
+                            "id": 2549,
+                            "cardID": "TB_BaconUps_136",
+                            "tags": {
+                                "undefined": 3,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "AURA": 1,
+                                "BACON_MINION_IS_LEVEL_TWO": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "RARITY": 4,
+                                "CREATOR": 2026,
+                                "CREATOR_DBID": 62237,
+                                "ZONE": 1,
+                                "COST": 3,
+                                "PREMIUM": 1,
+                                "ENTITY_ID": 2549,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 3,
+                                "ATK": 6,
+                                "TECH_LEVEL": 2,
+                                "ZONE_POSITION": 6,
+                                "HEALTH": 6,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2026
+                            }
+                        },
+                        {
+                            "id": 2555,
+                            "cardID": "BGS_056",
+                            "tags": {
+                                "undefined": 1,
+                                "SPAWN_TIME_COUNT": 1,
+                                "CARDRACE": 23,
+                                "TRIGGER_VISUAL": 1,
+                                "IS_BACON_POOL_MINION": 1,
+                                "EXHAUSTED": 0,
+                                "CARDTYPE": 4,
+                                "CREATOR": 2027,
+                                "CREATOR_DBID": 61056,
+                                "ZONE": 1,
+                                "COST": 4,
+                                "ENTITY_ID": 2555,
+                                "TAG_LAST_KNOWN_COST_IN_HAND": 4,
+                                "ATK": 5,
+                                "TECH_LEVEL": 4,
+                                "ZONE_POSITION": 7,
+                                "HEALTH": 6,
+                                "CONTROLLER": 10,
+                                "COPIED_FROM_ENTITY_ID": 2027
+                            }
+                        }
+                    ]
+                },
+                "tripleHistory": [
+                    {
+                        "tierOfTripledMinion": 3,
+                        "turn": 7
+                    }
+                ],
+                "tavernUpgradeHistory": [
+                    {
+                        "tavernTier": 2,
+                        "turn": 2
+                    },
+                    {
+                        "tavernTier": 3,
+                        "turn": 5
+                    },
+                    {
+                        "tavernTier": 4,
+                        "turn": 7
+                    }
+                ]
+            }
+        ],
+        "currentTurn": 16
+    }

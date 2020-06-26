@@ -2,9 +2,17 @@ import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { AdsComponent } from '../../components/ads.component';
+import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
+import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
+import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-hero-portrait.component';
+import { BgsBattleStatusComponent } from '../../components/battlegrounds/in-game/bgs-battle-status.component';
+import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview-big.component';
+import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
+import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
 import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
@@ -36,7 +44,15 @@ import { ScrollableDirective } from '../../directives/scrollable.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 @NgModule({
-	imports: [BrowserModule, OverlayModule, SelectModule, FormsModule, ReactiveFormsModule, InlineSVGModule.forRoot()],
+	imports: [
+		BrowserModule,
+		OverlayModule,
+		SelectModule,
+		FormsModule,
+		ReactiveFormsModule,
+		ColiseumComponentsModule,
+		InlineSVGModule.forRoot(),
+	],
 	declarations: [
 		WindowWrapperComponent,
 
@@ -75,6 +91,14 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		SafeHtmlPipe,
 
 		AdsComponent,
+
+		BgsOpponentOverviewBigComponent,
+		BgsBoardComponent,
+		BgsCardTooltipComponent,
+		BgsHeroPortraitComponent,
+		BgsBattleStatusComponent,
+		BgsTriplesComponent,
+		MinionIconComponent,
 	],
 	entryComponents: [HelpTooltipComponent, CardTooltipComponent, ConfirmationComponent],
 	exports: [
@@ -115,6 +139,14 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		SafeHtmlPipe,
 
 		AdsComponent,
+
+		BgsOpponentOverviewBigComponent,
+		BgsBoardComponent,
+		BgsCardTooltipComponent,
+		BgsHeroPortraitComponent,
+		BgsBattleStatusComponent,
+		BgsTriplesComponent,
+		MinionIconComponent,
 	],
 	providers: [{ provide: OverlayContainer, useClass: CdkOverlayContainer }],
 })

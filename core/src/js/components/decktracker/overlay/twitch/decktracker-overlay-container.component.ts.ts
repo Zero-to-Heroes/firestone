@@ -1,10 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../../services/events.service';
+import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
+import { TwitchBgsState } from './twitch-bgs-state';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 // const EBS_URL = 'https://localhost:8081/deck';
@@ -18,7 +21,11 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 	],
 	template: `
 		<div class="container drag-boundary">
-			<state-mouse-over [gameState]="gameState" *ngIf="gameState"></state-mouse-over>
+			<state-mouse-over
+				[gameState]="gameState"
+				[bgsState]="bgsState"
+				*ngIf="gameState || bgsState"
+			></state-mouse-over>
 			<decktracker-overlay-standalone [gameState]="gameState" (dragStart)="onDragStart()" (dragEnd)="onDragEnd()">
 			</decktracker-overlay-standalone>
 			<!-- <tooltips [module]="'decktracker'" [position]="'outside'"></tooltips> -->
@@ -28,6 +35,7 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 })
 export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	gameState: GameState;
+	bgsState: TwitchBgsState;
 	activeTooltip: string;
 
 	private twitch;
@@ -35,9 +43,14 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 
 	// private dragging = false;
 
-	constructor(private cdr: ChangeDetectorRef, private events: Events, private http: HttpClient) {}
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private events: Events,
+		private http: HttpClient,
+		private allCards: AllCardsService,
+	) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		if (!(window as any).Twitch) {
 			setTimeout(() => this.ngAfterViewInit(), 500);
 			return;
@@ -56,6 +69,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			});
 		});
 		console.log('init done');
+		await this.allCards.initializeCardsDb();
 		// this.addDebugGameState();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -100,26 +114,36 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	}
 
 	private async processEvent(event) {
-		switch (event.event.name) {
-			case GameEvent.GAME_END:
-				console.log('received GAME_END event');
-				this.gameState = undefined;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-				break;
-			default:
-				console.log('received deck event');
-				this.gameState = event.state;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-				break;
+		if (event.type === 'bgs') {
+			this.bgsState = event.state;
+			// console.log('bgs state', this.bgsState);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		} else {
+			switch (event.event.name) {
+				case GameEvent.GAME_END:
+					console.log('received GAME_END event');
+					this.gameState = undefined;
+					this.bgsState = undefined;
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+					break;
+				default:
+					console.log('received deck event');
+					this.gameState = event.state;
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+					break;
+			}
 		}
 	}
 
 	private addDebugGameState() {
 		this.gameState = fakeState as any;
-		console.log('loaded fake state', this.gameState);
+		this.bgsState = fakeBgsState as any;
+		console.log('loaded fake state', this.gameState, this.bgsState);
 	}
 }

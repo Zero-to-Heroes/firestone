@@ -45,8 +45,8 @@ declare let amplitude: any;
 						[entities]="boardMinions"
 						[currentTurn]="currentTurn"
 						[boardTurn]="boardTurn"
-						[maxBoardHeight]="1"
-						[debug]="false"
+						[maxBoardHeight]="maxBoardHeight"
+						[debug]="debug"
 					></bgs-board>
 					<div class="bottom-info">
 						<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
@@ -86,10 +86,12 @@ export class BgsOpponentOverviewBigComponent {
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 
+	@Input() debug: boolean;
 	@Input() enableSimulation: boolean;
 	@Input() currentTurn: number;
 	@Input() nextBattle: BattleResult;
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
+	@Input() maxBoardHeight = 1;
 
 	@Input() set opponent(value: BgsPlayer) {
 		if (value === this._opponent) {

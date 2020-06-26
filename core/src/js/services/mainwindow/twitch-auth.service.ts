@@ -1,6 +1,16 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
+import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameType } from '@firestone-hs/reference-data';
+import {
+	TwitchBgsBoard,
+	TwitchBgsBoardEntity,
+	TwitchBgsPlayer,
+	TwitchBgsState,
+} from '../../components/decktracker/overlay/twitch/twitch-bgs-state';
+import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
+import { BgsBoard } from '../../models/battlegrounds/in-game/bgs-board';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
@@ -28,8 +38,14 @@ export class TwitchAuthService {
 		1000,
 		'twitch-emitter',
 	);
+	private bgsProcessingQueue = new ProcessingQueue<any>(
+		eventQueue => this.processBgsQueue(eventQueue),
+		1000,
+		'twitch-bgs-emitter',
+	);
 
 	private lastProcessTimestamp = 0;
+	private lastProcessBgsTimestamp = 0;
 
 	constructor(
 		private prefs: PreferencesService,
@@ -49,7 +65,11 @@ export class TwitchAuthService {
 		this.processingQueue.enqueue(event);
 	}
 
-	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
+	public async emitBattlegroundsEvent(event: any) {
+		this.bgsProcessingQueue.enqueue(event);
+	}
+
+	private async processQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
 		// Debounce events
 		if (Date.now() - this.lastProcessTimestamp < 1000) {
 			return eventQueue;
@@ -57,6 +77,17 @@ export class TwitchAuthService {
 		this.lastProcessTimestamp = Date.now();
 		const mostRecentEvent = eventQueue[eventQueue.length - 1];
 		await this.emitEvent(mostRecentEvent);
+		return [];
+	}
+
+	private async processBgsQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
+		// Debounce events
+		if (Date.now() - this.lastProcessBgsTimestamp < 1000) {
+			return eventQueue;
+		}
+		this.lastProcessBgsTimestamp = Date.now();
+		const mostRecentEvent = eventQueue[eventQueue.length - 1];
+		await this.emitBgsEvent(mostRecentEvent);
 		return [];
 	}
 
@@ -118,6 +149,75 @@ export class TwitchAuthService {
 				console.error('[twitch-auth] Could not send deck event to EBS', error);
 			},
 		);
+	}
+
+	private async emitBgsEvent(state: BattlegroundsState) {
+		// console.log('ready to emit twitch event', newEvent);
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.twitchAccessToken) {
+			// console.log('no twitch access token, returning');
+			return;
+		}
+		const stateToSend: TwitchBgsState = {
+			leaderboard: this.buildLeaderboard(state),
+			currentTurn: state.currentGame?.currentTurn,
+		};
+		const newEvent = {
+			type: 'bgs',
+			state: stateToSend,
+		};
+		// console.log('sending twitch bgs event', newEvent);
+		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
+		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
+			() => {
+				// Do nothing
+				// console.log('twitch event result', data);
+			},
+			error => {
+				console.error('[twitch-auth] Could not send deck event to EBS', error);
+			},
+		);
+	}
+
+	private buildLeaderboard(state: BattlegroundsState): readonly TwitchBgsPlayer[] {
+		return [...(state.currentGame?.players || [])]
+			.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
+			.map(player => this.buildLeaderboardPlayer(player));
+	}
+
+	private buildLeaderboardPlayer(player: BgsPlayer): TwitchBgsPlayer {
+		return {
+			cardId: player.cardId,
+			heroPowerCardId: player.heroPowerCardId,
+			name: player.name,
+			isMainPlayer: player.isMainPlayer,
+			initialHealth: player.initialHealth,
+			damageTaken: player.damageTaken,
+			leaderboardPlace: player.leaderboardPlace,
+			lastBoard:
+				player.boardHistory && player.boardHistory.length > 0
+					? this.buildLastBoard(player.boardHistory[player.boardHistory.length - 1])
+					: null,
+			tripleHistory: player.tripleHistory,
+			tavernUpgradeHistory: player.tavernUpgradeHistory,
+		};
+	}
+
+	private buildLastBoard(lastKnownBoardState: BgsBoard): TwitchBgsBoard {
+		return {
+			turn: lastKnownBoardState.turn,
+			board: lastKnownBoardState.board.map(entity =>
+				this.buildSerializableEntity(entity),
+			) as readonly TwitchBgsBoardEntity[],
+		};
+	}
+
+	private buildSerializableEntity(entity: Entity): TwitchBgsBoardEntity {
+		return {
+			id: entity.id,
+			cardID: entity.cardID,
+			tags: entity.tags.toJS(),
+		};
 	}
 
 	public buildLoginUrl(): string {

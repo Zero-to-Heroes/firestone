@@ -14,9 +14,7 @@ import { ChartsModule } from 'ng2-charts';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
-import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
-import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-hero-portrait.component';
 import { BgsHeroMiniComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-mini.component';
 import { BgsHeroOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-overview.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
@@ -25,15 +23,11 @@ import { BgsHeroStatsComponent } from '../../components/battlegrounds/hero-selec
 import { BgsHeroTierComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tier.component.ts';
 import { BgsHeroTribesComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tribes.component';
 import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
-import { BgsBattleStatusComponent } from '../../components/battlegrounds/in-game/bgs-battle-status.component';
 import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
 import { BgsHeroFaceOffsComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-offs.component';
 import { BgsNextOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-next-opponent-overview.component';
-import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview-big.component';
 import { BgsOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview.component';
-import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
-import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
 import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/bgs-chart-hp.component';
 import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
 import { BgsChartWarbandStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-stats.component';
@@ -99,14 +93,14 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsHeroSelectionTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsHeroTribesComponent,
-		BgsOpponentOverviewBigComponent,
+		// BgsOpponentOverviewBigComponent,
 		BgsHeroFaceOffsComponent,
-		BgsBoardComponent,
-		BgsCardTooltipComponent,
-		BgsHeroPortraitComponent,
-		BgsBattleStatusComponent,
-		BgsTriplesComponent,
-		MinionIconComponent,
+		// BgsBoardComponent,
+		// BgsCardTooltipComponent,
+		// BgsHeroPortraitComponent,
+		// BgsBattleStatusComponent,
+		// BgsTriplesComponent,
+		// MinionIconComponent,
 	],
 	entryComponents: [BgsHeroSelectionTooltipComponent, BgsCardTooltipComponent],
 	bootstrap: [BattlegroundsComponent],

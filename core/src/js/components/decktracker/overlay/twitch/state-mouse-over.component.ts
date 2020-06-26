@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Map } from 'immutable';
 import { GameState } from '../../../../models/decktracker/game-state';
+import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 
 @Component({
 	selector: 'state-mouse-over',
@@ -10,6 +11,14 @@ import { GameState } from '../../../../models/decktracker/game-state';
 	],
 	template: `
 		<div class="state-mouse-over">
+			<ul class="bgs-leaderboard">
+				<leaderboard-empty-card
+					*ngFor="let bgsPlayer of bgsPlayers; let i = index"
+					[bgsPlayer]="bgsPlayer"
+					[currentTurn]="currentTurn"
+				>
+				</leaderboard-empty-card>
+			</ul>
 			<ul class="hero top-hero">
 				<div class="hero-power">
 					<empty-card [cardId]="topHeroPowerCard"></empty-card>
@@ -42,16 +51,32 @@ import { GameState } from '../../../../models/decktracker/game-state';
 })
 export class StateMouseOverComponent {
 	_gameState: GameState;
+	_bgsState: TwitchBgsState;
 
 	topHeroPowerCard: string;
 	topBoardCards: readonly string[];
 	bottomBoardCards: readonly string[];
 	bottomHeroPowerCard: string;
 	bottomHandCards: readonly string[];
+	bgsPlayers: readonly TwitchBgsPlayer[];
+	currentTurn: number;
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 
-	@Input('gameState') set gameState(value: GameState) {
+	@Input() set bgsState(value: TwitchBgsState) {
+		if (value === this._bgsState) {
+			return;
+		}
+		this._bgsState = value;
+		this.bgsPlayers = this._bgsState.leaderboard;
+		this.currentTurn = this._bgsState.currentTurn;
+		// console.log('set bgs players', this.bgsPlayers, value);
+	}
+
+	@Input() set gameState(value: GameState) {
+		if (value === this._gameState) {
+			return;
+		}
 		this._gameState = value;
 		if (!value) {
 			return;
@@ -61,7 +86,7 @@ export class StateMouseOverComponent {
 		this.bottomBoardCards = this._gameState.playerDeck.board.map(card => card.cardId);
 		this.bottomHeroPowerCard = this._gameState.playerDeck.heroPower && this._gameState.playerDeck.heroPower.cardId;
 		this.bottomHandCards = this._gameState.playerDeck.hand.map(card => card.cardId);
-		console.log('upodated', this.bottomHeroPowerCard, this.topHeroPowerCard);
+		// console.log('upodated', this.bottomHeroPowerCard, this.topHeroPowerCard);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -1,0 +1,18 @@
+:host() {
+	height: 12.5%;
+	width: 100%;
+	position: relative;
+}
+
+.card {
+	pointer-events: all;
+	height: 100%;
+	width: 100%;
+	position: relative;
+	// background: rgba(0, 0, 0, 0.5); // dev
+
+	img {
+		height: 100%;
+		width: 100%;
+	}
+}

@@ -7,6 +7,7 @@ import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
+import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
@@ -76,6 +77,7 @@ export class BattlegroundsStoreService {
 
 	private queuedEvents: { event: BattlegroundsStoreEvent; trigger: string }[] = [];
 	private overlayHandlers: BattlegroundsOverlay[];
+	private eventEmitters = [];
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -85,10 +87,12 @@ export class BattlegroundsStoreService {
 		private ow: OverwolfService,
 		private prefs: PreferencesService,
 		private memory: MemoryInspectionService,
+		private twitch: TwitchAuthService,
 		private init_BgsRunStatsService: BgsRunStatsService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
+		this.buildEventEmitters();
 		this.buildOverlayHandlers();
 		this.battlegroundsUpdater.subscribe((event: GameEvent | BattlegroundsStoreEvent) => {
 			// console.log('[battlegrounds-state] enqueueing', event);
@@ -278,7 +282,9 @@ export class BattlegroundsStoreService {
 					const newState = await parser.parse(this.state, gameEvent);
 					if (newState !== this.state) {
 						this.state = newState;
-						this.battlegroundsStoreEventBus.next(this.state);
+						this.eventEmitters.forEach(emitter => emitter(this.state));
+
+						// this.battlegroundsStoreEventBus.next(this.state);
 						// console.log('emitted state', gameEvent.type, this.state);
 						this.updateOverlay();
 					}
@@ -287,6 +293,22 @@ export class BattlegroundsStoreService {
 				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e.message, e);
 			}
 		}
+	}
+
+	private async buildEventEmitters() {
+		const result = [state => this.battlegroundsStoreEventBus.next(state)];
+		const prefs = await this.prefs.getPreferences();
+		console.log('is logged in to Twitch?', prefs.twitchAccessToken);
+		if (prefs.twitchAccessToken) {
+			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
+			if (!isTokenValid) {
+				this.prefs.setTwitchAccessToken(undefined);
+				await this.twitch.sendExpiredTwitchTokenNotification();
+			} else {
+				result.push(state => this.twitch.emitBattlegroundsEvent(state));
+			}
+		}
+		this.eventEmitters = result;
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
@@ -308,7 +330,7 @@ export class BattlegroundsStoreService {
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(),
 			new BgsHeroSelectionParser(),
-			new BgsHeroSelectedParser(),
+			new BgsHeroSelectedParser(this.allCards),
 			new BgsHeroSelectionDoneParser(),
 			new BgsNextOpponentParser(),
 			new BgsTavernUpgradeParser(),

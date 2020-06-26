@@ -1,0 +1,56 @@
+:host() {
+	width: 800px;
+	width: calc(min(800px, 70%));
+	height: 225px;
+	padding: 20px;
+	padding-left: 0;
+	padding-top: 30px;
+	background-size: 100%;
+	background-repeat: round;
+	background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
+	outline: 1px solid #5f0b47;
+}
+
+.bgs-hero-overview-tooltip {
+	height: 100%;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 13px;
+	--variable-title-font-size: 14px !important;
+
+	bgs-opponent-overview-big {
+		height: 100%;
+	}
+
+	::ng-deep .opponent-info.opponent-info.opponent-info.opponent-info {
+		.bottom-info {
+			max-height: 25%;
+		}
+
+		.tavern-upgrades {
+			.tavern-upgrade .label {
+				font-size: 10px;
+			}
+		}
+
+		.triples-section {
+			.title {
+				margin-right: 15px;
+			}
+
+			.triple {
+				width: 1.8vw;
+				height: 2vw;
+				margin-right: 15px;
+
+				.number {
+					border-width: 2px;
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}
