@@ -19,30 +19,43 @@ export class DeckbuildingMechanicReq implements Requirement {
 	}
 
 	reset(): void {
+		// console.log('[debug] [mechanic] reset');
 		this.doesDeckMeetSpec = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
+		// console.log('[debug] [mechanic] afterAchievementCompletionReset');
 		this.doesDeckMeetSpec = undefined;
 	}
 
 	isCompleted(): boolean {
+		// console.log('[debug] [mechanic] isCompleted', this.doesDeckMeetSpec);
 		return this.doesDeckMeetSpec;
 	}
 
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.LOCAL_PLAYER) {
+			// console.log('[debug] [mechanic] handling local_player event?', gameEvent);
 			this.handleEvent(gameEvent);
 		}
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
 		const deck = gameEvent.localPlayer.deck ? gameEvent.localPlayer.deck.deck : null;
+		// console.log('[debug] [mechanic] deck', deck);
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
+			// console.log('[debug] [mechanic] cards', cards);
 			const numberOfMatchingCards: number = cards.filter(
 				card => card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1,
 			).length;
+			// console.log(
+			// 	'no-format',
+			// 	'[debug] [mechanic] numberOfMatchingCards',
+			// 	numberOfMatchingCards,
+			// 	cards.filter(card => card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1),
+			// 	cards.filter(card => !(card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1)),
+			// );
 			// console.debug('number of matching', numberOfMatchingCards, cards);
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetLifestealMinions;
@@ -54,5 +67,6 @@ export class DeckbuildingMechanicReq implements Requirement {
 		} else {
 			this.doesDeckMeetSpec = false;
 		}
+		// console.log('no-format', '[debug] [mechanic] doesDeckMeetSpec', this.doesDeckMeetSpec);
 	}
 }

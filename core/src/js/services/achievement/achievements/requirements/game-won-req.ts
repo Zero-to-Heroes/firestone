@@ -10,14 +10,17 @@ export class GameWonReq implements Requirement {
 	}
 
 	reset(): void {
+		// console.log('[debug] [won] reset');
 		this.isWon = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
+		// console.log('[debug] [won] afterAchievementCompletionReset');
 		this.isWon = undefined;
 	}
 
 	isCompleted(): boolean {
+		// console.log('[debug] [won] isCompleted', this.isWon);
 		return this.isWon;
 	}
 
@@ -34,5 +37,6 @@ export class GameWonReq implements Requirement {
 		if (localPlayer.Id === winner.Id) {
 			this.isWon = true;
 		}
+		// console.log('[debug] [won] gameresult', this.isWon, gameEvent);
 	}
 }

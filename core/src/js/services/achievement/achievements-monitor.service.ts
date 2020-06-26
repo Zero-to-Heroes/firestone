@@ -52,23 +52,33 @@ export class AchievementsMonitor {
 		const autoGrantAchievements = await this.achievementLoader.getAchievementsById(
 			achievement.linkedAchievementIds,
 		);
-		// console.log('[achievement-monitor] autoGrantAchievements', autoGrantAchievements);
+		// console.log(
+		// 	'no-format',
+		// 	'[achievement-monitor] autoGrantAchievements',
+		// 	achievement.id,
+		// 	achievement,
+		// 	autoGrantAchievements,
+		// );
 		const allAchievements =
 			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
 		// console.log('[achievement-monitor] will grant achievements?', allAchievements, achievement);
 		for (const achv of allAchievements) {
-			// console.log('[achievement-monitor] starting process of completed achievement', challenge);
+			console.log('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
 			const existingAchievement: CompletedAchievement = await this.achievementsStorage.loadAchievementFromCache(
 				achv.id,
 			);
-			// console.log('[achievement-monitor] loaded existing completed achievement', existingAchievement);
+			// console.log(
+			// 	'no-format',
+			// 	'[achievement-monitor] loaded existing completed achievement',
+			// 	existingAchievement,
+			// );
 			const completedAchievement = new CompletedAchievement(
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
 				existingAchievement.replayInfo || [],
 			);
 			if (achv.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
-				// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+				console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
 				continue;
 			}
 			// Don't grant a linked achievement more than once
@@ -76,6 +86,13 @@ export class AchievementsMonitor {
 				existingAchievement.numberOfCompletions >= 1 &&
 				autoGrantAchievements.map(a => a.id).indexOf(achv.id) !== -1
 			) {
+				// console.log(
+				// 	'no-format',
+				// 	'[achievement-monitor] linked achievement can be completed only once',
+				// 	achv.id,
+				// 	existingAchievement.numberOfCompletions,
+				// 	autoGrantAchievements.map(a => a.id),
+				// );
 				continue;
 			}
 			console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);

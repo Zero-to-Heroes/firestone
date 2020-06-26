@@ -15,10 +15,12 @@ export class GameTypeReq implements Requirement {
 	}
 
 	reset(): void {
+		// console.log('[debug] [type] reset');
 		this.isCorrectGameType = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
+		// console.log('[debug] [type] afterAchievementCompletionReset');
 		this.isCorrectGameType = undefined;
 	}
 
@@ -26,6 +28,7 @@ export class GameTypeReq implements Requirement {
 		if (process.env.LOCAL_TEST) {
 			return true;
 		}
+		// console.log('[debug] [type] isCompleted', this.isCorrectGameType);
 		return this.isCorrectGameType;
 	}
 
@@ -36,6 +39,12 @@ export class GameTypeReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
+		// console.log(
+		// 	'[debug] [type] handleEvent',
+		// 	gameEvent,
+		// 	this.gameTypes.indexOf(gameEvent.additionalData.metaData.GameType) !== -1,
+		// 	this.gameTypes,
+		// );
 		if (this.gameTypes.indexOf(gameEvent.additionalData.metaData.GameType) !== -1) {
 			this.isCorrectGameType = true;
 		}
