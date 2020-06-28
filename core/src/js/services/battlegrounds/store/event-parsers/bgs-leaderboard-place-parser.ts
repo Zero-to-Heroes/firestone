@@ -14,12 +14,17 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 		const playerToUpdate = currentState.currentGame.players.find(
 			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
+		// console.log('updating leaderboard place for', playerToUpdate, event, currentState);
 		if (!playerToUpdate) {
 			return currentState;
+		}
+		if (event.leaderboardPlace === 0) {
+			console.error('invalid leaderboard place', event, currentState);
 		}
 		const newPlayer = playerToUpdate.update({
 			leaderboardPlace: event.leaderboardPlace,
 		} as BgsPlayer);
+		// console.log('newPlayer', newPlayer);
 		const newGame = currentState.currentGame.updatePlayer(newPlayer);
 		return currentState.update({
 			currentGame: newGame,
