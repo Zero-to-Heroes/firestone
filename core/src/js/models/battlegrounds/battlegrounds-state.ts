@@ -12,6 +12,7 @@ export class BattlegroundsState {
 	readonly globalStats: BgsStats;
 	readonly currentGame: BgsGame;
 	readonly inGame: boolean;
+	readonly gameEnded: boolean; // Flag useful mostly for twitch to know when to hide the overlay
 	readonly forceOpen: boolean;
 	readonly postMatchStats: BgsPostMatchStats;
 

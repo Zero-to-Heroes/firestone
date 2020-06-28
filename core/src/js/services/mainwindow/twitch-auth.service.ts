@@ -161,6 +161,8 @@ export class TwitchAuthService {
 		const stateToSend: TwitchBgsState = {
 			leaderboard: this.buildLeaderboard(state),
 			currentTurn: state.currentGame?.currentTurn,
+			inGame: state.inGame,
+			gameEnded: state.gameEnded,
 		};
 		const newEvent = {
 			type: 'bgs',

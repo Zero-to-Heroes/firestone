@@ -25,7 +25,12 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 				[bgsState]="bgsState"
 				*ngIf="gameState || bgsState"
 			></state-mouse-over>
-			<decktracker-overlay-standalone [gameState]="gameState" (dragStart)="onDragStart()" (dragEnd)="onDragEnd()">
+			<decktracker-overlay-standalone
+				*ngIf="!bgsState?.inGame"
+				[gameState]="gameState"
+				(dragStart)="onDragStart()"
+				(dragEnd)="onDragEnd()"
+			>
 			</decktracker-overlay-standalone>
 		</div>
 	`,

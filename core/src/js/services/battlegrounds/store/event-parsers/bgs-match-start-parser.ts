@@ -14,6 +14,7 @@ export class BgsMatchStartParser implements EventParser {
 		const newGame: BgsGame = BgsGame.create({} as BgsGame);
 		return currentState.update({
 			inGame: true,
+			gameEnded: false,
 			currentGame: newGame,
 			forceOpen: true,
 			stages: BgsInitParser.buildEmptyStages(),

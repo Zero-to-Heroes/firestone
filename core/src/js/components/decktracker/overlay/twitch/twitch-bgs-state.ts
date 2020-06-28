@@ -4,6 +4,8 @@ import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
 export interface TwitchBgsState {
 	readonly leaderboard: readonly TwitchBgsPlayer[];
 	readonly currentTurn: number;
+	readonly gameEnded: boolean;
+	readonly inGame: boolean;
 }
 
 export interface TwitchBgsPlayer {
