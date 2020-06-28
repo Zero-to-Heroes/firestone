@@ -36,6 +36,7 @@ export class GameEvent {
 	public static readonly QUEST_CREATED_IN_GAME = 'QUEST_CREATED_IN_GAME';
 	public static readonly MINION_SUMMONED = 'MINION_SUMONED';
 	public static readonly HERO_POWER_CHANGED = 'HERO_POWER_CHANGED';
+	public static readonly WEAPON_EQUIPPED = 'WEAPON_EQUIPPED';
 	public static readonly CARD_REVEALED = 'CARD_REVEALED';
 	public static readonly CARD_CHANGED_ON_BOARD = 'CARD_CHANGED_ON_BOARD';
 	public static readonly CARD_CHANGED_IN_HAND = 'CARD_CHANGED_IN_HAND';
@@ -43,6 +44,7 @@ export class GameEvent {
 	public static readonly SECRET_PLAYED = 'SECRET_PLAYED';
 	public static readonly SECRET_TRIGGERED = 'SECRET_TRIGGERED';
 	public static readonly SECRET_DESTROYED = 'SECRET_DESTROYED';
+	public static readonly WEAPON_DESTROYED = 'WEAPON_DESTROYED';
 	public static readonly QUEST_PLAYED = 'QUEST_PLAYED';
 	public static readonly QUEST_DESTROYED = 'QUEST_DESTROYED';
 	public static readonly DEATHRATTLE_TRIGGERED = 'DEATHRATTLE_TRIGGERED';

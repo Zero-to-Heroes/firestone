@@ -11,7 +11,7 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 	],
 	template: `
 		<div class="state-mouse-over">
-			<ul class="bgs-leaderboard">
+			<ul class="bgs-leaderboard" *ngIf="_bgsState && _bgsState.inGame && !_bgsState.gameEnded">
 				<leaderboard-empty-card
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index"
 					[bgsPlayer]="bgsPlayer"
@@ -20,6 +20,9 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 				</leaderboard-empty-card>
 			</ul>
 			<ul class="hero top-hero">
+				<div class="weapon">
+					<empty-card [cardId]="topWeaponCard"></empty-card>
+				</div>
 				<div class="hero-power">
 					<empty-card [cardId]="topHeroPowerCard"></empty-card>
 				</div>
@@ -31,6 +34,9 @@ import { TwitchBgsPlayer, TwitchBgsState } from './twitch-bgs-state';
 				<empty-card *ngFor="let cardId of bottomBoardCards" [cardId]="cardId"></empty-card>
 			</ul>
 			<ul class="hero bottom-hero">
+				<div class="weapon">
+					<empty-card [cardId]="bottomWeaponCard"></empty-card>
+				</div>
 				<div class="hero-power">
 					<empty-card [cardId]="bottomHeroPowerCard"></empty-card>
 				</div>
@@ -54,9 +60,11 @@ export class StateMouseOverComponent {
 	_bgsState: TwitchBgsState;
 
 	topHeroPowerCard: string;
+	topWeaponCard: string;
 	topBoardCards: readonly string[];
 	bottomBoardCards: readonly string[];
 	bottomHeroPowerCard: string;
+	bottomWeaponCard: string;
 	bottomHandCards: readonly string[];
 	bgsPlayers: readonly TwitchBgsPlayer[];
 	currentTurn: number;
@@ -82,9 +90,11 @@ export class StateMouseOverComponent {
 			return;
 		}
 		this.topHeroPowerCard = this._gameState.opponentDeck.heroPower && this._gameState.opponentDeck.heroPower.cardId;
+		this.topWeaponCard = this._gameState.opponentDeck.weapon && this._gameState.opponentDeck.weapon.cardId;
 		this.topBoardCards = this._gameState.opponentDeck.board.map(card => card.cardId);
 		this.bottomBoardCards = this._gameState.playerDeck.board.map(card => card.cardId);
 		this.bottomHeroPowerCard = this._gameState.playerDeck.heroPower && this._gameState.playerDeck.heroPower.cardId;
+		this.bottomWeaponCard = this._gameState.playerDeck.weapon && this._gameState.playerDeck.weapon.cardId;
 		this.bottomHandCards = this._gameState.playerDeck.hand.map(card => card.cardId);
 		// console.log('upodated', this.bottomHeroPowerCard, this.topHeroPowerCard);
 		if (!(this.cdr as ViewRef)?.destroyed) {

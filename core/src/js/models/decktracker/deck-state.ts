@@ -36,6 +36,7 @@ export class DeckState {
 	readonly name?: string;
 	readonly hero?: HeroCard;
 	readonly heroPower: DeckCard;
+	readonly weapon: DeckCard;
 	readonly deckList: readonly DeckCard[] = [];
 	readonly unknownRealCardsInDeck: boolean;
 	// This is too cumbersome to compute for the opponent deck when the decklist is known,

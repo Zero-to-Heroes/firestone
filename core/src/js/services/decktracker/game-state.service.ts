@@ -71,6 +71,8 @@ import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-de
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
+import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
+import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { AttackOpponentCounterOverlayHandler } from './overlays/counter-opponent-attack-handler';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
@@ -448,6 +450,8 @@ export class GameStateService {
 			new CardCreatorChangedParser(this.helper),
 			new AssignCardIdParser(this.helper),
 			new HeroPowerChangedParser(this.helper, this.allCards),
+			new WeaponEquippedParser(this.helper, this.allCards),
+			new WeaponDestroyedParser(),
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
 			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),

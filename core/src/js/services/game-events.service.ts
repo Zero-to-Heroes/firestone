@@ -357,6 +357,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'WEAPON_EQUIPPED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.WEAPON_EQUIPPED, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
+				break;
 			case 'CARD_REVEALED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
@@ -447,6 +454,10 @@ export class GameEvents {
 			case 'SECRET_DESTROYED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_DESTROYED, gameEvent));
+				break;
+			case 'WEAPON_DESTROYED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.WEAPON_DESTROYED, gameEvent));
 				break;
 			case 'MINION_GO_DORMANT':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_GO_DORMANT, gameEvent));

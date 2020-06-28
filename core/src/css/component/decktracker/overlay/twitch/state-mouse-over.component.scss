@@ -39,6 +39,14 @@ empty-card {
 	align-items: center;
 	justify-content: center;
 
+	.weapon {
+		position: absolute;
+		width: 15vh;
+		height: 69%;
+		left: 35%;
+		top: 30%;
+	}
+
 	.hero-power {
 		position: absolute;
 		width: 15vh;
