@@ -165,8 +165,13 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 
 	private refreshScroll() {
 		setTimeout(() => {
-			const contentHeight = this.el.nativeElement.querySelector('.ps-content').getBoundingClientRect().height;
-			const containerHeight = this.el.nativeElement.querySelector('.ps').getBoundingClientRect().height;
+			const psContent = this.el.nativeElement.querySelector('.ps-content');
+			const ps = this.el.nativeElement.querySelector('.ps');
+			if (!ps || !psContent) {
+				return;
+			}
+			const contentHeight = psContent.getBoundingClientRect().height;
+			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
 			// console.log('isScroll', this.isScroll, containerHeight, contentHeight);
 			this.refresh();
