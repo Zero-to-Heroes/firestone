@@ -103,7 +103,7 @@ export class BattlegroundsStoreService {
 		window['bgsHotkeyPressed'] = this.handleHotkeyPressed;
 
 		this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
-			console.log('[bootstrap] hotkey pressed', hotkeyResult);
+			console.log('[bgs-store] hotkey pressed', hotkeyResult);
 			if (hotkeyResult.status === 'success') {
 				this.handleHotkeyPressed();
 			}
@@ -113,6 +113,11 @@ export class BattlegroundsStoreService {
 		setTimeout(() => {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 			preferencesEventBus.subscribe(event => {
+				if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
+					console.log('[bgs-store] rebuilding event emitters');
+					this.buildEventEmitters();
+					return;
+				}
 				if (event) {
 					this.handleDisplayPreferences(event.preferences);
 				}
@@ -219,7 +224,7 @@ export class BattlegroundsStoreService {
 			this.processPendingEvents(gameEvent);
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
-			console.log('[bgs-run-stats] Replay created, received info');
+			console.log('[bgs-store] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review' && this.state && this.state.inGame && this.state.currentGame) {
 				this.events.broadcast(Events.START_BGS_RUN_STATS, info.reviewId, this.state.currentGame);
@@ -233,7 +238,7 @@ export class BattlegroundsStoreService {
 		try {
 			await this.processEvent(gameEvent);
 		} catch (e) {
-			console.error('Exception while processing event', e);
+			console.error('[bgs-store] Exception while processing event', e);
 		}
 		return eventQueue.slice(1);
 	}
@@ -298,7 +303,7 @@ export class BattlegroundsStoreService {
 	private async buildEventEmitters() {
 		const result = [state => this.battlegroundsStoreEventBus.next(state)];
 		const prefs = await this.prefs.getPreferences();
-		console.log('is logged in to Twitch?', prefs.twitchAccessToken);
+		console.log('[bgs-store] is logged in to Twitch?', prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {
