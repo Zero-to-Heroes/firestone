@@ -92,19 +92,19 @@ export class BgsBoardComponent implements AfterViewInit {
 		this._minionStats = value;
 	}
 
-	@Input('entities') set entities(entities: readonly Entity[]) {
-		if (this.inputEntities === entities) {
-			if (this.debug) {
-				console.log('getting the same input entities, returning', entities);
-			}
-			return;
-		}
-		this.inputEntities = entities;
-		this._entities = entities?.map(entity => Entity.create({ ...entity } as Entity));
+	@Input('entities') set entities(value: readonly Entity[]) {
+		// if (this.inputEntities === value) {
+		// 	if (this.debug) {
+		// 		console.log('getting the same input entities, returning', value);
+		// 	}
+		// 	return;
+		// }
+		this.inputEntities = value;
+		this._entities = value?.map(entity => Entity.create({ ...entity } as Entity));
 		this.previousBoardWidth = undefined;
 		if (this.debug) {
 			this.boardReady = false;
-			console.log('[bgs-board] setting board ready', this.boardReady);
+			console.log('[bgs-board] setting board ready in entities setter', this.boardReady);
 		}
 		this.onResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -146,18 +146,18 @@ export class BgsBoardComponent implements AfterViewInit {
 	showTooltipWarning(entity: Entity): boolean {
 		return (
 			this._entities
-				.map(e => normalizeCardId(e.cardID, this.allCards))
-				.filter(cardId => cardId === normalizeCardId(entity.cardID, this.allCards)).length > 1
+				?.map(e => normalizeCardId(e.cardID, this.allCards))
+				?.filter(cardId => cardId === normalizeCardId(entity.cardID, this.allCards)).length > 1
 		);
 	}
 
 	getDamageDealt(entity: Entity): number {
-		return this._minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+		return this._minionStats?.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
 			?.damageDealt;
 	}
 
 	getDamageTaken(entity: Entity): number {
-		return this._minionStats.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+		return this._minionStats?.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
 			?.damageTaken;
 	}
 
@@ -173,15 +173,18 @@ export class BgsBoardComponent implements AfterViewInit {
 				setTimeout(() => this.onResize(), 300);
 				return;
 			}
+			if (this.debug) {
+				console.log('no entities set, doing nothing', this._entities);
+			}
 			return;
 		}
 		const rect = boardContainer.getBoundingClientRect();
 		// if (this.debug) {
 		// 	console.log('board container', boardContainer, rect);
 		// }
-		if (!rect.width || !rect.height) {
+		if (!rect || !rect.width || !rect.height) {
 			if (this.debug) {
-				console.log('no dimensions, retrying');
+				console.log('no dimensions, retrying', rect, boardContainer);
 			}
 			setTimeout(() => this.onResize(), 1000);
 			return;
@@ -189,7 +192,13 @@ export class BgsBoardComponent implements AfterViewInit {
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
 		if (cardElements.length !== (this._entities?.length || 0)) {
 			if (this.debug) {
-				console.log('card elements not displayed yet', cardElements, this._entities);
+				console.log(
+					'card elements not displayed yet',
+					cardElements.length,
+					this._entities?.length,
+					cardElements,
+					this._entities,
+				);
 			}
 			setTimeout(() => this.onResize(), 300);
 			return;
@@ -219,7 +228,6 @@ export class BgsBoardComponent implements AfterViewInit {
 				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 				this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
 			}
-			// console.log('setting board ready', this.boardReady);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
