@@ -37,6 +37,7 @@ const entry = {
 	settings: './src/js/modules/settings/main.ts',
 	twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
 	battlegrounds: './src/js/modules/battlegrounds/main.ts',
+	bgsbattlesimulation: './src/js/modules/bgs-battle-simulation/main.ts',
 	'bgsbattlesimulation.worker': './src/js/workers/bgs-simulation.worker.ts',
 	'bgspostmatchstats.worker': './src/js/workers/bgs-post-match-stats.worker.ts',
 };
@@ -63,6 +64,7 @@ module.exports = function(env, argv) {
 				'./src/js/modules/settings/settings.module#SettingsModule',
 				'./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule',
 				'./src/js/modules/battlegrounds/battlegrounds.module#BattlegroundsModule',
+				'./src/js/modules/bgs-battle-simulation/bgs-battle-simulation.module#BgsBattleSimulationModule',
 				'./src/js/modules/game-counters/game-counters.module#GameCountersModule',
 			],
 			sourceMap: true,
@@ -106,6 +108,7 @@ module.exports = function(env, argv) {
 		buildHtmlWebpackPluginConf('twitch-auth-callback.html', 'twitchauthcallback'),
 		buildHtmlWebpackPluginConf('match_overlay_opponent_hand.html', 'opponentHand'),
 		buildHtmlWebpackPluginConf('battlegrounds.html', 'battlegrounds'),
+		buildHtmlWebpackPluginConf('bgs_battle_simulation.html', 'bgsbattlesimulation'),
 		buildHtmlWebpackPluginConf('counter_player_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_pogo.html', 'gamecounters'),

@@ -61,6 +61,7 @@ import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
 import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
+import { BgsSimulationOverlay } from './overlay/bgs-simulation-overlay';
 
 @Injectable()
 export class BattlegroundsStoreService {
@@ -361,6 +362,10 @@ export class BattlegroundsStoreService {
 	}
 
 	private buildOverlayHandlers() {
-		this.overlayHandlers = [new BgsMainWindowOverlay(this.prefs, this.ow), new BgsPlayerPogoOverlay(this.ow)];
+		this.overlayHandlers = [
+			new BgsMainWindowOverlay(this.prefs, this.ow),
+			new BgsPlayerPogoOverlay(this.ow),
+			new BgsSimulationOverlay(this.prefs, this.ow),
+		];
 	}
 }

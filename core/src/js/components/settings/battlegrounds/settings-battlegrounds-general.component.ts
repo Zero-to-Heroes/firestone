@@ -54,6 +54,11 @@ import { Knob } from '../preference-slider.component';
 						label="Pogo-Hopper counter"
 						tooltip="Show the number of times you played a Pogo-Hopper in Battlegrounds"
 					></preference-toggle>
+					<preference-toggle
+						field="bgsEnableBattleSimulationOverlay"
+						label="Battle Simulation overlay"
+						tooltip="Also show the current battle simulation results as an overlay on top of the game"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">

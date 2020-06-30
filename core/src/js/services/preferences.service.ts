@@ -113,6 +113,12 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async updateBgsSimulationWidgetPosition(left: any, top: any) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsSimulationWidgetPosition: { left, top } };
+		this.savePreferences(newPrefs);
+	}
+
 	public async updateCounterPosition(activeCounter: string, side: string, left: any, top: any) {
 		const prefs = await this.getPreferences();
 		const propertyName = this.buildCounterPropertyName(activeCounter, side);

@@ -1,0 +1,30 @@
+:host {
+	padding: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-size: 100%;
+	background-repeat: round;
+	background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
+	outline: 1px solid #5f0b47;
+	display: flex;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 13px;
+}
+
+.title {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	color: #d9c3ab;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+::ng-deep bgs-battle-status .battle-simulation.battle-simulation.battle-simulation {
+	border-left: none;
+}
