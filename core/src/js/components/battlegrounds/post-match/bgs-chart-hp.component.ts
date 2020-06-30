@@ -367,7 +367,7 @@ export class BgsChartHpComponent {
 		}
 		const playerOrder = [...this._game.players]
 			.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
-			.map(player => player.cardId);
+			.map(player => player?.cardId);
 		// console.log('playerOrder', playerOrder);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
@@ -378,7 +378,7 @@ export class BgsChartHpComponent {
 			cardId: cardId,
 			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${cardId}.png`,
 			position: playerOrder.indexOf(cardId) + 1,
-			isPlayer: cardId === this._game.getMainPlayer().cardId,
+			isPlayer: cardId === this._game.getMainPlayer()?.cardId,
 			shown: true,
 		}));
 

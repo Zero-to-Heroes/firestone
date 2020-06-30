@@ -34,7 +34,16 @@ export class BgsGame {
 	}
 
 	public getMainPlayer(): BgsPlayer {
-		return this.players.find(player => player.isMainPlayer);
+		const mainPlayer = this.players.find(player => player.isMainPlayer);
+		if (!mainPlayer) {
+			console.error(
+				'Could not find main player',
+				this.players.map(player => {
+					player.cardId, player.isMainPlayer, player.name;
+				}),
+			);
+		}
+		return mainPlayer;
 	}
 
 	public updateActualBattleResult(result: string): BgsGame {

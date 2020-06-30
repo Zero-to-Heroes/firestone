@@ -24,6 +24,15 @@ export class BgsPlayerBoardParser implements EventParser {
 		const playerToUpdate = currentState.currentGame.players.find(
 			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
+		if (!playerToUpdate) {
+			console.error(
+				'Could not idenfity player for whom to update board history',
+				event.heroCardId,
+				normalizeHeroCardId(event.heroCardId),
+				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
+			);
+			return currentState;
+		}
 		// console.log('finding player board', playerToUpdate, event, currentState);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
