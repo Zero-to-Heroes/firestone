@@ -81,8 +81,8 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 				this.isMaximized = false;
 			}
 		});
-		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.hotkeyPressedHandler = this.ow.getMainWindow().bgsHotkeyPressed;
+		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		// console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
