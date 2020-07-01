@@ -10,8 +10,8 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 	],
 	template: `
 		<div class="title-bar">
-			<decktracker-deck-name [deck]="deck"></decktracker-deck-name>
-			<decktracker-cards-recap [deck]="deck"></decktracker-cards-recap>
+			<decktracker-deck-name [deck]="deck" *ngIf="showTitleBar"></decktracker-deck-name>
+			<decktracker-cards-recap [deck]="deck" *ngIf="showTitleBar"></decktracker-cards-recap>
 			<decktracker-winrate-recap
 				*ngIf="showDeckWinrate"
 				[stats]="deckWinrate"
@@ -28,6 +28,7 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 })
 export class DeckTrackerTitleBarComponent {
 	@Input() deck: DeckState;
+	@Input() showTitleBar: boolean;
 	@Input() showDeckWinrate: boolean;
 	@Input() showMatchupWinrate: boolean;
 	@Input() deckWinrate: StatsRecap;

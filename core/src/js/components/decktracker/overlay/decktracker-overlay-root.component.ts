@@ -51,7 +51,7 @@ declare let amplitude;
 						class="decktracker"
 						*ngIf="gameState"
 						[style.width.px]="overlayWidthInPx"
-						[ngClass]="{ 'hide-title-bar': !showTitleBar, 'hide-control-bar': !showControlBar }"
+						[ngClass]="{ 'hide-control-bar': !showControlBar }"
 					>
 						<div class="background"></div>
 						<decktracker-control-bar
@@ -62,6 +62,7 @@ declare let amplitude;
 						></decktracker-control-bar>
 						<decktracker-title-bar
 							[deck]="deck"
+							[showTitleBar]="showTitleBar"
 							[showDeckWinrate]="showDeckWinrate"
 							[showMatchupWinrate]="showMatchupWinrate"
 							[deckWinrate]="gameState.deckStatsRecap"
