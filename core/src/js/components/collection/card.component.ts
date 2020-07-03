@@ -99,7 +99,7 @@ export class CardComponent implements AfterViewInit {
 
 	@Input() set loadImage(value: boolean) {
 		this._loadImage = value;
-		// console.log('set loadimage', value);
+		// console.log('set loadimage', this._card?.id, value);
 		this.updateImage();
 	}
 
@@ -118,24 +118,9 @@ export class CardComponent implements AfterViewInit {
 		}
 	}
 
-	// @HostListener('mouseenter') onMouseEnter() {
-	// 	if (this.tooltips && this._loadImage) {
-	// 		const rect = this.el.nativeElement.getBoundingClientRect();
-	// 		const x = rect.left + rect.width - 20;
-	// 		const y = rect.top + rect.height / 2;
-	// 		this.events.broadcast(Events.SHOW_TOOLTIP, this._card.id, x, y, this._card.isOwned());
-	// 	}
-	// }
-
-	// @HostListener('mouseleave') onMouseLeave() {
-	// 	if (this.tooltips) {
-	// 		this.events.broadcast(Events.HIDE_TOOLTIP, this._card.id);
-	// 	}
-	// }
-
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
-		//console.log('image loaded', this.image);
+		// console.log('image loaded', this.image);
 		this.imageLoaded.next(true);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -149,11 +134,10 @@ export class CardComponent implements AfterViewInit {
 			return;
 		}
 		this.showPlaceholder = true;
-		// this.showPlaceholder = true;
 		const imagePath = 'compressed'; // this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;
-		//console.log('updated image', this.image, this.overlayMaskImage);
+		// console.log('updated image', this.image);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

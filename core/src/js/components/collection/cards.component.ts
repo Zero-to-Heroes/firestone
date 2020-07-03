@@ -220,7 +220,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		// - Extract this to a directive, so that the logic is abstracted away from each rendering page
 		// - Be smart about how many items to display at first, so that the page looks full right away
 		// Maybe have a look at https://www.telerik.com/blogs/blazing-fast-list-rendering-in-angular?
-		this.gradualLoadActiveCards(this._cardList);
+		// this.gradualLoadActiveCards(this._cardList);
 		// And hide some of them depending on the filters
 		this.updateShownCards();
 	}
@@ -293,6 +293,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	shouldLoadImage(index: number) {
+		// console.log('should load image?', index, this.imagestoLoad);
 		return index <= this.imagestoLoad;
 	}
 
@@ -304,6 +305,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 						displayed: false,
 				  } as SetCard),
 		);
+		this.gradualLoadActiveCards(this._activeCards.filter(card => card.displayed));
 	}
 
 	private shouldBeShown(card: SetCard): boolean {
@@ -326,7 +328,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private *doGradualLoad(cards: SetCard[]): IterableIterator<void> {
-		console.log('starting loading cards');
+		// console.log('starting loading cards', cards);
 		this.loading = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -346,7 +348,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		this.loading = false;
 		this.imagestoLoad = 10;
 		this.imagesLoaded = 0;
-		console.log('init images to load', this.imagestoLoad);
+		// console.log('init images to load', this.imagestoLoad);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
