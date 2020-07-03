@@ -16,6 +16,7 @@ import { GlobalCategoryProvider } from './achievement-sets/global/global-categor
 import { MonsterHuntCategoryProvider } from './achievement-sets/monster_hunt/monster-hunt-category';
 import { RumbleRunCategoryProvider } from './achievement-sets/rumble_run/rumble-run-category';
 import { SetProvider } from './achievement-sets/set-provider';
+import { ThijsCategoryProvider } from './achievement-sets/thijs/thijs-category';
 import { TombsOfTerrorCategoryProvider } from './achievement-sets/tombs_of_terror/tombs-of-terror-category';
 import { AchievementsLocalStorageService } from './achievements-local-storage.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
@@ -120,6 +121,7 @@ export class AchievementsRepository {
 
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
+			new ThijsCategoryProvider(),
 			new GlobalCategoryProvider(),
 			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),

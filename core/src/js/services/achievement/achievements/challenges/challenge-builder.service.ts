@@ -12,12 +12,15 @@ import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-rece
 import { CardNotPlayedReq } from '../requirements/card-not-played-req';
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
 import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-or-on-board-at-game-start-req';
+import { CardWithSameAttributePlayedReq } from '../requirements/card-with-same-attribute-played-req';
 import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
 import { CorrectStartingHealthReq } from '../requirements/correct-starting-health-req';
 import { DamageAtEndReq } from '../requirements/damage-at-end-req';
 import { DeathrattleTriggeredReq } from '../requirements/deathrattle-triggered-req';
 import { DeckbuildingCardAttributeReq } from '../requirements/deckbuilding/deckbuilding-card-attribute-req';
+import { DeckbuildingCardNameReq } from '../requirements/deckbuilding/deckbuilding-card-name-req';
 import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuilding-classic-req';
+import { DeckbuildingCostReq } from '../requirements/deckbuilding/deckbuilding-cost-req';
 import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuilding-mechanic-req';
 import { DeckbuildingNoCardWithLetterInNameReq } from '../requirements/deckbuilding/deckbuilding-no-card-with-letter-in-name-req';
 import { DeckbuildingNumberOfMinionsReq } from '../requirements/deckbuilding/deckbuilding-number-of-minions-req';
@@ -29,6 +32,7 @@ import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { ExcludedScenarioIdReq } from '../requirements/excluded-scenario-id-req';
 import { FatigueDamageReq } from '../requirements/fatigue-damage-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
+import { GameMaxTurnsReq } from '../requirements/game-max-turns-req';
 import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
 import { GameTieReq } from '../requirements/game-tie-req';
 import { GameTypeReq } from '../requirements/game-type-req';
@@ -46,15 +50,18 @@ import { PlayerClassReq } from '../requirements/player-class-req';
 import { PlayerHeroReq } from '../requirements/player-hero-req';
 import { ResummonRecurringVillainRew } from '../requirements/resummon-recurring-villain-req';
 import { RumbleRunStepReq } from '../requirements/rumble-run-step-req';
+import { SameMinionAttackReq } from '../requirements/same-minion-attack-req';
 import { ScenarioIdReq } from '../requirements/scenario-id-req';
 import { SceneChangedToGameReq } from '../requirements/scene-changed-to-game-req';
 import { SecretTriggeredReq } from '../requirements/secret-triggered-req';
 import { StandardRankedMinLeagueReq } from '../requirements/standard-ranked-min-rank-req';
 import { TotalArmorGainReq } from '../requirements/total-armor-gain-req';
+import { TotalCardsPlayedReq } from '../requirements/total-cards-played-req';
 import { TotalDamageDealtReq } from '../requirements/total-damage-dealt-req';
 import { TotalDamageTakenReq } from '../requirements/total-damage-taken-req';
 import { TotalDiscardedCardsReq } from '../requirements/total-discarded-cards-req';
 import { TotalHeroHealReq } from '../requirements/total-hero-heal-req';
+import { TotalMinionsSummonedReq } from '../requirements/total-minions-summoned-req';
 import { WinAgsinstClassInRankedStandardInLimitedTimeReq } from '../requirements/win-against-class-in-ranked-standard-in-limited-time-req';
 import { WinStreakReq } from '../requirements/win-streak-req';
 import { Requirement } from '../requirements/_requirement';
@@ -89,6 +96,7 @@ export class ChallengeBuilderService {
 			case 'GAME_WON': return GameWonReq.create(rawReq);
 			case 'GAME_TIE': return GameTieReq.create(rawReq);
 			case 'GAME_MIN_TURNS': return GameMinTurnsReq.create(rawReq);
+			case 'GAME_MAX_TURNS': return GameMaxTurnsReq.create(rawReq);
 			case 'PLAYER_HERO': return PlayerHeroReq.create(rawReq);
 			case 'PLAYER_CLASS': return PlayerClassReq.create(rawReq, this.cards);
 			case 'CORRECT_OPPONENT': return CorrectOpponentReq.create(rawReq);
@@ -116,12 +124,16 @@ export class ChallengeBuilderService {
 			case 'TOTAL_ARMOR_GAINED': return TotalArmorGainReq.create(rawReq);
 			case 'MINIONS_CONTROLLED_DURING_TURN': return MinionsControlledDuringTurnReq.create(rawReq);
 			case 'WIN_STREAK_LENGTH': return WinStreakReq.create(rawReq);
+			case 'TOTAL_CARDS_PLAYED': return TotalCardsPlayedReq.create(rawReq, this.cards);
+			case 'TOTAL_MINIONS_SUMMONED': return TotalMinionsSummonedReq.create(rawReq, this.cards);
+			case 'SAME_MINION_ATTACK_TIMES': return SameMinionAttackReq.create(rawReq, this.cards);
 			
 			// The very specific reqs
 			case 'LAST_DAMAGE_DONE_BY_MINION': return LastDamageDoneByMinionReq.create(rawReq);
 			case 'BOARD_FULL_OF_SAME_LEGENDARY_MINION': return BoardFullOfSameLegendaryMinionReq.create(rawReq, this.cards);
 			case 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME': return WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);
 			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
+			case 'CARDS_WITH_SAME_ATTRIBUTE_PLAYED': return CardWithSameAttributePlayedReq.create(rawReq, this.cards);
 			
 			// The deckbuilding reqs
 			case 'DECK_CLASSIC': return DeckbuildingClassicReq.create(rawReq, this.cards);
@@ -132,6 +144,8 @@ export class ChallengeBuilderService {
 			case 'DECK_CARD_TEXT_VALUE': return DeckbuildingTextReq.create(rawReq, this.cards);
 			case 'DECK_CARD_TEXT_NUMBER_OF_WORDS': return DeckbuildingTextNumberOfWordsReq.create(rawReq, this.cards);
 			case 'DECK_NO_CARD_WITH_LETTER_IN_NAME': return DeckbuildingNoCardWithLetterInNameReq.create(rawReq, this.cards);
+			case 'DECK_CARD_NAME': return DeckbuildingCardNameReq.create(rawReq, this.cards);
+			case 'DECK_CARD_COST': return DeckbuildingCostReq.create(rawReq, this.cards);
 			case 'DECK_NUMBER_OF_MINIONS': 
 				console.debug(''); // No idea why I have to add this for jest to pick up the line
 				return DeckbuildingNumberOfMinionsReq.create(rawReq, this.cards);

@@ -73,6 +73,7 @@ export class AchievementsLoaderService {
 			'competitive_ladder',
 			'deckbuilding',
 			'galakrond',
+			'thijs',
 		];
 		const achievementsArray = await Promise.all(achievementFiles.map(fileName => this.loadAchievements(fileName)));
 		const result = achievementsArray.reduce((a, b) => a.concat(b), []);
