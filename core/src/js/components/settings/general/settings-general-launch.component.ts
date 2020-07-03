@@ -18,6 +18,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					tooltip="When turned off, you need to manually launch Firestone every time"
 				></preference-toggle>
 				<preference-toggle
+					field="showSessionRecapOnExit"
+					label="Session recap on exit"
+					tooltip="Shows a recap of the past session when you exit Hearthstone"
+				></preference-toggle>
+				<preference-toggle
 					field="shareGamesWithVS"
 					label="Contribute to the VS meta report"
 					tooltip="When turned on, you contribute to build the Vicious Syndicate meta report. The server parses your games and extracts some global info (like the game's rank, the cards played) and anonymously sends this aggregated data to Vicious Syndicate. We don't get paid for this, but we do get some exposure since they then talk about us :)"

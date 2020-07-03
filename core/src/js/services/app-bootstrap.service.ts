@@ -140,7 +140,7 @@ export class AppBootstrapService {
 					// the game was forced-closed, some achievements didn't have the opportunity
 					// to reset, so we're forcing it here
 					(await this.achievementsLoader.getChallengeModules()).forEach(challenge => challenge.resetState());
-					this.showReplaysRecap();
+					this.handleExitGame();
 				}
 			} else if (await this.ow.inGame()) {
 				console.log('[bootstrap] game is running, showing loading screen');
@@ -256,19 +256,13 @@ export class AppBootstrapService {
 		this.ow.closeWindow(OverwolfService.LOADING_WINDOW);
 	}
 
-	private async showReplaysRecap() {
-		// Close all windows
-		// const windows = await this.ow.getOpenWindows();
-		// console.log('closing all windows', windows);
-		// for (const [name, window] of Object.entries(windows)) {
-		// 	// Close the main window last
-		// 	if (name !== OverwolfService.MAIN_WINDOW) {
-		// 		console.log('closing window', name, window);
-		// 		this.ow.closeWindowFromName(name);
-		// 	}
-		// }
-		this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
-		// this.ow.closeWindowFromName(OverwolfService.MAIN_WINDOW);
+	private async handleExitGame() {
+		const prefs = await this.prefs.getPreferences();
+		if (prefs.showSessionRecapOnExit) {
+			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
+		} else {
+			this.ow.closeWindow(OverwolfService.MAIN_WINDOW);
+		}
 	}
 
 	private async addAnalytics() {

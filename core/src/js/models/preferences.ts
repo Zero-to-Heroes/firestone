@@ -3,6 +3,10 @@ import { Ftue } from './preferences/ftue';
 export class Preferences {
 	readonly id: number = 1;
 
+	readonly launchAppOnGameStart: boolean = true;
+	readonly showSessionRecapOnExit: boolean = true;
+	readonly shareGamesWithVS: boolean = true;
+
 	readonly advancedModeToggledOn: boolean;
 
 	readonly dontConfirmVideoReplayDeletion: boolean;
@@ -101,9 +105,6 @@ export class Preferences {
 	readonly bgsEnableSimulation = true;
 	readonly bgsSimulatorNumberOfSims = 2500;
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
-
-	readonly launchAppOnGameStart: boolean = true;
-	readonly shareGamesWithVS: boolean = true;
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
