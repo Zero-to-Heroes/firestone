@@ -92,14 +92,15 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		this.http.get(EBS_URL, options).subscribe(
 			(result: any) => {
 				console.log('successfully retrieved initial state', result);
-				if (result.event === GameEvent.GAME_END) {
-					this.gameState = undefined;
-				} else {
-					this.gameState = result.state;
-				}
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
+				this.processEvent(result);
+				// if (result.event === GameEvent.GAME_END) {
+				// 	this.gameState = undefined;
+				// } else {
+				// 	this.gameState = result.state;
+				// }
+				// if (!(this.cdr as ViewRef)?.destroyed) {
+				// 	this.cdr.detectChanges();
+				// }
 			},
 			error => {
 				console.log('could not retrieve initial state, waiting for EBS update');
