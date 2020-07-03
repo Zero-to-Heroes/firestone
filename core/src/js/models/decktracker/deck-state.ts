@@ -31,6 +31,7 @@ export class DeckState {
 	];
 
 	readonly isFirstPlayer: boolean;
+	readonly isActivePlayer: boolean;
 	readonly isOpponent: boolean;
 	readonly deckstring?: string;
 	readonly name?: string;

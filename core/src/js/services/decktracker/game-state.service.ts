@@ -331,9 +331,10 @@ export class GameStateService {
 		const totalAttackOnBoard = deck.board
 			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
 			.filter(entity => entity)
-			.filter(entity => this.canAttack(entity))
+			.filter(entity => this.canAttack(entity, deck.isActivePlayer))
 			.map(entity => (entity.attack > 0 ? entity.attack : 0))
 			.reduce((a, b) => a + b, 0);
+
 		// console.log(
 		// 	'total attack on board',
 		// 	playerFromTracker?.Board,
@@ -342,10 +343,10 @@ export class GameStateService {
 		// 		.filter(entity => entity && entity.attack > 0)
 		// 		.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
 		// );
-		const heroAttack =
-			playerFromTracker?.Hero?.attack > 0 && this.canAttack(playerFromTracker?.Hero)
-				? playerFromTracker?.Hero?.attack
-				: 0;
+		const heroAttack = this.canAttack(playerFromTracker?.Hero, deck.isActivePlayer)
+			? Math.max(playerFromTracker?.Hero?.attack, 0) +
+			  (deck.isActivePlayer ? 0 : Math.max(playerFromTracker?.Weapon?.attack, 0))
+			: 0;
 		// console.log('heroAttack', playerFromTracker?.Hero, this.canAttack(playerFromTracker?.Hero));
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
@@ -471,12 +472,17 @@ export class GameStateService {
 		];
 	}
 
-	private canAttack(entity): boolean {
+	// On the opponent's turn, we show the total attack, except for dormant minions
+	private canAttack(entity, isActivePlayer: boolean): boolean {
 		const impossibleToAttack =
 			this.hasTag(entity, GameTag.DORMANT) ||
-			(this.hasTag(entity, GameTag.EXHAUSTED) && !this.hasTag(entity, GameTag.ATTACKABLE_BY_RUSH)) ||
-			this.hasTag(entity, GameTag.FROZEN) ||
-			this.hasTag(entity, GameTag.CANT_ATTACK);
+			(isActivePlayer &&
+				this.hasTag(entity, GameTag.EXHAUSTED) &&
+				!this.hasTag(entity, GameTag.ATTACKABLE_BY_RUSH)) ||
+			// Here technically it's not totally correct, as you'd have to know if the
+			// frozen minion will unfreeze in the opponent's turn
+			(isActivePlayer && this.hasTag(entity, GameTag.FROZEN)) ||
+			(isActivePlayer && this.hasTag(entity, GameTag.CANT_ATTACK));
 		// console.log(
 		// 	'can attack?',
 		// 	!impossibleToAttack,
