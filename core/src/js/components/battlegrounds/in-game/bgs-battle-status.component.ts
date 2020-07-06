@@ -11,17 +11,47 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="battle-simulation">
-			<div class="win item">
-				<div
-					class="label"
-					helpTooltip="Your chances of winning the current battle (assumes all hero powers are active)"
-				>
-					Win
+			<div class="probas">
+				<div class="title">Your chance of:</div>
+				<div class="proba-items">
+					<div class="win item">
+						<div
+							class="label"
+							helpTooltip="Your chances of winning the current battle (assumes all hero powers are active)"
+						>
+							Win
+						</div>
+						<div class="value">
+							{{ battleSimulationResultWin }}
+						</div>
+					</div>
+					<div class="tie item">
+						<div
+							class="label"
+							helpTooltip="Your chances of tying the current battle (assumes all hero powers are active)"
+						>
+							Tie
+						</div>
+						<div class="value">
+							{{ battleSimulationResultTie }}
+						</div>
+					</div>
+					<div class="lose item">
+						<div
+							class="label"
+							helpTooltip="Your chances of losing the current battle (assumes all hero powers are active)"
+						>
+							Loss
+						</div>
+						<div class="value">
+							{{ battleSimulationResultLose }}
+						</div>
+					</div>
 				</div>
-				<div class="value">
-					{{ battleSimulationResultWin }}
-				</div>
-				<div class="damage" helpTooltip="Average damage dealt">
+			</div>
+			<div class="damage-container">
+				<div class="title">Dmg</div>
+				<div class="damage dealt" helpTooltip="Average damage dealt">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
@@ -29,29 +59,7 @@ declare let amplitude: any;
 					</div>
 					<div class="damage-value">{{ damageWon || '--' }}</div>
 				</div>
-			</div>
-			<div class="tie item">
-				<div
-					class="label"
-					helpTooltip="Your chances of tying the current battle (assumes all hero powers are active)"
-				>
-					Tie
-				</div>
-				<div class="value">
-					{{ battleSimulationResultTie }}
-				</div>
-			</div>
-			<div class="lose item">
-				<div
-					class="label"
-					helpTooltip="Your chances of losing the current battle (assumes all hero powers are active)"
-				>
-					Loss
-				</div>
-				<div class="value">
-					{{ battleSimulationResultLose }}
-				</div>
-				<div class="damage" helpTooltip="Average damage received">
+				<div class="damage received" helpTooltip="Average damage received">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
