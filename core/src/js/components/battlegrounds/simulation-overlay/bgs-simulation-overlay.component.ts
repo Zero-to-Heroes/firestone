@@ -19,11 +19,21 @@ declare let amplitude: any;
 @Component({
 	selector: 'bgs-simulation-overlay',
 	styleUrls: [
+		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/component/battlegrounds/simulation-overlay/bgs-simulation-overlay.component.scss`,
 		'../../../../css/themes/battlegrounds-theme.scss',
 	],
 	template: `
+		<div class="logo-container battlegrounds-theme">
+			<div class="background-main-part"></div>
+			<div class="background-second-part"></div>
+			<i class="gold-theme logo">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
+				</svg>
+			</i>
+		</div>
 		<div class="app-container overlay-container-parent battlegrounds-theme simulation-overlay">
 			<bgs-battle-status
 				[nextBattle]="nextBattle"
@@ -50,8 +60,8 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
-				this.nextBattle = newState?.currentGame.battleResult;
-				this.battleSimulationStatus = newState?.currentGame.battleInfoStatus;
+				this.nextBattle = newState?.currentGame?.battleResult;
+				this.battleSimulationStatus = newState?.currentGame?.battleInfoStatus;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

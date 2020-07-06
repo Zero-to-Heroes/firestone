@@ -22,7 +22,7 @@ declare let amplitude: any;
 							Win
 						</div>
 						<div class="value">
-							{{ battleSimulationResultWin }}
+							{{ battleSimulationResultWin || '--' }}
 						</div>
 					</div>
 					<div class="tie item">
@@ -33,7 +33,7 @@ declare let amplitude: any;
 							Tie
 						</div>
 						<div class="value">
-							{{ battleSimulationResultTie }}
+							{{ battleSimulationResultTie || '--' }}
 						</div>
 					</div>
 					<div class="lose item">
@@ -44,7 +44,7 @@ declare let amplitude: any;
 							Loss
 						</div>
 						<div class="value">
-							{{ battleSimulationResultLose }}
+							{{ battleSimulationResultLose || '--' }}
 						</div>
 					</div>
 				</div>
