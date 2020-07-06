@@ -17,12 +17,13 @@ export class MatchMetadataParser implements EventParser {
 		const stats: StatsState = gameEvent.additionalData?.stats;
 		const format = gameEvent.additionalData.metaData.FormatType as number;
 		const convertedFormat = MatchMetadataParser.convertFormat(format);
-		const deckStats: readonly GameStat[] = !currentState.playerDeck?.deckstring
-			? []
-			: stats.gameStats.stats
-					.filter(stat => stat.gameMode === 'ranked')
-					.filter(stat => stat.playerDecklist === currentState.playerDeck?.deckstring)
-					.filter(stat => stat.gameFormat === convertedFormat) || [];
+		const deckStats: readonly GameStat[] =
+			!currentState.playerDeck?.deckstring || !stats?.gameStats
+				? []
+				: stats.gameStats.stats
+						.filter(stat => stat.gameMode === 'ranked')
+						.filter(stat => stat.playerDecklist === currentState.playerDeck?.deckstring)
+						.filter(stat => stat.gameFormat === convertedFormat) || [];
 		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
 		console.log('match metadata', deckStats, convertedFormat, format, stats);
 		let matchupStatsRecap = currentState.matchupStatsRecap;
