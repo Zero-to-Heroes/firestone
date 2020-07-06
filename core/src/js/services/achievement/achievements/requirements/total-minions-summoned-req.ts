@@ -5,7 +5,7 @@ import { QualifierType } from './_qualifier.type';
 import { Requirement } from './_requirement';
 
 export class TotalMinionsSummonedReq implements Requirement {
-	private summonCount: number = 0;
+	private summonCount = 0;
 
 	constructor(
 		private readonly targetQuantity: number,

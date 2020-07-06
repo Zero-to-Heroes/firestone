@@ -7,7 +7,7 @@ import { QualifierType } from './_qualifier.type';
 import { Requirement } from './_requirement';
 
 export class TotalCardsPlayedReq implements Requirement {
-	private playCounts: number = 0;
+	private playCounts = 0;
 
 	constructor(
 		private readonly targetQuantity: number,

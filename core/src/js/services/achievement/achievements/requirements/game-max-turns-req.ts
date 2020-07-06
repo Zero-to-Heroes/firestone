@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class GameMaxTurnsReq implements Requirement {
-	private isRequirementMet: boolean = true;
+	private isRequirementMet = true;
 
 	constructor(private readonly targetTurn: number) {}
 
