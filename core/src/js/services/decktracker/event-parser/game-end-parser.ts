@@ -15,6 +15,7 @@ export class GameEndParser implements EventParser {
 	async parse(currentState: GameState): Promise<GameState> {
 		const prefs = await this.prefs.getPreferences();
 		this.deckParser.reset();
+		console.log('[deck-parser] resetting deck in game-end-parser');
 		if (prefs && prefs.decktrackerCloseOnGameEnd) {
 			return new GameState();
 		}

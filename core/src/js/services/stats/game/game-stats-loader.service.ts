@@ -36,7 +36,7 @@ export class GameStatsLoaderService {
 	private doRetrieve(userId: string, retrievesLeft: number, resolve, expectedReviewId: string) {
 		// console.log('[game-stats-loader] in doRetrieve', userId, retrievesLeft);
 		if (retrievesLeft <= 0) {
-			console.error('[game-stats-loader] could not load stats');
+			console.error('[game-stats-loader] could not load stats', userId, expectedReviewId);
 			resolve(null);
 			return;
 		}

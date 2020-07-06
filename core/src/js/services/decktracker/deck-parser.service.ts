@@ -35,6 +35,7 @@ export class DeckParserService {
 	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
+				console.log('[deck-parser] resetting deck after game end');
 				this.reset();
 			} else if (event.type === GameEvent.MATCH_METADATA) {
 				this.currentGameType = event.additionalData.metaData.GameType;
@@ -108,7 +109,8 @@ export class DeckParserService {
 			this.currentBlock !== 'DECK_SLECTED'
 		) {
 			console.log('[deck-parser] Doesnt look like a deck selection, exiting block', this.currentBlock);
-			this.reset();
+			// Don't reset the deck here, as it can override a deck built from memory inspection
+			// this.reset();
 			return;
 		}
 
