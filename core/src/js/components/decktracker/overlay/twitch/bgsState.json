@@ -1797,5 +1797,7 @@
                 ]
             }
         ],
-        "currentTurn": 16
+		"currentTurn": 16,
+		"inGame": true,
+		"gameEnded": false
     }
