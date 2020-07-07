@@ -41,6 +41,10 @@ declare let amplitude: any;
 				<div class="value">{{ totalHeroDamageDealt }}</div>
 			</div>
 			<div class="entry cell">
+				<div class="label">Max dmg dealt (hero)</div>
+				<div class="value">{{ maxSingleTurnHeroDamageDealt }}</div>
+			</div>
+			<div class="entry cell">
 				<div class="label">Highest Win streak</div>
 				<div class="value">{{ winStreak }}</div>
 			</div>
@@ -119,6 +123,7 @@ export class BgsPostMatchStatsRecapComponent {
 	totalMinionsDamageDealt: number;
 	totalMinionsDamageTaken: number;
 	totalHeroDamageDealt: number;
+	maxSingleTurnHeroDamageDealt: number;
 	winStreak: number;
 	triples: number;
 	maxBoardStats: number;
@@ -164,10 +169,9 @@ export class BgsPostMatchStatsRecapComponent {
 			.filter(cardId => cardId !== this._stats.player.cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageTaken[cardId])
 			.reduce((a, b) => a + b, 0);
-		this.totalHeroDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)
-			.filter(cardId => cardId === this._stats.player.cardId)
-			.map(cardId => this._stats.stats.totalMinionsDamageDealt[cardId])
-			.reduce((a, b) => a + b, 0);
+		const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn.map(info => info.value);
+		this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero);
+		this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
 		this.triples = this._stats.player.tripleHistory.length;
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);

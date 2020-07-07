@@ -22,6 +22,7 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[];
 	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[];
+	readonly damageToEnemyHeroOverTurn: readonly NumericTurnInfo[];
 
 	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[];

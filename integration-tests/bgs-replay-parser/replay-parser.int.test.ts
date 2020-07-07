@@ -1,4 +1,5 @@
 import {
+	BgsPostMatchStats,
 	parseBattlegroundsGame,
 	parseHsReplayString,
 	Replay,
@@ -13,9 +14,9 @@ describe('BGS Replay-parser - basic test', () => {
 		const replay: Replay = parseHsReplayString(replayXml);
 		console.timeEnd('startParsing');
 
-		const stats = parseBattlegroundsGame(replayXml, BgsPlayer.create({} as BgsPlayer), []);
+		const stats: BgsPostMatchStats = parseBattlegroundsGame(replayXml, BgsPlayer.create({} as BgsPlayer), []);
 
 		expect(stats).not.toBe(null);
-		console.debug(stats.hpOverTurn['TB_BaconShop_HERO_59']);
+		console.debug(stats.damageToEnemyHeroOverTurn);
 	});
 });
