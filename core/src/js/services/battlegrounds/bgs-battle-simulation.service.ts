@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
+import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
+import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
 import Worker from 'worker-loader!../../workers/bgs-simulation.worker';
 import { BgsBattleSimulationResult } from '../../models/battlegrounds/bgs-battle-simulation-result';
@@ -29,17 +31,22 @@ export class BgsBattleSimulationService {
 		});
 		this.cardsData = new CardsData(cards.service, false);
 		this.cardsData.inititialize();
-		// this.worker = new Worker();
-
-		// this.startBgsBattleSimulation({ hop: 'test' } as any);
 	}
 
-	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo) {
+	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo, races: readonly Race[]) {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.bgsEnableSimulation) {
 			console.log('[bgs-simulation] simulation turned off');
 			return;
 		}
+		const options: BgsBattleOptions = {
+			...battleInfo.options,
+			validTribes: races,
+		} as BgsBattleOptions;
+		const battleInfoInput: BgsBattleInfo = {
+			...battleInfo,
+			options,
+		};
 		console.log(
 			'no-format',
 			'[bgs-simulation] battle simulation request prepared',
@@ -49,9 +56,9 @@ export class BgsBattleSimulationService {
 		);
 
 		const result: BgsBattleSimulationResult = prefs.bgsUseLocalSimulator
-			? await this.simulateLocalBattle(battleInfo, prefs)
+			? await this.simulateLocalBattle(battleInfoInput, prefs)
 			: ((await this.http
-					.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfo)
+					.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput)
 					.toPromise()) as BgsBattleSimulationResult);
 		console.log('[bgs-simulation] battle simulation result', result);
 		this.stateUpdater.next(new BattlegroundsBattleSimulationEvent(result));
@@ -64,18 +71,16 @@ export class BgsBattleSimulationService {
 		return new Promise<BgsBattleSimulationResult>(resolve => {
 			const worker = new Worker();
 			worker.onmessage = (ev: MessageEvent) => {
-				// console.log('received worker message', ev);
 				worker.terminate();
 				resolve(JSON.parse(ev.data));
 			};
-			// console.log('created worker', worker);
 			worker.postMessage({
 				...battleInfo,
 				options: {
+					...battleInfo.options,
 					numberOfSimulations: Math.floor(prefs.bgsSimulatorNumberOfSims),
 				},
 			} as BgsBattleInfo);
-			// console.log('posted worker message');
 		});
 	}
 }

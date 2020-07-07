@@ -77,7 +77,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		} as BattlegroundsState);
 
 		if (result.currentGame.battleInfo.opponentBoard) {
-			this.simulation.startBgsBattleSimulation(result.currentGame.battleInfo);
+			this.simulation.startBgsBattleSimulation(result.currentGame.battleInfo, result.currentGame.availableRaces);
 		}
 		return result;
 	}
