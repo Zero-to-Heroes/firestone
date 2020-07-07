@@ -24,6 +24,7 @@ export class OverwolfService {
 	public static BATTLEGROUNDS_WINDOW = 'BattlegroundsWindow';
 	public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
 	public static BATTLEGROUNDS_BATTLE_SIMULATION_WINDOW_OVERLAY = 'BgsBattleSimulationOverlay';
+	public static BATTLEGROUNDS_BANNED_TRIBES_WINDOW = 'BgsBannedTribes';
 	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
 	public static COUNTER_OPPONENT_GALAKROND_WINDOW = 'CounterOpponentGalakrond';
 	public static COUNTER_PLAYER_POGO_WINDOW = 'CounterPlayerPogo';

@@ -1,0 +1,27 @@
+.bgs-banned-tribe {
+	position: relative;
+}
+
+.background {
+	position: relative;
+	width: 75px;
+	height: 85px;
+	background: #dfb3d3;
+	clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+}
+
+.icon {
+	position: absolute;
+	top: 5px;
+	left: 0px;
+	width: 75px;
+	height: 75px;
+	clip-path: polygon(50% 2%, 90% 25%, 90% 75%, 50% 99%, 10% 75%, 10% 25%);
+}
+
+.crossed {
+	position: absolute;
+	top: -1px;
+	left: 10px;
+	width: 55px;
+}

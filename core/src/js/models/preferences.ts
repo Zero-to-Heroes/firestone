@@ -100,11 +100,13 @@ export class Preferences {
 	readonly bgsEnableApp = true;
 	readonly bgsUseOverlay = false;
 	readonly bgsEnableBattleSimulationOverlay = true;
+	readonly bgsShowBannedTribesOverlay = true;
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsUseLocalPostMatchStats = true;
 	readonly bgsEnableSimulation = true;
 	readonly bgsSimulatorNumberOfSims = 2500;
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
+	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

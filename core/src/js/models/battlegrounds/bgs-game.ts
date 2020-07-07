@@ -1,4 +1,5 @@
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
@@ -17,6 +18,8 @@ export class BgsGame {
 	readonly replayXml: string;
 	readonly mmrAtStart: number;
 	readonly pogoHoppersCount: number;
+	readonly availableRaces: readonly Race[];
+	readonly bannedRaces: readonly Race[];
 
 	public static create(base: BgsGame): BgsGame {
 		return Object.assign(new BgsGame(), base);

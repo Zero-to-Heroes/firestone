@@ -1,3 +1,39 @@
+import { CardIds, Race } from '@firestone-hs/reference-data';
+
+export const getTribeIcon = (tribe: string | Race): string => {
+	let referenceCardId: string;
+	switch (tribe) {
+		case 'Mech':
+		case Race.MECHANICAL:
+			referenceCardId = CardIds.Collectible.Rogue.IronSensei;
+			break;
+		case 'Beast':
+		case Race.BEAST:
+			referenceCardId = CardIds.NonCollectible.Neutral.MamaBear;
+			break;
+		case 'Demon':
+		case Race.DEMON:
+			referenceCardId = CardIds.Collectible.Warlock.Malganis;
+			break;
+		case 'Dragon':
+		case Race.DRAGON:
+			referenceCardId = CardIds.NonCollectible.Neutral.Razorgore;
+			break;
+		case 'Murloc':
+		case Race.MURLOC:
+			referenceCardId = CardIds.NonCollectible.Neutral.KingBagurgle;
+			break;
+		case 'Pirate':
+		case Race.PIRATE:
+			referenceCardId = 'BGS_080';
+			break;
+		default:
+			referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
+			break;
+	}
+	return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+};
+
 export const getHeroPower = (heroCardId: string): string => {
 	switch (heroCardId) {
 		case 'TB_BaconShop_HERO_01':

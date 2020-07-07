@@ -59,6 +59,7 @@ import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
 import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
+import { BgsBannedTribesOverlay } from './overlay/bgs-banned-tribes-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
 import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
 import { BgsSimulationOverlay } from './overlay/bgs-simulation-overlay';
@@ -335,7 +336,7 @@ export class BattlegroundsStoreService {
 			new NoBgsMatchParser(),
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(),
-			new BgsHeroSelectionParser(),
+			new BgsHeroSelectionParser(this.memory),
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsHeroSelectionDoneParser(),
 			new BgsNextOpponentParser(),
@@ -366,6 +367,7 @@ export class BattlegroundsStoreService {
 			new BgsMainWindowOverlay(this.prefs, this.ow),
 			new BgsPlayerPogoOverlay(this.ow),
 			new BgsSimulationOverlay(this.prefs, this.ow),
+			new BgsBannedTribesOverlay(this.prefs, this.ow),
 		];
 	}
 }

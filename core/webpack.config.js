@@ -38,6 +38,7 @@ const entry = {
 	twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
 	battlegrounds: './src/js/modules/battlegrounds/main.ts',
 	bgsbattlesimulation: './src/js/modules/bgs-battle-simulation/main.ts',
+	bgsbannedtribes: './src/js/modules/bgs-banned-tribes/main.ts',
 	'bgsbattlesimulation.worker': './src/js/workers/bgs-simulation.worker.ts',
 	'bgspostmatchstats.worker': './src/js/workers/bgs-post-match-stats.worker.ts',
 };
@@ -66,6 +67,7 @@ module.exports = function(env, argv) {
 				'./src/js/modules/battlegrounds/battlegrounds.module#BattlegroundsModule',
 				'./src/js/modules/bgs-battle-simulation/bgs-battle-simulation.module#BgsBattleSimulationModule',
 				'./src/js/modules/game-counters/game-counters.module#GameCountersModule',
+				'./src/js/modules/bgs-banned-tribes/bgs-banned-tribes.module#BgsBannedTribesModule',
 			],
 			sourceMap: true,
 		}),
@@ -109,6 +111,7 @@ module.exports = function(env, argv) {
 		buildHtmlWebpackPluginConf('match_overlay_opponent_hand.html', 'opponentHand'),
 		buildHtmlWebpackPluginConf('battlegrounds.html', 'battlegrounds'),
 		buildHtmlWebpackPluginConf('bgs_battle_simulation.html', 'bgsbattlesimulation'),
+		buildHtmlWebpackPluginConf('bgs_banned_tribes.html', 'bgsbannedtribes'),
 		buildHtmlWebpackPluginConf('counter_player_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_pogo.html', 'gamecounters'),

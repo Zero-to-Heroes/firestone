@@ -55,6 +55,11 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Show the number of times you played a Pogo-Hopper in Battlegrounds"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowBannedTribesOverlay"
+						label="Show banned tribes"
+						tooltip="Adds a small widget that shows what tribes are banned in the current run"
+					></preference-toggle>
+					<preference-toggle
 						field="bgsEnableBattleSimulationOverlay"
 						label="Battle Simulation overlay"
 						tooltip="Also show the current battle simulation results as an overlay on top of the game"

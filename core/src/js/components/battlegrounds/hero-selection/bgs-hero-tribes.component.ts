@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
 import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
+import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 
 declare let amplitude: any;
 
@@ -47,31 +47,7 @@ export class BgsHeroTribesComponent {
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	getIcon(tribe: string): string {
-		let referenceCardId: string;
-		switch (tribe) {
-			case 'Mech':
-				referenceCardId = CardIds.Collectible.Rogue.IronSensei;
-				break;
-			case 'Beast':
-				referenceCardId = CardIds.NonCollectible.Neutral.MamaBear;
-				break;
-			case 'Demon':
-				referenceCardId = CardIds.Collectible.Warlock.Malganis;
-				break;
-			case 'Dragon':
-				referenceCardId = CardIds.NonCollectible.Neutral.Razorgore;
-				break;
-			case 'Murloc':
-				referenceCardId = CardIds.NonCollectible.Neutral.KingBagurgle;
-				break;
-			case 'Pirate':
-				referenceCardId = 'BGS_080';
-				break;
-			default:
-				referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
-				break;
-		}
-		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+		return getTribeIcon(tribe);
 	}
 
 	trackByTribeFn(index, item: { tribe: string; percent: string }) {
