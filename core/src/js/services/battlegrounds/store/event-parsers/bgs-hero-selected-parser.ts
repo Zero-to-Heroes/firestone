@@ -18,7 +18,7 @@ export class BgsHeroSelectedParser implements EventParser {
 		const normalizedCardId = normalizeHeroCardId(event.cardId);
 		const newPlayer: BgsPlayer = BgsPlayer.create({
 			cardId: normalizedCardId,
-			heroPowerCardId: getHeroPower(normalizedCardId),
+			heroPowerCardId: getHeroPower(event.cardId),
 			name: this.allCards.getCard(event.cardId).name,
 			isMainPlayer: true,
 		} as BgsPlayer);

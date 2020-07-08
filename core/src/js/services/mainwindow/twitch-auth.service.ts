@@ -189,8 +189,8 @@ export class TwitchAuthService {
 
 	private buildLeaderboardPlayer(player: BgsPlayer): TwitchBgsPlayer {
 		return {
-			cardId: player.cardId,
-			heroPowerCardId: player.heroPowerCardId,
+			cardId: player.getDisplayCardId(),
+			heroPowerCardId: player.getDisplayHeroPowerCardId(),
 			name: player.name,
 			isMainPlayer: player.isMainPlayer,
 			initialHealth: player.initialHealth,

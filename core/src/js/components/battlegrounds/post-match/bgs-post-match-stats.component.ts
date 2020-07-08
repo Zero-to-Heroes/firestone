@@ -188,10 +188,10 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		}
 		// console.log('setting panel', value);
 		this._panel = value;
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.cardId}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.getDisplayCardId()}.png`;
 		this.health = value.player.initialHealth - value.player.damageTaken;
 		this.maxHealth = value.player.initialHealth;
-		this.heroPowerCardId = value.player.heroPowerCardId;
+		this.heroPowerCardId = value.player.getDisplayHeroPowerCardId();
 		this.name = value.player.name;
 		this.tavernTier = value.player.getCurrentTavernTier();
 		this.boardMinions = value.player.getLastKnownBoardState();

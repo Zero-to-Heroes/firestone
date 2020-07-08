@@ -1,6 +1,7 @@
 import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { getHeroPower } from '../../services/battlegrounds/bgs-utils';
 import { BgsBoard } from './in-game/bgs-board';
 import { BgsComposition } from './in-game/bgs-composition';
 import { BgsTavernUpgrade } from './in-game/bgs-tavern-upgrade';
@@ -8,6 +9,7 @@ import { BgsTriple } from './in-game/bgs-triple';
 
 export class BgsPlayer implements IBgsPlayer {
 	readonly cardId: string;
+	readonly displayedCardId: string;
 	readonly heroPowerCardId: string;
 	readonly name: string;
 	readonly isMainPlayer: boolean = false;
@@ -28,6 +30,14 @@ export class BgsPlayer implements IBgsPlayer {
 
 	public update(base: BgsPlayer) {
 		return Object.assign(new BgsPlayer(), this, base);
+	}
+
+	public getDisplayCardId(): string {
+		return this.displayedCardId || this.cardId;
+	}
+
+	public getDisplayHeroPowerCardId(): string {
+		return getHeroPower(this.getDisplayCardId());
 	}
 
 	public getCurrentTavernTier(): number {

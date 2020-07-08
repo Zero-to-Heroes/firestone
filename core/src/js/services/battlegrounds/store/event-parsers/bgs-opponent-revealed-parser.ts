@@ -26,7 +26,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 		}
 		const newPlayer: BgsPlayer = BgsPlayer.create({
 			cardId: normalizedCardId,
-			heroPowerCardId: getHeroPower(normalizedCardId),
+			heroPowerCardId: getHeroPower(event.cardId),
 			name: this.allCards.getCard(event.cardId).name,
 		} as BgsPlayer);
 		const newGame = currentState.currentGame.update({

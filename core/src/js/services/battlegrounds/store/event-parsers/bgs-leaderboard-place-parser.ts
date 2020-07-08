@@ -22,6 +22,7 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 			console.error('invalid leaderboard place', event, currentState);
 		}
 		const newPlayer = playerToUpdate.update({
+			displayedCardId: event.heroCardId,
 			leaderboardPlace: event.leaderboardPlace,
 		} as BgsPlayer);
 		// console.log('newPlayer', newPlayer);

@@ -37,6 +37,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 				(playerFromMemory.WinStreak as number) || 0,
 			);
 			return player.update({
+				displayedCardId: playerFromMemory.CardId,
 				damageTaken: newDamage,
 				currentWinStreak: newWinStreak,
 				highestWinStreak: newHighestWinStreak,
