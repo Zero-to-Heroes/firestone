@@ -267,12 +267,6 @@ export class AppBootstrapService {
 
 	private async addAnalytics() {
 		const prefs = await this.prefs.getPreferences();
-		if (prefs.batlegroundsShowHeroSelectionPref) {
-			amplitude.getInstance().logEvent('beta', { 'feature': 'batlegroundsShowHeroSelectionPref' });
-		}
-		if (prefs.battlegroundsShowLastOpponentBoard) {
-			amplitude.getInstance().logEvent('beta', { 'feature': 'battlegroundsShowLastOpponentBoard' });
-		}
 		// Log an event for each of the prefs
 		console.log('no-format', 'pref status', prefs);
 		amplitude.getInstance().logEvent('preferences', {

@@ -33,6 +33,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					tooltip="When turned on, the main window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app. Changing this value will close then reopen the Settings window and the Main window"
 					[toggleFunction]="toggleOverlay"
 				></preference-toggle>
+				<preference-toggle
+					field="collectionUseOverlay"
+					label="Use main window overlay"
+					tooltip="When turned on, the main window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app. Changing this value will close then reopen the Settings window and the Main window"
+					[toggleFunction]="toggleOverlay"
+				></preference-toggle>
 			</section>
 		</div>
 	`,

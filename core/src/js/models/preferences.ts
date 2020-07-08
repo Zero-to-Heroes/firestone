@@ -94,9 +94,6 @@ export class Preferences {
 	readonly achievementsDisplayNotifications = true;
 	readonly resetAchievementsOnAppStart = false;
 
-	readonly battlegroundsShowLastOpponentBoard = false;
-	readonly batlegroundsShowHeroSelectionPref = false;
-
 	readonly bgsEnableApp = true;
 	readonly bgsUseOverlay = false;
 	readonly bgsEnableBattleSimulationOverlay = true;
