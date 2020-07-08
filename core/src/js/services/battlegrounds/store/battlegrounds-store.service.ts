@@ -346,7 +346,7 @@ export class BattlegroundsStoreService {
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
 			new BgsMatchStartParser(),
-			new BgsGameEndParser(),
+			new BgsGameEndParser(this.prefs),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(),
 			// new BgsResetBattleStateParser(),
@@ -356,7 +356,7 @@ export class BattlegroundsStoreService {
 			new BgsLeaderboardPlaceParser(),
 			new BgsCombatStartParser(),
 			new BgsGlobalInfoUpdatedParser(),
-			new BgsStartComputingPostMatchStatsParser(),
+			new BgsStartComputingPostMatchStatsParser(this.prefs),
 			new BgsInitMmrParser(this.memory),
 			new BgsCardPlayedParser(),
 		];

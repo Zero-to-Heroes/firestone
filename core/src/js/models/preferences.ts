@@ -101,6 +101,7 @@ export class Preferences {
 	readonly bgsUseOverlay = false;
 	readonly bgsEnableBattleSimulationOverlay = true;
 	readonly bgsShowBannedTribesOverlay = true;
+	readonly bgsForceShowPostMatchStats = true;
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsUseLocalPostMatchStats = true;
 	readonly bgsEnableSimulation = true;

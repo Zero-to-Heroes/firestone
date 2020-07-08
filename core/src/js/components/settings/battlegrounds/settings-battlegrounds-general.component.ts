@@ -34,6 +34,12 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, you will know your chances to win / tie / lose each battle at the start of the battle"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsEnableBattleSimulationOverlay"
+						[ngClass]="{ 'disabled': !enableSimulation }"
+						label="Battle Simulation overlay"
+						tooltip="Also show the current battle simulation results as an overlay on top of the game"
+					></preference-toggle>
+					<preference-toggle
 						field="bgsUseLocalSimulator"
 						[ngClass]="{ 'disabled': !enableSimulation }"
 						label="Use local battle simulator"
@@ -60,9 +66,9 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Adds a small widget that shows what tribes are banned in the current run"
 					></preference-toggle>
 					<preference-toggle
-						field="bgsEnableBattleSimulationOverlay"
-						label="Battle Simulation overlay"
-						tooltip="Also show the current battle simulation results as an overlay on top of the game"
+						field="bgsForceShowPostMatchStats"
+						label="Show post-match stats"
+						tooltip="When active, the battlegrounds window will be restored after a match to show the post-match stats, even if it was minimized"
 					></preference-toggle>
 				</div>
 			</div>

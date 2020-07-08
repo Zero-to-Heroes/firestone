@@ -6,18 +6,23 @@ import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-
 import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { Preferences } from '../../../../models/preferences';
+import { PreferencesService } from '../../../preferences.service';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 // TODO: coins wasted doesn't take into account hero powers that let you have more coins (Bel'ial)
 export class BgsGameEndParser implements EventParser {
+	constructor(private readonly prefs: PreferencesService) {}
+
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsGameEndEvent';
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
-		console.warn('will build post-match info');
+		const prefs: Preferences = await this.prefs.getPreferences();
+		console.warn('will build post-match info', prefs.bgsForceShowPostMatchStats);
 		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(event.postMatchStats, currentState);
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
 			stage.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : stage,
@@ -26,7 +31,7 @@ export class BgsGameEndParser implements EventParser {
 			stages: stages,
 			currentStageId: 'post-match',
 			currentPanelId: 'bgs-post-match-stats',
-			forceOpen: true,
+			forceOpen: prefs.bgsForceShowPostMatchStats ? true : false,
 		} as BattlegroundsState);
 	}
 
