@@ -1,5 +1,20 @@
-import { Component, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	OnDestroy,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { Preferences } from '../../../models/preferences';
+import { DebugService } from '../../../services/debug.service';
+import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'opponent-card-info',
@@ -8,7 +23,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		'../../../../css/component/matchoverlay/opponenthand/opponent-card-info.component.scss',
 	],
 	template: `
-		<div class="opponent-card-info" [style.left.vh]="leftVhOffset" [style.top.vh]="topVhOffset">
+		<div class="opponent-card-info scalable" [style.left.vh]="leftVhOffset" [style.top.vh]="topVhOffset">
 			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="_card"></opponent-card-turn-number>
 			<opponent-card-info-id
 				*ngIf="displayGuess || displayBuff"
@@ -20,7 +35,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		</div>
 	`,
 })
-export class OpponentCardInfoComponent {
+export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() maxBuffsToShow: number;
@@ -34,5 +49,47 @@ export class OpponentCardInfoComponent {
 
 	@Input() set card(value: DeckCard) {
 		this._card = value;
+	}
+
+	private scale;
+	private preferencesSubscription: Subscription;
+
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly init_DebugService: DebugService,
+	) {}
+
+	async ngAfterViewInit() {
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handleDisplayPreferences(event.preferences);
+		});
+		await this.handleDisplayPreferences();
+	}
+
+	ngOnDestroy(): void {
+		this.preferencesSubscription.unsubscribe();
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.scale = preferences.decktrackerOpponentHandScale;
+		this.onResized();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private onResized() {
+		const newScale = this.scale / 100;
+		const element = this.el.nativeElement.querySelector('.scalable');
+		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

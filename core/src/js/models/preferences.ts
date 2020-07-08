@@ -36,6 +36,7 @@ export class Preferences {
 	readonly dectrackerShowOpponentBuff: boolean = false;
 	readonly dectrackerLimitOpponentBuff: boolean = true;
 	readonly dectrackerMaxOpponentsBuffToShow: number = 3;
+	readonly decktrackerOpponentHandScale: number = 100;
 
 	// readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;

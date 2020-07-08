@@ -48,6 +48,10 @@
 		margin-top: 15px;
 	}
 
+	::ng-deep preference-slider.hand-slider .knob {
+		margin-left: 3px;
+	}
+
 	::ng-deep preference-toggle .preference-toggle label p,
 	::ng-deep preference-slider .preference-slider label {
 		width: 260px;
@@ -64,7 +68,11 @@
 		width: 230px;
 		margin-left: 10px;
 	}
+
 	::ng-deep preference-slider:not(:last-child) .preference-slider {
 		margin-bottom: 40px;
+	}
+	::ng-deep preference-slider.secrets-slider .preference-slider {
+		margin-bottom: 60px;
 	}
 }

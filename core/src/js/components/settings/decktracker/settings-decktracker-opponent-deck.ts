@@ -127,7 +127,7 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<div class="subtitle">Opponent's deck</div>
 				<preference-slider
-					class="first-slider"
+					class="first-slider deck-slider"
 					field="opponentOverlayScale"
 					[enabled]="opponentTracker"
 					[min]="75"
@@ -147,7 +147,7 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 				<div class="subtitle">Secrets Helper</div>
 				<preference-slider
-					class="first-slider"
+					class="first-slider secrets-slider"
 					field="secretsHelperScale"
 					[enabled]="secretsHelper"
 					[min]="60"
@@ -156,15 +156,31 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
+				<div class="subtitle">Hand markers</div>
+				<preference-slider
+					class="first-slider hand-slider"
+					field="decktrackerOpponentHandScale"
+					[enabled]="
+						dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuff
+					"
+					[min]="80"
+					[max]="200"
+					[snapSensitivity]="5"
+					[knobs]="handSizeKnobs"
+				>
+				</preference-slider>
 			</div>
 		</div>
 	`,
+	// dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuff
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, OnDestroy {
 	overlayGroupByZone: boolean;
 	opponentOverlayGroupByZone: boolean;
 	opponentTracker: boolean;
+	dectrackerShowOpponentTurnDraw: boolean;
+	dectrackerShowOpponentGuess: boolean;
 	dectrackerShowOpponentBuff: boolean;
 	secretsHelper: boolean;
 	sizeKnobs: readonly Knob[] = [
@@ -179,6 +195,12 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		{
 			percentageValue: 100,
 			label: 'Large',
+		},
+	];
+	handSizeKnobs: readonly Knob[] = [
+		{
+			absoluteValue: 100,
+			label: 'Default',
 		},
 	];
 
@@ -208,8 +230,10 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 			this.opponentTracker = preferences.opponentTracker;
 			this.secretsHelper = preferences.secretsHelper;
 			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
+			this.dectrackerShowOpponentTurnDraw = preferences.dectrackerShowOpponentTurnDraw;
+			this.dectrackerShowOpponentGuess = preferences.dectrackerShowOpponentGuess;
 			this.dectrackerShowOpponentBuff = preferences.dectrackerShowOpponentBuff;
-			console.log('updated prefs', this.dectrackerShowOpponentBuff, preferences);
+			// console.log('updated prefs', this.dectrackerShowOpponentBuff, preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -239,6 +263,8 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
 		this.opponentTracker = prefs.opponentTracker;
 		this.secretsHelper = prefs.secretsHelper;
+		this.dectrackerShowOpponentTurnDraw = prefs.dectrackerShowOpponentTurnDraw;
+		this.dectrackerShowOpponentGuess = prefs.dectrackerShowOpponentGuess;
 		this.dectrackerShowOpponentBuff = prefs.dectrackerShowOpponentBuff;
 		// console.log('updated prefs', this.dectrackerShowOpponentBuff, prefs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
