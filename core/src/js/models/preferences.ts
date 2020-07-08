@@ -6,6 +6,7 @@ export class Preferences {
 	readonly launchAppOnGameStart: boolean = true;
 	readonly showSessionRecapOnExit: boolean = true;
 	readonly shareGamesWithVS: boolean = true;
+	readonly hideAllNotifications: boolean = false;
 
 	readonly advancedModeToggledOn: boolean;
 

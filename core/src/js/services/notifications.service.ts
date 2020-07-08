@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from './overwolf.service';
+import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class OwNotificationsService {
@@ -13,7 +14,7 @@ export class OwNotificationsService {
 
 	private stateEmitter = new BehaviorSubject<Message>(undefined);
 
-	constructor(private ow: OverwolfService) {
+	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
 		// Give it time to boot
 		setTimeout(() => this.detectNotificationsWindow(), 5000);
 		window['notificationsEmitterBus'] = this.stateEmitter;
@@ -21,7 +22,11 @@ export class OwNotificationsService {
 
 	// This directly share JS objects, without stringifying them, so it lets us do some
 	// fancy stuff
-	public emitNewNotification(htmlMessage: Message) {
+	public async emitNewNotification(htmlMessage: Message) {
+		if ((await this.prefs.getPreferences()).hideAllNotifications) {
+			console.log('not showing any notification');
+			return;
+		}
 		if (!this.windowId) {
 			if (this.retriesLeft <= 0) {
 				throw new Error('NotificationsWindow was not identified at app start');
@@ -36,7 +41,11 @@ export class OwNotificationsService {
 		this.stateEmitter.next(htmlMessage);
 	}
 
-	public html(htmlMessage: Message) {
+	public async html(htmlMessage: Message) {
+		if ((await this.prefs.getPreferences()).hideAllNotifications) {
+			console.log('not showing any notification');
+			return;
+		}
 		// console.log('[notifications-service] trying to send notification to component');
 		if (!this.windowId) {
 			if (this.retriesLeft <= 0) {
