@@ -26,7 +26,7 @@ export class DeckstringOverrideParser implements EventParser {
 		for (const line of formattedData) {
 			await this.deckParser.parseActiveDeck(line);
 		}
-		const currentDeck = await this.deckParser.getCurrentDeck();
+		const currentDeck = await this.deckParser.getCurrentDeck(false, null);
 		if (!currentDeck || !currentDeck.deckstring || currentDeck.deckstring === currentState.playerDeck.deckstring) {
 			console.log('no new deckstring to import, returning', gameEvent, currentDeck);
 			return currentState;

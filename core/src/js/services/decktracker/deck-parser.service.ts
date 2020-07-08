@@ -21,11 +21,13 @@ export class DeckParserService {
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
 
 	public currentDeck: any = {};
+	private previousDeck: any = {};
 
 	private lastDeckTimestamp;
 	private currentBlock: string;
 
 	private currentGameType: GameType;
+	private currentScenarioId: number;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -36,11 +38,19 @@ export class DeckParserService {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				console.log('[deck-parser] resetting deck after game end');
-				this.reset();
+				this.reset(this.currentGameType === GameType.GT_VS_AI);
+				this.currentGameType = undefined;
+				this.currentScenarioId = undefined;
 			} else if (event.type === GameEvent.MATCH_METADATA) {
 				this.currentGameType = event.additionalData.metaData.GameType;
-			} else if (event.type === GameEvent.GAME_END) {
-				this.currentGameType = undefined;
+				this.currentScenarioId = event.additionalData.metaData.ScenarioID;
+				this.currentDeck.scenarioId = this.currentScenarioId;
+				console.log(
+					'[deck-parser] setting mleta info',
+					this.currentGameType,
+					this.currentScenarioId,
+					this.currentDeck,
+				);
 			}
 		});
 	}
@@ -58,17 +68,37 @@ export class DeckParserService {
 			const activeDeck = await this.memory.getActiveDeck(2);
 			//console.log('active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-				console.log('[deck-parser] updating active deck after queue', activeDeck, this.currentDeck);
+				console.log(
+					'[deck-parser] updating active deck after queue',
+					activeDeck,
+					this.currentDeck,
+					this.currentScenarioId,
+				);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
+				this.currentDeck.scenarioId = this.currentScenarioId;
 			}
 		}
 	}
 
-	public async getCurrentDeck(): Promise<any> {
-		console.log('[deck-parser] getting current deck', this.currentDeck);
+	public async getCurrentDeck(shouldUsePreviousDeck: boolean, scenarioId: number): Promise<any> {
+		console.log(
+			'[deck-parser] getting current deck',
+			this.currentDeck,
+			shouldUsePreviousDeck,
+			scenarioId,
+			this.previousDeck,
+		);
 		if (this.currentDeck?.deck) {
 			console.log('[deck-parser] returning cached deck', this.currentDeck);
 			return this.currentDeck;
+		}
+		if (
+			(!this.currentDeck || !this.currentDeck.deck) &&
+			shouldUsePreviousDeck &&
+			scenarioId === this.previousDeck.scenarioId
+		) {
+			console.log('[deck-parser] using previous deck');
+			this.currentDeck = this.previousDeck;
 		}
 		if (this.memory) {
 			//console.log('[deck-parser] ready to get active deck', new Error().stack);
@@ -78,7 +108,7 @@ export class DeckParserService {
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}
-		console.log('returning current deck', this.currentDeck);
+		console.log('[deck-parser] returning current deck', this.currentDeck);
 		return this.currentDeck;
 	}
 
@@ -120,6 +150,7 @@ export class DeckParserService {
 			// console.log('[deck-parser] matching log line for deck name', data);
 			this.currentDeck = {
 				name: match[1],
+				scenarioId: this.currentScenarioId,
 			};
 			console.log('[deck-parser] deck init', this.currentDeck);
 			return;
@@ -127,7 +158,9 @@ export class DeckParserService {
 		match = this.deckstringRegex.exec(data);
 		if (match) {
 			console.log('[deck-parser] parsing deckstring', match);
-			this.currentDeck = this.currentDeck || {};
+			this.currentDeck = this.currentDeck || {
+				scenarioId: this.currentScenarioId,
+			};
 			this.currentDeck.deckstring = this.normalizeDeckstring(match[1]);
 			console.log('[deck-parser] current deck', this.currentDeck);
 			this.decodeDeckString();
@@ -151,9 +184,12 @@ export class DeckParserService {
 
 	// By doing this we make sure we don't get a leftover deckstring caused by
 	// a game mode that doesn't interact with the Decks.log
-	public reset() {
-		console.log('[deck-parser] resetting deck');
+	public reset(shouldStorePreviousDeck: boolean) {
+		if (shouldStorePreviousDeck && this.currentDeck?.deck) {
+			this.previousDeck = this.currentDeck;
+		}
 		this.currentDeck = {};
+		console.log('[deck-parser] resetting deck', shouldStorePreviousDeck, this.currentDeck, this.previousDeck);
 	}
 
 	public buildDeck(currentDeck: any): readonly DeckCard[] {

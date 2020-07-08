@@ -418,7 +418,7 @@ export class GameStateService {
 	private buildEventParsers(): readonly EventParser[] {
 		return [
 			new GameStartParser(this.deckParser, this.prefs, this.allCards),
-			new MatchMetadataParser(),
+			new MatchMetadataParser(this.deckParser, this.prefs, this.allCards),
 			new MulliganOverParser(),
 			new MainStepReadyParser(),
 			new CardDrawParser(this.helper),
