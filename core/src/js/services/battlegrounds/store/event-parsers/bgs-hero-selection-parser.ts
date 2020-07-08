@@ -46,8 +46,8 @@ export class BgsHeroSelectionParser implements EventParser {
 	private buildRaces(availableRaces: readonly number[]): [readonly Race[], readonly Race[]] {
 		const allRaces = [Race.BEAST, Race.DEMON, Race.DRAGON, Race.MECHANICAL, Race.MURLOC, Race.PIRATE];
 		return [
-			allRaces.filter(race => availableRaces.includes(race)),
-			allRaces.filter(race => !availableRaces.includes(race)),
+			allRaces.filter(race => !availableRaces || availableRaces.length === 0 || availableRaces.includes(race)),
+			allRaces.filter(race => availableRaces && !availableRaces.includes(race)),
 		];
 	}
 
