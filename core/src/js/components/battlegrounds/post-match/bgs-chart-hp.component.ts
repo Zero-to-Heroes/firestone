@@ -332,11 +332,14 @@ export class BgsChartHpComponent {
 		if (!this._dirty) {
 			return;
 		}
+		if (!this.chart?.nativeElement) {
+			return;
+		}
 
 		// console.log('on chart hp resize');
 		const chartContainer = this.el.nativeElement.querySelector('.container-1');
 		const rect = chartContainer?.getBoundingClientRect();
-		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {
+		if (!rect?.width || !rect?.height || !this.chart.nativeElement.getContext('2d')) {
 			setTimeout(() => {
 				this.doResize();
 			}, 500);

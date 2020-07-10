@@ -94,7 +94,9 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			} catch (e) {
 				// Not having this catch block causes the "Cannot read property 'destroyed' of null"
 				// exception to break the app
-				console.error('Exception while handling new state', e.message, e);
+				if (e.message && !(e.message as string).includes("Cannot read property 'destroyed' of null")) {
+					console.error('Exception while handling new state', e.message, e.stack, e);
+				}
 			}
 		});
 		this.hotkey = await this.ow.getHotKey('battlegrounds');

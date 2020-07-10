@@ -345,7 +345,10 @@ export class BgsChartWarbandStatsComponent {
 	}
 
 	private getBackgroundColor() {
-		// console.log('setting gradient', Math.round(this.chartHeight));
+		if (!this.chart?.nativeElement) {
+			return;
+		}
+
 		const gradient = this.chart.nativeElement
 			.getContext('2d')
 			.createLinearGradient(0, 0, 0, Math.round(this.chartHeight));
