@@ -243,6 +243,26 @@
 				"start_position": { "top": 500, "left": 600 },
 				"in_game_only": true
 			},
+			"CounterPlayerJadeGolem": {
+				"file": "Files/counter_player_jade_golem.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterOpponentJadeGolem": {
+				"file": "Files/counter_opponent_jade_golem.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
 			"CounterPlayerAttack": {
 				"file": "Files/counter_player_attack.html",
 				"transparent": true,

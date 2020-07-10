@@ -49,10 +49,10 @@ export class DeckState {
 	readonly secretHelperActive: boolean = true;
 
 	readonly totalAttackOnBoard: AttackOnBoard;
-	readonly galakrondInvokesCount: number;
-	readonly cthunSize: number;
-	readonly jadeGolemSize: number;
-	readonly pogoHopperSize: number;
+	readonly galakrondInvokesCount: number = 0;
+	readonly cthunSize: number = 0;
+	readonly jadeGolemSize: number = 0;
+	readonly pogoHopperSize: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
@@ -74,7 +74,7 @@ export class DeckState {
 		return Object.assign(new DeckState(), this, value);
 	}
 
-	// TODO: Probably not the place for this method
+	// TODO: Probably not the place for these methods
 	public containsGalakrond(allCards?: AllCardsService): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		const isGalakrond = allCardsInDeck
@@ -87,6 +87,19 @@ export class DeckState {
 						allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
 			);
 		return isGalakrond;
+	}
+
+	public containJade(allCards?: AllCardsService): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const isJade = allCardsInDeck
+			.filter(card => card.cardId)
+			.some(
+				card =>
+					allCards &&
+					allCards.getCard(card.cardId)?.referencedTags &&
+					allCards.getCard(card.cardId)?.referencedTags.includes('JADE_GOLEM'),
+			);
+		return isJade;
 	}
 
 	public containsPogoHopper(): boolean {

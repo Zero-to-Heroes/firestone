@@ -77,6 +77,11 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Show the number of times you played a Pogo-Hopper (excluding Battlegrounds)"
 					></preference-toggle>
 					<preference-toggle
+						field="playerJadeGolemCounter"
+						label="Jade Golem"
+						tooltip="Show the current size of your Jade Golems"
+					></preference-toggle>
+					<preference-toggle
 						field="playerAttackCounter"
 						label="Attack on board"
 						tooltip="Show the total attack of minions on your board + your hero"

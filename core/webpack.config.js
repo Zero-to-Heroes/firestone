@@ -116,6 +116,8 @@ module.exports = function(env, argv) {
 		buildHtmlWebpackPluginConf('counter_opponent_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_pogo.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_pogo.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_player_jade_golem.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_opponent_jade_golem.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_attack.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_attack.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('bgs_counter_player_pogo.html', 'gamecounters'),

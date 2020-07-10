@@ -12,6 +12,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AttackCountersComponent } from '../../components/game-counters/attack-counter.component';
 import { GalakrondCountersComponent } from '../../components/game-counters/galakrond-counter.component';
 import { GameCountersComponent } from '../../components/game-counters/game-counters.component';
+import { JadeCounterComponent } from '../../components/game-counters/jade-counter.component';
 import { PogoHopperCountersComponent } from '../../components/game-counters/pogo-counter.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -58,6 +59,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		GameCountersComponent,
 		GalakrondCountersComponent,
 		PogoHopperCountersComponent,
+		JadeCounterComponent,
 		AttackCountersComponent,
 	],
 	bootstrap: [GameCountersComponent],

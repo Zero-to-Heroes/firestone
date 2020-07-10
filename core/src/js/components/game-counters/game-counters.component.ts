@@ -38,6 +38,7 @@ declare let amplitude;
 				[state]="gameState || bgsGameState"
 				[side]="side"
 			></pogo-counter>
+			<jade-counter *ngIf="activeCounter === 'jadeGolem'" [state]="gameState" [side]="side"></jade-counter>
 			<attack-counter *ngIf="activeCounter === 'attack'" [state]="gameState" [side]="side"></attack-counter>
 		</div>
 	`,
@@ -46,7 +47,7 @@ declare let amplitude;
 export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
 	bgsGameState: BattlegroundsState;
-	activeCounter: 'galakrond' | 'pogo' | 'bgsPogo' | 'attack';
+	activeCounter: 'galakrond' | 'pogo' | 'bgsPogo' | 'attack' | 'jadeGolem';
 	side: 'player' | 'opponent';
 
 	// private gameInfoUpdatedListener: (message: any) => void;

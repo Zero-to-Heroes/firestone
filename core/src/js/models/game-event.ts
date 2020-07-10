@@ -76,6 +76,7 @@ export class GameEvent {
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';
 	public static readonly GALAKROND_INVOKED = 'GALAKROND_INVOKED';
 	public static readonly MINION_GO_DORMANT = 'MINION_GO_DORMANT';
+	public static readonly JADE_GOLEM = 'JADE_GOLEM';
 
 	public static readonly GAME_STATE_UPDATE = 'GAME_STATE_UPDATE';
 

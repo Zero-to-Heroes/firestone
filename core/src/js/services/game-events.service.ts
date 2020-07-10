@@ -350,6 +350,14 @@ export class GameEvents {
 					GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps),
 				);
 				break;
+			case 'JADE_GOLEM':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.JADE_GOLEM, gameEvent, {
+						golemSize: gameEvent.Value.AdditionalProps.GolemSize,
+					}),
+				);
+				break;
 			case 'HERO_POWER_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.HERO_POWER_CHANGED, gameEvent, {

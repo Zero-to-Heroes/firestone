@@ -48,6 +48,7 @@ import { GameEndParser } from './event-parser/game-end-parser';
 import { GameRunningParser } from './event-parser/game-running-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
 import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
+import { JadeGolemParser } from './event-parser/jade-golem-parser';
 import { LocalPlayerParser } from './event-parser/local-player-parser';
 import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
@@ -76,9 +77,11 @@ import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { AttackOpponentCounterOverlayHandler } from './overlays/counter-opponent-attack-handler';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
+import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-opponent-jade-golem-handler';
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
 import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
+import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
 import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
 import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
 import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
@@ -412,6 +415,8 @@ export class GameStateService {
 			new PogoOpponentCounterOverlayHandler(this.ow, this.allCards),
 			new AttackPlayerCounterOverlayHandler(this.ow, this.allCards),
 			new AttackOpponentCounterOverlayHandler(this.ow, this.allCards),
+			new JadeGolemPlayerCounterOverlayHandler(this.ow, this.allCards),
+			new JadeGolemOpponentCounterOverlayHandler(this.ow, this.allCards),
 		];
 	}
 
@@ -467,6 +472,7 @@ export class GameStateService {
 			new MinionOnBoardAttackUpdatedParser(this.helper),
 			new GalakrondInvokedParser(),
 			new PogoPlayedParser(),
+			new JadeGolemParser(),
 			new CardBuffedInHandParser(this.helper, this.allCards),
 			new MinionGoDormantParser(this.helper),
 		];
