@@ -96,7 +96,7 @@ declare let amplitude: any;
 				<div class="label" helpTooltip="Percentage of battles where you attacked first">
 					Battles going first
 				</div>
-				<div class="value">{{ percentageOfBattlesGoingFirst.toFixed(1) }}%</div>
+				<div class="value">{{ percentageOfBattlesGoingFirst?.toFixed(1) }}%</div>
 			</div>
 			<div class="entry cell battle-luck">
 				<div class="label">
@@ -109,7 +109,7 @@ declare let amplitude: any;
 						>What is this?</a
 					>
 				</div>
-				<div class="value">{{ luckFactor.toFixed(1) }}%</div>
+				<div class="value">{{ luckFactor?.toFixed(1) }}%</div>
 			</div>
 		</div>
 	`,
