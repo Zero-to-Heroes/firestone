@@ -186,7 +186,7 @@ export class BgsBoardComponent implements AfterViewInit {
 			if (this.debug) {
 				console.log('no dimensions, retrying', rect, boardContainer);
 			}
-			setTimeout(() => this.onResize(), 1000);
+			setTimeout(() => this.onResize(), 1500);
 			return;
 		}
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
