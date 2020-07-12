@@ -42,6 +42,7 @@ init({
 	enabled: process.env.NODE_ENV === 'production',
 	release: process.env.APP_VERSION,
 	attachStacktrace: true,
+	sampleRate: 0.1,
 	integrations: [
 		new Integrations.GlobalHandlers({
 			onerror: true,
