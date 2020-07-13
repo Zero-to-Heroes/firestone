@@ -19,12 +19,14 @@ export class GameStatsInitProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const stats = Object.assign(new StatsState(), currentState.stats, event.newState);
-		const replayState: ReplaysState = this.replaysStateBuilder.buildState(currentState.replays, stats);
-		const decktracker = this.decktrackerStateLoader.buildState(currentState.decktracker, stats);
+		const newStatsState = currentState.stats.update({
+			gameStats: event.newGameStats,
+		} as StatsState);
+		const replayState: ReplaysState = this.replaysStateBuilder.buildState(currentState.replays, newStatsState);
+		const decktracker = this.decktrackerStateLoader.buildState(currentState.decktracker, newStatsState);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
-				stats: stats,
+				stats: newStatsState,
 				replays: replayState,
 				decktracker: decktracker,
 			} as MainWindowState),

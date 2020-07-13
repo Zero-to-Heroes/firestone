@@ -1,4 +1,4 @@
-import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
+import { GameStats } from '../../../../../models/mainwindow/stats/game-stats';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class GameStatsInitEvent implements MainWindowStoreEvent {
@@ -6,7 +6,7 @@ export class GameStatsInitEvent implements MainWindowStoreEvent {
 		return 'GameStatsInitEvent';
 	}
 
-	constructor(public readonly newState: StatsState) {}
+	constructor(public readonly newGameStats: GameStats) {}
 
 	public eventName(): string {
 		return 'GameStatsInitEvent';

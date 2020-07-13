@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
-import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { Events } from '../../events.service';
 import { OverwolfService } from '../../overwolf.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
@@ -24,10 +23,7 @@ export class GameStatsBootstrapService {
 
 	public async initGameStats() {
 		const newGameStats: GameStats = await this.gameStatsLoader.retrieveStats();
-		const newState = Object.assign(new StatsState(), {
-			gameStats: newGameStats,
-		} as StatsState);
 		this.events.broadcast(Events.MATCH_STATS_UPDATED, newGameStats);
-		this.stateUpdater.next(new GameStatsInitEvent(newState));
+		this.stateUpdater.next(new GameStatsInitEvent(newGameStats));
 	}
 }
