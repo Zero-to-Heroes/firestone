@@ -30,8 +30,6 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 			? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
 			: OverwolfService.BATTLEGROUNDS_WINDOW;
 		const battlegroundsWindow = await this.ow.getWindowState(windowId);
-		// console.log('use overlay?', prefs.bgsUseOverlay, battlegroundsWindow);
-		// console.warn('updazting overlay', battlegroundsWindow);
 		// Minimize is only triggered by a user action, so if they minimize it we don't touch it
 		if (battlegroundsWindow.window_state_ex === 'minimized' && !state.forceOpen) {
 			return;
@@ -43,14 +41,21 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		}
 		// console.warn(battlegroundsWindow);
 		if (inGame && this.bgsActive && state.forceOpen) {
-			// console.log('[bgs-store] showing window', battlegroundsWindow, inGame, this.bgsActive, state.forceOpen);
+			// console.log(
+			// 	'[bgs-store] showing window',
+			// 	await this.ow.getWindowState(windowId),
+			// 	inGame,
+			// 	this.bgsActive,
+			// 	state.forceOpen,
+			// );
 			await this.ow.obtainDeclaredWindow(windowId);
 			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
-				// console.log('restoring window');
+				// console.log('restoring window', await this.ow.getWindowState(windowId));
 				await this.ow.restoreWindow(windowId);
 				await this.ow.bringToFront(windowId);
+				// console.log('restored window', await this.ow.getWindowState(windowId));
 			} else {
-				// console.log('not restoring window', battlegroundsWindow.window_state_ex);
+				// console.log('not restoring window', await this.ow.getWindowState(windowId));
 			}
 		}
 		// In fact we don't want to close the window when the game ends

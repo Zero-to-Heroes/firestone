@@ -25,13 +25,15 @@ export class BgsSimulationOverlay implements BattlegroundsOverlay {
 		const window = await this.ow.getWindowState(windowId);
 		const inGame = state && state.inGame && !state.gameEnded;
 		if (inGame && this.active) {
-			// console.log('[bgs-simulation-overlay] showing window', window);
-			await this.ow.obtainDeclaredWindow(windowId);
-			await this.ow.restoreWindow(windowId);
-			// console.log('[bgs-simulation-overlay] restored window', window);
+			if (isWindowClosed(window.window_state_ex)) {
+				// console.log('[bgs-simulation-overlay] showing window', await this.ow.getWindowState(windowId));
+				await this.ow.obtainDeclaredWindow(windowId);
+				await this.ow.restoreWindow(windowId);
+				// console.log('[bgs-simulation-overlay] restored window', await this.ow.getWindowState(windowId));
+			}
 		} else if (!isWindowClosed(window.window_state_ex) && !isWindowClosed(window.stateEx)) {
-			// console.log('[bgs-simulation-overlay] closing window', window);
 			await this.ow.hideWindow(windowId);
+			// console.log('[bgs-simulation-overlay] hid window', await this.ow.getWindowState(windowId));
 		}
 	}
 
