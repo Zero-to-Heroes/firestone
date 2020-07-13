@@ -121,11 +121,11 @@ export class AchievementsRepository {
 
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
-			new ThijsCategoryProvider(),
 			new GlobalCategoryProvider(),
 			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),
 			new DeckbuildingCategoryProvider(),
+			new ThijsCategoryProvider(),
 			new BattlegroundsCategoryProvider(),
 			new GalakrondCategoryProvider(),
 			new TombsOfTerrorCategoryProvider(),
