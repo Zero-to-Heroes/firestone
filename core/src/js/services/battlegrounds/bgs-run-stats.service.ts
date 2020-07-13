@@ -58,7 +58,7 @@ export class BgsRunStatsService {
 		// bestBgsUserStats = bestBgsUserStats.map(stat =>
 		// 	stat.statName === 'maxBoardStats' ? { ...stat, value: 0 } : stat,
 		// );
-		let [postMatchStats, newBestValues] = this.populateObject(
+		const [postMatchStats, newBestValues] = this.populateObject(
 			prefs.bgsUseLocalPostMatchStats
 				? await this.buildStatsLocally(currentGame)
 				: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats),
