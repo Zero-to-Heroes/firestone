@@ -1,5 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
+import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
+import { Input } from '@firestone-hs/compute-bgs-run-stats/dist/model/input';
+import { buildNewStats } from '@firestone-hs/compute-bgs-run-stats/dist/stats-builder';
 import {
 	BattleResultHistory,
 	BgsPostMatchStats as IBgsPostMatchStats,
@@ -12,6 +15,7 @@ import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
+import { UserService } from '../user.service';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
@@ -26,33 +30,42 @@ export class BgsRunStatsService {
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly userService: UserService,
 		private readonly memoryService: MemoryInspectionService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async event => {
-			this.computeRunStats(event.data[0], event.data[1]);
+			this.computeRunStats(event.data[0], event.data[1], event.data[2]);
 		});
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
 		});
 	}
 
-	private async computeRunStats(reviewId: string, currentGame: BgsGame) {
+	private async computeRunStats(reviewId: string, currentGame: BgsGame, bestBgsUserStats: readonly BgsBestStat[]) {
 		const prefs = await this.prefs.getPreferences();
+		const user = await this.userService.getCurrentUser();
 		const newMmr = await this.getNewRating(currentGame.mmrAtStart);
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
+			userId: user.username || user.userId,
 			battleResultHistory: currentGame.battleResultHistory,
 			mainPlayer: currentGame.getMainPlayer(),
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: newMmr,
 		};
 
-		const postMatchStats: BgsPostMatchStats = this.populateObject(
+		// console.error('dev stuff to be removed here', bestBgsUserStats);
+		// bestBgsUserStats = bestBgsUserStats.map(stat =>
+		// 	stat.statName === 'maxBoardStats' ? { ...stat, value: 0 } : stat,
+		// );
+		let [postMatchStats, newBestValues] = this.populateObject(
 			prefs.bgsUseLocalPostMatchStats
 				? await this.buildStatsLocally(currentGame)
 				: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats),
 			input,
+			bestBgsUserStats || [],
 		);
+		console.log('newBestVaues', newBestValues);
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
 		if (prefs.bgsUseLocalPostMatchStats) {
@@ -63,7 +76,7 @@ export class BgsRunStatsService {
 			);
 		}
 		console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats);
-		this.stateUpdater.next(new BgsGameEndEvent(postMatchStats));
+		this.stateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues));
 	}
 
 	private async buildStatsLocally(currentGame: BgsGame): Promise<IBgsPostMatchStats> {
@@ -87,13 +100,30 @@ export class BgsRunStatsService {
 		});
 	}
 
-	private populateObject(data: IBgsPostMatchStats, input: BgsComputeRunStatsInput): BgsPostMatchStats {
+	private populateObject(
+		data: IBgsPostMatchStats,
+		input: BgsComputeRunStatsInput,
+		existingBestStats: readonly BgsBestStat[],
+	): [BgsPostMatchStats, readonly BgsBestStat[]] {
 		const result: BgsPostMatchStats = BgsPostMatchStats.create({
 			...data,
 			// We do this because the immutable maps are all messed up when going back and forth
 			boardHistory: input.mainPlayer.boardHistory,
 		});
-		return result;
+		const newBestStats = buildNewStats(
+			existingBestStats,
+			data,
+			({
+				mainPlayer: input.mainPlayer,
+				reviewId: input.reviewId,
+				userId: input.userId,
+			} as any) as Input,
+			`${new Date()
+				.toISOString()
+				.slice(0, 19)
+				.replace('T', ' ')}.${new Date().getMilliseconds()}`,
+		);
+		return [result, newBestStats];
 	}
 
 	private async getNewRating(previousRating: number): Promise<number> {
@@ -122,6 +152,7 @@ export class BgsRunStatsService {
 
 interface BgsComputeRunStatsInput {
 	readonly reviewId: string;
+	readonly userId: string;
 	readonly battleResultHistory: readonly BattleResultHistory[];
 	readonly mainPlayer: BgsPlayer;
 	readonly oldMmr: number;

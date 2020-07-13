@@ -4,6 +4,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
@@ -66,6 +67,7 @@ import { BgsSimulationOverlay } from './overlay/bgs-simulation-overlay';
 
 @Injectable()
 export class BattlegroundsStoreService {
+	private mainWindowState: MainWindowState;
 	private state: BattlegroundsState = new BattlegroundsState();
 	private eventParsers: readonly EventParser[];
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
@@ -123,6 +125,12 @@ export class BattlegroundsStoreService {
 				if (event) {
 					this.handleDisplayPreferences(event.preferences);
 				}
+			});
+
+			const mainWindowStoreEmitter: BehaviorSubject<MainWindowState> = window['mainWindowStore'];
+			mainWindowStoreEmitter.subscribe(newState => {
+				this.mainWindowState = newState;
+				// console.log('[bgs-store] received new main state', this.mainWindowState);
 			});
 		});
 	}
@@ -226,10 +234,15 @@ export class BattlegroundsStoreService {
 			this.processPendingEvents(gameEvent);
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
-			console.log('[bgs-store] Replay created, received info');
+			console.log('[bgs-store] Replay created, received info', this.mainWindowState);
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review' && this.state && this.state.inGame && this.state.currentGame) {
-				this.events.broadcast(Events.START_BGS_RUN_STATS, info.reviewId, this.state.currentGame);
+				this.events.broadcast(
+					Events.START_BGS_RUN_STATS,
+					info.reviewId,
+					this.state.currentGame,
+					this.mainWindowState?.stats?.bestBgsUserStats,
+				);
 			}
 		});
 	}

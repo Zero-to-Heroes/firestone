@@ -1,4 +1,4 @@
-import { BgsBestStat } from '../../../../../models/battlegrounds/post-match/bgs-best-stat';
+import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BgsBestUserStatsInitEvent implements MainWindowStoreEvent {

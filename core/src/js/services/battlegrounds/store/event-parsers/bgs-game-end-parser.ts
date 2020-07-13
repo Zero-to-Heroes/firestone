@@ -1,3 +1,4 @@
+import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -23,7 +24,12 @@ export class BgsGameEndParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
 		const prefs: Preferences = await this.prefs.getPreferences();
 		console.warn('will build post-match info', prefs.bgsForceShowPostMatchStats);
-		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(event.postMatchStats, currentState);
+		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
+		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(
+			event.postMatchStats,
+			newBestUserStats,
+			currentState,
+		);
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
 			stage.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : stage,
 		);
@@ -37,11 +43,12 @@ export class BgsGameEndParser implements EventParser {
 
 	private buildPostMatchStage(
 		postMatchStats: BgsPostMatchStats,
+		newBestUserStats: readonly BgsBestStat[],
 		currentState: BattlegroundsState,
 	): BgsPostMatchStage {
 		const stageToRebuild =
 			currentState.stages.find(stage => stage.id === 'post-match') || this.createNewStage(currentState);
-		const panelToRebuild = this.createNewPanel(currentState, postMatchStats);
+		const panelToRebuild = this.createNewPanel(currentState, postMatchStats, newBestUserStats);
 
 		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>
 			panel.id === 'bgs-post-match-stats' ? panelToRebuild : panel,
@@ -60,12 +67,14 @@ export class BgsGameEndParser implements EventParser {
 	private createNewPanel(
 		currentState: BattlegroundsState,
 		postMatchStats: BgsPostMatchStats,
+		newBestUserStats: readonly BgsBestStat[],
 	): BgsPostMatchStatsPanel {
 		const player: BgsPlayer = currentState.currentGame.getMainPlayer();
 		const finalPosition = player.leaderboardPlace;
-		console.log('post match stats', postMatchStats);
+		console.log('post match stats');
 		return BgsPostMatchStatsPanel.create({
 			stats: postMatchStats,
+			newBestUserStats: newBestUserStats,
 			globalStats: currentState.globalStats,
 			player: currentState.currentGame.getMainPlayer(),
 			selectedStat: 'hp-by-turn',

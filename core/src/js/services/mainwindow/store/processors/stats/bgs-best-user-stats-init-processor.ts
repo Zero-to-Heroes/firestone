@@ -14,7 +14,7 @@ export class BgsBestUserStatsInitProcessor implements Processor {
 		const newStatsState = currentState.stats.update({
 			bestBgsUserStats: event.bgsStats,
 		} as StatsState);
-		console.log('updated stats state with bgs best stats', newStatsState);
+		// console.log('updated stats state with bgs best stats', newStatsState);
 		return [
 			currentState.update({
 				stats: newStatsState,

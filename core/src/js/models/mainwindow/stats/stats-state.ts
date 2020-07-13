@@ -1,4 +1,4 @@
-import { BgsBestStat } from '../../battlegrounds/post-match/bgs-best-stat';
+import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { GameStats } from './game-stats';
 
 export class StatsState {

@@ -31,6 +31,16 @@
 		.value {
 			color: var(--default-text-color);
 		}
+
+		&.new-record .label::after {
+			content: 'New Record';
+			position: relative;
+			font-size: 12px;
+			color: var(--default-title-color);
+			transform: rotate(-18deg);
+			display: inline-block;
+			left: -14px;
+		}
 	}
 
 	.battle-luck .label {

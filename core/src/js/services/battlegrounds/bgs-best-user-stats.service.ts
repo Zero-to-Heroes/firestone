@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BgsBestStat } from '../../models/battlegrounds/post-match/bgs-best-stat';
+import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { OverwolfService } from '../overwolf.service';
 
@@ -29,10 +29,9 @@ export class BgsBestUserStatsService {
 			return;
 		}
 		this.http.get(`${BGS_BEST_USER_STATS_ENDPOINT}/${currentUser.username || currentUser.userId}`).subscribe(
-			(data: any) => {
+			(data: readonly BgsBestStat[]) => {
 				console.log('[bgs-best-stats] received stats', data);
-				const stats: readonly BgsBestStat[] = data.result;
-				callback(stats);
+				callback(data);
 			},
 			error => {
 				setTimeout(() => this.getBgsBestUserStatsInternal(currentUser, callback, retriesLeft - 1), 1000);

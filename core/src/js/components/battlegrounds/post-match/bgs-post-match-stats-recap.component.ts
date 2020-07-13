@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { StatName } from '@firestone-hs/compute-bgs-run-stats/dist/model/stat-name.type';
 import { CardIds } from '@firestone-hs/reference-data';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
@@ -28,77 +29,78 @@ declare let amplitude: any;
 					<div class="value">{{ ties }}</div>
 				</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('totalDamageDealtToMinions') }">
 				<div class="label">Total dmg dealt (minions)</div>
 				<div class="value">{{ totalMinionsDamageDealt }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('totalDamageTakenByMinions') }">
 				<div class="label">Total dmg taken (minions)</div>
 				<div class="value">{{ totalMinionsDamageTaken }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('totalDamageDealtToHeroes') }">
 				<div class="label">Total dmg dealt (hero)</div>
 				<div class="value">{{ totalHeroDamageDealt }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('maxDamageDealtToHero') }">
 				<div class="label">Max dmg dealt (hero)</div>
 				<div class="value">{{ maxSingleTurnHeroDamageDealt }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('highestWinStreak') }">
 				<div class="label">Highest Win streak</div>
 				<div class="value">{{ winStreak }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('triplesCreated') }">
 				<div class="label">Triples created</div>
 				<div class="value">{{ triples }}</div>
 			</div>
 			<div
 				class="entry cell"
+				[ngClass]="{ 'new-record': isNewRecord('maxBoardStats') }"
 				helpTooltip="The maximum total stats (attack + health) of your board at the beginning of a battle"
 			>
 				<div class="label">Max board stats</div>
 				<div class="value">{{ maxBoardStats }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('coinsWasted') }">
 				<div class="label">Coins wasted</div>
 				<div class="value">{{ coinsWasted }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('rerolls') }">
 				<div class="label">Rerolls</div>
 				<div class="value">{{ rerolls }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('freezes') }">
 				<div class="label">Freezes</div>
 				<div class="value">{{ freezes }}</div>
 			</div>
 			<!-- hero power: only show if not a passive one -->
-			<div class="entry cell" *ngIf="heroPowers">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('heroPowerUsed') }" *ngIf="heroPowers">
 				<div class="label">Hero Power used</div>
 				<div class="value">{{ heroPowers }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('minionsBought') }">
 				<div class="label">Minions bought</div>
 				<div class="value">{{ minionsBought }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('minionsSold') }">
 				<div class="label">Minions sold</div>
 				<div class="value">{{ minionsSold }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('enemyMinionsKilled') }">
 				<div class="label">Enemy Minions killed</div>
 				<div class="value">{{ minionsKilled }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('enemyHeroesKilled') }">
 				<div class="label">Enemy Heroes killed</div>
 				<div class="value">{{ heroesKilled }}</div>
 			</div>
-			<div class="entry cell">
+			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('percentageOfBattlesGoingFirst') }">
 				<div class="label" helpTooltip="Percentage of battles where you attacked first">
 					Battles going first
 				</div>
 				<div class="value">{{ percentageOfBattlesGoingFirst?.toFixed(1) }}%</div>
 			</div>
-			<div class="entry cell battle-luck">
+			<div class="entry cell battle-luck" [ngClass]="{ 'new-record': isNewRecord('battleLuck') }">
 				<div class="label">
 					Battle luck
 					<a
@@ -142,13 +144,27 @@ export class BgsPostMatchStatsRecapComponent {
 	private _game: BgsGame;
 
 	@Input() set stats(value: BgsPostMatchStatsPanel) {
+		if (value === this._stats) {
+			return;
+		}
 		this._stats = value;
 		this.updateStats();
 	}
 
 	@Input() set game(value: BgsGame) {
+		if (value === this._game) {
+			return;
+		}
 		this._game = value;
 		this.updateStats();
+	}
+
+	isNewRecord(statName: StatName): boolean {
+		const isNewRecord =
+			this?._stats?.newBestUserStats &&
+			this?._stats?.newBestUserStats.find(stat => stat.statName === statName) != null;
+		// console.log('isNewRecord', statName, isNewRecord, this._stats);
+		return isNewRecord;
 	}
 
 	// When adding stats here, also add them to the api-compute-bgs-single-run-stats lambda
@@ -161,6 +177,7 @@ export class BgsPostMatchStatsRecapComponent {
 		this.wins = this._game.faceOffs.filter(faceOff => faceOff.result === 'won').length || 0;
 		this.losses = this._game.faceOffs.filter(faceOff => faceOff.result === 'lost').length || 0;
 		this.ties = this._game.faceOffs.filter(faceOff => faceOff.result === 'tied').length || 0;
+
 		this.winStreak = this._stats.player.highestWinStreak;
 		this.totalMinionsDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)
 			.filter(cardId => cardId !== this._stats.player.cardId)

@@ -23,7 +23,7 @@ export class BgsBestUserStatsBootstrapService {
 	public async initBgsBestUserStats() {
 		console.log('retrieving bgs best stats');
 		const bgsBestUserStats = await this.bgs.getBgsBestUserStats();
-		console.log('retrieved bgs best stats', bgsBestUserStats);
+		console.log('retrieved bgs best stats', bgsBestUserStats?.length);
 		this.stateUpdater.next(new BgsBestUserStatsInitEvent(bgsBestUserStats));
 	}
 }
