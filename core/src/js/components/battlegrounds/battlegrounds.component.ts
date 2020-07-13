@@ -39,8 +39,6 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	state: BattlegroundsState;
 	cardsLoaded = false;
 
-	private isMaximized = false;
-	private stateChangedListener: (message: any) => void;
 	private hotkeyPressedHandler;
 	// private messageReceivedListener: (message: any) => void;
 	private storeSubscription: Subscription;
@@ -68,19 +66,6 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		// console.log('windowId', this.windowId);
-		this.stateChangedListener = this.ow.addStateChangedListener(OverwolfService.BATTLEGROUNDS_WINDOW, message => {
-			// console.log('received battlegrounds window message', message, this.isMaximized);
-			// If hidden, restore window to as it was
-			if (message.window_previous_state_ex === 'hidden') {
-				// console.log('window was previously hidden, keeping the previosu state', this.isMaximized);
-			}
-			if (message.window_state === 'maximized') {
-				this.isMaximized = true;
-			} else if (message.window_state !== 'minimized') {
-				// When minimized we want to remember the last position
-				this.isMaximized = false;
-			}
-		});
 		this.hotkeyPressedHandler = this.ow.getMainWindow().bgsHotkeyPressed;
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		// console.log('retrieved storeBus');
@@ -130,14 +115,10 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('mousedown')
 	dragMove() {
-		// console.log('moving?', this.isMaximized);
-		if (!this.isMaximized) {
-			this.ow.dragMove(this.windowId);
-		}
+		this.ow.dragMove(this.windowId);
 	}
 
 	ngOnDestroy(): void {
-		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.storeSubscription.unsubscribe();
 	}
 
@@ -158,7 +139,5 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			console.log('changing window position', this.windowId, secondMonitor.x, secondMonitor.y);
 			this.ow.changeWindowPosition(this.windowId, secondMonitor.x + 100, secondMonitor.y + 100);
 		}
-
-		// this.ow.maximizeWindow(this.windowId);
 	}
 }
