@@ -52,6 +52,7 @@ export class BgsBattleResultParser implements EventParser {
 				currentState.currentGame.battleInfo,
 				currentState.currentGame.battleResult,
 			);
+			// Not possible to forcefully ignore sample rates
 			captureEvent({
 				message: 'Impossible battle loss',
 				extra: {
