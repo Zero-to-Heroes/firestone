@@ -26,12 +26,13 @@ import { PreferencesService } from '../../../services/preferences.service';
 		<div class="decktracker-broadcast">
 			<h2>Broadcast on Twitch</h2>
 			<p class="text">
-				Firestone twitch extension allows you to stream while showing your deck tracker in Twitch player. To do
-				so you will need to:
+				Firestone twitch extension allows you to stream while showing your deck tracker in the Twitch player, as
+				well as letting them mouse over all the players in the leaderboard in Battlegrounds. To activate it, you
+				will need to:
 			</p>
 			<ol class="todo">
 				<li>
-					1. Install the Firestone Twitch extension:
+					1. Install the Firestone Twitch extension on your channel:
 					<a
 						href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u"
 						target="_blank"
@@ -42,6 +43,17 @@ import { PreferencesService } from '../../../services/preferences.service';
 					>
 				</li>
 				<li>2. Connect your Twitch account to Firestone by clicking the button below</li>
+				<li>
+					3. Tweak your options (see
+					<a
+						href="https://github.com/Zero-to-Heroes/firestone/wiki/Setting-up-the-Twitch-extension"
+						target="_blank"
+						(mousedown)="preventMiddleClick($event)"
+						(click)="preventMiddleClick($event)"
+						(auxclick)="preventMiddleClick($event)"
+						>here</a
+					>)
+				</li>
 			</ol>
 
 			<div class="twitch logged-out" *ngIf="twitchLoginUrl && !twitchedLoggedIn">

@@ -37,6 +37,7 @@
 
 	ol {
 		margin-top: 15px;
+		padding-left: 15px;
 	}
 
 	li {
@@ -53,6 +54,11 @@
 		margin-left: 5px;
 		text-decoration: underline;
 		width: auto;
+
+		&:hover {
+			color: #ffb948;
+			background: transparent;
+		}
 	}
 
 	.user-name {
@@ -60,11 +66,6 @@
 		align-items: center;
 		position: relative;
 		top: -10px;
-
-		a:hover {
-			color: #ffb948;
-			background: transparent;
-		}
 	}
 
 	button {

@@ -20,9 +20,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ 'selected': selectedMenu === 'launch' }" (mousedown)="selectMenu('launch')">
 				<span>Launch options</span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedMenu === 'broadcast' }" (mousedown)="selectMenu('broadcast')">
-				<span>Twitch</span>
-			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

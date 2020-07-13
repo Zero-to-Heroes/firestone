@@ -17,7 +17,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				></settings-decktracker-opponent-deck>
 				<settings-decktracker-global *ngSwitchCase="'global'"></settings-decktracker-global>
 				<settings-decktracker-launch *ngSwitchCase="'launch'"></settings-decktracker-launch>
-				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
 			</ng-container>
 		</ul>
 	`,

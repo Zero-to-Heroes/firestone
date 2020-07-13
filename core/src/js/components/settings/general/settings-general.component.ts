@@ -14,6 +14,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<settings-general-launch *ngSwitchCase="'launch'"></settings-general-launch>
 				<settings-general-bug-report *ngSwitchCase="'bugreport'"></settings-general-bug-report>
 				<settings-decktracker-beta *ngSwitchCase="'beta'"></settings-decktracker-beta>
+				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
 			</ng-container>
 		</ul>
 	`,
