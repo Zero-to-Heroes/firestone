@@ -83,8 +83,8 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 		const gameWidth = gameInfo.logicalWidth;
 		const prefs: Preferences = await this.prefs.getPreferences();
 		const trackerPosition = prefs.bgsBannedTribesWidgetPosition;
-		const newLeft = (trackerPosition && trackerPosition.left) || gameWidth / 2 - 700;
-		const newTop = (trackerPosition && trackerPosition.top) || gameInfo.logicalHeight - 400;
+		const newLeft = (trackerPosition && trackerPosition.left) || gameWidth / 2 + 300;
+		const newTop = (trackerPosition && trackerPosition.top) || 200;
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 }
