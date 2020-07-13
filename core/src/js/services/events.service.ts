@@ -58,6 +58,7 @@ export class Events {
 	public static readonly START_POPULATE_GAME_STATS_STATE = 'start-populate-game-stats-state';
 	public static readonly START_POPULATE_GLOBAL_STATS_STATE = 'start-populate-global-stats-state';
 	public static readonly START_BGS_RUN_STATS = 'start-bgs-run-stats';
+	public static readonly START_POPULATE_BGS_BEST_USER_STATS_STATE = 'start-populate-bgs-best-user-stats-state';
 
 	private _eventBus: Subject<BroadcastEvent>;
 

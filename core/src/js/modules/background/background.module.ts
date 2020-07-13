@@ -14,6 +14,7 @@ import { RemoteAchievementsService } from '../../services/achievement/remote-ach
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
+import { BgsBestUserStatsService } from '../../services/battlegrounds/bgs-best-user-stats.service';
 import { BgsGlobalStatsService } from '../../services/battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from '../../services/battlegrounds/bgs-init.service';
 import { BgsRunStatsService } from '../../services/battlegrounds/bgs-run-stats.service';
@@ -43,6 +44,7 @@ import { GlobalStatsService } from '../../services/global-stats/global-stats.ser
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { AchievementsBootstrapService } from '../../services/mainwindow/store/achievements-bootstrap.service';
+import { BgsBestUserStatsBootstrapService } from '../../services/mainwindow/store/bgs-best-user-stats-bootstrap.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { CollectionBootstrapService } from '../../services/mainwindow/store/collection-bootstrap.service';
 import { GameStatsBootstrapService } from '../../services/mainwindow/store/game-stats-bootstrap.service';
@@ -153,6 +155,8 @@ export class SentryErrorHandler implements ErrorHandler {
 		BgsGlobalStatsService,
 		BgsBattleSimulationService,
 		BgsRunStatsService,
+		BgsBestUserStatsService,
+		BgsBestUserStatsBootstrapService,
 
 		AiDeckService,
 		SecretConfigService,

@@ -70,6 +70,7 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
+import { BgsBestUserStatsInitEvent } from './events/stats/bgs-best-user-stats-init-event';
 import { GameStatsInitEvent } from './events/stats/game-stats-init-event';
 import { GlobalStatsInitEvent } from './events/stats/global/global-stats-init-event';
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
@@ -121,6 +122,7 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
+import { BgsBestUserStatsInitProcessor } from './processors/stats/bgs-best-user-stats-init-processor';
 import { GameStatsInitProcessor } from './processors/stats/game-stats-init-processor';
 import { GlobalStatsInitProcessor } from './processors/stats/global/global-stats-init-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
@@ -451,6 +453,9 @@ export class MainWindowStoreService {
 			// Stats
 			GameStatsInitEvent.eventName(),
 			new GameStatsInitProcessor(this.replaysStateBuilder, this.decktrackerStateLoader),
+
+			BgsBestUserStatsInitEvent.eventName(),
+			new BgsBestUserStatsInitProcessor(),
 
 			RecomputeGameStatsEvent.eventName(),
 			new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.events),

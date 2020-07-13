@@ -6,6 +6,7 @@ import { AchievementsVideoCaptureService } from './achievement/achievements-vide
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
+import { BgsBestUserStatsService } from './battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BattlegroundsStoreService } from './battlegrounds/store/battlegrounds-store.service';
 import { CollectionManager } from './collection/collection-manager.service';
@@ -20,6 +21,7 @@ import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
 import { AchievementsBootstrapService } from './mainwindow/store/achievements-bootstrap.service';
+import { BgsBestUserStatsBootstrapService } from './mainwindow/store/bgs-best-user-stats-bootstrap.service';
 import { CollectionBootstrapService } from './mainwindow/store/collection-bootstrap.service';
 import { ChangeVisibleApplicationEvent } from './mainwindow/store/events/change-visible-application-event';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
@@ -76,8 +78,10 @@ export class AppBootstrapService {
 		private init_CollectionBootstrapService: CollectionBootstrapService,
 		private init_GameStatsBootstrapService: GameStatsBootstrapService,
 		private init_GlobalStatsBootstrapService: GlobalStatsBootstrapService,
+		private init_BgsBestUserStatsBootstrapService: BgsBestUserStatsBootstrapService,
 		private init_BgsStoreService: BattlegroundsStoreService,
 		private init_BgsInitService: BgsInitService,
+		private init_BgsBestUserStatsService: BgsBestUserStatsService,
 	) {}
 
 	public async init() {

@@ -17,6 +17,7 @@ export class TriggerPopulateStoreProcessor implements Processor {
 		this.events.broadcast(Events.START_POPULATE_ACHIEVEMENT_STATE);
 		this.events.broadcast(Events.START_POPULATE_GAME_STATS_STATE);
 		this.events.broadcast(Events.START_POPULATE_GLOBAL_STATS_STATE);
+		this.events.broadcast(Events.START_POPULATE_BGS_BEST_USER_STATS_STATE);
 		return [null, null];
 	}
 }
