@@ -1,5 +1,4 @@
 export interface MainWindowStoreEvent {
-	// isNavigationEvent(): boolean;
-	// isResetHistoryEvent(): boolean;
+	isNavigationEvent(): boolean;
 	eventName(): string;
 }

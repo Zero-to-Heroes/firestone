@@ -12,8 +12,4 @@ export class PopulateStoreEvent implements MainWindowStoreEvent {
 	public isNavigationEvent(): boolean {
 		return true;
 	}
-
-	public isResetHistoryEvent(): boolean {
-		return true;
-	}
 }
