@@ -264,17 +264,10 @@ export class MainWindowStoreService {
 	}
 
 	private addStateToHistory(newNavigationState: NavigationState, originalEvent: MainWindowStoreEvent): void {
-		// const navigation = originalEvent.isNavigationEvent();
+		if (!originalEvent.isNavigationEvent()) {
+			return;
+		}
 		const event = originalEvent.eventName();
-		// Because the history stores the state + the navigation state
-		// If we go back in time, we will override the current state with a past state
-		// and this can cause some info to disappear until we restart the app
-		// So all events that cause an actual update to the state data should
-		// reset the history, until we have a better solution
-		// const isResetHistory = originalEvent.isResetHistoryEvent();
-		// if (isResetHistory) {
-		// 	this.stateHistory = [];
-		// }
 		const historyTrunk = this.navigationHistory.stateHistory.slice(
 			0,
 			this.navigationHistory.currentIndexInHistory + 1,
@@ -299,6 +292,12 @@ export class MainWindowStoreService {
 					.currentApp === navigationState.currentApp) ||
 			// We allow a "back" to the parent in case there is no back history
 			NavigationBackProcessor.buildParentState(navigationState, dataState) != null;
+		// console.log(
+		// 	'isBackArrowEnabled?',
+		// 	this.navigationHistory,
+		// 	navigationState,
+		// 	NavigationBackProcessor.buildParentState(navigationState, dataState),
+		// );
 		const nextArrowEnabled =
 			this.navigationHistory.currentIndexInHistory < this.navigationHistory.stateHistory.length - 1;
 		return navigationState.update({
