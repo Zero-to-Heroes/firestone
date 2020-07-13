@@ -30,6 +30,7 @@ declare let amplitude;
 		'../../css/component/notifications/notifications-achievements.scss',
 		'../../css/component/notifications/notifications-decktracker.scss',
 		'../../css/component/notifications/notifications-replays.scss',
+		'../../css/component/notifications/notifications-general.scss',
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
@@ -42,7 +43,7 @@ declare let amplitude;
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 export class NotificationsComponent implements AfterViewInit, OnDestroy {
-	timeout = 10000;
+	timeout = 8000;
 	// timeout = 9999999;
 	toastOptions = {
 		timeOut: this.timeout,

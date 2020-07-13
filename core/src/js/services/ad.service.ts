@@ -2,8 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { OverwolfService } from './overwolf.service';
 
-const NO_AD_PLAN = 13;
-
 @Injectable()
 export class AdService {
 	constructor(private http: HttpClient, private ow: OverwolfService) {}
@@ -15,13 +13,10 @@ export class AdService {
 		}
 		return new Promise<boolean>(async resolve => {
 			// Use OW's subscription mechanism
-			const [activePlans, user] = await Promise.all([
-				this.ow.getActiveSubscriptionPlans(),
-				this.ow.getCurrentUser(),
-			]);
-			console.log('active plans', activePlans);
-			if (activePlans && activePlans.plans && activePlans.plans.indexOf(NO_AD_PLAN) !== -1) {
-				console.log('User has a no-ad subscription, not showing ads', activePlans);
+			const [showAds, user] = await Promise.all([this.ow.shouldShowAds(), this.ow.getCurrentUser()]);
+			console.log('should show ads', showAds);
+			if (!showAds) {
+				console.log('User has a no-ad subscription, not showing ads', showAds);
 				resolve(false);
 				return;
 			}

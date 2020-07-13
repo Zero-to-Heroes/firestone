@@ -41,6 +41,7 @@ export class OwNotificationsService {
 		this.stateEmitter.next(htmlMessage);
 	}
 
+	/** @deprecated */
 	public async html(htmlMessage: Message) {
 		if ((await this.prefs.getPreferences()).hideAllNotifications) {
 			console.log('not showing any notification');

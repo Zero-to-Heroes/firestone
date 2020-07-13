@@ -32,6 +32,7 @@ import { GlobalStatsBootstrapService } from './mainwindow/store/global-stats-boo
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
+import { OwNotificationsService } from './notifications.service';
 import { OverwolfService } from './overwolf.service';
 import { PreferencesService } from './preferences.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
@@ -69,6 +70,7 @@ export class AppBootstrapService {
 		private deckParserService: DeckParserService,
 		private gameStateService: GameStateService,
 		private prefs: PreferencesService,
+		private notifs: OwNotificationsService,
 		private settingsCommunicationService: SettingsCommunicationService,
 		private init_decktrackerDisplayService: OverlayDisplayService,
 		private init_endGameListenerService: EndGameListenerService,
@@ -208,15 +210,41 @@ export class AppBootstrapService {
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
 		const prefs = await this.prefs.getPreferences();
 		this.ow.hideCollectionWindow(prefs);
-		// if (this.currentState === 'READY') {
-		// 	return;
-		// }
-		await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
-		const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
-		console.log('[bootstrap] final restore for loadingwindow done', result);
-		setTimeout(() => {
-			this.notifyAbilitiesReady();
-		}, AppBootstrapService.LOADING_SCREEN_DURATION);
+
+		const shouldShowAds = await this.ow.shouldShowAds();
+		// console.log('shouldshow ads?', shouldShowAds);
+		if (shouldShowAds) {
+			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
+			const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
+			console.log('[bootstrap] final restore for loadingwindow done', result);
+			setTimeout(() => {
+				this.notifyAbilitiesReady();
+			}, AppBootstrapService.LOADING_SCREEN_DURATION);
+		} else {
+			this.currentState = 'READY';
+			this.notifs.emitNewNotification({
+				content: `
+					<div class="general-message-container general-theme">
+						<div class="firestone-icon">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder" />
+							</svg>
+						</div>
+						<div class="message">
+							<div class="title">
+								<span>Firestone ready to go</span>
+							</div>
+							<span class="text">Thanks for supporting us!</span>
+						</div>
+						<button class="i-30 close-button">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+							</svg>
+						</button>
+					</div>`,
+				notificationId: `app-ready`,
+			});
+		}
 	}
 
 	private notifyAbilitiesReady() {

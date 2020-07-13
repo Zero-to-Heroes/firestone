@@ -7,6 +7,7 @@ import { Preferences } from '../models/preferences';
 declare let overwolf: any;
 
 const HEARTHSTONE_GAME_ID = 9898;
+const NO_AD_PLAN = 13;
 
 @Injectable()
 export class OverwolfService {
@@ -659,6 +660,20 @@ export class OverwolfService {
 			overwolf.profile.subscriptions.getActivePlans((res: ActiveSubscriptionPlan) => {
 				console.log('[overwolf-service] ActiveSubscriptionPlan', res);
 				resolve(res);
+			});
+		});
+	}
+
+	public async shouldShowAds(): Promise<boolean> {
+		return new Promise<boolean>(resolve => {
+			if (!overwolf.profile.subscriptions) {
+				resolve(true);
+				return;
+			}
+			overwolf.profile.subscriptions.getActivePlans((activePlans: ActiveSubscriptionPlan) => {
+				console.log('[overwolf-service] ActiveSubscriptionPlan', activePlans);
+				const hideAds = activePlans && activePlans.plans && activePlans.plans.includes(NO_AD_PLAN);
+				resolve(!hideAds);
 			});
 		});
 	}
