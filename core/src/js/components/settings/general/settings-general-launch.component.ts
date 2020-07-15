@@ -36,7 +36,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<preference-toggle
 					field="setAllNotifications"
 					label="Display notifications"
-					tooltip="Toggles global visibility of toast notifications [bottom-right]. Notifications can easily be enabled or disabled per game mode. You can configure them in the corresponding tabs."
+					tooltip="Toggles global visibility of toast notifications [bottom-right]. When active, you can still configure notifications per game mode in the corresponding tabs."
 					advancedSetting
 					messageWhenToggleValue="Notifications now TURNED OFF globally."
 					[valueToDisplayMessageOn]="false"

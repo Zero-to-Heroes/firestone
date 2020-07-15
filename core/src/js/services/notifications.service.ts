@@ -23,7 +23,7 @@ export class OwNotificationsService {
 	// This directly share JS objects, without stringifying them, so it lets us do some
 	// fancy stuff
 	public async emitNewNotification(htmlMessage: Message) {
-		if ((await this.prefs.getPreferences()).hideAllNotifications) {
+		if (!(await this.prefs.getPreferences()).setAllNotifications) {
 			console.log('not showing any notification');
 			return;
 		}
@@ -43,7 +43,7 @@ export class OwNotificationsService {
 
 	/** @deprecated */
 	public async html(htmlMessage: Message) {
-		if ((await this.prefs.getPreferences()).hideAllNotifications) {
+		if (!(await this.prefs.getPreferences()).setAllNotifications) {
 			console.log('not showing any notification');
 			return;
 		}
