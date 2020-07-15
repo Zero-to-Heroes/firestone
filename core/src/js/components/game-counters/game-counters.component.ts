@@ -23,11 +23,11 @@ declare let amplitude;
 	styleUrls: [
 		'../../../css/global/components-global.scss',
 		`../../../css/global/cdk-overlay.scss`,
-		'../../../css/component/game-counters/game-counters.component.scss',
 		`../../../css/themes/decktracker-theme.scss`,
+		'../../../css/component/game-counters/game-counters.component.scss',
 	],
 	template: `
-		<div class="root overlay-container-parent" [activeTheme]="'decktracker'">
+		<div class="root overlay-container-parent" [ngClass]="{ 'isBgs': isBgs }" [activeTheme]="'decktracker'">
 			<galakrond-counter
 				*ngIf="activeCounter === 'galakrond'"
 				[state]="gameState"
@@ -49,6 +49,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	bgsGameState: BattlegroundsState;
 	activeCounter: 'galakrond' | 'pogo' | 'bgsPogo' | 'attack' | 'jadeGolem';
 	side: 'player' | 'opponent';
+	isBgs: boolean;
 
 	// private gameInfoUpdatedListener: (message: any) => void;
 	private windowId: string;
@@ -82,6 +83,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().battlegroundsStore;
 			this.stateSubscription = deckEventBus.subscribe(async newState => {
 				this.bgsGameState = newState;
+				this.isBgs = true;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -108,6 +110,13 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			}
 			this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
 		});
+	}
+
+	private isBgsState(state: GameState | BattlegroundsState): state is BattlegroundsState {
+		if ((state as BattlegroundsState).currentGame) {
+			return true;
+		}
+		return false;
 	}
 
 	private async restoreWindowPosition(): Promise<void> {

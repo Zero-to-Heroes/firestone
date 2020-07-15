@@ -16,7 +16,7 @@ declare let amplitude;
 	template: `
 		<div
 			class="counter jade-counter"
-			[helpTooltip]="(_side === 'player' ? 'Your ' : 'Your opponent ') + 'golem size is ' + golemSize"
+			[helpTooltip]="(_side === 'player' ? 'Your ' : 'Your opponent ') + 'Jade Golem size is ' + golemSize"
 		>
 			<img class="image" [src]="image" />
 			<div class="frame"></div>

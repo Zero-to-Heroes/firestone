@@ -32,7 +32,6 @@ export class PogoHopperCountersComponent {
 	pogoCount: number;
 	image: string;
 	_side: 'player' | 'opponent';
-
 	private _state: GameState | BattlegroundsState;
 
 	@Input() set state(value: GameState | BattlegroundsState) {

@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Sumana');
 
-:host() {
+.root {
 	margin-top: -30px;
+	--counter-border-color: #9fb6d7;
+	--counter-value-color: #303352;
+
+	&.isBgs {
+		--counter-border-color: #dfb3d3;
+		--counter-value-color: #5f0b47;
+		--tooltip-background-color: #5f0b47;
+		--tooltip-color: #dfb3d3;
+	}
 }
