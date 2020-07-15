@@ -96,7 +96,9 @@ export class ChallengeBuilderService {
 			case 'GAME_WON': return GameWonReq.create(rawReq);
 			case 'GAME_TIE': return GameTieReq.create(rawReq);
 			case 'GAME_MIN_TURNS': return GameMinTurnsReq.create(rawReq);
-			case 'GAME_MAX_TURNS': return GameMaxTurnsReq.create(rawReq);
+			case 'GAME_MAX_TURN': // deprecated, there for backward-compatibilty
+			case 'GAME_MAX_TURNS': 
+				return GameMaxTurnsReq.create(rawReq);
 			case 'PLAYER_HERO': return PlayerHeroReq.create(rawReq);
 			case 'PLAYER_CLASS': return PlayerClassReq.create(rawReq, this.cards);
 			case 'CORRECT_OPPONENT': return CorrectOpponentReq.create(rawReq);
