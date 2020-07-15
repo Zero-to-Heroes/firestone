@@ -34,12 +34,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[toggleFunction]="toggleOverlay"
 				></preference-toggle>
 				<preference-toggle
-					field="hideAllNotifications"
-					label="Turn off notifications"
-					tooltip="Turn it on if you don't want to see any notification (in the lower-right corner) anymore"
+					field="setAllNotifications"
+					label="Display notifications"
+					tooltip="Toggles global visibility of toast notifications [bottom-right]. When active, you can still configure notifications per game mode in the corresponding tabs."
 					advancedSetting
-					messageWhenToggleValue="Got it, we won't show you any notification anymore"
-					[valueToDisplayMessageOn]="true"
+					messageWhenToggleValue="Notifications now TURNED OFF globally."
+					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
 			</section>
 		</div>
