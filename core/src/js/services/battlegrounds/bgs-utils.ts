@@ -84,6 +84,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_042';
 		case 'TB_BaconShop_HERO_37':
 			return 'TB_BaconShop_HP_036';
+		case 'TB_BaconShop_HERO_38':
+			return 'TB_BaconShop_HP_038';
 		case 'TB_BaconShop_HERO_39':
 			return 'TB_BaconShop_HP_040';
 		case 'TB_BaconShop_HERO_40':
@@ -92,6 +94,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_046';
 		case 'TB_BaconShop_HERO_42':
 			return 'TB_BaconShop_HP_047';
+		case 'TB_BaconShop_HERO_43':
+			return 'TB_BaconShop_HP_048';
 		case 'TB_BaconShop_HERO_44':
 			return 'TB_BaconShop_HP_050';
 		case 'TB_BaconShop_HERO_45':
@@ -100,6 +104,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_051';
 		case 'TB_BaconShop_HERO_49':
 			return 'TB_BaconShop_HP_054';
+		case 'TB_BaconShop_HERO_50':
+			return 'TB_BaconShop_HP_077';
 		case 'TB_BaconShop_HERO_52':
 			return 'TB_BaconShop_HP_061';
 		case 'TB_BaconShop_HERO_53':
