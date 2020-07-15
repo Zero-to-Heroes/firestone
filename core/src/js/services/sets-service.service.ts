@@ -14,6 +14,7 @@ export class SetsService {
 		['dragons', 'Descent of Dragons'],
 		['yod', "Galakrond's Awakening"],
 		['black_temple', 'Ashes of Outland'],
+		['scholomance', 'Scholomance Academy'],
 	];
 
 	private readonly WILD_SETS = [
