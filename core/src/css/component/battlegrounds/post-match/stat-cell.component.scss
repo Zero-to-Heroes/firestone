@@ -1,0 +1,31 @@
+.entry {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 14%;
+	min-height: 60px;
+}
+
+.cell {
+	display: flex;
+
+	.label {
+		flex-grow: 1;
+	}
+
+	.value {
+		color: var(--default-text-color);
+	}
+
+	.record-icon {
+		display: none;
+		width: 40px;
+		height: 40px;
+		position: relative;
+		top: -5px;
+	}
+
+	&.new-record .record-icon {
+		display: inline-block;
+	}
+}

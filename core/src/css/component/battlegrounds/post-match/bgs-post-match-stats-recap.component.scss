@@ -10,6 +10,10 @@
 	font-size: 20px;
 	position: relative;
 
+	stat-cell:not(:last-child) {
+		border-bottom: 1px solid var(--color-3);
+	}
+
 	.entry {
 		display: flex;
 		align-items: center;
@@ -32,14 +36,16 @@
 			color: var(--default-text-color);
 		}
 
-		&.new-record .label::after {
-			content: 'New Record';
+		.record-icon {
+			display: none;
+			width: 40px;
+			height: 40px;
 			position: relative;
-			font-size: 12px;
-			color: var(--default-title-color);
-			transform: rotate(-18deg);
+			top: -5px;
+		}
+
+		&.new-record .record-icon {
 			display: inline-block;
-			left: -14px;
 		}
 	}
 

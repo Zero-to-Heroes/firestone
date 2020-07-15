@@ -29,78 +29,87 @@ declare let amplitude: any;
 					<div class="value">{{ ties }}</div>
 				</div>
 			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('totalDamageDealtToMinions') }">
-				<div class="label">Total dmg dealt (minions)</div>
-				<div class="value">{{ totalMinionsDamageDealt }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('totalDamageTakenByMinions') }">
-				<div class="label">Total dmg taken (minions)</div>
-				<div class="value">{{ totalMinionsDamageTaken }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('totalDamageDealtToHeroes') }">
-				<div class="label">Total dmg dealt (hero)</div>
-				<div class="value">{{ totalHeroDamageDealt }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('maxDamageDealtToHero') }">
-				<div class="label">Max dmg dealt (hero)</div>
-				<div class="value">{{ maxSingleTurnHeroDamageDealt }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('highestWinStreak') }">
-				<div class="label">Highest Win streak</div>
-				<div class="value">{{ winStreak }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('triplesCreated') }">
-				<div class="label">Triples created</div>
-				<div class="value">{{ triples }}</div>
-			</div>
-			<div
-				class="entry cell"
-				[ngClass]="{ 'new-record': isNewRecord('maxBoardStats') }"
-				helpTooltip="The maximum total stats (attack + health) of your board at the beginning of a battle"
-			>
-				<div class="label">Max board stats</div>
-				<div class="value">{{ maxBoardStats }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('coinsWasted') }">
-				<div class="label">Coins wasted</div>
-				<div class="value">{{ coinsWasted }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('rerolls') }">
-				<div class="label">Rerolls</div>
-				<div class="value">{{ rerolls }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('freezes') }">
-				<div class="label">Freezes</div>
-				<div class="value">{{ freezes }}</div>
-			</div>
+			<stat-cell
+				label="Total dmg dealt (minions)"
+				[value]="totalMinionsDamageDealt"
+				[isNewRecord]="isNewRecord('totalDamageDealtToMinions')"
+			></stat-cell>
+			<stat-cell
+				label="Total dmg taken (minions)"
+				[value]="totalMinionsDamageTaken"
+				[isNewRecord]="isNewRecord('totalDamageTakenByMinions')"
+			></stat-cell>
+			<stat-cell
+				label="Total dmg dealt (hero)"
+				[value]="totalHeroDamageDealt"
+				[isNewRecord]="isNewRecord('totalDamageDealtToHeroes')"
+			></stat-cell>
+			<stat-cell
+				label="Max dmg dealt (hero)"
+				[value]="maxSingleTurnHeroDamageDealt"
+				[isNewRecord]="isNewRecord('maxDamageDealtToHero')"
+			></stat-cell>
+			<stat-cell
+				label="Highest Win streak"
+				[value]="winStreak"
+				[isNewRecord]="isNewRecord('highestWinStreak')"
+			></stat-cell>
+			<stat-cell
+				label="Triples created"
+				[value]="triples"
+				[isNewRecord]="isNewRecord('triplesCreated')"
+			></stat-cell>
+			<stat-cell
+				label="Max board stats"
+				[value]="maxBoardStats"
+				[isNewRecord]="isNewRecord('maxBoardStats')"
+				tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
+			></stat-cell>
+			<stat-cell
+				label="Coins wasted"
+				[value]="coinsWasted"
+				[isNewRecord]="isNewRecord('coinsWasted')"
+			></stat-cell>
+			<stat-cell label="Rerolls" [value]="rerolls" [isNewRecord]="isNewRecord('rerolls')"></stat-cell>
+			<stat-cell label="Freezes" [value]="freezes" [isNewRecord]="isNewRecord('freezes')"></stat-cell>
 			<!-- hero power: only show if not a passive one -->
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('heroPowerUsed') }" *ngIf="heroPowers">
-				<div class="label">Hero Power used</div>
-				<div class="value">{{ heroPowers }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('minionsBought') }">
-				<div class="label">Minions bought</div>
-				<div class="value">{{ minionsBought }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('minionsSold') }">
-				<div class="label">Minions sold</div>
-				<div class="value">{{ minionsSold }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('enemyMinionsKilled') }">
-				<div class="label">Enemy Minions killed</div>
-				<div class="value">{{ minionsKilled }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('enemyHeroesKilled') }">
-				<div class="label">Enemy Heroes killed</div>
-				<div class="value">{{ heroesKilled }}</div>
-			</div>
-			<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord('percentageOfBattlesGoingFirst') }">
-				<div class="label" helpTooltip="Percentage of battles where you attacked first">
-					Battles going first
-				</div>
-				<div class="value">{{ percentageOfBattlesGoingFirst?.toFixed(1) }}%</div>
-			</div>
+			<stat-cell
+				*ngIf="heroPowers"
+				label="Hero Power used"
+				[value]="heroPowers"
+				[isNewRecord]="isNewRecord('heroPowerUsed')"
+			></stat-cell>
+			<stat-cell
+				label="Minions bought"
+				[value]="minionsBought"
+				[isNewRecord]="isNewRecord('minionsBought')"
+			></stat-cell>
+			<stat-cell
+				label="Minions sold"
+				[value]="minionsSold"
+				[isNewRecord]="isNewRecord('minionsSold')"
+			></stat-cell>
+			<stat-cell
+				label="Enemy Minions killed"
+				[value]="minionsKilled"
+				[isNewRecord]="isNewRecord('enemyMinionsKilled')"
+			></stat-cell>
+			<stat-cell
+				label="Enemy Heroes killed"
+				[value]="heroesKilled"
+				[isNewRecord]="isNewRecord('enemyHeroesKilled')"
+			></stat-cell>
+			<stat-cell
+				label="Battles going first"
+				[value]="percentageOfBattlesGoingFirst?.toFixed(1)"
+				[isNewRecord]="isNewRecord('percentageOfBattlesGoingFirst')"
+			></stat-cell>
 			<div class="entry cell battle-luck" [ngClass]="{ 'new-record': isNewRecord('battleLuck') }">
+				<div class="record-icon">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#new_record" />
+					</svg>
+				</div>
 				<div class="label">
 					Battle luck
 					<a
