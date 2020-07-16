@@ -41,7 +41,7 @@ export class ReplaysNotificationService {
 			app: 'replays',
 			theClass: 'remove-on-update',
 			clickToClose: true,
-			timeout: 15000,
+			timeout: 0,
 		} as Message);
 	}
 

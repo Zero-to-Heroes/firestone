@@ -313,7 +313,7 @@ export class PackMonitor {
 				</div>`,
 			notificationId: `cards-${Date.now()}-${dbCard.id}`,
 			cardId: dbCard.id,
-			timeout: 5000,
+			timeout: 0,
 		});
 	}
 
@@ -341,7 +341,7 @@ export class PackMonitor {
                             </svg>
                         </button>
                     </div>`,
-				timeout: 5000,
+				timeout: 0,
 				notificationId: `dust-${Date.now()}-${dust}-${numberOfCards}`,
 			});
 		}

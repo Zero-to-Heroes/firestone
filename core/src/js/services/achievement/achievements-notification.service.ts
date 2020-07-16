@@ -57,7 +57,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-no-record',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: notificationTimeout, // Used to close the notif if no record notif takes its place
+			timeout: 0, // Used to close the notif if no record notif takes its place
 			theClass: 'no-record',
 			clickToClose: recordingOff,
 		} as Message);
@@ -82,7 +82,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-pre-record',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: 30000, // We will manually remove this notification once the replay is recorded
+			timeout: 0, // We will manually remove this notification once the replay is recorded
 			theClass: 'pending',
 			clickToClose: false,
 		});
@@ -107,7 +107,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-confirm',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: 5000, // Used in case something goes wrong and this is the first notif that is being shown
+			timeout: 0, // Used in case something goes wrong and this is the first notif that is being shown
 			theClass: 'active',
 			clickToClose: true,
 		});

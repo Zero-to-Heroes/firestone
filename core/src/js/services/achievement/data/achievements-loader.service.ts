@@ -85,7 +85,7 @@ export class AchievementsLoaderService {
 		return new Promise<readonly RawAchievement[]>((resolve, reject) => {
 			console.log('[achievements-loader] retrieving local achievements', fileName);
 			this.http
-				.get(`./achievements/${fileName}.json`)
+				.get(`./achievements/${fileName}?v=3.json`)
 				.pipe(
 					timeout(500),
 					catchError((error, caught) => {
