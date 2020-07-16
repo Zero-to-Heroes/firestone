@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { captureEvent } from '@sentry/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
@@ -49,14 +48,14 @@ export class GameEvents {
 		if (this.plugin) {
 			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
-				if (
-					!this.hasSentToS3 &&
-					(first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1)
-				) {
-					console.info('sending logs to S3', first, second);
-					// Avoid race conditions
-					setTimeout(() => this.uploadLogsAndSendException(first, second), Math.random() * 10000);
-				}
+				// if (
+				// 	!this.hasSentToS3 &&
+				// 	(first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1)
+				// ) {
+				// 	console.info('sending logs to S3', first, second);
+				// 	// Avoid race conditions
+				// 	setTimeout(() => this.uploadLogsAndSendException(first, second), Math.random() * 10000);
+				// }
 			});
 			this.plugin.onGameEvent.addListener(gameEvent => {
 				this.dispatchGameEvent(JSON.parse(gameEvent));
@@ -1009,36 +1008,36 @@ export class GameEvents {
 		}
 	}
 
-	private async uploadLogsAndSendException(first, second) {
-		if (this.hasSentToS3) {
-			return;
-		}
+	// private async uploadLogsAndSendException(first, second) {
+	// 	if (this.hasSentToS3) {
+	// 		return;
+	// 	}
 
-		this.hasSentToS3 = true;
-		try {
-			const s3LogFileKey = await this.logService.uploadGameLogs();
-			const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
-			const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
-			// console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
-			const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
-			const firstoneLogsKey = await this.logService.uploadAppLogs();
-			captureEvent({
-				message: 'Exception while running plugin: ' + first,
-				extra: {
-					first: first,
-					firstProcessedLine:
-						fullLogsFromPlugin.indexOf('\n') !== -1
-							? fullLogsFromPlugin.split('\n')[0]
-							: fullLogsFromPlugin,
-					lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
-					logFileKey: s3LogFileKey,
-					pluginLogsFileKey: pluginLogsFileKey,
-					firestoneLogs: firstoneLogsKey,
-				},
-			});
-			// console.log('uploaded event to sentry');
-		} catch (e) {
-			console.error('Exception while uploading logs for troubleshooting', e);
-		}
-	}
+	// 	this.hasSentToS3 = true;
+	// 	try {
+	// 		const s3LogFileKey = await this.logService.uploadGameLogs();
+	// 		const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
+	// 		const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
+	// 		// console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
+	// 		const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
+	// 		const firstoneLogsKey = await this.logService.uploadAppLogs();
+	// 		captureEvent({
+	// 			message: 'Exception while running plugin: ' + first,
+	// 			extra: {
+	// 				first: first,
+	// 				firstProcessedLine:
+	// 					fullLogsFromPlugin.indexOf('\n') !== -1
+	// 						? fullLogsFromPlugin.split('\n')[0]
+	// 						: fullLogsFromPlugin,
+	// 				lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
+	// 				logFileKey: s3LogFileKey,
+	// 				pluginLogsFileKey: pluginLogsFileKey,
+	// 				firestoneLogs: firstoneLogsKey,
+	// 			},
+	// 		});
+	// 		// console.log('uploaded event to sentry');
+	// 	} catch (e) {
+	// 		console.error('Exception while uploading logs for troubleshooting', e);
+	// 	}
+	// }
 }
