@@ -79,6 +79,10 @@ export class AchievementRecordedProcessor implements Processor {
 				),
 			),
 		);
+		if (!globalCategory) {
+			console.warn('Could not find global category for', achievementId);
+			return globalCategories;
+		}
 		const achievementSet = globalCategory.achievementSets.find(set =>
 			set.achievements.some(achievement => achievement.completionSteps.some(step => step.id === achievementId)),
 		);
