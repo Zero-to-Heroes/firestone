@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "5.3.0",
+	"version": "5.3.1",
 	"scripts": {
 		"lint": "node --max_old_space_size=8000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=8000 ./node_modules/jest/bin/jest.js --colors",
@@ -31,7 +31,7 @@
 		"@firestone-hs/hs-replay-xml-parser": "0.0.51",
 		"@firestone-hs/reference-data": "^0.1.37",
 		"@firestone-hs/replay-parser": "^1.1.23",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.2",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.5",
 		"@sentry/browser": "^5.7.1",
 		"@sentry/integrations": "^5.7.1",
 		"@swimlane/ngx-charts": "^14.0.0",
