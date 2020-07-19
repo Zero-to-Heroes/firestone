@@ -323,7 +323,8 @@ export class BattlegroundsStoreService {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {
 				this.prefs.setTwitchAccessToken(undefined);
-				await this.twitch.sendExpiredTwitchTokenNotification();
+				// Don't send the notif, as it's already sent by game-state.service
+				// await this.twitch.sendExpiredTwitchTokenNotification();
 			} else {
 				result.push(state => this.twitch.emitBattlegroundsEvent(state));
 			}
