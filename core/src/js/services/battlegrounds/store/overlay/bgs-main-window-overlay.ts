@@ -65,7 +65,7 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 			this.closedByUser
 		) {
 			// console.log('[bgs-store] closing window', battlegroundsWindow, inGame, this.bgsActive, state.forceOpen);
-			await this.ow.hideWindow(windowId);
+			await this.ow.closeWindow(windowId);
 		}
 	}
 

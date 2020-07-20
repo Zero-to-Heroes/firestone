@@ -32,7 +32,7 @@ export class BgsSimulationOverlay implements BattlegroundsOverlay {
 				// console.log('[bgs-simulation-overlay] restored window', await this.ow.getWindowState(windowId));
 			}
 		} else if (!isWindowClosed(window.window_state_ex) && !isWindowClosed(window.stateEx)) {
-			await this.ow.hideWindow(windowId);
+			await this.ow.closeWindow(windowId);
 			// console.log('[bgs-simulation-overlay] hid window', await this.ow.getWindowState(windowId));
 		}
 	}

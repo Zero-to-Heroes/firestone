@@ -14,7 +14,7 @@ declare let amplitude;
 		`../../../css/themes/battlegrounds-theme.scss`,
 	],
 	template: `
-		<div class="bgs-banned-tribe" [helpTooltip]="tooltip">
+		<div class="bgs-banned-tribe" [helpTooltip]="tooltip" *ngIf="image">
 			<div class="background"></div>
 			<img class="icon" [src]="image" />
 			<img
@@ -30,6 +30,10 @@ export class BgsBannedTribeComponent {
 	tooltip: string;
 
 	@Input() set tribe(value: Race) {
+		if (!value) {
+			this.image = undefined;
+			return;
+		}
 		this.image = getTribeIcon(value);
 		this.tooltip = `${this.getTribeName(value)}s won't appear in this run`;
 	}

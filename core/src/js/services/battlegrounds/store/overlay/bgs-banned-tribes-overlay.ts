@@ -30,7 +30,7 @@ export class BgsBannedTribesOverlay implements BattlegroundsOverlay {
 			// console.log('[bgs-simulation-overlay] restored window', window);
 		} else if (!isWindowClosed(window.window_state_ex) && !isWindowClosed(window.stateEx)) {
 			// console.log('[bgs-simulation-overlay] closing window', window);
-			await this.ow.hideWindow(windowId);
+			await this.ow.closeWindow(windowId);
 		}
 	}
 

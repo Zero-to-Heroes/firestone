@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -31,7 +32,7 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
-	bannedTribes: readonly Race[];
+	bannedTribes: readonly Race[] = [];
 
 	private stateSubscription: Subscription;
 	private windowId: string;
@@ -44,11 +45,11 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().battlegroundsStore;
-		this.stateSubscription = deckEventBus.subscribe(async gameState => {
+		this.stateSubscription = deckEventBus.subscribe(async (gameState: BattlegroundsState) => {
 			// console.log('received state', gameState?.currentGame?.bannedRaces, event);
 			if (gameState?.currentGame?.bannedRaces !== this.bannedTribes) {
-				this.bannedTribes = gameState?.currentGame?.bannedRaces;
-				// console.log('setting banned tribes', this.bannedTribes);
+				this.bannedTribes = gameState?.currentGame?.bannedRaces || [];
+				console.log('setting banned tribes', this.bannedTribes);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
