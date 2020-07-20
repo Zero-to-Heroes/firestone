@@ -1,3 +1,5 @@
+import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
+import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBoard } from '../in-game/bgs-board';
 import { BgsTavernUpgrade } from '../in-game/bgs-tavern-upgrade';
@@ -22,7 +24,7 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
 	readonly totalStatsOverTurn: readonly NumericTurnInfo[];
 	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[];
-	readonly damageToEnemyHeroOverTurn: readonly NumericTurnInfo[];
+	readonly damageToEnemyHeroOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[];
 
 	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[];

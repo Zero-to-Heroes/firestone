@@ -41,11 +41,13 @@ declare let amplitude: any;
 			></stat-cell>
 			<stat-cell
 				label="Total dmg dealt (hero)"
+				helpTooltip="Doesn't include fights against the ghost"
 				[value]="totalHeroDamageDealt"
 				[isNewRecord]="isNewRecord('totalDamageDealtToHeroes')"
 			></stat-cell>
 			<stat-cell
 				label="Max dmg dealt (hero)"
+				helpTooltip="Doesn't include fights against the ghost"
 				[value]="maxSingleTurnHeroDamageDealt"
 				[isNewRecord]="isNewRecord('maxDamageDealtToHero')"
 			></stat-cell>
@@ -196,7 +198,9 @@ export class BgsPostMatchStatsRecapComponent {
 			.filter(cardId => cardId !== this._stats.player.cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageTaken[cardId])
 			.reduce((a, b) => a + b, 0);
-		const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn.map(info => info.value);
+		const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
+			.filter(info => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+			.map(info => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
 		this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero);
 		this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
 		this.triples = this._stats.player.tripleHistory.length;
