@@ -123,9 +123,7 @@ declare let amplitude: any;
 			</with-loading>
 			<div class="left empty" *ngIf="!_panel?.player"></div>
 			<div class="left" *ngIf="_panel?.player">
-				<div class="title">
-					Last Match Stats
-				</div>
+				<div class="title">Last Match Stats {{ mmr ? ' (' + mmr + ' mmr)' : '' }}</div>
 				<bgs-post-match-stats-recap [stats]="_panel" [game]="_game"></bgs-post-match-stats-recap>
 			</div>
 		</div>
@@ -147,6 +145,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	tabs: readonly BgsStatsFilterId[];
 	selectedTab: BgsStatsFilterId;
 	computing: boolean;
+	mmr: number;
 
 	loadingElapsed = 0;
 
@@ -159,6 +158,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			return;
 		}
 		this._game = value;
+		this.mmr = value ? value.mmrAtStart : undefined;
 	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {

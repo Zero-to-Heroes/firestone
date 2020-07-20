@@ -54,7 +54,7 @@ declare let amplitude: any;
 			</div>
 			<div class="left">
 				<div class="title" helpTooltip="Recap of all the encounters you had with the other players">
-					Score Board
+					Score Board {{ mmr ? ' (' + mmr + ' mmr)' : '' }}
 				</div>
 				<bgs-hero-face-offs
 					[faceOffs]="faceOffs"
@@ -75,6 +75,7 @@ export class BgsNextOpponentOverviewComponent {
 	nextBattle: BattleResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	nextOpponentCardId: string;
+	mmr: number;
 
 	@Input() enableSimulation: boolean;
 
@@ -95,6 +96,7 @@ export class BgsNextOpponentOverviewComponent {
 
 	@Input() set game(value: BgsGame) {
 		this._game = value;
+		this.mmr = value ? value.mmrAtStart : undefined;
 		this.updateInfo();
 	}
 
