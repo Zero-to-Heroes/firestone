@@ -29,33 +29,13 @@ export class MatchMetadataParser implements EventParser {
 		const stats: StatsState = gameEvent.additionalData?.stats;
 		const format = gameEvent.additionalData.metaData.FormatType as number;
 		const convertedFormat = MatchMetadataParser.convertFormat(format);
-		const deckStats: readonly GameStat[] =
-			!currentState.playerDeck?.deckstring || !stats?.gameStats
-				? []
-				: stats.gameStats.stats
-						.filter(stat => stat.gameMode === 'ranked')
-						.filter(stat => stat.playerDecklist === currentState.playerDeck?.deckstring)
-						.filter(stat => stat.gameFormat === convertedFormat) || [];
-		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
-		console.log('match metadata', deckStats, convertedFormat, format, stats);
-		let matchupStatsRecap = currentState.matchupStatsRecap;
-		if (currentState?.opponentDeck?.hero?.playerClass) {
-			const statsAgainstOpponent = currentState.deckStats.filter(
-				stat => stat.opponentClass === currentState?.opponentDeck?.hero.playerClass,
-			);
-			matchupStatsRecap = StatsRecap.from(
-				statsAgainstOpponent,
-				convertedFormat,
-				currentState?.opponentDeck?.hero.playerClass,
-			);
-			console.log('opponent present', matchupStatsRecap, currentState);
-		}
 
 		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
 		if (noDeckMode) {
 			console.log('[game-start-parser] no deck mode is active, not loading current deck');
 		}
 		console.log('[game-start-parser] will get current deck');
+		// We don't always have a deckstring here, eg when we read the deck from memory
 		const currentDeck = noDeckMode
 			? undefined
 			: await this.deckParser.getCurrentDeck(
@@ -68,7 +48,40 @@ export class MatchMetadataParser implements EventParser {
 			currentDeck && currentDeck.name,
 			currentDeck,
 		);
-		// We don't always have a deckstring here, eg when we read the deck from memory
+
+		const deckStats: readonly GameStat[] =
+			!currentDeck.deckstring || !currentState.playerDeck?.deckstring || !stats?.gameStats
+				? []
+				: stats.gameStats.stats
+						.filter(stat => stat.gameMode === 'ranked')
+						.filter(
+							stat =>
+								stat.playerDecklist === currentState.playerDeck?.deckstring ||
+								stat.playerDecklist === currentDeck.deckstring,
+						)
+						.filter(stat => stat.gameFormat === convertedFormat) || [];
+		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
+		console.log(
+			'match metadata',
+			deckStats,
+			convertedFormat,
+			format,
+			currentState.playerDeck?.deckstring,
+			currentDeck.deckstring,
+			stats?.gameStats,
+		);
+		let matchupStatsRecap = currentState.matchupStatsRecap;
+		if (currentState?.opponentDeck?.hero?.playerClass) {
+			const statsAgainstOpponent = currentState.deckStats.filter(
+				stat => stat.opponentClass === currentState?.opponentDeck?.hero.playerClass,
+			);
+			matchupStatsRecap = StatsRecap.from(
+				statsAgainstOpponent,
+				convertedFormat,
+				currentState?.opponentDeck?.hero.playerClass,
+			);
+			console.log('opponent present', matchupStatsRecap, currentState);
+		}
 		const deckList: readonly DeckCard[] = this.deckParser.buildDeck(currentDeck);
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
 		const opponentDeck: readonly DeckCard[] = this.deckParser.buildEmptyDeckList(deckList.length);
