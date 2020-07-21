@@ -7,12 +7,12 @@ import {
 	OnInit,
 	ViewRef,
 } from '@angular/core';
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { BattleResult } from '../in-game/battle-result';
 
 declare let amplitude: any;
 
@@ -44,7 +44,7 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
-	nextBattle: BattleResult;
+	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 
 	private windowId: string;

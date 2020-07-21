@@ -10,6 +10,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 				<img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" />
 				<div class="value">{{ _health }}</div>
 			</div>
+			<div class="rating" *ngIf="rating != null">
+				<div class="value">{{ rating?.toLocaleString('en-US') }}</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,6 +21,8 @@ export class BgsHeroPortraitComponent {
 	_icon: string;
 	_health: number;
 	_maxHealth: number;
+
+	@Input() rating: number;
 
 	@Input() set icon(value: string) {
 		if (value === this._icon) {

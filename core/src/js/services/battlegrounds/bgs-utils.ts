@@ -4,7 +4,7 @@ export const getTribeIcon = (tribe: string | Race): string => {
 	let referenceCardId: string;
 	switch (tribe) {
 		case 'Mech':
-		case Race.MECHANICAL:
+		case Race.MECH:
 			referenceCardId = CardIds.Collectible.Rogue.IronSensei;
 			break;
 		case 'Beast':

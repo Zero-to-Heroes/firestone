@@ -66,6 +66,7 @@ declare let amplitude: any;
 								[cardTooltip]="heroPowerCardId"
 								[cardTooltipText]="name"
 								[cardTooltipClass]="'bgs-hero-power'"
+								[rating]="mmr"
 							></bgs-hero-portrait>
 							<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 						</div>
@@ -123,7 +124,7 @@ declare let amplitude: any;
 			</with-loading>
 			<div class="left empty" *ngIf="!_panel?.player"></div>
 			<div class="left" *ngIf="_panel?.player">
-				<div class="title">Last Match Stats {{ mmr ? ' (' + mmr + ' mmr)' : '' }}</div>
+				<div class="title">Last Match Stats</div>
 				<bgs-post-match-stats-recap [stats]="_panel" [game]="_game"></bgs-post-match-stats-recap>
 			</div>
 		</div>

@@ -8,10 +8,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
-import { BattleResult } from './battle-result';
 
 declare let amplitude: any;
 
@@ -36,6 +36,7 @@ declare let amplitude: any;
 					[cardTooltip]="heroPowerCardId"
 					[cardTooltipText]="name"
 					[cardTooltipClass]="'bgs-hero-power'"
+					[rating]="rating"
 				></bgs-hero-portrait>
 				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 			</div>
@@ -86,10 +87,11 @@ export class BgsOpponentOverviewBigComponent {
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 
+	@Input() rating: number;
 	@Input() debug: boolean;
 	@Input() enableSimulation: boolean;
 	@Input() currentTurn: number;
-	@Input() nextBattle: BattleResult;
+	@Input() nextBattle: SimulationResult;
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	@Input() maxBoardHeight = 1;
 

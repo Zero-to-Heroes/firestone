@@ -7,11 +7,11 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsFaceOff } from '../../../models/battlegrounds/bgs-face-off';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
-import { BattleResult } from './battle-result';
 
 declare let amplitude: any;
 
@@ -40,6 +40,7 @@ declare let amplitude: any;
 					[enableSimulation]="enableSimulation"
 					[nextBattle]="nextBattle"
 					[battleSimulationStatus]="battleSimulationStatus"
+					[rating]="mmr"
 				></bgs-opponent-overview-big>
 				<div class="other-opponents">
 					<div class="subtitle">Other opponents</div>
@@ -54,7 +55,7 @@ declare let amplitude: any;
 			</div>
 			<div class="left">
 				<div class="title" helpTooltip="Recap of all the encounters you had with the other players">
-					Score Board {{ mmr ? ' (' + mmr + ' mmr)' : '' }}
+					Score Board
 				</div>
 				<bgs-hero-face-offs
 					[faceOffs]="faceOffs"
@@ -72,7 +73,7 @@ export class BgsNextOpponentOverviewComponent {
 	otherOpponents: readonly BgsPlayer[];
 	faceOffs: readonly BgsFaceOff[];
 	currentTurn: number;
-	nextBattle: BattleResult;
+	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	nextOpponentCardId: string;
 	mmr: number;

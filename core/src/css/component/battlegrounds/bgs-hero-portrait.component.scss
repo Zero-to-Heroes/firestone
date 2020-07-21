@@ -2,8 +2,35 @@
 	display: flex;
 }
 
+.hero-portrait {
+	position: relative;
+}
+
 .portrait {
 	width: 100%;
+}
+
+.rating {
+	background: url(https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rating_banner.png);
+	position: absolute;
+	width: 89%;
+	height: 39%;
+	background-size: contain;
+	background-repeat: no-repeat;
+	bottom: -25%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.value {
+		font-family: Passion One;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 20px;
+		text-align: center;
+		color: var(--color-1);
+		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+	}
 }
 
 .health {
@@ -37,5 +64,11 @@
 
 	&.damaged {
 		color: #ff4747;
+	}
+}
+
+@media (min-width: 1450px) {
+	.rating .value {
+		font-size: 30px;
 	}
 }

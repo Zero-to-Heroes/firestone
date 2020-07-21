@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsLocalStorageService } from '../../services/achievement/achievements-local-storage.service';
@@ -46,6 +47,7 @@ export class SharedServicesModule {
 				PreferencesService,
 				S3FileUploadService,
 				SimpleIOService,
+				AllCardsService,
 
 				AchievementHistoryStorageService,
 				AchievementsRepository,
