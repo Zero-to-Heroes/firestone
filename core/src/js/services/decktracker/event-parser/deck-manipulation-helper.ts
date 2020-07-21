@@ -265,6 +265,7 @@ export class DeckManipulationHelper {
 		if (cardInHand && !cardInHand.cardId) {
 			const newCard = cardInHand.update({
 				cardId: cardId,
+				cardName: this.allCards.getCard(cardId)?.name,
 			} as DeckCard);
 			const newHand = this.replaceCardInZone(deck.hand, newCard);
 			return Object.assign(new DeckState(), deck, {
