@@ -9,7 +9,10 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<{ localPlay
 			ow,
 			'getMatchInfo',
 			() => mindVision.getMatchInfo(),
-			matchInfo => !matchInfo,
+			matchInfo =>
+				!matchInfo ||
+				!matchInfo.LocalPlayer?.Standard?.LeagueId ||
+				matchInfo.LocalPlayer.Standard.LeagueId === -1,
 			matchInfo => {
 				const localPlayer = this.extractPlayerInfo(matchInfo.LocalPlayer);
 				const opponent = this.extractPlayerInfo(matchInfo.OpposingPlayer);
