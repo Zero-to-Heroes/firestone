@@ -1,5 +1,4 @@
 import { CardType } from '@firestone-hs/reference-data';
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
@@ -7,7 +6,7 @@ import { QualifierType } from './_qualifier.type';
 import { Requirement } from './_requirement';
 
 export class SameMinionAttackReq implements Requirement {
-	private isCardPlayed: boolean;
+	private hasMinionAttacked: boolean;
 	private attackCounts: { [entityId: number]: number };
 
 	constructor(
@@ -27,16 +26,16 @@ export class SameMinionAttackReq implements Requirement {
 
 	reset(): void {
 		this.attackCounts = {};
-		this.isCardPlayed = undefined;
+		this.hasMinionAttacked = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.attackCounts = {};
-		this.isCardPlayed = undefined;
+		this.hasMinionAttacked = undefined;
 	}
 
 	isCompleted(): boolean {
-		return this.isCardPlayed;
+		return this.hasMinionAttacked;
 	}
 
 	test(gameEvent: GameEvent): void {
@@ -52,23 +51,20 @@ export class SameMinionAttackReq implements Requirement {
 		const entityId = gameEvent.additionalData.attackerEntityId;
 		const controllerId = gameEvent.additionalData.attackerControllerId;
 		const card = this.cards.getCard(cardId);
-		// console.log('handling card played event', cardId, controllerId, localPlayer.PlayerId);
+		// console.log('handling attack event', gameEvent, card);
 		if (
 			controllerId === localPlayer.PlayerId &&
 			card.type &&
 			CardType[card.type.toUpperCase()] === CardType.MINION
 		) {
-			// console.log('handling for attribute', attributeValue, this.attribute);
+			// console.log('valid minion attack');
 			this.attackCounts[entityId] = (this.attackCounts[entityId] || 0) + 1;
-			// console.log('playCounts', this.playCounts, this.targetQuantity);
-			this.isCardPlayed = Object.keys(this.attackCounts).some(
+			// console.log('attack count is', entityId, this.attackCounts);
+			this.hasMinionAttacked = Object.keys(this.attackCounts).some(
 				// TODO: only support "AT_LEAST", implicitely, for now
 				entityId => this.attackCounts[entityId] >= this.targetQuantity,
 			);
+			// console.log('hasMinionAttacked', this.hasMinionAttacked);
 		}
-	}
-
-	private hasEcho(card: ReferenceCard): boolean {
-		return card.mechanics && card.mechanics.includes('ECHO');
 	}
 }
