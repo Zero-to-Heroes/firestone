@@ -123,6 +123,7 @@ export class BgsBoardComponent implements AfterViewInit {
 	private previousBoardWidth: number;
 	private previousBoardHeight: number;
 	private inputEntities: readonly Entity[];
+	private resizeTimeout;
 
 	constructor(
 		private readonly el: ElementRef,
@@ -163,6 +164,9 @@ export class BgsBoardComponent implements AfterViewInit {
 
 	@HostListener('window:resize')
 	onResize() {
+		if (this.resizeTimeout) {
+			clearTimeout(this.resizeTimeout);
+		}
 		// console.log('on window resize');
 		const boardContainer = this.el.nativeElement.querySelector('.board');
 		if (!boardContainer) {
@@ -170,7 +174,7 @@ export class BgsBoardComponent implements AfterViewInit {
 				if (this.debug) {
 					console.log('no  board container, retrying', this.el.nativeElement);
 				}
-				setTimeout(() => this.onResize(), 300);
+				this.resizeTimeout = setTimeout(() => this.onResize(), 300);
 				return;
 			}
 			if (this.debug) {
@@ -186,7 +190,8 @@ export class BgsBoardComponent implements AfterViewInit {
 			if (this.debug) {
 				console.log('no dimensions, retrying', rect, boardContainer);
 			}
-			setTimeout(() => this.onResize(), 1500);
+
+			this.resizeTimeout = setTimeout(() => this.onResize(), 1500);
 			return;
 		}
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
@@ -200,7 +205,7 @@ export class BgsBoardComponent implements AfterViewInit {
 					this._entities,
 				);
 			}
-			setTimeout(() => this.onResize(), 300);
+			this.resizeTimeout = setTimeout(() => this.onResize(), 300);
 			return;
 		}
 		// We have to resize even though we have the same number of entities, because the resize is
@@ -238,7 +243,7 @@ export class BgsBoardComponent implements AfterViewInit {
 		}
 		this.previousBoardWidth = rect.width;
 		this.previousBoardHeight = rect.height;
-		setTimeout(() => this.onResize(), 300);
+		this.resizeTimeout = setTimeout(() => this.onResize(), 300);
 	}
 
 	isOption(entity: Entity): boolean {
