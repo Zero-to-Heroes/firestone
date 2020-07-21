@@ -7,6 +7,7 @@ import {
 	ElementRef,
 	HostListener,
 	Input,
+	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -71,7 +72,7 @@ import { normalizeCardId } from './post-match/card-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBoardComponent implements AfterViewInit {
+export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	_entities: readonly Entity[];
 	_enchantmentCandidates: readonly Entity[];
 	_options: readonly number[];
@@ -142,6 +143,12 @@ export class BgsBoardComponent implements AfterViewInit {
 			// console.log('detected window resize');
 			this.onResize();
 		});
+	}
+
+	ngOnDestroy() {
+		if (this.resizeTimeout) {
+			clearTimeout(this.resizeTimeout);
+		}
 	}
 
 	showTooltipWarning(entity: Entity): boolean {
