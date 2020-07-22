@@ -157,6 +157,10 @@ export class OverwolfService {
 		overwolf.utils.openUrlInOverwolfBrowser(url);
 	}
 
+	public openUrlInDefaultBrowser(url: string) {
+		overwolf.utils.openUrlInDefaultBrowser(url);
+	}
+
 	public addSessionInfoChangedLisetner(callback) {
 		overwolf.egs.onSessionInfoChanged.addListener(callback);
 	}

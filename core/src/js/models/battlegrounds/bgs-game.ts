@@ -2,8 +2,8 @@ import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
-import { BgsBattleSimulationResult } from './bgs-battle-simulation-result';
 import { BgsFaceOff } from './bgs-face-off';
 import { BgsPlayer } from './bgs-player';
 
@@ -13,7 +13,7 @@ export class BgsGame {
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 	readonly battleInfo: BgsBattleInfo;
 	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
-	readonly battleResult: BgsBattleSimulationResult;
+	readonly battleResult: SimulationResult;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly replayXml: string;
 	readonly mmrAtStart: number;

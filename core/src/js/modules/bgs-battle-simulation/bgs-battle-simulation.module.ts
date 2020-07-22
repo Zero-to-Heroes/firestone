@@ -13,6 +13,7 @@ import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BgsSimulationOverlayComponent } from '../../components/battlegrounds/simulation-overlay/bgs-simulation-overlay.component';
+import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
@@ -56,6 +57,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	declarations: [BgsSimulationOverlayComponent],
 	entryComponents: [BgsSimulationOverlayComponent],
 	bootstrap: [BgsSimulationOverlayComponent],
-	providers: [],
+	providers: [BgsBattleSimulationService],
 })
 export class BgsBattleSimulationModule {}

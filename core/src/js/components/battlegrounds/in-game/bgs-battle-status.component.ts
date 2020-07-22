@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BattleResult } from './battle-result';
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 declare let amplitude: any;
 
@@ -21,7 +24,7 @@ declare let amplitude: any;
 						>
 							Win
 						</div>
-						<div class="value">
+						<div class="value" (dblclick)="viewSimulationResult('win')">
 							{{ battleSimulationResultWin || '--' }}
 						</div>
 					</div>
@@ -32,7 +35,7 @@ declare let amplitude: any;
 						>
 							Tie
 						</div>
-						<div class="value">
+						<div class="value" (dblclick)="viewSimulationResult('tie')">
 							{{ battleSimulationResultTie || '--' }}
 						</div>
 					</div>
@@ -43,7 +46,7 @@ declare let amplitude: any;
 						>
 							Loss
 						</div>
-						<div class="value">
+						<div class="value" (dblclick)="viewSimulationResult('loss')">
 							{{ battleSimulationResultLose || '--' }}
 						</div>
 					</div>
@@ -76,6 +79,9 @@ export class BgsBattleStatusComponent {
 	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
 	battleSimulationResultLose: string;
+	winSimulationSample: readonly GameSample[];
+	tieSimulationSample: readonly GameSample[];
+	loseSimulationSample: readonly GameSample[];
 	temporaryBattleTooltip: string;
 	damageWon: string;
 	damageLost: string;
@@ -99,6 +105,9 @@ export class BgsBattleStatusComponent {
 			this.battleSimulationResultWin = '--';
 			this.battleSimulationResultTie = '--';
 			this.battleSimulationResultLose = '--';
+			this.winSimulationSample = [];
+			this.tieSimulationSample = [];
+			this.loseSimulationSample = [];
 			this.damageWon = null;
 			this.damageLost = null;
 		} else if (value === 'waiting-for-result') {
@@ -119,17 +128,20 @@ export class BgsBattleStatusComponent {
 		}
 	}
 
-	@Input() set nextBattle(value: BattleResult) {
+	@Input() set nextBattle(value: SimulationResult) {
 		if (value === this._previousBattle) {
 			// console.log('not setting next battle', value, this._previousBattle);
 			return;
 		}
 		this._previousBattle = value;
-		// console.log('setting next battle', value);
+		console.log('setting next battle', value);
 		if (value?.wonPercent != null) {
 			this.battleSimulationResultWin = value.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = value.tiedPercent.toFixed(1) + '%';
 			this.battleSimulationResultLose = value.lostPercent.toFixed(1) + '%';
+			this.winSimulationSample = value.outcomeSamples.won;
+			this.tieSimulationSample = value.outcomeSamples.tied;
+			this.loseSimulationSample = value.outcomeSamples.lost;
 			this.damageWon = value.averageDamageWon?.toFixed(1);
 			this.damageLost = value.averageDamageLost?.toFixed(1);
 		} else {
@@ -137,9 +149,44 @@ export class BgsBattleStatusComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly bgsSim: BgsBattleSimulationService,
+	) {}
 
 	ngAfterViewInit() {
 		// console.log('after battle status init');
+	}
+
+	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
+		console.log('viewing simulation result', category);
+		const simulationSample: GameSample = this.pickSimulationResult(category);
+		console.log('sim sample', simulationSample);
+		if (!simulationSample) {
+			return;
+		}
+
+		const id = await this.bgsSim.getIdForSimulationSample(simulationSample);
+		if (id) {
+			this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
+		}
+	}
+
+	private pickSimulationResult(category: 'win' | 'tie' | 'loss') {
+		switch (category) {
+			case 'win':
+				return this.winSimulationSample && this.winSimulationSample.length > 0
+					? this.winSimulationSample[0]
+					: null;
+			case 'tie':
+				return this.tieSimulationSample && this.tieSimulationSample.length > 0
+					? this.tieSimulationSample[0]
+					: null;
+			case 'loss':
+				return this.loseSimulationSample && this.loseSimulationSample.length > 0
+					? this.loseSimulationSample[0]
+					: null;
+		}
 	}
 }

@@ -35,6 +35,7 @@ import { BgsPostMatchStatsRecapComponent } from '../../components/battlegrounds/
 import { BgsPostMatchStatsComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats.component';
 import { StatCellComponent } from '../../components/battlegrounds/post-match/stat-cell.component';
 import { AdService } from '../../services/ad.service';
+import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
@@ -107,6 +108,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	],
 	entryComponents: [BgsHeroSelectionTooltipComponent, BgsCardTooltipComponent],
 	bootstrap: [BattlegroundsComponent],
-	providers: [AdService],
+	providers: [AdService, BgsBattleSimulationService],
 })
 export class BattlegroundsModule {}
