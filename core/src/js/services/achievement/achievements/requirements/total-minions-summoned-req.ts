@@ -1,3 +1,4 @@
+import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
@@ -41,7 +42,7 @@ export class TotalMinionsSummonedReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.MINION_SUMMONED) {
+		if (gameEvent.type === GameEvent.MINION_SUMMONED || gameEvent.type === GameEvent.CARD_PLAYED) {
 			this.detectCardPlayedEvent(gameEvent);
 			return;
 		}
@@ -52,7 +53,7 @@ export class TotalMinionsSummonedReq implements Requirement {
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const card = this.cards.getCard(cardId);
-		if (controllerId === localPlayer.PlayerId) {
+		if (controllerId === localPlayer.PlayerId && CardType[card.type?.toUpperCase()] === CardType.MINION) {
 			this.summonCount = (this.summonCount || 0) + 1;
 		}
 	}
