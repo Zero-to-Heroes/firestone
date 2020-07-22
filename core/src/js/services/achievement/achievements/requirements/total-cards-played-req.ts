@@ -49,7 +49,11 @@ export class TotalCardsPlayedReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.CARD_PLAYED) {
+		if (
+			gameEvent.type === GameEvent.CARD_PLAYED ||
+			gameEvent.type === GameEvent.SECRET_PLAYED ||
+			gameEvent.type === GameEvent.SECRET_PLAYED_FROM_DECK
+		) {
 			this.detectCardPlayedEvent(gameEvent);
 			return;
 		}
@@ -60,15 +64,22 @@ export class TotalCardsPlayedReq implements Requirement {
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const card = this.cards.getCard(cardId);
+		// if (this.cardType === 'SECRET') {
+		// 	console.log('handling card played event', gameEvent, card);
+		// }
 		if (controllerId === localPlayer.PlayerId && this.getCardType(card) === this.cardType) {
-			// console.log(
-			// 	'handling card played event',
-			// 	cardId,
-			// 	this.getCardType(card),
-			// 	controllerId,
-			// 	localPlayer.PlayerId,
-			// );
 			this.playCounts++;
+			// if (this.cardType === 'SECRET') {
+			// 	console.log(
+			// 		'handling card played event',
+			// 		cardId,
+			// 		this.getCardType(card),
+			// 		card,
+			// 		controllerId,
+			// 		localPlayer.PlayerId,
+			// 		this.playCounts,
+			// 	);
+			// }
 		}
 	}
 
