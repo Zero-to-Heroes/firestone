@@ -39,7 +39,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		if (gameEvent.type === GameEvent.SECRET_TRIGGERED) {
 			this.counterSpellTriggered = cardId === CardIds.Collectible.Mage.Counterspell;
-			console.warn('counterspell triggered', this.counterSpellTriggered);
+			// console.warn('counterspell triggered', this.counterSpellTriggered);
 			return currentState;
 		}
 
