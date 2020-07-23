@@ -35,7 +35,28 @@ export class BgsBannedTribeComponent {
 			return;
 		}
 		this.image = getTribeIcon(value);
-		this.tooltip = `${this.getTribeName(value)}s won't appear in this run`;
+		const exceptionCards = this.getExceptions(value);
+		const exceptions =
+			exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
+		this.tooltip = `${this.getTribeName(value)}s won't appear in this run. ${exceptions}`;
+	}
+
+	private getExceptions(value: Race): string[] {
+		switch (value) {
+			case Race.BEAST:
+				return ['Megasaur'];
+			case Race.DEMON:
+				return [];
+			case Race.DRAGON:
+				return [];
+			case Race.MECH:
+				return ['Zoobot'];
+			case Race.MURLOC:
+				return [];
+			case Race.PIRATE:
+				return [];
+		}
+		return [];
 	}
 
 	private getTribeName(value: Race): string {
