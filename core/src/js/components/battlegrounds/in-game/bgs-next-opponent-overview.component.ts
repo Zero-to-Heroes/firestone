@@ -40,7 +40,6 @@ declare let amplitude: any;
 					[enableSimulation]="enableSimulation"
 					[nextBattle]="nextBattle"
 					[battleSimulationStatus]="battleSimulationStatus"
-					[rating]="mmr"
 				></bgs-opponent-overview-big>
 				<div class="other-opponents">
 					<div class="subtitle">Other opponents</div>
