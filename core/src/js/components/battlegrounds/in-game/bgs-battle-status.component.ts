@@ -169,6 +169,9 @@ export class BgsBattleStatusComponent {
 
 		const id = await this.bgsSim.getIdForSimulationSample(simulationSample);
 		if (id) {
+			amplitude.getInstance().logEvent('bgsSimulation', {
+				'bgsSimulationId': id,
+			});
 			this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
 		}
 	}
