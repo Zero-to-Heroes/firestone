@@ -283,6 +283,47 @@
 				"start_position": { "top": 500, "left": 600 },
 				"in_game_only": true
 			},
+			"CounterPlayerCthun": {
+				"file": "Files/counter_player_cthun.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterOpponentCthun": {
+				"file": "Files/counter_opponent_cthun.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterPlayerFatigue": {
+				"file": "Files/counter_player_fatigue.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterOpponentFatigue": {
+				"file": "Files/counter_opponent_fatigue.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+
 			"BgsCounterPlayerPogo": {
 				"file": "Files/bgs_counter_player_pogo.html",
 				"transparent": true,

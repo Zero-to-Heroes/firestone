@@ -32,6 +32,10 @@ export class OverwolfService {
 	public static COUNTER_PLAYER_JADE_WINDOW = 'CounterPlayerJadeGolem';
 	public static COUNTER_OPPONENT_POGO_WINDOW = 'CounterOpponentPogo';
 	public static COUNTER_OPPONENT_JADE_WINDOW = 'CounterOpponentJadeGolem';
+	public static COUNTER_PLAYER_CTHUN_WINDOW = 'CounterPlayerCthun';
+	public static COUNTER_OPPONENT_CTHUN_WINDOW = 'CounterOpponentCthun';
+	public static COUNTER_PLAYER_FATIGUE_WINDOW = 'CounterPlayerFatigue';
+	public static COUNTER_OPPONENT_FATIGUE_WINDOW = 'CounterOpponentFatigue';
 	public static COUNTER_PLAYER_ATTACK_WINDOW = 'CounterPlayerAttack';
 	public static COUNTER_OPPONENT_ATTACK_WINDOW = 'CounterOpponentAttack';
 	public static BGS_COUNTER_PLAYER_POGO_WINDOW = 'BgsCounterPlayerPogo';

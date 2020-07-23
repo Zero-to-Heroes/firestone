@@ -10,6 +10,8 @@ import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AttackCountersComponent } from '../../components/game-counters/attack-counter.component';
+import { CthunCounterComponent } from '../../components/game-counters/cthun-counter.component';
+import { FatigueCounterComponent } from '../../components/game-counters/fatigue-counter.component';
 import { GalakrondCountersComponent } from '../../components/game-counters/galakrond-counter.component';
 import { GameCountersComponent } from '../../components/game-counters/game-counters.component';
 import { JadeCounterComponent } from '../../components/game-counters/jade-counter.component';
@@ -62,6 +64,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		PogoHopperCountersComponent,
 		JadeCounterComponent,
 		AttackCountersComponent,
+		FatigueCounterComponent,
+		CthunCounterComponent,
 	],
 	bootstrap: [GameCountersComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],

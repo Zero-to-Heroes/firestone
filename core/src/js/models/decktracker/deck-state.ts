@@ -53,6 +53,7 @@ export class DeckState {
 	readonly cthunSize: number = 0;
 	readonly jadeGolemSize: number = 0;
 	readonly pogoHopperSize: number = 0;
+	readonly fatigue: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
@@ -87,6 +88,20 @@ export class DeckState {
 						allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
 			);
 		return isGalakrond;
+	}
+
+	public containsCthun(allCards: AllCardsService): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const isCthun = allCardsInDeck
+			.filter(card => card.cardId)
+			.some(
+				card =>
+					card.cardId === CardIds.Collectible.Neutral.Cthun ||
+					(allCards &&
+						allCards.getCard(card.cardId)?.text &&
+						allCards.getCard(card.cardId)?.text?.indexOf("C'Thun") !== -1),
+			);
+		return isCthun;
 	}
 
 	public containJade(allCards?: AllCardsService): boolean {

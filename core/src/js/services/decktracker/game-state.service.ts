@@ -36,12 +36,14 @@ import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand
 import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
+import { CthunParser } from './event-parser/cthun-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
 import { EventParser } from './event-parser/event-parser';
+import { FatigueParser } from './event-parser/fatigue-parser';
 import { FirstPlayerParser } from './event-parser/first-player-parser';
 import { GalakrondInvokedParser } from './event-parser/galakrond-invoked-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
@@ -76,10 +78,14 @@ import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { AttackOpponentCounterOverlayHandler } from './overlays/counter-opponent-attack-handler';
+import { CthunOpponentCounterOverlayHandler } from './overlays/counter-opponent-cthun-handler';
+import { FatigueOpponentCounterOverlayHandler } from './overlays/counter-opponent-fatigue-handler';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
 import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-opponent-jade-golem-handler';
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
 import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
+import { CthunPlayerCounterOverlayHandler } from './overlays/counter-player-cthun-handler';
+import { FatiguePlayerCounterOverlayHandler } from './overlays/counter-player-fatigue-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
 import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
 import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
@@ -417,6 +423,10 @@ export class GameStateService {
 			new AttackOpponentCounterOverlayHandler(this.ow, this.allCards),
 			new JadeGolemPlayerCounterOverlayHandler(this.ow, this.allCards),
 			new JadeGolemOpponentCounterOverlayHandler(this.ow, this.allCards),
+			new CthunPlayerCounterOverlayHandler(this.ow, this.allCards),
+			new CthunOpponentCounterOverlayHandler(this.ow, this.allCards),
+			new FatiguePlayerCounterOverlayHandler(this.ow, this.allCards),
+			new FatigueOpponentCounterOverlayHandler(this.ow, this.allCards),
 		];
 	}
 
@@ -473,8 +483,10 @@ export class GameStateService {
 			new GalakrondInvokedParser(),
 			new PogoPlayedParser(),
 			new JadeGolemParser(),
+			new CthunParser(),
 			new CardBuffedInHandParser(this.helper, this.allCards),
 			new MinionGoDormantParser(this.helper),
+			new FatigueParser(),
 		];
 	}
 

@@ -91,6 +91,14 @@ export class Preferences {
 	readonly playerAttackCounterWidgetPosition: { left: number; top: number };
 	readonly opponentAttackCounter: boolean = true;
 	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
+	readonly playerCthunCounter: boolean = true;
+	readonly playerCthunCounterWidgetPosition: { left: number; top: number };
+	readonly opponentCthunCounter: boolean = true;
+	readonly opponentCthunCounterWidgetPosition: { left: number; top: number };
+	readonly playerFatigueCounter: boolean = true;
+	readonly playerFatigueCounterWidgetPosition: { left: number; top: number };
+	readonly opponentFatigueCounter: boolean = true;
+	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerBgsPogoCounter: boolean = true;
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };

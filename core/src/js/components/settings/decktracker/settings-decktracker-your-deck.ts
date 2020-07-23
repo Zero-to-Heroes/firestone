@@ -82,6 +82,16 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Show the current size of your Jade Golems"
 					></preference-toggle>
 					<preference-toggle
+						field="playerCthunCounter"
+						label="C'Thun"
+						tooltip="Show the current size of your C'Thun"
+					></preference-toggle>
+					<preference-toggle
+						field="playerFatigueCounter"
+						label="Fatigue"
+						tooltip="Show your current fatigue damage"
+					></preference-toggle>
+					<preference-toggle
 						field="playerAttackCounter"
 						label="Attack on board"
 						tooltip="Show the total attack of minions on your board + your hero"

@@ -350,10 +350,18 @@ export class GameEvents {
 				);
 				break;
 			case 'JADE_GOLEM':
-				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.JADE_GOLEM, gameEvent, {
 						golemSize: gameEvent.Value.AdditionalProps.GolemSize,
+					}),
+				);
+				break;
+			case 'CTHUN':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CTHUN, gameEvent, {
+						cthunSize: gameEvent.Value.AdditionalProps.CthunSize,
 					}),
 				);
 				break;
