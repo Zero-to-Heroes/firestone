@@ -23,11 +23,10 @@ export class ReplayUploadService {
 		console.log('[manastorm-bridge] uploading game');
 		const user = await this.ow.getCurrentUser();
 		console.log('[manastorm-bridge] retrieved current user');
-		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
-		this.postFullReview(game.reviewId, userId, game);
+		this.postFullReview(game.reviewId, user.userId, user.username, game);
 	}
 
-	private async postFullReview(reviewId: string, userId: string, game: GameForUpload) {
+	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload) {
 		const jszip = new JSZip.default();
 		console.log('ready to zip', jszip);
 		jszip.file('power.log', game.uncompressedXmlReplay);
@@ -56,6 +55,7 @@ export class ReplayUploadService {
 				'review-id': reviewId,
 				'application-key': 'firestone',
 				'user-key': userId,
+				'username': userName,
 				'file-type': 'hszip',
 				'player-rank': playerRank ? '' + playerRank : '',
 				'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
