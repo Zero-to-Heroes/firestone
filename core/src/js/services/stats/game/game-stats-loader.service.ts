@@ -5,7 +5,7 @@ import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { DeckParserService } from '../../decktracker/deck-parser.service';
 import { OverwolfService } from '../../overwolf.service';
 
-const GAME_STATS_ENDPOINT = 'https://p3mfx6jmhc.execute-api.us-west-2.amazonaws.com/Prod';
+const GAME_STATS_ENDPOINT = 'https://api.firestoneapp.com/retrieveUserMatchStats/matchStats';
 
 @Injectable()
 export class GameStatsLoaderService {
@@ -27,21 +27,25 @@ export class GameStatsLoaderService {
 			return this.gameStats;
 		}
 		const user = await this.ow.getCurrentUser();
-		const userId = user.userId || user.machineId || user.username;
 		return new Promise<GameStats>(async resolve => {
-			this.doRetrieve(userId, retriesLeft, resolve, expectedReviewId);
+			this.doRetrieve(user.userId, user.username, retriesLeft, resolve, expectedReviewId);
 		});
 	}
 
-	private doRetrieve(userId: string, retrievesLeft: number, resolve, expectedReviewId: string) {
+	private doRetrieve(userId: string, userName: string, retrievesLeft: number, resolve, expectedReviewId: string) {
 		// console.log('[game-stats-loader] in doRetrieve', userId, retrievesLeft);
 		if (retrievesLeft <= 0) {
 			console.error('[game-stats-loader] could not load stats', userId, expectedReviewId);
 			resolve(null);
 			return;
 		}
-		const expectedReviewPath = expectedReviewId ? `/${expectedReviewId}` : '';
-		this.http.get(`${GAME_STATS_ENDPOINT}/overwolf-${userId}${expectedReviewPath}`).subscribe(
+		const postObject = {
+			userId: userId,
+			userName: userName,
+			uploaderToken: `overwolf-${userId}`,
+			expectedReviewId: expectedReviewId,
+		};
+		this.http.post(GAME_STATS_ENDPOINT, postObject).subscribe(
 			data => {
 				// console.log('[game-stats-loader] received http data');
 				const endpointResult: readonly GameStat[] = (data as any).results;
@@ -65,12 +69,15 @@ export class GameStatsLoaderService {
 					// 	expectedReviewId,
 					// 	endpointResult.length,
 					// );
-					setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 2000);
+					setTimeout(
+						() => this.doRetrieve(userId, userName, retrievesLeft - 1, resolve, expectedReviewId),
+						2000,
+					);
 				}
 			},
 			error => {
 				console.log('[game-stats-loader] could not get stats', error);
-				setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 2000);
+				setTimeout(() => this.doRetrieve(userId, userName, retrievesLeft - 1, resolve, expectedReviewId), 2000);
 			},
 		);
 	}
