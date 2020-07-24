@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
@@ -7,6 +7,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { isCharLowerCase } from '../utils';
 
@@ -34,6 +35,7 @@ export class DeckParserService {
 		private memory: MemoryInspectionService,
 		private allCards: AllCardsService,
 		private events: Events,
+		private ow: OverwolfService,
 	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
@@ -46,7 +48,7 @@ export class DeckParserService {
 				this.currentScenarioId = event.additionalData.metaData.ScenarioID;
 				this.currentDeck.scenarioId = this.currentScenarioId;
 				console.log(
-					'[deck-parser] setting mleta info',
+					'[deck-parser] setting meta info',
 					this.currentGameType,
 					this.currentScenarioId,
 					this.currentDeck,
@@ -108,8 +110,49 @@ export class DeckParserService {
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}
+		// console.log(
+		// 	'[deck-parser] should try to read deck from logs?',
+		// 	scenarioId,
+		// 	this.isDeckLogged(scenarioId),
+		// 	this.currentDeck?.deck,
+		// );
+		if (!this.currentDeck?.deck && this.isDeckLogged(scenarioId)) {
+			await this.readDeckFromLogFile();
+		}
 		console.log('[deck-parser] returning current deck', this.currentDeck);
 		return this.currentDeck;
+	}
+
+	private isDeckLogged(scenarioId: number): boolean {
+		return [...PRACTICE_ALL, ScenarioId.ARENA, ScenarioId.RANKED].includes(scenarioId);
+	}
+
+	private async readDeckFromLogFile(): Promise<void> {
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!this.ow.gameRunning(gameInfo)) {
+			return;
+		}
+		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Decks.log';
+		const logsContents = await this.ow.getFileContents(logsLocation);
+		if (!logsContents) {
+			return;
+		}
+		const lines = logsContents
+			.split('\n')
+			.filter(line => line && line.length > 0)
+			.map(line => line.trim());
+		// console.log('[deck-parser] reading deck contents', lines);
+		if (lines.length >= 4) {
+			// console.log('[deck-parser] lets go', lines[lines.length - 4]);
+			const isLastSectionDeckSelectLine = lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1;
+			if (!isLastSectionDeckSelectLine) {
+				return;
+			}
+			// deck name
+			this.parseActiveDeck(lines[lines.length - 3]);
+			// deckstring
+			this.parseActiveDeck(lines[lines.length - 1]);
+		}
 	}
 
 	private explodeDecklist(decklist: string[]): any[] {

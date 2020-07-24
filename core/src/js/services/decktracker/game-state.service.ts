@@ -245,7 +245,7 @@ export class GameStateService {
 				...eventQueue.filter(event => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 			].filter(event => event);
-			console.log('will processed', eventsToProcess.length, 'events');
+			// console.log('will processed', eventsToProcess.length, 'events');
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				await this.processEvent(eventsToProcess[i], true, i === eventsToProcess.length - 1);
 			}
@@ -345,7 +345,7 @@ export class GameStateService {
 			state: this.state,
 		};
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-		console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
+		// console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
 		this.previousStart = Date.now();
 	}
 
