@@ -74,7 +74,7 @@ export class MindVisionOperationFacade<T> {
 		}
 		return new Promise<T>(resolve => {
 			this.processingQueue.enqueue({
-				retriesLeft: numberOfRetries || this.numberOfRetries,
+				retriesLeft: numberOfRetries ?? this.numberOfRetries,
 				// When processing the full queue in one go, we can use this to notify
 				// all pending processes
 				resolve: resolve,

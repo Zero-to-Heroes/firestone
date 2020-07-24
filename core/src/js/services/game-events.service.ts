@@ -8,6 +8,7 @@ import { MainWindowStoreService } from './mainwindow/store/main-window-store.ser
 import { OverwolfService } from './overwolf.service';
 import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
+import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { PreferencesService } from './preferences.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { S3FileUploadService } from './s3-file-upload.service';
@@ -38,6 +39,7 @@ export class GameEvents {
 		private prefs: PreferencesService,
 		private ow: OverwolfService,
 		private store: MainWindowStoreService,
+		private memoryService: MemoryInspectionService,
 	) {
 		this.init();
 	}
@@ -952,7 +954,7 @@ export class GameEvents {
 		this.triggerTimeout = setTimeout(() => this.triggerCatchUp(), 2000);
 	}
 
-	private triggerCatchUp() {
+	private async triggerCatchUp() {
 		const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
 		console.log(
 			'[game-events] [existing] last line timestamp',
@@ -960,15 +962,13 @@ export class GameEvents {
 			Date.now(),
 			this.existingLogLines[this.existingLogLines.length - 1],
 		);
-		// Sometimes there is a one hour offset that breaks everything, and I couldn't find where it came from
-		// See the following log lines that produced the issue
-		// 2019-12-11 12:46:06,017 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] received CREATE_GAME log" | "D 12:46:05.5537105 GameState.DebugPrintPower() - CREATE_GAME" |
-		// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line timestamp" | 1576075565000 | 1576079166026 | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
-		// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line is too old, not doing anything" | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
-		// 2019-12-11 12:46:06,223 (INFO) </Files/vendor.js> (:1620) - "[game-events] received CREATE_GAME log" | "D 12:46:06.1966960 PowerTaskList.DebugPrintPower() -     CREATE_GAME" |
-		// DISCARDED COMMENT: However (20/01/2020), having a 1-hour timeout on this is too long, and I'd rather have some missing reconnects
-		// than some issues after a long reconnect where part of the tracker remains visible on home screen
-		if (lastLineTimestamp && Date.now() - lastLineTimestamp > 5 * 60 * 1000) {
+		// If we're in a game, we want to ignore the past time restriction, as it's not a reconnect but
+		// rather the user launching the app once the game is running
+		if (
+			lastLineTimestamp &&
+			Date.now() - lastLineTimestamp > 5 * 60 * 1000 &&
+			!['scene_gameplay'].includes(await this.memoryService.getCurrentScene())
+		) {
 			console.log(
 				'[game-events] [existing] last line is too old, not doing anything',
 				this.existingLogLines[this.existingLogLines.length - 1],

@@ -238,16 +238,27 @@ export class GameStateService {
 	}
 
 	private async processQueue(eventQueue: readonly GameEvent[]) {
-		const gameEvent = eventQueue[0];
+		// const gameEvent = eventQueue[0];
 		try {
-			await this.processEvent(gameEvent);
+			const stateUpdateEvents = eventQueue.filter(event => event.type === GameEvent.GAME_STATE_UPDATE);
+			const eventsToProcess = [
+				...eventQueue.filter(event => event.type !== GameEvent.GAME_STATE_UPDATE),
+				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
+			].filter(event => event);
+			console.log('will processed', eventsToProcess.length, 'events');
+			for (let i = 0; i < eventsToProcess.length; i++) {
+				await this.processEvent(eventsToProcess[i], true, i === eventsToProcess.length - 1);
+			}
 		} catch (e) {
 			console.error('Exception while processing event', e);
 		}
-		return eventQueue.slice(1);
+		return [];
 	}
 
-	private async processEvent(gameEvent: GameEvent, allowRequeue = true) {
+	private previousStart: number = Date.now();
+
+	private async processEvent(gameEvent: GameEvent, allowRequeue = true, shouldUpdateOverlays = true) {
+		// console.log('processing event', gameEvent.type);
 		this.overlayHandlers.forEach(handler =>
 			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
 		);
@@ -259,17 +270,17 @@ export class GameStateService {
 					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
 				} as DeckState),
 			} as GameState);
-			this.updateOverlays(this.state);
+			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
 		} else if (gameEvent.type === GameEvent.GAME_START) {
-			this.updateOverlays(this.state, false, true);
+			this.updateOverlays(this.state, false, true, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.GAME_END) {
-			this.updateOverlays(this.state, true, true);
+			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
 			console.log('[game-state] handling overlay for event', gameEvent.type, gameEvent);
 			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
-			this.updateOverlays(this.state);
+			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		}
 
 		// Delay all "card played" and "secret played" events to give Counterspell a chance to apply first
@@ -282,17 +293,21 @@ export class GameStateService {
 			setTimeout(() => this.processEvent(gameEvent, false), 1500);
 			return;
 		}
+		// console.log('\tready to apply secrets parser');
 		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent);
+		// console.log('\thas applied secrets parser');
 
+		const prefs = await this.prefs.getPreferences();
 		for (const parser of this.eventParsers) {
 			try {
-				if (parser.applies(gameEvent, this.state, await this.prefs.getPreferences())) {
+				if (parser.applies(gameEvent, this.state, prefs)) {
 					this.state = await parser.parse(this.state, gameEvent);
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
+		// console.log('\thas applied other parsers');
 		try {
 			if (this.state) {
 				// Add information that is not linked to events, like the number of turns the
@@ -315,11 +330,13 @@ export class GameStateService {
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
+		// console.log('\tready to emit event');
 		// console.log('[game-state] will emit event', gameEvent.type, this.state);
-		await this.updateOverlays(
+		this.updateOverlays(
 			this.state,
 			false,
 			[GameEvent.MATCH_METADATA, GameEvent.LOCAL_PLAYER].indexOf(gameEvent.type) !== -1,
+			shouldUpdateOverlays,
 		);
 		const emittedEvent = {
 			event: {
@@ -328,6 +345,8 @@ export class GameStateService {
 			state: this.state,
 		};
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+		console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
+		this.previousStart = Date.now();
 	}
 
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
@@ -368,7 +387,15 @@ export class GameStateService {
 			: playerDeckWithZonesOrdered;
 	}
 
-	private async updateOverlays(state: GameState, shouldForceCloseSecretsHelper = false, forceLogs = false) {
+	private async updateOverlays(
+		state: GameState,
+		shouldForceCloseSecretsHelper = false,
+		forceLogs = false,
+		updateOverlays = true,
+	) {
+		if (!updateOverlays) {
+			return;
+		}
 		if (!this.ow) {
 			console.log('ow not defined, returning');
 			return;
