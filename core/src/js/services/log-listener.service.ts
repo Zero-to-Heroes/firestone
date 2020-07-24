@@ -17,9 +17,13 @@ export class LogListenerService {
 
 	constructor(private ow: OverwolfService) {}
 
-	public configure(logFile: string, callback: Function, existingLineHandler: Function = null): LogListenerService {
+	public configure(
+		logFile: string,
+		newLineHandler: Function,
+		existingLineHandler: Function = null,
+	): LogListenerService {
 		this.logFile = logFile;
-		this.callback = callback;
+		this.callback = newLineHandler;
 		console.log('[log-listener] [' + this.logFile + '] initializing', this.logFile);
 		this.monitoring = false;
 		this.fileInitiallyPresent = true;
