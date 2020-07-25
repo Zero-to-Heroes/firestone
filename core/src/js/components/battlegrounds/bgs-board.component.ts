@@ -14,6 +14,8 @@ import {
 import { GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
+import { OverwolfService } from '../../services/overwolf.service';
+import { isWindowHidden } from '../../services/utils';
 import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 import { normalizeCardId } from './post-match/card-utils';
 
@@ -100,8 +102,8 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// 	}
 		// 	return;
 		// }
-		this.inputEntities = value;
-		this._entities = value?.map(entity => Entity.create({ ...entity } as Entity));
+		this.inputEntities = value || [];
+		this._entities = this.inputEntities.map(entity => Entity.create({ ...entity } as Entity));
 		this.previousBoardWidth = undefined;
 		if (this.debug) {
 			this.boardReady = false;
@@ -125,15 +127,17 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	private previousBoardHeight: number;
 	private inputEntities: readonly Entity[];
 	private resizeTimeout;
+	private stateChangedListener: (message: any) => void;
 
 	constructor(
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: AllCardsService,
+		private readonly ow: OverwolfService,
 	) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		setTimeout(() => {
 			this.onResize();
 		}, 100);
@@ -143,12 +147,25 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 			// console.log('detected window resize');
 			this.onResize();
 		});
+		const windowId = (await this.ow.getCurrentWindow()).id;
+		this.stateChangedListener = this.ow.addStateChangedListener(windowId, message => {
+			// console.log('state changed', message);
+			if (isWindowHidden(message.window_previous_state_ex) && !isWindowHidden(message.window_state_ex)) {
+				console.log(
+					'showing hidden window, resizing board',
+					message.window_state_ex,
+					message.window_previous_state_ex,
+				);
+				this.onResize();
+			}
+		});
 	}
 
 	ngOnDestroy() {
 		if (this.resizeTimeout) {
 			clearTimeout(this.resizeTimeout);
 		}
+		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
 	showTooltipWarning(entity: Entity): boolean {
@@ -170,9 +187,15 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	@HostListener('window:resize')
-	onResize() {
+	async onResize() {
 		if (this.resizeTimeout) {
 			clearTimeout(this.resizeTimeout);
+		}
+		const window = await this.ow.getCurrentWindow();
+		// console.log('currentWIndow', window);
+		if (isWindowHidden(window.stateEx)) {
+			console.log('window hidden, not resizing board state', window.stateEx, window);
+			return;
 		}
 		// console.log('on window resize');
 		const boardContainer = this.el.nativeElement.querySelector('.board');

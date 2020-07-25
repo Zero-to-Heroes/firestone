@@ -21,6 +21,10 @@ export const isWindowClosed = (state: string): boolean => {
 	return state === 'closed' || state === 'hidden';
 };
 
+export const isWindowHidden = (state: string): boolean => {
+	return state !== 'normal' && state !== 'maximized';
+};
+
 export const capitalizeFirstLetter = (input: string): string => {
 	return input.charAt(0).toUpperCase() + input.slice(1);
 };
