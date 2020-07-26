@@ -66,9 +66,9 @@ export class DeckParserService {
 			return;
 		}
 		if (this.goingIntoQueueRegex.exec(logLine)) {
-			console.log('getting active deck from going into queue');
-			const activeDeck = await this.memory.getActiveDeck(0);
-			//console.log('active deck after queue', activeDeck);
+			console.log('[deck-parser] getting active deck from going into queue');
+			const activeDeck = await this.memory.getActiveDeck(1);
+			console.log('[deck-parser] active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log(
 					'[deck-parser] updating active deck after queue',
@@ -117,6 +117,7 @@ export class DeckParserService {
 		// 	this.currentDeck?.deck,
 		// );
 		if (!this.currentDeck?.deck && this.isDeckLogged(scenarioId)) {
+			console.log('[deck-parser] reading previous deck from logs', scenarioId);
 			await this.readDeckFromLogFile();
 		}
 		console.log('[deck-parser] returning current deck', this.currentDeck);
