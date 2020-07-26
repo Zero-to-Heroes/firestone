@@ -175,11 +175,17 @@ export class DeckParserService {
 			console.log('[deck-parser] finished editing deck');
 			return;
 		}
+		if (data.indexOf('Finding Game With Deck') !== -1) {
+			this.lastDeckTimestamp = Date.now();
+			this.currentBlock = 'DECK_SELECTED';
+			console.log('[deck-parser] found deck selection block');
+			return;
+		}
 
 		if (
 			this.lastDeckTimestamp &&
 			Date.now() - this.lastDeckTimestamp < 1000 &&
-			this.currentBlock !== 'DECK_SLECTED'
+			this.currentBlock !== 'DECK_SELECTED'
 		) {
 			console.log('[deck-parser] Doesnt look like a deck selection, exiting block', this.currentBlock);
 			// Don't reset the deck here, as it can override a deck built from memory inspection
