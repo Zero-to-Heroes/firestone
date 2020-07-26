@@ -40,12 +40,14 @@ export class OpponentDeckOverlayHandler implements OverlayHandler {
 		const shouldShowTracker =
 			state &&
 			state.opponentDeck &&
+			state.metadata.gameType > 0 &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
 			((state.opponentDeck.deck && state.opponentDeck.deck.length > 0) ||
 				(state.opponentDeck.hand && state.opponentDeck.hand.length > 0) ||
 				(state.opponentDeck.board && state.opponentDeck.board.length > 0) ||
 				(state.opponentDeck.otherZone && state.opponentDeck.otherZone.length > 0));
+		// console.log('showing opponent deck?', inGame, decktrackerWindow, shouldShowTracker, state);
 		if (
 			inGame &&
 			shouldShowTracker &&

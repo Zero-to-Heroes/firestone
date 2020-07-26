@@ -136,7 +136,9 @@ export class BattlegroundsStoreService {
 	}
 
 	private async handleHotkeyPressed() {
-		await Promise.all(this.overlayHandlers?.map(handler => handler.handleHotkeyPressed(this.state)));
+		if (this.overlayHandlers) {
+			await Promise.all(this.overlayHandlers.map(handler => handler.handleHotkeyPressed(this.state)));
+		}
 	}
 
 	private registerGameEvents() {

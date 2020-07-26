@@ -55,6 +55,7 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 
 		const shouldShowTracker =
 			state &&
+			state.metadata.gameType > 0 &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
 			state.playerDeck &&

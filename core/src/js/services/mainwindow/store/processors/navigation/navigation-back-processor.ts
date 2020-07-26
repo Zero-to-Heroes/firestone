@@ -85,6 +85,9 @@ export class NavigationBackProcessor implements Processor {
 		navigationState: NavigationState,
 		dataState: MainWindowState,
 	): NavigationState {
+		if (!dataState) {
+			return null;
+		}
 		switch (navigationState.navigationCollection.currentView) {
 			case 'sets':
 				return null;
