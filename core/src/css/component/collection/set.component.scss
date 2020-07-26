@@ -8,7 +8,7 @@
 	height: 100%;
 	position: relative;
 	perspective: 800px;
-	
+
 	.set-view {
 		display: flex;
 		align-items: center;
@@ -24,7 +24,8 @@
 	}
 
 	&.coming-soon {
-		.set-view, .set-view:hover {
+		.set-view,
+		.set-view:hover {
 			background: rgba(255, 255, 255, 0.08);
 		}
 		.coming-soon-info {
@@ -49,10 +50,10 @@
 	}
 
 	.logo-container {
-	    position: relative;
-	    display: flex;
-	    flex-direction: column;
-    	height: calc(100% - 35px);
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		height: calc(100% - 35px);
 	}
 
 	.set-logo {
@@ -68,6 +69,10 @@
 
 	.cards-collected {
 		@extend %completion-number;
+
+		&.premium {
+			color: var(--default-title-color);
+		}
 	}
 
 	.frame {
@@ -87,25 +92,25 @@
 				&.bottom-left {
 					bottom: 0;
 					left: 0;
-				    transform: rotate(0);
+					transform: rotate(0);
 				}
 
 				&.top-left {
 					top: 0;
 					left: 0;
-    				transform: rotate(90deg);
+					transform: rotate(90deg);
 				}
 
 				&.top-right {
 					top: 0;
 					right: 0;
-    				transform: rotate(180deg);
+					transform: rotate(180deg);
 				}
 
 				&.bottom-right {
 					bottom: 0;
 					right: 0;
-    				transform: rotate(270deg);
+					transform: rotate(270deg);
 				}
 			}
 		}
@@ -115,10 +120,10 @@
 
 			.outer-border {
 				position: absolute;
-			    top: -5px;
-			    right: -5px;
-			    bottom: -5px;
-			    left: -5px;
+				top: -5px;
+				right: -5px;
+				bottom: -5px;
+				left: -5px;
 				border: 2px solid $yellow03;
 			}
 
@@ -128,25 +133,25 @@
 				&.bottom-left {
 					bottom: 0;
 					left: 0;
-				    transform: rotate(0);
+					transform: rotate(0);
 				}
 
 				&.top-left {
 					top: 0;
 					left: 0;
-    				transform: rotate(0) scale(1, -1);
+					transform: rotate(0) scale(1, -1);
 				}
 
 				&.top-right {
 					top: 0;
 					right: 0;
-    				transform: rotate(180deg);
+					transform: rotate(180deg);
 				}
 
 				&.bottom-right {
 					bottom: 0;
 					right: 0;
-    				transform: rotate(180deg) scale(1, -1);
+					transform: rotate(180deg) scale(1, -1);
 				}
 			}
 
@@ -238,11 +243,11 @@
 		transform-style: preserve-3d;
 		transform: transform 1s;
 	}
-	
+
 	.box-side {
 		width: 100%;
-		   height: 100%;
-		   position: absolute;
+		height: 100%;
+		position: absolute;
 		backface-visibility: hidden;
 	}
 }

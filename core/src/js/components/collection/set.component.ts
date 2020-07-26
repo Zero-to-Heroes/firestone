@@ -27,8 +27,17 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<img src="{{ '/Files/assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
 						<span class="text set-name" *ngIf="_displayName">{{ _cardSet.name }}</span>
 					</div>
-					<span class="cards-collected" *ngIf="released">
-						{{ _cardSet.ownedLimitCollectibleCards }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
+					<span
+						class="cards-collected"
+						*ngIf="released"
+						[ngClass]="{ 'premium': isSimpleComplete() }"
+						[helpTooltip]="
+							isSimpleComplete()
+								? 'You collected all playable copies! This now shows you missing golden cards'
+								: null
+						"
+					>
+						{{ getOwnedLimitCollectibleCards() }}/{{ _cardSet.numberOfLimitCollectibleCards() }}
 					</span>
 					<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
 						<i class="i-25 pale-gold-theme corner bottom-left">
@@ -219,6 +228,12 @@ export class SetComponent implements AfterViewInit {
 			return false;
 		}
 		return this._cardSet.ownedLimitCollectiblePremiumCards === this._cardSet.numberOfLimitCollectibleCards();
+	}
+
+	getOwnedLimitCollectibleCards(): number {
+		return this.isSimpleComplete()
+			? this._cardSet.allCards.map(card => card.getNumberCollectedPremium()).reduce((c1, c2) => c1 + c2, 0)
+			: this._cardSet.ownedLimitCollectibleCards;
 	}
 
 	browseSet() {
