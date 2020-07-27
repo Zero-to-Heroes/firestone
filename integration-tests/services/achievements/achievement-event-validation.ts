@@ -8,6 +8,7 @@ import { ReplayInfo } from '../../../core/src/js/models/replay-info';
 import { AchievementsLocalStorageService } from '../../../core/src/js/services/achievement/achievements-local-storage.service.js';
 import { AchievementsMonitor } from '../../../core/src/js/services/achievement/achievements-monitor.service';
 import { ChallengeBuilderService } from '../../../core/src/js/services/achievement/achievements/challenges/challenge-builder.service';
+import { GenericChallenge } from '../../../core/src/js/services/achievement/achievements/challenges/generic-challenge';
 import { AchievementsLoaderService } from '../../../core/src/js/services/achievement/data/achievements-loader.service';
 import { RemoteAchievementsService } from '../../../core/src/js/services/achievement/remote-achievements.service.js';
 import { DeckParserService } from '../../../core/src/js/services/decktracker/deck-parser.service';
@@ -69,7 +70,7 @@ export const achievementsValidation = async (
 		},
 	} as MemoryInspectionService;
 	const challengeBuilder = new ChallengeBuilderService(cards, memoryService);
-	const loader = new AchievementsLoaderService(null, challengeBuilder, logger);
+	const loader = new AchievementsLoaderService(null, challengeBuilder);
 	await loader.initializeAchievements(rawAchievements);
 	if (loader.challengeModules.length !== 1) {
 		throw new Error('Can only handle single achievements for now');
@@ -87,7 +88,7 @@ export const achievementsValidation = async (
 	} as GameEventsPluginService;
 	const emitter = new GameEventsEmitterService();
 	const playersInfoService = new PlayersInfoService(events, memoryService);
-	const deckService = new DeckParserService(emitter, null, cards);
+	const deckService = new DeckParserService(emitter, memoryService, cards, null);
 	deckService.currentDeck.deckstring = collaborators ? collaborators.deckstring : undefined;
 	deckService.decodeDeckString();
 	deckService['reset'] = () => {};
@@ -97,16 +98,6 @@ export const achievementsValidation = async (
 		},
 	} as PreferencesService;
 	// console.debug('built current deck', deckService);
-	const gameEventsService = new GameEvents(
-		mockPlugin,
-		null,
-		null,
-		events,
-		playersInfoService,
-		emitter,
-		deckService,
-		prefs,
-	);
 	// Setup achievement monitor, that will check for completion
 	let isAchievementComplete = false;
 	const store: MainWindowStoreService = {
@@ -125,6 +116,17 @@ export const achievementsValidation = async (
 			},
 		} as any,
 	} as MainWindowStoreService;
+	const gameEventsService = new GameEvents(
+		mockPlugin,
+		events,
+		playersInfoService,
+		emitter,
+		deckService,
+		prefs,
+		null, 
+		store, 
+		memoryService
+	);
 	const gameState = {
 		getCurrentReviewId: async () => {
 			return '';
@@ -135,7 +137,7 @@ export const achievementsValidation = async (
 			return new GameStats();
 		},
 	} as GameStatsLoaderService;
-	const statsUpdater = new GameStatsUpdaterService(events, new NGXLoggerMock() as NGXLogger, statsLoader);
+	const statsUpdater = new GameStatsUpdaterService(events, statsLoader);
 	statsUpdater.stateUpdater = store.stateUpdater;
 	const storage: AchievementsLocalStorageService = {
 		loadAchievementFromCache: async (achievementId: string) => {
@@ -158,7 +160,6 @@ export const achievementsValidation = async (
 		emitter,
 		loader,
 		events,
-		new NGXLoggerMock() as NGXLogger,
 		store,
 		achievementStats,
 		storage,
@@ -186,15 +187,15 @@ export const achievementsValidation = async (
 
 	await sleep(2000);
 
-	// if (!isAchievementComplete) {
-	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {
-	// 		challenge.requirements.forEach(req => {
-	// 			if (!req.isCompleted()) {
-	// 				console.debug('req not completed', Object.assign(req, { cards: undefined }));
-	// 			}
-	// 		});
-	// 	});
-	// }
+	if (!isAchievementComplete) {
+		loader.challengeModules.forEach((challenge: GenericChallenge) => {
+			challenge.requirements.forEach(req => {
+				if (!req.isCompleted()) {
+					console.debug('req not completed', Object.assign(req, { cards: undefined }));
+				}
+			});
+		});
+	}
 
 	return isAchievementComplete;
 };

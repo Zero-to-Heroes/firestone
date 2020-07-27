@@ -5,7 +5,6 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { GameEvent } from '../../models/game-event';
-import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -34,7 +33,6 @@ export class DeckParserService {
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
 		private allCards: AllCardsService,
-		private events: Events,
 		private ow: OverwolfService,
 	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {

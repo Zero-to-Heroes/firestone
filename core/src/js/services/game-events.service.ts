@@ -3,7 +3,6 @@ import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
-import { LogsUploaderService } from './logs-uploader.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
 import { PlayersInfoService } from './players-info.service';
@@ -11,7 +10,6 @@ import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { PreferencesService } from './preferences.service';
 import { ProcessingQueue } from './processing-queue.service';
-import { S3FileUploadService } from './s3-file-upload.service';
 
 declare let amplitude;
 
@@ -30,8 +28,6 @@ export class GameEvents {
 
 	constructor(
 		private gameEventsPlugin: GameEventsPluginService,
-		private logService: LogsUploaderService,
-		private s3: S3FileUploadService,
 		private events: Events,
 		private playersInfoService: PlayersInfoService,
 		private gameEventsEmitter: GameEventsEmitterService,
@@ -96,7 +92,7 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+		this.ow?.addGameInfoUpdatedListener(async (res: any) => {
 			// console.log('[bootstrap] updated game status', res);
 			if (this.ow.exitGame(res)) {
 				this.spectating = false;
@@ -143,7 +139,7 @@ export class GameEvents {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
 							metaData: gameEvent.Value,
-							stats: this.store.state.stats,
+							stats: this.store.state?.stats,
 						},
 					} as GameEvent),
 				);

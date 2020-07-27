@@ -1,10 +1,10 @@
 {
-	"name": "firestone",
+	"name": "firestone-tests",
 	"version": "4.3.3",
 	"scripts": {
 		"test": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --runInBand --colors",
-		"singleTest": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --runInBand -t",
-		"singleFile": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --runInBand"
+		"singleTest": "node --max_old_space_size=10000 ./node_modules/jest/bin/jest.js --runInBand -t",
+		"singleFile": "node --max_old_space_size=10000 ./node_modules/jest/bin/jest.js --runInBand"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -17,10 +17,12 @@
 		"@angular/material": "8.1.0",
 		"@angular/platform-browser": "8.1.1",
 		"@angular/platform-browser-dynamic": "8.1.1",
-		"@firestone-hs/coliseum-components": "0.0.4",
-		"@firestone-hs/hs-replay-xml-parser": "0.0.49",
-		"@firestone-hs/reference-data": "^0.1.32",
-		"@firestone-hs/replay-parser": "^1.1.16",
+		"@firestone-hs/coliseum-components": "0.0.8",
+		"@firestone-hs/compute-bgs-run-stats": "^1.0.7",
+		"@firestone-hs/hs-replay-xml-parser": "0.0.53",
+		"@firestone-hs/reference-data": "^0.1.39",
+		"@firestone-hs/replay-parser": "^1.1.26",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.9",
 		"@sentry/browser": "^5.7.1",
 		"@sentry/integrations": "^5.7.1",
 		"angular-resize-event": "1.0.0",
