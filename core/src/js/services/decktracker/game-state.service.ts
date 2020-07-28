@@ -499,7 +499,7 @@ export class GameStateService {
 			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),
 			new DecklistUpdateParser(this.aiDecks, this.deckParser, this.prefs),
-			new CardOnBoardAtGameStart(this.helper),
+			new CardOnBoardAtGameStart(this.helper, this.allCards),
 			new GameRunningParser(this.deckParser),
 			new SecretTriggeredParser(this.helper),
 			new QuestCreatedInGameParser(this.helper, this.allCards),
