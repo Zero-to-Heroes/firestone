@@ -136,9 +136,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	async ngAfterViewInit() {
-		setTimeout(() => {
-			this.onResize();
-		}, 100);
+		this.doResizeTimeout(100);
 		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
 		// issue when destroying / recreating the view?)
 		window.addEventListener('resize', () => {
@@ -207,7 +205,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 				if (this.debug) {
 					console.log('no  board container, retrying', this.el.nativeElement);
 				}
-				this.resizeTimeout = setTimeout(() => this.onResize(), 300);
+				this.doResizeTimeout(300);
 				return;
 			}
 			if (this.debug) {
@@ -223,8 +221,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 			if (this.debug) {
 				console.log('no dimensions, retrying', rect, window.stateEx);
 			}
-
-			this.resizeTimeout = setTimeout(() => this.onResize(), 1500);
+			this.doResizeTimeout(1500);
 			return;
 		}
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
@@ -238,7 +235,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 					this._entities,
 				);
 			}
-			this.resizeTimeout = setTimeout(() => this.onResize(), 300);
+			this.doResizeTimeout(300);
 			return;
 		}
 		// We have to resize even though we have the same number of entities, because the resize is
@@ -276,10 +273,19 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		}
 		this.previousBoardWidth = rect.width;
 		this.previousBoardHeight = rect.height;
-		this.resizeTimeout = setTimeout(() => this.onResize(), 300);
+		this.doResizeTimeout(300);
 	}
 
 	trackByFn(index, item: Entity) {
 		return item.id;
+	}
+
+	private doResizeTimeout(delay: number) {
+		if (this.resizeTimeout) {
+			clearTimeout(this.resizeTimeout);
+		}
+		this.resizeTimeout = setTimeout(() => {
+			this.onResize();
+		}, delay);
 	}
 }
