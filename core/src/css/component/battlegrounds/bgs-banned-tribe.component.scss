@@ -19,20 +19,20 @@
 	clip-path: polygon(50% 4%, 85% 25%, 85% 75%, 50% 99%, 15% 75%, 15% 25%);
 }
 
-.crossed { /* smaller initially + opacity for readability */
-	position: absolute;
-	top: 9px;
-	left: 14px;
-	width: 40px;
-	opacity: 0.5;
-	filter: alpha(opacity=50);
-}
-
-.crossed:hover { /* larger & opaque on hover */
+.crossed {
 	position: absolute;
 	top: 0px;
 	left: 10px;
 	width: 50px;
 	opacity: 1;
 	filter: alpha(opacity=100);
+}
+
+.crossed:hover {
+	position: absolute;
+	top: 9px;
+	left: 14px;
+	width: 40px;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
 }
