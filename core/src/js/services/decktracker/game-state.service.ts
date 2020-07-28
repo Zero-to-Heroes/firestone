@@ -360,7 +360,7 @@ export class GameStateService {
 			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
 			.filter(entity => entity)
 			.filter(entity => this.canAttack(entity, deck.isActivePlayer))
-			.map(entity => (entity.attack > 0 ? entity.attack : 0))
+			.map(entity => this.windfuryMultiplier(entity) * (entity.attack > 0 ? entity.attack : 0))
 			.reduce((a, b) => a + b, 0);
 		// console.log(
 		// 	'total attack on board',
@@ -371,10 +371,12 @@ export class GameStateService {
 		// 		.filter(entity => entity && entity.attack > 0)
 		// 		.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
 		// );
-		const heroAttack = this.canAttack(playerFromTracker?.Hero, deck.isActivePlayer)
-			? Math.max(playerFromTracker?.Hero?.attack, 0) +
-			  (deck.isActivePlayer ? 0 : Math.max(playerFromTracker?.Weapon?.attack, 0))
-			: 0;
+		const heroAttack =
+			this.windfuryMultiplier(playerFromTracker?.Hero) *
+			(this.canAttack(playerFromTracker?.Hero, deck.isActivePlayer)
+				? Math.max(playerFromTracker?.Hero?.attack, 0) +
+				  (deck.isActivePlayer ? 0 : Math.max(playerFromTracker?.Weapon?.attack, 0))
+				: 0);
 		// console.log('heroAttack', playerFromTracker?.Hero, this.canAttack(playerFromTracker?.Hero));
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
@@ -385,6 +387,16 @@ export class GameStateService {
 					} as AttackOnBoard,
 			  } as DeckState)
 			: playerDeckWithZonesOrdered;
+	}
+
+	private windfuryMultiplier(entity): number {
+		if (this.hasTag(entity, GameTag.MEGA_WINDFURY)) {
+			return 4;
+		}
+		if (this.hasTag(entity, GameTag.WINDFURY)) {
+			return 2;
+		}
+		return 1;
 	}
 
 	private async updateOverlays(
