@@ -117,7 +117,7 @@ export class DeckParserService {
 		// 	this.currentDeck?.deck,
 		// );
 		if (!this.currentDeck?.deck && this.isDeckLogged(scenarioId)) {
-			console.log('[deck-parser] reading previous deck from logs', scenarioId);
+			console.log('[deck-parser] trying to read previous deck from logs', scenarioId);
 			await this.readDeckFromLogFile();
 		}
 		console.log('[deck-parser] returning current deck', this.currentDeck);
@@ -153,6 +153,7 @@ export class DeckParserService {
 			this.parseActiveDeck(lines[lines.length - 3]);
 			// deckstring
 			this.parseActiveDeck(lines[lines.length - 1]);
+			console.log('[deck-parser] finished reading previous deck from logs');
 		}
 	}
 
@@ -281,16 +282,13 @@ export class DeckParserService {
 		if (!deck || deck.length === 0) {
 			return deck;
 		}
-		console.log('postprocessing', deck);
+		// console.log('postprocessing', deck);
 		const matchInfo = await this.memory.getMatchInfo();
 		return deck.map(decKCard => this.postProcessDeckCard(decKCard, matchInfo));
 	}
 
 	private postProcessDeckCard(deckCard: DeckCard, matchInfo: MatchInfo): DeckCard {
 		const newCardId = this.updateCardId(deckCard.cardId, matchInfo);
-		if (newCardId.indexOf('HERO') !== -1) {
-			console.warn('no hero card expected', new Error().stack);
-		}
 		if (newCardId === deckCard.cardId) {
 			return deckCard;
 		}
