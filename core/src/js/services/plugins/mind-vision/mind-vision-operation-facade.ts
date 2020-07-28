@@ -17,7 +17,7 @@ export class MindVisionOperationFacade<T> {
 		private mindVisionOperation: () => Promise<any>,
 		private emptyCheck: (input: any) => boolean,
 		private transformer: (output: any) => T,
-		private numberOfRetries = 20,
+		private numberOfRetries = 5,
 		private delay = 3000,
 	) {}
 
