@@ -207,7 +207,7 @@ export class BattlegroundsStoreService {
 				);
 				setTimeout(async () => {
 					const info = await this.memory.getBattlegroundsInfo(1);
-					// console.log('bgs info', JSON.stringify(info, null, 4));
+					console.log('bgs info', info);
 					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
 					// console.log('BgsGlobalInfoUpdatedEvent emit done');
 				}, 5000);
