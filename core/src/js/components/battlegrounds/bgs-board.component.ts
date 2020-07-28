@@ -11,7 +11,6 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -42,8 +41,6 @@ import { normalizeCardId } from './post-match/card-utils';
 					<card-on-board
 						transition-group-item
 						[entity]="entity"
-						[enchantments]="buildEnchantments(entity)"
-						[option]="isOption(entity)"
 						[isMainPlayer]="isMainPlayer"
 						[isRecruitPhase]="isRecruitPhase"
 						cachedComponentTooltip
@@ -128,6 +125,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	private inputEntities: readonly Entity[];
 	private resizeTimeout;
 	private stateChangedListener: (message: any) => void;
+	private lastResizeOperationTimestamp: number;
 
 	constructor(
 		private readonly el: ElementRef,
@@ -144,18 +142,22 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
 		// issue when destroying / recreating the view?)
 		window.addEventListener('resize', () => {
-			// console.log('detected window resize');
+			if (this.debug) {
+				console.log('detected window resize');
+			}
 			this.onResize();
 		});
 		const windowId = (await this.ow.getCurrentWindow()).id;
 		this.stateChangedListener = this.ow.addStateChangedListener(windowId, message => {
 			// console.log('state changed', message);
 			if (isWindowHidden(message.window_previous_state_ex) && !isWindowHidden(message.window_state_ex)) {
-				console.log(
-					'showing hidden window, resizing board',
-					message.window_state_ex,
-					message.window_previous_state_ex,
-				);
+				if (this.debug) {
+					console.log(
+						'showing hidden window, resizing board',
+						message.window_state_ex,
+						message.window_previous_state_ex,
+					);
+				}
 				this.onResize();
 			}
 		});
@@ -188,6 +190,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:resize')
 	async onResize() {
+		// if (!this.lastResizeOperationTimestamp || Date.now() - this.lastResizeOperationTimestamp )
 		if (this.resizeTimeout) {
 			clearTimeout(this.resizeTimeout);
 		}
@@ -218,7 +221,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// }
 		if (!rect || !rect.width || !rect.height) {
 			if (this.debug) {
-				console.log('no dimensions, retrying', rect, boardContainer);
+				console.log('no dimensions, retrying', rect, window.stateEx);
 			}
 
 			this.resizeTimeout = setTimeout(() => this.onResize(), 1500);
@@ -276,18 +279,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		this.resizeTimeout = setTimeout(() => this.onResize(), 300);
 	}
 
-	isOption(entity: Entity): boolean {
-		return this._options && this._options.indexOf(entity.id) !== -1;
-	}
-
 	trackByFn(index, item: Entity) {
 		return item.id;
-	}
-
-	buildEnchantments(entity: Entity): readonly Entity[] {
-		if (!this._enchantmentCandidates) {
-			return [];
-		}
-		return this._enchantmentCandidates.filter(e => e.getTag(GameTag.ATTACHED) === entity.id);
 	}
 }
