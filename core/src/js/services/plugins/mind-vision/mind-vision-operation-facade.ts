@@ -17,7 +17,7 @@ export class MindVisionOperationFacade<T> {
 		private mindVisionOperation: () => Promise<any>,
 		private emptyCheck: (input: any) => boolean,
 		private transformer: (output: any) => T,
-		private numberOfRetries = 5,
+		private numberOfRetries = 3,
 		private delay = 3000,
 	) {}
 
@@ -104,7 +104,7 @@ export class MindVisionOperationFacade<T> {
 			callback(null, 0);
 			return;
 		}
-		// this.log('performing oiperation', this.mindVisionOperation);
+		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
 		const resultFromMemory = await this.mindVisionOperation();
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
 			this.log('result from memory is empty, retying');
