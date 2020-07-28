@@ -163,7 +163,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
-		// console.log('will set panel?', value);
+		console.log('setting panel in post-match stats', value?.isComputing, value?.player, value);
 		if (value) {
 			this.computing = value.isComputing;
 			if (this.computing) {
