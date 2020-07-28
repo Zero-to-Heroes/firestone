@@ -65,7 +65,7 @@ export class OpponentPlayerParser implements EventParser {
 			} as GameState);
 		}
 
-		const decklist = this.deckParser.buildDeckList(aiDeckString);
+		const decklist = await this.deckParser.postProcessDeck(this.deckParser.buildDeckList(aiDeckString));
 		// console.log('[opponent-player] parsed decklist', decklist);
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can

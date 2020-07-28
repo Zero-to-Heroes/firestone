@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
+import { Board, CardIds, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { GameEvent } from '../../models/game-event';
+import { MatchInfo } from '../../models/match-info';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -274,6 +275,90 @@ export class DeckParserService {
 
 	public buildEmptyDeckList(deckSize = 30): readonly DeckCard[] {
 		return new Array(deckSize).fill(DeckCard.create({} as DeckCard));
+	}
+
+	public async postProcessDeck(deck: readonly DeckCard[]): Promise<readonly DeckCard[]> {
+		if (!deck || deck.length === 0) {
+			return deck;
+		}
+		console.log('postprocessing', deck);
+		const matchInfo = await this.memory.getMatchInfo();
+		return deck.map(decKCard => this.postProcessDeckCard(decKCard, matchInfo));
+	}
+
+	private postProcessDeckCard(deckCard: DeckCard, matchInfo: MatchInfo): DeckCard {
+		const newCardId = this.updateCardId(deckCard.cardId, matchInfo);
+		if (newCardId.indexOf('HERO') !== -1) {
+			console.warn('no hero card expected', new Error().stack);
+		}
+		if (newCardId === deckCard.cardId) {
+			return deckCard;
+		}
+		const newCard = this.allCards.getCard(newCardId);
+		return deckCard.update({
+			cardId: newCard.id,
+			cardName: newCard.name,
+		} as DeckCard);
+	}
+
+	private updateCardId(cardId: string, matchInfo: MatchInfo): string {
+		if (cardId !== CardIds.Collectible.Neutral.TransferStudent) {
+			return cardId;
+		}
+		switch (matchInfo.boardId) {
+			case Board.STORMWIND:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken1;
+			case Board.ORGRIMMAR:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken12;
+			case Board.PANDARIA:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken19;
+			case Board.STRANGLETHORN:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken20;
+			case Board.NAXXRAMUS:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken21;
+			case Board.GOBLINS_VS_GNOMES:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken22;
+			case Board.BLACKROCK_MOUNTAIN:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken23;
+			case Board.THE_GRAND_TOURNAMENT:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken24;
+			case Board.THE_MUSEUM:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken25;
+			case Board.EXCAVATION_SITE:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken17;
+			case Board.WHISPERS_OF_THE_OLD_GODS:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken2;
+			case Board.KARAZHAN:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken3;
+			case Board.GADGETZAN:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken4;
+			case Board.UNGORO:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken5;
+			case Board.ICECROWN_CITADEL:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken6;
+			case Board.THE_CATACOMBS:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken7;
+			case Board.THE_WITCHWOOD:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken8;
+			case Board.THE_BOOMSDAY_PROJECT:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken9;
+			case Board.GURUBASHI_ARENA:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken10;
+			case Board.DALARAN:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken11;
+			case Board.ULDUM_TOMB:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken13;
+			case Board.ULDUM_CITY:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken18;
+			case Board.DRAGONBLIGHT:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken14;
+			case Board.OUTLAND:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken15;
+			// case Board.SCHOLOMANCE:
+			// 	return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken16;
+			default:
+				return cardId;
+		}
 	}
 
 	public buildDeckCards(pair): DeckCard[] {

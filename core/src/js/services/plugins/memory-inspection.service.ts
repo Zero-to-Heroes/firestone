@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
+import { MatchInfo } from '../../models/match-info';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { SetsService } from '../sets-service.service';
@@ -23,7 +24,7 @@ export class MemoryInspectionService {
 	];
 
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
-	private getPlayerInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
+	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
@@ -41,8 +42,8 @@ export class MemoryInspectionService {
 		return this.getCollectionOperation.call();
 	}
 
-	public async getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
-		return this.getPlayerInfoOperation.call();
+	public async getMatchInfo(): Promise<MatchInfo> {
+		return this.getMatchInfoOperation.call();
 	}
 
 	public async getBattlegroundsInfo(numberOfRetries?: number): Promise<BattlegroundsInfo> {

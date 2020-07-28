@@ -40,7 +40,7 @@ export class DecklistUpdateParser implements EventParser {
 			// console.log('[decklist-update] could not find new deck', gameEvent, aiDeck);
 			return currentState;
 		}
-		const decklist = this.deckParser.buildDeckList(newDeckstring);
+		const decklist = await this.deckParser.postProcessDeck(this.deckParser.buildDeckList(newDeckstring));
 		// console.log('[decklist-update] parsed decklist', decklist);
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,

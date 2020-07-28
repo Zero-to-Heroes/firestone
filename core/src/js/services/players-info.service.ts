@@ -22,7 +22,7 @@ export class PlayersInfoService {
 		// 	return this.playerInfo;
 		// }
 		// console.log('[players-info] playerInfo not present in cache, fetching it from GEP');
-		const infoFromGep = this.cachedInfo?.localPlayer ? this.cachedInfo : await this.memoryService.getPlayerInfo();
+		const infoFromGep = this.cachedInfo?.localPlayer ? this.cachedInfo : await this.memoryService.getMatchInfo();
 		if (!infoFromGep) {
 			console.warn('[players-info] No player info returned by mindvision', this.cachedInfo, infoFromGep);
 			return null;
@@ -40,7 +40,7 @@ export class PlayersInfoService {
 		// }
 		// It's usually less important to have the opponent info, so we only add this as a log
 		// console.log('[players-info] opponentInfo not present in cache, fetching it from GEP');
-		const infoFromGep = this.cachedInfo?.opponent ? this.cachedInfo : await this.memoryService.getPlayerInfo();
+		const infoFromGep = this.cachedInfo?.opponent ? this.cachedInfo : await this.memoryService.getMatchInfo();
 		if (!infoFromGep) {
 			console.warn('[players-info] No player info returned by mindvision');
 			return null;

@@ -32,7 +32,7 @@ export class DeckstringOverrideParser implements EventParser {
 			return currentState;
 		}
 		console.log('retrieved current deck', currentDeck);
-		const deckList: readonly DeckCard[] = this.buildDeckList(currentDeck);
+		const deckList: readonly DeckCard[] = await this.deckParser.postProcessDeck(this.buildDeckList(currentDeck));
 		const hero: HeroCard = this.buildHero(currentDeck);
 		// Remove the cards that are not in deck anymore, i.e. the cards that are in the other zones
 		// It's not 100% accurate, but probably as good as we can do it without replaying all the match

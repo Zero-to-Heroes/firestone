@@ -1,9 +1,10 @@
+import { MatchInfo } from '../../../models/match-info';
 import { PlayerInfo } from '../../../models/player-info';
 import { OverwolfService } from '../../overwolf.service';
 import { MindVisionOperationFacade } from './mind-vision-operation-facade';
 import { MindVisionService } from './mind-vision.service';
 
-export class GetMatchInfoOperation extends MindVisionOperationFacade<{ localPlayer: any; opponent: any }> {
+export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> {
 	constructor(mindVision: MindVisionService, ow: OverwolfService) {
 		super(
 			ow,
@@ -19,6 +20,7 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<{ localPlay
 				const result = {
 					localPlayer: localPlayer,
 					opponent: opponent,
+					boardId: matchInfo.BoardDbId,
 				};
 				return result;
 			},
