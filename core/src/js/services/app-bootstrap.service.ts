@@ -256,7 +256,7 @@ export class AppBootstrapService {
 		const isRunning = await this.ow.inGame();
 		console.log('[bootstrap] are we in game?', isRunning);
 		// Show main window directly only if started on desktop
-		if (!isRunning) {
+		if (!isRunning || showMainWindow) {
 			this.showCollectionWindow();
 		}
 	}
