@@ -52,7 +52,7 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseOverlay"
-						label="Use game overlay"
+						label="Set integrated mode"
 						tooltip="When turned on, the battlegrounds window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app"
 					></preference-toggle>
 					<preference-toggle
