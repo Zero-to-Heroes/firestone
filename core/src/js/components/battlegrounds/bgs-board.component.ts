@@ -22,17 +22,20 @@ import { normalizeCardId } from './post-match/card-utils';
 	selector: 'bgs-board',
 	styleUrls: [`../../../css/component/battlegrounds/bgs-board.component.scss`],
 	template: `
-		<div class="board-turn" *ngIf="_entities && !finalBoard">
+		<div class="board-turn" *ngIf="_entities && !finalBoard && isNumber(currentTurn - boardTurn)">
 			Board as seen
 			{{ currentTurn - boardTurn === 0 ? 'just now' : currentTurn - boardTurn + ' turns ago' }}
 		</div>
 		<div class="board-turn" *ngIf="_entities && finalBoard">
 			Your final board
 		</div>
-		<div class="board-turn empty" *ngIf="!_entities">
+		<div
+			class="board-turn empty"
+			*ngIf="!_entities && !finalBoard && (!boardTurn || !isNumber(currentTurn - boardTurn))"
+		>
 			You have not fought that player yet
 		</div>
-		<div class="board-turn empty" *ngIf="_entities && _entities.length === 0">
+		<div class="board-turn empty" *ngIf="_entities && _entities.length === 0 && isNumber(currentTurn - boardTurn)">
 			Last board was empty
 		</div>
 		<ul class="board" *ngIf="_entities && _entities.length > 0" [style.opacity]="boardReady ? 1 : 0">
@@ -184,6 +187,10 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	getDamageTaken(entity: Entity): number {
 		return this._minionStats?.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
 			?.damageTaken;
+	}
+
+	isNumber(value: number): boolean {
+		return !isNaN(value);
 	}
 
 	@HostListener('window:resize')
