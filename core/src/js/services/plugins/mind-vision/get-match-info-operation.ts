@@ -12,8 +12,7 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 			() => mindVision.getMatchInfo(),
 			matchInfo =>
 				!matchInfo ||
-				matchInfo.LocalPlayer?.Standard?.LeagueId == null ||
-				matchInfo.LocalPlayer.Standard.LeagueId === -1,
+				(matchInfo.LocalPlayer.Standard.LeagueId === -1 && !matchInfo.LocalPlayer.Standard.LegendRank),
 			matchInfo => {
 				const localPlayer = this.extractPlayerInfo(matchInfo.LocalPlayer);
 				const opponent = this.extractPlayerInfo(matchInfo.OpposingPlayer);
