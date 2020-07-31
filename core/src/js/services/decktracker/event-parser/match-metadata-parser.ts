@@ -32,9 +32,9 @@ export class MatchMetadataParser implements EventParser {
 
 		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
 		if (noDeckMode) {
-			console.log('[game-start-parser] no deck mode is active, not loading current deck');
+			console.log('[match-metadata-parser] no deck mode is active, not loading current deck');
 		}
-		console.log('[game-start-parser] will get current deck');
+		console.log('[match-metadata-parser] will get current deck');
 		// We don't always have a deckstring here, eg when we read the deck from memory
 		const currentDeck = noDeckMode
 			? undefined
@@ -42,33 +42,28 @@ export class MatchMetadataParser implements EventParser {
 					gameEvent.additionalData.metaData.GameType === GameType.GT_VS_AI,
 					gameEvent.additionalData.metaData.ScenarioID,
 			  );
+		const deckstringToUse = currentState.playerDeck?.deckstring || currentDeck?.deckstring;
 		console.log(
-			'[game-start-parser] init game with deck',
+			'[match-metadata-parser] init game with deck',
+			deckstringToUse,
 			currentDeck && currentDeck.deckstring,
 			currentDeck && currentDeck.name,
-			currentDeck,
 		);
 
 		const deckStats: readonly GameStat[] =
-			!currentDeck.deckstring || !currentState.playerDeck?.deckstring || !stats?.gameStats
+			!deckstringToUse || !stats?.gameStats
 				? []
 				: stats.gameStats.stats
 						.filter(stat => stat.gameMode === 'ranked')
-						.filter(
-							stat =>
-								stat.playerDecklist === currentState.playerDeck?.deckstring ||
-								stat.playerDecklist === currentDeck.deckstring,
-						)
+						.filter(stat => stat.playerDecklist === deckstringToUse)
 						.filter(stat => stat.gameFormat === convertedFormat) || [];
 		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
 		console.log(
-			'match metadata',
-			deckStats,
+			'[match-metadata-parser] match metadata',
 			convertedFormat,
 			format,
-			currentState.playerDeck?.deckstring,
-			currentDeck.deckstring,
-			stats?.gameStats,
+			deckstringToUse,
+			stats?.gameStats?.stats?.length,
 		);
 		let matchupStatsRecap = currentState.matchupStatsRecap;
 		if (currentState?.opponentDeck?.hero?.playerClass) {
@@ -80,8 +75,9 @@ export class MatchMetadataParser implements EventParser {
 				convertedFormat,
 				currentState?.opponentDeck?.hero.playerClass,
 			);
-			console.log('opponent present', matchupStatsRecap, currentState);
+			console.log('[match-metadata-parser] opponent present', matchupStatsRecap, currentState);
 		}
+		// console.log('[match-metadata-parser] built stats for deck', statsRecap, matchupStatsRecap);
 		const deckList: readonly DeckCard[] = await this.deckParser.postProcessDeck(
 			this.deckParser.buildDeck(currentDeck),
 		);
@@ -99,7 +95,7 @@ export class MatchMetadataParser implements EventParser {
 			deckStatsRecap: statsRecap,
 			matchupStatsRecap: matchupStatsRecap,
 			playerDeck: currentState.playerDeck.update({
-				deckstring: currentDeck ? currentDeck.deckstring : null,
+				deckstring: deckstringToUse,
 				name: currentDeck ? currentDeck.name : null,
 				hero: hero,
 				deckList: deckList,
