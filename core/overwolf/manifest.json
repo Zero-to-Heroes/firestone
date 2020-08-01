@@ -13,6 +13,7 @@
 		"launcher_icon": "launcher_icon.ico",
 		"splash_image": "Splash_icon.png"
 	},
+	"process_name": "Firestone",
 	"permissions": [
 		"Logging",
 		"GameInfo",
