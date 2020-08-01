@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { Preferences } from '../../models/preferences';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'card-tooltip',
@@ -24,7 +26,17 @@ export class CardTooltipComponent {
 	}
 
 	@Input() set cardId(value: string) {
-		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${value}.png`;
+		this.doSetCardId(value);
+	}
+
+	async doSetCardId(value: string) {
+		const prefs: Preferences = await this.prefs.getPreferences();
+		const highRes = prefs.collectionUseHighResImages;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		const imagePath = highRes ? '512' : 'compressed';
+		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${value}.png`;
 		// console.log('setting tooltip', value, this.image);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -38,7 +50,7 @@ export class CardTooltipComponent {
 		}
 	}
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	constructor(private cdr: ChangeDetectorRef, private prefs: PreferencesService) {}
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {

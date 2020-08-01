@@ -133,7 +133,7 @@ export class CardComponent implements AfterViewInit {
 			return;
 		}
 		this.showPlaceholder = true;
-		const imagePath = 'compressed'; // this._highRes ? '512' : 'compressed';
+		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;
 		// console.log('updated image', this.image);

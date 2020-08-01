@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
 	selector: 'settings-collection-menu',
@@ -9,7 +9,7 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 	template: `
 		<ul class="collection-menu">
 			<li [ngClass]="{ 'selected': selectedMenu === 'notification' }" (mousedown)="selectMenu('notification')">
-				<span>Notifications</span>
+				<span>General</span>
 			</li>
 		</ul>
 	`,

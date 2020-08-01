@@ -13,7 +13,9 @@ import {
 import { default as sortBy } from 'lodash-es/sortBy';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
+import { Preferences } from '../../models/preferences';
 import { Set, SetCard } from '../../models/set';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'cards',
@@ -86,7 +88,11 @@ import { Set, SetCard } from '../../models/set';
 					*ngFor="let card of _activeCards; let i = index; trackBy: trackByCardId"
 					[ngClass]="{ 'hidden visuallyHidden': !card.displayed }"
 				>
-					<card-view [card]="card" (imageLoaded)="onImageLoaded()" [loadImage]="shouldLoadImage(i)"
+					<card-view
+						[card]="card"
+						(imageLoaded)="onImageLoaded()"
+						[loadImage]="shouldLoadImage(i)"
+						[highRes]="highRes"
 						>/</card-view
 					>
 				</li>
@@ -174,14 +180,19 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	cardsOwnedActiveFilter = this.FILTER_ALL;
 	loading = false;
 	imagestoLoad = 0;
+	highRes: boolean;
 
 	private imagesLoaded = 0;
 
 	private processingTimeout;
 
-	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private elRef: ElementRef,
+		private cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
+	) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		// console.log('after view init', isEqual(1, 1));
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
 		singleEls.forEach(singleEl => {
@@ -192,11 +203,16 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');
 		});
-		setTimeout(() => {
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		// setTimeout(() => {
+		// 	if (!(this.cdr as ViewRef)?.destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// });
+		const prefs: Preferences = await this.prefs.getPreferences();
+		this.highRes = prefs.collectionUseHighResImages;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngOnDestroy() {

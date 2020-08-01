@@ -1,5 +1,7 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
 	ElementRef,
 	EventEmitter,
@@ -7,10 +9,12 @@ import {
 	Input,
 	Output,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
-import { Events } from '../../services/events.service';
+import { PreferencesService } from '../../services/preferences.service';
 import { SetsService } from '../../services/sets-service.service';
 
 declare let amplitude;
@@ -26,7 +30,7 @@ declare let amplitude;
 	template: `
 		<div class="card-details-container" [ngClass]="{ 'owned': card.owned, 'missing': !card.owned }" *ngIf="card">
 			<div class="card-view-container">
-				<card-view [card]="card" [tooltips]="false" [showCounts]="true" [highRes]="true">/</card-view>
+				<card-view [card]="card" [tooltips]="false" [showCounts]="true" [highRes]="highRes">/</card-view>
 			</div>
 			<div class="details">
 				<h1>{{ card.name }}</h1>
@@ -70,8 +74,7 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
-export class FullCardComponent {
+export class FullCardComponent implements AfterViewInit {
 	@Output() close = new EventEmitter();
 
 	class: string;
@@ -83,15 +86,10 @@ export class FullCardComponent {
 	card: any;
 	flavor;
 
+	highRes: boolean;
+
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips = [];
-
-	constructor(
-		private events: Events,
-		private elRef: ElementRef,
-		private cards: SetsService,
-		private sanitizer: DomSanitizer,
-	) {}
 
 	@Input('selectedCard') set selectedCard(selectedCard: SetCard) {
 		if (!selectedCard) {
@@ -133,6 +131,22 @@ export class FullCardComponent {
 		this.set = this.cards.setName(card.set);
 		this.rarity = card.rarity;
 		this.flavor = card.flavor ? this.sanitizer.bypassSecurityTrustHtml(card.flavor) : null;
+	}
+
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly elRef: ElementRef,
+		private readonly cards: SetsService,
+		private readonly sanitizer: DomSanitizer,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	async ngAfterViewInit() {
+		const prefs: Preferences = await this.prefs.getPreferences();
+		this.highRes = prefs.collectionUseHighResImages;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	playSound(audioClip) {

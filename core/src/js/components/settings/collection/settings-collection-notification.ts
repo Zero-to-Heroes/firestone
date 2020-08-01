@@ -12,6 +12,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	template: `
 		<div class="collection-notification">
 			<section class="settings-group toggle-label">
+				<h2 class="modes">General options</h2>
+				<preference-toggle field="collectionUseHighResImages" label="High res images"></preference-toggle>
+			</section>
+			<!-- For now we group them all together to avoid needless clutter of the tabs -->
+			<section class="settings-group toggle-label">
 				<h2 class="modes">You can selectively show some card notifications</h2>
 				<preference-toggle field="showDust" label="Dust recap"></preference-toggle>
 				<preference-toggle field="showCommon" label="Non-golden commons"></preference-toggle>

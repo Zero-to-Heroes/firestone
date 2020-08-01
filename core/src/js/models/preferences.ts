@@ -18,6 +18,7 @@ export class Preferences {
 	readonly showCommon: boolean = true;
 	readonly showCardsOutsideOfPacks: boolean = true;
 	readonly collectionHistoryShowOnlyNewCards: boolean = false;
+	readonly collectionUseHighResImages: boolean = false;
 
 	readonly collectionUseOverlay: boolean;
 
