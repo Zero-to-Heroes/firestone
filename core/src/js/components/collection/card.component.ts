@@ -21,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
 		<div class="card-container" [ngClass]="{ 'missing': missing }">
-			<div class="images">
+			<div class="images" [cardTooltip]="_card.id">
 				<img
 					src="/Files/assets/images/placeholder.png"
 					class="pale-theme placeholder"
@@ -32,7 +32,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 					src="{{ image }}"
 					class="real-card"
 					(load)="imageLoadedHandler()"
-					[cardTooltip]="_card.id"
 				/>
 				<div
 					[hidden]="showPlaceholder"
