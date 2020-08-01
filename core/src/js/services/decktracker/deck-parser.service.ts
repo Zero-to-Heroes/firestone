@@ -352,8 +352,8 @@ export class DeckParserService {
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken14;
 			case Board.OUTLAND:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken15;
-			// case Board.SCHOLOMANCE:
-			// 	return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken16;
+			case Board.SCHOLOMANCE:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken16;
 			default:
 				return cardId;
 		}
