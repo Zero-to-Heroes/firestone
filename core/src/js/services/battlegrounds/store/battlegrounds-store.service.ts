@@ -207,11 +207,11 @@ export class BattlegroundsStoreService {
 					),
 				);
 				setTimeout(async () => {
-					let info = await this.memory.getBattlegroundsInfo(1);
+					let info = await this.memory.getBattlegroundsMatch(1);
 					while (info.game?.Players == null || info.game.Players.length == 0) {
 						console.log('no player info in game, retryuing', info);
 						await sleep(500);
-						info = await this.memory.getBattlegroundsInfo(1);
+						info = await this.memory.getBattlegroundsMatch(1);
 					}
 					console.log('bgs info', info);
 					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
