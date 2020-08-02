@@ -50,7 +50,7 @@ export class BgsBannedTribeComponent {
 			case Race.DRAGON:
 				return [];
 			case Race.MECH:
-				return ['Zoobot'];
+				return [];
 			case Race.MURLOC:
 				return [];
 			case Race.PIRATE:
