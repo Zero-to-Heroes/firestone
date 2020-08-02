@@ -31,7 +31,7 @@ import { normalizeCardId } from './post-match/card-utils';
 		</div>
 		<div
 			class="board-turn empty"
-			*ngIf="!_entities && !finalBoard && (!boardTurn || !isNumber(currentTurn - boardTurn))"
+			*ngIf="!finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
 		>
 			You have not fought that player yet
 		</div>
