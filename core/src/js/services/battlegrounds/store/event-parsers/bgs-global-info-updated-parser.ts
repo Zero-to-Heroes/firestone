@@ -20,7 +20,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		// console.log('in BgsGlobalInfoUpdatedParser', event.info);
 		const players = event.info?.game?.Players;
 		if (!players || players.length === 0) {
-			console.log('no players, returning&');
+			console.log('no players, returning&', event);
 			return currentState;
 		}
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players

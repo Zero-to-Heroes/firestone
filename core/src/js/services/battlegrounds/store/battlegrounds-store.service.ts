@@ -14,6 +14,7 @@ import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
+import { sleep } from '../../utils';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
@@ -206,11 +207,16 @@ export class BattlegroundsStoreService {
 					),
 				);
 				setTimeout(async () => {
-					const info = await this.memory.getBattlegroundsInfo(1);
+					let info = await this.memory.getBattlegroundsInfo(1);
+					while (info.game?.Players == null || info.game.Players.length == 0) {
+						console.log('no player info in game, retryuing', info);
+						await sleep(500);
+						info = await this.memory.getBattlegroundsInfo(1);
+					}
 					console.log('bgs info', info);
 					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
 					// console.log('BgsGlobalInfoUpdatedEvent emit done');
-				}, 5000);
+				}, 1000);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE) {
 				this.battlegroundsUpdater.next(new BgsTripleCreatedEvent(gameEvent.cardId));
 				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {
