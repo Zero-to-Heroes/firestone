@@ -3,7 +3,7 @@ import { ProcessingQueue } from '../../processing-queue.service';
 
 export class MindVisionOperationFacade<T> {
 	private cachedValue: T;
-	private lastCacheDate: number = 0;
+	private lastCacheDate = 0;
 
 	private processingQueue = new ProcessingQueue<InternalCall<T>>(
 		eventQueue => this.processQueue(eventQueue),
