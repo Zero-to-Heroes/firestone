@@ -56,11 +56,23 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 					] as readonly BgsComposition[],
 				} as BgsPlayer);
 			});
+		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(event.info?.game?.AvailableRaces);
 		const newGame = currentState.currentGame.update({
 			players: newPlayers,
+			bannedRaces: bannedRaces && bannedRaces.length > 0 ? bannedRaces : currentState.currentGame.bannedRaces,
+			availableRaces:
+				availableRaces && availableRaces.length > 0 ? availableRaces : currentState.currentGame.availableRaces,
 		} as BgsGame);
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);
+	}
+
+	public static buildRaces(availableRaces: readonly number[]): [readonly Race[], readonly Race[]] {
+		const allRaces = [Race.BEAST, Race.DEMON, Race.DRAGON, Race.MECH, Race.MURLOC, Race.PIRATE];
+		return [
+			allRaces.filter(race => !availableRaces || availableRaces.length === 0 || availableRaces.includes(race)),
+			allRaces.filter(race => availableRaces && !availableRaces.includes(race)),
+		];
 	}
 }

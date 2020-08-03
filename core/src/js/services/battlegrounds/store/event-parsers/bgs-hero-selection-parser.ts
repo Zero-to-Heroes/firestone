@@ -1,4 +1,3 @@
-import { Race } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -11,6 +10,7 @@ import { MemoryInspectionService } from '../../../plugins/memory-inspection.serv
 import { getHeroPower } from '../../bgs-utils';
 import { BgsHeroSelectionEvent } from '../events/bgs-hero-selection-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { BgsGlobalInfoUpdatedParser } from './bgs-global-info-updated-parser';
 import { EventParser } from './_event-parser';
 
 export class BgsHeroSelectionParser implements EventParser {
@@ -22,7 +22,7 @@ export class BgsHeroSelectionParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectionEvent): Promise<BattlegroundsState> {
 		const bgsInfo = await this.memoryService.getBattlegroundsMatch();
-		const [availableRaces, bannedRaces] = this.buildRaces(bgsInfo?.game?.AvailableRaces);
+		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.game?.AvailableRaces);
 		const newHeroSelectionStage: BgsHeroSelectionStage = this.buildHeroSelectionStage(
 			event.heroCardIds,
 			currentState.globalStats,
@@ -41,14 +41,6 @@ export class BgsHeroSelectionParser implements EventParser {
 				bannedRaces: bannedRaces,
 			} as BgsGame),
 		} as BattlegroundsState);
-	}
-
-	private buildRaces(availableRaces: readonly number[]): [readonly Race[], readonly Race[]] {
-		const allRaces = [Race.BEAST, Race.DEMON, Race.DRAGON, Race.MECH, Race.MURLOC, Race.PIRATE];
-		return [
-			allRaces.filter(race => !availableRaces || availableRaces.length === 0 || availableRaces.includes(race)),
-			allRaces.filter(race => availableRaces && !availableRaces.includes(race)),
-		];
 	}
 
 	private buildHeroSelectionStage(heroCardIds: readonly string[], stats: BgsStats): BgsHeroSelectionStage {
