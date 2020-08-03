@@ -38,22 +38,26 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 					player.highestWinStreak || 0,
 					(playerFromMemory.WinStreak as number) || 0,
 				);
+				const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
+				const newCompositionHistory = player.compositionHistory.find(history => history.turn === turn)
+					? player.compositionHistory
+					: ([
+							...player.compositionHistory,
+							{
+								turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
+								tribe:
+									playerFromMemory.BoardCompositionRace === 0
+										? 'mixed'
+										: Race[playerFromMemory.BoardCompositionRace],
+								count: playerFromMemory.BoardCompositionCount,
+							} as BgsComposition,
+					  ] as readonly BgsComposition[]);
 				return player.update({
 					displayedCardId: playerFromMemory.CardId,
 					damageTaken: newDamage,
 					currentWinStreak: newWinStreak,
 					highestWinStreak: newHighestWinStreak,
-					compositionHistory: [
-						...player.compositionHistory,
-						{
-							turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
-							tribe:
-								playerFromMemory.BoardCompositionRace === 0
-									? 'mixed'
-									: Race[playerFromMemory.BoardCompositionRace],
-							count: playerFromMemory.BoardCompositionCount,
-						} as BgsComposition,
-					] as readonly BgsComposition[],
+					compositionHistory: newCompositionHistory,
 				} as BgsPlayer);
 			});
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(event.info?.game?.AvailableRaces);
@@ -63,6 +67,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			availableRaces:
 				availableRaces && availableRaces.length > 0 ? availableRaces : currentState.currentGame.availableRaces,
 		} as BgsGame);
+		// console.log('[bgs-info] updated new game', newGame);
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

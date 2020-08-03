@@ -83,6 +83,7 @@ export class BattlegroundsStoreService {
 	private queuedEvents: { event: BattlegroundsStoreEvent; trigger: string }[] = [];
 	private overlayHandlers: BattlegroundsOverlay[];
 	private eventEmitters = [];
+	private memoryInterval;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -157,6 +158,20 @@ export class BattlegroundsStoreService {
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 				) {
 					this.battlegroundsUpdater.next(new BgsMatchStartEvent());
+					if (this.memoryInterval) {
+						clearInterval(this.memoryInterval);
+					}
+					this.memoryInterval = setInterval(async () => {
+						let info = await this.memory.getBattlegroundsMatch(1);
+						while (info?.game?.Players == null || info.game.Players.length == 0) {
+							// console.log('no player info in game, retryuing', info);
+							await sleep(500);
+							info = await this.memory.getBattlegroundsMatch(1);
+						}
+						// console.log('[battlegrounds-store] bgs info', info);
+						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
+						// console.log('BgsGlobalInfoUpdatedEvent emit done');
+					}, 3000);
 				} else {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
@@ -206,17 +221,6 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.damage,
 					),
 				);
-				setTimeout(async () => {
-					let info = await this.memory.getBattlegroundsMatch(1);
-					while (info.game?.Players == null || info.game.Players.length == 0) {
-						console.log('no player info in game, retryuing', info);
-						await sleep(500);
-						info = await this.memory.getBattlegroundsMatch(1);
-					}
-					console.log('bgs info', info);
-					this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-					// console.log('BgsGlobalInfoUpdatedEvent emit done');
-				}, 1000);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE) {
 				this.battlegroundsUpdater.next(new BgsTripleCreatedEvent(gameEvent.cardId));
 				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {
@@ -231,6 +235,9 @@ export class BattlegroundsStoreService {
 					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
 					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 				);
+				if (this.memoryInterval) {
+					clearInterval(this.memoryInterval);
+				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
 					new BgsLeaderboardPlaceEvent(

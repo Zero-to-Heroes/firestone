@@ -3,7 +3,7 @@ import { ProcessingQueue } from '../../processing-queue.service';
 
 export class MindVisionOperationFacade<T> {
 	private cachedValue: T;
-	private timeout;
+	private lastCacheDate: number = 0;
 
 	private processingQueue = new ProcessingQueue<InternalCall<T>>(
 		eventQueue => this.processQueue(eventQueue),
@@ -19,6 +19,7 @@ export class MindVisionOperationFacade<T> {
 		private transformer: (output: any) => T,
 		private numberOfRetries = 3,
 		private delay = 3000,
+		private cacheDuration = 2000,
 	) {}
 
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
@@ -65,8 +66,8 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	public async call(numberOfRetries?: number): Promise<T> {
-		if (this.cachedValue) {
-			if (this.serviceName === 'getBattlegroundsInfo') {
+		if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
+			if (this.serviceName === 'getBattlegroundsMatch') {
 				this.log('returning cached value', this.cachedValue);
 			}
 			return this.cachedValue;
@@ -91,8 +92,8 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number) {
-		if (this.cachedValue) {
-			if (this.serviceName === 'getBattlegroundsInfo') {
+		if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
+			if (this.serviceName === 'getBattlegroundsMatch') {
 				this.log('returning cached value', this.cachedValue);
 			}
 			callback(this.cachedValue, 0);
@@ -124,12 +125,7 @@ export class MindVisionOperationFacade<T> {
 		// 	);
 		// } catch (e) {}
 		this.cachedValue = this.transformer(resultFromMemory);
-		if (!this.timeout) {
-			this.timeout = setTimeout(() => {
-				this.cachedValue = null;
-				this.timeout = null;
-			}, this.delay);
-		}
+		this.lastCacheDate = Date.now();
 		callback(this.cachedValue, retriesLeft - 1);
 		return;
 	}
