@@ -103,7 +103,7 @@ declare let amplitude: any;
 			></stat-cell>
 			<stat-cell
 				label="Battles going first"
-				[value]="percentageOfBattlesGoingFirst?.toFixed(1)"
+				[value]="percentageOfBattlesGoingFirst?.toFixed(1) + '%'"
 				[isNewRecord]="isNewRecord('percentageOfBattlesGoingFirst')"
 			></stat-cell>
 			<div class="entry cell battle-luck" [ngClass]="{ 'new-record': isNewRecord('battleLuck') }">
