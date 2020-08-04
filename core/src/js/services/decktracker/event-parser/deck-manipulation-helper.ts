@@ -88,7 +88,8 @@ export class DeckManipulationHelper {
 		const result = [];
 		for (const card of zone) {
 			// We don't want to remove a card if it has a different entityId
-			if (card.cardId === normalizedCardId && !card.entityId && !hasRemovedOnce) {
+			const refCardId = normalizeUpgradedCards ? this.normalizeCardId(card.cardId) : card.cardId;
+			if (refCardId === normalizedCardId && !card.entityId && !hasRemovedOnce) {
 				if (debug) {
 					console.debug('removing card', card);
 				}
@@ -184,7 +185,10 @@ export class DeckManipulationHelper {
 			if (!found) {
 				// Card hasn't been found, so we provide a default return
 				if (cardId) {
-					const idByCardId = zone.find(card => card.cardId === normalizedCardId && !card.entityId);
+					const idByCardId = zone.find(card => {
+						const refCardId = normalizeUpgradedCards ? this.normalizeCardId(card.cardId) : card.cardId;
+						return refCardId === normalizedCardId && !card.entityId;
+					});
 					if (idByCardId) {
 						const card = this.allCards.getCard(normalizedCardId);
 						return idByCardId.update({
@@ -234,7 +238,10 @@ export class DeckManipulationHelper {
 		// Search by cardId only
 		if (cardId) {
 			// console.log('trying to get a card without providing an entityId', cardId, zone);
-			const found = zone.find(card => card.cardId === normalizedCardId);
+			const found = zone.find(card => {
+				const refCardId = normalizeUpgradedCards ? this.normalizeCardId(card.cardId) : card.cardId;
+				return refCardId === normalizedCardId && !card.entityId;
+			});
 			if (!found) {
 				// console.log('could not find card, creating card with default template', cardId, entityId);
 				const card = this.allCards.getCard(cardId);
