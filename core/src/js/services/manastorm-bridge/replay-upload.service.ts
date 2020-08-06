@@ -6,6 +6,7 @@ import * as JSZip from 'jszip';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { GameForUpload } from './game-for-upload';
+import { ManastormInfo } from './manastorm-info';
 
 const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
 const BUCKET = 'com.zerotoheroes.batch';
@@ -76,7 +77,7 @@ export class ReplayUploadService {
 				// reject();
 			} else {
 				console.log('[manastorm-bridge] Uploaded game', game.id, reviewId);
-				const info = {
+				const info: ManastormInfo = {
 					type: 'new-review',
 					reviewId: reviewId,
 					replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,

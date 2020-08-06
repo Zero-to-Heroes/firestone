@@ -1,4 +1,4 @@
-import { GlobalStats } from '../../../../../../models/mainwindow/stats/global/global-stats';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { MainWindowStoreEvent } from '../../main-window-store-event';
 
 export class GlobalStatsUpdatedEvent implements MainWindowStoreEvent {

@@ -1,7 +1,7 @@
+import { GlobalStat } from '@firestone-hs/build-global-stats/dist/model/global-stat';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';
-import { GlobalStat } from '../../../../../models/mainwindow/stats/global/global-stat';
-import { GlobalStats } from '../../../../../models/mainwindow/stats/global/global-stats';
 import { GlobalStatReq } from './global-stat-req';
 
 describe('global-stat-req', () => {

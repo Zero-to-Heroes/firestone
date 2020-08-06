@@ -1,10 +1,10 @@
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { CurrentUser } from '../overwolf/profile/current-user';
 import { AchievementsState } from './achievements-state';
 import { BinderState } from './binder-state';
 import { DecktrackerState } from './decktracker/decktracker-state';
 import { ReplaysState } from './replays/replays-state';
 import { SocialShareUserInfo } from './social-share-user-info';
-import { GlobalStats } from './stats/global/global-stats';
 import { StatsState } from './stats/stats-state';
 
 export class MainWindowState {

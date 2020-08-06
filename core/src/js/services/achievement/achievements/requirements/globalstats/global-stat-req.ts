@@ -1,8 +1,8 @@
+import { StatContext } from '@firestone-hs/build-global-stats/dist/model/context.type';
+import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/global-stat-key.type';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';
-import { StatContext } from '../../../../../models/mainwindow/stats/global/context.type';
-import { GlobalStatKey } from '../../../../../models/mainwindow/stats/global/global-stat-key.type';
-import { GlobalStats } from '../../../../../models/mainwindow/stats/global/global-stats';
 import { Requirement } from '../_requirement';
 
 export class GlobalStatReq implements Requirement {

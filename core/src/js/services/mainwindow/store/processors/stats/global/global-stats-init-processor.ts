@@ -1,6 +1,6 @@
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { MainWindowState } from '../../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../../models/mainwindow/navigation/navigation-state';
-import { GlobalStats } from '../../../../../../models/mainwindow/stats/global/global-stats';
 import { GlobalStatsInitEvent } from '../../../events/stats/global/global-stats-init-event';
 import { Processor } from '../../processor';
 

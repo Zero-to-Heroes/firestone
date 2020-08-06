@@ -8,11 +8,11 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { StatContext } from '@firestone-hs/build-global-stats/dist/model/context.type';
+import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/global-stat-key.type';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-import { StatContext } from '../../models/mainwindow/stats/global/context.type';
-import { GlobalStatKey } from '../../models/mainwindow/stats/global/global-stat-key.type';
-import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';

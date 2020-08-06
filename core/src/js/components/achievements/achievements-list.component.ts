@@ -11,10 +11,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { IOption } from 'ng-select';
 import { AchievementSet } from '../../models/achievement-set';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { ChangeAchievementsActiveFilterEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-active-filter-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';

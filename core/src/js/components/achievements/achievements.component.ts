@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { AchievementSet } from '../../models/achievement-set';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { VisualAchievement } from '../../models/visual-achievement';
 

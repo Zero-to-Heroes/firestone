@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
+import { ReviewMessage } from '@firestone-hs/build-global-stats/dist/review-message';
+import { extractStatsForGame, mergeStats } from '@firestone-hs/build-global-stats/dist/stats-builder';
 import { Events } from '../events.service';
 import { GlobalStatsUpdatedEvent } from '../mainwindow/store/events/stats/global/global-stats-updated-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { GameForUpload } from '../manastorm-bridge/game-for-upload';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { GlobalStatsService } from './global-stats.service';
@@ -26,18 +30,24 @@ export class GlobalStatsNotifierService {
 			console.log('[global-stats] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review') {
-				this.handleNewGlobalStats();
+				this.updateGlobalStats(info.reviewId, info.game);
 			}
 		});
 	}
 
-	private async handleNewGlobalStats(retriesLeft = 3) {
-		if (retriesLeft <= 0) {
-			return;
-		}
-		const stats = await this.globalStats.getGlobalStats();
-		if (stats) {
-			this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(stats));
-		}
+	private async updateGlobalStats(reviewId: string, game: GameForUpload) {
+		const currentGlobalStats = this.store.state.globalStats;
+		const message: ReviewMessage = {
+			reviewId: reviewId,
+			gameMode: game.gameMode,
+			replayKey: undefined,
+			playerRank: game.playerRank,
+			uploaderToken: undefined,
+		};
+		const statsFromGame = await extractStatsForGame(message, game.uncompressedXmlReplay);
+		//console.log('[global-stats] built stats', statsFromGame, currentGlobalStats);
+		const mergedStats: GlobalStats = mergeStats(currentGlobalStats, statsFromGame);
+		//console.log('[global-stats] merged stats', mergedStats);
+		this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(mergedStats));
 	}
 }

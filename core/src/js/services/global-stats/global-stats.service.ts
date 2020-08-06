@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
+import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { OverwolfService } from '../overwolf.service';
 
@@ -52,7 +52,7 @@ export class GlobalStatsService {
 								retriesLeft - 1,
 								!areEqual && !data.expectedEmpty,
 							),
-						1000,
+						2000,
 					);
 					return;
 				}
