@@ -5,6 +5,7 @@ import AWS from 'aws-sdk/global';
 import * as JSZip from 'jszip';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { uuid } from '../utils';
 import { GameForUpload } from './game-for-upload';
 import { ManastormInfo } from './manastorm-info';
 
@@ -47,6 +48,9 @@ export class ReplayUploadService {
 
 		const playerRank = game.playerRank;
 		const s3 = new S3();
+		const today = new Date();
+		const replayKey = `hearthstone/replay/${today.getFullYear()}/${today.getMonth() +
+			1}/${today.getDate()}/${uuid()}.xml.zip`;
 		const params = {
 			Bucket: BUCKET,
 			Key: fileKey,
@@ -54,6 +58,7 @@ export class ReplayUploadService {
 			Body: blob,
 			Metadata: {
 				'review-id': reviewId,
+				'replay-key': replayKey,
 				'application-key': 'firestone',
 				'user-key': userId,
 				'username': userName,

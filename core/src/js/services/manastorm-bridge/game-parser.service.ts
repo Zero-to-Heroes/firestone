@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { GameForUpload as Game, Player } from './game-for-upload';
@@ -222,7 +223,7 @@ export class GameParserService {
 		return playerClass;
 	}
 
-	public extractResult(replayXml: any, mainPlayerId: number): string {
+	public extractResult(replayXml: any, mainPlayerId: number): MatchResultType {
 		const tagChanges = replayXml.getElementsByTagName('TagChange');
 		// console.log('found ' + tagChanges.length + ' tag changes');
 		let winnerTag: any;
@@ -239,7 +240,7 @@ export class GameParserService {
 		}
 
 		// console.log('finding winner', winnerTag, mainPlayerId);
-		let status = 'unknown';
+		let status: MatchResultType = null;
 		if (winnerTag) {
 			if (mainPlayerId === parseInt(winnerTag.getAttribute('entity'))) {
 				status = 'won';

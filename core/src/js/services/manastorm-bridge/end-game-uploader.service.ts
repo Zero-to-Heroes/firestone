@@ -26,7 +26,7 @@ export class EndGameUploaderService {
 		deckstring: any,
 		deckName: string,
 		buildNumber: number,
-		scenarioId: string,
+		scenarioId: number,
 	): Promise<void> {
 		console.log('[manastorm-bridge] Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
@@ -48,7 +48,7 @@ export class EndGameUploaderService {
 		deckstring: any,
 		deckName: string,
 		buildNumber: number,
-		scenarioId: string,
+		scenarioId: number,
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;

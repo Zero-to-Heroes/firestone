@@ -51,19 +51,22 @@ export class ReplaysNotificationService {
 			console.log('[replays-notification] preference is turned off, not showing replay notification');
 			return;
 		}
-		const stat = Object.assign(new GameStat(), stats.stats[0]);
-		console.log('[replays-notification] preparing new game stat notification', stat);
-		// console.log('[replays-notification] will emit notif notification', stat);
-		this.notificationService.emitNewNotification({
-			notificationId: `replay-${stat.reviewId}`,
-			content: this.buildNotificationTemplate(stat),
-			type: 'match-stats-recorded',
-			app: 'replays',
-			cardId: undefined,
-			theClass: 'active',
-			clickToClose: true,
-			eventToSendOnClick: () => new ShowReplayEvent(stat.reviewId),
-		} as Message);
+		// Give some time for the replay to actually be recorded
+		setTimeout(() => {
+			const stat = Object.assign(new GameStat(), stats.stats[0]);
+			console.log('[replays-notification] preparing new game stat notification', stat);
+			// console.log('[replays-notification] will emit notif notification', stat);
+			this.notificationService.emitNewNotification({
+				notificationId: `replay-${stat.reviewId}`,
+				content: this.buildNotificationTemplate(stat),
+				type: 'match-stats-recorded',
+				app: 'replays',
+				cardId: undefined,
+				theClass: 'active',
+				clickToClose: true,
+				eventToSendOnClick: () => new ShowReplayEvent(stat.reviewId),
+			} as Message);
+		}, 5000);
 	}
 
 	private buildStartNotificationTemplate(reviewId: string): string {

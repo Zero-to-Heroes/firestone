@@ -28,7 +28,7 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 				type: GameEvent.GAME_STATS_UPDATED,
 				additionalData: {
 					gameStats: Object.assign(new GameStats(), {
-						stats: [addHours(won, -12), addHours(won, -11), addHours(won, 0)],
+						stats: [addHours(won, -12), addHours(won, -11), addHours(won, 0)] as readonly GameStat[],
 					} as GameStats),
 				},
 			} as GameEvent);
@@ -44,7 +44,12 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 				type: GameEvent.GAME_STATS_UPDATED,
 				additionalData: {
 					gameStats: Object.assign(new GameStats(), {
-						stats: [addHours(won, -12), addHours(won, -12), addHours(won, -10), addHours(won, -9)],
+						stats: [
+							addHours(won, -12),
+							addHours(won, -12),
+							addHours(won, -10),
+							addHours(won, -9),
+						] as readonly GameStat[],
 					} as GameStats),
 				},
 			} as GameEvent);
@@ -60,7 +65,7 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 				type: GameEvent.GAME_STATS_UPDATED,
 				additionalData: {
 					gameStats: Object.assign(new GameStats(), {
-						stats: [addHours(won, -12), addHours(won, -12)],
+						stats: [addHours(won, -12), addHours(won, -12)] as readonly GameStat[],
 					} as GameStats),
 				},
 			} as GameEvent);
@@ -76,7 +81,12 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 				type: GameEvent.GAME_STATS_UPDATED,
 				additionalData: {
 					gameStats: Object.assign(new GameStats(), {
-						stats: [addHours(won, -12), addHours(lost, -12), addHours(won, -10), addHours(won, -9)],
+						stats: [
+							addHours(won, -12),
+							addHours(lost, -12),
+							addHours(won, -10),
+							addHours(won, -9),
+						] as readonly GameStat[],
 					} as GameStats),
 				},
 			} as GameEvent);
@@ -92,7 +102,7 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 				type: GameEvent.GAME_STATS_UPDATED,
 				additionalData: {
 					gameStats: Object.assign(new GameStats(), {
-						stats: [addHours(won, -12), addHours(lost, -12), addHours(won, -10)],
+						stats: [addHours(won, -12), addHours(lost, -12), addHours(won, -10)] as readonly GameStat[],
 					} as GameStats),
 				},
 			} as GameEvent);
@@ -111,7 +121,11 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 				type: GameEvent.GAME_STATS_UPDATED,
 				additionalData: {
 					gameStats: Object.assign(new GameStats(), {
-						stats: [addHours(won, -12), addHours(winAgainstOtherClass, -12), addHours(won, -10)],
+						stats: [
+							addHours(won, -12),
+							addHours(winAgainstOtherClass, -12),
+							addHours(won, -10),
+						] as readonly GameStat[],
 					} as GameStats),
 				},
 			} as GameEvent);
@@ -127,7 +141,7 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 				type: GameEvent.GAME_STATS_UPDATED,
 				additionalData: {
 					gameStats: Object.assign(new GameStats(), {
-						stats: [addHours(won, -15), addHours(won, -12), addHours(won, -10)],
+						stats: [addHours(won, -15), addHours(won, -12), addHours(won, -10)] as readonly GameStat[],
 					} as GameStats),
 				},
 			} as GameEvent);
@@ -147,7 +161,7 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 			type: GameEvent.GAME_STATS_UPDATED,
 			additionalData: {
 				gameStats: Object.assign(new GameStats(), {
-					stats: [addHours(won, -11), addHours(other, -9), addHours(won, -8)],
+					stats: [addHours(won, -11), addHours(other, -9), addHours(won, -8)] as readonly GameStat[],
 				} as GameStats),
 			},
 		} as GameEvent);
@@ -166,7 +180,7 @@ describe('win-against-class-in-ranked-standard-in-limited-time-req', () => {
 			type: GameEvent.GAME_STATS_UPDATED,
 			additionalData: {
 				gameStats: Object.assign(new GameStats(), {
-					stats: [addHours(won, -11), addHours(other, -9), addHours(won, -8)],
+					stats: [addHours(won, -11), addHours(other, -9), addHours(won, -8)] as readonly GameStat[],
 				} as GameStats),
 			},
 		} as GameEvent);

@@ -25,7 +25,7 @@ describe('win-streak-req', () => {
 						type: GameEvent.GAME_STATS_UPDATED,
 						additionalData: {
 							gameStats: Object.assign(new GameStats(), {
-								stats: [wonStat, wonStat, wonStat],
+								stats: [wonStat, wonStat, wonStat] as readonly GameStat[],
 							} as GameStats),
 						},
 					} as GameEvent);
@@ -41,7 +41,7 @@ describe('win-streak-req', () => {
 						type: GameEvent.GAME_STATS_UPDATED,
 						additionalData: {
 							gameStats: Object.assign(new GameStats(), {
-								stats: [wonStat, wonStat, wonStat, wonStat],
+								stats: [wonStat, wonStat, wonStat, wonStat] as readonly GameStat[],
 							} as GameStats),
 						},
 					} as GameEvent);
@@ -57,7 +57,7 @@ describe('win-streak-req', () => {
 						type: GameEvent.GAME_STATS_UPDATED,
 						additionalData: {
 							gameStats: Object.assign(new GameStats(), {
-								stats: [wonStat, wonStat],
+								stats: [wonStat, wonStat] as readonly GameStat[],
 							} as GameStats),
 						},
 					} as GameEvent);
@@ -73,7 +73,7 @@ describe('win-streak-req', () => {
 						type: GameEvent.GAME_STATS_UPDATED,
 						additionalData: {
 							gameStats: Object.assign(new GameStats(), {
-								stats: [wonStat, wonStat, lostStat, wonStat],
+								stats: [wonStat, wonStat, lostStat, wonStat] as readonly GameStat[],
 							} as GameStats),
 						},
 					} as GameEvent);
@@ -95,7 +95,7 @@ describe('win-streak-req', () => {
 					type: GameEvent.GAME_STATS_UPDATED,
 					additionalData: {
 						gameStats: Object.assign(new GameStats(), {
-							stats: [rankedWild, rankedWild, rankedWild, wonStat, wonStat],
+							stats: [rankedWild, rankedWild, rankedWild, wonStat, wonStat] as readonly GameStat[],
 						} as GameStats),
 					},
 				} as GameEvent);
@@ -116,7 +116,13 @@ describe('win-streak-req', () => {
 					type: GameEvent.GAME_STATS_UPDATED,
 					additionalData: {
 						gameStats: Object.assign(new GameStats(), {
-							stats: [casualStandard, casualStandard, casualStandard, wonStat, wonStat],
+							stats: [
+								casualStandard,
+								casualStandard,
+								casualStandard,
+								wonStat,
+								wonStat,
+							] as readonly GameStat[],
 						} as GameStats),
 					},
 				} as GameEvent);

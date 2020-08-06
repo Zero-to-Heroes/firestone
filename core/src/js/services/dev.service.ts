@@ -105,7 +105,7 @@ export class DevService {
 							gameMode: 'battlegrounds',
 							playerRank: '5123',
 						} as GameStat),
-					],
+					] as readonly GameStat[],
 				} as GameStats),
 			);
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);

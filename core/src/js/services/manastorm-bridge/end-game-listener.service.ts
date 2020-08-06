@@ -15,7 +15,7 @@ export class EndGameListenerService {
 	private currentDeckstring: string;
 	private currentDeckname: string;
 	private currentBuildNumber: number;
-	private currentScenarioId: string;
+	private currentScenarioId: number;
 	// private currentReviewId: string;
 
 	constructor(

@@ -28,6 +28,10 @@ export class GameStat {
 	readonly reviewId: string;
 	readonly matchStat: MatchStats;
 
+	public static create(base: GameStat): GameStat {
+		return Object.assign(new GameStat(), base);
+	}
+
 	public buildPlayerRankImage(): [string, string, string] {
 		if (!this.playerRank) {
 			return [null, null, null];

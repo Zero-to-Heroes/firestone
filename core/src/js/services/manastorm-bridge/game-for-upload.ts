@@ -1,3 +1,4 @@
+import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 
@@ -11,10 +12,10 @@ export class GameForUpload {
 	gameMode: StatGameModeType;
 	gameFormat: StatGameFormatType;
 	buildNumber: number;
-	scenarioId: string;
+	scenarioId: number;
 	playerRank: string;
 	opponentRank: string;
-	result: string;
+	result: MatchResultType;
 	// arenaInfo: any;
 	durationTimeSeconds: number;
 	durationTurns: number;
