@@ -13,6 +13,7 @@ export class BgsGlobalStatsService {
 			this.loadGlobalStatsInternal(result => resolve(result));
 		});
 	}
+
 	private loadGlobalStatsInternal(callback, retriesLeft = 5) {
 		if (retriesLeft <= 0) {
 			console.error('Could not load bgs global stats', `${BGS_STATS_RETRIEVE_URL}`);
@@ -28,7 +29,7 @@ export class BgsGlobalStatsService {
 				callback(globalStats);
 			},
 			error => {
-				setTimeout(() => this.loadGlobalStatsInternal(callback, retriesLeft - 1), 1000);
+				setTimeout(() => this.loadGlobalStatsInternal(callback, retriesLeft - 1), 2000);
 			},
 		);
 	}

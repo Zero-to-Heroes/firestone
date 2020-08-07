@@ -13,7 +13,7 @@ export class GameStatsLoaderService {
 
 	constructor(private http: HttpClient, private ow: OverwolfService, private deckParser: DeckParserService) {}
 
-	public async retrieveStats(retriesLeft = 10): Promise<GameStats> {
+	public async retrieveStats(retriesLeft = 5): Promise<GameStats> {
 		console.log('[game-stats-loader] retrieving stats', retriesLeft, this.gameStats && this.gameStats[0]);
 		// if (this.gameStats)
 		// if (

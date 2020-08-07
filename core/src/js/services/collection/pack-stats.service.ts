@@ -54,7 +54,7 @@ export class PackStatsService {
 		this.publishPackStatInternal(statEvent);
 	}
 
-	private publishPackStatInternal(statEvent, retriesLeft = 10) {
+	private publishPackStatInternal(statEvent, retriesLeft = 5) {
 		if (retriesLeft <= 0) {
 			console.error('Could not send pack stats info');
 			return;
@@ -84,7 +84,7 @@ export class PackStatsService {
 		this.publishCardStatsInternal(statEvent);
 	}
 
-	private publishCardStatsInternal(statEvent, retriesLeft = 10) {
+	private publishCardStatsInternal(statEvent, retriesLeft = 5) {
 		if (retriesLeft <= 0) {
 			console.error('Could not send card stats info');
 			return;

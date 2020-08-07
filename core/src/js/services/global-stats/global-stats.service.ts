@@ -18,11 +18,11 @@ export class GlobalStatsService {
 			if (!user.userId || !user.username) {
 				console.warn('[global-stats] user not logged in', user);
 			}
-			this.getGlobalStatsInternal(user, stats => resolve(stats), 20);
+			this.getGlobalStatsInternal(user, stats => resolve(stats), 5);
 		});
 	}
 
-	private getGlobalStatsInternal(currentUser: CurrentUser, callback, retriesLeft = 30, shouldLogError = false) {
+	private getGlobalStatsInternal(currentUser: CurrentUser, callback, retriesLeft = 5, shouldLogError = false) {
 		const postEvent = {
 			userName: currentUser.username,
 			userId: currentUser.userId,

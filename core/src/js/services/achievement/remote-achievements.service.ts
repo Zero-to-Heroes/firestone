@@ -66,7 +66,7 @@ export class RemoteAchievementsService {
 	}
 
 	// TODO: at some point, use the CurrentUser from the state?
-	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 15): Promise<void> {
+	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 5): Promise<void> {
 		if (retriesLeft <= 0) {
 			console.error('Could not upload achievemnt stats after 15 retries');
 			return;

@@ -18,11 +18,11 @@ export class BgsBestUserStatsService {
 			if (!user.userId || !user.username) {
 				console.warn('[bgs-best-stats] user not logged in', user);
 			}
-			this.getBgsBestUserStatsInternal(user, stats => resolve(stats), 10);
+			this.getBgsBestUserStatsInternal(user, stats => resolve(stats), 5);
 		});
 	}
 
-	private getBgsBestUserStatsInternal(currentUser: CurrentUser, callback, retriesLeft = 10) {
+	private getBgsBestUserStatsInternal(currentUser: CurrentUser, callback, retriesLeft = 5) {
 		if (retriesLeft <= 0) {
 			console.log('[bgs-best-stats] could not retrieve stats', currentUser);
 			callback(null);
@@ -34,7 +34,7 @@ export class BgsBestUserStatsService {
 				callback(data);
 			},
 			error => {
-				setTimeout(() => this.getBgsBestUserStatsInternal(currentUser, callback, retriesLeft - 1), 1000);
+				setTimeout(() => this.getBgsBestUserStatsInternal(currentUser, callback, retriesLeft - 1), 2000);
 			},
 		);
 	}
