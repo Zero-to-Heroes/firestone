@@ -73,7 +73,9 @@ export class CardPlayedFromHandParser implements EventParser {
 			board: newBoard,
 			deck: newDeck,
 			otherZone: newOtherZone,
-		});
+			cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
+		} as DeckState);
+		// console.log('[secret-turn-end] updated deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

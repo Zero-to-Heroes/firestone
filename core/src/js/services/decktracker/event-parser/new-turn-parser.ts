@@ -1,3 +1,4 @@
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -18,13 +19,15 @@ export class NewTurnParser implements EventParser {
 			isActivePlayer: currentState.playerDeck.isFirstPlayer
 				? gameEvent.additionalData.turnNumber % 2 === 1
 				: gameEvent.additionalData.turnNumber % 2 === 0,
+			cardsPlayedThisTurn: [] as readonly DeckCard[],
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
 			isActivePlayer: currentState.opponentDeck.isFirstPlayer
 				? gameEvent.additionalData.turnNumber % 2 === 1
 				: gameEvent.additionalData.turnNumber % 2 === 0,
+			cardsPlayedThisTurn: [] as readonly DeckCard[],
 		} as DeckState);
-		// console.log('[debug] updated active player', gameEvent.additionalData.turnNumber, playerDeck, opponentDeck);
+		// console.log('[secret-turn-end] new turn');
 		return Object.assign(new GameState(), currentState, {
 			currentTurn: currentTurn,
 			playerDeck: playerDeck,

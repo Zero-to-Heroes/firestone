@@ -67,6 +67,8 @@ export class DeckState {
 	readonly otherZone: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
+	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
+
 	public static create(value: DeckState): DeckState {
 		return Object.assign(new DeckState(), value);
 	}

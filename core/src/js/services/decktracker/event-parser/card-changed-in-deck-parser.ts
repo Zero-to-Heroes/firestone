@@ -19,7 +19,8 @@ export class CardChangedInDeckParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
+		// console.log('changing card in deck');
+		// const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			previousDeck,
@@ -31,7 +32,7 @@ export class CardChangedInDeckParser implements EventParser {
 		// When card is changed in deck (eg Galakrond), a new card is created
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const newCard = DeckCard.create({
-			cardId: isPlayer ? cardId : undefined,
+			cardId: cardId,
 			entityId: entityId,
 			cardName: cardData.name,
 			manaCost: cardData ? cardData.cost : undefined,

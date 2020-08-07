@@ -40,7 +40,9 @@ export class SecretPlayedFromHandParser implements EventParser {
 					this.secretConfig.getValidSecrets(currentState.metadata, secretClass),
 				),
 			] as readonly BoardSecret[],
+			cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
 		} as DeckState);
+		// console.log('[secret-turn-end] updated deck after secret played', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
