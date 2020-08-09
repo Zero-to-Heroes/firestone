@@ -72,29 +72,30 @@ export class AchievementsMonitor {
 			// 	'[achievement-monitor] loaded existing completed achievement',
 			// 	existingAchievement,
 			// );
+			// From now on, stop counting how many times each achievement has been unlocked
+			if (existingAchievement.numberOfCompletions >= 1) {
+				// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+				continue;
+			}
+			// Don't grant a linked achievement more than once
+			// if (
+			// 	existingAchievement.numberOfCompletions >= 1 &&
+			// 	autoGrantAchievements.map(a => a.id).indexOf(achv.id) !== -1
+			// ) {
+			// 	// console.log(
+			// 	// 	'no-format',
+			// 	// 	'[achievement-monitor] linked achievement can be completed only once',
+			// 	// 	achv.id,
+			// 	// 	existingAchievement.numberOfCompletions,
+			// 	// 	autoGrantAchievements.map(a => a.id),
+			// 	// );
+			// 	continue;
+			// }
 			const completedAchievement = new CompletedAchievement(
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
 				existingAchievement.replayInfo || [],
 			);
-			if (achv.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
-				// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
-				continue;
-			}
-			// Don't grant a linked achievement more than once
-			if (
-				existingAchievement.numberOfCompletions >= 1 &&
-				autoGrantAchievements.map(a => a.id).indexOf(achv.id) !== -1
-			) {
-				// console.log(
-				// 	'no-format',
-				// 	'[achievement-monitor] linked achievement can be completed only once',
-				// 	achv.id,
-				// 	existingAchievement.numberOfCompletions,
-				// 	autoGrantAchievements.map(a => a.id),
-				// );
-				continue;
-			}
 			// console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
 			const mergedAchievement = Object.assign(new Achievement(), achv, {
 				numberOfCompletions: completedAchievement.numberOfCompletions,
