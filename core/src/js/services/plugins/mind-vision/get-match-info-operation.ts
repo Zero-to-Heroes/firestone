@@ -10,9 +10,9 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 			ow,
 			'getMatchInfo',
 			() => mindVision.getMatchInfo(),
-			matchInfo =>
-				!matchInfo ||
-				(matchInfo.LocalPlayer.Standard.LeagueId === -1 && !matchInfo.LocalPlayer.Standard.LegendRank),
+			// matchInfo => !matchInfo || (matchInfo.LocalPlayer.Standard.LeagueId === -1 && !matchInfo.LocalPlayer.Standard.LegendRank),
+			// The fact that the matchInfo is empty will depend on who calls it, so let the caller handle that
+			matchInfo => false,
 			matchInfo => {
 				const localPlayer = this.extractPlayerInfo(matchInfo.LocalPlayer);
 				const opponent = this.extractPlayerInfo(matchInfo.OpposingPlayer);
@@ -23,7 +23,8 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 				};
 				return result;
 			},
-			10,
+			3,
+			1500,
 		);
 	}
 
