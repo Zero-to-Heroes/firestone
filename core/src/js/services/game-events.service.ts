@@ -147,19 +147,19 @@ export class GameEvents {
 			case 'LOCAL_PLAYER':
 				console.log(gameEvent.Type + ' event');
 				// First try without waiting for a callback, which is most of the cases
-				const playerInfo = await this.playersInfoService.getPlayerInfo();
-				// console.log('LOCAL_PLAYER info', playerInfo);
-				if (!playerInfo) {
-					console.warn('[game-events] no local player info returned by mmindvision');
-					amplitude.getInstance().logEvent('error-logged', {
-						'error-category': 'memory-reading',
-						'error-id': 'no-player-info',
-					});
-				}
+				// const playerInfo = await this.playersInfoService.getPlayerInfo();
+				// // console.log('LOCAL_PLAYER info', playerInfo);
+				// if (!playerInfo) {
+				// 	console.warn('[game-events] no local player info returned by mmindvision');
+				// 	amplitude.getInstance().logEvent('error-logged', {
+				// 		'error-category': 'memory-reading',
+				// 		'error-id': 'no-player-info',
+				// 	});
+				// }
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
-					standard: playerInfo?.standard,
-					wild: playerInfo?.wild,
-					cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
+					// standard: playerInfo?.standard,
+					// wild: playerInfo?.wild,
+					// cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
 					deck: this.deckParser.currentDeck,
 				} as GameEventPlayer);
 				console.log('sending LOCAL_PLAYER info', localPlayer);
@@ -172,19 +172,19 @@ export class GameEvents {
 				break;
 			case 'OPPONENT_PLAYER':
 				console.log(gameEvent.Type + ' event');
-				const opponentInfo = await this.playersInfoService.getOpponentInfo();
-				// console.log('OPPONENT_PLAYER info', opponentInfo);
-				if (!opponentInfo) {
-					console.warn('[game-events] no local player info returned by mmindvision');
-					amplitude.getInstance().logEvent('error-logged', {
-						'error-category': 'memory-reading',
-						'error-id': 'no-player-info',
-					});
-				}
+				// const opponentInfo = await this.playersInfoService.getOpponentInfo();
+				// // console.log('OPPONENT_PLAYER info', opponentInfo);
+				// if (!opponentInfo) {
+				// 	console.warn('[game-events] no local player info returned by mmindvision');
+				// 	amplitude.getInstance().logEvent('error-logged', {
+				// 		'error-category': 'memory-reading',
+				// 		'error-id': 'no-player-info',
+				// 	});
+				// }
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value.OpponentPlayer, {
-					standard: opponentInfo?.standard,
-					wild: opponentInfo?.wild,
-					cardBackId: opponentInfo?.cardBackId,
+					// standard: opponentInfo?.standard,
+					// wild: opponentInfo?.wild,
+					// cardBackId: opponentInfo?.cardBackId,
 				} as GameEventPlayer);
 				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
 				this.gameEventsEmitter.allEvents.next(
