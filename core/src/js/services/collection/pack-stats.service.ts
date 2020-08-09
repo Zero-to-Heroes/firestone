@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Card } from '../../models/card';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { SetsService } from '../sets-service.service';
@@ -8,7 +7,7 @@ import { SetsService } from '../sets-service.service';
 @Injectable()
 export class PackStatsService {
 	private readonly PACK_STAT_URL: string = 'https://2xwty3krsl.execute-api.us-west-2.amazonaws.com/Prod/packstats';
-	private readonly CARD_STAT_URL: string = 'https://ke4xvpzrfi.execute-api.us-west-2.amazonaws.com/Prod/cardstats';
+	// private readonly CARD_STAT_URL: string = 'https://ke4xvpzrfi.execute-api.us-west-2.amazonaws.com/Prod/cardstats';
 
 	private userId: string;
 	private userMachineId: string;
@@ -21,8 +20,8 @@ export class PackStatsService {
 		private http: HttpClient,
 	) {
 		this.events.on(Events.NEW_PACK).subscribe(event => this.publishPackStat(event));
-		this.events.on(Events.NEW_CARD).subscribe(event => this.publishCardStat(event.data[0], event.data[1], true));
-		this.events.on(Events.MORE_DUST).subscribe(event => this.publishCardStat(event.data[0], event.data[2], false));
+		// this.events.on(Events.NEW_CARD).subscribe(event => this.publishCardStat(event.data[0], event.data[1], true));
+		// this.events.on(Events.MORE_DUST).subscribe(event => this.publishCardStat(event.data[0], event.data[2], false));
 		this.retrieveUserInfo();
 	}
 
@@ -34,13 +33,14 @@ export class PackStatsService {
 		this.username = user.username;
 	}
 
-	private publishPackStat(event: any): any {
+	private async publishPackStat(event: any) {
 		const setId = event.data[0];
 		const cards: any[] = event.data[1];
+		await this.retrieveUserInfo();
 		const statEvent = {
 			'creationDate': new Date(),
 			'userId': this.userId,
-			'userMachineId': this.userMachineId,
+			// 'userMachineId': this.userMachineId,
 			'userName': this.username,
 			'setId': setId,
 		};
@@ -68,33 +68,33 @@ export class PackStatsService {
 		);
 	}
 
-	private publishCardStat(card: Card, type: string, isNew: boolean) {
-		console.log('ready to publish card stat event', card, type, isNew);
-		const statEvent = {
-			'creationDate': new Date(),
-			'userId': this.userId,
-			'userMachineId': this.userMachineId,
-			'userName': this.username,
-			'cardId': card.id,
-			'type': type.toLowerCase(),
-			'rarity': this.allCards.getCard(card.id).rarity?.toLowerCase(),
-			'isNew': isNew,
-		};
-		console.log('posting card stat event', statEvent);
-		this.publishCardStatsInternal(statEvent);
-	}
+	// private publishCardStat(card: Card, type: string, isNew: boolean) {
+	// 	console.log('ready to publish card stat event', card, type, isNew);
+	// 	const statEvent = {
+	// 		'creationDate': new Date(),
+	// 		'userId': this.userId,
+	// 		'userMachineId': this.userMachineId,
+	// 		'userName': this.username,
+	// 		'cardId': card.id,
+	// 		'type': type.toLowerCase(),
+	// 		'rarity': this.allCards.getCard(card.id).rarity?.toLowerCase(),
+	// 		'isNew': isNew,
+	// 	};
+	// 	console.log('posting card stat event', statEvent);
+	// 	this.publishCardStatsInternal(statEvent);
+	// }
 
-	private publishCardStatsInternal(statEvent, retriesLeft = 5) {
-		if (retriesLeft <= 0) {
-			console.error('Could not send card stats info');
-			return;
-		}
-		this.http.post(this.CARD_STAT_URL, statEvent).subscribe(
-			result => console.log('card stat event result', result),
-			error => {
-				console.warn('Could not send card stats info', error);
-				setTimeout(() => this.publishCardStatsInternal(statEvent, retriesLeft - 1));
-			},
-		);
-	}
+	// private publishCardStatsInternal(statEvent, retriesLeft = 5) {
+	// 	if (retriesLeft <= 0) {
+	// 		console.error('Could not send card stats info');
+	// 		return;
+	// 	}
+	// 	this.http.post(this.CARD_STAT_URL, statEvent).subscribe(
+	// 		result => console.log('card stat event result', result),
+	// 		error => {
+	// 			console.warn('Could not send card stats info', error);
+	// 			setTimeout(() => this.publishCardStatsInternal(statEvent, retriesLeft - 1));
+	// 		},
+	// 	);
+	// }
 }
