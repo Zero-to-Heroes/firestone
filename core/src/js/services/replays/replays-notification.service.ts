@@ -66,7 +66,7 @@ export class ReplaysNotificationService {
 				clickToClose: true,
 				eventToSendOnClick: () => new ShowReplayEvent(stat.reviewId),
 			} as Message);
-		}, 5000);
+		}, 3500);
 	}
 
 	private buildStartNotificationTemplate(reviewId: string): string {
