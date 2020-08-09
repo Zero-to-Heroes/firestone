@@ -67,9 +67,9 @@ export class MindVisionOperationFacade<T> {
 
 	public async call(numberOfRetries?: number): Promise<T> {
 		if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
-			if (this.serviceName === 'getBattlegroundsMatch') {
-				this.log('returning cached value', this.cachedValue);
-			}
+			// if (this.serviceName === 'getBattlegroundsMatch') {
+			// 	this.log('returning cached value', this.cachedValue);
+			// }
 			return this.cachedValue;
 		}
 		if (!(await this.ow.inGame())) {
@@ -93,9 +93,9 @@ export class MindVisionOperationFacade<T> {
 
 	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number) {
 		if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
-			if (this.serviceName === 'getBattlegroundsMatch') {
-				this.log('returning cached value', this.cachedValue);
-			}
+			// if (this.serviceName === 'getBattlegroundsMatch') {
+			// 	this.log('returning cached value', this.cachedValue);
+			// }
 			callback(this.cachedValue, 0);
 			return;
 		}
