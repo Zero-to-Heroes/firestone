@@ -66,7 +66,7 @@ export class DeckParserService {
 		}
 		if (this.goingIntoQueueRegex.exec(logLine)) {
 			console.log('[deck-parser] getting active deck from going into queue');
-			const activeDeck = await this.memory.getActiveDeck(2);
+			const activeDeck = await this.memory.getActiveDeck(1);
 			console.log('[deck-parser] active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log(
@@ -300,7 +300,7 @@ export class DeckParserService {
 	}
 
 	private updateCardId(cardId: string, matchInfo: MatchInfo): string {
-		if (cardId !== CardIds.Collectible.Neutral.TransferStudent) {
+		if (cardId !== CardIds.Collectible.Neutral.TransferStudent || !matchInfo) {
 			return cardId;
 		}
 		switch (matchInfo.boardId) {
