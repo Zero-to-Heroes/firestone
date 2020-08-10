@@ -73,6 +73,7 @@ declare let amplitude: any;
 						<div class="opponent-info">
 							<div class="main-info">
 								<bgs-board
+									*ngIf="boardMinions && boardMinions.length > 0"
 									[debug]="true"
 									[entities]="boardMinions"
 									[finalBoard]="true"
