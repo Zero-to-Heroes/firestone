@@ -36,6 +36,7 @@ import { BgsPlayerBoardParser } from './event-parsers/bgs-player-board-parser';
 import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-match-stats-filter-change-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
+import { BgsStatUpdateParser } from './event-parsers/bgs-stat-update-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
@@ -365,6 +366,7 @@ export class BattlegroundsStoreService {
 			new NoBgsMatchParser(),
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(),
+			new BgsStatUpdateParser(this.allCards),
 			new BgsHeroSelectionParser(this.memory),
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsHeroSelectionDoneParser(),

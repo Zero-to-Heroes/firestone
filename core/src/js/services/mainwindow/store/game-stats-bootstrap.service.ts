@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
+import { BgsInitService } from '../../battlegrounds/bgs-init.service';
 import { Events } from '../../events.service';
 import { OverwolfService } from '../../overwolf.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
@@ -13,6 +14,7 @@ export class GameStatsBootstrapService {
 	constructor(
 		private readonly events: Events,
 		private readonly gameStatsLoader: GameStatsLoaderService,
+		private readonly bgsInit: BgsInitService,
 		private readonly ow: OverwolfService,
 	) {
 		this.events.on(Events.START_POPULATE_GAME_STATS_STATE).subscribe(event => this.initGameStats());
@@ -24,6 +26,7 @@ export class GameStatsBootstrapService {
 	public async initGameStats() {
 		const newGameStats: GameStats = await this.gameStatsLoader.retrieveStats();
 		this.events.broadcast(Events.MATCH_STATS_UPDATED, newGameStats);
+		this.bgsInit.init(newGameStats);
 		this.stateUpdater.next(new GameStatsInitEvent(newGameStats));
 	}
 }
