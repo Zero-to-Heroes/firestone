@@ -20,6 +20,7 @@ export class BattlegroundsTrackingSetProvider extends GenericSetProvider {
 				'battlegrounds_tribe_played_dragon',
 				'battlegrounds_tribe_played_mechanical',
 				'battlegrounds_tribe_played_murloc',
+				'battlegrounds_tribe_played_pirate',
 			],
 			'achievements_progression',
 		);
