@@ -26,9 +26,17 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' = 'bottom';
 
 	@Input('helpTooltip') set text(value: string) {
+		if (value === this._text) {
+			console.log('same value, returning', value);
+			return;
+		}
 		this._text = value;
+		//console.log('updating text in tooltip', value);
 		if (!this._text && this.overlayRef) {
 			this.overlayRef?.detach();
+		} else if (this.tooltipRef) {
+			//console.log('existing tooltip', value);
+			this.tooltipRef.instance.text = this._text;
 		}
 	}
 
@@ -37,6 +45,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
+	private tooltipRef: ComponentRef<HelpTooltipComponent>;
 
 	constructor(
 		private overlayPositionBuilder: OverlayPositionBuilder,
@@ -49,7 +58,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		const target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
-		// console.log('targeting tooltip help element', this.position, target);
+		//console.log('targeting tooltip help element', this.position, target);
 
 		const positionArrays: ConnectedPosition[] =
 			this.position === 'bottom'
@@ -121,17 +130,17 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		if (!this._text) {
 			return;
 		}
+		//console.log('onmouseenter');
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
 
 		// Attach tooltip portal to overlay
-		const tooltipRef: ComponentRef<HelpTooltipComponent> = this.overlayRef.attach(this.tooltipPortal);
+		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
-		tooltipRef.instance.text = this._text;
+		this.tooltipRef.instance.text = this._text;
 		// console.log('setting tooltip text', this._text, tooltipRef);
 		this.positionStrategy.apply();
-
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -145,40 +154,19 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			const tooltipLeft =
 				window.left +
 				(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
-				(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x;
+				(this.tooltipRef.location.nativeElement.getBoundingClientRect() as any).x;
 			if (tooltipLeft < 0) {
-				console.log(
-					'tooltip left',
-					tooltipLeft,
-					window,
-					this.overlayRef.hostElement.getBoundingClientRect(),
-					this.overlayRef.hostElement,
-					tooltipRef,
-					tooltipRef.location.nativeElement.getBoundingClientRect(),
-					tooltipRef.location.nativeElement,
-				);
-				this.renderer.setStyle(tooltipRef.location.nativeElement, 'marginLeft', `${-tooltipLeft}px`);
+				this.renderer.setStyle(this.tooltipRef.location.nativeElement, 'marginLeft', `${-tooltipLeft}px`);
 			}
 
 			const tooltipRight =
 				window.left +
 				(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
-				(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x +
-				(tooltipRef.location.nativeElement.getBoundingClientRect() as any).width;
+				(this.tooltipRef.location.nativeElement.getBoundingClientRect() as any).x +
+				(this.tooltipRef.location.nativeElement.getBoundingClientRect() as any).width;
 			if (gameInfo && tooltipRight > gameInfo.logicalWidth) {
-				console.log(
-					'tooltip right',
-					gameInfo,
-					tooltipRight,
-					window,
-					this.overlayRef.hostElement.getBoundingClientRect(),
-					this.overlayRef.hostElement,
-					tooltipRef,
-					tooltipRef.location.nativeElement.getBoundingClientRect(),
-					tooltipRef.location.nativeElement,
-				);
 				this.renderer.setStyle(
-					tooltipRef.location.nativeElement,
+					this.tooltipRef.location.nativeElement,
 					'marginLeft',
 					`${gameInfo.logicalWidth - tooltipRight}px`,
 				);
@@ -188,11 +176,15 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
+		//console.log('onmouseleave');
 		if (this.overlayRef) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
+		}
+		if (this.tooltipRef) {
+			this.tooltipRef = undefined;
 		}
 	}
 }

@@ -773,6 +773,13 @@ export class OverwolfService {
 		});
 	}
 
+	public async placeOnClipboard(value: string): Promise<void> {
+		return new Promise<void>(resolve => {
+			overwolf.utils.placeOnClipboard(value);
+			resolve();
+		});
+	}
+
 	public async getMonitorsList(): Promise<any> {
 		return new Promise<any>(resolve => {
 			overwolf.utils.getMonitorsList(res => {
