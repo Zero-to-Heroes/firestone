@@ -33,6 +33,16 @@ export class BgsPlayerBoardParser implements EventParser {
 			);
 			return currentState;
 		}
+		if (event.board.length > 7) {
+			console.error('no-format', 'Too many entities on the board', event);
+			return currentState.update({
+				currentGame: currentState.currentGame.update({
+					battleInfo: undefined,
+					battleInfoStatus: 'empty',
+					battleResult: undefined,
+				} as BgsGame),
+			} as BattlegroundsState);
+		}
 		// console.log('finding player board', playerToUpdate, event, currentState);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
