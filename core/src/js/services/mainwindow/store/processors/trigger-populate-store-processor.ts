@@ -13,11 +13,14 @@ export class TriggerPopulateStoreProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.log('starting to populate store');
 		this.events.broadcast(Events.START_POPULATE_COLLECTION_STATE);
-		this.events.broadcast(Events.START_POPULATE_ACHIEVEMENT_STATE);
-		this.events.broadcast(Events.START_POPULATE_GAME_STATS_STATE);
-		this.events.broadcast(Events.START_POPULATE_GLOBAL_STATS_STATE);
-		this.events.broadcast(Events.START_POPULATE_BGS_BEST_USER_STATS_STATE);
+		if (!event.onlyGameData) {
+			this.events.broadcast(Events.START_POPULATE_ACHIEVEMENT_STATE);
+			this.events.broadcast(Events.START_POPULATE_GAME_STATS_STATE);
+			this.events.broadcast(Events.START_POPULATE_GLOBAL_STATS_STATE);
+			this.events.broadcast(Events.START_POPULATE_BGS_BEST_USER_STATS_STATE);
+		}
 		return [null, null];
 	}
 }

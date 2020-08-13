@@ -191,16 +191,16 @@ export class MainWindowStoreService {
 
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.gameLaunched(res)) {
-				console.log('[store] game launched, populating store', res);
+				// console.log('[store] game launched, populating store', res);
 				// Do both so that it's hidden right away
 				const prefs = await this.prefs.getPreferences();
 				this.ow.hideCollectionWindow(prefs);
 				this.stateUpdater.next(new CloseMainWindowEvent());
-				this.populateStore();
+				this.populateStore(true);
 			}
 		});
-		this.populateStore();
 
+		this.populateStore();
 		this.listenForSocialAccountLoginUpdates();
 	}
 
@@ -477,11 +477,11 @@ export class MainWindowStoreService {
 		);
 	}
 
-	private populateStore() {
+	private populateStore(onlyGameData = false) {
 		console.log('sending populate store event');
 		// Launch events to start gathering data for the store
 		this.stateUpdater.next(new PopulateStoreEvent());
-		this.stateUpdater.next(new TriggerPopulateStoreEvent());
+		this.stateUpdater.next(new TriggerPopulateStoreEvent(onlyGameData));
 	}
 
 	private listenForSocialAccountLoginUpdates() {
