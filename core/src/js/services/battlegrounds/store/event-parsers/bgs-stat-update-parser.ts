@@ -20,15 +20,24 @@ export class BgsStatUpdateParser implements EventParser {
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
 			return currentState;
 		}
-		//console.log('[debug] bgsMatchStats', bgsMatchStats);
+
+		console.log('[bgs-stat-update] bgsMatchStats', bgsMatchStats.length);
 		const currentBattlegroundsMetaPatch = currentState.globalStats.currentBattlegroundsMetaPatch;
 		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
-		//console.log('[debug] bgsStatsForCurrentPatch', bgsStatsForCurrentPatch);
+		console.log(
+			'[bgs-stat-update] bgsStatsForCurrentPatch',
+			bgsStatsForCurrentPatch.length,
+			currentBattlegroundsMetaPatch,
+		);
 
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
 			currentState.globalStats,
 			bgsStatsForCurrentPatch,
 			this.cards,
+		);
+		console.log(
+			'[bgs-stat-update] heroStatsWithPlayer',
+			heroStatsWithPlayer.length > 0 && heroStatsWithPlayer[0].playerGamesPlayed,
 		);
 		const statsWithPlayer = currentState.globalStats?.update({
 			heroStats: heroStatsWithPlayer,
@@ -79,7 +88,9 @@ export class BgsStatUpdateParser implements EventParser {
 									.map(stat => parseInt(stat.additionalResult))
 									.filter(position => position == 1).length / playerGamesPlayed,
 				} as BgsHeroStat);
-			}) || []
+			}) ||
+			[] ||
+			[]
 		);
 	}
 }

@@ -25,7 +25,7 @@ export class BgsInitService {
 	) {
 		this.events.on(Events.MATCH_STATS_UPDATED).subscribe(event => {
 			const newGameStats: GameStats = event.data[0];
-			console.log('[debug] match stats updated', newGameStats);
+			console.log('[bgs-init] match stats updated', newGameStats);
 			this.stateUpdater.next(new BgsStatUpdateEvent(newGameStats));
 		});
 		setTimeout(() => {
@@ -34,21 +34,34 @@ export class BgsInitService {
 	}
 
 	public async init(matchStats: GameStats) {
-		console.log('bgs init starting');
+		console.log('[bgs-init] bgs init starting');
 		const bgsGlobalStats: BgsStats = await this.bgsGlobalStats.loadGlobalStats();
-		console.log('bgs got global stats');
+		console.log(
+			'[bgs-init] bgs got global stats',
+			bgsGlobalStats?.heroStats && bgsGlobalStats.heroStats.length > 0 && bgsGlobalStats.heroStats[0].tribesStat,
+		);
 		const bgsMatchStats = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
-			console.log('no bgs match stats');
+			console.log('[bgs-init] no bgs match stats');
 			this.stateUpdater.next(new BgsInitEvent([], bgsGlobalStats));
 			return;
 		}
+		console.log('[bgs-init] bgsMatchStats', bgsMatchStats.length);
 		const currentBattlegroundsMetaPatch = (await this.patchesService.getConf()).currentBattlegroundsMetaPatch;
 		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
+		console.log(
+			'[bgs-init] bgsStatsForCurrentPatch',
+			bgsStatsForCurrentPatch.length,
+			currentBattlegroundsMetaPatch,
+		);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
 			bgsGlobalStats,
 			bgsStatsForCurrentPatch,
 			this.cards,
+		);
+		console.log(
+			'[bgs-init] heroStatsWithPlayer',
+			heroStatsWithPlayer.length > 0 && heroStatsWithPlayer[0].playerGamesPlayed,
 		);
 		const statsWithPlayer = bgsGlobalStats?.update({
 			heroStats: heroStatsWithPlayer,
