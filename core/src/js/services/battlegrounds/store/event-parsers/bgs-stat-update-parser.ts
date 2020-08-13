@@ -3,12 +3,13 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
+import { PatchesConfigService } from '../../../patches-config.service';
 import { BgsStatUpdateEvent } from '../events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsStatUpdateParser implements EventParser {
-	constructor(private readonly cards: AllCardsService) {}
+	constructor(private readonly cards: AllCardsService, private readonly patchesService: PatchesConfigService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsStatUpdateEvent';
@@ -22,7 +23,9 @@ export class BgsStatUpdateParser implements EventParser {
 		}
 
 		console.log('[bgs-stat-update] bgsMatchStats', bgsMatchStats.length);
-		const currentBattlegroundsMetaPatch = currentState.globalStats.currentBattlegroundsMetaPatch;
+		const currentBattlegroundsMetaPatch =
+			currentState.globalStats?.currentBattlegroundsMetaPatch ||
+			(await this.patchesService.getConf()).currentBattlegroundsMetaPatch;
 		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
 		console.log(
 			'[bgs-stat-update] bgsStatsForCurrentPatch',

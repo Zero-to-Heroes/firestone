@@ -11,6 +11,7 @@ import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../../overwolf.service';
+import { PatchesConfigService } from '../../patches-config.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
@@ -95,6 +96,7 @@ export class BattlegroundsStoreService {
 		private prefs: PreferencesService,
 		private memory: MemoryInspectionService,
 		private twitch: TwitchAuthService,
+		private patchesService: PatchesConfigService,
 		private init_BgsRunStatsService: BgsRunStatsService,
 	) {
 		this.eventParsers = this.buildEventParsers();
@@ -319,8 +321,6 @@ export class BattlegroundsStoreService {
 					if (newState !== this.state) {
 						this.state = newState;
 						this.eventEmitters.forEach(emitter => emitter(this.state));
-
-						// this.battlegroundsStoreEventBus.next(this.state);
 						// console.log('emitted state', gameEvent.type, this.state);
 						this.updateOverlay();
 					}
@@ -366,7 +366,7 @@ export class BattlegroundsStoreService {
 			new NoBgsMatchParser(),
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(),
-			new BgsStatUpdateParser(this.allCards),
+			new BgsStatUpdateParser(this.allCards, this.patchesService),
 			new BgsHeroSelectionParser(this.memory),
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsHeroSelectionDoneParser(),

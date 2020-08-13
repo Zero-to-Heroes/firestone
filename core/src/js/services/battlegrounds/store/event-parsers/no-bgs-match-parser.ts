@@ -9,6 +9,8 @@ export class NoBgsMatchParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: NoBgsMatchEvent): Promise<BattlegroundsState> {
-		return new BattlegroundsState();
+		return BattlegroundsState.create({
+			globalStats: currentState.globalStats,
+		} as BattlegroundsState);
 	}
 }
