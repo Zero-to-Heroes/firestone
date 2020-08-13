@@ -21,7 +21,7 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		// Can happen at the very start of the game
 		if (!localPlayer) {
-			console.log('[secret-turn-end] no local player, returning', gameEvent);
+			// console.log('[secret-turn-end] no local player, returning', gameEvent);
 			return currentState;
 		}
 
@@ -30,18 +30,18 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayerActive ? currentState.playerDeck : currentState.opponentDeck;
 		const playerWhoseCardsPlayedToCheck = !isPlayerActive ? currentState.playerDeck : currentState.opponentDeck;
-		console.log('[secret-turn-end] ndekc with secret', deckWithSecretToCheck);
-		console.log('[secret-turn-end] playerWhoseCardsPlayedToCheck', playerWhoseCardsPlayedToCheck);
+		// console.log('[secret-turn-end] ndekc with secret', deckWithSecretToCheck);
+		// console.log('[secret-turn-end] playerWhoseCardsPlayedToCheck', playerWhoseCardsPlayedToCheck);
 		const secretsWeCantRuleOut = [];
 
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
-			console.log('[secret-turn-end] hand full');
+			// console.log('[secret-turn-end] hand full');
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Plagiarize);
 		}
 
 		const hasOpponentPlayedCards = playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn.length > 0;
-		console.log('[secret-turn-end] cards played this turn', playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn);
+		// console.log('[secret-turn-end] cards played this turn', playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn);
 		if (!hasOpponentPlayedCards) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Plagiarize);
 		}
