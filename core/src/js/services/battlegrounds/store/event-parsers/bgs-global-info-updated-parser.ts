@@ -74,10 +74,14 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 	}
 
 	public static buildRaces(availableRaces: readonly number[]): [readonly Race[], readonly Race[]] {
+		if (!availableRaces || availableRaces.length === 0) {
+			console.warn('[bgs-info-updater] no tribe info read from memory');
+			return [undefined, undefined];
+		}
 		const allRaces = [Race.BEAST, Race.DEMON, Race.DRAGON, Race.MECH, Race.MURLOC, Race.PIRATE];
 		return [
-			allRaces.filter(race => !availableRaces || availableRaces.length === 0 || availableRaces.includes(race)),
-			allRaces.filter(race => availableRaces && !availableRaces.includes(race)),
+			allRaces.filter(race => availableRaces.includes(race)),
+			allRaces.filter(race => !availableRaces.includes(race)),
 		];
 	}
 }
