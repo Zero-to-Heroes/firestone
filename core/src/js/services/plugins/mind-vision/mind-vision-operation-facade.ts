@@ -2,7 +2,7 @@ import { OverwolfService } from '../../overwolf.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 
 export class MindVisionOperationFacade<T> {
-	private cachedValue: T;
+	// private cachedValue: T;
 	private lastCacheDate = 0;
 
 	private processingQueue = new ProcessingQueue<InternalCall<T>>(
@@ -66,12 +66,12 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	public async call(numberOfRetries?: number): Promise<T> {
-		if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
-			// if (this.serviceName === 'getBattlegroundsMatch') {
-			// 	this.log('returning cached value', this.cachedValue);
-			// }
-			return this.cachedValue;
-		}
+		// if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
+		// 	// if (this.serviceName === 'getBattlegroundsMatch') {
+		// 	// 	this.log('returning cached value', this.cachedValue);
+		// 	// }
+		// 	return this.cachedValue;
+		// }
 		if (!(await this.ow.inGame())) {
 			return null;
 		}
@@ -92,13 +92,13 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number) {
-		if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
-			// if (this.serviceName === 'getBattlegroundsMatch') {
-			// 	this.log('returning cached value', this.cachedValue);
-			// }
-			callback(this.cachedValue, 0);
-			return;
-		}
+		// if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
+		// 	// if (this.serviceName === 'getBattlegroundsMatch') {
+		// 	// 	this.log('returning cached value', this.cachedValue);
+		// 	// }
+		// 	callback(this.cachedValue, 0);
+		// 	return;
+		// }
 		if (retriesLeft <= 0) {
 			// There are cases where not retrieving the info it totally valid,
 			// like trying to get the BattlegroundsInfo right after logging in
@@ -124,9 +124,10 @@ export class MindVisionOperationFacade<T> {
 		// 		resultFromMemory.filter(entry => entry.CardId === 'CS2_041'),
 		// 	);
 		// } catch (e) {}
-		this.cachedValue = this.transformer(resultFromMemory);
+		const result = this.transformer(resultFromMemory);
+		// this.cachedValue = result;
 		this.lastCacheDate = Date.now();
-		callback(this.cachedValue, retriesLeft - 1);
+		callback(result, retriesLeft - 1);
 		return;
 	}
 
