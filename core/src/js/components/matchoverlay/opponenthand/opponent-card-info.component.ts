@@ -23,7 +23,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		'../../../../css/component/matchoverlay/opponenthand/opponent-card-info.component.scss',
 	],
 	template: `
-		<div class="opponent-card-info scalable" [style.left.vh]="leftVhOffset" [style.top.vh]="topVhOffset">
+		<div class="opponent-card-info scalable" [style.left.vw]="leftVwOffset" [style.top.vw]="topVwOffset">
 			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="_card"></opponent-card-turn-number>
 			<opponent-card-info-id
 				*ngIf="displayGuess || displayBuff"
@@ -43,8 +43,8 @@ export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 	// Weuse vh instead of vw here, because the height of the playing area is not affected when
 	// you resize the window. The width on the other hand changes, because the border outside of
 	// the play area are cropped
-	@Input() leftVhOffset: number;
-	@Input() topVhOffset: number;
+	@Input() leftVwOffset: number;
+	@Input() topVwOffset: number;
 	_card: DeckCard;
 
 	@Input() set card(value: DeckCard) {

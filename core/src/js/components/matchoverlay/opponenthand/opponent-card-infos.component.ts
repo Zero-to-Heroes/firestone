@@ -18,8 +18,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
 				[maxBuffsToShow]="maxBuffsToShow"
-				[leftVhOffset]="cardPositionLeft(i)"
-				[topVhOffset]="cardPositionTop(i)"
+				[leftVwOffset]="cardPositionLeft(i)"
+				[topVwOffset]="cardPositionTop(i)"
 				[attr.data-entity-id]="card.entityId"
 			></opponent-card-info>
 		</ul>
@@ -42,12 +42,12 @@ export class OpponentCardInfosComponent {
 
 	cardPositionLeft(i: number) {
 		const totalCards = this._cards.length;
-		return this.handAdjustment.get(totalCards, Adjustment.create()).positionLeft.get(i, 0);
+		return 0.2 * this.handAdjustment.get(totalCards, Adjustment.create()).positionLeft.get(i, 0);
 	}
 
 	cardPositionTop(i: number) {
 		const totalCards = this._cards.length;
-		return this.handAdjustment.get(totalCards, Adjustment.create()).positionTop.get(i, 0);
+		return 0.2 * this.handAdjustment.get(totalCards, Adjustment.create()).positionTop.get(i, 0);
 	}
 
 	trackById(index, card: DeckCard) {

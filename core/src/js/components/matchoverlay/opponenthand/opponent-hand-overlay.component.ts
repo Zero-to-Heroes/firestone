@@ -118,20 +118,11 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		if (!gameInfo) {
 			return;
 		}
-		// Window takes 30% of the size of the screen width
 		const gameWidth = gameInfo.width;
-		const width = gameWidth * 1;
-		console.log(
-			'[opponent-hand-overlay] new game width is',
-			gameWidth,
-			'with dpi',
-			'and overlay width',
-			width,
-			gameInfo,
-		);
-		// Height
 		const gameHeight = gameInfo.height;
-		const height = gameHeight * 0.2;
+		const height = gameHeight * 0.5;
+		const width = gameHeight;
 		await this.ow.changeWindowSize(this.windowId, width, height);
+		await this.ow.changeWindowPosition(this.windowId, 0.5 * (gameWidth - width), 0);
 	}
 }
