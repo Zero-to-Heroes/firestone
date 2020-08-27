@@ -16,7 +16,7 @@ export class RealTimeNotificationService {
 				if (res.ok) {
 					const status = JSON.parse(res._body);
 					this.notifications = status[0].status;
-					console.log('received status', this.notifications);
+					// console.log('received status', this.notifications);
 				}
 				resolve(this.notifications);
 			});

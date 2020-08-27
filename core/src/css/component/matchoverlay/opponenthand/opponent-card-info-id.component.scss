@@ -14,50 +14,21 @@
 	justify-content: center;
 	border-radius: 50%;
 	border: 2px solid #9fb6d7;
+	--icon-color: #9fb6d7;
 	overflow: hidden;
 	z-index: 1;
 
-	&.created-by {
-		border-color: #d9c3ab;
-		border-style: dashed;
-
-		.card-image {
-			width: 250%;
-			clip-path: none;
-		}
+	&.buffed {
+		border-color: #ffb948;
+		--icon-color: #ffb948;
 	}
-}
 
-.buffs {
-	display: flex;
-	width: 100%;
-	flex-direction: column;
-	position: relative;
-	top: 3px;
-	background: #303352;
-	padding: 2px;
-	// z-index: -1;
-
-	&:not(:first-child) {
-		top: -5px;
-		left: 8px;
-	}
-}
-
-.buff {
-	background: #07081f;
-	width: 22px;
-	height: 22px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: 1px solid #d9c3ab;
-	overflow: hidden;
-	border-radius: 50%;
-	margin-bottom: 2px;
-
-	img {
-		width: 220%;
+	.created-by {
+		position: absolute;
+		width: 15px;
+		height: 15px;
+		top: 15px;
+		left: 15px;
 	}
 }
 

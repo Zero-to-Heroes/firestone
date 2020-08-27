@@ -157,6 +157,7 @@ export class DeckManipulationHelper {
 		const newCard = DeckCard.create({
 			...cardTemplate,
 			buffingEntityCardIds: undefined,
+			buffCardIds: undefined,
 			metaInfo: new CardMetaInfo(),
 		} as DeckCard);
 		if (debug) {

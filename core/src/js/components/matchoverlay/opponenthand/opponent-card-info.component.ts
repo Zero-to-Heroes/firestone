@@ -29,7 +29,6 @@ import { PreferencesService } from '../../../services/preferences.service';
 				*ngIf="displayGuess || displayBuff"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
-				[maxBuffsToShow]="maxBuffsToShow"
 				[card]="_card"
 			></opponent-card-info-id>
 		</div>
@@ -38,7 +37,6 @@ import { PreferencesService } from '../../../services/preferences.service';
 export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
-	@Input() maxBuffsToShow: number;
 	@Input() displayTurnNumber: boolean;
 	// Weuse vh instead of vw here, because the height of the playing area is not affected when
 	// you resize the window. The width on the other hand changes, because the border outside of

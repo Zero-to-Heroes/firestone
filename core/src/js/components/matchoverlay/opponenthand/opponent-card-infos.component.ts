@@ -17,7 +17,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
-				[maxBuffsToShow]="maxBuffsToShow"
 				[leftVwOffset]="cardPositionLeft(i)"
 				[topVwOffset]="cardPositionTop(i)"
 				[attr.data-entity-id]="card.entityId"
@@ -29,7 +28,6 @@ export class OpponentCardInfosComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 	@Input() displayTurnNumber: boolean;
-	@Input() maxBuffsToShow: number;
 	_cards: readonly DeckCard[];
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();

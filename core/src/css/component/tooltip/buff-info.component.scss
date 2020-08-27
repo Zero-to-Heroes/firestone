@@ -1,0 +1,54 @@
+.buff-info {
+	display: flex;
+	flex-direction: column;
+	font-family: Open Sans;
+	font-style: normal;
+	color: #eddfd0;
+	font-size: 11px;
+	margin-bottom: 5px;
+
+	.header {
+		display: flex;
+		margin-bottom: 6px;
+
+		.count {
+			font-weight: bold;
+			color: #ffb948;
+			margin-right: 5px;
+		}
+
+		.name {
+			font-weight: bold;
+		}
+	}
+
+	.body {
+		display: flex;
+
+		.icon-container {
+			padding: 5px;
+			width: 25px;
+			min-width: 25px;
+			max-width: 25px;
+			height: 25px;
+			min-height: 25px;
+			max-height: 25px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			border: 2px solid #ffb948;
+			overflow: hidden;
+			z-index: 1;
+			margin-right: 10px;
+
+			.icon {
+				width: 250%;
+				clip-path: none;
+			}
+		}
+
+		.text {
+		}
+	}
+}

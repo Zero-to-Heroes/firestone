@@ -407,10 +407,11 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_BUFFED_IN_HAND':
-				// console.log('will emit ', GameEvent.CARD_BUFFED_IN_HAND);
+				// console.log('will emit ', GameEvent.CARD_BUFFED_IN_HAND, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_BUFFED_IN_HAND, gameEvent, {
 						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
+						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,
 					}),
 				);
 				break;

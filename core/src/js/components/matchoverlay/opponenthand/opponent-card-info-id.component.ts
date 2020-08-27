@@ -11,22 +11,22 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		<div
 			class="opponent-card-info-id"
 			*ngIf="cardId && displayGuess"
-			[cardTooltip]="cardId"
-			cardTooltipPosition="right"
-			[cardTooltipText]="createdBy ? 'Created by' : undefined"
-			[ngClass]="{ 'created-by': createdBy }"
+			cardTooltip
+			[cardTooltipCard]="_card"
+			cardTooltipPosition="bottom-right"
+			[cardTooltipDisplayBuffs]="displayBuff"
+			[ngClass]="{ 'buffed': hasBuffs }"
 		>
-			<img [src]="cardUrl" class="card-image" />
-		</div>
-		<div class="buffs" *ngIf="buffs && displayBuff">
-			<div
-				*ngFor="let buff of buffs"
-				class="buff"
-				[cardTooltip]="buff"
-				cardTooltipPosition="right"
-				[cardTooltipText]="'Buffed by'"
-			>
-				<img [src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + buff + '.jpg'" />
+			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" />
+			<div *ngIf="createdBy" class="created-by">
+				<svg>
+					<use xlink:href="/Files/assets/svg/sprite.svg#created_by" />
+				</svg>
+			</div>
+			<div *ngIf="!cardUrl" class="only-buff">
+				<svg>
+					<use xlink:href="/Files/assets/svg/sprite.svg#card_only_buff" />
+				</svg>
 			</div>
 		</div>
 	`,
@@ -35,42 +35,25 @@ export class OpponentCardInfoIdComponent {
 	cardId: string;
 	cardUrl: string;
 	createdBy: boolean;
-	buffs: readonly string[];
+	hasBuffs: boolean;
+	_card: DeckCard;
 
 	@Input() displayGuess: boolean;
 	@Input() displayBuff: boolean;
 
-	private _buffingCardIds: readonly string[];
-	private _maxBuffsToShow: number;
-
 	@Input() set card(value: DeckCard) {
+		this._card = value;
 		this.cardId = value.cardId || value.creatorCardId || value.lastAffectedByCardId;
-		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
-		this._buffingCardIds = value.buffingEntityCardIds;
-		console.log('set card in hand', value);
-		this.updateBuffs();
-	}
-
-	@Input() set maxBuffsToShow(value: number) {
-		this._maxBuffsToShow = value;
-		// console.log('set _maxBuffsToShow', this._maxBuffsToShow);
-		this.updateBuffs();
-	}
-
-	constructor(private cdr: ChangeDetectorRef) {}
-
-	private updateBuffs() {
-		this.buffs =
-			this._buffingCardIds && this._buffingCardIds.length > 0
-				? this._maxBuffsToShow > 0
-					? this._buffingCardIds.slice(0, this._maxBuffsToShow)
-					: this._buffingCardIds
-				: null;
+		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
+		this.hasBuffs = value.buffCardIds?.length > 0;
+		// console.log('set card in hand', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
+
+	constructor(private cdr: ChangeDetectorRef) {}
 }

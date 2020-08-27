@@ -30,7 +30,6 @@ import { PreferencesService } from '../../../services/preferences.service';
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
-				[maxBuffsToShow]="maxBuffsToShow"
 			></opponent-card-infos>
 		</div>
 	`,
@@ -43,7 +42,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	displayTurnNumber = true;
 	displayGuess = true;
 	displayBuff = true;
-	maxBuffsToShow = 0;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -68,7 +66,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				return;
 			}
 			this.gameState = event.state;
-			console.log('received state', event.event?.name, this.gameState?.opponentDeck?.hand);
+			// console.log('received state', event.event?.name, this.gameState?.opponentDeck?.hand);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -104,10 +102,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
 		this.displayGuess = preferences.dectrackerShowOpponentGuess;
 		this.displayBuff = preferences.dectrackerShowOpponentBuff;
-		this.maxBuffsToShow = preferences.dectrackerLimitOpponentBuff
-			? preferences.dectrackerMaxOpponentsBuffToShow
-			: 0;
-		// console.log('maxBuffsToShow', this.maxBuffsToShow, this.displayBuff);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -120,7 +114,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		}
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
-		const height = gameHeight * 0.5;
+		const height = gameHeight * 0.8;
 		const width = gameHeight;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		await this.ow.changeWindowPosition(this.windowId, 0.5 * (gameWidth - width), 0);

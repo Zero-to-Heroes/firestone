@@ -17,6 +17,7 @@ export class CardBuffedInHandParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		// console.log('buffing card in hand', cardId, controllerId, localPlayer, entityId, gameEvent);
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
+		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
@@ -28,6 +29,7 @@ export class CardBuffedInHandParser implements EventParser {
 						...(cardInHand.buffingEntityCardIds || []),
 						buffingEntityCardId,
 					] as readonly string[],
+					buffCardIds: [...(cardInHand.buffCardIds || []), buffCardId] as readonly string[],
 			  } as DeckCard)
 			: null;
 		// console.log('newCardInHand', newCardInHand);
