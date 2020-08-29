@@ -58,6 +58,7 @@ import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-par
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { MinionGoDormantParser } from './event-parser/minion-go-dormant-parser';
 import { MinionOnBoardAttackUpdatedParser } from './event-parser/minion-on-board-attack-updated-parser';
+import { MinionSummonedFromHandParser } from './event-parser/minion-summoned-from-hand-parser';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
@@ -486,6 +487,7 @@ export class GameStateService {
 			new CardChangedInHandParser(this.helper, this.allCards),
 			new CardChangedInDeckParser(this.helper, this.allCards),
 			new CardPlayedFromHandParser(this.helper, this.allCards),
+			new MinionSummonedFromHandParser(this.helper, this.allCards),
 			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
 			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(this.prefs, this.deckParser),

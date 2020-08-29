@@ -27,7 +27,11 @@ export class CardPlayedOrChangedOnBoardReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD) {
+		if (
+			gameEvent.type === GameEvent.CARD_PLAYED ||
+			gameEvent.type === GameEvent.MINION_SUMMONED_FROM_HAND ||
+			gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD
+		) {
 			// console.log('handling passive buff event', this.cardId, gameEvent, this);
 			this.detectCardPlayedEvent(gameEvent);
 			return;

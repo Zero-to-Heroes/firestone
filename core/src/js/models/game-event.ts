@@ -35,6 +35,7 @@ export class GameEvent {
 	public static readonly QUEST_PLAYED_FROM_DECK = 'QUEST_PLAYED_FROM_DECK';
 	public static readonly QUEST_CREATED_IN_GAME = 'QUEST_CREATED_IN_GAME';
 	public static readonly MINION_SUMMONED = 'MINION_SUMONED';
+	public static readonly MINION_SUMMONED_FROM_HAND = 'MINION_SUMMONED_FROM_HAND';
 	public static readonly HERO_POWER_CHANGED = 'HERO_POWER_CHANGED';
 	public static readonly WEAPON_EQUIPPED = 'WEAPON_EQUIPPED';
 	public static readonly CARD_REVEALED = 'CARD_REVEALED';

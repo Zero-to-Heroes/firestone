@@ -34,7 +34,11 @@ export class MinionAttackReq implements Requirement {
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.MINION_ON_BOARD_ATTACK_UPDATED) {
 			this.handleAttackUpdatedEvent(gameEvent);
-		} else if (gameEvent.type === GameEvent.MINION_SUMMONED || gameEvent.type === GameEvent.CARD_PLAYED) {
+		} else if (
+			gameEvent.type === GameEvent.MINION_SUMMONED ||
+			gameEvent.type === GameEvent.MINION_SUMMONED_FROM_HAND ||
+			gameEvent.type === GameEvent.CARD_PLAYED
+		) {
 			this.handleMinionSummonedEvent(gameEvent);
 		}
 	}
