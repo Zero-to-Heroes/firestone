@@ -60,7 +60,7 @@ export class CardTooltipComponent {
 			);
 			// console.log('buffs are', this.buffs);
 		}
-		this.doSetCardId(value.cardId);
+		this.doSetCardId(value.cardId || value.creatorCardId);
 	}
 
 	@Input() set additionalClass(value: string) {
@@ -100,6 +100,7 @@ export class CardTooltipComponent {
 			// }
 			const imagePath = highRes ? '512' : 'compressed';
 			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${value}.png`;
+			// console.log('image is', this.image);
 		}
 		// console.log('setting tooltip', value, this.image);
 		if (!(this.cdr as ViewRef)?.destroyed) {
