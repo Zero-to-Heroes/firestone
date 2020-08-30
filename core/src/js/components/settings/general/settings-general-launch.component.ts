@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'settings-general-launch',
@@ -43,13 +44,30 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				></preference-toggle>
 			</section>
 		</div>
+
+		<div class="reset-container">
+			<button
+				(mousedown)="reset()"
+				helpTooltip="Reset ALL your preferences, including the various widgets positions on screen"
+			>
+				<span>{{ resetText }}</span>
+			</button>
+			<div class="confirmation" *ngIf="showResetConfirmationText">
+				All your preferences have been reset. This includes the various widgets locations on screen, as well as
+				your Twitch settings, so don't forget to set back what you need :)
+			</div>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsGeneralLaunchComponent implements AfterViewInit {
+	resetText = 'Reset preferences';
+	confirmationShown = false;
+	showResetConfirmationText = false;
+
 	private reloadWindows;
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {}
 
 	ngAfterViewInit() {
 		this.reloadWindows = this.ow.getMainWindow().reloadWindows;
@@ -60,4 +78,18 @@ export class SettingsGeneralLaunchComponent implements AfterViewInit {
 		console.log('reloading windows', this.reloadWindows, this);
 		this.reloadWindows();
 	};
+
+	async reset() {
+		if (!this.confirmationShown) {
+			this.confirmationShown = true;
+			this.resetText = 'Are you sure?';
+			return;
+		}
+
+		this.resetText = 'Reset preferences';
+		this.confirmationShown = false;
+		this.showResetConfirmationText = true;
+		await this.prefs.reset();
+		this.reloadWindows();
+	}
 }

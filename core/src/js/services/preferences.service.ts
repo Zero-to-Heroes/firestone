@@ -26,6 +26,11 @@ export class PreferencesService {
 		return this.indexedDb.getUserPreferences();
 	}
 
+	public async reset() {
+		const newPrefs: Preferences = new Preferences();
+		await this.savePreferences(newPrefs);
+	}
+
 	public async setValue(field: string, pref: boolean | number) {
 		const prefs = await this.getPreferences();
 		// console.log('setting pref', field, pref);
