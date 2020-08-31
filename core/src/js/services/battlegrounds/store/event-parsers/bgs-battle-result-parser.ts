@@ -12,6 +12,13 @@ export class BgsBattleResultParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsBattleResultEvent): Promise<BattlegroundsState> {
+		if (!currentState.currentGame.getMainPlayer()) {
+			console.error(
+				'Could not find main player',
+				currentState.currentGame.players.map(player => player.cardId),
+			);
+			return currentState;
+		}
 		const faceOff: BgsFaceOff = BgsFaceOff.create({
 			turn: currentState.currentGame.currentTurn,
 			playerCardId: currentState.currentGame.getMainPlayer().cardId,

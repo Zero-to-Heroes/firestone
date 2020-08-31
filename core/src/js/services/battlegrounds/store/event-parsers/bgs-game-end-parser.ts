@@ -70,13 +70,13 @@ export class BgsGameEndParser implements EventParser {
 		newBestUserStats: readonly BgsBestStat[],
 	): BgsPostMatchStatsPanel {
 		const player: BgsPlayer = currentState.currentGame.getMainPlayer();
-		const finalPosition = player.leaderboardPlace;
+		const finalPosition = player?.leaderboardPlace;
 		console.log('post match stats');
 		return BgsPostMatchStatsPanel.create({
 			stats: postMatchStats,
 			newBestUserStats: newBestUserStats,
 			globalStats: currentState.globalStats,
-			player: currentState.currentGame.getMainPlayer(),
+			player: player,
 			selectedStat: 'hp-by-turn',
 			tabs: ['hp-by-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 			isComputing: false,

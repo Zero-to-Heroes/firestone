@@ -16,6 +16,10 @@ export class BgsTavernUpgradeParser implements EventParser {
 		const playerToUpdate = currentState.currentGame.players.find(
 			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
+		if (!playerToUpdate) {
+			console.error('No player found to update the history', playerToUpdate);
+			return currentState;
+		}
 		const newHistory: readonly BgsTavernUpgrade[] = [
 			...playerToUpdate.tavernUpgradeHistory,
 			BgsTavernUpgrade.create({
