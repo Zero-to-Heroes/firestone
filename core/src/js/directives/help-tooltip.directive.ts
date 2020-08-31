@@ -135,7 +135,12 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
 
 		// Attach tooltip portal to overlay
-		this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
+		try {
+			this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
+		} catch (e) {
+			this.overlayRef?.detach();
+			this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
+		}
 
 		// Pass content to tooltip component instance
 		this.tooltipRef.instance.text = this._text;
