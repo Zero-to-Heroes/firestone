@@ -24,8 +24,21 @@ declare let amplitude: any;
 						>
 							Win
 						</div>
-						<div class="value" (dblclick)="viewSimulationResult('win')">
-							{{ battleSimulationResultWin || '--' }}
+						<div class="value-container">
+							<div class="value">{{ battleSimulationResultWin || '--' }}</div>
+							<div
+								class="replay-icon"
+								*ngIf="hasSimulationResult('win') && showReplayLink"
+								(click)="viewSimulationResult('win')"
+								helpTooltip="Open a simulation sample leading to this result in your browser"
+							>
+								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
+									<use xlink:href="/Files/assets/svg/sprite.svg#video" />
+								</svg>
+								<svg class="svg-icon-fill" class="loading-icon" *ngIf="processingSimulationSample">
+									<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral" />
+								</svg>
+							</div>
 						</div>
 					</div>
 					<div class="tie item">
@@ -35,8 +48,21 @@ declare let amplitude: any;
 						>
 							Tie
 						</div>
-						<div class="value" (dblclick)="viewSimulationResult('tie')">
-							{{ battleSimulationResultTie || '--' }}
+						<div class="value-container">
+							<div class="value">{{ battleSimulationResultTie || '--' }}</div>
+							<div
+								class="replay-icon"
+								*ngIf="hasSimulationResult('tie') && showReplayLink"
+								(click)="viewSimulationResult('tie')"
+								helpTooltip="Open a simulation sample leading to this result in your browser"
+							>
+								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
+									<use xlink:href="/Files/assets/svg/sprite.svg#video" />
+								</svg>
+								<svg class="svg-icon-fill" class="loading-icon" *ngIf="processingSimulationSample">
+									<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral" />
+								</svg>
+							</div>
 						</div>
 					</div>
 					<div class="lose item">
@@ -46,8 +72,21 @@ declare let amplitude: any;
 						>
 							Loss
 						</div>
-						<div class="value" (dblclick)="viewSimulationResult('loss')">
-							{{ battleSimulationResultLose || '--' }}
+						<div class="value-container">
+							<div class="value">{{ battleSimulationResultLose || '--' }}</div>
+							<div
+								class="replay-icon"
+								*ngIf="hasSimulationResult('loss') && showReplayLink"
+								(click)="viewSimulationResult('loss')"
+								helpTooltip="Open a simulation sample leading to this result in your browser"
+							>
+								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
+									<use xlink:href="/Files/assets/svg/sprite.svg#video" />
+								</svg>
+								<svg class="svg-icon-fill" class="loading-icon" *ngIf="processingSimulationSample">
+									<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral" />
+								</svg>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -85,6 +124,9 @@ export class BgsBattleStatusComponent {
 	temporaryBattleTooltip: string;
 	damageWon: string;
 	damageLost: string;
+	@Input() showReplayLink: boolean;
+
+	processingSimulationSample: boolean;
 
 	private _previousStatus: string;
 	private _previousBattle;
@@ -166,13 +208,34 @@ export class BgsBattleStatusComponent {
 		if (!simulationSample) {
 			return;
 		}
+		this.processingSimulationSample = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 
+		// const id = 5;
 		const id = await this.bgsSim.getIdForSimulationSample(simulationSample);
 		if (id) {
 			amplitude.getInstance().logEvent('bgsSimulation', {
 				'bgsSimulationId': id,
 			});
 			this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
+		}
+		this.processingSimulationSample = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	hasSimulationResult(category: 'win' | 'tie' | 'loss') {
+		// return true;
+		switch (category) {
+			case 'win':
+				return this.winSimulationSample && this.winSimulationSample.length > 0;
+			case 'tie':
+				return this.tieSimulationSample && this.tieSimulationSample.length > 0;
+			case 'loss':
+				return this.loseSimulationSample && this.loseSimulationSample.length > 0;
 		}
 	}
 

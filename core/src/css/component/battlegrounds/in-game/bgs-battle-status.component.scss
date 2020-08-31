@@ -29,6 +29,7 @@
 		flex-direction: column;
 		width: 85px;
 		padding-left: 20px;
+		justify-content: center;
 
 		.damage {
 			display: flex;
@@ -66,6 +67,39 @@
 		flex-direction: column;
 		align-items: center;
 
+		.value-container {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.replay-icon {
+			width: 24px;
+			height: 20px;
+			margin-left: 5px;
+			color: var(--default-text-color);
+			--icon-color: var(--default-text-color);
+
+			&:hover {
+				color: var(--default-title-color);
+				--icon-color: var(--default-title-color);
+			}
+
+			.loading-icon {
+				// opacity: 0.7;
+				animation-name: spin;
+				animation-duration: 2000ms;
+				animation-iteration-count: 50; // In case something goes wrong, we don't hog the CPU all the time
+				animation-timing-function: linear;
+				transform: translateZ(
+					0
+				); // https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way
+				// color: var(--default-text-color);
+				// --icon-color: var(--default-text-color);
+			}
+		}
+
 		&.win .value {
 			color: #61ff47;
 		}
@@ -73,5 +107,14 @@
 		&.lose .value {
 			color: #ff4747;
 		}
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(-360deg);
 	}
 }

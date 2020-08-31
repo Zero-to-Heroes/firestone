@@ -54,6 +54,7 @@ declare let amplitude: any;
 							*ngIf="enableSimulation"
 							[nextBattle]="nextBattle"
 							[battleSimulationStatus]="battleSimulationStatus"
+							[showReplayLink]="true"
 						></bgs-battle-status>
 					</div>
 				</div>
