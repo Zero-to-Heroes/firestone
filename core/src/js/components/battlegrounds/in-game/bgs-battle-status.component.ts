@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
@@ -193,7 +193,7 @@ export class BgsBattleStatusComponent {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
+		@Optional() private readonly ow: OverwolfService,
 		private readonly bgsSim: BgsBattleSimulationService,
 	) {}
 
@@ -219,7 +219,11 @@ export class BgsBattleStatusComponent {
 			amplitude.getInstance().logEvent('bgsSimulation', {
 				'bgsSimulationId': id,
 			});
-			this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
+			if (this.ow) {
+				this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
+			} else {
+				window.open(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`, '_blank');
+			}
 		}
 		this.processingSimulationSample = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {

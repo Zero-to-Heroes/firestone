@@ -32,6 +32,13 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 				(dragEnd)="onDragEnd()"
 			>
 			</decktracker-overlay-standalone>
+			<bgs-simulation-overlay-standalone
+				*ngIf="bgsState?.inGame"
+				[bgsState]="bgsState"
+				(dragStart)="onDragStart()"
+				(dragEnd)="onDragEnd()"
+			>
+			</bgs-simulation-overlay-standalone>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,7 +73,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		});
 		console.log('init done');
 		await this.allCards.initializeCardsDb();
-		// this.addDebugGameState();
+		this.addDebugGameState();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
