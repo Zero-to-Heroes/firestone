@@ -46,7 +46,6 @@ export class ReplayUploadService {
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
-		const playerRank = game.playerRank;
 		const s3 = new S3();
 		const today = new Date();
 		const replayKey = `hearthstone/replay/${today.getFullYear()}/${today.getMonth() +
@@ -63,7 +62,8 @@ export class ReplayUploadService {
 				'user-key': userId,
 				'username': userName,
 				'file-type': 'hszip',
-				'player-rank': playerRank ? '' + playerRank : '',
+				'player-rank': game.playerRank ? '' + game.playerRank : '',
+				'new-player-rank': game.newPlayerRank ? '' + game.newPlayerRank : '',
 				'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
 				'game-mode': game.gameMode,
 				'game-format': game.gameFormat,

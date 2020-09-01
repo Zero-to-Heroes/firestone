@@ -8,6 +8,7 @@ import { OverwolfService } from '../overwolf.service';
 import { SetsService } from '../sets-service.service';
 import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
 import { GetArenaInfoOperation } from './mind-vision/get-arena-info-operation';
+import { GetBattlegroundsEndGameOperation } from './mind-vision/get-battlegrounds-end-game-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-match-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
@@ -27,6 +28,7 @@ export class MemoryInspectionService {
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
+	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
 	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
@@ -50,6 +52,10 @@ export class MemoryInspectionService {
 
 	public async getBattlegroundsInfo(numberOfRetries?: number): Promise<BattlegroundsInfo> {
 		return this.getBattlegroundsInfoOperation.call(numberOfRetries);
+	}
+
+	public async getBattlegroundsEndGame(numberOfRetries?: number): Promise<BattlegroundsInfo> {
+		return this.getBattlegroundsEndGameOperation.call(numberOfRetries);
 	}
 
 	public async getBattlegroundsMatch(numberOfRetries?: number): Promise<BattlegroundsInfo> {

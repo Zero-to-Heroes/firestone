@@ -80,10 +80,12 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge] extracted duration');
 
 		let playerRank;
+		let newPlayerRank;
 		if (game.gameMode === 'battlegrounds') {
-			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
+			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame();
 			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
-			console.log('updated player rank', playerRank);
+			newPlayerRank = battlegroundsInfo.newRating;
+			console.log('updated player rank', playerRank, newPlayerRank);
 		} else if (game.gameMode === 'arena') {
 			const arenaInfo = await this.memoryInspection.getArenaInfo();
 			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
@@ -137,6 +139,7 @@ export class EndGameUploaderService {
 		}
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
+		game.newPlayerRank = newPlayerRank;
 		console.log('[manastorm-bridge] game ready');
 		return game;
 	}
