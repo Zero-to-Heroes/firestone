@@ -16,10 +16,11 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
+		`../../../../../css/themes/battlegrounds-theme.scss`,
 		// '../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
 	],
 	template: `
-		<div class="container drag-boundary">
+		<div class="container drag-boundary overlay-container-parent battlegrounds-theme">
 			<state-mouse-over
 				[gameState]="gameState"
 				[bgsState]="bgsState"
@@ -32,6 +33,13 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 				(dragEnd)="onDragEnd()"
 			>
 			</decktracker-overlay-standalone>
+			<bgs-simulation-overlay-standalone
+				*ngIf="bgsState?.inGame"
+				[bgsState]="bgsState"
+				(dragStart)="onDragStart()"
+				(dragEnd)="onDragEnd()"
+			>
+			</bgs-simulation-overlay-standalone>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

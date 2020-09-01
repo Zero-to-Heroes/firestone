@@ -9,6 +9,7 @@ import { init } from '@sentry/browser';
 import { AngularResizedEventModule } from 'angular-resize-event';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
+import { BgsSimulationOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component';
 import { DeckTrackerOverlayContainerComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
 import { DeckTrackerOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
 import { DeckTrackerTwitchTitleBarComponent } from '../../components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
@@ -16,6 +17,7 @@ import { EmptyCardComponent } from '../../components/decktracker/overlay/twitch/
 import { LeaderboardEmptyCardComponent } from '../../components/decktracker/overlay/twitch/leaderboard-empty-card.component';
 import { StateMouseOverComponent } from '../../components/decktracker/overlay/twitch/state-mouse-over.component';
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
+import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { Events } from '../../services/events.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedModule } from '../shared/shared.module';
@@ -45,6 +47,7 @@ console.log('version is', process.env.APP_VERSION);
 		DeckTrackerOverlayStandaloneComponent,
 		DeckTrackerOverlayContainerComponent,
 		DeckTrackerTwitchTitleBarComponent,
+		BgsSimulationOverlayStandaloneComponent,
 		EmptyCardComponent,
 		StateMouseOverComponent,
 
@@ -53,6 +56,6 @@ console.log('version is', process.env.APP_VERSION);
 	],
 	entryComponents: [TwitchBgsHeroOverviewComponent, BgsCardTooltipComponent],
 	bootstrap: [DeckTrackerOverlayContainerComponent],
-	providers: [Events, AllCardsService],
+	providers: [Events, AllCardsService, BgsBattleSimulationService],
 })
 export class DeckTrackerTwitchModule {}

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
@@ -81,7 +81,7 @@ export class CardTooltipComponent {
 		}
 	}
 
-	constructor(private cdr: ChangeDetectorRef, private prefs: PreferencesService) {}
+	constructor(private cdr: ChangeDetectorRef, @Optional() private prefs: PreferencesService) {}
 
 	refresh() {
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -93,8 +93,8 @@ export class CardTooltipComponent {
 		if (!value) {
 			this.image = undefined;
 		} else {
-			const prefs: Preferences = await this.prefs.getPreferences();
-			const highRes = prefs.collectionUseHighResImages;
+			const prefs: Preferences = this.prefs ? await this.prefs.getPreferences() : null;
+			const highRes = prefs?.collectionUseHighResImages;
 			// if (!(this.cdr as ViewRef)?.destroyed) {
 			// 	this.cdr.detectChanges();
 			// }

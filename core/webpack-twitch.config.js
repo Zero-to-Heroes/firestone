@@ -140,13 +140,22 @@ module.exports = function(env, argv) {
 			rules: [
 				{
 					test: /\.ts$/,
+					exclude: [/node_modules/, /test/, /\.worker.ts$/],
+					use: ['@artonge/webpack', 'ts-loader'],
+				},
+				{
+					test: /\.worker.ts$/,
 					exclude: [/node_modules/, /test/],
-					use: ['@artonge/webpack'],
+					use: ['ts-loader'],
 				},
 				{
 					test: /\.scss$/,
 					exclude: /node_modules/,
 					use: ['css-to-string-loader', 'css-loader', 'sass-loader'],
+				},
+				{
+					test: /\.worker\.js$/,
+					use: { loader: 'worker-loader' },
 				},
 			],
 		},

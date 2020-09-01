@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -24,13 +24,15 @@ export class BgsBattleSimulationService {
 
 	constructor(
 		private readonly http: HttpClient,
-		private readonly ow: OverwolfService,
+		@Optional() private readonly ow: OverwolfService,
 		private readonly cards: AllCardsService,
-		private readonly prefs: PreferencesService,
+		@Optional() private readonly prefs: PreferencesService,
 	) {
-		setTimeout(() => {
-			this.stateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
-		});
+		if (ow) {
+			setTimeout(() => {
+				this.stateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
+			});
+		}
 		this.init();
 	}
 
