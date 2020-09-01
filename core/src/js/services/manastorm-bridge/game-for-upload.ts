@@ -14,6 +14,7 @@ export class GameForUpload {
 	buildNumber: number;
 	scenarioId: number;
 	playerRank: string;
+	newPlayerRank: string;
 	opponentRank: string;
 	result: MatchResultType;
 	// arenaInfo: any;
