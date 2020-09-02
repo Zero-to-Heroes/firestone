@@ -34,8 +34,7 @@ export class Preferences {
 
 	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly dectrackerShowOpponentGuess: boolean = true;
-	readonly dectrackerShowOpponentBuff: boolean = false;
-	readonly dectrackerMaxOpponentsBuffToShow: number = 3;
+	readonly dectrackerShowOpponentBuffInHand: boolean = true;
 	readonly decktrackerOpponentHandScale: number = 100;
 
 	// readonly overlayDisplayMode: string;

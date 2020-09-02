@@ -101,7 +101,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	private setDisplayPreferences(preferences: Preferences) {
 		this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
 		this.displayGuess = preferences.dectrackerShowOpponentGuess;
-		this.displayBuff = preferences.dectrackerShowOpponentBuff;
+		this.displayBuff = preferences.dectrackerShowOpponentBuffInHand;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

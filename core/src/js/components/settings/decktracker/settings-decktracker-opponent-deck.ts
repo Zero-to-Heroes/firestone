@@ -85,7 +85,7 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Show what card is in the opponent's hand when we know it (after it has been sent back to their hand with a Sap for instance)"
 					></preference-toggle>
 					<preference-toggle
-						field="dectrackerShowOpponentBuff"
+						field="dectrackerShowOpponentBuffInHand"
 						label="Show buff in hand"
 						tooltip="Show buffs affecting cards in the opponent's hand"
 					></preference-toggle>
@@ -170,7 +170,9 @@ import { Knob } from '../preference-slider.component';
 					class="first-slider hand-slider"
 					field="decktrackerOpponentHandScale"
 					[enabled]="
-						dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuff
+						dectrackerShowOpponentTurnDraw ||
+						dectrackerShowOpponentGuess ||
+						dectrackerShowOpponentBuffInHand
 					"
 					[min]="80"
 					[max]="200"
@@ -181,7 +183,7 @@ import { Knob } from '../preference-slider.component';
 			</div>
 		</div>
 	`,
-	// dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuff
+	// dectrackerShowOpponentTurnDraw || dectrackerShowOpponentGuess || dectrackerShowOpponentBuffInHand
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, OnDestroy {
@@ -190,7 +192,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 	opponentTracker: boolean;
 	dectrackerShowOpponentTurnDraw: boolean;
 	dectrackerShowOpponentGuess: boolean;
-	dectrackerShowOpponentBuff: boolean;
+	dectrackerShowOpponentBuffInHand: boolean;
 	secretsHelper: boolean;
 	sizeKnobs: readonly Knob[] = [
 		{
@@ -241,8 +243,8 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
 			this.dectrackerShowOpponentTurnDraw = preferences.dectrackerShowOpponentTurnDraw;
 			this.dectrackerShowOpponentGuess = preferences.dectrackerShowOpponentGuess;
-			this.dectrackerShowOpponentBuff = preferences.dectrackerShowOpponentBuff;
-			// console.log('updated prefs', this.dectrackerShowOpponentBuff, preferences);
+			this.dectrackerShowOpponentBuffInHand = preferences.dectrackerShowOpponentBuffInHand;
+			// console.log('updated prefs', this.dectrackerShowOpponentBuffInHand, preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -274,8 +276,8 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.secretsHelper = prefs.secretsHelper;
 		this.dectrackerShowOpponentTurnDraw = prefs.dectrackerShowOpponentTurnDraw;
 		this.dectrackerShowOpponentGuess = prefs.dectrackerShowOpponentGuess;
-		this.dectrackerShowOpponentBuff = prefs.dectrackerShowOpponentBuff;
-		// console.log('updated prefs', this.dectrackerShowOpponentBuff, prefs);
+		this.dectrackerShowOpponentBuffInHand = prefs.dectrackerShowOpponentBuffInHand;
+		// console.log('updated prefs', this.dectrackerShowOpponentBuffInHand, prefs);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
