@@ -51,7 +51,7 @@ export class AchievementsNotificationService {
 			? `Achievement saved! Click to recap`
 			: `Your replay is being recorded...<span class="loader"></span>`;
 		const unclickable = recordingOff ? undefined : 'unclickable';
-		this.notificationService.html({
+		this.notificationService.emitNewNotification({
 			notificationId: achievement.id,
 			content: this.buildNotificationTemplate(achievement, recapText, unclickable),
 			type: 'achievement-no-record',

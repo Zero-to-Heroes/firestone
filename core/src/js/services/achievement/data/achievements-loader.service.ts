@@ -63,7 +63,7 @@ export class AchievementsLoaderService {
 		console.log('[achievements-loader] loading all achievements');
 		const achievementFiles = [
 			'global',
-			'battlegrounds',
+			'battlegrounds2',
 			'dungeon_run',
 			'monster_hunt',
 			'rumble_run',
@@ -93,7 +93,7 @@ export class AchievementsLoaderService {
 						// 	'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
 						// 	fileName,
 						// );
-						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=2`).subscribe(
+						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=3`).subscribe(
 							(result: any[]) => {
 								console.log('[achievements-loader] retrieved all achievements from CDN', fileName);
 								resolve(result);

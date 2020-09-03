@@ -4,6 +4,7 @@ import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
+import { BattlegroundsHeroSelectedReq } from '../requirements/battlegrounds-hero-selected-req';
 import { BattlegroundsFinishReq } from '../requirements/battlegrounds/battlegrounds-finish-req';
 import { BattlegroundsRankReq } from '../requirements/battlegrounds/battlegrounds-rank-req';
 import { BattlegroundsTriplePlayReq } from '../requirements/battlegrounds/battlegrounds-tipple-play--req';
@@ -105,6 +106,7 @@ export class ChallengeBuilderService {
 			case 'CORRECT_STARTING_HEALTH': return CorrectStartingHealthReq.create(rawReq);
 			case 'SCENE_CHANGED_TO_GAME': return SceneChangedToGameReq.create(rawReq);
 			case 'CARD_PLAYED_OR_CHANGED_ON_BOARD': return CardPlayedOrChangedOnBoardReq.create(rawReq);
+			case 'BATTLEGROUNDS_HERO_SELECTED': return BattlegroundsHeroSelectedReq.create(rawReq);
 			case 'CARD_PLAYED_OR_ON_BOARD_AT_GAME_START': return CardPlayedOrOnBoardAtGameStartReq.create(rawReq);
 			case 'CARD_NOT_PLAYED': return CardNotPlayedReq.create(rawReq);
 			case 'CARD_DRAWN_OR_RECEIVED_IN_HAND': return CardDrawnOrReceivedInHandReq.create(rawReq);

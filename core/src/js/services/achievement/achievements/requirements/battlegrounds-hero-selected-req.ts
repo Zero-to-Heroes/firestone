@@ -2,16 +2,16 @@ import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
-export class CardPlayedOrChangedOnBoardReq implements Requirement {
+export class BattlegroundsHeroSelectedReq implements Requirement {
 	private isCardPlayed: boolean;
 
 	constructor(private readonly cardId: string) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 1) {
-			console.error('invalid parameters for CardPlayedOrChangedOnBoardReq', rawReq);
+			console.error('invalid parameters for BattlegroundsHeroSelectedReq', rawReq);
 		}
-		return new CardPlayedOrChangedOnBoardReq(rawReq.values[0]);
+		return new BattlegroundsHeroSelectedReq(rawReq.values[0]);
 	}
 
 	reset(): void {
@@ -27,12 +27,7 @@ export class CardPlayedOrChangedOnBoardReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (
-			gameEvent.type === GameEvent.CARD_PLAYED ||
-			gameEvent.type === GameEvent.MINION_SUMMONED_FROM_HAND ||
-			gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD
-		) {
-			// console.log('handling card played event', this.cardId, gameEvent, this);
+		if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 			this.detectCardPlayedEvent(gameEvent);
 			return;
 		}
@@ -40,10 +35,11 @@ export class CardPlayedOrChangedOnBoardReq implements Requirement {
 
 	private detectCardPlayedEvent(gameEvent: GameEvent) {
 		const cardId = gameEvent.cardId;
-		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
-		if (cardId === this.cardId && controllerId === localPlayer.PlayerId) {
+		console.log('handling hero selected event', cardId, localPlayer, this.cardId, gameEvent, this);
+		if (cardId === this.cardId) {
 			this.isCardPlayed = true;
+			console.log('hero selected');
 		}
 	}
 }
