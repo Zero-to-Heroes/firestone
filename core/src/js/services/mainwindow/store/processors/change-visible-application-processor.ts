@@ -1,5 +1,6 @@
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
@@ -16,6 +17,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		// if (event.module === navigationState.currentApp) {
 		// 	return [null, null];
 		// }
+		// console.log('changing application', event);
 		const binder =
 			event.module === 'collection'
 				? navigationState.navigationCollection.update({
@@ -36,6 +38,13 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						currentView: 'list',
 				  } as NavigationReplays)
 				: navigationState.navigationReplays;
+		const battlegrounds =
+			event.module === 'battlegrounds'
+				? navigationState.navigationBattlegrounds.update({
+						currentView: 'categories',
+						menuDisplayType: 'menu',
+				  } as NavigationBattlegrounds)
+				: navigationState.navigationBattlegrounds;
 		return [
 			null,
 			navigationState.update({
@@ -44,6 +53,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				navigationCollection: binder,
 				navigationAchievements: achievements,
 				navigationReplays: replays,
+				navigationBattlegrounds: battlegrounds,
 				text: event.module === 'achievements' ? 'Categories' : null,
 				image: null,
 			} as NavigationState),

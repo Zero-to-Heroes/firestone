@@ -1,5 +1,6 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -31,6 +32,8 @@ export class NavigationBackProcessor implements Processor {
 				return NavigationBackProcessor.buildParentDecktrackerState(navigationState, dataState);
 			case 'replays':
 				return NavigationBackProcessor.buildParentReplaysState(navigationState, dataState);
+			case 'battlegrounds':
+				return NavigationBackProcessor.buildParentBattlegroundsState(navigationState, dataState);
 			default:
 				return navigationState;
 		}
@@ -75,6 +78,29 @@ export class NavigationBackProcessor implements Processor {
 					text: dataState.achievements.globalCategories.find(
 						cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
 					).name,
+				} as NavigationState);
+			default:
+				return null;
+		}
+	}
+
+	private static buildParentBattlegroundsState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+	): NavigationState {
+		if (!navigationState || !dataState) {
+			console.warn('Missing state for processing back navigation', navigationState, dataState);
+			return null;
+		}
+		switch (navigationState.navigationBattlegrounds.currentView) {
+			case 'categories':
+				return null;
+			case 'category':
+				return navigationState.update({
+					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
+						currentView: 'categories',
+					} as NavigationBattlegrounds),
+					text: 'Categories',
 				} as NavigationState);
 			default:
 				return null;

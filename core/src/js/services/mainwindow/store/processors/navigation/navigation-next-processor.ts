@@ -17,17 +17,4 @@ export class NavigationNextProcessor implements Processor {
 				: history.stateHistory[history.currentIndexInHistory + 1].state;
 		return [null, newState];
 	}
-
-	// public static getTargetIndex(currentState: NavigationState, history: readonly StateHistory[]): number {
-	// 	let currentIndex = history.map(history => history.state).indexOf(currentState);
-	// 	// We go back until we find an item that is a navigation state
-	// 	let targetIndex = -1;
-	// 	for (let i = currentIndex + 1; i < history.length; i++) {
-	// 		if (history[i].navigation) {
-	// 			targetIndex = i;
-	// 			break;
-	// 		}
-	// 	}
-	// 	return targetIndex;
-	// }
 }

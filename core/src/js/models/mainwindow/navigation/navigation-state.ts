@@ -1,5 +1,6 @@
 import { CurrentAppType } from '../current-app.type';
 import { NavigationAchievements } from './navigation-achievements';
+import { NavigationBattlegrounds } from './navigation-battlegrounds';
 import { NavigationCollection } from './navigation-collection';
 import { NavigationDecktracker } from './navigation-decktracker';
 import { NavigationReplays } from './navigation-replays';
@@ -11,6 +12,7 @@ export class NavigationState {
 	readonly navigationCollection: NavigationCollection = new NavigationCollection();
 	readonly navigationAchievements: NavigationAchievements = new NavigationAchievements();
 	readonly navigationDecktracker: NavigationDecktracker = new NavigationDecktracker();
+	readonly navigationBattlegrounds: NavigationBattlegrounds = new NavigationBattlegrounds();
 
 	readonly backArrowEnabled = false;
 	readonly nextArrowEnabled = false;

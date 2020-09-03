@@ -38,6 +38,9 @@ import { SelectAchievementCategoryEvent } from './events/achievements/select-ach
 import { SelectAchievementSetEvent } from './events/achievements/select-achievement-set-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
 import { VideoReplayDeletionRequestEvent } from './events/achievements/video-replay-deletion-request-event';
+import { BgsAppInitEvent } from './events/battlegrounds/bgs-app-init-event';
+import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
+import { SelectBattlegroundsGlobalCategoryEvent } from './events/battlegrounds/select-battlegrounds-global-category-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
@@ -89,6 +92,9 @@ import { SelectAchievementCategoryProcessor } from './processors/achievements/se
 import { SelectAchievementSetProcessor } from './processors/achievements/select-achievement-set-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
 import { VideoReplayDeletionRequestProcessor } from './processors/achievements/video-replay-deletion-request-processor';
+import { BgsAppInitProcessor } from './processors/battlegrounds/bgs-app-init-processor';
+import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
+import { SelectBattlegroundsGlobalCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-global-category-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
@@ -206,7 +212,7 @@ export class MainWindowStoreService {
 
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
 		const event = eventQueue[0];
-		console.log('[store] processing event', event.eventName());
+		// console.log('[store] processing event', event.eventName());
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
 		if (!processor) {
@@ -222,6 +228,7 @@ export class MainWindowStoreService {
 				this.navigationHistory,
 				this.navigationState,
 			);
+			// console.log('newState, newNavState', newState, newNavState);
 			if (newNavState) {
 				if (event.eventName() === NavigationBackEvent.eventName()) {
 					this.navigationHistory.currentIndexInHistory--;
@@ -234,6 +241,7 @@ export class MainWindowStoreService {
 				// or forward with the history arrows, the state of these arrows will change
 				// vs what they originally were when the state was stored
 				this.navigationState = newNavState;
+				// console.log('updating navigation state', this.navigationState, newNavState);
 				const stateWithNavigation: NavigationState = this.updateNavigationArrows(
 					this.navigationState,
 					newState,
@@ -292,9 +300,14 @@ export class MainWindowStoreService {
 			NavigationBackProcessor.buildParentState(navigationState, dataState) != null;
 		// console.log(
 		// 	'isBackArrowEnabled?',
+		// 	backArrowEnabled,
+		// 	this.navigationHistory.currentIndexInHistory > 0,
+		// 	this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state?.currentApp ===
+		// 		navigationState.currentApp,
+		// 	NavigationBackProcessor.buildParentState(navigationState, dataState),
+		// 	this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state,
 		// 	this.navigationHistory,
 		// 	navigationState,
-		// 	NavigationBackProcessor.buildParentState(navigationState, dataState),
 		// );
 		const nextArrowEnabled =
 			this.navigationHistory.currentIndexInHistory < this.navigationHistory.stateHistory.length - 1;
@@ -474,6 +487,16 @@ export class MainWindowStoreService {
 
 			ChangeDeckModeFilterEvent.eventName(),
 			new ChangeDeckModeFilterProcessor(this.decksStateBuilder),
+
+			// Battlegrounds
+			BgsAppInitEvent.eventName(),
+			new BgsAppInitProcessor(),
+
+			SelectBattlegroundsGlobalCategoryEvent.eventName(),
+			new SelectBattlegroundsGlobalCategoryProcessor(),
+
+			SelectBattlegroundsCategoryEvent.eventName(),
+			new SelectBattlegroundsCategoryProcessor(),
 		);
 	}
 

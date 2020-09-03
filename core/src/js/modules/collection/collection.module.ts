@@ -29,7 +29,13 @@ import { AchievementsGlobalCategoriesComponent } from '../../components/achievem
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
 import { AchievementsComponent } from '../../components/achievements/achievements.component';
+import { BattlegroundsCategoriesComponent } from '../../components/battlegrounds/desktop/battlegrounds-categories.component';
+import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
+import { BattlegroundsCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-category.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
+import { BattlegroundsGlobalCategoriesComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-categories.component';
+import { BattlegroundsGlobalCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-category.component';
+import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
 import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
@@ -161,6 +167,12 @@ console.log('version is ' + process.env.APP_VERSION);
 		RankImageComponent,
 
 		BattlegroundsDesktopComponent,
+		BattlegroundsGlobalCategoriesComponent,
+		BattlegroundsGlobalCategoryComponent,
+		BattlegroundsCategoriesComponent,
+		BattlegroundsCategoryComponent,
+		BattlegroundsCategoryDetailsComponent,
+		BattlegroundsPersonalStatsHeroesComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,
