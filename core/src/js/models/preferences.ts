@@ -1,3 +1,5 @@
+import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
+import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { Ftue } from './preferences/ftue';
 
 export class Preferences {
@@ -118,6 +120,9 @@ export class Preferences {
 	readonly bgsSimulatorNumberOfSims = 2500;
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
+
+	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
+	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

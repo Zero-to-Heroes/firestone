@@ -26,7 +26,7 @@ export class GameStatsBootstrapService {
 	public async initGameStats() {
 		const newGameStats: GameStats = await this.gameStatsLoader.retrieveStats();
 		this.events.broadcast(Events.MATCH_STATS_UPDATED, newGameStats);
-		this.bgsInit.init(newGameStats);
+		await this.bgsInit.init(newGameStats);
 		this.stateUpdater.next(new GameStatsInitEvent(newGameStats));
 	}
 }

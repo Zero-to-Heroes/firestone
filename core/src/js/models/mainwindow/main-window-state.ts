@@ -1,6 +1,7 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { CurrentUser } from '../overwolf/profile/current-user';
 import { AchievementsState } from './achievements-state';
+import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
 import { BinderState } from './binder-state';
 import { DecktrackerState } from './decktracker/decktracker-state';
 import { ReplaysState } from './replays/replays-state';
@@ -14,6 +15,7 @@ export class MainWindowState {
 	readonly binder: BinderState = new BinderState();
 	readonly achievements: AchievementsState = new AchievementsState();
 	readonly decktracker: DecktrackerState = new DecktrackerState();
+	readonly battlegrounds: BattlegroundsAppState = new BattlegroundsAppState();
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly globalStats: GlobalStats = new GlobalStats();

@@ -1,0 +1,17 @@
+:host {
+	height: 100%;
+	display: flex;
+	flex-grow: 1;
+}
+
+.battlegrounds-category-details {
+	height: 100%;
+	display: flex;
+	flex-grow: 1;
+	overflow: auto;
+
+	& > * {
+		flex-grow: 1;
+		display: flex;
+	}
+}

@@ -1,0 +1,12 @@
+.battlegrounds-personal-stats-heroes {
+	flex-grow: 1;
+	display: flex;
+	flex-wrap: wrap;
+
+	battlegrounds-stats-hero-vignette {
+		width: 20%;
+		max-width: 160px;
+		margin-right: 15px;
+		margin-bottom: 15px;
+	}
+}

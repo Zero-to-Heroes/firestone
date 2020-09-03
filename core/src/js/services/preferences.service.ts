@@ -1,4 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
+import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
@@ -159,6 +161,18 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const propertyName = 'overlayZoneToggleDefaultClose_' + side + '_' + name;
 		return prefs[propertyName];
+	}
+
+	public async updateBgsTimeFilter(value: BgsActiveTimeFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsActiveTimeFilter: value };
+		this.savePreferences(newPrefs);
+	}
+
+	public async updateBgsHeroSortFilter(value: BgsHeroSortFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsActiveHeroSortFilter: value };
+		this.savePreferences(newPrefs);
 	}
 
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {

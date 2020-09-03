@@ -14,7 +14,7 @@ export class BgsBattleResultParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsBattleResultEvent): Promise<BattlegroundsState> {
 		if (!currentState.currentGame.getMainPlayer()) {
 			console.error(
-				'Could not find main player',
+				'Could not find main player in battle result parser',
 				currentState.currentGame.players.map(player => player.cardId),
 			);
 			return currentState;

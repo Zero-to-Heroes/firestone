@@ -1,5 +1,6 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -31,6 +32,8 @@ export class NavigationBackProcessor implements Processor {
 				return NavigationBackProcessor.buildParentDecktrackerState(navigationState, dataState);
 			case 'replays':
 				return NavigationBackProcessor.buildParentReplaysState(navigationState, dataState);
+			case 'battlegrounds':
+				return NavigationBackProcessor.buildParentBattlegroundsState(navigationState, dataState);
 			default:
 				return navigationState;
 		}
@@ -74,6 +77,51 @@ export class NavigationBackProcessor implements Processor {
 					// and derive the name of the current navigation from the state we are in
 					text: dataState.achievements.globalCategories.find(
 						cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
+					).name,
+				} as NavigationState);
+			default:
+				return null;
+		}
+	}
+
+	private static buildParentBattlegroundsState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+	): NavigationState {
+		if (!navigationState || !dataState) {
+			console.warn('Missing state for processing back navigation', navigationState, dataState);
+			return null;
+		}
+		switch (navigationState.navigationBattlegrounds.currentView) {
+			case 'categories':
+				return null;
+			case 'category':
+				return navigationState.update({
+					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
+						currentView: 'categories',
+					} as NavigationBattlegrounds),
+					text: 'Categories',
+				} as NavigationState);
+			case 'list':
+				const category = dataState.battlegrounds.globalCategories.find(
+					cat => cat.id === navigationState.navigationBattlegrounds.selectedGlobalCategoryId,
+				);
+				if (category.categories.length === 1) {
+					return navigationState.update({
+						navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
+							currentView: 'categories',
+						} as NavigationBattlegrounds),
+						text: 'Categories',
+					} as NavigationState);
+				}
+				return navigationState.update({
+					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
+						currentView: 'category',
+					} as NavigationBattlegrounds),
+					// This is starting to be weird. It would probably be best to have an FSM,
+					// and derive the name of the current navigation from the state we are in
+					text: dataState.battlegrounds.globalCategories.find(
+						cat => cat.id === navigationState.navigationBattlegrounds.selectedGlobalCategoryId,
 					).name,
 				} as NavigationState);
 			default:

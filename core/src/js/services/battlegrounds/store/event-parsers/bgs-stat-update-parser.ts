@@ -57,7 +57,7 @@ export class BgsStatUpdateParser implements EventParser {
 		bgsStatsForCurrentPatch: readonly GameStat[],
 		cards: AllCardsService,
 	) {
-		return (
+		const heroStats =
 			globalStats?.heroStats?.map(heroStat => {
 				const playerGamesPlayed = bgsStatsForCurrentPatch.filter(stat => stat.playerCardId === heroStat.id)
 					.length;
@@ -93,7 +93,7 @@ export class BgsStatUpdateParser implements EventParser {
 				} as BgsHeroStat);
 			}) ||
 			[] ||
-			[]
-		);
+			[];
+		return heroStats.sort((a, b) => a.averagePosition - b.averagePosition);
 	}
 }

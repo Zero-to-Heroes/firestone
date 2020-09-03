@@ -38,7 +38,7 @@ export class BgsGame {
 
 	public getMainPlayer(): BgsPlayer {
 		const mainPlayer = this.players.find(player => player.isMainPlayer);
-		if (!mainPlayer && this.players.length > 1) {
+		if (!mainPlayer && this.players.length > 6) {
 			console.error(
 				'Could not find main player',
 				this.players.map(player => ({

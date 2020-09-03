@@ -5,6 +5,7 @@
 	font-family: Open Sans;
 	font-style: normal;
 	font-weight: normal;
+	color: var(--default-text-color);
 
 	.main {
 		display: flex;
@@ -22,6 +23,12 @@
 
 		with-loading {
 			flex-grow: 1;
+
+			& > .content {
+				flex-grow: 1;
+				display: flex;
+				flex-direction: column;
+			}
 		}
 	}
 
@@ -76,4 +83,9 @@ loading-state {
 	svg {
 		fill: transparent;
 	}
+}
+
+battlegrounds-filters {
+	position: absolute;
+	right: 0;
 }

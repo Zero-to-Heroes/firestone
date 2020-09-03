@@ -16,6 +16,7 @@ module.exports = {
 		'@typescript-eslint/explicit-function-return-type': 0, // Temporary, until code violations are fixed
 		'@typescript-eslint/no-explicit-any': 0, // Temporary, until code violations are fixed
 		'@typescript-eslint/no-parameter-properties': 0,
+		'@typescript-eslint/ban-ts-ignore': 0,
 		'@typescript-eslint/explicit-member-accessibility': [
 			2,
 			{
