@@ -38,7 +38,7 @@ export class DeckTrackerWinrateRecapComponent {
 	private _type: 'matchup' | 'deck';
 
 	@Input() set stats(value: StatsRecap) {
-		console.log('setting stats', value);
+		// console.log('setting stats', value);
 		if (value === this._stats) {
 			return;
 		}
