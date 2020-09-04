@@ -5,8 +5,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
+import { ChartsModule } from 'ng2-charts';
 import { AchievementImageComponent } from 'src/js/components/achievements/achievement-image.component';
 import { AchievementProgressBarComponent } from 'src/js/components/achievements/achievement-progress-bar.component';
 import { AchievementRecordingsComponent } from 'src/js/components/achievements/achievement-recordings.component';
@@ -37,6 +39,7 @@ import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/de
 import { BattlegroundsGlobalCategoriesComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-categories.component';
 import { BattlegroundsGlobalCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-category.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
+import { BattlegroundsPersonalStatsRatingComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
@@ -110,6 +113,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		VgControlsModule,
 		VgOverlayPlayModule,
 		VgBufferingModule,
+		ChartsModule,
+		NgxChartsModule,
 		SharedServicesModule.forRoot(),
 	],
 	declarations: [
@@ -177,6 +182,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
 		BattlegroundsStatsHeroVignetteComponent,
+		BattlegroundsPersonalStatsRatingComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,

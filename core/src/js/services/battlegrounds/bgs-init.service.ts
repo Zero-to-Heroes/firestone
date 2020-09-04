@@ -6,6 +6,7 @@ import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/bat
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsGlobalCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-global-category';
 import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
+import { BattlegroundsPersonalRatingCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Events } from '../events.service';
 import { BgsAppInitEvent } from '../mainwindow/store/events/battlegrounds/bgs-app-init-event';
@@ -123,16 +124,13 @@ export class BgsInitService {
 	private buildPersonalHeroesCategory(): BattlegroundsCategory {
 		return BattlegroundsPersonalHeroesCategory.create({
 			enabled: true,
-			// stats: finalStats,
 		} as BattlegroundsPersonalHeroesCategory);
 	}
 
 	private buildPersonalRatingCategory(): BattlegroundsCategory {
-		return BattlegroundsCategory.create({
-			id: 'bgs-category-personal-rating',
-			name: 'Rating',
+		return BattlegroundsPersonalRatingCategory.create({
 			enabled: true,
-		} as BattlegroundsCategory);
+		} as BattlegroundsPersonalRatingCategory);
 	}
 
 	private buildPersonalStatsCategory(): BattlegroundsCategory {

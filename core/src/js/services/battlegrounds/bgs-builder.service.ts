@@ -18,7 +18,7 @@ export class BgsBuilderService {
 		matchStats: GameStats,
 		currentBattlegroundsMetaPatch: number,
 	): Promise<BattlegroundsAppState> {
-		const bgsMatchStats = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
+		const bgsMatchStats: readonly GameStat[] = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
 		const prefs = await this.prefs.getPreferences();
 		const activeBgsMatchStats = this.filterBgsMatchStats(bgsMatchStats, prefs, currentBattlegroundsMetaPatch);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
@@ -38,6 +38,7 @@ export class BgsBuilderService {
 		} as BgsStats);
 		return currentState.update({
 			stats: finalStats,
+			matchStats: activeBgsMatchStats,
 			activeTimeFilter: prefs.bgsActiveTimeFilter,
 			activeHeroSortFilter: prefs.bgsActiveHeroSortFilter,
 		} as BattlegroundsAppState);
