@@ -87,7 +87,7 @@ export class GameReplayComponent implements OnInit {
 			window['coliseum'].component.updateStatus('Downloading replay file');
 		});
 		const review: any = await this.http
-			.get(`https://nj8w9uc6p5.execute-api.us-west-2.amazonaws.com/Prod/${reviewId}`)
+			.get(`https://static-api.firestoneapp.com/retrieveReview/${reviewId}`)
 			.toPromise();
 		const replay = await this.loadReplay(review.replayKey);
 		console.log('loaded replay');
