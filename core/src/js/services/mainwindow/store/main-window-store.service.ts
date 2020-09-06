@@ -66,7 +66,6 @@ import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
-import { PopulateStoreEvent } from './events/populate-store-event';
 import { ReplaysFilterEvent } from './events/replays/replays-filter-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
@@ -75,12 +74,9 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
-import { BgsBestUserStatsInitEvent } from './events/stats/bgs-best-user-stats-init-event';
-import { GameStatsInitEvent } from './events/stats/game-stats-init-event';
-import { GlobalStatsInitEvent } from './events/stats/global/global-stats-init-event';
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
-import { TriggerPopulateStoreEvent } from './events/trigger-populate-store-event';
+import { StoreInitEvent } from './events/store-init-event';
 import { AchievementStateHelper } from './helper/achievement-state-helper';
 import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { NavigationHistory } from './navigation-history';
@@ -121,7 +117,6 @@ import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
-import { PopulateStoreProcessor } from './processors/populate-store-processor';
 import { Processor } from './processors/processor';
 import { ReplaysFilterProcessor } from './processors/replays/replays-filter-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
@@ -131,13 +126,11 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
-import { BgsBestUserStatsInitProcessor } from './processors/stats/bgs-best-user-stats-init-processor';
-import { GameStatsInitProcessor } from './processors/stats/game-stats-init-processor';
-import { GlobalStatsInitProcessor } from './processors/stats/global/global-stats-init-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
-import { TriggerPopulateStoreProcessor } from './processors/trigger-populate-store-processor';
+import { StoreInitProcessor } from './processors/store-init-processor';
 import { StateHistory } from './state-history';
+import { StoreBootstrapService } from './store-bootstrap.service';
 
 declare let amplitude;
 
@@ -182,6 +175,7 @@ export class MainWindowStoreService {
 		private notifs: OwNotificationsService,
 		private userService: UserService,
 		private decktrackerStateLoader: DecktrackerStateLoaderService,
+		private readonly storeBootstrap: StoreBootstrapService,
 		private readonly globalStats: GlobalStatsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly prefs: PreferencesService,
@@ -328,13 +322,12 @@ export class MainWindowStoreService {
 		const achievementUpdateHelper = new AchievementUpdateHelper(
 			this.achievementsRepository,
 			achievementStateHelper,
+			this.achievementHistoryStorage,
+			this.achievementsLoader,
 		);
 		return Map.of(
-			TriggerPopulateStoreEvent.eventName(),
-			new TriggerPopulateStoreProcessor(this.events),
-
-			PopulateStoreEvent.eventName(),
-			new PopulateStoreProcessor(this.ow, this.userService, this.prefs),
+			StoreInitEvent.eventName(),
+			new StoreInitProcessor(this.ow, this.userService, this.prefs),
 
 			NavigationBackEvent.eventName(),
 			new NavigationBackProcessor(),
@@ -467,18 +460,9 @@ export class MainWindowStoreService {
 			new SkipFtueProcessor(this.prefs),
 
 			// Stats
-			GameStatsInitEvent.eventName(),
-			new GameStatsInitProcessor(this.replaysStateBuilder, this.decktrackerStateLoader),
-
-			BgsBestUserStatsInitEvent.eventName(),
-			new BgsBestUserStatsInitProcessor(),
 
 			RecomputeGameStatsEvent.eventName(),
 			new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.replaysStateBuilder, this.events),
-
-			// Global stats
-			GlobalStatsInitEvent.eventName(),
-			new GlobalStatsInitProcessor(),
 
 			// Replays
 			ShowReplayEvent.eventName(),
@@ -513,10 +497,16 @@ export class MainWindowStoreService {
 	}
 
 	private populateStore(onlyGameData = false) {
-		console.log('sending populate store event');
+		console.log('populating store');
+		if (!onlyGameData) {
+			console.log('sending populate store event');
+			this.storeBootstrap.initStore();
+		} else {
+			this.events.broadcast(Events.START_POPULATE_COLLECTION_STATE);
+		}
 		// Launch events to start gathering data for the store
-		this.stateUpdater.next(new PopulateStoreEvent());
-		this.stateUpdater.next(new TriggerPopulateStoreEvent(onlyGameData));
+		// this.stateUpdater.next(new PopulateStoreEvent());
+		// this.stateUpdater.next(new TriggerPopulateStoreEvent(onlyGameData));
 	}
 
 	private listenForSocialAccountLoginUpdates() {

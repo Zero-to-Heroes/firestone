@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Card } from '../../../models/card';
-import { CardHistory } from '../../../models/card-history';
 import { BinderState } from '../../../models/mainwindow/binder-state';
 import { PityTimer } from '../../../models/pity-timer';
 import { Set, SetCard } from '../../../models/set';
@@ -31,17 +30,23 @@ export class CollectionBootstrapService {
 		});
 	}
 
-	public async initCollectionState() {
-		const cardHistory: readonly CardHistory[] = await this.cardHistoryStorage.loadAll(100);
+	public async initCollectionState(): Promise<BinderState> {
+		console.log('initializing collection state');
+		const [cardHistory, sets, totalHistoryLength] = await Promise.all([
+			this.cardHistoryStorage.loadAll(100),
+			this.buildSets(),
+			this.cardHistoryStorage.countHistory(),
+		]);
 		const newState = Object.assign(new BinderState(), {
-			allSets: await this.buildSets(),
+			allSets: sets,
 			cardHistory: cardHistory,
 			shownCardHistory: cardHistory,
-			totalHistoryLength: await this.cardHistoryStorage.countHistory(),
+			totalHistoryLength: totalHistoryLength,
 			isLoading: false,
 		} as BinderState);
-		// console.warn('loading card history', cardHistory, newState);
+		console.warn('collection loading card history', cardHistory, newState);
 		this.stateUpdater.next(new CollectionInitEvent(newState));
+		return newState;
 	}
 
 	private async buildSets(): Promise<readonly Set[]> {
