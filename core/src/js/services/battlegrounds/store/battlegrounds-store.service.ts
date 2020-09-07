@@ -86,6 +86,7 @@ export class BattlegroundsStoreService {
 	private overlayHandlers: BattlegroundsOverlay[];
 	private eventEmitters = [];
 	private memoryInterval;
+	private battlegroundsHotkeyListener;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -111,11 +112,9 @@ export class BattlegroundsStoreService {
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
 		window['bgsHotkeyPressed'] = this.handleHotkeyPressed;
 
-		this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
+		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
 			console.log('[bgs-store] hotkey pressed', hotkeyResult);
-			if (hotkeyResult.status === 'success') {
-				this.handleHotkeyPressed();
-			}
+			this.handleHotkeyPressed();
 		});
 
 		this.handleDisplayPreferences();

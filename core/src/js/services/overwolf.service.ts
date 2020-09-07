@@ -127,8 +127,14 @@ export class OverwolfService {
 		overwolf.social.twitter.onLoginStateChanged.addListener(callback);
 	}
 
-	public addHotKeyPressedListener(hotkey: string, callback) {
-		overwolf.settings.registerHotKey(hotkey, callback);
+	public addHotKeyPressedListener(hotkey: string, callback): any {
+		// overwolf.settings.registerHotKey(hotkey, callback);
+		overwolf.settings.hotkeys.onPressed.addListener(hotkeyPressed => {
+			if (hotkeyPressed?.name === hotkey) {
+				callback();
+			}
+			// console.log('hotkey pressed', hotkeyPressed)
+		});
 	}
 
 	public addHotkeyChangedListener(callback: (message: any) => void): (message: any) => void {

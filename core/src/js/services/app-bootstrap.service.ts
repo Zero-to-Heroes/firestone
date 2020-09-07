@@ -45,6 +45,7 @@ export class AppBootstrapService {
 	private currentState = 'INIT';
 	private loadingWindowId: string;
 	private loadingWindowShown = false;
+	private collectionHotkeyListener;
 
 	constructor(
 		private store: MainWindowStoreService,
@@ -109,17 +110,15 @@ export class AppBootstrapService {
 		console.log('[bootstrap] app init starting');
 		window['mainWindowHotkeyPressed'] = () => this.onHotkeyPress();
 		window['reloadWindows'] = () => this.reloadWindows();
-		this.ow.addHotKeyPressedListener('collection', async hotkeyResult => {
-			// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
-			if (this.currentState !== 'READY') {
-				return;
-			}
-			if (hotkeyResult.status === 'success') {
+		if (!this.collectionHotkeyListener) {
+			this.collectionHotkeyListener = this.ow.addHotKeyPressedListener('collection', async hotkeyResult => {
+				// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
+				if (this.currentState !== 'READY') {
+					return;
+				}
 				this.onHotkeyPress();
-			} else {
-				console.log('could not trigger hotkey', hotkeyResult, this.currentState);
-			}
-		});
+			});
+		}
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			// console.log('[bootstrap] updated game status', res);
 			if (this.ow.exitGame(res)) {
