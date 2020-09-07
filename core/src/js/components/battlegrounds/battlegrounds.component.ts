@@ -132,7 +132,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 		console.log('monitors', monitorsList);
-		console.log('gameInfo', gameInfo);
+		// console.log('gameInfo', gameInfo);
 		const mainMonitor = gameInfo?.monitorHandle?.value ?? -1;
 		if (mainMonitor !== -1) {
 			const secondMonitor = monitorsList.displays.filter(monitor => monitor.handle.value !== mainMonitor)[0];

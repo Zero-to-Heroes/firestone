@@ -171,7 +171,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 		this.activeTimeFilter = this._state.activeTimeFilter;
-		console.log('set time filter', this.activeTimeFilter, this.timeFilterOptions, this);
+		console.log('set time filter', this.activeTimeFilter, this.timeFilterOptions);
 		this.placeholder = this.timeFilterOptions.find(option => option.value === this.activeTimeFilter).label;
 
 		this.updateHeroSortFilter();

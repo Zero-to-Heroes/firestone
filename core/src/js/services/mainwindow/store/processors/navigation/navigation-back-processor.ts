@@ -44,7 +44,7 @@ export class NavigationBackProcessor implements Processor {
 		dataState: MainWindowState,
 	): NavigationState {
 		if (!navigationState || !dataState) {
-			console.warn('Missing state for processing back navigation', navigationState, dataState);
+			console.warn('Missing state for processing back navigation');
 			return null;
 		}
 		switch (navigationState.navigationAchievements.currentView) {
@@ -89,7 +89,7 @@ export class NavigationBackProcessor implements Processor {
 		dataState: MainWindowState,
 	): NavigationState {
 		if (!navigationState || !dataState) {
-			console.warn('Missing state for processing back navigation', navigationState, dataState);
+			console.warn('Missing state for processing back navigation');
 			return null;
 		}
 		switch (navigationState.navigationBattlegrounds.currentView) {

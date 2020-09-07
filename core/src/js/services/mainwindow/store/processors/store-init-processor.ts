@@ -16,7 +16,7 @@ export class StoreInitProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('[store-init] populating store', event, currentState);
+		console.log('[store-init] populating store');
 		const prefs = await this.prefs.getPreferences();
 		return [
 			currentState.update(event.initialState),

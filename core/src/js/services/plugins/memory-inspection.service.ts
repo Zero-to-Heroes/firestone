@@ -73,7 +73,7 @@ export class MemoryInspectionService {
 	public async getCurrentScene(): Promise<string> {
 		return new Promise<string>(async resolve => {
 			const gameInfo = await this.ow.getGameEventsInfo();
-			console.log('gameInfo', gameInfo);
+			// console.log('gameInfo', gameInfo);
 			resolve(gameInfo?.res?.game_info?.scene_state);
 		});
 	}
