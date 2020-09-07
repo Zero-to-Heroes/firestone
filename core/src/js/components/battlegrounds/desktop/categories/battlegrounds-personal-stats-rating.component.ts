@@ -171,7 +171,10 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		}
 		this.lineChartData = [
 			{
-				data: this._state.matchStats.filter(match => match.playerRank).map(match => parseInt(match.playerRank)),
+				data: this._state.matchStats
+					.filter(match => match.playerRank)
+					.reverse()
+					.map(match => parseInt(match.playerRank)),
 				label: 'Rating',
 			},
 		];
