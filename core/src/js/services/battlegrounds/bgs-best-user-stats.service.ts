@@ -30,7 +30,7 @@ export class BgsBestUserStatsService {
 		}
 		this.http.get(`${BGS_BEST_USER_STATS_ENDPOINT}/${currentUser.username || currentUser.userId}`).subscribe(
 			(data: readonly BgsBestStat[]) => {
-				console.log('[bgs-best-stats] received stats', data);
+				console.log('[bgs-best-stats] received stats');
 				callback(data);
 			},
 			error => {
