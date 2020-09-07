@@ -16,6 +16,14 @@ export class BgsTripleCreatedParser implements EventParser {
 		const playerToUpdate = currentState.currentGame.players.find(
 			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
+		if (!playerToUpdate) {
+			console.error(
+				'Could not find player to update for triple history',
+				currentState.currentGame.players.map(player => player.cardId),
+				event.heroCardId,
+			);
+			return currentState;
+		}
 		const newHistory: readonly BgsTriple[] = [
 			...playerToUpdate.tripleHistory,
 			BgsTriple.create({

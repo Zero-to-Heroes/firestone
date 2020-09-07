@@ -22,6 +22,10 @@ export class BgsOpponentRevealedParser implements EventParser {
 				.map(player => normalizeHeroCardId(player.cardId))
 				.includes(normalizedCardId)
 		) {
+			console.log(
+				'opponent already added',
+				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
+			);
 			return currentState;
 		}
 		const newPlayer: BgsPlayer = BgsPlayer.create({
