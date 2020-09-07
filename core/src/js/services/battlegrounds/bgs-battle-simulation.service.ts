@@ -78,7 +78,7 @@ export class BgsBattleSimulationService {
 				.post(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, sample)
 				.toPromise()) as string;
 			console.log('[bgs-simulation] id for simulation sample', result);
-			return result?.id;
+			return result;
 		} catch (e) {
 			console.error('[bgs-simulation] could not get if from sample', e.message, sample, e);
 			return null;
