@@ -1,7 +1,7 @@
+import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GALAKROND_EVIL, GALAKROND_EXPLORER } from '@firestone-hs/reference-data';
 import { CoinPlayType } from '../replays/coin-play.type';
 import { MatchResultType } from '../replays/match-result.type';
-import { MatchStats } from './match-stats';
 import { StatGameFormatType } from './stat-game-format.type';
 import { StatGameModeType } from './stat-game-mode.type';
 
@@ -18,6 +18,7 @@ export class GameStat {
 	readonly playerName: string;
 	readonly playerClass: string;
 	readonly playerRank: string | undefined;
+	readonly newPlayerRank: string;
 	readonly playerCardId: string;
 	readonly playerDecklist: string | undefined;
 	readonly playerDeckName: string | undefined;
@@ -26,7 +27,8 @@ export class GameStat {
 	readonly opponentCardId: string;
 	readonly opponentName: string;
 	readonly reviewId: string;
-	readonly matchStat: MatchStats;
+	// readonly matchStat?: MatchStats;
+	readonly postMatchStats?: BgsPostMatchStats;
 
 	public static create(base: GameStat): GameStat {
 		return Object.assign(new GameStat(), base);

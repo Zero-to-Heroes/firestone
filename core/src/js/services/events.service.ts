@@ -35,10 +35,6 @@ export class Events {
 
 	public static readonly GAME_STATS_UPDATED = 'events-game-stats-updated';
 	public static readonly GLOBAL_STATS_UPDATED = 'global-stats-updated';
-	public static readonly MATCH_STATS_UPDATED = 'EVENTS_MATCH_STATS_UPDATED';
-
-	// public static readonly SHOW_TOOLTIP = 'show-tooltip';
-	// public static readonly HIDE_TOOLTIP = 'hide-tooltip';
 
 	// An intermediate layer for decktracker, so that we have better control on the display
 	public static readonly DECK_SHOW_TOOLTIP = 'deck-show-tooltip';
@@ -54,11 +50,7 @@ export class Events {
 	public static readonly HIDE_MODAL = 'hide-modal';
 
 	public static readonly START_POPULATE_COLLECTION_STATE = 'start-populate-collection-state';
-	public static readonly START_POPULATE_ACHIEVEMENT_STATE = 'start-populate-achievements-state';
-	public static readonly START_POPULATE_GAME_STATS_STATE = 'start-populate-game-stats-state';
-	public static readonly START_POPULATE_GLOBAL_STATS_STATE = 'start-populate-global-stats-state';
 	public static readonly START_BGS_RUN_STATS = 'start-bgs-run-stats';
-	public static readonly START_POPULATE_BGS_BEST_USER_STATS_STATE = 'start-populate-bgs-best-user-stats-state';
 
 	private _eventBus: Subject<BroadcastEvent>;
 

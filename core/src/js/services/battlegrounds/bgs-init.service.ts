@@ -33,7 +33,7 @@ export class BgsInitService {
 		private readonly patchesService: PatchesConfigService,
 		private readonly prefs: PreferencesService,
 	) {
-		this.events.on(Events.MATCH_STATS_UPDATED).subscribe(event => {
+		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
 			const newGameStats: GameStats = event.data[0];
 			console.log('[bgs-init] match stats updated', newGameStats);
 			this.bgsStateUpdater.next(new BgsStatUpdateEvent(newGameStats));
@@ -70,8 +70,6 @@ export class BgsInitService {
 		} as BgsStats);
 		this.bgsStateUpdater.next(new BgsInitEvent(bgsStatsForCurrentPatch, statsWithPlayer));
 		return statsWithPatch;
-
-		// TODO: update after each BG match
 	}
 
 	public async initBattlegoundsAppState(bgsGlobalStats: BgsStats): Promise<BattlegroundsAppState> {
