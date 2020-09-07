@@ -120,10 +120,10 @@ export class BgsInitService {
 	private buildPersonalAICategory(): BattlegroundsCategory {
 		return BattlegroundsCategory.create({
 			id: 'bgs-category-personal-ai',
-			name: 'AI Coaching',
+			name: 'AI Insights',
 			enabled: false,
 			disabledTooltip:
-				'AI coaching is still in development. It will likely be a perk for subscribers, but nothing is decided yet. Thanks for your patience!',
+				'AI insights are still in development. They will likely be a perk for subscribers, but nothing is decided yet. Thanks for your patience!',
 		} as BattlegroundsCategory);
 	}
 
