@@ -89,7 +89,7 @@ declare let amplitude: any;
 				</decktracker>
 				<battlegrounds-desktop
 					class="main-section"
-					[state]="dataState.battlegrounds"
+					[state]="dataState"
 					[navigation]="navigationState"
 					[hidden]="navigationState.currentApp !== 'battlegrounds'"
 				>

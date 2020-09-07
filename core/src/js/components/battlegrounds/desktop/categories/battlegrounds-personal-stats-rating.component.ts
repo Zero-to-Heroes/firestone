@@ -188,7 +188,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 				pointHoverBorderColor: 'transparent',
 			},
 		];
-		console.log('chartData', this.lineChartData, this.lineChartLabels);
+		// console.log('chartData', this.lineChartData, this.lineChartLabels);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

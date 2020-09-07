@@ -33,7 +33,8 @@ export class SelectBattlegroundsCategoryProcessor implements Processor {
 			navigationState.update({
 				isVisible: true,
 				navigationBattlegrounds: navigationBattlegrounds,
-				text: globalCategory.name !== category.name ? globalCategory.name + ' ' + category.name : category.name,
+				text:
+					globalCategory.name !== category.name ? globalCategory.name + ' - ' + category.name : category.name,
 				image: null,
 			} as NavigationState),
 		];

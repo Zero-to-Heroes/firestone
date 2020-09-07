@@ -39,8 +39,8 @@ import { SelectAchievementCategoryEvent } from './events/achievements/select-ach
 import { SelectAchievementSetEvent } from './events/achievements/select-achievement-set-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
 import { VideoReplayDeletionRequestEvent } from './events/achievements/video-replay-deletion-request-event';
-import { BgsAppInitEvent } from './events/battlegrounds/bgs-app-init-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
+import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { SelectBattlegroundsGlobalCategoryEvent } from './events/battlegrounds/select-battlegrounds-global-category-event';
@@ -91,8 +91,8 @@ import { SelectAchievementCategoryProcessor } from './processors/achievements/se
 import { SelectAchievementSetProcessor } from './processors/achievements/select-achievement-set-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
 import { VideoReplayDeletionRequestProcessor } from './processors/achievements/video-replay-deletion-request-processor';
-import { BgsAppInitProcessor } from './processors/battlegrounds/bgs-app-init-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
+import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { SelectBattlegroundsGlobalCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-global-category-processor';
@@ -460,9 +460,13 @@ export class MainWindowStoreService {
 			new SkipFtueProcessor(this.prefs),
 
 			// Stats
-
 			RecomputeGameStatsEvent.eventName(),
-			new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.replaysStateBuilder, this.events),
+			new RecomputeGameStatsProcessor(
+				this.decktrackerStateLoader,
+				this.replaysStateBuilder,
+				this.bgsBuilder,
+				this.events,
+			),
 
 			// Replays
 			ShowReplayEvent.eventName(),
@@ -479,9 +483,6 @@ export class MainWindowStoreService {
 			new ChangeDeckModeFilterProcessor(this.decksStateBuilder),
 
 			// Battlegrounds
-			BgsAppInitEvent.eventName(),
-			new BgsAppInitProcessor(),
-
 			SelectBattlegroundsGlobalCategoryEvent.eventName(),
 			new SelectBattlegroundsGlobalCategoryProcessor(),
 
@@ -493,11 +494,13 @@ export class MainWindowStoreService {
 
 			BgsHeroSortFilterSelectedEvent.eventName(),
 			new BgsHeroSortFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+
+			BgsPostMatchStatsComputedEvent.eventName(),
+			new BgsPostMatchStatsComputedProcessor(),
 		);
 	}
 
 	private populateStore(onlyGameData = false) {
-		console.log('populating store');
 		if (!onlyGameData) {
 			console.log('sending populate store event');
 			this.storeBootstrap.initStore();

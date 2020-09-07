@@ -19,13 +19,6 @@ export class MainWindowState {
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly globalStats: GlobalStats = new GlobalStats();
-	// readonly navigation: Navigation = new Navigation();
-	// Store all elements that should not be modified when navigating back and forth
-	// IMPORTANT: I think ultimately it should probably done this other way around - the
-	// main states contain permanent info (like the achievments unlocked, which don't
-	// depend on the current navigation), and we have a "navigation state" that
-	// only contains the info that should be updated when navigating (like what page
-	// is currently being displayed)
 
 	public update(base: MainWindowState): MainWindowState {
 		return Object.assign(new MainWindowState(), this, base);

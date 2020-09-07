@@ -57,6 +57,6 @@ export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit 
 			return;
 		}
 		this.stats = this._state.stats.heroStats.filter(stat => stat.id !== 'average');
-		console.log('stats', this.stats);
+		// console.log('stats', this.stats);
 	}
 }

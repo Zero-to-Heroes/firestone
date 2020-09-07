@@ -12,6 +12,8 @@ import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { Events } from '../events.service';
+import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
+import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
@@ -19,11 +21,12 @@ import { UserService } from '../user.service';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
-const BGS_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+const BGS_UPLOAD_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 
 @Injectable()
 export class BgsRunStatsService {
-	private stateUpdater: EventEmitter<BattlegroundsStoreEvent>;
+	private bgsStateUpdater: EventEmitter<BattlegroundsStoreEvent>;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly http: HttpClient,
@@ -37,10 +40,17 @@ export class BgsRunStatsService {
 			this.computeRunStats(event.data[0], event.data[1], event.data[2]);
 		});
 		setTimeout(() => {
-			this.stateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
+			this.bgsStateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
+			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
 	}
 
+	// TODO: refactor how the initial state is built:
+	// - Move everything in a single class, that calls all the services, with a Promise.all
+	// - Once we have all the data, build the initial state
+	// - Keep separate services for updating the state after each match
+	// Today it's a mess and very difficult to know what is available and when
+	// Other TODO; assume post-match stats are available when building the replays list, and only fetch it when asked for
 	private async computeRunStats(reviewId: string, currentGame: BgsGame, bestBgsUserStats: readonly BgsBestStat[]) {
 		const prefs = await this.prefs.getPreferences();
 		const user = await this.userService.getCurrentUser();
@@ -61,7 +71,7 @@ export class BgsRunStatsService {
 		const [postMatchStats, newBestValues] = this.populateObject(
 			prefs.bgsUseLocalPostMatchStats
 				? await this.buildStatsLocally(currentGame)
-				: ((await this.http.post(BGS_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats),
+				: ((await this.http.post(BGS_UPLOAD_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats),
 			input,
 			bestBgsUserStats || [],
 		);
@@ -70,13 +80,14 @@ export class BgsRunStatsService {
 		// archive the data. However, this is non-blocking
 		if (prefs.bgsUseLocalPostMatchStats) {
 			// console.log('posting to endpoint');
-			this.http.post(BGS_RUN_STATS_ENDPOINT, input).subscribe(
+			this.http.post(BGS_UPLOAD_RUN_STATS_ENDPOINT, input).subscribe(
 				result => console.log('request remote post-match stats success'),
 				error => console.error('issue while posting post-match stats', error),
 			);
 		}
 		console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats);
-		this.stateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues));
+		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues));
+		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
 
 	private async buildStatsLocally(currentGame: BgsGame): Promise<IBgsPostMatchStats> {

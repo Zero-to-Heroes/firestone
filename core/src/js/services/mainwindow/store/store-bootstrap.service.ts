@@ -69,8 +69,6 @@ export class StoreBootstrapService {
 			this.collectionBootstrap.initCollectionState(),
 		]);
 
-		// TODO: check that BG match stats (in BG app) are still properly updated
-		// this.events.broadcast(Events.MATCH_STATS_UPDATED, matchStats);
 		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);
 
 		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(bgsGlobalStats);
@@ -105,11 +103,6 @@ export class StoreBootstrapService {
 			stats: newStatsState,
 			globalStats: globalStats,
 		} as MainWindowState);
-		// TODO: move this to this store init processor
-		// navigationState.update({
-		// 	currentApp: !prefs.ftue.hasSeenGlobalFtue ? undefined : navigationState.currentApp,
-		// 	text: 'Categories',
-		// } as NavigationState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState));
 	}
 

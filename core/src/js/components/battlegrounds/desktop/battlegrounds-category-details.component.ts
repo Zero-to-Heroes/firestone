@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 
 @Component({
@@ -14,21 +14,27 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 			<battlegrounds-personal-stats-heroes
 				[hidden]="navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-heroes'"
 				[category]="category"
-				[state]="state"
+				[state]="state.battlegrounds"
 			>
 			</battlegrounds-personal-stats-heroes>
 			<battlegrounds-personal-stats-rating
 				[hidden]="navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-rating'"
 				[category]="category"
-				[state]="state"
+				[state]="state.battlegrounds"
 			>
 			</battlegrounds-personal-stats-rating>
+			<battlegrounds-personal-stats-stats
+				[hidden]="navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-stats'"
+				[category]="category"
+				[state]="state"
+			>
+			</battlegrounds-personal-stats-stats>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsCategoryDetailsComponent {
 	@Input() category: BattlegroundsCategory;
-	@Input() state: BattlegroundsAppState;
+	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
 }

@@ -5,6 +5,10 @@ export class StatsState {
 	readonly gameStats: GameStats = new GameStats();
 	readonly bestBgsUserStats: readonly BgsBestStat[];
 
+	public static create(base: StatsState): StatsState {
+		return Object.assign(new StatsState(), base);
+	}
+
 	public update(base: StatsState): StatsState {
 		return Object.assign(new StatsState(), this, base);
 	}

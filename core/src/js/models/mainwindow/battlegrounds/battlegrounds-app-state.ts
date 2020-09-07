@@ -12,6 +12,7 @@ export class BattlegroundsAppState {
 	readonly matchStats: readonly GameStat[];
 	// The stats used by the app (so a mix a globalStats + matchStats + filters)
 	readonly stats: BgsStats;
+
 	readonly activeTimeFilter: BgsActiveTimeFilterType;
 	readonly activeHeroSortFilter: BgsHeroSortFilterType;
 

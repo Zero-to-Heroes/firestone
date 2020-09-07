@@ -13,6 +13,7 @@ import { BgsBattleStatusComponent } from '../../components/battlegrounds/in-game
 import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview-big.component';
 import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
 import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
+import { StatCellComponent } from '../../components/battlegrounds/post-match/stat-cell.component';
 import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
@@ -101,6 +102,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
 		MinionIconComponent,
+
+		StatCellComponent,
 	],
 	entryComponents: [HelpTooltipComponent, CardTooltipComponent, ConfirmationComponent],
 	exports: [
@@ -149,6 +152,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
 		MinionIconComponent,
+
+		StatCellComponent,
 	],
 	providers: [{ provide: OverlayContainer, useClass: CdkOverlayContainer }],
 })

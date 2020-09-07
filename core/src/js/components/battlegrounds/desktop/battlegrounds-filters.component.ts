@@ -12,6 +12,7 @@ import { IOption } from 'ng-select';
 import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BgsActiveTimeFilterType } from '../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { BgsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
@@ -84,8 +85,12 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	_state: BattlegroundsAppState;
 	_navigation: NavigationState;
 
-	@Input() set state(value: BattlegroundsAppState) {
-		this._state = value;
+	@Input() set state(value: BattlegroundsAppState | MainWindowState) {
+		if (value instanceof BattlegroundsAppState) {
+			this._state = value;
+		} else {
+			this._state = value.battlegrounds;
+		}
 		this.doSetValues();
 	}
 
@@ -145,7 +150,10 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			return;
 		}
 
-		if (['categories', 'category'].includes(this._navigation.navigationBattlegrounds.currentView)) {
+		if (
+			['categories', 'category'].includes(this._navigation.navigationBattlegrounds.currentView) ||
+			['bgs-category-personal-stats'].includes(this._navigation.navigationBattlegrounds.selectedCategoryId)
+		) {
 			this.timeFilterVisible = false;
 			this.heroSortFilterVisible = false;
 			return;
@@ -163,6 +171,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 		this.activeTimeFilter = this._state.activeTimeFilter;
+		console.log('set time filter', this.activeTimeFilter, this.timeFilterOptions, this);
 		this.placeholder = this.timeFilterOptions.find(option => option.value === this.activeTimeFilter).label;
 
 		this.updateHeroSortFilter();

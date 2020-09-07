@@ -1,3 +1,4 @@
+import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -5,6 +6,7 @@ import { ReplaysState } from '../../../../../models/mainwindow/replays/replays-s
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
+import { BgsBuilderService } from '../../../../battlegrounds/bgs-builder.service';
 import { DecktrackerStateLoaderService } from '../../../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../../../decktracker/main/replays-state-builder.service';
 import { Events } from '../../../../events.service';
@@ -13,8 +15,9 @@ import { Processor } from '../processor';
 
 export class RecomputeGameStatsProcessor implements Processor {
 	constructor(
-		private decktrackerStateLoader: DecktrackerStateLoaderService,
+		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
+		private readonly bgsBuilder: BgsBuilderService,
 		private readonly events: Events,
 	) {}
 
@@ -28,7 +31,6 @@ export class RecomputeGameStatsProcessor implements Processor {
 		const newGameStats: GameStats = currentState.stats.gameStats.update({
 			stats: [event.gameStat, ...currentState.stats.gameStats.stats] as readonly GameStat[],
 		} as GameStats);
-		this.events.broadcast(Events.MATCH_STATS_UPDATED, newGameStats);
 		this.events.broadcast(Events.GAME_STATS_UPDATED, newGameStats);
 		const newStatsState: StatsState = Object.assign(new StatsState(), currentState.stats, {
 			gameStats: newGameStats,
@@ -41,11 +43,21 @@ export class RecomputeGameStatsProcessor implements Processor {
 			newStatsState,
 		);
 		console.log('[recompute-game-stats-processor] decktracker');
+
+		// Rebuild stats for battlegrounds state
+		const battlegrounds: BattlegroundsAppState = await this.bgsBuilder.updateStats(
+			currentState.battlegrounds,
+			newGameStats,
+			currentState.battlegrounds.stats.currentBattlegroundsMetaPatch,
+		);
+		console.log('[recompute-game-stats-processor] battlegrounds');
+
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				stats: newStatsState,
 				decktracker: decktracker,
 				replays: replayState,
+				battlegrounds: battlegrounds,
 			} as MainWindowState),
 			null,
 		];

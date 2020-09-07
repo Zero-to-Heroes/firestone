@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 
 @Component({
@@ -12,7 +12,7 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 	template: `
 		<div class="app-section battlegrounds">
 			<section class="main divider">
-				<with-loading [isLoading]="enableBg && state.loading">
+				<with-loading [isLoading]="enableBg && (!state.battlegrounds || state.battlegrounds.loading)">
 					<div class="content empty-state" *ngIf="!enableBg">
 						<i>
 							<svg>
@@ -29,12 +29,12 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 							>Coming soon: personal stats and the ability to review all past match stats!</span
 						>
 					</div>
-					<div class="content" *ngIf="enableBg">
+					<div class="content" *ngIf="enableBg && state.battlegrounds">
 						<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
 						<battlegrounds-filters [state]="state" [navigation]="navigation"> </battlegrounds-filters>
 						<battlegrounds-global-categories
 							[hidden]="navigation.navigationBattlegrounds.currentView !== 'categories'"
-							[globalCategories]="state.globalCategories"
+							[globalCategories]="state.battlegrounds.globalCategories"
 						>
 						</battlegrounds-global-categories>
 						<battlegrounds-categories
@@ -58,14 +58,14 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsDesktopComponent {
-	@Input() state: BattlegroundsAppState;
+	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
 
 	enableBg = true;
 
 	buildCategories(): readonly BattlegroundsCategory[] {
 		return (
-			this.state.globalCategories.find(
+			this.state.battlegrounds.globalCategories.find(
 				cat => cat.id === this.navigation.navigationBattlegrounds.selectedGlobalCategoryId,
 			)?.categories || []
 		);
