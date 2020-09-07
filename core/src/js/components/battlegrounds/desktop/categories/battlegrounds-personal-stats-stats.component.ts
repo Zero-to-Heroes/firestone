@@ -165,7 +165,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 		this.heroesKilled = this.getStat('enemyHeroesKilled')?.value || 0;
 		this.percentageOfBattlesGoingFirst = this.getStat('percentageOfBattlesGoingFirst')?.value || 0;
 		this.battleLuck = this.getStat('battleLuck')?.value || 0;
-		this.negativeBattleLuck = this.getStat('negativeBattleLuck')?.value || 0;
+		this.negativeBattleLuck = Math.max(this.getStat('negativeBattleLuck')?.value || 0);
 	}
 
 	private getStat(statName: string): BgsBestStat {
