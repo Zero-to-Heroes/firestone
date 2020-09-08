@@ -6,6 +6,7 @@ export class NavigationBattlegrounds {
 	readonly selectedGlobalCategoryId: 'bgs-global-category-personal-stats' | 'bgs-global-category-meta-stats';
 	readonly selectedCategoryId:
 		| 'bgs-category-personal-heroes'
+		| 'bgs-category-personal-hero-details'
 		| 'bgs-category-personal-rating'
 		| 'bgs-category-personal-stats'
 		| 'bgs-category-personal-ai';

@@ -8,6 +8,7 @@ import { BattlegroundsGlobalCategory } from '../../models/mainwindow/battlegroun
 import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
 import { BattlegroundsPersonalRatingCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
 import { BattlegroundsPersonalStatsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
+import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Events } from '../events.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -74,7 +75,7 @@ export class BgsInitService {
 
 	public async initBattlegoundsAppState(bgsGlobalStats: BgsStats): Promise<BattlegroundsAppState> {
 		const globalCategories: readonly BattlegroundsGlobalCategory[] = [
-			this.buildPersonalStatsGlobalCategory(),
+			this.buildPersonalStatsGlobalCategory(bgsGlobalStats),
 			this.buildMetaStatsGlobalCategory(),
 		];
 		return BattlegroundsAppState.create({
@@ -84,9 +85,9 @@ export class BgsInitService {
 		} as BattlegroundsAppState);
 	}
 
-	private buildPersonalStatsGlobalCategory(): BattlegroundsGlobalCategory {
+	private buildPersonalStatsGlobalCategory(bgsGlobalStats: BgsStats): BattlegroundsGlobalCategory {
 		const categories: readonly BattlegroundsCategory[] = [
-			this.buildPersonalHeroesCategory(),
+			this.buildPersonalHeroesCategory(bgsGlobalStats),
 			this.buildPersonalRatingCategory(),
 			this.buildPersonalStatsCategory(),
 			this.buildPersonalAICategory(),
@@ -99,9 +100,20 @@ export class BgsInitService {
 		} as BattlegroundsGlobalCategory);
 	}
 
-	private buildPersonalHeroesCategory(): BattlegroundsCategory {
+	private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
+		// console.log('building stats', bgsGlobalStats);
+		const heroDetailCategories: readonly BattlegroundsCategory[] = bgsGlobalStats.heroStats
+			.filter(heroStat => heroStat.id !== 'average')
+			.map(heroStat =>
+				BattlegroundsPersonalStatsHeroDetailsCategory.create({
+					id: 'bgs-category-personal-hero-details-' + heroStat.id,
+					name: this.cards.getCard(heroStat.id)?.name,
+					heroId: heroStat.id,
+				} as BattlegroundsPersonalStatsHeroDetailsCategory),
+			);
 		return BattlegroundsPersonalHeroesCategory.create({
 			enabled: true,
+			categories: heroDetailCategories,
 		} as BattlegroundsPersonalHeroesCategory);
 	}
 

@@ -29,6 +29,17 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 				[state]="state"
 			>
 			</battlegrounds-personal-stats-stats>
+			<battlegrounds-personal-stats-hero-details
+				[hidden]="
+					!navigation.navigationBattlegrounds.selectedCategoryId ||
+					navigation.navigationBattlegrounds.selectedCategoryId.indexOf(
+						'bgs-category-personal-hero-details'
+					) === -1
+				"
+				[category]="category"
+				[state]="state"
+			>
+			</battlegrounds-personal-stats-hero-details>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

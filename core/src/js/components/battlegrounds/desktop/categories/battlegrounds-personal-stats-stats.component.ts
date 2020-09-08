@@ -247,7 +247,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 			hero: stat?.heroCardId,
 			reviewId: stat?.reviewId,
 		};
-		console.log('getting stat', statName, this._state.stats.bestBgsUserStats);
+		// console.log('getting stat', statName, this._state.stats.bestBgsUserStats);
 		return result;
 	}
 }

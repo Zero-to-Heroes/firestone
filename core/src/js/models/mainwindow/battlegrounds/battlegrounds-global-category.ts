@@ -1,3 +1,4 @@
+import { BattlegroundsAppState } from './battlegrounds-app-state';
 import { BattlegroundsCategory } from './battlegrounds-category';
 
 export class BattlegroundsGlobalCategory {
@@ -9,5 +10,12 @@ export class BattlegroundsGlobalCategory {
 
 	public static create(base: BattlegroundsGlobalCategory): BattlegroundsGlobalCategory {
 		return Object.assign(new BattlegroundsGlobalCategory(), base);
+	}
+
+	public hasSubCategory(categoryId: string): boolean {
+		const allCategories = this.categories
+			.map(category => BattlegroundsAppState.extractCategory(category))
+			.reduce((a, b) => a.concat(b), []);
+		return allCategories.some(cat => cat.id === categoryId);
 	}
 }

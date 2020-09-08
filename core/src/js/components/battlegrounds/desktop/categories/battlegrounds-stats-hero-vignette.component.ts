@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
@@ -11,7 +12,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	],
 	template: `
 		<div class="battlegrounds-stats-hero-vignette">
-			<img [src]="icon" class="portrait" />
+			<img [src]="icon" class="portrait" (click)="seeDetailedHeroStats()" />
 			<div class="stats">
 				<div class="item average-position">
 					<div class="label">Average position</div>
@@ -57,5 +58,10 @@ export class BattlegroundsStatsHeroVignetteComponent implements AfterViewInit {
 
 	buildValue(value: number): string {
 		return !value ? 'N/A' : value.toFixed(2);
+	}
+
+	seeDetailedHeroStats() {
+		// console.log('choosing hero details', this._stat.id);
+		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsEvent(this._stat.id));
 	}
 }

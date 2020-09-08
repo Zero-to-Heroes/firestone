@@ -40,6 +40,7 @@ import { SelectAchievementSetEvent } from './events/achievements/select-achievem
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
 import { VideoReplayDeletionRequestEvent } from './events/achievements/video-replay-deletion-request-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
+import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
@@ -92,6 +93,7 @@ import { SelectAchievementSetProcessor } from './processors/achievements/select-
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
 import { VideoReplayDeletionRequestProcessor } from './processors/achievements/video-replay-deletion-request-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
+import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
@@ -250,7 +252,7 @@ export class MainWindowStoreService {
 			}
 			if (newState) {
 				this.state = newState;
-				// console.log('emitting new state', newState);
+				// console.log('emitting new state', this.state, this.navigationState);
 				this.stateEmitter.next(this.state);
 				if (Date.now() - start > 1000) {
 					console.warn(
@@ -266,6 +268,7 @@ export class MainWindowStoreService {
 		} catch (e) {
 			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
 		}
+		console.log('emitting new state', this.state, this.navigationState);
 		return eventQueue.slice(1);
 	}
 
@@ -497,6 +500,9 @@ export class MainWindowStoreService {
 
 			BgsPostMatchStatsComputedEvent.eventName(),
 			new BgsPostMatchStatsComputedProcessor(),
+
+			BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
+			new BgsPersonalStatsSelectHeroDetailsProcessor(),
 		);
 	}
 

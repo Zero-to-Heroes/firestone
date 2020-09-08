@@ -1,5 +1,6 @@
 import { BgsStats } from '../../battlegrounds/stats/bgs-stats';
 import { GameStat } from '../stats/game-stat';
+import { BattlegroundsCategory } from './battlegrounds-category';
 import { BattlegroundsGlobalCategory } from './battlegrounds-global-category';
 import { BgsActiveTimeFilterType } from './bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
@@ -22,5 +23,27 @@ export class BattlegroundsAppState {
 
 	public update(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), this, base);
+	}
+
+	public static findCategory(state: BattlegroundsAppState, categoryId: string) {
+		const allCategories = state.globalCategories
+			.filter(globalCategory => globalCategory.categories)
+			.map(globalCategory => globalCategory.categories)
+			.reduce((a, b) => a.concat(b), [])
+			.map(category => BattlegroundsAppState.extractCategory(category))
+			.reduce((a, b) => a.concat(b), []);
+		return allCategories.find(cat => cat.id === categoryId);
+	}
+
+	public static extractCategory(category: BattlegroundsCategory): readonly BattlegroundsCategory[] {
+		if (!category.categories || category.categories.length === 0) {
+			return [category];
+		}
+		return [
+			category,
+			...category.categories
+				.map(cat => BattlegroundsAppState.extractCategory(cat))
+				.reduce((a, b) => a.concat(b), []),
+		];
 	}
 }

@@ -38,6 +38,7 @@ import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/de
 import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/desktop/battlegrounds-filters.component';
 import { BattlegroundsGlobalCategoriesComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-categories.component';
 import { BattlegroundsGlobalCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-category.component';
+import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
 import { BattlegroundsPersonalStatsRatingComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
 import { BattlegroundsPersonalStatsStatsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component';
@@ -185,6 +186,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BattlegroundsStatsHeroVignetteComponent,
 		BattlegroundsPersonalStatsRatingComponent,
 		BattlegroundsPersonalStatsStatsComponent,
+		BattlegroundsPersonalStatsHeroDetailsComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,
