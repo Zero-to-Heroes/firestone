@@ -136,6 +136,12 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_076';
 		case 'TB_BaconShop_HERO_70':
 			return 'TB_BaconShop_HP_080';
+		case 'TB_BaconShop_HERO_71':
+			return 'TB_BaconShop_HP_084';
+		case 'TB_BaconShop_HERO_72':
+			return 'TB_BaconShop_HP_081';
+		case 'TB_BaconShop_HERO_74':
+			return 'TB_BaconShop_HP_082';
 	}
 };
 
