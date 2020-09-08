@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -61,7 +62,7 @@ export class BattlegroundsDesktopComponent {
 	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
 
-	enableBg = true;
+	enableBg = false;
 
 	buildCategories(): readonly BattlegroundsCategory[] {
 		return (
@@ -72,7 +73,9 @@ export class BattlegroundsDesktopComponent {
 	}
 
 	buildCategory(): BattlegroundsCategory {
-		const categories = this.buildCategories();
-		return categories.find(cat => cat.id === this.navigation.navigationBattlegrounds.selectedCategoryId);
+		return BattlegroundsAppState.findCategory(
+			this.state.battlegrounds,
+			this.navigation.navigationBattlegrounds.selectedCategoryId,
+		);
 	}
 }
