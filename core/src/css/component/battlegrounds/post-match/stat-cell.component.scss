@@ -8,8 +8,9 @@
 
 .cell {
 	display: flex;
+	position: relative;
 
-	.label {
+	.filler {
 		flex-grow: 1;
 	}
 
@@ -27,5 +28,46 @@
 
 	&.new-record .record-icon {
 		display: inline-block;
+	}
+
+	.hero {
+		height: 100%;
+		height: 60px;
+		margin-right: 15px;
+
+		.portrait {
+			height: 100%;
+		}
+	}
+}
+
+.replay {
+	display: flex;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--default-text-color);
+	--icon-color: var(--default-text-color);
+	align-items: center;
+	flex-grow: 0;
+	justify-content: flex-end;
+	margin-left: auto;
+	width: 35px;
+	height: 30px;
+
+	.watch {
+		margin-right: 10px;
+	}
+
+	.watch-icon {
+		height: 100%;
+	}
+
+	&:hover,
+	&:hover svg {
+		color: var(--on-menu-selection-color);
+		--icon-color: var(--on-menu-selection-color);
 	}
 }

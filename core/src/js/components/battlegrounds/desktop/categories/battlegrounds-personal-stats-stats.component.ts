@@ -7,7 +7,6 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { BattlegroundsPersonalStatsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -21,36 +20,104 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	],
 	template: `
 		<div class="stats-recap" scrollable>
-			<stat-cell label="Total dmg dealt (minions)" [value]="totalMinionsDamageDealt"></stat-cell>
-			<stat-cell label="Total dmg taken (minions)" [value]="totalMinionsDamageTaken"></stat-cell>
+			<stat-cell
+				label="Total dmg dealt (minions)"
+				[value]="totalMinionsDamageDealt.value"
+				[heroCardId]="totalMinionsDamageDealt.hero"
+				[reviewId]="totalMinionsDamageDealt.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Total dmg taken (minions)"
+				[value]="totalMinionsDamageTaken.value"
+				[heroCardId]="totalMinionsDamageTaken.hero"
+				[reviewId]="totalMinionsDamageTaken.reviewId"
+			></stat-cell>
 			<stat-cell
 				label="Total dmg dealt (hero)"
-				helpTooltip="Doesn't include fights against the ghost"
-				[value]="totalHeroDamageDealt"
+				tooltipText="Doesn't include fights against the ghost"
+				[value]="totalHeroDamageDealt.value"
+				[heroCardId]="totalHeroDamageDealt.hero"
+				[reviewId]="totalHeroDamageDealt.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Max dmg dealt (hero)"
-				helpTooltip="Doesn't include fights against the ghost"
-				[value]="maxSingleTurnHeroDamageDealt"
+				tooltipText="Doesn't include fights against the ghost"
+				[value]="maxSingleTurnHeroDamageDealt.value"
+				[heroCardId]="maxSingleTurnHeroDamageDealt.hero"
+				[reviewId]="maxSingleTurnHeroDamageDealt.reviewId"
 			></stat-cell>
-			<stat-cell label="Highest Win streak" [value]="winStreak"></stat-cell>
-			<stat-cell label="Triples created" [value]="triples"></stat-cell>
+			<stat-cell
+				label="Highest Win streak"
+				[value]="winStreak.value"
+				[heroCardId]="winStreak.hero"
+				[reviewId]="winStreak.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Triples created"
+				[value]="triples.value"
+				[heroCardId]="triples.hero"
+				[reviewId]="triples.reviewId"
+			></stat-cell>
 			<stat-cell
 				label="Max board stats"
-				[value]="maxBoardStats"
+				[value]="maxBoardStats.value"
+				[heroCardId]="maxBoardStats.hero"
+				[reviewId]="maxBoardStats.reviewId"
 				tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
 			></stat-cell>
-			<stat-cell label="Coins wasted" [value]="coinsWasted"></stat-cell>
-			<stat-cell label="Rerolls" [value]="rerolls"></stat-cell>
-			<stat-cell label="Freezes" [value]="freezes"></stat-cell>
-			<stat-cell label="Hero Power used" [value]="heroPowers"></stat-cell>
-			<stat-cell label="Minions bought" [value]="minionsBought"></stat-cell>
-			<stat-cell label="Minions sold" [value]="minionsSold"></stat-cell>
-			<stat-cell label="Enemy Minions killed" [value]="minionsKilled"></stat-cell>
-			<stat-cell label="Enemy Heroes killed" [value]="heroesKilled"></stat-cell>
+			<stat-cell
+				label="Coins wasted"
+				[value]="coinsWasted.value"
+				[heroCardId]="coinsWasted.hero"
+				[reviewId]="coinsWasted.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Rerolls"
+				[value]="rerolls.value"
+				[heroCardId]="rerolls.hero"
+				[reviewId]="rerolls.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Freezes"
+				[value]="freezes.value"
+				[heroCardId]="freezes.hero"
+				[reviewId]="freezes.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Hero Power used"
+				[value]="heroPowers.value"
+				[heroCardId]="heroPowers.hero"
+				[reviewId]="heroPowers.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Minions bought"
+				[value]="minionsBought.value"
+				[heroCardId]="minionsBought.hero"
+				[reviewId]="minionsBought.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Minions sold"
+				[value]="minionsSold.value"
+				[heroCardId]="minionsSold.hero"
+				[reviewId]="minionsSold.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Enemy Minions killed"
+				[value]="minionsKilled.value"
+				[heroCardId]="minionsKilled.hero"
+				[reviewId]="minionsKilled.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Enemy Heroes killed"
+				[value]="heroesKilled.value"
+				[heroCardId]="heroesKilled.hero"
+				[reviewId]="heroesKilled.reviewId"
+			></stat-cell>
 			<stat-cell
 				label="Battles going first"
-				[value]="percentageOfBattlesGoingFirst?.toFixed(1) + '%'"
+				[value]="percentageOfBattlesGoingFirst.value?.toFixed(1) + '%'"
+				[heroCardId]="percentageOfBattlesGoingFirst.hero"
+				[reviewId]="percentageOfBattlesGoingFirst.reviewId"
 			></stat-cell>
 			<div class="entry cell battle-luck">
 				<div class="record-icon">
@@ -68,7 +135,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						>What is this?</a
 					>
 				</div>
-				<div class="value">{{ battleLuck?.toFixed(1) }}%</div>
+				<div class="value">{{ battleLuck.value?.toFixed(1) }}%</div>
 			</div>
 			<div class="entry cell battle-luck">
 				<div class="record-icon">
@@ -86,7 +153,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						>What is this?</a
 					>
 				</div>
-				<div class="value">{{ negativeBattleLuck?.toFixed(1) }}%</div>
+				<div class="value">{{ negativeBattleLuck.value?.toFixed(1) }}%</div>
 			</div>
 		</div>
 	`,
@@ -96,24 +163,24 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 	_category: BattlegroundsPersonalStatsCategory;
 	_state: MainWindowState;
 
-	totalMinionsDamageDealt: number;
-	totalMinionsDamageTaken: number;
-	totalHeroDamageDealt: number;
-	maxSingleTurnHeroDamageDealt: number;
-	winStreak: number;
-	triples: number;
-	maxBoardStats: number;
-	coinsWasted: number;
-	rerolls: number;
-	freezes: number;
-	heroPowers: number;
-	minionsBought: number;
-	minionsSold: number;
-	minionsKilled: number;
-	heroesKilled: number;
-	percentageOfBattlesGoingFirst: number;
-	battleLuck: number;
-	negativeBattleLuck: number;
+	totalMinionsDamageDealt: NumberValue = {} as NumberValue;
+	totalMinionsDamageTaken: NumberValue = {} as NumberValue;
+	totalHeroDamageDealt: NumberValue = {} as NumberValue;
+	maxSingleTurnHeroDamageDealt: NumberValue = {} as NumberValue;
+	winStreak: NumberValue = {} as NumberValue;
+	triples: NumberValue = {} as NumberValue;
+	maxBoardStats: NumberValue = {} as NumberValue;
+	coinsWasted: NumberValue = {} as NumberValue;
+	rerolls: NumberValue = {} as NumberValue;
+	freezes: NumberValue = {} as NumberValue;
+	heroPowers: NumberValue = {} as NumberValue;
+	minionsBought: NumberValue = {} as NumberValue;
+	minionsSold: NumberValue = {} as NumberValue;
+	minionsKilled: NumberValue = {} as NumberValue;
+	heroesKilled: NumberValue = {} as NumberValue;
+	percentageOfBattlesGoingFirst: NumberValue = {} as NumberValue;
+	battleLuck: NumberValue = {} as NumberValue;
+	negativeBattleLuck: NumberValue = {} as NumberValue;
 
 	@Input() set category(value: BattlegroundsPersonalStatsCategory) {
 		if (value === this._category) {
@@ -147,28 +214,46 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 		if (!this._state || !this._category) {
 			return;
 		}
-
-		this.totalMinionsDamageDealt = this.getStat('totalDamageDealtToMinions')?.value || 0;
-		this.totalMinionsDamageTaken = this.getStat('totalDamageTakenByMinions')?.value || 0;
-		this.totalHeroDamageDealt = this.getStat('totalDamageDealtToHeroes')?.value || 0;
-		this.maxSingleTurnHeroDamageDealt = this.getStat('maxDamageDealtToHero')?.value || 0;
-		this.winStreak = this.getStat('highestWinStreak')?.value || 0;
-		this.triples = this.getStat('triplesCreated')?.value || 0;
-		this.maxBoardStats = this.getStat('maxBoardStats')?.value || 0;
-		this.coinsWasted = this.getStat('coinsWasted')?.value || 0;
-		this.rerolls = this.getStat('rerolls')?.value || 0;
-		this.freezes = this.getStat('freezes')?.value || 0;
-		this.heroPowers = this.getStat('heroPowerUsed')?.value || 0;
-		this.minionsBought = this.getStat('minionsBought')?.value || 0;
-		this.minionsSold = this.getStat('minionsSold')?.value || 0;
-		this.minionsKilled = this.getStat('enemyMinionsKilled')?.value || 0;
-		this.heroesKilled = this.getStat('enemyHeroesKilled')?.value || 0;
-		this.percentageOfBattlesGoingFirst = this.getStat('percentageOfBattlesGoingFirst')?.value || 0;
-		this.battleLuck = this.getStat('battleLuck')?.value || 0;
-		this.negativeBattleLuck = Math.max(this.getStat('negativeBattleLuck')?.value || 0);
+		console.log('top stats', this._state.stats.bestBgsUserStats);
+		this.totalMinionsDamageDealt = this.getStat('totalDamageDealtToMinions');
+		this.totalMinionsDamageTaken = this.getStat('totalDamageTakenByMinions');
+		this.totalHeroDamageDealt = this.getStat('totalDamageDealtToHeroes');
+		this.maxSingleTurnHeroDamageDealt = this.getStat('maxDamageDealtToHero');
+		this.winStreak = this.getStat('highestWinStreak');
+		this.triples = this.getStat('triplesCreated');
+		this.maxBoardStats = this.getStat('maxBoardStats');
+		this.coinsWasted = this.getStat('coinsWasted');
+		this.rerolls = this.getStat('rerolls');
+		this.freezes = this.getStat('freezes');
+		this.heroPowers = this.getStat('heroPowerUsed');
+		this.minionsBought = this.getStat('minionsBought');
+		this.minionsSold = this.getStat('minionsSold');
+		this.minionsKilled = this.getStat('enemyMinionsKilled');
+		this.heroesKilled = this.getStat('enemyHeroesKilled');
+		this.percentageOfBattlesGoingFirst = this.getStat('percentageOfBattlesGoingFirst');
+		this.battleLuck = this.getStat('battleLuck');
+		const negativeBattleLuckStat = this.getStat('negativeBattleLuck');
+		this.negativeBattleLuck = {
+			value: Math.max(negativeBattleLuckStat.value, 0),
+			hero: negativeBattleLuckStat.hero,
+			reviewId: negativeBattleLuckStat.reviewId,
+		};
 	}
 
-	private getStat(statName: string): BgsBestStat {
-		return this._state.stats.bestBgsUserStats.find(stat => stat.statName === statName);
+	private getStat(statName: string): NumberValue {
+		const stat = this._state.stats.bestBgsUserStats.find(stat => stat.statName === statName);
+		const result = {
+			value: stat?.value || 0,
+			hero: stat?.heroCardId,
+			reviewId: stat?.reviewId,
+		};
+		console.log('getting stat', statName, this._state.stats.bestBgsUserStats);
+		return result;
 	}
+}
+
+interface NumberValue {
+	value: number;
+	hero: string;
+	reviewId: string;
 }

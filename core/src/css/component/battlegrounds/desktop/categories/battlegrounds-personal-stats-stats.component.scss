@@ -13,6 +13,13 @@
 		border-bottom: 1px solid var(--color-3);
 	}
 
+	::ng-deep stat-cell {
+		.value {
+			width: 65px;
+			text-align: right;
+		}
+	}
+
 	.entry {
 		display: flex;
 		align-items: center;
