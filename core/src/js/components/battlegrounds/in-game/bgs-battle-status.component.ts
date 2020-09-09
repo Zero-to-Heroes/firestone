@@ -195,7 +195,7 @@ export class BgsBattleStatusComponent {
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
 		console.log('viewing simulation result', category);
 		const simulationSample: GameSample = this.pickSimulationResult(category);
-		console.log('sim sample', simulationSample);
+		// console.log('sim sample', simulationSample);
 		if (!simulationSample) {
 			return;
 		}

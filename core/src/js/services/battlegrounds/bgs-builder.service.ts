@@ -26,6 +26,10 @@ export class BgsBuilderService {
 			activeBgsMatchStats,
 			this.cards,
 		);
+		if (!currentState.globalStats) {
+			console.warn('Did not retrieve global stats');
+			return currentState;
+		}
 		const statsWithPlayer = currentState.globalStats?.update({
 			heroStats: heroStatsWithPlayer,
 			currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
@@ -33,7 +37,7 @@ export class BgsBuilderService {
 		const sortedStats: readonly BgsHeroStat[] = [...(statsWithPlayer?.heroStats || [])].sort(
 			this.buildSortingFunction(prefs),
 		);
-		const finalStats = statsWithPlayer.update({
+		const finalStats = statsWithPlayer?.update({
 			heroStats: sortedStats,
 		} as BgsStats);
 		return currentState.update({

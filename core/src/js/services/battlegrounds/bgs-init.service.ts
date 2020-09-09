@@ -49,23 +49,24 @@ export class BgsInitService {
 		console.log('[bgs-init] bgs init starting');
 		const [bgsGlobalStats] = await Promise.all([this.bgsGlobalStats.loadGlobalStats()]);
 		console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
-		const bgsMatchStats = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
-		if (!bgsMatchStats || bgsMatchStats.length === 0) {
-			console.log('[bgs-init] no bgs match stats');
-			this.bgsStateUpdater.next(new BgsInitEvent([], bgsGlobalStats));
-			return;
-		}
 		const currentBattlegroundsMetaPatch = (await this.patchesService.getConf()).currentBattlegroundsMetaPatch;
-		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
-		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
-			bgsGlobalStats,
-			bgsStatsForCurrentPatch,
-			this.cards,
-		);
 
 		const statsWithPatch = bgsGlobalStats?.update({
 			currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
 		} as BgsStats);
+
+		const bgsMatchStats = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
+		if (!bgsMatchStats || bgsMatchStats.length === 0) {
+			console.log('[bgs-init] no bgs match stats');
+			this.bgsStateUpdater.next(new BgsInitEvent([], statsWithPatch));
+			return statsWithPatch;
+		}
+		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
+		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
+			statsWithPatch,
+			bgsStatsForCurrentPatch,
+			this.cards,
+		);
 
 		const statsWithPlayer = statsWithPatch?.update({
 			heroStats: heroStatsWithPlayer,
