@@ -48,6 +48,7 @@ export class BgsInitService {
 	public async init(matchStats: GameStats): Promise<BgsStats> {
 		console.log('[bgs-init] bgs init starting');
 		const [bgsGlobalStats] = await Promise.all([this.bgsGlobalStats.loadGlobalStats()]);
+		console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
 		const bgsMatchStats = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
 			console.log('[bgs-init] no bgs match stats');
@@ -102,7 +103,7 @@ export class BgsInitService {
 
 	private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
 		// console.log('building stats', bgsGlobalStats);
-		const heroDetailCategories: readonly BattlegroundsCategory[] = bgsGlobalStats.heroStats
+		const heroDetailCategories: readonly BattlegroundsCategory[] = bgsGlobalStats?.heroStats
 			.filter(heroStat => heroStat.id !== 'average')
 			.map(heroStat =>
 				BattlegroundsPersonalStatsHeroDetailsCategory.create({

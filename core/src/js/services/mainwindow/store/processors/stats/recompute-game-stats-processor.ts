@@ -48,7 +48,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 		const battlegrounds: BattlegroundsAppState = await this.bgsBuilder.updateStats(
 			currentState.battlegrounds,
 			newGameStats,
-			currentState.battlegrounds.stats.currentBattlegroundsMetaPatch,
+			currentState.battlegrounds.stats?.currentBattlegroundsMetaPatch,
 		);
 		console.log('[recompute-game-stats-processor] battlegrounds');
 

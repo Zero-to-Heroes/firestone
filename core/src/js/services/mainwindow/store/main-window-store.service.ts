@@ -268,7 +268,7 @@ export class MainWindowStoreService {
 		} catch (e) {
 			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
 		}
-		console.log('emitting new state', this.state, this.navigationState);
+		// console.log('emitting new state', this.state, this.navigationState);
 		return eventQueue.slice(1);
 	}
 

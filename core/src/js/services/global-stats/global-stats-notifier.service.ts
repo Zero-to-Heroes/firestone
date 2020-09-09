@@ -46,7 +46,9 @@ export class GlobalStatsNotifierService {
 		};
 		const statsFromGame = await extractStatsForGame(message, game.uncompressedXmlReplay);
 		//console.log('[global-stats] built stats', statsFromGame, currentGlobalStats);
-		const mergedStats: GlobalStats = mergeStats(currentGlobalStats, statsFromGame);
+		const mergedStats: GlobalStats = !currentGlobalStats
+			? statsFromGame
+			: mergeStats(currentGlobalStats, statsFromGame);
 		//console.log('[global-stats] merged stats', mergedStats);
 		this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(mergedStats));
 	}
