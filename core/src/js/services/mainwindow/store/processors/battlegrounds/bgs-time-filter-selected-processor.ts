@@ -18,7 +18,7 @@ export class BgsTimeFilterSelectedProcessor implements Processor {
 		const bgsState = await this.bgsService.updateStats(
 			currentState.battlegrounds,
 			currentState.stats.gameStats,
-			currentState.battlegrounds.stats.currentBattlegroundsMetaPatch,
+			currentState.battlegrounds.stats?.currentBattlegroundsMetaPatch,
 		);
 		console.log('updated time filter', bgsState);
 		return [

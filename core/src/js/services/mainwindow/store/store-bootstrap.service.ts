@@ -13,6 +13,7 @@ import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state
 import { Events } from '../../events.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OverwolfService } from '../../overwolf.service';
+import { PatchesConfigService } from '../../patches-config.service';
 import { PreferencesService } from '../../preferences.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { UserService } from '../../user.service';
@@ -39,6 +40,7 @@ export class StoreBootstrapService {
 		private readonly globalStats: GlobalStatsService,
 		private readonly bestBgsStats: BgsBestUserStatsService,
 		private readonly collectionBootstrap: CollectionBootstrapService,
+		private readonly patchConfig: PatchesConfigService,
 	) {
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -75,7 +77,8 @@ export class StoreBootstrapService {
 		const bgsAppStateWithStats = await this.bgsBuilder.updateStats(
 			battlegroundsAppState,
 			matchStats,
-			bgsGlobalStats.currentBattlegroundsMetaPatch,
+			bgsGlobalStats?.currentBattlegroundsMetaPatch ||
+				(await this.patchConfig.getConf()).currentBattlegroundsMetaPatch,
 		);
 
 		const newStatsState = StatsState.create({
