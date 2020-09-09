@@ -76,7 +76,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
 	onResized(event: ResizedEvent) {
 		try {
-			console.log('resize event', event);
+			// console.log('resize event', event);
 			// Resize the tracker
 			const scale = event.newHeight / 950;
 			// console.log('proposed scale', scale);
@@ -138,7 +138,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	startDragging() {
 		this.tooltipPosition = 'none';
 		this.dragging = true;
-		console.log('starting dragging');
+		// console.log('starting dragging');
 		// this.events.broadcast(Events.HIDE_TOOLTIP);
 		this.dragStart.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -148,7 +148,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
 	async stopDragging() {
 		this.dragging = false;
-		console.log('stopped dragging');
+		// console.log('stopped dragging');
 		this.dragEnd.next();
 		await this.updateTooltipPosition();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -165,7 +165,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 		} else {
 			this.tooltipPosition = 'left';
 		}
-		console.log('updated tooltip position', rect, this.tooltipPosition);
+		// console.log('updated tooltip position', rect, this.tooltipPosition);
 		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

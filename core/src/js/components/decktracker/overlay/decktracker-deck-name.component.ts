@@ -40,7 +40,7 @@ export class DeckTrackerDeckNameComponent {
 	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly ow: OverwolfService) {}
 
 	async copyDeckstring() {
-		if (!this.ow) {
+		if (!this.ow?.isOwEnabled()) {
 			console.log('no OW service present, not copying to clipboard');
 			return;
 		}

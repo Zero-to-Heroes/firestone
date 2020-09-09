@@ -90,7 +90,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	ngAfterViewInit() {
-		if (this.ow) {
+		if (this.ow?.isOwEnabled()) {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 			this.preferencesSubscription =
 				preferencesEventBus &&

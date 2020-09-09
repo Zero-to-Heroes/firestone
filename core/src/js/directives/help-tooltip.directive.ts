@@ -48,12 +48,12 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	private tooltipRef: ComponentRef<HelpTooltipComponent>;
 
 	constructor(
-		private overlayPositionBuilder: OverlayPositionBuilder,
-		private elementRef: ElementRef,
-		private overlay: Overlay,
-		private cdr: ChangeDetectorRef,
-		@Optional() private ow: OverwolfService,
-		private renderer: Renderer2,
+		private readonly overlayPositionBuilder: OverlayPositionBuilder,
+		private readonly elementRef: ElementRef,
+		private readonly overlay: Overlay,
+		private readonly cdr: ChangeDetectorRef,
+		@Optional() private readonly ow: OverwolfService,
+		private readonly renderer: Renderer2,
 	) {}
 
 	ngOnInit() {
@@ -153,7 +153,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		// These are used by the decktracker, since the window has some transparent space to the left
 		// and right that can go out of the game's window
 		// For all other cases, it should not be needed
-		if (this.bindTooltipToGameWindow && this.ow) {
+		if (this.bindTooltipToGameWindow && this.ow?.isOwEnabled()) {
 			const window = await this.ow.getCurrentWindow();
 			const gameInfo = await this.ow.getRunningGameInfo();
 			const tooltipLeft =

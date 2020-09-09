@@ -109,6 +109,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	}
 
 	private async processEvent(event) {
+		// console.log('received event', event);
 		if (event.type === 'bgs') {
 			this.bgsState = event.state;
 			console.log('bgs state', this.bgsState);

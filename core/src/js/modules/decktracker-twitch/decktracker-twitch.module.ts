@@ -19,6 +19,7 @@ import { StateMouseOverComponent } from '../../components/decktracker/overlay/tw
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { Events } from '../../services/events.service';
+import { OverwolfService } from '../../services/overwolf.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedModule } from '../shared/shared.module';
 
@@ -56,6 +57,6 @@ console.log('version is', process.env.APP_VERSION);
 	],
 	entryComponents: [TwitchBgsHeroOverviewComponent, BgsCardTooltipComponent],
 	bootstrap: [DeckTrackerOverlayContainerComponent],
-	providers: [Events, AllCardsService, BgsBattleSimulationService],
+	providers: [Events, AllCardsService, BgsBattleSimulationService, OverwolfService],
 })
 export class DeckTrackerTwitchModule {}

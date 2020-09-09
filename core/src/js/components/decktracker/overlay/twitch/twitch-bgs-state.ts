@@ -1,3 +1,4 @@
+import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
 
@@ -6,6 +7,10 @@ export interface TwitchBgsState {
 	readonly currentTurn: number;
 	readonly gameEnded: boolean;
 	readonly inGame: boolean;
+	readonly currentBattle: {
+		battleInfo: SimulationResult;
+		status: 'empty' | 'waiting-for-result' | 'done';
+	};
 }
 
 export interface TwitchBgsPlayer {

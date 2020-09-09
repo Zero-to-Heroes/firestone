@@ -30,7 +30,7 @@ export class BgsBuilderService {
 			heroStats: heroStatsWithPlayer,
 			currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
 		} as BgsStats);
-		const sortedStats: readonly BgsHeroStat[] = [...statsWithPlayer.heroStats].sort(
+		const sortedStats: readonly BgsHeroStat[] = [...(statsWithPlayer?.heroStats || [])].sort(
 			this.buildSortingFunction(prefs),
 		);
 		const finalStats = statsWithPlayer.update({

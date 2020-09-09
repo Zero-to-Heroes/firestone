@@ -28,7 +28,7 @@ export class BgsBattleSimulationService {
 		private readonly cards: AllCardsService,
 		@Optional() private readonly prefs: PreferencesService,
 	) {
-		if (ow) {
+		if (ow?.isOwEnabled()) {
 			setTimeout(() => {
 				this.stateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
 			});
@@ -79,6 +79,27 @@ export class BgsBattleSimulationService {
 				.toPromise()) as string;
 			console.log('[bgs-simulation] id for simulation sample', result);
 			return result;
+		} catch (e) {
+			console.error('[bgs-simulation] could not get if from sample', e.message, sample, e);
+			return null;
+		}
+	}
+
+	public async getIdForSimulationSampleWithFetch(sample: GameSample): Promise<string> {
+		console.log('calling fetch sample endpoint', sample);
+		try {
+			const response = await fetch(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, {
+				method: 'POST',
+				mode: 'cors',
+				// credentials: 'same-origin',
+				headers: {
+					'Content-Type': 'application/json',
+					// 'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: JSON.stringify(sample),
+			});
+			console.log('[bgs-simulation] id for simulation sample', response);
+			return response.text();
 		} catch (e) {
 			console.error('[bgs-simulation] could not get if from sample', e.message, sample, e);
 			return null;

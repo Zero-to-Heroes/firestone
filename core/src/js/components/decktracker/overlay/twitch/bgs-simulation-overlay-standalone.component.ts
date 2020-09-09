@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { TwitchBgsState } from './twitch-bgs-state';
 
 declare let amplitude: any;
 
@@ -55,16 +55,16 @@ export class BgsSimulationOverlayStandaloneComponent {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
 
-	@Input() set bgsState(value: BattlegroundsState) {
-		this.nextBattle = value?.currentGame?.battleResult;
-		this.battleSimulationStatus = value?.currentGame?.battleInfoStatus;
+	@Input() set bgsState(value: TwitchBgsState) {
+		this.nextBattle = value?.currentBattle?.battleInfo;
+		this.battleSimulationStatus = value?.currentBattle?.status;
 		console.log('setting game state', value, this.nextBattle, this.battleSimulationStatus);
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	startDragging() {
-		console.log('starting dragging');
+		// console.log('starting dragging');
 		// this.events.broadcast(Events.HIDE_TOOLTIP);
 		this.dragStart.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -73,7 +73,7 @@ export class BgsSimulationOverlayStandaloneComponent {
 	}
 
 	async stopDragging() {
-		console.log('stopped dragging');
+		// console.log('stopped dragging');
 		this.dragEnd.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

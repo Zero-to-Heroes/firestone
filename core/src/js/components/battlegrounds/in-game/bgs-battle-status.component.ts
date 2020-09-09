@@ -204,17 +204,24 @@ export class BgsBattleStatusComponent {
 			this.cdr.detectChanges();
 		}
 
-		// const id = 5;
-		const id = await this.bgsSim.getIdForSimulationSample(simulationSample);
+		const id = this.ow?.isOwEnabled()
+			? await this.bgsSim.getIdForSimulationSample(simulationSample)
+			: await this.bgsSim.getIdForSimulationSampleWithFetch(simulationSample);
+		console.log('id', id);
 		if (id) {
-			amplitude.getInstance().logEvent('bgsSimulation', {
-				'bgsSimulationId': id,
-			});
-			if (this.ow) {
+			if (this.ow?.isOwEnabled()) {
 				this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
 			} else {
+				console.log('window', window);
 				window.open(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`, '_blank');
 			}
+			try {
+				if (amplitude) {
+					amplitude.getInstance().logEvent('bgsSimulation', {
+						'bgsSimulationId': id,
+					});
+				}
+			} catch (e) {}
 		}
 		this.processingSimulationSample = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
