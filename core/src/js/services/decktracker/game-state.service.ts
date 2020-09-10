@@ -503,7 +503,7 @@ export class GameStateService {
 			new SecretDestroyedParser(this.helper),
 			new NewTurnParser(),
 			new FirstPlayerParser(),
-			new CardStolenParser(this.helper),
+			new CardStolenParser(this.helper, this.allCards),
 			new CardCreatorChangedParser(this.helper),
 			new AssignCardIdParser(this.helper),
 			new HeroPowerChangedParser(this.helper, this.allCards),
