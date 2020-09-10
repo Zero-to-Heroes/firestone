@@ -16,6 +16,7 @@ export class Preferences {
 	readonly dontRecordAchievements: boolean = true;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
 
+	readonly collectionEnableNotifications: boolean = true;
 	readonly showDust: boolean = true;
 	readonly showCommon: boolean = true;
 	readonly showCardsOutsideOfPacks: boolean = true;

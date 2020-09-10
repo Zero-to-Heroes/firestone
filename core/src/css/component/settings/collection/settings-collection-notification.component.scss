@@ -19,5 +19,14 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: flex-start;
+
+		&.disabled {
+			opacity: 0.4;
+
+			::ng-deep preference-toggle .preference-toggle,
+			::ng-deep preference-slider .preference-slider {
+				pointer-events: none;
+			}
+		}
 	}
 }
