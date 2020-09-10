@@ -68,7 +68,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			this.fetchInitialState();
 			this.twitch.listen('broadcast', (target, contentType, event) => {
 				const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
-				console.log('received event', deckEvent);
+				// console.log('received event', deckEvent);
 				this.processEvent(deckEvent);
 			});
 		});
@@ -112,7 +112,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		// console.log('received event', event);
 		if (event.type === 'bgs') {
 			this.bgsState = event.state;
-			console.log('bgs state', this.bgsState);
+			// console.log('bgs state', this.bgsState);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -127,7 +127,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 					}
 					break;
 				default:
-					console.log('received deck event');
+					// console.log('received deck event');
 					this.gameState = event.state;
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();

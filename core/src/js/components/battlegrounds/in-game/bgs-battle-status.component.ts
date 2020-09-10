@@ -167,7 +167,7 @@ export class BgsBattleStatusComponent {
 			return;
 		}
 		this._previousBattle = value;
-		console.log('setting next battle', value);
+		// console.log('setting next battle', value);
 		if (value?.wonPercent != null) {
 			this.battleSimulationResultWin = value.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = value.tiedPercent.toFixed(1) + '%';

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameType } from '@firestone-hs/reference-data';
+import { GameTag, GameType } from '@firestone-hs/reference-data';
 import {
 	TwitchBgsBoard,
 	TwitchBgsBoardEntity,
@@ -71,7 +71,7 @@ export class TwitchAuthService {
 
 	private async processQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
 		// Debounce events
-		if (Date.now() - this.lastProcessTimestamp < 1000) {
+		if (Date.now() - this.lastProcessTimestamp < 2000) {
 			return eventQueue;
 		}
 		this.lastProcessTimestamp = Date.now();
@@ -82,7 +82,7 @@ export class TwitchAuthService {
 
 	private async processBgsQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
 		// Debounce events
-		if (Date.now() - this.lastProcessBgsTimestamp < 1000) {
+		if (Date.now() - this.lastProcessBgsTimestamp < 2000) {
 			return eventQueue;
 		}
 		this.lastProcessBgsTimestamp = Date.now();
@@ -122,11 +122,10 @@ export class TwitchAuthService {
 				newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY)
 		) {
 			// Don't show anything in the deck itself
-			const newPlayerDeck = Object.assign(new DeckState(), newEvent.state.playerDeck, {
-				deck: [] as readonly DeckCard[],
-			} as DeckState);
 			const newState = Object.assign(new GameState(), newEvent.state, {
-				playerDeck: newPlayerDeck,
+				playerDeck: null,
+				opponentDeck: null,
+				deckStats: null,
 			} as GameState);
 			newEvent = Object.assign({}, newEvent, {
 				state: newState,
@@ -222,8 +221,64 @@ export class TwitchAuthService {
 		return {
 			id: entity.id,
 			cardID: entity.cardID,
-			tags: entity.tags.toJS(),
+			tags: entity.tags.filter(tag => this.isSerializableTag(tag)).toJS(),
 		};
+	}
+
+	private isSerializableTag(tag): boolean {
+		return true;
+		// Will activate that later on, when message size becomes an issue once more
+		const isSerializable = [
+			GameTag.PREMIUM,
+			GameTag.DAMAGE,
+			GameTag.HEALTH,
+			GameTag.ATK,
+			GameTag.COST,
+			GameTag.WINDFURY,
+			GameTag.TAUNT,
+			GameTag.DIVINE_SHIELD,
+			GameTag.CLASS,
+			GameTag.CARDTYPE,
+			GameTag.CARDRACE,
+			GameTag.DEATHRATTLE,
+			GameTag.ZONE_POSITION,
+			GameTag.POISONOUS,
+			GameTag.LIFESTEAL,
+			GameTag.REBORN,
+			GameTag.MEGA_WINDFURY,
+			GameTag.TECH_LEVEL,
+			GameTag.TECH_LEVEL_MANA_GEM,
+		].includes(tag);
+		console.log(
+			'is tag serializable',
+			tag,
+			isSerializable,
+			'is taunt?',
+			GameTag.TAUNT,
+			tag === GameTag.TAUNT,
+			[
+				GameTag.PREMIUM,
+				GameTag.DAMAGE,
+				GameTag.HEALTH,
+				GameTag.ATK,
+				GameTag.COST,
+				GameTag.WINDFURY,
+				GameTag.TAUNT,
+				GameTag.DIVINE_SHIELD,
+				GameTag.CLASS,
+				GameTag.CARDTYPE,
+				GameTag.CARDRACE,
+				GameTag.DEATHRATTLE,
+				GameTag.ZONE_POSITION,
+				GameTag.POISONOUS,
+				GameTag.LIFESTEAL,
+				GameTag.REBORN,
+				GameTag.MEGA_WINDFURY,
+				GameTag.TECH_LEVEL,
+				GameTag.TECH_LEVEL_MANA_GEM,
+			].indexOf(tag),
+		);
+		return isSerializable;
 	}
 
 	public buildLoginUrl(): string {

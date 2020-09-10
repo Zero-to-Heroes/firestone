@@ -148,27 +148,29 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 			}
 			this.onResize();
 		});
-		const windowId = (await this.ow.getCurrentWindow()).id;
-		this.stateChangedListener = this.ow.addStateChangedListener(windowId, message => {
-			// console.log('state changed', message);
-			if (isWindowHidden(message.window_previous_state_ex) && !isWindowHidden(message.window_state_ex)) {
-				if (this.debug) {
-					console.log(
-						'showing hidden window, resizing board',
-						message.window_state_ex,
-						message.window_previous_state_ex,
-					);
+		if (this.ow.isOwEnabled()) {
+			const windowId = (await this.ow.getCurrentWindow()).id;
+			this.stateChangedListener = this.ow.addStateChangedListener(windowId, message => {
+				// console.log('state changed', message);
+				if (isWindowHidden(message.window_previous_state_ex) && !isWindowHidden(message.window_state_ex)) {
+					if (this.debug) {
+						console.log(
+							'showing hidden window, resizing board',
+							message.window_state_ex,
+							message.window_previous_state_ex,
+						);
+					}
+					this.onResize();
 				}
-				this.onResize();
-			}
-		});
+			});
+		}
 	}
 
 	ngOnDestroy() {
 		if (this.resizeTimeout) {
 			clearTimeout(this.resizeTimeout);
 		}
-		this.ow.removeStateChangedListener(this.stateChangedListener);
+		this.ow.isOwEnabled() && this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
 	showTooltipWarning(entity: Entity): boolean {
@@ -199,11 +201,13 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		if (this.resizeTimeout) {
 			clearTimeout(this.resizeTimeout);
 		}
-		const window = await this.ow.getCurrentWindow();
-		// console.log('currentWIndow', window);
-		if (isWindowHidden(window.stateEx)) {
-			console.log('window hidden, not resizing board state', window.stateEx, window);
-			return;
+		if (this.ow.isOwEnabled()) {
+			const window = await this.ow.getCurrentWindow();
+			// console.log('currentWIndow', window);
+			if (isWindowHidden(window.stateEx)) {
+				// console.log('window hidden, not resizing board state', window.stateEx, window);
+				return;
+			}
 		}
 		// console.log('on window resize');
 		const boardContainer = this.el.nativeElement.querySelector('.board');
@@ -226,7 +230,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// }
 		if (!rect || !rect.width || !rect.height) {
 			if (this.debug) {
-				console.log('no dimensions, retrying', rect, window.stateEx);
+				console.log('no dimensions, retrying', rect);
 			}
 			this.doResizeTimeout(1500);
 			return;

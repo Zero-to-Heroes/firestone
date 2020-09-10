@@ -23,7 +23,7 @@ export class CardStolenParser implements EventParser {
 		const stolenFromDeck = isPlayerStolenFrom ? currentState.playerDeck : currentState.opponentDeck;
 
 		const cardInHand = this.helper.findCardInZone(stolenFromDeck.hand, null, entityId);
-		console.log('\tcard in hand', cardInHand, stolenFromDeck.hand);
+		// console.log('\tcard in hand', cardInHand, stolenFromDeck.hand);
 		const cardInBoard = this.helper.findCardInZone(stolenFromDeck.board, null, entityId);
 		// console.log('\tcard in board', cardInBoard, stolenFromDeck.board);
 		const cardInDeck = this.helper.findCardInZone(stolenFromDeck.deck, null, entityId);

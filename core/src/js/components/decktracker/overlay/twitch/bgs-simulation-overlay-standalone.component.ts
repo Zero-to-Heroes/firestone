@@ -28,15 +28,6 @@ declare let amplitude: any;
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
 		>
-			<div class="logo-container battlegrounds-theme">
-				<div class="background-main-part"></div>
-				<div class="background-second-part"></div>
-				<i class="gold-theme logo">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#logo" />
-					</svg>
-				</i>
-			</div>
 			<div class="battlegrounds-theme simulation-overlay">
 				<bgs-battle-status
 					[nextBattle]="nextBattle"
