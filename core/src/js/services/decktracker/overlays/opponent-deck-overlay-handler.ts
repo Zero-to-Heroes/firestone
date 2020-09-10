@@ -52,6 +52,7 @@ export class OpponentDeckOverlayHandler implements OverlayHandler {
 			inGame &&
 			shouldShowTracker &&
 			isWindowClosed(decktrackerWindow.window_state_ex) &&
+			showDecktrackerFromGameMode &&
 			this.showOpponentTracker &&
 			!this.closedByUser
 		) {
@@ -59,7 +60,11 @@ export class OpponentDeckOverlayHandler implements OverlayHandler {
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 		} else if (
 			!isWindowClosed(decktrackerWindow.window_state_ex) &&
-			(!shouldShowTracker || !this.showOpponentTracker || this.closedByUser || !inGame)
+			(!shouldShowTracker ||
+				!showDecktrackerFromGameMode ||
+				!this.showOpponentTracker ||
+				this.closedByUser ||
+				!inGame)
 		) {
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 		}

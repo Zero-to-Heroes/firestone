@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
@@ -27,10 +28,10 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private init() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
-				this.handleDisplayPreferences(this.gameState, event.preferences);
-			}
+		this.preferencesSubscription = preferencesEventBus.pipe(debounceTime(200)).subscribe(event => {
+			// if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+			this.handleDisplayPreferences(this.gameState, event.preferences);
+			// }
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
