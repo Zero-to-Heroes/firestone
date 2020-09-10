@@ -104,7 +104,7 @@ export class GameStat {
 			rankIcon = 'arenadraft';
 		}
 		// console.log('returning', rankIcon, null, rankIconTooltip);
-		return [`/Files/assets/images/deck/ranks/${rankIcon}.png`, null, rankIconTooltip];
+		return [`assets/images/deck/ranks/${rankIcon}.png`, null, rankIconTooltip];
 	}
 
 	public buildRankText(): string {

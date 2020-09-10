@@ -46,7 +46,7 @@ declare let amplitude;
 
 					<i class="video-folder" (mousedown)="openVideoFolder()">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#video_folder" />
+							<use xlink:href="assets/svg/sprite.svg#video_folder" />
 						</svg>
 					</i>
 
@@ -72,7 +72,7 @@ declare let amplitude;
 			<div class="no-media" *ngIf="currentThumbnail.isDeleted">
 				<i>
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#no_media" />
+						<use xlink:href="assets/svg/sprite.svg#no_media" />
 					</svg>
 				</i>
 				<span>Media deleted</span>
@@ -86,7 +86,7 @@ declare let amplitude;
 					*ngIf="thumbnails.length > THUMBNAILS_PER_PAGE"
 				>
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow" />
+						<use xlink:href="assets/svg/sprite.svg#carousel_arrow" />
 					</svg>
 				</i>
 				<ul>
@@ -109,7 +109,7 @@ declare let amplitude;
 					*ngIf="thumbnails.length > THUMBNAILS_PER_PAGE"
 				>
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow" />
+						<use xlink:href="assets/svg/sprite.svg#carousel_arrow" />
 					</svg>
 				</i>
 			</div>
@@ -129,12 +129,12 @@ declare let amplitude;
 					<label for="a-01">
 						<i class="unchecked" *ngIf="!dontAsk">
 							<svg>
-								<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+								<use xlink:href="assets/svg/sprite.svg#unchecked_box" />
 							</svg>
 						</i>
 						<i class="checked" *ngIf="dontAsk">
 							<svg>
-								<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+								<use xlink:href="assets/svg/sprite.svg#checked_box" />
 							</svg>
 						</i>
 						<p>Don't ask me again</p>
@@ -473,7 +473,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		this.title = this.sanitizer.bypassSecurityTrustHtml(`
             <i class="icon">
                 <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#${this.buildIcon(this.currentThumbnail.stepId)}"/>
+                    <use xlink:href="assets/svg/sprite.svg#${this.buildIcon(this.currentThumbnail.stepId)}"/>
                 </svg>
             </i>
             <div class="text">${this.buildText()}</div>
@@ -486,7 +486,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		return this.sanitizer.bypassSecurityTrustHtml(`
             <i class="icon-svg">
                 <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#${this.buildIcon(stepId)}"/>
+                    <use xlink:href="assets/svg/sprite.svg#${this.buildIcon(stepId)}"/>
                 </svg>
             </i>`);
 	}

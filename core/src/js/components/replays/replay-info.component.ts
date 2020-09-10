@@ -43,7 +43,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="watch">Watch</div>
 				<div class="watch-icon">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/replays/replays_icons.svg#match_watch" />
+						<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
 					</svg>
 				</div>
 			</div>
@@ -127,7 +127,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		const iconName = info.result === 'won' ? 'match_result_victory' : 'match_result_defeat';
 		return this.sanitizer.bypassSecurityTrustHtml(`
 			<svg class="svg-icon-fill">
-				<use xlink:href="/Files/assets/svg/replays/replays_icons.svg#${iconName}"/>
+				<use xlink:href="assets/svg/replays/replays_icons.svg#${iconName}"/>
 			</svg>
 		`);
 	}
@@ -164,7 +164,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		return [
 			this.sanitizer.bypassSecurityTrustHtml(`
 			<svg class="svg-icon-fill">
-				<use xlink:href="/Files/assets/svg/replays/replays_icons.svg#${iconName}"/>
+				<use xlink:href="assets/svg/replays/replays_icons.svg#${iconName}"/>
 			</svg>
 		`),
 			tooltip,

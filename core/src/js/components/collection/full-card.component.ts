@@ -58,7 +58,7 @@ declare let amplitude;
 								<span class="label">{{ sound.name }}</span>
 								<button class="i-30 brown-theme sound-button">
 									<svg class="svg-icon-fill">
-										<use xlink:href="/Files/assets/svg/sprite.svg#sound" />
+										<use xlink:href="assets/svg/sprite.svg#sound" />
 									</svg>
 								</button>
 							</li>

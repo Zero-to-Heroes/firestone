@@ -34,7 +34,7 @@ declare let amplitude: any;
 					<div class="navigation">
 						<i class="i-117X33 gold-theme logo">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
+								<use xlink:href="assets/svg/sprite.svg#logo" />
 							</svg>
 						</i>
 						<menu-selection

@@ -17,7 +17,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Ou
 				<svg class="svg-icon-fill">
 					<use
 						xmlns:xlink="https://www.w3.org/1999/xlink"
-						xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
+						xlink:href="assets/svg/sprite.svg#window-control_close"
 					></use>
 				</svg>
 			</button>

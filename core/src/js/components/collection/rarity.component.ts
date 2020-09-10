@@ -8,7 +8,7 @@ import { Set } from '../../models/set';
 		<div *ngIf="cardSet && rarity" class="rarity-container">
 			<div class="rarity-progress">
 				<img
-					src="{{ '/Files/assets/images/rarity-' + rarity?.toLowerCase() + '.png' }}"
+					src="{{ 'assets/images/rarity-' + rarity?.toLowerCase() + '.png' }}"
 					class="rarity"
 					title="{{ rarity }}"
 				/>

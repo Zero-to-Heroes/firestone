@@ -17,7 +17,7 @@ import { PreferencesService } from '../../services/preferences.service';
 					{{ label }}
 					<i class="info" *ngIf="tooltip">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
+							<use xlink:href="assets/svg/sprite.svg#info" />
 						</svg>
 						<div class="zth-tooltip right">
 							<p>{{ tooltip }}</p>
@@ -31,7 +31,7 @@ import { PreferencesService } from '../../services/preferences.service';
 			</label>
 			<div class="info-message" *ngIf="messageWhenToggleValue && shouldDisplayMessage()">
 				<svg class="attention-icon">
-					<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
+					<use xlink:href="assets/svg/sprite.svg#attention" />
 				</svg>
 				{{ messageWhenToggleValue }}
 			</div>

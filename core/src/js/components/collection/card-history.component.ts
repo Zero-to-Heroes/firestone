@@ -52,7 +52,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<section *ngIf="!cardHistory || cardHistory.length === 0" class="empty-state">
 						<i class="i-60x78 pale-theme">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_my_card_history" />
+								<use xlink:href="assets/svg/sprite.svg#empty_state_my_card_history" />
 							</svg>
 						</i>
 						<span>No history yet</span>

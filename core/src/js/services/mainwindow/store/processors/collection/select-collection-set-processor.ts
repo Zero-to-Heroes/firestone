@@ -29,7 +29,7 @@ export class SelectCollectionSetProcessor implements Processor {
 				currentApp: 'collection',
 				navigationCollection: newCollection,
 				text: selectedSet.name,
-				image: `/Files/assets/images/sets/${selectedSet.id}.png`,
+				image: `assets/images/sets/${selectedSet.id}.png`,
 			} as NavigationState),
 		];
 	}

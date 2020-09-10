@@ -28,7 +28,7 @@ declare let amplitude: any;
 			<div class="no-ads-placeholder">
 				<i class="i-117X33 gold-theme logo">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder" />
+						<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 					</svg>
 				</i>
 			</div>

@@ -287,18 +287,18 @@ export class PackMonitor {
 		this.notificationService.html({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
-					<img class="rarity" src="/Files/assets/images/rarity/rarity-${rarity}.png">
+					<img class="rarity" src="assets/images/rarity/rarity-${rarity}.png">
 					<img class="art" src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${dbCard.id}.jpg">
 					<div class="message">
 						<div *ngIf="goldenClass" class="premium-deco">
 							<i class="gold-theme left">
 								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+									<use xlink:href="assets/svg/sprite.svg#two_gold_leaves"/>
 								</svg>
 							</i>
 							<i class="gold-theme right">
 								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+									<use xlink:href="assets/svg/sprite.svg#two_gold_leaves"/>
 								</svg>
 							</i>
 						</div>
@@ -307,7 +307,7 @@ export class PackMonitor {
 					</div>
 					<button class="i-30 close-button">
 						<svg class="svg-icon-fill">
-							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
 						</svg>
 					</button>
 				</div>`,
@@ -327,7 +327,7 @@ export class PackMonitor {
                         <div class="dust">
                             <i class="i-30 pale-theme">
                                 <svg class="svg-icon-fill">
-                                    <use xlink:href="/Files/assets/svg/sprite.svg#dust"/>
+                                    <use xlink:href="assets/svg/sprite.svg#dust"/>
                                 </svg>
                             </i>
                         </div>
@@ -337,7 +337,7 @@ export class PackMonitor {
                         </div>
                         <button class="i-30 close-button">
                             <svg class="svg-icon-fill">
-                                <use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+                                <use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
                             </svg>
                         </button>
                     </div>`,

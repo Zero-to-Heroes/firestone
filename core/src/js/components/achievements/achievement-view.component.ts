@@ -42,7 +42,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 							<span class="number">{{ numberOfRecordings }}</span>
 							<i class="i-30x20">
 								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#video" />
+									<use xlink:href="assets/svg/sprite.svg#video" />
 								</svg>
 							</i>
 						</div>
@@ -56,7 +56,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="collapse">
 					<i class="i-13X7" [ngClass]="{ 'open': showRecordings }" *ngIf="numberOfRecordings > 0">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret" />
+							<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 						</svg>
 					</i>
 				</div>

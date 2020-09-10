@@ -60,7 +60,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 				<button (mousedown)="connect()" class="text">
 					<i class="twitch-icon">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#twitch" />
+							<use xlink:href="assets/svg/sprite.svg#twitch" />
 						</svg>
 					</i>
 					<span>Login with Twitch</span>
@@ -81,7 +81,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 				<button (mousedown)="disconnect()" class="text">
 					<i class="twitch-icon">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#twitch" />
+							<use xlink:href="assets/svg/sprite.svg#twitch" />
 						</svg>
 					</i>
 					<span>Disconnect</span>

@@ -24,7 +24,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<div class="wrapper-for-flip" [@flipState]="flip">
 				<div class="box-side set-view">
 					<div class="logo-container">
-						<img src="{{ '/Files/assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
+						<img src="{{ 'assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
 						<span class="text set-name" *ngIf="_displayName">{{ _cardSet.name }}</span>
 					</div>
 					<span class="cards-collected" *ngIf="released" helpTooltip="Total non-golden cards collected">
@@ -36,22 +36,22 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
 						<i class="i-25 pale-gold-theme corner bottom-left">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+								<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 							</svg>
 						</i>
 						<i class="i-25 pale-gold-theme corner top-left">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+								<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 							</svg>
 						</i>
 						<i class="i-25 pale-gold-theme corner top-right">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+								<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 							</svg>
 						</i>
 						<i class="i-25 pale-gold-theme corner bottom-right">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+								<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 							</svg>
 						</i>
 					</div>
@@ -60,32 +60,32 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 						<i class="i-22X30 gold-theme corner bottom-left">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 							</svg>
 						</i>
 
 						<i class="i-22X30 gold-theme corner top-left">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 							</svg>
 						</i>
 
 						<i class="i-22X30 gold-theme corner top-right">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 							</svg>
 						</i>
 
 						<i class="i-22X30 gold-theme corner bottom-right">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 							</svg>
 						</i>
 
 						<div class="crown">
 							<i class="i-20X10 gold-theme">
 								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#three_gold_leaves" />
+									<use xlink:href="assets/svg/sprite.svg#three_gold_leaves" />
 								</svg>
 							</i>
 						</div>
@@ -93,7 +93,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<div class="coming-soon-info" *ngIf="!released">
 						<i>
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#coming_soon" />
+								<use xlink:href="assets/svg/sprite.svg#coming_soon" />
 							</svg>
 						</i>
 						<p>Coming soon!</p>
@@ -103,14 +103,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<div class="title">
 						<i class="i-15 pale-theme">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#timer" />
+								<use xlink:href="assets/svg/sprite.svg#timer" />
 							</svg>
 						</i>
 						<span>Next guaranteed:</span>
 					</div>
 					<div class="progression epic">
 						<div class="progress-title">
-							<img src="/Files/assets/images/rarity/rarity-epic-small.png" />
+							<img src="assets/images/rarity/rarity-epic-small.png" />
 							<span>In {{ epicTimer }} packs</span>
 						</div>
 						<div class="progress-bar">
@@ -119,7 +119,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</div>
 					<div class="progression legendary">
 						<div class="progress-title">
-							<img src="/Files/assets/images/rarity/rarity-legendary-small.png" />
+							<img src="assets/images/rarity/rarity-legendary-small.png" />
 							<span>In {{ legendaryTimer }} packs</span>
 						</div>
 						<div class="progress-bar">

@@ -37,7 +37,7 @@ declare let amplitude;
 							(click)="toggleLoginPopup()"
 							[ngClass]="{ 'active': loginPopupActive }"
 						>
-							<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
+							<use xlink:href="assets/svg/sprite.svg#attention" />
 						</svg>
 						<div class="login-conf-popup" *ngIf="loginPopupActive">
 							<div class="text">

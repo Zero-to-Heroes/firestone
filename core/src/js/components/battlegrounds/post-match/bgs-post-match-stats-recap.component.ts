@@ -109,7 +109,7 @@ declare let amplitude: any;
 			<div class="entry cell battle-luck" [ngClass]="{ 'new-record': isNewRecord('battleLuck') }">
 				<div class="record-icon">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#new_record" />
+						<use xlink:href="assets/svg/sprite.svg#new_record" />
 					</svg>
 				</div>
 				<div class="label">

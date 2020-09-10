@@ -22,12 +22,12 @@ declare let overwolf;
 				<label for="video-quality-low">
 					<i class="unselected" *ngIf="settingsForm.value.videoQuality !== 'low'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_unselected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_unselected" />
 						</svg>
 					</i>
 					<i class="checked" *ngIf="settingsForm.value.videoQuality === 'low'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_selected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_selected" />
 						</svg>
 					</i>
 					<p>Low (480p 10fps)</p>
@@ -37,12 +37,12 @@ declare let overwolf;
 				<label for="video-quality-medium">
 					<i class="unselected" *ngIf="settingsForm.value.videoQuality !== 'medium'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_unselected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_unselected" />
 						</svg>
 					</i>
 					<i class="checked" *ngIf="settingsForm.value.videoQuality === 'medium'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_selected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_selected" />
 						</svg>
 					</i>
 					<p>Medium (720p 30fps)</p>
@@ -52,18 +52,18 @@ declare let overwolf;
 				<label for="video-quality-high" class="video-quality-high" disabled>
 					<i class="unselected" *ngIf="settingsForm.value.videoQuality !== 'high'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_unselected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_unselected" />
 						</svg>
 					</i>
 					<i class="checked" *ngIf="settingsForm.value.videoQuality === 'high'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_selected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_selected" />
 						</svg>
 					</i>
 					<p>High (1080p 60fps)</p>
 					<i class="info">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
+							<use xlink:href="assets/svg/sprite.svg#info" />
 						</svg>
 						<div class="zth-tooltip right">
 							<p>1080p recording is temporarily disabled for Achiemvents, and will come back soon</p>
@@ -78,12 +78,12 @@ declare let overwolf;
 				<label for="video-quality-custom">
 					<i class="unselected" *ngIf="settingsForm.value.videoQuality !== 'custom'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_unselected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_unselected" />
 						</svg>
 					</i>
 					<i class="checked" *ngIf="settingsForm.value.videoQuality === 'custom'">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#radio_selected" />
+							<use xlink:href="assets/svg/sprite.svg#radio_selected" />
 						</svg>
 					</i>
 					<div

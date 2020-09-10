@@ -31,7 +31,7 @@ import { PreferencesService } from '../../services/preferences.service';
 				<svg class="svg-icon-fill">
 					<use
 						xmlns:xlink="https://www.w3.org/1999/xlink"
-						xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
+						xlink:href="assets/svg/sprite.svg#window-control_close"
 					></use>
 				</svg>
 			</button>
@@ -39,7 +39,7 @@ import { PreferencesService } from '../../services/preferences.service';
 				<div class="social-share twitter">
 					<i>
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#twitter_share" />
+							<use xlink:href="assets/svg/sprite.svg#twitter_share" />
 						</svg>
 					</i>
 				</div>

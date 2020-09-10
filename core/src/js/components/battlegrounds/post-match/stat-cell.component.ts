@@ -16,7 +16,7 @@ declare let amplitude: any;
 		<div class="entry cell" [ngClass]="{ 'new-record': isNewRecord }">
 			<div class="record-icon" helpTooltip="You broke your personal record!">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#new_record" />
+					<use xlink:href="assets/svg/sprite.svg#new_record" />
 				</svg>
 			</div>
 			<div class="label" [helpTooltip]="tooltipText">{{ label }}</div>
@@ -41,7 +41,7 @@ declare let amplitude: any;
 			>
 				<div class="watch-icon">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/replays/replays_icons.svg#match_watch" />
+						<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
 					</svg>
 				</div>
 			</div>

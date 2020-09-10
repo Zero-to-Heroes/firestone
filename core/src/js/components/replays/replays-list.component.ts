@@ -31,7 +31,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="state-container">
 					<i class="i-236X165">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_replays" />
+							<use xlink:href="assets/svg/sprite.svg#empty_state_replays" />
 						</svg>
 					</i>
 					<span class="title">Nothing here yet</span>

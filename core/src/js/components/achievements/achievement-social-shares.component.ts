@@ -1,8 +1,8 @@
-import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-import { StartSocialSharingEvent } from '../../services/mainwindow/store/events/social/start-social-sharing-event';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { StartSocialSharingEvent } from '../../services/mainwindow/store/events/social/start-social-sharing-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -13,28 +13,28 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<div class="social-share twitter" (mousedown)="startSharingTwitter()">
 				<i>
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#twitter_share" />
+						<use xlink:href="assets/svg/sprite.svg#twitter_share" />
 					</svg>
 				</i>
 			</div>
 			<!--<div class="social-share discord disabled">
                 <i>
                     <svg>
-                        <use xlink:href="/Files/assets/svg/sprite.svg#discord_share"/>
+                        <use xlink:href="assets/svg/sprite.svg#discord_share"/>
                     </svg>
                 </i>
             </div>
             <div class="social-share youtube disabled">
                 <i>
                     <svg>
-                        <use xlink:href="/Files/assets/svg/sprite.svg#youtube_share"/>
+                        <use xlink:href="assets/svg/sprite.svg#youtube_share"/>
                     </svg>
                 </i>
             </div>
             <div class="social-share gfycat disabled">
                 <i>
                     <svg>
-                        <use xlink:href="/Files/assets/svg/sprite.svg#gfycat_share"/>
+                        <use xlink:href="assets/svg/sprite.svg#gfycat_share"/>
                     </svg>
                 </i>
             </div>-->

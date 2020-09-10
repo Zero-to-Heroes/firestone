@@ -16,12 +16,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<label for="system-capture-checkbox" (mousedown)="toggleSystemSoundCapture($event)">
 					<i class="unselected" *ngIf="!captureSystemSound">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+							<use xlink:href="assets/svg/sprite.svg#unchecked_box" />
 						</svg>
 					</i>
 					<i class="checked" *ngIf="captureSystemSound">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+							<use xlink:href="assets/svg/sprite.svg#checked_box" />
 						</svg>
 					</i>
 					<p>Capture system sound</p>
@@ -31,12 +31,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<label for="microphone-capture-checkbox" (mousedown)="toggleMicrophoneSoundCapture($event)">
 					<i class="unselected" *ngIf="!captureMicrophoneSound">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+							<use xlink:href="assets/svg/sprite.svg#unchecked_box" />
 						</svg>
 					</i>
 					<i class="checked" *ngIf="captureMicrophoneSound">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+							<use xlink:href="assets/svg/sprite.svg#checked_box" />
 						</svg>
 					</i>
 					<p>Capture microphone sound</p>

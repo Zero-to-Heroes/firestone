@@ -13,9 +13,7 @@ import { Set } from '../../models/set';
 				<div class="state-container">
 					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
-							<use
-								xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration"
-							/>
+							<use xlink:href="assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration" />
 						</svg>
 					</i>
 					<span class="title">This set is complete and you have it all!</span>
@@ -26,7 +24,7 @@ import { Set } from '../../models/set';
 				<div class="state-container">
 					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration" />
+							<use xlink:href="assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration" />
 						</svg>
 					</i>
 					<span class="title">No cards from this set yet!</span>
@@ -37,9 +35,7 @@ import { Set } from '../../models/set';
 				<div class="state-container">
 					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
-							<use
-								xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration"
-							/>
+							<use xlink:href="assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration" />
 						</svg>
 					</i>
 					<span class="title">No golden cards from this set yet!</span>
@@ -50,7 +46,7 @@ import { Set } from '../../models/set';
 				<div class="state-container">
 					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration" />
+							<use xlink:href="assets/svg/sprite.svg#No_result_illustration" />
 						</svg>
 					</i>
 					<span class="title">Oh No! Nothing Matches: "{{ _searchString }}"</span>

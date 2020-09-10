@@ -33,7 +33,7 @@ declare let amplitude;
 				<span>{{ dustValue }}</span>
 				<i class="i-30 pale-theme">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#dust" />
+						<use xlink:href="assets/svg/sprite.svg#dust" />
 					</svg>
 				</i>
 			</span>
@@ -93,7 +93,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		}
 		const dbCard = this.cards.getCard(history.cardId);
 		// console.log('history for card', history.cardId, dbCard.name, dbCard, history);
-		this.rarityImg = `/Files/assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
+		this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
 		const name = dbCard && dbCard.name ? dbCard.name : 'Unknown card';
 		this.cardName = (history.isPremium ? 'Golden ' : '') + name;
 		this.dustValue = this.getDust(dbCard, history.isPremium);

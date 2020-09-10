@@ -19,7 +19,7 @@ import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
 					*ngIf="_thumbnail !== _currentThumbnail"
 				>
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#delete" />
+						<use xlink:href="assets/svg/sprite.svg#delete" />
 					</svg>
 					<div class="zth-tooltip right" *ngIf="!highlighted">
 						<p>Delete media</p>

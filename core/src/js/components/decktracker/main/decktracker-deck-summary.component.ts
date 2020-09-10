@@ -18,7 +18,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
 			<div class="deck-image">
 				<img class="skin" [src]="skin" />
-				<img class="frame" src="/Files/assets/images/deck/hero_frame.png" />
+				<img class="frame" src="assets/images/deck/hero_frame.png" />
 			</div>
 			<div class="stats">
 				<div class="text total-games">{{ totalGames }} games</div>

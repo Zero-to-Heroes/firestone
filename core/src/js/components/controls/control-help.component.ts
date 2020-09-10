@@ -18,7 +18,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"
-					xlink:href="/Files/assets/svg/sprite.svg#window-control_support"
+					xlink:href="assets/svg/sprite.svg#window-control_support"
 				></use>
 			</svg>
 		</a>

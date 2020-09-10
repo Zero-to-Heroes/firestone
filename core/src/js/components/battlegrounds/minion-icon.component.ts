@@ -37,9 +37,7 @@ export class MinionIconComponent {
 		this.premium = value.getTag(GameTag.PREMIUM) === 1;
 		this.tavernTier = this.allCards.getCard(value.cardID)?.techLevel;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardID}.jpg`;
-		this.frameSvg = this.premium
-			? '/Files/assets/svg/bg_ellipsis_premium.svg'
-			: '/Files/assets/svg/bg_ellipsis.svg';
+		this.frameSvg = this.premium ? 'assets/svg/bg_ellipsis_premium.svg' : 'assets/svg/bg_ellipsis.svg';
 		console.log('frameSvg', this.frameSvg);
 	}
 

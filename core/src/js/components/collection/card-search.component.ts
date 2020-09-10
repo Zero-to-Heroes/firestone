@@ -27,7 +27,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<label class="search-label" [ngClass]="{ 'search-active': _searchString }">
 				<i class="i-30">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#search" />
+						<use xlink:href="assets/svg/sprite.svg#search" />
 					</svg>
 				</i>
 				<input

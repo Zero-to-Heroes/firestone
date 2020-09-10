@@ -49,12 +49,12 @@ declare let amplitude: any;
 						<p class="position-item">#{{ player.position }}</p>
 						<i class="unselected" *ngIf="!player.shown">
 							<svg>
-								<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+								<use xlink:href="assets/svg/sprite.svg#unchecked_box" />
 							</svg>
 						</i>
 						<i class="checked" *ngIf="player.shown">
 							<svg>
-								<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+								<use xlink:href="assets/svg/sprite.svg#checked_box" />
 							</svg>
 						</i>
 					</label>

@@ -122,7 +122,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			<div class="entry cell battle-luck">
 				<div class="record-icon">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#new_record" />
+						<use xlink:href="assets/svg/sprite.svg#new_record" />
 					</svg>
 				</div>
 				<div class="label">
@@ -140,7 +140,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			<div class="entry cell battle-luck">
 				<div class="record-icon">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#new_record" />
+						<use xlink:href="assets/svg/sprite.svg#new_record" />
 					</svg>
 				</div>
 				<div class="label">

@@ -31,11 +31,11 @@ export class LoadingStateComponent implements AfterViewInit, OnDestroy {
 	@Input() hint: boolean;
 	@Input() set svgName(value: string) {
 		if (value) {
-			this.loadingStateSvgName = `/Files/assets/svg/${value}.svg`;
+			this.loadingStateSvgName = `assets/svg/${value}.svg`;
 		}
 	}
 
-	loadingStateSvgName = '/Files/assets/svg/loading_state.svg';
+	loadingStateSvgName = 'assets/svg/loading_state.svg';
 	displayedHint: string;
 
 	private interval;

@@ -17,7 +17,7 @@ declare let amplitude;
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"
-					xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"
+					xlink:href="assets/svg/sprite.svg#window-control_minimize"
 				></use>
 			</svg>
 		</button>

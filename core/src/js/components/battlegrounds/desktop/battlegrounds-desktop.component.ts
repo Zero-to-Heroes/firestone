@@ -17,7 +17,7 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 					<div class="content empty-state" *ngIf="!enableBg">
 						<i>
 							<svg>
-								<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
+								<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 							</svg>
 						</i>
 						<span class="title">Battlegrounds in-game app is now live! </span>

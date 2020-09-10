@@ -24,7 +24,7 @@ import { PreferencesService } from '../../services/preferences.service';
 				<span>{{ label }}</span>
 				<i class="info" *ngIf="tooltip || tooltipDisabled">
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#info" />
+						<use xlink:href="assets/svg/sprite.svg#info" />
 					</svg>
 					<div class="zth-tooltip right">
 						<p>

@@ -15,32 +15,32 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 
 				<i class="i-22X30 gold-theme corner bottom-left">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+						<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 					</svg>
 				</i>
 
 				<i class="i-22X30 gold-theme corner top-left">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+						<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 					</svg>
 				</i>
 
 				<i class="i-22X30 gold-theme corner top-right">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+						<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 					</svg>
 				</i>
 
 				<i class="i-22X30 gold-theme corner bottom-right">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+						<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 					</svg>
 				</i>
 
 				<div class="crown">
 					<i class="i-20X10 gold-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#three_gold_leaves" />
+							<use xlink:href="assets/svg/sprite.svg#three_gold_leaves" />
 						</svg>
 					</i>
 				</div>
@@ -63,7 +63,7 @@ export class AchievementsGlobalCategoryComponent {
 
 	@Input('category') set category(category: VisualAchievementCategory) {
 		this._category = category;
-		this.categoryIcon = `/Files/assets/svg/achievements/categories/${category.icon}.svg`;
+		this.categoryIcon = `assets/svg/achievements/categories/${category.icon}.svg`;
 		this.displayName = category.name;
 		this.allAchievements = category.achievementSets.map(set => set.achievements).reduce((a, b) => a.concat(b), []);
 		const flatCompletions = this.allAchievements

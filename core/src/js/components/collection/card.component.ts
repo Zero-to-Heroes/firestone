@@ -23,7 +23,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="card-container" [ngClass]="{ 'missing': missing }">
 			<div class="images" [cardTooltip]="_card.id">
 				<img
-					src="/Files/assets/images/placeholder.png"
+					src="assets/images/placeholder.png"
 					class="pale-theme placeholder"
 					[style.opacity]="showPlaceholder ? 1 : 0"
 				/>
@@ -47,13 +47,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="premium" *ngIf="showPremiumCount">
 					<i class="gold-theme left">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+							<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 						</svg>
 					</i>
 					<span>{{ _card.ownedPremium }}</span>
 					<i class="gold-theme right">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
+							<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 						</svg>
 					</i>
 				</div>

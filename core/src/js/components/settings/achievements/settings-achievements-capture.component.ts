@@ -24,19 +24,19 @@ declare let amplitude;
 			<label class="record-video" for="video-capture-checkbox" (mousedown)="toggleVideoCapture($event)">
 				<i class="unselected" *ngIf="!captureVideo">
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+						<use xlink:href="assets/svg/sprite.svg#unchecked_box" />
 					</svg>
 				</i>
 				<i class="checked" *ngIf="captureVideo">
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+						<use xlink:href="assets/svg/sprite.svg#checked_box" />
 					</svg>
 				</i>
 				<p>
 					Record achievements
 					<i class="info">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
+							<use xlink:href="assets/svg/sprite.svg#info" />
 						</svg>
 						<div class="zth-tooltip right">
 							<p>

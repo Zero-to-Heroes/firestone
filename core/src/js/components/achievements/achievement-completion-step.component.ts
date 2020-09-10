@@ -24,7 +24,7 @@ export class AchievementCompletionStepComponent {
 		this.svgAndTooltip = this.domSanitizer.bypassSecurityTrustHtml(`
 			<i class="i-30">
                 <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#${step.icon}"/>
+                    <use xlink:href="assets/svg/sprite.svg#${step.icon}"/>
                 </svg>
             </i>
             <div class="zth-tooltip bottom">

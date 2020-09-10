@@ -18,14 +18,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="global-header" *ngIf="navigation?.text">
 			<i class="i-13X7 arrow back" (click)="back()" *ngIf="navigation.backArrowEnabled">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret" />
+					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 				</svg>
 			</i>
 			<img class="image" *ngIf="navigation && navigation.image" [src]="navigation && navigation.image" />
 			<div class="text">{{ navigation?.text }}</div>
 			<i class="i-13X7 arrow next" (click)="next()" *ngIf="navigation.nextArrowEnabled">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret" />
+					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 				</svg>
 			</i>
 		</div>

@@ -19,7 +19,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<div class="element" *ngIf="isHome">
 				<div class="title">Welcome to Firestone</div>
 				<div class="text">How about a quick tour?</div>
-				<div class="icon" [inlineSVG]="'/Files/assets/svg/ftue/general.svg'"></div>
+				<div class="icon" [inlineSVG]="'assets/svg/ftue/general.svg'"></div>
 				<button class="get-started" (click)="next()" growOnClick>Let's start</button>
 				<div class="skip-ftue ftue-nav-link" (click)="skip()" growOnClick>Skip</div>
 			</div>
@@ -59,7 +59,7 @@ export class FtueComponent implements AfterViewInit {
 			id: 'achievements',
 			title: 'Achievements',
 			text: "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished",
-			icon: `/Files/assets/svg/ftue/achievements.svg`,
+			icon: `assets/svg/ftue/achievements.svg`,
 			progressIndex: 0,
 		},
 		{
@@ -67,21 +67,21 @@ export class FtueComponent implements AfterViewInit {
 			title: 'Collection',
 			text:
 				'Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)',
-			icon: `/Files/assets/svg/ftue/collection.svg`,
+			icon: `assets/svg/ftue/collection.svg`,
 			progressIndex: 1,
 		},
 		{
 			id: 'decktracker',
 			title: 'Deck Tracker',
 			text: 'Track your cards in game and your deck stats',
-			icon: `/Files/assets/svg/ftue/decktracker.svg`,
+			icon: `assets/svg/ftue/decktracker.svg`,
 			progressIndex: 2,
 		},
 		{
 			id: 'replays',
 			title: 'Replays',
 			text: 'Here you can find all your past games, broken into step by step actions',
-			icon: `/Files/assets/svg/ftue/replays.svg`,
+			icon: `assets/svg/ftue/replays.svg`,
 			progressIndex: 3,
 		},
 		{
@@ -89,7 +89,7 @@ export class FtueComponent implements AfterViewInit {
 			title: 'Battlegrounds',
 			text:
 				'Our in game helper will appear once you start a game! We will accompany you along your game from hero selection to post match.',
-			icon: `/Files/assets/svg/ftue/battlegrounds.svg`,
+			icon: `assets/svg/ftue/battlegrounds.svg`,
 			progressIndex: 4,
 		},
 	];

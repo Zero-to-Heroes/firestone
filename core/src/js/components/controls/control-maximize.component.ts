@@ -26,13 +26,13 @@ declare let amplitude;
 			<svg class="svg-icon-fill" *ngIf="!maximized">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"
-					xlink:href="/Files/assets/svg/sprite.svg#window-control_maximize"
+					xlink:href="assets/svg/sprite.svg#window-control_maximize"
 				></use>
 			</svg>
 			<svg class="svg-icon-fill" *ngIf="maximized">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"
-					xlink:href="/Files/assets/svg/sprite.svg#window-control_restore"
+					xlink:href="assets/svg/sprite.svg#window-control_restore"
 				></use>
 			</svg>
 		</button>

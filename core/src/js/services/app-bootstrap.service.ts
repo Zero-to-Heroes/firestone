@@ -218,7 +218,7 @@ export class AppBootstrapService {
 					<div class="general-message-container general-theme">
 						<div class="firestone-icon">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder" />
+								<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 							</svg>
 						</div>
 						<div class="message">
@@ -229,7 +229,7 @@ export class AppBootstrapService {
 						</div>
 						<button class="i-30 close-button">
 							<svg class="svg-icon-fill">
-								<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+								<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
 							</svg>
 						</button>
 					</div>`,

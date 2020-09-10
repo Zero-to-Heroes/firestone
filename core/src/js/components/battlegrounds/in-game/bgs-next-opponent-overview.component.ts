@@ -27,7 +27,7 @@ declare let amplitude: any;
 			<div class="content empty-state" *ngIf="!opponents || !opponents[0]">
 				<i>
 					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
+						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 					</svg>
 				</i>
 				<span class="title">Nothing here yet</span>

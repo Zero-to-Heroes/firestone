@@ -30,10 +30,10 @@ declare let amplitude: any;
 								helpTooltip="Open a simulation sample leading to this result in your browser"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
-									<use xlink:href="/Files/assets/svg/sprite.svg#video" />
+									<use xlink:href="assets/svg/sprite.svg#video" />
 								</svg>
 								<svg class="svg-icon-fill" class="loading-icon" *ngIf="processingSimulationSample">
-									<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral" />
+									<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
 								</svg>
 							</div>
 						</div>
@@ -51,10 +51,10 @@ declare let amplitude: any;
 								helpTooltip="Open a simulation sample leading to this result in your browser"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
-									<use xlink:href="/Files/assets/svg/sprite.svg#video" />
+									<use xlink:href="assets/svg/sprite.svg#video" />
 								</svg>
 								<svg class="svg-icon-fill" class="loading-icon" *ngIf="processingSimulationSample">
-									<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral" />
+									<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
 								</svg>
 							</div>
 						</div>
@@ -72,10 +72,10 @@ declare let amplitude: any;
 								helpTooltip="Open a simulation sample leading to this result in your browser"
 							>
 								<svg class="svg-icon-fill" *ngIf="!processingSimulationSample">
-									<use xlink:href="/Files/assets/svg/sprite.svg#video" />
+									<use xlink:href="assets/svg/sprite.svg#video" />
 								</svg>
 								<svg class="svg-icon-fill" class="loading-icon" *ngIf="processingSimulationSample">
-									<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral" />
+									<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
 								</svg>
 							</div>
 						</div>
@@ -87,7 +87,7 @@ declare let amplitude: any;
 				<div class="damage dealt" helpTooltip="Average damage dealt">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
+							<use xlink:href="assets/svg/sprite.svg#sword" />
 						</svg>
 					</div>
 					<div class="damage-value">{{ damageWon || '--' }}</div>
@@ -95,7 +95,7 @@ declare let amplitude: any;
 				<div class="damage received" helpTooltip="Average damage received">
 					<div class="damage-icon">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#sword" />
+							<use xlink:href="assets/svg/sprite.svg#sword" />
 						</svg>
 					</div>
 					<div class="damage-value">{{ damageLost || '--' }}</div>

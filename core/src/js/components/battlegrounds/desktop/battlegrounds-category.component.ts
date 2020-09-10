@@ -32,7 +32,7 @@ export class BattlegroundsCategoryComponent implements AfterViewInit {
 
 	@Input() set category(category: BattlegroundsCategory) {
 		this._category = category;
-		// this.categoryIcon = `/Files/assets/svg/achievements/categories/${category.icon}.svg`;
+		// this.categoryIcon = `assets/svg/achievements/categories/${category.icon}.svg`;
 		this.displayName = category.name;
 		this.disabled = !category.enabled;
 		this.tooltip = category.disabledTooltip;

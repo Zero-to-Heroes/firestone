@@ -21,7 +21,7 @@ declare let amplitude: any;
 			<section class="menu-bar">
 				<i class="i-117X33 gold-theme logo">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
+						<use xlink:href="assets/svg/sprite.svg#logo" />
 					</svg>
 				</i>
 				<div class="controls">
@@ -31,7 +31,7 @@ declare let amplitude: any;
 						<svg class="svg-icon-fill">
 							<use
 								xmlns:xlink="https://www.w3.org/1999/xlink"
-								xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"
+								xlink:href="assets/svg/sprite.svg#window-control_minimize"
 							></use>
 						</svg>
 					</button>
@@ -39,7 +39,7 @@ declare let amplitude: any;
 						<svg class="svg-icon-fill">
 							<use
 								xmlns:xlink="https://www.w3.org/1999/xlink"
-								xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
+								xlink:href="assets/svg/sprite.svg#window-control_close"
 							></use>
 						</svg>
 					</button>
@@ -49,19 +49,19 @@ declare let amplitude: any;
 				<div class="app-title">
 					<i class="i-35 gold-theme left">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#title_decor" />
+							<use xlink:href="assets/svg/sprite.svg#title_decor" />
 						</svg>
 					</i>
 					<span class="title">{{ title }}</span>
 					<i class="i-35 gold-theme right">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#title_decor" />
+							<use xlink:href="assets/svg/sprite.svg#title_decor" />
 						</svg>
 					</i>
 				</div>
 				<i class="i-54 loading-icon gold-theme" *ngIf="loading">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral" />
+						<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
 					</svg>
 				</i>
 				<div class="sub-title" *ngIf="!loading">

@@ -30,7 +30,7 @@ import { OverwolfService } from '../services/overwolf.service';
 					<span>{{ option?.label }}</span>
 					<i class="i-30 selected-icon" *ngIf="option.value === activeFilter">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown" />
+							<use xlink:href="assets/svg/sprite.svg#selected_dropdown" />
 						</svg>
 					</i>
 				</ng-template>
@@ -56,7 +56,7 @@ export class FilterComponent {
 		singleEls.forEach(singleEl => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
+					<use xlink:href="assets/svg/sprite.svg#arrow"/>
 				</svg>`;
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');

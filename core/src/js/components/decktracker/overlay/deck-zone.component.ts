@@ -29,7 +29,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 							helpTooltip="The actual cards in this deck are randomly chosen from all the cards in the list below"
 							[bindTooltipToGameWindow]="true"
 						>
-							<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
+							<use xlink:href="assets/svg/sprite.svg#attention" />
 						</svg>
 					</div>
 				</div>

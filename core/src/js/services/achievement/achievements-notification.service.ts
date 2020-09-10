@@ -126,7 +126,7 @@ export class AchievementsNotificationService {
 						class="real-achievement ${achievement.displayCardType}"/>
 					<i class="i-84x90 frame">
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
+							<use xlink:href="assets/svg/sprite.svg#achievement_frame"/>
 						</svg>
 					</i>
 				</div>
@@ -134,7 +134,7 @@ export class AchievementsNotificationService {
 					<div class="title">
 						<i class="icon-svg">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#${achievement.icon}"/>
+								<use xlink:href="assets/svg/sprite.svg#${achievement.icon}"/>
 							</svg>
 						</i>
 						<span>Achievement unlocked!</span>
@@ -148,7 +148,7 @@ export class AchievementsNotificationService {
 				</div>
 				<button class="i-30 close-button">
 					<svg class="svg-icon-fill">
-						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
 					</svg>
 				</button>
 			</div>`;

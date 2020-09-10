@@ -22,7 +22,7 @@ import {
 			<div class="overlay"></div>
 			<i class="i-84x90 frame">
 				<svg>
-					<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame" />
+					<use xlink:href="assets/svg/sprite.svg#achievement_frame" />
 				</svg>
 			</i>
 		</div>

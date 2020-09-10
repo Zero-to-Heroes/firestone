@@ -20,12 +20,12 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 			<img *ngIf="cardUrl" [src]="cardUrl" class="card-image" />
 			<div *ngIf="createdBy" class="created-by">
 				<svg>
-					<use xlink:href="/Files/assets/svg/sprite.svg#created_by" />
+					<use xlink:href="assets/svg/sprite.svg#created_by" />
 				</svg>
 			</div>
 			<div *ngIf="!cardUrl" class="only-buff">
 				<svg>
-					<use xlink:href="/Files/assets/svg/sprite.svg#card_only_buff" />
+					<use xlink:href="assets/svg/sprite.svg#card_only_buff" />
 				</svg>
 			</div>
 		</div>

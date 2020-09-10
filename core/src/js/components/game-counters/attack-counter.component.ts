@@ -21,7 +21,7 @@ declare let amplitude;
 			"
 		>
 			<div class="frame">{{ totalAttackOnBoard }}</div>
-			<div class="value" [inlineSVG]="'/Files/assets/svg/attack.svg'"></div>
+			<div class="value" [inlineSVG]="'assets/svg/attack.svg'"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

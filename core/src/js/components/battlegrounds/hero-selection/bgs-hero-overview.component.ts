@@ -39,7 +39,7 @@ declare let amplitude: any;
 		<div class="hero-overview empty" *ngIf="!_hero">
 			<i class="placeholder">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder" />
+					<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
 				</svg>
 			</i>
 		</div>

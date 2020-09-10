@@ -13,22 +13,22 @@ import { AchievementSet } from '../../models/achievement-set';
 			<div class="frame complete-simple" *ngIf="complete">
 				<i class="i-25 pale-gold-theme corner bottom-left">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 					</svg>
 				</i>
 				<i class="i-25 pale-gold-theme corner top-left">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 					</svg>
 				</i>
 				<i class="i-25 pale-gold-theme corner top-right">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 					</svg>
 				</i>
 				<i class="i-25 pale-gold-theme corner bottom-right">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner" />
+						<use xlink:href="assets/svg/sprite.svg#common_set_corner" />
 					</svg>
 				</i>
 			</div>
@@ -53,7 +53,7 @@ export class AchievementSetComponent {
 		if (achievementSet) {
 			this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
 				<svg>
-					<use xlink:href="/Files/assets/svg/sprite.svg#${this._achievementSet.logoName}"/>
+					<use xlink:href="assets/svg/sprite.svg#${this._achievementSet.logoName}"/>
 				</svg>`);
 			this.displayName = achievementSet.displayName;
 			const flatCompletions = achievementSet.achievements

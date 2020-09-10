@@ -14,7 +14,7 @@ import { PreferencesService } from '../../services/preferences.service';
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"
-					xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"
+					xlink:href="assets/svg/sprite.svg#window-control_settings"
 				></use>
 			</svg>
 		</button>
