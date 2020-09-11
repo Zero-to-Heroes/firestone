@@ -17,6 +17,7 @@ export class AmazingPlaysSetProvider extends GenericSetProvider {
 				'amazing_plays_gain_armor',
 				'amazing_plays_desert_obelisk',
 				'amazing_plays_recurring_villains',
+				'amazing_plays_fatigue_count',
 			],
 			'achievements_amazing_plays',
 		);

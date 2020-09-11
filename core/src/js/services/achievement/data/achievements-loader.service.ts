@@ -69,7 +69,7 @@ export class AchievementsLoaderService {
 			'rumble_run',
 			'dalaran_heist',
 			'tombs_of_terror',
-			'amazing_plays',
+			'amazing_plays2',
 			'competitive_ladder',
 			'deckbuilding',
 			'galakrond',
