@@ -22,6 +22,10 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					<div class="label">Games played</div>
 					<div class="value">{{ gamesPlayed }}</div>
 				</div>
+				<div class="item mmr">
+					<div class="label" helpTooltip="Average MMR gain/loss per match">Net MMR</div>
+					<div class="value">{{ buildValue(netMmr) }}</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -32,6 +36,7 @@ export class BattlegroundsStatsHeroVignetteComponent implements AfterViewInit {
 	icon: string;
 	averagePosition: number;
 	gamesPlayed: number;
+	netMmr: number;
 
 	@Input() set stat(value: BgsHeroStat) {
 		// console.log('setting stats', value);
@@ -42,6 +47,7 @@ export class BattlegroundsStatsHeroVignetteComponent implements AfterViewInit {
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png`;
 		this.averagePosition = value.playerAveragePosition;
 		this.gamesPlayed = value.playerGamesPlayed;
+		this.netMmr = value.playerAverageMmr;
 	}
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

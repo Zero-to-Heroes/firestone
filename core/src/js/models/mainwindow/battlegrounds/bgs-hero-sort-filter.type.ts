@@ -1,1 +1,1 @@
-export type BgsHeroSortFilterType = 'average-position' | 'games-played';
+export type BgsHeroSortFilterType = 'average-position' | 'games-played' | 'mmr';

@@ -63,6 +63,17 @@ export class BgsBuilderService {
 		switch (prefs.bgsActiveHeroSortFilter) {
 			case 'games-played':
 				return (a, b) => b.playerGamesPlayed - a.playerGamesPlayed;
+			case 'mmr':
+				return (a, b) => {
+					if (!a.playerAverageMmr) {
+						return 1;
+					}
+					if (!b.playerAverageMmr) {
+						return -1;
+					}
+					return b.playerAverageMmr - a.playerAverageMmr;
+				};
+			case 'average-position':
 			default:
 				return (a, b) => {
 					if (!a.playerAveragePosition) {

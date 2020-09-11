@@ -18,7 +18,7 @@ export class GameStat {
 	readonly playerName: string;
 	readonly playerClass: string;
 	readonly playerRank: string | undefined;
-	readonly newPlayerRank: string;
+	readonly newPlayerRank: string | undefined;
 	readonly playerCardId: string;
 	readonly playerDecklist: string | undefined;
 	readonly playerDeckName: string | undefined;

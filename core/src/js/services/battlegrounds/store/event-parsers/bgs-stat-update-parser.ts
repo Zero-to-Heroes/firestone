@@ -76,6 +76,15 @@ export class BgsStatUpdateParser implements EventParser {
 									.filter(stat => stat.playerCardId === heroStat.id)
 									.map(stat => parseInt(stat.additionalResult))
 									.reduce((a, b) => a + b, 0) / playerGamesPlayed,
+					playerAverageMmr:
+						playerPopularity === 0
+							? 0
+							: bgsStatsForCurrentPatch
+									.filter(stat => stat.playerCardId === heroStat.id)
+									.filter(stat => stat.newPlayerRank != null && stat.playerRank != null)
+									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
+									.filter(mmr => !isNaN(mmr))
+									.reduce((a, b) => a + b, 0) / playerGamesPlayed,
 					playerTop4:
 						playerPopularity === 0
 							? 0

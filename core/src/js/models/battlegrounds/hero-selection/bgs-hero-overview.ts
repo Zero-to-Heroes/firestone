@@ -12,6 +12,7 @@ export class BgsHeroOverview {
 	readonly ownGamesPlayed: number;
 	readonly ownPopularity: number;
 	readonly ownAveragePosition: number;
+	readonly ownAverageMmr: number;
 	readonly ownTop4: number;
 	readonly ownTop4Percentage: number;
 	readonly ownTop1: number;

@@ -190,6 +190,10 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 				label: 'Average position',
 			} as HeroSortFilterOption,
 			{
+				value: 'mmr',
+				label: 'Net MMR',
+			} as HeroSortFilterOption,
+			{
 				value: 'games-played',
 				label: 'Games played',
 			} as HeroSortFilterOption,
