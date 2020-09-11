@@ -62,7 +62,7 @@ export class BattlegroundsDesktopComponent {
 	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
 
-	enableBg = false;
+	enableBg = true;
 
 	buildCategories(): readonly BattlegroundsCategory[] {
 		return (
