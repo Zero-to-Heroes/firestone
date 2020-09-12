@@ -19,7 +19,7 @@
 		"@angular/platform-browser-dynamic": "8.1.1",
 		"@firestone-hs/coliseum-components": "0.0.8",
 		"@firestone-hs/compute-bgs-run-stats": "^1.0.7",
-		"@firestone-hs/hs-replay-xml-parser": "0.0.53",
+		"@firestone-hs/hs-replay-xml-parser": "0.0.55",
 		"@firestone-hs/reference-data": "^0.1.39",
 		"@firestone-hs/replay-parser": "^1.1.26",
 		"@firestone-hs/simulate-bgs-battle": "^1.1.9",
