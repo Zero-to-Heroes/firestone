@@ -65,6 +65,9 @@ export class BgsBuilderService {
 				return (a, b) => b.playerGamesPlayed - a.playerGamesPlayed;
 			case 'mmr':
 				return (a, b) => {
+					if (!a.playerAverageMmr && !b.playerAverageMmr) {
+						return b.playerGamesPlayed - a.playerGamesPlayed;
+					}
 					if (!a.playerAverageMmr) {
 						return 1;
 					}

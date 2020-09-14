@@ -12,6 +12,10 @@
 		opacity: 0.8;
 	}
 
+	&.unused {
+		opacity: 0.4;
+	}
+
 	&:hover {
 		.portrait {
 			opacity: 1;
@@ -36,6 +40,16 @@
 				font-weight: bold;
 				color: #ce73b4;
 				font-size: 13px;
+			}
+
+			&.mmr {
+				&.negative .value {
+					color: #ff4747;
+				}
+
+				&.positive .value {
+					color: #61ff47;
+				}
 			}
 		}
 	}

@@ -11,7 +11,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 		`../../../../../css/global/components-global.scss`,
 	],
 	template: `
-		<div class="battlegrounds-stats-hero-vignette">
+		<div class="battlegrounds-stats-hero-vignette" [ngClass]="{ 'unused': gamesPlayed === 0 }">
 			<img [src]="icon" class="portrait" (click)="seeDetailedHeroStats()" />
 			<div class="stats">
 				<div class="item average-position">
@@ -22,7 +22,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					<div class="label">Games played</div>
 					<div class="value">{{ gamesPlayed }}</div>
 				</div>
-				<div class="item mmr">
+				<div class="item mmr" [ngClass]="{ 'positive': netMmr > 0, 'negative': netMmr < 0 }">
 					<div class="label" helpTooltip="Average MMR gain/loss per match">Net MMR</div>
 					<div class="value">{{ buildValue(netMmr) }}</div>
 				</div>
