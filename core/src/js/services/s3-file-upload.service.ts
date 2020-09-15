@@ -7,55 +7,59 @@ const BUCKET = 'com.zerotoheroes.support';
 
 @Injectable()
 export class S3FileUploadService {
-	public async postLogs(logString: string): Promise<string> {
-		const fileKey = uuid();
-		AWS.config.region = 'us-west-2';
-		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
-		const s3 = new S3();
-		const params = {
-			Bucket: BUCKET,
-			Key: fileKey,
-			ACL: 'public-read-write',
-			Body: logString,
-		};
-		// console.log('uploading log to S3 with params', params);
-		return new Promise<string>(resolve => {
-			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
-				// There Was An Error With Your S3 Config
-				if (err) {
-					console.warn('An error during upload', err);
-					resolve(null);
-				} else {
-					// console.log('Uploaded logs', data2);
-					resolve(fileKey);
-				}
-			});
-		});
+	// public async postLogs(logString: string): Promise<string> {
+	// 	const fileKey = uuid();
+	// 	AWS.config.region = 'us-west-2';
+	// 	AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
+	// 	const s3 = new S3();
+	// 	const params = {
+	// 		Bucket: BUCKET,
+	// 		Key: fileKey,
+	// 		ACL: 'public-read-write',
+	// 		Body: logString,
+	// 	};
+	// 	// console.log('uploading log to S3 with params', params);
+	// 	return new Promise<string>(resolve => {
+	// 		s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
+	// 			// There Was An Error With Your S3 Config
+	// 			if (err) {
+	// 				console.warn('An error during upload', err);
+	// 				resolve(null);
+	// 			} else {
+	// 				// console.log('Uploaded logs', data2);
+	// 				resolve(fileKey);
+	// 			}
+	// 		});
+	// 	});
+	// }
+
+	// public async postBinaryFile(biytesAsString: string, fileExtension?: string): Promise<string> {
+	// 	const split = biytesAsString.split(',');
+	// 	const bytes = [];
+	// 	for (let i = 0; i < split.length; i++) {
+	// 		bytes[i] = parseInt(split[i]);
+	// 	}
+	// 	const byteArray = new Uint8Array(bytes);
+	// 	const blob = new Blob([byteArray], { type: 'application/zip' });
+	// 	return this.postBlob(blob, fileExtension);
+	// }
+
+	public async saveImage(blob: Blob): Promise<string> {
+		return this.postBlob(blob, '.png', 'user-content.firestoneapp.com');
 	}
 
-	public async postBinaryFile(biytesAsString: string, extension?: string): Promise<string> {
-		const split = biytesAsString.split(',');
-		const bytes = [];
-		for (let i = 0; i < split.length; i++) {
-			bytes[i] = parseInt(split[i]);
-		}
-		const byteArray = new Uint8Array(bytes);
-		const blob = new Blob([byteArray], { type: 'application/zip' });
-		return this.postBlob(blob, extension);
-	}
-
-	public async postBlob(blob: Blob, extension?: string): Promise<string> {
+	public async postBlob(blob: Blob, extension?: string, bucket?: string): Promise<string> {
 		const fileKey = uuid() + (extension || '');
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 		const s3 = new S3();
 		const params = {
-			Bucket: BUCKET,
+			Bucket: bucket || BUCKET,
 			Key: fileKey,
 			ACL: 'public-read-write',
 			Body: blob,
 		};
-		console.log('uploading log to S3 with params', params);
+		console.log('uploading blob to S3 with params', params);
 		return new Promise<string>(resolve => {
 			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 				// There Was An Error With Your S3 Config

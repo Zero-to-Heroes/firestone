@@ -15,7 +15,7 @@ export class CthunParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			cthunSize: gameEvent.additionalData.cthunSize,
 		} as DeckState);
-		console.log('updated deck golem size', newPlayerDeck);
+		console.log('updated cthun size', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
-import { catchError, timeout } from 'rxjs/operators';
 import { Achievement } from '../../../models/achievement';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
 import { ReplayInfo } from '../../../models/replay-info';
@@ -84,44 +82,15 @@ export class AchievementsLoaderService {
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
 		return new Promise<readonly RawAchievement[]>((resolve, reject) => {
 			console.log('[achievements-loader] retrieving local achievements', fileName);
-			this.http
-				.get(`./achievements/${fileName}?v=3.json`)
-				.pipe(
-					timeout(500),
-					catchError((error, caught) => {
-						// console.log(
-						// 	'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
-						// 	fileName,
-						// );
-						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=4`).subscribe(
-							(result: any[]) => {
-								console.log('[achievements-loader] retrieved all achievements from CDN', fileName);
-								resolve(result);
-								return of(null);
-							},
-							error => {
-								console.error(
-									'[achievements-loader] Could not retrieve achievements from CDN',
-									fileName,
-									error,
-								);
-								return of(null);
-							},
-						);
-						return of(null);
-					}),
-				)
-				.subscribe(
-					(result: any[]) => {
-						if (result) {
-							console.log('[achievements-loader] retrieved all cards locally', fileName);
-							resolve(result);
-						}
-					},
-					error => {
-						console.warn('[achievements-loader] could not load cards', error);
-					},
-				);
+			this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=5`).subscribe(
+				(result: any[]) => {
+					console.log('[achievements-loader] retrieved all achievements from CDN', fileName);
+					resolve(result);
+				},
+				error => {
+					console.error('[achievements-loader] Could not retrieve achievements from CDN', fileName, error);
+				},
+			);
 		});
 	}
 
