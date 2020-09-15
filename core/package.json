@@ -45,7 +45,6 @@
 		"cross-fetch": "^3.0.6",
 		"deckstrings": "2.1.0",
 		"elementtree": "^0.1.7",
-		"html2canvas": "^1.0.0-rc.7",
 		"immutable": "3.8.2",
 		"jszip": "^3.2.2",
 		"lodash-es": "^4.17.15",
