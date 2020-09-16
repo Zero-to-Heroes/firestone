@@ -10,6 +10,7 @@ import { AchievementsRepository } from '../../achievement/achievements-repositor
 import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
 import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
+import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
@@ -41,6 +42,7 @@ import { ShowAchievementDetailsEvent } from './events/achievements/show-achievem
 import { VideoReplayDeletionRequestEvent } from './events/achievements/video-replay-deletion-request-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
+import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
@@ -94,6 +96,7 @@ import { ShowAchievementDetailsProcessor } from './processors/achievements/show-
 import { VideoReplayDeletionRequestProcessor } from './processors/achievements/video-replay-deletion-request-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
+import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
@@ -183,6 +186,7 @@ export class MainWindowStoreService {
 		private readonly prefs: PreferencesService,
 		private readonly decksStateBuilder: DecksStateBuilderService,
 		private readonly bgsBuilder: BgsBuilderService,
+		private readonly bgsRunStatsService: BgsRunStatsService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -502,7 +506,10 @@ export class MainWindowStoreService {
 			new BgsPostMatchStatsComputedProcessor(),
 
 			BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
-			new BgsPersonalStatsSelectHeroDetailsProcessor(),
+			new BgsPersonalStatsSelectHeroDetailsProcessor(this.events),
+
+			BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName(),
+			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor(),
 		);
 	}
 

@@ -22,20 +22,26 @@ import { normalizeCardId } from './post-match/card-utils';
 	selector: 'bgs-board',
 	styleUrls: [`../../../css/component/battlegrounds/bgs-board.component.scss`],
 	template: `
-		<div class="board-turn" *ngIf="_entities && !finalBoard && isNumber(currentTurn - boardTurn)">
+		<div class="board-turn" *ngIf="customTitle">
+			{{ customTitle }}
+		</div>
+		<div class="board-turn" *ngIf="!customTitle && _entities && !finalBoard && isNumber(currentTurn - boardTurn)">
 			Board as seen
 			{{ currentTurn - boardTurn === 0 ? 'just now' : currentTurn - boardTurn + ' turns ago' }}
 		</div>
-		<div class="board-turn" *ngIf="_entities && finalBoard">
+		<div class="board-turn" *ngIf="!customTitle && _entities && finalBoard">
 			Your final board
 		</div>
 		<div
 			class="board-turn empty"
-			*ngIf="!finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
+			*ngIf="!customTitle && !finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
 		>
 			You have not fought that player yet
 		</div>
-		<div class="board-turn empty" *ngIf="_entities && _entities.length === 0 && isNumber(currentTurn - boardTurn)">
+		<div
+			class="board-turn empty"
+			*ngIf="!customTitle && _entities && _entities.length === 0 && isNumber(currentTurn - boardTurn)"
+		>
 			Last board was empty
 		</div>
 		<ul class="board" *ngIf="_entities && _entities.length > 0" [style.opacity]="boardReady ? 1 : 0">
@@ -82,6 +88,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	boardReady: boolean;
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
+	@Input() customTitle: string;
 	@Input() isMainPlayer: boolean;
 	@Input() debug: boolean;
 	@Input() isRecruitPhase: boolean;
@@ -103,7 +110,9 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// 	return;
 		// }
 		this.inputEntities = value || [];
+		console.log('input entities', this.inputEntities);
 		this._entities = this.inputEntities.map(entity => Entity.create({ ...entity } as Entity));
+		console.log('setting entities', this._entities);
 		this.previousBoardWidth = undefined;
 		if (this.debug) {
 			this.boardReady = false;

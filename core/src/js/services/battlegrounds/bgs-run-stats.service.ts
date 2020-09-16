@@ -10,8 +10,11 @@ import {
 import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
+import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
+import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { Events } from '../events.service';
+import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
@@ -22,6 +25,7 @@ import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
 const BGS_UPLOAD_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+const BGS_RETRIEVE_RUN_STATS_ENDPOINT = ' https://pbd6q0rx4h.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 
 @Injectable()
 export class BgsRunStatsService {
@@ -39,25 +43,84 @@ export class BgsRunStatsService {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async event => {
 			this.computeRunStats(event.data[0], event.data[1], event.data[2]);
 		});
+		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async event => {
+			this.computeHeroDetailsForBg(event.data[0]);
+		});
 		setTimeout(() => {
 			this.bgsStateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
 	}
 
-	// TODO: refactor how the initial state is built:
-	// - Move everything in a single class, that calls all the services, with a Promise.all
-	// - Once we have all the data, build the initial state
-	// - Keep separate services for updating the state after each match
-	// Today it's a mess and very difficult to know what is available and when
-	// Other TODO; assume post-match stats are available when building the replays list, and only fetch it when asked for
+	private async computeHeroDetailsForBg(heroCardId: string) {
+		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId, 5);
+		console.log('lastHeroPostMatchStats', lastHeroPostMatchStats);
+		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats));
+	}
+
+	private async retrieveLastBgsRunStats(
+		heroCardId: string,
+		numberOfStats: number,
+	): Promise<readonly BgsPostMatchStatsForReview[]> {
+		const user = await this.userService.getCurrentUser();
+		return new Promise<readonly BgsPostMatchStatsForReview[]>((resolve, reject) => {
+			this.retrieveLastBgsRunStatsInternal(user, heroCardId, numberOfStats, result => resolve(result));
+		});
+	}
+
+	private retrieveLastBgsRunStatsInternal(
+		user: CurrentUser,
+		heroCardId: string,
+		numberOfStats: number,
+		callback,
+		retriesLeft = 1,
+	) {
+		if (retriesLeft <= 0) {
+			console.error(
+				'Could not load bgs post-match stats for',
+				heroCardId,
+				numberOfStats,
+				`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
+			);
+			callback(null);
+			return;
+		}
+		const input = {
+			userId: user.userId,
+			userName: user.username,
+			heroCardId: heroCardId,
+			limitResults: numberOfStats,
+		};
+		this.http.post(`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`, input).subscribe(
+			(result: any) => {
+				console.log('retrieved last hero stats for hero', result);
+				callback(result);
+			},
+			error => {
+				setTimeout(
+					() =>
+						this.retrieveLastBgsRunStatsInternal(
+							user,
+							heroCardId,
+							numberOfStats,
+							callback,
+							retriesLeft - 1,
+						),
+					2000,
+				);
+			},
+		);
+	}
+
 	private async computeRunStats(reviewId: string, currentGame: BgsGame, bestBgsUserStats: readonly BgsBestStat[]) {
 		const prefs = await this.prefs.getPreferences();
 		const user = await this.userService.getCurrentUser();
 		const newMmr = await this.getNewRating(currentGame.mmrAtStart);
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
-			userId: user.username || user.userId,
+			heroCardId: currentGame.getMainPlayer()?.cardId,
+			userId: user.userId,
+			userName: user.username,
 			battleResultHistory: currentGame.battleResultHistory,
 			mainPlayer: currentGame.getMainPlayer(),
 			oldMmr: currentGame.mmrAtStart,
@@ -163,7 +226,9 @@ export class BgsRunStatsService {
 
 interface BgsComputeRunStatsInput {
 	readonly reviewId: string;
+	readonly heroCardId: string;
 	readonly userId: string;
+	readonly userName: string;
 	readonly battleResultHistory: readonly BattleResultHistory[];
 	readonly mainPlayer: BgsPlayer;
 	readonly oldMmr: number;

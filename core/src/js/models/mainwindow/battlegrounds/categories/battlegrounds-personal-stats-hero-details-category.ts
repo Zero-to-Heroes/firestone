@@ -8,4 +8,8 @@ export class BattlegroundsPersonalStatsHeroDetailsCategory extends Battlegrounds
 	): BattlegroundsPersonalStatsHeroDetailsCategory {
 		return Object.assign(new BattlegroundsPersonalStatsHeroDetailsCategory(), base);
 	}
+
+	public update(base: BattlegroundsPersonalStatsHeroDetailsCategory): BattlegroundsPersonalStatsHeroDetailsCategory {
+		return Object.assign(new BattlegroundsPersonalStatsHeroDetailsCategory(), this, base);
+	}
 }

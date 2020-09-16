@@ -1,3 +1,4 @@
+import { BgsPostMatchStatsForReview } from '../../battlegrounds/bgs-post-match-stats-for-review';
 import { BgsStats } from '../../battlegrounds/stats/bgs-stats';
 import { GameStat } from '../stats/game-stat';
 import { BattlegroundsCategory } from './battlegrounds-category';
@@ -13,6 +14,7 @@ export class BattlegroundsAppState {
 	readonly matchStats: readonly GameStat[];
 	// The stats used by the app (so a mix a globalStats + matchStats + filters)
 	readonly stats: BgsStats;
+	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
 
 	readonly activeTimeFilter: BgsActiveTimeFilterType;
 	readonly activeHeroSortFilter: BgsHeroSortFilterType;
