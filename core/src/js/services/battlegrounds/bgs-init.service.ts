@@ -92,7 +92,7 @@ export class BgsInitService {
 			this.buildPersonalHeroesCategory(bgsGlobalStats),
 			this.buildPersonalRatingCategory(),
 			this.buildPersonalStatsCategory(),
-			this.buildPersonalAICategory(),
+			// this.buildPersonalAICategory(),
 		];
 		return BattlegroundsGlobalCategory.create({
 			id: 'bgs-global-category-personal-stats',

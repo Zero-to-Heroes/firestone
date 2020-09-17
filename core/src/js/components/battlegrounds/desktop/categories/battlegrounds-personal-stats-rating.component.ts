@@ -166,7 +166,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 	}
 
 	private updateValues() {
-		if (!this._state || !this._category) {
+		if (!this._state?.matchStats || !this._category) {
 			return;
 		}
 		this.lineChartData = [

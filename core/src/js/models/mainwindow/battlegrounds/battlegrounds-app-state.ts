@@ -37,6 +37,32 @@ export class BattlegroundsAppState {
 		return allCategories.find(cat => cat.id === categoryId);
 	}
 
+	public static findParentCategory(state: BattlegroundsAppState, categoryId: string) {
+		return BattlegroundsAppState.findParentCategoryInternal(state.globalCategories, categoryId);
+	}
+
+	public static findParentCategoryInternal(
+		categories: readonly (BattlegroundsCategory | BattlegroundsGlobalCategory)[],
+		categoryId: string,
+	): BattlegroundsCategory | BattlegroundsGlobalCategory {
+		if (!categories) {
+			return null;
+		}
+		for (const cat of categories) {
+			if (cat.id === categoryId) {
+				return null;
+			}
+			if (cat.categories.some(subCat => subCat.id === categoryId)) {
+				return cat;
+			}
+			const sub = BattlegroundsAppState.findParentCategoryInternal(cat.categories, categoryId);
+			if (sub) {
+				return sub;
+			}
+		}
+		return null;
+	}
+
 	public static extractCategory(category: BattlegroundsCategory): readonly BattlegroundsCategory[] {
 		if (!category.categories || category.categories.length === 0) {
 			return [category];

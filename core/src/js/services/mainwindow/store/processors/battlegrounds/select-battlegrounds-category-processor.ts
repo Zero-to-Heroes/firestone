@@ -18,7 +18,7 @@ export class SelectBattlegroundsCategoryProcessor implements Processor {
 		const category: BattlegroundsCategory = globalCategory.categories.find(cat => cat.id === event.categoryId);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'list',
-			menuDisplayType: 'breadcrumbs',
+			menuDisplayType: 'menu',
 			selectedGlobalCategoryId: globalCategory.id,
 			selectedCategoryId: category.id,
 		} as NavigationBattlegrounds);
@@ -33,8 +33,7 @@ export class SelectBattlegroundsCategoryProcessor implements Processor {
 			navigationState.update({
 				isVisible: true,
 				navigationBattlegrounds: navigationBattlegrounds,
-				text:
-					globalCategory.name !== category.name ? globalCategory.name + ' - ' + category.name : category.name,
+				text: null,
 				image: null,
 			} as NavigationState),
 		];

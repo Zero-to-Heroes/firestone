@@ -167,7 +167,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			} as TimeFilterOption,
 			{
 				value: 'last-patch',
-				label: `Last patch (${this._state.stats.currentBattlegroundsMetaPatch})`,
+				label: `Last patch (${this._state?.stats?.currentBattlegroundsMetaPatch})`,
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 		this.activeTimeFilter = this._state.activeTimeFilter;

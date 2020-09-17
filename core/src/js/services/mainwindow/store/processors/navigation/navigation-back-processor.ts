@@ -1,3 +1,6 @@
+import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
+import { BattlegroundsCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { BattlegroundsGlobalCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-global-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
@@ -15,10 +18,12 @@ export class NavigationBackProcessor implements Processor {
 		history: NavigationHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.log('going back', history.currentIndexInHistory, history);
 		const newState =
 			history.currentIndexInHistory > 0
 				? NavigationBackProcessor.buildParentState(navigationState, currentState)
 				: history.stateHistory[history.currentIndexInHistory - 1].state;
+		console.log('new nag state', newState);
 		return [null, newState];
 	}
 
@@ -92,37 +97,40 @@ export class NavigationBackProcessor implements Processor {
 			console.warn('Missing state for processing back navigation');
 			return null;
 		}
+		console.log('building parent battelgrounds state', navigationState.navigationBattlegrounds.currentView);
 		switch (navigationState.navigationBattlegrounds.currentView) {
 			case 'categories':
 				return null;
 			case 'category':
-				return navigationState.update({
-					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
-						currentView: 'categories',
-					} as NavigationBattlegrounds),
-					text: 'Categories',
-				} as NavigationState);
+				// console.log('going back', navigationState.navigationBattlegrounds.currentView);
+				return null;
+			// return navigationState.update({
+			// 	navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
+			// 		currentView: 'categories',
+			// 	} as NavigationBattlegrounds),
+			// 	text: null,
+			// } as NavigationState);
 			case 'list':
-				const category = dataState.battlegrounds.globalCategories.find(
-					cat => cat.id === navigationState.navigationBattlegrounds.selectedGlobalCategoryId,
+				const currentCategory: BattlegroundsCategory = BattlegroundsAppState.findCategory(
+					dataState.battlegrounds,
+					navigationState.navigationBattlegrounds.selectedCategoryId,
 				);
-				if (category.categories.length === 1) {
-					return navigationState.update({
-						navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
-							currentView: 'categories',
-						} as NavigationBattlegrounds),
-						text: 'Categories',
-					} as NavigationState);
-				}
+				const parentCategory:
+					| BattlegroundsCategory
+					| BattlegroundsGlobalCategory = BattlegroundsAppState.findParentCategory(
+					dataState.battlegrounds,
+					currentCategory.id,
+				);
+				console.log('hop', currentCategory, parentCategory);
 				return navigationState.update({
 					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
-						currentView: 'category',
+						menuDisplayType: 'menu',
+						currentView: 'list',
+						selectedCategoryId: parentCategory.id,
 					} as NavigationBattlegrounds),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in
-					text: dataState.battlegrounds.globalCategories.find(
-						cat => cat.id === navigationState.navigationBattlegrounds.selectedGlobalCategoryId,
-					).name,
+					text: null,
 				} as NavigationState);
 			default:
 				return null;

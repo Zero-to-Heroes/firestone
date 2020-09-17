@@ -506,7 +506,7 @@ export class MainWindowStoreService {
 			new BgsPostMatchStatsComputedProcessor(),
 
 			BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
-			new BgsPersonalStatsSelectHeroDetailsProcessor(this.events),
+			new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.cards),
 
 			BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName(),
 			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor(),

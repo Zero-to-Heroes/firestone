@@ -41,7 +41,9 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		const battlegrounds =
 			event.module === 'battlegrounds'
 				? navigationState.navigationBattlegrounds.update({
-						currentView: 'categories',
+						currentView: 'list',
+						selectedGlobalCategoryId: 'bgs-global-category-personal-stats',
+						selectedCategoryId: 'bgs-category-personal-heroes',
 						menuDisplayType: 'menu',
 				  } as NavigationBattlegrounds)
 				: navigationState.navigationBattlegrounds;
@@ -54,7 +56,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				navigationAchievements: achievements,
 				navigationReplays: replays,
 				navigationBattlegrounds: battlegrounds,
-				text: ['achievements', 'battlegrounds'].includes(event.module) ? 'Categories' : null,
+				text: ['achievements'].includes(event.module) ? 'Categories' : null,
 				image: null,
 			} as NavigationState),
 		];

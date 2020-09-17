@@ -1,7 +1,7 @@
 import { CurrentView } from '../achievement/current-view.type';
 
 export class NavigationBattlegrounds {
-	readonly currentView: CurrentView = 'categories';
+	readonly currentView: CurrentView = 'category';
 	readonly menuDisplayType: string = 'menu';
 	readonly selectedGlobalCategoryId: 'bgs-global-category-personal-stats' | 'bgs-global-category-meta-stats';
 	readonly selectedCategoryId:

@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
+import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'battlegrounds-desktop',
@@ -31,18 +34,37 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 						>
 					</div>
 					<div class="content" *ngIf="enableBg && state.battlegrounds">
-						<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
+						<global-header
+							[navigation]="navigation"
+							*ngIf="
+								navigation.text && navigation?.navigationBattlegrounds.menuDisplayType === 'breadcrumbs'
+							"
+						></global-header>
+						<ul
+							class="menu-selection"
+							*ngIf="!navigation?.text && navigation?.navigationBattlegrounds.menuDisplayType === 'menu'"
+						>
+							<li
+								*ngFor="let category of buildCategories()"
+								[ngClass]="{
+									'selected': navigation?.navigationBattlegrounds?.selectedCategoryId === category.id
+								}"
+								(mousedown)="selectCategory(category.id)"
+							>
+								<span>{{ category.name }} </span>
+							</li>
+						</ul>
 						<battlegrounds-filters [state]="state" [navigation]="navigation"> </battlegrounds-filters>
-						<battlegrounds-global-categories
+						<!-- <battlegrounds-global-categories
 							[hidden]="navigation.navigationBattlegrounds.currentView !== 'categories'"
 							[globalCategories]="state.battlegrounds.globalCategories"
 						>
-						</battlegrounds-global-categories>
-						<battlegrounds-categories
+						</battlegrounds-global-categories> -->
+						<!-- <battlegrounds-categories
 							[hidden]="navigation.navigationBattlegrounds.currentView !== 'category'"
 							[categories]="buildCategories()"
 						>
-						</battlegrounds-categories>
+						</battlegrounds-categories> -->
 						<battlegrounds-category-details
 							[hidden]="navigation.navigationBattlegrounds.currentView !== 'list'"
 							[category]="buildCategory()"
@@ -58,11 +80,19 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsDesktopComponent {
+export class BattlegroundsDesktopComponent implements AfterViewInit {
 	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
 
 	enableBg = true;
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
+
+	ngAfterViewInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
 
 	buildCategories(): readonly BattlegroundsCategory[] {
 		return (
@@ -77,5 +107,9 @@ export class BattlegroundsDesktopComponent {
 			this.state.battlegrounds,
 			this.navigation.navigationBattlegrounds.selectedCategoryId,
 		);
+	}
+
+	selectCategory(categoryId: string) {
+		this.stateUpdater.next(new SelectBattlegroundsCategoryEvent(categoryId));
 	}
 }
