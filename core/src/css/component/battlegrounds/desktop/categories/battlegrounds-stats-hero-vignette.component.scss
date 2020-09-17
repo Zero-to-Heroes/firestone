@@ -6,10 +6,24 @@
 	height: 100%;
 	flex-grow: 0;
 	flex-shrink: 0;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 10px;
+
+	.wrapper-for-flip,
+	.box-side {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	.hero-name {
+		font-size: 14px;
+		color: var(--default-title-color);
+	}
 
 	.portrait {
-		width: 100%;
-		opacity: 0.8;
+		width: 80px;
 	}
 
 	&.unused {
@@ -17,9 +31,7 @@
 	}
 
 	&:hover {
-		.portrait {
-			opacity: 1;
-		}
+		background: rgba(255, 255, 255, 0.12);
 	}
 
 	.stats {

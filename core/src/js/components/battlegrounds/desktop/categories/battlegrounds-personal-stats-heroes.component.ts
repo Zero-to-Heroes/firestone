@@ -3,6 +3,7 @@ import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-sta
 import { BattlegroundsAppState } from '../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsPersonalHeroesCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
+import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
@@ -17,6 +18,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			<battlegrounds-stats-hero-vignette
 				*ngFor="let stat of stats"
 				[stat]="stat"
+				(click)="seeDetailedHeroStats(stat.id)"
 			></battlegrounds-stats-hero-vignette>
 		</div>
 	`,
@@ -53,10 +55,15 @@ export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit 
 	}
 
 	private updateValues() {
-		if (!this._state || !this._category) {
+		if (!this._state?.stats?.heroStats || !this._category) {
 			return;
 		}
 		this.stats = this._state.stats.heroStats.filter(stat => stat.id !== 'average');
 		// console.log('stats', this.stats);
+	}
+
+	seeDetailedHeroStats(statId: string) {
+		// console.log('choosing hero details', this._stat.id);
+		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsEvent(statId));
 	}
 }
