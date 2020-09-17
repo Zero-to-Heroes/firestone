@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
+import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
 declare let amplitude: any;
 
@@ -21,13 +21,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ buildValue(_hero?.globalAveragePosition) }}
+					{{ buildValue(_hero?.averagePosition) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ buildValue(_hero?.ownAveragePosition) }})
+					({{ buildValue(_hero?.averagePosition) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -38,13 +38,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ buildPercents(_hero?.globalTop4) }}
+					{{ buildPercents(_hero?.top4) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ buildPercents(_hero?.ownTop4Percentage) }})
+					({{ buildPercents(_hero?.playerTop4Percentage) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -55,13 +55,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ buildPercents(_hero?.globalTop1) }}
+					{{ buildPercents(_hero?.top1) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ buildPercents(_hero?.ownTop1Percentage) }})
+					({{ buildPercents(_hero?.playerTop1Percentage) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -72,13 +72,13 @@ declare let amplitude: any;
 					class="global-value"
 					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
 				>
-					{{ buildPercents(_hero?.globalPopularity) }}
+					{{ buildPercents(_hero?.popularity) }}
 				</div>
 				<div
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ buildPercents(_hero?.ownPopularity) }})
+					({{ buildPercents(_hero?.playerPopularity) }})
 				</div>
 			</div>
 		</div>
@@ -86,10 +86,10 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroStatsComponent {
-	_hero: BgsHeroOverview;
+	_hero: BgsHeroStat;
 	@Input() patchNumber: number;
 
-	@Input() set hero(value: BgsHeroOverview) {
+	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;
 		// console.log('setting hero', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {

@@ -2,9 +2,9 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
-import { BgsHeroOverview } from '../../../../models/battlegrounds/hero-selection/bgs-hero-overview';
 import { BgsHeroSelectionOverview } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroSelectionStage } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-stage';
+import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
 import { PatchesConfigService } from '../../../patches-config.service';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
@@ -61,26 +61,26 @@ export class BgsHeroSelectionParser implements EventParser {
 		heroCardIds: readonly string[],
 		stats: BgsStats,
 	): Promise<BgsHeroSelectionOverview> {
-		const heroOverview: readonly BgsHeroOverview[] =
+		const heroOverview: readonly BgsHeroStat[] =
 			stats?.heroStats?.map(stat =>
-				BgsHeroOverview.create({
-					heroCardId: stat.id,
+				BgsHeroStat.create({
+					id: stat.id,
 					heroPowerCardId: getHeroPower(stat.id),
 					name: stat.name,
-					globalAveragePosition: stat.averagePosition,
-					globalPopularity: stat.popularity,
-					globalTop4: stat.top4 || 0,
-					globalTop1: stat.top1 || 0,
+					averagePosition: stat.averagePosition,
+					popularity: stat.popularity,
+					top4: stat.top4 || 0,
+					top1: stat.top1 || 0,
 					tier: stat.tier,
-					ownAveragePosition: stat.playerAveragePosition,
-					ownAverageMmr: stat.playerAverageMmr,
-					ownPopularity: stat.playerPopularity,
-					ownGamesPlayed: stat.playerGamesPlayed,
-					ownTop4: stat.playerTop4 || 0,
-					ownTop4Percentage:
+					playerAveragePosition: stat.playerAveragePosition,
+					playerAverageMmr: stat.playerAverageMmr,
+					playerPopularity: stat.playerPopularity,
+					playerGamesPlayed: stat.playerGamesPlayed,
+					playerTop4: stat.playerTop4 || 0,
+					playerTop4Percentage:
 						stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop4 || 0)) / stat.playerGamesPlayed,
-					ownTop1: stat.playerTop1 || 0,
-					ownTop1Percentage:
+					playerTop1: stat.playerTop1 || 0,
+					playerTop1Percentage:
 						stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop1 || 0)) / stat.playerGamesPlayed,
 					tribesStat: stat.tribesStat,
 					warbandStats: stat.warbandStats,

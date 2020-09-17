@@ -4,6 +4,7 @@ import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-sta
 import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { PatchesConfigService } from '../../../patches-config.service';
+import { getHeroPower } from '../../bgs-utils';
 import { BgsStatUpdateEvent } from '../events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -67,6 +68,7 @@ export class BgsStatUpdateParser implements EventParser {
 					top4: heroStat.top4 || 0,
 					top1: heroStat.top1 || 0,
 					name: heroStat.id !== 'average' ? cards.getCard(heroStat.id)?.name : heroStat.id,
+					heroPowerCardId: getHeroPower(heroStat.id),
 					playerGamesPlayed: playerGamesPlayed,
 					playerPopularity: playerPopularity,
 					playerAveragePosition:

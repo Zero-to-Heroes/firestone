@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
-import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
 declare let amplitude: any;
 
@@ -47,20 +46,20 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroOverviewComponent {
-	_hero: BgsHeroOverview;
+	_hero: BgsHeroStat;
 	icon: string;
 	tier: BgsHeroTier;
 	tribes: readonly { tribe: string; percent: string }[];
 	warbandStats: readonly { turn: number; totalStats: number }[];
 	@Input() patchNumber: number;
 
-	@Input() set hero(value: BgsHeroOverview) {
+	@Input() set hero(value: BgsHeroStat) {
 		// console.log('setting hero', value, this._hero);
 		this._hero = value;
 		if (!value) {
 			return;
 		}
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.heroCardId}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))

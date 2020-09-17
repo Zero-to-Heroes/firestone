@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
+import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 
 declare let amplitude: any;
@@ -30,10 +30,10 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroTribesComponent {
-	_hero: BgsHeroOverview;
+	_hero: BgsHeroStat;
 	tribes: readonly { tribe: string; percent: string }[];
 
-	@Input() set hero(value: BgsHeroOverview) {
+	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)

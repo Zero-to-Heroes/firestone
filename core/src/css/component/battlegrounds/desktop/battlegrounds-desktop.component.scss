@@ -37,14 +37,25 @@
 	}
 
 	.secondary {
+		position: relative;
+		top: 45px;
 		display: flex;
 		flex-direction: column;
 		flex-grow: 0;
 		margin-left: 15px;
 		margin-right: 5px;
 		width: 400px;
-		height: calc(100% - 350px);
+		height: calc(100% - 395px);
 		flex-shrink: 0;
+		background: rgba(255, 255, 255, 0.08);
+		padding-left: 10px;
+
+		& > * {
+			min-height: 0;
+			max-height: 100%;
+			flex-shrink: 0;
+			display: flex;
+		}
 	}
 }
 

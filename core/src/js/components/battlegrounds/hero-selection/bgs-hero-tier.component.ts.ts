@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
-import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
 declare let amplitude: any;
 
@@ -24,14 +23,14 @@ declare let amplitude: any;
 })
 export class BgsHeroTierComponent {
 	_tier: BgsHeroTier;
-	heroes: readonly BgsHeroOverview[];
+	heroes: readonly BgsHeroStat[];
 
-	@Input() set tier(value: { tier: BgsHeroTier; heroes: readonly BgsHeroOverview[] }) {
+	@Input() set tier(value: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }) {
 		this._tier = value.tier;
 		this.heroes = value.heroes;
 	}
 
-	trackByHeroFn(index, item: BgsHeroOverview) {
-		return item.heroCardId;
+	trackByHeroFn(index, item: BgsHeroStat) {
+		return item.id;
 	}
 }

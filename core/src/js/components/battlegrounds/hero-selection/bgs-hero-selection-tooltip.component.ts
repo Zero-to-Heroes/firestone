@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
+import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
 declare let amplitude: any;
 
@@ -24,12 +24,12 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionTooltipComponent {
-	_hero: BgsHeroOverview;
+	_hero: BgsHeroStat;
 	heroPowerImage: string;
 	tribes: readonly { tribe: string; percent: string }[];
 	warbandStats: readonly { turn: number; totalStats: number }[];
 
-	@Input() set config(value: BgsHeroOverview) {
+	@Input() set config(value: BgsHeroStat) {
 		this._hero = value;
 		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/${value.heroPowerCardId}.png`;
 		this.tribes = [...value.tribesStat]

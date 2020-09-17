@@ -15,13 +15,8 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
-import { BgsHeroMiniComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-mini.component';
 import { BgsHeroOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-overview.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
-import { BgsHeroSelectionTooltipComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component';
-import { BgsHeroStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-stats.component';
-import { BgsHeroTierComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tier.component.ts';
-import { BgsHeroTribesComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tribes.component';
 import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
 import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
 import { BgsHeroFaceOffsComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-offs.component';
@@ -84,17 +79,12 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsNextOpponentOverviewComponent,
 		BgsPostMatchStatsComponent,
 		BgsPostMatchStatsRecapComponent,
-		BgsHeroMiniComponent,
 		BgsHeroFaceOffComponent,
 		BgsOpponentOverviewComponent,
 		BgsChartHpComponent,
 		BgsChartWarbandStatsComponent,
 		BgsChartWarbandCompositionComponent,
 		MenuSelectionBgsComponent,
-		BgsHeroTierComponent,
-		BgsHeroSelectionTooltipComponent,
-		BgsHeroStatsComponent,
-		BgsHeroTribesComponent,
 		// BgsOpponentOverviewBigComponent,
 		BgsHeroFaceOffsComponent,
 		// BgsBoardComponent,
@@ -104,7 +94,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		// BgsTriplesComponent,
 		// MinionIconComponent,
 	],
-	entryComponents: [BgsHeroSelectionTooltipComponent, BgsCardTooltipComponent],
+	entryComponents: [BgsCardTooltipComponent],
 	bootstrap: [BattlegroundsComponent],
 	providers: [AdService, BgsBattleSimulationService],
 })

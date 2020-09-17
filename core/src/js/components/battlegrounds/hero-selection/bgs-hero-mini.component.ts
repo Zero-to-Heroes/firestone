@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
+import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
 declare let amplitude: any;
@@ -25,11 +25,11 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroMiniComponent {
-	_hero: BgsHeroOverview;
+	_hero: BgsHeroStat;
 	icon: string;
 	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
-	@Input() set hero(value: BgsHeroOverview) {
+	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.heroCardId}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png`;
 	}
 }

@@ -1,5 +1,6 @@
 export class BgsHeroStat {
 	readonly id: string;
+	readonly heroPowerCardId: string;
 	readonly name: string;
 	readonly popularity: number;
 	readonly averagePosition: number;
@@ -11,7 +12,9 @@ export class BgsHeroStat {
 	readonly playerAverageMmr: number;
 	readonly playerGamesPlayed: number;
 	readonly playerTop4: number;
+	readonly playerTop4Percentage: number;
 	readonly playerTop1: number;
+	readonly playerTop1Percentage: number;
 	readonly tribesStat: readonly { tribe: string; percent: number }[];
 	readonly warbandStats: readonly { turn: number; totalStats: number }[];
 

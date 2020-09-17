@@ -75,7 +75,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary"></section>
+			<section class="secondary">
+				<battlegrounds-tier-list
+					*ngIf="shouldDisplayHeroTierList()"
+					[category]="buildCategory()"
+					[state]="state"
+				></battlegrounds-tier-list>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -107,6 +113,11 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 			this.state.battlegrounds,
 			this.navigation.navigationBattlegrounds.selectedCategoryId,
 		);
+	}
+
+	shouldDisplayHeroTierList(): boolean {
+		const category = this.buildCategory();
+		return category?.id === 'bgs-category-personal-heroes';
 	}
 
 	selectCategory(categoryId: string) {

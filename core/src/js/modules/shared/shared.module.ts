@@ -9,6 +9,11 @@ import { AdsComponent } from '../../components/ads.component';
 import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-hero-portrait.component';
+import { BgsHeroMiniComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-mini.component';
+import { BgsHeroSelectionTooltipComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component';
+import { BgsHeroStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-stats.component';
+import { BgsHeroTierComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tier.component.ts';
+import { BgsHeroTribesComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tribes.component';
 import { BgsBattleStatusComponent } from '../../components/battlegrounds/in-game/bgs-battle-status.component';
 import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview-big.component';
 import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
@@ -101,11 +106,21 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
+		BgsHeroTribesComponent,
 		MinionIconComponent,
+		BgsHeroTierComponent,
+		BgsHeroMiniComponent,
+		BgsHeroSelectionTooltipComponent,
+		BgsHeroStatsComponent,
 
 		StatCellComponent,
 	],
-	entryComponents: [HelpTooltipComponent, CardTooltipComponent, ConfirmationComponent],
+	entryComponents: [
+		HelpTooltipComponent,
+		CardTooltipComponent,
+		ConfirmationComponent,
+		BgsHeroSelectionTooltipComponent,
+	],
 	exports: [
 		WindowWrapperComponent,
 
@@ -151,7 +166,12 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsHeroPortraitComponent,
 		BgsBattleStatusComponent,
 		BgsTriplesComponent,
+		BgsHeroTribesComponent,
 		MinionIconComponent,
+		BgsHeroTierComponent,
+		BgsHeroMiniComponent,
+		BgsHeroSelectionTooltipComponent,
+		BgsHeroStatsComponent,
 
 		StatCellComponent,
 	],

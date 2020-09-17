@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
 import { BgsHeroSelectionOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
-import { BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { groupByFunction } from '../../../services/utils';
 
 declare let amplitude: any;
@@ -31,9 +30,9 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionOverviewComponent {
-	heroOverviews: BgsHeroOverview[];
-	smallOverviews: readonly BgsHeroOverview[];
-	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroOverview[] }[] = [];
+	heroOverviews: BgsHeroStat[];
+	smallOverviews: readonly BgsHeroStat[];
+	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] = [];
 	_panel: BgsHeroSelectionOverview;
 	patchNumber: number;
 
@@ -47,9 +46,9 @@ export class BgsHeroSelectionOverviewComponent {
 		// console.log('setting panel', value, this._panel);
 		this._panel = value;
 		this.patchNumber = value.patchNumber;
-		const allOverviews = this._panel.heroOverview.filter(overview => overview.heroCardId !== 'average');
-		const groupingByTier = groupByFunction((overview: BgsHeroOverview) => overview.tier);
-		const groupedByTier: BgsHeroOverview[][] = Object.values(groupingByTier(allOverviews));
+		const allOverviews = this._panel.heroOverview.filter(overview => overview.id !== 'average');
+		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
+		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(allOverviews));
 		if (!value?.heroOptionCardIds || !groupedByTier) {
 			return;
 		}
@@ -58,42 +57,42 @@ export class BgsHeroSelectionOverviewComponent {
 				tier: 'S' as BgsHeroTier,
 				heroes: groupedByTier
 					.find(heroes => heroes.find(hero => hero.tier === 'S'))
-					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'A' as BgsHeroTier,
 				heroes: groupedByTier
 					.find(heroes => heroes.find(hero => hero.tier === 'A'))
-					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'B' as BgsHeroTier,
 				heroes: groupedByTier
 					.find(heroes => heroes.find(hero => hero.tier === 'B'))
-					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'C' as BgsHeroTier,
 				heroes: groupedByTier
 					.find(heroes => heroes.find(hero => hero.tier === 'C'))
-					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'D' as BgsHeroTier,
 				heroes: groupedByTier
 					.find(heroes => heroes.find(hero => hero.tier === 'D'))
-					?.sort((a, b) => a.globalAveragePosition - b.globalAveragePosition),
+					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 		].filter(tier => tier.heroes);
 		// console.log('setting hero overviews', this._panel);
 		this.heroOverviews = this._panel.heroOptionCardIds.map(cardId => {
-			const existingStat = this._panel.heroOverview.find(overview => overview.heroCardId === cardId);
+			const existingStat = this._panel.heroOverview.find(overview => overview.id === cardId);
 			return (
 				existingStat ||
-				BgsHeroOverview.create({
-					heroCardId: cardId,
+				BgsHeroStat.create({
+					id: cardId,
 					tribesStat: [] as readonly { tribe: string; percent: number }[],
-				} as BgsHeroOverview)
+				} as BgsHeroStat)
 			);
 		});
 		// Add null-safe in case the heroes have been updated but not the code
@@ -115,15 +114,15 @@ export class BgsHeroSelectionOverviewComponent {
 		return 24;
 	}
 
-	isAvailableHero(hero: BgsHeroOverview): boolean {
-		return this.heroOverviews.map(h => h.heroCardId).indexOf(hero.heroCardId) !== -1;
+	isAvailableHero(hero: BgsHeroStat): boolean {
+		return this.heroOverviews.map(h => h.id).indexOf(hero.id) !== -1;
 	}
 
-	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsHeroOverview[] }) {
+	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }) {
 		return item.tier;
 	}
 
-	trackByHeroFn(index, item: BgsHeroOverview) {
-		return item?.heroCardId;
+	trackByHeroFn(index, item: BgsHeroStat) {
+		return item?.id;
 	}
 }
