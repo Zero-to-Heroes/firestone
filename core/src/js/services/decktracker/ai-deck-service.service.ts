@@ -16,6 +16,7 @@ export class AiDeckService {
 			console.warn('[ai-decks] decks not initialized yet', opponentCardId, scenarioId);
 			return null;
 		}
+		// console.log('getting ai deck', this.aiDecks, opponentCardId, scenarioId);
 		const deck =
 			this.aiDecks.find(
 				deck =>
@@ -35,7 +36,7 @@ export class AiDeckService {
 
 	private async getDeckNames(): Promise<readonly string[]> {
 		return new Promise<readonly string[]>(resolve => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json`).subscribe(
+			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json?v=2`).subscribe(
 				(result: any[]) => {
 					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
@@ -50,7 +51,7 @@ export class AiDeckService {
 
 	private async loadAiDecks(fileName: string): Promise<readonly AiDeck[]> {
 		return new Promise<readonly AiDeck[]>(resolve => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json`).subscribe(
+			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json?v=2`).subscribe(
 				(result: any[]) => {
 					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
