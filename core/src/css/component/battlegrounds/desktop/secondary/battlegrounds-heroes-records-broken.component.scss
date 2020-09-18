@@ -1,0 +1,28 @@
+.battlegrounds-heroes-records-broken {
+	display: flex;
+	min-height: 0;
+	overflow: auto;
+	padding-right: 20px;
+	padding-top: 10px;
+	flex-direction: column;
+
+	.title {
+		font-size: 14px;
+		color: var(--color-1);
+		margin-bottom: 10px;
+	}
+
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+
+		battlegrounds-hero-records-broken {
+			width: 68px;
+			margin-right: 25px;
+
+			&:nth-child(4n) {
+				margin-right: 0;
+			}
+		}
+	}
+}

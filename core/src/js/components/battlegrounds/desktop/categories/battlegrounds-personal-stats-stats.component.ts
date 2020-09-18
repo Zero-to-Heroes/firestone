@@ -19,104 +19,118 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 		`../../../../../css/global/components-global.scss`,
 	],
 	template: `
+		<div class="header">
+			<div class="label">
+				<div class="record-icon">
+					<svg class="svg-icon-fill">
+						<use xlink:href="assets/svg/sprite.svg#new_record" />
+					</svg>
+				</div>
+				Record
+			</div>
+			<div class="filler"></div>
+			<div class="hero">Hero</div>
+			<div class="replay">Replay</div>
+			<div class="value">Score</div>
+		</div>
 		<div class="stats-recap" scrollable>
 			<stat-cell
 				label="Total dmg dealt (minions)"
 				[value]="totalMinionsDamageDealt.value"
-				[heroCardId]="totalMinionsDamageDealt.hero"
+				[heroIcon]="totalMinionsDamageDealt.hero"
 				[reviewId]="totalMinionsDamageDealt.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Total dmg taken (minions)"
 				[value]="totalMinionsDamageTaken.value"
-				[heroCardId]="totalMinionsDamageTaken.hero"
+				[heroIcon]="totalMinionsDamageTaken.hero"
 				[reviewId]="totalMinionsDamageTaken.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Total dmg dealt (hero)"
 				tooltipText="Doesn't include fights against the ghost"
 				[value]="totalHeroDamageDealt.value"
-				[heroCardId]="totalHeroDamageDealt.hero"
+				[heroIcon]="totalHeroDamageDealt.hero"
 				[reviewId]="totalHeroDamageDealt.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Max dmg dealt (hero)"
 				tooltipText="Doesn't include fights against the ghost"
 				[value]="maxSingleTurnHeroDamageDealt.value"
-				[heroCardId]="maxSingleTurnHeroDamageDealt.hero"
+				[heroIcon]="maxSingleTurnHeroDamageDealt.hero"
 				[reviewId]="maxSingleTurnHeroDamageDealt.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Highest Win streak"
 				[value]="winStreak.value"
-				[heroCardId]="winStreak.hero"
+				[heroIcon]="winStreak.hero"
 				[reviewId]="winStreak.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Triples created"
 				[value]="triples.value"
-				[heroCardId]="triples.hero"
+				[heroIcon]="triples.hero"
 				[reviewId]="triples.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Max board stats"
 				[value]="maxBoardStats.value"
-				[heroCardId]="maxBoardStats.hero"
+				[heroIcon]="maxBoardStats.hero"
 				[reviewId]="maxBoardStats.reviewId"
 				tooltipText="The maximum total stats (attack + health) of your board at the beginning of a battle"
 			></stat-cell>
 			<stat-cell
 				label="Coins wasted"
 				[value]="coinsWasted.value"
-				[heroCardId]="coinsWasted.hero"
+				[heroIcon]="coinsWasted.hero"
 				[reviewId]="coinsWasted.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Rerolls"
 				[value]="rerolls.value"
-				[heroCardId]="rerolls.hero"
+				[heroIcon]="rerolls.hero"
 				[reviewId]="rerolls.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Freezes"
 				[value]="freezes.value"
-				[heroCardId]="freezes.hero"
+				[heroIcon]="freezes.hero"
 				[reviewId]="freezes.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Hero Power used"
 				[value]="heroPowers.value"
-				[heroCardId]="heroPowers.hero"
+				[heroIcon]="heroPowers.hero"
 				[reviewId]="heroPowers.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Minions bought"
 				[value]="minionsBought.value"
-				[heroCardId]="minionsBought.hero"
+				[heroIcon]="minionsBought.hero"
 				[reviewId]="minionsBought.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Minions sold"
 				[value]="minionsSold.value"
-				[heroCardId]="minionsSold.hero"
+				[heroIcon]="minionsSold.hero"
 				[reviewId]="minionsSold.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Enemy Minions killed"
 				[value]="minionsKilled.value"
-				[heroCardId]="minionsKilled.hero"
+				[heroIcon]="minionsKilled.hero"
 				[reviewId]="minionsKilled.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Enemy Heroes killed"
 				[value]="heroesKilled.value"
-				[heroCardId]="heroesKilled.hero"
+				[heroIcon]="heroesKilled.hero"
 				[reviewId]="heroesKilled.reviewId"
 			></stat-cell>
 			<stat-cell
 				label="Battles going first"
 				[value]="percentageOfBattlesGoingFirst.value?.toFixed(1) + '%'"
-				[heroCardId]="percentageOfBattlesGoingFirst.hero"
+				[heroIcon]="percentageOfBattlesGoingFirst.hero"
 				[reviewId]="percentageOfBattlesGoingFirst.reviewId"
 			></stat-cell>
 			<div class="entry cell battle-luck">

@@ -33,18 +33,19 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 							<div class="label">Games played</div>
 							<div class="value">{{ gamesPlayed }}</div>
 						</div>
-						<div class="item mmr" [ngClass]="{ 'positive': netMmr > 0, 'negative': netMmr < 0 }">
+						<div
+							class="item mmr"
+							[ngClass]="{
+								'positive': netMmr > 0,
+								'negative': netMmr < 0,
+								'missing': buildValue(netMmr) === 'N/A'
+							}"
+						>
 							<div class="label" helpTooltip="Average MMR gain/loss per match">Net MMR</div>
 							<div class="value">{{ buildValue(netMmr) }}</div>
 						</div>
 					</div>
 				</div>
-				<!-- <div class="box-side extra-info">
-					<div class="hero-name">{{ heroName }}</div>
-
-
-					<button class="browse-set-button">More details</button>
-				</div> -->
 			</div>
 		</div>
 	`,

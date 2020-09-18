@@ -20,6 +20,11 @@
 	.hero-name {
 		font-size: 14px;
 		color: var(--default-title-color);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 140px;
+		text-align: center;
 	}
 
 	.portrait {
@@ -43,6 +48,7 @@
 		.item {
 			display: flex;
 			align-items: center;
+			margin-top: 3px;
 
 			.label {
 				margin-right: 5px;
@@ -51,7 +57,6 @@
 			.value {
 				font-weight: bold;
 				color: #ce73b4;
-				font-size: 13px;
 			}
 
 			&.mmr {
@@ -61,6 +66,10 @@
 
 				&.positive .value {
 					color: #61ff47;
+				}
+
+				&.missing .value {
+					color: inherit;
 				}
 			}
 		}

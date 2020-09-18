@@ -81,6 +81,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[category]="buildCategory()"
 					[state]="state"
 				></battlegrounds-tier-list>
+				<battlegrounds-heroes-records-broken
+					*ngIf="shouldDisplayRecordBrokenHeroes()"
+					[category]="buildCategory()"
+					[state]="state"
+				></battlegrounds-heroes-records-broken>
 			</section>
 		</div>
 	`,
@@ -118,6 +123,11 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	shouldDisplayHeroTierList(): boolean {
 		const category = this.buildCategory();
 		return category?.id === 'bgs-category-personal-heroes';
+	}
+
+	shouldDisplayRecordBrokenHeroes(): boolean {
+		const category = this.buildCategory();
+		return category?.id === 'bgs-category-personal-stats';
 	}
 
 	selectCategory(categoryId: string) {

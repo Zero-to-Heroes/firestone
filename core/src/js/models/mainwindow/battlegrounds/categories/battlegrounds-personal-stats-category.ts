@@ -8,7 +8,7 @@ export class BattlegroundsPersonalStatsCategory extends BattlegroundsCategory {
 		// @ts-ignore
 		this.id = 'bgs-category-personal-stats';
 		// @ts-ignore
-		this.name = 'Best Match Stats';
+		this.name = 'Records Broken';
 	}
 
 	public static create(base: BattlegroundsPersonalStatsCategory): BattlegroundsPersonalStatsCategory {

@@ -1,0 +1,29 @@
+.battlegrounds-hero-records-broken {
+	display: flex;
+	position: relative;
+
+	.portrait {
+		width: 100%;
+	}
+
+	.records {
+		right: -5px;
+		top: 5px;
+		position: absolute;
+		color: var(--color-5);
+
+		.icon {
+			width: 34px;
+			height: 34px;
+		}
+
+		.value {
+			position: absolute;
+			top: 8px;
+			font-size: 12px;
+			font-weight: bold;
+			width: 100%;
+			text-align: center;
+		}
+	}
+}

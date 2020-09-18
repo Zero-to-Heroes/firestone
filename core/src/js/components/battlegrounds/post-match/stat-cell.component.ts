@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -24,12 +25,18 @@ declare let amplitude: any;
 			<div class="hero">
 				<img
 					*ngIf="heroCardId"
-					helpTooltip="Best stat unlocked with this hero"
+					[helpTooltip]="'Best stat unlocked with ' + getCardName(heroCardId)"
 					[src]="
 						'https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/' +
 						heroCardId +
 						'.png'
 					"
+					class="portrait"
+				/>
+				<img
+					*ngIf="heroIcon"
+					[helpTooltip]="'Best stat unlocked with ' + getCardName(heroIcon)"
+					[src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + heroIcon + '.jpg'"
 					class="portrait"
 				/>
 			</div>
@@ -56,11 +63,12 @@ export class StatCellComponent implements AfterViewInit {
 	@Input() isNewRecord: boolean;
 	@Input() tooltipText: string;
 	@Input() heroCardId: string;
+	@Input() heroIcon: string;
 	@Input() reviewId: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly cards: AllCardsService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -68,5 +76,9 @@ export class StatCellComponent implements AfterViewInit {
 
 	showReplay() {
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
+	}
+
+	getCardName(cardId: string): string {
+		return this.cards.getCard(cardId)?.name || 'this hero';
 	}
 }
