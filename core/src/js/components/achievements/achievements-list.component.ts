@@ -138,7 +138,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	@Input() set activeFilter(value: string) {
-		console.log('setting active filter', value);
+		// console.log('setting active filter', value);
 		this.filterFromPrefs = value;
 		this.updateShownAchievements();
 	}

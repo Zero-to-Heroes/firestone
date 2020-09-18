@@ -228,7 +228,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 		if (!this._state || !this._category) {
 			return;
 		}
-		console.log('top stats', this._state.stats.bestBgsUserStats);
+		// console.log('top stats', this._state.stats.bestBgsUserStats);
 		this.totalMinionsDamageDealt = this.getStat('totalDamageDealtToMinions');
 		this.totalMinionsDamageTaken = this.getStat('totalDamageTakenByMinions');
 		this.totalHeroDamageDealt = this.getStat('totalDamageDealtToHeroes');

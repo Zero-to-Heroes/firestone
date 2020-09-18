@@ -116,7 +116,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
-		console.log('updating filter visuals', singleEls);
+		// console.log('updating filter visuals', singleEls);
 		singleEls.forEach(singleEl => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">

@@ -69,7 +69,7 @@ export class BattlegroundsReplaysRecapComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		console.log('tier updating values', this._state, this._category);
+		// console.log('tier updating values', this._state, this._category);
 		if (!this._state || !this._category || !this._numberOfReplays) {
 			return;
 		}

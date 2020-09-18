@@ -6,6 +6,7 @@
 	font-style: normal;
 	font-weight: normal;
 	color: var(--default-text-color);
+	max-width: 100%;
 
 	.main {
 		display: flex;
@@ -15,6 +16,7 @@
 		// padding-right: 15px;
 		margin-top: 0;
 		position: relative;
+		max-width: calc(100% - 420px);
 
 		&.divider {
 			border-right: 1px solid var(--menu-bar-bottom-border-color);
@@ -28,6 +30,7 @@
 				flex-grow: 1;
 				display: flex;
 				flex-direction: column;
+				max-width: 100%;
 			}
 		}
 	}

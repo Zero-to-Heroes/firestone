@@ -63,7 +63,7 @@ export class BattlegroundsHeroesRecordsBrokenComponent implements AfterViewInit 
 	}
 
 	private updateValues() {
-		console.log('tier updating values', this._state, this._category);
+		// console.log('tier updating values', this._state, this._category);
 		if (!this._state?.battlegrounds?.stats?.heroStats || !this._category) {
 			return;
 		}

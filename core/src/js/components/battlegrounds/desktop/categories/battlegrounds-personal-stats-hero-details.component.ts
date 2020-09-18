@@ -71,7 +71,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		}
 
 		this.heroStat = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === this._category.heroId);
-		console.log('setting stat', this._category.heroId, this.heroStat, this._state, this._category);
+		// console.log('setting stat', this._category.heroId, this.heroStat, this._state, this._category);
 
 		this.lastKnownBoards = this._state.battlegrounds.lastHeroPostMatchStats
 			? this._state.battlegrounds.lastHeroPostMatchStats
@@ -96,7 +96,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 						} as KnownBoard;
 					})
 			: null;
-		console.log('lastKnownBoards', this.lastKnownBoards);
+		// console.log('lastKnownBoards', this.lastKnownBoards);
 	}
 
 	private getFinishPlace(finalPlace: number): string {
