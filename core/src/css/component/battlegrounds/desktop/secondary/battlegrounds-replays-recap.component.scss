@@ -1,0 +1,24 @@
+.battlegrounds-replays-recap {
+	display: flex;
+	min-height: 0;
+	overflow: auto;
+	padding-right: 8px;
+	padding-top: 10px;
+	flex-direction: column;
+	width: 100%;
+
+	.title {
+		font-size: 14px;
+		color: var(--color-1);
+		margin-bottom: 10px;
+	}
+
+	.list {
+		display: flex;
+		flex-direction: column;
+
+		li {
+			margin-bottom: 3px;
+		}
+	}
+}

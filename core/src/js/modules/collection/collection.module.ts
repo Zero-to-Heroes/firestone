@@ -46,6 +46,7 @@ import { BattlegroundsPersonalStatsStatsComponent } from '../../components/battl
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
+import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
@@ -194,6 +195,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BattlegroundsTierListComponent,
 		BattlegroundsHeroesRecordsBrokenComponent,
 		BattlegroundsHeroRecordsBrokenComponent,
+		BattlegroundsReplaysRecapComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,

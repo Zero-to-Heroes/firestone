@@ -86,6 +86,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[category]="buildCategory()"
 					[state]="state"
 				></battlegrounds-heroes-records-broken>
+				<battlegrounds-replays-recap
+					*ngIf="shouldDisplayReplaysRecap()"
+					[category]="buildCategory()"
+					[state]="state"
+					[numberOfReplays]="numberOfReplaysToShow()"
+				></battlegrounds-replays-recap>
 			</section>
 		</div>
 	`,
@@ -128,6 +134,15 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	shouldDisplayRecordBrokenHeroes(): boolean {
 		const category = this.buildCategory();
 		return category?.id === 'bgs-category-personal-stats';
+	}
+
+	shouldDisplayReplaysRecap(): boolean {
+		const category = this.buildCategory();
+		return category?.id === 'bgs-category-personal-rating';
+	}
+
+	numberOfReplaysToShow(): number {
+		return 10;
 	}
 
 	selectCategory(categoryId: string) {
