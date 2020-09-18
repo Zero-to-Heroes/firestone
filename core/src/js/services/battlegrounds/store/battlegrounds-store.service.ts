@@ -168,7 +168,7 @@ export class BattlegroundsStoreService {
 						console.log('[battlegrounds-store] bgs info', info);
 						while (info?.game?.Players == null || info.game.Players.length == 0) {
 							console.log('no player info in game, retryuing', info);
-							await sleep(500);
+							await sleep(1000);
 							info = await this.memory.getBattlegroundsMatch(1);
 						}
 						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));

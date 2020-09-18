@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 	template: `
 		<div class="hero-portrait">
 			<img [src]="_icon" class="portrait" />
-			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth }">
+			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth }" *ngIf="_health">
 				<img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" />
 				<div class="value">{{ _health }}</div>
 			</div>

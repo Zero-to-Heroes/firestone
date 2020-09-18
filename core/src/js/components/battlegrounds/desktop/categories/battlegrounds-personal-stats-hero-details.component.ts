@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
+import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
@@ -15,8 +16,9 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	],
 	template: `
 		<div class="battlegrounds-personal-stats-hero-details">
-			<battlegrounds-stats-hero-vignette class="hero-stats" [stat]="heroStat"></battlegrounds-stats-hero-vignette>
-			<div class="boards-container">
+			<bgs-player-capsule [player]="player"></bgs-player-capsule>
+			<!-- <battlegrounds-stats-hero-vignette class="hero-stats" [stat]="heroStat"></battlegrounds-stats-hero-vignette> -->
+			<!-- <div class="boards-container">
 				<div class="boards" *ngIf="lastKnownBoards">
 					<div class="header">Last known {{ lastKnownBoards.length }} boards</div>
 					<bgs-board
@@ -31,7 +33,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 				<div class="empty-state" *ngIf="!lastKnownBoards">
 					Loading last known boards
 				</div>
-			</div>
+			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,6 +41,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterViewInit {
 	_category: BattlegroundsPersonalStatsHeroDetailsCategory;
 	_state: MainWindowState;
+	player: BgsPlayer;
 	heroStat: BgsHeroStat;
 	lastKnownBoards: readonly KnownBoard[];
 
@@ -71,7 +74,15 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		}
 
 		this.heroStat = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === this._category.heroId);
+		if (!this.heroStat) {
+			return;
+		}
 		// console.log('setting stat', this._category.heroId, this.heroStat, this._state, this._category);
+		this.player = BgsPlayer.create({
+			cardId: this.heroStat.id,
+			displayedCardId: this.heroStat.id,
+			heroPowerCardId: this.heroStat.heroPowerCardId,
+		} as BgsPlayer);
 
 		this.lastKnownBoards = this._state.battlegrounds.lastHeroPostMatchStats
 			? this._state.battlegrounds.lastHeroPostMatchStats

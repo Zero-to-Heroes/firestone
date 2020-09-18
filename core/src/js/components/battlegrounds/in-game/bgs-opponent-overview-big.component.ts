@@ -22,66 +22,39 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,
 	],
 	template: `
-		<div class="opponent-overview">
-			<div class="background-additions">
-				<div class="top"></div>
-				<div class="bottom"></div>
-			</div>
-			<div class="portrait">
-				<bgs-hero-portrait
-					class="icon"
-					[icon]="icon"
-					[health]="health"
-					[maxHealth]="maxHealth"
-					[cardTooltip]="heroPowerCardId"
-					[cardTooltipText]="name"
-					[cardTooltipClass]="'bgs-hero-power'"
-					[rating]="rating"
-				></bgs-hero-portrait>
-				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
-			</div>
-			<div class="opponent-info">
-				<div class="main-info">
-					<bgs-board
-						[entities]="boardMinions"
-						[currentTurn]="currentTurn"
-						[boardTurn]="boardTurn"
-						[maxBoardHeight]="maxBoardHeight"
-					></bgs-board>
-					<div class="bottom-info">
-						<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
-						<bgs-battle-status
-							*ngIf="enableSimulation"
-							[nextBattle]="nextBattle"
-							[battleSimulationStatus]="battleSimulationStatus"
-							[showReplayLink]="true"
-						></bgs-battle-status>
-					</div>
+		<bgs-player-capsule [player]="_opponent" class="opponent-overview">
+			<div class="main-info">
+				<bgs-board
+					[entities]="boardMinions"
+					[currentTurn]="currentTurn"
+					[boardTurn]="boardTurn"
+					[maxBoardHeight]="maxBoardHeight"
+				></bgs-board>
+				<div class="bottom-info">
+					<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
+					<bgs-battle-status
+						*ngIf="enableSimulation"
+						[nextBattle]="nextBattle"
+						[battleSimulationStatus]="battleSimulationStatus"
+						[showReplayLink]="true"
+					></bgs-battle-status>
 				</div>
-				<div class="tavern-upgrades">
-					<div class="title">Tavern upgrades</div>
-					<div class="upgrades">
-						<div
-							class="tavern-upgrade"
-							*ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn"
-						>
-							<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
-							<div class="label">Turn {{ upgrade.turn }}</div>
-						</div>
+			</div>
+			<div class="tavern-upgrades">
+				<div class="title">Tavern upgrades</div>
+				<div class="upgrades">
+					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
+						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
+						<div class="label">Turn {{ upgrade.turn }}</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</bgs-player-capsule>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsOpponentOverviewBigComponent {
-	icon: string;
-	health: number;
-	maxHealth: number;
-	heroPowerCardId: string;
-	name: string;
-	tavernTier: number;
+	_opponent: BgsPlayer;
 	boardMinions: readonly Entity[];
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
@@ -99,18 +72,13 @@ export class BgsOpponentOverviewBigComponent {
 		if (value === this._opponent) {
 			return;
 		}
+
 		this._opponent = value;
 		if (!value) {
 			console.warn('[opponent-big] setting empty value');
 			return;
 		}
-		// console.log('setting next opponent info', value, value.getCurrentTavernTier());
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png`;
-		this.health = value.initialHealth - value.damageTaken;
-		this.maxHealth = value.initialHealth;
-		this.heroPowerCardId = value.getDisplayHeroPowerCardId();
-		this.name = value.name;
-		this.tavernTier = value.getCurrentTavernTier();
+
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;
@@ -119,8 +87,6 @@ export class BgsOpponentOverviewBigComponent {
 			this.cdr.detectChanges();
 		}
 	}
-
-	private _opponent: BgsPlayer;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
 

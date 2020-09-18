@@ -52,37 +52,18 @@ declare let amplitude: any;
 				[hint]="true"
 			>
 				<div class="content">
-					<div class="opponent-overview">
-						<div class="background-additions">
-							<div class="top"></div>
-							<div class="bottom"></div>
+					<bgs-player-capsule [player]="_panel.player" class="opponent-overview">
+						<div class="main-info">
+							<bgs-board
+								*ngIf="boardMinions && boardMinions.length > 0"
+								[debug]="true"
+								[entities]="boardMinions"
+								[finalBoard]="true"
+								[minionStats]="minionStats"
+								[maxBoardHeight]="0.8"
+							></bgs-board>
 						</div>
-						<div class="portrait">
-							<bgs-hero-portrait
-								class="icon"
-								[icon]="icon"
-								[health]="health"
-								[maxHealth]="maxHealth"
-								[cardTooltip]="heroPowerCardId"
-								[cardTooltipText]="name"
-								[cardTooltipClass]="'bgs-hero-power'"
-								[rating]="mmr"
-							></bgs-hero-portrait>
-							<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
-						</div>
-						<div class="opponent-info">
-							<div class="main-info">
-								<bgs-board
-									*ngIf="boardMinions && boardMinions.length > 0"
-									[debug]="true"
-									[entities]="boardMinions"
-									[finalBoard]="true"
-									[minionStats]="minionStats"
-									[maxBoardHeight]="0.8"
-								></bgs-board>
-							</div>
-						</div>
-					</div>
+					</bgs-player-capsule>
 					<div class="stats">
 						<ul class="tabs">
 							<li
