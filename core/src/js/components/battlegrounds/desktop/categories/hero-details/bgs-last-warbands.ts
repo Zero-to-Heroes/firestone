@@ -1,15 +1,15 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { MainWindowStoreEvent } from '../../../../../services/mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../../../../../services/overwolf.service';
 
 @Component({
 	selector: 'bgs-last-warbands',
 	styleUrls: [
-		`../../../../../css/component/battlegrounds/desktop/categories/bgs-last-warbands.component.scss`,
-		`../../../../../css/global/components-global.scss`,
+		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,
+		`../../../../../../css/global/components-global.scss`,
 	],
 	template: `
 		<div class="bgs-last-warbands">

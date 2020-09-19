@@ -12,16 +12,16 @@ import {
 } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
-import { BattlegroundsAppState } from '../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
+import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
+import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { MainWindowStoreEvent } from '../../../../../services/mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../../../../../services/overwolf.service';
 
 @Component({
 	selector: 'bgs-mmr-evolution-for-hero',
 	styleUrls: [
-		`../../../../../css/component/battlegrounds/desktop/categories/bgs-mmr-evolution-for-hero.component.scss`,
-		`../../../../../css/global/components-global.scss`,
+		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component.scss`,
+		`../../../../../../css/global/components-global.scss`,
 	],
 	template: `
 		<div class="bgs-mmr-evolution-for-hero">
