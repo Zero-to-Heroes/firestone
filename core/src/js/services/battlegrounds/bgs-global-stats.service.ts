@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 
-const BGS_STATS_RETRIEVE_URL = 'https://static-api.firestoneapp.com/retrieveBgsGlobalStats/{proxy+}';
+const BGS_STATS_RETRIEVE_URL = 'https://static-api.firestoneapp.com/retrieveBgsGlobalStats/{proxy+}?v=2';
 
 @Injectable()
 export class BgsGlobalStatsService {
