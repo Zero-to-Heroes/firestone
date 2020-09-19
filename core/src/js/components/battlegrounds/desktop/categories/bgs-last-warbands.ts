@@ -20,7 +20,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					[customTitle]="board.title"
 					[finalBoard]="true"
 					[useFullWidth]="true"
-					[debug]="true"
+					[debug]="false"
 				></bgs-board>
 			</div>
 			<div class="empty-state" *ngIf="!lastKnownBoards">

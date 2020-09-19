@@ -63,6 +63,9 @@ export class BgsStatUpdateParser implements EventParser {
 				const playerGamesPlayed = bgsStatsForCurrentPatch.filter(stat => stat.playerCardId === heroStat.id)
 					.length;
 				const playerPopularity = (100 * playerGamesPlayed) / bgsStatsForCurrentPatch.length;
+				const gamesWithMmr = bgsStatsForCurrentPatch
+					.filter(stat => stat.playerCardId === heroStat.id)
+					.filter(stat => stat.newPlayerRank != null && stat.playerRank != null);
 				return BgsHeroStat.create({
 					...heroStat,
 					top4: heroStat.top4 || 0,
@@ -81,12 +84,10 @@ export class BgsStatUpdateParser implements EventParser {
 					playerAverageMmr:
 						playerPopularity === 0
 							? 0
-							: bgsStatsForCurrentPatch
-									.filter(stat => stat.playerCardId === heroStat.id)
-									.filter(stat => stat.newPlayerRank != null && stat.playerRank != null)
+							: gamesWithMmr
 									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.filter(mmr => !isNaN(mmr))
-									.reduce((a, b) => a + b, 0) / playerGamesPlayed,
+									.reduce((a, b) => a + b, 0) / gamesWithMmr.length,
 					playerTop4:
 						playerPopularity === 0
 							? 0

@@ -34,6 +34,13 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 				<ng-container>
 					<bgs-last-warbands class="stat" [state]="_state" [hidden]="selectedTab !== 'final-warbands'">
 					</bgs-last-warbands>
+					<bgs-mmr-evolution-for-hero
+						class="stat"
+						[hidden]="selectedTab !== 'mmr'"
+						[category]="_category"
+						[state]="_state.battlegrounds"
+					>
+					</bgs-mmr-evolution-for-hero>
 					<!-- <bgs-chart-warband-stats
 						class="stat"
 						[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
