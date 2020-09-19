@@ -32,6 +32,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						#chart
 						*ngIf="lineChartData"
 						baseChart
+						[style.opacity]="opacity"
 						[style.width.px]="chartWidth"
 						[style.height.px]="chartHeight"
 						[datasets]="lineChartData"
@@ -113,6 +114,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		},
 	};
 	lineChartColors: Color[];
+	opacity: number = 0;
 
 	@Input() set category(value: BattlegroundsPersonalRatingCategory) {
 		if (value === this._category) {
@@ -211,6 +213,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 				pointHoverBorderColor: 'transparent',
 			},
 		];
+		this.opacity = 1;
 		// console.log('chartData', this.lineChartData, this.lineChartLabels, this.lineChartColors);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
