@@ -97,6 +97,8 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	@Input() finalBoard: boolean;
 	@Input() tooltipPosition: 'left' | 'right' | 'top' | 'bottom' = 'right';
 	@Input() maxBoardHeight = 1;
+	// Used when the container will scroll, so we don't want to constrain the height
+	@Input() useFullWidth: boolean = false;
 
 	@Input() set minionStats(value: readonly MinionStat[]) {
 		this._minionStats = value;
@@ -237,7 +239,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// if (this.debug) {
 		// 	console.log('board container', boardContainer, rect);
 		// }
-		if (!rect || !rect.width || !rect.height) {
+		if (!rect || !rect.width || (!this.useFullWidth && !rect.height)) {
 			if (this.debug) {
 				console.log('no dimensions, retrying', rect);
 			}
@@ -269,7 +271,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 			// The board size is fixed, now we add the cards
 			let cardWidth = (this.previousBoardWidth / 8) * 0.85; // take the margin into account
 			let cardHeight = 1.48 * cardWidth;
-			if (cardHeight > this.previousBoardHeight * this.maxBoardHeight) {
+			if (!this.useFullWidth && cardHeight > this.previousBoardHeight * this.maxBoardHeight) {
 				if (this.debug) {
 					console.log('cropping cards to height', cardHeight, this.previousBoardHeight, this.maxBoardHeight);
 				}
