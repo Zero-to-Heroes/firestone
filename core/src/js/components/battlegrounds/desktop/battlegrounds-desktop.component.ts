@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
@@ -91,6 +92,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[category]="buildCategory()"
 					[state]="state"
 					[numberOfReplays]="numberOfReplaysToShow()"
+					[heroCardId]="heroFilterForReplays()"
 				></battlegrounds-replays-recap>
 			</section>
 		</div>
@@ -138,11 +140,22 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 
 	shouldDisplayReplaysRecap(): boolean {
 		const category = this.buildCategory();
-		return category?.id === 'bgs-category-personal-rating';
+		return (
+			category?.id === 'bgs-category-personal-rating' ||
+			category?.id?.includes('bgs-category-personal-hero-details-')
+		);
 	}
 
 	numberOfReplaysToShow(): number {
 		return 10;
+	}
+
+	heroFilterForReplays(): string {
+		const category = this.buildCategory();
+		if (category?.id?.includes('bgs-category-personal-hero-details-')) {
+			return (category as BattlegroundsPersonalStatsHeroDetailsCategory).heroId;
+		}
+		return null;
 	}
 
 	selectCategory(categoryId: string) {

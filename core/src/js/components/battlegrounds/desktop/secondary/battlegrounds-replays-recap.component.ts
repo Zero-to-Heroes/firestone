@@ -29,16 +29,9 @@ export class BattlegroundsReplaysRecapComponent implements AfterViewInit {
 	_category: BattlegroundsCategory;
 	_state: MainWindowState;
 	_numberOfReplays: number;
+	_heroCardId: string;
 
 	replays: readonly GameStat[];
-
-	@Input() set numberOfReplays(value: number) {
-		if (value === this._numberOfReplays) {
-			return;
-		}
-		this._numberOfReplays = value;
-		this.updateValues();
-	}
 
 	@Input() set category(value: BattlegroundsPersonalHeroesCategory) {
 		if (value === this._category) {
@@ -53,6 +46,23 @@ export class BattlegroundsReplaysRecapComponent implements AfterViewInit {
 			return;
 		}
 		this._state = value;
+		this.updateValues();
+	}
+
+	@Input() set numberOfReplays(value: number) {
+		if (value === this._numberOfReplays) {
+			return;
+		}
+		this._numberOfReplays = value;
+		this.updateValues();
+	}
+
+	@Input() set heroCardId(value: string) {
+		console.log('setting hero card id', value);
+		if (value === this._heroCardId) {
+			return;
+		}
+		this._heroCardId = value;
 		this.updateValues();
 	}
 
@@ -74,9 +84,11 @@ export class BattlegroundsReplaysRecapComponent implements AfterViewInit {
 			return;
 		}
 
+		console.log('filtering replays', this._heroCardId);
 		this.replays = this._state.replays.allReplays
 			.filter(replay => replay.gameMode === 'battlegrounds')
 			.filter(replay => replay.playerRank != null)
+			.filter(replay => !this._heroCardId || this._heroCardId === replay.playerCardId)
 			.slice(0, this._numberOfReplays);
 	}
 }
