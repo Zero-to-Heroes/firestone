@@ -1,4 +1,5 @@
 import { CurrentView } from '../achievement/current-view.type';
+import { BgsHeroStatsFilterId } from '../battlegrounds/categories/bgs-hero-stats-filter-id';
 
 export class NavigationBattlegrounds {
 	readonly currentView: CurrentView = 'category';
@@ -10,6 +11,7 @@ export class NavigationBattlegrounds {
 		| 'bgs-category-personal-rating'
 		| 'bgs-category-personal-stats'
 		| 'bgs-category-personal-ai';
+	readonly selectedPersonalHeroStatsTab: BgsHeroStatsFilterId = 'final-warbands';
 
 	public update(base: NavigationBattlegrounds): NavigationBattlegrounds {
 		return Object.assign(new NavigationBattlegrounds(), this, base);

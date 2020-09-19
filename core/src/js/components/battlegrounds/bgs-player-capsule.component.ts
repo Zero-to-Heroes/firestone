@@ -37,7 +37,7 @@ declare let amplitude: any;
 					[cardTooltipClass]="'bgs-hero-power'"
 					[rating]="rating"
 				></bgs-hero-portrait>
-				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
+				<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
 			</div>
 			<div class="player-info">
 				<ng-content></ng-content>
@@ -60,6 +60,8 @@ export class BgsPlayerCapsuleComponent {
 
 	@Input() rating: number;
 
+	@Input() displayTavernTier: boolean;
+
 	@Input() set player(value: BgsPlayer) {
 		if (value === this._player) {
 			return;
@@ -75,7 +77,7 @@ export class BgsPlayerCapsuleComponent {
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId();
 		this.name = value.name;
-		this.tavernTier = value.getCurrentTavernTier();
+		this.tavernTier = this.displayTavernTier ? value.getCurrentTavernTier() : undefined;
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;

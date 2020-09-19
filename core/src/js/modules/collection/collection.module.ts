@@ -44,6 +44,7 @@ import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/batt
 import { BattlegroundsPersonalStatsRatingComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
 import { BattlegroundsPersonalStatsStatsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component';
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
+import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/bgs-last-warbands';
 import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
 import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
@@ -196,6 +197,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BattlegroundsHeroesRecordsBrokenComponent,
 		BattlegroundsHeroRecordsBrokenComponent,
 		BattlegroundsReplaysRecapComponent,
+		BgsLastWarbandsComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,

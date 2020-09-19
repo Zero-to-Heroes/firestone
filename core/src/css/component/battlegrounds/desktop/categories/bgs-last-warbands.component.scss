@@ -1,0 +1,30 @@
+.bgs-last-warbands {
+	flex-grow: 1;
+	flex-shrink: 1;
+	display: flex;
+
+	.boards {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		overflow: scroll;
+		min-height: 0;
+
+		::ng-deep bgs-board {
+			flex-shrink: 0;
+
+			.board {
+				margin-bottom: 30px;
+			}
+
+			.board-turn {
+				text-align: center;
+			}
+
+			.board,
+			.board-turn {
+				max-width: 700px;
+			}
+		}
+	}
+}

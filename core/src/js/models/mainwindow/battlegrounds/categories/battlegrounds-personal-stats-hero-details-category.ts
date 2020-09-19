@@ -1,7 +1,9 @@
 import { BattlegroundsCategory } from '../battlegrounds-category';
+import { BgsHeroStatsFilterId } from './bgs-hero-stats-filter-id';
 
 export class BattlegroundsPersonalStatsHeroDetailsCategory extends BattlegroundsCategory {
-	public readonly heroId: string;
+	readonly heroId: string;
+	readonly tabs: readonly BgsHeroStatsFilterId[];
 
 	public static create(
 		base: BattlegroundsPersonalStatsHeroDetailsCategory,

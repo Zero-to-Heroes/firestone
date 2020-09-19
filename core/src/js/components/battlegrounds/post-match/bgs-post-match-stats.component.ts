@@ -52,7 +52,7 @@ declare let amplitude: any;
 				[hint]="true"
 			>
 				<div class="content">
-					<bgs-player-capsule [player]="_panel.player" class="opponent-overview">
+					<bgs-player-capsule [player]="_panel?.player" class="opponent-overview">
 						<div class="main-info">
 							<bgs-board
 								*ngIf="boardMinions && boardMinions.length > 0"

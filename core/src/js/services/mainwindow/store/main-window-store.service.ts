@@ -47,6 +47,7 @@ import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { SelectBattlegroundsGlobalCategoryEvent } from './events/battlegrounds/select-battlegrounds-global-category-event';
+import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
@@ -101,6 +102,7 @@ import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/b
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { SelectBattlegroundsGlobalCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-global-category-processor';
+import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
@@ -510,6 +512,9 @@ export class MainWindowStoreService {
 
 			BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent.eventName(),
 			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor(),
+
+			SelectBattlegroundsPersonalStatsHeroTabEvent.eventName(),
+			new SelectBattlegroundsPersonalStatsHeroProcessor(),
 		);
 	}
 

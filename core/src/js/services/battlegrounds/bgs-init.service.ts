@@ -9,6 +9,7 @@ import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/bat
 import { BattlegroundsPersonalRatingCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
 import { BattlegroundsPersonalStatsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Events } from '../events.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -111,6 +112,7 @@ export class BgsInitService {
 					id: 'bgs-category-personal-hero-details-' + heroStat.id,
 					name: this.cards.getCard(heroStat.id)?.name,
 					heroId: heroStat.id,
+					tabs: ['final-warbands', 'mmr', 'warband-stats'] as readonly BgsHeroStatsFilterId[],
 				} as BattlegroundsPersonalStatsHeroDetailsCategory),
 			);
 		return BattlegroundsPersonalHeroesCategory.create({

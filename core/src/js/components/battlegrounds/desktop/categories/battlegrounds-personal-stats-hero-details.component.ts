@@ -4,7 +4,10 @@ import { Map } from 'immutable';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
+import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
@@ -16,7 +19,39 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	],
 	template: `
 		<div class="battlegrounds-personal-stats-hero-details">
-			<bgs-player-capsule [player]="player"></bgs-player-capsule>
+			<bgs-player-capsule [player]="player" [displayTavernTier]="false"></bgs-player-capsule>
+			<div class="stats">
+				<ul class="tabs">
+					<li
+						*ngFor="let tab of tabs"
+						class="tab"
+						[ngClass]="{ 'active': tab === selectedTab }"
+						(mousedown)="selectTab(tab)"
+					>
+						{{ getLabel(tab) }}
+					</li>
+				</ul>
+				<ng-container>
+					<bgs-last-warbands class="stat" [state]="_state" [hidden]="selectedTab !== 'final-warbands'">
+					</bgs-last-warbands>
+					<!-- <bgs-chart-warband-stats
+						class="stat"
+						[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
+						[player]="_panel?.player"
+						[globalStats]="_panel?.globalStats"
+						[stats]="_panel?.stats"
+						[visible]="selectedTab === 'warband-total-stats-by-turn'"
+					>
+					</bgs-chart-warband-stats>
+					<bgs-chart-warband-composition
+						class="stat"
+						[hidden]="selectedTab !== 'warband-composition-by-turn'"
+						[stats]="_panel?.stats"
+						[visible]="selectedTab === 'warband-composition-by-turn'"
+					>
+					</bgs-chart-warband-composition> -->
+				</ng-container>
+			</div>
 			<!-- <battlegrounds-stats-hero-vignette class="hero-stats" [stat]="heroStat"></battlegrounds-stats-hero-vignette> -->
 			<!-- <div class="boards-container">
 				<div class="boards" *ngIf="lastKnownBoards">
@@ -41,8 +76,13 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterViewInit {
 	_category: BattlegroundsPersonalStatsHeroDetailsCategory;
 	_state: MainWindowState;
+	_navigation: NavigationBattlegrounds;
+
 	player: BgsPlayer;
 	heroStat: BgsHeroStat;
+	tabs: readonly BgsHeroStatsFilterId[];
+	selectedTab: BgsHeroStatsFilterId;
+
 	lastKnownBoards: readonly KnownBoard[];
 
 	@Input() set category(value: BattlegroundsPersonalStatsHeroDetailsCategory) {
@@ -61,6 +101,14 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		this.updateValues();
 	}
 
+	@Input() set navigation(value: NavigationBattlegrounds) {
+		if (value === this._navigation) {
+			return;
+		}
+		this._navigation = value;
+		this.updateValues();
+	}
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private ow: OverwolfService) {}
@@ -69,7 +117,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 	private updateValues() {
-		if (!this._state || !this._category) {
+		if (!this._state || !this._category || !this._navigation) {
 			return;
 		}
 
@@ -83,6 +131,9 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 			displayedCardId: this.heroStat.id,
 			heroPowerCardId: this.heroStat.heroPowerCardId,
 		} as BgsPlayer);
+		this.tabs = this._category.tabs;
+		this.selectedTab = this._navigation.selectedPersonalHeroStatsTab;
+		console.log('selectedTab', this.selectedTab, this._navigation);
 
 		this.lastKnownBoards = this._state.battlegrounds.lastHeroPostMatchStats
 			? this._state.battlegrounds.lastHeroPostMatchStats
@@ -108,6 +159,21 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 					})
 			: null;
 		// console.log('lastKnownBoards', this.lastKnownBoards);
+	}
+
+	getLabel(tab: BgsHeroStatsFilterId) {
+		switch (tab) {
+			case 'mmr':
+				return 'MMR';
+			case 'final-warbands':
+				return 'Last warbands';
+			case 'warband-stats':
+				return 'Warband stats';
+		}
+	}
+
+	selectTab(tab: BgsHeroStatsFilterId) {
+		this.stateUpdater.next(new SelectBattlegroundsPersonalStatsHeroTabEvent(tab));
 	}
 
 	private getFinishPlace(finalPlace: number): string {

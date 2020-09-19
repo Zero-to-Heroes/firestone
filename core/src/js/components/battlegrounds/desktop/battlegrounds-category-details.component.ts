@@ -38,6 +38,7 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 				"
 				[category]="category"
 				[state]="state"
+				[navigation]="navigation.navigationBattlegrounds"
 			>
 			</battlegrounds-personal-stats-hero-details>
 		</div>
