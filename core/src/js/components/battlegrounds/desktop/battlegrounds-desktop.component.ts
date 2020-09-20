@@ -103,7 +103,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
 
-	enableBg = true;
+	enableBg = false;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
