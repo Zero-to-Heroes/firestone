@@ -146,14 +146,9 @@ export class BgsBattleStatusComponent {
 		} else if (value === 'waiting-for-result') {
 			// console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
-			this.tempInterval = setInterval(() => {
-				this.battleSimulationResultWin = (99 * Math.random()).toFixed(1) + '%';
-				this.battleSimulationResultTie = (99 * Math.random()).toFixed(1) + '%';
-				this.battleSimulationResultLose = (99 * Math.random()).toFixed(1) + '%';
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			}, 30);
+			this.battleSimulationResultWin = '__';
+			this.battleSimulationResultTie = '__';
+			this.battleSimulationResultLose = '__';
 		} else {
 			// console.log('result done', value);
 			this.temporaryBattleTooltip =
