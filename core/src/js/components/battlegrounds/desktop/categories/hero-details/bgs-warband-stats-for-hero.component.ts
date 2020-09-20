@@ -246,6 +246,9 @@ export class BgsWarbandStatsForHeroComponent {
 				} as NumericTurnInfo;
 			})
 			.filter(stat => stat);
+		if (!warbandStats) {
+			return;
+		}
 
 		const heroStatsOverTurn: (readonly NumericTurnInfo[])[] = this._state.battlegrounds.lastHeroPostMatchStats
 			.map(postMatch => postMatch.stats.totalStatsOverTurn)
@@ -267,7 +270,7 @@ export class BgsWarbandStatsForHeroComponent {
 			})
 			.filter(info => info);
 
-		if (!warbandStats || !heroStats) {
+		if (!heroStats) {
 			return;
 		}
 		this.lineChartLabels = [...Array(lastTurn).keys()].map(turn => '' + turn);
