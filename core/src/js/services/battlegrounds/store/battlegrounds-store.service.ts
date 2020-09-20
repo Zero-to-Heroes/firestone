@@ -15,7 +15,6 @@ import { PatchesConfigService } from '../../patches-config.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
-import { sleep } from '../../utils';
 import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
@@ -166,10 +165,8 @@ export class BattlegroundsStoreService {
 					this.memoryInterval = setInterval(async () => {
 						let info = await this.memory.getBattlegroundsMatch(1);
 						console.log('[battlegrounds-store] bgs info', info);
-						while (info?.game?.Players == null || info.game.Players.length == 0) {
+						if (info?.game?.Players == null || info.game.Players.length == 0) {
 							console.log('no player info in game, retryuing', info);
-							await sleep(1000);
-							info = await this.memory.getBattlegroundsMatch(1);
 						}
 						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
 						// console.log('BgsGlobalInfoUpdatedEvent emit done');
@@ -233,13 +230,13 @@ export class BattlegroundsStoreService {
 				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				console.log('[bgs-store] Game ended');
+				if (this.memoryInterval) {
+					clearInterval(this.memoryInterval);
+				}
 				this.maybeHandleNextEvent(
 					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
 					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 				);
-				if (this.memoryInterval) {
-					clearInterval(this.memoryInterval);
-				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(
 					new BgsLeaderboardPlaceEvent(
