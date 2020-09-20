@@ -13,7 +13,7 @@ import { OverwolfService } from '../../../../../services/overwolf.service';
 	],
 	template: `
 		<div class="bgs-last-warbands">
-			<div class="boards" *ngIf="lastKnownBoards">
+			<div class="boards" *ngIf="lastKnownBoards" scrollable>
 				<bgs-board
 					*ngFor="let board of lastKnownBoards"
 					[entities]="board.entities"
@@ -78,6 +78,7 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 						} as KnownBoard;
 					})
 			: null;
+		console.log('last known boards', this.lastKnownBoards, this._state);
 	}
 
 	private getFinishPlace(finalPlace: number): string {

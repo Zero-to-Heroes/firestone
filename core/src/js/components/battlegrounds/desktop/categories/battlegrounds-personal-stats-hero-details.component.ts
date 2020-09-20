@@ -41,41 +41,15 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						[state]="_state.battlegrounds"
 					>
 					</bgs-mmr-evolution-for-hero>
-					<!-- <bgs-chart-warband-stats
+					<bgs-warband-stats-for-hero
 						class="stat"
-						[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
-						[player]="_panel?.player"
-						[globalStats]="_panel?.globalStats"
-						[stats]="_panel?.stats"
-						[visible]="selectedTab === 'warband-total-stats-by-turn'"
+						[hidden]="selectedTab !== 'warband-stats'"
+						[category]="_category"
+						[state]="_state"
 					>
-					</bgs-chart-warband-stats>
-					<bgs-chart-warband-composition
-						class="stat"
-						[hidden]="selectedTab !== 'warband-composition-by-turn'"
-						[stats]="_panel?.stats"
-						[visible]="selectedTab === 'warband-composition-by-turn'"
-					>
-					</bgs-chart-warband-composition> -->
+					</bgs-warband-stats-for-hero>
 				</ng-container>
 			</div>
-			<!-- <battlegrounds-stats-hero-vignette class="hero-stats" [stat]="heroStat"></battlegrounds-stats-hero-vignette> -->
-			<!-- <div class="boards-container">
-				<div class="boards" *ngIf="lastKnownBoards">
-					<div class="header">Last known {{ lastKnownBoards.length }} boards</div>
-					<bgs-board
-						*ngFor="let board of lastKnownBoards"
-						[entities]="board.entities"
-						[customTitle]="board.title"
-						[finalBoard]="true"
-						[maxBoardHeight]="0.8"
-						[debug]="true"
-					></bgs-board>
-				</div>
-				<div class="empty-state" *ngIf="!lastKnownBoards">
-					Loading last known boards
-				</div>
-			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

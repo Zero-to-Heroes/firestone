@@ -53,14 +53,14 @@ export class BgsRunStatsService {
 	}
 
 	private async computeHeroDetailsForBg(heroCardId: string) {
-		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId, 5);
+		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId);
 		console.log('lastHeroPostMatchStats', lastHeroPostMatchStats);
 		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats));
 	}
 
 	private async retrieveLastBgsRunStats(
 		heroCardId: string,
-		numberOfStats: number,
+		numberOfStats?: number,
 	): Promise<readonly BgsPostMatchStatsForReview[]> {
 		const user = await this.userService.getCurrentUser();
 		return new Promise<readonly BgsPostMatchStatsForReview[]>((resolve, reject) => {
