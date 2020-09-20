@@ -116,21 +116,22 @@ export class BgsRunStatsService {
 		const prefs = await this.prefs.getPreferences();
 		const user = await this.userService.getCurrentUser();
 		const newMmr = await this.getNewRating(currentGame.mmrAtStart);
+
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
 			heroCardId: currentGame.getMainPlayer()?.cardId,
 			userId: user.userId,
 			userName: user.username,
-			battleResultHistory: currentGame.battleResultHistory,
+			battleResultHistory: currentGame.battleResultHistory.map(history => ({
+				...history,
+				simulationResult: { ...history.simulationResult, outcomeSamples: undefined },
+			})),
 			mainPlayer: currentGame.getMainPlayer(),
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: newMmr,
 		};
+		// console.log('computing post-match stats input', input);
 
-		// console.error('dev stuff to be removed here', bestBgsUserStats);
-		// bestBgsUserStats = bestBgsUserStats.map(stat =>
-		// 	stat.statName === 'maxBoardStats' ? { ...stat, value: 0 } : stat,
-		// );
 		const [postMatchStats, newBestValues] = this.populateObject(
 			prefs.bgsUseLocalPostMatchStats
 				? await this.buildStatsLocally(currentGame)
@@ -138,7 +139,8 @@ export class BgsRunStatsService {
 			input,
 			bestBgsUserStats || [],
 		);
-		console.log('newBestVaues', newBestValues);
+		// console.log('newBestVaues', newBestValues, postMatchStats);
+
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
 		if (prefs.bgsUseLocalPostMatchStats) {

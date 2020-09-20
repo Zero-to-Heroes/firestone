@@ -1,6 +1,9 @@
 import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
 import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
-import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import {
+	BattleResultHistory,
+	BgsPostMatchStats as IBgsPostMatchStats,
+} from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBoard } from '../in-game/bgs-board';
 import { BgsTavernUpgrade } from '../in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../in-game/bgs-triple';
@@ -35,6 +38,7 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly totalEnemyMinionsKilled: number;
 	readonly totalEnemyHeroesKilled: number;
 	readonly luckFactor: number;
+	readonly battleResultHistory: readonly BattleResultHistory[];
 
 	public static create(base: BgsPostMatchStats): BgsPostMatchStats {
 		return Object.assign(new BgsPostMatchStats(), base);
