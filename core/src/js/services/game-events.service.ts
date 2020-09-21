@@ -218,6 +218,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MAIN_STEP_READY':
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MAIN_STEP_READY,
@@ -298,7 +299,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
 				break;
 			case 'MINION_BACK_ON_BOARD':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
@@ -348,7 +349,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MINION_SUMMONED':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
@@ -397,7 +398,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				const summonAdditionProps2 = gameEvent.Value.AdditionalProps
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
@@ -554,7 +555,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
 				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				const additionalProps = gameEvent.Value.AdditionalProps
 					? {
 							health: gameEvent.Value.AdditionalProps.Health,
@@ -748,7 +749,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_COMBAT_START':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_COMBAT_START,
@@ -756,7 +757,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_BATTLE_RESULT':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
@@ -769,7 +770,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_NEXT_OPPONENT':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				// console.log(gameEvent.Type + ' event', gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,

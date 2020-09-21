@@ -112,9 +112,9 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// 	return;
 		// }
 		this.inputEntities = value || [];
-		console.log('input entities', this.inputEntities);
+		// console.log('input entities', this.inputEntities);
 		this._entities = this.inputEntities.map(entity => Entity.create({ ...entity } as Entity));
-		console.log('setting entities', this._entities);
+		// console.log('setting entities', this._entities);
 		this.previousBoardWidth = undefined;
 		if (this.debug) {
 			this.boardReady = false;

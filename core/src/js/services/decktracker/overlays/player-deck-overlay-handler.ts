@@ -37,7 +37,7 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 		if (forceLogs) {
 			console.log(
 				'[player-overlay] will consider overlay for player deck',
-				state,
+				state?.metadata,
 				showDecktrackerFromGameMode,
 				forceCloseWidgets,
 			);

@@ -140,7 +140,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		const prefs = await this.prefs.getPreferences();
 		const windowName = await this.ow.getCollectionWindowName(prefs);
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, message => {
-			console.log('received collection window message', message, this.isMaximized);
+			// console.log('received collection window message', message, this.isMaximized);
 			// If hidden, restore window to as it was
 			if (message.window_previous_state_ex === 'hidden') {
 				console.log('window was previously hidden, keeping the previosu state', this.isMaximized);
@@ -189,7 +189,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 						await this.ow.maximizeWindow(this.windowId);
 					}
 				} else if (!newState.isVisible && currentlyVisible) {
-					console.log('hiding main window', newState);
+					console.log('hiding main window');
 					await this.ow.hideWindow(this.windowId);
 				}
 				if (this.navigationState && newState.currentApp !== this.navigationState.currentApp) {
