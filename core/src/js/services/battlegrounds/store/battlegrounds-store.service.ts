@@ -163,10 +163,10 @@ export class BattlegroundsStoreService {
 						clearInterval(this.memoryInterval);
 					}
 					this.memoryInterval = setInterval(async () => {
-						let info = await this.memory.getBattlegroundsMatch(1);
-						console.log('[battlegrounds-store] bgs info', info);
+						const info = await this.memory.getBattlegroundsMatch(1);
+						// console.log('[battlegrounds-store] bgs info', info);
 						if (info?.game?.Players == null || info.game.Players.length == 0) {
-							console.log('no player info in game, retryuing', info);
+							// console.log('no player info in game, retryuing', info);
 						}
 						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
 						// console.log('BgsGlobalInfoUpdatedEvent emit done');

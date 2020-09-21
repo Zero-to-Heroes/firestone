@@ -114,7 +114,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		},
 	};
 	lineChartColors: Color[];
-	opacity: number = 0;
+	opacity = 0;
 
 	@Input() set category(value: BattlegroundsPersonalRatingCategory) {
 		if (value === this._category) {

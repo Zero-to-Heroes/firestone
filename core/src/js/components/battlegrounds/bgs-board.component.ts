@@ -98,7 +98,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	@Input() tooltipPosition: 'left' | 'right' | 'top' | 'bottom' = 'right';
 	@Input() maxBoardHeight = 1;
 	// Used when the container will scroll, so we don't want to constrain the height
-	@Input() useFullWidth: boolean = false;
+	@Input() useFullWidth = false;
 
 	@Input() set minionStats(value: readonly MinionStat[]) {
 		this._minionStats = value;

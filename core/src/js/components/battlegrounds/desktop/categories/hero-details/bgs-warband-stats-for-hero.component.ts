@@ -202,7 +202,7 @@ export class BgsWarbandStatsForHeroComponent {
 		},
 	};
 	lineChartColors: Color[];
-	opacity: number = 0;
+	opacity = 0;
 
 	private _state: MainWindowState;
 	private _category: BattlegroundsPersonalStatsHeroDetailsCategory;

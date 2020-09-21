@@ -113,7 +113,7 @@ export class BgsMmrEvolutionForHeroComponent implements AfterViewInit {
 		},
 	};
 	lineChartColors: Color[];
-	opacity: number = 0;
+	opacity = 0;
 
 	@Input() set category(value: BattlegroundsPersonalStatsHeroDetailsCategory) {
 		if (value === this._category) {
