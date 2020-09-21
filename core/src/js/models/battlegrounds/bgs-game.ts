@@ -76,15 +76,17 @@ export class BgsGame {
 
 	public addBattleBoardInfo(bgsInfo: BgsBoardInfo): BgsGame {
 		const battleInfo: any = this.battleInfo || {};
+		//console.log('will set battle info', bgsInfo, battleInfo);
 		if (!battleInfo.playerBoard) {
 			battleInfo.playerBoard = bgsInfo;
+			// this.battleInfoStatus = 'waiting-for-result';
 		} else if (!battleInfo.opponentBoard) {
 			battleInfo.opponentBoard = bgsInfo;
-			// console.log('Set battle info', JSON.stringify(battleInfo, null, 4));
 		} else {
 			console.warn('trying to set bgsinfo in full data', this, bgsInfo);
 			return this;
 		}
+		//console.log('stting battle info', bgsInfo, battleInfo);
 		return Object.assign(new BgsGame(), this, {
 			battleInfo: battleInfo,
 			battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',

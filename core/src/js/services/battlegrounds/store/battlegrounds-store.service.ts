@@ -44,7 +44,6 @@ import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
 import { EventParser } from './event-parsers/_event-parser';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
-import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
 import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
@@ -205,10 +204,27 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.heroPowerUsed,
 					),
 				);
-				// } else if (gameEvent.type === GameEvent.MAIN_STEP_READY) {
-				// 	this.battlegroundsUpdater.next(new BgsResetBattleStateEvent());
+				// this.maybeHandleNextEvent(
+				// 	new BgsPlayerBoardEvent(
+				// 		gameEvent.additionalData.cardId,
+				// 		gameEvent.additionalData.board,
+				// 		gameEvent.additionalData.hero,
+				// 		gameEvent.additionalData.heroPowerCardId,
+				// 		gameEvent.additionalData.heroPowerUsed,
+				// 	),
+				// 	GameEvent.BATTLEGROUNDS_COMBAT_START,
+				// );
+				// this.battlegroundsUpdater.next(
+				// 	new BgsPlayerBoardEvent(
+				// 		gameEvent.additionalData.cardId,
+				// 		gameEvent.additionalData.board,
+				// 		gameEvent.additionalData.hero,
+				// 		gameEvent.additionalData.heroPowerCardId,
+				// 		gameEvent.additionalData.heroPowerUsed,
+				// 	),
+				// );
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
-				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
+				// this.battlegroundsUpdater.next(new BgsCombatStartEvent());
 				// 	} else {
 				// 		console.warn('not ready to send battle simulation')
 				// 	}
