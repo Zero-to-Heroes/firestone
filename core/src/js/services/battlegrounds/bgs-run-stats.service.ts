@@ -150,7 +150,7 @@ export class BgsRunStatsService {
 				error => console.error('issue while posting post-match stats', error),
 			);
 		}
-		console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats);
+		// console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats, postMatchStats, currentGame);
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}

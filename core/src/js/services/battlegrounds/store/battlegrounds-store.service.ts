@@ -147,7 +147,6 @@ export class BattlegroundsStoreService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
-				// TODO: retrieve current MMR
 				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId));
@@ -204,30 +203,6 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.heroPowerUsed,
 					),
 				);
-				// this.maybeHandleNextEvent(
-				// 	new BgsPlayerBoardEvent(
-				// 		gameEvent.additionalData.cardId,
-				// 		gameEvent.additionalData.board,
-				// 		gameEvent.additionalData.hero,
-				// 		gameEvent.additionalData.heroPowerCardId,
-				// 		gameEvent.additionalData.heroPowerUsed,
-				// 	),
-				// 	GameEvent.BATTLEGROUNDS_COMBAT_START,
-				// );
-				// this.battlegroundsUpdater.next(
-				// 	new BgsPlayerBoardEvent(
-				// 		gameEvent.additionalData.cardId,
-				// 		gameEvent.additionalData.board,
-				// 		gameEvent.additionalData.hero,
-				// 		gameEvent.additionalData.heroPowerCardId,
-				// 		gameEvent.additionalData.heroPowerUsed,
-				// 	),
-				// );
-			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
-				// this.battlegroundsUpdater.next(new BgsCombatStartEvent());
-				// 	} else {
-				// 		console.warn('not ready to send battle simulation')
-				// 	}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
 				this.battlegroundsUpdater.next(
 					new BgsBattleResultEvent(
@@ -238,12 +213,8 @@ export class BattlegroundsStoreService {
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TRIPLE) {
 				this.battlegroundsUpdater.next(new BgsTripleCreatedEvent(gameEvent.cardId));
-				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {
-				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.CARD_PLAYED) {
 				this.battlegroundsUpdater.next(new BgsCardPlayedEvent(gameEvent));
-				// } else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BOARD_COMPOSITION) {
-				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				console.log('[bgs-store] Game ended');
 				if (this.memoryInterval) {

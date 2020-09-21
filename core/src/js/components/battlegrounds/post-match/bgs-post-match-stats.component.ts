@@ -93,6 +93,15 @@ declare let amplitude: any;
 								[visible]="selectedTab === 'warband-total-stats-by-turn'"
 							>
 							</bgs-chart-warband-stats>
+							<bgs-winrate-chart
+								class="stat"
+								[hidden]="selectedTab !== 'winrate-per-turn'"
+								[player]="_panel?.player"
+								[globalStats]="_panel?.globalStats"
+								[stats]="_panel?.stats"
+								[visible]="selectedTab === 'warband-total-stats-by-turn'"
+							>
+							</bgs-winrate-chart>
 							<bgs-chart-warband-composition
 								class="stat"
 								[hidden]="selectedTab !== 'warband-composition-by-turn'"
@@ -225,6 +234,8 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 				return 'Compositions';
 			case 'warband-total-stats-by-turn':
 				return 'Warband stats';
+			case 'winrate-per-turn':
+				return 'Winrate';
 		}
 	}
 
