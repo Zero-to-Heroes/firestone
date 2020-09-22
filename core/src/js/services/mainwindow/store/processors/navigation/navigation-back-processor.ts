@@ -21,8 +21,8 @@ export class NavigationBackProcessor implements Processor {
 		console.log('going back', history.currentIndexInHistory, history);
 		const newState =
 			history.currentIndexInHistory > 0
-				? NavigationBackProcessor.buildParentState(navigationState, currentState)
-				: history.stateHistory[history.currentIndexInHistory - 1].state;
+				? history.stateHistory[history.currentIndexInHistory - 1].state
+				: NavigationBackProcessor.buildParentState(navigationState, currentState);
 		console.log('new nag state', newState);
 		return [null, newState];
 	}
