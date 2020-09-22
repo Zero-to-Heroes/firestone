@@ -15,13 +15,6 @@ export class GameStatsLoaderService {
 
 	public async retrieveStats(retriesLeft = 5): Promise<GameStats> {
 		console.log('[game-stats-loader] retrieving stats', retriesLeft, this.gameStats && this.gameStats[0]);
-		// if (this.gameStats)
-		// if (
-		// 	this.gameStats &&
-		// 	(!expectedReviewId || this.gameStats.stats.some(stat => stat.reviewId === expectedReviewId))
-		// ) {
-		// 	return this.gameStats;
-		// }
 		const user = await this.ow.getCurrentUser();
 		return new Promise<GameStats>(async resolve => {
 			this.doRetrieve(user.userId, user.username, retriesLeft, resolve);
@@ -29,7 +22,6 @@ export class GameStatsLoaderService {
 	}
 
 	private doRetrieve(userId: string, userName: string, retrievesLeft: number, resolve) {
-		// console.log('[game-stats-loader] in doRetrieve', userId, retrievesLeft);
 		if (retrievesLeft <= 0) {
 			console.error('[game-stats-loader] could not load stats', userId);
 			resolve(null);
@@ -43,9 +35,7 @@ export class GameStatsLoaderService {
 		};
 		this.http.post(GAME_STATS_ENDPOINT, postObject).subscribe(
 			data => {
-				// console.log('[game-stats-loader] received http data');
 				const endpointResult: readonly GameStat[] = (data as any).results;
-				// if (!expectedReviewId || endpointResult.some(stat => stat.reviewId === expectedReviewId)) {
 				this.gameStats = Object.assign(new GameStats(), {
 					stats: endpointResult
 						.map(stat => ({
@@ -56,17 +46,6 @@ export class GameStatsLoaderService {
 				} as GameStats);
 				console.log('[game-stats-loader] Retrieved game stats for user');
 				resolve(this.gameStats);
-				// } else {
-				// 	// console.log(
-				// 	// 	'[game-stats-loader] Could not retrieve game stats for user, retrying',
-				// 	// 	expectedReviewId,
-				// 	// 	endpointResult.length,
-				// 	// );
-				// 	setTimeout(
-				// 		() => this.doRetrieve(userId, userName, retrievesLeft - 1, resolve, expectedReviewId),
-				// 		2000,
-				// 	);
-				// }
 			},
 			error => {
 				console.log('[game-stats-loader] could not get stats', error);
