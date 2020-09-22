@@ -30,7 +30,7 @@ declare let amplitude: any;
 		<div class="legend">
 			<div
 				class="item average unsupported"
-				helpTooltip="Average winrate (the % chance to win a battle) for each run"
+				helpTooltip="Average winrate (the % chance to win a battle) for each run. Will be available soon :)"
 			>
 				<div class="node"></div>
 				Average for hero (soon)
@@ -46,6 +46,7 @@ declare let amplitude: any;
 					*ngIf="lineChartData"
 					#chart
 					baseChart
+					[style.opacity]="opacity"
 					[style.width.px]="chartWidth"
 					[style.height.px]="chartHeight"
 					[datasets]="lineChartData"
@@ -171,7 +172,7 @@ export class BgsWinrateChartComponent {
 							<div class="section average">
 								<div class="subtitle">Average for hero</div>
 								<div class="value">Turn ${currentRunDatapoint.label}</div>
-								<div class="value">Winrate ${averageDatapoint?.value || 'No data'}</div>							
+								<div class="value">Winrate ${averageDatapoint?.value ? averageDatapoint?.value + '%' : 'No data'}</div>							
 							</div>
 						</div>
 					`;
@@ -202,6 +203,7 @@ export class BgsWinrateChartComponent {
 		},
 	};
 	lineChartColors: Color[];
+	opacity = 0;
 
 	private _globalStats: BgsStats;
 	private _stats: BgsPostMatchStats;
@@ -339,6 +341,7 @@ export class BgsWinrateChartComponent {
 				pointHoverBorderColor: 'transparent',
 			},
 		];
+		this.opacity = 1;
 		// console.log('setting chart dimensions', this.chartHeight, this.chartWidth);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
