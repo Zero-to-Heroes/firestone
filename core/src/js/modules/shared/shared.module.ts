@@ -2,14 +2,18 @@ import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
+import { ChartsModule } from 'ng2-charts';
 import { AdsComponent } from '../../components/ads.component';
 import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-hero-portrait.component';
 import { BgsPlayerCapsuleComponent } from '../../components/battlegrounds/bgs-player-capsule.component';
+import { GraphWithComparisonComponent } from '../../components/battlegrounds/graph-with-comparison.component';
 import { BgsHeroMiniComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-mini.component';
 import { BgsHeroSelectionTooltipComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component';
 import { BgsHeroStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-stats.component';
@@ -60,6 +64,9 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		ReactiveFormsModule,
 		ColiseumComponentsModule,
 		InlineSVGModule.forRoot(),
+		NgxChartsModule,
+		ChartsModule,
+		BrowserAnimationsModule,
 	],
 	declarations: [
 		WindowWrapperComponent,
@@ -114,6 +121,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsHeroSelectionTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
+
+		GraphWithComparisonComponent,
 
 		StatCellComponent,
 	],
@@ -175,6 +184,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsHeroSelectionTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
+
+		GraphWithComparisonComponent,
 
 		StatCellComponent,
 	],
