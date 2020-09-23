@@ -8,7 +8,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { ChartDataSets, ChartOptions, ChartTooltipModel } from 'chart.js';
+import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem, ChartTooltipModel } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { NumericTurnInfo } from '../../models/battlegrounds/post-match/numeric-turn-info';
 
@@ -24,11 +24,11 @@ declare let amplitude: any;
 		<div class="legend">
 			<div class="item average" [helpTooltip]="communityTooltip">
 				<div class="node"></div>
-				Community
+				{{ communityLabel }}
 			</div>
 			<div class="item current" [helpTooltip]="yourTooltip">
 				<div class="node"></div>
-				You
+				{{ yourLabel }}
 			</div>
 		</div>
 		<div class="container-1">
@@ -98,7 +98,6 @@ export class GraphWithComparisonComponent {
 			position: 'nearest',
 			intersect: false,
 			backgroundColor: '#CE73B4',
-			// titleFontSize: 0,
 			titleFontFamily: 'Open Sans',
 			titleFontColor: '#40032E',
 			bodyFontFamily: 'Open Sans',
@@ -110,9 +109,15 @@ export class GraphWithComparisonComponent {
 			cornerRadius: 0,
 			displayColors: false,
 			enabled: false,
+			callbacks: {
+				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
+					// console.log('beforeBody', item, data);
+					return data.datasets.map(dataset => dataset.label);
+				},
+			},
 			custom: function(tooltip: ChartTooltipModel) {
 				let tooltipEl = document.getElementById('chartjs-tooltip-stats');
-				console.log('tooltip', tooltip);
+				// console.log('tooltip', tooltip);
 
 				if (!tooltipEl) {
 					tooltipEl = document.createElement('div');
@@ -142,19 +147,25 @@ export class GraphWithComparisonComponent {
 
 				// Set Text
 				if (tooltip.body) {
-					const averageDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
-					const currentRunDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
+					const communityLabel = tooltip.beforeBody[0];
+					const yourLabel = tooltip.beforeBody[1];
+					const communityDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
+					const yourDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
 					const innerHtml = `
 						<div class="body">
 							<div class="section player">
-								<div class="subtitle">You</div>
-								<div class="value">Turn ${currentRunDatapoint?.label}</div>
-								<div class="value">Stat ${currentRunDatapoint?.value ? parseInt(currentRunDatapoint.value).toFixed(0) : 'No data'}</div>
+								<div class="subtitle">${yourLabel}</div>
+								<div class="value">Turn ${yourDatapoint?.label}</div>
+								<div class="value">${yourDatapoint?.value ? 'Stat ' + parseInt(yourDatapoint.value).toFixed(0) : 'No data'}</div>
 							</div>
 							<div class="section average">
-								<div class="subtitle">Community</div>
-								<div class="value">Turn ${currentRunDatapoint.label}</div>
-								<div class="value">Stat ${averageDatapoint?.value ? parseInt(averageDatapoint.value).toFixed(0) : 'No data'}</div>							
+								<div class="subtitle">${communityLabel}</div>
+								<div class="value">Turn ${yourDatapoint.label}</div>
+								<div class="value">${
+									communityDatapoint?.value
+										? 'Stat ' + parseInt(communityDatapoint.value).toFixed(0)
+										: 'No data'
+								}</div>							
 							</div>
 						</div>
 					`;
@@ -181,6 +192,8 @@ export class GraphWithComparisonComponent {
 	lineChartColors: Color[];
 	opacity = 0;
 
+	@Input() communityLabel: string = 'Community';
+	@Input() yourLabel: string = 'You';
 	@Input() communityTooltip: string;
 	@Input() yourTooltip: string;
 
@@ -214,20 +227,19 @@ export class GraphWithComparisonComponent {
 		const community = this._communityExtractor() || [];
 		const your = this._yourExtractor() || [];
 
-		const maxTurnFromCommunity = Math.max(...community.filter(stat => stat.value).map(stat => stat.turn));
-		const maxTurnFromYour = Math.max(...your.filter(stat => stat.value).map(stat => stat.turn));
+		const maxTurnFromCommunity = this.getMaxTurn(community);
+		const maxTurnFromYour = this.getMaxTurn(your);
 		const lastTurn = Math.max(maxTurnFromCommunity, maxTurnFromYour);
-		// console.log('last turn', lastTurn, maxTurnFromCommunity, maxTurnFromYour, community, your);
 
 		this.lineChartLabels = [...Array(lastTurn).keys()].map(turn => '' + turn);
 		this.lineChartData = [
 			{
 				data: community.map(stat => stat.value),
-				label: 'Community',
+				label: this.communityLabel,
 			},
 			{
 				data: your.map(stat => stat.value),
-				label: 'You',
+				label: this.yourLabel,
 			} as any,
 		];
 		// console.log('last turn is', lastTurn, this.lineChartLabels, this.lineChartData, community, your);
@@ -299,5 +311,11 @@ export class GraphWithComparisonComponent {
 		gradient.addColorStop(0.4, 'rgba(206, 115, 180, 0.4)');
 		gradient.addColorStop(1, 'rgba(206, 115, 180, 0)');
 		return gradient;
+	}
+
+	private getMaxTurn(input: readonly NumericTurnInfo[]) {
+		return input.filter(stat => stat.value).length === 0
+			? 0
+			: Math.max(...input.filter(stat => stat.value).map(stat => stat.turn));
 	}
 }
