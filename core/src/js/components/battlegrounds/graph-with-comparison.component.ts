@@ -31,13 +31,12 @@ declare let amplitude: any;
 				{{ yourLabel }}
 			</div>
 		</div>
-		<div class="container-1">
+		<div class="container-1" [style.opacity]="opacity">
 			<div style="display: block; position: relative; height: 100%; width: 100%;">
 				<canvas
 					*ngIf="lineChartData"
 					#chart
 					baseChart
-					[style.opacity]="opacity"
 					[style.width.px]="chartWidth"
 					[style.height.px]="chartHeight"
 					[datasets]="lineChartData"
@@ -112,7 +111,7 @@ export class GraphWithComparisonComponent {
 			callbacks: {
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
 					// console.log('beforeBody', item, data);
-					return data.datasets.map(dataset => dataset.label);
+					return data.datasets.map(dataset => dataset?.label || '');
 				},
 			},
 			custom: function(tooltip: ChartTooltipModel) {
@@ -160,7 +159,7 @@ export class GraphWithComparisonComponent {
 							</div>
 							<div class="section average">
 								<div class="subtitle">${communityLabel}</div>
-								<div class="value">Turn ${yourDatapoint.label}</div>
+								<div class="value">Turn ${yourDatapoint?.label}</div>
 								<div class="value">${
 									communityDatapoint?.value
 										? 'Stat ' + parseInt(communityDatapoint.value).toFixed(0)
@@ -221,28 +220,43 @@ export class GraphWithComparisonComponent {
 
 	private updateValues() {
 		if (!this._yourExtractor || !this._communityExtractor) {
+			// console.log('not ready');
 			return;
 		}
 
-		const community = this._communityExtractor() || [];
-		const your = this._yourExtractor() || [];
+		// Turn 0 is before any battle, so it's not really interesting for us
+		const community = this.removeZero(this._communityExtractor() || []);
+		const your = this.removeZero(this._yourExtractor() || []);
 
 		const maxTurnFromCommunity = this.getMaxTurn(community);
 		const maxTurnFromYour = this.getMaxTurn(your);
 		const lastTurn = Math.max(maxTurnFromCommunity, maxTurnFromYour);
+		// console.log('max turn', maxTurnFromCommunity, maxTurnFromYour, lastTurn, community, your);
 
-		this.lineChartLabels = [...Array(lastTurn).keys()].map(turn => '' + turn);
+		const filledCommunity = this.fillMissingData(community, lastTurn);
+		const filledYour = this.fillMissingData(your, lastTurn);
+
+		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter(turn => turn > 0).map(turn => '' + turn);
 		this.lineChartData = [
 			{
-				data: community.map(stat => stat.value),
+				data: filledCommunity.map(stat => stat.value),
 				label: this.communityLabel,
 			},
 			{
-				data: your.map(stat => stat.value),
+				data: filledYour.map(stat => stat.value),
 				label: this.yourLabel,
 			} as any,
 		];
-		// console.log('last turn is', lastTurn, this.lineChartLabels, this.lineChartData, community, your);
+		// console.log(
+		// 	'last turn is',
+		// 	lastTurn,
+		// 	this.lineChartLabels,
+		// 	this.lineChartData,
+		// 	community,
+		// 	filledCommunity,
+		// 	your,
+		// 	filledYour,
+		// );
 		this.doResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -255,6 +269,23 @@ export class GraphWithComparisonComponent {
 	onResize() {
 		this._dirty = true;
 		this.doResize();
+	}
+
+	private removeZero(input: readonly NumericTurnInfo[]): readonly NumericTurnInfo[] {
+		return input.filter(stat => stat.turn > 0);
+	}
+
+	private fillMissingData(input: readonly NumericTurnInfo[], lastTurn: number) {
+		const result = [];
+		for (let i = 1; i <= lastTurn; i++) {
+			result.push(
+				input.find(stat => stat.turn === i) || {
+					turn: i,
+					value: null,
+				},
+			);
+		}
+		return result;
 	}
 
 	private doResize() {
@@ -274,9 +305,11 @@ export class GraphWithComparisonComponent {
 		}
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.height;
+		const gradient = this.getBackgroundColor();
+		// console.log('gradient', gradient);
 		this.lineChartColors = [
 			{
-				backgroundColor: this.getBackgroundColor(),
+				backgroundColor: gradient,
 				borderColor: '#CE73B4',
 				pointBackgroundColor: 'transparent',
 				pointBorderColor: 'transparent',
@@ -292,11 +325,17 @@ export class GraphWithComparisonComponent {
 				pointHoverBorderColor: 'transparent',
 			},
 		];
-		this.opacity = 1;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		setTimeout(() => this.doResize(), 200);
+		this.opacity = gradient && this.lineChartData && this.lineChartData.length > 0 ? 1 : 0;
+		// console.log('setting opacity', this.opacity, gradient, this.lineChartData);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => {
+			this.doResize();
+		}, 200);
 	}
 
 	private getBackgroundColor() {

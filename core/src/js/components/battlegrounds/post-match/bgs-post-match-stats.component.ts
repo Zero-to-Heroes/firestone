@@ -90,7 +90,6 @@ declare let amplitude: any;
 								[player]="_panel?.player"
 								[globalStats]="_panel?.globalStats"
 								[stats]="_panel?.stats"
-								[visible]="selectedTab === 'warband-total-stats-by-turn'"
 							>
 							</bgs-chart-warband-stats>
 							<bgs-winrate-chart

@@ -215,7 +215,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		if (this.ow.isOwEnabled()) {
 			const window = await this.ow.getCurrentWindow();
 			// console.log('currentWIndow', window);
-			if (isWindowHidden(window.stateEx)) {
+			if (isWindowHidden(window?.stateEx)) {
 				// console.log('window hidden, not resizing board state', window.stateEx, window);
 				return;
 			}

@@ -121,7 +121,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		} as BgsPlayer);
 		this.tabs = this._category.tabs;
 		this.selectedTab = this._navigation.selectedPersonalHeroStatsTab;
-		console.log('selectedTab', this.selectedTab, this._navigation);
+		// console.log('selectedTab', this.selectedTab, this._navigation);
 
 		this.lastKnownBoards = this._state.battlegrounds.lastHeroPostMatchStats
 			? this._state.battlegrounds.lastHeroPostMatchStats
