@@ -35,6 +35,12 @@
 	padding-top: 20px;
 	position: relative;
 	z-index: 1;
+
+	.social-shares {
+		position: absolute;
+		right: 0;
+		top: -30px;
+	}
 }
 
 .opponent-overview {

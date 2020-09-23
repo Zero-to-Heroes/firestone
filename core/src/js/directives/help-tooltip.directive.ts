@@ -179,9 +179,10 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		}
 	}
 
+	@HostListener('click')
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		//console.log('onmouseleave');
+		// console.log('onmouseleave');
 		if (this.overlayRef) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {

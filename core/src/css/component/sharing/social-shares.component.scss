@@ -1,0 +1,27 @@
+.social-shares {
+}
+
+.social-share {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #a89782;
+	margin-bottom: 5px;
+
+	&:hover:not(.disabled) {
+		background: #d9c3ab;
+	}
+
+	&.disabled {
+		background: #a89782;
+		opacity: 0.5;
+	}
+
+	i {
+		width: 21px;
+		height: 16px;
+		--icon-color: #1b071f;
+	}
+}

@@ -82,8 +82,6 @@ import { ReplayInfoComponent } from '../../components/replays/replay-info.compon
 import { ReplaysFilterComponent } from '../../components/replays/replays-filter.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
 import { ReplaysComponent } from '../../components/replays/replays.component';
-import { ShareInfoComponent } from '../../components/sharing/share-info.component';
-import { ShareLoginComponent } from '../../components/sharing/share-login.component';
 import { FsTimeDisplay, FsUtcPipe } from '../../components/video-controls/single-minute-time.component';
 import { AdService } from '../../services/ad.service';
 import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
@@ -204,9 +202,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsMmrEvolutionForHeroComponent,
 		BgsWarbandStatsForHeroComponent,
 		BgsWinrateStatsForHeroComponent,
-
-		ShareLoginComponent,
-		ShareInfoComponent,
 
 		FtueComponent,
 	],

@@ -17,6 +17,7 @@ import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { normalizeCardId } from './card-utils';
 
 declare let amplitude: any;
@@ -52,6 +53,7 @@ declare let amplitude: any;
 				[hint]="true"
 			>
 				<div class="content">
+					<social-shares class="social-shares" [onSocialClick]="takeScreenshot()"></social-shares>
 					<bgs-player-capsule [player]="_panel?.player" [rating]="mmr" class="opponent-overview">
 						<div class="main-info">
 							<bgs-board
@@ -204,6 +206,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: AllCardsService,
+		private readonly owUtils: OwUtilsService,
 	) {
 		// console.log('in construftor');
 		allCards.initializeCardsDb();
@@ -235,6 +238,10 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			case 'winrate-per-turn':
 				return 'Winrate';
 		}
+	}
+
+	takeScreenshot(): () => Promise<[string, any]> {
+		return () => this.owUtils.captureActiveWindow();
 	}
 
 	private addMinionStats() {

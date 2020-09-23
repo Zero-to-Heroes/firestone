@@ -55,7 +55,7 @@ declare let amplitude;
 					<!-- <vg-fullscreen [ngClass]="{ 'fullscreen': fullscreen }"></vg-fullscreen> -->
 				</vg-controls>
 
-				<achievement-social-shares
+				<!-- <achievement-social-shares
 					*ngIf="!currentThumbnail.isDeleted"
 					[socialShareUserInfo]="socialShareUserInfo"
 					[achievementName]="_achievement.name"
@@ -63,7 +63,7 @@ declare let amplitude;
 					[videoPathOnDisk]="currentVideoPathOnDisk"
 					[videoPath]="currentReplayLocation"
 				>
-				</achievement-social-shares>
+				</achievement-social-shares> -->
 
 				<video [vgMedia]="media" #media id="singleVideo" preload="auto">
 					<source [src]="currentReplay" type="video/mp4" />

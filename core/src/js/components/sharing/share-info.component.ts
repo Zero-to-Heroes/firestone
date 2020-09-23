@@ -1,8 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
-
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
-import { ShareVideoOnSocialNetworkEvent } from '../../services/mainwindow/store/events/social/share-video-on-social-network-event';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -19,32 +15,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShareInfoComponent implements AfterViewInit {
-	@Input() network: string;
-	@Input() videoPathOnDisk: string;
+export class ShareInfoComponent {
 	textValue: string;
-	loggedIn: boolean;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	@Input() loggedIn: boolean;
+
+	@Output() onShare: EventEmitter<string> = new EventEmitter<string>();
 
 	constructor(private ow: OverwolfService) {}
 
-	@Input() set socialInfo(value: SocialUserInfo) {
-		if (!value) {
-			return;
-		}
-		this.loggedIn = value.id != undefined;
-	}
-
-	@Input() set achievementName(value: string) {
-		this.textValue = `One more #hearthstone #achievement unlocked! | ${value} | Captured by Firestone`;
-	}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
 	share() {
-		this.stateUpdater.next(new ShareVideoOnSocialNetworkEvent(this.network, this.videoPathOnDisk, this.textValue));
+		this.onShare.next(this.textValue);
 	}
 }

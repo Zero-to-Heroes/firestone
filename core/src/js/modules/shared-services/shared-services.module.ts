@@ -20,6 +20,7 @@ import { OwNotificationsService } from '../../services/notifications.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { MindVisionService } from '../../services/plugins/mind-vision/mind-vision.service';
+import { OwUtilsService } from '../../services/plugins/ow-utils.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
@@ -61,6 +62,7 @@ export class SharedServicesModule {
 				IndexedDbService,
 				PackHistoryService,
 				MindVisionService,
+				OwUtilsService,
 			],
 		};
 	}

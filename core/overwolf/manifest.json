@@ -378,6 +378,10 @@
 			"mind-vision": {
 				"file": "Files/plugins/OverwolfUnitySpy.dll",
 				"class": "OverwolfUnitySpy.MindVisionPlugin"
+			},
+			"ow-utils": {
+				"file": "Files/plugins/OwUtils.dll",
+				"class": "OwUtils.OwUtilsPlugin"
 			}
 		},
 		"hotkeys": {

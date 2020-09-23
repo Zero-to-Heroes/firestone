@@ -705,6 +705,7 @@ export class OverwolfService {
 			overwolf.social.twitter.getUserInfo(res => {
 				if (res.status !== 'success' || !res.userInfo) {
 					const result: TwitterUserInfo = {
+						network: 'twitter',
 						avatarUrl: undefined,
 						id: undefined,
 						name: undefined,
@@ -714,6 +715,7 @@ export class OverwolfService {
 					return;
 				}
 				const result: TwitterUserInfo = {
+					network: 'twitter',
 					avatarUrl: res.userInfo.avatar,
 					id: res.userInfo.id,
 					name: res.userInfo.name,
@@ -735,6 +737,16 @@ export class OverwolfService {
 				console.log('[overwolf-service] uploaded file to twitter', res, error);
 				resolve(res);
 			});
+		});
+	}
+
+	public async twitterLogin() {
+		overwolf.social.twitter.performUserLogin();
+	}
+
+	public async twitterLogout() {
+		return new Promise<void>(resolve => {
+			overwolf.social.twitter.performLogout(info => resolve(info));
 		});
 	}
 
@@ -836,6 +848,14 @@ export class OverwolfService {
 		}
 		// Only detect new game launched events when it goes from not running to running
 		return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
+	}
+
+	public static getAppFolder(): string {
+		return `${overwolf.io.paths.localAppData}/overwolf/Log/Apps/Firestone`;
+	}
+
+	public static getLocalAppDataFolder(): string {
+		return `${overwolf.io.paths.localAppData}`;
 	}
 }
 

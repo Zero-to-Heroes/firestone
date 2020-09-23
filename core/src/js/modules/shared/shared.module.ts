@@ -37,6 +37,11 @@ import { HotkeyComponent } from '../../components/hotkey.component';
 import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
+import { ShareInfoComponent } from '../../components/sharing/share-info.component';
+import { ShareLoginComponent } from '../../components/sharing/share-login.component';
+import { SocialShareModalComponent } from '../../components/sharing/social-share-modal.component';
+import { SocialSharesComponent } from '../../components/sharing/social-shares.component';
+import { TwitterShareModalComponent } from '../../components/sharing/twitter-share-modal.component';
 import { BuffInfoComponent } from '../../components/tooltip/buff-info.component';
 import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
 import { ConfirmationComponent } from '../../components/tooltip/confirmation.component';
@@ -106,6 +111,12 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		FilterComponent,
 		SafeHtmlPipe,
 
+		SocialSharesComponent,
+		SocialShareModalComponent,
+		TwitterShareModalComponent,
+		ShareLoginComponent,
+		ShareInfoComponent,
+
 		AdsComponent,
 
 		BgsOpponentOverviewBigComponent,
@@ -131,6 +142,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		CardTooltipComponent,
 		ConfirmationComponent,
 		BgsHeroSelectionTooltipComponent,
+		TwitterShareModalComponent,
 	],
 	exports: [
 		WindowWrapperComponent,
@@ -170,6 +182,12 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		SafeHtmlPipe,
 
 		AdsComponent,
+
+		SocialSharesComponent,
+		SocialShareModalComponent,
+		TwitterShareModalComponent,
+		ShareLoginComponent,
+		ShareInfoComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,

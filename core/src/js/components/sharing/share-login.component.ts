@@ -1,7 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { TriggerSocialNetworkLoginToggleEvent } from '../../services/mainwindow/store/events/social/trigger-social-network-login-toggle-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -9,13 +7,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/component/sharing/share-login.component.scss`],
 	template: `
 		<div class="share-login">
-			<div class="avatar-image">
-				<div class="zth-tooltip top">
-					<p>{{ username }}</p>
-					<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-						<polygon points="0,0 8,-9 16,0" />
-					</svg>
-				</div>
+			<div class="avatar-image" [helpTooltip]="username">
 				<img [src]="loginImage" />
 			</div>
 			<button (mousedown)="logInOut()">{{ loggedIn ? 'Log out' : 'Log in' }}</button>
@@ -23,15 +15,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShareLoginComponent implements AfterViewInit {
-	@Input() network: string;
-	loggedIn: boolean;
-	loginImage: string;
-	username: string;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService) {}
+export class ShareLoginComponent {
+	@Output() onLogoutRequest: EventEmitter<boolean> = new EventEmitter<boolean>();
+	@Output() onLoginRequest: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	@Input() set socialInfo(value: SocialUserInfo) {
 		if (!value) {
@@ -42,11 +28,13 @@ export class ShareLoginComponent implements AfterViewInit {
 		this.loginImage = this.loggedIn && value.avatarUrl ? value.avatarUrl : 'assets/images/social-share-login.png';
 	}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	loggedIn: boolean;
+	loginImage: string;
+	username: string;
+
+	constructor(private ow: OverwolfService) {}
 
 	logInOut() {
-		this.stateUpdater.next(new TriggerSocialNetworkLoginToggleEvent(this.network));
+		this.loggedIn ? this.onLogoutRequest.next(true) : this.onLoginRequest.next(true);
 	}
 }

@@ -64,7 +64,7 @@ import { PreferencesService } from '../../services/preferences.service';
 					<source [src]="videoPath" type="video/mp4" />
 				</video>
 			</vg-player>
-			<section class="sharing-body">
+			<!-- <section class="sharing-body">
 				<share-login [socialInfo]="socialShareUserInfo[network]" [network]="network"></share-login>
 				<share-info
 					[achievementName]="achievementName"
@@ -73,7 +73,7 @@ import { PreferencesService } from '../../services/preferences.service';
 					[network]="network"
 				>
 				</share-info>
-			</section>
+			</section> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
