@@ -10,8 +10,6 @@ declare let amplitude: any;
 	selector: 'bgs-winrate-stats-for-hero',
 	styleUrls: [
 		`../../../../../../css/global/reset-styles.scss`,
-		`../../../../../../css/component/battlegrounds/hero-selection/bgs-hero-warband-stats.component.scss`,
-		`../../../../../../css/component/battlegrounds/post-match/bgs-chart-warband-stats.component.scss`,
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-winrate-stats-for-hero.component.scss`,
 	],
 	template: `

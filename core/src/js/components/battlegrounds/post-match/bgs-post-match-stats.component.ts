@@ -84,22 +84,21 @@ declare let amplitude: any;
 								[visible]="selectedTab === 'hp-by-turn'"
 							>
 							</bgs-chart-hp>
-							<bgs-chart-warband-stats
-								class="stat"
-								[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
-								[player]="_panel?.player"
-								[globalStats]="_panel?.globalStats"
-								[stats]="_panel?.stats"
-							>
-							</bgs-chart-warband-stats>
 							<bgs-winrate-chart
 								class="stat"
 								[hidden]="selectedTab !== 'winrate-per-turn'"
 								[player]="_panel?.player"
 								[globalStats]="_panel?.globalStats"
 								[stats]="_panel?.stats"
-								[visible]="selectedTab === 'warband-total-stats-by-turn'"
 							>
+								<bgs-chart-warband-stats
+									class="stat"
+									[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
+									[player]="_panel?.player"
+									[globalStats]="_panel?.globalStats"
+									[stats]="_panel?.stats"
+								>
+								</bgs-chart-warband-stats>
 							</bgs-winrate-chart>
 							<bgs-chart-warband-composition
 								class="stat"
