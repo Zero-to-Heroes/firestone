@@ -191,8 +191,8 @@ export class GraphWithComparisonComponent {
 	lineChartColors: Color[];
 	opacity = 0;
 
-	@Input() communityLabel: string = 'Community';
-	@Input() yourLabel: string = 'You';
+	@Input() communityLabel = 'Community';
+	@Input() yourLabel = 'You';
 	@Input() communityTooltip: string;
 	@Input() yourTooltip: string;
 
