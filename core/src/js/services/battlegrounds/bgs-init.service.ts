@@ -112,7 +112,12 @@ export class BgsInitService {
 					id: 'bgs-category-personal-hero-details-' + heroStat.id,
 					name: this.cards.getCard(heroStat.id)?.name,
 					heroId: heroStat.id,
-					tabs: ['final-warbands', 'mmr', 'warband-stats'] as readonly BgsHeroStatsFilterId[],
+					tabs: [
+						'final-warbands',
+						'winrate-stats',
+						'mmr',
+						'warband-stats',
+					] as readonly BgsHeroStatsFilterId[],
 				} as BattlegroundsPersonalStatsHeroDetailsCategory),
 			);
 		return BattlegroundsPersonalHeroesCategory.create({

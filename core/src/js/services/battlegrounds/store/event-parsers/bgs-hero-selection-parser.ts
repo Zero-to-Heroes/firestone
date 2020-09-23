@@ -84,6 +84,7 @@ export class BgsHeroSelectionParser implements EventParser {
 						stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop1 || 0)) / stat.playerGamesPlayed,
 					tribesStat: stat.tribesStat,
 					warbandStats: stat.warbandStats,
+					combatWinrate: stat.combatWinrate,
 				}),
 			) || [];
 		console.log('created hero overview', heroOverview);

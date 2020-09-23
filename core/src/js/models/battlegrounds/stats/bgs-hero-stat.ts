@@ -17,6 +17,7 @@ export class BgsHeroStat {
 	readonly playerTop1Percentage: number;
 	readonly tribesStat: readonly { tribe: string; percent: number }[];
 	readonly warbandStats: readonly { turn: number; totalStats: number }[];
+	readonly combatWinrate: readonly { turn: number; winrate: number }[];
 
 	public static create(base: BgsHeroStat): BgsHeroStat {
 		return Object.assign(new BgsHeroStat(), base);

@@ -1,1 +1,1 @@
-export type BgsHeroStatsFilterId = 'final-warbands' | 'warband-stats' | 'mmr';
+export type BgsHeroStatsFilterId = 'final-warbands' | 'warband-stats' | 'mmr' | 'winrate-stats';

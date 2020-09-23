@@ -48,6 +48,13 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						[state]="_state"
 					>
 					</bgs-warband-stats-for-hero>
+					<bgs-winrate-stats-for-hero
+						class="stat"
+						[hidden]="selectedTab !== 'winrate-stats'"
+						[category]="_category"
+						[state]="_state"
+					>
+					</bgs-winrate-stats-for-hero>
 				</ng-container>
 			</div>
 		</div>
@@ -150,6 +157,8 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 				return 'Last warbands';
 			case 'warband-stats':
 				return 'Warband stats';
+			case 'winrate-stats':
+				return 'Combat winrate';
 		}
 	}
 
