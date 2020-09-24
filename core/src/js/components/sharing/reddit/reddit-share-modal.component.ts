@@ -8,17 +8,17 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { TwitterUserInfo } from '../../../models/mainwindow/twitter-user-info';
+import { RedditUserInfo } from '../../../models/mainwindow/reddit-user-info';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { ShareInfoComponent } from '../share-info.component';
+import { RedditShareInfoComponent } from './reddit-share-info.component';
 
 @Component({
-	selector: 'twitter-share-modal',
+	selector: 'reddit-share-modal',
 	styleUrls: [
 		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
-		`../../../../css/component/sharing/twitter/twitter-share-modal.component.scss`,
+		`../../../../css/component/sharing/reddit/reddit-share-modal.component.scss`,
 	],
 	template: `
 		<social-share-modal
@@ -31,33 +31,33 @@ import { ShareInfoComponent } from '../share-info.component';
 			(onLogoutRequest)="handleLogoutRequest()"
 		>
 			<img class="share-preview" [src]="imagePath" />
-			<share-info
+			<reddit-share-info
 				#shareInfo
 				class="share-main-body"
 				[loggedIn]="_socialUserInfo?.id != null"
 				(onValidChange)="handleValid($event)"
 			>
-			</share-info>
+			</reddit-share-info>
 		</social-share-modal>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitterShareModalComponent implements AfterViewInit {
-	@ViewChild('shareInfo', { static: false }) shareInfo: ShareInfoComponent;
+export class RedditShareModalComponent implements AfterViewInit {
+	@ViewChild('shareInfo', { static: false }) shareInfo: RedditShareInfoComponent;
 
 	@Input() fileLocation: string;
 	@Input() closeHandler: () => void;
 	imagePath: SafeResourceUrl;
 	sharing: boolean;
-	_socialUserInfo: TwitterUserInfo;
+	_socialUserInfo: RedditUserInfo;
 	dataValid: boolean;
 
-	@Input() set socialUserInfo(value: TwitterUserInfo) {
+	@Input() set socialUserInfo(value: RedditUserInfo) {
 		this._socialUserInfo = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('setting socialUserInfo in twitter modal', value, this);
+		console.log('setting socialUserInfo in reddit modal', value, this);
 	}
 
 	@Input() set base64Image(value: string) {
@@ -65,7 +65,6 @@ export class TwitterShareModalComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('imagePath', this.imagePath, this);
 	}
 
 	constructor(
@@ -75,8 +74,8 @@ export class TwitterShareModalComponent implements AfterViewInit {
 	) {}
 
 	ngAfterViewInit() {
-		this.ow.addTwitterLoginStateChangedListener(async info => {
-			this._socialUserInfo = await this.ow.getTwitterUserInfo();
+		this.ow.addRedditLoginStateChangedListener(async info => {
+			this._socialUserInfo = await this.ow.getRedditUserInfo();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -95,7 +94,7 @@ export class TwitterShareModalComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		await this.ow.twitterShare(this.fileLocation, this.shareInfo.textValue);
+		await this.ow.redditShare(this.fileLocation, this.shareInfo.title, this.shareInfo.subreddit);
 		this.sharing = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -103,10 +102,10 @@ export class TwitterShareModalComponent implements AfterViewInit {
 	}
 
 	handleLoginRequest() {
-		this.ow.twitterLogin();
+		this.ow.redditLogin();
 	}
 
 	handleLogoutRequest() {
-		this.ow.twitterLogout();
+		this.ow.redditLogout();
 	}
 }

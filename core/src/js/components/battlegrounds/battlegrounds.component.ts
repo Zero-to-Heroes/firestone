@@ -57,6 +57,8 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	private async init() {
 		await this.cards.initializeCardsDb();
 		this.cardsLoaded = true;
+		this.ow.getTwitterUserInfo();
+		this.ow.getRedditUserInfo();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

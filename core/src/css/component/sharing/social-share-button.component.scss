@@ -4,16 +4,17 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: #a89782;
 	margin-bottom: 5px;
-	--icon-color: #1b071f;
+	margin-left: 5px;
+	--icon-color: #a89782;
+	--icon-secondary-color: #1b071f;
 
 	&:hover:not(.disabled) {
-		background: #d9c3ab;
+		--icon-color: #d9c3ab;
 	}
 
 	&.disabled {
-		background: #a89782;
+		--icon-color: #a89782;
 		opacity: 0.5;
 	}
 }

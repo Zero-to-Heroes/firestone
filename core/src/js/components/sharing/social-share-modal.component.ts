@@ -21,7 +21,7 @@ import { capitalizeEachWord } from '../../services/utils';
 				</svg>
 			</button>
 			<div class="modal-title">
-				<ng-content select=".network-icon"></ng-content>
+				<div class="network-icon" [inlineSVG]="networkSvg"></div>
 				<div class="text">Share on {{ networkTitle }}</div>
 			</div>
 			<ng-content select=".share-preview"></ng-content>
@@ -33,7 +33,15 @@ import { capitalizeEachWord } from '../../services/utils';
 				></share-login>
 				<ng-content select=".share-main-body"></ng-content>
 			</section>
-			<button *ngIf="loggedIn" class="share-button" (mousedown)="share()">Share</button>
+			<button
+				*ngIf="loggedIn"
+				class="share-button"
+				(mousedown)="share()"
+				[ngClass]="{ 'invalid': !dataValid || !loggedIn }"
+				[helpTooltip]="!dataValid || !loggedIn ? 'Please fill the mandatory data' : null"
+			>
+				Share
+			</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,23 +53,28 @@ export class SocialShareModalComponent {
 
 	@Input() closeHandler: () => void;
 	@Input() buttonEnabled: boolean;
+	@Input() dataValid: boolean;
 
 	@Input() set socialUserInfo(value: SocialUserInfo) {
-		console.log('setting socialUserInfo in modal', value);
 		this._socialUserInfo = value;
 		if (this._socialUserInfo) {
+			this.networkSvg = `assets/svg/social/${this._socialUserInfo.network}.svg`;
 			this.networkTitle = capitalizeEachWord(this._socialUserInfo.network);
 			this.loggedIn = this._socialUserInfo.id != null;
 		}
+		console.log('setting socialUserInfo in modal', value, this);
 	}
 
 	_socialUserInfo: SocialUserInfo;
 	networkTitle: string;
+	networkSvg: string;
 	loggedIn: boolean;
 
 	share(text: string) {
-		console.log('handling share', text);
-		this.onShare.next(text);
+		if (this.dataValid && this.loggedIn) {
+			console.log('handling share', text);
+			this.onShare.next(text);
+		}
 	}
 
 	handleLoginRequest() {

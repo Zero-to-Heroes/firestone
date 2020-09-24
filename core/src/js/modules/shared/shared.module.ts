@@ -38,6 +38,7 @@ import { InfiniteScrollComponent } from '../../components/infinite-scroll.compon
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
+import { RedditShareInfoComponent } from '../../components/sharing/reddit/reddit-share-info.component';
 import { RedditShareModalComponent } from '../../components/sharing/reddit/reddit-share-modal.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
@@ -124,6 +125,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		TwitterShareButtonComponent,
 		RedditShareModalComponent,
 		RedditShareButtonComponent,
+		RedditShareInfoComponent,
 
 		AdsComponent,
 
@@ -151,6 +153,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		ConfirmationComponent,
 		BgsHeroSelectionTooltipComponent,
 		TwitterShareModalComponent,
+		RedditShareModalComponent,
 	],
 	exports: [
 		WindowWrapperComponent,
@@ -200,6 +203,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		TwitterShareButtonComponent,
 		RedditShareModalComponent,
 		RedditShareButtonComponent,
+		RedditShareInfoComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,

@@ -1,0 +1,21 @@
+.share-info {
+	display: flex;
+	flex-direction: column;
+}
+
+input,
+.login-message {
+	background: rgba(255, 255, 255, 0.12);
+	height: 45px;
+	padding: 10px;
+	border: none;
+	resize: none;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 12px;
+	line-height: normal;
+	color: #d9c3ab;
+	cursor: auto;
+	margin-bottom: 10px;
+}

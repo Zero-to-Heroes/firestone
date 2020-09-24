@@ -697,11 +697,19 @@ export class OverwolfService {
 		});
 	}
 
+	private twitterUserInfo: TwitterUserInfo = null;
+
 	public addTwitterLoginStateChangedListener(callback) {
-		overwolf.social.twitter.onLoginStateChanged.addListener(callback);
+		overwolf.social.twitter.onLoginStateChanged.addListener(async result => {
+			callback(result);
+			this.twitterUserInfo = await this.getTwitterUserInfo(true);
+		});
 	}
 
-	public async getTwitterUserInfo(): Promise<TwitterUserInfo> {
+	public async getTwitterUserInfo(forceRefresh = false): Promise<TwitterUserInfo> {
+		if (!forceRefresh && this.twitterUserInfo && this.twitterUserInfo.id) {
+			return this.twitterUserInfo;
+		}
 		return new Promise<TwitterUserInfo>(resolve => {
 			overwolf.social.twitter.getUserInfo(res => {
 				if (res.status !== 'success' || !res.userInfo) {
@@ -712,6 +720,7 @@ export class OverwolfService {
 						name: undefined,
 						screenName: undefined,
 					};
+					this.twitterUserInfo = result;
 					resolve(result);
 					return;
 				}
@@ -722,6 +731,7 @@ export class OverwolfService {
 					name: res.userInfo.name,
 					screenName: res.userInfo.screenName,
 				};
+				this.twitterUserInfo = result;
 				resolve(result);
 			});
 		});
@@ -747,15 +757,26 @@ export class OverwolfService {
 
 	public async twitterLogout() {
 		return new Promise<void>(resolve => {
-			overwolf.social.twitter.performLogout(info => resolve(info));
+			overwolf.social.twitter.performLogout(info => {
+				this.twitterUserInfo = null;
+				resolve(info);
+			});
 		});
 	}
 
+	private redditUserInfo: RedditUserInfo = null;
+
 	public addRedditLoginStateChangedListener(callback) {
-		overwolf.social.reddit.onLoginStateChanged.addListener(callback);
+		overwolf.social.reddit.onLoginStateChanged.addListener(async result => {
+			callback(result);
+			this.redditUserInfo = await this.getRedditUserInfo(true);
+		});
 	}
 
-	public async getRedditUserInfo(): Promise<RedditUserInfo> {
+	public async getRedditUserInfo(forceRefresh = false): Promise<RedditUserInfo> {
+		if (!forceRefresh && this.redditUserInfo && this.redditUserInfo.id) {
+			return this.redditUserInfo;
+		}
 		return new Promise<RedditUserInfo>(resolve => {
 			overwolf.social.reddit.getUserInfo(res => {
 				if (res.status !== 'success' || !res.userInfo) {
@@ -766,6 +787,7 @@ export class OverwolfService {
 						name: undefined,
 						screenName: undefined,
 					};
+					this.redditUserInfo = result;
 					resolve(result);
 					return;
 				}
@@ -776,6 +798,7 @@ export class OverwolfService {
 					name: res.userInfo.name,
 					screenName: res.userInfo.displayName,
 				};
+				this.redditUserInfo = result;
 				resolve(result);
 			});
 		});
@@ -802,7 +825,10 @@ export class OverwolfService {
 
 	public async redditLogout() {
 		return new Promise<void>(resolve => {
-			overwolf.social.reddit.performLogout(info => resolve(info));
+			overwolf.social.reddit.performLogout(info => {
+				this.redditUserInfo = null;
+				resolve(info);
+			});
 		});
 	}
 

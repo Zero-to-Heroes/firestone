@@ -24,11 +24,11 @@
 	margin-bottom: 15px;
 	padding: 0 10px;
 
-	::ng-deep .network-icon {
+	.network-icon {
 		width: 30px;
 		height: 30px;
-		background: var(--default-title-color);
-		--icon-color: #1b071f;
+		--icon-color: var(--default-title-color);
+		--icon-secondary-color: #1b071f;
 		margin-right: 15px;
 	}
 
@@ -84,7 +84,11 @@
 	margin-top: 10px;
 	margin-right: 10px;
 
-	&:hover {
+	&:hover(:not(.invalid)) {
 		background: #d9c3ab;
+	}
+
+	&.invalid {
+		opacity: 0.5;
 	}
 }

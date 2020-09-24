@@ -3,15 +3,15 @@ import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
-import { TwitterShareModalComponent } from './twitter-share-modal.component';
+import { RedditShareModalComponent } from './reddit-share-modal.component';
 
 declare var amplitude;
 
 @Component({
-	selector: 'twitter-share-button',
+	selector: 'reddit-share-button',
 	styleUrls: [
 		`../../../../css/component/sharing/social-share-button.component.scss`,
-		`../../../../css/component/sharing/twitter/twitter-share-button.component.scss`,
+		`../../../../css/component/sharing/reddit/reddit-share-button.component.scss`,
 	],
 	template: `
 		<div
@@ -23,7 +23,7 @@ declare var amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TwitterShareButtonComponent extends SocialShareButtonComponent {
+export class RedditShareButtonComponent extends SocialShareButtonComponent {
 	constructor(
 		protected readonly ow: OverwolfService,
 		protected readonly overlay: Overlay,
@@ -32,24 +32,24 @@ export class TwitterShareButtonComponent extends SocialShareButtonComponent {
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(ow, overlay, elementRef, overlayPositionBuilder, cdr);
-		this.network = 'twitter';
+		this.network = 'reddit';
 	}
 
 	protected async doShare(screenshotLocation: string, base64Image: string) {
-		const portal = new ComponentPortal(TwitterShareModalComponent);
+		const portal = new ComponentPortal(RedditShareModalComponent);
 
 		const modalRef = this.overlayRef.attach(portal);
 		modalRef.instance.base64Image = base64Image;
 		modalRef.instance.closeHandler = () => this.overlayRef.detach();
 		modalRef.instance.fileLocation = screenshotLocation;
-		console.log('instanciated modalRef', null, modalRef);
+		console.log('instanciated modalRef reddit', null, modalRef);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 
-		const userInfo = await this.ow.getTwitterUserInfo();
+		const userInfo = await this.ow.getRedditUserInfo();
 		modalRef.instance.socialUserInfo = userInfo;
-		console.log('instanciated modalRef 2', userInfo, modalRef);
+		console.log('instanciated modalRef reddit 2', userInfo, modalRef);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

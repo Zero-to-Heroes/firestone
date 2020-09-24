@@ -62,9 +62,11 @@ export class SocialShareButtonComponent implements AfterViewInit {
 			});
 			const [screenshotLocation, base64Image] = await this.onSocialClick();
 			await this.doShare(screenshotLocation, base64Image);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			setTimeout(() => {
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			}, 20);
 		}, 200);
 	}
 
