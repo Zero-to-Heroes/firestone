@@ -1,26 +1,25 @@
 import { Overlay, OverlayPositionBuilder } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
-import { OverwolfService } from '../../services/overwolf.service';
+import { OverwolfService } from '../../../services/overwolf.service';
+import { TwitterShareModalComponent } from '../twitter-share-modal.component';
 import { SocialShareButtonComponent } from './social-share-button.component';
-import { TwitterShareModalComponent } from './twitter-share-modal.component';
 
 declare var amplitude;
 
 @Component({
 	selector: 'twitter-share-button',
 	styleUrls: [
-		`../../../css/component/sharing/social-share-button.component.scss`,
-		`../../../css/component/sharing/twitter-share-button.component.scss`,
+		`../../../../css/component/sharing/share-button/social-share-button.component.scss`,
+		`../../../../css/component/sharing/share-button/twitter-share-button.component.scss`,
 	],
 	template: `
-		<div class="social-share twitter" helpTooltip="Share current screen on Twitter" (mousedown)="startSharing()">
-			<i>
-				<svg>
-					<use xlink:href="assets/svg/sprite.svg#twitter_share" />
-				</svg>
-			</i>
-		</div>
+		<div
+			class="social-share {{ _network }}"
+			helpTooltip="Share on {{ networkTitle }}"
+			[inlineSVG]="networkSvg"
+			(mousedown)="startSharing()"
+		></div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -33,7 +32,6 @@ export class TwitterShareButtonComponent extends SocialShareButtonComponent {
 		protected readonly cdr: ChangeDetectorRef,
 	) {
 		super(ow, overlay, elementRef, overlayPositionBuilder, cdr);
-		console.log('setting network');
 		this.network = 'twitter';
 	}
 

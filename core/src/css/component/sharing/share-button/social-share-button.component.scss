@@ -6,6 +6,7 @@
 	justify-content: center;
 	background: #a89782;
 	margin-bottom: 5px;
+	--icon-color: #1b071f;
 
 	&:hover:not(.disabled) {
 		background: #d9c3ab;
@@ -14,11 +15,5 @@
 	&.disabled {
 		background: #a89782;
 		opacity: 0.5;
-	}
-
-	i {
-		width: 21px;
-		height: 16px;
-		--icon-color: #1b071f;
 	}
 }

@@ -8,22 +8,15 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '../../services/overwolf.service';
-import { capitalizeFirstLetter } from '../../services/utils';
+import { OverwolfService } from '../../../services/overwolf.service';
+import { capitalizeFirstLetter } from '../../../services/utils';
 
 declare var amplitude;
 
 @Component({
 	selector: 'social-share-button',
-	styleUrls: [`../../../css/component/sharing/social-share-button.component.scss`],
-	template: `
-		<div
-			class="social-share {{ _network }}"
-			helpTooltip="Share on {{ networkTitle }}"
-			[inlineSVG]="networkSvg"
-			(mousedown)="startSharing()"
-		></div>
-	`,
+	styleUrls: [`../../../../css/component/sharing/share-button/social-share-button.component.scss`],
+	template: ``,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialShareButtonComponent implements AfterViewInit {
