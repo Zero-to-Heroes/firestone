@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'social-shares',

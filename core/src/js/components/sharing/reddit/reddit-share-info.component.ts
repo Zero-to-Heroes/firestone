@@ -29,7 +29,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class RedditShareInfoComponent {
 	@Output() onValidChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 	title: string;
-	subreddit: string = 'BobsTavern';
+	subreddit = 'BobsTavern';
 
 	@Input() loggedIn: boolean;
 

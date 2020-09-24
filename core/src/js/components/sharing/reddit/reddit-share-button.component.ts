@@ -5,7 +5,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 import { RedditShareModalComponent } from './reddit-share-modal.component';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'reddit-share-button',

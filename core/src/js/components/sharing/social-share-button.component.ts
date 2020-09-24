@@ -11,7 +11,7 @@ import {
 import { OverwolfService } from '../../services/overwolf.service';
 import { capitalizeFirstLetter } from '../../services/utils';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'social-share-button',
