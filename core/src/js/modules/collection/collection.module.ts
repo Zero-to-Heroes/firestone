@@ -44,6 +44,7 @@ import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/batt
 import { BattlegroundsPersonalStatsRatingComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
 import { BattlegroundsPersonalStatsStatsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component';
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
+import { BgsHeroDetailedStatsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
 import { BgsWarbandStatsForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-warband-stats-for-hero.component';
@@ -202,6 +203,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsMmrEvolutionForHeroComponent,
 		BgsWarbandStatsForHeroComponent,
 		BgsWinrateStatsForHeroComponent,
+		BgsHeroDetailedStatsComponent,
 
 		FtueComponent,
 	],

@@ -60,7 +60,7 @@ export class BgsWinrateStatsForHeroComponent {
 			return this._state.battlegrounds.stats.heroStats
 				.find(stat => stat.id === this._category.heroId)
 				?.combatWinrate?.filter(stat => stat.turn > 0)
-				.map(stat => {
+				?.map(stat => {
 					return {
 						turn: stat.turn,
 						value: stat.winrate,
@@ -70,7 +70,7 @@ export class BgsWinrateStatsForHeroComponent {
 		};
 
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._state.battlegrounds?.stats?.heroStats) {
+			if (!this._state.battlegrounds?.lastHeroPostMatchStats) {
 				return [];
 			}
 

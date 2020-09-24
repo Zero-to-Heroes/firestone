@@ -7,6 +7,22 @@
 	flex-shrink: 0;
 	padding-right: 10px;
 
+	::ng-deep bgs-player-capsule {
+		height: 28%;
+
+		.player-overview .player-info {
+			padding-left: 5%;
+		}
+
+		.background-additions {
+			margin-left: 11%;
+		}
+
+		.player-overview > .portrait {
+			width: 17%;
+		}
+	}
+
 	.hero-stats {
 		width: 30%;
 		flex-grow: 0;

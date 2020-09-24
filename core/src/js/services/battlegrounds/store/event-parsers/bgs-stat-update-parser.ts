@@ -91,17 +91,21 @@ export class BgsStatUpdateParser implements EventParser {
 					playerTop4:
 						playerPopularity === 0
 							? 0
-							: bgsStatsForCurrentPatch
-									.filter(stat => stat.playerCardId === heroStat.id)
-									.map(stat => parseInt(stat.additionalResult))
-									.filter(position => position <= 4).length / playerGamesPlayed,
+							: (100 *
+									bgsStatsForCurrentPatch
+										.filter(stat => stat.playerCardId === heroStat.id)
+										.map(stat => parseInt(stat.additionalResult))
+										.filter(position => position <= 4).length) /
+							  playerGamesPlayed,
 					playerTop1:
 						playerPopularity === 0
 							? 0
-							: bgsStatsForCurrentPatch
-									.filter(stat => stat.playerCardId === heroStat.id)
-									.map(stat => parseInt(stat.additionalResult))
-									.filter(position => position == 1).length / playerGamesPlayed,
+							: (100 *
+									bgsStatsForCurrentPatch
+										.filter(stat => stat.playerCardId === heroStat.id)
+										.map(stat => parseInt(stat.additionalResult))
+										.filter(position => position == 1).length) /
+							  playerGamesPlayed,
 				} as BgsHeroStat);
 			}) ||
 			[] ||

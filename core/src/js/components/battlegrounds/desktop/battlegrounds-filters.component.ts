@@ -172,7 +172,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		] as readonly TimeFilterOption[];
 		this.activeTimeFilter = this._state.activeTimeFilter;
 		// console.log('set time filter', this.activeTimeFilter, this.timeFilterOptions);
-		this.placeholder = this.timeFilterOptions.find(option => option.value === this.activeTimeFilter).label;
+		this.placeholder = this.timeFilterOptions.find(option => option.value === this.activeTimeFilter)?.label;
 
 		this.updateHeroSortFilter();
 		return;
@@ -201,7 +201,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.activeHeroSortFilter = this._state.activeHeroSortFilter;
 		this.heroSortPlaceholder = this.heroSortFilterOptions.find(
 			option => option.value === this.activeHeroSortFilter,
-		).label;
+		)?.label;
 	}
 }
 

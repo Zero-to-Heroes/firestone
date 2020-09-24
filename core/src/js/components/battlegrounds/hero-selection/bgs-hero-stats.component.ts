@@ -44,7 +44,7 @@ declare let amplitude: any;
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ buildPercents(_hero?.playerTop4Percentage) }})
+					({{ buildPercents(_hero?.playerTop4) }})
 				</div>
 			</div>
 			<div class="entry">
@@ -61,7 +61,7 @@ declare let amplitude: any;
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
 				>
-					({{ buildPercents(_hero?.playerTop1Percentage) }})
+					({{ buildPercents(_hero?.playerTop1) }})
 				</div>
 			</div>
 			<div class="entry">

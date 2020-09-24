@@ -77,11 +77,11 @@ export class BgsHeroSelectionParser implements EventParser {
 					playerPopularity: stat.playerPopularity,
 					playerGamesPlayed: stat.playerGamesPlayed,
 					playerTop4: stat.playerTop4 || 0,
-					playerTop4Percentage:
-						stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop4 || 0)) / stat.playerGamesPlayed,
+					// playerTop4Percentage:
+					// 	stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop4 || 0)) / stat.playerGamesPlayed,
 					playerTop1: stat.playerTop1 || 0,
-					playerTop1Percentage:
-						stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop1 || 0)) / stat.playerGamesPlayed,
+					// playerTop1Percentage:
+					// 	stat.playerGamesPlayed === 0 ? 0 : (100 * (stat.playerTop1 || 0)) / stat.playerGamesPlayed,
 					tribesStat: stat.tribesStat,
 					warbandStats: stat.warbandStats,
 					combatWinrate: stat.combatWinrate,

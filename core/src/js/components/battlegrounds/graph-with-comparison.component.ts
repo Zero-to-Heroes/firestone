@@ -111,7 +111,7 @@ export class GraphWithComparisonComponent {
 			callbacks: {
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
 					// console.log('beforeBody', item, data);
-					return data.datasets.map(dataset => dataset?.label || '');
+					return data.datasets?.map(dataset => dataset?.label || '') || [];
 				},
 			},
 			custom: function(tooltip: ChartTooltipModel) {
@@ -239,11 +239,11 @@ export class GraphWithComparisonComponent {
 		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter(turn => turn > 0).map(turn => '' + turn);
 		this.lineChartData = [
 			{
-				data: filledCommunity.map(stat => stat.value),
+				data: filledCommunity?.map(stat => stat.value) || [],
 				label: this.communityLabel,
 			},
 			{
-				data: filledYour.map(stat => stat.value),
+				data: filledYour?.map(stat => stat.value) || [],
 				label: this.yourLabel,
 			} as any,
 		];
