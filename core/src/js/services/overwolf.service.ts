@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { RedditUserInfo } from '../models/mainwindow/reddit-user-info';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
 import { ActiveSubscriptionPlan } from '../models/overwolf/profile/active-subscription-plan';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
@@ -129,10 +130,6 @@ export class OverwolfService {
 
 	public removeVideoCaptureSettingsChangedListener(listener: (message: any) => void): void {
 		overwolf.settings.OnVideoCaptureSettingsChanged.removeListener(listener);
-	}
-
-	public addTwitterLoginStateChangedListener(callback) {
-		overwolf.social.twitter.onLoginStateChanged.addListener(callback);
 	}
 
 	public addHotKeyPressedListener(hotkey: string, callback): any {
@@ -700,6 +697,10 @@ export class OverwolfService {
 		});
 	}
 
+	public addTwitterLoginStateChangedListener(callback) {
+		overwolf.social.twitter.onLoginStateChanged.addListener(callback);
+	}
+
 	public async getTwitterUserInfo(): Promise<TwitterUserInfo> {
 		return new Promise<TwitterUserInfo>(resolve => {
 			overwolf.social.twitter.getUserInfo(res => {
@@ -747,6 +748,61 @@ export class OverwolfService {
 	public async twitterLogout() {
 		return new Promise<void>(resolve => {
 			overwolf.social.twitter.performLogout(info => resolve(info));
+		});
+	}
+
+	public addRedditLoginStateChangedListener(callback) {
+		overwolf.social.reddit.onLoginStateChanged.addListener(callback);
+	}
+
+	public async getRedditUserInfo(): Promise<RedditUserInfo> {
+		return new Promise<RedditUserInfo>(resolve => {
+			overwolf.social.reddit.getUserInfo(res => {
+				if (res.status !== 'success' || !res.userInfo) {
+					const result: RedditUserInfo = {
+						network: 'reddit',
+						avatarUrl: undefined,
+						id: undefined,
+						name: undefined,
+						screenName: undefined,
+					};
+					resolve(result);
+					return;
+				}
+				const result: RedditUserInfo = {
+					network: 'reddit',
+					avatarUrl: res.userInfo.avatar,
+					id: res.userInfo.name,
+					name: res.userInfo.name,
+					screenName: res.userInfo.displayName,
+				};
+				resolve(result);
+			});
+		});
+	}
+
+	public async redditShare(filePathOnDisk: string, message: string, subreddit: string): Promise<boolean> {
+		return new Promise<boolean>(resolve => {
+			const shareParam = {
+				file: filePathOnDisk,
+				title: message,
+				subreddit: subreddit,
+			};
+			console.log('[overwolf-service] sharing on Reddit', shareParam);
+			overwolf.social.reddit.share(shareParam, (res, error) => {
+				console.log('[overwolf-service] uploaded file to reddit', res, error);
+				resolve(res);
+			});
+		});
+	}
+
+	public async redditLogin() {
+		overwolf.social.reddit.performUserLogin();
+	}
+
+	public async redditLogout() {
+		return new Promise<void>(resolve => {
+			overwolf.social.reddit.performLogout(info => resolve(info));
 		});
 	}
 

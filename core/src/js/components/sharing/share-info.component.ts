@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -10,7 +10,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<div class="login-message" *ngIf="!loggedIn">
 				Please use the button on the left to login before posting a message
 			</div>
-			<button *ngIf="loggedIn" (mousedown)="share()">Share</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,11 +19,5 @@ export class ShareInfoComponent {
 
 	@Input() loggedIn: boolean;
 
-	@Output() onShare: EventEmitter<string> = new EventEmitter<string>();
-
 	constructor(private ow: OverwolfService) {}
-
-	share() {
-		this.onShare.next(this.textValue);
-	}
 }

@@ -44,6 +44,7 @@ export class TwitterShareButtonComponent extends SocialShareButtonComponent {
 		modalRef.instance.base64Image = base64Image;
 		modalRef.instance.socialUserInfo = userInfo;
 		modalRef.instance.closeHandler = () => this.overlayRef.detach();
+		console.log('instanciated modalRef'), modalRef;
 
 		this.positionStrategy.apply();
 	}

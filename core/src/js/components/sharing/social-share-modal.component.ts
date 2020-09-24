@@ -11,7 +11,7 @@ import { capitalizeEachWord } from '../../services/utils';
 		`../../../css/component/sharing/social-share-modal.component.scss`,
 	],
 	template: `
-		<div class="social-share-modal" *ngIf="_socialUserInfo">
+		<div class="social-share-modal">
 			<button class="i-30 close-button" (mousedown)="closeModal()">
 				<svg class="svg-icon-fill">
 					<use
@@ -31,8 +31,9 @@ import { capitalizeEachWord } from '../../services/utils';
 					(onLoginRequest)="handleLoginRequest()"
 					(onLogoutRequest)="handleLogoutRequest()"
 				></share-login>
-				<share-info [loggedIn]="_socialUserInfo.id != null" (onShare)="handleShare($event)"> </share-info>
+				<ng-content select=".share-main-body"></ng-content>
 			</section>
+			<button *ngIf="loggedIn" class="share-button" (mousedown)="share()">Share</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,13 +51,16 @@ export class SocialShareModalComponent {
 		this._socialUserInfo = value;
 		if (this._socialUserInfo) {
 			this.networkTitle = capitalizeEachWord(this._socialUserInfo.network);
+			this.loggedIn = this._socialUserInfo.id != null;
 		}
 	}
 
 	_socialUserInfo: SocialUserInfo;
 	networkTitle: string;
+	loggedIn: boolean;
 
-	handleShare(text: string) {
+	share(text: string) {
+		console.log('handling share', text);
 		this.onShare.next(text);
 	}
 

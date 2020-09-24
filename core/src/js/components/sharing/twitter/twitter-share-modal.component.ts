@@ -1,7 +1,16 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	ViewChild,
+	ViewRef,
+} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { TwitterUserInfo } from '../../../models/mainwindow/twitter-user-info';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { ShareInfoComponent } from '../share-info.component';
 
 @Component({
 	selector: 'twitter-share-modal',
@@ -16,7 +25,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			[socialUserInfo]="socialUserInfo"
 			[closeHandler]="closeHandler"
 			[buttonEnabled]="!sharing"
-			(onShare)="handleShare($event)"
+			(onShare)="handleShare()"
 			(onLoginRequest)="handleLoginRequest()"
 			(onLogoutRequest)="handleLogoutRequest()"
 		>
@@ -28,11 +37,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</i>
 			</div>
 			<img class="share-preview" [src]="imagePath" />
+			<share-info #shareInfo class="share-main-body" [loggedIn]="socialUserInfo.id != null"> </share-info>
 		</social-share-modal>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TwitterShareModalComponent implements AfterViewInit {
+	@ViewChild('shareInfo', { static: false }) shareInfo: ShareInfoComponent;
+
 	@Input() fileLocation: string;
 	@Input() socialUserInfo: TwitterUserInfo;
 	@Input() closeHandler: () => void;
@@ -41,6 +53,7 @@ export class TwitterShareModalComponent implements AfterViewInit {
 
 	@Input() set base64Image(value: string) {
 		this.imagePath = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/jpg;base64,${value}`);
+		console.log('imagePath', this.imagePath);
 	}
 
 	constructor(
@@ -58,12 +71,12 @@ export class TwitterShareModalComponent implements AfterViewInit {
 		});
 	}
 
-	async handleShare(text: string) {
+	async handleShare() {
 		this.sharing = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		await this.ow.twitterShare(this.fileLocation, text);
+		await this.ow.twitterShare(this.fileLocation, this.shareInfo.textValue);
 		this.sharing = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -37,6 +37,8 @@ import { HotkeyComponent } from '../../components/hotkey.component';
 import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
+import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
+import { RedditShareModalComponent } from '../../components/sharing/reddit/reddit-share-modal.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
 import { SocialShareButtonComponent } from '../../components/sharing/social-share-button.component';
@@ -115,11 +117,13 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		SocialSharesComponent,
 		SocialShareModalComponent,
-		TwitterShareModalComponent,
 		ShareLoginComponent,
 		ShareInfoComponent,
 		SocialShareButtonComponent,
+		TwitterShareModalComponent,
 		TwitterShareButtonComponent,
+		RedditShareModalComponent,
+		RedditShareButtonComponent,
 
 		AdsComponent,
 
@@ -189,11 +193,13 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		SocialSharesComponent,
 		SocialShareModalComponent,
-		TwitterShareModalComponent,
 		ShareLoginComponent,
 		ShareInfoComponent,
 		SocialShareButtonComponent,
+		TwitterShareModalComponent,
 		TwitterShareButtonComponent,
+		RedditShareModalComponent,
+		RedditShareButtonComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
