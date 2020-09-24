@@ -39,8 +39,10 @@ import { LoadingStateComponent } from '../../components/loading-state.component'
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
+import { SocialShareButtonComponent } from '../../components/sharing/social-share-button.component';
 import { SocialShareModalComponent } from '../../components/sharing/social-share-modal.component';
 import { SocialSharesComponent } from '../../components/sharing/social-shares.component';
+import { TwitterShareButtonComponent } from '../../components/sharing/twitter-share-button.component';
 import { TwitterShareModalComponent } from '../../components/sharing/twitter-share-modal.component';
 import { BuffInfoComponent } from '../../components/tooltip/buff-info.component';
 import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
@@ -116,6 +118,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		TwitterShareModalComponent,
 		ShareLoginComponent,
 		ShareInfoComponent,
+		SocialShareButtonComponent,
+		TwitterShareButtonComponent,
 
 		AdsComponent,
 
@@ -188,6 +192,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		TwitterShareModalComponent,
 		ShareLoginComponent,
 		ShareInfoComponent,
+		SocialShareButtonComponent,
+		TwitterShareButtonComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
