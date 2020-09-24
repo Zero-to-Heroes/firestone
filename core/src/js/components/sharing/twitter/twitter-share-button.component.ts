@@ -2,16 +2,16 @@ import { Overlay, OverlayPositionBuilder } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { TwitterShareModalComponent } from '../twitter-share-modal.component';
-import { SocialShareButtonComponent } from './social-share-button.component';
+import { SocialShareButtonComponent } from '../social-share-button.component';
+import { TwitterShareModalComponent } from './twitter-share-modal.component';
 
 declare var amplitude;
 
 @Component({
 	selector: 'twitter-share-button',
 	styleUrls: [
-		`../../../../css/component/sharing/share-button/social-share-button.component.scss`,
-		`../../../../css/component/sharing/share-button/twitter-share-button.component.scss`,
+		`../../../../css/component/sharing/social-share-button.component.scss`,
+		`../../../../css/component/sharing/twitter/twitter-share-button.component.scss`,
 	],
 	template: `
 		<div

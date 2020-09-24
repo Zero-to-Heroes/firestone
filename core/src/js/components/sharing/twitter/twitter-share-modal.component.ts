@@ -1,15 +1,15 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { TwitterUserInfo } from '../../models/mainwindow/twitter-user-info';
-import { OverwolfService } from '../../services/overwolf.service';
+import { TwitterUserInfo } from '../../../models/mainwindow/twitter-user-info';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'twitter-share-modal',
 	styleUrls: [
-		`../../../css/global/scrollbar.scss`,
-		`../../../css/component/controls/controls.scss`,
-		`../../../css/component/controls/control-close.component.scss`,
-		`../../../css/component/sharing/twitter-share-modal.component.scss`,
+		`../../../../css/global/scrollbar.scss`,
+		`../../../../css/component/controls/controls.scss`,
+		`../../../../css/component/controls/control-close.component.scss`,
+		`../../../../css/component/sharing/twitter/twitter-share-modal.component.scss`,
 	],
 	template: `
 		<social-share-modal

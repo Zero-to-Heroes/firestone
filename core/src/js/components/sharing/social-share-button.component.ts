@@ -8,14 +8,14 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { capitalizeFirstLetter } from '../../../services/utils';
+import { OverwolfService } from '../../services/overwolf.service';
+import { capitalizeFirstLetter } from '../../services/utils';
 
 declare var amplitude;
 
 @Component({
 	selector: 'social-share-button',
-	styleUrls: [`../../../../css/component/sharing/share-button/social-share-button.component.scss`],
+	styleUrls: [`../../../css/component/sharing/social-share-button.component.scss`],
 	template: ``,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
