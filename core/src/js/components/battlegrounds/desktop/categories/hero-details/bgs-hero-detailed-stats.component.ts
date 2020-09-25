@@ -24,6 +24,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 							'positive': globalAveragePositionDelta > 0,
 							'negative': globalAveragePositionDelta < 0
 						}"
+						helpTooltip="Delta vs global (7000+ MMR - green means you are doing better than the average)"
 					>
 						{{ buildValue(globalAveragePositionDelta) }}
 					</div>
@@ -37,6 +38,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 							'positive': globalTop1Delta > 0,
 							'negative': globalTop1Delta < 0
 						}"
+						helpTooltip="Delta vs global (7000+ MMR - green means you are doing better than the average)"
 					>
 						{{ buildValue(globalTop1Delta) }}
 					</div>
@@ -50,6 +52,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 							'positive': globalTop4Delta > 0,
 							'negative': globalTop4Delta < 0
 						}"
+						helpTooltip="Delta vs global (7000+ MMR - green means you are doing better than the average)"
 					>
 						{{ buildValue(globalTop4Delta) }}
 					</div>
