@@ -1,6 +1,4 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
-import { Map } from 'immutable';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
@@ -34,7 +32,12 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					</li>
 				</ul>
 				<ng-container>
-					<bgs-last-warbands class="stat" [state]="_state" [hidden]="selectedTab !== 'final-warbands'">
+					<bgs-last-warbands
+						class="stat"
+						[state]="_state"
+						[category]="_category"
+						[hidden]="selectedTab !== 'final-warbands'"
+					>
 					</bgs-last-warbands>
 					<bgs-mmr-evolution-for-hero
 						class="stat"
@@ -73,8 +76,6 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 	tabs: readonly BgsHeroStatsFilterId[];
 	selectedTab: BgsHeroStatsFilterId;
 
-	lastKnownBoards: readonly KnownBoard[];
-
 	@Input() set category(value: BattlegroundsPersonalStatsHeroDetailsCategory) {
 		if (value === this._category) {
 			return;
@@ -84,6 +85,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 	}
 
 	@Input() set state(value: MainWindowState) {
+		console.log('setting state in hero-details', value);
 		if (value === this._state) {
 			return;
 		}
@@ -108,11 +110,13 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 	}
 	private updateValues() {
 		if (!this._state || !this._category || !this._navigation) {
+			console.log('not updating value');
 			return;
 		}
 
 		this.heroStat = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === this._category.heroId);
 		if (!this.heroStat) {
+			console.log('not updating hero stat');
 			return;
 		}
 		// console.log('setting stat', this._category.heroId, this.heroStat, this._state, this._category);
@@ -124,31 +128,6 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		this.tabs = this._category.tabs;
 		this.selectedTab = this._navigation.selectedPersonalHeroStatsTab;
 		// console.log('selectedTab', this.selectedTab, this._navigation);
-
-		this.lastKnownBoards = this._state.battlegrounds.lastHeroPostMatchStats
-			? this._state.battlegrounds.lastHeroPostMatchStats
-					.filter(postMatch => postMatch?.stats?.boardHistory && postMatch?.stats?.boardHistory.length > 0)
-					.map(postMatch => {
-						const bgsBoard = postMatch?.stats?.boardHistory[postMatch?.stats?.boardHistory.length - 1];
-						const boardEntities = bgsBoard.board.map(boardEntity =>
-							boardEntity instanceof Entity || boardEntity.tags instanceof Map
-								? Entity.create(new Entity(), boardEntity as EntityDefinition)
-								: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
-						) as readonly Entity[];
-						const review = this._state.stats.gameStats.stats.find(
-							matchStat => matchStat.reviewId === postMatch.reviewId,
-						);
-						const title =
-							review && review.additionalResult
-								? `You finished ${this.getFinishPlace(parseInt(review.additionalResult))} place`
-								: `Last board`;
-						return {
-							entities: boardEntities,
-							title: title,
-						} as KnownBoard;
-					})
-			: null;
-		// console.log('lastKnownBoards', this.lastKnownBoards);
 	}
 
 	getLabel(tab: BgsHeroStatsFilterId) {
@@ -167,22 +146,4 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 	selectTab(tab: BgsHeroStatsFilterId) {
 		this.stateUpdater.next(new SelectBattlegroundsPersonalStatsHeroTabEvent(tab));
 	}
-
-	private getFinishPlace(finalPlace: number): string {
-		switch (finalPlace) {
-			case 1:
-				return '1st';
-			case 2:
-				return '2nd';
-			case 3:
-				return '3rd';
-			default:
-				return finalPlace + 'th';
-		}
-	}
-}
-
-interface KnownBoard {
-	readonly entities: readonly Entity[];
-	readonly title: string;
 }

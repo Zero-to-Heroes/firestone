@@ -13,6 +13,6 @@ export class SelectBattlegroundsPersonalStatsHeroTabEvent implements MainWindowS
 	}
 
 	public isNavigationEvent(): boolean {
-		return true;
+		return false;
 	}
 }

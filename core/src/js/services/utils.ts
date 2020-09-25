@@ -36,3 +36,16 @@ export const capitalizeEachWord = (input: string): string => {
 export const isCharLowerCase = (character: string): boolean => {
 	return character === character.toLowerCase() && character !== character.toUpperCase();
 };
+
+export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]): boolean => {
+	if (a == null && b == null) {
+		return true;
+	}
+	if ((a == null && b != null) || (a != null && b == null)) {
+		return false;
+	}
+	if (!Array.isArray(a) || !Array.isArray(b)) {
+		return false;
+	}
+	return a.length === b.length && a.every((el, ix) => el === b[ix]);
+};

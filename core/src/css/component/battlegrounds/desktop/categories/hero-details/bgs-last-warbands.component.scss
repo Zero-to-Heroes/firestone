@@ -32,3 +32,11 @@
 		}
 	}
 }
+
+::ng-deep with-loading {
+	display: flex;
+
+	.loading-state .state-container {
+		margin: auto;
+	}
+}

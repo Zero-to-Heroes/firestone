@@ -1,54 +1,92 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { AllCardsService, Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 import { MinionStat } from '../../../../../models/battlegrounds/post-match/minion-stat';
+import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { MainWindowStoreEvent } from '../../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../../services/overwolf.service';
+import { arraysEqual } from '../../../../../services/utils';
 import { normalizeCardId } from '../../../post-match/card-utils';
 
 @Component({
 	selector: 'bgs-last-warbands',
 	styleUrls: [
-		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,
 		`../../../../../../css/global/components-global.scss`,
+		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component.scss`,
 	],
 	template: `
 		<div class="bgs-last-warbands">
-			<div class="boards" *ngIf="lastKnownBoards" scrollable>
-				<bgs-board
-					*ngFor="let board of lastKnownBoards"
-					[entities]="board.entities"
-					[customTitle]="board.title"
-					[minionStats]="board.minionStats"
-					[finalBoard]="true"
-					[useFullWidth]="true"
-					[debug]="false"
-				></bgs-board>
-			</div>
-			<div class="empty-state" *ngIf="!lastKnownBoards">
-				Loading last known boards
-			</div>
+			<with-loading
+				[isLoading]="loading || !lastKnownBoards"
+				mainTitle="We're loading the last known final warbands"
+				svgName="ftue/battlegrounds"
+			>
+				<div class="boards" scrollable *ngIf="lastKnownBoards && lastKnownBoards.length > 0">
+					<bgs-board
+						*ngFor="let board of lastKnownBoards"
+						[entities]="board.entities"
+						[customTitle]="board.title"
+						[minionStats]="board.minionStats"
+						[finalBoard]="true"
+						[useFullWidth]="true"
+						[debug]="false"
+					></bgs-board>
+				</div>
+				<battlegrounds-empty-state
+					subtitle="Start playing Battlegrounds with this hero to collect some information"
+				></battlegrounds-empty-state>
+			</with-loading>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLastWarbandsComponent implements AfterViewInit {
 	_state: MainWindowState;
+	_category: BattlegroundsPersonalStatsHeroDetailsCategory;
 
 	lastKnownBoards: readonly KnownBoard[];
+	loading: boolean = true;
+	visible: boolean = false;
+
+	private lastReviews: readonly string[];
 
 	@Input() set state(value: MainWindowState) {
+		//console.log('setting stats', value, this._state);
 		if (value === this._state) {
 			return;
 		}
+		// this.lastKnownBoards = undefined;
 		this._state = value;
 		this.updateValues();
 	}
 
+	@Input() set category(value: BattlegroundsPersonalStatsHeroDetailsCategory) {
+		//console.log('setting category', value, this._category);
+		if (value?.heroId === this._category?.heroId) {
+			return;
+		}
+		if (value) {
+			this.loading = true;
+		}
+		this._category = value;
+	}
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly allCards: AllCardsService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -58,45 +96,68 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 		if (!this._state) {
 			return;
 		}
-		this.lastKnownBoards = this._state.battlegrounds.lastHeroPostMatchStats
+		const lastStats = this._state.battlegrounds.lastHeroPostMatchStats
 			? this._state.battlegrounds.lastHeroPostMatchStats
 					.filter(postMatch => postMatch?.stats?.boardHistory && postMatch?.stats?.boardHistory.length > 0)
-					.map(postMatch => {
-						const bgsBoard = postMatch?.stats?.boardHistory[postMatch?.stats?.boardHistory.length - 1];
-						const boardEntities = bgsBoard.board.map(boardEntity =>
-							boardEntity instanceof Entity || boardEntity.tags instanceof Map
-								? Entity.create(new Entity(), boardEntity as EntityDefinition)
-								: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
-						) as readonly Entity[];
+					.slice(0, 5)
+			: [];
+		const lastReviews: readonly string[] = lastStats.map(stat => stat.reviewId);
+		if (arraysEqual(lastReviews, this.lastReviews)) {
+			//console.log('showing the same data, not recomputing it', lastReviews, this.lastReviews);
+			this.loading = false;
+			return;
+		}
+		this.loading = true;
+		//console.log('last known boards', this.lastKnownBoards, this.lastReviews);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		//console.log('showing different data, recomputing it', lastReviews, this.lastReviews);
+		this.lastKnownBoards = lastStats.map(postMatch => {
+			const bgsBoard = postMatch?.stats?.boardHistory[postMatch?.stats?.boardHistory.length - 1];
+			const boardEntities = bgsBoard.board.map(boardEntity =>
+				boardEntity instanceof Entity || boardEntity.tags instanceof Map
+					? Entity.create(new Entity(), boardEntity as EntityDefinition)
+					: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
+			) as readonly Entity[];
 
-						const review = this._state.stats.gameStats.stats.find(
-							matchStat => matchStat.reviewId === postMatch.reviewId,
-						);
+			const review = this._state.stats.gameStats.stats.find(
+				matchStat => matchStat.reviewId === postMatch.reviewId,
+			);
 
-						const title =
-							review && review.additionalResult
-								? `You finished ${this.getFinishPlace(parseInt(review.additionalResult))}`
-								: `Last board`;
+			const title =
+				review && review.additionalResult
+					? `You finished ${this.getFinishPlace(parseInt(review.additionalResult))}`
+					: `Last board`;
 
-						const normalizedIds = [
-							...new Set(boardEntities.map(entity => normalizeCardId(entity.cardID, this.allCards))),
-						];
-						const minionStats = normalizedIds.map(
-							cardId =>
-								({
-									cardId: cardId,
-									damageDealt: this.extractDamage(cardId, postMatch?.stats.totalMinionsDamageDealt),
-									damageTaken: this.extractDamage(cardId, postMatch?.stats.totalMinionsDamageTaken),
-								} as MinionStat),
-						);
-						return {
-							entities: boardEntities,
-							title: title,
-							minionStats: minionStats,
-						} as KnownBoard;
-					})
-			: null;
-		console.log('last known boards', this.lastKnownBoards, this._state);
+			const normalizedIds = [
+				...new Set(boardEntities.map(entity => normalizeCardId(entity.cardID, this.allCards))),
+			];
+			const minionStats = normalizedIds.map(
+				cardId =>
+					({
+						cardId: cardId,
+						damageDealt: this.extractDamage(cardId, postMatch?.stats.totalMinionsDamageDealt),
+						damageTaken: this.extractDamage(cardId, postMatch?.stats.totalMinionsDamageTaken),
+					} as MinionStat),
+			);
+			return {
+				entities: boardEntities,
+				title: title,
+				minionStats: minionStats,
+			} as KnownBoard;
+		});
+		this.lastReviews = lastReviews;
+		//console.log('last known boards', this.lastKnownBoards, this.lastReviews);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => {
+			this.loading = false;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	private getFinishPlace(finalPlace: number): string {
