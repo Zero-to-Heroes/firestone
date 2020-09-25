@@ -79,6 +79,10 @@ export class BgsWinrateStatsForHeroComponent {
 				.filter(stats => stats && stats.length) as (readonly BattleResultHistory[])[];
 			// console.log('heroStatsOverTurn', heroStatsOverTurn);
 			const maxTurn = Math.max(...heroStatsOverTurn.map(stats => stats[stats.length - 1].turn));
+			if (maxTurn <= 0) {
+				return [];
+			}
+
 			const result = [...Array(maxTurn).keys()]
 				.filter(turn => turn > 0)
 				.map(turn => {

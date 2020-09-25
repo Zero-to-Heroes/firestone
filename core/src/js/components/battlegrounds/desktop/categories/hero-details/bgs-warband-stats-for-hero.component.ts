@@ -84,6 +84,9 @@ export class BgsWarbandStatsForHeroComponent {
 				.map(postMatch => postMatch.stats.totalStatsOverTurn)
 				.filter(stats => stats && stats.length) as (readonly NumericTurnInfo[])[];
 			const maxTurn = Math.max(...heroStatsOverTurn.map(stats => stats[stats.length - 1].turn));
+			if (maxTurn <= 0) {
+				return [];
+			}
 			const heroStats: readonly NumericTurnInfo[] = [...Array(maxTurn).keys()]
 				.map(turn => {
 					const statsForTurn = heroStatsOverTurn
