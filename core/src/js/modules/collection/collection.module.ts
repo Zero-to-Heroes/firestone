@@ -31,6 +31,7 @@ import { AchievementsGlobalCategoriesComponent } from '../../components/achievem
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
 import { AchievementsComponent } from '../../components/achievements/achievements.component';
+import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BattlegroundsCategoriesComponent } from '../../components/battlegrounds/desktop/battlegrounds-categories.component';
 import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
@@ -204,6 +205,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsWarbandStatsForHeroComponent,
 		BgsWinrateStatsForHeroComponent,
 		BgsHeroDetailedStatsComponent,
+		BattlegroundsEmptyStateComponent,
 
 		FtueComponent,
 	],
