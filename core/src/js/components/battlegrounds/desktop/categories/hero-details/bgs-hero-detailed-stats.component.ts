@@ -55,7 +55,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header">Net MMR</div>
+					<div class="header" helpTooltip="Average MMR gain/loss per match">Net MMR</div>
 					<div
 						class="my-value"
 						[ngClass]="{
