@@ -34,6 +34,7 @@ import { ControlMinimizeComponent } from '../../components/controls/control-mini
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
 import { FilterDropdownComponent } from '../../components/filter-dropdown.component';
 import { FilterComponent } from '../../components/filter.component';
+import { FsFilterDropdownComponent } from '../../components/fs-filter-dropdown.component';
 import { HotkeyComponent } from '../../components/hotkey.component';
 import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
@@ -147,6 +148,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		GraphWithComparisonComponent,
 
 		FilterDropdownComponent,
+		FsFilterDropdownComponent,
 
 		StatCellComponent,
 	],
@@ -225,6 +227,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		GraphWithComparisonComponent,
 
 		FilterDropdownComponent,
+		FsFilterDropdownComponent,
 
 		StatCellComponent,
 	],

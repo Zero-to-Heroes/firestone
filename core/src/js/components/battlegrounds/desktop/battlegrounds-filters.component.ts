@@ -25,14 +25,16 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div class="battlegrounds-filters">
-			<filter-dropdown
+			<fs-filter-dropdown
 				class="hero-sort-filter"
 				[options]="heroSortFilterOptions"
 				[filter]="activeHeroSortFilter"
 				[placeholder]="heroSortPlaceholder"
-				[visible]="heroSortFilterVisible"
+				[checkVisibleHandler]="heroVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
 				(onOptionSelected)="selectHeroSortFilter($event)"
-			></filter-dropdown>
+			></fs-filter-dropdown>
 			<ng-select
 				class="filter time-filter"
 				[ngClass]="{ 'disabled': !timeFilterVisible }"
@@ -58,6 +60,19 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsFiltersComponent implements AfterViewInit {
+	@Input() set state(value: MainWindowState) {
+		this._state = value;
+		this.doSetValues();
+	}
+
+	@Input() set navigation(value: NavigationState) {
+		this._navigation = value;
+		this.doSetValues();
+	}
+
+	_state: MainWindowState;
+	_navigation: NavigationState;
+
 	timeFilterOptions: readonly TimeFilterOption[];
 	activeTimeFilter: BgsActiveTimeFilterType;
 	placeholder: string;
@@ -68,18 +83,17 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	heroSortPlaceholder: string;
 	heroSortFilterVisible: boolean;
 
-	_state: MainWindowState;
-	_navigation: NavigationState;
-
-	@Input() set state(value: MainWindowState) {
-		this._state = value;
-		this.doSetValues();
-	}
-
-	@Input() set navigation(value: NavigationState) {
-		this._navigation = value;
-		this.doSetValues();
-	}
+	heroVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'battlegrounds' &&
+			navigation.navigationBattlegrounds &&
+			navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-heroes' &&
+			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
+			!['bgs-category-personal-stats'].includes(navigation.navigationBattlegrounds.selectedCategoryId)
+		);
+	};
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -112,12 +126,12 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	private doSetValues() {
 		if (!this._navigation || !this._state || !this._navigation.navigationBattlegrounds) {
 			this.timeFilterVisible = false;
-			this.heroSortFilterVisible = false;
+			// this.heroSortFilterVisible = false;
 			return;
 		}
 		if (this._navigation.currentApp !== 'battlegrounds') {
 			this.timeFilterVisible = false;
-			this.heroSortFilterVisible = false;
+			// this.heroSortFilterVisible = false;
 			return;
 		}
 
@@ -126,7 +140,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			['bgs-category-personal-stats'].includes(this._navigation.navigationBattlegrounds.selectedCategoryId)
 		) {
 			this.timeFilterVisible = false;
-			this.heroSortFilterVisible = false;
+			// this.heroSortFilterVisible = false;
 			return;
 		}
 
@@ -150,10 +164,10 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	}
 
 	private updateHeroSortFilter() {
-		if (this._navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-heroes') {
-			this.heroSortFilterVisible = false;
-			return;
-		}
+		// if (this._navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-heroes') {
+		// 	this.heroSortFilterVisible = false;
+		// 	return;
+		// }
 		this.heroSortFilterVisible = true;
 		this.heroSortFilterOptions = [
 			{
