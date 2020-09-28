@@ -32,6 +32,7 @@ import { ControlHelpComponent } from '../../components/controls/control-help.com
 import { ControlMaximizeComponent } from '../../components/controls/control-maximize.component';
 import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
+import { FilterDropdownComponent } from '../../components/filter-dropdown.component';
 import { FilterComponent } from '../../components/filter.component';
 import { HotkeyComponent } from '../../components/hotkey.component';
 import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
@@ -145,6 +146,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		GraphWithComparisonComponent,
 
+		FilterDropdownComponent,
+
 		StatCellComponent,
 	],
 	entryComponents: [
@@ -220,6 +223,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsPlayerCapsuleComponent,
 
 		GraphWithComparisonComponent,
+
+		FilterDropdownComponent,
 
 		StatCellComponent,
 	],

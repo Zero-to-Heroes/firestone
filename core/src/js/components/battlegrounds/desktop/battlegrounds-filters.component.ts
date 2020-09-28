@@ -3,13 +3,11 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	EventEmitter,
 	Input,
 	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
-import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BgsActiveTimeFilterType } from '../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -27,26 +25,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div class="battlegrounds-filters">
-			<ng-select
-				class="filter hero-sort-filter"
-				[ngClass]="{ 'disabled': !heroSortFilterVisible }"
+			<filter-dropdown
+				class="hero-sort-filter"
 				[options]="heroSortFilterOptions"
-				[ngModel]="activeHeroSortFilter"
+				[filter]="activeHeroSortFilter"
 				[placeholder]="heroSortPlaceholder"
-				(selected)="selectHeroSortFilter($event)"
-				(opened)="refresh()"
-				(closed)="refresh()"
-				[noFilter]="1"
-			>
-				<ng-template #optionTemplate let-option="option">
-					<span>{{ option?.label }}</span>
-					<i class="i-30 selected-icon" *ngIf="option.value === activeHeroSortFilter">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#selected_dropdown" />
-						</svg>
-					</i>
-				</ng-template>
-			</ng-select>
+				[visible]="heroSortFilterVisible"
+				(onOptionSelected)="selectHeroSortFilter($event)"
+			></filter-dropdown>
 			<ng-select
 				class="filter time-filter"
 				[ngClass]="{ 'disabled': !timeFilterVisible }"
@@ -82,15 +68,11 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	heroSortPlaceholder: string;
 	heroSortFilterVisible: boolean;
 
-	_state: BattlegroundsAppState;
+	_state: MainWindowState;
 	_navigation: NavigationState;
 
-	@Input() set state(value: BattlegroundsAppState | MainWindowState) {
-		if (value instanceof BattlegroundsAppState) {
-			this._state = value;
-		} else {
-			this._state = value.battlegrounds;
-		}
+	@Input() set state(value: MainWindowState) {
+		this._state = value;
 		this.doSetValues();
 	}
 
@@ -103,8 +85,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
-		private readonly el: ElementRef,
+		private readonly ow: OverwolfService, // private readonly el: ElementRef,
 	) {}
 
 	refresh() {
@@ -115,16 +96,6 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
-		// console.log('updating filter visuals', singleEls);
-		singleEls.forEach(singleEl => {
-			const caretEl = singleEl.appendChild(document.createElement('i'));
-			caretEl.innerHTML = `<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#arrow"/>
-				</svg>`;
-			caretEl.classList.add('i-30');
-			caretEl.classList.add('caret');
-		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -167,10 +138,10 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			} as TimeFilterOption,
 			{
 				value: 'last-patch',
-				label: `Last patch (${this._state?.stats?.currentBattlegroundsMetaPatch})`,
+				label: `Last patch (${this._state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch})`,
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
-		this.activeTimeFilter = this._state.activeTimeFilter;
+		this.activeTimeFilter = this._state?.battlegrounds?.activeTimeFilter;
 		// console.log('set time filter', this.activeTimeFilter, this.timeFilterOptions);
 		this.placeholder = this.timeFilterOptions.find(option => option.value === this.activeTimeFilter)?.label;
 
@@ -198,7 +169,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 				label: 'Games played',
 			} as HeroSortFilterOption,
 		] as readonly HeroSortFilterOption[];
-		this.activeHeroSortFilter = this._state.activeHeroSortFilter;
+		this.activeHeroSortFilter = this._state.battlegrounds?.activeHeroSortFilter;
 		this.heroSortPlaceholder = this.heroSortFilterOptions.find(
 			option => option.value === this.activeHeroSortFilter,
 		)?.label;
