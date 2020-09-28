@@ -6,6 +6,7 @@ export class BgsGameEndEvent extends BattlegroundsStoreEvent {
 	constructor(
 		public readonly postMatchStats: BgsPostMatchStats,
 		public readonly newBestStats: readonly BgsBestStat[],
+		public readonly reviewId: string,
 	) {
 		super('BgsGameEndEvent');
 	}

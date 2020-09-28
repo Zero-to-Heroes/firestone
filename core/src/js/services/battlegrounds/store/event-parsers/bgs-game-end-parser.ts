@@ -1,5 +1,6 @@
 import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
@@ -38,6 +39,9 @@ export class BgsGameEndParser implements EventParser {
 			currentStageId: 'post-match',
 			currentPanelId: 'bgs-post-match-stats',
 			forceOpen: prefs.bgsForceShowPostMatchStats ? true : false,
+			currentGame: currentState.currentGame.update({
+				reviewId: event.reviewId,
+			} as BgsGame),
 		} as BattlegroundsState);
 	}
 

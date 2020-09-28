@@ -151,7 +151,7 @@ export class BgsRunStatsService {
 			);
 		}
 		// console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats, postMatchStats, currentGame);
-		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues));
+		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
 
@@ -186,20 +186,34 @@ export class BgsRunStatsService {
 			// We do this because the immutable maps are all messed up when going back and forth
 			boardHistory: input.mainPlayer.boardHistory,
 		});
+		//console.log('computing new best stats', data, input, existingBestStats);
 		const newBestStats = buildNewStats(
 			existingBestStats,
 			data,
 			({
 				mainPlayer: input.mainPlayer,
 				reviewId: input.reviewId,
-				userId: input.userId,
+				userId: input.userName || input.userId,
 			} as any) as Input,
 			`${new Date()
 				.toISOString()
 				.slice(0, 19)
 				.replace('T', ' ')}.${new Date().getMilliseconds()}`,
 		);
-		return [result, newBestStats];
+		const finalStats = this.mergeStats(existingBestStats, newBestStats);
+		//console.log('built new best stats', newBestStats, finalStats);
+
+		return [result, finalStats];
+	}
+
+	private mergeStats(existingBestStats: readonly BgsBestStat[], newBestStats: readonly BgsBestStat[]) {
+		const statsToKeep = existingBestStats.filter(existing => !this.isStatIncluded(existing, newBestStats));
+		//console.log('statsToKeep', newBestStats, statsToKeep);
+		return [...newBestStats, ...statsToKeep];
+	}
+
+	private isStatIncluded(toFind: BgsBestStat, list: readonly BgsBestStat[]) {
+		return list.find(existing => existing.statName === toFind.statName) != null;
 	}
 
 	private async getNewRating(previousRating: number): Promise<number> {

@@ -8,6 +8,7 @@ import { BgsFaceOff } from './bgs-face-off';
 import { BgsPlayer } from './bgs-player';
 
 export class BgsGame {
+	readonly reviewId: string;
 	readonly players: readonly BgsPlayer[] = [];
 	readonly currentTurn: number = 1;
 	readonly faceOffs: readonly BgsFaceOff[] = [];
