@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GameFormat, GameType } from '@firestone-hs/reference-data';
+import { GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/decktracker/metadata';
 
 const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=2';
@@ -49,6 +49,24 @@ export class SecretConfigService {
 		if (metadata.gameType === GameType.GT_ARENA) {
 			return 'arena';
 		}
+		// Tavern brawl specific exceptions
+		if (
+			[
+				GameType.GT_TAVERNBRAWL,
+				GameType.GT_FSG_BRAWL,
+				GameType.GT_FSG_BRAWL_1P_VS_AI,
+				GameType.GT_FSG_BRAWL_2P_COOP,
+				GameType.GT_FSG_BRAWL_VS_FRIEND,
+				GameType.GT_TB_1P_VS_AI,
+				GameType.GT_TB_2P_COOP,
+			].indexOf(metadata.gameType) !== -1
+		) {
+			if (metadata.scenarioId === ScenarioId.TAVERN_BRAWL_BRAWLISEUM) {
+				return 'standard';
+			}
+		}
+
+		// The standard game modes
 		if (
 			[GameType.GT_CASUAL, GameType.GT_RANKED, GameType.GT_VS_FRIEND, GameType.GT_VS_AI].indexOf(
 				metadata.gameType,
@@ -59,7 +77,7 @@ export class SecretConfigService {
 			}
 			return 'wild';
 		}
-		return 'wild';
+		return metadata.formatType === GameFormat.FT_STANDARD ? 'standard' : 'wild';
 	}
 }
 
