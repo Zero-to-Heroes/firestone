@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ViewRef,
+} from '@angular/core';
 import { IOption } from 'ng-select';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
@@ -36,11 +44,13 @@ export class FsFilterDropdownComponent {
 
 	@Input() set optionsBuilder(value: (navigation: NavigationState, state: MainWindowState) => readonly IOption[]) {
 		this._optionsBuilder = value;
+		// console.log('setting options builder');
 		this.doSetValues();
 	}
 
 	@Input() set state(value: MainWindowState) {
 		this._state = value;
+		// console.log('setting state', this._state);
 		this.doSetValues();
 	}
 
@@ -57,17 +67,39 @@ export class FsFilterDropdownComponent {
 
 	visible: boolean;
 
+	constructor(private readonly cdr: ChangeDetectorRef) {}
+
 	onSelected(option: IOption) {
 		this.onOptionSelected.next(option);
 	}
 
 	private doSetValues() {
-		console.log('calling checkVisibleHandler', this._navigation, this._state);
+		// console.log(
+		// 	'calling checkVisibleHandler',
+		// 	this._options,
+		// 	this._optionsBuilder,
+		// 	this._optionsBuilder && this._optionsBuilder(this._navigation, this._state),
+		// 	this._navigation,
+		// 	this._state,
+		// );
 		this.visible = this._checkVisibleHandler ? this._checkVisibleHandler(this._navigation, this._state) : true;
-		this._options =
-			this._options ?? (this._optionsBuilder ? this._optionsBuilder(this._navigation, this._state) : []);
 		if (!this.visible) {
 			return;
+		}
+
+		this._options =
+			this._options && this._options.length > 0
+				? this._options
+				: this._optionsBuilder
+				? this._optionsBuilder(this._navigation, this._state)
+				: [];
+		const placeholder =
+			this._options && this._options.length > 0 && this.filter
+				? this._options.find(option => option.value === this.filter)?.label
+				: this.placeholder;
+		this.placeholder = placeholder ?? this.placeholder;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 }

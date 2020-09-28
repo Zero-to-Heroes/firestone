@@ -97,6 +97,6 @@ export class BattlegroundsTierListComponent implements AfterViewInit {
 					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 		].filter(tier => tier.heroes);
-		console.log('tier list', this.stats, allOverviews, groupedByTier, this.tiers);
+		// console.log('tier list', this.stats, allOverviews, groupedByTier, this.tiers);
 	}
 }

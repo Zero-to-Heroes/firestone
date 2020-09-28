@@ -85,7 +85,6 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 	}
 
 	@Input() set state(value: MainWindowState) {
-		console.log('setting state in hero-details', value);
 		if (value === this._state) {
 			return;
 		}
@@ -110,13 +109,13 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 	}
 	private updateValues() {
 		if (!this._state || !this._category || !this._navigation) {
-			console.log('not updating value');
+			// console.log('not updating value');
 			return;
 		}
 
 		this.heroStat = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === this._category.heroId);
 		if (!this.heroStat) {
-			console.log('not updating hero stat');
+			// console.log('not updating hero stat');
 			return;
 		}
 		// console.log('setting stat', this._category.heroId, this.heroStat, this._state, this._category);

@@ -29,32 +29,20 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				class="hero-sort-filter"
 				[options]="heroSortFilterOptions"
 				[filter]="activeHeroSortFilter"
-				[placeholder]="heroSortPlaceholder"
 				[checkVisibleHandler]="heroVisibleHandler"
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectHeroSortFilter($event)"
 			></fs-filter-dropdown>
-			<ng-select
-				class="filter time-filter"
-				[ngClass]="{ 'disabled': !timeFilterVisible }"
-				[options]="timeFilterOptions"
-				[ngModel]="activeTimeFilter"
-				[placeholder]="placeholder"
-				(selected)="selectTimeFilter($event)"
-				(opened)="refresh()"
-				(closed)="refresh()"
-				[noFilter]="1"
-			>
-				<ng-template #optionTemplate let-option="option">
-					<span>{{ option?.label }}</span>
-					<i class="i-30 selected-icon" *ngIf="option.value === activeTimeFilter">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#selected_dropdown" />
-						</svg>
-					</i>
-				</ng-template>
-			</ng-select>
+			<fs-filter-dropdown
+				class="time-filter"
+				[filter]="activeTimeFilter"
+				[checkVisibleHandler]="timeVisibleHandler"
+				[optionsBuilder]="timeOptionsBuilder"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectTimeFilter($event)"
+			></fs-filter-dropdown>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,16 +61,22 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	_state: MainWindowState;
 	_navigation: NavigationState;
 
-	timeFilterOptions: readonly TimeFilterOption[];
-	activeTimeFilter: BgsActiveTimeFilterType;
-	placeholder: string;
-	timeFilterVisible: boolean;
-
-	heroSortFilterOptions: readonly HeroSortFilterOption[];
+	heroSortFilterOptions: readonly HeroSortFilterOption[] = [
+		{
+			value: 'average-position',
+			label: 'Average position',
+		} as HeroSortFilterOption,
+		{
+			value: 'mmr',
+			label: 'Net MMR',
+		} as HeroSortFilterOption,
+		{
+			value: 'games-played',
+			label: 'Games played',
+		} as HeroSortFilterOption,
+	] as readonly HeroSortFilterOption[];
 	activeHeroSortFilter: BgsHeroSortFilterType;
-	heroSortPlaceholder: string;
 	heroSortFilterVisible: boolean;
-
 	heroVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
 		return (
 			state &&
@@ -95,18 +89,34 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		);
 	};
 
+	activeTimeFilter: BgsActiveTimeFilterType;
+	timeFilterVisible: boolean;
+	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'battlegrounds' &&
+			navigation.navigationBattlegrounds &&
+			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
+			!['bgs-category-personal-stats'].includes(navigation.navigationBattlegrounds.selectedCategoryId)
+		);
+	};
+	timeOptionsBuilder = (navigation: NavigationState, state: MainWindowState): readonly IOption[] => {
+		return [
+			{
+				value: 'all-time',
+				label: 'Past 100 days',
+			} as TimeFilterOption,
+			{
+				value: 'last-patch',
+				label: `Last patch (${state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch})`,
+			} as TimeFilterOption,
+		] as readonly TimeFilterOption[];
+	};
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(
-		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService, // private readonly el: ElementRef,
-	) {}
-
-	refresh() {
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -124,69 +134,8 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	}
 
 	private doSetValues() {
-		if (!this._navigation || !this._state || !this._navigation.navigationBattlegrounds) {
-			this.timeFilterVisible = false;
-			// this.heroSortFilterVisible = false;
-			return;
-		}
-		if (this._navigation.currentApp !== 'battlegrounds') {
-			this.timeFilterVisible = false;
-			// this.heroSortFilterVisible = false;
-			return;
-		}
-
-		if (
-			['categories', 'category'].includes(this._navigation.navigationBattlegrounds.currentView) ||
-			['bgs-category-personal-stats'].includes(this._navigation.navigationBattlegrounds.selectedCategoryId)
-		) {
-			this.timeFilterVisible = false;
-			// this.heroSortFilterVisible = false;
-			return;
-		}
-
-		this.timeFilterVisible = true;
-		this.timeFilterOptions = [
-			{
-				value: 'all-time',
-				label: 'Past 100 days',
-			} as TimeFilterOption,
-			{
-				value: 'last-patch',
-				label: `Last patch (${this._state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch})`,
-			} as TimeFilterOption,
-		] as readonly TimeFilterOption[];
 		this.activeTimeFilter = this._state?.battlegrounds?.activeTimeFilter;
-		// console.log('set time filter', this.activeTimeFilter, this.timeFilterOptions);
-		this.placeholder = this.timeFilterOptions.find(option => option.value === this.activeTimeFilter)?.label;
-
-		this.updateHeroSortFilter();
-		return;
-	}
-
-	private updateHeroSortFilter() {
-		// if (this._navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-heroes') {
-		// 	this.heroSortFilterVisible = false;
-		// 	return;
-		// }
-		this.heroSortFilterVisible = true;
-		this.heroSortFilterOptions = [
-			{
-				value: 'average-position',
-				label: 'Average position',
-			} as HeroSortFilterOption,
-			{
-				value: 'mmr',
-				label: 'Net MMR',
-			} as HeroSortFilterOption,
-			{
-				value: 'games-played',
-				label: 'Games played',
-			} as HeroSortFilterOption,
-		] as readonly HeroSortFilterOption[];
 		this.activeHeroSortFilter = this._state.battlegrounds?.activeHeroSortFilter;
-		this.heroSortPlaceholder = this.heroSortFilterOptions.find(
-			option => option.value === this.activeHeroSortFilter,
-		)?.label;
 	}
 }
 
