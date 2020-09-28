@@ -34,7 +34,12 @@ export class BgsPlayerBoardParser implements EventParser {
 			return currentState;
 		}
 		if (event.board.length > 7) {
-			console.error('no-format', 'Too many entities on the board', event);
+			console.error(
+				'no-format',
+				'Too many entities on the board',
+				event.heroCardId,
+				event.board.map(entity => entity.CardId),
+			);
 			return currentState.update({
 				currentGame: currentState.currentGame.update({
 					battleInfo: undefined,
