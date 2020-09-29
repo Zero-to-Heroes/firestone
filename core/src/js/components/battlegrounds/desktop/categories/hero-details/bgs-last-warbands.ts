@@ -54,8 +54,8 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 	_category: BattlegroundsPersonalStatsHeroDetailsCategory;
 
 	lastKnownBoards: readonly KnownBoard[];
-	loading: boolean = true;
-	visible: boolean = false;
+	loading = true;
+	visible = false;
 
 	private lastReviews: readonly string[];
 

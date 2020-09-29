@@ -16,6 +16,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsEmptyStateComponent {
-	@Input() title: string = 'Nothing here yet';
-	@Input() subtitle: string = 'Start playing Battlegrounds to receive information';
+	@Input() title = 'Nothing here yet';
+	@Input() subtitle = 'Start playing Battlegrounds to receive information';
 }

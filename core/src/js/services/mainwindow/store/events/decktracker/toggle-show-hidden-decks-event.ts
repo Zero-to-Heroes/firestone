@@ -1,8 +1,6 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ToggleShowHiddenDecksEvent implements MainWindowStoreEvent {
-	constructor() {}
-
 	public static eventName(): string {
 		return 'ToggleShowHiddenDecksEvent';
 	}

@@ -29,10 +29,10 @@ export class ConfirmationComponent {
 	@Output() onConfirm: EventEmitter<boolean> = new EventEmitter<boolean>();
 	@Output() onCancel: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-	@Input() confirmationTitle: string = 'Are you sure?';
-	@Input() confirmationText: string = 'This will close the tracker for the duration of the current match';
-	@Input() validButtonText: string = 'Exit';
-	@Input() cancelButtonText: string = 'Cancel';
+	@Input() confirmationTitle = 'Are you sure?';
+	@Input() confirmationText = 'This will close the tracker for the duration of the current match';
+	@Input() validButtonText = 'Exit';
+	@Input() cancelButtonText = 'Cancel';
 
 	constructor(private cdr: ChangeDetectorRef) {}
 
