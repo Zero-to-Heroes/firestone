@@ -1,17 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
 	selector: 'confirmation',
 	styleUrls: [`../../../css/component/tooltip/confirmation.component.scss`],
 	template: `
 		<div class="confirmation">
-			<div class="title">Are you sure?</div>
+			<div class="title">{{ confirmationTitle }}</div>
 			<div class="text">
-				This will close the tracker for the duration of the current match
+				{{ confirmationText }}
 			</div>
 			<div class="buttons">
-				<button class="ok" (click)="ok()">Exit</button>
-				<button class="cancel" (click)="cancel()">Cancel</button>
+				<button class="ok" (click)="ok()">{{ validButtonText }}</button>
+				<button class="cancel" (click)="cancel()">{{ cancelButtonText }}</button>
 			</div>
 			<button class="close-button" (click)="cancel()">
 				<svg class="svg-icon-fill">
@@ -28,6 +28,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Ou
 export class ConfirmationComponent {
 	@Output() onConfirm: EventEmitter<boolean> = new EventEmitter<boolean>();
 	@Output() onCancel: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+	@Input() confirmationTitle: string = 'Are you sure?';
+	@Input() confirmationText: string = 'This will close the tracker for the duration of the current match';
+	@Input() validButtonText: string = 'Exit';
+	@Input() cancelButtonText: string = 'Cancel';
 
 	constructor(private cdr: ChangeDetectorRef) {}
 

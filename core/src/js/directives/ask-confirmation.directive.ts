@@ -22,6 +22,11 @@ import { Events } from '../services/events.service';
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 	@Input() askConfirmation: boolean;
+	@Input() confirmationTitle: string;
+	@Input() confirmationText: string;
+	@Input() validButtonText: string;
+	@Input() cancelButtonText: string;
+
 	@Output() onConfirm: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	private tooltipPortal;
@@ -108,6 +113,10 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		const tooltipRef: ComponentRef<ConfirmationComponent> = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
+		this.confirmationTitle && (tooltipRef.instance.confirmationTitle = this.confirmationTitle);
+		this.confirmationText && (tooltipRef.instance.confirmationText = this.confirmationText);
+		this.validButtonText && (tooltipRef.instance.validButtonText = this.validButtonText);
+		this.cancelButtonText && (tooltipRef.instance.cancelButtonText = this.cancelButtonText);
 		tooltipRef.instance.onConfirm.subscribe(event => this.confirm());
 		tooltipRef.instance.onCancel.subscribe(event => this.cancel());
 
