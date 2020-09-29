@@ -231,7 +231,8 @@ export class BgsRunStatsService {
 			callback(previousRating);
 			return;
 		}
-		const newRating = (await this.memoryService.getBattlegroundsInfo())?.rating;
+		const battlegroundsInfo = await this.memoryService.getBattlegroundsEndGame();
+		const newRating = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
 		if (newRating === previousRating) {
 			setTimeout(() => this.getNewRatingInternal(previousRating, callback, retriesLeft - 1), 500);
 			return;
