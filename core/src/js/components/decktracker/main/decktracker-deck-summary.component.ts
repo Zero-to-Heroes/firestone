@@ -28,7 +28,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			</div>
 			<button
 				class="close-button"
-				helpTooltip="Hide deck (you can restore it later)"
+				helpTooltip="Archive deck (you can restore it later)"
 				(mousedown)="hideDeck()"
 				*ngIf="!hidden"
 			>

@@ -58,7 +58,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				(onOptionSelected)="selectSort($event)"
 			></fs-filter-dropdown>
 			<div class="show-hidden-decks-link" (click)="toggleShowHiddenDecks()">
-				{{ _state.decktracker.showHiddenDecks ? 'Showing hidden decks' : 'Hiding hidden decks' }}
+				{{ _state.decktracker.showHiddenDecks ? 'Showing archived decks' : 'Hiding archived decks' }}
 			</div>
 			<!-- <fs-filter-dropdown
 				class="mode-filter"
