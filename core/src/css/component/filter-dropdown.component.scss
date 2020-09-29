@@ -1,6 +1,11 @@
 @import '../global/variables';
 @import '../global/fonts';
 
+:host() {
+	display: flex;
+	height: 30px;
+}
+
 .filter {
 	min-width: 150px;
 }

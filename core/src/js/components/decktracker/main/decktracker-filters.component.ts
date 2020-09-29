@@ -1,6 +1,21 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
+import { IOption } from 'ng-select';
+import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
+import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
+import { ChangeDeckFormatFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-mode-filter-event';
+import { ChangeDeckTimeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -12,53 +27,128 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div class="decktracker-filters">
-			<div class="title" helpTooltipTarget helpTooltip="Advanced filtering is on its way, stay tuned!">
-				Active filters
-			</div>
-			<div class="filters">
-				<div class="filter">{{ activeFilters[0] }}</div>
-				<div class="filter" (click)="changeMode()" helpTooltip="Click to toggle between Standard and Wild">
-					{{ activeFilters[1] }}
-				</div>
-			</div>
+			<fs-filter-dropdown
+				class="format-filter"
+				[options]="formatFilterOptions"
+				[filter]="activeFormatFilter"
+				[checkVisibleHandler]="formatVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectFormat($event)"
+			></fs-filter-dropdown>
+			<!-- <fs-filter-dropdown
+				class="mode-filter"
+				[options]="modeFilterOptions"
+				[filter]="activeModeFilter"
+				[checkVisibleHandler]="modeVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectModeFilter($event)"
+			></fs-filter-dropdown> -->
+			<!-- <fs-filter-dropdown
+				class="class-filter"
+				[options]="classFilterOptions"
+				[filter]="activeClassFilter"
+				[checkVisibleHandler]="classVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectClassFilter($event)"
+			></fs-filter-dropdown> -->
+			<fs-filter-dropdown
+				class="time-filter"
+				[options]="timeFilterOptions"
+				[filter]="activeTimeFilter"
+				[checkVisibleHandler]="timeVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectTime($event)"
+			></fs-filter-dropdown>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerFiltersComponent implements AfterViewInit {
-	activeFilters: readonly string[];
+	@Input() set state(value: MainWindowState) {
+		this._state = value;
+		console.log('setting state', value);
+		this.doSetValues();
+	}
+
+	@Input() set navigation(value: NavigationState) {
+		this._navigation = value;
+		this.doSetValues();
+	}
+
+	_state: MainWindowState;
+	_navigation: NavigationState;
+
+	formatFilterOptions: readonly FormatFilterOption[] = [
+		{
+			value: 'standard',
+			label: 'Standard',
+		} as FormatFilterOption,
+		{
+			value: 'wild',
+			label: 'Wild',
+		} as FormatFilterOption,
+	] as readonly FormatFilterOption[];
+	activeFormatFilter: StatGameFormatType;
+	formatVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return state && navigation && navigation.currentApp == 'decktracker';
+	};
+
+	timeFilterOptions: readonly TimeFilterOption[] = [
+		{
+			value: 'all-time',
+			label: 'All time',
+		} as TimeFilterOption,
+		{
+			value: 'season-start',
+			label: 'This season',
+		} as TimeFilterOption,
+	] as readonly TimeFilterOption[];
+	activeTimeFilter: DeckTimeFilterType;
+	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return state && navigation && navigation.currentApp == 'decktracker';
+	};
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	@Input() set state(value: DeckFilters) {
-		this.activeFilters = [this.gameModeFilter(value), this.gameFormatFilter(value)];
-	}
-
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	changeMode() {
+	selectFormat(option: FormatFilterOption) {
+		this.stateUpdater.next(new ChangeDeckFormatFilterEvent(option.value));
+	}
+
+	selectTime(option: TimeFilterOption) {
+		this.stateUpdater.next(new ChangeDeckTimeFilterEvent(option.value));
+	}
+
+	selectMode(option: FormatFilterOption) {
 		this.stateUpdater.next(new ChangeDeckModeFilterEvent());
 	}
 
-	private gameModeFilter(filters: DeckFilters): string {
-		switch (filters.gameMode) {
-			case 'ranked':
-				return 'Ranked';
-		}
-		return filters.gameMode;
+	private doSetValues() {
+		this.activeFormatFilter = this._state?.decktracker?.filters?.gameFormat;
+		this.activeTimeFilter = this._state?.decktracker?.filters?.time;
 	}
+}
 
-	private gameFormatFilter(filters: DeckFilters): string {
-		switch (filters.gameFormat) {
-			case 'standard':
-				return 'Standard';
-			case 'wild':
-				return 'Wild';
-		}
-		return filters.gameFormat;
-	}
+interface FormatFilterOption extends IOption {
+	value: StatGameFormatType;
+}
+
+interface ModeFilterOption extends IOption {
+	value: StatGameModeType;
+}
+
+interface TimeFilterOption extends IOption {
+	value: DeckTimeFilterType;
 }

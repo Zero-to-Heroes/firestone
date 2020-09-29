@@ -86,7 +86,7 @@ export class StoreBootstrapService {
 			bestBgsUserStats: bgsBestUserStats,
 		} as StatsState);
 		const replayState: ReplaysState = this.replaysStateBuilder.buildState(new ReplaysState(), newStatsState);
-		const decktracker = this.decktrackerStateLoader.buildState(new DecktrackerState(), newStatsState);
+		const decktracker = this.decktrackerStateLoader.buildState(new DecktrackerState(), newStatsState, prefs);
 
 		const newAchievementState = Object.assign(new AchievementsState(), {
 			globalCategories: achievementGlobalCategories,

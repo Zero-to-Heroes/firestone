@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
+import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
@@ -173,6 +174,14 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveHeroSortFilter: value };
 		this.savePreferences(newPrefs);
+	}
+
+	public async setDesktopDeckFilters(value: DeckFilters) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, desktopDeckFilters: value };
+		console.log('saving new filters', value, newPrefs);
+		await this.savePreferences(newPrefs);
+		console.log('new filters saved', await this.getPreferences());
 	}
 
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {

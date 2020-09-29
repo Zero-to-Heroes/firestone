@@ -1,5 +1,13 @@
+:host() {
+	display: flex;
+	height: 30px;
+	margin-bottom: 10px;
+	flex-shrink: 0;
+}
+
 .decktracker-filters {
 	display: flex;
+	height: 30px;
 	color: var(--secondary-text-color);
 	font-family: Open Sans;
 	font-style: normal;

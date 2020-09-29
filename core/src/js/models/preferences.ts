@@ -1,5 +1,6 @@
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
+import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { Ftue } from './preferences/ftue';
 
 export class Preferences {
@@ -24,6 +25,8 @@ export class Preferences {
 	readonly collectionUseHighResImages: boolean = false;
 
 	readonly collectionUseOverlay: boolean;
+
+	readonly desktopDeckFilters: DeckFilters;
 
 	readonly decktrackerShowArena: boolean = true;
 	readonly decktrackerShowRanked: boolean = true;

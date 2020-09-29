@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
+import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 
@@ -12,12 +13,13 @@ export class DecksStateBuilderService {
 		if (!stats || !stats.gameStats) {
 			return [];
 		}
-		const standardRanked = stats.gameStats.stats
+		const validDecks = stats.gameStats.stats
 			.filter(stat => stat.gameFormat === filters.gameFormat)
 			.filter(stat => stat.gameMode === filters.gameMode)
+			.filter(stat => this.isValidDate(stat, filters.time))
 			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined');
 		const groupByDeckstring = groupBy('playerDecklist');
-		const statsByDeck = groupByDeckstring(standardRanked);
+		const statsByDeck = groupByDeckstring(validDecks);
 		// console.log('[decktracker-stats-loader] statsByDeck');
 		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
 		const deckstrings = Object.keys(statsByDeck);
@@ -25,6 +27,16 @@ export class DecksStateBuilderService {
 			this.buildDeckSummary(deckstring, statsByDeck[deckstring]),
 		);
 		return decks;
+	}
+
+	private isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType): boolean {
+		switch (timeFilter) {
+			case 'season-start':
+				const startOfMonthDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+				return stat.creationTimestamp >= startOfMonthDate.getTime();
+			default:
+				return true;
+		}
 	}
 
 	private buildDeckSummary(deckstring: string, stats: readonly GameStat[]): DeckSummary {

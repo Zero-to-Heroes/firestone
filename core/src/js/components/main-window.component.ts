@@ -82,7 +82,7 @@ declare let amplitude: any;
 				></collection>
 				<decktracker
 					class="main-section"
-					[state]="dataState.decktracker"
+					[state]="dataState"
 					[navigation]="navigationState"
 					[hidden]="navigationState.currentApp !== 'decktracker'"
 				>

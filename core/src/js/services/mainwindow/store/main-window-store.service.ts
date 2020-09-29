@@ -62,7 +62,9 @@ import { ShowCardDetailsEvent } from './events/collection/show-card-details-even
 import { ToggleShowOnlyNewCardsInHistoryEvent } from './events/collection/toggle-show-only-new-cards-in-history-event';
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
 import { CurrentUserEvent } from './events/current-user-event';
+import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
+import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
@@ -117,7 +119,9 @@ import { ShowCardDetailsProcessor } from './processors/collection/show-card-deta
 import { ToggleShowOnlyNewCardsInHistoryProcessor } from './processors/collection/toggle-show-only-new-cards-in-history-processor';
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
 import { CurrentUserProcessor } from './processors/current-user-process.ts';
+import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change-deck-format-filter-processor';
 import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
+import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
@@ -488,8 +492,14 @@ export class MainWindowStoreService {
 			SelectDecksViewEvent.eventName(),
 			new SelectDeckViewProcessor(),
 
+			ChangeDeckFormatFilterEvent.eventName(),
+			new ChangeDeckFormatFilterProcessor(this.decksStateBuilder, this.prefs),
+
 			ChangeDeckModeFilterEvent.eventName(),
-			new ChangeDeckModeFilterProcessor(this.decksStateBuilder),
+			new ChangeDeckModeFilterProcessor(this.decksStateBuilder, this.prefs),
+
+			ChangeDeckTimeFilterEvent.eventName(),
+			new ChangeDeckTimeFilterProcessor(this.decksStateBuilder, this.prefs),
 
 			// Battlegrounds
 			SelectBattlegroundsGlobalCategoryEvent.eventName(),
