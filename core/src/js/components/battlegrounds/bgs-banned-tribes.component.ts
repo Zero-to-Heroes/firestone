@@ -25,7 +25,7 @@ declare let amplitude;
 		`../../../css/themes/battlegrounds-theme.scss`,
 	],
 	template: `
-		<div *ngIf="bannedTribes" class="root overlay-container-parent" [activeTheme]="'battlegrounds'">
+		<div *ngIf="bannedTribes" class="root overlay-container-parent banned-tribes" [activeTheme]="'battlegrounds'">
 			<bgs-banned-tribe *ngFor="let tribe of bannedTribes" [tribe]="tribe">{{ tribe }}</bgs-banned-tribe>
 		</div>
 	`,
