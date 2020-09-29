@@ -4,6 +4,7 @@ import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -76,7 +77,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section class="secondary" *ngIf="enableBg">
 				<battlegrounds-tier-list
 					*ngIf="shouldDisplayHeroTierList()"
 					[category]="buildCategory()"
@@ -103,7 +104,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
 
-	enableBg = true;
+	enableBg = FeatureFlags.ENABLE_BG_DESKTOP;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
