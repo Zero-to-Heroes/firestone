@@ -64,6 +64,7 @@ import { UpdateCardSearchResultsEvent } from './events/collection/update-card-se
 import { CurrentUserEvent } from './events/current-user-event';
 import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
+import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
@@ -121,6 +122,7 @@ import { UpdateCardSearchResultsProcessor } from './processors/collection/update
 import { CurrentUserProcessor } from './processors/current-user-process.ts';
 import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change-deck-format-filter-processor';
 import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
+import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
@@ -500,6 +502,9 @@ export class MainWindowStoreService {
 
 			ChangeDeckTimeFilterEvent.eventName(),
 			new ChangeDeckTimeFilterProcessor(this.decksStateBuilder, this.prefs),
+
+			ChangeDeckSortEvent.eventName(),
+			new ChangeDeckSortProcessor(this.decksStateBuilder, this.prefs),
 
 			// Battlegrounds
 			SelectBattlegroundsGlobalCategoryEvent.eventName(),

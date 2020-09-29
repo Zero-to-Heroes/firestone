@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
+import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -23,10 +24,38 @@ export class DecksStateBuilderService {
 		// console.log('[decktracker-stats-loader] statsByDeck');
 		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
 		const deckstrings = Object.keys(statsByDeck);
-		const decks: readonly DeckSummary[] = deckstrings.map(deckstring =>
-			this.buildDeckSummary(deckstring, statsByDeck[deckstring]),
-		);
+		const decks: readonly DeckSummary[] = deckstrings
+			.map(deckstring => this.buildDeckSummary(deckstring, statsByDeck[deckstring]))
+			.sort(this.getSortFunction(filters.sort));
+
 		return decks;
+	}
+
+	private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
+		switch (sort) {
+			case 'games-played':
+				return (a: DeckSummary, b: DeckSummary) => {
+					if (a.totalGames <= b.totalGames) {
+						return 1;
+					}
+					return -1;
+				};
+			case 'winrate':
+				return (a: DeckSummary, b: DeckSummary) => {
+					if (a.winRatePercentage <= b.winRatePercentage) {
+						return 1;
+					}
+					return -1;
+				};
+			case 'last-played':
+			default:
+				return (a: DeckSummary, b: DeckSummary) => {
+					if (a.lastUsedTimestamp <= b.lastUsedTimestamp) {
+						return -1;
+					}
+					return 1;
+				};
+		}
 	}
 
 	private isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType): boolean {

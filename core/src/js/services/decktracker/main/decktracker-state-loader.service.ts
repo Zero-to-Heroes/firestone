@@ -12,7 +12,13 @@ export class DecktrackerStateLoaderService {
 	constructor(private readonly decksStateBuilder: DecksStateBuilderService) {}
 
 	public buildState(currentState: DecktrackerState, stats: StatsState, prefs: Preferences = null): DecktrackerState {
-		const filters: DeckFilters = prefs?.desktopDeckFilters ?? currentState.filters ?? new DeckFilters();
+		const existingFilters = prefs?.desktopDeckFilters ?? currentState.filters ?? new DeckFilters();
+		const filters: DeckFilters = {
+			gameFormat: existingFilters.gameFormat ?? 'standard',
+			gameMode: existingFilters.gameMode ?? 'ranked',
+			time: existingFilters.time ?? 'all-time',
+			sort: existingFilters.sort ?? 'last-played',
+		};
 		const decks: readonly DeckSummary[] = this.decksStateBuilder.buildState(stats, filters);
 		return Object.assign(new DecktrackerState(), currentState, {
 			decks: decks,

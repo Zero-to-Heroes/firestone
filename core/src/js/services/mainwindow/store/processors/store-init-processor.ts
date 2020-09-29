@@ -6,7 +6,6 @@ import { UserService } from '../../../user.service';
 import { StoreInitEvent } from '../events/store-init-event';
 import { Processor } from './processor';
 
-// TOREMOVE
 export class StoreInitProcessor implements Processor {
 	constructor(private ow: OverwolfService, private userService: UserService, private prefs: PreferencesService) {}
 

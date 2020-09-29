@@ -8,6 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
+import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -15,6 +16,7 @@ import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-f
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { ChangeDeckFormatFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-mode-filter-event';
+import { ChangeDeckSortEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -36,6 +38,24 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[navigation]="_navigation"
 				(onOptionSelected)="selectFormat($event)"
 			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="time-filter"
+				[options]="timeFilterOptions"
+				[filter]="activeTimeFilter"
+				[checkVisibleHandler]="timeVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectTime($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="sort"
+				[options]="sortOptions"
+				[filter]="activeSort"
+				[checkVisibleHandler]="sortVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectSort($event)"
+			></fs-filter-dropdown>
 			<!-- <fs-filter-dropdown
 				class="mode-filter"
 				[options]="modeFilterOptions"
@@ -54,15 +74,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[navigation]="_navigation"
 				(onOptionSelected)="selectClassFilter($event)"
 			></fs-filter-dropdown> -->
-			<fs-filter-dropdown
-				class="time-filter"
-				[options]="timeFilterOptions"
-				[filter]="activeTimeFilter"
-				[checkVisibleHandler]="timeVisibleHandler"
-				[state]="_state"
-				[navigation]="_navigation"
-				(onOptionSelected)="selectTime($event)"
-			></fs-filter-dropdown>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -112,6 +123,25 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		return state && navigation && navigation.currentApp == 'decktracker';
 	};
 
+	sortOptions: readonly DeckSortOption[] = [
+		{
+			value: 'last-played',
+			label: 'Last used',
+		} as DeckSortOption,
+		{
+			value: 'games-played',
+			label: 'Games played',
+		} as DeckSortOption,
+		{
+			value: 'winrate',
+			label: 'Winrate',
+		} as DeckSortOption,
+	] as readonly DeckSortOption[];
+	activeSort: DeckSortType;
+	sortVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return state && navigation && navigation.currentApp == 'decktracker';
+	};
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
@@ -135,9 +165,14 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new ChangeDeckModeFilterEvent());
 	}
 
+	selectSort(option: DeckSortOption) {
+		this.stateUpdater.next(new ChangeDeckSortEvent(option.value));
+	}
+
 	private doSetValues() {
 		this.activeFormatFilter = this._state?.decktracker?.filters?.gameFormat;
 		this.activeTimeFilter = this._state?.decktracker?.filters?.time;
+		this.activeSort = this._state?.decktracker?.filters?.sort;
 	}
 }
 
@@ -151,4 +186,8 @@ interface ModeFilterOption extends IOption {
 
 interface TimeFilterOption extends IOption {
 	value: DeckTimeFilterType;
+}
+
+interface DeckSortOption extends IOption {
+	value: DeckSortType;
 }
