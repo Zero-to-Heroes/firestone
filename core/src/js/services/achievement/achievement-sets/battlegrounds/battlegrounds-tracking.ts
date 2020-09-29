@@ -18,6 +18,7 @@ export class BattlegroundsTrackingSetProvider extends GenericSetProvider {
 				'battlegrounds_tribe_played_beast',
 				'battlegrounds_tribe_played_demon',
 				'battlegrounds_tribe_played_dragon',
+				'battlegrounds_tribe_played_elemental',
 				'battlegrounds_tribe_played_mechanical',
 				'battlegrounds_tribe_played_murloc',
 				'battlegrounds_tribe_played_pirate',

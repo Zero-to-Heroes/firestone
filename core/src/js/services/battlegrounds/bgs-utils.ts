@@ -27,6 +27,10 @@ export const getTribeIcon = (tribe: string | Race): string => {
 		case Race.PIRATE:
 			referenceCardId = 'BGS_080';
 			break;
+		case 'Elemental':
+		case Race.ELEMENTAL:
+			referenceCardId = CardIds.NonCollectible.Neutral.LilRag;
+			break;
 		default:
 			referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
 			break;
@@ -42,8 +46,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_011';
 		case 'TB_BaconShop_HERO_08':
 			return 'TB_BaconShop_HP_069';
-		case 'TB_BaconShop_HERO_11':
-			return 'TB_BaconShop_HP_019';
+		case CardIds.NonCollectible.Neutral.RagnarosTheFirelordTavernBrawlBATTLEGROUNDS:
+			return CardIds.NonCollectible.Neutral.DieInsectsTavernBrawl2;
 		case 'TB_BaconShop_HERO_12':
 			return 'TB_BaconShop_HP_041';
 		case 'TB_BaconShop_HERO_14':
@@ -142,6 +146,14 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_081';
 		case 'TB_BaconShop_HERO_74':
 			return 'TB_BaconShop_HP_082';
+		case CardIds.NonCollectible.Neutral.ChenvaalaTavernBrawl:
+			return CardIds.NonCollectible.Neutral.AvalancheTavernBrawl;
+		case CardIds.NonCollectible.Neutral.RakanishuTavernBrawl2:
+			return CardIds.NonCollectible.Neutral.TavernLightingTavernBrawl;
+		case CardIds.NonCollectible.Neutral.AlakirTavernBrawl:
+			return CardIds.NonCollectible.Neutral.SwattingInsectsTavernBrawl;
+		case '':
+			return null; // new heroes
 	}
 };
 
