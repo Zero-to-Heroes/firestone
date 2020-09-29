@@ -18,6 +18,7 @@ import { ChangeDeckFormatFilterEvent } from '../../../services/mainwindow/store/
 import { ChangeDeckModeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-mode-filter-event';
 import { ChangeDeckSortEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
+import { ToggleShowHiddenDecksEvent } from '../../../services/mainwindow/store/events/decktracker/toggle-show-hidden-decks-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -56,6 +57,9 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[navigation]="_navigation"
 				(onOptionSelected)="selectSort($event)"
 			></fs-filter-dropdown>
+			<div class="show-hidden-decks-link" (click)="toggleShowHiddenDecks()">
+				{{ _state.decktracker.showHiddenDecks ? 'Showing hidden decks' : 'Hiding hidden decks' }}
+			</div>
 			<!-- <fs-filter-dropdown
 				class="mode-filter"
 				[options]="modeFilterOptions"
@@ -167,6 +171,10 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 
 	selectSort(option: DeckSortOption) {
 		this.stateUpdater.next(new ChangeDeckSortEvent(option.value));
+	}
+
+	toggleShowHiddenDecks() {
+		this.stateUpdater.next(new ToggleShowHiddenDecksEvent());
 	}
 
 	private doSetValues() {

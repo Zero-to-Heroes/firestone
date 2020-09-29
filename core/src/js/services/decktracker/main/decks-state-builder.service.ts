@@ -6,18 +6,23 @@ import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
+import { Preferences } from '../../../models/preferences';
 
 @Injectable()
 export class DecksStateBuilderService {
-	public buildState(stats: StatsState, filters: DeckFilters): readonly DeckSummary[] {
-		// console.log('[decktracker-stats-loader] update with stats');
+	public buildState(stats: StatsState, filters: DeckFilters, prefs: Preferences = null): readonly DeckSummary[] {
+		console.log('[decktracker-stats-loader] update with stats');
 		if (!stats || !stats.gameStats) {
 			return [];
 		}
+		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		const validDecks = stats.gameStats.stats
 			.filter(stat => stat.gameFormat === filters.gameFormat)
 			.filter(stat => stat.gameMode === filters.gameMode)
 			.filter(stat => this.isValidDate(stat, filters.time))
+			.filter(
+				stat => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
+			)
 			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined');
 		const groupByDeckstring = groupBy('playerDecklist');
 		const statsByDeck = groupByDeckstring(validDecks);
@@ -25,7 +30,7 @@ export class DecksStateBuilderService {
 		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
 		const deckstrings = Object.keys(statsByDeck);
 		const decks: readonly DeckSummary[] = deckstrings
-			.map(deckstring => this.buildDeckSummary(deckstring, statsByDeck[deckstring]))
+			.map(deckstring => this.buildDeckSummary(deckstring, statsByDeck[deckstring], hiddenDeckCodes))
 			.sort(this.getSortFunction(filters.sort));
 
 		return decks;
@@ -68,7 +73,11 @@ export class DecksStateBuilderService {
 		}
 	}
 
-	private buildDeckSummary(deckstring: string, stats: readonly GameStat[]): DeckSummary {
+	private buildDeckSummary(
+		deckstring: string,
+		stats: readonly GameStat[],
+		hiddenDeckCodes: readonly string[],
+	): DeckSummary {
 		const deckName =
 			stats.filter(stat => stat.playerDeckName).length > 0
 				? stats.filter(stat => stat.playerDeckName)[0].playerDeckName
@@ -95,6 +104,7 @@ export class DecksStateBuilderService {
 			skin: deckSkin,
 			totalGames: totalGames,
 			winRatePercentage: (100.0 * totalWins) / totalGames,
+			hidden: hiddenDeckCodes.includes(deckstring),
 			// matchupStats: matchupStats,
 		} as DeckSummary);
 	}

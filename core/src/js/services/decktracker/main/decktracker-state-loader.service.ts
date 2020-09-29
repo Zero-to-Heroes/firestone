@@ -19,11 +19,12 @@ export class DecktrackerStateLoaderService {
 			time: existingFilters.time ?? 'all-time',
 			sort: existingFilters.sort ?? 'last-played',
 		};
-		const decks: readonly DeckSummary[] = this.decksStateBuilder.buildState(stats, filters);
+		const decks: readonly DeckSummary[] = this.decksStateBuilder.buildState(stats, filters, prefs);
 		return Object.assign(new DecktrackerState(), currentState, {
 			decks: decks,
 			filters: filters,
 			isLoading: false,
+			showHiddenDecks: prefs?.desktopDeckShowHiddenDecks ?? false,
 		} as DecktrackerState);
 	}
 }

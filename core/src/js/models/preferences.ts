@@ -27,6 +27,8 @@ export class Preferences {
 	readonly collectionUseOverlay: boolean;
 
 	readonly desktopDeckFilters: DeckFilters;
+	readonly desktopDeckShowHiddenDecks: boolean = false;
+	readonly desktopDeckHiddenDeckCodes: readonly string[] = [];
 
 	readonly decktrackerShowArena: boolean = true;
 	readonly decktrackerShowRanked: boolean = true;

@@ -3,6 +3,7 @@ import { DeckSummary } from './deck-summary';
 
 export class DecktrackerState {
 	readonly filters: DeckFilters = new DeckFilters();
+	readonly showHiddenDecks: boolean = false;
 	readonly decks: readonly DeckSummary[];
 	readonly isLoading: boolean = true;
 }

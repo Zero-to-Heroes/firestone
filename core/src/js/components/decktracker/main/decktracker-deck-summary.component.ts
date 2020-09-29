@@ -1,20 +1,21 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
+import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
+import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'decktracker-deck-summary',
 	styleUrls: [
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/controls/controls.scss`,
+		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/global/menu.scss`,
 		`../../../../css/component/decktracker/main/decktracker-deck-summary.component.scss`,
 	],
 	template: `
-		<div
-			class="decktracker-deck-summary"
-			helpTooltip="Detailed deck stats coming soon, stay tuned!"
-			helpTooltipPosition="right"
-		>
+		<div class="decktracker-deck-summary" [ngClass]="{ 'hidden': hidden }">
 			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
 			<div class="deck-image">
 				<img class="skin" [src]="skin" />
@@ -25,21 +26,32 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<div class="text win-rate">{{ winRatePercentage }}% win rate</div>
 				<div class="last-used">Last used: {{ lastUsed }}</div>
 			</div>
+			<button
+				class="close-button"
+				helpTooltip="Hide deck (you can restore it later)"
+				(mousedown)="hideDeck()"
+				*ngIf="!hidden"
+			>
+				<svg class="svg-icon-fill">
+					<use
+						xmlns:xlink="https://www.w3.org/1999/xlink"
+						xlink:href="assets/svg/sprite.svg#window-control_close"
+					></use>
+				</svg>
+			</button>
+			<button class="restore-button" helpTooltip="Restore deck" (mousedown)="restoreDeck()" *ngIf="hidden">
+				<svg class="svg-icon-fill">
+					<use
+						xmlns:xlink="https://www.w3.org/1999/xlink"
+						xlink:href="assets/svg/sprite.svg#copy_deckstring"
+					></use>
+				</svg>
+			</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerDeckSummaryComponent implements AfterViewInit {
-	_deck: DeckSummary;
-	deckName: string;
-	deckNameClass: string;
-	totalGames: number;
-	winRatePercentage: string;
-	lastUsed: string;
-	skin: string;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	@Input() set deck(value: DeckSummary) {
 		// console.log('[decktracker-deck-summary] setting value', value);
 		this._deck = value;
@@ -51,12 +63,32 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		});
 		this.lastUsed = this.buildLastUsedDate(value.lastUsedTimestamp);
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.skin}.jpg`;
+		this.hidden = value.hidden;
 	}
+
+	_deck: DeckSummary;
+	deckName: string;
+	deckNameClass: string;
+	totalGames: number;
+	winRatePercentage: string;
+	lastUsed: string;
+	skin: string;
+	hidden: boolean;
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	hideDeck() {
+		this.stateUpdater.next(new HideDeckSummaryEvent(this._deck.deckstring));
+	}
+
+	restoreDeck() {
+		this.stateUpdater.next(new RestoreDeckSummaryEvent(this._deck.deckstring));
 	}
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {

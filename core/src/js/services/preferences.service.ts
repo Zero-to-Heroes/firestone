@@ -34,7 +34,7 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async setValue(field: string, pref: boolean | number) {
+	public async setValue(field: string, pref: boolean | number): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		// console.log('setting pref', field, pref);
 		const newPrefs: Preferences = { ...prefs, [field]: pref };
@@ -43,6 +43,7 @@ export class PreferencesService {
 			'value': pref,
 		});
 		this.savePreferences(newPrefs);
+		return newPrefs;
 	}
 
 	public async setGlobalFtueDone() {
@@ -179,9 +180,14 @@ export class PreferencesService {
 	public async setDesktopDeckFilters(value: DeckFilters) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckFilters: value };
-		console.log('saving new filters', value, newPrefs);
 		await this.savePreferences(newPrefs);
-		console.log('new filters saved', await this.getPreferences());
+	}
+
+	public async setDesktopDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, desktopDeckHiddenDeckCodes: value };
+		this.savePreferences(newPrefs);
+		return newPrefs;
 	}
 
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {

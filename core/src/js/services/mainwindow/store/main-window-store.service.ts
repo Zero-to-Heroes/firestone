@@ -66,7 +66,10 @@ import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-fo
 import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
 import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
+import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
+import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summary-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
+import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
@@ -124,7 +127,10 @@ import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change
 import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
 import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
+import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
+import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-deck-summary-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
+import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
@@ -505,6 +511,15 @@ export class MainWindowStoreService {
 
 			ChangeDeckSortEvent.eventName(),
 			new ChangeDeckSortProcessor(this.decksStateBuilder, this.prefs),
+
+			HideDeckSummaryEvent.eventName(),
+			new HideDeckSummaryProcessor(this.decksStateBuilder, this.prefs),
+
+			RestoreDeckSummaryEvent.eventName(),
+			new RestoreDeckSummaryProcessor(this.decksStateBuilder, this.prefs),
+
+			ToggleShowHiddenDecksEvent.eventName(),
+			new ToggleShowHiddenDecksProcessor(this.decksStateBuilder, this.prefs),
 
 			// Battlegrounds
 			SelectBattlegroundsGlobalCategoryEvent.eventName(),

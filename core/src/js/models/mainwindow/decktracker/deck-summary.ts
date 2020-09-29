@@ -9,4 +9,5 @@ export class DeckSummary {
 	readonly winRatePercentage: number;
 	readonly lastUsedTimestamp: number;
 	readonly matchupStats: readonly MatchupStat[];
+	readonly hidden: boolean;
 }

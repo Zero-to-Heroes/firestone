@@ -13,6 +13,8 @@
 	font-style: normal;
 	font-weight: normal;
 	font-size: 13px;
+	flex-grow: 1;
+	margin-right: 20px;
 }
 
 .title {
@@ -33,5 +35,16 @@
 
 	.filter:last-child:after {
 		border-right: none;
+	}
+}
+
+.show-hidden-decks-link {
+	align-self: flex-end;
+	flex-grow: 1;
+	text-align: right;
+	opacity: 0.8;
+
+	&:hover {
+		opacity: 1;
 	}
 }
