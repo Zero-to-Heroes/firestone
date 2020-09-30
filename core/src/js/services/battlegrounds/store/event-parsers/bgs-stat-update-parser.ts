@@ -86,6 +86,7 @@ export class BgsStatUpdateParser implements EventParser {
 							? 0
 							: gamesWithMmr
 									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
+									.filter(mmr => BgsStatUpdateParser.isValidMmrDelta(mmr)) // Safeguard against season reset
 									.filter(mmr => !isNaN(mmr))
 									.reduce((a, b) => a + b, 0) / gamesWithMmr.length,
 					playerTop4:
@@ -111,5 +112,9 @@ export class BgsStatUpdateParser implements EventParser {
 			[] ||
 			[];
 		return heroStats.sort((a, b) => a.averagePosition - b.averagePosition);
+	}
+
+	private static isValidMmrDelta(mmr: number): boolean {
+		return Math.abs(mmr) < 350;
 	}
 }
