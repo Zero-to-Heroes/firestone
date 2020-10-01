@@ -4,6 +4,7 @@ import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
+import { Metadata } from '../../models/decktracker/metadata';
 import { GameEvent } from '../../models/game-event';
 import { MatchInfo } from '../../models/match-info';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -65,7 +66,12 @@ export class DeckParserService {
 			return;
 		}
 		if (this.goingIntoQueueRegex.exec(logLine)) {
-			console.log('[deck-parser] getting active deck from going into queue');
+			const currentScene = await this.memory.getCurrentScene();
+			// Don't refresh the deck when leaving the match
+			if (currentScene === 'scene_gameplay') {
+				return;
+			}
+			console.log('[deck-parser] getting active deck from going into queue', await this.memory.getCurrentScene());
 			const activeDeck = await this.memory.getActiveDeck(1);
 			console.log('[deck-parser] active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
@@ -81,22 +87,24 @@ export class DeckParserService {
 		}
 	}
 
-	public async getCurrentDeck(shouldUsePreviousDeck: boolean, scenarioId: number): Promise<any> {
+	public async getCurrentDeck(usePreviousDeckIfSameScenarioId: boolean, metadata: Metadata): Promise<any> {
+		const shouldUseCachedDeck = metadata.gameType !== GameType.GT_VS_AI;
 		console.log(
 			'[deck-parser] getting current deck',
 			this.currentDeck,
-			shouldUsePreviousDeck,
-			scenarioId,
+			usePreviousDeckIfSameScenarioId,
+			shouldUseCachedDeck,
+			metadata,
 			this.previousDeck,
 		);
-		if (this.currentDeck?.deck) {
+		if (shouldUseCachedDeck && this.currentDeck?.deck) {
 			console.log('[deck-parser] returning cached deck', this.currentDeck);
 			return this.currentDeck;
 		}
 		if (
 			(!this.currentDeck || !this.currentDeck.deck) &&
-			shouldUsePreviousDeck &&
-			scenarioId === this.previousDeck.scenarioId
+			usePreviousDeckIfSameScenarioId &&
+			metadata.scenarioId === this.previousDeck.scenarioId
 		) {
 			console.log('[deck-parser] using previous deck');
 			this.currentDeck = this.previousDeck;
@@ -116,8 +124,8 @@ export class DeckParserService {
 		// 	this.isDeckLogged(scenarioId),
 		// 	this.currentDeck?.deck,
 		// );
-		if (!this.currentDeck?.deck && this.isDeckLogged(scenarioId)) {
-			console.log('[deck-parser] trying to read previous deck from logs', scenarioId);
+		if (!this.currentDeck?.deck && this.isDeckLogged(metadata.scenarioId)) {
+			console.log('[deck-parser] trying to read previous deck from logs', metadata.scenarioId);
 			await this.readDeckFromLogFile();
 		}
 		console.log('[deck-parser] returning current deck', this.currentDeck);

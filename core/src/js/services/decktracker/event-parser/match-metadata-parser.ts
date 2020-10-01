@@ -35,13 +35,15 @@ export class MatchMetadataParser implements EventParser {
 			console.log('[match-metadata-parser] no deck mode is active, not loading current deck');
 		}
 		console.log('[match-metadata-parser] will get current deck');
+		const metaData = {
+			gameType: gameEvent.additionalData.metaData.GameType as number,
+			formatType: format,
+			scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
+		} as Metadata;
 		// We don't always have a deckstring here, eg when we read the deck from memory
 		const currentDeck = noDeckMode
 			? undefined
-			: await this.deckParser.getCurrentDeck(
-					gameEvent.additionalData.metaData.GameType === GameType.GT_VS_AI,
-					gameEvent.additionalData.metaData.ScenarioID,
-			  );
+			: await this.deckParser.getCurrentDeck(metaData.gameType === GameType.GT_VS_AI, metaData);
 		const deckstringToUse = currentState.playerDeck?.deckstring || currentDeck?.deckstring;
 		console.log(
 			'[match-metadata-parser] init game with deck',
@@ -86,11 +88,7 @@ export class MatchMetadataParser implements EventParser {
 		const hero: HeroCard = this.buildHero(currentDeck);
 
 		return Object.assign(new GameState(), currentState, {
-			metadata: {
-				gameType: gameEvent.additionalData.metaData.GameType as number,
-				formatType: format,
-				scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
-			} as Metadata,
+			metadata: metaData,
 			deckStats: deckStats,
 			deckStatsRecap: statsRecap,
 			matchupStatsRecap: matchupStatsRecap,
