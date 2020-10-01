@@ -176,7 +176,7 @@ export class BgsPostMatchStatsRecapComponent {
 			this?._game?.reviewId &&
 			this?._stats?.newBestUserStats.find(stat => stat.statName === statName) != null &&
 			this?._stats?.newBestUserStats.find(stat => stat.statName === statName).reviewId === this._game.reviewId;
-		console.log('isNewRecord', statName, isNewRecord, this._stats);
+		// console.log('isNewRecord', statName, isNewRecord, this._stats);
 		return isNewRecord;
 	}
 

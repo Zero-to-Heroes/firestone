@@ -232,7 +232,6 @@ export class MainWindowStoreService {
 
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
 		const event = eventQueue[0];
-		// console.log('[store] processing event', event.eventName());
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
 		if (!processor) {

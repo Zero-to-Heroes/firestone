@@ -263,7 +263,6 @@ export class BattlegroundsStoreService {
 		const eventsToProcess = this.queuedEvents.filter(event => event.trigger === gameEvent.type);
 		this.queuedEvents = this.queuedEvents.filter(event => event.trigger !== gameEvent.type);
 		for (const event of eventsToProcess) {
-			// console.log('[bgs-store] enqueueing pending event', event.event.type, event.trigger);
 			this.battlegroundsUpdater.next(event.event);
 		}
 	}

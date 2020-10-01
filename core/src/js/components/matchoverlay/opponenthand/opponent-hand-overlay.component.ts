@@ -66,7 +66,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				return;
 			}
 			this.gameState = event.state;
-			// console.log('received state', event.event?.name, this.gameState?.opponentDeck?.hand);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
