@@ -2,9 +2,6 @@ import { OverwolfService } from '../../overwolf.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 
 export class MindVisionOperationFacade<T> {
-	// private cachedValue: T;
-	private lastCacheDate = 0;
-
 	private processingQueue = new ProcessingQueue<InternalCall<T>>(
 		eventQueue => this.processQueue(eventQueue),
 		1000,
@@ -19,7 +16,6 @@ export class MindVisionOperationFacade<T> {
 		private transformer: (output: any) => T,
 		private numberOfRetries = 3,
 		private delay = 3000,
-		private cacheDuration = 2000,
 		private resetMindvisionIfEmpty: (info: any) => boolean = null,
 	) {}
 
@@ -67,12 +63,6 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	public async call(numberOfRetries?: number): Promise<T> {
-		// if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
-		// 	// if (this.serviceName === 'getBattlegroundsMatch') {
-		// 	// 	this.log('returning cached value', this.cachedValue);
-		// 	// }
-		// 	return this.cachedValue;
-		// }
 		if (!(await this.ow.inGame())) {
 			return null;
 		}
@@ -93,13 +83,6 @@ export class MindVisionOperationFacade<T> {
 	}
 
 	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number, forceReset = false) {
-		// if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
-		// 	// if (this.serviceName === 'getBattlegroundsMatch') {
-		// 	// 	this.log('returning cached value', this.cachedValue);
-		// 	// }
-		// 	callback(this.cachedValue, 0);
-		// 	return;
-		// }
 		if (!forceReset && retriesLeft <= 0) {
 			// There are cases where not retrieving the info it totally valid,
 			// like trying to get the BattlegroundsInfo right after logging in
@@ -121,17 +104,8 @@ export class MindVisionOperationFacade<T> {
 			setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay);
 			return;
 		}
-		// this.log('retrieved info from memory', resultFromMemory);
-		// try {
-		// 	this.log(
-		// 		'detail',
-		// 		resultFromMemory.filter(entry => entry.Count + entry.PremiumCount !== 0),
-		// 		resultFromMemory.filter(entry => entry.CardId === 'CS2_041'),
-		// 	);
-		// } catch (e) {}
+		this.log('retrieved info from memory', resultFromMemory);
 		const result = this.transformer(resultFromMemory);
-		// this.cachedValue = result;
-		this.lastCacheDate = Date.now();
 		callback(result, retriesLeft - 1);
 		return;
 	}
