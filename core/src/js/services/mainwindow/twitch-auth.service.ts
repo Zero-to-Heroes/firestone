@@ -22,7 +22,6 @@ import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
-// const EBS_URL = 'https://ec2-52-42-105-37.us-west-2.compute.amazonaws.com/deck/event';
 // const EBS_URL = 'https://localhost:8081/deck/event';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
@@ -106,8 +105,17 @@ export class TwitchAuthService {
 				state: GameState.create(),
 			});
 		}
+
+		// First clean the stats
+		const newState = Object.assign(new GameState(), newEvent.state, {
+			deckStats: undefined,
+		} as GameState);
+		newEvent = Object.assign({}, newEvent, {
+			state: newState,
+		});
+
 		// Tmp fix until we fix the twitch extension
-		else if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
+		if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
 			const newDeck: readonly DeckCard[] = [
 				...newEvent.state.playerDeck.deck,
 				...newEvent.state.playerDeck.hand,
