@@ -235,7 +235,7 @@ export class BattlegroundsStoreService {
 			this.processPendingEvents(gameEvent);
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
-			console.log('[bgs-store] Replay created, received info', this.mainWindowState);
+			console.log('[bgs-store] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review' && this.state && this.state.inGame && this.state.currentGame) {
 				this.events.broadcast(

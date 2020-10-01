@@ -36,7 +36,7 @@ export class OpponentPlayerParser implements EventParser {
 		} as HeroCard);
 
 		let matchupStatsRecap = currentState.matchupStatsRecap;
-		console.log('parsing opponent', currentState.metadata, currentState.deckStats, currentState);
+		console.log('parsing opponent', currentState.metadata, currentState.deckStats);
 		if (currentState.metadata.formatType && currentState.deckStats) {
 			const convertedFormat = MatchMetadataParser.convertFormat(currentState.metadata.formatType);
 			const statsAgainstOpponent = currentState.deckStats.filter(

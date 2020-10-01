@@ -34,7 +34,7 @@ export class GameRunningParser implements EventParser {
 			return state;
 		}
 		if (state.deckList && state.deckList.some(card => card.entityId > 0 || card.cardId)) {
-			console.log('[game-running] decklist in state, returning', state.deckList, state);
+			console.log('[game-running] decklist in state, returning', state.deckList);
 			return state;
 		}
 		if (state.deck && state.deck.some(card => card.entityId > 0 || card.cardId)) {

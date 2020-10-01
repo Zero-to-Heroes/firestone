@@ -34,24 +34,24 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 		forceCloseWidgets = false,
 		forceLogs = false,
 	) {
-		if (forceLogs) {
-			console.log(
-				'[player-overlay] will consider overlay for player deck',
-				state?.metadata,
-				showDecktrackerFromGameMode,
-				forceCloseWidgets,
-			);
-		}
+		// if (forceLogs) {
+		// 	console.log(
+		// 		'[player-overlay] will consider overlay for player deck',
+		// 		state?.metadata,
+		// 		showDecktrackerFromGameMode,
+		// 		forceCloseWidgets,
+		// 	);
+		// }
 		// TODO: don't forget to change this
 		// For now, it looks like the scene_state event from the GEP isn't fired anymore?
 		const inGame = await this.ow.inGame(); //(this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
-		if (forceLogs) {
-			console.log('[game-state] inGame?', inGame);
-		}
+		// if (forceLogs) {
+		// 	console.log('[game-state] inGame?', inGame);
+		// }
 		const decktrackerWindow = await this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW);
-		if (forceLogs) {
-			console.log('[game-state] retrieved window', decktrackerWindow);
-		}
+		// if (forceLogs) {
+		// 	console.log('[game-state] retrieved window', decktrackerWindow);
+		// }
 
 		const shouldShowTracker =
 			state &&
@@ -63,18 +63,18 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
 				(state.playerDeck.board && state.playerDeck.board.length > 0) ||
 				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
-		if (forceLogs) {
-			console.log(
-				'[game-state] should show tracker?',
-				inGame,
-				shouldShowTracker,
-				showDecktrackerFromGameMode,
-				decktrackerWindow.window_state_ex,
-				this.closedByUser,
-				state?.playerDeck,
-				state?.metadata,
-			);
-		}
+		// if (forceLogs) {
+		// 	console.log(
+		// 		'[game-state] should show tracker?',
+		// 		inGame,
+		// 		shouldShowTracker,
+		// 		showDecktrackerFromGameMode,
+		// 		decktrackerWindow.window_state_ex,
+		// 		this.closedByUser,
+		// 		state?.playerDeck,
+		// 		state?.metadata,
+		// 	);
+		// }
 		if (
 			inGame &&
 			shouldShowTracker &&
@@ -82,21 +82,21 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 			showDecktrackerFromGameMode &&
 			!this.closedByUser
 		) {
-			console.log('[game-state] showing tracker');
+			// console.log('[game-state] showing tracker');
 			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
 		} else if (
 			!isWindowClosed(decktrackerWindow.window_state_ex) &&
 			(!shouldShowTracker || !showDecktrackerFromGameMode || this.closedByUser || !inGame)
 		) {
-			console.log('[game-state] closing tracker');
+			// console.log('[game-state] closing tracker');
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
-		if (forceLogs) {
-			console.log(
-				'[game-state] tracker window handled',
-				await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW),
-			);
-		}
+		// if (forceLogs) {
+		// 	console.log(
+		// 		'[game-state] tracker window handled',
+		// 		await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW),
+		// 	);
+		// }
 	}
 }

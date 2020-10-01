@@ -174,7 +174,7 @@ export class GameStateService {
 				console.log('decktracker display update', event);
 				this.showDecktrackerFromGameMode = event;
 				console.log('will update overlays', event, this.showDecktrackerFromGameMode);
-				this.updateOverlays(this.state, false, true);
+				this.updateOverlays(this.state, false, false);
 			});
 		});
 		this.handleDisplayPreferences();
@@ -275,9 +275,9 @@ export class GameStateService {
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
 		} else if (gameEvent.type === GameEvent.GAME_START) {
-			this.updateOverlays(this.state, false, true, shouldUpdateOverlays);
+			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.GAME_END) {
-			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
+			this.updateOverlays(this.state, true, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
 			console.log('[game-state] handling overlay for event', gameEvent.type, gameEvent);
 			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
@@ -336,7 +336,7 @@ export class GameStateService {
 		this.updateOverlays(
 			this.state,
 			false,
-			[GameEvent.MATCH_METADATA, GameEvent.LOCAL_PLAYER].indexOf(gameEvent.type) !== -1,
+			false, //[GameEvent.MATCH_METADATA, GameEvent.LOCAL_PLAYER].indexOf(gameEvent.type) !== -1,
 			shouldUpdateOverlays,
 		);
 		const emittedEvent = {
