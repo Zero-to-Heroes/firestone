@@ -1,5 +1,23 @@
 .banned-tribes {
 	display: flex;
+
+	&.column {
+		flex-direction: column;
+
+		bgs-banned-tribe {
+			margin-right: 0;
+			margin-bottom: 10px;
+		}
+	}
+}
+
+.scalable {
+	transform: scale(1);
+	transform-origin: left top;
+	opacity: 1;
+	transition-property: transform, opacity;
+	transition-duration: 0.15s;
+	transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
 }
 
 bgs-banned-tribe {

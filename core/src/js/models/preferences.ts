@@ -126,6 +126,8 @@ export class Preferences {
 	readonly bgsSimulatorNumberOfSims = 2500;
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
+	readonly bgsBannedTribeScale = 100;
+	readonly bgsBannedTribesShowVertically: boolean;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';

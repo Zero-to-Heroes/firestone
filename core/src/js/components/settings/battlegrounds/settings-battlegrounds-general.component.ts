@@ -23,7 +23,7 @@ import { Knob } from '../preference-slider.component';
 		`../../../../css/component/settings/battlegrounds/settings-battlegrounds-general.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-general">
+		<div class="battlegrounds-general" scrollable>
 			<div class="title">Activate / Deactivate features</div>
 			<div class="settings-group">
 				<div class="subgroup">
@@ -84,7 +84,7 @@ import { Knob } from '../preference-slider.component';
 					Number of simulations
 				</div>
 				<preference-slider
-					class="first-slider"
+					class="simulation-slider"
 					field="bgsSimulatorNumberOfSims"
 					[enabled]="useLocalSimulator"
 					[showCurrentValue]="true"
@@ -96,6 +96,33 @@ import { Knob } from '../preference-slider.component';
 				>
 				</preference-slider>
 			</div>
+
+			<div class="title">
+				Banned tribes
+			</div>
+			<div class="settings-group" [ngClass]="{ 'disabled': !showBannedTribes }">
+				<preference-toggle
+					class="banned-tribes-vertical"
+					field="bgsBannedTribesShowVertically"
+					label="Show in column"
+					tooltip="When active, banned tribes are shown in a column instead of a row"
+				></preference-toggle>
+				<div class="text">
+					Icon size
+				</div>
+				<preference-slider
+					class="banned-tribes-size-slider"
+					field="bgsBannedTribeScale"
+					[enabled]="true"
+					[showCurrentValue]="false"
+					displayedValueUnit=""
+					[min]="80"
+					[max]="200"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,9 +130,24 @@ import { Knob } from '../preference-slider.component';
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;
+	showBannedTribes: boolean;
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
 			absoluteValue: 2500,
+		},
+	];
+	sizeKnobs: readonly Knob[] = [
+		{
+			percentageValue: 0,
+			label: 'Small',
+		},
+		{
+			percentageValue: 18,
+			label: 'Medium',
+		},
+		{
+			percentageValue: 100,
+			label: 'Large',
 		},
 	];
 
@@ -125,6 +167,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 			const preferences: Preferences = event.preferences;
 			this.useLocalSimulator = preferences.bgsUseLocalSimulator;
 			this.enableSimulation = preferences.bgsEnableSimulation;
+			this.showBannedTribes = preferences.bgsShowBannedTribesOverlay;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -139,6 +182,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		const prefs = await this.prefs.getPreferences();
 		this.useLocalSimulator = prefs.bgsUseLocalSimulator;
 		this.enableSimulation = prefs.bgsEnableSimulation;
+		this.showBannedTribes = prefs.bgsShowBannedTribesOverlay;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

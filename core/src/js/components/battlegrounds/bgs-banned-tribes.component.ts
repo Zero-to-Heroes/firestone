@@ -3,8 +3,11 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
+	EventEmitter,
 	HostListener,
 	OnDestroy,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
@@ -25,22 +28,33 @@ declare let amplitude;
 		`../../../css/themes/battlegrounds-theme.scss`,
 	],
 	template: `
-		<div *ngIf="bannedTribes" class="root overlay-container-parent banned-tribes" [activeTheme]="'battlegrounds'">
-			<bgs-banned-tribe *ngFor="let tribe of bannedTribes" [tribe]="tribe">{{ tribe }}</bgs-banned-tribe>
+		<div class="scalable">
+			<div
+				*ngIf="bannedTribes"
+				class="root overlay-container-parent banned-tribes {{ orientation }}"
+				[activeTheme]="'battlegrounds'"
+			>
+				<bgs-banned-tribe *ngFor="let tribe of bannedTribes" [tribe]="tribe">{{ tribe }}</bgs-banned-tribe>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 	bannedTribes: readonly Race[] = [];
+	orientation: 'row' | 'column' = 'row';
 
+	private scale: number;
 	private stateSubscription: Subscription;
 	private windowId: string;
+	private preferencesSubscription: Subscription;
 
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
 	) {}
 
 	async ngAfterViewInit() {
@@ -56,13 +70,22 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handleDisplayPreferences(event.preferences);
+		});
+		await this.handleDisplayPreferences();
 		await this.restoreWindowPosition();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngOnDestroy() {
 		if (this.stateSubscription) {
 			this.stateSubscription.unsubscribe();
 		}
+		this.preferencesSubscription.unsubscribe();
 	}
 
 	@HostListener('mousedown')
@@ -74,6 +97,27 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 			}
 			this.prefs.updateBgsBannedTribedPosition(window.left, window.top);
 		});
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.orientation = preferences.bgsBannedTribesShowVertically ? 'column' : 'row';
+		this.scale = preferences.bgsBannedTribeScale;
+		this.el.nativeElement.style.setProperty('--bgs-banned-tribe-scale', this.scale / 100);
+		// this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
+		this.onResized();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private onResized() {
+		const newScale = this.scale / 100;
+		const element = this.el.nativeElement.querySelector('.scalable');
+		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
