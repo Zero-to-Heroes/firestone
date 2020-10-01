@@ -91,7 +91,7 @@ export class BgsChartWarbandCompositionComponent {
 	dimensions: number[];
 	chartData: object[];
 	colorScheme = {
-		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#43403d', '#8e141f', '#D9C3AB'],
+		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#43403d', '#DE5959', '#D9C3AB'],
 	};
 	barPadding: number;
 
