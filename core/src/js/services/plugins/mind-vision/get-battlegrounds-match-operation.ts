@@ -8,7 +8,7 @@ export class GetBattlegroundsMatchOperation extends MindVisionOperationFacade<Ba
 		super(
 			ow,
 			'getBattlegroundsMatch',
-			() => mindVision.getBattlegroundsInfo(),
+			(forceReset?: boolean) => mindVision.getBattlegroundsInfo(forceReset),
 			battlegroundsInfo => false,
 			battlegroundsInfo =>
 				Object.assign(new BattlegroundsInfo(), {
@@ -17,6 +17,8 @@ export class GetBattlegroundsMatchOperation extends MindVisionOperationFacade<Ba
 				} as BattlegroundsInfo),
 			5,
 			1000,
+			2000,
+			battlegroundsInfo => !battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,
 		);
 	}
 }

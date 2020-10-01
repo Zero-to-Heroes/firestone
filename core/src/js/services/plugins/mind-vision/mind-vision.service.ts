@@ -44,12 +44,14 @@ export class MindVisionService {
 		});
 	}
 
-	public async getBattlegroundsInfo(): Promise<{ Rating: number }> {
+	public async getBattlegroundsInfo(forceReset = false): Promise<{ Rating: number }> {
 		return new Promise<{ Rating: number }>(async resolve => {
-			// console.log('[mind-vision] retrieving getBattlegroundsInfo');
+			if (forceReset) {
+				console.log('forcing reset of mindvision', forceReset);
+			}
 			const plugin = await this.get();
 			try {
-				plugin.getBattlegroundsInfo(battlegroundsInfo => {
+				plugin.getBattlegroundsInfo(forceReset, battlegroundsInfo => {
 					// console.log('[mind-vision] retrieved getBattlegroundsInfo', battlegroundsInfo);
 					resolve(battlegroundsInfo ? JSON.parse(battlegroundsInfo) : null);
 				});

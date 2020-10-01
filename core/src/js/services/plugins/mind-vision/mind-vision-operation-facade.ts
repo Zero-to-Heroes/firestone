@@ -14,12 +14,13 @@ export class MindVisionOperationFacade<T> {
 	constructor(
 		private ow: OverwolfService,
 		private serviceName: string,
-		private mindVisionOperation: () => Promise<any>,
+		private mindVisionOperation: (forceReset?: boolean) => Promise<any>,
 		private emptyCheck: (input: any) => boolean,
 		private transformer: (output: any) => T,
 		private numberOfRetries = 3,
 		private delay = 3000,
 		private cacheDuration = 2000,
+		private resetMindvisionIfEmpty: (info: any) => boolean = null,
 	) {}
 
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
@@ -91,7 +92,7 @@ export class MindVisionOperationFacade<T> {
 		});
 	}
 
-	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number) {
+	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number, forceReset = false) {
 		// if (this.cachedValue && Date.now() - this.lastCacheDate < this.cacheDuration) {
 		// 	// if (this.serviceName === 'getBattlegroundsMatch') {
 		// 	// 	this.log('returning cached value', this.cachedValue);
@@ -99,7 +100,7 @@ export class MindVisionOperationFacade<T> {
 		// 	callback(this.cachedValue, 0);
 		// 	return;
 		// }
-		if (retriesLeft <= 0) {
+		if (!forceReset && retriesLeft <= 0) {
 			// There are cases where not retrieving the info it totally valid,
 			// like trying to get the BattlegroundsInfo right after logging in
 			callback(null, retriesLeft);
@@ -110,9 +111,13 @@ export class MindVisionOperationFacade<T> {
 			return;
 		}
 		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
-		const resultFromMemory = await this.mindVisionOperation();
+		const resultFromMemory = await this.mindVisionOperation(forceReset);
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
-			this.log('result from memory is empty, retying'); //, resultFromMemory);
+			this.log('result from memory is empty, retying');
+			if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
+				setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay, true);
+				return;
+			}
 			setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay);
 			return;
 		}
