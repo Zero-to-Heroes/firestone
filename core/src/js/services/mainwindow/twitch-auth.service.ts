@@ -2,9 +2,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag, GameType } from '@firestone-hs/reference-data';
+import { OutcomeSamples } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { deflate } from 'pako';
 import {
 	TwitchBgsBoard,
 	TwitchBgsBoardEntity,
+	TwitchBgsCurrentBattle,
 	TwitchBgsPlayer,
 	TwitchBgsState,
 } from '../../components/decktracker/overlay/twitch/twitch-bgs-state';
@@ -71,7 +74,7 @@ export class TwitchAuthService {
 
 	private async processQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
 		// Debounce events
-		if (Date.now() - this.lastProcessTimestamp < 2000) {
+		if (Date.now() - this.lastProcessTimestamp < 4000) {
 			return eventQueue;
 		}
 		this.lastProcessTimestamp = Date.now();
@@ -82,7 +85,7 @@ export class TwitchAuthService {
 
 	private async processBgsQueue(eventQueue: readonly any[]): Promise<readonly any[]> {
 		// Debounce events
-		if (Date.now() - this.lastProcessBgsTimestamp < 2000) {
+		if (Date.now() - this.lastProcessBgsTimestamp < 4000) {
 			return eventQueue;
 		}
 		this.lastProcessBgsTimestamp = Date.now();
@@ -92,7 +95,12 @@ export class TwitchAuthService {
 	}
 
 	private async emitEvent(event: any) {
-		let newEvent = Object.assign({}, event);
+		let newEvent = Object.assign(
+			{
+				type: 'deck-event',
+			},
+			event,
+		);
 		if (!newEvent.state) {
 			newEvent = Object.assign({}, newEvent, {
 				state: GameState.create(),
@@ -131,23 +139,7 @@ export class TwitchAuthService {
 				state: newState,
 			});
 		}
-		// console.log('ready to emit twitch event', newEvent);
-		const prefs = await this.prefs.getPreferences();
-		if (!prefs.twitchAccessToken) {
-			// console.log('no twitch access token, returning');
-			return;
-		}
-		// console.log('sending twitch event', newEvent);
-		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
-		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
-			() => {
-				// Do nothing
-				// console.log('twitch event result', data);
-			},
-			error => {
-				console.error('[twitch-auth] Could not send deck event to EBS', error);
-			},
-		);
+		this.sendEvent(newEvent);
 	}
 
 	private async emitBgsEvent(state: BattlegroundsState) {
@@ -159,6 +151,7 @@ export class TwitchAuthService {
 		}
 		const stateToSend: TwitchBgsState = {
 			leaderboard: this.buildLeaderboard(state),
+			// TODO: remove this once everything is properly deployed on Twitch
 			currentBattle: {
 				battleInfo: state.currentGame?.battleResult,
 				status: state.currentGame?.battleInfoStatus,
@@ -167,16 +160,140 @@ export class TwitchAuthService {
 			inGame: state.inGame,
 			gameEnded: state.gameEnded,
 		};
-		const newEvent = {
-			type: 'bgs',
-			state: stateToSend,
-		};
-		// console.log('sending twitch bgs event', newEvent);
+
+		const shouldSplitMessage = this.shouldSplitMessage(stateToSend);
+		if (!shouldSplitMessage) {
+			this.sendEvent({
+				type: 'bgs',
+				state: stateToSend,
+			});
+		} else {
+			const { currentBattle, ...newEvent } = stateToSend;
+
+			const bgsStateEvent = {
+				type: 'bgs',
+				state: newEvent,
+			};
+			this.sendEvent(bgsStateEvent);
+
+			// console.warn('battle message too big, considering splitting it');
+			const cleanedCurrentBattle = this.cleanCurrentBattle(currentBattle);
+			if (!cleanedCurrentBattle) {
+				console.warn('Could not compress message enough');
+				return;
+			}
+			const bgsBattleEvent = {
+				event: {
+					// Here for backward compatibility purpose
+					name: 'bgs-battle',
+				},
+				type: 'bgs-battle',
+				state: cleanedCurrentBattle,
+			};
+			// console.log('[twitch] splitting message', bgsStateEvent, bgsBattleEvent);
+
+			this.sendEvent(bgsBattleEvent);
+		}
+	}
+
+	private cleanCurrentBattle(currentBattle: TwitchBgsCurrentBattle, threshold = 15): TwitchBgsCurrentBattle {
+		let shouldSplit = true;
+		while (threshold && threshold > 0 && shouldSplit) {
+			currentBattle = this.cleanOutcome(currentBattle, threshold, [
+				{
+					selector: (battle: TwitchBgsCurrentBattle) => battle.battleInfo.lostPercent,
+					cleaner: (outcomeSamples: OutcomeSamples) => ({
+						...outcomeSamples,
+						lost: undefined,
+					}),
+				} as Cleaner,
+				{
+					selector: (battle: TwitchBgsCurrentBattle) => battle.battleInfo.tiedPercent,
+					cleaner: (outcomeSamples: OutcomeSamples) => ({
+						...outcomeSamples,
+						tied: undefined,
+					}),
+				} as Cleaner,
+				{
+					selector: (battle: TwitchBgsCurrentBattle) => battle.battleInfo.wonPercent,
+					cleaner: (outcomeSamples: OutcomeSamples) => ({
+						...outcomeSamples,
+						won: undefined,
+					}),
+				} as Cleaner,
+			]);
+			threshold = threshold - 3;
+			if (threshold > 0) {
+				shouldSplit = this.shouldSplitMessage(currentBattle);
+			}
+			if (shouldSplit) {
+				// console.warn(
+				// 	'[twitch] battle message still too big, considering further cleaning',
+				// 	new Blob([deflate(JSON.stringify(currentBattle), { to: 'string' })]).size,
+				// 	JSON.stringify(currentBattle).length,
+				// 	currentBattle,
+				// 	threshold,
+				// );
+			} else {
+				// console.log('[twitch] message compressed', currentBattle);
+			}
+		}
+		return currentBattle;
+	}
+
+	private cleanOutcome(
+		battle: TwitchBgsCurrentBattle,
+		threshold: number,
+		cleaners: readonly Cleaner[],
+	): TwitchBgsCurrentBattle {
+		for (const cleaner of cleaners) {
+			if (cleaner.selector(battle) >= threshold) {
+				console.log('[twitch] deleting uninteresting sample', threshold, cleaner.selector(battle), battle);
+				battle = {
+					...battle,
+					battleInfo: {
+						...battle.battleInfo,
+						outcomeSamples: cleaner.cleaner(battle.battleInfo.outcomeSamples),
+					},
+				};
+				// console.log('deleted', battle);
+			}
+		}
+		// console.log('returning after deletion', battle);
+		return battle;
+	}
+
+	private shouldSplitMessage(message: any) {
+		const compressedMessage = deflate(JSON.stringify(message), { to: 'string' });
+		const messageSize = new Blob([compressedMessage]).size;
+		return messageSize >= 5000;
+	}
+
+	private hasLoggedInfoOnce = false;
+	private async sendEvent(newEvent) {
+		// console.log('ready to emit twitch event', newEvent);
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.twitchAccessToken) {
+			// console.log('no twitch access token, returning');
+			return;
+		}
+		// console.log('sending twitch event', newEvent);
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
-			() => {
+			(data: any) => {
 				// Do nothing
-				// console.log('twitch event result', data);
+				// console.log('[twitch] twitch event result', data);
+				const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
+				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
+					this.hasLoggedInfoOnce = true;
+					console.error(
+						'no-format',
+						'[twitch] Message sent to Twitch is too large',
+						compressedMessage.length,
+						new Blob([compressedMessage]).size,
+						newEvent,
+					);
+				}
 			},
 			error => {
 				console.error('[twitch-auth] Could not send deck event to EBS', error);
@@ -358,4 +475,9 @@ export class TwitchAuthService {
 		await this.prefs.setTwitchAccessToken(accessToken);
 		await this.retrieveUserName(accessToken);
 	}
+}
+
+interface Cleaner {
+	selector: (battle: TwitchBgsCurrentBattle) => number;
+	cleaner: (outcomeSamples: OutcomeSamples) => OutcomeSamples;
 }

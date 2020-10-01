@@ -7,10 +7,12 @@ export interface TwitchBgsState {
 	readonly currentTurn: number;
 	readonly gameEnded: boolean;
 	readonly inGame: boolean;
-	readonly currentBattle: {
-		battleInfo: SimulationResult;
-		status: 'empty' | 'waiting-for-result' | 'done';
-	};
+	readonly currentBattle?: TwitchBgsCurrentBattle;
+}
+
+export interface TwitchBgsCurrentBattle {
+	battleInfo: SimulationResult;
+	status: 'empty' | 'waiting-for-result' | 'done';
 }
 
 export interface TwitchBgsPlayer {

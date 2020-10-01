@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { TwitchBgsState } from './twitch-bgs-state';
+import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 
 declare let amplitude: any;
 
@@ -46,9 +46,9 @@ export class BgsSimulationOverlayStandaloneComponent {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
 
-	@Input() set bgsState(value: TwitchBgsState) {
-		this.nextBattle = value?.currentBattle?.battleInfo;
-		this.battleSimulationStatus = value?.currentBattle?.status;
+	@Input() set bgsState(value: TwitchBgsCurrentBattle) {
+		this.nextBattle = value?.battleInfo;
+		this.battleSimulationStatus = value?.status;
 		console.log('setting game state', value, this.nextBattle, this.battleSimulationStatus);
 	}
 
