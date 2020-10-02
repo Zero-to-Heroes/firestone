@@ -13,10 +13,12 @@ import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
+import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
@@ -33,6 +35,7 @@ export class BgsRunStatsService {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
+		private readonly apiRunner: ApiRunner,
 		private readonly http: HttpClient,
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
@@ -50,6 +53,18 @@ export class BgsRunStatsService {
 			this.bgsStateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
+	}
+
+	public async retrieveReviewPostMatchStats(reviewId: string): Promise<void> {
+		const results = await this.apiRunner.callPostApiWithRetries<readonly BgsPostMatchStatsForReview[]>(
+			`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
+			{
+				reviewId: reviewId,
+			},
+		);
+		const result = results && results.length > 0 ? results[0] : null;
+		console.log('post-match results for review', reviewId, result);
+		this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, result?.stats));
 	}
 
 	private async computeHeroDetailsForBg(heroCardId: string) {

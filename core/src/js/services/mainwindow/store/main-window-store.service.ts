@@ -77,7 +77,10 @@ import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { ReplaysFilterEvent } from './events/replays/replays-filter-event';
+import { SelectMatchStatsTabEvent } from './events/replays/select-match-stats-tab-event';
+import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
+import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
 import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
@@ -138,7 +141,10 @@ import { NavigationBackProcessor } from './processors/navigation/navigation-back
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
 import { ReplaysFilterProcessor } from './processors/replays/replays-filter-processor';
+import { SelectMatchStatsTabProcessor } from './processors/replays/select-match-stats-tab-processor';
+import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
+import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
 import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
@@ -491,6 +497,15 @@ export class MainWindowStoreService {
 			// Replays
 			ShowReplayEvent.eventName(),
 			new ShowReplayProcessor(),
+
+			TriggerShowMatchStatsEvent.eventName(),
+			new TriggerShowMatchStatsProcessor(this.bgsRunStatsService),
+
+			ShowMatchStatsEvent.eventName(),
+			new ShowMatchStatsProcessor(this.bgsRunStatsService),
+
+			SelectMatchStatsTabEvent.eventName(),
+			new SelectMatchStatsTabProcessor(),
 
 			ReplaysFilterEvent.eventName(),
 			new ReplaysFilterProcessor(this.replaysStateBuilder),

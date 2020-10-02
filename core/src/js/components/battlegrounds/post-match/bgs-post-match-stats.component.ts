@@ -31,7 +31,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="container">
-			<div class="content empty-state" *ngIf="!computing && !_panel?.player">
+			<div class="content empty-state" *ngIf="!computing && !_panel?.player && !mainPlayerCardId">
 				<i>
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
@@ -41,7 +41,7 @@ declare let amplitude: any;
 				<span class="subtitle">Finish the run to get some stats!</span>
 			</div>
 			<with-loading
-				*ngIf="_panel?.player || computing"
+				*ngIf="_panel?.player || computing || mainPlayerCardId"
 				[isLoading]="computing"
 				mainTitle="We're building the stats"
 				[subtitle]="
@@ -54,7 +54,7 @@ declare let amplitude: any;
 			>
 				<div class="content">
 					<social-shares class="social-shares" [onSocialClick]="takeScreenshot()"></social-shares>
-					<bgs-player-capsule [player]="_panel?.player" [rating]="mmr" class="opponent-overview">
+					<bgs-player-capsule [player]="_panel?.player" [rating]="mmr || inputMmr" class="opponent-overview">
 						<div class="main-info">
 							<bgs-board
 								*ngIf="boardMinions && boardMinions.length > 0"
@@ -82,7 +82,7 @@ declare let amplitude: any;
 								class="stat"
 								[hidden]="selectedTab !== 'hp-by-turn'"
 								[stats]="_panel?.stats"
-								[game]="_game"
+								[mainPlayerCardId]="_game?.getMainPlayer()?.cardId || mainPlayerCardId"
 								[visible]="selectedTab === 'hp-by-turn'"
 							>
 							</bgs-chart-hp>
@@ -135,7 +135,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	boardMinions: readonly Entity[];
 	minionStats: readonly MinionStat[];
 	tabs: readonly BgsStatsFilterId[];
-	selectedTab: BgsStatsFilterId;
 	computing: boolean;
 	mmr: number;
 
@@ -143,6 +142,11 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 
 	private loadingStart: number;
 	private loadingInterval;
+
+	@Input() selectedTab: BgsStatsFilterId;
+	@Input() mainPlayerCardId?: string;
+	@Input() inputMmr?: number;
+	@Input() selectTabHandler: (tab: BgsStatsFilterId) => void;
 
 	@Input() set game(value: BgsGame) {
 		if (value === this._game) {
@@ -178,7 +182,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			// console.log('same panel');
 			return;
 		}
-		// console.log('setting panel', value);
+		console.log('setting panel', value);
 		this._panel = value;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.getDisplayCardId()}.png`;
 		this.health = value.player.initialHealth - value.player.damageTaken;
@@ -191,7 +195,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
 		}
 		this.tabs = value.tabs;
-		this.selectedTab = value.selectedStat;
+		this.selectedTab = value.selectedStat ?? this.selectedTab;
 		this.addMinionStats();
 		// console.log('panel info set');
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -221,8 +225,10 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	selectTab(tab: BgsStatsFilterId) {
-		// console.log('selecting tab', tab);
-		this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab));
+		console.log('selecting tab', tab);
+		this.selectTabHandler
+			? this.selectTabHandler(tab)
+			: this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab));
 	}
 
 	getLabel(tab: BgsStatsFilterId): string {

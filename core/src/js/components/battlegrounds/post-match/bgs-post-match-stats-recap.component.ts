@@ -187,9 +187,9 @@ export class BgsPostMatchStatsRecapComponent {
 			this.reset();
 			return;
 		}
-		this.wins = this._game.faceOffs.filter(faceOff => faceOff.result === 'won').length || 0;
-		this.losses = this._game.faceOffs.filter(faceOff => faceOff.result === 'lost').length || 0;
-		this.ties = this._game.faceOffs.filter(faceOff => faceOff.result === 'tied').length || 0;
+		this.wins = this._game?.faceOffs?.filter(faceOff => faceOff.result === 'won')?.length || 0;
+		this.losses = this._game?.faceOffs?.filter(faceOff => faceOff.result === 'lost')?.length || 0;
+		this.ties = this._game?.faceOffs?.filter(faceOff => faceOff.result === 'tied')?.length || 0;
 
 		this.winStreak = this._stats.player.highestWinStreak;
 		this.totalMinionsDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)

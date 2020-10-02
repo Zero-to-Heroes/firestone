@@ -23,6 +23,12 @@ import { BgsBattleStatusComponent } from '../../components/battlegrounds/in-game
 import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview-big.component';
 import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
 import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
+import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/bgs-chart-hp.component';
+import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
+import { BgsChartWarbandStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-stats.component';
+import { BgsPostMatchStatsRecapComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats-recap.component';
+import { BgsPostMatchStatsComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats.component';
+import { BgsWinrateChartComponent } from '../../components/battlegrounds/post-match/bgs-winrate-chart.component';
 import { StatCellComponent } from '../../components/battlegrounds/post-match/stat-cell.component';
 import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
@@ -144,6 +150,12 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsHeroSelectionTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
+		BgsPostMatchStatsComponent,
+		BgsPostMatchStatsRecapComponent,
+		BgsChartHpComponent,
+		BgsChartWarbandStatsComponent,
+		BgsWinrateChartComponent,
+		BgsChartWarbandCompositionComponent,
 
 		GraphWithComparisonComponent,
 
@@ -223,6 +235,12 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		BgsHeroSelectionTooltipComponent,
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
+		BgsPostMatchStatsComponent,
+		BgsPostMatchStatsRecapComponent,
+		BgsChartHpComponent,
+		BgsChartWarbandStatsComponent,
+		BgsWinrateChartComponent,
+		BgsChartWarbandCompositionComponent,
 
 		GraphWithComparisonComponent,
 

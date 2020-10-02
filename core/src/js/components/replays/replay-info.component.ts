@@ -5,6 +5,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
+import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -39,6 +40,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="play-coin-icon icon" [innerHTML]="playCoinIconSvg" [helpTooltip]="playCoinTooltip"></div>
 			</div>
 
+			<div class="group match-stats" *ngIf="hasMatchStats" (click)="showStats()">
+				Show stats
+			</div>
+
 			<div class="replay" *ngIf="reviewId" (click)="showReplay()">
 				<div class="watch">Watch</div>
 				<div class="watch-icon">
@@ -66,6 +71,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
+	hasMatchStats: boolean;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -80,6 +86,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		this.result = this.buildMatchResultText(value);
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(value);
 		this.reviewId = value.reviewId;
+		this.hasMatchStats = value.gameMode === 'battlegrounds';
 		this.opponentName = value.gameMode !== 'battlegrounds' ? this.sanitizeName(value.opponentName) : null;
 		this.visualResult =
 			value.gameMode !== 'battlegrounds' ? value.result : parseInt(value.additionalResult) <= 4 ? 'won' : 'lost';
@@ -97,6 +104,10 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	showReplay() {
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
+	}
+
+	showStats() {
+		this.stateUpdater.next(new TriggerShowMatchStatsEvent(this.reviewId));
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {

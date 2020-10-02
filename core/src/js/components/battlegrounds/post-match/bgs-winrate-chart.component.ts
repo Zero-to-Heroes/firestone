@@ -62,6 +62,7 @@ export class BgsWinrateChartComponent {
 			return;
 		}
 
+		console.log('setting info in winrate chart', this._player, this._stats, this._globalStats);
 		this.communityExtractor = (): readonly NumericTurnInfo[] => {
 			if (!this._globalStats?.heroStats || !this._player.cardId) {
 				return [];

@@ -23,12 +23,6 @@ import { BgsHeroFaceOffsComponent } from '../../components/battlegrounds/in-game
 import { BgsNextOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-next-opponent-overview.component';
 import { BgsOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview.component';
 import { MenuSelectionBgsComponent } from '../../components/battlegrounds/menu-selection-bgs.component';
-import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/bgs-chart-hp.component';
-import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
-import { BgsChartWarbandStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-stats.component';
-import { BgsPostMatchStatsRecapComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats-recap.component';
-import { BgsPostMatchStatsComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats.component';
-import { BgsWinrateChartComponent } from '../../components/battlegrounds/post-match/bgs-winrate-chart.component';
 import { AdService } from '../../services/ad.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
@@ -78,14 +72,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsHeroOverviewComponent,
 		BgsHeroWarbandStatsComponent,
 		BgsNextOpponentOverviewComponent,
-		BgsPostMatchStatsComponent,
-		BgsPostMatchStatsRecapComponent,
 		BgsHeroFaceOffComponent,
 		BgsOpponentOverviewComponent,
-		BgsChartHpComponent,
-		BgsChartWarbandStatsComponent,
-		BgsWinrateChartComponent,
-		BgsChartWarbandCompositionComponent,
 		MenuSelectionBgsComponent,
 		// BgsOpponentOverviewBigComponent,
 		BgsHeroFaceOffsComponent,

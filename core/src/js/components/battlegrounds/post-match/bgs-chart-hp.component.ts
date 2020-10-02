@@ -8,11 +8,11 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color } from 'ng2-charts';
-import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 
@@ -263,7 +263,8 @@ export class BgsChartHpComponent {
 	lineChartColors: Color[] = [];
 
 	private _stats: BgsPostMatchStats;
-	private _game: BgsGame;
+	private _mainPlayerCardId: string;
+	// private _game: BgsGame;
 	private _visible: boolean;
 	private _dirty = true;
 
@@ -273,11 +274,17 @@ export class BgsChartHpComponent {
 		this.setStats();
 	}
 
-	@Input() set game(value: BgsGame) {
-		// console.log('setting game', value);
-		this._game = value;
+	@Input() set mainPlayerCardId(value: string) {
+		// console.log('setting stats', value);
+		this._mainPlayerCardId = value;
 		this.setStats();
 	}
+
+	// @Input() set game(value: BgsGame) {
+	// 	// console.log('setting game', value);
+	// 	this._game = value;
+	// 	this.setStats();
+	// }
 
 	@Input() set visible(value: boolean) {
 		if (value === this._visible) {
@@ -365,12 +372,47 @@ export class BgsChartHpComponent {
 	}
 
 	private async setStats() {
-		if (!this._stats || !this._game) {
+		if (!this._stats) {
 			return;
 		}
-		const playerOrder = [...this._game.players]
-			.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
-			.map(player => player?.cardId);
+		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn).map(playerCardId => ({
+			playerCardId: playerCardId,
+			turnDeath: this._stats.hpOverTurn[playerCardId].find(turnInfo => turnInfo.value <= 0)?.turn ?? 99,
+			lastKnownHp:
+				this._stats.hpOverTurn[playerCardId][this._stats.hpOverTurn[playerCardId].length - 1]?.value ?? 99,
+		}));
+		let playerOrder: string[] = turnAtWhichEachPlayerDies
+			.sort((a, b) => {
+				if (a.turnDeath < b.turnDeath) {
+					return 1;
+				}
+				if (a.turnDeath > b.turnDeath) {
+					return -1;
+				}
+				return b.lastKnownHp - a.lastKnownHp;
+			})
+			.map(playerInfo => playerInfo.playerCardId);
+		// Legacy issue - the heroes that were offered during the hero selection phase are
+		// also proposed there
+		if (playerOrder.length > 8) {
+			const candidatesToRemove = turnAtWhichEachPlayerDies
+				.filter(info => info.turnDeath === 99)
+				.filter(info =>
+					info.playerCardId === CardIds.NonCollectible.Neutral.PatchwerkTavernBrawl2
+						? info.lastKnownHp === 50
+						: info.lastKnownHp === 40,
+				)
+				.filter(info => info.playerCardId !== this._mainPlayerCardId);
+			console.log('candidates to remove', candidatesToRemove.length, playerOrder.length - 8, candidatesToRemove);
+			playerOrder = playerOrder.filter(
+				playerCardId => !candidatesToRemove.map(info => info.playerCardId).includes(playerCardId),
+			);
+		}
+
+		// const playerOrder = [...this._game.players]
+		// 	.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
+		// 	.map(player => player?.cardId);
+
 		// console.log('playerOrder', playerOrder);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
@@ -381,7 +423,7 @@ export class BgsChartHpComponent {
 			cardId: cardId,
 			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${cardId}.png`,
 			position: playerOrder.indexOf(cardId) + 1,
-			isPlayer: cardId === this._game.getMainPlayer()?.cardId,
+			isPlayer: cardId === this._mainPlayerCardId,
 			shown: true,
 		}));
 

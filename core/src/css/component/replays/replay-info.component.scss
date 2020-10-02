@@ -52,6 +52,7 @@
 		border: none;
 	}
 
+	&.match-stats,
 	&.result {
 		width: 115px;
 	}
@@ -147,6 +148,7 @@
 	margin-right: 5px;
 }
 
+.match-stats,
 .result {
 	font-family: Open Sans;
 	font-style: normal;
@@ -154,6 +156,12 @@
 	font-size: 13px;
 	line-height: 18px;
 	color: var(--default-text-color);
+}
+
+.match-stats {
+	&:hover {
+		color: var(--on-menu-selection-color);
+	}
 }
 
 .play-coin-icon {
