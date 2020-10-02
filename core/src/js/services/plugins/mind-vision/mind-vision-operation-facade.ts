@@ -104,7 +104,7 @@ export class MindVisionOperationFacade<T> {
 			setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay);
 			return;
 		}
-		this.log('retrieved info from memory', resultFromMemory);
+		// this.log('retrieved info from memory', resultFromMemory);
 		const result = this.transformer(resultFromMemory);
 		callback(result, retriesLeft - 1);
 		return;
