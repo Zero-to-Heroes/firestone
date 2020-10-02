@@ -81,6 +81,9 @@ export class BgsWinrateChartComponent {
 		};
 
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
+			if (!this._stats || !this._stats.battleResultHistory) {
+				return [];
+			}
 			return this._stats.battleResultHistory.map(
 				turnInfo =>
 					({

@@ -15,7 +15,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="stats-recap" scrollable>
-			<div class="entry face-offs">
+			<div class="entry face-offs" *ngIf="wins || losses || ties">
 				<div class="cell">
 					<div class="label">Won</div>
 					<div class="value">{{ wins }}</div>
@@ -182,7 +182,7 @@ export class BgsPostMatchStatsRecapComponent {
 
 	// When adding stats here, also add them to the api-compute-bgs-single-run-stats lambda
 	private updateStats() {
-		if (!this._stats?.player || !this._game) {
+		if (!this._stats?.player) {
 			// console.warn('[stats-recap] missing player or game', this._stats?.player, this._game);
 			this.reset();
 			return;
@@ -200,11 +200,13 @@ export class BgsPostMatchStatsRecapComponent {
 			.filter(cardId => cardId !== this._stats.player.cardId)
 			.map(cardId => this._stats.stats.totalMinionsDamageTaken[cardId])
 			.reduce((a, b) => a + b, 0);
-		const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
-			.filter(info => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
-			.map(info => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
-		this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero);
-		this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
+		if (this._stats.stats.damageToEnemyHeroOverTurn) {
+			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
+				.filter(info => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+				.map(info => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
+			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero);
+			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
+		}
 		this.triples = this._stats.player.tripleHistory.length;
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);

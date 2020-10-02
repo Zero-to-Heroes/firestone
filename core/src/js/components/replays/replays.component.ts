@@ -28,7 +28,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary"></section>
+			<section class="secondary">
+				<div class="match-stats" *ngIf="navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel">
+					<div class="title">Match Stats</div>
+					<bgs-post-match-stats-recap
+						[stats]="navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel"
+					></bgs-post-match-stats-recap>
+				</div>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
