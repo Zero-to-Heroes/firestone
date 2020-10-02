@@ -23,6 +23,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 				[panel]="panel"
 				[selectedTab]="selectedTab"
 				[selectTabHandler]="selectTabHandler"
+				emptyTitle="Nothing here"
+				emptySubtitle="We couldn't retrieve the stats"
 			></bgs-post-match-stats>
 		</div>
 	`,
@@ -38,8 +40,8 @@ export class MatchDetailsComponent {
 		this.selectedView = value.currentView === 'match-details' ? value.selectedTab : null;
 		this.selectedReplay = value.selectedReplay;
 		this.replayInfo = value.selectedReplay?.replayInfo;
-		this.playerCardId = value.selectedReplay?.replayInfo?.playerCardId;
 		this.panel = value.selectedReplay?.bgsPostMatchStatsPanel;
+		this.playerCardId = this.panel?.player?.cardId;
 		this.selectedTab = value.selectedStatsTab;
 		this.mmr = parseInt(value.selectedReplay?.replayInfo?.playerRank);
 		console.log('built panel', this.panel);

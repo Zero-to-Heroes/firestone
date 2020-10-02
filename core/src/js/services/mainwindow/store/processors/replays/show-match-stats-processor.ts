@@ -20,31 +20,31 @@ export class ShowMatchStatsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const matchStats = event.stats;
-		if (!matchStats) {
-			console.error('TODO: empty state');
-			return [currentState, navigationState];
-		}
 		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
 		const playerCardId = selectedInfo.playerCardId;
-		const mappedBoardInfo = matchStats.boardHistory.map(
-			history =>
-				({
-					turn: history.turn,
-					board: history.board.map(value => Entity.fromJS(value as any)),
-				} as BgsBoard),
-		);
-		console.log('mappedBoardInfo', mappedBoardInfo, matchStats.boardHistory);
+		const mappedBoardInfo = matchStats
+			? matchStats.boardHistory.map(
+					history =>
+						({
+							turn: history.turn,
+							board: history.board.map(value => Entity.fromJS(value as any)),
+						} as BgsBoard),
+			  )
+			: [];
+		// console.log('mappedBoardInfo', mappedBoardInfo, matchStats.boardHistory);
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({
 				stats: matchStats,
 				globalStats: currentState.battlegrounds.globalStats,
-				player: BgsPlayer.create({
-					cardId: playerCardId,
-					displayedCardId: playerCardId,
-					tavernUpgradeHistory: matchStats.tavernTimings,
-					boardHistory: mappedBoardInfo as readonly BgsBoard[],
-				} as BgsPlayer),
+				player: matchStats
+					? BgsPlayer.create({
+							cardId: playerCardId,
+							displayedCardId: playerCardId,
+							tavernUpgradeHistory: matchStats?.tavernTimings || [],
+							boardHistory: mappedBoardInfo as readonly BgsBoard[],
+					  } as BgsPlayer)
+					: null,
 				selectedStat: null, // We use the navigation-level info, to avoid
 				isComputing: false,
 				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn'], //, 'warband-composition-by-turn'], <-- will be reintroduced later

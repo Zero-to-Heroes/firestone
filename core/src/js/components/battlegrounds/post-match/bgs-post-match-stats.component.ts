@@ -37,8 +37,8 @@ declare let amplitude: any;
 						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
 					</svg>
 				</i>
-				<span class="title">Nothing here yet</span>
-				<span class="subtitle">Finish the run to get some stats!</span>
+				<span class="title">{{ emptyTitle }}</span>
+				<span class="subtitle">{{ emptySubtitle }} </span>
 			</div>
 			<with-loading
 				*ngIf="_panel?.player || computing || mainPlayerCardId"
@@ -143,6 +143,8 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	private loadingStart: number;
 	private loadingInterval;
 
+	@Input() emptyTitle = 'Nothing here yet';
+	@Input() emptySubtitle = 'Finish the run to get some stats!';
 	@Input() selectedTab: BgsStatsFilterId;
 	@Input() mainPlayerCardId?: string;
 	@Input() inputMmr?: number;
