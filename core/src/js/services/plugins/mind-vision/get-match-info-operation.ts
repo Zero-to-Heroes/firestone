@@ -34,14 +34,14 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 			name: matchPlayer.Name,
 			cardBackId: matchPlayer.CardBackId,
 			standard: {
-				leagueId: matchPlayer.Standard.LeagueId,
-				rankValue: matchPlayer.Standard.RankValue,
-				legendRank: matchPlayer.Standard.LegendRank,
+				leagueId: matchPlayer.Standard?.LeagueId,
+				rankValue: matchPlayer.Standard?.RankValue,
+				legendRank: matchPlayer.Standard?.LegendRank,
 			},
 			wild: {
-				leagueId: matchPlayer.Wild.LeagueId,
-				rankValue: matchPlayer.Wild.RankValue,
-				legendRank: matchPlayer.Wild.LegendRank,
+				leagueId: matchPlayer.Wild?.LeagueId,
+				rankValue: matchPlayer.Wild?.RankValue,
+				legendRank: matchPlayer.Wild?.LegendRank,
 			},
 		} as PlayerInfo;
 	}
