@@ -37,20 +37,19 @@ export class FsFilterDropdownComponent {
 		this.doSetValues();
 	}
 
+	@Input() set optionsBuilder(value: (navigation: NavigationState, state: MainWindowState) => readonly IOption[]) {
+		// this._options = undefined;
+		this._optionsBuilder = value;
+		this.doSetValues();
+	}
+
 	@Input() set options(value: readonly IOption[]) {
 		this._options = value;
 		this.doSetValues();
 	}
 
-	@Input() set optionsBuilder(value: (navigation: NavigationState, state: MainWindowState) => readonly IOption[]) {
-		this._optionsBuilder = value;
-		// console.log('setting options builder');
-		this.doSetValues();
-	}
-
 	@Input() set state(value: MainWindowState) {
 		this._state = value;
-		// console.log('setting state', this._state);
 		this.doSetValues();
 	}
 
@@ -61,7 +60,8 @@ export class FsFilterDropdownComponent {
 
 	_state: MainWindowState;
 	_navigation: NavigationState;
-	_options: readonly IOption[];
+	// Can be init directly, or through the builder
+	_options: readonly IOption[] = [];
 	_optionsBuilder: (navigation: NavigationState, state: MainWindowState) => readonly IOption[];
 	_checkVisibleHandler: (navigation: NavigationState, state: MainWindowState) => boolean;
 
@@ -74,25 +74,27 @@ export class FsFilterDropdownComponent {
 	}
 
 	private doSetValues() {
+		this.visible = this._checkVisibleHandler ? this._checkVisibleHandler(this._navigation, this._state) : true;
 		// console.log(
-		// 	'calling checkVisibleHandler',
+		// 	'setting values in filter',
 		// 	this._options,
 		// 	this._optionsBuilder,
 		// 	this._optionsBuilder && this._optionsBuilder(this._navigation, this._state),
+		// 	this._checkVisibleHandler,
+		// 	this.visible,
 		// 	this._navigation,
 		// 	this._state,
+		// 	this,
 		// );
-		this.visible = this._checkVisibleHandler ? this._checkVisibleHandler(this._navigation, this._state) : true;
 		if (!this.visible) {
+			console.log('not visible, returning', this._options);
 			return;
 		}
 
-		this._options =
-			this._options && this._options.length > 0
-				? this._options
-				: this._optionsBuilder
-				? this._optionsBuilder(this._navigation, this._state)
-				: [];
+		// We want to rebuild it in case the option contents change (eg the last patch number is retrieved,
+		// or in case the options values depend on another selection)
+		this._options = this._optionsBuilder ? this._optionsBuilder(this._navigation, this._state) : this._options;
+		// console.log('build options in fs-filter', this._options);
 		const placeholder =
 			this._options && this._options.length > 0 && this.filter
 				? this._options.find(option => option.value === this.filter)?.label
