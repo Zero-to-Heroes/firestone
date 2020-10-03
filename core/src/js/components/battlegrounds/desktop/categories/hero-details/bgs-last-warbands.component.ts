@@ -42,6 +42,7 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 					></bgs-board>
 				</div>
 				<battlegrounds-empty-state
+					*ngIf="!lastKnownBoards || lastKnownBoards.length === 0"
 					subtitle="Start playing Battlegrounds with this hero to collect some information"
 				></battlegrounds-empty-state>
 			</with-loading>
