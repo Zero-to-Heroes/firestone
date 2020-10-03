@@ -60,24 +60,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<div class="show-hidden-decks-link" (click)="toggleShowHiddenDecks()">
 				{{ _state.decktracker.showHiddenDecks ? 'Showing archived decks' : 'Hiding archived decks' }}
 			</div>
-			<!-- <fs-filter-dropdown
-				class="mode-filter"
-				[options]="modeFilterOptions"
-				[filter]="activeModeFilter"
-				[checkVisibleHandler]="modeVisibleHandler"
-				[state]="_state"
-				[navigation]="_navigation"
-				(onOptionSelected)="selectModeFilter($event)"
-			></fs-filter-dropdown> -->
-			<!-- <fs-filter-dropdown
-				class="class-filter"
-				[options]="classFilterOptions"
-				[filter]="activeClassFilter"
-				[checkVisibleHandler]="classVisibleHandler"
-				[state]="_state"
-				[navigation]="_navigation"
-				(onOptionSelected)="selectClassFilter($event)"
-			></fs-filter-dropdown> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -85,7 +67,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DecktrackerFiltersComponent implements AfterViewInit {
 	@Input() set state(value: MainWindowState) {
 		this._state = value;
-		console.log('setting state', value);
+		// console.log('setting state', value);
 		this.doSetValues();
 	}
 

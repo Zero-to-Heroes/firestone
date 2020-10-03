@@ -36,7 +36,7 @@ export class MatchDetailsComponent {
 	}
 
 	@Input() set navigation(value: NavigationReplays) {
-		console.log('setting replay info', value);
+		// console.log('setting replay info', value);
 		this.selectedView = value.currentView === 'match-details' ? value.selectedTab : null;
 		this.selectedReplay = value.selectedReplay;
 		this.replayInfo = value.selectedReplay?.replayInfo;
@@ -44,7 +44,7 @@ export class MatchDetailsComponent {
 		this.playerCardId = this.panel?.player?.cardId;
 		this.selectedTab = value.selectedStatsTab;
 		this.mmr = parseInt(value.selectedReplay?.replayInfo?.playerRank);
-		console.log('built panel', this.panel);
+		// console.log('built panel', this.panel);
 	}
 
 	selectedView: string;
