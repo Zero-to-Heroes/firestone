@@ -17,7 +17,7 @@ export class NavigationState {
 	readonly backArrowEnabled = false;
 	readonly nextArrowEnabled = false;
 	readonly isNavigationState = false;
-	readonly text: string;
+	readonly text: string = 'Categories'; // Init for Achievements, which is the default
 	readonly image: string;
 
 	public update(base: NavigationState): NavigationState {

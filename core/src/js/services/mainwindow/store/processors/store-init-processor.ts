@@ -21,7 +21,6 @@ export class StoreInitProcessor implements Processor {
 			currentState.update(event.initialState),
 			navigationState.update({
 				currentApp: !prefs.ftue.hasSeenGlobalFtue ? undefined : navigationState.currentApp,
-				text: 'Categories',
 			} as NavigationState),
 		];
 	}
