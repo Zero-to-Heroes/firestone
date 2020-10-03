@@ -256,7 +256,7 @@ export class TwitchAuthService {
 	): TwitchBgsCurrentBattle {
 		for (const cleaner of cleaners) {
 			if (cleaner.selector(battle) >= threshold) {
-				console.log('[twitch] deleting uninteresting sample', threshold, cleaner.selector(battle), battle);
+				console.log('[twitch] deleting uninteresting sample', threshold, cleaner.selector(battle));
 				battle = {
 					...battle,
 					battleInfo: {
