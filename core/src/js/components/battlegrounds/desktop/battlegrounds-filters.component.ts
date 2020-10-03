@@ -24,7 +24,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/battlegrounds/desktop/battlegrounds-filters.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-filters">
+		<div class="battlegrounds-filters" *ngIf="anyVisible()">
 			<fs-filter-dropdown
 				class="hero-sort-filter"
 				[options]="heroSortFilterOptions"
@@ -131,6 +131,13 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 
 	selectHeroSortFilter(option: HeroSortFilterOption) {
 		this.stateUpdater.next(new BgsHeroSortFilterSelectedEvent(option.value));
+	}
+
+	anyVisible() {
+		return (
+			this.heroVisibleHandler(this._navigation, this._state) ||
+			this.timeVisibleHandler(this._navigation, this._state)
+		);
 	}
 
 	private doSetValues() {
