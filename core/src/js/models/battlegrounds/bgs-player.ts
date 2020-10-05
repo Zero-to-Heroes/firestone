@@ -78,7 +78,9 @@ export class BgsPlayer implements IBgsPlayer {
 			taunt: logEntity.Tags.find(tag => tag.Name === GameTag.TAUNT)?.Value === 1,
 			cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator
 			windfury: logEntity.Tags.find(tag => tag.Name === GameTag.WINDFURY)?.Value === 1,
-			megaWindfury: logEntity.Tags.find(tag => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1,
+			megaWindfury:
+				logEntity.Tags.find(tag => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||
+				logEntity.Tags.find(tag => tag.Name === GameTag.WINDFURY)?.Value === 3,
 			friendly: true,
 		};
 	}

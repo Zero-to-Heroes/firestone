@@ -391,7 +391,7 @@ export class GameStateService {
 	}
 
 	private windfuryMultiplier(entity): number {
-		if (this.hasTag(entity, GameTag.MEGA_WINDFURY)) {
+		if (this.hasTag(entity, GameTag.MEGA_WINDFURY) || this.hasTag(entity, GameTag.WINDFURY, 3)) {
 			return 4;
 		}
 		if (this.hasTag(entity, GameTag.WINDFURY)) {
