@@ -31,6 +31,8 @@ const LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
 const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 
+const MAX_TWITCH_MESSAGE_SIZE = 5000;
+
 @Injectable()
 export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
@@ -274,7 +276,7 @@ export class TwitchAuthService {
 	private shouldSplitMessage(message: any) {
 		const compressedMessage = deflate(JSON.stringify(message), { to: 'string' });
 		const messageSize = new Blob([compressedMessage]).size;
-		return messageSize >= 5000;
+		return messageSize >= MAX_TWITCH_MESSAGE_SIZE;
 	}
 
 	private hasLoggedInfoOnce = false;
