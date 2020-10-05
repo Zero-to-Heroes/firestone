@@ -12,15 +12,29 @@ export class OwUtilsService {
 		this.initialize();
 	}
 
+	public async captureWindow(windowName: string): Promise<[string, any]> {
+		return new Promise<[string, any]>(async (resolve, reject) => {
+			console.log('[ow-utils] capturing window', windowName);
+			const plugin = await this.get();
+			try {
+				const path = `${OverwolfService.getLocalAppDataFolder()}/Temp`;
+				plugin.captureWindow(windowName, path, (screenshotLocation, byteArray) => {
+					console.log('[ow-utils] took screenshot', screenshotLocation, byteArray);
+					resolve([screenshotLocation, byteArray]);
+				});
+			} catch (e) {
+				console.log('[ow-utils] could not take screenshot', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async captureActiveWindow(): Promise<[string, any]> {
 		return new Promise<[string, any]>(async (resolve, reject) => {
 			// console.log('[ow-utils] retrieving collection');
 			const plugin = await this.get();
 			// console.log('[ow-utils] got plugin');
 			try {
-				plugin.onGlobalEvent.addListener((first: string, second: string) => {
-					console.log('[ow-utils] received global event', first, second);
-				});
 				const path = `${OverwolfService.getLocalAppDataFolder()}/Temp`;
 				plugin.captureActiveWindow(path, (screenshotLocation, byteArray) => {
 					// console.log('[ow-utils] took screenshot', screenshotLocation, byteArray);

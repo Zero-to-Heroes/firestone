@@ -18,6 +18,7 @@ import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrou
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
+import { PreferencesService } from '../../../services/preferences.service';
 import { normalizeCardId } from './card-utils';
 
 declare let amplitude: any;
@@ -53,7 +54,7 @@ declare let amplitude: any;
 				[hint]="true"
 			>
 				<div class="content">
-					<social-shares class="social-shares" [onSocialClick]="takeScreenshot()"></social-shares>
+					<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
 					<bgs-player-capsule [player]="_panel?.player" [rating]="mmr || inputMmr" class="opponent-overview">
 						<div class="main-info">
 							<bgs-board
@@ -140,6 +141,8 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 
 	loadingElapsed = 0;
 
+	takeScreenshotFunction: () => Promise<[string, any]> = this.takeScreenshot();
+
 	private loadingStart: number;
 	private loadingInterval;
 
@@ -213,6 +216,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly ow: OverwolfService,
 		private readonly allCards: AllCardsService,
 		private readonly owUtils: OwUtilsService,
+		private readonly prefs: PreferencesService,
 	) {
 		// console.log('in construftor');
 		allCards.initializeCardsDb();
@@ -249,7 +253,8 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	takeScreenshot(): () => Promise<[string, any]> {
-		return () => this.owUtils.captureActiveWindow();
+		//console.log('taking screenshot');
+		return async () => this.owUtils.captureWindow(`Firestone - Battlegrounds`);
 	}
 
 	private addMinionStats() {

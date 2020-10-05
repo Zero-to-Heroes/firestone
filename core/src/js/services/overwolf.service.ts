@@ -69,6 +69,12 @@ export class OverwolfService {
 			: OverwolfService.COLLECTION_WINDOW;
 	}
 
+	public getBattlegroundsWindowName(prefs: Preferences) {
+		return prefs.bgsUseOverlay
+			? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
+			: OverwolfService.BATTLEGROUNDS_WINDOW;
+	}
+
 	public getSettingsWindowName(prefs: Preferences) {
 		return prefs.collectionUseOverlay ? OverwolfService.SETTINGS_WINDOW_OVERLAY : OverwolfService.SETTINGS_WINDOW;
 	}
