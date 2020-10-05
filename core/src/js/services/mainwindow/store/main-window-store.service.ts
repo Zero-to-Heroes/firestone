@@ -44,6 +44,7 @@ import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
+import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { SelectBattlegroundsGlobalCategoryEvent } from './events/battlegrounds/select-battlegrounds-global-category-event';
@@ -108,6 +109,7 @@ import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/b
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-processor';
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
+import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { SelectBattlegroundsGlobalCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-global-category-processor';
@@ -544,6 +546,9 @@ export class MainWindowStoreService {
 
 			BgsTimeFilterSelectedEvent.eventName(),
 			new BgsTimeFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+
+			BgsRankFilterSelectedEvent.eventName(),
+			new BgsRankFilterSelectedProcessor(this.bgsBuilder, this.prefs),
 
 			BgsHeroSortFilterSelectedEvent.eventName(),
 			new BgsHeroSortFilterSelectedProcessor(this.bgsBuilder, this.prefs),

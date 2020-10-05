@@ -1,5 +1,6 @@
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
+import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { Ftue } from './preferences/ftue';
 
@@ -130,6 +131,7 @@ export class Preferences {
 	readonly bgsBannedTribesShowVertically: boolean;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
+	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 
 	readonly twitchAccessToken: string;

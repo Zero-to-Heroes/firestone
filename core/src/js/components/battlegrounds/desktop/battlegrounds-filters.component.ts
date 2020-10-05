@@ -10,9 +10,11 @@ import {
 import { IOption } from 'ng-select';
 import { BgsActiveTimeFilterType } from '../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
+import { BgsRankFilterType } from '../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { BgsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
+import { BgsRankFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -33,6 +35,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectHeroSortFilter($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="rank-filter"
+				[options]="rankFilterOptions"
+				[filter]="activeRankFilter"
+				[checkVisibleHandler]="rankVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectRankFilter($event)"
 			></fs-filter-dropdown>
 			<fs-filter-dropdown
 				class="time-filter"
@@ -89,6 +100,36 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		);
 	};
 
+	rankFilterOptions: readonly RankFilterOption[] = [
+		{
+			value: 'all',
+			label: 'All ranks',
+		} as RankFilterOption,
+		{
+			value: '2000',
+			label: '> 2000 MMR',
+		} as RankFilterOption,
+		{
+			value: '4000',
+			label: '> 4000 MMR',
+		} as RankFilterOption,
+		{
+			value: '6000',
+			label: '> 6000 MMR',
+		} as RankFilterOption,
+		{
+			value: '8000',
+			label: '> 8000 MMR',
+		} as RankFilterOption,
+		{
+			value: '10000',
+			label: '> 10 000 MMR',
+		} as RankFilterOption,
+	] as readonly RankFilterOption[];
+	activeRankFilter: BgsRankFilterType;
+	rankFilterVisible: boolean;
+	rankVisibleHandler = this.heroVisibleHandler;
+
 	activeTimeFilter: BgsActiveTimeFilterType;
 	timeFilterVisible: boolean;
 	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
@@ -133,16 +174,22 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new BgsHeroSortFilterSelectedEvent(option.value));
 	}
 
+	selectRankFilter(option: HeroSortFilterOption) {
+		this.stateUpdater.next(new BgsRankFilterSelectedEvent(option.value));
+	}
+
 	anyVisible() {
 		return (
 			this.heroVisibleHandler(this._navigation, this._state) ||
-			this.timeVisibleHandler(this._navigation, this._state)
+			this.timeVisibleHandler(this._navigation, this._state) ||
+			this.rankVisibleHandler(this._navigation, this._state)
 		);
 	}
 
 	private doSetValues() {
 		this.activeTimeFilter = this._state?.battlegrounds?.activeTimeFilter;
 		this.activeHeroSortFilter = this._state.battlegrounds?.activeHeroSortFilter;
+		this.activeRankFilter = this._state.battlegrounds?.activeRankFilter;
 	}
 }
 
@@ -152,4 +199,8 @@ interface TimeFilterOption extends IOption {
 
 interface HeroSortFilterOption extends IOption {
 	value: BgsHeroSortFilterType;
+}
+
+interface RankFilterOption extends IOption {
+	value: BgsRankFilterType;
 }

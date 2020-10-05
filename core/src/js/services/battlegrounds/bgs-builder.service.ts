@@ -45,6 +45,7 @@ export class BgsBuilderService {
 			matchStats: activeBgsMatchStats,
 			activeTimeFilter: prefs.bgsActiveTimeFilter,
 			activeHeroSortFilter: prefs.bgsActiveHeroSortFilter,
+			activeRankFilter: prefs.bgsActiveRankFilter,
 		} as BattlegroundsAppState);
 	}
 
@@ -53,10 +54,36 @@ export class BgsBuilderService {
 		prefs: Preferences,
 		currentBattlegroundsMetaPatch: number,
 	): readonly GameStat[] {
-		if (!prefs.bgsActiveTimeFilter || prefs.bgsActiveTimeFilter === 'last-patch') {
-			return bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
+		return bgsMatchStats
+			.filter(stat => this.timeFilter(stat, prefs, currentBattlegroundsMetaPatch))
+			.filter(stat => this.rankFilter(stat, prefs));
+	}
+
+	private timeFilter(stat: GameStat, prefs: Preferences, currentBattlegroundsMetaPatch: number) {
+		if (!prefs.bgsActiveTimeFilter) {
+			return true;
 		}
-		return bgsMatchStats;
+
+		switch (prefs.bgsActiveTimeFilter) {
+			case 'last-patch':
+				return stat.buildNumber >= currentBattlegroundsMetaPatch;
+			case 'all-time':
+			default:
+				return true;
+		}
+	}
+
+	private rankFilter(stat: GameStat, prefs: Preferences) {
+		if (!prefs.bgsActiveRankFilter || !stat.playerRank) {
+			return true;
+		}
+
+		switch (prefs.bgsActiveRankFilter) {
+			case 'all':
+				return true;
+			default:
+				return parseInt(stat.playerRank) >= parseInt(prefs.bgsActiveRankFilter);
+		}
 	}
 
 	private buildSortingFunction(prefs: Preferences): (a: BgsHeroStat, b: BgsHeroStat) => number {
