@@ -87,7 +87,7 @@ export class FsFilterDropdownComponent {
 		// 	this,
 		// );
 		if (!this.visible) {
-			console.log('not visible, returning', this._options);
+			// console.log('not visible, returning', this._options);
 			return;
 		}
 
