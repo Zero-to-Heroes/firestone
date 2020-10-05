@@ -72,6 +72,7 @@ export class ReplayUploadService {
 				'deck-name': game.deckName,
 				'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
 				'should-zip': 'true',
+				'app-version': '' + process.env.APP_VERSION,
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);
