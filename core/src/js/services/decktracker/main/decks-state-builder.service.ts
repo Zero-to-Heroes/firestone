@@ -56,9 +56,9 @@ export class DecksStateBuilderService {
 			default:
 				return (a: DeckSummary, b: DeckSummary) => {
 					if (a.lastUsedTimestamp <= b.lastUsedTimestamp) {
-						return -1;
+						return 1;
 					}
-					return 1;
+					return -1;
 				};
 		}
 	}
