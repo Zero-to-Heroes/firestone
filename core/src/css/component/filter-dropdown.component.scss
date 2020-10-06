@@ -58,7 +58,7 @@ ng-select.disabled {
 
 	select-dropdown {
 		& > div {
-			background: $black;
+			background: var(--color-7);
 			border: 1px solid var(--secondary-text-color);
 			border-top: none;
 			outline: none;
