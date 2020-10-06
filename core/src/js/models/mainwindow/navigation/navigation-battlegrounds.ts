@@ -11,7 +11,7 @@ export class NavigationBattlegrounds {
 		| 'bgs-category-personal-rating'
 		| 'bgs-category-personal-stats'
 		| 'bgs-category-personal-ai';
-	readonly selectedPersonalHeroStatsTab: BgsHeroStatsFilterId = 'final-warbands';
+	readonly selectedPersonalHeroStatsTab: BgsHeroStatsFilterId = 'winrate-stats';
 
 	public update(base: NavigationBattlegrounds): NavigationBattlegrounds {
 		return Object.assign(new NavigationBattlegrounds(), this, base);

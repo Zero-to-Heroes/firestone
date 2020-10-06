@@ -113,8 +113,8 @@ export class BgsInitService {
 					name: this.cards.getCard(heroStat.id)?.name,
 					heroId: heroStat.id,
 					tabs: [
-						'final-warbands',
 						'winrate-stats',
+						'final-warbands',
 						'mmr',
 						'warband-stats',
 					] as readonly BgsHeroStatsFilterId[],
