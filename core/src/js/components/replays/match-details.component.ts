@@ -23,6 +23,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				[panel]="panel"
 				[selectedTab]="selectedTab"
 				[selectTabHandler]="selectTabHandler"
+				parentWindow="Firestone - MainWindow"
 				emptyTitle="Nothing here"
 				emptySubtitle="We couldn't retrieve the stats"
 			></bgs-post-match-stats>

@@ -19,7 +19,7 @@ export class OwUtilsService {
 			try {
 				const path = `${OverwolfService.getLocalAppDataFolder()}/Temp`;
 				plugin.captureWindow(windowName, path, (screenshotLocation, byteArray) => {
-					console.log('[ow-utils] took screenshot', screenshotLocation, byteArray);
+					console.log('[ow-utils] took screenshot', screenshotLocation, byteArray?.length);
 					resolve([screenshotLocation, byteArray]);
 				});
 			} catch (e) {

@@ -148,6 +148,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 
 	@Input() emptyTitle = 'Nothing here yet';
 	@Input() emptySubtitle = 'Finish the run to get some stats!';
+	@Input() parentWindow = `Firestone - Battlegrounds`;
 	@Input() selectedTab: BgsStatsFilterId;
 	@Input() mainPlayerCardId?: string;
 	@Input() inputMmr?: number;
@@ -254,7 +255,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 
 	takeScreenshot(): () => Promise<[string, any]> {
 		//console.log('taking screenshot');
-		return async () => this.owUtils.captureWindow(`Firestone - Battlegrounds`);
+		return () => this.owUtils.captureWindow(this.parentWindow);
 	}
 
 	private addMinionStats() {

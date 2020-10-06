@@ -61,6 +61,10 @@ export class SocialShareButtonComponent implements AfterViewInit {
 				'network': this._network,
 			});
 			const [screenshotLocation, base64Image] = await this.onSocialClick();
+			if (!screenshotLocation || !base64Image) {
+				console.error('Could not take screenshot', screenshotLocation, base64Image);
+				return;
+			}
 			await this.doShare(screenshotLocation, base64Image);
 			setTimeout(() => {
 				if (!(this.cdr as ViewRef)?.destroyed) {
