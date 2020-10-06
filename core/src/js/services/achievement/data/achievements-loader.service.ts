@@ -82,7 +82,7 @@ export class AchievementsLoaderService {
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
 		return new Promise<readonly RawAchievement[]>((resolve, reject) => {
 			console.log('[achievements-loader] retrieving local achievements', fileName);
-			this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=6`).subscribe(
+			this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=7`).subscribe(
 				(result: any[]) => {
 					console.log('[achievements-loader] retrieved all achievements from CDN', fileName);
 					resolve(result);
