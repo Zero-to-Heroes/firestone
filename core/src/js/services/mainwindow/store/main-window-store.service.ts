@@ -69,6 +69,7 @@ import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
 import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summary-event';
+import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
@@ -134,6 +135,7 @@ import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-so
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
 import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
 import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-deck-summary-processor';
+import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
@@ -515,6 +517,9 @@ export class MainWindowStoreService {
 			// Decktracker
 			SelectDecksViewEvent.eventName(),
 			new SelectDeckViewProcessor(),
+
+			SelectDeckDetailsEvent.eventName(),
+			new SelectDeckDetailsProcessor(),
 
 			ChangeDeckFormatFilterEvent.eventName(),
 			new ChangeDeckFormatFilterProcessor(this.decksStateBuilder, this.prefs),

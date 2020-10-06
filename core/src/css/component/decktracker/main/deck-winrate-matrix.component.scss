@@ -1,0 +1,38 @@
+:host() {
+	flex-grow: 1;
+	display: flex;
+}
+
+.deck-winrate-matrix {
+	color: var(--default-text-color);
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	flex-grow: 1;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
+}
+
+::ng-deep {
+	.cell {
+		min-width: 80px;
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+deck-matchup-info {
+	margin-bottom: 5px;
+
+	&.no-data {
+		opacity: 0.5;
+	}
+}

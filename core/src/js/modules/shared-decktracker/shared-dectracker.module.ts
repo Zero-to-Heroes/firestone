@@ -9,7 +9,6 @@ import {
 	PerfectScrollbarModule,
 	PERFECT_SCROLLBAR_CONFIG,
 } from 'ngx-perfect-scrollbar';
-import { DeckCardComponent } from '../../components/decktracker/overlay/deck-card.component';
 import { DeckListByZoneComponent } from '../../components/decktracker/overlay/deck-list-by-zone.component';
 import { DeckZoneComponent } from '../../components/decktracker/overlay/deck-zone.component';
 import { DeckTrackerCardsRecapComponent } from '../../components/decktracker/overlay/decktracker-cards-recap.component';
@@ -51,7 +50,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerDeckListComponent,
 		DeckListByZoneComponent,
 		GroupedDeckListComponent,
-		DeckCardComponent,
 		DeckZoneComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerControlBarComponent,
@@ -68,7 +66,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerDeckListComponent,
 		DeckListByZoneComponent,
 		GroupedDeckListComponent,
-		DeckCardComponent,
 		DeckZoneComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerControlBarComponent,

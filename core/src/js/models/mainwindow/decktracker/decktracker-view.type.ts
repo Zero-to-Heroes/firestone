@@ -1,1 +1,1 @@
-export type DecktrackerViewType = 'decks' | 'replays';
+export type DecktrackerViewType = 'decks' | 'replays' | 'deck-details';

@@ -13,15 +13,22 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 			<section class="main divider">
 				<with-loading [isLoading]="!state?.decktracker || state?.decktracker.isLoading">
 					<div class="content">
-						<decktracker-menu
-							[displayType]="navigation.navigationDecktracker.menuDisplayType"
-							[currentView]="navigation.navigationDecktracker.currentView"
-						></decktracker-menu>
+						<global-header
+							[navigation]="navigation"
+							*ngIf="
+								navigation.text && navigation?.navigationDecktracker.menuDisplayType === 'breadcrumbs'
+							"
+						></global-header>
 						<decktracker-filters [state]="state" [navigation]="navigation"></decktracker-filters>
 						<decktracker-decks
 							[hidden]="navigation.navigationDecktracker.currentView !== 'decks'"
 							[decks]="state?.decktracker?.decks"
 						></decktracker-decks>
+						<decktracker-deck-details
+							[hidden]="navigation.navigationDecktracker.currentView !== 'deck-details'"
+							[state]="state"
+							[navigation]="navigation"
+						></decktracker-deck-details>
 					</div>
 				</with-loading>
 			</section>

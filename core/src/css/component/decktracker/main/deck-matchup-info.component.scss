@@ -1,0 +1,16 @@
+:host() {
+	display: flex;
+}
+
+.deck-matchup-info {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
+	background: rgba(255, 255, 255, 0.08);
+	flex-grow: 1;
+
+	.icon {
+		width: 30px;
+	}
+}

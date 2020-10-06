@@ -2,6 +2,7 @@ import { MainWindowState } from '../../../../models/mainwindow/main-window-state
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../models/mainwindow/navigation/navigation-collection';
+import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
@@ -47,6 +48,14 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						menuDisplayType: 'menu',
 				  } as NavigationBattlegrounds)
 				: navigationState.navigationBattlegrounds;
+		const decktracker =
+			event.module === 'decktracker'
+				? navigationState.navigationDecktracker.update({
+						currentView: 'decks',
+						menuDisplayType: 'breadcrumbs',
+						selectedDeckstring: null,
+				  } as NavigationDecktracker)
+				: navigationState.navigationBattlegrounds;
 		return [
 			null,
 			navigationState.update({
@@ -56,9 +65,21 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				navigationAchievements: achievements,
 				navigationReplays: replays,
 				navigationBattlegrounds: battlegrounds,
-				text: ['achievements'].includes(event.module) ? 'Categories' : null,
+				navigationDecktracker: decktracker,
+				text: this.getInitialText(event.module),
 				image: null,
 			} as NavigationState),
 		];
+	}
+
+	private getInitialText(module: string): string {
+		switch (module) {
+			case 'achievements':
+				return 'Categories';
+			case 'decktracker':
+				return 'Decks';
+			default:
+				return null;
+		}
 	}
 }

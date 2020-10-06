@@ -11,6 +11,7 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { isCharLowerCase } from '../utils';
+import { DeckHandlerService } from './deck-handler.service';
 
 @Injectable()
 export class DeckParserService {
@@ -36,6 +37,7 @@ export class DeckParserService {
 		private memory: MemoryInspectionService,
 		private allCards: AllCardsService,
 		private ow: OverwolfService,
+		private handler: DeckHandlerService,
 	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
@@ -268,22 +270,11 @@ export class DeckParserService {
 	}
 
 	public buildDeckList(deckstring: string, deckSize = 30): readonly DeckCard[] {
-		if (!deckstring) {
-			return this.buildEmptyDeckList(deckSize);
-		}
-		const deck = decode(deckstring);
-		// console.log('decoding', deckstring, deck);
-		return deck
-			? deck.cards
-					// [dbfid, count] pair
-					.map(pair => this.buildDeckCards(pair))
-					.reduce((a, b) => a.concat(b), [])
-					.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
-			: [];
+		return this.handler.buildDeckList(deckstring, deckSize);
 	}
 
 	public buildEmptyDeckList(deckSize = 30): readonly DeckCard[] {
-		return new Array(deckSize).fill(DeckCard.create({} as DeckCard));
+		return this.handler.buildEmptyDeckList(deckSize);
 	}
 
 	public async postProcessDeck(deck: readonly DeckCard[]): Promise<readonly DeckCard[]> {
@@ -368,32 +359,7 @@ export class DeckParserService {
 	}
 
 	public buildDeckCards(pair): DeckCard[] {
-		let dbfId = -1;
-		try {
-			dbfId = parseInt(pair[0]);
-		} catch (e) {}
-		const card =
-			!isNaN(dbfId) && dbfId !== -1 ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
-		const result: DeckCard[] = [];
-		if (!card) {
-			console.error('Could not build deck card', dbfId, isNaN(dbfId), dbfId !== -1, pair);
-			return result;
-		}
-		// Don't include passive buffs in the decklist
-		if (card.mechanics && card.mechanics.indexOf('DUNGEON_PASSIVE_BUFF') !== -1) {
-			return result;
-		}
-		for (let i = 0; i < pair[1]; i++) {
-			result.push(
-				DeckCard.create({
-					cardId: card.id,
-					cardName: card.name,
-					manaCost: card.cost,
-					rarity: card.rarity ? card.rarity.toLowerCase() : null,
-				} as DeckCard),
-			);
-		}
-		return result;
+		return this.handler.buildDeckCards(pair);
 	}
 
 	public normalizeDeckstring(deckstring: string, heroCardId?: string): string {

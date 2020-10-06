@@ -29,7 +29,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/decktracker-filters.component.scss`,
 	],
 	template: `
-		<div class="decktracker-filters">
+		<div class="decktracker-filters" *ngIf="anyVisible()">
 			<fs-filter-dropdown
 				class="format-filter"
 				[options]="formatFilterOptions"
@@ -57,7 +57,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[navigation]="_navigation"
 				(onOptionSelected)="selectSort($event)"
 			></fs-filter-dropdown>
-			<div class="show-hidden-decks-link" (click)="toggleShowHiddenDecks()">
+			<div class="show-hidden-decks-link" (click)="toggleShowHiddenDecks()" *ngIf="showHiddenDecksLink">
 				{{ _state.decktracker.showHiddenDecks ? 'Showing archived decks' : 'Hiding archived decks' }}
 			</div>
 		</div>
@@ -78,6 +78,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 
 	_state: MainWindowState;
 	_navigation: NavigationState;
+	showHiddenDecksLink: boolean;
 
 	formatFilterOptions: readonly FormatFilterOption[] = [
 		{
@@ -91,7 +92,12 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 	] as readonly FormatFilterOption[];
 	activeFormatFilter: StatGameFormatType;
 	formatVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
-		return state && navigation && navigation.currentApp == 'decktracker';
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'decktracker' &&
+			navigation.navigationDecktracker.currentView !== 'deck-details'
+		);
 	};
 
 	timeFilterOptions: readonly TimeFilterOption[] = [
@@ -125,7 +131,12 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 	] as readonly DeckSortOption[];
 	activeSort: DeckSortType;
 	sortVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
-		return state && navigation && navigation.currentApp == 'decktracker';
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'decktracker' &&
+			navigation.navigationDecktracker.currentView !== 'deck-details'
+		);
 	};
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -159,10 +170,24 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new ToggleShowHiddenDecksEvent());
 	}
 
+	anyVisible(): boolean {
+		return (
+			this.formatVisibleHandler(this._navigation, this._state) ||
+			this.timeVisibleHandler(this._navigation, this._state) ||
+			this.sortVisibleHandler(this._navigation, this._state)
+		);
+	}
+
 	private doSetValues() {
 		this.activeFormatFilter = this._state?.decktracker?.filters?.gameFormat;
 		this.activeTimeFilter = this._state?.decktracker?.filters?.time;
 		this.activeSort = this._state?.decktracker?.filters?.sort;
+
+		this.showHiddenDecksLink =
+			this._state &&
+			this._navigation &&
+			this._navigation.currentApp == 'decktracker' &&
+			this._navigation.navigationDecktracker.currentView !== 'deck-details';
 	}
 }
 

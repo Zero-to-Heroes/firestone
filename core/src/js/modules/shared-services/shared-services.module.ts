@@ -13,6 +13,7 @@ import { CollectionManager } from '../../services/collection/collection-manager.
 import { IndexedDbService } from '../../services/collection/indexed-db.service';
 import { PackHistoryService } from '../../services/collection/pack-history.service';
 import { DebugService } from '../../services/debug.service';
+import { DeckHandlerService } from '../../services/decktracker/deck-handler.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
@@ -57,6 +58,7 @@ export class SharedServicesModule {
 				AchievementsLoaderService,
 				AchievementsDb,
 
+				DeckHandlerService,
 				CardHistoryStorageService,
 				CollectionManager,
 				IndexedDbService,

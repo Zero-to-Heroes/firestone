@@ -68,10 +68,12 @@ import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainer } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
+import { DeckMatchupInfoComponent } from '../../components/decktracker/main/deck-matchup-info.component';
+import { DeckWinrateMatrixComponent } from '../../components/decktracker/main/deck-winrate-matrix.component';
+import { DecktrackerDeckDetailsComponent } from '../../components/decktracker/main/decktracker-deck-details.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
 import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
-import { DecktrackerMenuComponent } from '../../components/decktracker/main/decktracker-menu.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
@@ -170,10 +172,12 @@ console.log('version is ' + process.env.APP_VERSION);
 		AchievementsFilterComponent,
 
 		DecktrackerComponent,
-		DecktrackerMenuComponent,
 		DecktrackerDecksComponent,
 		DecktrackerDeckSummaryComponent,
 		DecktrackerFiltersComponent,
+		DecktrackerDeckDetailsComponent,
+		DeckWinrateMatrixComponent,
+		DeckMatchupInfoComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

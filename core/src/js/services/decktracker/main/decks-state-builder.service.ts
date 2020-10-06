@@ -5,8 +5,22 @@ import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.t
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { Preferences } from '../../../models/preferences';
+
+const ALL_CLASSES = [
+	'demonhunter',
+	'druid',
+	'hunter',
+	'mage',
+	'paladin',
+	'priest',
+	'rogue',
+	'shaman',
+	'warlock',
+	'warrior',
+];
 
 @Injectable()
 export class DecksStateBuilderService {
@@ -95,7 +109,7 @@ export class DecksStateBuilderService {
 		const lastUsed = stats.filter(stat => stat.creationTimestamp)
 			? stats.filter(stat => stat.creationTimestamp)[0].creationTimestamp
 			: undefined;
-		// const matchupStats: readonly MatchupStat[] = this.buildMatchupStats();
+		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(stats);
 		return Object.assign(new DeckSummary(), {
 			class: deckClass,
 			deckName: deckName,
@@ -105,8 +119,25 @@ export class DecksStateBuilderService {
 			totalGames: totalGames,
 			winRatePercentage: (100.0 * totalWins) / totalGames,
 			hidden: hiddenDeckCodes.includes(deckstring),
-			// matchupStats: matchupStats,
+			matchupStats: matchupStats,
 		} as DeckSummary);
+	}
+
+	private buildMatchupStats(stats: readonly GameStat[]): readonly MatchupStat[] {
+		return ALL_CLASSES.map(opponentClass => {
+			const games = stats.filter(stat => stat.opponentClass?.toLowerCase() === opponentClass);
+			return {
+				opponentClass: opponentClass,
+				totalGames: games.length,
+				totalWins: games.filter(game => game.result === 'won').length,
+				totalGamesFirst: games.filter(game => game.coinPlay === 'play').length,
+				totalGamesCoin: games.filter(game => game.coinPlay === 'coin').length,
+				totalWinsFirst: games.filter(game => game.coinPlay === 'play').filter(game => game.result === 'won')
+					.length,
+				totalWinsCoin: games.filter(game => game.coinPlay === 'coin').filter(game => game.result === 'won')
+					.length,
+			} as MatchupStat;
+		});
 	}
 }
 

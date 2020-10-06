@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
+import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/events/decktracker/select-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -15,7 +16,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/decktracker-deck-summary.component.scss`,
 	],
 	template: `
-		<div class="decktracker-deck-summary" [ngClass]="{ 'hidden': hidden }">
+		<div class="decktracker-deck-summary" [ngClass]="{ 'hidden': hidden }" (click)="selectDeck()">
 			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
 			<div class="deck-image">
 				<img class="skin" [src]="skin" />
@@ -29,7 +30,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<button
 				class="close-button"
 				helpTooltip="Archive deck (you can restore it later)"
-				(mousedown)="hideDeck()"
+				(mousedown)="hideDeck($event)"
 				*ngIf="!hidden"
 			>
 				<svg class="svg-icon-fill">
@@ -39,7 +40,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					></use>
 				</svg>
 			</button>
-			<button class="restore-button" helpTooltip="Restore deck" (mousedown)="restoreDeck()" *ngIf="hidden">
+			<button class="restore-button" helpTooltip="Restore deck" (mousedown)="restoreDeck($event)" *ngIf="hidden">
 				<svg class="svg-icon-fill">
 					<use
 						xmlns:xlink="https://www.w3.org/1999/xlink"
@@ -83,12 +84,18 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	hideDeck() {
+	hideDeck(event: MouseEvent) {
 		this.stateUpdater.next(new HideDeckSummaryEvent(this._deck.deckstring));
+		event.stopPropagation();
 	}
 
-	restoreDeck() {
+	restoreDeck(event: MouseEvent) {
 		this.stateUpdater.next(new RestoreDeckSummaryEvent(this._deck.deckstring));
+		event.stopPropagation();
+	}
+
+	selectDeck() {
+		this.stateUpdater.next(new SelectDeckDetailsEvent(this._deck.deckstring));
 	}
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {

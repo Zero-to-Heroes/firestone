@@ -38,6 +38,7 @@ import { ControlHelpComponent } from '../../components/controls/control-help.com
 import { ControlMaximizeComponent } from '../../components/controls/control-maximize.component';
 import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
+import { DeckCardComponent } from '../../components/decktracker/overlay/deck-card.component';
 import { FilterDropdownComponent } from '../../components/filter-dropdown.component';
 import { FilterComponent } from '../../components/filter.component';
 import { FsFilterDropdownComponent } from '../../components/fs-filter-dropdown.component';
@@ -137,6 +138,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		AdsComponent,
 
+		DeckCardComponent,
+
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
 		BgsCardTooltipComponent,
@@ -221,6 +224,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		RedditShareModalComponent,
 		RedditShareButtonComponent,
 		RedditShareInfoComponent,
+
+		DeckCardComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
