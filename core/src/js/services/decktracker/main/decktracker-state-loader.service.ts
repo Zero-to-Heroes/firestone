@@ -18,6 +18,7 @@ export class DecktrackerStateLoaderService {
 			gameMode: existingFilters.gameMode ?? 'ranked',
 			time: existingFilters.time ?? 'all-time',
 			sort: existingFilters.sort ?? 'last-played',
+			rank: existingFilters.rank ?? 'all',
 		};
 		const decks: readonly DeckSummary[] = this.decksStateBuilder.buildState(stats, filters, prefs);
 		return Object.assign(new DecktrackerState(), currentState, {

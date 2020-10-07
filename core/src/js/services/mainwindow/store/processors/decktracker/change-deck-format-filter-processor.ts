@@ -22,10 +22,10 @@ export class ChangeDeckFormatFilterProcessor implements Processor {
 		const filters = Object.assign(new DeckFilters(), currentState.decktracker.filters, {
 			gameFormat: event.newFormat,
 		} as DeckFilters);
-		this.prefs.setDesktopDeckFilters(filters);
+		const prefs = await this.prefs.setDesktopDeckFilters(filters);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
 			filters: filters,
-			decks: this.decksStateBuilder.buildState(currentState.stats, filters),
+			decks: this.decksStateBuilder.buildState(currentState.stats, filters, prefs),
 		} as DecktrackerState);
 		return [
 			Object.assign(new MainWindowState(), currentState, {

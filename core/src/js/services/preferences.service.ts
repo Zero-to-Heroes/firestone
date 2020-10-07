@@ -188,6 +188,7 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckFilters: value };
 		await this.savePreferences(newPrefs);
+		return newPrefs;
 	}
 
 	public async setDesktopDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {

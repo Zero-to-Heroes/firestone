@@ -8,6 +8,11 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
+import {
+	PerfectScrollbarConfigInterface,
+	PerfectScrollbarModule,
+	PERFECT_SCROLLBAR_CONFIG,
+} from 'ngx-perfect-scrollbar';
 import { AdsComponent } from '../../components/ads.component';
 import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
@@ -39,6 +44,10 @@ import { ControlMaximizeComponent } from '../../components/controls/control-maxi
 import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
 import { DeckCardComponent } from '../../components/decktracker/overlay/deck-card.component';
+import { DeckListByZoneComponent } from '../../components/decktracker/overlay/deck-list-by-zone.component';
+import { DeckZoneComponent } from '../../components/decktracker/overlay/deck-zone.component';
+import { DeckTrackerDeckListComponent } from '../../components/decktracker/overlay/decktracker-deck-list.component';
+import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
 import { FilterDropdownComponent } from '../../components/filter-dropdown.component';
 import { FilterComponent } from '../../components/filter.component';
 import { FsFilterDropdownComponent } from '../../components/fs-filter-dropdown.component';
@@ -74,6 +83,11 @@ import { PulseDirective } from '../../directives/pulse.directive';
 import { ScrollableDirective } from '../../directives/scrollable.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+	suppressScrollX: true,
+	maxScrollbarLength: 100,
+};
+
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -86,6 +100,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		NgxChartsModule,
 		ChartsModule,
 		BrowserAnimationsModule,
+		PerfectScrollbarModule,
 	],
 	declarations: [
 		WindowWrapperComponent,
@@ -139,6 +154,10 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		AdsComponent,
 
 		DeckCardComponent,
+		DeckTrackerDeckListComponent,
+		DeckListByZoneComponent,
+		GroupedDeckListComponent,
+		DeckZoneComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
@@ -226,6 +245,10 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		RedditShareInfoComponent,
 
 		DeckCardComponent,
+		DeckTrackerDeckListComponent,
+		DeckListByZoneComponent,
+		GroupedDeckListComponent,
+		DeckZoneComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
@@ -254,6 +277,12 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		StatCellComponent,
 	],
-	providers: [{ provide: OverlayContainer, useClass: CdkOverlayContainer }],
+	providers: [
+		{ provide: OverlayContainer, useClass: CdkOverlayContainer },
+		{
+			provide: PERFECT_SCROLLBAR_CONFIG,
+			useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+		},
+	],
 })
 export class SharedModule {}

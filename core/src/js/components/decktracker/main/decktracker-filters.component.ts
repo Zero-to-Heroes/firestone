@@ -8,6 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
+import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -16,6 +17,7 @@ import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-f
 import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { ChangeDeckFormatFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-mode-filter-event';
+import { ChangeDeckRankFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-rank-filter-event';
 import { ChangeDeckSortEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
 import { ToggleShowHiddenDecksEvent } from '../../../services/mainwindow/store/events/decktracker/toggle-show-hidden-decks-event';
@@ -47,6 +49,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectTime($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="rank"
+				[options]="rankOptions"
+				[filter]="activeRank"
+				[checkVisibleHandler]="rankVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectRank($event)"
 			></fs-filter-dropdown>
 			<fs-filter-dropdown
 				class="sort"
@@ -115,6 +126,41 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		return state && navigation && navigation.currentApp == 'decktracker';
 	};
 
+	rankOptions: readonly DeckRankOption[] = [
+		{
+			value: 'all',
+			label: 'All ranks',
+		} as DeckRankOption,
+		{
+			value: 'silver',
+			label: 'Silver+',
+		} as DeckRankOption,
+		{
+			value: 'gold',
+			label: 'Gold+',
+		} as DeckRankOption,
+		{
+			value: 'platinum',
+			label: 'Platinum+',
+		} as DeckRankOption,
+		{
+			value: 'diamond',
+			label: 'Diamond+',
+		} as DeckRankOption,
+		{
+			value: 'legend',
+			label: 'Legend',
+		} as DeckRankOption,
+		{
+			value: 'legend-500',
+			label: 'Top 500',
+		} as DeckRankOption,
+	] as readonly DeckRankOption[];
+	activeRank: DeckRankFilterType;
+	rankVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return state && navigation && navigation.currentApp == 'decktracker';
+	};
+
 	sortOptions: readonly DeckSortOption[] = [
 		{
 			value: 'last-played',
@@ -166,6 +212,10 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new ChangeDeckSortEvent(option.value));
 	}
 
+	selectRank(option: DeckRankOption) {
+		this.stateUpdater.next(new ChangeDeckRankFilterEvent(option.value));
+	}
+
 	toggleShowHiddenDecks() {
 		this.stateUpdater.next(new ToggleShowHiddenDecksEvent());
 	}
@@ -174,6 +224,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		return (
 			this.formatVisibleHandler(this._navigation, this._state) ||
 			this.timeVisibleHandler(this._navigation, this._state) ||
+			this.rankVisibleHandler(this._navigation, this._state) ||
 			this.sortVisibleHandler(this._navigation, this._state)
 		);
 	}
@@ -182,6 +233,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		this.activeFormatFilter = this._state?.decktracker?.filters?.gameFormat;
 		this.activeTimeFilter = this._state?.decktracker?.filters?.time;
 		this.activeSort = this._state?.decktracker?.filters?.sort;
+		this.activeRank = this._state?.decktracker?.filters?.rank;
 
 		this.showHiddenDecksLink =
 			this._state &&
@@ -205,4 +257,8 @@ interface TimeFilterOption extends IOption {
 
 interface DeckSortOption extends IOption {
 	value: DeckSortType;
+}
+
+interface DeckRankOption extends IOption {
+	value: DeckRankFilterType;
 }

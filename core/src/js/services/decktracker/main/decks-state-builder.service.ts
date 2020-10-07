@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
+import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
@@ -34,10 +35,12 @@ export class DecksStateBuilderService {
 			.filter(stat => stat.gameFormat === filters.gameFormat)
 			.filter(stat => stat.gameMode === filters.gameMode)
 			.filter(stat => this.isValidDate(stat, filters.time))
+			.filter(stat => this.isValidRank(stat, filters.rank))
+			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined')
 			.filter(
 				stat => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
-			)
-			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined');
+			);
+		// console.log('filtering done', prefs, validDecks, stats);
 		const groupByDeckstring = groupBy('playerDecklist');
 		const statsByDeck = groupByDeckstring(validDecks);
 		// console.log('[decktracker-stats-loader] statsByDeck');
@@ -82,6 +85,35 @@ export class DecksStateBuilderService {
 			case 'season-start':
 				const startOfMonthDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 				return stat.creationTimestamp >= startOfMonthDate.getTime();
+			default:
+				return true;
+		}
+	}
+
+	private isValidRank(stat: GameStat, rankFilter: DeckRankFilterType): boolean {
+		const legendRank =
+			stat.playerRank && stat.playerRank.indexOf('legend-') > -1
+				? parseInt(stat.playerRank.split('legend-')[0])
+				: null;
+		const leagueId =
+			!legendRank && stat.playerRank && stat.playerRank.indexOf('-') > -1
+				? parseInt(stat.playerRank.split('-')[0])
+				: null;
+		switch (rankFilter) {
+			case 'silver':
+				return legendRank != null || (leagueId && leagueId <= 4);
+			case 'gold':
+				return legendRank != null || (leagueId && leagueId <= 3);
+			case 'platinum':
+				// console.log('filtering', legendRank != null || leagueId >= 2, legendRank, leagueId, stat);
+				return legendRank != null || (leagueId && leagueId <= 2);
+			case 'diamond':
+				return legendRank != null || (leagueId && leagueId <= 1);
+			case 'legend':
+				return legendRank != null;
+			case 'legend-500':
+				return legendRank != null && legendRank <= 500;
+			case 'all':
 			default:
 				return true;
 		}
