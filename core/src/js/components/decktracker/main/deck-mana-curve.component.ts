@@ -46,7 +46,7 @@ export class DeckManaCurveComponent implements AfterViewInit {
 	}
 
 	cardsByCost: readonly CardsByCost[];
-	maxQuantity: number = 0;
+	maxQuantity = 0;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
