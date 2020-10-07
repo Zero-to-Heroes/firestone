@@ -68,9 +68,12 @@ import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainer } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
+import { DeckManaCurveBarComponent } from '../../components/decktracker/main/deck-mana-curve-bar.component';
+import { DeckManaCurveComponent } from '../../components/decktracker/main/deck-mana-curve.component';
 import { DeckMatchupInfoComponent } from '../../components/decktracker/main/deck-matchup-info.component';
 import { DeckWinrateMatrixComponent } from '../../components/decktracker/main/deck-winrate-matrix.component';
 import { DecktrackerDeckDetailsComponent } from '../../components/decktracker/main/decktracker-deck-details.component';
+import { DecktrackerDeckRecapComponent } from '../../components/decktracker/main/decktracker-deck-recap.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
 import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
@@ -178,6 +181,9 @@ console.log('version is ' + process.env.APP_VERSION);
 		DecktrackerDeckDetailsComponent,
 		DeckWinrateMatrixComponent,
 		DeckMatchupInfoComponent,
+		DecktrackerDeckRecapComponent,
+		DeckManaCurveComponent,
+		DeckManaCurveBarComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

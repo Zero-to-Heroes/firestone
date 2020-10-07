@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
@@ -39,7 +38,6 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	// cards: readonly VisualDeckCard[];
 	deck: DeckSummary;
 	deckState: DeckState;
 
@@ -67,54 +65,9 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		}
 
 		const decklist = this.deckHandler.buildDeckList(this.deck.deckstring);
-		console.log('built decklist', decklist);
 
 		this.deckState = DeckState.create({
 			deckList: decklist,
 		} as DeckState);
-
-		// const cards = decklist.map(
-		// 	deckCard =>
-		// 		VisualDeckCard.create({
-		// 			cardId: deckCard.cardId,
-		// 			cardName: deckCard.cardName,
-		// 			manaCost: deckCard.manaCost,
-		// 			rarity: deckCard.rarity,
-		// 		} as VisualDeckCard) as VisualDeckCard,
-		// );
-		// const grouped: { [cardId: string]: VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) => card.cardId)(
-		// 	cards,
-		// );
-		// console.log('grouped', grouped, cards);
-
-		// this.cards = Object.keys(grouped)
-		// 	.map(cardId =>
-		// 		Object.assign(new VisualDeckCard(), grouped[cardId][0], {
-		// 			totalQuantity: grouped[cardId].length,
-		// 		} as VisualDeckCard),
-		// 	)
-		// 	.sort((a, b) => this.compare(a, b));
-	}
-
-	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
-		if (a.manaCost < b.manaCost) {
-			return -1;
-		}
-		if (a.manaCost > b.manaCost) {
-			return 1;
-		}
-		if (a.cardName < b.cardName) {
-			return -1;
-		}
-		if (a.cardName > b.cardName) {
-			return 1;
-		}
-		if (a.creatorCardIds.length === 0) {
-			return -1;
-		}
-		if (b.creatorCardIds.length === 0) {
-			return 1;
-		}
-		return 0;
 	}
 }

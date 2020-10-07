@@ -498,6 +498,7 @@ export class MainWindowStoreService {
 				this.replaysStateBuilder,
 				this.bgsBuilder,
 				this.events,
+				this.prefs,
 			),
 
 			// Replays
@@ -524,28 +525,28 @@ export class MainWindowStoreService {
 			new SelectDeckDetailsProcessor(),
 
 			ChangeDeckFormatFilterEvent.eventName(),
-			new ChangeDeckFormatFilterProcessor(this.decksStateBuilder, this.prefs),
+			new ChangeDeckFormatFilterProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			ChangeDeckRankFilterEvent.eventName(),
-			new ChangeDeckRankFilterProcessor(this.decksStateBuilder, this.prefs),
+			new ChangeDeckRankFilterProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			ChangeDeckModeFilterEvent.eventName(),
 			new ChangeDeckModeFilterProcessor(this.decksStateBuilder, this.prefs),
 
 			ChangeDeckTimeFilterEvent.eventName(),
-			new ChangeDeckTimeFilterProcessor(this.decksStateBuilder, this.prefs),
+			new ChangeDeckTimeFilterProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			ChangeDeckSortEvent.eventName(),
 			new ChangeDeckSortProcessor(this.decksStateBuilder, this.prefs),
 
 			HideDeckSummaryEvent.eventName(),
-			new HideDeckSummaryProcessor(this.decksStateBuilder, this.prefs),
+			new HideDeckSummaryProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			RestoreDeckSummaryEvent.eventName(),
-			new RestoreDeckSummaryProcessor(this.decksStateBuilder, this.prefs),
+			new RestoreDeckSummaryProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			ToggleShowHiddenDecksEvent.eventName(),
-			new ToggleShowHiddenDecksProcessor(this.decksStateBuilder, this.prefs),
+			new ToggleShowHiddenDecksProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			// Battlegrounds
 			SelectBattlegroundsGlobalCategoryEvent.eventName(),

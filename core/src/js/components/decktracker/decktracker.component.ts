@@ -32,7 +32,13 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary"></section>
+			<section class="secondary">
+				<decktracker-deck-recap
+					[hidden]="navigation.navigationDecktracker.currentView !== 'deck-details'"
+					[state]="state"
+					[navigation]="navigation"
+				></decktracker-deck-recap>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

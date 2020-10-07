@@ -1,0 +1,25 @@
+.deck-mana-curve-bar {
+	display: flex;
+	flex-direction: column;
+	width: 10px;
+	align-items: center;
+	height: 100%;
+	justify-content: center;
+}
+
+.quantity {
+	color: var(--default-title-color);
+}
+
+.bar {
+	background: #130b2b;
+	width: 7px;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.fill {
+	background: var(--color-1);
+}

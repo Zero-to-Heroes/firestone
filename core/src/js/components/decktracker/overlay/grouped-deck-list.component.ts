@@ -47,7 +47,7 @@ export class GroupedDeckListComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
-		this.showWarning = deckState.showDecklistWarning;
+		this.showWarning = deckState?.showDecklistWarning;
 		// console.log('setting deck state', deckState);
 		this.buildGroupedList();
 	}
@@ -70,6 +70,9 @@ export class GroupedDeckListComponent {
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	private buildGroupedList() {
+		if (!this._deckState) {
+			return;
+		}
 		// console.log('darken used cards', this._darkenUsedCards);
 		// When we don't have the decklist, we just show all the cards in hand + deck
 		//console.log('building grouped list from state', this._deckState);
