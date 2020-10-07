@@ -116,6 +116,13 @@
 						// grey03
 						background-color: rgba(120, 95, 107, 0.4);
 					}
+
+					span {
+						max-width: 100%;
+						white-space: nowrap;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					}
 				}
 			}
 		}

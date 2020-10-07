@@ -93,12 +93,20 @@ export class ReplaysFilterComponent {
 	}
 
 	private updateFilters() {
+		// console.log('updating filters', this.category, this.replaysState);
 		if (!this.category || !this.replaysState) {
 			return;
 		}
 		const filter = this.replaysState.getFilter(this.category);
 		this.filterOptions = filter.options;
 		this.activeFilter = filter.selectedOption;
-		this.placeholder = filter.placeholder;
+		const placeholder =
+			this.filterOptions && this.filterOptions.length > 0 && this.activeFilter
+				? this.filterOptions.find(option => option.value === this.activeFilter)?.label
+				: null;
+		this.placeholder = placeholder ?? filter.placeholder;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

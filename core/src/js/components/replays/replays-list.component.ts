@@ -20,6 +20,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="replays-container">
 			<div class="filters">
 				<replays-filter [state]="_state" [filterCategory]="'gameMode'"></replays-filter>
+				<replays-filter [state]="_state" [filterCategory]="'deckstring'"></replays-filter>
 			</div>
 			<infinite-scroll class="replays-list" (scrolled)="onScroll()">
 				<li *ngFor="let replay of displayedReplays">
@@ -54,6 +55,9 @@ export class ReplaysListComponent {
 
 	@Input() set state(value: ReplaysState) {
 		// console.log('[replays-list] setting state', value);
+		if (value.isLoading) {
+			return;
+		}
 		this._state = value;
 		this.displayedReplays = [];
 		this._replays = value.groupedReplays || [];

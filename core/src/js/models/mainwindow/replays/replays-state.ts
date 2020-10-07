@@ -1,4 +1,5 @@
 import { IOption } from 'ng-select';
+import { DeckSummary } from '../decktracker/deck-summary';
 import { GameStat } from '../stats/game-stat';
 import { GroupedReplays } from './grouped-replays';
 import { ReplaysFilter } from './replays-filter';
@@ -11,15 +12,11 @@ export class ReplaysState {
 	readonly filters: readonly ReplaysFilter[];
 	readonly isLoading: boolean = true;
 
-	constructor() {
-		this.filters = this.buildFilters();
-	}
-
 	public getFilter(type: ReplaysFilterCategoryType) {
 		return this.filters.find(filter => filter.type === type);
 	}
 
-	private buildFilters(): readonly ReplaysFilter[] {
+	public static buildFilters(decks: readonly DeckSummary[]): readonly ReplaysFilter[] {
 		return [
 			ReplaysFilter.create({
 				type: 'gameMode',
@@ -57,6 +54,24 @@ export class ReplaysState {
 						value: 'practice',
 						label: 'Vs AI',
 					} as IOption,
+				] as readonly IOption[],
+				selectedOption: null,
+			} as ReplaysFilter),
+			ReplaysFilter.create({
+				type: 'deckstring',
+				placeholder: 'All decks',
+				options: [
+					{
+						value: null,
+						label: 'All decks',
+					} as IOption,
+					...decks.map(
+						deck =>
+							({
+								label: deck.deckName,
+								value: deck.deckstring,
+							} as IOption),
+					),
 				] as readonly IOption[],
 				selectedOption: null,
 			} as ReplaysFilter),

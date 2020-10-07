@@ -10,6 +10,7 @@ import { BgsBuilderService } from '../../../../battlegrounds/bgs-builder.service
 import { DecktrackerStateLoaderService } from '../../../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../../../decktracker/main/replays-state-builder.service';
 import { Events } from '../../../../events.service';
+import { PreferencesService } from '../../../../preferences.service';
 import { RecomputeGameStatsEvent } from '../../events/stats/recompute-game-stats-event';
 import { Processor } from '../processor';
 
@@ -19,6 +20,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly bgsBuilder: BgsBuilderService,
 		private readonly events: Events,
+		private readonly prefs: PreferencesService,
 	) {}
 
 	public async process(
@@ -36,13 +38,19 @@ export class RecomputeGameStatsProcessor implements Processor {
 			gameStats: newGameStats,
 		} as StatsState);
 
-		const replayState: ReplaysState = this.replaysStateBuilder.buildState(currentState.replays, newStatsState);
-		console.log('[recompute-game-stats-processor] newStatsState');
+		const prefs = await this.prefs.getPreferences();
 		const decktracker: DecktrackerState = this.decktrackerStateLoader.buildState(
 			currentState.decktracker,
 			newStatsState,
+			prefs,
 		);
 		console.log('[recompute-game-stats-processor] decktracker');
+		const replayState: ReplaysState = this.replaysStateBuilder.buildState(
+			currentState.replays,
+			newStatsState,
+			decktracker.decks,
+		);
+		console.log('[recompute-game-stats-processor] newStatsState');
 
 		// Rebuild stats for battlegrounds state
 		const battlegrounds: BattlegroundsAppState = await this.bgsBuilder.updateStats(

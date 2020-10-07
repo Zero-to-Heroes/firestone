@@ -1,1 +1,1 @@
-export type ReplaysFilterCategoryType = 'gameMode';
+export type ReplaysFilterCategoryType = 'gameMode' | 'deckstring';

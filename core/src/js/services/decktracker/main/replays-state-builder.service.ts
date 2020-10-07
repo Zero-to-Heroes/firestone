@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { GroupedReplays } from '../../../models/mainwindow/replays/grouped-replays';
 import { ReplaysFilter } from '../../../models/mainwindow/replays/replays-filter';
 import { ReplaysFilterCategoryType } from '../../../models/mainwindow/replays/replays-filter-category.type';
@@ -9,7 +10,7 @@ import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 
 @Injectable()
 export class ReplaysStateBuilderService {
-	public buildState(replayState: ReplaysState, stats: StatsState): ReplaysState {
+	public buildState(replayState: ReplaysState, stats: StatsState, decks: readonly DeckSummary[]): ReplaysState {
 		if (!stats || !stats.gameStats || !stats.gameStats.stats) {
 			console.error('Could not build replay state from empty stats', stats);
 			return replayState;
@@ -20,6 +21,7 @@ export class ReplaysStateBuilderService {
 			allReplays: allReplays,
 			groupedReplays: groupedReplays,
 			isLoading: false,
+			filters: ReplaysState.buildFilters(decks),
 		} as ReplaysState);
 	}
 

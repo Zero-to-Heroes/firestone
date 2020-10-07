@@ -27,6 +27,7 @@ export class ReplaysFilterProcessor implements Processor {
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'replays',
+				text: null,
 			} as NavigationState),
 		];
 	}

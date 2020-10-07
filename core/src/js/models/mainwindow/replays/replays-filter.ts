@@ -28,6 +28,8 @@ export class ReplaysFilter {
 		switch (this.type) {
 			case 'gameMode':
 				return stat.gameMode === this.selectedOption;
+			case 'deckstring':
+				return stat.playerDecklist === this.selectedOption;
 			default:
 				return true;
 		}
