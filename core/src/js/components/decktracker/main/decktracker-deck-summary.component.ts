@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
 import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/events/decktracker/select-deck-details-event';
@@ -16,7 +17,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/decktracker-deck-summary.component.scss`,
 	],
 	template: `
-		<div class="decktracker-deck-summary" [ngClass]="{ 'hidden': hidden }" (click)="selectDeck()">
+		<div
+			class="decktracker-deck-summary"
+			[ngClass]="{ 'hidden': hidden, 'no-click': !enableClick }"
+			(click)="selectDeck()"
+		>
 			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
 			<div class="deck-image">
 				<img class="skin" [src]="skin" />
@@ -76,6 +81,8 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	skin: string;
 	hidden: boolean;
 
+	enableClick = FeatureFlags.ENABLE_DECK_DETAILS;
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private ow: OverwolfService) {}
@@ -95,7 +102,9 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	}
 
 	selectDeck() {
-		this.stateUpdater.next(new SelectDeckDetailsEvent(this._deck.deckstring));
+		if (this.enableClick) {
+			this.stateUpdater.next(new SelectDeckDetailsEvent(this._deck.deckstring));
+		}
 	}
 
 	private buildLastUsedDate(lastUsedTimestamp: number): string {
