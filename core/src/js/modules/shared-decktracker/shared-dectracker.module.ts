@@ -9,11 +9,8 @@ import {
 	PerfectScrollbarModule,
 	PERFECT_SCROLLBAR_CONFIG,
 } from 'ngx-perfect-scrollbar';
-import { DeckListByZoneComponent } from '../../components/decktracker/overlay/deck-list-by-zone.component';
-import { DeckZoneComponent } from '../../components/decktracker/overlay/deck-zone.component';
 import { DeckTrackerCardsRecapComponent } from '../../components/decktracker/overlay/decktracker-cards-recap.component';
 import { DeckTrackerControlBarComponent } from '../../components/decktracker/overlay/decktracker-control-bar.component';
-import { DeckTrackerDeckListComponent } from '../../components/decktracker/overlay/decktracker-deck-list.component';
 import { DeckTrackerDeckNameComponent } from '../../components/decktracker/overlay/decktracker-deck-name.component';
 import { DeckTrackerOverlayOpponentComponent } from '../../components/decktracker/overlay/decktracker-overlay-opponent.component';
 import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/overlay/decktracker-overlay-player.component';
@@ -21,7 +18,6 @@ import { DeckTrackerOverlayRootComponent } from '../../components/decktracker/ov
 import { DeckTrackerTitleBarComponent } from '../../components/decktracker/overlay/decktracker-title-bar';
 import { DecktrackerWidgetIconComponent } from '../../components/decktracker/overlay/decktracker-widget-icon';
 import { DeckTrackerWinrateRecapComponent } from '../../components/decktracker/overlay/decktracker-winrate-recap.component';
-import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
 import { SecretsHelperListComponent } from '../../components/secrets-helper/secrets-helper-list.component';
 import { SharedModule } from '../shared/shared.module';
 
@@ -47,10 +43,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerOverlayRootComponent,
 		DeckTrackerOverlayPlayerComponent,
 		DeckTrackerOverlayOpponentComponent,
-		DeckTrackerDeckListComponent,
-		DeckListByZoneComponent,
-		GroupedDeckListComponent,
-		DeckZoneComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerControlBarComponent,
 		DeckTrackerTitleBarComponent,
@@ -63,10 +55,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerOverlayRootComponent,
 		DeckTrackerOverlayPlayerComponent,
 		DeckTrackerOverlayOpponentComponent,
-		DeckTrackerDeckListComponent,
-		DeckListByZoneComponent,
-		GroupedDeckListComponent,
-		DeckZoneComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerControlBarComponent,
 		DeckTrackerTitleBarComponent,

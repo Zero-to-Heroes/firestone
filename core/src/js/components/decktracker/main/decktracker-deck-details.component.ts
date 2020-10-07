@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { DeckState } from '../../../models/decktracker/deck-state';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -6,7 +7,6 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { groupByFunction } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-deck-details',
@@ -16,11 +16,13 @@ import { groupByFunction } from '../../../services/utils';
 	],
 	template: `
 		<div class="decktracker-deck-details">
-			<ul class="deck-list" scrollable>
-				<li *ngFor="let card of cards">
-					<deck-card [card]="card" [colorManaCost]="true"></deck-card>
-				</li>
-			</ul>
+			<decktracker-deck-list
+				class="deck-list"
+				[deckState]="deckState"
+				displayMode="DISPLAY_MODE_GROUPED"
+				[colorManaCost]="true"
+				tooltipPosition="right"
+			></decktracker-deck-list>
 			<deck-winrate-matrix [deck]="deck"> </deck-winrate-matrix>
 		</div>
 	`,
@@ -37,8 +39,9 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	cards: readonly VisualDeckCard[];
+	// cards: readonly VisualDeckCard[];
 	deck: DeckSummary;
+	deckState: DeckState;
 
 	private _state: MainWindowState;
 	private _navigation: NavigationState;
@@ -66,27 +69,31 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		const decklist = this.deckHandler.buildDeckList(this.deck.deckstring);
 		console.log('built decklist', decklist);
 
-		const cards = decklist.map(
-			deckCard =>
-				VisualDeckCard.create({
-					cardId: deckCard.cardId,
-					cardName: deckCard.cardName,
-					manaCost: deckCard.manaCost,
-					rarity: deckCard.rarity,
-				} as VisualDeckCard) as VisualDeckCard,
-		);
-		const grouped: { [cardId: string]: VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) => card.cardId)(
-			cards,
-		);
-		console.log('grouped', grouped, cards);
+		this.deckState = DeckState.create({
+			deckList: decklist,
+		} as DeckState);
 
-		this.cards = Object.keys(grouped)
-			.map(cardId =>
-				Object.assign(new VisualDeckCard(), grouped[cardId][0], {
-					totalQuantity: grouped[cardId].length,
-				} as VisualDeckCard),
-			)
-			.sort((a, b) => this.compare(a, b));
+		// const cards = decklist.map(
+		// 	deckCard =>
+		// 		VisualDeckCard.create({
+		// 			cardId: deckCard.cardId,
+		// 			cardName: deckCard.cardName,
+		// 			manaCost: deckCard.manaCost,
+		// 			rarity: deckCard.rarity,
+		// 		} as VisualDeckCard) as VisualDeckCard,
+		// );
+		// const grouped: { [cardId: string]: VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) => card.cardId)(
+		// 	cards,
+		// );
+		// console.log('grouped', grouped, cards);
+
+		// this.cards = Object.keys(grouped)
+		// 	.map(cardId =>
+		// 		Object.assign(new VisualDeckCard(), grouped[cardId][0], {
+		// 			totalQuantity: grouped[cardId].length,
+		// 		} as VisualDeckCard),
+		// 	)
+		// 	.sort((a, b) => this.compare(a, b));
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
