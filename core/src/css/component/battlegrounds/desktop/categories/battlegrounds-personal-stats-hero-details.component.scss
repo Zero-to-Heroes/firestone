@@ -1,3 +1,7 @@
+:host() {
+	padding-top: 10px;
+}
+
 .battlegrounds-personal-stats-hero-details {
 	display: flex;
 	flex-direction: column;
@@ -14,9 +18,10 @@
 			padding-left: 5%;
 		}
 
-		.background-additions {
-			margin-left: 11%;
-		}
+		// .background-additions {
+		// 	// margin-left: 11%;
+		// 	margin-left: calc(min(6%, 8vh));
+		// }
 
 		.player-overview > .portrait {
 			width: 17%;
