@@ -1,4 +1,4 @@
-import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
+import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
@@ -44,12 +44,10 @@ export class SocialShareButtonComponent implements AfterViewInit {
 	) {}
 
 	ngAfterViewInit() {
-		const positions: ConnectedPosition[] = this.buildPositions();
 		this.positionStrategy = this.overlayPositionBuilder
-			// Create position attached to the elementRef
-			.flexibleConnectedTo(this.elementRef)
-			// Describe how to connect overlay to the elementRef
-			.withPositions(positions);
+			.global()
+			.centerHorizontally()
+			.centerVertically();
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy, hasBackdrop: true });
 		this.overlayRef.backdropClick().subscribe(() => this.overlayRef.detach());
 	}
@@ -76,16 +74,5 @@ export class SocialShareButtonComponent implements AfterViewInit {
 
 	protected async doShare(screenshotLocation: string, base64Image: string) {
 		// Do nothing
-	}
-
-	private buildPositions(): ConnectedPosition[] {
-		return [
-			{
-				originX: 'start',
-				originY: 'top',
-				overlayX: 'end',
-				overlayY: 'top',
-			},
-		];
 	}
 }
