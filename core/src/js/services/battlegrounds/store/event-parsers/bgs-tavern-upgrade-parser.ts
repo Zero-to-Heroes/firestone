@@ -18,7 +18,12 @@ export class BgsTavernUpgradeParser implements EventParser {
 			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
 		if (!playerToUpdate) {
-			console.error('No player found to update the history', playerToUpdate);
+			console.error(
+				'No player found to update the history',
+				event.heroCardId,
+				normalizeHeroCardId(event.heroCardId),
+				currentState.currentGame.players.map(player => player.cardId),
+			);
 			return currentState;
 		}
 		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();

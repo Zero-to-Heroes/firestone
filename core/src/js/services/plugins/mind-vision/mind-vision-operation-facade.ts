@@ -97,7 +97,8 @@ export class MindVisionOperationFacade<T> {
 		const resultFromMemory = await this.mindVisionOperation(forceReset);
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
 			this.log('result from memory is empty, retying');
-			if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
+			if (forceReset || (this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory))) {
+				this.log('calling with a force reset');
 				setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay, true);
 				return;
 			}

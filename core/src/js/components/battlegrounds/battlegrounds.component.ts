@@ -81,7 +81,11 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			} catch (e) {
 				// Not having this catch block causes the "Cannot read property 'destroyed' of null"
 				// exception to break the app
-				if (e.message && !(e.message as string).includes("Cannot read property 'destroyed' of null")) {
+				if (
+					e.message &&
+					!(e.message as string).includes("Cannot read property 'destroyed' of null") &&
+					!(e.message as string).includes("Cannot read property 'context' of null")
+				) {
 					console.error('Exception while handling new state', e.message, e.stack, e);
 				}
 			}
