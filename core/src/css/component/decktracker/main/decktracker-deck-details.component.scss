@@ -4,22 +4,19 @@
 	padding-right: 10px;
 	margin-top: 10px;
 
-	.deck-list {
-		// display: flex;
-		// flex-direction: column;
-		// min-height: 0;
-		// height: 100%;
-		// width: 225px;
-		// overflow: auto;
+	.deck-list-container {
 		margin-right: 20px;
+		display: flex;
+		flex-direction: column;
 
-		// li {
-		// 	margin-bottom: 1px;
-		// }
+		.copy-deckcode {
+			margin-bottom: 10px;
+			justify-content: center;
+		}
 	}
 
 	deck-winrate-matrix {
-		margin-top: -40px;
+		margin-top: -10px;
 	}
 
 	social-shares {

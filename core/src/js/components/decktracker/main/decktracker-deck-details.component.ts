@@ -16,13 +16,17 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 	],
 	template: `
 		<div class="decktracker-deck-details">
-			<decktracker-deck-list
-				class="deck-list"
-				[deckState]="deckState"
-				displayMode="DISPLAY_MODE_GROUPED"
-				[colorManaCost]="true"
-				tooltipPosition="right"
-			></decktracker-deck-list>
+			<div class="deck-list-container">
+				<copy-deckstring class="copy-deckcode" [deckstring]="deck?.deckstring" copyText="Copy deck code">
+				</copy-deckstring>
+				<decktracker-deck-list
+					class="deck-list"
+					[deckState]="deckState"
+					displayMode="DISPLAY_MODE_GROUPED"
+					[colorManaCost]="true"
+					tooltipPosition="right"
+				></decktracker-deck-list>
+			</div>
 			<deck-winrate-matrix [deck]="deck"> </deck-winrate-matrix>
 			<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
 		</div>
@@ -81,6 +85,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 
 		this.deckState = DeckState.create({
 			deckList: decklist,
+			deck: decklist,
 		} as DeckState);
 	}
 }
