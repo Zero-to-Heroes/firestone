@@ -23,16 +23,6 @@
 	}
 }
 
-.copy-deckstring {
+copy-deckstring {
 	margin-left: 7px;
-	--icon-color-secondary: var(--color-1);
-
-	svg {
-		height: 16px;
-		width: 13px;
-	}
-
-	&:hover {
-		--icon-color: var(--color-1);
-	}
 }

@@ -11,17 +11,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	template: `
 		<div class="deck-name">
 			<span class="name" [helpTooltip]="deckName" [bindTooltipToGameWindow]="true">{{ deckName }}</span>
-			<div
-				*ngIf="deckstring"
-				class="copy-deckstring"
-				(mousedown)="copyDeckstring()"
-				[helpTooltip]="copyText"
-				[bindTooltipToGameWindow]="true"
-			>
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
-				</svg>
-			</div>
+			<copy-deckstring *ngIf="deckstring" [deckstring]="deckstring" [copyText]="copyText" [showTooltip]="true">
+			</copy-deckstring>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
