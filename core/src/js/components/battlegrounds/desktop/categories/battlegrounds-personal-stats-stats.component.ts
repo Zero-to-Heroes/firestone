@@ -15,8 +15,8 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 @Component({
 	selector: 'battlegrounds-personal-stats-stats',
 	styleUrls: [
-		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component.scss`,
 		`../../../../../css/global/components-global.scss`,
+		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-stats.component.scss`,
 	],
 	template: `
 		<div class="header">

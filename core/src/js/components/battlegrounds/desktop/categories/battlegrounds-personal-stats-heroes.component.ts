@@ -10,8 +10,8 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 @Component({
 	selector: 'battlegrounds-personal-stats-heroes',
 	styleUrls: [
-		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component.scss`,
 		`../../../../../css/global/components-global.scss`,
+		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component.scss`,
 	],
 	template: `
 		<div class="battlegrounds-personal-stats-heroes">
