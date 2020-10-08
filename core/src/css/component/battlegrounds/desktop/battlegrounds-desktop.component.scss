@@ -41,14 +41,13 @@
 
 	.secondary {
 		position: relative;
-		top: 45px;
 		display: flex;
 		flex-direction: column;
 		flex-grow: 0;
 		margin-left: 15px;
 		margin-right: 5px;
 		width: 400px;
-		height: calc(100% - 385px);
+		height: calc(100% - 340px);
 		flex-shrink: 0;
 		background: rgba(255, 255, 255, 0.08);
 		padding-left: 10px;
