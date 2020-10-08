@@ -42,6 +42,10 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						[legend]="false"
 						[chartType]="'line'"
 					></canvas>
+					<battlegrounds-empty-state
+						*ngIf="!lineChartData"
+						subtitle="Start playing Battlegrounds to collect some information"
+					></battlegrounds-empty-state>
 				</div>
 			</div>
 		</div>
@@ -183,12 +187,19 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		if (!this._state?.matchStats || !this._category) {
 			return;
 		}
+		const data = this._state.matchStats
+			.filter(match => match.playerRank)
+			.reverse()
+			.map(match => parseInt(match.playerRank));
+		if (data.length === 0) {
+			this.lineChartData = null;
+			this.lineChartLabels = null;
+			return;
+		}
+
 		this.lineChartData = [
 			{
-				data: this._state.matchStats
-					.filter(match => match.playerRank)
-					.reverse()
-					.map(match => parseInt(match.playerRank)),
+				data: data,
 				label: 'Rating',
 			},
 		];

@@ -20,13 +20,13 @@ import { OverwolfService } from '../../../../../services/overwolf.service';
 @Component({
 	selector: 'bgs-mmr-evolution-for-hero',
 	styleUrls: [
-		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component.scss`,
 		`../../../../../../css/global/components-global.scss`,
+		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component.scss`,
 	],
 	template: `
 		<div class="bgs-mmr-evolution-for-hero">
 			<div class="container-1">
-				<div style="display: block; position: relative; height: 100%; width: 100%;">
+				<div style="display: flex; position: relative; height: 100%; width: 100%;">
 					<canvas
 						#chart
 						*ngIf="lineChartData"
@@ -41,6 +41,10 @@ import { OverwolfService } from '../../../../../services/overwolf.service';
 						[legend]="false"
 						[chartType]="'line'"
 					></canvas>
+					<battlegrounds-empty-state
+						*ngIf="!lineChartData"
+						subtitle="Start playing Battlegrounds with this hero to collect some information"
+					></battlegrounds-empty-state>
 				</div>
 			</div>
 		</div>
@@ -188,6 +192,11 @@ export class BgsMmrEvolutionForHeroComponent implements AfterViewInit {
 			.filter(match => match.playerRank && match.newPlayerRank)
 			.map(match => parseInt(match.newPlayerRank) - parseInt(match.playerRank))
 			.reverse();
+		if (mmrDeltas.length === 0) {
+			this.lineChartData = null;
+			this.lineChartLabels = null;
+			return;
+		}
 		const finalResult = [0];
 		for (let i = 0; i < mmrDeltas.length; i++) {
 			finalResult[i + 1] = finalResult[i] + mmrDeltas[i];

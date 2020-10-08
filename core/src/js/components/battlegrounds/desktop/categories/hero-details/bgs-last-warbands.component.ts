@@ -27,8 +27,9 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 		<div class="bgs-last-warbands">
 			<with-loading
 				[isLoading]="loading || !lastKnownBoards"
-				mainTitle="We're loading the last known final warbands"
-				svgName="ftue/battlegrounds"
+				[mainTitle]="null"
+				[subtitle]="null"
+				svgName="loading-spiral"
 			>
 				<div class="boards" scrollable *ngIf="lastKnownBoards && lastKnownBoards.length > 0">
 					<bgs-board

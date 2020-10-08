@@ -13,7 +13,7 @@ import {
 	selector: 'loading-state',
 	styleUrls: [`../../css/component/loading-state.component.scss`],
 	template: `
-		<div class="loading-state">
+		<div class="loading-state {{ className }}">
 			<div class="state-container">
 				<div class="loading-icon" [inlineSVG]="loadingStateSvgName"></div>
 				<span class="title" *ngIf="mainTitle"> {{ mainTitle }} </span>
@@ -32,11 +32,13 @@ export class LoadingStateComponent implements AfterViewInit, OnDestroy {
 	@Input() set svgName(value: string) {
 		if (value) {
 			this.loadingStateSvgName = `assets/svg/${value}.svg`;
+			this.className = value.replace('/', '-');
 		}
 	}
 
 	loadingStateSvgName = 'assets/svg/loading_state.svg';
 	displayedHint: string;
+	className: string;
 
 	private interval;
 
