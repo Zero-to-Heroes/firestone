@@ -6,6 +6,7 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 
 @Component({
 	selector: 'decktracker-deck-details',
@@ -23,6 +24,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				tooltipPosition="right"
 			></decktracker-deck-list>
 			<deck-winrate-matrix [deck]="deck"> </deck-winrate-matrix>
+			<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -41,15 +43,26 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 	deck: DeckSummary;
 	deckState: DeckState;
 
+	takeScreenshotFunction: () => Promise<[string, any]> = this.takeScreenshot();
+
 	private _state: MainWindowState;
 	private _navigation: NavigationState;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly deckHandler: DeckHandlerService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly deckHandler: DeckHandlerService,
+		private readonly owUtils: OwUtilsService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	private takeScreenshot(): () => Promise<[string, any]> {
+		//console.log('taking screenshot');
+		return () => this.owUtils.captureWindow('Firestone - MainWindow');
 	}
 
 	private updateValues() {

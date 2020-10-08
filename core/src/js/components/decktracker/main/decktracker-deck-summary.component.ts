@@ -85,7 +85,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
