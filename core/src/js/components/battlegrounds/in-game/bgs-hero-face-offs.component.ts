@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { BgsFaceOff } from '../../../models/battlegrounds/bgs-face-off';
+import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { groupByFunction } from '../../../services/utils';
 

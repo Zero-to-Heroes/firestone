@@ -1,7 +1,9 @@
+import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
 import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
 import {
 	BattleResultHistory,
+	BgsComposition,
 	BgsPostMatchStats as IBgsPostMatchStats,
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsBoard } from '../in-game/bgs-board';
@@ -18,7 +20,7 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly replayLink: string;
 
 	readonly boardHistory: readonly BgsBoard[];
-	// readonly compositionsOverTurn: readonly BgsCompositionForTurn[];
+	readonly compositionsOverTurn: readonly BgsComposition[];
 	readonly rerollsOverTurn: readonly NumericTurnInfo[];
 	readonly freezesOverTurn: readonly NumericTurnInfo[];
 	readonly coinsWastedOverTurn: readonly NumericTurnInfo[];
@@ -39,6 +41,7 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly totalEnemyHeroesKilled: number;
 	readonly luckFactor: number;
 	readonly battleResultHistory: readonly BattleResultHistory[];
+	readonly faceOffs: readonly BgsFaceOff[];
 
 	public static create(base: BgsPostMatchStats): BgsPostMatchStats {
 		return Object.assign(new BgsPostMatchStats(), base);

@@ -1,15 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
-import { Input } from '@firestone-hs/compute-bgs-run-stats/dist/model/input';
+import { Input as BgsComputeRunStatsInput } from '@firestone-hs/compute-bgs-run-stats/dist/model/input';
 import { buildNewStats } from '@firestone-hs/compute-bgs-run-stats/dist/stats-builder';
-import {
-	BattleResultHistory,
-	BgsPostMatchStats as IBgsPostMatchStats,
-} from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
-import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
@@ -142,6 +138,7 @@ export class BgsRunStatsService {
 				simulationResult: { ...history.simulationResult, outcomeSamples: undefined },
 			})),
 			mainPlayer: currentGame.getMainPlayer(),
+			faceOffs: currentGame.faceOffs,
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: newMmr,
 		};
@@ -165,7 +162,7 @@ export class BgsRunStatsService {
 				error => console.error('issue while posting post-match stats', error),
 			);
 		}
-		// console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats, postMatchStats, currentGame);
+		console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats, postMatchStats, currentGame);
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
@@ -184,6 +181,7 @@ export class BgsRunStatsService {
 				replayXml: currentGame.replayXml,
 				mainPlayer: currentGame.getMainPlayer(),
 				battleResultHistory: currentGame.battleResultHistory,
+				faceOffs: currentGame.faceOffs,
 			};
 			console.log('created worker');
 			worker.postMessage(input);
@@ -209,7 +207,7 @@ export class BgsRunStatsService {
 				mainPlayer: input.mainPlayer,
 				reviewId: input.reviewId,
 				userId: input.userName || input.userId,
-			} as any) as Input,
+			} as any) as BgsComputeRunStatsInput,
 			`${new Date()
 				.toISOString()
 				.slice(0, 19)
@@ -254,15 +252,4 @@ export class BgsRunStatsService {
 		}
 		callback(newRating);
 	}
-}
-
-interface BgsComputeRunStatsInput {
-	readonly reviewId: string;
-	readonly heroCardId: string;
-	readonly userId: string;
-	readonly userName: string;
-	readonly battleResultHistory: readonly BattleResultHistory[];
-	readonly mainPlayer: BgsPlayer;
-	readonly oldMmr: number;
-	readonly newMmr: number;
 }
