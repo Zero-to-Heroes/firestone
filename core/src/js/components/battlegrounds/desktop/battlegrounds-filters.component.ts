@@ -107,23 +107,23 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		} as RankFilterOption,
 		{
 			value: '2000',
-			label: '> 2000 MMR',
+			label: '2,000+',
 		} as RankFilterOption,
 		{
 			value: '4000',
-			label: '> 4000 MMR',
+			label: '4,000+',
 		} as RankFilterOption,
 		{
 			value: '6000',
-			label: '> 6000 MMR',
+			label: '6,000+',
 		} as RankFilterOption,
 		{
 			value: '8000',
-			label: '> 8000 MMR',
+			label: '8,000+',
 		} as RankFilterOption,
 		{
 			value: '10000',
-			label: '> 10 000 MMR',
+			label: '10,000+',
 		} as RankFilterOption,
 	] as readonly RankFilterOption[];
 	activeRankFilter: BgsRankFilterType;
