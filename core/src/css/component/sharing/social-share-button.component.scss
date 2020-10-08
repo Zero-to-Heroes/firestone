@@ -6,15 +6,15 @@
 	justify-content: center;
 	margin-bottom: 5px;
 	margin-left: 5px;
-	--icon-color: #a89782;
-	--icon-secondary-color: #1b071f;
+	--icon-color: var(--color-2);
+	--icon-secondary-color: var(--color-7);
+	opacity: 0.8;
 
 	&:hover:not(.disabled) {
-		--icon-color: #d9c3ab;
+		opacity: 1;
 	}
 
 	&.disabled {
-		--icon-color: #a89782;
 		opacity: 0.5;
 	}
 }
