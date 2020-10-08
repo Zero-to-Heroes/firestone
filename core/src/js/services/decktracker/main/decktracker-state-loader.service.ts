@@ -14,7 +14,7 @@ export class DecktrackerStateLoaderService {
 	public buildState(currentState: DecktrackerState, stats: StatsState, prefs: Preferences = null): DecktrackerState {
 		const existingFilters = prefs?.desktopDeckFilters ?? currentState.filters ?? new DeckFilters();
 		const filters: DeckFilters = {
-			gameFormat: existingFilters.gameFormat ?? 'standard',
+			gameFormat: existingFilters.gameFormat ?? 'all',
 			gameMode: existingFilters.gameMode ?? 'ranked',
 			time: existingFilters.time ?? 'all-time',
 			sort: existingFilters.sort ?? 'last-played',

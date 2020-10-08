@@ -14,7 +14,6 @@ import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
-import { StatGameModeType } from '../../../models/mainwindow/stats/stat-game-mode.type';
 import { ChangeDeckFormatFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-mode-filter-event';
 import { ChangeDeckRankFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-rank-filter-event';
@@ -92,6 +91,10 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 	showHiddenDecksLink: boolean;
 
 	formatFilterOptions: readonly FormatFilterOption[] = [
+		{
+			value: 'all',
+			label: 'All formats',
+		} as FormatFilterOption,
 		{
 			value: 'standard',
 			label: 'Standard',
@@ -247,9 +250,9 @@ interface FormatFilterOption extends IOption {
 	value: StatGameFormatType;
 }
 
-interface ModeFilterOption extends IOption {
-	value: StatGameModeType;
-}
+// interface ModeFilterOption extends IOption {
+// 	value: StatGameModeType;
+// }
 
 interface TimeFilterOption extends IOption {
 	value: DeckTimeFilterType;

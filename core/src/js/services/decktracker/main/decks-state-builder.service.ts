@@ -32,7 +32,7 @@ export class DecksStateBuilderService {
 		}
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		const validDecks = stats.gameStats.stats
-			.filter(stat => stat.gameFormat === filters.gameFormat)
+			.filter(stat => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
 			.filter(stat => stat.gameMode === filters.gameMode)
 			.filter(stat => this.isValidDate(stat, filters.time))
 			.filter(stat => this.isValidRank(stat, filters.rank))
