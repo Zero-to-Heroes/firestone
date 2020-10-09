@@ -22,7 +22,7 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/in-game/bgs-opponent-overview-big.component.scss`,
 	],
 	template: `
-		<bgs-player-capsule [player]="_opponent" class="opponent-overview">
+		<bgs-player-capsule [player]="_opponent" [displayTavernTier]="true" class="opponent-overview">
 			<div class="main-info">
 				<bgs-board
 					[entities]="boardMinions"
