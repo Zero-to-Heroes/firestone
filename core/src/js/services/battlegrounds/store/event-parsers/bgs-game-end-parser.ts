@@ -9,6 +9,7 @@ import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/b
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { Preferences } from '../../../../models/preferences';
+import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsGameEndEvent } from '../events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -16,7 +17,7 @@ import { EventParser } from './_event-parser';
 
 // TODO: coins wasted doesn't take into account hero powers that let you have more coins (Bel'ial)
 export class BgsGameEndParser implements EventParser {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly memory: MemoryInspectionService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsGameEndEvent';
@@ -25,6 +26,10 @@ export class BgsGameEndParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
 		const prefs: Preferences = await this.prefs.getPreferences();
 		console.warn('will build post-match info', prefs.bgsForceShowPostMatchStats);
+		const battlegroundsInfo = await this.memory.getBattlegroundsEndGame();
+		const playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
+		const newPlayerRank = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
+		console.log('got player rank info', playerRank, newPlayerRank);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
 		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(
 			event.postMatchStats,

@@ -86,22 +86,25 @@ export class MindVisionOperationFacade<T> {
 		if (!forceReset && retriesLeft <= 0) {
 			// There are cases where not retrieving the info it totally valid,
 			// like trying to get the BattlegroundsInfo right after logging in
+			this.log('not getting any value', retriesLeft, forceReset);
 			callback(null, retriesLeft);
 			return;
 		}
 		if (!(await this.ow.inGame())) {
+			this.log('not in game', retriesLeft, forceReset);
 			callback(null, 0);
 			return;
 		}
-		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
+		this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
 		const resultFromMemory = await this.mindVisionOperation(forceReset);
+		this.log('result from memory', resultFromMemory);
+		if (this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
+			this.log('calling with a force reset');
+			setTimeout(() => this.callInternal(callback, retriesLeft - 1, true));
+			return;
+		}
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
 			this.log('result from memory is empty, retying');
-			if (forceReset || (this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory))) {
-				this.log('calling with a force reset');
-				setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay, true);
-				return;
-			}
 			setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay);
 			return;
 		}

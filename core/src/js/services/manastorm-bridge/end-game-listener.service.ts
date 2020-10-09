@@ -72,6 +72,7 @@ export class EndGameListenerService {
 					console.log('[manastorm-bridge] end game, uploading?');
 					const reviewId = await this.gameState.getCurrentReviewId();
 					this.events.broadcast(Events.GAME_END, reviewId);
+
 					await this.endGameUploader.upload(
 						gameEvent,
 						reviewId,

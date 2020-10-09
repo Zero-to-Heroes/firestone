@@ -82,7 +82,7 @@ export class EndGameUploaderService {
 		let playerRank;
 		let newPlayerRank;
 		if (game.gameMode === 'battlegrounds') {
-			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame();
+			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
 			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
 			newPlayerRank = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
 			console.log('updated player rank', playerRank, newPlayerRank);

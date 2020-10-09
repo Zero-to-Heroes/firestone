@@ -58,7 +58,7 @@ export class MemoryInspectionService {
 		return this.getBattlegroundsEndGameOperation.call(numberOfRetries);
 	}
 
-	public async getBattlegroundsMatch(numberOfRetries?: number): Promise<BattlegroundsInfo> {
+	public async getBattlegroundsMatchWithPlayers(numberOfRetries?: number): Promise<BattlegroundsInfo> {
 		return this.getBattlegroundsMatchOperation.call(numberOfRetries);
 	}
 

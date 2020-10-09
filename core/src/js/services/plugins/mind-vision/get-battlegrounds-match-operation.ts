@@ -7,7 +7,7 @@ export class GetBattlegroundsMatchOperation extends MindVisionOperationFacade<Ba
 	constructor(mindVision: MindVisionService, ow: OverwolfService) {
 		super(
 			ow,
-			'getBattlegroundsMatch',
+			'getBattlegroundsMatchWithPlayers',
 			(forceReset?: boolean) => mindVision.getBattlegroundsInfo(forceReset),
 			battlegroundsInfo => false,
 			battlegroundsInfo =>
@@ -15,7 +15,7 @@ export class GetBattlegroundsMatchOperation extends MindVisionOperationFacade<Ba
 					rating: battlegroundsInfo.Rating,
 					game: battlegroundsInfo.Game,
 				} as BattlegroundsInfo),
-			5,
+			2,
 			1000,
 			battlegroundsInfo => !battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,
 		);

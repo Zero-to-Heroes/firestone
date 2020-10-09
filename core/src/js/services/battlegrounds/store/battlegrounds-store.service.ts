@@ -159,10 +159,22 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new BgsMatchStartEvent());
 					if (this.memoryInterval) {
 						clearInterval(this.memoryInterval);
+						this.memoryInterval = null;
 					}
+					console.log('triggering setInterval', this.memoryInterval);
 					this.memoryInterval = setInterval(async () => {
-						const info = await this.memory.getBattlegroundsMatch(1);
-						// console.log('[battlegrounds-store] bgs info', info);
+						// If we are at the very start, we don't care about getting the player info -
+						// we just want some starting data fast
+						// Otherwise, we use the "getBattlegroundsMatchWithPlayers" endpoint to force
+						// a MindVision reset if no players are found, as resetting the memory reading
+						// could unblock the situation
+						// const info = this.state?.currentGame?.bannedRaces?.length
+						// 	? await this.memory.getBattlegroundsMatchWithPlayers(1)
+						// 	: await this.memory.getBattlegroundsInfo(1);
+						// Here we want to get the players info, mostly
+						console.log('getting battlegrounds info');
+						const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
+						console.log('[battlegrounds-store] bgs info', info);
 						if (info?.game?.Players == null || info.game.Players.length == 0) {
 							// console.log('no player info in game, retryuing', info);
 						}
@@ -219,6 +231,7 @@ export class BattlegroundsStoreService {
 				console.log('[bgs-store] Game ended');
 				if (this.memoryInterval) {
 					clearInterval(this.memoryInterval);
+					this.memoryInterval = null;
 				}
 				this.maybeHandleNextEvent(
 					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
@@ -359,7 +372,7 @@ export class BattlegroundsStoreService {
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
 			new BgsMatchStartParser(),
-			new BgsGameEndParser(this.prefs),
+			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(),
 			// new BgsResetBattleStateParser(),

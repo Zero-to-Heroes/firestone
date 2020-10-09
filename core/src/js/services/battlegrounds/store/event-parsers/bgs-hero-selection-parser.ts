@@ -25,7 +25,8 @@ export class BgsHeroSelectionParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectionEvent): Promise<BattlegroundsState> {
-		const bgsInfo = await this.memoryService.getBattlegroundsMatch();
+		//
+		const bgsInfo = await this.memoryService.getBattlegroundsInfo();
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.game?.AvailableRaces);
 		const newHeroSelectionStage: BgsHeroSelectionStage = await this.buildHeroSelectionStage(
 			event.heroCardIds,
