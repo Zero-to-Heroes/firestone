@@ -44,6 +44,7 @@
 		flex-direction: column;
 		padding: 10px;
 		padding-right: 0;
+		margin-bottom: 10px;
 
 		.title {
 			font-size: 14px;
@@ -60,6 +61,12 @@
 				width: 100%;
 				background: transparent;
 				font-size: 16px;
+				padding-left: 0;
+				padding-top: 0;
+
+				.hero {
+					display: none;
+				}
 			}
 		}
 	}
