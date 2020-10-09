@@ -44,14 +44,10 @@ declare let amplitude: any;
 			<with-loading
 				*ngIf="_panel?.player || computing || mainPlayerCardId"
 				[isLoading]="computing"
-				mainTitle="We're building the stats"
-				[subtitle]="
-					'We are building the post-match stats, please wait a bit - ' +
-					loadingElapsed?.toFixed(0) +
-					's elapsed (it usually takes about 20-30s)'
-				"
-				svgName="ftue/battlegrounds"
-				[hint]="true"
+				[mainTitle]="loadingTitle"
+				[subtitle]="loadingSubtitle"
+				[svgName]="loadingSvg"
+				[hint]="showHints"
 			>
 				<div class="content">
 					<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
@@ -124,6 +120,16 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsPostMatchStatsComponent implements AfterViewInit {
+	loadingElapsed = 0;
+
+	@Input() loadingTitle = "We're building the stats";
+	@Input()
+	loadingSubtitle = `We are building the post-match stats, please wait a bit - ${this.loadingElapsed?.toFixed(
+		0,
+	)}s elapsed (it usually takes about 20-30s)`;
+	@Input() loadingSvg = 'ftue/battlegrounds';
+	@Input() showHints = true;
+
 	_panel: BgsPostMatchStatsPanel;
 	_game: BgsGame;
 
@@ -138,8 +144,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	tabs: readonly BgsStatsFilterId[];
 	computing: boolean;
 	mmr: number;
-
-	loadingElapsed = 0;
 
 	takeScreenshotFunction: () => Promise<[string, any]> = this.takeScreenshot();
 
