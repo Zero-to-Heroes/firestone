@@ -4,6 +4,10 @@
 	align-items: center;
 	height: 40px;
 	padding: 10px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
 
 	&.ranked {
 		// Probably temporary, but in the meantime we need to make the ranked icons bigger
@@ -22,6 +26,10 @@
 			bottom: -57%;
 			padding-right: 13px;
 		}
+	}
+
+	&.battlegrounds .group.result {
+		width: 40px;
 	}
 }
 
@@ -47,19 +55,43 @@
 	margin-right: 10px;
 	align-items: center;
 	justify-content: center;
+	flex-shrink: 0;
 
 	&:nth-last-child(2) {
 		border: none;
 	}
 
-	&.match-stats,
 	&.result {
-		width: 115px;
+		width: 85px;
+	}
+
+	&.mmr {
+		font-size: 12px;
+		width: 75px;
+
+		.value {
+			margin-right: 5px;
+		}
+
+		&.positive .value {
+			color: #61ff47;
+
+			&::before {
+				content: '+';
+			}
+		}
+		&.negative .value {
+			color: #ff4747;
+		}
+	}
+
+	&.match-stats {
+		width: 85px;
 	}
 
 	&.player-images {
-		padding-left: 10px;
-		padding-right: 15px;
+		padding-left: 0px;
+		padding-right: 10px;
 	}
 }
 
@@ -85,12 +117,9 @@
 }
 
 .player-name {
-	font-family: Open Sans;
-	font-style: normal;
-	font-weight: normal;
 	font-size: 13px;
 	line-height: 18px;
-	color: var(--default-text-color);
+	// color: var(--default-text-color);
 	width: 100px;
 	white-space: nowrap;
 	overflow: hidden;
@@ -127,12 +156,9 @@
 }
 
 .vs {
-	font-family: Open Sans;
-	font-style: normal;
-	font-weight: normal;
 	font-size: 13px;
 	line-height: 18px;
-	color: var(--default-text-color);
+	// color: var(--default-text-color);
 	margin-left: 10px;
 	margin-right: 10px;
 }
@@ -150,12 +176,9 @@
 
 .match-stats,
 .result {
-	font-family: Open Sans;
-	font-style: normal;
-	font-weight: normal;
 	font-size: 13px;
 	line-height: 18px;
-	color: var(--default-text-color);
+	// color: var(--default-text-color);
 }
 
 .match-stats {
@@ -171,9 +194,6 @@
 
 .replay {
 	display: flex;
-	font-family: Open Sans;
-	font-style: normal;
-	font-weight: normal;
 	font-size: 13px;
 	line-height: 18px;
 	color: var(--default-text-color);

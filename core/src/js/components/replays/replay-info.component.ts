@@ -36,12 +36,21 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="result">{{ result }}</div>
 			</div>
 
+			<div
+				class="group mmr"
+				[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
+				*ngIf="deltaMmr != null"
+			>
+				<div class="value">{{ deltaMmr }}</div>
+				<div class="text">MMR</div>
+			</div>
+
 			<div class="group coin" *ngIf="playCoinIconSvg">
 				<div class="play-coin-icon icon" [innerHTML]="playCoinIconSvg" [helpTooltip]="playCoinTooltip"></div>
 			</div>
 
 			<div class="group match-stats" *ngIf="hasMatchStats" (click)="showStats()">
-				Show stats
+				{{ showStatsLabel }}
 			</div>
 
 			<div class="replay" *ngIf="reviewId" (click)="showReplay()">
@@ -57,6 +66,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplayInfoComponent implements AfterViewInit {
+	@Input() showStatsLabel: string = 'Show stats';
+
 	replayInfo: GameStat;
 	visualResult: string;
 	gameMode: StatGameModeType;
@@ -72,6 +83,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	playCoinTooltip: SafeHtml;
 	reviewId: string;
 	hasMatchStats: boolean;
+	deltaMmr: number;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -86,10 +98,17 @@ export class ReplayInfoComponent implements AfterViewInit {
 		this.result = this.buildMatchResultText(value);
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(value);
 		this.reviewId = value.reviewId;
-		this.hasMatchStats = value.gameMode === 'battlegrounds';
-		this.opponentName = value.gameMode !== 'battlegrounds' ? this.sanitizeName(value.opponentName) : null;
-		this.visualResult =
-			value.gameMode !== 'battlegrounds' ? value.result : parseInt(value.additionalResult) <= 4 ? 'won' : 'lost';
+
+		const isBg = value.gameMode === 'battlegrounds';
+		this.hasMatchStats = isBg;
+		this.opponentName = isBg ? null : this.sanitizeName(value.opponentName);
+		this.visualResult = isBg ? (parseInt(value.additionalResult) <= 4 ? 'won' : 'lost') : value.result;
+		if (isBg) {
+			const deltaMmr = parseInt(value.newPlayerRank) - parseInt(value.playerRank);
+			if (!isNaN(deltaMmr)) {
+				this.deltaMmr = deltaMmr;
+			}
+		}
 	}
 
 	constructor(
@@ -147,14 +166,14 @@ export class ReplayInfoComponent implements AfterViewInit {
 		if (info.gameMode === 'battlegrounds' && info.additionalResult) {
 			// prettier-ignore
 			switch (parseInt(info.additionalResult)) {
-				case 1: return '1st place';
-				case 2: return '2nd place';
-				case 3: return '3rd place';
-				case 4: return '4th place';
-				case 5: return '5th place';
-				case 6: return '6th place';
-				case 7: return '7th place';
-				case 8: return '8th place';
+				case 1: return '1st';
+				case 2: return '2nd';
+				case 3: return '3rd';
+				case 4: return '4th';
+				case 5: return '5th';
+				case 6: return '6th';
+				case 7: return '7th';
+				case 8: return '8th';
 			}
 		}
 		// prettier-ignore
