@@ -503,7 +503,7 @@ export class MainWindowStoreService {
 
 			// Replays
 			ShowReplayEvent.eventName(),
-			new ShowReplayProcessor(),
+			new ShowReplayProcessor(this.bgsRunStatsService),
 
 			TriggerShowMatchStatsEvent.eventName(),
 			new TriggerShowMatchStatsProcessor(this.bgsRunStatsService),

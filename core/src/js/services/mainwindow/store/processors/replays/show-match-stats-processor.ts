@@ -51,9 +51,6 @@ export class ShowMatchStatsProcessor implements Processor {
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);
 		const newReplays = navigationState.navigationReplays.update({
-			currentView: 'match-details',
-			selectedTab: 'match-stats',
-			selectedStatsTab: 'hp-by-turn',
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
 		return [

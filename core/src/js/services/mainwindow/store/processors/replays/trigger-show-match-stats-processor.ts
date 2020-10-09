@@ -16,6 +16,19 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		// Figure out if we have already loaded the stats, or if we need a refresh
+		if (navigationState.navigationReplays.selectedReplay?.replayInfo?.reviewId === event.reviewId) {
+			return [
+				null,
+				navigationState.update({
+					navigationReplays: navigationState.navigationReplays.update({
+						currentView: 'match-details',
+						selectedTab: 'match-stats',
+					} as NavigationReplays),
+				} as NavigationState),
+			];
+		}
+
 		this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
 		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
 		const matchDetail = Object.assign(new MatchDetail(), {
@@ -32,6 +45,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 		const newReplays = navigationState.navigationReplays.update({
 			currentView: 'match-details',
 			selectedTab: 'match-stats',
+			selectedStatsTab: 'hp-by-turn',
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
 		return [

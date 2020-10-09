@@ -2,17 +2,37 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
+import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
 import { ShowReplayEvent } from '../../events/replays/show-replay-event';
 import { Processor } from '../processor';
 
 export class ShowReplayProcessor implements Processor {
+	constructor(private readonly bgsRunStats: BgsRunStatsService) {}
+
 	public async process(
 		event: ShowReplayEvent,
 		currentState: MainWindowState,
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		// Figure out if we have already loaded the stats, or if we need a refresh
+		if (navigationState.navigationReplays.selectedReplay?.replayInfo?.reviewId === event.reviewId) {
+			return [
+				null,
+				navigationState.update({
+					navigationReplays: navigationState.navigationReplays.update({
+						currentView: 'match-details',
+						selectedTab: 'replay',
+					} as NavigationReplays),
+				} as NavigationState),
+			];
+		}
+
 		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
+		if (selectedInfo.gameMode === 'battlegrounds') {
+			this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
+		}
+
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 		} as MatchDetail);
@@ -21,6 +41,7 @@ export class ShowReplayProcessor implements Processor {
 			selectedTab: 'replay',
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
+
 		return [
 			null,
 			navigationState.update({

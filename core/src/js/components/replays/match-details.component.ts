@@ -26,6 +26,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 				parentWindow="Firestone - MainWindow"
 				emptyTitle="Nothing here"
 				emptySubtitle="We couldn't retrieve the stats"
+				[loadingTitle]="null"
+				[loadingSubtitle]="null"
+				[loadingSvg]="'loading-spiral'"
+				[showHints]="false"
 			></bgs-post-match-stats>
 		</div>
 	`,
