@@ -9,7 +9,7 @@ declare let amplitude;
 	template: `
 		<div class="social-shares" *ngIf="enabled">
 			<twitter-share-button [onSocialClick]="onSocialClick"></twitter-share-button>
-			<reddit-share-button [onSocialClick]="onSocialClick"></reddit-share-button>
+			<!-- <reddit-share-button [onSocialClick]="onSocialClick"></reddit-share-button> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
