@@ -144,7 +144,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private registerGameEvents() {
-		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
+		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
 				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
@@ -161,22 +161,25 @@ export class BattlegroundsStoreService {
 						clearInterval(this.memoryInterval);
 						this.memoryInterval = null;
 					}
-					console.log('triggering setInterval', this.memoryInterval);
+					console.log('[battlegrounds-store] triggering setInterval', this.memoryInterval);
 					this.memoryInterval = setInterval(async () => {
-						// If we are at the very start, we don't care about getting the player info -
-						// we just want some starting data fast
-						// Otherwise, we use the "getBattlegroundsMatchWithPlayers" endpoint to force
-						// a MindVision reset if no players are found, as resetting the memory reading
-						// could unblock the situation
-						// const info = this.state?.currentGame?.bannedRaces?.length
-						// 	? await this.memory.getBattlegroundsMatchWithPlayers(1)
-						// 	: await this.memory.getBattlegroundsInfo(1);
 						// Here we want to get the players info, mostly
-						console.log('getting battlegrounds info');
-						const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
+						console.log('[battlegrounds-store] getting battlegrounds info');
+						let info = await this.memory.getBattlegroundsMatchWithPlayers(2);
 						console.log('[battlegrounds-store] bgs info', info);
-						if (info?.game?.Players == null || info.game.Players.length == 0) {
-							// console.log('no player info in game, retryuing', info);
+						if (info?.game?.Players && info.game.Players.length > 0) {
+							console.log('[battlegrounds-store] removing damage info from memory players', info);
+							info = {
+								...info,
+								game: {
+									...info.game,
+									Players: info.game.Players.map(player => ({
+										...player,
+										Damage: null,
+									})),
+								},
+							};
+							console.log('[battlegrounds-store] removed damage info', info);
 						}
 						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
 						// console.log('BgsGlobalInfoUpdatedEvent emit done');
@@ -185,10 +188,15 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
+				console.log('[battlegrounds-store] getting battlegrounds info after opponent revealed');
+				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
+				console.log('[battlegrounds-store] bgs info after opponent revealed', info);
+				this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
 				this.maybeHandleNextEvent(
 					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
 					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 				);
+				this.maybeHandleNextEvent(new BgsGlobalInfoUpdatedEvent(info), GameEvent.BATTLEGROUNDS_BATTLE_RESULT);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(new BgsOpponentRevealedEvent(gameEvent.additionalData.cardId));
 			} else if (gameEvent.type === GameEvent.TURN_START) {

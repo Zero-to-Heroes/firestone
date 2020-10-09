@@ -32,7 +32,8 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 				if (!playerFromMemory) {
 					return player;
 				}
-				const newDamage = playerFromMemory.Damage as number;
+				// Damage is not always present, since we don't want to spoil the battle result too early
+				const newDamage = (playerFromMemory.Damage as number) || player.damageTaken;
 				const newWinStreak = (playerFromMemory.WinStreak as number) || 0;
 				const newHighestWinStreak = Math.max(
 					player.highestWinStreak || 0,
