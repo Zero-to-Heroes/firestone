@@ -18,7 +18,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			<div class="title">Last {{ _numberOfReplays }} replays</div>
 			<ul class="list">
 				<li *ngFor="let replay of replays">
-					<replay-info [replay]="replay"></replay-info>
+					<replay-info [replay]="replay" showStatsLabel="Stats"></replay-info>
 				</li>
 			</ul>
 		</div>

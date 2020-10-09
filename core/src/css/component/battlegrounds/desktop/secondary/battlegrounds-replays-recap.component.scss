@@ -19,6 +19,18 @@
 
 		li {
 			margin-bottom: 3px;
+
+			::ng-deep .replay-info {
+				.mode {
+					width: 40px;
+				}
+				.result {
+					width: 35px;
+				}
+				.match-stats {
+					width: 45px;
+				}
+			}
 		}
 	}
 }
