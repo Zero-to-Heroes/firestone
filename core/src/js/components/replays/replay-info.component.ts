@@ -66,7 +66,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplayInfoComponent implements AfterViewInit {
-	@Input() showStatsLabel: string = 'Show stats';
+	@Input() showStatsLabel = 'Show stats';
 
 	replayInfo: GameStat;
 	visualResult: string;
