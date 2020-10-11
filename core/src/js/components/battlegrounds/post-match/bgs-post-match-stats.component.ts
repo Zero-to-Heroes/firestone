@@ -45,7 +45,13 @@ declare let amplitude: any;
 				*ngIf="_panel?.player || computing || mainPlayerCardId"
 				[isLoading]="computing"
 				[mainTitle]="loadingTitle"
-				[subtitle]="loadingSubtitle"
+				[subtitle]="
+					loadingSubtitle
+						? loadingSubtitle
+						: 'We are building the post-match stats, please wait a bit - ' +
+						  loadingElapsed?.toFixed(0) +
+						  's elapsed (it usually takes about 20-30s)'
+				"
 				[svgName]="loadingSvg"
 				[hint]="showHints"
 			>
@@ -123,10 +129,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	loadingElapsed = 0;
 
 	@Input() loadingTitle = "We're building the stats";
-	@Input()
-	loadingSubtitle = `We are building the post-match stats, please wait a bit - ${this.loadingElapsed?.toFixed(
-		0,
-	)}s elapsed (it usually takes about 20-30s)`;
+	@Input() loadingSubtitle: string;
 	@Input() loadingSvg = 'ftue/battlegrounds';
 	@Input() showHints = true;
 
