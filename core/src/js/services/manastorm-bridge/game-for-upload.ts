@@ -1,3 +1,4 @@
+import { Race } from '@firestone-hs/reference-data';
 import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
@@ -32,6 +33,8 @@ export class GameForUpload {
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS
 	uncompressedXmlReplay: string;
+	availableTribes: readonly Race[];
+	bannedTribes: readonly Race[];
 
 	static createEmptyGame(id: string): GameForUpload {
 		const game = new GameForUpload();

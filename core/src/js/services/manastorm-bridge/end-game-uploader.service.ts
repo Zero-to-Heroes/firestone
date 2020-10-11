@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameEvent } from '../../models/game-event';
+import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { GameForUpload } from './game-for-upload';
@@ -85,6 +86,11 @@ export class EndGameUploaderService {
 			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
 			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
 			newPlayerRank = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
+			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
+				battlegroundsInfo?.game?.AvailableRaces,
+			);
+			game.availableTribes = availableRaces;
+			game.bannedTribes = bannedRaces;
 			console.log('updated player rank', playerRank, newPlayerRank);
 		} else if (game.gameMode === 'arena') {
 			const arenaInfo = await this.memoryInspection.getArenaInfo();

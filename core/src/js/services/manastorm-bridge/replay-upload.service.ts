@@ -73,6 +73,8 @@ export class ReplayUploadService {
 				'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
 				'should-zip': 'true',
 				'app-version': '' + process.env.APP_VERSION,
+				'available-races': game.availableTribes ? JSON.stringify(game.availableTribes) : undefined,
+				'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);
