@@ -30,7 +30,7 @@ export class GameRunningParser implements EventParser {
 	// For now, only bother to do some things if the current decklist is empty
 	private buildNewPlayer(state: DeckState, deckCount: number): DeckState {
 		if (state.deckstring) {
-			console.log('[game-running] deckstring in state, returning', state);
+			console.log('[game-running] deckstring in state, returning');
 			return state;
 		}
 		if (state.deckList && state.deckList.some(card => card.entityId > 0 || card.cardId)) {
@@ -38,7 +38,7 @@ export class GameRunningParser implements EventParser {
 			return state;
 		}
 		if (state.deck && state.deck.some(card => card.entityId > 0 || card.cardId)) {
-			console.log('[game-running] deck in state, returning', state.deck, state);
+			console.log('[game-running] deck in state, returning', state.deck);
 			return state;
 		}
 		const newDeck = this.deckParser.buildEmptyDeckList(deckCount);
