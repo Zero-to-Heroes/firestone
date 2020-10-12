@@ -1,6 +1,7 @@
 import { BgsPanel } from '../bgs-panel';
 import { BgsPanelId } from '../bgs-panel-id.type';
 import { BgsHeroStat } from '../stats/bgs-hero-stat';
+import { BgsStats } from '../stats/bgs-stats';
 
 export class BgsHeroSelectionOverview implements BgsPanel {
 	readonly id: BgsPanelId = 'bgs-hero-selection-overview';
@@ -9,6 +10,7 @@ export class BgsHeroSelectionOverview implements BgsPanel {
 	readonly heroOverview: readonly BgsHeroStat[];
 	readonly heroOptionCardIds: readonly string[];
 	readonly patchNumber: number;
+	readonly globalStats: BgsStats;
 
 	public static create(base: BgsHeroSelectionOverview): BgsHeroSelectionOverview {
 		return Object.assign(new BgsHeroSelectionOverview(), base);

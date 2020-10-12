@@ -26,7 +26,7 @@ declare let amplitude: any;
 				<div class="node"></div>
 				{{ communityLabel }}
 			</div>
-			<div class="item current" [helpTooltip]="yourTooltip">
+			<div class="item current" [helpTooltip]="yourTooltip" *ngIf="yourInfo">
 				<div class="node"></div>
 				{{ yourLabel }}
 			</div>
@@ -212,6 +212,8 @@ export class GraphWithComparisonComponent {
 		this.updateValues();
 	}
 
+	yourInfo: boolean;
+
 	private _communityExtractor: () => readonly NumericTurnInfo[];
 	private _yourExtractor: () => readonly NumericTurnInfo[];
 	private _dirty = true;
@@ -227,6 +229,7 @@ export class GraphWithComparisonComponent {
 		// Turn 0 is before any battle, so it's not really interesting for us
 		const community = this.removeZero(this._communityExtractor() || []);
 		const your = this.removeZero(this._yourExtractor() || []);
+		this.yourInfo = your && your.length > 0;
 
 		const maxTurnFromCommunity = this.getMaxTurn(community);
 		const maxTurnFromYour = this.getMaxTurn(your);

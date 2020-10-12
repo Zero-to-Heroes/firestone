@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 
 declare let amplitude: any;
 
@@ -29,9 +31,10 @@ declare let amplitude: any;
 						patchNumber
 					"
 				>
-					Warband stats
+					Winrate per turn
 				</div>
-				<bgs-hero-warband-stats [warbandStats]="warbandStats"></bgs-hero-warband-stats>
+				<bgs-winrate-chart [globalStats]="globalStats" [player]="player"></bgs-winrate-chart>
+				<!-- <bgs-hero-warband-stats [warbandStats]="warbandStats"></bgs-hero-warband-stats> -->
 			</div>
 			<bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes>
 		</div>
@@ -46,12 +49,15 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroOverviewComponent {
+	@Input() patchNumber: number;
+	@Input() globalStats: BgsStats;
+
 	_hero: BgsHeroStat;
+	player: BgsPlayer;
 	icon: string;
 	tier: BgsHeroTier;
 	tribes: readonly { tribe: string; percent: string }[];
 	warbandStats: readonly { turn: number; totalStats: number }[];
-	@Input() patchNumber: number;
 
 	@Input() set hero(value: BgsHeroStat) {
 		// console.log('setting hero', value, this._hero);
@@ -59,6 +65,9 @@ export class BgsHeroOverviewComponent {
 		if (!value) {
 			return;
 		}
+		this.player = BgsPlayer.create({
+			cardId: value.id,
+		} as BgsPlayer);
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)

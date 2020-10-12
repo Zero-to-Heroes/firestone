@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsHeroSelectionOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 import { groupByFunction } from '../../../services/utils';
 
 declare let amplitude: any;
@@ -21,6 +22,7 @@ declare let amplitude: any;
 				<bgs-hero-overview
 					*ngFor="let hero of heroOverviews || []; trackBy: trackByHeroFn"
 					[hero]="hero"
+					[globalStats]="globalStats"
 					[patchNumber]="patchNumber"
 					[style.width.%]="getOverviewWidth()"
 				></bgs-hero-overview>
@@ -35,6 +37,7 @@ export class BgsHeroSelectionOverviewComponent {
 	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] = [];
 	_panel: BgsHeroSelectionOverview;
 	patchNumber: number;
+	globalStats: BgsStats;
 
 	@Input() set panel(value: BgsHeroSelectionOverview) {
 		if (!value?.heroOverview) {
@@ -45,6 +48,7 @@ export class BgsHeroSelectionOverviewComponent {
 		}
 		// console.log('setting panel', value, this._panel);
 		this._panel = value;
+		this.globalStats = this._panel.globalStats;
 		this.patchNumber = value.patchNumber;
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.id !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);

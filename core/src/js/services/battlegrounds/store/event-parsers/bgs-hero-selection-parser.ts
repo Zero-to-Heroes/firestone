@@ -29,6 +29,7 @@ export class BgsHeroSelectionParser implements EventParser {
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo();
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.game?.AvailableRaces);
 		const newHeroSelectionStage: BgsHeroSelectionStage = await this.buildHeroSelectionStage(
+			currentState,
 			event.heroCardIds,
 			currentState.globalStats,
 		);
@@ -49,16 +50,20 @@ export class BgsHeroSelectionParser implements EventParser {
 	}
 
 	private async buildHeroSelectionStage(
+		currentState: BattlegroundsState,
 		heroCardIds: readonly string[],
 		stats: BgsStats,
 	): Promise<BgsHeroSelectionStage> {
-		const panels: readonly BgsPanel[] = [await this.buildBgsHeroSelectionOverview(heroCardIds, stats)];
+		const panels: readonly BgsPanel[] = [
+			await this.buildBgsHeroSelectionOverview(currentState, heroCardIds, stats),
+		];
 		return BgsHeroSelectionStage.create({
 			panels: panels,
 		} as BgsHeroSelectionStage);
 	}
 
 	private async buildBgsHeroSelectionOverview(
+		currentState: BattlegroundsState,
 		heroCardIds: readonly string[],
 		stats: BgsStats,
 	): Promise<BgsHeroSelectionOverview> {
@@ -92,6 +97,7 @@ export class BgsHeroSelectionParser implements EventParser {
 		return BgsHeroSelectionOverview.create({
 			heroOverview: heroOverview,
 			heroOptionCardIds: heroCardIds,
+			globalStats: currentState.globalStats,
 			patchNumber:
 				stats?.currentBattlegroundsMetaPatch ||
 				(await this.patchConfig.getConf()).currentBattlegroundsMetaPatch,
