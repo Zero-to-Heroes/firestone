@@ -55,22 +55,19 @@ export class BgsWarbandStatsForHeroComponent {
 				return [];
 			}
 
-			const averageStats: readonly {
-				turn: number;
-				totalStats: number;
-			}[] = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === 'average')?.warbandStats;
+			// const averageStats: readonly {
+			// 	turn: number;
+			// 	totalStats: number;
+			// }[] = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === 'average')?.warbandStats;
 			const warbandStats: readonly NumericTurnInfo[] = this._state.battlegrounds.stats.heroStats
 				.find(stat => stat.id === this._category.heroId)
-				?.warbandStats?.map(stat => {
-					const averageValue = averageStats.find(avg => avg.turn === stat.turn);
-					if (!averageValue) {
-						return null;
-					}
-					return {
-						turn: stat.turn,
-						value: stat.totalStats + averageValue.totalStats,
-					} as NumericTurnInfo;
-				})
+				?.warbandStats?.map(
+					stat =>
+						({
+							turn: stat.turn,
+							value: stat.totalStats,
+						} as NumericTurnInfo),
+				)
 				.filter(stat => stat);
 			return warbandStats;
 		};

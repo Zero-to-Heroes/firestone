@@ -13,7 +13,6 @@ declare let amplitude: any;
 	template: `
 		<div class="hero-selection-tooltip">
 			<img class="hero-power" [src]="heroPowerImage" />
-			<!-- <bgs-hero-warband-stats class="warband-stats" [warbandStats]="warbandStats"></bgs-hero-warband-stats> -->
 			<div class="infos">
 				<div class="name">{{ _hero.name }}</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
@@ -27,7 +26,6 @@ export class BgsHeroSelectionTooltipComponent {
 	_hero: BgsHeroStat;
 	heroPowerImage: string;
 	tribes: readonly { tribe: string; percent: string }[];
-	warbandStats: readonly { turn: number; totalStats: number }[];
 
 	@Input() set config(value: BgsHeroStat) {
 		this._hero = value;
@@ -36,7 +34,6 @@ export class BgsHeroSelectionTooltipComponent {
 			.sort((a, b) => b.percent - a.percent)
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
-		this.warbandStats = value.warbandStats;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
