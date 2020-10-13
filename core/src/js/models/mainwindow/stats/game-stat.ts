@@ -27,7 +27,9 @@ export class GameStat {
 	readonly opponentCardId: string;
 	readonly opponentName: string;
 	readonly reviewId: string;
-	// readonly matchStat?: MatchStats;
+	readonly gameDurationSeconds: number;
+	readonly gameDurationTurns: number;
+
 	readonly postMatchStats?: BgsPostMatchStats;
 
 	public static create(base: GameStat): GameStat {

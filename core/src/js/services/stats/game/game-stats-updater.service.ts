@@ -1,5 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import {
+	extractTotalDuration,
+	extractTotalTurns,
+	parseHsReplayString,
+} from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { Events } from '../../events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
@@ -20,12 +24,15 @@ export class GameStatsUpdaterService {
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async data => {
 			const info: ManastormInfo = data.data[0];
 			const newGameStat: GameStat = this.buildGameStat(info.reviewId, info.game);
+			console.log('built new game stat', newGameStat);
 			this.stateUpdater.next(new RecomputeGameStatsEvent(newGameStat));
 		});
 	}
 
 	private buildGameStat(reviewId: string, game: GameForUpload): GameStat {
 		const replay = parseHsReplayString(game.uncompressedXmlReplay);
+		const durationInSeconds = extractTotalDuration(replay);
+		const durationInTurns = extractTotalTurns(replay);
 		return GameStat.create({
 			additionalResult: replay.additionalResult,
 			buildNumber: game.buildNumber,
@@ -47,6 +54,8 @@ export class GameStatsUpdaterService {
 			result: game.result,
 			reviewId: reviewId,
 			scenarioId: game.scenarioId,
+			gameDurationSeconds: durationInSeconds,
+			gameDurationTurns: durationInTurns,
 		} as GameStat);
 	}
 }
