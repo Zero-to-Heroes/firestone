@@ -101,3 +101,10 @@ ng-select.disabled {
 		}
 	}
 }
+
+.tooltip {
+	width: 15px;
+	height: 15px;
+	--icon-color: var(--color-1);
+	margin-left: -20px;
+}

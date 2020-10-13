@@ -28,6 +28,11 @@ import { IOption } from 'ng-select';
 		>
 			<ng-template #optionTemplate let-option="option">
 				<span>{{ option?.label }}</span>
+				<div class="tooltip" *ngIf="option?.tooltip" [helpTooltip]="option.tooltip">
+					<svg>
+						<use xlink:href="assets/svg/sprite.svg#info" />
+					</svg>
+				</div>
 				<i class="i-30 selected-icon" *ngIf="option.value === filter">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#selected_dropdown" />

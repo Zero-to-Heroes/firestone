@@ -13,6 +13,7 @@ import { BgsHeroSortFilterType } from '../../../models/mainwindow/battlegrounds/
 import { BgsRankFilterType } from '../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { PatchInfo } from '../../../models/patches';
 import { BgsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsRankFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
@@ -151,7 +152,8 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			} as TimeFilterOption,
 			{
 				value: 'last-patch',
-				label: `Last patch ${this.formatDate(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch.date)}`,
+				label: `Last patch`,
+				tooltip: this.formatPatch(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch),
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 	};
@@ -193,14 +195,14 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.activeRankFilter = this._state.battlegrounds?.activeRankFilter;
 	}
 
-	private formatDate(input: string): string {
+	private formatPatch(input: PatchInfo): string {
 		if (!input) {
 			return '';
 		}
-		return `(${input
+		return `Patch ${input.version}.${input.number} released on ${input.date
 			.split('-')
 			.reverse()
-			.join('-')})`;
+			.join('-')}`;
 	}
 }
 
