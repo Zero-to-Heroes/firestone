@@ -101,6 +101,33 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		);
 	};
 
+	activeTimeFilter: BgsActiveTimeFilterType;
+	timeFilterVisible: boolean;
+	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'battlegrounds' &&
+			navigation.navigationBattlegrounds &&
+			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
+			!['bgs-category-personal-stats'].includes(navigation.navigationBattlegrounds.selectedCategoryId)
+		);
+	};
+	timeOptionsBuilder = (navigation: NavigationState, state: MainWindowState): readonly IOption[] => {
+		//console.log('building time options', state);
+		return [
+			{
+				value: 'all-time',
+				label: 'Past 100 days',
+			} as TimeFilterOption,
+			{
+				value: 'last-patch',
+				label: `Last patch`,
+				tooltip: this.formatPatch(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch),
+			} as TimeFilterOption,
+		] as readonly TimeFilterOption[];
+	};
+
 	rankFilterOptions: readonly RankFilterOption[] = [
 		{
 			value: 'all',
@@ -129,34 +156,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	] as readonly RankFilterOption[];
 	activeRankFilter: BgsRankFilterType;
 	rankFilterVisible: boolean;
-	rankVisibleHandler = this.heroVisibleHandler;
-
-	activeTimeFilter: BgsActiveTimeFilterType;
-	timeFilterVisible: boolean;
-	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
-		return (
-			state &&
-			navigation &&
-			navigation.currentApp == 'battlegrounds' &&
-			navigation.navigationBattlegrounds &&
-			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
-			!['bgs-category-personal-stats'].includes(navigation.navigationBattlegrounds.selectedCategoryId)
-		);
-	};
-	timeOptionsBuilder = (navigation: NavigationState, state: MainWindowState): readonly IOption[] => {
-		//console.log('building time options', state);
-		return [
-			{
-				value: 'all-time',
-				label: 'Past 100 days',
-			} as TimeFilterOption,
-			{
-				value: 'last-patch',
-				label: `Last patch`,
-				tooltip: this.formatPatch(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch),
-			} as TimeFilterOption,
-		] as readonly TimeFilterOption[];
-	};
+	rankVisibleHandler = this.timeVisibleHandler;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

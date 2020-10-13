@@ -56,7 +56,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 								<span>{{ category.name }} </span>
 							</li>
 						</ul>
-						<battlegrounds-filters [state]="state" [navigation]="navigation"> </battlegrounds-filters>
+						<battlegrounds-filters
+							[state]="state"
+							[navigation]="navigation"
+							[ngClass]="{ 'top': shouldDisplayFiltersAtTop() }"
+						>
+						</battlegrounds-filters>
 						<!-- <battlegrounds-global-categories
 							[hidden]="navigation.navigationBattlegrounds.currentView !== 'categories'"
 							[globalCategories]="state.battlegrounds.globalCategories"
@@ -72,6 +77,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[category]="buildCategory()"
 							[state]="state"
 							[navigation]="navigation"
+							[ngClass]="{ 'top': shouldDisplayFiltersAtTop() }"
 						>
 						</battlegrounds-category-details>
 					</div>
@@ -145,6 +151,11 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 			category?.id === 'bgs-category-personal-rating' ||
 			category?.id?.includes('bgs-category-personal-hero-details-')
 		);
+	}
+
+	shouldDisplayFiltersAtTop(): boolean {
+		const category = this.buildCategory();
+		return category?.id !== 'bgs-category-personal-heroes';
 	}
 
 	numberOfReplaysToShow(): number {
