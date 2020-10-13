@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { PatchesConfig } from '../models/patches';
 
 const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/patches.json';
 
@@ -38,16 +39,4 @@ export class PatchesConfigService {
 			);
 		});
 	}
-}
-
-interface PatchesConfig {
-	readonly patches: readonly PatchInfo[];
-	readonly currentBattlegroundsMetaPatch: number;
-}
-
-interface PatchInfo {
-	readonly number: number;
-	readonly version: string;
-	readonly name: string;
-	readonly startDate: string;
 }

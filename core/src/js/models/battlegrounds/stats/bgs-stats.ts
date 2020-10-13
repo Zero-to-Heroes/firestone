@@ -1,8 +1,9 @@
+import { PatchInfo } from '../../patches';
 import { BgsHeroStat } from './bgs-hero-stat';
 
 export class BgsStats {
 	readonly heroStats: readonly BgsHeroStat[] = [];
-	readonly currentBattlegroundsMetaPatch: number;
+	readonly currentBattlegroundsMetaPatch: PatchInfo;
 
 	public static create(result: any) {
 		return Object.assign(new BgsStats(), result);

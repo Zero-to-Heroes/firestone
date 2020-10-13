@@ -73,12 +73,15 @@ export class StoreBootstrapService {
 
 		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);
 
+		const patchConfig = await this.patchConfig.getConf();
+		const currentBattlegroundsMetaPatch = patchConfig?.patches
+			? patchConfig.patches.find(patch => patch.number === patchConfig.currentBattlegroundsMetaPatch)
+			: null;
 		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(bgsGlobalStats);
 		const bgsAppStateWithStats = await this.bgsBuilder.updateStats(
 			battlegroundsAppState,
 			matchStats,
-			bgsGlobalStats?.currentBattlegroundsMetaPatch ||
-				(await this.patchConfig.getConf()).currentBattlegroundsMetaPatch,
+			bgsGlobalStats?.currentBattlegroundsMetaPatch || currentBattlegroundsMetaPatch,
 		);
 
 		const newStatsState = StatsState.create({

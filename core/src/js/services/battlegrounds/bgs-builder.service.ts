@@ -5,6 +5,7 @@ import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../preferences.service';
 import { BgsStatUpdateParser } from './store/event-parsers/bgs-stat-update-parser';
@@ -16,11 +17,15 @@ export class BgsBuilderService {
 	public async updateStats(
 		currentState: BattlegroundsAppState,
 		matchStats: GameStats,
-		currentBattlegroundsMetaPatch: number,
+		currentBattlegroundsMetaPatch: PatchInfo,
 	): Promise<BattlegroundsAppState> {
 		const bgsMatchStats: readonly GameStat[] = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
 		const prefs = await this.prefs.getPreferences();
-		const activeBgsMatchStats = this.filterBgsMatchStats(bgsMatchStats, prefs, currentBattlegroundsMetaPatch);
+		const activeBgsMatchStats = this.filterBgsMatchStats(
+			bgsMatchStats,
+			prefs,
+			currentBattlegroundsMetaPatch?.number,
+		);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
 			currentState.globalStats,
 			activeBgsMatchStats,

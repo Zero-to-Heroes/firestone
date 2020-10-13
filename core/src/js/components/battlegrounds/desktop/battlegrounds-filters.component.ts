@@ -143,6 +143,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		);
 	};
 	timeOptionsBuilder = (navigation: NavigationState, state: MainWindowState): readonly IOption[] => {
+		//console.log('building time options', state);
 		return [
 			{
 				value: 'all-time',
@@ -150,7 +151,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			} as TimeFilterOption,
 			{
 				value: 'last-patch',
-				label: `Last patch (${state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch})`,
+				label: `Last patch ${this.formatDate(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch.date)}`,
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 	};
@@ -190,6 +191,16 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.activeTimeFilter = this._state?.battlegrounds?.activeTimeFilter;
 		this.activeHeroSortFilter = this._state.battlegrounds?.activeHeroSortFilter;
 		this.activeRankFilter = this._state.battlegrounds?.activeRankFilter;
+	}
+
+	private formatDate(input: string): string {
+		if (!input) {
+			return '';
+		}
+		return `(${input
+			.split('-')
+			.reverse()
+			.join('-')})`;
 	}
 }
 

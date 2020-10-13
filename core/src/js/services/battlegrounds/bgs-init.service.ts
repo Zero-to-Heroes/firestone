@@ -50,7 +50,10 @@ export class BgsInitService {
 		console.log('[bgs-init] bgs init starting');
 		const [bgsGlobalStats] = await Promise.all([this.bgsGlobalStats.loadGlobalStats()]);
 		console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
-		const currentBattlegroundsMetaPatch = (await this.patchesService.getConf()).currentBattlegroundsMetaPatch;
+		const patchConfig = await this.patchesService.getConf();
+		const currentBattlegroundsMetaPatch = patchConfig?.patches
+			? patchConfig.patches.find(patch => patch.number === patchConfig.currentBattlegroundsMetaPatch)
+			: null;
 
 		const statsWithPatch = bgsGlobalStats?.update({
 			currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
@@ -62,7 +65,9 @@ export class BgsInitService {
 			this.bgsStateUpdater.next(new BgsInitEvent([], statsWithPatch));
 			return statsWithPatch;
 		}
-		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
+		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat =>
+			currentBattlegroundsMetaPatch ? stat.buildNumber >= currentBattlegroundsMetaPatch.number : true,
+		);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
 			statsWithPatch,
 			bgsStatsForCurrentPatch,
