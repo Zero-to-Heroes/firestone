@@ -13,7 +13,7 @@ export class BgsGlobalStatsService {
 			useNewTable: true,
 		};
 		const result: any = await this.api.callPostApiWithRetries(BGS_STATS_RETRIEVE_URL, postEvent, 1);
-		console.log('result', result);
+		// console.log('result', result);
 		const globalStats = BgsStats.create({
 			heroStats: result.result.heroStats,
 		} as BgsStats);
