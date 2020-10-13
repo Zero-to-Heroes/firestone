@@ -28,9 +28,16 @@
 		}
 	}
 
-	&.battlegrounds .group.result {
-		width: 40px;
-		display: flex;
+	&.battlegrounds {
+		::ng-deep rank-image .frame {
+			height: 95%;
+			top: -4px;
+			left: -2px;
+		}
+		.group.result {
+			width: 40px;
+			display: flex;
+		}
 	}
 }
 
