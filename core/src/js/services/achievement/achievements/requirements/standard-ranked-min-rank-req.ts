@@ -42,7 +42,7 @@ export class StandardRankedMinLeagueReq implements Requirement {
 		if (gameEvent.type === GameEvent.MATCH_METADATA) {
 			this.handleMetadataEvent(gameEvent);
 		}
-		if (gameEvent.type === GameEvent.LOCAL_PLAYER) {
+		if (gameEvent.type === GameEvent.PLAYER_RANKS) {
 			this.handlePlayerEvent(gameEvent);
 		}
 	}
@@ -59,10 +59,12 @@ export class StandardRankedMinLeagueReq implements Requirement {
 	}
 
 	private handlePlayerEvent(gameEvent: GameEvent) {
+		//console.log('handling player event', gameEvent);
 		if (
-			gameEvent.localPlayer.standard?.leagueId <= this.targetRank ||
-			gameEvent.localPlayer.standard?.legendRank > 0
+			gameEvent.additionalData?.playerRank?.standard?.leagueId <= this.targetRank ||
+			gameEvent.additionalData?.playerRank?.standard?.legendRank > 0
 		) {
+			//console.log('isMinLeague', true, this.targetRank);
 			this.isMinLeague = true;
 		}
 		// console.log('[debug] [ranked-min] player', this.isMinLeague, gameEvent.localPlayer.standard);

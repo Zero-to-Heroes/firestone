@@ -169,6 +169,34 @@ export class GameEvents {
 						localPlayer: localPlayer,
 					} as GameEvent),
 				);
+
+				// Send the info separately and asynchronously, so that we don't block
+				// the main processing loop
+				// This info is not needed by the tracker, but it is needed by some achievements
+				// that rely on the rank
+				setTimeout(async () => {
+					const [playerInfo, opponentInfo] = await Promise.all([
+						this.playersInfoService.getPlayerInfo(),
+						this.playersInfoService.getOpponentInfo(),
+					]);
+					console.log('players info', playerInfo, opponentInfo);
+					if (!playerInfo || !opponentInfo) {
+						console.warn('[game-events] no player info returned by mmindvision', playerInfo, opponentInfo);
+						amplitude.getInstance().logEvent('error-logged', {
+							'error-category': 'memory-reading',
+							'error-id': 'no-player-info',
+						});
+					}
+					this.gameEventsEmitter.allEvents.next(
+						Object.assign(new GameEvent(), {
+							type: GameEvent.PLAYER_RANKS,
+							additionalData: {
+								playerRank: playerInfo,
+								opponentRank: opponentInfo,
+							},
+						} as GameEvent),
+					);
+				});
 				break;
 			case 'OPPONENT_PLAYER':
 				console.log(gameEvent.Type + ' event');

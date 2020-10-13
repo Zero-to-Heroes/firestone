@@ -8,6 +8,7 @@ export class GameEvent {
 	public static readonly PLAYER = 'PLAYER';
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
 	public static readonly OPPONENT = 'OPPONENT';
+	public static readonly PLAYER_RANKS = 'PLAYER_RANKS';
 	public static readonly GAME_RUNNING = 'GAME_RUNNING';
 	public static readonly INITIAL_CARD_IN_DECK = 'INITIAL_CARD_IN_DECK';
 	public static readonly HERO_POWER_USED = 'HERO_POWER_USED';
