@@ -30,7 +30,7 @@
 		"@firestone-hs/build-global-stats": "^1.0.3",
 		"@firestone-hs/coliseum-components": "0.0.8",
 		"@firestone-hs/compute-bgs-run-stats": "^1.0.13",
-		"@firestone-hs/hs-replay-xml-parser": "0.0.64",
+		"@firestone-hs/hs-replay-xml-parser": "0.0.66",
 		"@firestone-hs/reference-data": "^0.1.48",
 		"@firestone-hs/replay-parser": "^1.1.31",
 		"@firestone-hs/simulate-bgs-battle": "^1.1.26",
