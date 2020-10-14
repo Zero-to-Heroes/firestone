@@ -46,8 +46,10 @@ declare let amplitude: any;
 				[isLoading]="computing"
 				[mainTitle]="loadingTitle"
 				[subtitle]="
-					loadingSubtitle
+					loadingSubtitle != null
 						? loadingSubtitle
+						: hideDefaultLoadingSubtitle
+						? null
 						: 'We are building the post-match stats, please wait a bit - ' +
 						  loadingElapsed?.toFixed(0) +
 						  's elapsed (it usually takes about 20-30s)'
@@ -132,6 +134,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	@Input() loadingSubtitle: string;
 	@Input() loadingSvg = 'ftue/battlegrounds';
 	@Input() showHints = true;
+	@Input() hideDefaultLoadingSubtitle: boolean;
 
 	_panel: BgsPostMatchStatsPanel;
 	_game: BgsGame;
