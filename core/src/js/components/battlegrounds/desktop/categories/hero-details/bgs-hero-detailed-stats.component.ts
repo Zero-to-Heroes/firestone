@@ -138,7 +138,7 @@ export class BgsHeroDetailedStatsComponent {
 		this.mmrLoss = stat.playerAverageMmrLoss;
 	}
 
-	buildValue(value: number, decimals: number = 2): string {
+	buildValue(value: number, decimals = 2): string {
 		return !value ? 'N/A' : value.toFixed(decimals);
 	}
 }
