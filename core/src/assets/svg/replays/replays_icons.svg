@@ -18,6 +18,12 @@
 		<path d="M12 14L19 10L12 6V14Z" fill="var(--icon-color, currentcolor)"/>
 		<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H30V20H0V0ZM1 1H29V19H1V1Z" fill="var(--icon-color, currentcolor)"/>
 	</symbol>
+	<symbol id="match_stats" viewBox="0 0 30 20">
+		<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H30V20H0V0ZM1 1H29V19H1V1Z" fill="var(--icon-color, currentcolor)"/>
+		<circle cx="25" cy="6" r="0.5" stroke="var(--icon-color, currentcolor)"/>
+		<circle cx="5" cy="14" r="0.5" stroke="var(--icon-color, currentcolor)"/>
+		<path d="M5.5 13.5L10 8L18.5 12.5L25 6" stroke="var(--icon-color, currentcolor)"/>
+	</symbol>
 	<symbol id="match_coin" viewBox="0 0 30 30">
 		<circle cx="15" cy="15" r="9.7439" fill="#D2860B" stroke="#FFB948" stroke-width="0.512195"/>
 		<path d="M23.28 15.0005C23.28 19.5736 19.5727 23.2809 14.9995 23.2809C10.4263 23.2809 6.71899 19.5736 6.71899 15.0005C6.71899 10.4273 10.4263 6.71996 14.9995 6.71996C19.5727 6.71996 23.28 10.4273 23.28 15.0005Z" stroke="#FFB948" stroke-width="0.512195"/>

@@ -15,50 +15,63 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="replay-info {{ gameMode }}">
 			<div class="result-color-code {{ visualResult }}"></div>
 
-			<div class="group mode">
-				<rank-image class="player-rank" [stat]="replayInfo"></rank-image>
+			<div class="left-info">
+				<div class="group mode">
+					<rank-image class="player-rank" [stat]="replayInfo"></rank-image>
+				</div>
+
+				<div class="group player-images">
+					<img class="player-class player" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
+					<div class="vs" *ngIf="opponentClassImage">VS</div>
+					<img
+						class="player-class opponent"
+						[src]="opponentClassImage"
+						[helpTooltip]="opponentClassTooltip"
+						*ngIf="opponentClassImage"
+					/>
+					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
+				</div>
+
+				<div class="group result">
+					<div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div>
+					<div class="result">{{ result }}</div>
+				</div>
+
+				<div
+					class="group mmr"
+					[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
+					*ngIf="deltaMmr != null"
+				>
+					<div class="value">{{ deltaMmr }}</div>
+					<div class="text">MMR</div>
+				</div>
+
+				<div class="group coin" *ngIf="playCoinIconSvg">
+					<div
+						class="play-coin-icon icon"
+						[innerHTML]="playCoinIconSvg"
+						[helpTooltip]="playCoinTooltip"
+					></div>
+				</div>
 			</div>
 
-			<div class="group player-images">
-				<img class="player-class player" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
-				<div class="vs" *ngIf="opponentClassImage">VS</div>
-				<img
-					class="player-class opponent"
-					[src]="opponentClassImage"
-					[helpTooltip]="opponentClassTooltip"
-					*ngIf="opponentClassImage"
-				/>
-				<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
-			</div>
+			<div class="right-info">
+				<div class="group match-stats" *ngIf="hasMatchStats" (click)="showStats()">
+					<div class="watch" *ngIf="showStatsLabel">{{ showStatsLabel }}</div>
+					<div class="stats-icon" [helpTooltip]="!showStatsLabel ? 'Show stats' : null">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/replays/replays_icons.svg#match_stats" />
+						</svg>
+					</div>
+				</div>
 
-			<div class="group result">
-				<div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div>
-				<div class="result">{{ result }}</div>
-			</div>
-
-			<div
-				class="group mmr"
-				[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
-				*ngIf="deltaMmr != null"
-			>
-				<div class="value">{{ deltaMmr }}</div>
-				<div class="text">MMR</div>
-			</div>
-
-			<div class="group coin" *ngIf="playCoinIconSvg">
-				<div class="play-coin-icon icon" [innerHTML]="playCoinIconSvg" [helpTooltip]="playCoinTooltip"></div>
-			</div>
-
-			<div class="group match-stats" *ngIf="hasMatchStats" (click)="showStats()">
-				{{ showStatsLabel }}
-			</div>
-
-			<div class="replay" *ngIf="reviewId" (click)="showReplay()">
-				<div class="watch">Watch</div>
-				<div class="watch-icon">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
-					</svg>
+				<div class="replay" *ngIf="reviewId" (click)="showReplay()">
+					<div class="watch" *ngIf="showReplayLabel">{{ showReplayLabel }}</div>
+					<div class="watch-icon" [helpTooltip]="!showReplayLabel ? 'Watch replay' : null">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/replays/replays_icons.svg#match_watch" />
+						</svg>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -66,7 +79,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplayInfoComponent implements AfterViewInit {
-	@Input() showStatsLabel = 'Show stats';
+	@Input() showStatsLabel = 'Stats';
+	@Input() showReplayLabel = 'Watch';
 
 	replayInfo: GameStat;
 	visualResult: string;
