@@ -67,6 +67,7 @@ import { normalizeCardId } from './post-match/card-utils';
 								? 'Multiple distinct minions, as well as golden minions, share the same stats (because of how Battlegrounds is coded)'
 								: null
 						"
+						*ngIf="!hideDamageHeader"
 					>
 						Total Dmg <span *ngIf="showTooltipWarning(entity)">*</span>
 					</div>
@@ -88,6 +89,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	boardReady: boolean;
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
+	@Input() hideDamageHeader: boolean;
 	@Input() customTitle: string;
 	@Input() isMainPlayer: boolean;
 	@Input() debug: boolean;

@@ -31,16 +31,47 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 				[subtitle]="null"
 				svgName="loading-spiral"
 			>
+				<div class="title" *ngIf="lastKnownBoards && lastKnownBoards.length > 0">
+					Last {{ lastKnownBoards.length }} matches
+				</div>
 				<div class="boards" scrollable *ngIf="lastKnownBoards && lastKnownBoards.length > 0">
-					<bgs-board
-						*ngFor="let board of lastKnownBoards"
-						[entities]="board.entities"
-						[customTitle]="board.title"
-						[minionStats]="board.minionStats"
-						[finalBoard]="true"
-						[useFullWidth]="true"
-						[debug]="false"
-					></bgs-board>
+					<div class="board-container" *ngFor="let board of lastKnownBoards">
+						<div class="meta-info">
+							<div class="finish-position">{{ board.title }}</div>
+							<div class="date">{{ board.date }}</div>
+							<div
+								class="damage dealt"
+								helpTooltip="Total damage dealt by each unit. The damage for units with the same name is aggregated, and not split per unit"
+							>
+								<div class="damage-icon">
+									<svg class="svg-icon-fill">
+										<use xlink:href="assets/svg/sprite.svg#sword" />
+									</svg>
+								</div>
+								<div class="label">Dmg. dealt</div>
+							</div>
+							<div
+								class="damage received"
+								helpTooltip="Total damage received by each unit. The damage for units with the same name is aggregated, and not split per unit"
+							>
+								<div class="damage-icon">
+									<svg class="svg-icon-fill">
+										<use xlink:href="assets/svg/sprite.svg#sword" />
+									</svg>
+								</div>
+								<div class="label">Dmg. taken</div>
+							</div>
+						</div>
+						<bgs-board
+							[entities]="board.entities"
+							[customTitle]="null"
+							[minionStats]="board.minionStats"
+							[finalBoard]="true"
+							[useFullWidth]="true"
+							[hideDamageHeader]="true"
+							[debug]="false"
+						></bgs-board>
+					</div>
 				</div>
 				<battlegrounds-empty-state
 					*ngIf="!lastKnownBoards || lastKnownBoards.length === 0"
@@ -129,7 +160,7 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 
 			const title =
 				review && review.additionalResult
-					? `You finished ${this.getFinishPlace(parseInt(review.additionalResult))}`
+					? `Finished ${this.getFinishPlace(parseInt(review.additionalResult))}`
 					: `Last board`;
 
 			const normalizedIds = [
@@ -147,6 +178,7 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 				entities: boardEntities,
 				title: title,
 				minionStats: minionStats,
+				date: this.formatDate(review.creationTimestamp),
 			} as KnownBoard;
 		});
 		this.lastReviews = lastReviews;
@@ -159,6 +191,14 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
+		});
+	}
+
+	private formatDate(creationTimestamp: number): string {
+		console.log('formatting date', new Date(creationTimestamp));
+		return new Date(creationTimestamp).toLocaleString('en-us', {
+			month: 'long',
+			day: 'numeric',
 		});
 	}
 
@@ -189,4 +229,5 @@ interface KnownBoard {
 	readonly entities: readonly Entity[];
 	readonly title: string;
 	readonly minionStats: readonly MinionStat[];
+	readonly date: string;
 }
