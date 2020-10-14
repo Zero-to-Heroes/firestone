@@ -52,22 +52,22 @@
 	--on-confirmation-ok-button-background-color: #dfb3d3;
 	--confirmation-backdrop-color: #190505;
 
-	--variable-title-font-size: 20px;
-	--variable-title-font-size-big: 25px;
+	--variable-title-font-size: 13px;
+	--variable-title-font-size-big: 20px;
 }
 
-@media (max-width: 1700px) {
-	:host.battlegrounds-theme,
-	.battlegrounds-theme {
-		--variable-title-font-size: 16px;
-		--variable-title-font-size-big: 22px;
-	}
-}
+// @media (max-width: 1700px) {
+// 	:host.battlegrounds-theme,
+// 	.battlegrounds-theme {
+// 		--variable-title-font-size: 16px;
+// 		--variable-title-font-size-big: 22px;
+// 	}
+// }
 
-@media (max-width: 1500px) {
-	:host.battlegrounds-theme,
-	.battlegrounds-theme {
-		--variable-title-font-size: 13px;
-		--variable-title-font-size-big: 20px;
-	}
-}
+// @media (max-width: 1500px) {
+// 	:host.battlegrounds-theme,
+// 	.battlegrounds-theme {
+// 		--variable-title-font-size: 13px;
+// 		--variable-title-font-size-big: 20px;
+// 	}
+// }
