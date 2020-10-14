@@ -119,9 +119,9 @@ export class BgsInitService {
 					heroId: heroStat.id,
 					tabs: [
 						'winrate-stats',
-						'final-warbands',
 						'mmr',
 						'warband-stats',
+						'final-warbands',
 					] as readonly BgsHeroStatsFilterId[],
 				} as BattlegroundsPersonalStatsHeroDetailsCategory),
 			);
