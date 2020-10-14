@@ -65,7 +65,17 @@ export class BgsStatUpdateParser implements EventParser {
 				const playerPopularity = (100 * playerGamesPlayed) / bgsStatsForCurrentPatch.length;
 				const gamesWithMmr = bgsStatsForCurrentPatch
 					.filter(stat => stat.playerCardId === heroStat.id)
-					.filter(stat => stat.newPlayerRank != null && stat.playerRank != null);
+					.filter(stat => stat.newPlayerRank != null && stat.playerRank != null)
+					.filter(stat =>
+						BgsStatUpdateParser.isValidMmrDelta(parseInt(stat.newPlayerRank) - parseInt(stat.playerRank)),
+					) // Safeguard against season reset
+					.filter(stat => !isNaN(parseInt(stat.newPlayerRank) - parseInt(stat.playerRank)));
+				const gamesWithPositiveMmr = gamesWithMmr.filter(
+					stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank) > 0,
+				);
+				const gamesWithNegativeMmr = gamesWithMmr.filter(
+					stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank) < 0,
+				);
 				return BgsHeroStat.create({
 					...heroStat,
 					top4: heroStat.top4 || 0,
@@ -86,9 +96,19 @@ export class BgsStatUpdateParser implements EventParser {
 							? 0
 							: gamesWithMmr
 									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
-									.filter(mmr => BgsStatUpdateParser.isValidMmrDelta(mmr)) // Safeguard against season reset
-									.filter(mmr => !isNaN(mmr))
 									.reduce((a, b) => a + b, 0) / gamesWithMmr.length,
+					playerAverageMmrGain:
+						playerPopularity === 0
+							? 0
+							: gamesWithPositiveMmr
+									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
+									.reduce((a, b) => a + b, 0) / gamesWithPositiveMmr.length,
+					playerAverageMmrLoss:
+						playerPopularity === 0
+							? 0
+							: gamesWithNegativeMmr
+									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
+									.reduce((a, b) => a + b, 0) / gamesWithNegativeMmr.length,
 					playerTop4:
 						playerPopularity === 0
 							? 0

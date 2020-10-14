@@ -13,60 +13,71 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 			<div class="content">
 				<div class="stat">
 					<div class="header">Games played</div>
-					<div class="my-value">{{ gamesPlayed }}</div>
-				</div>
-				<div class="stat">
-					<div class="header">Avg position</div>
-					<div class="my-value">{{ buildValue(averagePosition) }}</div>
-					<div
-						class="global-value"
-						[ngClass]="{
-							'positive': globalAveragePositionDelta > 0,
-							'negative': globalAveragePositionDelta < 0
-						}"
-						helpTooltip="Delta vs global (7000+ MMR - green means you are doing better than the average)"
-					>
-						{{ buildValue(globalAveragePositionDelta) }}
+					<div class="values">
+						<div class="my-value">{{ gamesPlayed }}</div>
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header">Top 1%</div>
-					<div class="my-value">{{ buildValue(top1) }}</div>
-					<div
-						class="global-value"
-						[ngClass]="{
-							'positive': globalTop1Delta > 0,
-							'negative': globalTop1Delta < 0
-						}"
-						helpTooltip="Delta vs global (7000+ MMR - green means you are doing better than the average)"
-					>
-						{{ buildValue(globalTop1Delta) }}
+					<div class="header">Avg. position</div>
+					<div class="values">
+						<div class="my-value">{{ buildValue(averagePosition) }}</div>
+						<bgs-global-value [value]="buildValue(globalAveragePosition)"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header">Top 4%</div>
-					<div class="my-value">{{ buildValue(top4) }}</div>
-					<div
-						class="global-value"
-						[ngClass]="{
-							'positive': globalTop4Delta > 0,
-							'negative': globalTop4Delta < 0
-						}"
-						helpTooltip="Delta vs global (7000+ MMR - green means you are doing better than the average)"
-					>
-						{{ buildValue(globalTop4Delta) }}
+					<div class="header">Top 1</div>
+					<div class="values">
+						<div class="my-value">{{ buildValue(top1, 1) }}%</div>
+						<bgs-global-value [value]="buildValue(globalTop1, 1) + '%'"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
-					<div class="header" helpTooltip="Average MMR gain/loss per match">Net MMR</div>
-					<div
-						class="my-value"
-						[ngClass]="{
-							'positive': netMmr > 0,
-							'negative': netMmr < 0
-						}"
-					>
-						{{ buildValue(netMmr) }}
+					<div class="header">Top 4</div>
+					<div class="values">
+						<div class="my-value">{{ buildValue(top4, 1) }}</div>
+						<bgs-global-value [value]="buildValue(globalTop4, 1) + '%'"></bgs-global-value>
+					</div>
+				</div>
+				<div class="stat">
+					<div class="header" helpTooltip="Average MMR gain/loss per match">Avg. net MMR</div>
+					<div class="values">
+						<div
+							class="my-value"
+							[ngClass]="{
+								'positive': netMmr > 0,
+								'negative': netMmr < 0
+							}"
+						>
+							{{ buildValue(netMmr, 0) }}
+						</div>
+					</div>
+				</div>
+				<div class="stat">
+					<div class="header" helpTooltip="Average MMR gain per match">Avg. MMR gain</div>
+					<div class="values">
+						<div
+							class="my-value"
+							[ngClass]="{
+								'positive': mmrGain > 0,
+								'negative': mmrGain < 0
+							}"
+						>
+							{{ buildValue(mmrGain, 0) }}
+						</div>
+					</div>
+				</div>
+				<div class="stat">
+					<div class="header" helpTooltip="Average MMR loss per match">Avg. MMR loss</div>
+					<div class="values">
+						<div
+							class="my-value "
+							[ngClass]="{
+								'positive': mmrLoss > 0,
+								'negative': mmrLoss < 0
+							}"
+						>
+							{{ buildValue(mmrLoss, 0) }}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -80,12 +91,14 @@ export class BgsHeroDetailedStatsComponent {
 
 	gamesPlayed: number;
 	averagePosition: number;
-	globalAveragePositionDelta: number;
+	globalAveragePosition: number;
 	top1: number;
-	globalTop1Delta: number;
+	globalTop1: number;
 	top4: number;
-	globalTop4Delta: number;
+	globalTop4: number;
 	netMmr: number;
+	mmrGain: number;
+	mmrLoss: number;
 
 	@Input() set state(value: MainWindowState) {
 		if (value === this._state) {
@@ -115,15 +128,39 @@ export class BgsHeroDetailedStatsComponent {
 
 		this.gamesPlayed = stat.playerGamesPlayed;
 		this.averagePosition = stat.playerAveragePosition;
-		this.globalAveragePositionDelta = stat.averagePosition - stat.playerAveragePosition;
+		this.globalAveragePosition = stat.averagePosition;
 		this.top1 = stat.playerTop1;
-		this.globalTop1Delta = stat.playerTop1 - stat.top1;
+		this.globalTop1 = stat.top1;
 		this.top4 = stat.playerTop4;
-		this.globalTop4Delta = stat.playerTop4 - stat.top4;
+		this.globalTop4 = stat.top4;
 		this.netMmr = stat.playerAverageMmr;
+		this.mmrGain = stat.playerAverageMmrGain;
+		this.mmrLoss = stat.playerAverageMmrLoss;
 	}
 
-	buildValue(value: number): string {
-		return !value ? 'N/A' : value.toFixed(2);
+	buildValue(value: number, decimals: number = 2): string {
+		return !value ? 'N/A' : value.toFixed(decimals);
 	}
+}
+
+@Component({
+	selector: 'bgs-global-value',
+	styleUrls: [
+		`../../../../../../css/global/components-global.scss`,
+		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component.scss`,
+	],
+	template: `
+		<div class="global-value" helpTooltip="Average value for the community">
+			<div class="global-icon">
+				<svg class="svg-icon-fill">
+					<use xlink:href="assets/svg/sprite.svg#global" />
+				</svg>
+			</div>
+			<span class="value">{{ value }}</span>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class BgsGlobalValueComponent {
+	@Input() value: string;
 }

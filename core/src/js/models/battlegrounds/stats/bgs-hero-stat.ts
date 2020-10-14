@@ -10,6 +10,8 @@ export class BgsHeroStat {
 	readonly playerPopularity: number;
 	readonly playerAveragePosition: number;
 	readonly playerAverageMmr: number;
+	readonly playerAverageMmrGain: number;
+	readonly playerAverageMmrLoss: number;
 	readonly playerGamesPlayed: number;
 	readonly playerTop4: number;
 	// readonly playerTop4Percentage: number;

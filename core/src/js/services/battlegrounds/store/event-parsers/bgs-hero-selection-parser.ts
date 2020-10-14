@@ -80,6 +80,8 @@ export class BgsHeroSelectionParser implements EventParser {
 					tier: stat.tier,
 					playerAveragePosition: stat.playerAveragePosition,
 					playerAverageMmr: stat.playerAverageMmr,
+					playerAverageMmrGain: stat.playerAverageMmrGain,
+					playerAverageMmrLoss: stat.playerAverageMmrLoss,
 					playerPopularity: stat.playerPopularity,
 					playerGamesPlayed: stat.playerGamesPlayed,
 					playerTop4: stat.playerTop4 || 0,
