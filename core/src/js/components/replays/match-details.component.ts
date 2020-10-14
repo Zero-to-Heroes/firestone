@@ -28,6 +28,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				emptySubtitle="We couldn't retrieve the stats"
 				[loadingTitle]="null"
 				[loadingSubtitle]="null"
+				[hideDefaultLoadingSubtitle]="true"
 				[loadingSvg]="'loading-spiral'"
 				[showHints]="false"
 			></bgs-post-match-stats>
