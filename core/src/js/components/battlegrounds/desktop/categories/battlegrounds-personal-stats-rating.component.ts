@@ -26,7 +26,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	template: `
 		<div class="battlegrounds-personal-stats-rating">
 			<div class="header">MMR / Matches</div>
-			<div class="container-1">
+			<div class="container-1" *ngIf="lineChartData">
 				<div style="display: block; position: relative; height: 100%; width: 100%;">
 					<canvas
 						#chart
@@ -42,12 +42,12 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						[legend]="false"
 						[chartType]="'line'"
 					></canvas>
-					<battlegrounds-empty-state
-						*ngIf="!lineChartData"
-						subtitle="Start playing Battlegrounds to collect some information"
-					></battlegrounds-empty-state>
 				</div>
 			</div>
+			<battlegrounds-empty-state
+				*ngIf="!lineChartData"
+				subtitle="Start playing Battlegrounds to collect some information"
+			></battlegrounds-empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
