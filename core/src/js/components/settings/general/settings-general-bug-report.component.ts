@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { LogsUploaderService } from '../../../services/logs-uploader.service';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazonaws.com/Prod/feedback';
 
@@ -49,7 +50,7 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralBugReportComponent {
+export class SettingsGeneralBugReportComponent implements AfterViewInit {
 	email: string;
 	body: string;
 	status: string;
@@ -60,8 +61,12 @@ export class SettingsGeneralBugReportComponent {
 		private ow: OverwolfService,
 		private cdr: ChangeDetectorRef,
 		private http: HttpClient,
-		private el: ElementRef,
+		private prefs: PreferencesService,
 	) {}
+
+	ngAfterViewInit() {
+		this.loadDefaultValues();
+	}
 
 	onBodyChange(newBody: string) {
 		this.body = newBody;
@@ -100,10 +105,13 @@ export class SettingsGeneralBugReportComponent {
 			console.log('Sending bug / feedback', submission);
 			const result = await this.http.post(FEEDBACK_ENDPOINT_POST, submission).toPromise();
 			console.log('result', result);
+
+			this.prefs.setContactEmail(this.email);
+
 			this.status = `Feedback sent. Thanks for reaching out! Stay up-to-date on <a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a> or <a href="https://discord.gg/v2a4uR7" target="_blank">Discord</a>`;
 			this.buttonDisabled = false;
 			this.body = null;
-			this.email = null;
+			// this.email = null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -124,6 +132,14 @@ export class SettingsGeneralBugReportComponent {
 			event.stopPropagation();
 			event.preventDefault();
 			return false;
+		}
+	}
+
+	private async loadDefaultValues() {
+		const prefs = await this.prefs.getPreferences();
+		this.email = prefs.contactEmail;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 }

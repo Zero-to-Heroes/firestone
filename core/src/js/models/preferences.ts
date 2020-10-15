@@ -11,6 +11,7 @@ export class Preferences {
 	readonly showSessionRecapOnExit: boolean = true;
 	readonly shareGamesWithVS: boolean = true;
 	readonly setAllNotifications: boolean = true;
+	readonly contactEmail: string;
 
 	readonly advancedModeToggledOn: boolean;
 

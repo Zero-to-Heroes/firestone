@@ -61,6 +61,12 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async setContactEmail(value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, contactEmail: value };
+		this.savePreferences(newPrefs);
+	}
+
 	public async setDontRecordAchievements(pref: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontRecordAchievements: pref };
