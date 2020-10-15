@@ -57,7 +57,7 @@ export class TwitterShareModalComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('setting socialUserInfo in twitter modal', value, this);
+		console.log('setting socialUserInfo in twitter modal', value);
 	}
 
 	@Input() set base64Image(value: string) {
@@ -65,7 +65,7 @@ export class TwitterShareModalComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('imagePath', this.imagePath, this);
+		console.log('imagePath', value?.substring(0, 25));
 	}
 
 	constructor(

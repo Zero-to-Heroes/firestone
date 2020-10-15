@@ -242,9 +242,9 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// 	console.log('board container', boardContainer, rect);
 		// }
 		if (!rect || !rect.width || (!this.useFullWidth && !rect.height)) {
-			if (this.debug) {
-				console.log('no dimensions, retrying', rect);
-			}
+			// if (this.debug) {
+			// 	console.log('no dimensions, retrying', rect);
+			// }
 			this.doResizeTimeout(1500);
 			return;
 		}

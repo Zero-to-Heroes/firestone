@@ -62,7 +62,7 @@ export class SocialShareModalComponent {
 			this.networkTitle = capitalizeEachWord(this._socialUserInfo.network);
 			this.loggedIn = this._socialUserInfo.id != null;
 		}
-		console.log('setting socialUserInfo in modal', value, this);
+		console.log('setting socialUserInfo in modal', value);
 	}
 
 	_socialUserInfo: SocialUserInfo;

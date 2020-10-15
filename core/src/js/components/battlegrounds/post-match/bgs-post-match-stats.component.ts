@@ -264,7 +264,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	takeScreenshot(): () => Promise<[string, any]> {
-		//console.log('taking screenshot');
+		console.log('taking screenshot');
 		return () => this.owUtils.captureWindow(this.parentWindow);
 	}
 

@@ -95,11 +95,11 @@ export class MindVisionOperationFacade<T> {
 			callback(null, 0);
 			return;
 		}
-		this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
+		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
 		const resultFromMemory = await this.mindVisionOperation(forceReset);
-		this.log('result from memory', resultFromMemory);
+		// this.log('result from memory', resultFromMemory);
 		if (this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
-			this.log('calling with a force reset');
+			// this.log('calling with a force reset');
 			setTimeout(() => this.callInternal(callback, retriesLeft - 1, true));
 			return;
 		}

@@ -161,12 +161,12 @@ export class BattlegroundsStoreService {
 						clearInterval(this.memoryInterval);
 						this.memoryInterval = null;
 					}
-					console.log('[battlegrounds-store] triggering setInterval', this.memoryInterval);
+					// console.log('[battlegrounds-store] triggering setInterval', this.memoryInterval);
 					this.memoryInterval = setInterval(async () => {
 						// Here we want to get the players info, mostly
 						// console.log('[battlegrounds-store] getting battlegrounds info');
 						let info = await this.memory.getBattlegroundsMatchWithPlayers(2);
-						console.log('[battlegrounds-store] bgs info', info);
+						// console.log('[battlegrounds-store] bgs info', info);
 						if (info?.game?.Players && info.game.Players.length > 0) {
 							// console.log('[battlegrounds-store] removing damage info from memory players', info);
 							info = {
