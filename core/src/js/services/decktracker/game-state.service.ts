@@ -42,6 +42,7 @@ import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
+import { EntityUpdateParser } from './event-parser/entity-update-parser';
 import { EventParser } from './event-parser/event-parser';
 import { FatigueParser } from './event-parser/fatigue-parser';
 import { FirstPlayerParser } from './event-parser/first-player-parser';
@@ -528,6 +529,7 @@ export class GameStateService {
 			new CardBuffedInHandParser(this.helper, this.allCards),
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
+			new EntityUpdateParser(this.helper),
 		];
 	}
 

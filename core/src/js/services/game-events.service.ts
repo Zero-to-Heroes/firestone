@@ -121,7 +121,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// console.log('[debug] game event', gameEvent.Type, gameEvent);
+		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		//	console.log('[debug] game event', gameEvent.Type, gameEvent);
+		//}
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -900,6 +902,9 @@ export class GameEvents {
 			// TODO: at some point we might want to debounce these events
 			case 'GAME_STATE_UPDATE':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
+				break;
+			case 'ENTITY_UPDATE':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.ENTITY_UPDATE, gameEvent));
 				break;
 			default:
 				console.log('unsupported game event', gameEvent);
