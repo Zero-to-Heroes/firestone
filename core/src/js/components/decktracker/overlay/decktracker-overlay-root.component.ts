@@ -305,7 +305,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		const newTop =
 			trackerPosition &&
 			trackerPosition.top < gameInfo.logicalHeight &&
-			trackerPosition.top > -100 &&
+			trackerPosition.top > -300 &&
 			!forceTrackerReposition
 				? trackerPosition.top || 0
 				: this.defaultTrackerPositionTopProvider(gameWidth, width, dpi);
