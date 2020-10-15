@@ -25,12 +25,7 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 	],
 	template: `
 		<div class="bgs-last-warbands">
-			<with-loading
-				[isLoading]="loading || !lastKnownBoards"
-				[mainTitle]="null"
-				[subtitle]="null"
-				svgName="loading-spiral"
-			>
+			<with-loading [isLoading]="loading" [mainTitle]="null" [subtitle]="null" svgName="loading-spiral">
 				<div class="title" *ngIf="lastKnownBoards && lastKnownBoards.length > 0">
 					Last {{ lastKnownBoards.length }} matches
 				</div>
@@ -94,10 +89,9 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 
 	@Input() set state(value: MainWindowState) {
 		//console.log('setting stats', value, this._state);
-		if (value === this._state) {
-			return;
-		}
-		// this.lastKnownBoards = undefined;
+		// if (value === this._state) {
+		// 	return;
+		// }
 		this._state = value;
 		this.updateValues();
 	}
