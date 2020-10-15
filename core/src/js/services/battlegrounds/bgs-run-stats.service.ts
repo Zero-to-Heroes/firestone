@@ -59,7 +59,7 @@ export class BgsRunStatsService {
 			},
 		);
 		const result = results && results.length > 0 ? results[0] : null;
-		console.log('post-match results for review', reviewId, result);
+		console.log('post-match results for review', reviewId, results && results.length > 0);
 		this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, result?.stats));
 	}
 

@@ -107,7 +107,7 @@ export class BgsChartWarbandCompositionComponent {
 		if (!value?.boardHistory) {
 			return;
 		}
-		console.log('[warband-composition] setting value', value);
+		// console.log('[warband-composition] setting value', value);
 		this._stats = value;
 		this.setStats(value);
 	}
@@ -207,7 +207,7 @@ export class BgsChartWarbandCompositionComponent {
 		}
 		// await this.allCards.initializeCardsDb();
 		this.chartData = this.buildChartData(value);
-		console.log('chartData', this.chartData, value?.boardHistory, value);
+		// console.log('chartData', this.chartData, value?.boardHistory, value);
 		this.barPadding = Math.min(40, 40 - 2 * (value.boardHistory.length - 12));
 		// this.chartLabels = await this.buildChartLabels(value);
 		// this.chartColors = this.buildChartColors(value);

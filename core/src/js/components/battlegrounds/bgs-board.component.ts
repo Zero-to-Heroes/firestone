@@ -120,7 +120,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		this.previousBoardWidth = undefined;
 		if (this.debug) {
 			this.boardReady = false;
-			console.log('[bgs-board] setting board ready in entities setter', this.boardReady, this._entities);
+			console.log('[bgs-board] setting board ready in entities setter', this.boardReady);
 		}
 		this.onResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
