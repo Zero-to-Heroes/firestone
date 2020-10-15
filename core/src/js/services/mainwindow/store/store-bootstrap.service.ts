@@ -95,6 +95,12 @@ export class StoreBootstrapService {
 			decktracker.decks,
 		);
 
+		// Update prefs to remove hidden deck codes that are not in an active deck anymore
+		const allDeckCodes = newStatsState.gameStats.stats.map(deck => deck.playerDecklist);
+		const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter(deckCode => allDeckCodes.includes(deckCode));
+		// console.log('allDeckCodes', allDeckCodes, validHiddenCodes, prefs.desktopDeckHiddenDeckCodes);
+		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
+
 		const newAchievementState = Object.assign(new AchievementsState(), {
 			globalCategories: achievementGlobalCategories,
 			achievementHistory: achievementHistory,

@@ -22,6 +22,7 @@ import { ChangeDeckTimeFilterEvent } from '../../../services/mainwindow/store/ev
 import { ToggleShowHiddenDecksEvent } from '../../../services/mainwindow/store/events/decktracker/toggle-show-hidden-decks-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'decktracker-filters',
@@ -190,7 +191,11 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -232,17 +237,24 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		);
 	}
 
-	private doSetValues() {
+	private async doSetValues() {
 		this.activeFormatFilter = this._state?.decktracker?.filters?.gameFormat;
 		this.activeTimeFilter = this._state?.decktracker?.filters?.time;
 		this.activeSort = this._state?.decktracker?.filters?.sort;
 		this.activeRank = this._state?.decktracker?.filters?.rank;
 
+		const prefs = await this.prefs.getPreferences();
 		this.showHiddenDecksLink =
 			this._state &&
+			prefs.desktopDeckHiddenDeckCodes &&
+			prefs.desktopDeckHiddenDeckCodes.length > 0 &&
 			this._navigation &&
 			this._navigation.currentApp == 'decktracker' &&
 			this._navigation.navigationDecktracker.currentView !== 'deck-details';
+		// console.log('showHiddenDecksList', this.showHiddenDecksLink, prefs.desktopDeckHiddenDeckCodes);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 
