@@ -28,7 +28,7 @@ export class GameReplayComponent implements OnInit {
 	}
 
 	private async setReplay(value: MatchDetail) {
-		await this.resetGame();
+		await this.resetGame(value.replayInfo.reviewId);
 		if (value && value.replayInfo) {
 			console.log('[game-replay] setting game', value.replayInfo.reviewId);
 			this.loadReview(value.replayInfo.reviewId);
@@ -70,13 +70,13 @@ export class GameReplayComponent implements OnInit {
 		}
 	}
 
-	async resetGame() {
+	async resetGame(reviewId: string) {
 		try {
 			// Resetting the game
 			await this.waitForViewerInit();
-			console.log('[game-replay] resetting player');
+			console.log('[game-replay] resetting player', reviewId);
 			const coliseum = (window as any).coliseum;
-			coliseum.zone.run(() => coliseum.component.reset());
+			coliseum.zone.run(() => coliseum.component.reset(reviewId));
 		} catch (e) {
 			console.error('[game-replay] error wile resetting game', e.message, e);
 		}

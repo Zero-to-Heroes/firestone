@@ -14,8 +14,8 @@ export class GameStatsLoaderService {
 	constructor(private http: HttpClient, private ow: OverwolfService, private deckParser: DeckParserService) {}
 
 	public async retrieveStats(retriesLeft = 5): Promise<GameStats> {
-		console.log('[game-stats-loader] retrieving stats', retriesLeft, this.gameStats && this.gameStats[0]);
 		const user = await this.ow.getCurrentUser();
+		console.log('[game-stats-loader] retrieving stats', retriesLeft, user, this.gameStats && this.gameStats[0]);
 		return new Promise<GameStats>(async resolve => {
 			this.doRetrieve(user.userId, user.username, retriesLeft, resolve);
 		});
@@ -44,7 +44,7 @@ export class GameStatsLoaderService {
 						}))
 						.map(stat => Object.assign(new GameStat(), stat)) as readonly GameStat[],
 				} as GameStats);
-				console.log('[game-stats-loader] Retrieved game stats for user');
+				console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
 				resolve(this.gameStats);
 			},
 			error => {
