@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { getTribeIcon } from '../../services/battlegrounds/bgs-utils';
-import { capitalizeFirstLetter } from '../../services/utils';
 
 declare let amplitude;
 
@@ -14,7 +13,7 @@ declare let amplitude;
 		`../../../css/themes/battlegrounds-theme.scss`,
 	],
 	template: `
-		<div class="bgs-banned-tribe" [helpTooltip]="tooltip" *ngIf="image">
+		<div class="bgs-banned-tribe" *ngIf="image">
 			<div class="background"></div>
 			<img class="icon" [src]="image" />
 			<img
@@ -27,7 +26,6 @@ declare let amplitude;
 })
 export class BgsBannedTribeComponent {
 	image: string;
-	tooltip: string;
 
 	@Input() set tribe(value: Race) {
 		if (!value) {
@@ -35,31 +33,5 @@ export class BgsBannedTribeComponent {
 			return;
 		}
 		this.image = getTribeIcon(value);
-		const exceptionCards = this.getExceptions(value);
-		const exceptions =
-			exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
-		this.tooltip = `${this.getTribeName(value)}s won't appear in this run. ${exceptions}`;
-	}
-
-	private getExceptions(value: Race): string[] {
-		switch (value) {
-			case Race.BEAST:
-				return [];
-			case Race.DEMON:
-				return [];
-			case Race.DRAGON:
-				return [];
-			case Race.MECH:
-				return [];
-			case Race.MURLOC:
-				return [];
-			case Race.PIRATE:
-				return [];
-		}
-		return [];
-	}
-
-	private getTribeName(value: Race): string {
-		return capitalizeFirstLetter(Race[value].toLowerCase());
 	}
 }

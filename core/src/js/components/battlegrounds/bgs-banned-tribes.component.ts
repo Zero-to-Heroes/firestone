@@ -16,6 +16,7 @@ import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-sta
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { capitalizeFirstLetter } from '../../services/utils';
 
 declare let amplitude;
 
@@ -28,11 +29,12 @@ declare let amplitude;
 		`../../../css/themes/battlegrounds-theme.scss`,
 	],
 	template: `
-		<div class="scalable">
+		<div class="root scalable overlay-container-parent" [activeTheme]="'battlegrounds'">
 			<div
 				*ngIf="bannedTribes"
-				class="root overlay-container-parent banned-tribes {{ orientation }}"
-				[activeTheme]="'battlegrounds'"
+				class="banned-tribes {{ orientation }}"
+				[helpTooltip]="tooltip"
+				helpTooltipPosition="bottom"
 			>
 				<bgs-banned-tribe *ngFor="let tribe of bannedTribes" [tribe]="tribe">{{ tribe }}</bgs-banned-tribe>
 			</div>
@@ -43,6 +45,7 @@ declare let amplitude;
 export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 	bannedTribes: readonly Race[] = [];
 	orientation: 'row' | 'column' = 'row';
+	tooltip: string;
 
 	private scale: number;
 	private stateSubscription: Subscription;
@@ -61,13 +64,12 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().battlegroundsStore;
 		this.stateSubscription = deckEventBus.subscribe(async (gameState: BattlegroundsState) => {
 			// console.log('received state', gameState?.currentGame?.bannedRaces, event);
-			if (gameState?.currentGame?.bannedRaces !== this.bannedTribes) {
-				this.bannedTribes = gameState?.currentGame?.bannedRaces || [];
-				console.log('setting banned tribes', this.bannedTribes);
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
+			// if (gameState?.currentGame?.bannedRaces !== this.bannedTribes) {
+			this.buildBannedTribes(gameState);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
 			}
+			// }
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
@@ -97,6 +99,38 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 			}
 			this.prefs.updateBgsBannedTribedPosition(window.left, window.top);
 		});
+	}
+
+	private buildBannedTribes(gameState: BattlegroundsState) {
+		this.bannedTribes = [Race.PIRATE, Race.DEMON]; // gameState?.currentGame?.bannedRaces || [];
+		const tribeNames = this.bannedTribes.map(tribe => this.getTribeName(tribe)).join(', ');
+		const exceptionCards = this.bannedTribes.map(tribe => this.getExceptions(tribe)).reduce((a, b) => a.concat(b));
+		const exceptions =
+			exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
+		this.tooltip = `${tribeNames}s won't appear in this run. ${exceptions}`;
+		// console.log('setting banned tribes', this.bannedTribes, exceptionCards);
+	}
+
+	private getExceptions(value: Race): string[] {
+		switch (value) {
+			case Race.BEAST:
+				return [];
+			case Race.DEMON:
+				return [];
+			case Race.DRAGON:
+				return [];
+			case Race.MECH:
+				return [];
+			case Race.MURLOC:
+				return [];
+			case Race.PIRATE:
+				return [];
+		}
+		return [];
+	}
+
+	private getTribeName(value: Race): string {
+		return capitalizeFirstLetter(Race[value].toLowerCase());
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
