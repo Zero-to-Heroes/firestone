@@ -145,6 +145,7 @@ export class BattlegroundsStoreService {
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
+			this.eventsThisTurn.push(gameEvent.type);
 			if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
 				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
@@ -188,18 +189,25 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
-				console.log('[battlegrounds-store] getting battlegrounds info after opponent revealed');
-				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
-				console.log('[battlegrounds-store] bgs info after opponent revealed', info);
-				this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-				this.maybeHandleNextEvent(
+				// console.log('will handle next opponent?', this.state.currentGame?.battleInfo?.opponentBoard);
+				this.handleEventOnlyAfterTrigger(
 					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
-					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
+					// GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
+					GameEvent.TURN_START,
 				);
-				this.maybeHandleNextEvent(new BgsGlobalInfoUpdatedEvent(info), GameEvent.BATTLEGROUNDS_BATTLE_RESULT);
+				// console.log('[battlegrounds-store] getting battlegrounds info after opponent revealed');
+				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
+				// console.log('[battlegrounds-store] bgs info after opponent revealed', info);
+				// this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
+				this.handleEventOnlyAfterTrigger(
+					new BgsGlobalInfoUpdatedEvent(info),
+					// GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
+					GameEvent.TURN_START,
+				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(new BgsOpponentRevealedEvent(gameEvent.additionalData.cardId));
 			} else if (gameEvent.type === GameEvent.TURN_START) {
+				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE) {
 				this.battlegroundsUpdater.next(
@@ -214,7 +222,7 @@ export class BattlegroundsStoreService {
 				const damage = gameEvent.additionalData.targets[playerCardId].Damage;
 				this.battlegroundsUpdater.next(new BgsDamageDealtEvent(playerCardId, damage));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
-				this.battlegroundsUpdater.next(
+				this.handleEventOnlyAfterTrigger(
 					new BgsPlayerBoardEvent(
 						gameEvent.additionalData.cardId,
 						gameEvent.additionalData.board,
@@ -222,7 +230,17 @@ export class BattlegroundsStoreService {
 						gameEvent.additionalData.heroPowerCardId,
 						gameEvent.additionalData.heroPowerUsed,
 					),
+					GameEvent.BATTLEGROUNDS_COMBAT_START,
 				);
+				// this.battlegroundsUpdater.next(
+				// 	new BgsPlayerBoardEvent(
+				// 		gameEvent.additionalData.cardId,
+				// 		gameEvent.additionalData.board,
+				// 		gameEvent.additionalData.hero,
+				// 		gameEvent.additionalData.heroPowerCardId,
+				// 		gameEvent.additionalData.heroPowerUsed,
+				// 	),
+				// );
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
 				this.battlegroundsUpdater.next(
 					new BgsBattleResultEvent(
@@ -241,7 +259,7 @@ export class BattlegroundsStoreService {
 					clearInterval(this.memoryInterval);
 					this.memoryInterval = null;
 				}
-				this.maybeHandleNextEvent(
+				this.handleEventOnlyAfterTrigger(
 					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
 					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 				);
@@ -288,26 +306,38 @@ export class BattlegroundsStoreService {
 		}
 	}
 
-	private maybeHandleNextEvent(gameEvent: BattlegroundsStoreEvent, nextTrigger: string): void {
-		// Battle not over yet, deferring the event
-		// console.log('should handle event?', this.state.currentGame, gameEvent);
-		if (this.state.currentGame?.battleInfo?.opponentBoard) {
+	private processAllPendingEvents(turnNumber: number) {
+		for (const event of this.queuedEvents) {
+			// console.log('[bgs-store] force processing pending event', event.event.type);
+			this.battlegroundsUpdater.next(event.event);
+		}
+		this.queuedEvents = [];
+		this.eventsThisTurn = [];
+	}
+
+	private eventsThisTurn: string[] = [];
+
+	private handleEventOnlyAfterTrigger(gameEvent: BattlegroundsStoreEvent, nextTrigger: string): void {
+		if (this.eventsThisTurn.includes(nextTrigger)) {
+			this.battlegroundsUpdater.next(gameEvent);
+		} else {
 			// console.log('requeueing', gameEvent);
 			this.queuedEvents.push({ event: gameEvent, trigger: nextTrigger });
-			// if (this.requeueTimeout) {
-			// 	clearTimeout(this.requeueTimeout);
-			// }
-			// this.requeueTimeout = setTimeout(() => {
-			// 	this.maybeHandleNextEvent(gameEvent);
-			// }, 2000);
-		} else {
-			// console.log('sending event', gameEvent);
-			// if (this.requeueTimeout) {
-			// 	clearTimeout(this.requeueTimeout);
-			// }
-			this.battlegroundsUpdater.next(gameEvent);
 		}
 	}
+
+	// private maybeHandleNextEvent(gameEvent: BattlegroundsStoreEvent, nextTrigger: string): void {
+	// 	if (this.state.currentGame?.battleInfo?.opponentBoard) {
+	// 		// console.log('requeueing', gameEvent);
+	// 		this.queuedEvents.push({ event: gameEvent, trigger: nextTrigger });
+	// 	} else {
+	// 		// console.log('sending event', gameEvent);
+	// 		// if (this.requeueTimeout) {
+	// 		// 	clearTimeout(this.requeueTimeout);
+	// 		// }
+	// 		this.battlegroundsUpdater.next(gameEvent);
+	// 	}
+	// }
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
 		await Promise.all(this.overlayHandlers.map(handler => handler.processEvent(gameEvent)));
