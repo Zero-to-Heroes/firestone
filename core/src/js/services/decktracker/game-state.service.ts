@@ -529,7 +529,7 @@ export class GameStateService {
 			new CardBuffedInHandParser(this.helper, this.allCards),
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
-			new EntityUpdateParser(this.helper),
+			new EntityUpdateParser(this.helper, this.allCards),
 		];
 	}
 
