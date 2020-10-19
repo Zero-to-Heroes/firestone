@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
+import { PatchInfo } from '../../../models/patches';
 
 declare let amplitude: any;
 
@@ -28,7 +29,7 @@ declare let amplitude: any;
 					class="title"
 					[helpTooltip]="
 						'Board stats per turn, compared to the average board stats between all heroes (top4 6000+ MMR) since patch ' +
-						patchNumber
+						patchNumber?.number
 					"
 				>
 					Winrate per turn
@@ -49,7 +50,7 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroOverviewComponent {
-	@Input() patchNumber: number;
+	@Input() patchNumber: PatchInfo;
 	@Input() globalStats: BgsStats;
 
 	_hero: BgsHeroStat;

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { PatchInfo } from '../../../models/patches';
 
 declare let amplitude: any;
 
@@ -19,13 +20,15 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
+					[helpTooltip]="
+						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
+					"
 				>
 					{{ buildValue(_hero?.averagePosition) }}
 				</div>
 				<div
 					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
 				>
 					({{ buildValue(_hero?.averagePosition) }})
 				</div>
@@ -36,13 +39,15 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
+					[helpTooltip]="
+						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
+					"
 				>
 					{{ buildPercents(_hero?.top4) }}
 				</div>
 				<div
 					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
 				>
 					({{ buildPercents(_hero?.playerTop4) }})
 				</div>
@@ -53,13 +58,15 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
+					[helpTooltip]="
+						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
+					"
 				>
 					{{ buildPercents(_hero?.top1) }}
 				</div>
 				<div
 					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
 				>
 					({{ buildPercents(_hero?.playerTop1) }})
 				</div>
@@ -70,13 +77,15 @@ declare let amplitude: any;
 				</div>
 				<div
 					class="global-value"
-					[helpTooltip]="'Value for the top 10% of players since patch ' + patchNumber + ' (6000+ MMR)'"
+					[helpTooltip]="
+						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
+					"
 				>
 					{{ buildPercents(_hero?.popularity) }}
 				</div>
 				<div
 					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber"
+					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
 				>
 					({{ buildPercents(_hero?.playerPopularity) }})
 				</div>
@@ -87,7 +96,7 @@ declare let amplitude: any;
 })
 export class BgsHeroStatsComponent {
 	_hero: BgsHeroStat;
-	@Input() patchNumber: number;
+	@Input() patchNumber: PatchInfo;
 
 	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;
