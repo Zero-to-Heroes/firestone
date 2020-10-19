@@ -207,6 +207,10 @@
 				font-weight: bold;
 			}
 
+			.body {
+				flex-direction: column;
+			}
+
 			.line {
 				display: flex;
 				align-items: center;

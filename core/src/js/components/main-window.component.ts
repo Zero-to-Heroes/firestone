@@ -57,6 +57,7 @@ declare let amplitude: any;
 				</div>
 			</section>
 			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
+			<ads [parentComponent]="'main-window'" *ngIf="!dataState.showFtue"></ads>
 			<section class="content-container" *ngIf="!dataState.showFtue">
 				<replays
 					class="main-section"
@@ -95,7 +96,6 @@ declare let amplitude: any;
 				>
 				</battlegrounds-desktop>
 			</section>
-			<ads [parentComponent]="'main-window'" *ngIf="!dataState.showFtue"></ads>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
