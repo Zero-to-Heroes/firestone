@@ -1,3 +1,4 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -6,7 +7,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class EntityUpdateParser implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.ENTITY_UPDATE;
@@ -21,9 +22,18 @@ export class EntityUpdateParser implements EventParser {
 		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
 		const cardInOther = this.helper.findCardInZone(deck.otherZone, null, entityId);
 
-		const newCardInHand = cardInHand ? cardInHand.update({ cardId: cardId } as DeckCard) : null;
-		const newCardInDeck = cardInDeck ? cardInDeck.update({ cardId: cardId } as DeckCard) : null;
-		const newCardInOther = cardInOther ? cardInOther.update({ cardId: cardId } as DeckCard) : null;
+		const newCardInHand =
+			cardInHand && cardInHand.cardId !== cardId
+				? cardInHand.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
+				: null;
+		const newCardInDeck =
+			cardInDeck && cardInDeck.cardId !== cardId
+				? cardInDeck.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
+				: null;
+		const newCardInOther =
+			cardInOther && cardInOther.cardId !== cardId
+				? cardInOther.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
+				: null;
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
 		const newDeck = newCardInDeck ? this.helper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
