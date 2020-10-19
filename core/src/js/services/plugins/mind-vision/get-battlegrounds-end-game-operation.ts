@@ -7,7 +7,7 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 	constructor(mindVision: MindVisionService, ow: OverwolfService) {
 		super(
 			ow,
-			'getBattlegroundsInfo',
+			'getBattlegroundsInfoEndGame',
 			() => mindVision.getBattlegroundsInfo(),
 			battlegroundsInfo => battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1,
 			battlegroundsInfo =>
