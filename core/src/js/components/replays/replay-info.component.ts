@@ -158,10 +158,12 @@ export class ReplayInfoComponent implements AfterViewInit {
 		const name = isPlayer
 			? this.allCards.getCard(info.playerCardId).name
 			: this.allCards.getCard(info.opponentCardId).name;
+		const deckName = info.playerDeckName ? ` with ${info.playerDeckName}` : '';
+		const tooltip = name + deckName;
 		const image = isPlayer
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerCardId}.jpg`
 			: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.opponentCardId}.jpg`;
-		return [image, name];
+		return [image, tooltip];
 	}
 
 	private buildMatchResultIconSvg(info: GameStat): SafeHtml {
