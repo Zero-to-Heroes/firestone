@@ -4,14 +4,13 @@ import { MatchResultType } from '../../models/mainwindow/replays/match-result.ty
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { GameForUpload as Game, Player } from './game-for-upload';
-import { GameHelper } from './game-helper.service';
 
 @Injectable()
 export class GameParserService {
 	plugin: any;
 	initialized: boolean;
 
-	constructor(private gameHelper: GameHelper, private cards: AllCardsService) {}
+	constructor(private cards: AllCardsService) {}
 
 	public toFormatType(formatType: number): StatGameFormatType {
 		switch (formatType) {
@@ -61,7 +60,7 @@ export class GameParserService {
 
 	public extractDuration(game: Game) {
 		const parser = new DOMParser();
-		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
+		const replayXml = parser.parseFromString(game.uncompressedXmlReplay, 'text/xml');
 		// console.log('parsed', replayXml);
 
 		const timestampedNodes = replayXml.querySelectorAll('[ts]');
@@ -89,7 +88,7 @@ export class GameParserService {
 
 	public extractMatchup(game: Game): void {
 		const parser = new DOMParser();
-		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
+		const replayXml = parser.parseFromString(game.uncompressedXmlReplay, 'text/xml');
 		// console.log('parsed', replayXml);
 		// console.log('replayXML', replayXml);
 		if (!replayXml) {

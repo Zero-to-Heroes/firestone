@@ -54,7 +54,6 @@ import { StoreBootstrapService } from '../../services/mainwindow/store/store-boo
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
 import { EndGameListenerService } from '../../services/manastorm-bridge/end-game-listener.service';
 import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game-uploader.service';
-import { GameHelper } from '../../services/manastorm-bridge/game-helper.service';
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
 import { PatchesConfigService } from '../../services/patches-config.service';
@@ -143,7 +142,6 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		EndGameListenerService,
 		EndGameUploaderService,
-		GameHelper,
 		GameParserService,
 		ReplayUploadService,
 		SecretsParserService,

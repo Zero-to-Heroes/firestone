@@ -4,7 +4,6 @@ import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { GameForUpload } from './game-for-upload';
-import { GameHelper } from './game-helper.service';
 import { GameParserService } from './game-parser.service';
 import { ReplayUploadService } from './replay-upload.service';
 
@@ -13,7 +12,6 @@ export class EndGameUploaderService {
 	private readonly supportedModesDeckRetrieve = ['practice', 'friendly', 'ranked', 'casual', 'arena', 'tavernbrawl'];
 
 	constructor(
-		private gameHelper: GameHelper,
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
@@ -72,9 +70,8 @@ export class EndGameUploaderService {
 			game.deckName = deckName;
 		}
 		console.log('[manastorm-bridge] added meta data');
-		this.gameHelper.setXmlReplay(game, replayXml);
-		console.log('[manastorm-bridge] set xml replay');
 		game.uncompressedXmlReplay = replayXml;
+		console.log('[manastorm-bridge] set xml replay');
 		this.gameParserService.extractMatchup(game);
 		console.log('[manastorm-bridge] extracted matchup');
 		this.gameParserService.extractDuration(game);
