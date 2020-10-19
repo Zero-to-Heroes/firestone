@@ -102,7 +102,7 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private buildBannedTribes(gameState: BattlegroundsState) {
-		this.bannedTribes = [Race.PIRATE, Race.DEMON]; // gameState?.currentGame?.bannedRaces || [];
+		this.bannedTribes = gameState?.currentGame?.bannedRaces || [];
 		const tribeNames = this.bannedTribes.map(tribe => this.getTribeName(tribe)).join(', ');
 		const exceptionCards = this.bannedTribes.map(tribe => this.getExceptions(tribe)).reduce((a, b) => a.concat(b));
 		const exceptions =
