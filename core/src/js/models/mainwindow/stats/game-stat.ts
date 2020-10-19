@@ -37,25 +37,26 @@ export class GameStat {
 	}
 
 	public buildPlayerRankImage(): [string, string, string] {
-		if (!this.playerRank) {
-			return [null, null, null];
-		}
+		// if (!this.playerRank) {
+		// 	return [null, null, null];
+		// }
 		let rankIcon;
 		let rankIconTooltip;
-		// console.log('no-format', 'building player rank image for', JSON.stringify(this, null, 4));
 		if (this.gameMode === 'ranked') {
 			const standard = 'standard_ranked';
-			// console.log('playerRank', this.playerRank);
+			// TODO: add a "no-rank" image
+			if (!this.playerRank) {
+				// console.log('no player rank, returning null', this);
+				return [null, null, null];
+			}
 			if (this.playerRank.indexOf('legend') !== -1) {
 				rankIcon = `${standard}/legend`;
 				rankIconTooltip = 'Legend';
-				// console.log('assigning legend', this.playerRank?.indexOf('legend'));
 			} else if (this.playerRank.indexOf('-') > -1) {
 				const leagueId = parseInt(this.playerRank.split('-')[0]);
 				const rank = this.playerRank.split('-')[1];
 				const paddedRank = rank.padStart(2, '0');
 				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId);
-				// console.log('leagueFrame, leagueName', leagueFrame, leagueName);
 				return [
 					leagueFrame,
 					`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
@@ -71,6 +72,7 @@ export class GameStat {
 		} else if (this.gameMode === 'battlegrounds') {
 			rankIcon = 'battlegrounds';
 			rankIconTooltip = 'Battlegrounds';
+			// console.log('building rank for bg', rankIcon, rankIconTooltip);
 		} else if (this.gameMode === 'practice') {
 			if (GALAKROND_EXPLORER.indexOf(this.scenarioId) !== -1) {
 				rankIcon = 'galakrond_explorers';
@@ -89,6 +91,11 @@ export class GameStat {
 			rankIcon = 'friendly';
 			rankIconTooltip = 'Friendly';
 		} else if (this.gameMode === 'arena') {
+			// TODO: no-rank image
+			if (!this.playerRank) {
+				// console.log('no player rank, returning null', this);
+				return [null, null, null];
+			}
 			// New format
 			if (this.playerRank && this.playerRank.indexOf('-') !== -1) {
 				const wins = this.playerRank.split('-')[0];
@@ -105,7 +112,7 @@ export class GameStat {
 		} else {
 			rankIcon = 'arenadraft';
 		}
-		// console.log('returning', rankIcon, null, rankIconTooltip);
+		// console.log('returning', rankIcon, rankIconTooltip);
 		return [`assets/images/deck/ranks/${rankIcon}.png`, null, rankIconTooltip];
 	}
 
