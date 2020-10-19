@@ -19,7 +19,7 @@ export class CardChangedInHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardInHand = this.helper.findCardInZone(deck.hand, null, entityId);
-		console.log('found card to change in hand', cardInHand);
+		// console.log('found card to change in hand', cardInHand);
 
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const newCardInHand = cardInHand
@@ -31,10 +31,10 @@ export class CardChangedInHandParser implements EventParser {
 					rarity: isPlayer && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : cardInHand.rarity,
 			  } as DeckCard)
 			: null;
-		console.log('newCardInHand', newCardInHand);
+		// console.log('newCardInHand', newCardInHand);
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
-		console.log('newHand', newHand);
+		// console.log('newHand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,

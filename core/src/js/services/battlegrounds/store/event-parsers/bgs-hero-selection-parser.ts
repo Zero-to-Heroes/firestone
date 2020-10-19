@@ -95,7 +95,7 @@ export class BgsHeroSelectionParser implements EventParser {
 					combatWinrate: stat.combatWinrate,
 				}),
 			) || [];
-		console.log('created hero overview', heroOverview);
+		console.log('created hero overview');
 		return BgsHeroSelectionOverview.create({
 			heroOverview: heroOverview,
 			heroOptionCardIds: heroCardIds,
