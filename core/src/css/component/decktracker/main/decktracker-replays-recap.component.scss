@@ -1,0 +1,36 @@
+.decktracker-replays-recap {
+	display: flex;
+	min-height: 0;
+	overflow: auto;
+	padding-right: 8px;
+	padding-top: 10px;
+	flex-direction: column;
+	width: 100%;
+
+	.title {
+		font-size: 14px;
+		color: var(--color-1);
+		margin-bottom: 10px;
+	}
+
+	.list {
+		display: flex;
+		flex-direction: column;
+
+		li {
+			margin-bottom: 3px;
+
+			::ng-deep .replay-info {
+				.mode {
+					width: 40px;
+				}
+				.result {
+					width: 35px;
+				}
+				.match-stats {
+					width: 45px;
+				}
+			}
+		}
+	}
+}

@@ -1,3 +1,4 @@
+import { GameStat } from '../stats/game-stat';
 import { MatchupStat } from '../stats/matchup-stat';
 
 export class DeckSummary {
@@ -10,4 +11,5 @@ export class DeckSummary {
 	readonly lastUsedTimestamp: number;
 	readonly matchupStats: readonly MatchupStat[];
 	readonly hidden: boolean;
+	readonly replays: readonly GameStat[];
 }

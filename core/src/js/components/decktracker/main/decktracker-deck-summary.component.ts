@@ -20,7 +20,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		<div
 			class="decktracker-deck-summary"
 			[ngClass]="{ 'hidden': hidden, 'no-click': !enableClick }"
-			(click)="selectDeck()"
+			(click)="selectDeck($event)"
 		>
 			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
 			<div class="deck-image">
@@ -98,7 +98,8 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		event.stopPropagation();
 	}
 
-	selectDeck() {
+	selectDeck(event: MouseEvent) {
+		event.stopPropagation();
 		if (this.enableClick) {
 			this.stateUpdater.next(new SelectDeckDetailsEvent(this._deck.deckstring));
 		}

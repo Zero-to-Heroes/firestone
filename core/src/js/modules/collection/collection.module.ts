@@ -80,6 +80,7 @@ import { DecktrackerDeckRecapComponent } from '../../components/decktracker/main
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
 import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
+import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
@@ -187,6 +188,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DecktrackerDeckRecapComponent,
 		DeckManaCurveComponent,
 		DeckManaCurveBarComponent,
+		DecktrackerReplaysRecapComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

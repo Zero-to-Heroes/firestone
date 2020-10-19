@@ -38,6 +38,10 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 					[state]="state"
 					[navigation]="navigation"
 				></decktracker-deck-recap>
+				<decktracker-replays-recap
+					*ngIf="navigation.navigationDecktracker.currentView !== 'deck-details'"
+					[state]="state"
+				></decktracker-replays-recap>
 			</section>
 		</div>
 	`,

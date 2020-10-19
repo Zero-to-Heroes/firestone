@@ -31,18 +31,10 @@ export class DecksStateBuilderService {
 			return [];
 		}
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
-		const validDecks = stats.gameStats.stats
-			.filter(stat => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
-			.filter(stat => stat.gameMode === filters.gameMode)
-			.filter(stat => this.isValidDate(stat, filters.time))
-			.filter(stat => this.isValidRank(stat, filters.rank))
-			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined')
-			.filter(
-				stat => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
-			);
+		const validReplays = this.buildValidReplays(stats, filters, prefs);
 		// console.log('filtering done', prefs, validDecks, stats);
 		const groupByDeckstring = groupBy('playerDecklist');
-		const statsByDeck = groupByDeckstring(validDecks);
+		const statsByDeck = groupByDeckstring(validReplays);
 		// console.log('[decktracker-stats-loader] statsByDeck');
 		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
 		const deckstrings = Object.keys(statsByDeck);
@@ -51,6 +43,19 @@ export class DecksStateBuilderService {
 			.sort(this.getSortFunction(filters.sort));
 
 		return decks;
+	}
+
+	private buildValidReplays(stats: StatsState, filters: DeckFilters, prefs: Preferences): readonly GameStat[] {
+		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
+		return stats.gameStats.stats
+			.filter(stat => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
+			.filter(stat => stat.gameMode === filters.gameMode)
+			.filter(stat => this.isValidDate(stat, filters.time))
+			.filter(stat => this.isValidRank(stat, filters.rank))
+			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined')
+			.filter(
+				stat => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
+			);
 	}
 
 	private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
@@ -152,6 +157,7 @@ export class DecksStateBuilderService {
 			winRatePercentage: (100.0 * totalWins) / totalGames,
 			hidden: hiddenDeckCodes.includes(deckstring),
 			matchupStats: matchupStats,
+			replays: stats,
 		} as DeckSummary);
 	}
 

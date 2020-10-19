@@ -35,7 +35,10 @@
 		width: 400px;
 		height: calc(100% - 350px);
 		flex-shrink: 0;
-		padding-top: 45px;
+
+		& > * {
+			display: flex;
+		}
 	}
 }
 
