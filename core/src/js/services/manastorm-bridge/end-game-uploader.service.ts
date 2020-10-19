@@ -62,21 +62,9 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge] parsed format');
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
 		console.log('[manastorm-bridge] parsed type');
-		game.reviewId = currentReviewId;
-		game.buildNumber = buildNumber;
-		game.scenarioId = scenarioId;
-		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
-			game.deckstring = deckstring;
-			game.deckName = deckName;
-		}
-		console.log('[manastorm-bridge] added meta data');
-		game.uncompressedXmlReplay = replayXml;
-		console.log('[manastorm-bridge] set xml replay');
-		this.gameParserService.extractMatchup(game);
-		console.log('[manastorm-bridge] extracted matchup');
-		this.gameParserService.extractDuration(game);
-		console.log('[manastorm-bridge] extracted duration');
 
+		// Here we want to process the rank info as soon as possible to limit the chances of it
+		// being removed from memory by the player clicking away
 		let playerRank;
 		let newPlayerRank;
 		if (game.gameMode === 'battlegrounds') {
@@ -143,6 +131,23 @@ export class EndGameUploaderService {
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
 		game.newPlayerRank = newPlayerRank;
+		console.log('[manastorm-bridge] extracted player rank');
+
+		game.reviewId = currentReviewId;
+		game.buildNumber = buildNumber;
+		game.scenarioId = scenarioId;
+		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
+			game.deckstring = deckstring;
+			game.deckName = deckName;
+		}
+		console.log('[manastorm-bridge] added meta data');
+		game.uncompressedXmlReplay = replayXml;
+		console.log('[manastorm-bridge] set xml replay');
+		this.gameParserService.extractMatchup(game);
+		console.log('[manastorm-bridge] extracted matchup');
+		this.gameParserService.extractDuration(game);
+		console.log('[manastorm-bridge] extracted duration');
+
 		console.log('[manastorm-bridge] game ready');
 		return game;
 	}
