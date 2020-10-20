@@ -26,10 +26,6 @@ export class BgsGameEndParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
 		const prefs: Preferences = await this.prefs.getPreferences();
 		console.warn('will build post-match info', prefs.bgsForceShowPostMatchStats);
-		const battlegroundsInfo = await this.memory.getBattlegroundsEndGame();
-		const playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
-		const newPlayerRank = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
-		console.log('got player rank info', playerRank, newPlayerRank);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
 		const newPostMatchStatsStage: BgsPostMatchStage = this.buildPostMatchStage(
 			event.postMatchStats,
