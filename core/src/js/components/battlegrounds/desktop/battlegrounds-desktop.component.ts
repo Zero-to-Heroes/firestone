@@ -62,16 +62,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[ngClass]="{ 'top': shouldDisplayFiltersAtTop() }"
 						>
 						</battlegrounds-filters>
-						<!-- <battlegrounds-global-categories
-							[hidden]="navigation.navigationBattlegrounds.currentView !== 'categories'"
-							[globalCategories]="state.battlegrounds.globalCategories"
-						>
-						</battlegrounds-global-categories> -->
-						<!-- <battlegrounds-categories
-							[hidden]="navigation.navigationBattlegrounds.currentView !== 'category'"
-							[categories]="buildCategories()"
-						>
-						</battlegrounds-categories> -->
 						<battlegrounds-category-details
 							[hidden]="navigation.navigationBattlegrounds.currentView !== 'list'"
 							[category]="buildCategory()"
