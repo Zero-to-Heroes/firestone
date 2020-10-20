@@ -53,7 +53,7 @@ export class DecksStateBuilderService {
 			.filter(stat => this.isValidDate(stat, filters.time));
 		// Make sure that if the current filter is "season-start", the first game starts in Bronze
 		let indexOfFirstGame = replaysForDate.length;
-		console.log('replaysForDate', replaysForDate);
+		// console.log('replaysForDate', replaysForDate);
 		if (filters.time === 'season-start') {
 			for (let i = replaysForDate.length; i >= 0; i--) {
 				if (replaysForDate[i]?.playerRank?.includes('5-')) {
