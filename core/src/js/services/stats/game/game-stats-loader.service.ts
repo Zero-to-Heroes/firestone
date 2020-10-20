@@ -31,8 +31,12 @@ export class GameStatsLoaderService {
 			userId: userId,
 			userName: userName,
 			uploaderToken: `overwolf-${userId}`,
-			// expectedReviewId: expectedReviewId,
 		};
+		// const postObject = {
+		// 	userId: 'OW_a0975eac-f2aa-465f-912e-84f16196397a',
+		// 	// userName: userName,
+		// 	// uploaderToken: `overwolf-${userId}`,
+		// };
 		this.http.post(GAME_STATS_ENDPOINT, postObject).subscribe(
 			data => {
 				const endpointResult: readonly GameStat[] = (data as any).results;
