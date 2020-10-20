@@ -66,7 +66,6 @@ export class BgsRunStatsService {
 
 	private async computeHeroDetailsForBg(heroCardId: string) {
 		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId);
-		console.log('lastHeroPostMatchStats', lastHeroPostMatchStats);
 		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats));
 	}
 
@@ -105,7 +104,7 @@ export class BgsRunStatsService {
 		};
 		this.http.post(`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`, input).subscribe(
 			(result: any) => {
-				console.log('retrieved last hero stats for hero', result);
+				console.log('retrieved last hero stats for hero');
 				callback(result);
 			},
 			error => {
