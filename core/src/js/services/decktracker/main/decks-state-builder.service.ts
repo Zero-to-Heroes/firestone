@@ -31,15 +31,7 @@ export class DecksStateBuilderService {
 			return [];
 		}
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
-		const validDecks = stats.gameStats.stats
-			.filter(stat => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
-			.filter(stat => stat.gameMode === filters.gameMode)
-			.filter(stat => this.isValidDate(stat, filters.time))
-			.filter(stat => this.isValidRank(stat, filters.rank))
-			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined')
-			.filter(
-				stat => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
-			);
+		const validDecks = this.buildValidReplays(stats, filters, prefs);
 		// console.log('filtering done', prefs, validDecks, stats);
 		const groupByDeckstring = groupBy('playerDecklist');
 		const statsByDeck = groupByDeckstring(validDecks);
@@ -51,6 +43,33 @@ export class DecksStateBuilderService {
 			.sort(this.getSortFunction(filters.sort));
 
 		return decks;
+	}
+
+	private buildValidReplays(stats: StatsState, filters: DeckFilters, prefs: Preferences): readonly GameStat[] {
+		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
+		const replaysForDate = stats.gameStats.stats
+			.filter(stat => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
+			.filter(stat => stat.gameMode === filters.gameMode)
+			.filter(stat => this.isValidDate(stat, filters.time));
+		// Make sure that if the current filter is "season-start", the first game starts in Bronze
+		let indexOfFirstGame = replaysForDate.length;
+		console.log('replaysForDate', replaysForDate);
+		if (filters.time === 'season-start') {
+			for (let i = replaysForDate.length; i >= 0; i--) {
+				if (replaysForDate[i]?.playerRank?.includes('5-')) {
+					indexOfFirstGame = i;
+					console.log('indexOfFirstGame', indexOfFirstGame);
+					break;
+				}
+			}
+		}
+		return replaysForDate
+			.slice(0, indexOfFirstGame)
+			.filter(stat => this.isValidRank(stat, filters.rank))
+			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined')
+			.filter(
+				stat => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
+			);
 	}
 
 	private getSortFunction(sort: DeckSortType): (a: DeckSummary, b: DeckSummary) => number {
@@ -84,6 +103,7 @@ export class DecksStateBuilderService {
 		switch (timeFilter) {
 			case 'season-start':
 				const startOfMonthDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+				// Season starts always in Bronze
 				return stat.creationTimestamp >= startOfMonthDate.getTime();
 			default:
 				return true;
