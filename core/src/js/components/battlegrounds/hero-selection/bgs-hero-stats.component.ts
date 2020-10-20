@@ -72,7 +72,7 @@ declare let amplitude: any;
 				</div>
 			</div>
 			<div class="entry">
-				<div class="label" helpTooltip="Percentage of times this hero is plqyed">
+				<div class="label" helpTooltip="Percentage of times this hero is played">
 					Popularity:
 				</div>
 				<div
