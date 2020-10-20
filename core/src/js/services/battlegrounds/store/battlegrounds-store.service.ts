@@ -282,6 +282,7 @@ export class BattlegroundsStoreService {
 					info.reviewId,
 					this.state.currentGame,
 					this.mainWindowState?.stats?.bestBgsUserStats,
+					info.game,
 				);
 			}
 		});

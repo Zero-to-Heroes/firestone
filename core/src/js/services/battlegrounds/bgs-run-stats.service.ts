@@ -15,6 +15,7 @@ import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwin
 import { BgsPostMatchStatsComputedEvent } from '../mainwindow/store/events/battlegrounds/bgs-post-match-stats-computed-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
+import { GameForUpload } from '../manastorm-bridge/game-for-upload';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
@@ -40,7 +41,7 @@ export class BgsRunStatsService {
 		private readonly memoryService: MemoryInspectionService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async event => {
-			this.computeRunStats(event.data[0], event.data[1], event.data[2]);
+			this.computeRunStats(event.data[0], event.data[1], event.data[2], event.data[3]);
 		});
 		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async event => {
 			this.computeHeroDetailsForBg(event.data[0]);
@@ -123,10 +124,17 @@ export class BgsRunStatsService {
 		);
 	}
 
-	private async computeRunStats(reviewId: string, currentGame: BgsGame, bestBgsUserStats: readonly BgsBestStat[]) {
+	private async computeRunStats(
+		reviewId: string,
+		currentGame: BgsGame,
+		bestBgsUserStats: readonly BgsBestStat[],
+		game: GameForUpload,
+	) {
+		console.log('starting to compute run stats');
 		const prefs = await this.prefs.getPreferences();
 		const user = await this.userService.getCurrentUser();
-		const newMmr = await this.getNewRating(currentGame.mmrAtStart);
+		const newMmr = parseInt(game.newPlayerRank);
+		// const newMmr = await this.getNewRating(currentGame.mmrAtStart);
 
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
@@ -140,7 +148,7 @@ export class BgsRunStatsService {
 			mainPlayer: currentGame.getMainPlayer(),
 			faceOffs: currentGame.faceOffs,
 			oldMmr: currentGame.mmrAtStart,
-			newMmr: newMmr,
+			newMmr: isNaN(newMmr) ? null : newMmr,
 		};
 		// console.log('computing post-match stats input', input);
 
