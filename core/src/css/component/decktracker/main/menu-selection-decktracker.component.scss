@@ -1,0 +1,18 @@
+.menu-selection {
+	color: var(--menu-selection-color);
+
+	li {
+		margin-right: 25px;
+		padding-bottom: 14px;
+
+		&:hover {
+			&:not(.disabled) {
+				color: var(--on-menu-selection-color);
+			}
+		}
+
+		span {
+			display: flex;
+		}
+	}
+}

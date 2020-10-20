@@ -16,6 +16,7 @@ export class SelectDeckDetailsProcessor implements Processor {
 			navigationState.update({
 				navigationDecktracker: navigationState.navigationDecktracker.update({
 					currentView: 'deck-details',
+					menuDisplayType: 'breadcrumbs',
 					selectedDeckstring: event.deckstring,
 				} as NavigationDecktracker),
 				text: currentState.decktracker.decks.find(deck => deck.deckstring === event.deckstring)?.deckName,

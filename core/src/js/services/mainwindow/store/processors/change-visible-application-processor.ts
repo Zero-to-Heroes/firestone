@@ -52,7 +52,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
 						currentView: 'decks',
-						menuDisplayType: 'breadcrumbs',
+						menuDisplayType: 'menu',
 						selectedDeckstring: null,
 				  } as NavigationDecktracker)
 				: navigationState.navigationBattlegrounds;

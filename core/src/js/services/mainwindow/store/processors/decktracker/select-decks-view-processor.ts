@@ -13,6 +13,7 @@ export class SelectDeckViewProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const newDecktracker = navigationState.navigationDecktracker.update({
 			currentView: event.newView,
+			menuDisplayType: 'menu',
 		} as NavigationDecktracker);
 		return [
 			null,

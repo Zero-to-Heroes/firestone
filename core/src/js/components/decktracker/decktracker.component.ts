@@ -19,6 +19,12 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 								navigation.text && navigation?.navigationDecktracker.menuDisplayType === 'breadcrumbs'
 							"
 						></global-header>
+						<menu-selection-decktracker
+							class="menu-selection"
+							*ngIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
+							[selectedTab]="navigation.navigationDecktracker.currentView"
+						>
+						</menu-selection-decktracker>
 						<decktracker-filters [state]="state" [navigation]="navigation"></decktracker-filters>
 						<decktracker-decks
 							[hidden]="navigation.navigationDecktracker.currentView !== 'decks'"
@@ -29,6 +35,10 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 							[state]="state"
 							[navigation]="navigation"
 						></decktracker-deck-details>
+						<decktracker-personal-stats-ranking
+							[hidden]="navigation.navigationDecktracker.currentView !== 'ranking'"
+							[state]="state"
+						></decktracker-personal-stats-ranking>
 					</div>
 				</with-loading>
 			</section>
