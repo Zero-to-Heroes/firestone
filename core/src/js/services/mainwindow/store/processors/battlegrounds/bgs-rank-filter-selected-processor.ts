@@ -20,7 +20,7 @@ export class BgsRankFilterSelectedProcessor implements Processor {
 			currentState.stats.gameStats,
 			currentState.battlegrounds.stats?.currentBattlegroundsMetaPatch,
 		);
-		console.log('updated time filter', bgsState);
+		// console.log('updated time filter', bgsState);
 		return [
 			currentState.update({
 				battlegrounds: bgsState,
