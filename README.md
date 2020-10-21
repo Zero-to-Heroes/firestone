@@ -19,7 +19,8 @@ Firestone is an app you run on Overwolf alongside Hearthstone (like HearthArena)
   _ Track known cards in your opponent's hand
 - App is accessible both from in-game and from desktop
 
-See the full [imgur album](https://imgur.com/a/hLz4ORp)
+See the main [imgur album](https://imgur.com/a/hLz4ORp)
+And [the screenshots](https://imgur.com/a/9mYoN05) for battlegrounds personal stats are
 
 # Links
 
