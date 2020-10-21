@@ -37,9 +37,13 @@
 		display: none;
 	}
 
-	.caret,
+	.caret {
+		color: var(--color-1);
+	}
 	.selected-icon {
 		color: var(--color-1);
+		position: relative;
+		left: 8px;
 	}
 
 	.open .caret {
