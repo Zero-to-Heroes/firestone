@@ -208,7 +208,7 @@ export class TwitchAuthService {
 
 	private cleanCurrentBattle(currentBattle: TwitchBgsCurrentBattle, threshold = 15): TwitchBgsCurrentBattle {
 		let shouldSplit = true;
-		while (threshold && threshold > 0 && shouldSplit) {
+		while (threshold && threshold > -5 && shouldSplit) {
 			currentBattle = this.cleanOutcome(currentBattle, threshold, [
 				{
 					selector: (battle: TwitchBgsCurrentBattle) => battle.battleInfo.lostPercent,
@@ -233,9 +233,7 @@ export class TwitchAuthService {
 				} as Cleaner,
 			]);
 			threshold = threshold - 3;
-			if (threshold > 0) {
-				shouldSplit = this.shouldSplitMessage(currentBattle);
-			}
+			shouldSplit = this.shouldSplitMessage(currentBattle);
 			if (shouldSplit) {
 				// console.warn(
 				// 	'[twitch] battle message still too big, considering further cleaning',
@@ -248,7 +246,7 @@ export class TwitchAuthService {
 				// console.log('[twitch] message compressed', currentBattle);
 			}
 		}
-		return currentBattle;
+		return threshold > 0 ? currentBattle : null;
 	}
 
 	private cleanOutcome(
