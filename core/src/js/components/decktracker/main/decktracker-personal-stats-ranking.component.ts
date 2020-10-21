@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
-import { BaseChartDirective, Color, Label } from 'ng2-charts';
+import { Color, Label } from 'ng2-charts';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -131,63 +131,63 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 	) {}
 
 	ngAfterViewInit() {
-		BaseChartDirective.registerPlugin({
-			beforeRender: function(x, options) {
-				console.log('beforeRender', x, options);
-				// var c = x.chart;
-				// var dataset = x.data.datasets[0];
-				// var yScale = x.scales['y-axis-0'];
-				// var yPos = yScale.getPixelForValue(0);
+		// BaseChartDirective.registerPlugin({
+		// 	beforeRender: function(x, options) {
+		// 		console.log('beforeRender', x, options);
+		// 		// var c = x.chart;
+		// 		// var dataset = x.data.datasets[0];
+		// 		// var yScale = x.scales['y-axis-0'];
+		// 		// var yPos = yScale.getPixelForValue(0);
 
-				// var gradientFill = c.ctx.createLinearGradient(0, 0, 0, c.height);
-				// gradientFill.addColorStop(0, 'green');
-				// gradientFill.addColorStop(yPos / c.height - 0.01, 'green');
-				// gradientFill.addColorStop(yPos / c.height + 0.01, 'red');
-				// gradientFill.addColorStop(1, 'red');
+		// 		// var gradientFill = c.ctx.createLinearGradient(0, 0, 0, c.height);
+		// 		// gradientFill.addColorStop(0, 'green');
+		// 		// gradientFill.addColorStop(yPos / c.height - 0.01, 'green');
+		// 		// gradientFill.addColorStop(yPos / c.height + 0.01, 'red');
+		// 		// gradientFill.addColorStop(1, 'red');
 
-				// var model = x.data.datasets[0]._meta[Object.keys(dataset._meta)[0]].dataset._model;
-				// model.backgroundColor = gradientFill;
-			},
-			beforeDatasetDraw: (chart, easing: any, options) => {
-				var dataset = chart.config.data.datasets[0];
-				console.log('before dataset draw', chart, easing, options, dataset, this);
-				var yScale = (chart as any).scales['y-axis-0'];
-				var gradientFill = chart.ctx.createLinearGradient(0, 0, 0, chart.height);
-				if (!this.colors || this.colors.length === 0) {
-					return;
-				}
-				gradientFill.addColorStop(1, this.colors[0].code);
-				console.log('adding color stop', 1, this.colors[0].code);
-				this.thresholds.forEach((threshold: number, index: number) => {
-					const yPos = yScale.getPixelForValue(threshold);
-					gradientFill.addColorStop(yPos / chart.height, this.colors[index].code);
-					const nextYPost =
-						index === this.thresholds.length - 1 ? 0 : yScale.getPixelForValue(this.thresholds[index + 1]);
-					console.log('building gradient for', threshold, index, yPos, nextYPost);
-					console.log('adding color stop', yPos / chart.height, this.colors[index].code);
-					gradientFill.addColorStop(
-						yPos / chart.height,
-						nextYPost === 0 ? 'transparent' : this.colors[index + 1].code,
-					);
-					console.log(
-						'adding color stop',
-						yPos / chart.height,
-						nextYPost === 0 ? 'transparent' : this.colors[index + 1].code,
-					);
-					// gradientFill.addColorStop(
-					// 	nextYPost / chart.height,
-					// 	nextYPost === 0 ? 'transparent' : this.colors[index + 1].code,
-					// );
-				});
-				gradientFill.addColorStop(0, 'transparent');
-				console.log('built gradient', gradientFill);
+		// 		// var model = x.data.datasets[0]._meta[Object.keys(dataset._meta)[0]].dataset._model;
+		// 		// model.backgroundColor = gradientFill;
+		// 	},
+		// 	beforeDatasetDraw: (chart, easing: any, options) => {
+		// 		var dataset = chart.config.data.datasets[0];
+		// 		console.log('before dataset draw', chart, easing, options, dataset, this);
+		// 		var yScale = (chart as any).scales['y-axis-0'];
+		// 		var gradientFill = chart.ctx.createLinearGradient(0, 0, 0, chart.height);
+		// 		if (!this.colors || this.colors.length === 0) {
+		// 			return;
+		// 		}
+		// 		gradientFill.addColorStop(1, this.colors[0].code);
+		// 		console.log('adding color stop', 1, this.colors[0].code);
+		// 		this.thresholds.forEach((threshold: number, index: number) => {
+		// 			const yPos = yScale.getPixelForValue(threshold);
+		// 			gradientFill.addColorStop(yPos / chart.height, this.colors[index].code);
+		// 			const nextYPost =
+		// 				index === this.thresholds.length - 1 ? 0 : yScale.getPixelForValue(this.thresholds[index + 1]);
+		// 			console.log('building gradient for', threshold, index, yPos, nextYPost);
+		// 			console.log('adding color stop', yPos / chart.height, this.colors[index].code);
+		// 			gradientFill.addColorStop(
+		// 				yPos / chart.height,
+		// 				nextYPost === 0 ? 'transparent' : this.colors[index + 1].code,
+		// 			);
+		// 			console.log(
+		// 				'adding color stop',
+		// 				yPos / chart.height,
+		// 				nextYPost === 0 ? 'transparent' : this.colors[index + 1].code,
+		// 			);
+		// 			// gradientFill.addColorStop(
+		// 			// 	nextYPost / chart.height,
+		// 			// 	nextYPost === 0 ? 'transparent' : this.colors[index + 1].code,
+		// 			// );
+		// 		});
+		// 		gradientFill.addColorStop(0, 'transparent');
+		// 		console.log('built gradient', gradientFill);
 
-				var model = chart.getDatasetMeta(0).dataset['_model'];
-				// model.borderColor =
-				console.log('model', model, chart.getDatasetMeta(0));
-				model.backgroundColor = gradientFill;
-			},
-		});
+		// 		var model = chart.getDatasetMeta(0).dataset['_model'];
+		// 		// model.borderColor =
+		// 		console.log('model', model, chart.getDatasetMeta(0));
+		// 		model.backgroundColor = gradientFill;
+		// 	},
+		// });
 
 		this.onResize();
 	}
@@ -315,7 +315,7 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 			// 	label: 'Wild ranking (pre-legend)',
 			// },
 		];
-		console.log('lineChartData', this.lineChartData);
+		// console.log('lineChartData', this.lineChartData);
 		this.lineChartLabels = Array.from(Array(this.lineChartData[0].data.length), (_, i) => i + 1).map(
 			matchIndex => '' + matchIndex,
 		);
