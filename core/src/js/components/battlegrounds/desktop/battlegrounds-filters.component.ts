@@ -121,6 +121,14 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 				label: 'Past 100 days',
 			} as TimeFilterOption,
 			{
+				value: 'past-30',
+				label: 'Past 30 days',
+			} as TimeFilterOption,
+			{
+				value: 'past-7',
+				label: 'Past 7 days',
+			} as TimeFilterOption,
+			{
 				value: 'last-patch',
 				label: `Last patch`,
 				tooltip: this.formatPatch(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch),

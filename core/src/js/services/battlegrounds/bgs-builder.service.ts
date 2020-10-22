@@ -72,6 +72,10 @@ export class BgsBuilderService {
 		switch (prefs.bgsActiveTimeFilter) {
 			case 'last-patch':
 				return stat.buildNumber >= currentBattlegroundsMetaPatch;
+			case 'past-30':
+				return Date.now() - stat.creationTimestamp <= 30 * 24 * 60 * 60 * 1000;
+			case 'past-7':
+				return Date.now() - stat.creationTimestamp <= 7 * 24 * 60 * 60 * 1000;
 			case 'all-time':
 			default:
 				return true;
