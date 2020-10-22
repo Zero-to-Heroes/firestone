@@ -68,6 +68,14 @@ import { PreferencesService } from '../../../services/preferences.service';
 				[navigation]="_navigation"
 				(onOptionSelected)="selectSort($event)"
 			></fs-filter-dropdown>
+			<div
+				class="filter-info"
+				helpTooltip="Changing these filters will also impact the stats displayed in the decktracker in-game"
+			>
+				<svg>
+					<use xlink:href="assets/svg/sprite.svg#info" />
+				</svg>
+			</div>
 			<div class="show-hidden-decks-link" (click)="toggleShowHiddenDecks()" *ngIf="showHiddenDecksLink">
 				{{ _state.decktracker.showHiddenDecks ? 'Showing archived decks' : 'Hiding archived decks' }}
 			</div>

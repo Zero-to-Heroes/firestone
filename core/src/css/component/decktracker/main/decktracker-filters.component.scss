@@ -5,6 +5,7 @@
 }
 
 .decktracker-filters {
+	position: relative;
 	display: flex;
 	min-height: 30px;
 	color: var(--secondary-text-color);
@@ -40,6 +41,16 @@
 	.filter:last-child:after {
 		border-right: none;
 	}
+}
+
+.filter-info {
+	width: 20px;
+	height: 20px;
+	position: relative;
+	top: 5px;
+	right: -15px;
+	margin-left: -20px;
+	--icon-color: var(--secondary-text-color);
 }
 
 .show-hidden-decks-link {

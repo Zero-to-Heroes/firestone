@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
@@ -82,7 +82,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly elementRef: ElementRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -91,15 +91,21 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	hideDeck(event: MouseEvent) {
 		this.stateUpdater.next(new HideDeckSummaryEvent(this._deck.deckstring));
 		event.stopPropagation();
+		event.preventDefault();
 	}
 
 	restoreDeck(event: MouseEvent) {
 		this.stateUpdater.next(new RestoreDeckSummaryEvent(this._deck.deckstring));
 		event.stopPropagation();
+		event.preventDefault();
 	}
 
 	selectDeck(event: MouseEvent) {
 		event.stopPropagation();
+		event.preventDefault();
+		if ((event.target as any)?.tagName === 'BUTTON') {
+			return;
+		}
 		if (this.enableClick) {
 			this.stateUpdater.next(new SelectDeckDetailsEvent(this._deck.deckstring));
 		}
