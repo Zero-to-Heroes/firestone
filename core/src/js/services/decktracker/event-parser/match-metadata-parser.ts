@@ -7,9 +7,9 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 import { Metadata } from '../../../models/decktracker/metadata';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { GameEvent } from '../../../models/game-event';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
-import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PreferencesService } from '../../preferences.service';
 import { DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
@@ -26,7 +26,8 @@ export class MatchMetadataParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const stats: StatsState = gameEvent.additionalData?.stats;
+		const store: MainWindowState = gameEvent.additionalData.state;
+		// const stats: StatsState = gameEvent.additionalData?.stats;
 		const format = gameEvent.additionalData.metaData.FormatType as number;
 		const convertedFormat = MatchMetadataParser.convertFormat(format);
 
@@ -53,20 +54,14 @@ export class MatchMetadataParser implements EventParser {
 		);
 
 		const deckStats: readonly GameStat[] =
-			!deckstringToUse || !stats?.gameStats
+			!deckstringToUse || !store?.decktracker?.decks
 				? []
-				: stats.gameStats.stats
-						.filter(stat => stat.gameMode === 'ranked')
-						.filter(stat => stat.playerDecklist === deckstringToUse)
+				: store.decktracker.decks
+						.find(deck => deck.deckstring === deckstringToUse)
+						.replays.filter(stat => stat.gameMode === 'ranked')
 						.filter(stat => stat.gameFormat === convertedFormat) || [];
 		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
-		console.log(
-			'[match-metadata-parser] match metadata',
-			convertedFormat,
-			format,
-			deckstringToUse,
-			stats?.gameStats?.stats?.length,
-		);
+		console.log('[match-metadata-parser] match metadata', convertedFormat, format, deckstringToUse);
 		let matchupStatsRecap = currentState.matchupStatsRecap;
 		if (currentState?.opponentDeck?.hero?.playerClass) {
 			const statsAgainstOpponent = currentState.deckStats.filter(
