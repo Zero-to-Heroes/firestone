@@ -6,6 +6,7 @@ import { BattlegroundsGlobalCategory } from './battlegrounds-global-category';
 import { BgsActiveTimeFilterType } from './bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from './bgs-rank-filter.type';
+import { MmrGroupFilterType } from './mmr-group-filter-type';
 
 export class BattlegroundsAppState {
 	readonly globalCategories: readonly BattlegroundsGlobalCategory[] = [];
@@ -20,6 +21,7 @@ export class BattlegroundsAppState {
 	readonly activeTimeFilter: BgsActiveTimeFilterType;
 	readonly activeHeroSortFilter: BgsHeroSortFilterType;
 	readonly activeRankFilter: BgsRankFilterType;
+	readonly activeGroupMmrFilter: MmrGroupFilterType;
 
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);

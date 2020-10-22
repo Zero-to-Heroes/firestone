@@ -51,6 +51,7 @@ export class BgsBuilderService {
 			activeTimeFilter: prefs.bgsActiveTimeFilter,
 			activeHeroSortFilter: prefs.bgsActiveHeroSortFilter,
 			activeRankFilter: prefs.bgsActiveRankFilter,
+			activeGroupMmrFilter: prefs.bgsActiveMmrGroupFilter,
 		} as BattlegroundsAppState);
 	}
 
@@ -83,7 +84,7 @@ export class BgsBuilderService {
 	}
 
 	private rankFilter(stat: GameStat, prefs: Preferences) {
-		if (!prefs.bgsActiveRankFilter || !stat.playerRank) {
+		if (!prefs.bgsActiveRankFilter) {
 			return true;
 		}
 
@@ -91,7 +92,7 @@ export class BgsBuilderService {
 			case 'all':
 				return true;
 			default:
-				return parseInt(stat.playerRank) >= parseInt(prefs.bgsActiveRankFilter);
+				return stat.playerRank && parseInt(stat.playerRank) >= parseInt(prefs.bgsActiveRankFilter);
 		}
 	}
 

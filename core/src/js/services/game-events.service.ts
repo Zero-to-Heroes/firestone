@@ -142,6 +142,7 @@ export class GameEvents {
 						additionalData: {
 							metaData: gameEvent.Value,
 							stats: this.store.state?.stats,
+							state: this.store.state,
 						},
 					} as GameEvent),
 				);

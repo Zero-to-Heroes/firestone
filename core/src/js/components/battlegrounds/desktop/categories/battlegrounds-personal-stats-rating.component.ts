@@ -14,8 +14,10 @@ import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { BattlegroundsAppState } from '../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsPersonalRatingCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
+import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { formatDate, groupByFunction } from '../../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-rating',
@@ -187,25 +189,41 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		if (!this._state?.matchStats || !this._category) {
 			return;
 		}
-		const data = this._state.matchStats
-			.filter(match => match.playerRank)
-			.reverse()
-			.map(match => parseInt(match.playerRank));
+		const data = this._state.matchStats.filter(match => match.playerRank).reverse();
 		if (data.length === 0) {
 			this.lineChartData = null;
 			this.lineChartLabels = null;
 			return;
 		}
 
-		this.lineChartData = [
-			{
-				data: data,
-				label: 'Rating',
-			},
-		];
-		this.lineChartLabels = Array.from(Array(this.lineChartData[0].data.length), (_, i) => i + 1).map(
-			matchIndex => '' + matchIndex,
-		);
+		if (this._state.activeGroupMmrFilter === 'per-day') {
+			const groupedByDay = groupByFunction((match: GameStat) => formatDate(new Date(match.creationTimestamp)))(
+				data,
+			);
+			//console.log('groupedByDay', groupedByDay);
+			const values = Object.values(groupedByDay).map((games: readonly GameStat[]) =>
+				parseInt(games[games.length - 1].playerRank),
+			);
+			//console.log('values', values);
+			//console.log('days', Object.keys(groupedByDay));
+			this.lineChartData = [
+				{
+					data: values,
+					label: 'Rating',
+				},
+			];
+			this.lineChartLabels = Object.keys(groupedByDay);
+		} else {
+			this.lineChartData = [
+				{
+					data: data.map(match => parseInt(match.playerRank)),
+					label: 'Rating',
+				},
+			];
+			this.lineChartLabels = Array.from(Array(this.lineChartData[0].data.length), (_, i) => i + 1).map(
+				matchIndex => '' + matchIndex,
+			);
+		}
 
 		if (!this.chartHeight) {
 			// console.log('rating chart height not present yet, refreshing', this.chartHeight);

@@ -11,10 +11,12 @@ import { IOption } from 'ng-select';
 import { BgsActiveTimeFilterType } from '../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
+import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { PatchInfo } from '../../../models/patches';
 import { BgsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
+import { BgsMmrGroupFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { BgsRankFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -45,6 +47,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectRankFilter($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="mmr-group-filter"
+				[options]="mmrGroupFilterOptions"
+				[filter]="activeMmrGroupFilter"
+				[checkVisibleHandler]="mmrGroupVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectMmrGroupFilter($event)"
 			></fs-filter-dropdown>
 			<fs-filter-dropdown
 				class="time-filter"
@@ -98,6 +109,29 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-heroes' &&
 			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
 			!['bgs-category-personal-stats'].includes(navigation.navigationBattlegrounds.selectedCategoryId)
+		);
+	};
+
+	mmrGroupFilterOptions: readonly MmrGroupFilterOption[] = [
+		{
+			value: 'per-match',
+			label: 'Show each match',
+		} as MmrGroupFilterOption,
+		{
+			value: 'per-day',
+			label: 'Group per day',
+			tooltip: 'Show the rating at the end of each day',
+		} as MmrGroupFilterOption,
+	] as readonly MmrGroupFilterOption[];
+	activeMmrGroupFilter: MmrGroupFilterType;
+	mmrGroupFilterVisible: boolean;
+	mmrGroupVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'battlegrounds' &&
+			navigation.navigationBattlegrounds &&
+			navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-rating'
 		);
 	};
 
@@ -189,11 +223,16 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new BgsRankFilterSelectedEvent(option.value));
 	}
 
+	selectMmrGroupFilter(option: MmrGroupFilterOption) {
+		this.stateUpdater.next(new BgsMmrGroupFilterSelectedEvent(option.value));
+	}
+
 	anyVisible() {
 		return (
 			this.heroVisibleHandler(this._navigation, this._state) ||
 			this.timeVisibleHandler(this._navigation, this._state) ||
-			this.rankVisibleHandler(this._navigation, this._state)
+			this.rankVisibleHandler(this._navigation, this._state) ||
+			this.mmrGroupVisibleHandler(this._navigation, this._state)
 		);
 	}
 
@@ -201,6 +240,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.activeTimeFilter = this._state?.battlegrounds?.activeTimeFilter;
 		this.activeHeroSortFilter = this._state.battlegrounds?.activeHeroSortFilter;
 		this.activeRankFilter = this._state.battlegrounds?.activeRankFilter;
+		this.activeMmrGroupFilter = this._state.battlegrounds?.activeGroupMmrFilter;
 	}
 
 	private formatPatch(input: PatchInfo): string {
@@ -224,4 +264,8 @@ interface HeroSortFilterOption extends IOption {
 
 interface RankFilterOption extends IOption {
 	value: BgsRankFilterType;
+}
+
+interface MmrGroupFilterOption extends IOption {
+	value: MmrGroupFilterType;
 }

@@ -60,6 +60,18 @@
 			height: 100%;
 		}
 	}
+
+	// ::ng-deep fs-filter-dropdown.mmr-group-filter ng-select {
+	// 	width: 110px;
+	// 	min-width: 110px;
+	// }
+
+	// &.bgs-category-personal-rating {
+	// 	::ng-deep fs-filter-dropdown.rank-filter ng-select {
+	// 		width: 110px;
+	// 		min-width: 110px;
+	// 	}
+	// }
 }
 
 loading-state {
@@ -106,10 +118,10 @@ loading-state {
 battlegrounds-filters {
 	display: flex;
 
-	&.top {
-		position: absolute;
-		top: 0;
-		right: 0;
-		height: auto;
-	}
+	// &.top {
+	// 	position: absolute;
+	// 	top: 0;
+	// 	right: 0;
+	// 	height: auto;
+	// }
 }

@@ -49,3 +49,7 @@ export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]
 	}
 	return a.length === b.length && a.every((el, ix) => el === b[ix]);
 };
+
+export const formatDate = (theDate: Date): string => {
+	return `${theDate.toISOString().slice(0, 10)}`;
+};

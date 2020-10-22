@@ -16,7 +16,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/battlegrounds/desktop/battlegrounds-desktop.component.scss`,
 	],
 	template: `
-		<div class="app-section battlegrounds">
+		<div class="app-section battlegrounds {{ category?.id }}">
 			<section class="main divider">
 				<with-loading [isLoading]="enableBg && (!state.battlegrounds || state.battlegrounds.loading)">
 					<div class="content empty-state" *ngIf="!enableBg">
@@ -56,12 +56,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 								<span>{{ category.name }} </span>
 							</li>
 						</ul>
-						<battlegrounds-filters
-							[state]="state"
-							[navigation]="navigation"
-							[ngClass]="{ 'top': shouldDisplayFiltersAtTop() }"
-						>
-						</battlegrounds-filters>
+						<battlegrounds-filters [state]="state" [navigation]="navigation"> </battlegrounds-filters>
 						<battlegrounds-category-details
 							[hidden]="navigation.navigationBattlegrounds.currentView !== 'list'"
 							[category]="buildCategory()"
@@ -101,6 +96,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	@Input() navigation: NavigationState;
 
 	enableBg = FeatureFlags.ENABLE_BG_DESKTOP;
+	category: BattlegroundsCategory;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -119,10 +115,11 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	}
 
 	buildCategory(): BattlegroundsCategory {
-		return BattlegroundsAppState.findCategory(
+		this.category = BattlegroundsAppState.findCategory(
 			this.state.battlegrounds,
 			this.navigation.navigationBattlegrounds.selectedCategoryId,
 		);
+		return this.category;
 	}
 
 	shouldDisplayHeroTierList(): boolean {

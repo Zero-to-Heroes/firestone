@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-filter.type';
+import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
@@ -187,6 +188,12 @@ export class PreferencesService {
 	public async updateBgsHeroSortFilter(value: BgsHeroSortFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveHeroSortFilter: value };
+		this.savePreferences(newPrefs);
+	}
+
+	public async updateBgsMmrGroupFilter(value: MmrGroupFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsActiveMmrGroupFilter: value };
 		this.savePreferences(newPrefs);
 	}
 
