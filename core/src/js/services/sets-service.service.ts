@@ -15,6 +15,7 @@ export class SetsService {
 		['yod', "Galakrond's Awakening"],
 		['black_temple', 'Ashes of Outland'],
 		['scholomance', 'Scholomance Academy'],
+		['darkmoon_faire', 'Darkmoon Faire'],
 	];
 
 	private readonly WILD_SETS = [
