@@ -1,4 +1,4 @@
-export class DuelsInfo {
+export interface DuelsInfo {
 	readonly Wins: number;
 	readonly Losses: number;
 	readonly Rating: number;
@@ -6,6 +6,11 @@ export class DuelsInfo {
 	readonly DeckList: readonly string[];
 	readonly ChosenLoot: number;
 	readonly ChosenTreasure: number;
-	readonly LootOptionBundles: readonly number[];
+	readonly LootOptionBundles: readonly OptionBundle[];
 	readonly TreasureOption: readonly number[];
+}
+
+export interface OptionBundle {
+	readonly BundleId: number;
+	readonly Elements: readonly number[];
 }
