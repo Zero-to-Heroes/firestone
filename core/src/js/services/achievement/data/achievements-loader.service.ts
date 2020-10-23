@@ -67,7 +67,7 @@ export class AchievementsLoaderService {
 			'rumble_run',
 			'dalaran_heist',
 			'tombs_of_terror',
-			'amazing_plays2',
+			'amazing_plays',
 			'competitive_ladder',
 			'deckbuilding',
 			'galakrond',
@@ -82,7 +82,7 @@ export class AchievementsLoaderService {
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
 		return new Promise<readonly RawAchievement[]>((resolve, reject) => {
 			console.log('[achievements-loader] retrieving local achievements', fileName);
-			this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=7`).subscribe(
+			this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=8`).subscribe(
 				(result: any[]) => {
 					console.log('[achievements-loader] retrieved all achievements from CDN', fileName);
 					resolve(result);

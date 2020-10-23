@@ -8,4 +8,6 @@ export type StatGameModeType =
 	| 'ranked'
 	| 'tutorial'
 	| 'tavern-brawl'
-	| 'battlegrounds';
+	| 'battlegrounds'
+	| 'duels'
+	| 'paid-duels';

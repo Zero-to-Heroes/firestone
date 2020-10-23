@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
@@ -50,8 +51,13 @@ export class GameParserService {
 			case 21:
 			case 22:
 				return 'tavern-brawl';
-			case 23:
+			case GameType.GT_BATTLEGROUNDS:
+			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 				return 'battlegrounds';
+			case GameType.GT_PVPDR:
+				return 'duels';
+			case GameType.GT_PVPDR_PAID:
+				return 'paid-duels';
 			default:
 				console.warn('unsupported game type', gameType);
 				return 'unknown';

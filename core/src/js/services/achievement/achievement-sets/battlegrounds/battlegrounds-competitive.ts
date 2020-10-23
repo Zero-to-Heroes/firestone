@@ -58,6 +58,7 @@ export class BattlegroundsCompetitiveSetProvider extends GenericSetProvider {
 				'battlegrounds_hero_TB_BaconShop_HERO_75',
 				'battlegrounds_hero_TB_BaconShop_HERO_76',
 				'battlegrounds_hero_TB_BaconShop_HERO_78',
+				'battlegrounds_hero_TB_BaconShop_HERO_91',
 			],
 			'achievements_boss',
 		);
