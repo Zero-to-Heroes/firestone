@@ -62,9 +62,9 @@ export class ReplayUploadService {
 				'user-key': userId,
 				'username': userName,
 				'file-type': 'hszip',
-				'player-rank': game.playerRank ? '' + game.playerRank : '',
-				'new-player-rank': game.newPlayerRank ? '' + game.newPlayerRank : '',
-				'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
+				'player-rank': game.playerRank != null ? '' + game.playerRank : '',
+				'new-player-rank': game.newPlayerRank != null ? '' + game.newPlayerRank : '',
+				'opponent-rank': game.opponentRank != null ? '' + game.opponentRank : '',
 				'game-mode': game.gameMode,
 				'game-format': game.gameFormat,
 				'build-number': game.buildNumber ? '' + game.buildNumber : '',
@@ -75,6 +75,8 @@ export class ReplayUploadService {
 				'app-version': '' + process.env.APP_VERSION,
 				'available-races': game.availableTribes ? JSON.stringify(game.availableTribes) : undefined,
 				'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
+				'duels-run-id': game.currentDuelsRunId,
+				'additional-result': game.additionalResult,
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);

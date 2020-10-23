@@ -73,8 +73,10 @@ export class DeckParserService {
 			if (currentScene === 'scene_gameplay') {
 				return;
 			}
+
 			console.log('[deck-parser] getting active deck from going into queue', await this.memory.getCurrentScene());
-			const activeDeck = await this.memory.getActiveDeck(1);
+			const activeDeck =
+				currentScene === 'unknown_18' ? await this.memory.getDuelsInfo() : await this.memory.getActiveDeck(1);
 			console.log('[deck-parser] active deck after queue', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log(
@@ -155,7 +157,9 @@ export class DeckParserService {
 		// console.log('[deck-parser] reading deck contents', lines);
 		if (lines.length >= 4) {
 			// console.log('[deck-parser] lets go', lines[lines.length - 4]);
-			const isLastSectionDeckSelectLine = lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1;
+			const isLastSectionDeckSelectLine =
+				lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
+				lines[lines.length - 3].indexOf('Duel deck') !== -1;
 			if (!isLastSectionDeckSelectLine) {
 				return;
 			}
@@ -187,7 +191,7 @@ export class DeckParserService {
 			console.log('[deck-parser] finished editing deck');
 			return;
 		}
-		if (data.indexOf('Finding Game With Deck') !== -1) {
+		if (data.indexOf('Finding Game With Deck') !== -1 || data.indexOf('Duel deck') !== -1) {
 			this.lastDeckTimestamp = Date.now();
 			this.currentBlock = 'DECK_SELECTED';
 			console.log('[deck-parser] found deck selection block');
@@ -199,7 +203,12 @@ export class DeckParserService {
 			Date.now() - this.lastDeckTimestamp < 1000 &&
 			this.currentBlock !== 'DECK_SELECTED'
 		) {
-			console.log('[deck-parser] Doesnt look like a deck selection, exiting block', this.currentBlock);
+			console.log(
+				'[deck-parser] Doesnt look like a deck selection, exiting block',
+				this.currentBlock,
+				this.lastDeckTimestamp,
+				Date.now(),
+			);
 			// Don't reset the deck here, as it can override a deck built from memory inspection
 			// this.reset();
 			return;

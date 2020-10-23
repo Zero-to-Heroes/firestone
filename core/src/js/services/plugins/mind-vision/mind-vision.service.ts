@@ -44,6 +44,21 @@ export class MindVisionService {
 		});
 	}
 
+	public async getDuelsInfo(forceReset = false): Promise<any> {
+		return new Promise<any[]>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.getDuelsInfo(forceReset, info => {
+					console.log('[mind-vision] retrieved duels info', info);
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse duelsInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getBattlegroundsInfo(forceReset = false): Promise<{ Rating: number }> {
 		return new Promise<{ Rating: number }>(async resolve => {
 			if (forceReset) {

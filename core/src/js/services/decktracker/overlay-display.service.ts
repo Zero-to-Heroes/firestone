@@ -103,6 +103,9 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameType.GT_BATTLEGROUNDS:
 			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 				return false;
+			case GameType.GT_PVPDR:
+			case GameType.GT_PVPDR_PAID:
+				return prefs.decktrackerShowDuels;
 		}
 		console.log('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
 		return gameState.playerDeck.deckList.length > 0;

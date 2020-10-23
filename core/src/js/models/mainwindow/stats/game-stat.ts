@@ -29,6 +29,7 @@ export class GameStat {
 	readonly reviewId: string;
 	readonly gameDurationSeconds: number;
 	readonly gameDurationTurns: number;
+	readonly currentDuelsRunId: string;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 
@@ -90,6 +91,9 @@ export class GameStat {
 		} else if (this.gameMode === 'friendly') {
 			rankIcon = 'friendly';
 			rankIconTooltip = 'Friendly';
+		} else if (this.gameMode === 'duels') {
+			rankIcon = `duels`;
+			rankIconTooltip = 'Duels';
 		} else if (this.gameMode === 'arena') {
 			// TODO: no-rank image
 			if (!this.playerRank) {
@@ -97,7 +101,7 @@ export class GameStat {
 				return [null, null, null];
 			}
 			// New format
-			if (this.playerRank && this.playerRank.indexOf('-') !== -1) {
+			if (this.playerRank.indexOf('-') !== -1) {
 				const wins = this.playerRank.split('-')[0];
 				// const losses = this.playerRank.split('-')[1];
 				rankIcon = `arena/arena${wins}wins`;
@@ -117,6 +121,10 @@ export class GameStat {
 	}
 
 	public buildRankText(): string {
+		if (this.gameMode === 'duels' && this.additionalResult && this.additionalResult.indexOf('-') !== -1) {
+			const [wins, losses] = this.additionalResult.split('-');
+			return `${wins}-${losses}`;
+		}
 		if (!this.playerRank) {
 			return null;
 		}

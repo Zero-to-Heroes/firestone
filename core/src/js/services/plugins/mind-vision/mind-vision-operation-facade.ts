@@ -62,7 +62,7 @@ export class MindVisionOperationFacade<T> {
 		});
 	}
 
-	public async call(numberOfRetries?: number): Promise<T> {
+	public async call(numberOfRetries?: number, forceReset = false): Promise<T> {
 		if (!(await this.ow.inGame())) {
 			return null;
 		}
@@ -75,9 +75,13 @@ export class MindVisionOperationFacade<T> {
 				// Actually perform the operation, and the callback is called with the result
 				// of the operation once it completes
 				apply: (left: number, callback: (result: T, retriesLeft: number) => void) =>
-					this.callInternal((returnValue: T, left: number) => {
-						callback(returnValue, left);
-					}, left),
+					this.callInternal(
+						(returnValue: T, left: number) => {
+							callback(returnValue, left);
+						},
+						left,
+						forceReset,
+					),
 			});
 		});
 	}

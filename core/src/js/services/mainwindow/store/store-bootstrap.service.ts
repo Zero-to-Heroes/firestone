@@ -96,10 +96,19 @@ export class StoreBootstrapService {
 		);
 
 		// Update prefs to remove hidden deck codes that are not in an active deck anymore
-		const allDeckCodes = newStatsState.gameStats.stats.map(deck => deck.playerDecklist);
+		const allDeckCodes = newStatsState.gameStats.stats.map(match => match.playerDecklist);
 		const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter(deckCode => allDeckCodes.includes(deckCode));
-		// console.log('allDeckCodes', allDeckCodes, validHiddenCodes, prefs.desktopDeckHiddenDeckCodes);
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
+
+		const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
+		const lastRunId =
+			lastGameWithDuelsRunId && lastGameWithDuelsRunId.length > 0
+				? lastGameWithDuelsRunId[0].currentDuelsRunId
+				: null;
+		if (lastRunId) {
+			console.log('setting current duels run id', lastRunId);
+			await this.prefs.setDuelsRunId(lastRunId);
+		}
 
 		const newAchievementState = Object.assign(new AchievementsState(), {
 			globalCategories: achievementGlobalCategories,

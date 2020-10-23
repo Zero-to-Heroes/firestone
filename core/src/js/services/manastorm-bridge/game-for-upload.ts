@@ -6,6 +6,7 @@ import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.t
 export class GameForUpload {
 	id: string;
 	reviewId: string;
+	currentDuelsRunId: string;
 	title: string;
 
 	spectating: boolean;
@@ -16,6 +17,7 @@ export class GameForUpload {
 	scenarioId: number;
 	playerRank: string;
 	newPlayerRank: string;
+	additionalResult: string;
 	opponentRank: string;
 	result: MatchResultType;
 	// arenaInfo: any;

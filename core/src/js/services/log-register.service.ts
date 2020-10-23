@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Events } from '../services/events.service';
 import { LogParserService } from './collection/log-parser.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
+import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.service';
 import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
 import { OverwolfService } from './overwolf.service';
@@ -17,6 +18,7 @@ export class LogRegisterService {
 	constructor(
 		private events: Events,
 		private decksService: DeckParserService,
+		private dungeonLootService: DungeonLootParserService,
 		private collectionLogParserService: LogParserService,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
@@ -51,7 +53,10 @@ export class LogRegisterService {
 			})
 			.start();
 		new LogListenerService(this.ow)
-			.configure('FullScreenFX.log', data => this.decksService.queueingIntoMatch(data))
+			.configure('FullScreenFX.log', data => {
+				this.decksService.queueingIntoMatch(data);
+				this.dungeonLootService.queueingIntoMatch(data);
+			})
 			.subscribe(status => {
 				console.log('[log-register] status for FullScreenFX', status);
 			})

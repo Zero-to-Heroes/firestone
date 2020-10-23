@@ -27,6 +27,7 @@ import { PackStatsService } from '../../services/collection/pack-stats.service';
 import { AiDeckService } from '../../services/decktracker/ai-deck-service.service';
 import { DeckCardService } from '../../services/decktracker/deck-card.service';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
+import { DungeonLootParserService } from '../../services/decktracker/dungeon-loot-parser.service';
 import { DynamicZoneHelperService } from '../../services/decktracker/dynamic-zone-helper.service';
 import { DeckManipulationHelper } from '../../services/decktracker/event-parser/deck-manipulation-helper';
 import { SecretsParserService } from '../../services/decktracker/event-parser/secrets/secrets-parser.service';
@@ -166,6 +167,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		OverlayDisplayService,
 		DeckCardService,
 		DeckParserService,
+		DungeonLootParserService,
 		GameStateService,
 		DynamicZoneHelperService,
 		ZoneOrderingService,

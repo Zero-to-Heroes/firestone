@@ -14,6 +14,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<h2 class="modes">Decktracker is active for the following modes</h2>
 			<section class="toggle-label">
 				<preference-toggle field="decktrackerShowRanked" label="Ranked"></preference-toggle>
+				<preference-toggle field="decktrackerShowDuels" label="Duels"></preference-toggle>
 				<preference-toggle field="decktrackerShowArena" label="Arena"></preference-toggle>
 				<preference-toggle field="decktrackerShowTavernBrawl" label="Tavern Brawl"></preference-toggle>
 				<preference-toggle field="decktrackerShowPractice" label="Practice"></preference-toggle>

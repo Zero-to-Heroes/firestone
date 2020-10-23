@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
+import { DuelsInfo } from '../../models/duels-info';
 import { MatchInfo } from '../../models/match-info';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
@@ -12,6 +13,7 @@ import { GetBattlegroundsEndGameOperation } from './mind-vision/get-battleground
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-match-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
+import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
 
@@ -32,6 +34,7 @@ export class MemoryInspectionService {
 	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
+	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
 
 	constructor(
 		private events: Events,
@@ -68,6 +71,10 @@ export class MemoryInspectionService {
 
 	public async getArenaInfo(): Promise<ArenaInfo> {
 		return this.getArenaInfoOperation.call();
+	}
+
+	public async getDuelsInfo(forceReset = false): Promise<DuelsInfo> {
+		return this.getDuelsInfoOperation.call(1, forceReset);
 	}
 
 	public async getCurrentScene(): Promise<string> {

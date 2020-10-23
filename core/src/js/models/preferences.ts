@@ -33,8 +33,9 @@ export class Preferences {
 	readonly desktopDeckShowHiddenDecks: boolean = false;
 	readonly desktopDeckHiddenDeckCodes: readonly string[] = [];
 
-	readonly decktrackerShowArena: boolean = true;
 	readonly decktrackerShowRanked: boolean = true;
+	readonly decktrackerShowDuels: boolean = true;
+	readonly decktrackerShowArena: boolean = true;
 	readonly decktrackerShowTavernBrawl: boolean = true;
 	readonly decktrackerShowPractice: boolean = true;
 	readonly decktrackerShowFriendly: boolean = true;
@@ -136,6 +137,8 @@ export class Preferences {
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
+
+	readonly duelsRunUuid: string;
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

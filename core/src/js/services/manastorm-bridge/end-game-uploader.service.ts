@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameEvent } from '../../models/game-event';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
+import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { GameForUpload } from './game-for-upload';
@@ -16,6 +17,7 @@ export class EndGameUploaderService {
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
 		private memoryInspection: MemoryInspectionService,
+		private dungeonLootParser: DungeonLootParserService,
 	) {}
 
 	public async upload(
@@ -59,9 +61,10 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge] Created new game');
 		game.reviewId = currentReviewId;
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
-		console.log('[manastorm-bridge] parsed format');
+		console.log('[manastorm-bridge] parsed format', gameResult.FormatType, game.gameFormat);
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
-		console.log('[manastorm-bridge] parsed type');
+		console.log('[manastorm-bridge] parsed type', gameResult.GameType, game.gameMode);
+		game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
 
 		// Here we want to process the rank info as soon as possible to limit the chances of it
 		// being removed from memory by the player clicking away
@@ -77,6 +80,18 @@ export class EndGameUploaderService {
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
 			console.log('updated player rank', playerRank, newPlayerRank);
+		} else if (game.gameMode === 'duels') {
+			console.log('handline duels', game);
+			const duelsInfo = await this.memoryInspection.getDuelsInfo();
+			console.log('got duels info', duelsInfo);
+			playerRank = duelsInfo.Rating;
+			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
+		} else if (game.gameMode === 'paid-duels') {
+			console.log('handline paid duels', game);
+			const duelsInfo = await this.memoryInspection.getDuelsInfo();
+			console.log('got paid duels info', duelsInfo);
+			playerRank = duelsInfo.PaidRating;
+			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
 		} else if (game.gameMode === 'arena') {
 			const arenaInfo = await this.memoryInspection.getArenaInfo();
 			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
@@ -104,7 +119,7 @@ export class EndGameUploaderService {
 			}
 		}
 		let opponentRank;
-		if (game.gameMode === 'battlegrounds') {
+		if (game.gameMode === 'battlegrounds' || game.gameMode === 'duels') {
 			// Do nothing
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			const opponentInfo = await this.playersInfo.getOpponentInfo();
