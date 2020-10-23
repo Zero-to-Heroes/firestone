@@ -30,7 +30,7 @@ declare let amplitude: any;
 					class="player-value"
 					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
 				>
-					({{ buildValue(_hero?.averagePosition) }})
+					({{ buildValue(_hero?.playerAveragePosition) }})
 				</div>
 			</div>
 			<div class="entry">
