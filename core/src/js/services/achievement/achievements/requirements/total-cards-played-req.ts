@@ -84,6 +84,9 @@ export class TotalCardsPlayedReq implements Requirement {
 	}
 
 	private getCardType(card: ReferenceCard): string {
+		if (!card) {
+			return null;
+		}
 		if (
 			CardType[card.type.toUpperCase()] === CardType.SPELL &&
 			card.mechanics &&
