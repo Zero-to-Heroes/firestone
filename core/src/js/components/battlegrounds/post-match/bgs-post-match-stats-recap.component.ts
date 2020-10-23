@@ -155,7 +155,9 @@ export class BgsPostMatchStatsRecapComponent {
 	private _game: BgsGame;
 
 	@Input() set stats(value: BgsPostMatchStatsPanel) {
+		//console.log('triples 1', this.triples, value);
 		if (value === this._stats) {
+			//console.log('same value, returning');
 			return;
 		}
 		this._stats = value;
@@ -183,7 +185,7 @@ export class BgsPostMatchStatsRecapComponent {
 	// When adding stats here, also add them to the api-compute-bgs-single-run-stats lambda
 	private updateStats() {
 		if (!this._stats?.player) {
-			// console.warn('[stats-recap] missing player or game', this._stats?.player, this._game);
+			console.warn('[stats-recap] missing player', this._stats?.player);
 			this.reset();
 			return;
 		}
@@ -207,7 +209,8 @@ export class BgsPostMatchStatsRecapComponent {
 			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
 		}
-		this.triples = this._stats.player.tripleHistory.length;
+		this.triples = this._stats.stats.tripleTimings?.length;
+		//console.log('triples2', this.triples, this._stats);
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.minionsBought = this._stats.stats.minionsBoughtOverTurn
