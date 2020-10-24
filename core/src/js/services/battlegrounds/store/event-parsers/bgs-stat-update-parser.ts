@@ -85,32 +85,32 @@ export class BgsStatUpdateParser implements EventParser {
 					playerGamesPlayed: playerGamesPlayed,
 					playerPopularity: playerPopularity,
 					playerAveragePosition:
-						playerPopularity === 0
+						playerGamesPlayed === 0
 							? 0
 							: bgsStatsForCurrentPatch
 									.filter(stat => stat.playerCardId === heroStat.id)
 									.map(stat => parseInt(stat.additionalResult))
 									.reduce((a, b) => a + b, 0) / playerGamesPlayed,
 					playerAverageMmr:
-						playerPopularity === 0
+						gamesWithMmr.length === 0
 							? 0
 							: gamesWithMmr
 									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithMmr.length,
 					playerAverageMmrGain:
-						playerPopularity === 0
+						gamesWithPositiveMmr.length === 0
 							? 0
 							: gamesWithPositiveMmr
 									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithPositiveMmr.length,
 					playerAverageMmrLoss:
-						playerPopularity === 0
+						gamesWithNegativeMmr.length === 0
 							? 0
 							: gamesWithNegativeMmr
 									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithNegativeMmr.length,
 					playerTop4:
-						playerPopularity === 0
+						playerGamesPlayed === 0
 							? 0
 							: (100 *
 									bgsStatsForCurrentPatch
@@ -119,7 +119,7 @@ export class BgsStatUpdateParser implements EventParser {
 										.filter(position => position <= 4).length) /
 							  playerGamesPlayed,
 					playerTop1:
-						playerPopularity === 0
+						playerGamesPlayed === 0
 							? 0
 							: (100 *
 									bgsStatsForCurrentPatch
