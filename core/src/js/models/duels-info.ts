@@ -3,11 +3,12 @@ export interface DuelsInfo {
 	readonly Losses: number;
 	readonly Rating: number;
 	readonly PaidRating: number;
-	readonly DeckList: readonly string[];
+	readonly DeckList: readonly number[];
 	readonly ChosenLoot: number;
 	readonly ChosenTreasure: number;
 	readonly LootOptionBundles: readonly OptionBundle[];
 	readonly TreasureOption: readonly number[];
+	readonly StartingHeroPower: number;
 }
 
 export interface OptionBundle {

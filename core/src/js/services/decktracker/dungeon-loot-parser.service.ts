@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsInfo } from '../../models/duels-info';
@@ -17,6 +18,18 @@ const DUNGEON_LOOT_INFO_URL = 'https://e4rso1a869.execute-api.us-west-2.amazonaw
 @Injectable()
 export class DungeonLootParserService {
 	private readonly goingIntoQueueRegex = new RegExp('D \\d*:\\d*:\\d*.\\d* BeginEffect blur \\d => 1');
+	private readonly SIGNATURE_TREASUERS = [
+		CardIds.NonCollectible.Demonhunter.SummoningRitual2,
+		CardIds.NonCollectible.Druid.WardensInsight,
+		CardIds.NonCollectible.Hunter.SlatesSyringe,
+		CardIds.NonCollectible.Mage.WandOfDueling,
+		CardIds.NonCollectible.Paladin.RoyalGreatsword,
+		CardIds.NonCollectible.Priest.FracturedSpirits,
+		CardIds.NonCollectible.Rogue.DeadlyWeapons101,
+		CardIds.NonCollectible.Shaman.FluctuatingTotem,
+		CardIds.NonCollectible.Warlock.ImpishAid,
+		CardIds.NonCollectible.Warrior.AutoArmaments,
+	];
 
 	public currentDuelsRunId: string;
 
@@ -47,6 +60,7 @@ export class DungeonLootParserService {
 			}
 		});
 		// window['hop'] = async () => {
+		// 	this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
 		// 	let duelsInfo = await this.memory.getDuelsInfo();
 		// 	console.log('duelsInfo', duelsInfo);
 		// 	duelsInfo = await this.memory.getDuelsInfo(true);
@@ -54,13 +68,19 @@ export class DungeonLootParserService {
 		// 	const treasures: readonly string[] = duelsInfo.TreasureOption
 		// 		? duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(option)?.id || '' + option)
 		// 		: [];
+		// 	const signatureTreasure: string = this.findSignatureTreasure(duelsInfo.DeckList);
 		// 	const input: Input = {
 		// 		// TODO: have "paid-duels" be an option as well
 		// 		type: 'duels',
 		// 		reviewId: this.currentReviewId,
 		// 		runId: this.currentDuelsRunId,
+		// 		userId: null,
+		// 		userName: 'daedin',
+		// 		startingHeroPower:
+		// 			this.allCards.getCardFromDbfId(duelsInfo.StartingHeroPower)?.id || '' + duelsInfo.StartingHeroPower,
+		// 		signatureTreasure: signatureTreasure,
 		// 		lootBundles: duelsInfo.LootOptionBundles
-		// 			? duelsInfo.LootOptionBundles.map(bundle => ({
+		// 			? duelsInfo.LootOptionBundles.filter(bundle => bundle).map(bundle => ({
 		// 					bundleId: this.allCards.getCardFromDbfId(bundle.BundleId)?.id || '' + bundle.BundleId,
 		// 					elements: bundle.Elements.map(
 		// 						dbfId => this.allCards.getCardFromDbfId(dbfId)?.id || '' + dbfId,
@@ -130,15 +150,16 @@ export class DungeonLootParserService {
 		// TODO: this will let me associate a review id (and then later on, a win / loss or a final win/loss)
 		// TODO: how to group individual games into a "run"?
 		// console.log('will sending loot info', 'duels', this.currentReviewId, this.currentDuelsRunId, this.duelsInfo);
-		if (!this.duelsInfo.LootOptionBundles?.length && !this.duelsInfo.TreasureOption?.length) {
-			console.log('no loot option to send, returning', this.duelsInfo);
-			return;
-		}
+		// if (!this.duelsInfo.LootOptionBundles?.length && !this.duelsInfo.TreasureOption?.length) {
+		// 	console.log('no loot option to send, returning', this.duelsInfo);
+		// 	return;
+		// }
 
 		const user = await this.ow.getCurrentUser();
 		const treasures: readonly string[] = this.duelsInfo.TreasureOption
 			? this.duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(option)?.id || '' + option)
 			: [];
+		const signatureTreasure: string = this.findSignatureTreasure(this.duelsInfo.DeckList);
 		const input: Input = {
 			// TODO: have "paid-duels" be an option as well
 			type: 'duels',
@@ -146,8 +167,12 @@ export class DungeonLootParserService {
 			runId: this.currentDuelsRunId,
 			userId: user.userId,
 			userName: user.username,
+			startingHeroPower:
+				this.allCards.getCardFromDbfId(this.duelsInfo.StartingHeroPower)?.id ||
+				'' + this.duelsInfo.StartingHeroPower,
+			signatureTreasure: signatureTreasure,
 			lootBundles: this.duelsInfo.LootOptionBundles
-				? this.duelsInfo.LootOptionBundles.map(bundle => ({
+				? this.duelsInfo.LootOptionBundles.filter(bundle => bundle).map(bundle => ({
 						bundleId: this.allCards.getCardFromDbfId(bundle.BundleId)?.id || '' + bundle.BundleId,
 						elements: bundle.Elements.map(dbfId => this.allCards.getCardFromDbfId(dbfId)?.id || '' + dbfId),
 				  }))
@@ -162,5 +187,11 @@ export class DungeonLootParserService {
 		};
 		console.log('[dungeon-loot-parser] sending loot into', input);
 		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
+	}
+
+	private findSignatureTreasure(deckList: readonly number[]): string {
+		return deckList
+			.map(cardDbfId => this.allCards.getCardFromDbfId(cardDbfId))
+			.find(card => this.SIGNATURE_TREASUERS.includes(card?.id))?.id;
 	}
 }

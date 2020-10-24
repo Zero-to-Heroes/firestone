@@ -33,7 +33,7 @@
 		"@firestone-hs/hs-replay-xml-parser": "0.0.66",
 		"@firestone-hs/reference-data": "^0.1.51",
 		"@firestone-hs/replay-parser": "^1.1.33",
-		"@firestone-hs/save-dungeon-loot-info": "^1.0.4",
+		"@firestone-hs/save-dungeon-loot-info": "^1.0.5",
 		"@firestone-hs/simulate-bgs-battle": "^1.1.28",
 		"@sentry/browser": "^5.7.1",
 		"@sentry/integrations": "^5.7.1",
