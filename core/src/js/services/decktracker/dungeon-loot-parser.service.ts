@@ -88,19 +88,18 @@ export class DungeonLootParserService {
 				return;
 			}
 
-			this.duelsInfo = await this.memory.getDuelsInfo();
-			// console.log('[dungeon-loot-parser] retrieved duels info', this.duelsInfo);
+			this.duelsInfo = await this.memory.getDuelsInfo(false, 5);
+			console.log('[dungeon-loot-parser] retrieved duels info', this.duelsInfo);
 			// Should already have picked something, but nothing is detected
 			if (
-				(this.duelsInfo.Wins > 0 || this.duelsInfo.Losses > 0) &&
-				!this.duelsInfo.LootOptionBundles?.length &&
-				!this.duelsInfo.TreasureOption?.length
+				!this.duelsInfo ||
+				((this.duelsInfo.Wins > 0 || this.duelsInfo.Losses > 0) &&
+					!this.duelsInfo.LootOptionBundles?.length &&
+					!this.duelsInfo.TreasureOption?.length)
 			) {
 				this.duelsInfo = await this.memory.getDuelsInfo(true);
-				// console.log('[dungeon-loot-parser] retrieved duels info after force reset', this.duelsInfo);
+				console.log('[dungeon-loot-parser] retrieved duels info after force reset', this.duelsInfo);
 			}
-			// let currentRetries = 5;
-			// while (currentRetries >= 0 && !this.duelsInfo?.)
 
 			if (this.duelsInfo?.Wins === 0 && this.duelsInfo?.Losses === 0) {
 				// Start a new run
@@ -135,6 +134,8 @@ export class DungeonLootParserService {
 			console.log('no loot option to send, returning', this.duelsInfo);
 			return;
 		}
+
+		const user = await this.ow.getCurrentUser();
 		const treasures: readonly string[] = this.duelsInfo.TreasureOption
 			? this.duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(option)?.id || '' + option)
 			: [];
@@ -143,6 +144,8 @@ export class DungeonLootParserService {
 			type: 'duels',
 			reviewId: this.currentReviewId,
 			runId: this.currentDuelsRunId,
+			userId: user.userId,
+			userName: user.username,
 			lootBundles: this.duelsInfo.LootOptionBundles
 				? this.duelsInfo.LootOptionBundles.map(bundle => ({
 						bundleId: this.allCards.getCardFromDbfId(bundle.BundleId)?.id || '' + bundle.BundleId,

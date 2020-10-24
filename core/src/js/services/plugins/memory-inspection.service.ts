@@ -73,8 +73,8 @@ export class MemoryInspectionService {
 		return this.getArenaInfoOperation.call();
 	}
 
-	public async getDuelsInfo(forceReset = false): Promise<DuelsInfo> {
-		return this.getDuelsInfoOperation.call(1, forceReset);
+	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
+		return this.getDuelsInfoOperation.call(numberOfRetries, forceReset);
 	}
 
 	public async getCurrentScene(): Promise<string> {
