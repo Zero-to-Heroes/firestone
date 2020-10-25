@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
+import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameEvent } from '../../models/game-event';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { sleep } from '../utils';
 import { GameForUpload } from './game-for-upload';
 import { GameParserService } from './game-parser.service';
 import { ReplayUploadService } from './replay-upload.service';
@@ -86,6 +88,21 @@ export class EndGameUploaderService {
 			console.log('got duels info', duelsInfo);
 			playerRank = duelsInfo.Rating;
 			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
+			// TODO: if wins = 11 and game won, or losses = 2 and lost, wait until the rating change is not 0
+			try {
+				const replay = parseHsReplayString(game.uncompressedXmlReplay);
+				if (
+					(replay.result === 'won' && duelsInfo.Wins === 11) ||
+					(replay.result === 'lost' && duelsInfo.Losses === 2)
+				) {
+					const newPlayerRank = await this.getDuelsNewPlayerRank();
+					if (newPlayerRank != null) {
+						game.newPlayerRank = '' + newPlayerRank;
+					}
+				}
+			} catch (e) {
+				console.error('Could not handle rating change in duels', e);
+			}
 		} else if (game.gameMode === 'paid-duels') {
 			console.log('handline paid duels', game);
 			const duelsInfo = await this.memoryInspection.getDuelsInfo();
@@ -165,5 +182,18 @@ export class EndGameUploaderService {
 
 		console.log('[manastorm-bridge] game ready');
 		return game;
+	}
+
+	private async getDuelsNewPlayerRank(): Promise<number> {
+		const duelsInfo = await this.memoryInspection.getDuelsInfo();
+		let retriesLeft = 10;
+		while (!duelsInfo?.LastRatingChange && retriesLeft >= 0) {
+			await sleep(2000);
+			retriesLeft--;
+		}
+		if (!duelsInfo) {
+			return null;
+		}
+		return duelsInfo.LastRatingChange + duelsInfo.Rating;
 	}
 }

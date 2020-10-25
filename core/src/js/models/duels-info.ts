@@ -3,6 +3,7 @@ export interface DuelsInfo {
 	readonly Losses: number;
 	readonly Rating: number;
 	readonly PaidRating: number;
+	readonly LastRatingChange: number;
 	readonly DeckList: readonly number[];
 	readonly ChosenLoot: number;
 	readonly ChosenTreasure: number;
