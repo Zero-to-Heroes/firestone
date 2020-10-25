@@ -137,7 +137,7 @@ export class DeckParserService {
 	}
 
 	private isDeckLogged(scenarioId: number): boolean {
-		return [...PRACTICE_ALL, ScenarioId.ARENA, ScenarioId.RANKED].includes(scenarioId);
+		return [...PRACTICE_ALL, ScenarioId.ARENA, ScenarioId.RANKED, ScenarioId.DUELS].includes(scenarioId);
 	}
 
 	private async readDeckFromLogFile(): Promise<void> {
@@ -156,7 +156,7 @@ export class DeckParserService {
 			.map(line => line.trim());
 		// console.log('[deck-parser] reading deck contents', lines);
 		if (lines.length >= 4) {
-			// console.log('[deck-parser] lets go', lines[lines.length - 4]);
+			console.log('[deck-parser] lets go', lines[lines.length - 4], lines[lines.length - 3]);
 			const isLastSectionDeckSelectLine =
 				lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
 				lines[lines.length - 3].indexOf('Duel deck') !== -1;
