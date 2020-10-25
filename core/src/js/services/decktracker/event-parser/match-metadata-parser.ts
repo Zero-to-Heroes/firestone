@@ -57,9 +57,9 @@ export class MatchMetadataParser implements EventParser {
 			!deckstringToUse || !store?.decktracker?.decks
 				? []
 				: store.decktracker.decks
-						.find(deck => deck.deckstring === deckstringToUse)
-						.replays.filter(stat => stat.gameMode === 'ranked')
-						.filter(stat => stat.gameFormat === convertedFormat) || [];
+						?.find(deck => deck.deckstring === deckstringToUse)
+						?.replays?.filter(stat => stat.gameMode === 'ranked')
+						?.filter(stat => stat.gameFormat === convertedFormat) || [];
 		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
 		console.log('[match-metadata-parser] match metadata', convertedFormat, format, deckstringToUse);
 		let matchupStatsRecap = currentState.matchupStatsRecap;
