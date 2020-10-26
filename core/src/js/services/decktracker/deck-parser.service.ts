@@ -78,6 +78,11 @@ export class DeckParserService {
 			const activeDeck =
 				currentScene === 'unknown_18' ? await this.memory.getDuelsInfo() : await this.memory.getActiveDeck(1);
 			console.log('[deck-parser] active deck after queue', activeDeck);
+			if (currentScene === 'unknown_18' && activeDeck.Wins === 0 && activeDeck.Losses === 0) {
+				console.log('[deck-parser] not relying on memory reading for initial Duels deck, returning');
+				this.reset(false);
+				return;
+			}
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log(
 					'[deck-parser] updating active deck after queue',
@@ -156,17 +161,23 @@ export class DeckParserService {
 			.map(line => line.trim());
 		// console.log('[deck-parser] reading deck contents', lines);
 		if (lines.length >= 4) {
-			console.log('[deck-parser] lets go', lines[lines.length - 4], lines[lines.length - 3]);
+			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
 			const isLastSectionDeckSelectLine =
 				lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
-				lines[lines.length - 3].indexOf('Duel deck') !== -1;
+				lines[lines.length - 4].indexOf('Duel Deck') !== -1 ||
+				lines[lines.length - 3].indexOf('Duel Deck') !== -1;
+			console.log('isLastSectionDeckSelectLine', isLastSectionDeckSelectLine);
 			if (!isLastSectionDeckSelectLine) {
 				return;
 			}
 			// deck name
-			this.parseActiveDeck(lines[lines.length - 3]);
+			this.parseActiveDeck(
+				lines[lines.length - 4].indexOf('Duel Deck') !== -1 ? lines[lines.length - 4] : lines[lines.length - 3],
+			);
 			// deckstring
-			this.parseActiveDeck(lines[lines.length - 1]);
+			this.parseActiveDeck(
+				lines[lines.length - 4].indexOf('Duel Deck') !== -1 ? lines[lines.length - 2] : lines[lines.length - 1],
+			);
 			console.log('[deck-parser] finished reading previous deck from logs');
 		}
 	}
