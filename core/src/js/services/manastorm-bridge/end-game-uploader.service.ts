@@ -82,20 +82,19 @@ export class EndGameUploaderService {
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
 			console.log('updated player rank', playerRank, newPlayerRank);
-		} else if (game.gameMode === 'duels') {
-			console.log('handline duels', game);
+		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
+			console.log('handline duels', game.gameMode, game);
 			const duelsInfo = await this.memoryInspection.getDuelsInfo();
 			console.log('got duels info', duelsInfo);
-			playerRank = duelsInfo.Rating;
+			playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
 			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
-			// TODO: if wins = 11 and game won, or losses = 2 and lost, wait until the rating change is not 0
 			try {
 				const replay = parseHsReplayString(game.uncompressedXmlReplay);
 				if (
 					(replay.result === 'won' && duelsInfo.Wins === 11) ||
 					(replay.result === 'lost' && duelsInfo.Losses === 2)
 				) {
-					const newPlayerRank = await this.getDuelsNewPlayerRank();
+					const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
 					if (newPlayerRank != null) {
 						game.newPlayerRank = '' + newPlayerRank;
 					}
@@ -103,12 +102,6 @@ export class EndGameUploaderService {
 			} catch (e) {
 				console.error('Could not handle rating change in duels', e);
 			}
-		} else if (game.gameMode === 'paid-duels') {
-			console.log('handline paid duels', game);
-			const duelsInfo = await this.memoryInspection.getDuelsInfo();
-			console.log('got paid duels info', duelsInfo);
-			playerRank = duelsInfo.PaidRating;
-			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
 		} else if (game.gameMode === 'arena') {
 			const arenaInfo = await this.memoryInspection.getArenaInfo();
 			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
@@ -136,7 +129,7 @@ export class EndGameUploaderService {
 			}
 		}
 		let opponentRank;
-		if (game.gameMode === 'battlegrounds' || game.gameMode === 'duels') {
+		if (game.gameMode === 'battlegrounds' || game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			// Do nothing
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			const opponentInfo = await this.playersInfo.getOpponentInfo();
@@ -184,16 +177,17 @@ export class EndGameUploaderService {
 		return game;
 	}
 
-	private async getDuelsNewPlayerRank(): Promise<number> {
-		const duelsInfo = await this.memoryInspection.getDuelsInfo();
+	private async getDuelsNewPlayerRank(initialRank: number): Promise<number> {
+		let duelsInfo = await this.memoryInspection.getDuelsInfo();
 		let retriesLeft = 10;
 		while (!duelsInfo?.LastRatingChange && retriesLeft >= 0) {
 			await sleep(2000);
+			duelsInfo = await this.memoryInspection.getDuelsInfo();
 			retriesLeft--;
 		}
 		if (!duelsInfo) {
 			return null;
 		}
-		return duelsInfo.LastRatingChange + duelsInfo.Rating;
+		return duelsInfo.LastRatingChange + initialRank;
 	}
 }

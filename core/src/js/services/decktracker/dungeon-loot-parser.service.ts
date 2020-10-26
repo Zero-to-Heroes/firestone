@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsInfo } from '../../models/duels-info';
@@ -35,6 +35,7 @@ export class DungeonLootParserService {
 
 	private currentReviewId: string;
 	private duelsInfo: DuelsInfo;
+	private currentGameType: GameType;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -49,6 +50,10 @@ export class DungeonLootParserService {
 			if (event.type === GameEvent.GAME_END) {
 				this.duelsInfo = null;
 				this.currentReviewId = null;
+				this.currentGameType = null;
+			} else if (event.type === GameEvent.MATCH_METADATA) {
+				this.currentGameType = event.additionalData.metaData.GameType;
+				this.sendLootInfo();
 			}
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
@@ -59,45 +64,6 @@ export class DungeonLootParserService {
 				this.sendLootInfo();
 			}
 		});
-		// window['hop'] = async () => {
-		// 	this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-		// 	let duelsInfo = await this.memory.getDuelsInfo();
-		// 	console.log('duelsInfo', duelsInfo);
-		// 	duelsInfo = await this.memory.getDuelsInfo(true);
-		// 	console.log('[dungeon-loot-parser] retrieved duels info after force reset', duelsInfo);
-		// 	const treasures: readonly string[] = duelsInfo.TreasureOption
-		// 		? duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(option)?.id || '' + option)
-		// 		: [];
-		// 	const signatureTreasure: string = this.findSignatureTreasure(duelsInfo.DeckList);
-		// 	const input: Input = {
-		// 		// TODO: have "paid-duels" be an option as well
-		// 		type: 'duels',
-		// 		reviewId: this.currentReviewId,
-		// 		runId: this.currentDuelsRunId,
-		// 		userId: null,
-		// 		userName: 'daedin',
-		// 		startingHeroPower:
-		// 			this.allCards.getCardFromDbfId(duelsInfo.StartingHeroPower)?.id || '' + duelsInfo.StartingHeroPower,
-		// 		signatureTreasure: signatureTreasure,
-		// 		lootBundles: duelsInfo.LootOptionBundles
-		// 			? duelsInfo.LootOptionBundles.filter(bundle => bundle).map(bundle => ({
-		// 					bundleId: this.allCards.getCardFromDbfId(bundle.BundleId)?.id || '' + bundle.BundleId,
-		// 					elements: bundle.Elements.map(
-		// 						dbfId => this.allCards.getCardFromDbfId(dbfId)?.id || '' + dbfId,
-		// 					),
-		// 			  }))
-		// 			: [],
-		// 		chosenLootIndex: duelsInfo.ChosenLoot,
-		// 		treasureOptions: treasures,
-		// 		chosenTreasureIndex: duelsInfo.ChosenTreasure,
-		// 		currentWins: duelsInfo.Wins,
-		// 		currentLosses: duelsInfo.Losses,
-		// 		// TODO: send paid / normal rating depending on game mode
-		// 		rating: duelsInfo.Rating,
-		// 	};
-		// 	console.log('[dungeon-loot-parser] sending loot into', input);
-		// 	this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
-		// };
 	}
 
 	public async queueingIntoMatch(logLine: string) {
@@ -138,22 +104,16 @@ export class DungeonLootParserService {
 	}
 
 	private async sendLootInfo() {
-		if (!this.currentReviewId || !this.duelsInfo) {
+		if (!this.currentReviewId || !this.duelsInfo || !this.currentGameType) {
 			console.log(
 				'[dungeon-loot-parser] not enough data, not sending loot info',
 				this.currentReviewId,
 				this.duelsInfo,
 				this.currentDuelsRunId,
+				this.currentGameType,
 			);
 			return;
 		}
-		// TODO: this will let me associate a review id (and then later on, a win / loss or a final win/loss)
-		// TODO: how to group individual games into a "run"?
-		// console.log('will sending loot info', 'duels', this.currentReviewId, this.currentDuelsRunId, this.duelsInfo);
-		// if (!this.duelsInfo.LootOptionBundles?.length && !this.duelsInfo.TreasureOption?.length) {
-		// 	console.log('no loot option to send, returning', this.duelsInfo);
-		// 	return;
-		// }
 
 		const user = await this.ow.getCurrentUser();
 		const treasures: readonly string[] = this.duelsInfo.TreasureOption
@@ -161,8 +121,7 @@ export class DungeonLootParserService {
 			: [];
 		const signatureTreasure: string = this.findSignatureTreasure(this.duelsInfo.DeckList);
 		const input: Input = {
-			// TODO: have "paid-duels" be an option as well
-			type: 'duels',
+			type: this.currentGameType === GameType.GT_PVPDR ? 'duels' : 'paid-duels',
 			reviewId: this.currentReviewId,
 			runId: this.currentDuelsRunId,
 			userId: user.userId,
@@ -182,8 +141,7 @@ export class DungeonLootParserService {
 			chosenTreasureIndex: this.duelsInfo.ChosenTreasure,
 			currentWins: this.duelsInfo.Wins,
 			currentLosses: this.duelsInfo.Losses,
-			// TODO: send paid / normal rating depending on game mode
-			rating: this.duelsInfo.Rating,
+			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
 		};
 		console.log('[dungeon-loot-parser] sending loot into', input);
 		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);

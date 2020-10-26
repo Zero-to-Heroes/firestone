@@ -94,6 +94,9 @@ export class GameStat {
 		} else if (this.gameMode === 'duels') {
 			rankIcon = `duels`;
 			rankIconTooltip = 'Duels';
+		} else if (this.gameMode === 'paid-duels') {
+			rankIcon = `duels`;
+			rankIconTooltip = 'Paid Duels';
 		} else if (this.gameMode === 'arena') {
 			// TODO: no-rank image
 			if (!this.playerRank) {
@@ -121,7 +124,11 @@ export class GameStat {
 	}
 
 	public buildRankText(): string {
-		if (this.gameMode === 'duels' && this.additionalResult && this.additionalResult.indexOf('-') !== -1) {
+		if (
+			(this.gameMode === 'duels' || this.gameMode === 'paid-duels') &&
+			this.additionalResult &&
+			this.additionalResult.indexOf('-') !== -1
+		) {
 			const [wins, losses] = this.additionalResult.split('-');
 			return `${wins}-${losses}`;
 		}
