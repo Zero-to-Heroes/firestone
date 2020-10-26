@@ -1,3 +1,8 @@
+:host() {
+	width: 256px;
+	height: 388px;
+}
+
 .card-tooltip {
 	display: flex;
 	flex-direction: column;
@@ -24,6 +29,7 @@
 
 	img {
 		width: 256px;
+		height: 388px;
 		// filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 		filter: drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7)) drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7));
 	}
