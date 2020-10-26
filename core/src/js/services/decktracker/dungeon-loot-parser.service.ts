@@ -115,6 +115,13 @@ export class DungeonLootParserService {
 			return;
 		}
 
+		if (this.duelsInfo?.Wins === 0 && this.duelsInfo?.Losses === 0) {
+			console.log(
+				'[dungeon-loot-parser] not sending info in the first game, as data might be from the previous run',
+			);
+			return;
+		}
+
 		const user = await this.ow.getCurrentUser();
 		const treasures: readonly string[] = this.duelsInfo.TreasureOption
 			? this.duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(option)?.id || '' + option)
