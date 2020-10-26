@@ -3,6 +3,7 @@ import { NavigationAchievements } from './navigation-achievements';
 import { NavigationBattlegrounds } from './navigation-battlegrounds';
 import { NavigationCollection } from './navigation-collection';
 import { NavigationDecktracker } from './navigation-decktracker';
+import { NavigationDuels } from './navigation-duels';
 import { NavigationReplays } from './navigation-replays';
 
 export class NavigationState {
@@ -13,6 +14,7 @@ export class NavigationState {
 	readonly navigationAchievements: NavigationAchievements = new NavigationAchievements();
 	readonly navigationDecktracker: NavigationDecktracker = new NavigationDecktracker();
 	readonly navigationBattlegrounds: NavigationBattlegrounds = new NavigationBattlegrounds();
+	readonly navigationDuels: NavigationDuels = new NavigationDuels();
 
 	readonly backArrowEnabled = false;
 	readonly nextArrowEnabled = false;

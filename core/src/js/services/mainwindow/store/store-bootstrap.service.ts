@@ -119,7 +119,7 @@ export class StoreBootstrapService {
 			console.log('setting current duels run id', lastRunId);
 			await this.prefs.setDuelsRunId(lastRunId);
 		}
-		// const newDuelsState = this.duels.buildState(matchStats, duelsRunInfo);
+		const newDuelsState = this.duels.buildState(matchStats, duelsRunInfo);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,
@@ -129,7 +129,7 @@ export class StoreBootstrapService {
 			achievements: newAchievementState,
 			decktracker: decktracker,
 			battlegrounds: bgsAppStateWithStats,
-			// duels; newDuelsState,
+			duels: newDuelsState,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			globalStats: globalStats,
