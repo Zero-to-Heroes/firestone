@@ -40,6 +40,7 @@ import { OverlayDisplayService } from '../../services/decktracker/overlay-displa
 import { SecretConfigService } from '../../services/decktracker/secret-config.service';
 import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.service';
 import { DevService } from '../../services/dev.service';
+import { DuelsStateBuilderService } from '../../services/duels/duels-state-builder.service';
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
 import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
@@ -172,6 +173,8 @@ export class SentryErrorHandler implements ErrorHandler {
 		DynamicZoneHelperService,
 		ZoneOrderingService,
 		GameStateMetaInfoService,
+
+		DuelsStateBuilderService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

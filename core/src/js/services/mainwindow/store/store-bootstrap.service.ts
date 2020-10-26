@@ -10,6 +10,7 @@ import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
+import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { Events } from '../../events.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OverwolfService } from '../../overwolf.service';
@@ -41,6 +42,7 @@ export class StoreBootstrapService {
 		private readonly bestBgsStats: BgsBestUserStatsService,
 		private readonly collectionBootstrap: CollectionBootstrapService,
 		private readonly patchConfig: PatchesConfigService,
+		private readonly duels: DuelsStateBuilderService,
 	) {
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -59,6 +61,7 @@ export class StoreBootstrapService {
 			globalStats,
 			bgsBestUserStats,
 			collectionState,
+			duelsRunInfo,
 		] = await Promise.all([
 			this.initializeSocialShareUserInfo(),
 			this.userService.getCurrentUser(),
@@ -69,6 +72,7 @@ export class StoreBootstrapService {
 			this.globalStats.getGlobalStats(),
 			this.bestBgsStats.getBgsBestUserStats(),
 			this.collectionBootstrap.initCollectionState(),
+			this.duels.loadRuns(),
 		]);
 
 		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);
@@ -100,6 +104,12 @@ export class StoreBootstrapService {
 		const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter(deckCode => allDeckCodes.includes(deckCode));
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
+		const newAchievementState = Object.assign(new AchievementsState(), {
+			globalCategories: achievementGlobalCategories,
+			achievementHistory: achievementHistory,
+			isLoading: false,
+		} as AchievementsState);
+
 		const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
 		const lastRunId =
 			lastGameWithDuelsRunId && lastGameWithDuelsRunId.length > 0
@@ -109,12 +119,7 @@ export class StoreBootstrapService {
 			console.log('setting current duels run id', lastRunId);
 			await this.prefs.setDuelsRunId(lastRunId);
 		}
-
-		const newAchievementState = Object.assign(new AchievementsState(), {
-			globalCategories: achievementGlobalCategories,
-			achievementHistory: achievementHistory,
-			isLoading: false,
-		} as AchievementsState);
+		// const newDuelsState = this.duels.buildState(matchStats, duelsRunInfo);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,
@@ -124,6 +129,7 @@ export class StoreBootstrapService {
 			achievements: newAchievementState,
 			decktracker: decktracker,
 			battlegrounds: bgsAppStateWithStats,
+			// duels; newDuelsState,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			globalStats: globalStats,
