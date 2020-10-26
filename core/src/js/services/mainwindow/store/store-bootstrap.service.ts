@@ -63,6 +63,7 @@ export class StoreBootstrapService {
 			bgsBestUserStats,
 			collectionState,
 			duelsRunInfo,
+			// duelsStats,
 		] = await Promise.all([
 			this.initializeSocialShareUserInfo(),
 			this.userService.getCurrentUser(),
@@ -74,6 +75,7 @@ export class StoreBootstrapService {
 			this.bestBgsStats.getBgsBestUserStats(),
 			this.collectionBootstrap.initCollectionState(),
 			this.duels.loadRuns(),
+			// this.duels.loadStats(),
 		]);
 
 		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);

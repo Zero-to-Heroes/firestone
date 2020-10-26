@@ -1,1 +1,1 @@
-export type DuelsCategoryType = 'duels-runs';
+export type DuelsCategoryType = 'duels-runs' | 'duels-stats';

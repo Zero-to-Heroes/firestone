@@ -44,6 +44,13 @@ export class DuelsStateBuilderService {
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-stats',
+				name: 'Stats',
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
 		];
 	}
 
