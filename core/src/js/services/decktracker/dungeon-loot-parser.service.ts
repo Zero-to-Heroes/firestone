@@ -149,6 +149,7 @@ export class DungeonLootParserService {
 			currentWins: this.duelsInfo.Wins,
 			currentLosses: this.duelsInfo.Losses,
 			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
+			appVersion: process.env.APP_VERSION,
 		};
 		console.log('[dungeon-loot-parser] sending loot into', input);
 		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
