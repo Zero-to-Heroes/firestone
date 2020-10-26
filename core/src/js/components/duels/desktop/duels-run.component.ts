@@ -1,6 +1,16 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsRun } from '../../../models/duels/duels-run';
+import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -13,6 +23,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<div class="group mode">
 					<img class="game-mode" [src]="gameModeImage" [helpTooltip]="gameModeTooltip" />
 					<div class="rating" *ngIf="rating">{{ rating }}</div>
+				</div>
+
+				<div class="group result" *ngIf="wins != null">
+					<div class="wins">{{ wins }}</div>
+					<div class="separator">-</div>
+					<div class="losses">{{ losses }}</div>
 				</div>
 
 				<div class="group player-images">
@@ -38,12 +54,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					/>
 				</div>
 
-				<div class="group result" *ngIf="wins != null">
-					<div class="wins">{{ wins }}</div>
-					<div class="separator">-</div>
-					<div class="losses">{{ losses }}</div>
-				</div>
-
 				<div
 					class="group delta-rating"
 					[ngClass]="{ 'positive': deltaRating > 0, 'negative': deltaRating < 0 }"
@@ -53,6 +63,19 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<div class="text">Rating</div>
 				</div>
 			</div>
+			<div class="right-info">
+				<div class="show-more" (click)="toggleShowMore()">
+					{{ isExpanded ? 'Hide details' : 'Show details' }}
+				</div>
+			</div>
+		</div>
+		<div class="run-details" *ngIf="isExpanded">
+			<ul class="details">
+				<li *ngFor="let step of steps">
+					<loot-info [loot]="step" *ngIf="isLootInfo(step)"></loot-info>
+					<replay-info [replay]="step" *ngIf="isReplayInfo(step)"></replay-info>
+				</li>
+			</ul>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,6 +89,7 @@ export class DuelsRunComponent implements AfterViewInit {
 		this.rating = value.ratingAtStart;
 		this.deltaRating =
 			value.ratingAtEnd && !isNaN(value.ratingAtEnd) ? value.ratingAtEnd - value.ratingAtStart : null;
+		this.steps = value.steps;
 
 		this.playerClassImage = value.heroCardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`
@@ -101,12 +125,34 @@ export class DuelsRunComponent implements AfterViewInit {
 	wins: number;
 	losses: number;
 	deltaRating: number;
+	steps: readonly (GameStat | DuelsRunInfo)[];
+
+	isExpanded: boolean;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly allCards: AllCardsService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	toggleShowMore() {
+		this.isExpanded = !this.isExpanded;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	isReplayInfo(value: GameStat | DuelsRunInfo): boolean {
+		return (value as GameStat).buildNumber != null;
+	}
+
+	isLootInfo(value: GameStat | DuelsRunInfo): boolean {
+		return (value as DuelsRunInfo).bundleType === 'treasure';
 	}
 }

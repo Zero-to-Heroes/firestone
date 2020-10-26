@@ -1,0 +1,37 @@
+.loot-info {
+	background: rgba(255, 255, 255, 0.08);
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 10px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+}
+
+.option {
+	margin-right: 15px;
+}
+
+.option-image {
+	width: 30px;
+	height: 30px;
+	clip-path: circle(10px at 50% 50%);
+	transform: scale(1.5);
+
+	&:not(.picked) {
+		filter: grayscale(1);
+	}
+}
+
+.text {
+	margin-left: 10px;
+	font-size: 14px;
+	margin-right: 15px;
+}
+
+.treasure-loot {
+	display: flex;
+	align-items: center;
+}

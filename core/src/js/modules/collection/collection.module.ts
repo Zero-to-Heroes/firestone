@@ -86,6 +86,7 @@ import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/
 import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
 import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.component';
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
+import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
@@ -233,6 +234,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsDesktopComponent,
 		DuelsRunsListComponent,
 		DuelsRunComponent,
+		LootInfoComponent,
 
 		FtueComponent,
 	],

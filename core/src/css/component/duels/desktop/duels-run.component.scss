@@ -8,6 +8,10 @@
 	font-style: normal;
 	font-weight: normal;
 	color: var(--default-text-color);
+
+	&.expanded {
+		margin-bottom: 10px;
+	}
 }
 
 .group {
@@ -102,4 +106,25 @@
 	font-size: 13px;
 	line-height: 18px;
 	width: 40px;
+}
+
+.show-more {
+	font-size: 14px;
+
+	&:hover {
+		color: var(--default-title-color);
+	}
+}
+
+.run-details {
+	margin-bottom: 15px;
+
+	.details {
+		padding-left: 20px;
+		list-style: none;
+
+		li {
+			margin-top: 5px;
+		}
+	}
 }
