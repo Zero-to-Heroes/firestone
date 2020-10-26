@@ -4,6 +4,7 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsState } from '../../models/duels/duels-state';
+import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { ApiRunner } from '../api-runner';
@@ -27,7 +28,30 @@ export class DuelsStateBuilderService {
 		return results?.results;
 	}
 
-	public buildState(matchStats: GameStats, duelsRunInfo: readonly DuelsRunInfo[]): DuelsState {
+	public initState(): DuelsState {
+		const categories: readonly DuelsCategory[] = this.buildCategories();
+		return DuelsState.create({
+			categories: categories,
+		} as DuelsState);
+	}
+
+	private buildCategories(): readonly DuelsCategory[] {
+		return [
+			DuelsCategory.create({
+				id: 'duels-runs',
+				name: 'Runs',
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
+		];
+	}
+
+	public updateState(
+		currentState: DuelsState,
+		matchStats: GameStats,
+		duelsRunInfo: readonly DuelsRunInfo[],
+	): DuelsState {
 		const duelMatches = matchStats?.stats
 			?.filter(match => match.gameMode === 'duels' || match.gameMode === 'paid-duels')
 			.filter(match => match.currentDuelsRunId);
@@ -45,8 +69,9 @@ export class DuelsStateBuilderService {
 			.filter(run => run)
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs);
-		return DuelsState.create({
+		return currentState.update({
 			runs: runs,
+			loading: false,
 		} as DuelsState);
 	}
 

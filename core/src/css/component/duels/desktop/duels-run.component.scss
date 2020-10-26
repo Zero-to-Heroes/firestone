@@ -1,0 +1,105 @@
+.duels-run {
+	background: rgba(255, 255, 255, 0.08);
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 10px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+}
+
+.group {
+	border-right: 1px solid var(--default-text-color);
+	display: flex;
+	height: 100%;
+	padding-right: 10px;
+	margin-right: 10px;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+
+	&.delta-rating {
+		font-size: 12px;
+		width: 75px;
+
+		.value {
+			margin-right: 5px;
+		}
+
+		&.positive .value {
+			color: #61ff47;
+
+			&::before {
+				content: '+';
+			}
+		}
+		&.negative .value {
+			color: #ff4747;
+		}
+	}
+
+	&.player-images {
+		padding-left: 0px;
+		padding-right: 10px;
+	}
+}
+
+.left-info,
+.right-info {
+	display: flex;
+	align-items: center;
+	height: 100%;
+
+	& > div:last-child {
+		border-right: none;
+	}
+}
+
+.right-info {
+	margin-left: auto;
+}
+
+.mode {
+	position: relative;
+
+	.game-mode {
+		width: 30px;
+		height: 30px;
+		margin-right: 5px;
+		position: relative;
+		top: -4px;
+	}
+
+	.rating {
+		position: absolute;
+		bottom: -9px;
+		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+		color: white;
+		font-size: 12px;
+		width: 100%;
+		text-align: center;
+		padding-right: 3px;
+	}
+}
+
+.separator {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.player-images {
+	img {
+		width: 30px;
+		height: 30px;
+		clip-path: circle(10px at 50% 50%);
+		transform: scale(1.5);
+	}
+}
+
+.result {
+	font-size: 13px;
+	line-height: 18px;
+	width: 40px;
+}

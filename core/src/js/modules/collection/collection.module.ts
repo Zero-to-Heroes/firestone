@@ -83,6 +83,9 @@ import { DecktrackerFiltersComponent } from '../../components/decktracker/main/d
 import { DecktrackerPersonalStatsRankingComponent } from '../../components/decktracker/main/decktracker-personal-stats-ranking.component';
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
+import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
+import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.component';
+import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
@@ -226,6 +229,10 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsHeroDetailedStatsComponent,
 		BattlegroundsEmptyStateComponent,
 		BgsGlobalValueComponent,
+
+		DuelsDesktopComponent,
+		DuelsRunsListComponent,
+		DuelsRunComponent,
 
 		FtueComponent,
 	],

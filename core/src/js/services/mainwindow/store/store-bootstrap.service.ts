@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { DuelsState } from '../../../models/duels/duels-state';
 import { AchievementsState } from '../../../models/mainwindow/achievements-state';
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -119,7 +120,8 @@ export class StoreBootstrapService {
 			console.log('setting current duels run id', lastRunId);
 			await this.prefs.setDuelsRunId(lastRunId);
 		}
-		const newDuelsState = this.duels.buildState(matchStats, duelsRunInfo);
+		const duelsStats: DuelsState = this.duels.initState();
+		const newDuelsState = this.duels.updateState(duelsStats, matchStats, duelsRunInfo);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,

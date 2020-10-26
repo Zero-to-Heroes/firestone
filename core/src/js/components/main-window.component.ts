@@ -95,6 +95,13 @@ declare let amplitude: any;
 					[hidden]="navigationState.currentApp !== 'battlegrounds'"
 				>
 				</battlegrounds-desktop>
+				<duels-desktop
+					class="main-section"
+					[state]="dataState"
+					[navigation]="navigationState"
+					[hidden]="navigationState.currentApp !== 'duels'"
+				>
+				</duels-desktop>
 			</section>
 		</window-wrapper>
 	`,

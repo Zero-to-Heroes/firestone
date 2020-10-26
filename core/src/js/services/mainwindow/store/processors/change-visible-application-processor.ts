@@ -3,6 +3,7 @@ import { NavigationAchievements } from '../../../../models/mainwindow/navigation
 import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
+import { NavigationDuels } from '../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
@@ -48,6 +49,13 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						menuDisplayType: 'menu',
 				  } as NavigationBattlegrounds)
 				: navigationState.navigationBattlegrounds;
+		const duels =
+			event.module === 'duels'
+				? navigationState.navigationDuels.update({
+						selectedCategoryId: 'duels-runs',
+						menuDisplayType: 'menu',
+				  } as NavigationDuels)
+				: navigationState.navigationDuels;
 		const decktracker =
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
@@ -65,6 +73,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				navigationAchievements: achievements,
 				navigationReplays: replays,
 				navigationBattlegrounds: battlegrounds,
+				navigationDuels: duels,
 				navigationDecktracker: decktracker,
 				text: this.getInitialText(event.module),
 				image: null,

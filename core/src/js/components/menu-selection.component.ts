@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
+import { FeatureFlags } from '../services/feature-flags';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
@@ -20,6 +21,25 @@ declare let amplitude;
 	styleUrls: [`../../css/global/menu.scss`, `../../css/component/menu-selection.component.scss`],
 	template: `
 		<ul class="menu-selection">
+			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">
+				<span>Ladder</span>
+			</li>
+			<li
+				[ngClass]="{ 'selected': selectedModule === 'battlegrounds' }"
+				(mousedown)="selectModule('battlegrounds')"
+			>
+				<span>Battlegrounds</span>
+			</li>
+			<li
+				[ngClass]="{ 'selected': selectedModule === 'duels' }"
+				(mousedown)="selectModule('duels')"
+				*ngIf="showDuels"
+			>
+				<span>Duels</span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedModule === 'replays' }" (mousedown)="selectModule('replays')">
+				<span>Replays</span>
+			</li>
 			<li
 				[ngClass]="{ 'selected': selectedModule === 'achievements' }"
 				(mousedown)="selectModule('achievements')"
@@ -56,18 +76,6 @@ declare let amplitude;
 			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
 				<span>Collection</span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">
-				<span>Deck Tracker</span>
-			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'replays' }" (mousedown)="selectModule('replays')">
-				<span>Replays</span>
-			</li>
-			<li
-				[ngClass]="{ 'selected': selectedModule === 'battlegrounds' }"
-				(mousedown)="selectModule('battlegrounds')"
-			>
-				<span>Battlegrounds</span>
-			</li>
 		</ul>
 	`,
 	encapsulation: ViewEncapsulation.None,
@@ -77,6 +85,7 @@ export class MenuSelectionComponent implements AfterViewInit {
 	@Input() selectedModule: string;
 	@Input() currentUser: CurrentUser;
 
+	showDuels = FeatureFlags.ENABLE_DUELS;
 	loginPopupActive: boolean;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
