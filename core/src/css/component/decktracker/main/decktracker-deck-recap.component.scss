@@ -1,6 +1,5 @@
 :host() {
 	height: 100%;
-	padding-top: 45px;
 }
 
 .decktracker-deck-recap {
@@ -11,7 +10,6 @@
 	font-weight: normal;
 	color: var(--default-text-color);
 	font-size: 14px;
-	background: rgba(255, 255, 255, 0.08);
 	padding: 15px;
 	padding-top: 5px;
 	max-height: 100%;
@@ -19,7 +17,7 @@
 
 	.title {
 		color: var(--secondary-text-color);
-		margin-bottom: 15px;
+		margin-bottom: 30px;
 	}
 
 	.deck-summary {
@@ -27,7 +25,7 @@
 	}
 
 	.deck-image {
-		width: 60px;
+		width: 75px;
 		position: relative;
 		flex-grow: 0;
 		margin-right: 20px;
@@ -47,10 +45,16 @@
 	.deck-title {
 		display: flex;
 		flex-direction: column;
+		justify-content: space-around;
 
 		.deck-name {
 			color: var(--default-title-color);
 			margin-bottom: 5px;
+			display: flex;
+
+			.text {
+				margin-left: 5px;
+			}
 		}
 
 		.replay {
@@ -96,7 +100,7 @@
 
 	.deck-stats-recap {
 		display: flex;
-		margin-top: 15px;
+		margin-top: 20px;
 
 		.recap {
 			display: flex;

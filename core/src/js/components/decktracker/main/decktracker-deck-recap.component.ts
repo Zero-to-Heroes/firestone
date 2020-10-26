@@ -23,7 +23,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<img class="frame" src="assets/images/deck/hero_frame.png" />
 				</div>
 				<div class="deck-title">
-					<div class="deck-name">{{ deckName }}</div>
+					<div class="deck-name">
+						<copy-deckstring
+							[deckstring]="deckstring"
+							[showTooltip]="true"
+							copyText="Copy deck code"
+						></copy-deckstring>
+						<div class="text">{{ deckName }}</div>
+					</div>
 					<div class="replay" (click)="showReplays()">
 						<div class="watch-icon">
 							<svg class="svg-icon-fill">
@@ -74,6 +81,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 	deck: DeckSummary;
 	skin: string;
 	deckName: string;
+	deckstring: string;
 	winRatePercentage: string;
 	games: number;
 
@@ -106,6 +114,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.deck.skin}.jpg`;
 		this.deckName = this.deck.deckName;
+		this.deckstring = this.deck.deckstring;
 		this.winRatePercentage = parseFloat('' + this.deck.winRatePercentage).toLocaleString('en-US', {
 			minimumIntegerDigits: 1,
 			maximumFractionDigits: 1,
