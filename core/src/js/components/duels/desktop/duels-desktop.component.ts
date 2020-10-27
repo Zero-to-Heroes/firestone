@@ -1,8 +1,10 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DuelsCategory } from '../../../models/mainwindow/duels/duels-category';
+import { DuelsCategoryType } from '../../../models/mainwindow/duels/duels-category.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { FeatureFlags } from '../../../services/feature-flags';
+import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/events/duels/duels-select-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -33,11 +35,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[state]="state.duels"
 						>
 						</duels-runs-list>
-						<!-- <duels-stats
+						<duels-hero-stats
 							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-stats'"
 							[state]="state.duels"
 						>
-						</duels-stats> -->
+						</duels-hero-stats>
 					</div>
 				</with-loading>
 			</section>
@@ -67,11 +69,7 @@ export class DuelsDesktopComponent implements AfterViewInit {
 		return this.state.duels.categories;
 	}
 
-	// buildCategory(): DuelsCategory {
-	// 	return this.buildCategories().find(cat => cat.id === this.navigation.navigationDuels.selectedCategoryId);
-	// }
-
-	selectCategory(categoryId: string) {
-		// this.stateUpdater.next(new SelectBattlegroundsCategoryEvent(categoryId));
+	selectCategory(categoryId: DuelsCategoryType) {
+		this.stateUpdater.next(new DuelsSelectCategoryEvent(categoryId));
 	}
 }

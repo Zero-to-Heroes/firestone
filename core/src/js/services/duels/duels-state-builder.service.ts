@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { DuelsGlobalStats } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
+import { DuelsHeroPlayerStat, DuelsPlayerStats } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsState } from '../../models/duels/duels-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
@@ -12,6 +14,7 @@ import { OverwolfService } from '../overwolf.service';
 import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -28,10 +31,18 @@ export class DuelsStateBuilderService {
 		return results?.results;
 	}
 
-	public initState(): DuelsState {
+	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
+		const results: any = await this.api.callPostApiWithRetries(DUELS_GLOBAL_STATS_URL, null);
+		console.log('[duels-state-builder] loaded global stats', results?.result);
+		return results?.result;
+	}
+
+	public initState(globalStats: DuelsGlobalStats, duelsRunInfo: readonly DuelsRunInfo[]): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		return DuelsState.create({
 			categories: categories,
+			globalStats: globalStats,
+			duelsRunInfos: duelsRunInfo,
 		} as DuelsState);
 	}
 
@@ -54,11 +65,7 @@ export class DuelsStateBuilderService {
 		];
 	}
 
-	public updateState(
-		currentState: DuelsState,
-		matchStats: GameStats,
-		duelsRunInfo: readonly DuelsRunInfo[],
-	): DuelsState {
+	public updateState(currentState: DuelsState, matchStats: GameStats): DuelsState {
 		const duelMatches = matchStats?.stats
 			?.filter(match => match.gameMode === 'duels' || match.gameMode === 'paid-duels')
 			.filter(match => match.currentDuelsRunId);
@@ -70,16 +77,101 @@ export class DuelsStateBuilderService {
 				this.buildRun(
 					runId,
 					matchesByRun[runId],
-					duelsRunInfo.filter(runInfo => runInfo.runId === runId),
+					currentState.duelsRunInfos.filter(runInfo => runInfo.runId === runId),
 				),
 			)
 			.filter(run => run)
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs);
+
+		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats);
+		console.log('[duels-state-builder] playerStats', playerStats);
 		return currentState.update({
 			runs: runs,
+			playerStats: playerStats,
 			loading: false,
 		} as DuelsState);
+	}
+
+	private buildStatsWithPlayer(runs: readonly DuelsRun[], globalStats: DuelsGlobalStats): DuelsPlayerStats {
+		if (!globalStats) {
+			return null;
+		}
+		const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		const heroStats: readonly DuelsHeroPlayerStat[] = globalStats.heroStats.map(stat => {
+			const playerTotalMatches = runs
+				.filter(run => run.heroCardId === stat.heroCardId)
+				.map(run => run.wins + run.losses)
+				.reduce((a, b) => a + b, 0);
+			return {
+				cardId: stat.heroCardId,
+				heroClass: stat.heroClass,
+				periodStart: stat.periodStart,
+				globalTotalMatches: stat.totalMatches,
+				globalPopularity: stat.popularity,
+				globalWinrate: stat.winrate,
+				playerTotalMatches: playerTotalMatches,
+				playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
+				playerWinrate:
+					playerTotalMatches === 0
+						? 0
+						: runs
+								.filter(run => run.heroCardId === stat.heroCardId)
+								.map(run => run.wins)
+								.reduce((a, b) => a + b, 0) / playerTotalMatches,
+			} as DuelsHeroPlayerStat;
+		});
+		const heroPowerStats: readonly DuelsHeroPlayerStat[] = globalStats.heroPowerStats.map(stat => {
+			const playerTotalMatches = runs
+				.filter(run => run.heroPowerCardId === stat.heroPowerCardId)
+				.map(run => run.wins + run.losses)
+				.reduce((a, b) => a + b, 0);
+			return {
+				cardId: stat.heroPowerCardId,
+				heroClass: stat.heroClass,
+				periodStart: stat.periodStart,
+				globalTotalMatches: stat.totalMatches,
+				globalPopularity: stat.popularity,
+				globalWinrate: stat.winrate,
+				playerTotalMatches: playerTotalMatches,
+				playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
+				playerWinrate:
+					playerTotalMatches === 0
+						? 0
+						: runs
+								.filter(run => run.heroCardId === stat.heroPowerCardId)
+								.map(run => run.wins)
+								.reduce((a, b) => a + b, 0) / playerTotalMatches,
+			} as DuelsHeroPlayerStat;
+		});
+		const signatureTreasureStats: readonly DuelsHeroPlayerStat[] = globalStats.signatureTreasureStats.map(stat => {
+			const playerTotalMatches = runs
+				.filter(run => run.signatureTreasureCardId === stat.signatureTreasureCardId)
+				.map(run => run.wins + run.losses)
+				.reduce((a, b) => a + b, 0);
+			return {
+				cardId: stat.signatureTreasureCardId,
+				heroClass: stat.heroClass,
+				periodStart: stat.periodStart,
+				globalTotalMatches: stat.totalMatches,
+				globalPopularity: stat.popularity,
+				globalWinrate: stat.winrate,
+				playerTotalMatches: playerTotalMatches,
+				playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
+				playerWinrate:
+					playerTotalMatches === 0
+						? 0
+						: runs
+								.filter(run => run.heroCardId === stat.signatureTreasureCardId)
+								.map(run => run.wins)
+								.reduce((a, b) => a + b, 0) / playerTotalMatches,
+			} as DuelsHeroPlayerStat;
+		});
+		return {
+			heroStats: heroStats,
+			heroPowerStats: heroPowerStats,
+			signatureTreasureStats: signatureTreasureStats,
+		} as DuelsPlayerStats;
 	}
 
 	private buildRun(runId: string, matchesForRun: GameStat[], runInfo: DuelsRunInfo[]): DuelsRun {

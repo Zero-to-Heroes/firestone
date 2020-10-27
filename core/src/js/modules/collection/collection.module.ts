@@ -84,6 +84,11 @@ import { DecktrackerPersonalStatsRankingComponent } from '../../components/deckt
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
 import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
+import {
+	DuelsGlobalValueComponent,
+	DuelsHeroStatVignetteComponent,
+} from '../../components/duels/desktop/duels-hero-stat-vignette.component';
+import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.component';
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
@@ -235,6 +240,9 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsRunsListComponent,
 		DuelsRunComponent,
 		LootInfoComponent,
+		DuelsHeroStatsComponent,
+		DuelsHeroStatVignetteComponent,
+		DuelsGlobalValueComponent,
 
 		FtueComponent,
 	],

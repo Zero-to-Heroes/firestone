@@ -1,0 +1,110 @@
+.duels-hero-stat-vignette {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 10px;
+
+	.box-side {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	.name {
+		font-size: 14px;
+		color: var(--default-title-color);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 140px;
+		text-align: center;
+	}
+
+	.portrait {
+		width: 80px;
+		height: 80px;
+		clip-path: circle(25px at 50% 50%);
+		transform: scale(1.5);
+		margin-top: 15px;
+		margin-bottom: 15px;
+	}
+
+	&.unused {
+		// opacity: 0.6;
+	}
+
+	&:hover {
+		// background: rgba(255, 255, 255, 0.12);
+	}
+
+	.stats {
+		display: flex;
+		flex-direction: column;
+		font-size: 12px;
+		align-items: center;
+
+		.item {
+			display: flex;
+			align-items: center;
+			margin-top: 3px;
+
+			.label {
+				margin-right: 5px;
+			}
+
+			.values {
+				display: flex;
+			}
+
+			.value {
+				font-weight: bold;
+				color: #ce73b4;
+			}
+
+			&.mmr {
+				&.negative .value {
+					color: #ff4747;
+				}
+
+				&.positive .value {
+					color: #61ff47;
+				}
+
+				&.missing .value {
+					color: inherit;
+				}
+			}
+		}
+	}
+}
+
+.global-value {
+	font-size: 12px;
+	display: flex;
+	align-items: flex-end;
+	margin-left: 5px;
+	position: relative;
+
+	&:before {
+		content: '/';
+		margin-right: 5px;
+	}
+
+	.global-icon {
+		width: 12px;
+		height: 12px;
+		position: relative;
+		bottom: 3px;
+		margin-right: 3px;
+	}
+
+	&.positive::before {
+		content: '/ +';
+	}
+}

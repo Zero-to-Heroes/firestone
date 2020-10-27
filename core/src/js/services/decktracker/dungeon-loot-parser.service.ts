@@ -7,6 +7,8 @@ import { GameEvent } from '../../models/game-event';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/dungeon-loot-info-updated-event';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -45,6 +47,7 @@ export class DungeonLootParserService {
 		private events: Events,
 		private prefs: PreferencesService,
 		private api: ApiRunner,
+		private store: MainWindowStoreService,
 	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
@@ -90,7 +93,6 @@ export class DungeonLootParserService {
 			if (this.duelsInfo?.Wins === 0 && this.duelsInfo?.Losses === 0) {
 				// Start a new run
 				console.log('[dungeon-loot-parser] starting a new run', this.duelsInfo);
-				// TODO: also handle paid Duels
 				await this.prefs.setDuelsRunId(uuid());
 			}
 			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
@@ -156,6 +158,7 @@ export class DungeonLootParserService {
 		};
 		console.log('[dungeon-loot-parser] sending loot into', input);
 		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
+		this.store.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
 	}
 
 	private findSignatureTreasure(deckList: readonly number[]): string {

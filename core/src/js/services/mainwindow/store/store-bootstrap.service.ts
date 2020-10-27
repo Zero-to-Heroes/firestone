@@ -53,30 +53,35 @@ export class StoreBootstrapService {
 	public async initStore() {
 		// Load all the initial data
 		const [
-			socialShareUserInfo,
-			currentUser,
-			prefs,
-			achievementGlobalCategories,
-			achievementHistory,
-			matchStats,
-			globalStats,
-			bgsBestUserStats,
-			collectionState,
-			duelsRunInfo,
-			// duelsStats,
+			[
+				socialShareUserInfo,
+				currentUser,
+				prefs,
+				achievementGlobalCategories,
+				achievementHistory,
+				matchStats,
+				globalStats,
+				bgsBestUserStats,
+				collectionState,
+				duelsRunInfo,
+			],
+			duelsGlobalStats,
 		] = await Promise.all([
-			this.initializeSocialShareUserInfo(),
-			this.userService.getCurrentUser(),
-			this.prefs.getPreferences(),
-			this.achievementsHelper.buildGlobalCategories(),
-			this.achievementsHelper.buildAchievementHistory(),
-			this.gameStatsLoader.retrieveStats(),
-			this.globalStats.getGlobalStats(),
-			this.bestBgsStats.getBgsBestUserStats(),
-			this.collectionBootstrap.initCollectionState(),
-			this.duels.loadRuns(),
-			// this.duels.loadStats(),
+			Promise.all([
+				this.initializeSocialShareUserInfo(),
+				this.userService.getCurrentUser(),
+				this.prefs.getPreferences(),
+				this.achievementsHelper.buildGlobalCategories(),
+				this.achievementsHelper.buildAchievementHistory(),
+				this.gameStatsLoader.retrieveStats(),
+				this.globalStats.getGlobalStats(),
+				this.bestBgsStats.getBgsBestUserStats(),
+				this.collectionBootstrap.initCollectionState(),
+				this.duels.loadRuns(),
+			]),
+			this.duels.loadGlobalStats(),
 		]);
+		console.log('loaded info', matchStats, duelsGlobalStats, duelsRunInfo);
 
 		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);
 
@@ -122,8 +127,8 @@ export class StoreBootstrapService {
 			console.log('setting current duels run id', lastRunId);
 			await this.prefs.setDuelsRunId(lastRunId);
 		}
-		const duelsStats: DuelsState = this.duels.initState();
-		const newDuelsState = this.duels.updateState(duelsStats, matchStats, duelsRunInfo);
+		const duelsStats: DuelsState = this.duels.initState(duelsGlobalStats, duelsRunInfo);
+		const newDuelsState = this.duels.updateState(duelsStats, matchStats);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,

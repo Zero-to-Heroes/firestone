@@ -1,3 +1,4 @@
+import { DuelsState } from '../../../../../models/duels/duels-state';
 import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -9,6 +10,7 @@ import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { BgsBuilderService } from '../../../../battlegrounds/bgs-builder.service';
 import { DecktrackerStateLoaderService } from '../../../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../../../decktracker/main/replays-state-builder.service';
+import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
 import { Events } from '../../../../events.service';
 import { PreferencesService } from '../../../../preferences.service';
 import { RecomputeGameStatsEvent } from '../../events/stats/recompute-game-stats-event';
@@ -19,6 +21,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly bgsBuilder: BgsBuilderService,
+		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly events: Events,
 		private readonly prefs: PreferencesService,
 	) {}
@@ -60,12 +63,16 @@ export class RecomputeGameStatsProcessor implements Processor {
 		);
 		console.log('[recompute-game-stats-processor] battlegrounds');
 
+		const duels: DuelsState = await this.duelsBuilder.updateState(currentState.duels, newGameStats);
+		console.log('[recompute-game-stats-processor] duels', duels);
+
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				stats: newStatsState,
 				decktracker: decktracker,
 				replays: replayState,
 				battlegrounds: battlegrounds,
+				duels: duels,
 			} as MainWindowState),
 			null,
 		];

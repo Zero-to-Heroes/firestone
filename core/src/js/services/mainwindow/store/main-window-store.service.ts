@@ -18,6 +18,7 @@ import { PackHistoryService } from '../../collection/pack-history.service';
 import { DecksStateBuilderService } from '../../decktracker/main/decks-state-builder.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
+import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { Events } from '../../events.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OwNotificationsService } from '../../notifications.service';
@@ -74,6 +75,8 @@ import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summa
 import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
+import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
+import { DungeonLootInfoUpdatedEvent } from './events/duels/dungeon-loot-info-updated-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
@@ -142,6 +145,8 @@ import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-de
 import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
+import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
+import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot-info-updated-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
@@ -215,6 +220,7 @@ export class MainWindowStoreService {
 		private readonly decksStateBuilder: DecksStateBuilderService,
 		private readonly bgsBuilder: BgsBuilderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
+		private readonly duelsBuilder: DuelsStateBuilderService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -499,6 +505,7 @@ export class MainWindowStoreService {
 				this.decktrackerStateLoader,
 				this.replaysStateBuilder,
 				this.bgsBuilder,
+				this.duelsBuilder,
 				this.events,
 				this.prefs,
 			),
@@ -580,6 +587,13 @@ export class MainWindowStoreService {
 
 			SelectBattlegroundsPersonalStatsHeroTabEvent.eventName(),
 			new SelectBattlegroundsPersonalStatsHeroProcessor(),
+
+			// Duels
+			DungeonLootInfoUpdatedEvent.eventName(),
+			new DungeonLootInfoUpdatedProcessor(),
+
+			DuelsSelectCategoryEvent.eventName(),
+			new DuelsSelectCategoryProcessor(),
 		);
 	}
 
