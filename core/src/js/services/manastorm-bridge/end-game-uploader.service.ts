@@ -89,7 +89,7 @@ export class EndGameUploaderService {
 			playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
 			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
 			try {
-				const replay = parseHsReplayString(game.uncompressedXmlReplay);
+				const replay = parseHsReplayString(replayXml);
 				if (
 					(replay.result === 'won' && duelsInfo.Wins === 11) ||
 					(replay.result === 'lost' && duelsInfo.Losses === 2)

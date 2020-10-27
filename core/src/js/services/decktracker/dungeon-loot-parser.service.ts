@@ -97,7 +97,10 @@ export class DungeonLootParserService {
 			if (!this.currentDuelsRunId) {
 				await this.prefs.setDuelsRunId(uuid());
 				this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-				console.log('Could not retrieve duels run id, starting a new run', this.currentDuelsRunId);
+				console.log(
+					'[dungeon-loot-parser] Could not retrieve duels run id, starting a new run',
+					this.currentDuelsRunId,
+				);
 			}
 			this.sendLootInfo();
 		}
