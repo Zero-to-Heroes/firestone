@@ -9,9 +9,11 @@ import {
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
+import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { DuelsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-hero-sort-filter-selected-event';
+import { DuelsStatTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-stat-type-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -31,6 +33,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectHeroSortFilter($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="stat-type-filter"
+				[options]="statTypeFilterOptions"
+				[filter]="activeStatTypeFilter"
+				[checkVisibleHandler]="statTypeVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectStatTypeFilter($event)"
 			></fs-filter-dropdown>
 		</div>
 	`,
@@ -76,6 +87,24 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		);
 	};
 
+	statTypeFilterOptions: readonly StatTypeFilterOption[] = [
+		{
+			value: 'hero',
+			label: 'Heroes',
+		} as StatTypeFilterOption,
+		{
+			value: 'hero-power',
+			label: 'Hero Powers',
+		} as StatTypeFilterOption,
+		{
+			value: 'signature-treasure',
+			label: 'Signature Treasures',
+		} as StatTypeFilterOption,
+	] as readonly StatTypeFilterOption[];
+	activeStatTypeFilter: DuelsStatTypeFilterType;
+	statTypeFilterVisible: boolean;
+	statTypeVisibleHandler = this.heroVisibleHandler;
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
@@ -88,8 +117,11 @@ export class DuelsFiltersComponent implements AfterViewInit {
 	}
 
 	selectHeroSortFilter(option: HeroSortFilterOption) {
-		// TODO: don't forget prefs updates
 		this.stateUpdater.next(new DuelsHeroSortFilterSelectedEvent(option.value));
+	}
+
+	selectStatTypeFilter(option: StatTypeFilterOption) {
+		this.stateUpdater.next(new DuelsStatTypeFilterSelectedEvent(option.value));
 	}
 
 	anyVisible() {
@@ -98,10 +130,15 @@ export class DuelsFiltersComponent implements AfterViewInit {
 
 	private doSetValues() {
 		this.activeHeroSortFilter = this._state.duels?.activeHeroSortFilter;
+		this.activeStatTypeFilter = this._state.duels?.activeStatTypeFilter;
 		console.log('active filter', this.activeHeroSortFilter, this._state);
 	}
 }
 
 interface HeroSortFilterOption extends IOption {
 	value: DuelsHeroSortFilterType;
+}
+
+interface StatTypeFilterOption extends IOption {
+	value: DuelsStatTypeFilterType;
 }

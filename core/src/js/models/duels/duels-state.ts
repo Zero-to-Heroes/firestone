@@ -4,6 +4,7 @@ import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { DuelsHeroSortFilterType } from './duels-hero-sort-filter.type';
 import { DuelsPlayerStats } from './duels-player-stats';
 import { DuelsRun } from './duels-run';
+import { DuelsStatTypeFilterType } from './duels-stat-type-filter.type';
 
 export class DuelsState {
 	readonly loading: boolean = true;
@@ -14,6 +15,7 @@ export class DuelsState {
 	readonly playerStats: DuelsPlayerStats;
 
 	readonly activeHeroSortFilter: DuelsHeroSortFilterType;
+	readonly activeStatTypeFilter: DuelsStatTypeFilterType;
 
 	public static create(base: DuelsState): DuelsState {
 		return Object.assign(new DuelsState(), base);

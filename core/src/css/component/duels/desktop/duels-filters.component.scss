@@ -107,3 +107,7 @@ ng-select.disabled {
 		}
 	}
 }
+
+.stat-type-filter ::ng-deep ng-select {
+	width: 170px;
+}

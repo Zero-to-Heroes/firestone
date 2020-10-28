@@ -103,6 +103,7 @@ export class DuelsStateBuilderService {
 			playerStats: playerStats,
 			loading: false,
 			activeHeroSortFilter: prefs.duelsActiveHeroSortFilter,
+			activeStatTypeFilter: prefs.duelsActiveStatTypeFilter,
 		} as DuelsState);
 	}
 

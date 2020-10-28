@@ -41,8 +41,17 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		if (!this._state?.playerStats) {
 			return;
 		}
-		// TODO: add a way to choose whether to see heroes / hero powers / signature treasures (use same
-		// page, probably no need for several tabs)
-		this.stats = this._state.playerStats.heroStats;
+		switch (this._state.activeStatTypeFilter) {
+			case 'hero-power':
+				this.stats = this._state.playerStats.heroPowerStats;
+				break;
+			case 'signature-treasure':
+				this.stats = this._state.playerStats.signatureTreasureStats;
+				break;
+			case 'hero':
+			default:
+				this.stats = this._state.playerStats.heroStats;
+				break;
+		}
 	}
 }

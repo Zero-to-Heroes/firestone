@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsHeroSortFilterType } from '../models/duels/duels-hero-sort-filter.type';
+import { DuelsStatTypeFilterType } from '../models/duels/duels-stat-type-filter.type';
 import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-filter.type';
@@ -207,6 +208,12 @@ export class PreferencesService {
 	public async updateDuelsHeroSortFilter(value: DuelsHeroSortFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActiveHeroSortFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateDuelsStatTypeFilter(value: DuelsStatTypeFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsActiveStatTypeFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

@@ -1,4 +1,5 @@
 import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
+import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
@@ -141,6 +142,7 @@ export class Preferences {
 
 	readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
+	readonly duelsActiveStatTypeFilter: DuelsStatTypeFilterType = 'hero';
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
