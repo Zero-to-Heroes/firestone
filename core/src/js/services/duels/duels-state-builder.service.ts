@@ -5,10 +5,16 @@ import {
 	HeroPowerStat,
 	HeroStat,
 	SignatureTreasureStat,
+	TreasureStat,
 } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
-import { DuelsHeroPlayerStat, DuelsPlayerStats } from '../../models/duels/duels-player-stats';
+import {
+	DuelsHeroPlayerStat,
+	DuelsPlayerStats,
+	DuelsTreasureStat,
+	DuelsTreasureStatForClass,
+} from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsState } from '../../models/duels/duels-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
@@ -134,11 +140,81 @@ export class DuelsStateBuilderService {
 			(stat: SignatureTreasureStat) => stat.signatureTreasureCardId,
 			prefs,
 		);
+		const treasureStats: readonly DuelsTreasureStat[] = this.buildTreasureStats(
+			runs,
+			globalStats.treasureStats,
+			prefs,
+		);
+		console.log('[duels-state-builder] built trasure stats', treasureStats);
 		return {
 			heroStats: heroStats,
 			heroPowerStats: heroPowerStats,
 			signatureTreasureStats: signatureTreasureStats,
+			treasureStats: treasureStats,
 		} as DuelsPlayerStats;
+	}
+
+	private buildTreasureStats(
+		runs: readonly DuelsRun[],
+		treasureStats: readonly TreasureStat[],
+		prefs: Preferences,
+	): readonly DuelsTreasureStat[] {
+		const groupedByTreasures = groupByFunction((stat: TreasureStat) => stat.cardId)(treasureStats);
+		const treasureIds = Object.keys(groupedByTreasures);
+		const totalTreasureOfferings = treasureStats.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
+		const totalPick = treasureStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
+		if (totalPick * 3 !== totalTreasureOfferings) {
+			console.error('[duels-state-builder] invalid data', totalPick, totalTreasureOfferings, treasureStats);
+		}
+		return treasureIds.map(treasureId => {
+			const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
+			return this.buildTreasureStat(treasureId, statsForTreasure, totalTreasureOfferings);
+		});
+	}
+
+	private buildTreasureStat(
+		treasureId: string,
+		statsForTreasure: readonly TreasureStat[],
+		totalTreasureOfferings: number,
+	): DuelsTreasureStat {
+		const groupedByClass = groupByFunction((stat: TreasureStat) => stat.playerClass)(statsForTreasure);
+		const totalTreasureOfferingsForTreasure = statsForTreasure
+			.map(stat => stat.totalOffered)
+			.reduce((a, b) => a + b, 0);
+		const statsForClass: readonly DuelsTreasureStatForClass[] = Object.keys(groupedByClass).map(playerClass => {
+			const classStats: readonly TreasureStat[] = groupedByClass[playerClass];
+			return this.buildTreasureForClass(treasureId, playerClass, classStats, totalTreasureOfferingsForTreasure);
+		});
+		const globalTotalOffered = statsForClass.map(stat => stat.globalTotalOffered).reduce((a, b) => a + b, 0);
+		const globalTotalPicked = statsForClass.map(stat => stat.globalTotalPicked).reduce((a, b) => a + b, 0);
+		return {
+			cardId: treasureId,
+			periodStart: statsForClass[0].periodStart,
+			statsForClass: statsForClass,
+			globalTotalOffered: globalTotalOffered,
+			globalTotalPicked: globalTotalPicked,
+			globalOfferingRate: (3 * 100 * globalTotalOffered) / totalTreasureOfferings,
+			globalPickRate: (100 * globalTotalPicked) / globalTotalOffered,
+		} as DuelsTreasureStat;
+	}
+
+	private buildTreasureForClass(
+		treasureId: string,
+		playerClass: string,
+		classStats: readonly TreasureStat[],
+		totalTreasureOfferingsForTreasure: number,
+	): DuelsTreasureStatForClass {
+		const globalTotalOffered = classStats.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
+		const globalTotalPicked = classStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
+		return {
+			cardId: treasureId,
+			playerClass: playerClass,
+			periodStart: classStats[0].periodStart,
+			globalTotalOffered: globalTotalOffered,
+			globalTotalPicked: globalTotalPicked,
+			globalOfferingRate: (3 * 100 * globalTotalOffered) / totalTreasureOfferingsForTreasure,
+			globalPickRate: (100 * globalTotalPicked) / globalTotalOffered,
+		} as DuelsTreasureStatForClass;
 	}
 
 	private buildStats(
@@ -147,7 +223,8 @@ export class DuelsStateBuilderService {
 		idExtractor: (stat: HeroStat | HeroPowerStat | SignatureTreasureStat) => string,
 		prefs: Preferences,
 	): readonly DuelsHeroPlayerStat[] {
-		const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		const totalMatchesForPlayer = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		const totalStats = stats.map(stat => stat.totalMatches).reduce((a, b) => a + b, 0);
 		return stats
 			.map(stat => {
 				const playerTotalMatches = runs
@@ -159,10 +236,11 @@ export class DuelsStateBuilderService {
 					heroClass: stat.heroClass,
 					periodStart: stat.periodStart,
 					globalTotalMatches: stat.totalMatches,
-					globalPopularity: stat.popularity,
-					globalWinrate: stat.winrate,
+					globalPopularity: totalStats === 0 ? 0 : (100 * stat.totalMatches) / totalStats,
+					globalWinrate: stat.totalMatches === 0 ? 0 : (100 * stat.totalWins) / stat.totalMatches,
 					playerTotalMatches: playerTotalMatches,
-					playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
+					playerPopularity:
+						totalMatchesForPlayer === 0 ? 0 : (100 * playerTotalMatches) / totalMatchesForPlayer,
 					playerWinrate:
 						playerTotalMatches === 0
 							? 0

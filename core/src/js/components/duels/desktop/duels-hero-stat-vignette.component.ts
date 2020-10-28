@@ -27,7 +27,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						<div class="item popularity">
 							<div class="label">Games played</div>
 							<div class="values">
-								<div class="value player">{{ buildValue(playerGamesPlayed) }}</div>
+								<div class="value player">{{ buildValue(playerGamesPlayed, 0) }}</div>
 							</div>
 						</div>
 					</div>
@@ -47,8 +47,8 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		this.name = this.cards.getCard(value.cardId)?.name;
 		this.playerClass = this.cards.getCard(value.cardId)?.playerClass;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
-		this.playerWinrate = 100 * value.playerWinrate;
-		this.globalWinrate = 100 * value.globalWinrate;
+		this.playerWinrate = value.playerWinrate;
+		this.globalWinrate = value.globalWinrate;
 		this.playerGamesPlayed = value.playerTotalMatches || 0;
 	}
 
@@ -72,8 +72,8 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		return value == null ? 'N/A' : value.toFixed(1) + '%';
 	}
 
-	buildValue(value: number): string {
-		return value == null ? 'N/A' : value === 0 ? '0' : value.toFixed(2);
+	buildValue(value: number, decimal = 2): string {
+		return value == null ? 'N/A' : value === 0 ? '0' : value.toFixed(decimal);
 	}
 }
 
