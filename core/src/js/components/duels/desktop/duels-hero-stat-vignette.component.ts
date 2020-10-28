@@ -13,8 +13,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	template: `
 		<div class="duels-hero-stat-vignette" [ngClass]="{ 'unused': playerGamesPlayed === 0 }">
 			<div class="box-side">
-				<div class="name">{{ name }}</div>
-				<img [src]="icon" class="portrait" />
+				<div class="name" [helpTooltip]="name">{{ name }}</div>
+				<img [src]="icon" class="portrait" [helpTooltip]="playerClass" />
 				<div class="stats">
 					<div class="item winrate">
 						<div class="label">Winrate</div>
@@ -45,6 +45,7 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		}
 		this._stat = value;
 		this.name = this.cards.getCard(value.cardId)?.name;
+		this.playerClass = this.cards.getCard(value.cardId)?.playerClass;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 		this.playerWinrate = 100 * value.playerWinrate;
 		this.globalWinrate = 100 * value.globalWinrate;
@@ -53,6 +54,7 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 
 	_stat: DuelsHeroPlayerStat;
 	name: string;
+	playerClass: string;
 	icon: string;
 	playerWinrate: number;
 	globalWinrate: number;
