@@ -56,13 +56,7 @@ export class EndGameListenerService {
 					this.ow.setExtensionInfo(JSON.stringify(info));
 					break;
 				case GameEvent.LOCAL_PLAYER:
-					this.currentDeckstring = this.deckService.currentDeck.deckstring;
-					// First remove the diacritics, then remove the weird unicode characters (deck names can't be fun!)
-					this.currentDeckname = this.deckService.currentDeck.name
-						?.normalize('NFKD')
-						// Allow some characters
-						?.replace(/[^\w^\{^\}^\[^\]$^/^\s]/g, '')
-						?.replace(/[^\x20-\x7E]/g, '');
+					this.listenToDeckUpdate();
 					break;
 				case GameEvent.MATCH_METADATA:
 					this.currentBuildNumber = gameEvent.additionalData.metaData.BuildNumber;
@@ -82,7 +76,34 @@ export class EndGameListenerService {
 						this.currentBuildNumber,
 						this.currentScenarioId,
 					);
+					if (this.deckTimeout) {
+						clearTimeout(this.deckTimeout);
+					}
 			}
 		});
+	}
+
+	private deckTimeout;
+	private listenToDeckUpdate() {
+		if (this.deckTimeout) {
+			clearTimeout(this.deckTimeout);
+		}
+		if (!this.deckService.currentDeck?.deckstring) {
+			console.log('[manastorm-bridge] no deckstring, waiting');
+			this.deckTimeout = setTimeout(() => this.listenToDeckUpdate(), 2000);
+			return;
+		}
+		this.currentDeckstring = this.deckService.currentDeck.deckstring;
+		console.log(
+			'[manastorm-bridge] got local player info, adding deckstring',
+			this.currentDeckstring,
+			this.deckService.currentDeck,
+		);
+		// First remove the diacritics, then remove the weird unicode characters (deck names can't be fun!)
+		this.currentDeckname = this.deckService.currentDeck.name
+			?.normalize('NFKD')
+			// Allow some characters
+			?.replace(/[^\w^\{^\}^\[^\]$^/^\s]/g, '')
+			?.replace(/[^\x20-\x7E]/g, '');
 	}
 }

@@ -90,6 +90,7 @@ export class DeckParserService {
 					this.currentDeck,
 					this.currentScenarioId,
 				);
+				this.updateDeckFromMemory(activeDeck.DeckList);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 				this.currentDeck.scenarioId = this.currentScenarioId;
 			}
@@ -124,7 +125,7 @@ export class DeckParserService {
 			console.log('[deck-parser] active deck from memory', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
-				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
+				this.updateDeckFromMemory(activeDeck.DeckList);
 			}
 		}
 		// console.log(
@@ -139,6 +140,32 @@ export class DeckParserService {
 		}
 		console.log('[deck-parser] returning current deck', this.currentDeck);
 		return this.currentDeck;
+	}
+
+	private updateDeckFromMemory(decklistFromMemory) {
+		console.log('[deck-parser] updating deck from memory', decklistFromMemory);
+		const decklist: readonly number[] = this.normalizeWithDbfIds(decklistFromMemory);
+		console.log('[deck-parser] normalized decklist with dbf ids', decklist);
+		this.currentDeck.deck = {
+			format: 1, // fake
+			cards: this.explodeDecklist(decklist),
+			heroes: [7], // fake
+		};
+		console.log('[deck-parser] building deckstring', this.currentDeck.deck);
+		const deckString = encode(this.currentDeck.deck);
+		console.log('[deck-parser] built deckstring', deckString);
+		this.currentDeck.deckstring = this.normalizeDeckstring(deckString);
+		console.log('[deck-parser] updated deck with deckstring', this.currentDeck.deckstring);
+	}
+
+	private normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
+		return decklist.map(cardId => {
+			let card = this.allCards.getCard(cardId as string);
+			if (!card?.dbfId) {
+				card = this.allCards.getCardFromDbfId(cardId as number);
+			}
+			return card?.dbfId;
+		});
 	}
 
 	private isDeckLogged(scenarioId: number): boolean {
@@ -182,9 +209,8 @@ export class DeckParserService {
 		}
 	}
 
-	private explodeDecklist(decklist: string[]): any[] {
-		// Can be either a dbfId or a cardId, depending on the situation
-		return decklist.map(id => [id, 1]);
+	private explodeDecklist(decklistWithDbfIds: readonly number[]): any[] {
+		return decklistWithDbfIds.map(id => [id, 1]);
 	}
 
 	public parseActiveDeck(data: string) {

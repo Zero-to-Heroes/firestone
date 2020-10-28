@@ -12,7 +12,16 @@ import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
 export class EndGameUploaderService {
-	private readonly supportedModesDeckRetrieve = ['practice', 'friendly', 'ranked', 'casual', 'arena', 'tavernbrawl'];
+	private readonly supportedModesDeckRetrieve = [
+		'practice',
+		'friendly',
+		'ranked',
+		'casual',
+		'arena',
+		'tavernbrawl',
+		'duels',
+		'paid-duels',
+	];
 
 	constructor(
 		private replayUploadService: ReplayUploadService,
@@ -162,8 +171,15 @@ export class EndGameUploaderService {
 		game.buildNumber = buildNumber;
 		game.scenarioId = scenarioId;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
+			console.log('[manastorm-bridge] adding deckstring', deckstring, game.gameMode);
 			game.deckstring = deckstring;
 			game.deckName = deckName;
+		} else {
+			console.log(
+				'[manastorm-bridge] game mode not supporting deckstrings, not sending it',
+				deckstring,
+				game.gameMode,
+			);
 		}
 		console.log('[manastorm-bridge] added meta data');
 		game.uncompressedXmlReplay = replayXml;
