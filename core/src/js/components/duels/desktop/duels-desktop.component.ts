@@ -30,6 +30,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 								<span>{{ category.name }} </span>
 							</li>
 						</ul>
+						<duels-filters [state]="state" [navigation]="navigation"> </duels-filters>
 						<duels-runs-list
 							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-runs'"
 							[state]="state.duels"

@@ -128,7 +128,7 @@ export class StoreBootstrapService {
 			await this.prefs.setDuelsRunId(lastRunId);
 		}
 		const duelsStats: DuelsState = this.duels.initState(duelsGlobalStats, duelsRunInfo);
-		const newDuelsState = this.duels.updateState(duelsStats, matchStats);
+		const newDuelsState = await this.duels.updateState(duelsStats, matchStats);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,

@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { DuelsHeroSortFilterType } from '../models/duels/duels-hero-sort-filter.type';
 import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-filter.type';
@@ -44,7 +45,7 @@ export class PreferencesService {
 			'field': field,
 			'value': pref,
 		});
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 		return newPrefs;
 	}
 
@@ -53,7 +54,7 @@ export class PreferencesService {
 		const ftue: Ftue = { ...prefs.ftue, hasSeenGlobalFtue: true };
 		// console.log('setting pref', field, pref);
 		const newPrefs: Preferences = { ...prefs, ftue: ftue };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async setDuelsRunId(id: string) {
@@ -65,49 +66,49 @@ export class PreferencesService {
 	public async setDontConfirmVideoDeletion(dontAsk: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async setContactEmail(value: string) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, contactEmail: value };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async setDontRecordAchievements(pref: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontRecordAchievements: pref };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateAdvancedSettings(advancedSettings: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, advancedModeToggledOn: advancedSettings };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async setHasSeenVideoCaptureChangeNotif(pref: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, hasSeenVideoCaptureChangeNotif: pref };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async setTwitchAccessToken(pref: string) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, twitchAccessToken: pref };
-		this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
+		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
 	}
 
 	public async setTwitchUserName(pref: string) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, twitchUserName: pref };
-		this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
+		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
 	}
 
 	public async disconnectTwitch() {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, twitchAccessToken: undefined };
-		this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
+		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
 	}
 
 	public async acknowledgeFtue(pref: string) {
@@ -115,44 +116,44 @@ export class PreferencesService {
 		const ftue = prefs.ftue;
 		const newFtue = { ...ftue, [pref]: true } as Ftue;
 		const newPrefs: Preferences = { ...prefs, ftue: newFtue };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateTrackerPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, decktrackerPosition: { left, top } };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateOpponentTrackerPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, opponentOverlayPosition: { left, top } };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateSecretsHelperPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, secretsHelperPosition: { left, top } };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateBgsSimulationWidgetPosition(left: any, top: any) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsSimulationWidgetPosition: { left, top } };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateBgsBannedTribedPosition(left: any, top: any) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsBannedTribesWidgetPosition: { left, top } };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateCounterPosition(activeCounter: string, side: string, left: any, top: any) {
 		const prefs = await this.getPreferences();
 		const propertyName = this.buildCounterPropertyName(activeCounter, side);
 		const newPrefs: Preferences = { ...prefs, [propertyName]: { left, top } };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async getCounterPosition(activeCounter: string, side: string) {
@@ -163,14 +164,14 @@ export class PreferencesService {
 	public async updateSecretsHelperWidgetPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, secretsHelperWidgetPosition: { left, top } };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async setZoneToggleDefaultClose(name: string, side: string, close: boolean) {
 		const prefs = await this.getPreferences();
 		const propertyName = 'overlayZoneToggleDefaultClose_' + side + '_' + name;
 		const newPrefs: Preferences = { ...prefs, [propertyName]: close };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async getZoneToggleDefaultClose(name: string, side: string) {
@@ -182,25 +183,31 @@ export class PreferencesService {
 	public async updateBgsTimeFilter(value: BgsActiveTimeFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveTimeFilter: value };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateBgsRankFilter(value: BgsRankFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveRankFilter: value };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateBgsHeroSortFilter(value: BgsHeroSortFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveHeroSortFilter: value };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
 	}
 
 	public async updateBgsMmrGroupFilter(value: MmrGroupFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveMmrGroupFilter: value };
-		this.savePreferences(newPrefs);
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateDuelsHeroSortFilter(value: DuelsHeroSortFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsActiveHeroSortFilter: value };
+		await this.savePreferences(newPrefs);
 	}
 
 	public async setDesktopDeckFilters(value: DeckFilters) {

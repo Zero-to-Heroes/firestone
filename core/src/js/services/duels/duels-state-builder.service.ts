@@ -1,6 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
-import { DuelsGlobalStats } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
+import {
+	DuelsGlobalStats,
+	HeroPowerStat,
+	HeroStat,
+	SignatureTreasureStat,
+} from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DuelsHeroPlayerStat, DuelsPlayerStats } from '../../models/duels/duels-player-stats';
@@ -9,8 +14,10 @@ import { DuelsState } from '../../models/duels/duels-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { OverwolfService } from '../overwolf.service';
+import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
@@ -18,7 +25,11 @@ const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazona
 
 @Injectable()
 export class DuelsStateBuilderService {
-	constructor(private readonly api: ApiRunner, private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly api: ApiRunner,
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+	) {}
 
 	public async loadRuns(): Promise<readonly DuelsRunInfo[]> {
 		const user = await this.ow.getCurrentUser();
@@ -65,7 +76,8 @@ export class DuelsStateBuilderService {
 		];
 	}
 
-	public updateState(currentState: DuelsState, matchStats: GameStats): DuelsState {
+	public async updateState(currentState: DuelsState, matchStats: GameStats): Promise<DuelsState> {
+		const prefs = await this.prefs.getPreferences();
 		const duelMatches = matchStats?.stats
 			?.filter(match => match.gameMode === 'duels' || match.gameMode === 'paid-duels')
 			.filter(match => match.currentDuelsRunId);
@@ -84,94 +96,94 @@ export class DuelsStateBuilderService {
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs);
 
-		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats);
+		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats, prefs);
 		console.log('[duels-state-builder] playerStats', playerStats);
 		return currentState.update({
 			runs: runs,
 			playerStats: playerStats,
 			loading: false,
+			activeHeroSortFilter: prefs.duelsActiveHeroSortFilter,
 		} as DuelsState);
 	}
 
-	private buildStatsWithPlayer(runs: readonly DuelsRun[], globalStats: DuelsGlobalStats): DuelsPlayerStats {
+	private buildStatsWithPlayer(
+		runs: readonly DuelsRun[],
+		globalStats: DuelsGlobalStats,
+		prefs: Preferences,
+	): DuelsPlayerStats {
 		if (!globalStats) {
 			return null;
 		}
 		const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
-		const heroStats: readonly DuelsHeroPlayerStat[] = globalStats.heroStats.map(stat => {
-			const playerTotalMatches = runs
-				.filter(run => run.heroCardId === stat.heroCardId)
-				.map(run => run.wins + run.losses)
-				.reduce((a, b) => a + b, 0);
-			return {
-				cardId: stat.heroCardId,
-				heroClass: stat.heroClass,
-				periodStart: stat.periodStart,
-				globalTotalMatches: stat.totalMatches,
-				globalPopularity: stat.popularity,
-				globalWinrate: stat.winrate,
-				playerTotalMatches: playerTotalMatches,
-				playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
-				playerWinrate:
-					playerTotalMatches === 0
-						? 0
-						: runs
-								.filter(run => run.heroCardId === stat.heroCardId)
-								.map(run => run.wins)
-								.reduce((a, b) => a + b, 0) / playerTotalMatches,
-			} as DuelsHeroPlayerStat;
-		});
-		const heroPowerStats: readonly DuelsHeroPlayerStat[] = globalStats.heroPowerStats.map(stat => {
-			const playerTotalMatches = runs
-				.filter(run => run.heroPowerCardId === stat.heroPowerCardId)
-				.map(run => run.wins + run.losses)
-				.reduce((a, b) => a + b, 0);
-			return {
-				cardId: stat.heroPowerCardId,
-				heroClass: stat.heroClass,
-				periodStart: stat.periodStart,
-				globalTotalMatches: stat.totalMatches,
-				globalPopularity: stat.popularity,
-				globalWinrate: stat.winrate,
-				playerTotalMatches: playerTotalMatches,
-				playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
-				playerWinrate:
-					playerTotalMatches === 0
-						? 0
-						: runs
-								.filter(run => run.heroCardId === stat.heroPowerCardId)
-								.map(run => run.wins)
-								.reduce((a, b) => a + b, 0) / playerTotalMatches,
-			} as DuelsHeroPlayerStat;
-		});
-		const signatureTreasureStats: readonly DuelsHeroPlayerStat[] = globalStats.signatureTreasureStats.map(stat => {
-			const playerTotalMatches = runs
-				.filter(run => run.signatureTreasureCardId === stat.signatureTreasureCardId)
-				.map(run => run.wins + run.losses)
-				.reduce((a, b) => a + b, 0);
-			return {
-				cardId: stat.signatureTreasureCardId,
-				heroClass: stat.heroClass,
-				periodStart: stat.periodStart,
-				globalTotalMatches: stat.totalMatches,
-				globalPopularity: stat.popularity,
-				globalWinrate: stat.winrate,
-				playerTotalMatches: playerTotalMatches,
-				playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
-				playerWinrate:
-					playerTotalMatches === 0
-						? 0
-						: runs
-								.filter(run => run.heroCardId === stat.signatureTreasureCardId)
-								.map(run => run.wins)
-								.reduce((a, b) => a + b, 0) / playerTotalMatches,
-			} as DuelsHeroPlayerStat;
-		});
+		const heroStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
+			runs,
+			globalStats.heroStats,
+			(stat: HeroStat) => stat.heroCardId,
+			prefs,
+		);
+		const heroPowerStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
+			runs,
+			globalStats.heroPowerStats,
+			(stat: HeroPowerStat) => stat.heroPowerCardId,
+			prefs,
+		);
+		const signatureTreasureStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
+			runs,
+			globalStats.signatureTreasureStats,
+			(stat: SignatureTreasureStat) => stat.signatureTreasureCardId,
+			prefs,
+		);
 		return {
 			heroStats: heroStats,
 			heroPowerStats: heroPowerStats,
 			signatureTreasureStats: signatureTreasureStats,
 		} as DuelsPlayerStats;
+	}
+
+	private buildStats(
+		runs: readonly DuelsRun[],
+		stats: readonly (HeroStat | HeroPowerStat | SignatureTreasureStat)[],
+		idExtractor: (stat: HeroStat | HeroPowerStat | SignatureTreasureStat) => string,
+		prefs: Preferences,
+	): readonly DuelsHeroPlayerStat[] {
+		const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		return stats
+			.map(stat => {
+				const playerTotalMatches = runs
+					.filter(run => run.heroCardId === idExtractor(stat))
+					.map(run => run.wins + run.losses)
+					.reduce((a, b) => a + b, 0);
+				return {
+					cardId: idExtractor(stat),
+					heroClass: stat.heroClass,
+					periodStart: stat.periodStart,
+					globalTotalMatches: stat.totalMatches,
+					globalPopularity: stat.popularity,
+					globalWinrate: stat.winrate,
+					playerTotalMatches: playerTotalMatches,
+					playerPopularity: totalMatches === 0 ? 0 : (100 * playerTotalMatches) / totalMatches,
+					playerWinrate:
+						playerTotalMatches === 0
+							? 0
+							: runs
+									.filter(run => run.heroCardId === idExtractor(stat))
+									.map(run => run.wins)
+									.reduce((a, b) => a + b, 0) / playerTotalMatches,
+				} as DuelsHeroPlayerStat;
+			})
+			.sort(this.getStatSortFunction(prefs));
+	}
+
+	private getStatSortFunction(prefs: Preferences): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {
+		switch (prefs.duelsActiveHeroSortFilter) {
+			case 'player-winrate':
+				return (a, b) => b.playerWinrate - a.playerWinrate;
+			case 'global-winrate':
+				return (a, b) => b.globalWinrate - a.globalWinrate;
+			case 'games-played':
+			default:
+				return (a, b) => b.playerTotalMatches - a.playerTotalMatches;
+		}
 	}
 
 	private buildRun(runId: string, matchesForRun: GameStat[], runInfo: DuelsRunInfo[]): DuelsRun {

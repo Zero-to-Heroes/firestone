@@ -75,6 +75,7 @@ import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summa
 import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
+import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
 import { DungeonLootInfoUpdatedEvent } from './events/duels/dungeon-loot-info-updated-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
@@ -145,6 +146,7 @@ import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-de
 import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
+import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
 import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot-info-updated-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
@@ -594,6 +596,9 @@ export class MainWindowStoreService {
 
 			DuelsSelectCategoryEvent.eventName(),
 			new DuelsSelectCategoryProcessor(),
+
+			DuelsHeroSortFilterSelectedEvent.eventName(),
+			new DuelsHeroSortFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 		);
 	}
 

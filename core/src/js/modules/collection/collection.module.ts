@@ -84,6 +84,7 @@ import { DecktrackerPersonalStatsRankingComponent } from '../../components/deckt
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
 import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
+import { DuelsFiltersComponent } from '../../components/duels/desktop/duels-filters.component';
 import {
 	DuelsGlobalValueComponent,
 	DuelsHeroStatVignetteComponent,
@@ -243,6 +244,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsHeroStatsComponent,
 		DuelsHeroStatVignetteComponent,
 		DuelsGlobalValueComponent,
+		DuelsFiltersComponent,
 
 		FtueComponent,
 	],
