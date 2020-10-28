@@ -17,10 +17,17 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<img [src]="icon" class="portrait" [helpTooltip]="playerClass" />
 				<div class="stats">
 					<div class="item winrate">
-						<div class="label">Winrate</div>
+						<div class="label">Global winrate</div>
+						<div class="values">
+							<div class="value player">{{ buildPercents(globalWinrate) }}</div>
+							<!-- <duels-global-value [value]="buildPercents(globalWinrate)"></duels-global-value> -->
+						</div>
+					</div>
+					<div class="item winrate">
+						<div class="label">Your winrate</div>
 						<div class="values">
 							<div class="value player">{{ buildPercents(playerWinrate) }}</div>
-							<duels-global-value [value]="buildPercents(globalWinrate)"></duels-global-value>
+							<!-- <duels-global-value [value]="buildPercents(globalWinrate)"></duels-global-value> -->
 						</div>
 					</div>
 					<div class="stats">

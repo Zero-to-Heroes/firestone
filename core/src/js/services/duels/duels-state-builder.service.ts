@@ -74,7 +74,14 @@ export class DuelsStateBuilderService {
 			} as DuelsCategory),
 			DuelsCategory.create({
 				id: 'duels-stats',
-				name: 'Stats',
+				name: 'Heroes',
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-treasures',
+				name: 'Treasures',
 				enabled: true,
 				icon: undefined,
 				categories: null,
@@ -110,6 +117,8 @@ export class DuelsStateBuilderService {
 			loading: false,
 			activeHeroSortFilter: prefs.duelsActiveHeroSortFilter,
 			activeStatTypeFilter: prefs.duelsActiveStatTypeFilter,
+			activeTreasureSortFilter: prefs.duelsActiveTreasureSortFilter,
+			activeTreasureStatTypeFilter: prefs.duelsActiveTreasureStatTypeFilter,
 		} as DuelsState);
 	}
 
@@ -166,10 +175,12 @@ export class DuelsStateBuilderService {
 		if (totalPick * 3 !== totalTreasureOfferings) {
 			console.error('[duels-state-builder] invalid data', totalPick, totalTreasureOfferings, treasureStats);
 		}
-		return treasureIds.map(treasureId => {
-			const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
-			return this.buildTreasureStat(treasureId, statsForTreasure, totalTreasureOfferings);
-		});
+		return treasureIds
+			.map(treasureId => {
+				const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
+				return this.buildTreasureStat(treasureId, statsForTreasure, totalTreasureOfferings);
+			})
+			.sort(this.getTreasureSortFunction(prefs));
 	}
 
 	private buildTreasureStat(
@@ -262,6 +273,16 @@ export class DuelsStateBuilderService {
 			case 'games-played':
 			default:
 				return (a, b) => b.playerTotalMatches - a.playerTotalMatches;
+		}
+	}
+
+	private getTreasureSortFunction(prefs: Preferences): (a: DuelsTreasureStat, b: DuelsTreasureStat) => number {
+		switch (prefs.duelsActiveTreasureSortFilter) {
+			case 'global-offering':
+				return (a, b) => b.globalOfferingRate - a.globalOfferingRate;
+			case 'global-pickrate':
+			default:
+				return (a, b) => b.globalPickRate - a.globalPickRate;
 		}
 	}
 

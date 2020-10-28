@@ -41,6 +41,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[state]="state.duels"
 						>
 						</duels-hero-stats>
+						<duels-treasure-stats
+							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-treasures'"
+							[state]="state.duels"
+						>
+						</duels-treasure-stats>
 					</div>
 				</with-loading>
 			</section>

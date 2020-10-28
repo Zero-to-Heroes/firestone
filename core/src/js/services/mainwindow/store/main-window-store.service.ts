@@ -78,6 +78,7 @@ import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hid
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
 import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
+import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
 import { DungeonLootInfoUpdatedEvent } from './events/duels/dungeon-loot-info-updated-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
@@ -150,6 +151,7 @@ import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
 import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
+import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
 import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot-info-updated-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
@@ -604,6 +606,9 @@ export class MainWindowStoreService {
 
 			DuelsStatTypeFilterSelectedEvent.eventName(),
 			new DuelsStatTypeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsTreasureSortFilterSelectedEvent.eventName(),
+			new DuelsTreasureSortFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 		);
 	}
 

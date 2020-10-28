@@ -10,10 +10,12 @@ import {
 import { IOption } from 'ng-select';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
+import { DuelsTreasureSortFilterType } from '../../../models/duels/duels-treasure-sort-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { DuelsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsStatTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-stat-type-filter-selected-event';
+import { DuelsTreasureSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-treasure-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -42,6 +44,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectStatTypeFilter($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="treasure-sort-filter"
+				[options]="treasureSortFilterOptions"
+				[filter]="activeTreasureSortFilter"
+				[checkVisibleHandler]="treasureVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectTreasureSortFilter($event)"
 			></fs-filter-dropdown>
 		</div>
 	`,
@@ -105,6 +116,38 @@ export class DuelsFiltersComponent implements AfterViewInit {
 	statTypeFilterVisible: boolean;
 	statTypeVisibleHandler = this.heroVisibleHandler;
 
+	treasureSortFilterOptions: readonly TreasureSortFilterOption[] = [
+		{
+			value: 'global-pickrate',
+			label: 'Global pick rate',
+		} as TreasureSortFilterOption,
+		{
+			value: 'global-offering',
+			label: 'Global offering',
+		} as TreasureSortFilterOption,
+	] as readonly TreasureSortFilterOption[];
+	activeTreasureSortFilter: DuelsTreasureSortFilterType;
+	treasureSortFilterVisible: boolean;
+	treasureVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		console.log(
+			'should show treasure filter?',
+			state &&
+				navigation &&
+				navigation.currentApp == 'duels' &&
+				navigation.navigationDuels &&
+				navigation.navigationDuels.selectedCategoryId === 'duels-treasures',
+			navigation?.currentApp,
+			navigation?.navigationDuels?.selectedCategoryId,
+		);
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'duels' &&
+			navigation.navigationDuels &&
+			navigation.navigationDuels.selectedCategoryId === 'duels-treasures'
+		);
+	};
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
@@ -124,14 +167,22 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new DuelsStatTypeFilterSelectedEvent(option.value));
 	}
 
+	selectTreasureSortFilter(option: TreasureSortFilterOption) {
+		this.stateUpdater.next(new DuelsTreasureSortFilterSelectedEvent(option.value));
+	}
+
 	anyVisible() {
-		return this.heroVisibleHandler(this._navigation, this._state);
+		return (
+			this.heroVisibleHandler(this._navigation, this._state) ||
+			this.statTypeVisibleHandler(this._navigation, this._state) ||
+			this.treasureVisibleHandler(this._navigation, this._state)
+		);
 	}
 
 	private doSetValues() {
 		this.activeHeroSortFilter = this._state.duels?.activeHeroSortFilter;
 		this.activeStatTypeFilter = this._state.duels?.activeStatTypeFilter;
-		console.log('active filter', this.activeHeroSortFilter, this._state);
+		this.activeTreasureSortFilter = this._state.duels?.activeTreasureSortFilter;
 	}
 }
 
@@ -141,4 +192,8 @@ interface HeroSortFilterOption extends IOption {
 
 interface StatTypeFilterOption extends IOption {
 	value: DuelsStatTypeFilterType;
+}
+
+interface TreasureSortFilterOption extends IOption {
+	value: DuelsTreasureSortFilterType;
 }

@@ -37,6 +37,7 @@
 
 	.menu-selection {
 		margin-bottom: 12px;
+		flex-shrink: 0;
 	}
 
 	.secondary {
@@ -63,9 +64,9 @@
 }
 
 duels-filters {
-	position: absolute;
-	right: 0;
-	top: 0;
+	// position: absolute;
+	// right: 0;
+	// top: 0;
 }
 
 loading-state {

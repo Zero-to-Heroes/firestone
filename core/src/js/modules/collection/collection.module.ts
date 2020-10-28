@@ -92,6 +92,8 @@ import {
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.component';
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
+import { DuelsTreasureStatVignetteComponent } from '../../components/duels/desktop/duels-treasure-stat-vignette.component';
+import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
@@ -245,6 +247,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsHeroStatVignetteComponent,
 		DuelsGlobalValueComponent,
 		DuelsFiltersComponent,
+		DuelsTreasureStatsComponent,
+		DuelsTreasureStatVignetteComponent,
 
 		FtueComponent,
 	],
