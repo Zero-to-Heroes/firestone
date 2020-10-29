@@ -10,11 +10,13 @@ import {
 import { IOption } from 'ng-select';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
+import { DuelsTreasurePassiveTypeFilterType } from '../../../models/duels/duels-treasure-passive-type-filter.type';
 import { DuelsTreasureSortFilterType } from '../../../models/duels/duels-treasure-sort-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { DuelsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsStatTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-stat-type-filter-selected-event';
+import { DuelsTreasurePassiveTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-treasure-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -44,6 +46,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectStatTypeFilter($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="treasure-passive-type-filter"
+				[options]="treasurePassiveTypeFilterOptions"
+				[filter]="activeTreasurePassiveTypeFilter"
+				[checkVisibleHandler]="treasurePassiveVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectTreasurePassiveTypeFilter($event)"
 			></fs-filter-dropdown>
 			<fs-filter-dropdown
 				class="treasure-sort-filter"
@@ -116,6 +127,28 @@ export class DuelsFiltersComponent implements AfterViewInit {
 	statTypeFilterVisible: boolean;
 	statTypeVisibleHandler = this.heroVisibleHandler;
 
+	treasurePassiveTypeFilterOptions: readonly TreasurePassiveTypeFilterOption[] = [
+		{
+			value: 'treasure',
+			label: 'Treasures',
+		} as TreasurePassiveTypeFilterOption,
+		{
+			value: 'passive',
+			label: 'Passives',
+		} as TreasurePassiveTypeFilterOption,
+	] as readonly TreasurePassiveTypeFilterOption[];
+	activeTreasurePassiveTypeFilter: DuelsTreasurePassiveTypeFilterType;
+	treasurePassiveTypeFilterVisible: boolean;
+	treasurePassiveVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'duels' &&
+			navigation.navigationDuels &&
+			navigation.navigationDuels.selectedCategoryId === 'duels-treasures'
+		);
+	};
+
 	treasureSortFilterOptions: readonly TreasureSortFilterOption[] = [
 		{
 			value: 'global-pickrate',
@@ -125,20 +158,14 @@ export class DuelsFiltersComponent implements AfterViewInit {
 			value: 'global-offering',
 			label: 'Global offering',
 		} as TreasureSortFilterOption,
+		{
+			value: 'player-pickrate',
+			label: 'Your pick rate',
+		} as TreasureSortFilterOption,
 	] as readonly TreasureSortFilterOption[];
 	activeTreasureSortFilter: DuelsTreasureSortFilterType;
 	treasureSortFilterVisible: boolean;
 	treasureVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
-		console.log(
-			'should show treasure filter?',
-			state &&
-				navigation &&
-				navigation.currentApp == 'duels' &&
-				navigation.navigationDuels &&
-				navigation.navigationDuels.selectedCategoryId === 'duels-treasures',
-			navigation?.currentApp,
-			navigation?.navigationDuels?.selectedCategoryId,
-		);
 		return (
 			state &&
 			navigation &&
@@ -171,11 +198,16 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new DuelsTreasureSortFilterSelectedEvent(option.value));
 	}
 
+	selectTreasurePassiveTypeFilter(option: TreasurePassiveTypeFilterOption) {
+		this.stateUpdater.next(new DuelsTreasurePassiveTypeFilterSelectedEvent(option.value));
+	}
+
 	anyVisible() {
 		return (
 			this.heroVisibleHandler(this._navigation, this._state) ||
 			this.statTypeVisibleHandler(this._navigation, this._state) ||
-			this.treasureVisibleHandler(this._navigation, this._state)
+			this.treasureVisibleHandler(this._navigation, this._state) ||
+			this.treasurePassiveVisibleHandler(this._navigation, this._state)
 		);
 	}
 
@@ -183,6 +215,7 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.activeHeroSortFilter = this._state.duels?.activeHeroSortFilter;
 		this.activeStatTypeFilter = this._state.duels?.activeStatTypeFilter;
 		this.activeTreasureSortFilter = this._state.duels?.activeTreasureSortFilter;
+		this.activeTreasurePassiveTypeFilter = this._state.duels?.activeTreasureStatTypeFilter;
 	}
 }
 
@@ -196,4 +229,8 @@ interface StatTypeFilterOption extends IOption {
 
 interface TreasureSortFilterOption extends IOption {
 	value: DuelsTreasureSortFilterType;
+}
+
+interface TreasurePassiveTypeFilterOption extends IOption {
+	value: DuelsTreasurePassiveTypeFilterType;
 }

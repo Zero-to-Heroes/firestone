@@ -178,7 +178,7 @@ export class DuelsStateBuilderService {
 		return treasureIds
 			.map(treasureId => {
 				const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
-				return this.buildTreasureStat(treasureId, statsForTreasure, totalTreasureOfferings);
+				return this.buildTreasureStat(treasureId, statsForTreasure, runs, totalTreasureOfferings);
 			})
 			.sort(this.getTreasureSortFunction(prefs));
 	}
@@ -186,6 +186,7 @@ export class DuelsStateBuilderService {
 	private buildTreasureStat(
 		treasureId: string,
 		statsForTreasure: readonly TreasureStat[],
+		runs: readonly DuelsRun[],
 		totalTreasureOfferings: number,
 	): DuelsTreasureStat {
 		const groupedByClass = groupByFunction((stat: TreasureStat) => stat.playerClass)(statsForTreasure);
@@ -198,6 +199,23 @@ export class DuelsStateBuilderService {
 		});
 		const globalTotalOffered = statsForClass.map(stat => stat.globalTotalOffered).reduce((a, b) => a + b, 0);
 		const globalTotalPicked = statsForClass.map(stat => stat.globalTotalPicked).reduce((a, b) => a + b, 0);
+		const treasureOfferings = runs
+			.map(run => run.steps)
+			.reduce((a, b) => a.concat(b), [])
+			.filter(step => (step as DuelsRunInfo).bundleType === 'treasure')
+			.map(step => step as DuelsRunInfo)
+			.filter(step => step.option1 === treasureId || step.option2 === treasureId || step.option3 === treasureId);
+		const playerPickRate =
+			treasureOfferings.length === 0
+				? null
+				: (100 *
+						treasureOfferings.filter(
+							step =>
+								(step.chosenOptionIndex === 1 && step.option1 === treasureId) ||
+								(step.chosenOptionIndex === 2 && step.option2 === treasureId) ||
+								(step.chosenOptionIndex === 3 && step.option3 === treasureId),
+						).length) /
+				  treasureOfferings.length;
 		return {
 			cardId: treasureId,
 			periodStart: statsForClass[0].periodStart,
@@ -206,6 +224,7 @@ export class DuelsStateBuilderService {
 			globalTotalPicked: globalTotalPicked,
 			globalOfferingRate: (3 * 100 * globalTotalOffered) / totalTreasureOfferings,
 			globalPickRate: (100 * globalTotalPicked) / globalTotalOffered,
+			playerPickRate: playerPickRate,
 		} as DuelsTreasureStat;
 	}
 
@@ -255,10 +274,12 @@ export class DuelsStateBuilderService {
 					playerWinrate:
 						playerTotalMatches === 0
 							? 0
-							: runs
-									.filter(run => run.heroCardId === idExtractor(stat))
-									.map(run => run.wins)
-									.reduce((a, b) => a + b, 0) / playerTotalMatches,
+							: (100 *
+									runs
+										.filter(run => run.heroCardId === idExtractor(stat))
+										.map(run => run.wins)
+										.reduce((a, b) => a + b, 0)) /
+							  playerTotalMatches,
 				} as DuelsHeroPlayerStat;
 			})
 			.sort(this.getStatSortFunction(prefs));
@@ -280,6 +301,8 @@ export class DuelsStateBuilderService {
 		switch (prefs.duelsActiveTreasureSortFilter) {
 			case 'global-offering':
 				return (a, b) => b.globalOfferingRate - a.globalOfferingRate;
+			case 'player-pickrate':
+				return (a, b) => b.playerPickRate - a.playerPickRate;
 			case 'global-pickrate':
 			default:
 				return (a, b) => b.globalPickRate - a.globalPickRate;

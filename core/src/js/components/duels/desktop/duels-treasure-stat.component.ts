@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsTreasureStat } from '../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { isPassive } from '../../../services/duels/duels-utils';
@@ -32,7 +33,7 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -44,10 +45,14 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 		}
 		switch (this._state.activeTreasureStatTypeFilter) {
 			case 'treasure':
-				this.stats = this._state.playerStats.treasureStats.filter(stat => !isPassive(stat.cardId));
+				this.stats = this._state.playerStats.treasureStats.filter(
+					stat => !isPassive(stat.cardId, this.allCards),
+				);
 				break;
 			case 'passive':
-				this.stats = this._state.playerStats.treasureStats.filter(stat => isPassive(stat.cardId));
+				this.stats = this._state.playerStats.treasureStats.filter(stat =>
+					isPassive(stat.cardId, this.allCards),
+				);
 				break;
 		}
 	}

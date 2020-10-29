@@ -26,6 +26,7 @@ export interface DuelsTreasureStat {
 	readonly globalTotalPicked: number;
 	readonly globalOfferingRate: number;
 	readonly globalPickRate: number;
+	readonly playerPickRate: number;
 	readonly statsForClass: readonly DuelsTreasureStatForClass[];
 }
 
