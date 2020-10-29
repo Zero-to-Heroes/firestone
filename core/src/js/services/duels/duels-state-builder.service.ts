@@ -27,7 +27,8 @@ import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+// const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -49,7 +50,7 @@ export class DuelsStateBuilderService {
 	}
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
-		const results: any = await this.api.callPostApiWithRetries(DUELS_GLOBAL_STATS_URL, null);
+		const results: any = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
 		console.log('[duels-state-builder] loaded global stats', results?.result);
 		return results?.result;
 	}
