@@ -17,6 +17,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<img [src]="icon" class="portrait" [cardTooltip]="cardId" />
 				<div class="stats">
 					<div class="stats">
+						<div class="item winrate">
+							<div class="label">Global winrate</div>
+							<div class="values">
+								<div class="value player">{{ buildPercents(globalWinrate) }}</div>
+							</div>
+						</div>
 						<div class="item pickrate">
 							<div class="label">Global pick rate</div>
 							<div class="values">
@@ -44,7 +50,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 	@Input() set stat(value: DuelsTreasureStat) {
-		// console.log('setting stats', value);
+		// TODO: stat per class
 		if (!value || value === this._stat) {
 			return;
 		}
@@ -55,6 +61,7 @@ export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 		this.playerPickRate = value.playerPickRate;
 		this.globalPickRate = value.globalPickRate;
+		this.globalWinrate = value.globalWinrate;
 		this.globalOfferingRate = value.globalOfferingRate;
 	}
 
@@ -64,6 +71,7 @@ export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 	playerClass: string;
 	icon: string;
 	globalPickRate: number;
+	globalWinrate: number;
 	globalOfferingRate: number;
 	playerPickRate: number;
 

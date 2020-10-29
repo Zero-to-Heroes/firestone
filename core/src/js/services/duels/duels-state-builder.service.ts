@@ -181,6 +181,7 @@ export class DuelsStateBuilderService {
 				const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
 				return this.buildTreasureStat(treasureId, statsForTreasure, runs, totalTreasureOfferings);
 			})
+			.filter(stat => stat.globalTotalMatches > 0)
 			.sort(this.getTreasureSortFunction(prefs));
 	}
 
@@ -200,6 +201,11 @@ export class DuelsStateBuilderService {
 		});
 		const globalTotalOffered = statsForClass.map(stat => stat.globalTotalOffered).reduce((a, b) => a + b, 0);
 		const globalTotalPicked = statsForClass.map(stat => stat.globalTotalPicked).reduce((a, b) => a + b, 0);
+		const globalTotalMatches = statsForClass.map(stat => stat.globalTotalMatches).reduce((a, b) => a + b, 0);
+		const globalTotalWins = statsForClass.map(stat => stat.globalTotalWins).reduce((a, b) => a + b, 0);
+		const globalTotalLosses = statsForClass.map(stat => stat.globalTotalLosses).reduce((a, b) => a + b, 0);
+		const globalTotalTies = statsForClass.map(stat => stat.globalTotalTies).reduce((a, b) => a + b, 0);
+
 		const treasureOfferings = runs
 			.map(run => run.steps)
 			.reduce((a, b) => a.concat(b), [])
@@ -225,7 +231,13 @@ export class DuelsStateBuilderService {
 			globalTotalPicked: globalTotalPicked,
 			globalOfferingRate: (3 * 100 * globalTotalOffered) / totalTreasureOfferings,
 			globalPickRate: (100 * globalTotalPicked) / globalTotalOffered,
+			globalTotalMatches: globalTotalMatches,
+			globalTotalWins: globalTotalWins,
+			globalTotalLosses: globalTotalLosses,
+			globalTotalTies: globalTotalTies,
+			globalWinrate: globalTotalMatches === 0 ? null : (100 * globalTotalWins) / globalTotalMatches,
 			playerPickRate: playerPickRate,
+			// playerWinrate: playerWinrate,
 		} as DuelsTreasureStat;
 	}
 
@@ -237,6 +249,11 @@ export class DuelsStateBuilderService {
 	): DuelsTreasureStatForClass {
 		const globalTotalOffered = classStats.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
 		const globalTotalPicked = classStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
+		const globalTotalMatches = classStats.map(stat => stat.matchesPlayed).reduce((a, b) => a + b, 0);
+		const globalTotalWins = classStats.map(stat => stat.totalWins).reduce((a, b) => a + b, 0);
+		const globalTotalLosses = classStats.map(stat => stat.totalLosses).reduce((a, b) => a + b, 0);
+		const globalTotalTies = classStats.map(stat => stat.totalTies).reduce((a, b) => a + b, 0);
+
 		return {
 			cardId: treasureId,
 			playerClass: playerClass,
@@ -245,6 +262,11 @@ export class DuelsStateBuilderService {
 			globalTotalPicked: globalTotalPicked,
 			globalOfferingRate: (3 * 100 * globalTotalOffered) / totalTreasureOfferingsForTreasure,
 			globalPickRate: (100 * globalTotalPicked) / globalTotalOffered,
+			globalTotalMatches: globalTotalMatches,
+			globalTotalWins: globalTotalWins,
+			globalTotalLosses: globalTotalLosses,
+			globalTotalTies: globalTotalTies,
+			globalWinrate: globalTotalMatches === 0 ? null : (100 * globalTotalWins) / globalTotalMatches,
 		} as DuelsTreasureStatForClass;
 	}
 
@@ -305,8 +327,10 @@ export class DuelsStateBuilderService {
 			case 'player-pickrate':
 				return (a, b) => b.playerPickRate - a.playerPickRate;
 			case 'global-pickrate':
-			default:
 				return (a, b) => b.globalPickRate - a.globalPickRate;
+			case 'global-winrate':
+			default:
+				return (a, b) => b.globalWinrate - a.globalWinrate;
 		}
 	}
 

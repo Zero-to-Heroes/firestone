@@ -26,7 +26,13 @@ export interface DuelsTreasureStat {
 	readonly globalTotalPicked: number;
 	readonly globalOfferingRate: number;
 	readonly globalPickRate: number;
+	readonly globalTotalMatches: number;
+	readonly globalTotalWins: number;
+	readonly globalTotalLosses: number;
+	readonly globalTotalTies: number;
+	readonly globalWinrate: number;
 	readonly playerPickRate: number;
+	readonly playerWinrate: number;
 	readonly statsForClass: readonly DuelsTreasureStatForClass[];
 }
 
@@ -38,4 +44,9 @@ export interface DuelsTreasureStatForClass {
 	readonly globalTotalPicked: number;
 	readonly globalOfferingRate: number;
 	readonly globalPickRate: number;
+	readonly globalTotalMatches: number;
+	readonly globalTotalWins: number;
+	readonly globalTotalLosses: number;
+	readonly globalTotalTies: number;
+	readonly globalWinrate: number;
 }

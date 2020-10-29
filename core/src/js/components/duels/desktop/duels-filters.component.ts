@@ -151,6 +151,10 @@ export class DuelsFiltersComponent implements AfterViewInit {
 
 	treasureSortFilterOptions: readonly TreasureSortFilterOption[] = [
 		{
+			value: 'global-winrate',
+			label: 'Global winrate',
+		} as TreasureSortFilterOption,
+		{
 			value: 'global-pickrate',
 			label: 'Global pick rate',
 		} as TreasureSortFilterOption,

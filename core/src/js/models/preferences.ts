@@ -145,7 +145,7 @@ export class Preferences {
 	readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
 	readonly duelsActiveStatTypeFilter: DuelsStatTypeFilterType = 'hero';
-	readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-pickrate';
+	readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-winrate';
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure';
 
 	readonly twitchAccessToken: string;
