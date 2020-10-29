@@ -45,12 +45,6 @@ module.exports = {
 				'ignoreRestSiblings': true, // For object destructuring
 			},
 		],
-		'@typescript-eslint/no-use-before-define': [
-			2,
-			{
-				'functions': false,
-				'classes': false,
-			},
-		],
+		'@typescript-eslint/no-use-before-define': 0,
 	},
 };
