@@ -107,6 +107,7 @@ export class EndGameUploaderService {
 					if (newPlayerRank != null) {
 						game.newPlayerRank = '' + newPlayerRank;
 					}
+					this.dungeonLootParser.resetDuelsRunId();
 				}
 			} catch (e) {
 				console.error('Could not handle rating change in duels', e);

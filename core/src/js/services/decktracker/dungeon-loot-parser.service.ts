@@ -34,6 +34,10 @@ export class DungeonLootParserService {
 	];
 
 	public currentDuelsRunId: string;
+	private currentDuelsHeroPowerCardDbfId: number;
+	private currentDuelsSignatureTreasureCardId: string;
+	private currentDuelsWins: number;
+	private currentDuelsLosses: number;
 
 	private currentReviewId: string;
 	private duelsInfo: DuelsInfo;
@@ -77,7 +81,7 @@ export class DungeonLootParserService {
 				return;
 			}
 
-			this.duelsInfo = await this.memory.getDuelsInfo(false, 5);
+			this.duelsInfo = await this.memory.getDuelsInfo(false, 10);
 			console.log('[dungeon-loot-parser] retrieved duels info', this.duelsInfo);
 			// Should already have picked something, but nothing is detected
 			if (
@@ -90,7 +94,11 @@ export class DungeonLootParserService {
 				console.log('[dungeon-loot-parser] retrieved duels info after force reset', this.duelsInfo);
 			}
 
-			if (this.duelsInfo?.Wins === 0 && this.duelsInfo?.Losses === 0) {
+			if (!this.duelsInfo) {
+				console.error('[dungeon-loot-parser] Could not retrieve duels info', this.currentDuelsRunId);
+			}
+
+			if (this.isNewRun(this.duelsInfo)) {
 				// Start a new run
 				console.log('[dungeon-loot-parser] starting a new run', this.duelsInfo);
 				await this.prefs.setDuelsRunId(uuid());
@@ -105,6 +113,48 @@ export class DungeonLootParserService {
 				);
 			}
 			this.sendLootInfo();
+		}
+	}
+
+	public resetDuelsRunId() {
+		console.log('resetting DuelsDunId');
+		this.prefs.setDuelsRunId(null);
+		this.currentDuelsRunId = null;
+		this.currentDuelsHeroPowerCardDbfId = null;
+		this.currentDuelsSignatureTreasureCardId = null;
+		this.currentDuelsWins = null;
+		this.currentDuelsLosses = null;
+	}
+
+	private isNewRun(duelsInfo: DuelsInfo): boolean {
+		if (duelsInfo?.Wins === 0 && duelsInfo?.Losses === 0) {
+			console.log('[dungeon-loot-parser] wins and losses are 0, starting new run', duelsInfo);
+			return true;
+		}
+		if (duelsInfo.Wins < this.currentDuelsWins || duelsInfo.Losses < this.currentDuelsLosses) {
+			console.log(
+				'[dungeon-loot-parser] wins or losses less than previous info, starting new run',
+				duelsInfo,
+				this.currentDuelsWins,
+				this.currentDuelsLosses,
+			);
+			return true;
+		}
+		if (duelsInfo.StartingHeroPower !== this.currentDuelsHeroPowerCardDbfId) {
+			console.log(
+				'[dungeon-loot-parser] different hero power, starting new run',
+				duelsInfo,
+				this.currentDuelsHeroPowerCardDbfId,
+			);
+			return true;
+		}
+		const signatureTreasure: string = this.findSignatureTreasure(duelsInfo.DeckList);
+		if (signatureTreasure !== this.currentDuelsSignatureTreasureCardId) {
+			console.log(
+				'[dungeon-loot-parser] different signature treasure, starting new run',
+				duelsInfo,
+				this.currentDuelsSignatureTreasureCardId,
+			);
 		}
 	}
 
@@ -126,6 +176,8 @@ export class DungeonLootParserService {
 			);
 			return;
 		}
+
+		this.updateCurrentDuelsInfo(this.duelsInfo);
 
 		const user = await this.ow.getCurrentUser();
 		const treasures: readonly string[] = this.duelsInfo.TreasureOption
@@ -159,6 +211,13 @@ export class DungeonLootParserService {
 		console.log('[dungeon-loot-parser] sending loot into', input);
 		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
 		this.store.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
+	}
+
+	private updateCurrentDuelsInfo(duelsInfo: DuelsInfo) {
+		this.currentDuelsHeroPowerCardDbfId = duelsInfo.StartingHeroPower;
+		this.currentDuelsSignatureTreasureCardId = this.findSignatureTreasure(duelsInfo.DeckList);
+		this.currentDuelsWins = duelsInfo.Wins;
+		this.currentDuelsLosses = duelsInfo.Losses;
 	}
 
 	private findSignatureTreasure(deckList: readonly number[]): string {
