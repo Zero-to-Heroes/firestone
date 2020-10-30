@@ -148,6 +148,10 @@ export class DungeonLootParserService {
 			);
 			return true;
 		}
+		if (duelsInfo.LastRatingChange > 0) {
+			console.log('[dungeon-loot-parser] rating changed, starting new run', duelsInfo.LastRatingChange);
+			return true;
+		}
 		const signatureTreasure: string = this.findSignatureTreasure(duelsInfo.DeckList);
 		if (signatureTreasure !== this.currentDuelsSignatureTreasureCardId) {
 			console.log(

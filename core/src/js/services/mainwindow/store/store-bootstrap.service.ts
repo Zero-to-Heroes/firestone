@@ -120,7 +120,9 @@ export class StoreBootstrapService {
 
 		const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
 		const lastRunId =
-			lastGameWithDuelsRunId && lastGameWithDuelsRunId.length > 0
+			lastGameWithDuelsRunId &&
+			lastGameWithDuelsRunId.length > 0 &&
+			!this.isLastMatchInRun(lastGameWithDuelsRunId[0].additionalResult, lastGameWithDuelsRunId[0].result)
 				? lastGameWithDuelsRunId[0].currentDuelsRunId
 				: null;
 		if (lastRunId) {
@@ -144,6 +146,24 @@ export class StoreBootstrapService {
 			globalStats: globalStats,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState));
+	}
+
+	private isLastMatchInRun(additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean {
+		if (!additionalResult) {
+			return false;
+		}
+		const [wins, losses] = additionalResult.split('-').map(info => parseInt(info));
+		if (wins === 11 && result === 'won') {
+			console.log(
+				'[store-bootstrap] last duels match was the last of the run, not forwarding run id',
+				additionalResult,
+				result,
+			);
+			return true;
+		}
+		if (losses === 2 && result === 'lost') {
+			return false;
+		}
 	}
 
 	private async initializeSocialShareUserInfo(): Promise<SocialShareUserInfo> {
