@@ -173,9 +173,9 @@ export class DuelsStateBuilderService {
 		const treasureIds = Object.keys(groupedByTreasures);
 		const totalTreasureOfferings = treasureStats.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
 		const totalPick = treasureStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
-		if (totalPick * 3 !== totalTreasureOfferings) {
-			console.error('[duels-state-builder] invalid data', totalPick, totalTreasureOfferings, treasureStats);
-		}
+		// if (totalPick * 3 !== totalTreasureOfferings) {
+		// 	console.error('[duels-state-builder] invalid data', totalPick, totalTreasureOfferings, treasureStats);
+		// }
 		return treasureIds
 			.map(treasureId => {
 				const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
