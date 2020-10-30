@@ -131,7 +131,10 @@ export class DungeonLootParserService {
 			console.log('[dungeon-loot-parser] wins and losses are 0, starting new run', duelsInfo);
 			return true;
 		}
-		if (duelsInfo.Wins < this.currentDuelsWins || duelsInfo.Losses < this.currentDuelsLosses) {
+		if (
+			(this.currentDuelsWins != null && duelsInfo.Wins < this.currentDuelsWins) ||
+			(this.currentDuelsLosses != null && duelsInfo.Losses < this.currentDuelsLosses)
+		) {
 			console.log(
 				'[dungeon-loot-parser] wins or losses less than previous info, starting new run',
 				duelsInfo,
@@ -140,7 +143,10 @@ export class DungeonLootParserService {
 			);
 			return true;
 		}
-		if (duelsInfo.StartingHeroPower !== this.currentDuelsHeroPowerCardDbfId) {
+		if (
+			this.currentDuelsHeroPowerCardDbfId &&
+			duelsInfo.StartingHeroPower !== this.currentDuelsHeroPowerCardDbfId
+		) {
 			console.log(
 				'[dungeon-loot-parser] different hero power, starting new run',
 				duelsInfo,
@@ -153,7 +159,10 @@ export class DungeonLootParserService {
 			return true;
 		}
 		const signatureTreasure: string = this.findSignatureTreasure(duelsInfo.DeckList);
-		if (signatureTreasure !== this.currentDuelsSignatureTreasureCardId) {
+		if (
+			this.currentDuelsSignatureTreasureCardId &&
+			signatureTreasure !== this.currentDuelsSignatureTreasureCardId
+		) {
 			console.log(
 				'[dungeon-loot-parser] different signature treasure, starting new run',
 				duelsInfo,
