@@ -17,7 +17,7 @@ export class LoadMoreCardHistoryProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const result = await this.cardHistoryStorage.loadAll(0);
-		const cardHistory: readonly CardHistory[] = result.splice(0, event.maxResults);
+		const cardHistory: readonly CardHistory[] = [...result].splice(0, event.maxResults);
 		const shownHistory: readonly CardHistory[] = navigationState.navigationCollection.showOnlyNewCardsInHistory
 			? cardHistory.filter((card: CardHistory) => card.isNewCard)
 			: cardHistory;

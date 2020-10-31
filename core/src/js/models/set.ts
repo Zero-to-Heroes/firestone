@@ -28,6 +28,10 @@ export class Set {
 		this.ownedLimitCollectiblePremiumCards = ownedLimitCollectiblePremiumCards || 0;
 	}
 
+	public getCard(cardId: string): SetCard {
+		return this.allCards.find(card => card.id === cardId);
+	}
+
 	numberOfLimitCollectibleCards(): number {
 		let totalCards = 0;
 		this.allCards.forEach((card: SetCard) => {
@@ -104,7 +108,7 @@ export class SetCard {
 	readonly id: string;
 	readonly name: string;
 	readonly cardClass: string;
-	readonly rarity: string;
+	readonly rarity: string; // it's all lowercase
 	readonly cost: number;
 	readonly ownedNonPremium: number = 0;
 	readonly ownedPremium: number = 0;
@@ -122,10 +126,25 @@ export class SetCard {
 		this.id = id;
 		this.name = name;
 		this.cardClass = cardClass ? cardClass.toLowerCase() : cardClass;
-		this.rarity = rarity;
+		this.rarity = rarity?.toLowerCase();
 		this.cost = cost;
 		this.ownedNonPremium = ownedNonPremium || 0;
 		this.ownedPremium = ownedPremium || 0;
+	}
+
+	getRegularDustCost(): any {
+		switch (this.rarity) {
+			case 'common':
+				return 40;
+			case 'rare':
+				return 100;
+			case 'epic':
+				return 400;
+			case 'legendary':
+				return 1600;
+			default:
+				return 0;
+		}
 	}
 
 	getNumberCollected(): number {

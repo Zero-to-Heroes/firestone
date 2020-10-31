@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-
 import { CardHistory } from '../../models/card-history';
-
 import { IndexedDbService } from './indexed-db.service';
 
 @Injectable()
 export class CardHistoryStorageService {
 	constructor(private indexedDb: IndexedDbService) {}
 
-	public async loadAll(limit: number): Promise<CardHistory[]> {
+	public async loadAll(limit: number): Promise<readonly CardHistory[]> {
 		return this.indexedDb.getAll(limit);
 	}
 

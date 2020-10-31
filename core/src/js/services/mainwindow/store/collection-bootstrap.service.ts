@@ -40,7 +40,7 @@ export class CollectionBootstrapService {
 		const newState = Object.assign(new BinderState(), {
 			allSets: sets,
 			cardHistory: cardHistory,
-			shownCardHistory: cardHistory,
+			// shownCardHistory: cardHistory,
 			totalHistoryLength: totalHistoryLength,
 			isLoading: false,
 		} as BinderState);
