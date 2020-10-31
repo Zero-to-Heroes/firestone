@@ -1,10 +1,13 @@
 import { ReferencePlayerClass } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-player-class';
+import { DeckStat } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
+import { DuelsGroupedDecks } from './duels-grouped-decks';
 
 export interface DuelsPlayerStats {
 	readonly heroStats: readonly DuelsHeroPlayerStat[];
 	readonly heroPowerStats: readonly DuelsHeroPlayerStat[];
 	readonly signatureTreasureStats: readonly DuelsHeroPlayerStat[];
 	readonly treasureStats: readonly DuelsTreasureStat[];
+	readonly deckStats: readonly DuelsGroupedDecks[];
 }
 
 export interface DuelsHeroPlayerStat {
@@ -49,4 +52,9 @@ export interface DuelsTreasureStatForClass {
 	readonly globalTotalLosses: number;
 	readonly globalTotalTies: number;
 	readonly globalWinrate: number;
+}
+
+export interface DuelsDeckStat extends DeckStat {
+	readonly heroCardId: string;
+	readonly dustCost: number;
 }

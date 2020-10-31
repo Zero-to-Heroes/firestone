@@ -63,7 +63,11 @@ export class RecomputeGameStatsProcessor implements Processor {
 		);
 		console.log('[recompute-game-stats-processor] battlegrounds');
 
-		const duels: DuelsState = await this.duelsBuilder.updateState(currentState.duels, newGameStats);
+		const duels: DuelsState = await this.duelsBuilder.updateState(
+			currentState.duels,
+			newGameStats,
+			currentState.binder,
+		);
 		console.log('[recompute-game-stats-processor] duels', duels);
 
 		return [

@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import {
+	DeckStat,
 	DuelsGlobalStats,
 	HeroPowerStat,
 	HeroStat,
@@ -9,7 +11,10 @@ import {
 } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
+import { DeckDefinition, decode } from 'deckstrings';
+import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import {
+	DuelsDeckStat,
 	DuelsHeroPlayerStat,
 	DuelsPlayerStats,
 	DuelsTreasureStat,
@@ -17,6 +22,7 @@ import {
 } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsState } from '../../models/duels/duels-state';
+import { BinderState } from '../../models/mainwindow/binder-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
@@ -28,7 +34,7 @@ import { groupByFunction } from '../utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}';
+const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=3';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -36,6 +42,7 @@ export class DuelsStateBuilderService {
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
+		private readonly allCards: AllCardsService,
 	) {}
 
 	public async loadRuns(): Promise<readonly DuelsRunInfo[]> {
@@ -87,10 +94,21 @@ export class DuelsStateBuilderService {
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-top-decks',
+				name: '12-win decks',
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
 		];
 	}
 
-	public async updateState(currentState: DuelsState, matchStats: GameStats): Promise<DuelsState> {
+	public async updateState(
+		currentState: DuelsState,
+		matchStats: GameStats,
+		collectionState: BinderState,
+	): Promise<DuelsState> {
 		const prefs = await this.prefs.getPreferences();
 		const duelMatches = matchStats?.stats
 			?.filter(match => match.gameMode === 'duels' || match.gameMode === 'paid-duels')
@@ -110,7 +128,7 @@ export class DuelsStateBuilderService {
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs);
 
-		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats, prefs);
+		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats, collectionState, prefs);
 		console.log('[duels-state-builder] playerStats', playerStats);
 		return currentState.update({
 			runs: runs,
@@ -126,6 +144,7 @@ export class DuelsStateBuilderService {
 	private buildStatsWithPlayer(
 		runs: readonly DuelsRun[],
 		globalStats: DuelsGlobalStats,
+		collectionState: BinderState,
 		prefs: Preferences,
 	): DuelsPlayerStats {
 		if (!globalStats) {
@@ -155,13 +174,71 @@ export class DuelsStateBuilderService {
 			globalStats.treasureStats,
 			prefs,
 		);
+		const deckStats: readonly DuelsGroupedDecks[] = this.buildDeckStats(
+			runs,
+			globalStats.deckStats,
+			collectionState,
+			prefs,
+		);
 		console.log('[duels-state-builder] built trasure stats', treasureStats);
 		return {
 			heroStats: heroStats,
 			heroPowerStats: heroPowerStats,
 			signatureTreasureStats: signatureTreasureStats,
 			treasureStats: treasureStats,
+			deckStats: deckStats,
 		} as DuelsPlayerStats;
+	}
+
+	private buildDeckStats(
+		runs: readonly DuelsRun[],
+		deckStats: readonly DeckStat[],
+		collectionState: BinderState,
+		prefs: Preferences,
+	): readonly DuelsGroupedDecks[] {
+		const decks = deckStats.map(stat => {
+			const deck = decode(stat.decklist);
+			const dustCost = this.buildDustCost(deck, collectionState);
+			return {
+				...stat,
+				heroCardId: this.allCards.getCardFromDbfId(deck.heroes[0])?.id,
+				dustCost: dustCost,
+			} as DuelsDeckStat;
+		});
+		const groupedDecks: readonly DuelsGroupedDecks[] = this.groupDecks(decks, prefs);
+		return groupedDecks;
+	}
+
+	private groupDecks(decks: readonly DuelsDeckStat[], prefs: Preferences): readonly DuelsGroupedDecks[] {
+		const groupingFunction = (deck: DuelsDeckStat) => {
+			const date = new Date(deck.runStartDate);
+			return date.toLocaleDateString('en-US', {
+				month: 'short',
+				day: '2-digit',
+				year: 'numeric',
+			});
+		};
+		const groupByDate = groupByFunction(groupingFunction);
+		const decksByDate = groupByDate(decks);
+		return Object.keys(decksByDate).map(date => this.buildGroupedDecks(date, decksByDate[date]));
+	}
+
+	private buildGroupedDecks(date: string, decks: readonly DuelsDeckStat[]): DuelsGroupedDecks {
+		return DuelsGroupedDecks.create({
+			header: date,
+			decks: decks,
+		} as DuelsGroupedDecks);
+	}
+
+	private buildDustCost(deck: DeckDefinition, collectionState: BinderState): number {
+		return deck.cards
+			.map(cards => cards[0])
+			.map(cardDbfId => this.allCards.getCardFromDbfId(cardDbfId))
+			.filter(card => card)
+			.map(card => collectionState.getCard(card.id))
+			.filter(card => card.getNumberCollected() === 0)
+			.map(card => card.getRegularDustCost())
+			.reduce((a, b) => a + b, 0);
 	}
 
 	private buildTreasureStats(
@@ -176,13 +253,16 @@ export class DuelsStateBuilderService {
 		// if (totalPick * 3 !== totalTreasureOfferings) {
 		// 	console.error('[duels-state-builder] invalid data', totalPick, totalTreasureOfferings, treasureStats);
 		// }
-		return treasureIds
-			.map(treasureId => {
-				const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
-				return this.buildTreasureStat(treasureId, statsForTreasure, runs, totalTreasureOfferings);
-			})
-			.filter(stat => stat.globalTotalMatches > 0)
-			.sort(this.getTreasureSortFunction(prefs));
+		return (
+			treasureIds
+				.map(treasureId => {
+					const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
+					return this.buildTreasureStat(treasureId, statsForTreasure, runs, totalTreasureOfferings);
+				})
+				// For now I want to keep the "rare" passives, since they have been confirmed
+				// .filter(stat => stat.globalTotalMatches > 0)
+				.sort(this.getTreasureSortFunction(prefs))
+		);
 	}
 
 	private buildTreasureStat(

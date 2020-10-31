@@ -164,6 +164,9 @@ export class DevService {
 			}
 			console.log('processing done');
 		};
+		window['decodeDeck'] = deckstring => {
+			console.log(decode(deckstring));
+		};
 		window['buildDeck'] = async (decklist, hero) => {
 			const cards = decklist.split('\n');
 			console.log(cards);

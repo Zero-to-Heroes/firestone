@@ -1,0 +1,141 @@
+:host() {
+	position: relative;
+}
+
+.duels-deck-stat-vignette {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.08);
+	position: relative;
+	padding: 10px;
+	padding-bottom: 12px;
+
+	.box-side {
+		width: 100%;
+	}
+
+	.deck-name {
+		width: 100%;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		color: var(--default-title-color);
+		font-size: 16px;
+		line-height: 22px;
+		text-align: center;
+		position: relative;
+		margin: auto;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-bottom: 10px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.summary {
+		display: flex;
+	}
+
+	.deck-image {
+		width: 80px;
+		position: relative;
+		flex-grow: 0;
+		margin-bottom: 10px;
+		left: 7px;
+
+		.skin {
+			width: 100%;
+			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 75% 20%, 85% 56%, 85% 100%);
+		}
+		.frame {
+			position: absolute;
+			top: -8%;
+			left: -16%;
+			width: 120%;
+		}
+	}
+
+	.info {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 12px;
+		line-height: 16px;
+		color: var(--default-title-color);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		flex-grow: 1;
+	}
+
+	.icon {
+		width: 22px;
+		height: 22px;
+		clip-path: circle(9px at 50% 50%);
+		transform: scale(2);
+	}
+
+	.starting {
+		display: flex;
+		width: 100%;
+		align-items: center;
+		justify-content: space-around;
+		flex-direction: column;
+		height: 100%;
+		padding-bottom: 10px;
+	}
+
+	.dust-cost {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 12px;
+		line-height: 16px;
+		color: var(--default-title-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 30px;
+
+		.dust-icon {
+			width: 30px;
+			height: 30px;
+			margin-left: 5px;
+		}
+	}
+
+	// .treasure {
+	// 	transform: scale(1.5);
+	// }
+
+	.copy-deck-code {
+		padding: 5px 10px;
+		width: 100%;
+		display: flex;
+		align-self: center;
+		align-items: center;
+		background: var(--default-text-color);
+		color: var(--color-7);
+		margin-top: 5px;
+
+		span {
+			width: 100%;
+		}
+
+		div {
+			display: flex;
+		}
+
+		&:hover {
+			background: #ffb948;
+			border: none;
+
+			span {
+				color: #2f0d0d;
+			}
+		}
+	}
+}

@@ -29,12 +29,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 								<div class="value player">{{ buildPercents(globalPickRate) }}</div>
 							</div>
 						</div>
-						<!-- <div class="item pickrate">
+						<div class="item pickrate">
 							<div class="label">Global offering</div>
 							<div class="values">
 								<div class="value player">{{ buildPercents(globalOfferingRate) }}</div>
 							</div>
-						</div> -->
+						</div>
 						<div class="item pickrate">
 							<div class="label">Your pick rate</div>
 							<div class="values">

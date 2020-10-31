@@ -1,0 +1,41 @@
+.grouped-decks {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 10px;
+}
+
+.header {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 19px;
+	color: var(--default-title-color);
+	margin-bottom: 5px;
+}
+
+.decks {
+	flex-grow: 1;
+	display: flex;
+	flex-wrap: wrap;
+	// min-height: 1px;
+	// overflow: auto;
+
+	duels-deck-stat-vignette {
+		width: 159px; // Max size so that 4 vignettes fit on a single line at the lowest size
+		margin-right: 15px;
+		margin-bottom: 15px;
+	}
+}
+
+@media screen and (min-width: 1450px) and (min-height: 850px) {
+	duels-treasure-stat-vignette {
+		zoom: 1.1;
+	}
+}
+
+@media screen and (min-width: 1700px) and (min-height: 900px) {
+	duels-treasure-stat-vignette {
+		zoom: 1.3;
+	}
+}
