@@ -1,7 +1,7 @@
 .duels-top-decks {
 	flex-grow: 1;
 	display: flex;
-	flex-wrap: wrap;
 	min-height: 1px;
 	overflow: auto;
+	flex-direction: column;
 }

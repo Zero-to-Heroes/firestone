@@ -53,3 +53,11 @@ export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]
 export const formatDate = (theDate: Date): string => {
 	return `${theDate.toISOString().slice(0, 10)}`;
 };
+
+export const formatClass = (playerClass: string): string => {
+	let update = playerClass;
+	if (playerClass === 'demonhunter') {
+		update = 'demon hunter';
+	}
+	return capitalizeEachWord(update);
+};

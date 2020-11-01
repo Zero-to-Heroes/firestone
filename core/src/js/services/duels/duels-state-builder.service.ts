@@ -31,10 +31,11 @@ import { ApiRunner } from '../api-runner';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
+import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=3';
+const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=6';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -196,16 +197,20 @@ export class DuelsStateBuilderService {
 		collectionState: BinderState,
 		prefs: Preferences,
 	): readonly DuelsGroupedDecks[] {
-		const decks = deckStats.map(stat => {
-			const deck = decode(stat.decklist);
-			const dustCost = this.buildDustCost(deck, collectionState);
-			return {
-				...stat,
-				heroCardId: this.allCards.getCardFromDbfId(deck.heroes[0])?.id,
-				dustCost: dustCost,
-			} as DuelsDeckStat;
-		});
-		const groupedDecks: readonly DuelsGroupedDecks[] = this.groupDecks(decks, prefs);
+		const decks = deckStats
+			.map(stat => {
+				const deck = decode(stat.decklist);
+				const dustCost = this.buildDustCost(deck, collectionState);
+				return {
+					...stat,
+					heroCardId: stat.heroCardId || getDuelsHeroCardId(stat.playerClass),
+					// heroCardId: this.allCards.getCardFromDbfId(deck.heroes[0])?.id,
+					dustCost: dustCost,
+				} as DuelsDeckStat;
+			})
+			.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime());
+		console.log('[duels-state-builder] decks', decks);
+		const groupedDecks: readonly DuelsGroupedDecks[] = [...this.groupDecks(decks, prefs)];
 		return groupedDecks;
 	}
 
