@@ -298,7 +298,7 @@ export class AppBootstrapService {
 			...prefs,
 		});
 		const monitorsList = await this.ow.getMonitorsList();
-		// console.log('monitorsList', monitorsList);
+		console.log('monitorsList', monitorsList);
 		const numberOfMonitors = monitorsList && monitorsList.displays ? monitorsList.displays.length : -1;
 		// console.log('number of monitors', numberOfMonitors, monitorsList);
 		if (numberOfMonitors > 0) {
