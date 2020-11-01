@@ -13,7 +13,7 @@ export class DuelsSelectCategoryEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return false;
+		return true;
 	}
 
 	public isResetHistoryEvent(): boolean {

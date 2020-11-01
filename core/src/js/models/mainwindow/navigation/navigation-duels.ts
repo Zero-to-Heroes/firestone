@@ -2,7 +2,8 @@ import { DuelsCategoryType } from '../duels/duels-category.type';
 
 export class NavigationDuels {
 	readonly selectedCategoryId: DuelsCategoryType = 'duels-runs';
-	readonly menuDisplayType: string = 'menu';
+	readonly menuDisplayType: 'menu' | 'breadcrumbs' = 'menu';
+	readonly selectedDeckId: number;
 
 	public update(base: NavigationDuels): NavigationDuels {
 		return Object.assign(new NavigationDuels(), this, base);

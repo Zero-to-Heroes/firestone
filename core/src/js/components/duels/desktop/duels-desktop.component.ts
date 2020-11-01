@@ -19,6 +19,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<section class="main divider">
 				<with-loading [isLoading]="enableDuels && (!state.duels || state.duels.loading)">
 					<div class="content" *ngIf="enableDuels && state.duels">
+						<global-header
+							[navigation]="navigation"
+							*ngIf="navigation.text && navigation?.navigationDuels.menuDisplayType === 'breadcrumbs'"
+						></global-header>
 						<ul class="menu-selection" *ngIf="navigation?.navigationDuels.menuDisplayType === 'menu'">
 							<li
 								*ngFor="let category of buildCategories()"
@@ -51,6 +55,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[state]="state.duels"
 						>
 						</duels-top-decks>
+						<duels-deck-details
+							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-deck-details'"
+							[state]="state.duels"
+							[navigation]="navigation.navigationDuels"
+						>
+						</duels-deck-details>
 					</div>
 				</with-loading>
 			</section>

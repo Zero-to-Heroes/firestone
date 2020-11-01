@@ -9,9 +9,10 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
+import { DuelsViewDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { capitalizeEachWord } from '../../../services/utils';
+import { formatClass } from '../../../services/utils';
 
 @Component({
 	selector: 'duels-deck-stat-vignette',
@@ -54,9 +55,12 @@ import { capitalizeEachWord } from '../../../services/utils';
 					<div class="dust-cost" *ngIf="dustCost">{{ dustCost }}</div>
 					<div class="dust-cost" *ngIf="dustCost === 0">You have all cards</div>
 				</div>
-				<button class="copy-deck-code" (click)="copyDeckCode()">
-					<span>{{ copyText }}</span>
+				<button class="view-details" (click)="viewDetails()">
+					<span>View details</span>
 				</button>
+				<!-- <button class="copy-deck-code" (click)="copyDeckCode()">
+					<span>{{ copyText }}</span>
+				</button> -->
 			</div>
 		</div>
 	`,
@@ -69,7 +73,8 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 			return;
 		}
 		this._stat = value;
-		this.deckName = this.formatClass(value.playerClass);
+		const deckNamePrefix = value.wins ? `${value.wins}-${value.losses} ` : '';
+		this.deckName = deckNamePrefix + formatClass(value.playerClass);
 		this.deckstring = value.decklist;
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`;
 		this.heroPowerCardId = value.heroPowerCardId;
@@ -78,12 +83,6 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 		this.signatureTreasureImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.signatureTreasureCardId}.jpg`;
 
 		this.dustCost = value.dustCost;
-
-		console.log('ready to set treasures', value.treasuresCardIds, value);
-		this.treasures = value.treasuresCardIds.map(cardId => ({
-			cardId: cardId,
-			icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
-		}));
 	}
 
 	_stat: DuelsDeckStat;
@@ -135,11 +134,7 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 		return value == null ? 'N/A' : value === 0 ? '0' : value.toFixed(decimal);
 	}
 
-	private formatClass(playerClass: string): string {
-		let update = playerClass;
-		if (playerClass === 'demonhunter') {
-			update = 'demon hunter';
-		}
-		return capitalizeEachWord(update);
+	viewDetails() {
+		this.stateUpdater.next(new DuelsViewDeckDetailsEvent(this._stat.id));
 	}
 }

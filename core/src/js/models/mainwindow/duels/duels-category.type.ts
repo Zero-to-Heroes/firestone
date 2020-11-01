@@ -1,1 +1,6 @@
-export type DuelsCategoryType = 'duels-runs' | 'duels-stats' | 'duels-treasures' | 'duels-top-decks';
+export type DuelsCategoryType =
+	| 'duels-runs'
+	| 'duels-stats'
+	| 'duels-treasures'
+	| 'duels-top-decks'
+	| 'duels-deck-details';

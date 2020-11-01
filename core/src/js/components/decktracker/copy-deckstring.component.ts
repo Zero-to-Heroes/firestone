@@ -18,7 +18,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
 			</svg>
 		</div>
-		<div class="message" *ngIf="!showTooltip">{{ copyText }}</div>
+		<div class="message" *ngIf="!showTooltip || title">{{ title || copyText }}</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -26,6 +26,7 @@ export class CopyDesckstringComponent {
 	@Input() deckstring: string;
 	@Input() copyText: string;
 	@Input() showTooltip: boolean;
+	@Input() title: string;
 
 	private inputCopy: string;
 
