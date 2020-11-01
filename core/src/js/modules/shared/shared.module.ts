@@ -46,6 +46,7 @@ import { ControlSettingsComponent } from '../../components/controls/control-sett
 import { CopyDesckstringComponent } from '../../components/decktracker/copy-deckstring.component';
 import { DeckCardComponent } from '../../components/decktracker/overlay/deck-card.component';
 import { DeckListByZoneComponent } from '../../components/decktracker/overlay/deck-list-by-zone.component';
+import { DeckListComponent } from '../../components/decktracker/overlay/deck-list.component';
 import { DeckZoneComponent } from '../../components/decktracker/overlay/deck-zone.component';
 import { DeckTrackerDeckListComponent } from '../../components/decktracker/overlay/decktracker-deck-list.component';
 import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
@@ -160,6 +161,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		GroupedDeckListComponent,
 		DeckZoneComponent,
 		CopyDesckstringComponent,
+		DeckListComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,
@@ -252,6 +254,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		GroupedDeckListComponent,
 		DeckZoneComponent,
 		CopyDesckstringComponent,
+		DeckListComponent,
 
 		BgsOpponentOverviewBigComponent,
 		BgsBoardComponent,

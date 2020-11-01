@@ -1,9 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
@@ -19,13 +17,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 			<div class="deck-list-container">
 				<copy-deckstring class="copy-deckcode" [deckstring]="deck?.deckstring" copyText="Copy deck code">
 				</copy-deckstring>
-				<decktracker-deck-list
-					class="deck-list"
-					[deckState]="deckState"
-					displayMode="DISPLAY_MODE_GROUPED"
-					[colorManaCost]="true"
-					tooltipPosition="right"
-				></decktracker-deck-list>
+				<deck-list class="deck-list" [deckstring]="deck?.deckstring"></deck-list>
 			</div>
 			<deck-winrate-matrix [deck]="deck"> </deck-winrate-matrix>
 			<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
@@ -45,7 +37,6 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 	}
 
 	deck: DeckSummary;
-	deckState: DeckState;
 
 	takeScreenshotFunction: () => Promise<[string, any]> = this.takeScreenshot();
 
@@ -54,11 +45,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly deckHandler: DeckHandlerService,
-		private readonly owUtils: OwUtilsService,
-	) {}
+	constructor(private readonly ow: OverwolfService, private readonly owUtils: OwUtilsService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -77,15 +64,5 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.deck = this._state.decktracker.decks.find(
 			deck => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
-		if (!this.deck) {
-			return;
-		}
-
-		const decklist = this.deckHandler.buildDeckList(this.deck.deckstring);
-
-		this.deckState = DeckState.create({
-			deckList: decklist,
-			deck: decklist,
-		} as DeckState);
 	}
 }
