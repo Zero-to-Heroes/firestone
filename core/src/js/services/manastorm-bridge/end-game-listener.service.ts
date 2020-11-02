@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ScenarioId } from '@firestone-hs/reference-data';
+import { GameType } from '@firestone-hs/reference-data';
 import { GameEvent } from '../../models/game-event';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
@@ -17,6 +17,7 @@ export class EndGameListenerService {
 	private currentDeckname: string;
 	private currentBuildNumber: number;
 	private currentScenarioId: number;
+	private currentGameMode: number;
 	// private currentReviewId: string;
 
 	constructor(
@@ -62,6 +63,7 @@ export class EndGameListenerService {
 				case GameEvent.MATCH_METADATA:
 					this.currentBuildNumber = gameEvent.additionalData.metaData.BuildNumber;
 					this.currentScenarioId = gameEvent.additionalData.metaData.ScenarioID;
+					this.currentGameMode = gameEvent.additionalData.metaData.GameType;
 					break;
 				case GameEvent.GAME_END:
 					console.log('[manastorm-bridge] end game, uploading?');
@@ -89,8 +91,12 @@ export class EndGameListenerService {
 		if (this.deckTimeout) {
 			clearTimeout(this.deckTimeout);
 		}
-		if (!this.deckService.currentDeck?.deckstring && this.currentScenarioId !== ScenarioId.BATTLEGROUNDS) {
-			console.log('[manastorm-bridge] no deckstring, waiting');
+		if (
+			!this.deckService.currentDeck?.deckstring &&
+			this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
+			this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY
+		) {
+			console.log('[manastorm-bridge] no deckstring, waiting', this.currentGameMode);
 			this.deckTimeout = setTimeout(() => this.listenToDeckUpdate(), 2000);
 			return;
 		}
