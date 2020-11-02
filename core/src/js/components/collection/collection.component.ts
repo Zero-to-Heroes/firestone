@@ -17,9 +17,9 @@ import { SetsService } from '../../services/sets-service.service';
 					<div class="content">
 						<global-header [navigation]="_navigation" *ngIf="_navigation.text"> </global-header>
 						<sets
-							[selectedFormat]="_navigation.navigationCollection.selectedFormat"
 							[standardSets]="standardSets"
 							[wildSets]="wildSets"
+							[selectedFormat]="_navigation.navigationCollection.selectedFormat"
 							[hidden]="_navigation.navigationCollection.currentView !== 'sets'"
 						>
 						</sets>

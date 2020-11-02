@@ -16,27 +16,31 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 				[placeholder]="placeholder"
 				[filterChangeFunction]="filterChangeFunction"
 			></filter>
-			<!--<ul class="menu-selection">
-				<li [ngClass]="{ 'active': showStandard }" (mousedown)="toggleStandard()">Standard</li>
-				<li [ngClass]="{ 'active': showWild }" (mousedown)="toggleWild()">Wild</li>
-			</ul> -->
-			<sets-container [sets]="standardSets" [category]="'Standard'" *ngIf="showStandard"></sets-container>
-			<sets-container [sets]="wildSets" [category]="'Wild'" *ngIf="showWild"></sets-container>
+			<sets-container [sets]="sets" [category]="category"></sets-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetsComponent {
-	@Input() standardSets: Set[];
-	@Input() wildSets: Set[];
+	@Input() set standardSets(value: Set[]) {
+		this._standardSets = value;
+		this.update();
+	}
+
+	@Input() set wildSets(value: Set[]) {
+		this._wildSets = value;
+		this.update();
+	}
+
+	category: string;
+	sets: Set[];
+	_standardSets: Set[];
+	_wildSets: Set[];
 
 	filterOptions: readonly IOption[];
 	activeFilter: string;
 	placeholder: string;
 	filterChangeFunction: (option: IOption) => MainWindowStoreEvent;
-
-	showStandard = true;
-	showWild = false;
 
 	constructor() {
 		this.filterOptions = [
@@ -48,6 +52,10 @@ export class SetsComponent {
 				label: 'Wild',
 				value: 'wild',
 			} as IOption,
+			{
+				label: 'All',
+				value: 'all',
+			} as IOption,
 		];
 		this.filterChangeFunction = (option: IOption) =>
 			new CollectionSetsFilterEvent(option.value as StatGameFormatType);
@@ -55,18 +63,26 @@ export class SetsComponent {
 
 	@Input('selectedFormat') set selectedFormat(format: StatGameFormatType) {
 		this.activeFilter = format;
-		switch (format) {
+		this.update();
+	}
+
+	private update() {
+		if (!this._standardSets || !this._wildSets) {
+			return;
+		}
+		switch (this.activeFilter) {
 			case 'standard':
-				this.showStandard = true;
-				this.showWild = false;
+				this.sets = this._standardSets;
+				this.category = 'Standard';
 				break;
 			case 'wild':
-				this.showStandard = false;
-				this.showWild = true;
+				this.sets = this._wildSets;
+				this.category = 'Wild';
 				break;
+			case 'all':
 			default:
-				this.showStandard = true;
-				this.showWild = false;
+				this.sets = [...this._wildSets, ...this._standardSets];
+				this.category = 'All';
 		}
 	}
 }
