@@ -160,9 +160,12 @@ export class DeckParserService {
 
 	private normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
 		return decklist.map(cardId => {
-			let card = this.allCards.getCard(cardId as string);
+			const isDbfId = !isNaN(parseInt(cardId as any));
+			let card = isDbfId
+				? this.allCards.getCardFromDbfId(cardId as number)
+				: this.allCards.getCard(cardId as string);
 			if (!card?.dbfId) {
-				card = this.allCards.getCardFromDbfId(cardId as number);
+				console.warn('[deck-parser] could not find card for dbfId', cardId, isDbfId, card);
 			}
 			return card?.dbfId;
 		});
