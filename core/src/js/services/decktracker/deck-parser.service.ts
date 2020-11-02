@@ -57,10 +57,17 @@ export class DeckParserService {
 				);
 			}
 		});
+		window['currentScene'] = async () => {
+			console.log(
+				'[deck-parser] scene',
+				await this.memory.getCurrentScene(),
+				await this.memory.getCurrentSceneFromMindVision(),
+			);
+		};
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		// console.log('will detect active deck from queue?', logLine);
+		console.log('[deck-parser] will detect active deck from queue?', logLine);
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
 			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
@@ -69,9 +76,22 @@ export class DeckParserService {
 		}
 		if (this.goingIntoQueueRegex.exec(logLine)) {
 			const currentScene = await this.memory.getCurrentScene();
+			console.log('[deck-parser] going into queue', currentScene);
 			// Don't refresh the deck when leaving the match
+			// However scene_gameplay is also the current scene when selecting a friendly deck?
 			if (currentScene === 'scene_gameplay') {
-				return;
+				// Double check, as there is today an issue with the events from the GEP when in friendly matches
+				const currentSceneFromMindVision = await this.memory.getCurrentSceneFromMindVision();
+				// console.log('[deck-parser] current scene from mindvision', currentSceneFromMindVision);
+				// 4 is GAMEPLAY. Will use a proper enum later on if the bug on the GEP is not fixed
+				if (currentSceneFromMindVision === 4) {
+					return;
+				}
+				console.log(
+					'[deck-parser] mismatch between MindVision and GEP',
+					currentScene,
+					currentSceneFromMindVision,
+				);
 			}
 
 			console.log('[deck-parser] getting active deck from going into queue', await this.memory.getCurrentScene());

@@ -109,6 +109,20 @@ export class MindVisionService {
 		});
 	}
 
+	public async getCurrentScene(): Promise<number> {
+		return new Promise<number>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.getCurrentScene(scene => {
+					resolve(scene);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse activeDeck', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async get() {
 		await this.waitForInit();
 		return this.mindVisionPlugin.get();

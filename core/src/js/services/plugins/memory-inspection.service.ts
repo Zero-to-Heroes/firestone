@@ -13,6 +13,7 @@ import { GetBattlegroundsEndGameOperation } from './mind-vision/get-battleground
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-match-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
+import { GetCurrentSceneOperation } from './mind-vision/get-current-scene-operation';
 import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
@@ -35,6 +36,7 @@ export class MemoryInspectionService {
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
+	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
 
 	constructor(
 		private events: Events,
@@ -75,6 +77,10 @@ export class MemoryInspectionService {
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
 		return this.getDuelsInfoOperation.call(numberOfRetries, forceReset);
+	}
+
+	public async getCurrentSceneFromMindVision(): Promise<number> {
+		return this.getCurrentSceneOperation.call();
 	}
 
 	public async getCurrentScene(): Promise<string> {
