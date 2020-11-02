@@ -75,7 +75,7 @@ export class DeckstringOverrideParser implements EventParser {
 			return null;
 		}
 		return currentDeck.deck.heroes
-			.map(hero => this.allCards.getCardFromDbfId(hero))
+			.map(hero => this.allCards.getCardFromDbfId(+hero))
 			.map(heroCard => {
 				if (!heroCard) {
 					console.error(
@@ -109,7 +109,7 @@ export class DeckstringOverrideParser implements EventParser {
 	}
 
 	private buildDeckCards(pair): DeckCard[] {
-		const card = this.allCards.getCardFromDbfId(pair[0]);
+		const card = this.allCards.getCardFromDbfId(+pair[0]);
 		const result: DeckCard[] = [];
 		if (!card) {
 			console.error('Could not build deck card', pair);

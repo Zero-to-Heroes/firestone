@@ -27,12 +27,8 @@ export class DeckHandlerService {
 	}
 
 	public buildDeckCards(pair): DeckCard[] {
-		let dbfId = -1;
-		try {
-			dbfId = parseInt(pair[0]);
-		} catch (e) {}
-		const card =
-			!isNaN(dbfId) && dbfId !== -1 ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
+		let dbfId = +pair[0];
+		const card = !isNaN(dbfId) ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
 		const result: DeckCard[] = [];
 		if (!card) {
 			console.error('Could not build deck card', dbfId, isNaN(dbfId), dbfId !== -1, pair);

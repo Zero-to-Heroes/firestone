@@ -119,7 +119,7 @@ export class MatchMetadataParser implements EventParser {
 			return null;
 		}
 		return currentDeck.deck.heroes
-			.map(hero => this.allCards.getCardFromDbfId(hero))
+			.map(hero => this.allCards.getCardFromDbfId(+hero))
 			.map(heroCard => {
 				if (!heroCard) {
 					console.error(

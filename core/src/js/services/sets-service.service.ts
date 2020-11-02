@@ -147,7 +147,7 @@ export class SetsService {
 	}
 
 	public getCardFromDbfId(dbfId: number): ReferenceCard {
-		return this.allCards.getCardFromDbfId(dbfId);
+		return this.allCards.getCardFromDbfId(+dbfId);
 	}
 
 	public getCardsFromDbfIds(dbfIds: number[]): ReferenceCard[] {

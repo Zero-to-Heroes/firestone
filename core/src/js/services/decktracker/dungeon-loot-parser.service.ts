@@ -194,7 +194,7 @@ export class DungeonLootParserService {
 
 		const user = await this.ow.getCurrentUser();
 		const treasures: readonly string[] = this.duelsInfo.TreasureOption
-			? this.duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(option)?.id || '' + option)
+			? this.duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(+option)?.id || '' + option)
 			: [];
 		const signatureTreasure: string = this.findSignatureTreasure(this.duelsInfo.DeckList);
 		const input: Input = {
@@ -204,13 +204,15 @@ export class DungeonLootParserService {
 			userId: user.userId,
 			userName: user.username,
 			startingHeroPower:
-				this.allCards.getCardFromDbfId(this.duelsInfo.StartingHeroPower)?.id ||
+				this.allCards.getCardFromDbfId(+this.duelsInfo.StartingHeroPower)?.id ||
 				'' + this.duelsInfo.StartingHeroPower,
 			signatureTreasure: signatureTreasure,
 			lootBundles: this.duelsInfo.LootOptionBundles
 				? this.duelsInfo.LootOptionBundles.filter(bundle => bundle).map(bundle => ({
-						bundleId: this.allCards.getCardFromDbfId(bundle.BundleId)?.id || '' + bundle.BundleId,
-						elements: bundle.Elements.map(dbfId => this.allCards.getCardFromDbfId(dbfId)?.id || '' + dbfId),
+						bundleId: this.allCards.getCardFromDbfId(+bundle.BundleId)?.id || '' + bundle.BundleId,
+						elements: bundle.Elements.map(
+							dbfId => this.allCards.getCardFromDbfId(+dbfId)?.id || '' + dbfId,
+						),
 				  }))
 				: [],
 			chosenLootIndex: this.duelsInfo.ChosenLoot,
@@ -235,7 +237,7 @@ export class DungeonLootParserService {
 
 	private findSignatureTreasure(deckList: readonly number[]): string {
 		return deckList
-			.map(cardDbfId => this.allCards.getCardFromDbfId(cardDbfId))
+			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
 			.find(card => this.SIGNATURE_TREASUERS.includes(card?.id))?.id;
 	}
 }

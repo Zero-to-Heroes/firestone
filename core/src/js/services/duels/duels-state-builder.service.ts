@@ -204,7 +204,6 @@ export class DuelsStateBuilderService {
 				return {
 					...stat,
 					heroCardId: stat.heroCardId || getDuelsHeroCardId(stat.playerClass),
-					// heroCardId: this.allCards.getCardFromDbfId(deck.heroes[0])?.id,
 					dustCost: dustCost,
 				} as DuelsDeckStat;
 			})
@@ -238,7 +237,7 @@ export class DuelsStateBuilderService {
 	private buildDustCost(deck: DeckDefinition, collectionState: BinderState): number {
 		return deck.cards
 			.map(cards => cards[0])
-			.map(cardDbfId => this.allCards.getCardFromDbfId(cardDbfId))
+			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
 			.filter(card => card)
 			.map(card => collectionState.getCard(card.id))
 			.filter(card => card.getNumberCollected() === 0)
