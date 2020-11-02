@@ -196,9 +196,16 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 			return;
 		}
 
+		const fakeMatchWithCurrentMmr: GameStat = data[data.length - 1].newPlayerRank
+			? GameStat.create({
+					...data[data.length - 1],
+					playerRank: data[data.length - 1].newPlayerRank,
+			  } as GameStat)
+			: null;
+		const dataWithCurrentMmr = fakeMatchWithCurrentMmr ? [...data, fakeMatchWithCurrentMmr] : data;
 		if (this._state.activeGroupMmrFilter === 'per-day') {
 			const groupedByDay = groupByFunction((match: GameStat) => formatDate(new Date(match.creationTimestamp)))(
-				data,
+				dataWithCurrentMmr,
 			);
 			//console.log('groupedByDay', groupedByDay);
 			const values = Object.values(groupedByDay).map((games: readonly GameStat[]) =>
@@ -216,7 +223,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		} else {
 			this.lineChartData = [
 				{
-					data: data.map(match => parseInt(match.playerRank)),
+					data: dataWithCurrentMmr.map(match => parseInt(match.playerRank)),
 					label: 'Rating',
 				},
 			];
