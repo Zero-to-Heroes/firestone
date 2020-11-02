@@ -27,7 +27,7 @@ export class DeckHandlerService {
 	}
 
 	public buildDeckCards(pair): DeckCard[] {
-		let dbfId = +pair[0];
+		const dbfId = +pair[0];
 		const card = !isNaN(dbfId) ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
 		const result: DeckCard[] = [];
 		if (!card) {
