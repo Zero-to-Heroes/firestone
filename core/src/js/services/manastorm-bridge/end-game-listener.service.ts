@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ScenarioId } from '@firestone-hs/reference-data';
 import { GameEvent } from '../../models/game-event';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
@@ -88,7 +89,7 @@ export class EndGameListenerService {
 		if (this.deckTimeout) {
 			clearTimeout(this.deckTimeout);
 		}
-		if (!this.deckService.currentDeck?.deckstring) {
+		if (!this.deckService.currentDeck?.deckstring && this.currentScenarioId !== ScenarioId.BATTLEGROUNDS) {
 			console.log('[manastorm-bridge] no deckstring, waiting');
 			this.deckTimeout = setTimeout(() => this.listenToDeckUpdate(), 2000);
 			return;
