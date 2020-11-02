@@ -104,7 +104,9 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 	private buildBannedTribes(gameState: BattlegroundsState) {
 		this.bannedTribes = gameState?.currentGame?.bannedRaces || [];
 		const tribeNames = this.bannedTribes.map(tribe => this.getTribeName(tribe)).join(', ');
-		const exceptionCards = this.bannedTribes.map(tribe => this.getExceptions(tribe)).reduce((a, b) => a.concat(b));
+		const exceptionCards = this.bannedTribes
+			.map(tribe => this.getExceptions(tribe))
+			.reduce((a, b) => a.concat(b), []);
 		const exceptions =
 			exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
 		this.tooltip = `${tribeNames}s won't appear in this run. ${exceptions}`;
