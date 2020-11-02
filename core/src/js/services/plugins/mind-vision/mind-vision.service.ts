@@ -123,6 +123,20 @@ export class MindVisionService {
 		});
 	}
 
+	public async reset(): Promise<void> {
+		return new Promise<void>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.reset(result => {
+					resolve(result);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not reset', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async get() {
 		await this.waitForInit();
 		return this.mindVisionPlugin.get();

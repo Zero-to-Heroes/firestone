@@ -83,6 +83,10 @@ export class MemoryInspectionService {
 		return this.getCurrentSceneOperation.call();
 	}
 
+	public async reset(): Promise<void> {
+		this.mindVision.reset();
+	}
+
 	public async getCurrentScene(): Promise<string> {
 		return new Promise<string>(async resolve => {
 			const gameInfo = await this.ow.getGameEventsInfo();

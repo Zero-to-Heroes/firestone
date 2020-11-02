@@ -33,6 +33,8 @@ export class DeckParserService {
 	private currentGameType: GameType;
 	private currentScenarioId: number;
 
+	private deckSanityDone: boolean;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
@@ -56,6 +58,25 @@ export class DeckParserService {
 					this.currentScenarioId,
 					this.currentDeck,
 				);
+			} else if (event.type === GameEvent.SCENE_CHANGED) {
+				// Doing that because the first time we access the deck selection screen the memory reading can be weird
+				// So we reset the memory reading once the game has been fully loaded
+				if (!this.deckSanityDone) {
+					const scene = event.additionalData.scene;
+					if (
+						[
+							'scene_tournament',
+							'scene_friendly',
+							'scene_adventure',
+							'unknown_18',
+							'scene_bacon',
+							'scene_arena',
+						].includes(scene)
+					) {
+						console.log('[deck-parser] resetting mindvision once fully in game');
+						this.memory.reset();
+					}
+				}
 			}
 		});
 		window['currentScene'] = async () => {
@@ -64,6 +85,9 @@ export class DeckParserService {
 				await this.memory.getCurrentScene(),
 				await this.memory.getCurrentSceneFromMindVision(),
 			);
+		};
+		window['deckFromMemory'] = async () => {
+			console.log('[deck-parser] deckFromMemory', await this.memory.getActiveDeck(1));
 		};
 	}
 
