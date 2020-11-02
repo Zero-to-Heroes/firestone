@@ -67,7 +67,7 @@ export class DeckParserService {
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		console.log('[deck-parser] will detect active deck from queue?', logLine);
+		console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
 			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
@@ -94,9 +94,9 @@ export class DeckParserService {
 				);
 			}
 
-			console.log('[deck-parser] getting active deck from going into queue', await this.memory.getCurrentScene());
+			console.log('[deck-parser] getting active deck from going into queue', currentScene);
 			const activeDeck =
-				currentScene === 'unknown_18' ? await this.memory.getDuelsInfo() : await this.memory.getActiveDeck(1);
+				currentScene === 'unknown_18' ? await this.memory.getDuelsInfo() : await this.memory.getActiveDeck(2);
 			console.log('[deck-parser] active deck after queue', activeDeck);
 			if (currentScene === 'unknown_18' && activeDeck.Wins === 0 && activeDeck.Losses === 0) {
 				console.log('[deck-parser] not relying on memory reading for initial Duels deck, returning');
@@ -181,7 +181,7 @@ export class DeckParserService {
 	private normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
 		return decklist.map(cardId => {
 			const isDbfId = !isNaN(parseInt(cardId as any));
-			let card = isDbfId
+			const card = isDbfId
 				? this.allCards.getCardFromDbfId(cardId as number)
 				: this.allCards.getCard(cardId as string);
 			if (!card?.dbfId) {
