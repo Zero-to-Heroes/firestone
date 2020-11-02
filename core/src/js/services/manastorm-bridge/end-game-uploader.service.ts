@@ -3,6 +3,7 @@ import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { GameEvent } from '../../models/game-event';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
+import { LogsUploaderService } from '../logs-uploader.service';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { sleep } from '../utils';
@@ -29,6 +30,7 @@ export class EndGameUploaderService {
 		private playersInfo: PlayersInfoService,
 		private memoryInspection: MemoryInspectionService,
 		private dungeonLootParser: DungeonLootParserService,
+		private logService: LogsUploaderService,
 	) {}
 
 	public async upload(
@@ -189,6 +191,10 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge] extracted matchup');
 		this.gameParserService.extractDuration(game);
 		console.log('[manastorm-bridge] extracted duration');
+
+		if (!this.dungeonLootParser.currentDuelsRunId && game.gameMode === 'duels') {
+			this.logService.reportSpecificBug('duels-empty-run-id');
+		}
 
 		console.log('[manastorm-bridge] game ready');
 		return game;
