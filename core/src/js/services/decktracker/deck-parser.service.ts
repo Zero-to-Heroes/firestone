@@ -79,16 +79,16 @@ export class DeckParserService {
 				}
 			}
 		});
-		window['currentScene'] = async () => {
-			console.log(
-				'[deck-parser] scene',
-				await this.memory.getCurrentScene(),
-				await this.memory.getCurrentSceneFromMindVision(),
-			);
-		};
-		window['deckFromMemory'] = async () => {
-			console.log('[deck-parser] deckFromMemory', await this.memory.getActiveDeck(1));
-		};
+		// window['currentScene'] = async () => {
+		// 	console.log(
+		// 		'[deck-parser] scene',
+		// 		await this.memory.getCurrentScene(),
+		// 		await this.memory.getCurrentSceneFromMindVision(),
+		// 	);
+		// };
+		// window['deckFromMemory'] = async () => {
+		// 	console.log('[deck-parser] deckFromMemory', await this.memory.getActiveDeck(1));
+		// };
 	}
 
 	public async queueingIntoMatch(logLine: string) {
@@ -126,7 +126,7 @@ export class DeckParserService {
 
 			console.log('[deck-parser] getting active deck from going into queue', currentScene);
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
-			const activeDeck = currentScene === 'unknown_18' ? this.getDuelsInfo() : deckFromMemory;
+			const activeDeck = currentScene === 'unknown_18' ? await this.getDuelsInfo() : deckFromMemory;
 			console.log('[deck-parser] active deck after queue', activeDeck);
 			if (currentScene === 'unknown_18' && activeDeck?.Wins === 0 && activeDeck?.Losses === 0) {
 				console.log('[deck-parser] not relying on memory reading for initial Duels deck, returning');
