@@ -12,7 +12,7 @@ import { MatchInfo } from '../../models/match-info';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { groupByFunction, isCharLowerCase } from '../utils';
+import { groupByFunction } from '../utils';
 import { DeckHandlerService } from './deck-handler.service';
 
 @Injectable()
@@ -80,6 +80,7 @@ export class DeckParserService {
 				}
 			}
 		});
+		// window['memory'] = this.memory;
 		// window['currentScene'] = async () => {
 		// 	console.log(
 		// 		'[deck-parser] scene',
@@ -115,20 +116,21 @@ export class DeckParserService {
 				const currentSceneFromMindVision = await this.memory.getCurrentSceneFromMindVision();
 				// console.log('[deck-parser] current scene from mindvision', currentSceneFromMindVision);
 				// 4 is GAMEPLAY. Will use a proper enum later on if the bug on the GEP is not fixed
-				if (currentSceneFromMindVision === 4) {
+				if (currentSceneFromMindVision == 4) {
 					return;
 				}
 				console.log(
 					'[deck-parser] mismatch between MindVision and GEP',
 					currentScene,
 					currentSceneFromMindVision,
+					currentSceneFromMindVision == 4,
 				);
 			}
 
 			console.log('[deck-parser] getting active deck from going into queue', currentScene);
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
 			const activeDeck = currentScene === 'unknown_18' ? await this.getDuelsInfo() : deckFromMemory;
-			console.log('[deck-parser] active deck after queue', activeDeck);
+			console.log('[deck-parser] active deck after queue', activeDeck, currentScene);
 			if (!activeDeck) {
 				console.warn('[deck-parser] could not read any deck from memory');
 				return;
@@ -512,15 +514,43 @@ export class DeckParserService {
 				return heroDbfId;
 			}
 		}
-		// This is the case for the non-standard heroes
-		if (isCharLowerCase(card.id.charAt(card.id.length - 1))) {
-			const canonicalHeroId = card.id.slice(0, -1);
-			// console.log('trying to find canonical hero card', card, canonicalHeroId);
-			const canonicalCard = this.allCards.getCard(canonicalHeroId);
-			if (canonicalCard) {
-				return canonicalCard.dbfId;
-			}
+
+		const playerClass: string = this.allCards.getCard(card.id)?.playerClass;
+		switch (playerClass) {
+			case 'DemonHunter':
+			case 'Demonhunter':
+				return 56550;
+			case 'Druid':
+				return 274;
+			case 'Hunter':
+				return 31;
+			case 'Mage':
+				return 637;
+			case 'Paladin':
+				return 671;
+			case 'Priest':
+				return 813;
+			case 'Rogue':
+				return 930;
+			case 'Shaman':
+				return 1066;
+			case 'Warlock':
+				return 893;
+			case 'Warrior':
+				return 7;
+			default:
+				console.warn('Could not normalize hero card id', heroDbfId, heroCardId, playerClass, card);
+				return 7;
 		}
-		return heroDbfId;
+		// // This is the case for the non-standard heroes
+		// if (isCharLowerCase(card.id.charAt(card.id.length - 1))) {
+		// 	const canonicalHeroId = card.id.slice(0, -1);
+		// 	// console.log('trying to find canonical hero card', card, canonicalHeroId);
+		// 	const canonicalCard = this.allCards.getCard(canonicalHeroId);
+		// 	if (canonicalCard) {
+		// 		return canonicalCard.dbfId;
+		// 	}
+		// }
+		// return heroDbfId;
 	}
 }
