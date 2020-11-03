@@ -170,7 +170,14 @@ export class DeckManipulationHelper {
 		if (!cardId) {
 			return zone;
 		}
-		return zone.map(card => (card.entityId !== entityId ? card : card.update({ cardId: cardId } as DeckCard)));
+		return zone.map(card =>
+			card.entityId !== entityId
+				? card
+				: card.update({
+						cardId: cardId,
+						cardName: this.allCards.getCard(cardId)?.name,
+				  } as DeckCard),
+		);
 	}
 
 	public findCardInZone(

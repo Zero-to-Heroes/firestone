@@ -10,6 +10,11 @@ export interface DuelsInfo {
 	readonly LootOptionBundles: readonly OptionBundle[];
 	readonly TreasureOption: readonly number[];
 	readonly StartingHeroPower: number;
+
+	// Not read from memory, just there for compatiblity with standard decklists
+	readonly IsWild: boolean;
+	readonly Name: string;
+	readonly HeroCardId: string;
 }
 
 export interface OptionBundle {

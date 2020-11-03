@@ -3,6 +3,7 @@ import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
 import { DuelsInfo } from '../../models/duels-info';
+import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
@@ -67,7 +68,7 @@ export class MemoryInspectionService {
 		return this.getBattlegroundsMatchOperation.call(numberOfRetries);
 	}
 
-	public async getActiveDeck(numberOfRetries?: number): Promise<any> {
+	public async getActiveDeck(numberOfRetries?: number): Promise<DeckInfoFromMemory> {
 		return this.getActiveDeckOperation.call(numberOfRetries);
 	}
 

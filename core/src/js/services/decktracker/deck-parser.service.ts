@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Board, CardIds, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
+import { Board, CardIds, GameFormat, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
@@ -7,11 +7,12 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 import { Metadata } from '../../models/decktracker/metadata';
 import { DuelsInfo } from '../../models/duels-info';
 import { GameEvent } from '../../models/game-event';
+import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { isCharLowerCase } from '../utils';
+import { groupByFunction, isCharLowerCase } from '../utils';
 import { DeckHandlerService } from './deck-handler.service';
 
 @Injectable()
@@ -128,23 +129,31 @@ export class DeckParserService {
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
 			const activeDeck = currentScene === 'unknown_18' ? await this.getDuelsInfo() : deckFromMemory;
 			console.log('[deck-parser] active deck after queue', activeDeck);
-			if (currentScene === 'unknown_18' && activeDeck?.Wins === 0 && activeDeck?.Losses === 0) {
+			if (!activeDeck) {
+				console.warn('[deck-parser] could not read any deck from memory');
+				return;
+			}
+			if (this.isDuelsInfo(activeDeck) && activeDeck.Wins === 0 && activeDeck.Losses === 0) {
 				console.log('[deck-parser] not relying on memory reading for initial Duels deck, returning');
 				this.reset(false);
 				return;
 			}
-			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
+			if (activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log(
 					'[deck-parser] updating active deck after queue',
 					activeDeck,
 					this.currentDeck,
 					this.currentScenarioId,
 				);
-				this.updateDeckFromMemory(activeDeck.DeckList);
+				this.updateDeckFromMemory(activeDeck);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 				this.currentDeck.scenarioId = this.currentScenarioId;
 			}
 		}
+	}
+
+	private isDuelsInfo(activeDeck: DeckInfoFromMemory | DuelsInfo): activeDeck is DuelsInfo {
+		return (activeDeck as DuelsInfo).Wins !== undefined;
 	}
 
 	private async getDuelsInfo(): Promise<DuelsInfo> {
@@ -183,7 +192,7 @@ export class DeckParserService {
 			console.log('[deck-parser] active deck from memory', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
-				this.updateDeckFromMemory(activeDeck.DeckList);
+				this.updateDeckFromMemory(activeDeck);
 			}
 		}
 		// console.log(
@@ -200,14 +209,14 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
-	private updateDeckFromMemory(decklistFromMemory) {
-		console.log('[deck-parser] updating deck from memory', decklistFromMemory);
-		const decklist: readonly number[] = this.normalizeWithDbfIds(decklistFromMemory);
+	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory) {
+		console.log('[deck-parser] updating deck from memory', deckFromMemory);
+		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist);
 		this.currentDeck.deck = {
-			format: 1, // fake
+			format: deckFromMemory.IsWild ? GameFormat.FT_WILD : GameFormat.FT_STANDARD,
 			cards: this.explodeDecklist(decklist),
-			heroes: [7], // fake
+			heroes: [this.normalizeHero(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId)],
 		};
 		console.log('[deck-parser] building deckstring', this.currentDeck.deck);
 		const deckString = encode(this.currentDeck.deck);
@@ -268,8 +277,13 @@ export class DeckParserService {
 		}
 	}
 
-	private explodeDecklist(decklistWithDbfIds: readonly number[]): any[] {
-		return decklistWithDbfIds.map(id => [id, 1]);
+	private explodeDecklist(decklistWithDbfIds: readonly (number | string)[]): any[] {
+		console.log('[deck-parser] exploding decklist', decklistWithDbfIds);
+		const groupedById = groupByFunction(cardId => '' + cardId)(decklistWithDbfIds);
+		console.log('[deck-parser] groupedById', groupedById);
+		const result = Object.keys(groupedById).map(id => [+id, groupedById[id].length]);
+		console.log('[deck-parser] exploding decklist result', result);
+		return result;
 	}
 
 	public parseActiveDeck(data: string) {

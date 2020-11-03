@@ -13,6 +13,9 @@ export class GetDuelsInfoOperation extends MindVisionOperationFacade<DuelsInfo> 
 			info =>
 				({
 					...info,
+					IsWild: true,
+					Name: 'Duels deck',
+					HeroCardId: 'HERO_01', // Fake
 				} as DuelsInfo),
 			3,
 			1500,
