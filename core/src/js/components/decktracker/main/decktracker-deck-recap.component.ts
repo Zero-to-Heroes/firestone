@@ -6,6 +6,7 @@ import { DeckHandlerService } from '../../../services/decktracker/deck-handler.s
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ReplaysFilterEvent } from '../../../services/mainwindow/store/events/replays/replays-filter-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { formatClass } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-deck-recap',
@@ -39,6 +40,17 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						</div>
 						<div class="watch">Watch replays</div>
 					</div>
+				</div>
+				<div class="best-against">
+					<div class="header">Best against</div>
+					<ul class="classes">
+						<img
+							class="class-icon"
+							*ngFor="let bestAgainst of bestAgainsts"
+							[src]="bestAgainst.icon"
+							[helpTooltip]="bestAgainst.playerClass"
+						/>
+					</ul>
 				</div>
 			</div>
 			<div class="deck-stats-recap">
@@ -84,6 +96,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 	deckstring: string;
 	winRatePercentage: string;
 	games: number;
+	bestAgainsts: readonly BestAgainst[];
 
 	private _state: MainWindowState;
 	private _navigation: NavigationState;
@@ -120,5 +133,20 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 			maximumFractionDigits: 1,
 		});
 		this.games = this.deck.totalGames;
+		this.bestAgainsts = [...this.deck.matchupStats]
+			.sort((a, b) => b.totalWins / (b.totalGames || 1) - a.totalWins / (a.totalGames || 1))
+			.slice(0, 3)
+			.map(
+				matchUp =>
+					({
+						icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
+						playerClass: formatClass(matchUp.opponentClass),
+					} as BestAgainst),
+			);
 	}
+}
+
+interface BestAgainst {
+	readonly icon: string;
+	readonly playerClass: string;
 }

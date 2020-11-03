@@ -45,12 +45,13 @@
 	.deck-title {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-around;
+		justify-content: flex-start;
 
 		.deck-name {
 			color: var(--default-title-color);
-			margin-bottom: 5px;
+			margin-bottom: 15px;
 			display: flex;
+			align-items: center;
 
 			.text {
 				margin-left: 5px;
@@ -94,6 +95,36 @@
 				cursor: default;
 				transition: 0.15s;
 				color: transparent;
+			}
+		}
+	}
+
+	.best-against {
+		margin-left: 40px;
+		border-left: 1px solid var(--default-text-color);
+		padding-left: 40px;
+		display: flex;
+		flex-direction: column;
+
+		.header {
+			color: var(--default-title-color);
+			font-size: 14px;
+			margin-bottom: 15px;
+		}
+
+		.classes {
+			display: flex;
+
+			.class-icon {
+				width: 20px;
+				height: 20px;
+				clip-path: circle(10px at 50% 50%);
+				transform: scale(1.3);
+				margin-right: 15px;
+
+				&:last-child {
+					margin-right: 0;
+				}
 			}
 		}
 	}
