@@ -16,7 +16,6 @@ export class BattlegroundsMinionsSetProvider extends GenericSetProvider {
 				'battlegrounds_minion_play_TB_BaconUps_003t',
 				'battlegrounds_minion_play_ICC_038',
 				'battlegrounds_minion_play_TB_BaconUps_061',
-				'battlegrounds_minion_play_TB_BaconUps_059t',
 				'battlegrounds_minion_play_LOOT_013',
 				'battlegrounds_minion_play_TB_BaconUps_079',
 				'battlegrounds_minion_play_TB_BaconUps_112',
