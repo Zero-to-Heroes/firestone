@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
-import { capitalizeEachWord } from '../../../services/utils';
+import { formatClass } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-winrate-recap',
@@ -72,7 +72,7 @@ export class DeckTrackerWinrateRecapComponent {
 			this.text = "Deck's winrate";
 			this.tooltip = "This deck's winrate in ranked since " + dateFrom;
 		} else {
-			const readableClass = this.formatClass(this._stats.opponentClass);
+			const readableClass = formatClass(this._stats.opponentClass);
 			this.text = 'VS. ' + readableClass;
 			this.tooltip = "This deck's winrate in ranked against " + readableClass + ' since ' + dateFrom;
 		}
@@ -80,13 +80,5 @@ export class DeckTrackerWinrateRecapComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private formatClass(playerClass: string): string {
-		let update = playerClass;
-		if (playerClass === 'demonhunter') {
-			update = 'demon hunter';
-		}
-		return capitalizeEachWord(update);
 	}
 }

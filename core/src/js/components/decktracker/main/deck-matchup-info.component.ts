@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { capitalizeEachWord } from '../../../services/utils';
+import { formatClass } from '../../../services/utils';
 
 @Component({
 	selector: 'deck-matchup-info',
@@ -26,7 +26,7 @@ import { capitalizeEachWord } from '../../../services/utils';
 export class DeckMatchupInfoComponent implements AfterViewInit {
 	@Input() set matchup(value: MatchupStat) {
 		this.icon = `assets/images/deck/classes/${value.opponentClass.toLowerCase()}.png`;
-		this.className = this.buildClassName(value.opponentClass);
+		this.className = formatClass(value.opponentClass);
 		this.games = value.totalGames;
 		this.winrate = value.totalWins != null && value.totalGames ? (100 * value.totalWins) / value.totalGames : null;
 		this.winrateFirst =
@@ -60,14 +60,5 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 
 	buildValue(value: number): string {
 		return value == null ? 'N/A' : value.toFixed(0) + '%';
-	}
-
-	private buildClassName(classCode: string): string {
-		switch (classCode) {
-			case 'demonhunter':
-				return 'Demon Hunter';
-			default:
-				return capitalizeEachWord(classCode);
-		}
 	}
 }
