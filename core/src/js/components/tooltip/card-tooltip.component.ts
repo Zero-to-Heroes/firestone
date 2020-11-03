@@ -60,7 +60,7 @@ export class CardTooltipComponent {
 			);
 			// console.log('buffs are', this.buffs);
 		}
-		this.doSetCardId(value.cardId || value.creatorCardId);
+		this.doSetCardId(value.cardId || value.creatorCardId || value.lastAffectedByCardId);
 	}
 
 	@Input() set additionalClass(value: string) {
