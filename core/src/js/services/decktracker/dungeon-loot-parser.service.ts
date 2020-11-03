@@ -104,6 +104,7 @@ export class DungeonLootParserService {
 				await this.prefs.setDuelsRunId(uuid());
 			}
 			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
+			console.log('[dungeon-loot-parser] set currentDuelsRunId', this.currentDuelsRunId);
 			if (!this.currentDuelsRunId) {
 				await this.prefs.setDuelsRunId(uuid());
 				this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
@@ -117,7 +118,7 @@ export class DungeonLootParserService {
 	}
 
 	public resetDuelsRunId() {
-		console.log('resetting DuelsDunId');
+		console.log('[dungeon-loot-parser] resetting DuelsDunId');
 		this.prefs.setDuelsRunId(null);
 		this.currentDuelsRunId = null;
 		this.currentDuelsHeroPowerCardDbfId = null;

@@ -192,7 +192,8 @@ export class EndGameUploaderService {
 		this.gameParserService.extractDuration(game);
 		console.log('[manastorm-bridge] extracted duration');
 
-		if (!this.dungeonLootParser.currentDuelsRunId && game.gameMode === 'duels') {
+		if (!game.currentDuelsRunId && game.gameMode === 'duels') {
+			console.warn('[manastorm-bridge] currentDuelsRunId is missing', game.currentDuelsRunId, game.gameMode);
 			this.logService.reportSpecificBug('duels-empty-run-id');
 		}
 
