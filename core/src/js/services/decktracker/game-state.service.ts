@@ -64,6 +64,7 @@ import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
 import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
+import { PassiveTriggeredParser } from './event-parser/passive-triggered-parser';
 import { PogoPlayedParser } from './event-parser/pogo-played-parser';
 import { QuestCreatedInGameParser } from './event-parser/quest-created-in-game-parser';
 import { QuestDestroyedParser } from './event-parser/quest-destroyed-parser';
@@ -530,6 +531,7 @@ export class GameStateService {
 			new MinionGoDormantParser(this.helper),
 			new FatigueParser(),
 			new EntityUpdateParser(this.helper, this.allCards),
+			new PassiveTriggeredParser(this.helper, this.allCards),
 		];
 	}
 

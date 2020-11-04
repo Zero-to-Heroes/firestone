@@ -31,12 +31,12 @@ export class DeckListByZoneComponent {
 	@Input() colorManaCost: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() side: 'player' | 'opponent';
-	zones: readonly DeckZone[];
-	_tooltipPosition: CardTooltipPositionType;
 
-	private _hideGeneratedCardsInOtherZone: boolean;
-	private _sortCardsByManaCostInOtherZone: boolean;
-	private _deckState: DeckState;
+	@Input() set showGlobalEffectsZone(value: boolean) {
+		console.log('setting global effect in zone', value);
+		this._showGlobalEffectsZone = value;
+		this.updateInfo();
+	}
 
 	@Input() set hideGeneratedCardsInOtherZone(value: boolean) {
 		if (value === this._hideGeneratedCardsInOtherZone) {
@@ -67,20 +67,35 @@ export class DeckListByZoneComponent {
 		this.updateInfo();
 	}
 
+	zones: readonly DeckZone[];
+	_tooltipPosition: CardTooltipPositionType;
+
+	private _showGlobalEffectsZone: boolean;
+	private _hideGeneratedCardsInOtherZone: boolean;
+	private _sortCardsByManaCostInOtherZone: boolean;
+	private _deckState: DeckState;
+
 	private updateInfo() {
 		if (!this._deckState) {
 			return;
 		}
+		const zones = [];
+		console.log('should show global effects zone?', this._showGlobalEffectsZone, this._deckState.globalEffects);
+		if (this._showGlobalEffectsZone && this._deckState.globalEffects.length > 0) {
+			zones.push(this.buildZone(this._deckState.globalEffects, 'global-effects', 'Global Effects', null, null));
+		}
 		// console.log('deck state', deckState);
-		const zones = [
+		zones.push(
 			Object.assign(
 				this.buildZone(this._deckState.deck, 'deck', 'In deck', null, this._deckState.cardsLeftInDeck),
 				{
 					showWarning: this._deckState.showDecklistWarning,
 				} as DeckZone,
 			),
+		);
+		zones.push(
 			this.buildZone(this._deckState.hand, 'hand', 'In hand', null, this._deckState.hand.length, null, 'in-hand'),
-		];
+		);
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (this._deckState.dynamicZones.length === 0) {
 			const otherZone = [...this._deckState.otherZone, ...this._deckState.board];

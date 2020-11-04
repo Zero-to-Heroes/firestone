@@ -44,6 +44,13 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle
 						[ngClass]="{ 'disabled': !overlayGroupByZone }"
 						class="indented"
+						field="overlayShowGlobalEffects"
+						label="Show global effects"
+						tooltip="When active, a new section appears at the top of the tracker that shows global effects on the game (for now, only Dungeon Run passives)"
+					></preference-toggle>
+					<preference-toggle
+						[ngClass]="{ 'disabled': !overlayGroupByZone }"
+						class="indented"
 						field="overlaySortByManaInOtherZone"
 						label="Sort cards by mana cost"
 						tooltip="When active, the cards will be sorted by mana cost in the Other zone. Otherwise, the zone will first show the cards on the board, then the graveyard, then the others."

@@ -65,6 +65,7 @@ export class DeckState {
 	readonly deck: readonly DeckCard[] = [];
 	readonly board: readonly DeckCard[] = [];
 	readonly otherZone: readonly DeckCard[] = [];
+	readonly globalEffects: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
 
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];

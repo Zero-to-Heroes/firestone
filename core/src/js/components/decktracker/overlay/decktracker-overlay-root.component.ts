@@ -72,6 +72,7 @@ declare let amplitude;
 							[deckState]="deck"
 							[displayMode]="displayMode"
 							[colorManaCost]="colorManaCost"
+							[showGlobalEffectsZone]="showGlobalEffectsZone"
 							[showGiftsSeparately]="showGiftsSeparately"
 							[cardsGoToBottom]="cardsGoToBottom"
 							[tooltipPosition]="tooltipPosition"
@@ -94,6 +95,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@Input() overlayDisplayModeExtractor: (prefs: Preferences) => string;
 	@Input() opacityExtractor: (prefs: Preferences) => number;
 	@Input() cardsGoToBottomExtractor: (prefs: Preferences) => boolean;
+	@Input() showGlobalEffectsExtractor: (prefs: Preferences) => boolean;
 	@Input() darkenUsedCardsExtractor: (prefs: Preferences) => boolean;
 	@Input() hideGeneratedCardsInOtherZoneExtractor: (prefs: Preferences) => boolean;
 	@Input() sortCardsByManaCostInOtherZoneExtractor: (prefs: Preferences) => boolean;
@@ -125,6 +127,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	colorManaCost: boolean;
 	showGiftsSeparately: boolean;
 	cardsGoToBottom: boolean;
+	showGlobalEffectsZone: boolean;
 	darkenUsedCards: boolean;
 	hideGeneratedCardsInOtherZone: boolean;
 	sortCardsByManaCostInOtherZone: boolean;
@@ -162,6 +165,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			this.gameState = event ? event.state : undefined;
+			console.log('received game state', this.gameState);
 			this.deck = this.gameState ? this.deckExtractor(this.gameState) : null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -259,6 +263,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
+		this.showGlobalEffectsZone = this.showGlobalEffectsExtractor(preferences);
 		this.showDeckWinrate = this.showDeckWinrateExtractor(preferences);
 		this.showMatchupWinrate = this.showMatchupWinrateExtractor(preferences);
 		this.darkenUsedCards = this.darkenUsedCardsExtractor(preferences);

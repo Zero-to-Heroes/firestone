@@ -13,6 +13,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[opacityExtractor]="opacityExtractor"
 			[scaleExtractor]="scaleExtractor"
 			[cardsGoToBottomExtractor]="cardsGoToBottomExtractor"
+			[showGlobalEffectsExtractor]="showGlobalEffectsExtractor"
 			[darkenUsedCardsExtractor]="darkenUsedCardsExtractor"
 			[hideGeneratedCardsInOtherZoneExtractor]="hideGeneratedCardsInOtherZoneExtractor"
 			[sortCardsByManaCostInOtherZoneExtractor]="sortCardsByManaCostInOtherZoneExtractor"
@@ -37,6 +38,7 @@ export class DeckTrackerOverlayOpponentComponent {
 	opacityExtractor = (prefs: Preferences) => prefs.opponentOverlayOpacityInPercent;
 	scaleExtractor = (prefs: Preferences) => prefs.opponentOverlayScale;
 	cardsGoToBottomExtractor = (prefs: Preferences) => prefs.opponentOverlayCardsGoToBottom;
+	showGlobalEffectsExtractor = (prefs: Preferences) => prefs.opponentOverlayShowGlobalEffects;
 	darkenUsedCardsExtractor = (prefs: Preferences) => prefs.opponentOverlayDarkenUsedCards;
 	hideGeneratedCardsInOtherZoneExtractor = (prefs: Preferences) => prefs.opponentOverlayHideGeneratedCardsInOtherZone;
 	sortCardsByManaCostInOtherZoneExtractor = (prefs: Preferences) => prefs.opponentOverlaySortByManaInOtherZone;

@@ -65,6 +65,7 @@ export class Preferences {
 	readonly overlayGroupByZone: boolean = true;
 	// readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
 	readonly overlayCardsGoToBottom: boolean = false;
+	readonly overlayShowGlobalEffects: boolean = true;
 	readonly overlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly overlaySortByManaInOtherZone: boolean = false;
 	readonly decktrackerNoDeckMode: boolean = false;
@@ -73,6 +74,7 @@ export class Preferences {
 
 	readonly opponentOverlayGroupByZone: boolean = true;
 	readonly opponentOverlayCardsGoToBottom: boolean = true;
+	readonly opponentOverlayShowGlobalEffects: boolean = true;
 	readonly opponentOverlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly opponentOverlaySortByManaInOtherZone: boolean = false;
 	readonly opponentOverlayDarkenUsedCards: boolean = true;
