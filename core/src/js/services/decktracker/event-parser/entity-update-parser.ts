@@ -23,7 +23,8 @@ export class EntityUpdateParser implements EventParser {
 		const cardInOther = this.helper.findCardInZone(deck.otherZone, null, entityId);
 
 		const newCardInHand =
-			cardInHand && cardInHand.cardId !== cardId
+			// If we don't restrict it to the current player, we create some info leaks in the opponent's hand (eg with Baku)
+			cardInHand && cardInHand.cardId !== cardId && isPlayer
 				? cardInHand.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
 				: null;
 		const newCardInDeck =
