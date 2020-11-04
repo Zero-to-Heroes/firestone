@@ -250,7 +250,7 @@ export class GameStateService {
 			].filter(event => event);
 			// console.log('will processed', eventsToProcess.length, 'events');
 			for (let i = 0; i < eventsToProcess.length; i++) {
-				await this.processEvent(eventsToProcess[i], true, i === eventsToProcess.length - 1);
+				await this.processEvent(eventsToProcess[i], i === eventsToProcess.length - 1);
 			}
 		} catch (e) {
 			console.error('Exception while processing event', e);
@@ -260,8 +260,9 @@ export class GameStateService {
 
 	private previousStart: number = Date.now();
 
-	private async processEvent(gameEvent: GameEvent, allowRequeue = true, shouldUpdateOverlays = true) {
-		// console.log('processing event', gameEvent.type);
+	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
+		const allowRequeue = !(gameEvent as any).preventRequeue;
+		//console.log('processing event', gameEvent.type, allowRequeue, gameEvent);
 		this.overlayHandlers.forEach(handler =>
 			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
 		);
@@ -288,26 +289,43 @@ export class GameStateService {
 
 		// Delay all "card played" and "secret played" events to give Counterspell a chance to apply first
 		// Only do so when a secret has been played to avoid impacting the overall experience
+		// To test - Counterspell played first, then Spellbender
+		// play spell on a minion, that is countered. Spellbender does not trigger, but shouldn't be grayed out
+		let requeueingEventForSecrets = false;
 		if (
 			allowRequeue &&
 			(this.state.playerDeck.secrets.length > 0 || this.state.opponentDeck.secrets.length > 0) &&
 			[GameEvent.CARD_PLAYED || GameEvent.SECRET_PLAYED || GameEvent.QUEST_PLAYED].indexOf(gameEvent.type) !== -1
 		) {
-			setTimeout(() => this.processEvent(gameEvent, false), 1500);
-			return;
+			setTimeout(
+				() => this.processingQueue.enqueue(Object.assign(new GameEvent(), gameEvent, { preventRequeue: true })),
+				7500,
+			);
+			requeueingEventForSecrets = true;
 		}
+
 		// console.log('\tready to apply secrets parser');
-		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent);
+		if (!requeueingEventForSecrets) {
+			this.state = await this.secretsParser.parseSecrets(this.state, gameEvent);
+		}
 		// console.log('\thas applied secrets parser');
 
-		const prefs = await this.prefs.getPreferences();
-		for (const parser of this.eventParsers) {
-			try {
-				if (parser.applies(gameEvent, this.state, prefs)) {
-					this.state = await parser.parse(this.state, gameEvent);
+		if (allowRequeue) {
+			const prefs = await this.prefs.getPreferences();
+			for (const parser of this.eventParsers) {
+				try {
+					if (parser.applies(gameEvent, this.state, prefs)) {
+						this.state = await parser.parse(this.state, gameEvent);
+					}
+				} catch (e) {
+					console.error(
+						'[game-state] Exception while applying parser',
+						parser.event(),
+						e.message,
+						e.stack,
+						e,
+					);
 				}
-			} catch (e) {
-				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
 		// console.log('\thas applied other parsers');
@@ -334,7 +352,7 @@ export class GameStateService {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
 		// console.log('\tready to emit event');
-		// console.log('[game-state] will emit event', gameEvent.type, this.state);
+		//console.log('[game-state] will emit event', gameEvent.type, this.state);
 		this.updateOverlays(
 			this.state,
 			false,

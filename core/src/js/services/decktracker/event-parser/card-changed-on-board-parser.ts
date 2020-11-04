@@ -26,12 +26,20 @@ export class CardChangedOnBoardParser implements EventParser {
 			console.warn('[card-changed-on-board] could not find card change on board', entityId, deck.board);
 			return currentState;
 		}
+		const boardWithRemovedCard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
+			deck.board,
+			null,
+			entityId,
+		)[0];
+		//console.log('boardWithRemovedCard', boardWithRemovedCard);
+
 		// The CARD_CHANGED* events keep the same entityId, but change the cardId, and thus the card name
 		const dbCard = this.allCards.getCard(cardId) || ({} as ReferenceCard);
 		// So that we can keep track of transformed cards
 		const oldCard = card.update({
 			zone: 'TRANSFORMED_INTO_OTHER',
 		} as DeckCard);
+		//console.log('oldCard', oldCard);
 		const updatedCard = card.update({
 			cardId: cardId,
 			cardName: dbCard.name,
@@ -39,17 +47,16 @@ export class CardChangedOnBoardParser implements EventParser {
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 			creatorCardId: creatorCardId,
 		} as DeckCard);
-		const boardWithRemovedCard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
-			deck.board,
-			null,
-			entityId,
-		)[0];
+		//console.log('updatedCard', updatedCard);
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(boardWithRemovedCard, updatedCard);
+		//console.log('newBoard', newBoard);
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, oldCard);
+		//console.log('newOther', newOther);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
-			other: newOther,
+			otherZone: newOther,
 		});
+		//console.log('newPlayerDeck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
