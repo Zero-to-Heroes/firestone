@@ -24,6 +24,13 @@ export class NavigationBackProcessor implements Processor {
 				? history.stateHistory[history.currentIndexInHistory - 1].state
 				: NavigationBackProcessor.buildParentState(navigationState, currentState);
 		// console.log('new nag state', newState);
+		if (!newState.isVisible) {
+			if (history.currentIndexInHistory !== 1) {
+				// When the first event is the store init, this behavior is normal
+				console.error('[navigation-back] going back to an invisible state, auto-fixing the issue', newState);
+			}
+			return [null, newState.update({ ...newState, isVisible: true } as NavigationState)];
+		}
 		return [null, newState];
 	}
 
@@ -63,6 +70,7 @@ export class NavigationBackProcessor implements Processor {
 						currentView: 'categories',
 					} as NavigationAchievements),
 					text: 'Categories',
+					isVisible: true,
 				} as NavigationState);
 			case 'list':
 				const category = dataState.achievements.globalCategories.find(
@@ -74,6 +82,7 @@ export class NavigationBackProcessor implements Processor {
 							currentView: 'categories',
 						} as NavigationAchievements),
 						text: 'Categories',
+						isVisible: true,
 					} as NavigationState);
 				}
 				return navigationState.update({
@@ -85,6 +94,7 @@ export class NavigationBackProcessor implements Processor {
 					text: dataState.achievements.globalCategories.find(
 						cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
 					).name,
+					isVisible: true,
 				} as NavigationState);
 			default:
 				return null;

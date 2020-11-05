@@ -15,6 +15,10 @@ export class NavigationNextProcessor implements Processor {
 			history.currentIndexInHistory >= history.stateHistory.length
 				? null
 				: history.stateHistory[history.currentIndexInHistory + 1].state;
+		if (!newState.isVisible) {
+			console.error('[navigation-next] going forward to an invisible state, auto-fixing the issue', newState);
+			return [null, newState.update({ ...newState, isVisible: true } as NavigationState)];
+		}
 		return [null, newState];
 	}
 }
