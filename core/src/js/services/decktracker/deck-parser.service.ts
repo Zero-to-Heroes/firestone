@@ -111,9 +111,10 @@ export class DeckParserService {
 			console.log('[deck-parser] going into queue', currentScene);
 			// Don't refresh the deck when leaving the match
 			// However scene_gameplay is also the current scene when selecting a friendly deck?
+			let currentSceneFromMindVision: number;
 			if (currentScene === 'scene_gameplay') {
 				// Double check, as there is today an issue with the events from the GEP when in friendly matches
-				const currentSceneFromMindVision = await this.memory.getCurrentSceneFromMindVision();
+				currentSceneFromMindVision = await this.memory.getCurrentSceneFromMindVision();
 				// console.log('[deck-parser] current scene from mindvision', currentSceneFromMindVision);
 				// 4 is GAMEPLAY. Will use a proper enum later on if the bug on the GEP is not fixed
 				if (currentSceneFromMindVision == 4) {
@@ -127,9 +128,16 @@ export class DeckParserService {
 				);
 			}
 
-			console.log('[deck-parser] getting active deck from going into queue', currentScene);
+			console.log(
+				'[deck-parser] getting active deck from going into queue',
+				currentScene,
+				currentSceneFromMindVision,
+			);
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
-			const activeDeck = currentScene === 'unknown_18' ? await this.getDuelsInfo() : deckFromMemory;
+			const activeDeck =
+				currentScene === 'unknown_18' || currentSceneFromMindVision === 18
+					? await this.getDuelsInfo()
+					: deckFromMemory;
 			console.log('[deck-parser] active deck after queue', activeDeck, currentScene);
 			if (!activeDeck) {
 				console.warn('[deck-parser] could not read any deck from memory');
@@ -190,7 +198,7 @@ export class DeckParserService {
 		}
 		if (this.memory) {
 			console.log('[deck-parser] ready to get active deck');
-			const activeDeck = await this.memory.getActiveDeck(1);
+			const activeDeck = await this.memory.getActiveDeck(2);
 			console.log('[deck-parser] active deck from memory', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
