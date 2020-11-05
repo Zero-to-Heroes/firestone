@@ -17,7 +17,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 			<div class="left-info">
 				<div class="group mode">
-					<rank-image class="player-rank" [stat]="replayInfo"></rank-image>
+					<rank-image class="player-rank" [stat]="replayInfo" [gameMode]="gameMode"></rank-image>
 				</div>
 
 				<div class="group player-images">

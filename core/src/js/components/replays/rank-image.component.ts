@@ -9,7 +9,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 			class="rank-image"
 			[helpTooltip]="playerRank ? playerRankImageTooltip : 'We had an issue while retrieving the player rank'"
 		>
-			<div class="icon">
+			<div class="icon {{ gameMode }}" [ngClass]="{ 'missing-rank': !rankText }">
 				<img class="art" *ngIf="playerRankArt" [src]="playerRankArt" />
 				<img class="frame" *ngIf="playerRankImage" [src]="playerRankImage" />
 			</div>
@@ -19,15 +19,17 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RankImageComponent {
-	playerRank: string;
-	playerRankImage: string;
-	playerRankArt: string;
-	playerRankImageTooltip: string;
-	rankText: string;
-
 	@Input() set stat(value: GameStat) {
 		this.playerRank = value.playerRank;
 		[this.playerRankImage, this.playerRankArt, this.playerRankImageTooltip] = value.buildPlayerRankImage();
 		this.rankText = value.buildRankText();
 	}
+
+	@Input() gameMode: string;
+
+	playerRank: string;
+	playerRankImage: string;
+	playerRankArt: string;
+	playerRankImageTooltip: string;
+	rankText: string;
 }

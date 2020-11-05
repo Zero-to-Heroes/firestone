@@ -5,6 +5,11 @@
 
 .icon {
 	height: 100%;
+
+	&.battlegrounds.missing-rank {
+		position: relative;
+		top: 4px;
+	}
 }
 
 .art {
