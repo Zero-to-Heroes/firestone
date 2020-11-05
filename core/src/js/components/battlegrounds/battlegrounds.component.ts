@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
@@ -39,7 +40,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	state: BattlegroundsState;
 	cardsLoaded = false;
 
-	private hotkeyPressedHandler;
+	private hotkeyPressedHandler: EventEmitter<boolean>;
 	// private messageReceivedListener: (message: any) => void;
 	private storeSubscription: Subscription;
 	private hotkey;
@@ -69,6 +70,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		// console.log('windowId', this.windowId);
 		this.hotkeyPressedHandler = this.ow.getMainWindow().bgsHotkeyPressed;
+		//console.log('hotkeyPressHandler define', this.hotkeyPressedHandler);
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		// console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
@@ -97,10 +99,10 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:keydown', ['$event'])
 	async onKeyDown(e: KeyboardEvent) {
 		const currentWindow = await this.ow.getCurrentWindow();
+		// console.log('keydown event', e, this.hotkey, currentWindow.id);
 		if (currentWindow.id.includes('Overlay')) {
 			return;
 		}
-		// console.log('keydown event', e, this.hotkey);
 		if (!this.hotkey || this.hotkey.IsUnassigned) {
 			return;
 		}
@@ -114,8 +116,8 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			e.ctrlKey === isCtrlKey &&
 			e.keyCode == this.hotkey.virtualKeycode
 		) {
-			// console.log('handling hotkey press');
-			this.hotkeyPressedHandler();
+			//console.log('handling hotkey press', this.hotkeyPressedHandler);
+			this.hotkeyPressedHandler.next(true);
 		}
 	}
 

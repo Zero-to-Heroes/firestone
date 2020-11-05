@@ -69,7 +69,7 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		}
 	}
 
-	public async handleHotkeyPressed(state: BattlegroundsState) {
+	public async handleHotkeyPressed(state: BattlegroundsState, force = false) {
 		const prefs = await this.prefs.getPreferences();
 		const windowId = prefs.bgsUseOverlay
 			? OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY
@@ -77,9 +77,8 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		const window = await this.ow.obtainDeclaredWindow(windowId);
 		//console.warn('hotkey pressed', window);
 		const inGame = state && state.inGame;
-		const shouldShowOverlay = true;
-		if (!inGame || !shouldShowOverlay) {
-			console.log('[bgs-store] not in game or shouldnt show overlay', inGame, shouldShowOverlay);
+		if (!force && !inGame) {
+			console.log('[bgs-store] not in game or shouldnt show overlay', inGame);
 			return;
 		}
 

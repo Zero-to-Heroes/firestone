@@ -73,6 +73,7 @@ export class BattlegroundsStoreService {
 	private eventParsers: readonly EventParser[];
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
 	private battlegroundsStoreEventBus = new BehaviorSubject<BattlegroundsState>(null);
+	private battlegroundsWindowsListener: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	private processingQueue = new ProcessingQueue<BattlegroundsStoreEvent>(
 		eventQueue => this.processQueue(eventQueue),
@@ -106,9 +107,13 @@ export class BattlegroundsStoreService {
 			// console.log('[battlegrounds-state] enqueueing', event);
 			this.processingQueue.enqueue(event);
 		});
+		this.battlegroundsWindowsListener.subscribe((event: boolean) => {
+			console.log('[bgs-store] hotkey pressed');
+			this.handleHotkeyPressed(true);
+		});
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
-		window['bgsHotkeyPressed'] = this.handleHotkeyPressed;
+		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
 
 		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
 			console.log('[bgs-store] hotkey pressed', hotkeyResult);
@@ -137,9 +142,10 @@ export class BattlegroundsStoreService {
 		});
 	}
 
-	private async handleHotkeyPressed() {
+	private async handleHotkeyPressed(force = false) {
+		//console.log('handling hotley', force, this.overlayHandlers, this);
 		if (this.overlayHandlers) {
-			await Promise.all(this.overlayHandlers.map(handler => handler.handleHotkeyPressed(this.state)));
+			await Promise.all(this.overlayHandlers.map(handler => handler.handleHotkeyPressed(this.state, force)));
 		}
 	}
 
