@@ -75,6 +75,7 @@ export class StatCellComponent implements AfterViewInit {
 	}
 
 	showReplay() {
+		amplitude.getInstance().logEvent('click-on-record-broken-replay');
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
 	}
 
