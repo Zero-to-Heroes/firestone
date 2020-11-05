@@ -94,7 +94,7 @@ export class DeckParserService {
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
+		// console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
 			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
@@ -148,7 +148,7 @@ export class DeckParserService {
 					this.currentScenarioId,
 				);
 				this.updateDeckFromMemory(activeDeck);
-				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
+				// this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 				this.currentDeck.scenarioId = this.currentScenarioId;
 			}
 		}
@@ -280,10 +280,10 @@ export class DeckParserService {
 		}
 	}
 
-	private explodeDecklist(decklistWithDbfIds: readonly (number | string)[]): any[] {
-		console.log('[deck-parser] exploding decklist', decklistWithDbfIds);
-		const groupedById = groupByFunction(cardId => '' + cardId)(decklistWithDbfIds);
-		console.log('[deck-parser] groupedById', groupedById);
+	private explodeDecklist(initialDecklist: readonly number[]): any[] {
+		console.log('[deck-parser] decklist with dbfids', initialDecklist);
+		const groupedById = groupByFunction(cardId => '' + cardId)(initialDecklist);
+		// console.log('[deck-parser] groupedById', groupedById);
 		const result = Object.keys(groupedById).map(id => [+id, groupedById[id].length]);
 		console.log('[deck-parser] exploding decklist result', result);
 		return result;
