@@ -20,7 +20,7 @@ export class PassiveTriggeredParser implements EventParser {
 			return currentState;
 		}
 
-		console.log('triggring passive', cardId, controllerId, localPlayer, entityId, gameEvent);
+		// console.log('triggring passive', cardId, controllerId, localPlayer, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
