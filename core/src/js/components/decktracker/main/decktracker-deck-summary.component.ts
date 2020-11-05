@@ -44,10 +44,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			</button>
 			<button class="restore-button" helpTooltip="Restore deck" (mousedown)="restoreDeck($event)" *ngIf="hidden">
 				<svg class="svg-icon-fill">
-					<use
-						xmlns:xlink="https://www.w3.org/1999/xlink"
-						xlink:href="assets/svg/sprite.svg#copy_deckstring"
-					></use>
+					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#restore"></use>
 				</svg>
 			</button>
 		</div>

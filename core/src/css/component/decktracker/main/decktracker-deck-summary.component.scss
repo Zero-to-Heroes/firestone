@@ -86,15 +86,13 @@
 	}
 
 	.restore-button {
-		--icon-color: var(--color-5);
-		--icon-color-secondary: var(--color-1);
-		width: 20px;
-		height: 20px;
-		top: 5px;
-		right: 5px;
+		width: 30px;
+		height: 30px;
 
 		&:hover {
-			--icon-color: var(--color-1);
+			background: var(--on-close-button-background-color); // #2F0D0D;
+			color: var(--on-close-button-color); //#CCA2B3;
+			--icon-color: var(--on-close-button-color); //#CCA2B3;
 		}
 	}
 
