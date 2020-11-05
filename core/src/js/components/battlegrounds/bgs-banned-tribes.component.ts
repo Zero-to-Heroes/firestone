@@ -127,6 +127,8 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 				return [];
 			case Race.PIRATE:
 				return [];
+			case Race.ELEMENTAL:
+				return [];
 		}
 		return [];
 	}

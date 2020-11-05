@@ -79,7 +79,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			console.warn('[bgs-info-updater] no tribe info read from memory');
 			return [undefined, undefined];
 		}
-		const allRaces = [Race.BEAST, Race.DEMON, Race.DRAGON, Race.MECH, Race.MURLOC, Race.PIRATE];
+		const allRaces = [Race.BEAST, Race.DEMON, Race.DRAGON, Race.MECH, Race.MURLOC, Race.PIRATE, Race.ELEMENTAL];
 		return [
 			allRaces.filter(race => availableRaces.includes(race)),
 			allRaces.filter(race => !availableRaces.includes(race)),
