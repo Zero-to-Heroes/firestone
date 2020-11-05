@@ -148,7 +148,7 @@ export class NavigationBackProcessor implements Processor {
 					dataState.battlegrounds,
 					currentCategory.id,
 				);
-				console.log('hop', currentCategory, parentCategory);
+				// console.log('hop', currentCategory, parentCategory);
 				return navigationState.update({
 					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 						menuDisplayType: 'menu',

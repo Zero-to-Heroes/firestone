@@ -42,7 +42,7 @@ export class BgsWinrateChartComponent {
 				} as NumericTurnInfo;
 			})
 			.filter(stat => stat);
-		console.log('comunity result', result);
+		// console.log('comunity result', result);
 		return result;
 	};
 	yourExtractor: () => readonly NumericTurnInfo[] = (): readonly NumericTurnInfo[] => {
