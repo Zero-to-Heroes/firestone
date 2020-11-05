@@ -260,14 +260,13 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.CARD_PLAYED) {
 				this.battlegroundsUpdater.next(new BgsCardPlayedEvent(gameEvent));
 			} else if (gameEvent.type === GameEvent.GAME_END) {
-				console.log('[bgs-store] Game ended');
+				// console.log('[bgs-store] Game ended', gameEvent);
 				if (this.memoryInterval) {
 					clearInterval(this.memoryInterval);
 					this.memoryInterval = null;
 				}
-				this.handleEventOnlyAfterTrigger(
+				this.battlegroundsUpdater.next(
 					new BgsStartComputingPostMatchStatsEvent(gameEvent.additionalData.replayXml),
-					GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
 				this.battlegroundsUpdater.next(

@@ -153,7 +153,7 @@ export class BgsRunStatsService {
 
 		const [postMatchStats, newBestValues] = this.populateObject(
 			prefs.bgsUseLocalPostMatchStats
-				? await this.buildStatsLocally(currentGame)
+				? await this.buildStatsLocally(currentGame, game.uncompressedXmlReplay)
 				: ((await this.http.post(BGS_UPLOAD_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats),
 			input,
 			bestBgsUserStats || [],
@@ -169,12 +169,12 @@ export class BgsRunStatsService {
 				error => console.error('issue while posting post-match stats', error),
 			);
 		}
-		console.log('postMatchStats built', prefs.bgsUseLocalPostMatchStats, postMatchStats, currentGame);
+		console.log('postMatchStats built');
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
 
-	private async buildStatsLocally(currentGame: BgsGame): Promise<IBgsPostMatchStats> {
+	private async buildStatsLocally(currentGame: BgsGame, replayXml: string): Promise<IBgsPostMatchStats> {
 		return new Promise<IBgsPostMatchStats>(resolve => {
 			const worker = new Worker();
 			worker.onmessage = (ev: MessageEvent) => {
@@ -185,7 +185,7 @@ export class BgsRunStatsService {
 			};
 
 			const input = {
-				replayXml: currentGame.replayXml,
+				replayXml: replayXml,
 				mainPlayer: currentGame.getMainPlayer(),
 				battleResultHistory: currentGame.battleResultHistory,
 				faceOffs: currentGame.faceOffs,
