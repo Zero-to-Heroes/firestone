@@ -110,7 +110,7 @@ export class DuelsRunComponent implements AfterViewInit {
 			? this.allCards.getCard(value.signatureTreasureCardId)
 			: null;
 		this.signatureTreasureTooltip = signatureTreasureCard ? signatureTreasureCard.name : null;
-		console.log('setting value', value);
+		// console.log('setting value', value);
 	}
 
 	gameModeImage: string;

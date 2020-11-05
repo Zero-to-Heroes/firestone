@@ -80,7 +80,7 @@ export class DeckListByZoneComponent {
 			return;
 		}
 		const zones = [];
-		console.log('should show global effects zone?', this._showGlobalEffectsZone, this._deckState.globalEffects);
+		// console.log('should show global effects zone?', this._showGlobalEffectsZone, this._deckState.globalEffects);
 		if (this._showGlobalEffectsZone && this._deckState.globalEffects.length > 0) {
 			zones.push(this.buildZone(this._deckState.globalEffects, 'global-effects', 'Global Effects', null, null));
 		}
