@@ -25,11 +25,11 @@ import { formatClass } from '../../../services/utils';
 				</div>
 				<div class="deck-title">
 					<div class="deck-name">
-						<copy-deckstring
+						<!-- <copy-deckstring
 							[deckstring]="deckstring"
 							[showTooltip]="true"
 							copyText="Copy deck code"
-						></copy-deckstring>
+						></copy-deckstring> -->
 						<div class="text">{{ deckName }}</div>
 					</div>
 					<div class="replay" (click)="showReplays()">
