@@ -20,12 +20,11 @@ export class ToggleShowHiddenDecksProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const currentPrefs = await this.prefs.getPreferences();
-		const newToggle = !currentPrefs.desktopDeckShowHiddenDecks;
-		const newPrefs = await this.prefs.setValue('desktopDeckShowHiddenDecks', newToggle);
+		const newPrefs = await this.prefs.getPreferences();
+		// const newPrefs = await this.prefs.setValue('desktopDeckShowHiddenDecks', event.newValue);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
 			decks: this.decksStateBuilder.buildState(currentState.stats, currentState.decktracker.filters, newPrefs),
-			showHiddenDecks: newToggle,
+			showHiddenDecks: event.newValue,
 		} as DecktrackerState);
 		const replays = this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [

@@ -56,14 +56,28 @@
 .show-hidden-decks-link {
 	align-self: flex-end;
 	flex-grow: 1;
-	// text-align: right;
 	opacity: 0.8;
 	height: 30px;
 	display: flex;
 	align-items: flex-end;
 	justify-content: flex-end;
+	position: absolute;
+	top: -45px;
+	right: -15px;
+
+	::ng-deep .preference-toggle.preference-toggle.preference-toggle .settings-p {
+		color: var(--secondary-text-color);
+		width: auto;
+		margin-right: 10px;
+	}
 
 	&:hover {
 		opacity: 1;
+	}
+}
+
+@media (min-width: 1305px) {
+	.show-hidden-decks-link {
+		top: -7px;
 	}
 }

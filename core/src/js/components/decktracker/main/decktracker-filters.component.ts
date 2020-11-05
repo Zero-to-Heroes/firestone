@@ -76,9 +76,13 @@ import { PreferencesService } from '../../../services/preferences.service';
 					<use xlink:href="assets/svg/sprite.svg#info" />
 				</svg>
 			</div>
-			<div class="show-hidden-decks-link" (click)="toggleShowHiddenDecks()" *ngIf="showHiddenDecksLink">
-				{{ _state.decktracker.showHiddenDecks ? 'Showing archived decks' : 'Hiding archived decks' }}
-			</div>
+			<preference-toggle
+				class="show-hidden-decks-link"
+				*ngIf="showHiddenDecksLink"
+				field="desktopDeckShowHiddenDecks"
+				label="Show archived"
+				[toggleFunction]="toggleShowHiddenDecks"
+			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -232,9 +236,10 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new ChangeDeckRankFilterEvent(option.value));
 	}
 
-	toggleShowHiddenDecks() {
-		this.stateUpdater.next(new ToggleShowHiddenDecksEvent());
-	}
+	toggleShowHiddenDecks = (newValue: boolean) => {
+		this.stateUpdater.next(new ToggleShowHiddenDecksEvent(newValue));
+		// console.log('roggle function called');
+	};
 
 	anyVisible(): boolean {
 		return (
