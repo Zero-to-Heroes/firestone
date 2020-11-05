@@ -53,13 +53,13 @@ export class DuelsStateBuilderService {
 			userName: user.username,
 		};
 		const results: any = await this.api.callPostApiWithRetries(DUELS_RUN_INFO_URL, input);
-		console.log('[duels-state-builder] loaded result', results?.results);
+		console.log('[duels-state-builder] loaded result');
 		return results?.results;
 	}
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
 		const results: any = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
-		console.log('[duels-state-builder] loaded global stats', results?.result);
+		console.log('[duels-state-builder] loaded global stats');
 		return results?.result;
 	}
 
@@ -127,10 +127,10 @@ export class DuelsStateBuilderService {
 			)
 			.filter(run => run)
 			.sort(this.getSortFunction());
-		console.log('[duels-state-builder] built runs', runs);
+		console.log('[duels-state-builder] built runs', runs?.length);
 
 		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats, collectionState, prefs);
-		console.log('[duels-state-builder] playerStats', playerStats);
+		console.log('[duels-state-builder] playerStats');
 		return currentState.update({
 			runs: runs,
 			playerStats: playerStats,
@@ -181,7 +181,7 @@ export class DuelsStateBuilderService {
 			collectionState,
 			prefs,
 		);
-		console.log('[duels-state-builder] built trasure stats', treasureStats);
+		console.log('[duels-state-builder] built duels stats');
 		return {
 			heroStats: heroStats,
 			heroPowerStats: heroPowerStats,
@@ -208,7 +208,7 @@ export class DuelsStateBuilderService {
 				} as DuelsDeckStat;
 			})
 			.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime());
-		console.log('[duels-state-builder] decks', decks);
+		console.log('[duels-state-builder] decks', decks?.length);
 		const groupedDecks: readonly DuelsGroupedDecks[] = [...this.groupDecks(decks, prefs)];
 		return groupedDecks;
 	}

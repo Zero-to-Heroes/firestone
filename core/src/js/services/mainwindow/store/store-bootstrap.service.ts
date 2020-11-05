@@ -81,7 +81,7 @@ export class StoreBootstrapService {
 			]),
 			this.duels.loadGlobalStats(),
 		]);
-		console.log('loaded info', matchStats, duelsGlobalStats, duelsRunInfo);
+		console.log('loaded info');
 
 		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);
 

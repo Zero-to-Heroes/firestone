@@ -26,7 +26,7 @@ const ALL_CLASSES = [
 @Injectable()
 export class DecksStateBuilderService {
 	public buildState(stats: StatsState, filters: DeckFilters, prefs: Preferences = null): readonly DeckSummary[] {
-		console.log('[decktracker-stats-loader] update with stats');
+		// console.log('[decktracker-stats-loader] update with stats');
 		if (!stats || !stats.gameStats) {
 			return [];
 		}

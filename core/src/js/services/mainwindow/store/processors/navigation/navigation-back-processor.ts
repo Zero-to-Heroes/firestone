@@ -18,12 +18,12 @@ export class NavigationBackProcessor implements Processor {
 		history: NavigationHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('going back', history.currentIndexInHistory, history);
+		// console.log('going back', history.currentIndexInHistory, history);
 		const newState =
 			history.currentIndexInHistory > 0
 				? history.stateHistory[history.currentIndexInHistory - 1].state
 				: NavigationBackProcessor.buildParentState(navigationState, currentState);
-		console.log('new nag state', newState);
+		// console.log('new nag state', newState);
 		return [null, newState];
 	}
 
@@ -51,7 +51,7 @@ export class NavigationBackProcessor implements Processor {
 		dataState: MainWindowState,
 	): NavigationState {
 		if (!navigationState || !dataState) {
-			console.warn('Missing state for processing back navigation');
+			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
 		switch (navigationState.navigationAchievements.currentView) {
@@ -96,7 +96,7 @@ export class NavigationBackProcessor implements Processor {
 		dataState: MainWindowState,
 	): NavigationState {
 		if (!navigationState || !dataState) {
-			console.warn('Missing state for processing back navigation');
+			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
 		console.log('building parent duels state', navigationState.navigationDuels.selectedCategoryId);
@@ -111,7 +111,7 @@ export class NavigationBackProcessor implements Processor {
 		dataState: MainWindowState,
 	): NavigationState {
 		if (!navigationState || !dataState) {
-			console.warn('Missing state for processing back navigation');
+			// console.warn('Missing state for processing back navigation');
 			return null;
 		}
 		console.log('building parent battelgrounds state', navigationState.navigationBattlegrounds.currentView);
