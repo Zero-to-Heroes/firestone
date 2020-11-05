@@ -68,6 +68,10 @@ ng-select.disabled {
 			outline: none;
 		}
 
+		.below {
+			z-index: 99;
+		}
+
 		.filter {
 			display: none;
 		}
