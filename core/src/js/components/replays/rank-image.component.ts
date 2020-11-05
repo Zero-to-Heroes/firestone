@@ -5,15 +5,13 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 	selector: 'rank-image',
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/rank-image.component.scss`],
 	template: `
-		<div class="rank-image" [helpTooltip]="playerRank ? null : 'We had an issue while retrieving the player rank'">
+		<div
+			class="rank-image"
+			[helpTooltip]="playerRank ? playerRankImageTooltip : 'We had an issue while retrieving the player rank'"
+		>
 			<div class="icon">
-				<img class="art" *ngIf="playerRankArt" [src]="playerRankArt" [helpTooltip]="playerRankImageTooltip" />
-				<img
-					class="frame"
-					*ngIf="playerRankImage"
-					[src]="playerRankImage"
-					[helpTooltip]="playerRankImageTooltip"
-				/>
+				<img class="art" *ngIf="playerRankArt" [src]="playerRankArt" />
+				<img class="frame" *ngIf="playerRankImage" [src]="playerRankImage" />
 			</div>
 			<div class="rank-text" *ngIf="rankText">{{ rankText }}</div>
 		</div>
