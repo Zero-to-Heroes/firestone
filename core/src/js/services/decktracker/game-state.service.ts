@@ -297,11 +297,34 @@ export class GameStateService {
 			(this.state.playerDeck.secrets.length > 0 || this.state.opponentDeck.secrets.length > 0) &&
 			[GameEvent.CARD_PLAYED || GameEvent.SECRET_PLAYED || GameEvent.QUEST_PLAYED].indexOf(gameEvent.type) !== -1
 		) {
-			setTimeout(
-				() => this.processingQueue.enqueue(Object.assign(new GameEvent(), gameEvent, { preventRequeue: true })),
-				7500,
-			);
-			requeueingEventForSecrets = true;
+			const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+			const isPlayer = controllerId === localPlayer.PlayerId;
+			const card = this.allCards.getCard(cardId);
+			// Only spells are used to delay secret guess
+			if (!card || card.type?.toUpperCase() === 'SPELL') {
+				// Consider the opposing secrets
+				if (
+					(isPlayer && this.state.opponentDeck.secrets.length > 0) ||
+					(!isPlayer && this.state.playerDeck.secrets.length > 0)
+				) {
+					console.log(
+						'[game-state] delaying secret elimination to account for a possible Counterspell',
+						cardId,
+						card,
+						isPlayer,
+						this.state.playerDeck.secrets.length,
+						this.state.opponentDeck.secrets.length,
+					);
+					setTimeout(
+						() =>
+							this.processingQueue.enqueue(
+								Object.assign(new GameEvent(), gameEvent, { preventRequeue: true }),
+							),
+						7500,
+					);
+					requeueingEventForSecrets = true;
+				}
+			}
 		}
 
 		// console.log('\tready to apply secrets parser');
@@ -352,7 +375,7 @@ export class GameStateService {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
 		// console.log('\tready to emit event');
-		//console.log('[game-state] will emit event', gameEvent.type, this.state);
+		console.log('[game-state] will emit event', gameEvent.type, this.state);
 		this.updateOverlays(
 			this.state,
 			false,
