@@ -1,8 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ReplaysFilterEvent } from '../../../services/mainwindow/store/events/replays/replays-filter-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -41,7 +48,7 @@ import { formatClass } from '../../../services/utils';
 						<div class="watch">Watch replays</div>
 					</div>
 				</div>
-				<div class="best-against">
+				<div class="best-against" *ngIf="bestAgainsts?.length">
 					<div class="header">Best against</div>
 					<ul class="classes">
 						<img
@@ -103,7 +110,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly deckHandler: DeckHandlerService) {}
+	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -133,16 +140,24 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 			maximumFractionDigits: 1,
 		});
 		this.games = this.deck.totalGames;
-		this.bestAgainsts = [...this.deck.matchupStats]
-			.sort((a, b) => b.totalWins / (b.totalGames || 1) - a.totalWins / (a.totalGames || 1))
-			.slice(0, 3)
-			.map(
-				matchUp =>
-					({
-						icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
-						playerClass: formatClass(matchUp.opponentClass),
-					} as BestAgainst),
-			);
+		this.bestAgainsts = null;
+
+		setTimeout(() => {
+			this.bestAgainsts = [...this.deck.matchupStats]
+				.filter(matchup => matchup.totalWins > 0)
+				.sort((a, b) => b.totalWins / b.totalGames - a.totalWins / a.totalGames)
+				.slice(0, 3)
+				.map(
+					matchUp =>
+						({
+							icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
+							playerClass: formatClass(matchUp.opponentClass),
+						} as BestAgainst),
+				);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 }
 

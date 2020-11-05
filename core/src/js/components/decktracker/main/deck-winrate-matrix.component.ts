@@ -31,7 +31,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DeckWinrateMatrixComponent implements AfterViewInit {
 	@Input() set deck(value: DeckSummary) {
 		this._deck = value;
-		console.log('setting deck', value);
+		// console.log('setting deck', value);
 		this.updateValues();
 	}
 
@@ -50,8 +50,8 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		if (!this._deck) {
 			return;
 		}
-		console.log('will build matchups', this._deck.matchupStats);
+		// console.log('will build matchups', this._deck.matchupStats);
 		this.matchups = this._deck.matchupStats;
-		console.log('matchups', this.matchups);
+		// console.log('matchups', this.matchups);
 	}
 }
