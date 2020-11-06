@@ -4,10 +4,11 @@ import { EventParser } from './event-parser';
 
 export class MulliganOverParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.MULLIGAN_DONE;
+		return state && gameEvent.type === GameEvent.MULLIGAN_DEALING;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		// console.log('[debug] mulligan over');
 		return Object.assign(new GameState(), currentState, {
 			mulliganOver: true,
 			currentTurn: 0,
@@ -15,6 +16,6 @@ export class MulliganOverParser implements EventParser {
 	}
 
 	event(): string {
-		return GameEvent.MAIN_STEP_READY;
+		return GameEvent.MULLIGAN_INPUT;
 	}
 }

@@ -27,7 +27,7 @@ export class NewTurnParser implements EventParser {
 				: gameEvent.additionalData.turnNumber % 2 === 0,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],
 		} as DeckState);
-		// console.log('[secret-turn-end] new turn');
+		// console.log('[debug] new turn', numericTurn, currentTurn, currentState.mulliganOver);
 		return Object.assign(new GameState(), currentState, {
 			currentTurn: currentTurn,
 			playerDeck: playerDeck,

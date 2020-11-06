@@ -14,6 +14,7 @@ export class GameEvent {
 	public static readonly HERO_POWER_USED = 'HERO_POWER_USED';
 	public static readonly MULLIGAN_INPUT = 'MULLIGAN_INPUT';
 	public static readonly MULLIGAN_INITIAL_OPTION = 'MULLIGAN_INITIAL_OPTION';
+	public static readonly MULLIGAN_DEALING = 'MULLIGAN_DEALING';
 	public static readonly MULLIGAN_DONE = 'MULLIGAN_DONE';
 	public static readonly MAIN_STEP_READY = 'MAIN_STEP_READY';
 	public static readonly DECKLIST_UPDATE = 'DECKLIST_UPDATE';

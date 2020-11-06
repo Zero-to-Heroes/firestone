@@ -121,9 +121,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		//	console.log('[debug] game event', gameEvent.Type, gameEvent);
-		//}
+		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		// 	console.log('[debug] game event', gameEvent.Type, gameEvent);
+		// }
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -238,6 +238,13 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MULLIGAN_INPUT,
+					} as GameEvent),
+				);
+				break;
+			case 'MULLIGAN_DEALING':
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.MULLIGAN_DEALING,
 					} as GameEvent),
 				);
 				break;
