@@ -55,7 +55,7 @@ export class LogRegisterService {
 		new LogListenerService(this.ow)
 			.configure('FullScreenFX.log', data => {
 				this.decksService.queueingIntoMatch(data);
-				this.dungeonLootService.queueingIntoMatch(data);
+				// this.dungeonLootService.queueingIntoMatch(data);
 			})
 			.subscribe(status => {
 				console.log('[log-register] status for FullScreenFX', status);

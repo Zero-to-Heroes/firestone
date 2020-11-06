@@ -60,7 +60,9 @@ export class DungeonLootParserService {
 				this.currentGameType = null;
 			} else if (event.type === GameEvent.MATCH_METADATA) {
 				this.currentGameType = event.additionalData.metaData.GameType;
-				this.sendLootInfo();
+				if ([GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(this.currentGameType)) {
+					this.retrieveLootInfo();
+				}
 			}
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
@@ -73,48 +75,40 @@ export class DungeonLootParserService {
 		});
 	}
 
-	public async queueingIntoMatch(logLine: string) {
-		if (this.goingIntoQueueRegex.exec(logLine)) {
-			const currentScene = await this.memory.getCurrentScene();
-			// Don't refresh the deck when leaving the match
-			if (currentScene !== 'unknown_18') {
-				return;
-			}
-
-			this.duelsInfo = await this.memory.getDuelsInfo(false, 10);
-			console.log('[dungeon-loot-parser] retrieved duels info', this.duelsInfo);
-			// Should already have picked something, but nothing is detected
-			if (
-				!this.duelsInfo ||
-				((this.duelsInfo.Wins > 0 || this.duelsInfo.Losses > 0) &&
-					!this.duelsInfo.LootOptionBundles?.length &&
-					!this.duelsInfo.TreasureOption?.length)
-			) {
-				this.duelsInfo = await this.memory.getDuelsInfo(true);
-				console.log('[dungeon-loot-parser] retrieved duels info after force reset', this.duelsInfo);
-			}
-
-			if (!this.duelsInfo) {
-				console.error('[dungeon-loot-parser] Could not retrieve duels info', this.currentDuelsRunId);
-			}
-
-			if (this.isNewRun(this.duelsInfo)) {
-				// Start a new run
-				console.log('[dungeon-loot-parser] starting a new run', this.duelsInfo);
-				await this.prefs.setDuelsRunId(uuid());
-			}
-			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-			console.log('[dungeon-loot-parser] set currentDuelsRunId', this.currentDuelsRunId);
-			if (!this.currentDuelsRunId) {
-				await this.prefs.setDuelsRunId(uuid());
-				this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-				console.log(
-					'[dungeon-loot-parser] Could not retrieve duels run id, starting a new run',
-					this.currentDuelsRunId,
-				);
-			}
-			this.sendLootInfo();
+	public async retrieveLootInfo() {
+		this.duelsInfo = await this.memory.getDuelsInfo(false, 10);
+		console.log('[dungeon-loot-parser] retrieved duels info', this.duelsInfo);
+		// Should already have picked something, but nothing is detected
+		if (
+			!this.duelsInfo ||
+			((this.duelsInfo.Wins > 0 || this.duelsInfo.Losses > 0) &&
+				!this.duelsInfo.LootOptionBundles?.length &&
+				!this.duelsInfo.TreasureOption?.length)
+		) {
+			this.duelsInfo = await this.memory.getDuelsInfo(true);
+			console.log('[dungeon-loot-parser] retrieved duels info after force reset', this.duelsInfo);
 		}
+
+		if (!this.duelsInfo) {
+			console.error('[dungeon-loot-parser] Could not retrieve duels info', this.currentDuelsRunId);
+		}
+
+		if (this.isNewRun(this.duelsInfo)) {
+			// Start a new run
+			console.log('[dungeon-loot-parser] starting a new run', this.duelsInfo);
+			await this.prefs.setDuelsRunId(uuid());
+		}
+		this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
+		console.log('[dungeon-loot-parser] set currentDuelsRunId', this.currentDuelsRunId);
+		if (!this.currentDuelsRunId) {
+			await this.prefs.setDuelsRunId(uuid());
+			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
+			console.log(
+				'[dungeon-loot-parser] Could not retrieve duels run id, starting a new run',
+				this.currentDuelsRunId,
+			);
+		}
+		this.sendLootInfo();
 	}
 
 	public resetDuelsRunId() {
@@ -173,7 +167,11 @@ export class DungeonLootParserService {
 	}
 
 	private async sendLootInfo() {
-		if (!this.currentReviewId || !this.duelsInfo || !this.currentGameType) {
+		if (
+			!this.currentReviewId ||
+			!this.duelsInfo ||
+			![GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(this.currentGameType)
+		) {
 			console.log(
 				'[dungeon-loot-parser] not enough data, not sending loot info',
 				this.currentReviewId,

@@ -78,6 +78,9 @@ export class EndGameUploaderService {
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
 		console.log('[manastorm-bridge] parsed type', gameResult.GameType, game.gameMode);
 		game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+		if (game.gameMode === 'duels') {
+			console.log('[manastorm-bridge] added duels run id', game.currentDuelsRunId);
+		}
 
 		// Here we want to process the rank info as soon as possible to limit the chances of it
 		// being removed from memory by the player clicking away
