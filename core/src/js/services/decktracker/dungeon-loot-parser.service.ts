@@ -54,19 +54,26 @@ export class DungeonLootParserService {
 		private store: MainWindowStoreService,
 	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
-			if (event.type === GameEvent.GAME_END) {
-				this.duelsInfo = null;
-				this.currentReviewId = null;
-				this.currentGameType = null;
-			} else if (event.type === GameEvent.MATCH_METADATA) {
+			// Only reset from a single place (the end-game-uploader)
+			// if (event.type === GameEvent.GAME_END) {
+			// 	this.duelsInfo = null;
+			// 	this.currentReviewId = null;
+			// 	this.currentGameType = null;
+			// } else
+			if (event.type === GameEvent.MATCH_METADATA) {
 				this.currentGameType = event.additionalData.metaData.GameType;
+				this.log(
+					'retrieved match meta data',
+					this.currentGameType,
+					[GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(this.currentGameType),
+				);
 				if ([GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(this.currentGameType)) {
 					this.retrieveLootInfo();
 				}
 			}
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
-			console.log('[dungeon-loot-parser] Received new review id event');
+			this.log('Received new review id event');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
 				this.currentReviewId = info.reviewId;
@@ -75,9 +82,9 @@ export class DungeonLootParserService {
 		});
 	}
 
-	public async retrieveLootInfo() {
+	private async retrieveLootInfo() {
 		this.duelsInfo = await this.memory.getDuelsInfo(false, 10);
-		console.log('[dungeon-loot-parser] retrieved duels info', this.duelsInfo);
+		this.log('retrieved duels info', this.duelsInfo, this.currentGameType);
 		// Should already have picked something, but nothing is detected
 		if (
 			!this.duelsInfo ||
@@ -86,33 +93,30 @@ export class DungeonLootParserService {
 				!this.duelsInfo.TreasureOption?.length)
 		) {
 			this.duelsInfo = await this.memory.getDuelsInfo(true);
-			console.log('[dungeon-loot-parser] retrieved duels info after force reset', this.duelsInfo);
+			this.log('retrieved duels info after force reset', this.duelsInfo);
 		}
 
 		if (!this.duelsInfo) {
-			console.error('[dungeon-loot-parser] Could not retrieve duels info', this.currentDuelsRunId);
+			console.error('Could not retrieve duels info', this.currentDuelsRunId);
 		}
 
 		if (this.isNewRun(this.duelsInfo)) {
 			// Start a new run
-			console.log('[dungeon-loot-parser] starting a new run', this.duelsInfo);
+			this.log('starting a new run', this.duelsInfo);
 			await this.prefs.setDuelsRunId(uuid());
 		}
 		this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-		console.log('[dungeon-loot-parser] set currentDuelsRunId', this.currentDuelsRunId);
+		this.log('set currentDuelsRunId', this.currentDuelsRunId);
 		if (!this.currentDuelsRunId) {
 			await this.prefs.setDuelsRunId(uuid());
 			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-			console.log(
-				'[dungeon-loot-parser] Could not retrieve duels run id, starting a new run',
-				this.currentDuelsRunId,
-			);
+			this.log('Could not retrieve duels run id, starting a new run');
 		}
 		this.sendLootInfo();
 	}
 
 	public resetDuelsRunId() {
-		console.log('[dungeon-loot-parser] resetting DuelsDunId');
+		this.log('resetting duels run info');
 		this.prefs.setDuelsRunId(null);
 		this.currentDuelsRunId = null;
 		this.currentDuelsHeroPowerCardDbfId = null;
@@ -122,16 +126,19 @@ export class DungeonLootParserService {
 	}
 
 	private isNewRun(duelsInfo: DuelsInfo): boolean {
+		if (!duelsInfo) {
+			return false;
+		}
 		if (duelsInfo?.Wins === 0 && duelsInfo?.Losses === 0) {
-			console.log('[dungeon-loot-parser] wins and losses are 0, starting new run', duelsInfo);
+			this.log('wins and losses are 0, starting new run', duelsInfo);
 			return true;
 		}
 		if (
 			(this.currentDuelsWins != null && duelsInfo.Wins < this.currentDuelsWins) ||
 			(this.currentDuelsLosses != null && duelsInfo.Losses < this.currentDuelsLosses)
 		) {
-			console.log(
-				'[dungeon-loot-parser] wins or losses less than previous info, starting new run',
+			this.log(
+				'wins or losses less than previous info, starting new run',
 				duelsInfo,
 				this.currentDuelsWins,
 				this.currentDuelsLosses,
@@ -142,15 +149,11 @@ export class DungeonLootParserService {
 			this.currentDuelsHeroPowerCardDbfId &&
 			duelsInfo.StartingHeroPower !== this.currentDuelsHeroPowerCardDbfId
 		) {
-			console.log(
-				'[dungeon-loot-parser] different hero power, starting new run',
-				duelsInfo,
-				this.currentDuelsHeroPowerCardDbfId,
-			);
+			this.log('different hero power, starting new run', duelsInfo, this.currentDuelsHeroPowerCardDbfId);
 			return true;
 		}
 		if (duelsInfo.LastRatingChange > 0) {
-			console.log('[dungeon-loot-parser] rating changed, starting new run', duelsInfo.LastRatingChange);
+			this.log('rating changed, starting new run', duelsInfo.LastRatingChange);
 			return true;
 		}
 		const signatureTreasure: string = this.findSignatureTreasure(duelsInfo.DeckList);
@@ -158,8 +161,8 @@ export class DungeonLootParserService {
 			this.currentDuelsSignatureTreasureCardId &&
 			signatureTreasure !== this.currentDuelsSignatureTreasureCardId
 		) {
-			console.log(
-				'[dungeon-loot-parser] different signature treasure, starting new run',
+			this.log(
+				'different signature treasure, starting new run',
 				duelsInfo,
 				this.currentDuelsSignatureTreasureCardId,
 			);
@@ -172,20 +175,12 @@ export class DungeonLootParserService {
 			!this.duelsInfo ||
 			![GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(this.currentGameType)
 		) {
-			console.log(
-				'[dungeon-loot-parser] not enough data, not sending loot info',
-				this.currentReviewId,
-				this.duelsInfo,
-				this.currentDuelsRunId,
-				this.currentGameType,
-			);
+			this.log('not enough data, not sending loot info', this.duelsInfo, this.currentGameType);
 			return;
 		}
 
 		if (this.duelsInfo?.Wins === 0 && this.duelsInfo?.Losses === 0) {
-			console.log(
-				'[dungeon-loot-parser] not sending info in the first game, as data might be from the previous run',
-			);
+			this.log('not sending info in the first game, as data might be from the previous run');
 			return;
 		}
 
@@ -222,7 +217,7 @@ export class DungeonLootParserService {
 			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
 			appVersion: process.env.APP_VERSION,
 		};
-		console.log('[dungeon-loot-parser] sending loot into', input);
+		this.log('sending loot into', input);
 		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
 		this.store.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
 	}
@@ -238,5 +233,9 @@ export class DungeonLootParserService {
 		return deckList
 			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
 			.find(card => this.SIGNATURE_TREASUERS.includes(card?.id))?.id;
+	}
+
+	private log(...args) {
+		console.log('[dungeon-loot-parser]', this.currentReviewId, this.currentDuelsRunId, ...args);
 	}
 }

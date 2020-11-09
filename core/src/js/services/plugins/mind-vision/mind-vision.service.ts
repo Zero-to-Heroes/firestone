@@ -6,6 +6,7 @@ declare let OverwolfPlugin: any;
 @Injectable()
 export class MindVisionService {
 	private mindVisionPlugin: any;
+
 	initialized = false;
 
 	constructor() {
@@ -14,12 +15,9 @@ export class MindVisionService {
 
 	public async getCollection(): Promise<any[]> {
 		return new Promise<any[]>(async (resolve, reject) => {
-			// console.log('[mind-vision] retrieving collection');
 			const plugin = await this.get();
-			// console.log('[mind-vision] got plugin');
 			try {
 				plugin.getCollection(collection => {
-					// console.log('[mind-vision] retrieved collection', collection != null);
 					resolve(collection ? JSON.parse(collection) : null);
 				});
 			} catch (e) {
@@ -31,7 +29,6 @@ export class MindVisionService {
 
 	public async getMatchInfo(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
-			// console.log('[mind-vision] retrieving matchInfo');
 			const plugin = await this.get();
 			try {
 				plugin.getMatchInfo(matchInfo => {
@@ -49,7 +46,7 @@ export class MindVisionService {
 			const plugin = await this.get();
 			try {
 				plugin.getDuelsInfo(forceReset, info => {
-					console.log('[mind-vision] retrieved duels info', info);
+					// console.log('[mind-vision] retrieved duels info', info);
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -62,7 +59,7 @@ export class MindVisionService {
 	public async getBattlegroundsInfo(forceReset = false): Promise<{ Rating: number }> {
 		return new Promise<{ Rating: number }>(async resolve => {
 			if (forceReset) {
-				console.log('forcing reset of mindvision', forceReset);
+				// console.log('forcing reset of mindvision', forceReset);
 			}
 			const plugin = await this.get();
 			try {
@@ -79,11 +76,9 @@ export class MindVisionService {
 
 	public async getArenaInfo(): Promise<ArenaInfo> {
 		return new Promise<ArenaInfo>(async resolve => {
-			console.log('[mind-vision] retrieving getArenaInfo');
 			const plugin = await this.get();
 			try {
 				plugin.getArenaInfo(arenaInfo => {
-					console.log('[mind-vision] retrieved arena info', arenaInfo);
 					resolve(arenaInfo ? JSON.parse(arenaInfo) : null);
 				});
 			} catch (e) {
@@ -95,11 +90,9 @@ export class MindVisionService {
 
 	public async getActiveDeck(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
-			// console.log('[mind-vision] retrieving activeDeck');
 			const plugin = await this.get();
 			try {
 				plugin.getActiveDeck(activeDeck => {
-					// console.log('[mind-vision] retrieved activeDeck', activeDeck);
 					resolve(activeDeck ? JSON.parse(activeDeck) : null);
 				});
 			} catch (e) {
@@ -171,7 +164,6 @@ export class MindVisionService {
 				if (this.initialized) {
 					resolve();
 				} else {
-					// console.log('[game-events] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

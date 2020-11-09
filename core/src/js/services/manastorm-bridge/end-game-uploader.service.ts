@@ -42,7 +42,7 @@ export class EndGameUploaderService {
 		buildNumber: number,
 		scenarioId: number,
 	): Promise<void> {
-		console.log('[manastorm-bridge] Uploading game info');
+		console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,
 			currentReviewId,
@@ -67,19 +67,26 @@ export class EndGameUploaderService {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
 		if (!replayXml) {
-			console.warn('[manastorm-bridge] could not convert replay');
+			console.warn('[manastorm-bridge]', currentReviewId, 'could not convert replay');
 		}
-		console.log('[manastorm-bridge] Creating new game', currentGameId, 'with replay length', replayXml.length);
+		console.log(
+			'[manastorm-bridge]',
+			currentReviewId,
+			'Creating new game',
+			currentGameId,
+			'with replay length',
+			replayXml.length,
+		);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentGameId);
-		console.log('[manastorm-bridge] Created new game');
+		console.log('[manastorm-bridge]', currentReviewId, 'Created new game');
 		game.reviewId = currentReviewId;
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
-		console.log('[manastorm-bridge] parsed format', gameResult.FormatType, game.gameFormat);
+		console.log('[manastorm-bridge]', currentReviewId, 'parsed format', gameResult.FormatType, game.gameFormat);
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
-		console.log('[manastorm-bridge] parsed type', gameResult.GameType, game.gameMode);
+		console.log('[manastorm-bridge]', currentReviewId, 'parsed type', gameResult.GameType, game.gameMode);
 		game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
 		if (game.gameMode === 'duels') {
-			console.log('[manastorm-bridge] added duels run id', game.currentDuelsRunId);
+			console.log('[manastorm-bridge]', currentReviewId, 'added duels run id', game.currentDuelsRunId);
 		}
 
 		// Here we want to process the rank info as soon as possible to limit the chances of it
@@ -95,11 +102,11 @@ export class EndGameUploaderService {
 			);
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
-			console.log('updated player rank', playerRank, newPlayerRank);
+			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
-			console.log('handline duels', game.gameMode, game);
+			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode, game);
 			const duelsInfo = await this.memoryInspection.getDuelsInfo();
-			console.log('got duels info', duelsInfo);
+			console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo);
 			playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
 			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
 			try {
@@ -109,18 +116,18 @@ export class EndGameUploaderService {
 					(replay.result === 'lost' && duelsInfo.Losses === 2)
 				) {
 					const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
+					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
 					if (newPlayerRank != null) {
 						game.newPlayerRank = '' + newPlayerRank;
 					}
-					this.dungeonLootParser.resetDuelsRunId();
 				}
 			} catch (e) {
-				console.error('Could not handle rating change in duels', e);
+				console.error('[manastorm-bridge]', currentReviewId, 'Could not handle rating change in duels', e);
 			}
 		} else if (game.gameMode === 'arena') {
 			const arenaInfo = await this.memoryInspection.getArenaInfo();
 			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
-			console.log('updated player rank for arena', playerRank);
+			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			const playerInfo = await this.playersInfo.getPlayerInfo();
 			if (playerInfo && game.gameFormat === 'standard') {
@@ -129,7 +136,12 @@ export class EndGameUploaderService {
 				} else if (playerInfo.standard.leagueId >= 0 && playerInfo.standard.rankValue >= 0) {
 					playerRank = `${playerInfo.standard.leagueId}-${playerInfo.standard.rankValue}`;
 				} else {
-					console.warn('Could not extract player rank', playerInfo.standard);
+					console.warn(
+						'[manastorm-bridge]',
+						currentReviewId,
+						'Could not extract player rank',
+						playerInfo.standard,
+					);
 					playerRank = null;
 				}
 			} else if (playerInfo && game.gameFormat === 'wild') {
@@ -138,7 +150,12 @@ export class EndGameUploaderService {
 				} else if (playerInfo.wild.leagueId >= 0 && playerInfo.wild.rankValue >= 0) {
 					playerRank = `${playerInfo.wild.leagueId}-${playerInfo.wild.rankValue}`;
 				} else {
-					console.warn('Could not extract player rank', playerInfo.wild);
+					console.warn(
+						'[manastorm-bridge]',
+						currentReviewId,
+						'Could not extract player rank',
+						playerInfo.wild,
+					);
 					playerRank = null;
 				}
 			}
@@ -154,7 +171,12 @@ export class EndGameUploaderService {
 				} else if (opponentInfo.standard.leagueId >= 0 && opponentInfo.standard.rankValue >= 0) {
 					opponentRank = `${opponentInfo.standard.leagueId}-${opponentInfo.standard?.rankValue}`;
 				} else {
-					console.warn('Could not extract opponent rank', opponentInfo.standard);
+					console.warn(
+						'[manastorm-bridge]',
+						currentReviewId,
+						'Could not extract opponent rank',
+						opponentInfo.standard,
+					);
 					opponentRank = null;
 				}
 			} else if (opponentInfo && game.gameFormat === 'wild') {
@@ -163,7 +185,12 @@ export class EndGameUploaderService {
 				} else if (opponentInfo.wild.leagueId >= 0 && opponentInfo.wild.rankValue >= 0) {
 					opponentRank = `${opponentInfo.wild.leagueId}-${opponentInfo.wild?.rankValue}`;
 				} else {
-					console.warn('Could not extract opponent rank', opponentInfo.wild);
+					console.warn(
+						'[manastorm-bridge]',
+						currentReviewId,
+						'Could not extract opponent rank',
+						opponentInfo.wild,
+					);
 					opponentRank = null;
 				}
 			}
@@ -171,36 +198,48 @@ export class EndGameUploaderService {
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
 		game.newPlayerRank = newPlayerRank;
-		console.log('[manastorm-bridge] extracted player rank');
+		console.log('[manastorm-bridge]', currentReviewId, 'extracted player rank');
 
 		game.reviewId = currentReviewId;
 		game.buildNumber = buildNumber;
 		game.scenarioId = scenarioId;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
-			console.log('[manastorm-bridge] adding deckstring', deckstring, game.gameMode);
+			console.log('[manastorm-bridge]', currentReviewId, 'adding deckstring', deckstring, game.gameMode);
 			game.deckstring = deckstring;
 			game.deckName = deckName;
 		} else {
 			console.log(
-				'[manastorm-bridge] game mode not supporting deckstrings, not sending it',
+				'[manastorm-bridge]',
+				currentReviewId,
+				'game mode not supporting deckstrings, not sending it',
 				deckstring,
 				game.gameMode,
 			);
 		}
-		console.log('[manastorm-bridge] added meta data');
+		console.log('[manastorm-bridge]', currentReviewId, 'added meta data');
 		game.uncompressedXmlReplay = replayXml;
-		console.log('[manastorm-bridge] set xml replay');
+		console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
 		this.gameParserService.extractMatchup(game);
-		console.log('[manastorm-bridge] extracted matchup');
+		console.log('[manastorm-bridge]', currentReviewId, 'extracted matchup');
 		this.gameParserService.extractDuration(game);
-		console.log('[manastorm-bridge] extracted duration');
+		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
 		if (!game.currentDuelsRunId && game.gameMode === 'duels') {
-			console.warn('[manastorm-bridge] currentDuelsRunId is missing', game.currentDuelsRunId, game.gameMode);
-			this.logService.reportSpecificBug('duels-empty-run-id');
+			console.warn(
+				'[manastorm-bridge]',
+				currentReviewId,
+				'currentDuelsRunId is missing',
+				game.currentDuelsRunId,
+				game.gameMode,
+				this.dungeonLootParser.currentDuelsRunId,
+			);
+			game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+			this.dungeonLootParser.resetDuelsRunId();
+			// So that we have time to collect more logs, especially the ones linked to replay upload
+			setTimeout(() => this.logService.reportSpecificBug('duels-empty-run-id'), 5000);
 		}
 
-		console.log('[manastorm-bridge] game ready');
+		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
 		return game;
 	}
 
