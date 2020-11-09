@@ -20,7 +20,7 @@ export class DuelsStatTypeFilterSelectedProcessor implements Processor {
 			currentState.stats.gameStats,
 			currentState.binder,
 		);
-		console.log('updated duels stat type filter', duels);
+		console.log('updated duels stat type filter', event.value);
 		return [
 			currentState.update({
 				duels: duels,

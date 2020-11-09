@@ -38,6 +38,8 @@ export class GameForUpload {
 	availableTribes: readonly Race[];
 	bannedTribes: readonly Race[];
 
+	// TODO: we can probably remove that ID, it was used by Manastorm but doesn't make
+	// sense for Firestone anymore
 	static createEmptyGame(id: string): GameForUpload {
 		const game = new GameForUpload();
 		game.id = id;

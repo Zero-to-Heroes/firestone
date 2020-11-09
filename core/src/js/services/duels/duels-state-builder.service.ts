@@ -35,7 +35,7 @@ import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=6';
+const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=8';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -59,7 +59,7 @@ export class DuelsStateBuilderService {
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
 		const results: any = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
-		console.log('[duels-state-builder] loaded global stats');
+		console.log('[duels-state-builder] loaded global stats', results);
 		return results?.result;
 	}
 
@@ -139,6 +139,7 @@ export class DuelsStateBuilderService {
 			activeStatTypeFilter: prefs.duelsActiveStatTypeFilter,
 			activeTreasureSortFilter: prefs.duelsActiveTreasureSortFilter,
 			activeTreasureStatTypeFilter: prefs.duelsActiveTreasureStatTypeFilter,
+			activeTimeFilter: prefs.duelsActiveTimeFilter,
 		} as DuelsState);
 	}
 
@@ -152,32 +153,45 @@ export class DuelsStateBuilderService {
 			return null;
 		}
 		const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		const periodStats =
+			prefs.duelsActiveTimeFilter === 'all-time'
+				? globalStats.statsForFullPeriod
+				: globalStats.statsSinceLastPatch;
+		if (!periodStats) {
+			console.error(
+				'[duels-state-builder] could not build period stats',
+				prefs.duelsActiveTimeFilter,
+				globalStats.statsForFullPeriod,
+				globalStats.statsSinceLastPatch,
+			);
+			return null;
+		}
 		const heroStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
 			runs,
-			globalStats.heroStats,
+			periodStats.heroStats,
 			(stat: HeroStat) => stat.heroCardId,
 			prefs,
 		);
 		const heroPowerStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
 			runs,
-			globalStats.heroPowerStats,
+			periodStats.heroPowerStats,
 			(stat: HeroPowerStat) => stat.heroPowerCardId,
 			prefs,
 		);
 		const signatureTreasureStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
 			runs,
-			globalStats.signatureTreasureStats,
+			periodStats.signatureTreasureStats,
 			(stat: SignatureTreasureStat) => stat.signatureTreasureCardId,
 			prefs,
 		);
 		const treasureStats: readonly DuelsTreasureStat[] = this.buildTreasureStats(
 			runs,
-			globalStats.treasureStats,
+			periodStats.treasureStats,
 			prefs,
 		);
 		const deckStats: readonly DuelsGroupedDecks[] = this.buildDeckStats(
 			runs,
-			globalStats.deckStats,
+			periodStats.deckStats,
 			collectionState,
 			prefs,
 		);
@@ -407,14 +421,22 @@ export class DuelsStateBuilderService {
 	private getTreasureSortFunction(prefs: Preferences): (a: DuelsTreasureStat, b: DuelsTreasureStat) => number {
 		switch (prefs.duelsActiveTreasureSortFilter) {
 			case 'global-offering':
-				return (a, b) => b.globalOfferingRate - a.globalOfferingRate;
+				return (a, b) =>
+					a.globalOfferingRate == null
+						? 1
+						: b.globalOfferingRate == null
+						? -1
+						: b.globalOfferingRate - a.globalOfferingRate;
 			case 'player-pickrate':
-				return (a, b) => b.playerPickRate - a.playerPickRate;
+				return (a, b) =>
+					a.playerPickRate == null ? 1 : b.playerPickRate == null ? -1 : b.playerPickRate - a.playerPickRate;
 			case 'global-pickrate':
-				return (a, b) => b.globalPickRate - a.globalPickRate;
+				return (a, b) =>
+					a.globalPickRate == null ? 1 : b.globalPickRate == null ? -1 : b.globalPickRate - a.globalPickRate;
 			case 'global-winrate':
 			default:
-				return (a, b) => b.globalWinrate - a.globalWinrate;
+				return (a, b) =>
+					a.globalWinrate == null ? 1 : b.globalWinrate == null ? -1 : b.globalWinrate - a.globalWinrate;
 		}
 	}
 

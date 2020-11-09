@@ -10,16 +10,19 @@ import {
 import { IOption } from 'ng-select';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
+import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
 import { DuelsTreasurePassiveTypeFilterType } from '../../../models/duels/duels-treasure-passive-type-filter.type';
 import { DuelsTreasureSortFilterType } from '../../../models/duels/duels-treasure-sort-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { DuelsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsStatTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-stat-type-filter-selected-event';
+import { DuelsTimeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-treasure-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { formatPatch } from '../../../services/utils';
 
 @Component({
 	selector: 'duels-filters',
@@ -64,6 +67,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectTreasureSortFilter($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="time-sort-filter"
+				[optionsBuilder]="timeOptionsBuilder"
+				[filter]="activeTimeFilter"
+				[checkVisibleHandler]="timeVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectTimeFilter($event)"
 			></fs-filter-dropdown>
 		</div>
 	`,
@@ -179,6 +191,32 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		);
 	};
 
+	timeOptionsBuilder = (navigation: NavigationState, state: MainWindowState): readonly TimeFilterOption[] => {
+		return [
+			{
+				value: 'all-time',
+				label: 'Past 100 days',
+			} as TimeFilterOption,
+			{
+				value: 'last-patch',
+				label: `Last patch`,
+				tooltip: formatPatch(state?.duels?.currentDuelsMetaPatch),
+			} as TimeFilterOption,
+		] as readonly TimeFilterOption[];
+	};
+	activeTimeFilter: DuelsTimeFilterType;
+	timeFilterVisible: boolean;
+	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'duels' &&
+			navigation.navigationDuels &&
+			(navigation.navigationDuels.selectedCategoryId === 'duels-stats' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-treasures')
+		);
+	};
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
@@ -206,12 +244,17 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new DuelsTreasurePassiveTypeFilterSelectedEvent(option.value));
 	}
 
+	selectTimeFilter(option: TimeFilterOption) {
+		this.stateUpdater.next(new DuelsTimeFilterSelectedEvent(option.value));
+	}
+
 	anyVisible() {
 		return (
 			this.heroVisibleHandler(this._navigation, this._state) ||
 			this.statTypeVisibleHandler(this._navigation, this._state) ||
 			this.treasureVisibleHandler(this._navigation, this._state) ||
-			this.treasurePassiveVisibleHandler(this._navigation, this._state)
+			this.treasurePassiveVisibleHandler(this._navigation, this._state) ||
+			this.timeVisibleHandler(this._navigation, this._state)
 		);
 	}
 
@@ -220,6 +263,7 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.activeStatTypeFilter = this._state.duels?.activeStatTypeFilter;
 		this.activeTreasureSortFilter = this._state.duels?.activeTreasureSortFilter;
 		this.activeTreasurePassiveTypeFilter = this._state.duels?.activeTreasureStatTypeFilter;
+		this.activeTimeFilter = this._state.duels?.activeTimeFilter;
 	}
 }
 
@@ -237,4 +281,8 @@ interface TreasureSortFilterOption extends IOption {
 
 interface TreasurePassiveTypeFilterOption extends IOption {
 	value: DuelsTreasurePassiveTypeFilterType;
+}
+
+interface TimeFilterOption extends IOption {
+	value: DuelsTimeFilterType;
 }

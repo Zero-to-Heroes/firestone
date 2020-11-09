@@ -1,3 +1,5 @@
+import { PatchInfo } from '../models/patches';
+
 export const groupByFunction = (keyExtractor: (obj: object | string) => string) => array =>
 	array.reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
@@ -60,4 +62,14 @@ export const formatClass = (playerClass: string): string => {
 		update = 'demon hunter';
 	}
 	return capitalizeEachWord(update);
+};
+
+export const formatPatch = (input: PatchInfo): string => {
+	if (!input) {
+		return '';
+	}
+	return `Patch ${input.version}.${input.number} released on ${input.date
+		.split('-')
+		.reverse()
+		.join('-')}`;
 };

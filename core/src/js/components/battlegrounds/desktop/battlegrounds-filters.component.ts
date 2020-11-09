@@ -14,13 +14,13 @@ import { BgsRankFilterType } from '../../../models/mainwindow/battlegrounds/bgs-
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { PatchInfo } from '../../../models/patches';
 import { BgsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsMmrGroupFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { BgsRankFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { formatPatch } from '../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-filters',
@@ -152,7 +152,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		return [
 			{
 				value: 'all-time',
-				label: 'Past 100 days',
+				label: 'All time',
 			} as TimeFilterOption,
 			{
 				value: 'past-30',
@@ -165,7 +165,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			{
 				value: 'last-patch',
 				label: `Last patch`,
-				tooltip: this.formatPatch(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch),
+				tooltip: formatPatch(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch),
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 	};
@@ -241,16 +241,6 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.activeHeroSortFilter = this._state.battlegrounds?.activeHeroSortFilter;
 		this.activeRankFilter = this._state.battlegrounds?.activeRankFilter;
 		this.activeMmrGroupFilter = this._state.battlegrounds?.activeGroupMmrFilter;
-	}
-
-	private formatPatch(input: PatchInfo): string {
-		if (!input) {
-			return '';
-		}
-		return `Patch ${input.version}.${input.number} released on ${input.date
-			.split('-')
-			.reverse()
-			.join('-')}`;
 	}
 }
 

@@ -78,6 +78,7 @@ import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hid
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
 import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
+import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-selected-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
 import { DuelsViewDeckDetailsEvent } from './events/duels/duels-view-deck-details-event';
@@ -153,6 +154,7 @@ import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
 import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
+import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-filter-selected-processor';
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
 import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
 import { DuelsViewDeckDetailsProcessor } from './processors/duels/duels-view-deck-details-processor';
@@ -613,6 +615,9 @@ export class MainWindowStoreService {
 
 			DuelsTreasureSortFilterSelectedEvent.eventName(),
 			new DuelsTreasureSortFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsTimeFilterSelectedEvent.eventName(),
+			new DuelsTimeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsTreasurePassiveTypeFilterSelectedEvent.eventName(),
 			new DuelsTreasurePassiveTypeFilterSelectedProcessor(this.duelsBuilder, this.prefs),

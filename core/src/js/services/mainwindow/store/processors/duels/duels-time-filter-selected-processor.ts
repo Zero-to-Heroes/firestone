@@ -2,19 +2,19 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
 import { PreferencesService } from '../../../../preferences.service';
-import { DuelsHeroSortFilterSelectedEvent } from '../../events/duels/duels-hero-sort-filter-selected-event';
+import { DuelsTimeFilterSelectedEvent } from '../../events/duels/duels-time-filter-selected-event';
 import { Processor } from '../processor';
 
-export class DuelsHeroSortFilterSelectedProcessor implements Processor {
+export class DuelsTimeFilterSelectedProcessor implements Processor {
 	constructor(private readonly duelsService: DuelsStateBuilderService, private readonly prefs: PreferencesService) {}
 
 	public async process(
-		event: DuelsHeroSortFilterSelectedEvent,
+		event: DuelsTimeFilterSelectedEvent,
 		currentState: MainWindowState,
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		await this.prefs.updateDuelsHeroSortFilter(event.value);
+		await this.prefs.updateDuelsTimeFilter(event.value);
 		const duels = await this.duelsService.updateState(
 			currentState.duels,
 			currentState.stats.gameStats,

@@ -20,7 +20,7 @@ export class DuelsTreasureSortFilterSelectedProcessor implements Processor {
 			currentState.stats.gameStats,
 			currentState.binder,
 		);
-		console.log('updated duels treasure sort filter', duels);
+		console.log('updated duels treasure sort filter', event.value);
 		return [
 			currentState.update({
 				duels: duels,
