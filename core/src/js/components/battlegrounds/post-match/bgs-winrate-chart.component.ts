@@ -26,48 +26,20 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsWinrateChartComponent {
-	communityExtractor: () => readonly NumericTurnInfo[] = (): readonly NumericTurnInfo[] => {
-		if (!this._globalStats?.heroStats || !this._player?.cardId) {
-			console.log('no info, returning', this._globalStats, this._player);
-			return [];
-		}
-
-		const result = this._globalStats.heroStats
-			.find(stat => stat.id === this._player.cardId)
-			?.combatWinrate?.filter(stat => stat.turn > 0)
-			.map(stat => {
-				return {
-					turn: stat.turn,
-					value: stat.winrate,
-				} as NumericTurnInfo;
-			})
-			.filter(stat => stat);
-		// console.log('comunity result', result);
-		return result;
-	};
-	yourExtractor: () => readonly NumericTurnInfo[] = (): readonly NumericTurnInfo[] => {
-		if (!this._stats || !this._stats.battleResultHistory) {
-			return [];
-		}
-		return this._stats.battleResultHistory.map(
-			turnInfo =>
-				({
-					turn: turnInfo.turn,
-					value: turnInfo.simulationResult?.wonPercent || 0,
-				} as NumericTurnInfo),
-		);
-	};
+	communityExtractor: () => readonly NumericTurnInfo[];
+	yourExtractor: () => readonly NumericTurnInfo[];
 
 	private _globalStats: BgsStats;
 	private _stats: BgsPostMatchStats;
 	private _player: BgsPlayer;
 
 	@Input() set globalStats(value: BgsStats) {
+		// console.log('setting global stats', value, this._globalStats);
 		if (value === this._globalStats) {
 			return;
 		}
 		this._globalStats = value;
-		// this.updateInfo();
+		this.updateInfo();
 	}
 
 	@Input() set stats(value: BgsPostMatchStats) {
@@ -75,7 +47,7 @@ export class BgsWinrateChartComponent {
 			return;
 		}
 		this._stats = value;
-		// this.updateInfo();
+		this.updateInfo();
 	}
 
 	@Input() set player(value: BgsPlayer) {
@@ -83,39 +55,45 @@ export class BgsWinrateChartComponent {
 			return;
 		}
 		this._player = value;
-		// this.updateInfo();
+		this.updateInfo();
 	}
 
-	// private updateInfo() {
-	// 	console.log('setting info in winrate chart', this._player, this._stats, this._globalStats);
-	// 	this.communityExtractor = (): readonly NumericTurnInfo[] => {
-	// 		if (!this._globalStats?.heroStats || !this._player.cardId) {
-	// 			return [];
-	// 		}
+	private updateInfo() {
+		if (!this._player || !this._stats || !this._globalStats) {
+			return;
+		}
+		this.communityExtractor = (): readonly NumericTurnInfo[] => {
+			if (!this._globalStats?.heroStats || !this._player?.cardId) {
+				// console.log('no info, returning', this._globalStats, this._player);
+				return [];
+			}
 
-	// 		return this._globalStats.heroStats
-	// 			.find(stat => stat.id === this._player.cardId)
-	// 			?.combatWinrate?.filter(stat => stat.turn > 0)
-	// 			.map(stat => {
-	// 				return {
-	// 					turn: stat.turn,
-	// 					value: stat.winrate,
-	// 				} as NumericTurnInfo;
-	// 			})
-	// 			.filter(stat => stat);
-	// 	};
-
-	// 	this.yourExtractor = (): readonly NumericTurnInfo[] => {
-	// 		if (!this._stats || !this._stats.battleResultHistory) {
-	// 			return [];
-	// 		}
-	// 		return this._stats.battleResultHistory.map(
-	// 			turnInfo =>
-	// 				({
-	// 					turn: turnInfo.turn,
-	// 					value: turnInfo.simulationResult?.wonPercent || 0,
-	// 				} as NumericTurnInfo),
-	// 		);
-	// 	};
-	// }
+			const result = this._globalStats.heroStats
+				.find(stat => stat.id === this._player.cardId)
+				?.combatWinrate?.filter(stat => stat.turn > 0)
+				.map(stat => {
+					return {
+						turn: stat.turn,
+						value: stat.winrate,
+					} as NumericTurnInfo;
+				})
+				.filter(stat => stat);
+			// console.log('comunity result', result);
+			return result;
+		};
+		this.yourExtractor = (): readonly NumericTurnInfo[] => {
+			if (!this._stats || !this._stats.battleResultHistory) {
+				return [];
+			}
+			const result = this._stats.battleResultHistory.map(
+				turnInfo =>
+					({
+						turn: turnInfo.turn,
+						value: turnInfo.simulationResult?.wonPercent || 0,
+					} as NumericTurnInfo),
+			);
+			// console.log('your result', result);
+			return result;
+		};
+	}
 }
