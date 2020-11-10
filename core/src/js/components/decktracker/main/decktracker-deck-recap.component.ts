@@ -10,10 +10,10 @@ import {
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { formatClass } from '../../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ReplaysFilterEvent } from '../../../services/mainwindow/store/events/replays/replays-filter-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { formatClass } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-deck-recap',

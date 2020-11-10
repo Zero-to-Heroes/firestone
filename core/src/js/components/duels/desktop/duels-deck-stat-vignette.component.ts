@@ -9,10 +9,10 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
+import { formatClass } from '../../../services/hs-utils';
 import { DuelsViewDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { formatClass } from '../../../services/utils';
 
 @Component({
 	selector: 'duels-deck-stat-vignette',

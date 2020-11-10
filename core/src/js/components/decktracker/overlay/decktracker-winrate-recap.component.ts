@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
-import { formatClass } from '../../../services/utils';
+import { formatClass } from '../../../services/hs-utils';
 
 @Component({
 	selector: 'decktracker-winrate-recap',

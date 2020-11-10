@@ -1,8 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { formatClass } from '../../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { formatClass } from '../../../services/utils';
 
 @Component({
 	selector: 'deck-matchup-info',
