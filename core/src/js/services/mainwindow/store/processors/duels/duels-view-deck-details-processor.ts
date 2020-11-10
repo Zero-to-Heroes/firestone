@@ -2,7 +2,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { Events } from '../../../../events.service';
-import { formatClass } from '../../../../utils';
+import { formatClass } from '../../../../hs-utils';
 import { DuelsViewDeckDetailsEvent } from '../../events/duels/duels-view-deck-details-event';
 import { Processor } from '../processor';
 

@@ -1,3 +1,4 @@
+import { DuelsClassFilterType } from './duels/duels-class-filter.type';
 import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
@@ -151,6 +152,7 @@ export class Preferences {
 	readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-winrate';
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure';
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
+	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

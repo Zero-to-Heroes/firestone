@@ -80,6 +80,7 @@ import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-e
 import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
 import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-selected-event';
 import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck-run-details-loaded-event';
+import { DuelsTopDecksClassFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
 import { DuelsViewDeckDetailsEvent } from './events/duels/duels-view-deck-details-event';
@@ -157,6 +158,7 @@ import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-ca
 import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
 import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-filter-selected-processor';
 import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-top-deck-run-details-loaded-processor';
+import { DuelsTopDecksClassFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
 import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
 import { DuelsViewDeckDetailsProcessor } from './processors/duels/duels-view-deck-details-processor';
@@ -623,6 +625,9 @@ export class MainWindowStoreService {
 
 			DuelsTreasurePassiveTypeFilterSelectedEvent.eventName(),
 			new DuelsTreasurePassiveTypeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsTopDecksClassFilterSelectedEvent.eventName(),
+			new DuelsTopDecksClassFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsViewDeckDetailsEvent.eventName(),
 			new DuelsViewDeckDetailsProcessor(this.events),

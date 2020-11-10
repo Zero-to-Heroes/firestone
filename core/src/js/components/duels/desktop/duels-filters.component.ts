@@ -8,6 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
+import { DuelsClassFilterType } from '../../../models/duels/duels-class-filter.type';
 import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
@@ -15,9 +16,11 @@ import { DuelsTreasurePassiveTypeFilterType } from '../../../models/duels/duels-
 import { DuelsTreasureSortFilterType } from '../../../models/duels/duels-treasure-sort-filter.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { classes, formatClass } from '../../../services/hs-utils';
 import { DuelsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsStatTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-stat-type-filter-selected-event';
 import { DuelsTimeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
+import { DuelsTopDecksClassFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/duels/duels-treasure-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -76,6 +79,15 @@ import { formatPatch } from '../../../services/utils';
 				[state]="_state"
 				[navigation]="_navigation"
 				(onOptionSelected)="selectTimeFilter($event)"
+			></fs-filter-dropdown>
+			<fs-filter-dropdown
+				class="top-decks-class-filter"
+				[options]="topDecksClassFilterOptions"
+				[filter]="activeTopDecksClassFilter"
+				[checkVisibleHandler]="topDecksClassVisibleHandler"
+				[state]="_state"
+				[navigation]="_navigation"
+				(onOptionSelected)="selectTopDecksClassFilter($event)"
 			></fs-filter-dropdown>
 		</div>
 	`,
@@ -217,6 +229,19 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		);
 	};
 
+	topDecksClassFilterOptions: readonly TopDeckClassFilterOption[] = this.buildTopDeckClassFilterOptions();
+	activeTopDecksClassFilter: DuelsClassFilterType;
+	topDecksClassFilterVisible: boolean;
+	topDecksClassVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+		return (
+			state &&
+			navigation &&
+			navigation.currentApp == 'duels' &&
+			navigation.navigationDuels &&
+			navigation.navigationDuels.selectedCategoryId === 'duels-top-decks'
+		);
+	};
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
@@ -248,13 +273,18 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.stateUpdater.next(new DuelsTimeFilterSelectedEvent(option.value));
 	}
 
+	selectTopDecksClassFilter(option: TopDeckClassFilterOption) {
+		this.stateUpdater.next(new DuelsTopDecksClassFilterSelectedEvent(option.value));
+	}
+
 	anyVisible() {
 		return (
 			this.heroVisibleHandler(this._navigation, this._state) ||
 			this.statTypeVisibleHandler(this._navigation, this._state) ||
 			this.treasureVisibleHandler(this._navigation, this._state) ||
 			this.treasurePassiveVisibleHandler(this._navigation, this._state) ||
-			this.timeVisibleHandler(this._navigation, this._state)
+			this.timeVisibleHandler(this._navigation, this._state) ||
+			this.topDecksClassVisibleHandler(this._navigation, this._state)
 		);
 	}
 
@@ -264,6 +294,18 @@ export class DuelsFiltersComponent implements AfterViewInit {
 		this.activeTreasureSortFilter = this._state.duels?.activeTreasureSortFilter;
 		this.activeTreasurePassiveTypeFilter = this._state.duels?.activeTreasureStatTypeFilter;
 		this.activeTimeFilter = this._state.duels?.activeTimeFilter;
+		this.activeTopDecksClassFilter = this._state.duels?.activeTopDecksClassFilter;
+	}
+
+	private buildTopDeckClassFilterOptions(): readonly TopDeckClassFilterOption[] {
+		const options: readonly DuelsClassFilterType[] = ['all', ...(classes as DuelsClassFilterType[])];
+		return options.map(
+			option =>
+				({
+					value: option,
+					label: option === 'all' ? 'All classes' : formatClass(option),
+				} as TopDeckClassFilterOption),
+		);
 	}
 }
 
@@ -285,4 +327,8 @@ interface TreasurePassiveTypeFilterOption extends IOption {
 
 interface TimeFilterOption extends IOption {
 	value: DuelsTimeFilterType;
+}
+
+interface TopDeckClassFilterOption extends IOption {
+	value: DuelsClassFilterType;
 }

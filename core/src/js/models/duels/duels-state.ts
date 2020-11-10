@@ -2,6 +2,7 @@ import { DuelsGlobalStats } from '@firestone-hs/retrieve-duels-global-stats/dist
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
+import { DuelsClassFilterType } from './duels-class-filter.type';
 import { DuelsHeroSortFilterType } from './duels-hero-sort-filter.type';
 import { DuelsDeckStat, DuelsPlayerStats } from './duels-player-stats';
 import { DuelsRun } from './duels-run';
@@ -28,6 +29,7 @@ export class DuelsState {
 	readonly activeTreasureSortFilter: DuelsTreasureSortFilterType;
 	readonly activeTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType;
 	readonly activeTimeFilter: DuelsTimeFilterType;
+	readonly activeTopDecksClassFilter: DuelsClassFilterType;
 
 	public static create(base: DuelsState): DuelsState {
 		return Object.assign(new DuelsState(), base);
