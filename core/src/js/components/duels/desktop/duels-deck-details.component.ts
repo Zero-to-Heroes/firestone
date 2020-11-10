@@ -86,7 +86,6 @@ export class DuelsDeckDetailsComponent implements AfterViewInit {
 			.map(grouped => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])
 			.find(deck => deck.id === this._navigation.selectedDeckId);
-		console.log('updating values', this.deck, this._state.additionalDeckDetails);
 		if (!this.deck) {
 			return;
 		}

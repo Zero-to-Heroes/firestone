@@ -86,7 +86,6 @@ import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/
 import { DuelsDeckDetailsComponent } from '../../components/duels/desktop/duels-deck-details.component';
 import { DuelsDeckStatVignetteComponent } from '../../components/duels/desktop/duels-deck-stat-vignette.component';
 import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
-import { DuelsFiltersComponent } from '../../components/duels/desktop/duels-filters.component';
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
@@ -98,6 +97,8 @@ import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-run
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
 import { DuelsTreasureStatVignetteComponent } from '../../components/duels/desktop/duels-treasure-stat-vignette.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
+import { DuelsFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-filter-dropdown.component';
+import { DuelsFiltersComponent } from '../../components/duels/desktop/filters/duels-filters.component';
 import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.component';
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import { MainWindowComponent } from '../../components/main-window.component';
@@ -253,6 +254,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsHeroStatVignetteComponent,
 		DuelsGlobalValueComponent,
 		DuelsFiltersComponent,
+		DuelsFilterDropdownComponent,
 		DuelsTreasureStatsComponent,
 		DuelsTreasureStatVignetteComponent,
 		DuelsTopDecksComponent,
