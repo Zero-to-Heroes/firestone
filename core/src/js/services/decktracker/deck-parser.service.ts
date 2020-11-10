@@ -75,6 +75,7 @@ export class DeckParserService {
 						].includes(scene)
 					) {
 						console.log('[deck-parser] resetting mindvision once fully in game');
+						this.deckSanityDone = true;
 						this.memory.reset();
 					}
 				}
