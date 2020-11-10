@@ -1,8 +1,9 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameTag } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
+import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
@@ -304,8 +305,8 @@ export class GameStateService {
 			if (!card || card.type?.toUpperCase() === 'SPELL') {
 				// Consider the opposing secrets
 				if (
-					(isPlayer && this.state.opponentDeck.secrets.length > 0) ||
-					(!isPlayer && this.state.playerDeck.secrets.length > 0)
+					(isPlayer && this.hasPossibleCounterspell(this.state.opponentDeck.secrets)) ||
+					(!isPlayer && this.hasPossibleCounterspell(this.state.playerDeck.secrets))
 				) {
 					console.log(
 						'[game-state] delaying secret elimination to account for a possible Counterspell',
@@ -391,6 +392,15 @@ export class GameStateService {
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		// console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
 		this.previousStart = Date.now();
+	}
+
+	private hasPossibleCounterspell(secrets: readonly BoardSecret[]) {
+		return (
+			secrets.length > 0 &&
+			secrets.some(secret =>
+				secret.allPossibleOptions.some(option => option.cardId === CardIds.Collectible.Mage.Counterspell),
+			)
+		);
 	}
 
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
