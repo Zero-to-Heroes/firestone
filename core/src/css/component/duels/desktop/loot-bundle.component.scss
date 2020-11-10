@@ -1,0 +1,24 @@
+.loot-bundle {
+	display: flex;
+	flex-direction: column;
+
+	.cards {
+		display: flex;
+		flex-direction: column;
+
+		.card-container {
+			width: 100%;
+			margin-bottom: 2px;
+			height: 26px;
+		}
+
+		deck-card {
+			width: 100%;
+		}
+	}
+
+	.header {
+		font-size: 13px;
+		text-align: center;
+	}
+}

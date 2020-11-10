@@ -2,36 +2,53 @@
 	background: rgba(255, 255, 255, 0.08);
 	display: flex;
 	align-items: center;
-	height: 40px;
+	height: 80px;
 	padding: 10px;
 	font-family: Open Sans;
 	font-style: normal;
 	font-weight: normal;
 	color: var(--default-text-color);
+
+	&.loot {
+		height: 120px;
+	}
 }
 
 .option {
 	margin-right: 15px;
-}
-
-.option-image {
-	width: 30px;
-	height: 30px;
-	clip-path: circle(10px at 50% 50%);
-	transform: scale(1.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 33%;
 
 	&:not(.picked) {
 		filter: grayscale(1);
 	}
 }
 
+.option-image {
+	width: 90px;
+	height: 90px;
+	clip-path: circle(33px at 50% 50%);
+}
+
 .text {
 	margin-left: 10px;
 	font-size: 14px;
 	margin-right: 15px;
+	width: 100px;
 }
 
-.treasure-loot {
+.treasure-loot,
+.loot {
 	display: flex;
 	align-items: center;
+	flex-grow: 1;
+}
+
+.bundles,
+.options {
+	display: flex;
+	flex-grow: 1;
+	justify-content: space-around;
 }

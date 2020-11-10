@@ -53,6 +53,8 @@ export class Events {
 	public static readonly START_BGS_RUN_STATS = 'start-bgs-run-stats';
 	public static readonly POPULATE_HERO_DETAILS_FOR_BG = 'POPULATE_HERO_DETAILS_FOR_BG';
 
+	public static readonly DUELS_LOAD_TOP_DECK_RUN_DETAILS = 'DUELS_LOAD_TOP_DECK_RUN_DETAILS';
+
 	private _eventBus: Subject<BroadcastEvent>;
 
 	constructor() {

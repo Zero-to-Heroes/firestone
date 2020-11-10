@@ -98,6 +98,7 @@ import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-run
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
 import { DuelsTreasureStatVignetteComponent } from '../../components/duels/desktop/duels-treasure-stat-vignette.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
+import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.component';
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
@@ -247,6 +248,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsRunsListComponent,
 		DuelsRunComponent,
 		LootInfoComponent,
+		LootBundleComponent,
 		DuelsHeroStatsComponent,
 		DuelsHeroStatVignetteComponent,
 		DuelsGlobalValueComponent,

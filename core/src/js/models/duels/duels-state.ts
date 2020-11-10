@@ -3,7 +3,7 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
 import { DuelsHeroSortFilterType } from './duels-hero-sort-filter.type';
-import { DuelsPlayerStats } from './duels-player-stats';
+import { DuelsDeckStat, DuelsPlayerStats } from './duels-player-stats';
 import { DuelsRun } from './duels-run';
 import { DuelsStatTypeFilterType } from './duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels-time-filter.type';
@@ -17,6 +17,10 @@ export class DuelsState {
 	readonly runs: readonly DuelsRun[];
 	readonly globalStats: DuelsGlobalStats;
 	readonly playerStats: DuelsPlayerStats;
+	// Used to store additional deck data loaded during the course of the app's use,
+	// like the 12-wins additional data. If we store it directly in the deck stats,
+	// it will be erased every time we recompute everything from the global stats
+	readonly additionalDeckDetails: readonly DuelsDeckStat[];
 	readonly currentDuelsMetaPatch: PatchInfo;
 
 	readonly activeHeroSortFilter: DuelsHeroSortFilterType;

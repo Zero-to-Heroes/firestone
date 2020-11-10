@@ -1,7 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
+import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
@@ -13,27 +15,37 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 		`../../../../css/component/duels/desktop/duels-deck-details.component.scss`,
 	],
 	template: `
-		<div class="duels-deck-details">
-			<div class="deck-list-container starting">
-				<copy-deckstring
-					class="copy-deckcode"
-					[deckstring]="deck?.decklist"
-					[showTooltip]="true"
-					title="Starting deck"
-				>
-				</copy-deckstring>
-				<deck-list class="deck-list" [deckstring]="deck?.decklist"></deck-list>
+		<div class="duels-deck-details" scrollable>
+			<div class="deck-lists">
+				<div class="deck-list-container starting">
+					<copy-deckstring
+						class="copy-deckcode"
+						[deckstring]="deck?.decklist"
+						[showTooltip]="true"
+						title="Starting deck"
+					>
+					</copy-deckstring>
+					<deck-list class="deck-list" [deckstring]="deck?.decklist"></deck-list>
+				</div>
+				<div class="deck-list-container final">
+					<copy-deckstring
+						class="copy-deckcode"
+						[deckstring]="deck?.finalDecklist"
+						[showTooltip]="true"
+						title="Final deck"
+					>
+					</copy-deckstring>
+					<deck-list class="deck-list" [deckstring]="deck?.finalDecklist"></deck-list>
+				</div>
 			</div>
-			<div class="treasures"></div>
-			<div class="deck-list-container final">
-				<copy-deckstring
-					class="copy-deckcode"
-					[deckstring]="deck?.finalDecklist"
-					[showTooltip]="true"
-					title="Final deck"
-				>
-				</copy-deckstring>
-				<deck-list class="deck-list" [deckstring]="deck?.finalDecklist"></deck-list>
+			<div class="treasures">
+				<div class="header">Run picks</div>
+				<div class="loading" *ngIf="loading">Loading data...</div>
+				<ul class="details">
+					<li *ngFor="let step of steps">
+						<loot-info [loot]="step"></loot-info>
+					</li>
+				</ul>
 			</div>
 		</div>
 	`,
@@ -51,6 +63,8 @@ export class DuelsDeckDetailsComponent implements AfterViewInit {
 	}
 
 	deck: DuelsDeckStat;
+	loading: boolean;
+	steps: readonly DuelsRunInfo[];
 
 	private _state: DuelsState;
 	private _navigation: NavigationDuels;
@@ -72,8 +86,22 @@ export class DuelsDeckDetailsComponent implements AfterViewInit {
 			.map(grouped => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])
 			.find(deck => deck.id === this._navigation.selectedDeckId);
+		console.log('updating values', this.deck, this._state.additionalDeckDetails);
 		if (!this.deck) {
 			return;
+		}
+
+		const steps: readonly (DuelsRunInfo | GameStat)[] =
+			this.deck.steps ||
+			(this._state.additionalDeckDetails || []).find(deck => deck.id === this._navigation.selectedDeckId)?.steps;
+		console.log('steps', steps);
+		this.loading = steps == null;
+		if (steps) {
+			this.steps = steps
+				.filter(step => (step as DuelsRunInfo).bundleType)
+				.map(step => step as DuelsRunInfo)
+				.filter(step => step.bundleType !== 'hero-power' && step.bundleType !== 'signature-treasure');
+			console.log('built steps', this.steps);
 		}
 
 		// console.log('ready to set treasures', this.deck.treasuresCardIds, this.deck);

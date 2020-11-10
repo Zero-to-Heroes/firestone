@@ -126,5 +126,23 @@
 		li {
 			margin-top: 5px;
 		}
+
+		::ng-deep loot-info {
+			.loot-info {
+				height: 40px;
+
+				.treasure-loot {
+					.options {
+						justify-content: flex-start;
+
+						.option-image {
+							width: 45px;
+							height: 45px;
+							clip-path: circle(15px at 50% 50%);
+						}
+					}
+				}
+			}
+		}
 	}
 }

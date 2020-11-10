@@ -10,4 +10,11 @@ export class VisualDeckCard extends DeckCard {
 	constructor() {
 		super();
 	}
+
+	public static create(base: VisualDeckCard = {} as VisualDeckCard): VisualDeckCard {
+		if (base.cardId && !base.cardName) {
+			console.warn('creating deck card without name', base, new Error().stack);
+		}
+		return Object.assign(new VisualDeckCard(), base);
+	}
 }

@@ -1,5 +1,7 @@
 import { ReferencePlayerClass } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-player-class';
 import { DeckStat } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
+import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { GameStat } from '../mainwindow/stats/game-stat';
 import { DuelsGroupedDecks } from './duels-grouped-decks';
 
 export interface DuelsPlayerStats {
@@ -57,4 +59,5 @@ export interface DuelsTreasureStatForClass {
 export interface DuelsDeckStat extends DeckStat {
 	readonly heroCardId: string;
 	readonly dustCost: number;
+	readonly steps: readonly (GameStat | DuelsRunInfo)[];
 }

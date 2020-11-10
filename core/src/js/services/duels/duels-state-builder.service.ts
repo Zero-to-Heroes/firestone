@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import {
 	DeckStat,
@@ -28,6 +28,9 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
+import { Events } from '../events.service';
+import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
+import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { groupByFunction } from '../utils';
@@ -36,15 +39,40 @@ import { getDuelsHeroCardId } from './duels-utils';
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=8';
+const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
 export class DuelsStateBuilderService {
+	private mainWindowStateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
 		private readonly allCards: AllCardsService,
-	) {}
+		private readonly events: Events,
+	) {
+		this.events
+			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
+			.subscribe(data => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
+
+		setTimeout(() => {
+			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		});
+	}
+
+	private async loadTopDeckRunDetails(runId: string, deckId: number) {
+		const results: any = await this.api.callGetApiWithRetries(`${DUELS_RUN_DETAILS_URL}/${runId}?v=2`);
+		console.log('[duels-state-builder] laoded run details', results);
+		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
+		this.mainWindowStateUpdater.next(
+			new DuelsTopDeckRunDetailsLoadedEvent({
+				id: deckId,
+				runId: runId,
+				steps: steps,
+			} as DuelsDeckStat),
+		);
+	}
 
 	public async loadRuns(): Promise<readonly DuelsRunInfo[]> {
 		const user = await this.ow.getCurrentUser();
