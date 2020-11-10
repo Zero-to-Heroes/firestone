@@ -38,7 +38,7 @@ import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 // const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=8';
+const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=9';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
@@ -442,6 +442,7 @@ export class DuelsStateBuilderService {
 					globalTotalMatches: stat.totalMatches,
 					globalPopularity: totalStats === 0 ? 0 : (100 * stat.totalMatches) / totalStats,
 					globalWinrate: stat.totalMatches === 0 ? 0 : (100 * stat.totalWins) / stat.totalMatches,
+					globalWinDistribution: this.buildWinDistribution((stat as HeroStat).winDistribution),
 					playerTotalMatches: playerTotalMatches,
 					playerPopularity:
 						totalMatchesForPlayer === 0 ? 0 : (100 * playerTotalMatches) / totalMatchesForPlayer,
@@ -457,6 +458,22 @@ export class DuelsStateBuilderService {
 				} as DuelsHeroPlayerStat;
 			})
 			.sort(this.getStatSortFunction(prefs));
+	}
+
+	private buildWinDistribution(winDistribution: {
+		[winNumber: string]: number;
+	}): readonly { winNumber: number; value: number }[] {
+		if (!winDistribution) {
+			return [];
+		}
+		const max = Math.max(...Object.values(winDistribution));
+		const total = Object.values(winDistribution).reduce((a, b) => a + b, 0);
+		return Object.keys(winDistribution)
+			.sort((a, b) => +a - +b)
+			.map(winNumber => ({
+				winNumber: +winNumber,
+				value: (100 * winDistribution[winNumber]) / total,
+			}));
 	}
 
 	private getStatSortFunction(prefs: Preferences): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {

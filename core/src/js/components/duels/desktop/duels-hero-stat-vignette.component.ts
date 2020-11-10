@@ -3,6 +3,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
 @Component({
 	selector: 'duels-hero-stat-vignette',
@@ -16,6 +17,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<div class="name" [helpTooltip]="name">{{ name }}</div>
 				<img [src]="icon" class="portrait" [helpTooltip]="playerClass" />
 				<div class="stats">
+					<simple-bar-chart
+						*ngIf="globalWinDistribution?.data?.length > 0"
+						class="win-distribution"
+						[data]="globalWinDistribution"
+						[id]="'duels-hero-vignette' + _stat.cardId"
+						tooltipTitle="Win distribution"
+					></simple-bar-chart>
 					<div class="item winrate">
 						<div class="label">Global winrate</div>
 						<div class="values">
@@ -57,6 +65,12 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		this.playerWinrate = value.playerWinrate;
 		this.globalWinrate = value.globalWinrate;
 		this.playerGamesPlayed = value.playerTotalMatches || 0;
+		this.globalWinDistribution = {
+			data: value.globalWinDistribution.map(input => ({
+				label: '' + input.winNumber,
+				value: input.value,
+			})),
+		} as SimpleBarChartData;
 	}
 
 	_stat: DuelsHeroPlayerStat;
@@ -66,6 +80,7 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 	playerWinrate: number;
 	globalWinrate: number;
 	playerGamesPlayed: number;
+	globalWinDistribution: SimpleBarChartData;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

@@ -36,6 +36,7 @@ import { BgsPostMatchStatsComponent } from '../../components/battlegrounds/post-
 import { BgsWinrateChartComponent } from '../../components/battlegrounds/post-match/bgs-winrate-chart.component';
 import { StatCellComponent } from '../../components/battlegrounds/post-match/stat-cell.component';
 import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
+import { SimpleBarChartComponent } from '../../components/common/chart/simple-bar-chart.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
 import { ControlDiscordComponent } from '../../components/controls/control-discord.component';
@@ -184,6 +185,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsChartWarbandCompositionComponent,
 
 		GraphWithComparisonComponent,
+		SimpleBarChartComponent,
 
 		FilterDropdownComponent,
 		FsFilterDropdownComponent,
@@ -277,6 +279,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsChartWarbandCompositionComponent,
 
 		GraphWithComparisonComponent,
+		SimpleBarChartComponent,
 
 		FilterDropdownComponent,
 		FsFilterDropdownComponent,

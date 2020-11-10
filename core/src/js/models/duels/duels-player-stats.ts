@@ -19,6 +19,7 @@ export interface DuelsHeroPlayerStat {
 	readonly globalTotalMatches: number;
 	readonly globalPopularity: number;
 	readonly globalWinrate: number;
+	readonly globalWinDistribution: readonly { winNumber: number; value: number }[];
 	readonly playerTotalMatches: number;
 	readonly playerPopularity: number;
 	readonly playerWinrate: number;

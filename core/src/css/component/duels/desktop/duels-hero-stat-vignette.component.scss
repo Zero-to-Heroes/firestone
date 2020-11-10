@@ -8,12 +8,15 @@
 	flex-shrink: 0;
 	background: rgba(255, 255, 255, 0.08);
 	padding: 10px;
+	--bar-chart-bar-color: var(--color-8);
+	--on-bar-chart-bar-color: var(--color-2);
 
 	.box-side {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		flex-direction: column;
+		width: 100%;
 	}
 
 	.name {
@@ -43,11 +46,22 @@
 		// background: rgba(255, 255, 255, 0.12);
 	}
 
+	.win-distribution {
+		height: 60px;
+		width: calc(100% - 20px);
+		top: -10px;
+
+		::ng-deep .tooltip-container {
+			width: 150px;
+		}
+	}
+
 	.stats {
 		display: flex;
 		flex-direction: column;
 		font-size: 12px;
 		align-items: center;
+		width: 100%;
 
 		.item {
 			display: flex;
