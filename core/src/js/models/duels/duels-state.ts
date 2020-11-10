@@ -8,6 +8,7 @@ import { DuelsDeckStat, DuelsPlayerStats } from './duels-player-stats';
 import { DuelsRun } from './duels-run';
 import { DuelsStatTypeFilterType } from './duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels-time-filter.type';
+import { DuelsTopDecksDustFilterType } from './duels-top-decks-dust-filter.type';
 import { DuelsTreasureSortFilterType } from './duels-treasure-sort-filter.type';
 import { DuelsTreasureStatTypeFilterType } from './duels-treasure-stat-type-filter.type';
 
@@ -30,6 +31,7 @@ export class DuelsState {
 	readonly activeTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType;
 	readonly activeTimeFilter: DuelsTimeFilterType;
 	readonly activeTopDecksClassFilter: DuelsClassFilterType;
+	readonly activeTopDecksDustFilter: DuelsTopDecksDustFilterType;
 
 	public static create(base: DuelsState): DuelsState {
 		return Object.assign(new DuelsState(), base);

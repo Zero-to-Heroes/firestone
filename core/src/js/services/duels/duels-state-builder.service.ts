@@ -169,6 +169,7 @@ export class DuelsStateBuilderService {
 			activeTreasureStatTypeFilter: prefs.duelsActiveTreasureStatTypeFilter,
 			activeTimeFilter: prefs.duelsActiveTimeFilter,
 			activeTopDecksClassFilter: prefs.duelsActiveTopDecksClassFilter,
+			activeTopDecksDustFilter: prefs.duelsActiveTopDecksDustFilter,
 		} as DuelsState);
 	}
 
@@ -241,7 +242,6 @@ export class DuelsStateBuilderService {
 		prefs: Preferences,
 	): readonly DuelsGroupedDecks[] {
 		const decks = deckStats
-			.filter(stat => this.filterTopDeck(stat, prefs))
 			.map(stat => {
 				const deck = decode(stat.decklist);
 				const dustCost = this.buildDustCost(deck, collectionState);
@@ -251,18 +251,32 @@ export class DuelsStateBuilderService {
 					dustCost: dustCost,
 				} as DuelsDeckStat;
 			})
+			.filter(stat => this.filterTopDeck(stat, prefs))
 			.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime());
 		console.log('[duels-state-builder] decks', decks?.length);
 		const groupedDecks: readonly DuelsGroupedDecks[] = [...this.groupDecks(decks, prefs)];
 		return groupedDecks;
 	}
 
-	private filterTopDeck(stat: DeckStat, prefs: Preferences): boolean {
+	private filterTopDeck(stat: DuelsDeckStat, prefs: Preferences): boolean {
+		return this.topDeckClassFilter(stat, prefs) && this.topDeckDustFilter(stat, prefs);
+	}
+
+	private topDeckClassFilter(stat: DuelsDeckStat, prefs: Preferences): boolean {
 		switch (prefs.duelsActiveTopDecksClassFilter) {
 			case 'all':
 				return true;
 			default:
 				return stat.playerClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter;
+		}
+	}
+
+	private topDeckDustFilter(stat: DuelsDeckStat, prefs: Preferences): boolean {
+		switch (prefs.duelsActiveTopDecksDustFilter) {
+			case 'all':
+				return true;
+			default:
+				return stat.dustCost <= parseInt(prefs.duelsActiveTopDecksDustFilter);
 		}
 	}
 

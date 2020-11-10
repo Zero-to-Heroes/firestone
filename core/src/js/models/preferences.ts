@@ -2,6 +2,7 @@ import { DuelsClassFilterType } from './duels/duels-class-filter.type';
 import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from './duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from './duels/duels-time-filter.type';
+import { DuelsTopDecksDustFilterType } from './duels/duels-top-decks-dust-filter.type';
 import { DuelsTreasureSortFilterType } from './duels/duels-treasure-sort-filter.type';
 import { DuelsTreasureStatTypeFilterType } from './duels/duels-treasure-stat-type-filter.type';
 import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-time-filter.type';
@@ -153,6 +154,7 @@ export class Preferences {
 	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure';
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
 	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';
+	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

@@ -81,6 +81,7 @@ import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type
 import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-selected-event';
 import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck-run-details-loaded-event';
 import { DuelsTopDecksClassFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
+import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-decks-dust-filter-selected-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
 import { DuelsViewDeckDetailsEvent } from './events/duels/duels-view-deck-details-event';
@@ -159,6 +160,7 @@ import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-s
 import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-filter-selected-processor';
 import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-top-deck-run-details-loaded-processor';
 import { DuelsTopDecksClassFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
+import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/duels-top-decks-dust-filter-selected-processor';
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
 import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
 import { DuelsViewDeckDetailsProcessor } from './processors/duels/duels-view-deck-details-processor';
@@ -628,6 +630,9 @@ export class MainWindowStoreService {
 
 			DuelsTopDecksClassFilterSelectedEvent.eventName(),
 			new DuelsTopDecksClassFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsTopDecksDustFilterSelectedEvent.eventName(),
+			new DuelsTopDecksDustFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsViewDeckDetailsEvent.eventName(),
 			new DuelsViewDeckDetailsProcessor(this.events),
