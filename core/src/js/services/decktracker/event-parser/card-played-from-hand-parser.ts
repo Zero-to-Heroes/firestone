@@ -3,6 +3,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { globalEffectCards } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -68,12 +69,18 @@ export class CardPlayedFromHandParser implements EventParser {
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
+
+		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
+		if (globalEffectCards.includes(card?.cardId)) {
+			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, cardWithZone);
+		}
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			board: newBoard,
 			deck: newDeck,
 			otherZone: newOtherZone,
 			cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
+			globalEffects: newGlobalEffects,
 		} as DeckState);
 		// console.log('[secret-turn-end] updated deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
