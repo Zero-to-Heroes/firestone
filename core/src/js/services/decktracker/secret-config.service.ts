@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/decktracker/metadata';
 
-const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=2';
+const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=3';
 
 @Injectable()
 export class SecretConfigService {
@@ -48,6 +48,9 @@ export class SecretConfigService {
 	private getMode(metadata: Metadata): string {
 		if (metadata.gameType === GameType.GT_ARENA) {
 			return 'arena';
+		}
+		if (metadata.gameType === GameType.GT_PVPDR || metadata.gameType === GameType.GT_PVPDR_PAID) {
+			return 'duels';
 		}
 		// Tavern brawl specific exceptions
 		if (
