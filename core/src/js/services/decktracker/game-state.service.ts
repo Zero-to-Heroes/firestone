@@ -38,6 +38,7 @@ import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { CthunParser } from './event-parser/cthun-parser';
+import { DamageTakenParser } from './event-parser/damage-taken-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
@@ -583,6 +584,7 @@ export class GameStateService {
 			new FatigueParser(),
 			new EntityUpdateParser(this.helper, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards),
+			new DamageTakenParser(),
 		];
 	}
 

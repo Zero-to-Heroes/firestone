@@ -20,12 +20,14 @@ export class NewTurnParser implements EventParser {
 				? gameEvent.additionalData.turnNumber % 2 === 1
 				: gameEvent.additionalData.turnNumber % 2 === 0,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],
+			damageTakenThisTurn: 0,
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
 			isActivePlayer: currentState.opponentDeck.isFirstPlayer
 				? gameEvent.additionalData.turnNumber % 2 === 1
 				: gameEvent.additionalData.turnNumber % 2 === 0,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],
+			damageTakenThisTurn: 0,
 		} as DeckState);
 		// console.log('[debug] new turn', numericTurn, currentTurn, currentState.mulliganOver);
 		return Object.assign(new GameState(), currentState, {
