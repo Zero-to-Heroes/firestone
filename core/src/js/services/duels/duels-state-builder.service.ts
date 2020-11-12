@@ -13,7 +13,13 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DeckDefinition, decode } from 'deckstrings';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
-import { DuelsDeckStatInfo, DuelsDeckSummary, DuelsDeckSummaryForType } from '../../models/duels/duels-personal-deck';
+import {
+	DuelsDeckStatInfo,
+	DuelsDeckSummary,
+	DuelsDeckSummaryForType,
+	HeroPowerDuelsDeckStatInfo,
+	SignatureTreasureDuelsDeckStatInfo,
+} from '../../models/duels/duels-personal-deck';
 import {
 	DuelsDeckStat,
 	DuelsHeroPlayerStat,
@@ -261,8 +267,14 @@ export class DuelsStateBuilderService {
 	}
 
 	private buildWinDistributionForRun(runs: readonly DuelsRun[]): readonly { winNumber: number; value: number }[] {
-		console.warn('TODO: build win distribution for run');
-		return [];
+		const result: { winNumber: number; value: number }[] = [];
+		for (let i = 0; i <= 12; i++) {
+			result.push({
+				winNumber: i,
+				value: runs.filter(run => run.wins === i).length,
+			});
+		}
+		return result;
 	}
 
 	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
@@ -280,45 +292,49 @@ export class DuelsStateBuilderService {
 				)(groupedByDecklist[deckstring]);
 				const decksForTypes: readonly DuelsDeckSummaryForType[] = Object.keys(groupedByType).map(type => {
 					return {
-						type: type, // duels / paid-duels
-						global: this.buildDeckStatInfo(groupedByType[type]),
-						// heroPowerStats:  [{
-						// 	heroPowerCardId: ,
-						// 	totalRunsPlayed: ,
-						// 	totalMatchesPlayed: ,
-						// 	winsDistribution: ,
-						// 	winrate: ,
-						// 	netRating: ,
-						// }],
-						// signatureTreasureStats: [{
-						// 	signatureTreasureCardId: ,
-						// 	totalRunsPlayed: ,
-						// 	totalMatchesPlayed: ,
-						// 	winsDistribution: ,
-						// 	winrate: ,
-						// 	netRating: ,
-						// }]
+						type: type,
+						...this.buildMainPersonalDecktats(groupedByType[type]),
 					} as DuelsDeckSummaryForType;
 				});
+
 				return {
 					initialDeckList: deckstring,
 					heroCardId: groupedByDecklist[deckstring][0].heroCardId,
-					global: this.buildDeckStatInfo(groupedByDecklist[deckstring]),
-					// heroPowerStats: {
-					// 	// Total Runs for each hero power
-					// 	// Total matches
-					// 	// winrate for each hero power
-					// 	// win distribution for each hero power
-					// 	// net rating
-					// },
-					// signatureTreasureStats: {
-					// 	// same
-					// },
+					...this.buildMainPersonalDecktats(groupedByDecklist[deckstring]),
 					deckStatsForTypes: decksForTypes,
 				} as DuelsDeckSummary;
 			});
 		console.log('[duels-state-builder] decks', decks?.length);
 		return decks;
+	}
+
+	private buildMainPersonalDecktats(
+		runs: readonly DuelsRun[],
+	): {
+		readonly global: DuelsDeckStatInfo;
+		readonly heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[];
+		readonly signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[];
+	} {
+		const groupedByHeroPower = groupByFunction((run: DuelsRun) => run.heroPowerCardId)(runs);
+		const heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[] = Object.keys(groupedByHeroPower).map(
+			heroPowerCardId => ({
+				...this.buildDeckStatInfo(groupedByHeroPower[heroPowerCardId]),
+				heroPowerCardId: heroPowerCardId,
+			}),
+		);
+		const groupedBySignatureTreasure = groupByFunction((run: DuelsRun) => run.signatureTreasureCardId)(runs);
+		const signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[] = Object.keys(
+			groupedBySignatureTreasure,
+		).map(signatureTreasureCardId => ({
+			...this.buildDeckStatInfo(groupedBySignatureTreasure[signatureTreasureCardId]),
+			signatureTreasureCardId: signatureTreasureCardId,
+		}));
+
+		return {
+			global: this.buildDeckStatInfo(runs),
+			heroPowerStats: heroPowerStats,
+			signatureTreasureStats: signatureTreasureStats,
+		};
 	}
 
 	private buildTopDeckStats(
