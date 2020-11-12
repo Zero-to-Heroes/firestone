@@ -13,6 +13,7 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DeckDefinition, decode } from 'deckstrings';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
+import { DuelsDeckStatInfo, DuelsDeckSummary, DuelsDeckSummaryForType } from '../../models/duels/duels-personal-deck';
 import {
 	DuelsDeckStat,
 	DuelsHeroPlayerStat,
@@ -87,7 +88,7 @@ export class DuelsStateBuilderService {
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
 		const results: any = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
-		console.log('[duels-state-builder] loaded global stats', results);
+		console.log('[duels-state-builder] loaded global stats');
 		return results?.result;
 	}
 
@@ -104,7 +105,14 @@ export class DuelsStateBuilderService {
 		return [
 			DuelsCategory.create({
 				id: 'duels-runs',
-				name: 'Runs',
+				name: 'My Runs',
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-decks',
+				name: 'My Decks',
 				enabled: true,
 				icon: undefined,
 				categories: null,
@@ -219,23 +227,101 @@ export class DuelsStateBuilderService {
 			periodStats.treasureStats,
 			prefs,
 		);
-		const deckStats: readonly DuelsGroupedDecks[] = this.buildDeckStats(
+		const topDeckStats: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
 			runs,
 			periodStats.deckStats,
 			collectionState,
 			prefs,
 		);
+		const personalDeckStats: readonly DuelsDeckSummary[] = this.buildPersonalDeckStats(runs, prefs);
 		console.log('[duels-state-builder] built duels stats');
 		return {
 			heroStats: heroStats,
 			heroPowerStats: heroPowerStats,
 			signatureTreasureStats: signatureTreasureStats,
 			treasureStats: treasureStats,
-			deckStats: deckStats,
+			deckStats: topDeckStats,
+			personalDeckStats: personalDeckStats,
 		} as DuelsPlayerStats;
 	}
 
-	private buildDeckStats(
+	private buildDeckStatInfo(runs: readonly DuelsRun[]): DuelsDeckStatInfo {
+		const totalMatchesPlayed = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		return {
+			totalRunsPlayed: runs.length,
+			totalMatchesPlayed: totalMatchesPlayed,
+			winrate: (100 * runs.map(run => run.wins).reduce((a, b) => a + b, 0)) / totalMatchesPlayed,
+			averageWinsPerRun: runs.map(run => run.wins).reduce((a, b) => a + b, 0) / runs.length,
+			winsDistribution: this.buildWinDistributionForRun(runs),
+			netRating: runs
+				.filter(run => run.ratingAtEnd != null && run.ratingAtStart != null)
+				.map(run => +run.ratingAtEnd - +run.ratingAtStart)
+				.reduce((a, b) => a + b, 0),
+		} as DuelsDeckStatInfo;
+	}
+
+	private buildWinDistributionForRun(runs: readonly DuelsRun[]): readonly { winNumber: number; value: number }[] {
+		console.warn('TODO: build win distribution for run');
+		return [];
+	}
+
+	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
+		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
+			(run: DuelsRun) => run.initialDeckList,
+		)(runs);
+		const decks: readonly DuelsDeckSummary[] = Object.keys(groupedByDecklist)
+			.filter(deckstring => deckstring)
+			.map(deckstring => {
+				// const allRuns = groupedByDecklist[deckstring].map(run => run.
+				// heroPowerCardIds: [...new Set(...groupedByDecklist[deckstring].map(run => run.heroPowerCardId))],
+
+				const groupedByType: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
+					(run: DuelsRun) => run.type,
+				)(groupedByDecklist[deckstring]);
+				const decksForTypes: readonly DuelsDeckSummaryForType[] = Object.keys(groupedByType).map(type => {
+					return {
+						type: type, // duels / paid-duels
+						global: this.buildDeckStatInfo(groupedByType[type]),
+						// heroPowerStats:  [{
+						// 	heroPowerCardId: ,
+						// 	totalRunsPlayed: ,
+						// 	totalMatchesPlayed: ,
+						// 	winsDistribution: ,
+						// 	winrate: ,
+						// 	netRating: ,
+						// }],
+						// signatureTreasureStats: [{
+						// 	signatureTreasureCardId: ,
+						// 	totalRunsPlayed: ,
+						// 	totalMatchesPlayed: ,
+						// 	winsDistribution: ,
+						// 	winrate: ,
+						// 	netRating: ,
+						// }]
+					} as DuelsDeckSummaryForType;
+				});
+				return {
+					initialDeckList: deckstring,
+					heroCardId: groupedByDecklist[deckstring][0].heroCardId,
+					global: this.buildDeckStatInfo(groupedByDecklist[deckstring]),
+					// heroPowerStats: {
+					// 	// Total Runs for each hero power
+					// 	// Total matches
+					// 	// winrate for each hero power
+					// 	// win distribution for each hero power
+					// 	// net rating
+					// },
+					// signatureTreasureStats: {
+					// 	// same
+					// },
+					deckStatsForTypes: decksForTypes,
+				} as DuelsDeckSummary;
+			});
+		console.log('[duels-state-builder] decks', decks?.length);
+		return decks;
+	}
+
+	private buildTopDeckStats(
 		runs: readonly DuelsRun[],
 		deckStats: readonly DeckStat[],
 		collectionState: BinderState,
@@ -515,6 +601,7 @@ export class DuelsStateBuilderService {
 			return null;
 		}
 		const sortedMatches = matchesForRun.sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
+		const firstMatch = this.getFirstMatchForRun(sortedMatches);
 		const sortedInfo = runInfo.sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
 		const steps: readonly (GameStat | DuelsRunInfo)[] = [
 			...(sortedMatches || []),
@@ -528,12 +615,22 @@ export class DuelsStateBuilderService {
 			heroCardId: this.extractHeroCardId(sortedMatches),
 			heroPowerCardId: this.extractHeroPowerCardId(sortedInfo),
 			signatureTreasureCardId: this.extractSignatureTreasureCardId(sortedInfo),
+			initialDeckList: firstMatch?.playerDecklist,
 			wins: wins,
 			losses: losses,
 			ratingAtStart: this.extractRatingAtStart(sortedMatches),
 			ratingAtEnd: this.extractRatingAtEnd(sortedMatches),
 			steps: steps,
 		} as DuelsRun);
+	}
+
+	private getFirstMatchForRun(sortedMatches: readonly GameStat[]): GameStat {
+		const firstMatch = sortedMatches[0];
+		const [wins, losses] = firstMatch.additionalResult?.split('-')?.map(info => parseInt(info)) ?? [null, null];
+		if (wins !== 0 || losses !== 0) {
+			return null;
+		}
+		return firstMatch;
 	}
 
 	private extractRatingAtEnd(sortedMatches: readonly GameStat[]): number {

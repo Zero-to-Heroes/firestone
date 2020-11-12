@@ -4,6 +4,7 @@ import { GameStat } from '../mainwindow/stats/game-stat';
 export class DuelsRun {
 	readonly id: string;
 	readonly type: 'duels' | 'paid-duels';
+	readonly initialDeckList: string;
 	readonly steps: readonly (GameStat | DuelsRunInfo)[];
 	readonly creationTimestamp: number;
 	readonly heroCardId: string;

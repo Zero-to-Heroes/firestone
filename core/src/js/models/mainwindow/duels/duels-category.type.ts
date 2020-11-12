@@ -3,4 +3,5 @@ export type DuelsCategoryType =
 	| 'duels-stats'
 	| 'duels-treasures'
 	| 'duels-top-decks'
+	| 'duels-decks'
 	| 'duels-deck-details';

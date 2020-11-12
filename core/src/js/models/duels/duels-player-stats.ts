@@ -3,6 +3,7 @@ import { DeckStat } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { GameStat } from '../mainwindow/stats/game-stat';
 import { DuelsGroupedDecks } from './duels-grouped-decks';
+import { DuelsDeckSummary } from './duels-personal-deck';
 
 export interface DuelsPlayerStats {
 	readonly heroStats: readonly DuelsHeroPlayerStat[];
@@ -10,6 +11,7 @@ export interface DuelsPlayerStats {
 	readonly signatureTreasureStats: readonly DuelsHeroPlayerStat[];
 	readonly treasureStats: readonly DuelsTreasureStat[];
 	readonly deckStats: readonly DuelsGroupedDecks[];
+	readonly personalDeckStats: readonly DuelsDeckSummary[];
 }
 
 export interface DuelsHeroPlayerStat {

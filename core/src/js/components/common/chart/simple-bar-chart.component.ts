@@ -227,7 +227,7 @@ export class SimpleBarChartComponent {
 					label: 'Win distribution',
 				},
 			];
-			console.log('chartData', this.chartData);
+			// console.log('chartData', this.chartData);
 			this.doResize();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

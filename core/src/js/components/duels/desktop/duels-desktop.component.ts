@@ -55,6 +55,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[state]="state.duels"
 						>
 						</duels-top-decks>
+						<duels-personal-decks
+							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-decks'"
+							[state]="state.duels"
+						>
+						</duels-personal-decks>
 						<duels-deck-details
 							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-deck-details'"
 							[state]="state.duels"

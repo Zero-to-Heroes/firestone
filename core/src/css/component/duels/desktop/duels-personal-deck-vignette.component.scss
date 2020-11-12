@@ -1,0 +1,101 @@
+:host() {
+	position: relative;
+}
+
+.duels-personal-deck-vignette {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.08);
+	position: relative;
+	padding: 10px;
+	padding-bottom: 12px;
+
+	.deck-name {
+		width: 100%;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		color: var(--default-title-color);
+		font-size: 16px;
+		line-height: 22px;
+		text-align: center;
+		position: relative;
+		margin: auto;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-bottom: 10px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.deck-image {
+		width: 80px;
+		position: relative;
+		flex-grow: 0;
+		margin-bottom: 10px;
+		left: 7px;
+
+		.skin {
+			width: 100%;
+			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 75% 20%, 85% 56%, 85% 100%);
+		}
+		.frame {
+			position: absolute;
+			top: -8%;
+			left: -16%;
+			width: 120%;
+		}
+	}
+
+	.stats {
+		display: flex;
+		flex-direction: column;
+		font-size: 12px;
+		align-items: center;
+		width: 100%;
+
+		.item {
+			display: flex;
+			align-items: center;
+			margin-top: 3px;
+
+			.value {
+				font-weight: bold;
+				color: #ce73b4;
+				margin-right: 5px;
+			}
+		}
+	}
+
+	.copy-deck-code,
+	.view-details {
+		padding: 5px 10px;
+		width: 100%;
+		display: flex;
+		align-self: center;
+		align-items: center;
+		background: var(--default-text-color);
+		color: var(--color-7);
+		margin-top: 5px;
+
+		span {
+			width: 100%;
+		}
+
+		div {
+			display: flex;
+		}
+
+		&:hover {
+			background: #ffb948;
+			border: none;
+
+			span {
+				color: #2f0d0d;
+			}
+		}
+	}
+}
