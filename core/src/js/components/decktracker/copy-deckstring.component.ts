@@ -18,7 +18,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
 			</svg>
 		</div>
-		<div class="message" *ngIf="!showTooltip || title">{{ title || copyText }}</div>
+		<div class="message" *ngIf="!showTooltip || title">{{ copyText || title }}</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,14 +38,14 @@ export class CopyDesckstringComponent {
 			return;
 		}
 		this.ow.placeOnClipboard(this.deckstring);
-		this.inputCopy = this.copyText;
+		this.inputCopy = this.title || this.copyText;
 		this.copyText = 'Copied!';
 		console.log('copied deckstring to clipboard', this.deckstring);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		setTimeout(() => {
-			this.copyText = this.inputCopy;
+			this.copyText = this.title ? null : this.inputCopy;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

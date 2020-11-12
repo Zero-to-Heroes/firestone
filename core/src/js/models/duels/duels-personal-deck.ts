@@ -1,5 +1,6 @@
 export interface DuelsDeckSummary {
 	readonly initialDeckList: string;
+	readonly playerClass: string;
 	readonly heroCardId: string;
 	readonly global: DuelsDeckStatInfo;
 	readonly deckStatsForTypes: readonly DuelsDeckSummaryForType[];
@@ -8,6 +9,8 @@ export interface DuelsDeckSummary {
 export interface DuelsDeckSummaryForType {
 	readonly type: 'duels' | 'paid-duels';
 	readonly global: DuelsDeckStatInfo;
+	readonly heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[];
+	readonly signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[];
 }
 
 export interface DuelsDeckStatInfo {
@@ -17,4 +20,12 @@ export interface DuelsDeckStatInfo {
 	readonly winsDistribution: readonly { winNumber: number; value: number }[];
 	readonly winrate: number;
 	readonly netRating: number;
+}
+
+export interface HeroPowerDuelsDeckStatInfo extends DuelsDeckStatInfo {
+	readonly heroPowerCardId: string;
+}
+
+export interface SignatureTreasureDuelsDeckStatInfo extends DuelsDeckStatInfo {
+	readonly signatureTreasureCardId: string;
 }

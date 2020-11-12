@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
+import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { capitalizeEachWord } from '../../../services/utils';
@@ -37,8 +38,11 @@ import { capitalizeEachWord } from '../../../services/utils';
 					<span class="value">{{ avgWins.toFixed(1) }}</span> wins / run
 				</div>
 			</div>
-			<button class="view-details" (click)="copyDeckcode()">
+			<!-- <button class="copy-deck-code" (click)="copyDeckcode()">
 				<span>{{ copyText }}</span>
+			</button> -->
+			<button class="view-details" (click)="viewDetails()">
+				<span>View Details</span>
 			</button>
 		</div>
 	`,
@@ -93,5 +97,9 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		}, 2000);
+	}
+
+	viewDetails() {
+		this.stateUpdater.next(new DuelsViewPersonalDeckDetailsEvent(this.deckstring));
 	}
 }

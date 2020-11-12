@@ -50,16 +50,22 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[state]="state.duels"
 						>
 						</duels-treasure-stats>
+						<duels-personal-decks
+							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-personal-decks'"
+							[state]="state.duels"
+						>
+						</duels-personal-decks>
+						<duels-personal-deck-details
+							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-personal-deck-details'"
+							[state]="state.duels"
+							[navigation]="navigation.navigationDuels"
+						>
+						</duels-personal-deck-details>
 						<duels-top-decks
 							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-top-decks'"
 							[state]="state.duels"
 						>
 						</duels-top-decks>
-						<duels-personal-decks
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-decks'"
-							[state]="state.duels"
-						>
-						</duels-personal-decks>
 						<duels-deck-details
 							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-deck-details'"
 							[state]="state.duels"

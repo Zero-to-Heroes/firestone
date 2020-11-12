@@ -85,6 +85,7 @@ import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-d
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
 import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
 import { DuelsViewDeckDetailsEvent } from './events/duels/duels-view-deck-details-event';
+import { DuelsViewPersonalDeckDetailsEvent } from './events/duels/duels-view-personal-deck-details-event';
 import { DungeonLootInfoUpdatedEvent } from './events/duels/dungeon-loot-info-updated-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
@@ -164,6 +165,7 @@ import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/due
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
 import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
 import { DuelsViewDeckDetailsProcessor } from './processors/duels/duels-view-deck-details-processor';
+import { DuelsViewPersonalDeckDetailsProcessor } from './processors/duels/duels-view-personal-deck-details-processor';
 import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot-info-updated-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
@@ -636,6 +638,9 @@ export class MainWindowStoreService {
 
 			DuelsViewDeckDetailsEvent.eventName(),
 			new DuelsViewDeckDetailsProcessor(this.events),
+
+			DuelsViewPersonalDeckDetailsEvent.eventName(),
+			new DuelsViewPersonalDeckDetailsProcessor(),
 
 			DuelsTopDeckRunDetailsLoadedEvent.eventName(),
 			new DuelsTopDeckRunDetailsLoadedProcessor(),

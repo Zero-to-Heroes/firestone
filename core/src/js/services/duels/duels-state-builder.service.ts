@@ -117,7 +117,7 @@ export class DuelsStateBuilderService {
 				categories: null,
 			} as DuelsCategory),
 			DuelsCategory.create({
-				id: 'duels-decks',
+				id: 'duels-personal-decks',
 				name: 'My Decks',
 				enabled: true,
 				icon: undefined,
@@ -296,10 +296,11 @@ export class DuelsStateBuilderService {
 						...this.buildMainPersonalDecktats(groupedByType[type]),
 					} as DuelsDeckSummaryForType;
 				});
-
+				const heroCardId = groupedByDecklist[deckstring][0].heroCardId;
 				return {
 					initialDeckList: deckstring,
-					heroCardId: groupedByDecklist[deckstring][0].heroCardId,
+					heroCardId: heroCardId,
+					playerClass: this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase(),
 					...this.buildMainPersonalDecktats(groupedByDecklist[deckstring]),
 					deckStatsForTypes: decksForTypes,
 				} as DuelsDeckSummary;

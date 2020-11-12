@@ -92,6 +92,7 @@ import {
 	DuelsHeroStatVignetteComponent,
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
+import { DuelsPersonalDeckDetailsComponent } from '../../components/duels/desktop/duels-personal-deck-details.component';
 import { DuelsPersonalDecksVignetteComponent } from '../../components/duels/desktop/duels-personal-deck-vignette.component';
 import { DuelsPersonalDecksComponent } from '../../components/duels/desktop/duels-personal-decks.component';
 import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.component';
@@ -265,6 +266,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsDeckDetailsComponent,
 		DuelsPersonalDecksComponent,
 		DuelsPersonalDecksVignetteComponent,
+		DuelsPersonalDeckDetailsComponent,
 
 		FtueComponent,
 	],
