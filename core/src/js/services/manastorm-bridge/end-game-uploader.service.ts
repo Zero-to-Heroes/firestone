@@ -224,7 +224,7 @@ export class EndGameUploaderService {
 		this.gameParserService.extractDuration(game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
-		if (!game.currentDuelsRunId && game.gameMode === 'duels') {
+		if (!game.currentDuelsRunId && (game.gameMode === 'duels' || game.gameMode === 'paid-duels')) {
 			console.warn(
 				'[manastorm-bridge]',
 				currentReviewId,

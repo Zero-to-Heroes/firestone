@@ -83,7 +83,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DuelsRunComponent implements AfterViewInit {
 	@Input() set run(value: DuelsRun) {
 		this.gameModeImage = 'assets/images/deck/ranks/duels.png';
-		this.gameModeTooltip = value.type === 'duels' ? 'Duels' : 'Paid Duels';
+		this.gameModeTooltip = value.type === 'duels' ? 'Duels' : 'Heroic Duels';
 		this.wins = value.wins;
 		this.losses = value.losses;
 		this.rating = value.ratingAtStart;

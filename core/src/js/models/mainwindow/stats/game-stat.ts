@@ -96,7 +96,7 @@ export class GameStat {
 			rankIconTooltip = 'Duels';
 		} else if (this.gameMode === 'paid-duels') {
 			rankIcon = `duels`;
-			rankIconTooltip = 'Paid Duels';
+			rankIconTooltip = 'Heroic Duels';
 		} else if (this.gameMode === 'arena') {
 			// TODO: no-rank image
 			if (!this.playerRank) {
