@@ -3,6 +3,7 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
 import { DuelsClassFilterType } from './duels-class-filter.type';
+import { DuelsGameModeFilterType } from './duels-game-mode-filter.type';
 import { DuelsHeroSortFilterType } from './duels-hero-sort-filter.type';
 import { DuelsDeckStat, DuelsPlayerStats } from './duels-player-stats';
 import { DuelsRun } from './duels-run';
@@ -30,6 +31,7 @@ export class DuelsState {
 	readonly activeTreasureSortFilter: DuelsTreasureSortFilterType;
 	readonly activeTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType;
 	readonly activeTimeFilter: DuelsTimeFilterType;
+	readonly activeGameModeFilter: DuelsGameModeFilterType;
 	readonly activeTopDecksClassFilter: DuelsClassFilterType;
 	readonly activeTopDecksDustFilter: DuelsTopDecksDustFilterType;
 

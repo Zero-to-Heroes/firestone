@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsDropdownOption } from './duels-dropdown-option';
+import { DuelsGameModeSortFilterOption } from './duels-game-mode-sort-filter-option';
 import { DuelsHeroFilterOption } from './duels-hero-filter-option';
 import { DuelsStatTypeOption } from './duels-stat-type-option';
 import { DuelsTimeSortFilterOption } from './duels-time-sort-filter-option';
@@ -54,10 +55,11 @@ export class DuelsFiltersComponent {
 			return;
 		}
 		this.options = [
+			{ class: 'game-mode-sort-filter', option: new DuelsGameModeSortFilterOption() } as InternalOption,
 			{ class: 'hero-sort-filter', option: new DuelsHeroFilterOption() } as InternalOption,
+			{ class: 'treasure-sort-filter', option: new DuelsTreasureSortOption() } as InternalOption,
 			{ class: 'stat-type-filter', option: new DuelsStatTypeOption() } as InternalOption,
 			{ class: 'treasure-passive-type-filter', option: new DuelsTreasurePassiveTypeOption() } as InternalOption,
-			{ class: 'treasure-sort-filter', option: new DuelsTreasureSortOption() } as InternalOption,
 			{ class: 'time-sort-filter', option: new DuelsTimeSortFilterOption() } as InternalOption,
 			{ class: 'top-decks-class-filter', option: new DuelsTopDecksClassFilterOption() } as InternalOption,
 			{ class: 'top-decks-dust-filter', option: new DuelsTopDecksDustFilterOption() } as InternalOption,

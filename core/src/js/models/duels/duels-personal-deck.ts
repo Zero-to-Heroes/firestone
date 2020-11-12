@@ -1,9 +1,12 @@
+import { DuelsRun } from './duels-run';
+
 export interface DuelsDeckSummary {
 	readonly initialDeckList: string;
 	readonly playerClass: string;
 	readonly heroCardId: string;
 	readonly global: DuelsDeckStatInfo;
 	readonly deckStatsForTypes: readonly DuelsDeckSummaryForType[];
+	readonly runs: readonly DuelsRun[];
 }
 
 export interface DuelsDeckSummaryForType {

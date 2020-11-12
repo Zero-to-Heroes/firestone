@@ -4,6 +4,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import {
 	DeckStat,
 	DuelsGlobalStats,
+	DuelsGlobalStatsForGameMode,
 	HeroPowerStat,
 	HeroStat,
 	SignatureTreasureStat,
@@ -44,8 +45,7 @@ import { groupByFunction } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-// const DUELS_GLOBAL_STATS_URL = 'https://3cv8xm5w6k.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=9';
+const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=10';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
@@ -182,6 +182,7 @@ export class DuelsStateBuilderService {
 			activeTreasureSortFilter: prefs.duelsActiveTreasureSortFilter,
 			activeTreasureStatTypeFilter: prefs.duelsActiveTreasureStatTypeFilter,
 			activeTimeFilter: prefs.duelsActiveTimeFilter,
+			activeGameModeFilter: prefs.duelsActiveGameModeFilter,
 			activeTopDecksClassFilter: prefs.duelsActiveTopDecksClassFilter,
 			activeTopDecksDustFilter: prefs.duelsActiveTopDecksDustFilter,
 		} as DuelsState);
@@ -196,17 +197,20 @@ export class DuelsStateBuilderService {
 		if (!globalStats) {
 			return null;
 		}
-		const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		// const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		// Fallback until everything is properly deployed
+		const gameModeStats = this.getGameModeStats(globalStats, prefs) || globalStats;
 		const periodStats =
 			prefs.duelsActiveTimeFilter === 'all-time'
-				? globalStats.statsForFullPeriod
-				: globalStats.statsSinceLastPatch;
+				? gameModeStats.statsForFullPeriod
+				: gameModeStats.statsSinceLastPatch;
 		if (!periodStats) {
 			console.error(
 				'[duels-state-builder] could not build period stats',
 				prefs.duelsActiveTimeFilter,
-				globalStats.statsForFullPeriod,
-				globalStats.statsSinceLastPatch,
+				gameModeStats,
+				gameModeStats.statsForFullPeriod,
+				gameModeStats.statsSinceLastPatch,
 			);
 			return null;
 		}
@@ -249,6 +253,18 @@ export class DuelsStateBuilderService {
 			deckStats: topDeckStats,
 			personalDeckStats: personalDeckStats,
 		} as DuelsPlayerStats;
+	}
+
+	private getGameModeStats(globalStats: DuelsGlobalStats, prefs: Preferences): DuelsGlobalStatsForGameMode {
+		switch (prefs.duelsActiveGameModeFilter) {
+			case 'duels':
+				return globalStats.duels;
+			case 'paid-duels':
+				return globalStats.paidDuels;
+			case 'all':
+			default:
+				return globalStats.both;
+		}
 	}
 
 	private buildDeckStatInfo(runs: readonly DuelsRun[]): DuelsDeckStatInfo {
@@ -303,6 +319,7 @@ export class DuelsStateBuilderService {
 					playerClass: this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase(),
 					...this.buildMainPersonalDecktats(groupedByDecklist[deckstring]),
 					deckStatsForTypes: decksForTypes,
+					runs: runs,
 				} as DuelsDeckSummary;
 			});
 		console.log('[duels-state-builder] decks', decks?.length);

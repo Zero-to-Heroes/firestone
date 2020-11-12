@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { DuelsClassFilterType } from '../models/duels/duels-class-filter.type';
+import { DuelsGameModeFilterType } from '../models/duels/duels-game-mode-filter.type';
 import { DuelsHeroSortFilterType } from '../models/duels/duels-hero-sort-filter.type';
 import { DuelsStatTypeFilterType } from '../models/duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from '../models/duels/duels-time-filter.type';
@@ -231,6 +232,12 @@ export class PreferencesService {
 	public async updateDuelsStatTypeFilter(value: DuelsStatTypeFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActiveStatTypeFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateDuelsGameModeFilter(value: DuelsGameModeFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsActiveGameModeFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

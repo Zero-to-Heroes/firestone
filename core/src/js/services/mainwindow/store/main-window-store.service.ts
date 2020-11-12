@@ -75,6 +75,7 @@ import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summa
 import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
+import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
 import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
@@ -155,6 +156,7 @@ import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-de
 import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
+import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
 import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
@@ -623,6 +625,9 @@ export class MainWindowStoreService {
 
 			DuelsTreasureSortFilterSelectedEvent.eventName(),
 			new DuelsTreasureSortFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsGameModeFilterSelectedEvent.eventName(),
+			new DuelsGameModeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsTimeFilterSelectedEvent.eventName(),
 			new DuelsTimeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
