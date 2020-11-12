@@ -29,7 +29,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 		const deck = currentState?.duels?.playerStats?.personalDeckStats?.find(
 			deck => deck.initialDeckList === deckstring,
 		);
-		console.log('found deck', deck, currentState);
+		// console.log('found deck', deck, currentState);
 		if (!deck) {
 			return null;
 		}
