@@ -15,7 +15,7 @@ export const classes = [
 ];
 
 export const formatClass = (playerClass: string): string => {
-	let update = playerClass;
+	let update = playerClass?.toLowerCase();
 	if (playerClass === 'demonhunter') {
 		update = 'demon hunter';
 	}
@@ -26,6 +26,7 @@ export const globalEffectCards = [
 	CardIds.Collectible.Druid.Embiggen,
 	CardIds.Collectible.Druid.SurvivalOfTheFittest,
 	CardIds.Collectible.Hunter.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
+	CardIds.Collectible.Mage.DeckOfLunacy,
 	CardIds.Collectible.Mage.LunasPocketGalaxy,
 	CardIds.Collectible.Mage.IncantersFlow,
 	// CardIds.Collectible.Neutral.BakuTheMooneater,
@@ -36,9 +37,12 @@ export const globalEffectCards = [
 	CardIds.Collectible.Neutral.WyrmrestPurifier,
 	CardIds.Collectible.Paladin.AldorAttendant,
 	CardIds.Collectible.Paladin.AldorTruthseeker,
+	CardIds.Collectible.Paladin.LothraxionTheRedeemed,
 	CardIds.Collectible.Priest.ArchbishopBenedictus,
 	CardIds.Collectible.Priest.LadyInWhite,
+	CardIds.Collectible.Shaman.GrandTotemEysor, // TODO: count the number of times the effect triggered, not the card played
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
+	CardIds.Collectible.Warlock.DeckOfChaos,
 	CardIds.Collectible.Warlock.RenounceDarkness,
 	CardIds.NonCollectible.Neutral.ReductomaraToken,
 	CardIds.NonCollectible.Neutral.UpgradedPackMule,

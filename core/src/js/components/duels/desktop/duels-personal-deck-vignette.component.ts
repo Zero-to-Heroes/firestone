@@ -66,7 +66,7 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	totalRuns: number;
 	avgWins: number;
 
-	copyText: string = 'Copy deck code';
+	copyText = 'Copy deck code';
 
 	private deckstring: string;
 	private inputCopy: string;

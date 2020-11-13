@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "6.1.14",
+	"version": "6.2.0",
 	"scripts": {
 		"lint": "node --max_old_space_size=8000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=8000 ./node_modules/jest/bin/jest.js --colors",
@@ -31,7 +31,7 @@
 		"@firestone-hs/coliseum-components": "0.0.8",
 		"@firestone-hs/compute-bgs-run-stats": "^1.0.13",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.66",
-		"@firestone-hs/reference-data": "^0.1.53",
+		"@firestone-hs/reference-data": "^0.1.54",
 		"@firestone-hs/replay-parser": "^1.1.35",
 		"@firestone-hs/retrieve-duels-global-stats": "^1.0.11",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.1",

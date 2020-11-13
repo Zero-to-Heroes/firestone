@@ -24,8 +24,9 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.Collectible.Mage.FlameWard,
 		CardIds.Collectible.Paladin.AutodefenseMatrix,
 		CardIds.Collectible.Paladin.NobleSacrifice,
-		CardIds.Collectible.Rogue.SuddenBetrayal,
 		CardIds.Collectible.Rogue.Bamboozle,
+		CardIds.Collectible.Rogue.ShadowClone,
+		CardIds.Collectible.Rogue.SuddenBetrayal,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -123,9 +124,9 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrifice);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 		}
 		if (!isAttackerMinion) {
-			// console.log('ruling out sudden betrayal, no attacker minion', isAttackerMinion);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.FreezingTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
@@ -139,7 +140,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Bamboozle);
 			if (enemyBoard.length === 1) {
-				// console.log('ruling out sudden betrayal', enemyBoard);
 				secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 			}
 		}
@@ -148,10 +148,11 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.Misdirection);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.ExplosiveTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.WanderingMonster);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.IceBarrier);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
 			if (isDefenderDivineShield) {
 				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
 			}

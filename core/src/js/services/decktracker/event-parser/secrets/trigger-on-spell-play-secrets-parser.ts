@@ -16,6 +16,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Mage.Spellbender,
 		CardIds.Collectible.Mage.ManaBind,
 		CardIds.Collectible.Paladin.NeverSurrender,
+		CardIds.Collectible.Paladin.OhMyYogg,
 		CardIds.Collectible.Rogue.DirtyTricks,
 	];
 

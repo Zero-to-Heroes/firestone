@@ -8,7 +8,10 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnEndSecretsParser implements EventParser {
-	private secretsTriggeringOnTurnEnd = [CardIds.Collectible.Rogue.Plagiarize];
+	private secretsTriggeringOnTurnEnd = [
+		CardIds.Collectible.Mage.RiggedFaireGame,
+		CardIds.Collectible.Rogue.Plagiarize,
+	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -44,6 +47,11 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		// console.log('[secret-turn-end] cards played this turn', playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn);
 		if (!hasOpponentPlayedCards) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Plagiarize);
+		}
+
+		const hasHeroTakenDamage = deckWithSecretToCheck.damageTakenThisTurn > 0;
+		if (hasHeroTakenDamage) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.RiggedFaireGame);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnEnd.filter(

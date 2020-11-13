@@ -184,7 +184,7 @@ export class SimpleBarChartComponent {
 	}
 
 	@Input() id: string;
-	@Input() tooltipTitle: string = 'Title';
+	@Input() tooltipTitle = 'Title';
 
 	private _data: SimpleBarChartData;
 
