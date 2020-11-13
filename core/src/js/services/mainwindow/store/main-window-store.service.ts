@@ -389,7 +389,7 @@ export class MainWindowStoreService {
 		);
 		return Map.of(
 			StoreInitEvent.eventName(),
-			new StoreInitProcessor(this.ow, this.userService, this.prefs),
+			new StoreInitProcessor(this.events, this.prefs),
 
 			NavigationBackEvent.eventName(),
 			new NavigationBackProcessor(),

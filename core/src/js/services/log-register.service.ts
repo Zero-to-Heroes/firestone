@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Events } from '../services/events.service';
 import { LogParserService } from './collection/log-parser.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
-import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.service';
 import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
 import { OverwolfService } from './overwolf.service';
@@ -18,15 +17,19 @@ export class LogRegisterService {
 	constructor(
 		private events: Events,
 		private decksService: DeckParserService,
-		private dungeonLootService: DungeonLootParserService,
 		private collectionLogParserService: LogParserService,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
 	) {
-		this.init();
+		// Only init the log listener once the store has been initialized. This aims at preventing
+		// the app from starting to parse the game logs while in an uninitialized state, which in
+		// turn can lead to some weird behavior (previous match still updating while the current match
+		// is being played, and some events being delayed because not all the states have been initialized)
+		// this.init();
+		this.events.on(Events.STORE_READY).subscribe(() => this.init());
 	}
 
-	init(): void {
+	private init(): void {
 		console.log('[log-register] initiating log registerservice');
 		new LogListenerService(this.ow)
 			.configure('Achievements.log', data => this.collectionLogParserService.receiveLogLine(data))

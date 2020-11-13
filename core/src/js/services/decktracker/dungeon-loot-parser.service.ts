@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
@@ -8,7 +8,7 @@ import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/dungeon-loot-info-updated-event';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -43,6 +43,8 @@ export class DungeonLootParserService {
 	private duelsInfo: DuelsInfo;
 	private currentGameType: GameType;
 
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
@@ -51,8 +53,8 @@ export class DungeonLootParserService {
 		private events: Events,
 		private prefs: PreferencesService,
 		private api: ApiRunner,
-		private store: MainWindowStoreService,
 	) {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			// Only reset from a single place (the end-game-uploader)
 			// if (event.type === GameEvent.GAME_END) {
@@ -219,7 +221,7 @@ export class DungeonLootParserService {
 		};
 		this.log('sending loot into', input);
 		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
-		this.store.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
+		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
 	}
 
 	private updateCurrentDuelsInfo(duelsInfo: DuelsInfo) {

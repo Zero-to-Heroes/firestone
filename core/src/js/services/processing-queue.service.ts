@@ -10,6 +10,21 @@ export class ProcessingQueue<T> {
 		private readonly queueName?: string,
 	) {}
 
+	public clear() {
+		this.isProcessing = true;
+		this.eventQueue = [];
+		this.pendingQueue = [];
+		if (this.interval) {
+			clearInterval(this.interval);
+			this.interval = undefined;
+		}
+		this.isProcessing = false;
+	}
+
+	public eventsPendingCount(): number {
+		return this.eventQueue.length + this.pendingQueue.length;
+	}
+
 	public async enqueue(event: T) {
 		// What happens if this happens while we're waiting for the processingFunction
 		// to complete? As it's async

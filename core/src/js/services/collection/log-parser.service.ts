@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Card } from '../../models/card';
 import { Events } from '../events.service';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../overwolf.service';
 import { ProcessingQueue } from '../processing-queue.service';
 
 declare let amplitude: any;
@@ -30,7 +31,11 @@ export class LogParserService {
 		'log-parser',
 	);
 
-	constructor(private cards: AllCardsService, private events: Events, private store: MainWindowStoreService) {}
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private cards: AllCardsService, private events: Events, private ow: OverwolfService) {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
 
 	private async processQueue(eventQueue: readonly any[][]): Promise<readonly any[][]> {
 		if (eventQueue.length > 0 && this.isTooSoon(eventQueue[eventQueue.length - 1])) {
@@ -64,7 +69,7 @@ export class LogParserService {
 			console.log('[pack-parser] notifying new pack opening', setId, packCards);
 			amplitude.getInstance().logEvent('new-pack', { 'set': setId });
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
-			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
+			this.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
 		} else {
 			console.log('[pack-parser] received cards outside of pack', cards, toProcess);
 		}
@@ -110,7 +115,7 @@ export class LogParserService {
 		} else {
 			this.displayDustMessage(cardInCollection, type);
 		}
-		this.store.stateUpdater.next(new NewCardEvent(cardInCollection, type));
+		this.stateUpdater.next(new NewCardEvent(cardInCollection, type));
 	}
 
 	private toPackCards(toProcess: string[]): any[] {
