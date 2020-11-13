@@ -433,25 +433,26 @@ export class DeckParserService {
 		if (cardId !== CardIds.Collectible.Neutral.TransferStudent || !matchInfo) {
 			return cardId;
 		}
+
 		switch (matchInfo.boardId) {
 			case Board.STORMWIND:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken1;
 			case Board.ORGRIMMAR:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken12;
 			case Board.PANDARIA:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken19;
-			case Board.STRANGLETHORN:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken20;
-			case Board.NAXXRAMUS:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken21;
-			case Board.GOBLINS_VS_GNOMES:
+			case Board.STRANGLETHORN:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken22;
-			case Board.BLACKROCK_MOUNTAIN:
+			case Board.NAXXRAMUS:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken23;
-			case Board.THE_GRAND_TOURNAMENT:
+			case Board.GOBLINS_VS_GNOMES:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken24;
-			case Board.THE_MUSEUM:
+			case Board.BLACKROCK_MOUNTAIN:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken25;
+			case Board.THE_GRAND_TOURNAMENT:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken26;
+			case Board.THE_MUSEUM:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken27;
 			case Board.EXCAVATION_SITE:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken17;
 			case Board.WHISPERS_OF_THE_OLD_GODS:
@@ -484,6 +485,8 @@ export class DeckParserService {
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken15;
 			case Board.SCHOLOMANCE:
 				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken16;
+			case Board.DARKMOON_FAIRE:
+				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken19;
 			default:
 				return cardId;
 		}
