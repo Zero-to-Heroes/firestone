@@ -205,13 +205,13 @@ export class DeckManipulationHelper {
 							cardName: card && card.name,
 						} as DeckCard);
 					} else {
-						console.warn(
-							'could not find card in zone',
-							cardId,
-							entityId,
-							zone.map(card => card.entityId),
-							zone.map(card => card.cardId),
-						);
+						// console.warn(
+						// 	'could not find card in zone',
+						// 	cardId,
+						// 	entityId,
+						// 	zone.map(card => card.entityId),
+						// 	zone.map(card => card.cardId),
+						// );
 					}
 				} else if (cardId == null) {
 					// We explicitely said we wanted a card identified by an entityId, so we don't fallback

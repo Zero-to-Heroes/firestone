@@ -60,7 +60,7 @@ export class CardBackToDeckParser implements EventParser {
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
 			return this.helper.findCardInZone(deckState.otherZone, cardId, entityId);
 		}
-		console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
+		// console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
 		const dbCard = this.allCards.getCard(cardId) || ({} as ReferenceCard);
 		return DeckCard.create({
 			cardId: cardId,

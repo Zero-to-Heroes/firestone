@@ -121,9 +121,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		// 	console.log('[debug] game event', gameEvent.Type, gameEvent);
-		// }
+		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		//	console.log('[debug] game event', gameEvent.Type, gameEvent);
+		//}
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -871,7 +871,7 @@ export class GameEvents {
 				);
 				break;
 			case 'WINNER':
-				console.log(gameEvent.Type + ' event', gameEvent.Value.Winner);
+				console.log(gameEvent.Type + ' event', { ...gameEvent.Value.Winner, Tags: null });
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.WINNER,
@@ -920,6 +920,21 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string) {
+		// In case the game overrides the info during the process, we stop everything and start from scratch
+		if (data === 'truncated') {
+			console.log(
+				'[game-events] HS log file truncated, clearing queue',
+				this.existingLogLines?.length,
+				this.processingQueue.eventsPendingCount(),
+			);
+			this.spectating = false;
+			if (this.triggerTimeout) {
+				clearTimeout(this.triggerTimeout);
+			}
+			this.existingLogLines = [];
+			this.processingQueue.clear();
+			return;
+		}
 		// console.log('received log line', data);
 		if (data.indexOf('Begin Spectating') !== -1) {
 			console.log('begin spectating', data);

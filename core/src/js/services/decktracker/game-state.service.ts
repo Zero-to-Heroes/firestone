@@ -377,7 +377,15 @@ export class GameStateService {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
 		// console.log('\tready to emit event');
-		// console.log('[game-state] will emit event', gameEvent.type, this.state);
+		// if (gameEvent.controllerId === 1) {
+		// 	console.log(
+		// 		'[game-state] will emit event',
+		// 		gameEvent.type,
+		// 		this.state.playerDeck.hand,
+		// 		this.state,
+		// 		gameEvent,
+		// 	);
+		// }
 		this.updateOverlays(
 			this.state,
 			false,
