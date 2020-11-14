@@ -154,6 +154,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.SwattingInsectsTavernBrawl;
 		case CardIds.NonCollectible.Neutral.ZephrysTheGreatTavernBrawl:
 			return CardIds.NonCollectible.Neutral.ThreeWishesTavernBrawl;
+		case CardIds.NonCollectible.Neutral.SilasDarkmoonTavernBrawl:
+			return CardIds.NonCollectible.Neutral.ComeOneComeAllTavernBrawl;
 		case '':
 			return null; // new heroes
 	}
