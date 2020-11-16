@@ -12,23 +12,101 @@
 	padding: 10px;
 	padding-bottom: 12px;
 
-	.deck-name {
+	.copy-deck-code,
+	.view-details,
+	.rename-button {
+		padding: 5px 10px;
 		width: 100%;
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		color: var(--default-title-color);
-		font-size: 16px;
-		line-height: 22px;
-		text-align: center;
-		position: relative;
-		margin: auto;
-		flex-grow: 0;
-		flex-shrink: 0;
+		display: flex;
+		align-self: center;
+		align-items: center;
+		background: var(--default-text-color);
+		color: var(--color-7);
+		margin-top: 5px;
+
+		span {
+			width: 100%;
+		}
+
+		div {
+			display: flex;
+		}
+
+		&:hover {
+			background: #ffb948;
+			border: none;
+
+			span {
+				color: #2f0d0d;
+			}
+		}
+	}
+
+	.deck-name-container {
+		display: flex;
+		max-width: 100%;
+		height: 25px;
 		margin-bottom: 10px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+
+		// .rename-deck-icon {
+		// 	width: 25px;
+		// 	height: 25px;
+		// 	flex-shrink: 0;
+		// }
+
+		.deck-name {
+			width: 100%;
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			color: var(--default-title-color);
+			font-size: 16px;
+			line-height: 22px;
+			text-align: center;
+			position: relative;
+			margin: auto;
+			flex-grow: 0;
+			flex-shrink: 1;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			cursor: text;
+		}
+	}
+
+	.deck-rename-container {
+		display: flex;
+		max-width: 100%;
+		height: 25px;
+		margin-bottom: 10px;
+
+		.name-input {
+			display: block;
+			background: transparent;
+			border: 1px solid var(--color-3);
+			padding-left: 10px;
+			padding-right: 10px;
+			outline: none;
+			width: 100%;
+			cursor: text;
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: 400;
+			line-height: normal;
+			font-size: 12px;
+			color: var(--color-1);
+		}
+
+		.rename-button {
+			padding: 0;
+			height: 25px;
+			width: 30px;
+			display: flex;
+			margin-top: 0;
+			margin-left: 5px;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 
 	.deck-image {
@@ -66,35 +144,6 @@
 				font-weight: bold;
 				color: #ce73b4;
 				margin-right: 5px;
-			}
-		}
-	}
-
-	.copy-deck-code,
-	.view-details {
-		padding: 5px 10px;
-		width: 100%;
-		display: flex;
-		align-self: center;
-		align-items: center;
-		background: var(--default-text-color);
-		color: var(--color-7);
-		margin-top: 5px;
-
-		span {
-			width: 100%;
-		}
-
-		div {
-			display: flex;
-		}
-
-		&:hover {
-			background: #ffb948;
-			border: none;
-
-			span {
-				color: #2f0d0d;
 			}
 		}
 	}

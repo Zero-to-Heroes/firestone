@@ -77,6 +77,7 @@ import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-eve
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
 import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
+import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
 import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
 import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-selected-event';
@@ -158,6 +159,7 @@ import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-v
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
 import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
+import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
 import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
 import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-filter-selected-processor';
@@ -640,6 +642,9 @@ export class MainWindowStoreService {
 
 			DuelsTopDecksDustFilterSelectedEvent.eventName(),
 			new DuelsTopDecksDustFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsPersonalDeckRenameEvent.eventName(),
+			new DuelsPersonalDeckRenameProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsViewDeckDetailsEvent.eventName(),
 			new DuelsViewDeckDetailsProcessor(this.events),

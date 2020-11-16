@@ -157,6 +157,7 @@ export class Preferences {
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
 	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
+	readonly duelsPersonalDeckNames: { [deckstring: string]: string } = {};
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

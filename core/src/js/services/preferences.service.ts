@@ -259,6 +259,14 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateDuelsDeckName(deckstring: string, newName: string) {
+		const prefs = await this.getPreferences();
+		const names = prefs.duelsPersonalDeckNames;
+		names[deckstring] = newName;
+		const newPrefs: Preferences = { ...prefs, duelsPersonalDeckNames: names };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async setDesktopDeckFilters(value: DeckFilters) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckFilters: value };

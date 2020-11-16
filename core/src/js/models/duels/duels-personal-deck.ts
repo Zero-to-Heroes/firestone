@@ -2,6 +2,7 @@ import { DuelsRun } from './duels-run';
 
 export interface DuelsDeckSummary {
 	readonly initialDeckList: string;
+	readonly deckName: string;
 	readonly playerClass: string;
 	readonly heroCardId: string;
 	readonly global: DuelsDeckStatInfo;

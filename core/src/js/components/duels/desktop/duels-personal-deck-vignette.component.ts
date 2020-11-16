@@ -9,10 +9,10 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
+import { DuelsPersonalDeckRenameEvent } from '../../../services/mainwindow/store/events/duels/duels-personal-deck-rename-event';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { capitalizeEachWord } from '../../../services/utils';
 
 @Component({
 	selector: 'duels-personal-deck-vignette',
@@ -25,7 +25,22 @@ import { capitalizeEachWord } from '../../../services/utils';
 	],
 	template: `
 		<div class="duels-personal-deck-vignette">
-			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
+			<div class="deck-name-container" *ngIf="!renaming">
+				<div class="deck-name" [helpTooltip]="deckName + ' - Click to rename'" (mousedown)="startDeckRename()">
+					{{ deckName }}
+				</div>
+			</div>
+			<div class="deck-rename-container" *ngIf="renaming">
+				<input
+					class="name-input"
+					[(ngModel)]="deckName"
+					(mousedown)="preventDrag($event)"
+					(keydown.enter)="doRename()"
+				/>
+				<button class="rename-button" (click)="doRename()">
+					<span>Ok</span>
+				</button>
+			</div>
 			<div class="deck-image">
 				<img class="skin" [src]="skin" />
 				<img class="frame" src="assets/images/deck/hero_frame.png" />
@@ -53,7 +68,7 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		// console.log('[decktracker-deck-summary] setting value', value);
 		this._deck = value;
 		const heroCardName = this.allCards.getCard(value.heroCardId)?.name;
-		this.deckName = heroCardName ? `${capitalizeEachWord(heroCardName)} Deck` : 'Unnamed deck';
+		this.deckName = value.deckName;
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`;
 		this.totalRuns = value.global.totalRunsPlayed;
 		this.avgWins = value.global.averageWinsPerRun;
@@ -67,6 +82,8 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	avgWins: number;
 
 	copyText = 'Copy deck code';
+
+	renaming: boolean;
 
 	private deckstring: string;
 	private inputCopy: string;
@@ -101,5 +118,26 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 
 	viewDetails() {
 		this.stateUpdater.next(new DuelsViewPersonalDeckDetailsEvent(this.deckstring));
+	}
+
+	preventDrag(event: MouseEvent) {
+		event.stopPropagation();
+	}
+
+	startDeckRename() {
+		console.log('start renaming deck');
+		this.renaming = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	doRename() {
+		console.log('done renaming deck');
+		this.stateUpdater.next(new DuelsPersonalDeckRenameEvent(this.deckstring, this.deckName));
+		// this.renaming = false;
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 }

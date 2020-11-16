@@ -1,7 +1,6 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { formatClass } from '../../../../hs-utils';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../events/duels/duels-view-personal-deck-details-event';
 import { Processor } from '../processor';
 
@@ -30,10 +29,6 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 			deck => deck.initialDeckList === deckstring,
 		);
 		// console.log('found deck', deck, currentState);
-		if (!deck) {
-			return null;
-		}
-		const prefix = deck.global.averageWinsPerRun.toFixed(1);
-		return prefix + ' wins ' + formatClass(deck.playerClass);
+		return deck?.deckName;
 	}
 }

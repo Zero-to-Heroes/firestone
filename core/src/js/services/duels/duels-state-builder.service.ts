@@ -37,6 +37,7 @@ import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
+import { formatClass } from '../hs-utils';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
@@ -314,12 +315,19 @@ export class DuelsStateBuilderService {
 					} as DuelsDeckSummaryForType;
 				});
 				const heroCardId = groupedByDecklist[deckstring][0].heroCardId;
+				const mainStats = this.buildMainPersonalDecktats(groupedByDecklist[deckstring]);
+				const playerClass = this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase();
+				const deckName =
+					prefs.duelsPersonalDeckNames[deckstring] ||
+					`${mainStats.global.averageWinsPerRun.toFixed(1)} wins ${formatClass(playerClass)}`;
+
 				return {
 					initialDeckList: deckstring,
 					heroCardId: heroCardId,
-					playerClass: this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase(),
-					...this.buildMainPersonalDecktats(groupedByDecklist[deckstring]),
+					playerClass: playerClass,
+					...mainStats,
 					deckStatsForTypes: decksForTypes,
+					deckName: deckName,
 					runs: runs,
 				} as DuelsDeckSummary;
 			});
