@@ -294,9 +294,10 @@ export class DuelsStateBuilderService {
 	}
 
 	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
+		const runsForGameMode = runs.filter(run => this.isCorrectGameMode(run, prefs));
 		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 			(run: DuelsRun) => run.initialDeckList,
-		)(runs);
+		)(runsForGameMode);
 		const decks: readonly DuelsDeckSummary[] = Object.keys(groupedByDecklist)
 			.filter(deckstring => deckstring)
 			.map(deckstring => {
@@ -324,6 +325,18 @@ export class DuelsStateBuilderService {
 			});
 		console.log('[duels-state-builder] decks', decks?.length);
 		return decks;
+	}
+
+	private isCorrectGameMode(run: DuelsRun, prefs: Preferences): boolean {
+		switch (prefs.duelsActiveGameModeFilter) {
+			case 'duels':
+				return run.type === 'duels';
+			case 'paid-duels':
+				return run.type === 'paid-duels';
+			case 'all':
+			default:
+				return true;
+		}
 	}
 
 	private buildMainPersonalDecktats(
