@@ -34,12 +34,25 @@
 	width: 3px;
 	position: relative;
 	left: -10px;
+	flex-shrink: 0;
 
 	&.won {
 		background: #61ff47;
 	}
 	&.lost {
 		background: #ff4747;
+	}
+}
+
+.result-text {
+	width: 50px;
+	font-size: 13px;
+
+	&.won {
+		color: #61ff47;
+	}
+	&.lost {
+		color: #ff4747;
 	}
 }
 

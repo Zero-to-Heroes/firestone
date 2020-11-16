@@ -216,7 +216,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	}
 
 	onMinimize() {
-		// console.log('minimizing in root');
+		console.log('minimizing in root');
 		this.onDecktrackerToggle(false);
 	}
 
