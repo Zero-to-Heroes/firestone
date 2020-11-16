@@ -1,6 +1,7 @@
 :host() {
 	width: 256px;
 	height: 388px;
+	height: auto; // forcing height will wreak havoc if the card is not exactly at the right dimensions
 }
 
 .card-tooltip {
@@ -30,6 +31,7 @@
 	img {
 		width: 256px;
 		height: 388px;
+		height: auto;
 		// filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 		filter: drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7)) drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7));
 	}
