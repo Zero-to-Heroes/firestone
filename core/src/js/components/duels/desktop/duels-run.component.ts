@@ -11,6 +11,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -64,7 +65,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</div>
 			</div>
 			<div class="right-info">
-				<div class="show-more" (click)="toggleShowMore()">
+				<div class="group view-deck" (click)="showDeck()">View deck</div>
+				<div class="group show-more" (click)="toggleShowMore()">
 					{{ isExpanded ? 'Hide details' : 'Show details' }}
 				</div>
 			</div>
@@ -82,6 +84,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DuelsRunComponent implements AfterViewInit {
 	@Input() set run(value: DuelsRun) {
+		this.deckstring = value.initialDeckList;
 		this.gameModeImage = 'assets/images/deck/ranks/duels.png';
 		this.gameModeTooltip = value.type === 'duels' ? 'Duels' : 'Heroic Duels';
 		this.wins = value.wins;
@@ -113,6 +116,7 @@ export class DuelsRunComponent implements AfterViewInit {
 		// console.log('setting value', value);
 	}
 
+	deckstring: string;
 	gameModeImage: string;
 	gameModeTooltip: string;
 	rating: number;
@@ -146,6 +150,10 @@ export class DuelsRunComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	showDeck() {
+		this.stateUpdater.next(new DuelsViewPersonalDeckDetailsEvent(this.deckstring));
 	}
 
 	isReplayInfo(value: GameStat | DuelsRunInfo): boolean {
