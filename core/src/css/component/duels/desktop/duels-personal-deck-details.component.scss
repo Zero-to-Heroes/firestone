@@ -1,12 +1,9 @@
 .duels-personal-deck-details {
 	display: flex;
 	flex-grow: 1;
-	padding-right: 10px;
 	padding-left: 10px;
 	margin-top: 10px;
-	flex-direction: column;
-	min-height: 0;
-	overflow: auto;
+	max-width: 100%;
 
 	.deck-list-container {
 		margin-right: 20px;
@@ -23,6 +20,57 @@
 
 		&.final {
 			margin-right: 30px;
+		}
+	}
+
+	.stats {
+		margin-left: 40px;
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		min-height: 0;
+		overflow: auto;
+
+		.section {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 15px;
+
+			.title {
+				text-align: center;
+				margin-bottom: 10px;
+			}
+
+			.list {
+				list-style: none;
+				display: flex;
+				flex-wrap: wrap;
+
+				.element {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					margin-right: 15px;
+					margin-bottom: 15px;
+
+					.icon {
+						width: 90px;
+						height: 90px;
+						clip-path: circle(33px at 50% 50%);
+					}
+
+					.stat {
+						display: flex;
+						font-size: 13px;
+
+						.value {
+							font-weight: bold;
+							color: #ce73b4;
+							margin-left: 5px;
+						}
+					}
+				}
+			}
 		}
 	}
 }

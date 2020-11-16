@@ -19,7 +19,9 @@ import {
 	DuelsDeckSummary,
 	DuelsDeckSummaryForType,
 	HeroPowerDuelsDeckStatInfo,
+	LootDuelsDeckStatInfo,
 	SignatureTreasureDuelsDeckStatInfo,
+	TreasureDuelsDeckStatInfo,
 } from '../../models/duels/duels-personal-deck';
 import {
 	DuelsDeckStat,
@@ -90,7 +92,15 @@ export class DuelsStateBuilderService {
 		};
 		const results: any = await this.api.callPostApiWithRetries(DUELS_RUN_INFO_URL, input);
 		console.log('[duels-state-builder] loaded result');
-		return results?.results;
+		return results?.results.map(
+			info =>
+				({
+					...info,
+					option1Contents: info.option1Contents?.split(','),
+					option2Contents: info.option2Contents?.split(','),
+					option3Contents: info.option3Contents?.split(','),
+				} as DuelsRunInfo),
+		);
 	}
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
@@ -170,7 +180,7 @@ export class DuelsStateBuilderService {
 			)
 			.filter(run => run)
 			.sort(this.getSortFunction());
-		console.log('[duels-state-builder] built runs', runs?.length);
+		console.log('[duels-state-builder] built runs', runs?.length, runs);
 
 		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats, collectionState, prefs);
 		console.log('[duels-state-builder] playerStats');
@@ -295,19 +305,16 @@ export class DuelsStateBuilderService {
 	}
 
 	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
-		const runsForGameMode = runs.filter(run => this.isCorrectGameMode(run, prefs));
 		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 			(run: DuelsRun) => run.initialDeckList,
-		)(runsForGameMode);
+		)(runs);
 		const decks: readonly DuelsDeckSummary[] = Object.keys(groupedByDecklist)
 			.filter(deckstring => deckstring)
 			.map(deckstring => {
-				// const allRuns = groupedByDecklist[deckstring].map(run => run.
-				// heroPowerCardIds: [...new Set(...groupedByDecklist[deckstring].map(run => run.heroPowerCardId))],
-
 				const groupedByType: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 					(run: DuelsRun) => run.type,
 				)(groupedByDecklist[deckstring]);
+
 				const decksForTypes: readonly DuelsDeckSummaryForType[] = Object.keys(groupedByType).map(type => {
 					return {
 						type: type,
@@ -315,7 +322,9 @@ export class DuelsStateBuilderService {
 					} as DuelsDeckSummaryForType;
 				});
 				const heroCardId = groupedByDecklist[deckstring][0].heroCardId;
-				const mainStats = this.buildMainPersonalDecktats(groupedByDecklist[deckstring]);
+
+				const runsForGameMode = groupedByDecklist[deckstring].filter(run => this.isCorrectGameMode(run, prefs));
+				const mainStats = this.buildMainPersonalDecktats(runsForGameMode);
 				const playerClass = this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase();
 				const deckName =
 					prefs.duelsPersonalDeckNames[deckstring] ||
@@ -328,7 +337,7 @@ export class DuelsStateBuilderService {
 					...mainStats,
 					deckStatsForTypes: decksForTypes,
 					deckName: deckName,
-					runs: runs,
+					runs: groupedByDecklist[deckstring],
 				} as DuelsDeckSummary;
 			});
 		console.log('[duels-state-builder] decks', decks?.length);
@@ -353,6 +362,8 @@ export class DuelsStateBuilderService {
 		readonly global: DuelsDeckStatInfo;
 		readonly heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[];
 		readonly signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[];
+		readonly treasureStats: readonly TreasureDuelsDeckStatInfo[];
+		readonly lootStats: readonly LootDuelsDeckStatInfo[];
 	} {
 		const groupedByHeroPower = groupByFunction((run: DuelsRun) => run.heroPowerCardId)(runs);
 		const heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[] = Object.keys(groupedByHeroPower).map(
@@ -361,6 +372,7 @@ export class DuelsStateBuilderService {
 				heroPowerCardId: heroPowerCardId,
 			}),
 		);
+
 		const groupedBySignatureTreasure = groupByFunction((run: DuelsRun) => run.signatureTreasureCardId)(runs);
 		const signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[] = Object.keys(
 			groupedBySignatureTreasure,
@@ -369,10 +381,67 @@ export class DuelsStateBuilderService {
 			signatureTreasureCardId: signatureTreasureCardId,
 		}));
 
+		const extractTreasuresForRun = (run: DuelsRun) => {
+			return run.steps
+				.filter(step => (step as DuelsRunInfo).bundleType === 'treasure')
+				.map(step => step as DuelsRunInfo)
+				.map(step =>
+					step.chosenOptionIndex === 1
+						? step.option1
+						: step.chosenOptionIndex === 2
+						? step.option2
+						: step.chosenOptionIndex === 2
+						? step.option3
+						: null,
+				)
+				.filter(treasure => treasure);
+		};
+		const allTreasures: readonly string[] = [
+			...new Set(runs.map(run => extractTreasuresForRun(run)).reduce((a, b) => a.concat(b), [])),
+		];
+		const treasureStats: readonly TreasureDuelsDeckStatInfo[] = allTreasures.map(treasureId => {
+			const runsWithTreasure: readonly DuelsRun[] = runs.filter(run =>
+				extractTreasuresForRun(run).includes(treasureId),
+			);
+			return {
+				...this.buildDeckStatInfo(runsWithTreasure),
+				cardId: treasureId,
+			};
+		});
+
+		const extractLootsForRun = (run: DuelsRun) => {
+			return run.steps
+				.filter(step => (step as DuelsRunInfo).bundleType === 'loot')
+				.map(step => step as DuelsRunInfo)
+				.map(step =>
+					step.chosenOptionIndex === 1
+						? step.option1Contents
+						: step.chosenOptionIndex === 2
+						? step.option2Contents
+						: step.chosenOptionIndex === 2
+						? step.option3Contents
+						: null,
+				)
+				.reduce((a, b) => a.concat(b), [])
+				.filter(cardId => cardId);
+		};
+		const allCardLooted: readonly string[] = [
+			...new Set(runs.map(run => extractLootsForRun(run)).reduce((a, b) => a.concat(b), [])),
+		];
+		const lootStats: readonly LootDuelsDeckStatInfo[] = allCardLooted.map(cardId => {
+			const runsWithTheLoot: readonly DuelsRun[] = runs.filter(run => extractLootsForRun(run).includes(cardId));
+			return {
+				...this.buildDeckStatInfo(runsWithTheLoot),
+				cardId: cardId,
+			};
+		});
+
 		return {
 			global: this.buildDeckStatInfo(runs),
 			heroPowerStats: heroPowerStats,
 			signatureTreasureStats: signatureTreasureStats,
+			treasureStats: treasureStats,
+			lootStats: lootStats,
 		};
 	}
 

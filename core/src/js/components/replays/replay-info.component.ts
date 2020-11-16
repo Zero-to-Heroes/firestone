@@ -7,6 +7,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { capitalizeEachWord } from '../../services/utils';
 
 @Component({
 	selector: 'replay-info',
@@ -30,6 +31,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 						*ngIf="opponentClassImage"
 					/>
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
+				</div>
+
+				<div class="group result-text {{ visualResult }}" *ngIf="gameMode !== 'battlegrounds'">
+					{{ capitalize(visualResult) }}
 				</div>
 
 				<div class="group result">
@@ -141,6 +146,10 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	showStats() {
 		this.stateUpdater.next(new TriggerShowMatchStatsEvent(this.reviewId));
+	}
+
+	capitalize(input: string): string {
+		return capitalizeEachWord(input);
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {
