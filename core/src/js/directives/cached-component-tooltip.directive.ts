@@ -114,7 +114,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		}
 		this.tooltipRef.instance.visible = true;
 		this.positionStrategy.apply();
-		// console.log('created tooltip instance', tooltipRef);
+		// console.log('created tooltip instance', this.tooltipRef);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
