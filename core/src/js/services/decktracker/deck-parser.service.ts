@@ -70,6 +70,7 @@ export class DeckParserService {
 							'scene_friendly',
 							'scene_adventure',
 							'unknown_18',
+							'scene_pvp_dungeon_run',
 							'scene_bacon',
 							'scene_arena',
 						].includes(scene)
@@ -136,7 +137,9 @@ export class DeckParserService {
 			);
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
 			const activeDeck =
-				currentScene === 'unknown_18' || currentSceneFromMindVision === 18
+				currentScene === 'unknown_18' ||
+				currentScene === 'scene_pvp_dungeon_run' ||
+				currentSceneFromMindVision === 18
 					? await this.getDuelsInfo()
 					: deckFromMemory;
 			console.log('[deck-parser] active deck after queue', activeDeck, currentScene);
