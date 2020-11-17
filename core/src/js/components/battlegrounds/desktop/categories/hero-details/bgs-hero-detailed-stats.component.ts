@@ -139,7 +139,7 @@ export class BgsHeroDetailedStatsComponent {
 	}
 
 	buildValue(value: number, decimals = 2): string {
-		return !value ? 'N/A' : value.toFixed(decimals);
+		return !value ? '-' : value.toFixed(decimals);
 	}
 }
 

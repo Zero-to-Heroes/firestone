@@ -93,11 +93,11 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 	}
 
 	buildPercents(value: number): string {
-		return value == null ? 'N/A' : value.toFixed(1) + '%';
+		return value == null ? '-' : value.toFixed(1) + '%';
 	}
 
 	buildValue(value: number, decimal = 2): string {
-		return value == null ? 'N/A' : value === 0 ? '0' : value.toFixed(decimal);
+		return value == null ? '-' : value === 0 ? '0' : value.toFixed(decimal);
 	}
 }
 

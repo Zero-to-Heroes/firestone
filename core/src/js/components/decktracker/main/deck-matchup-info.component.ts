@@ -59,6 +59,6 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 	}
 
 	buildValue(value: number): string {
-		return value == null ? 'N/A' : value.toFixed(0) + '%';
+		return value == null ? '-' : value.toFixed(0) + '%';
 	}
 }

@@ -38,7 +38,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 							[ngClass]="{
 								'positive': netMmr > 0,
 								'negative': netMmr < 0,
-								'missing': buildValue(netMmr) === 'N/A'
+								'missing': buildValue(netMmr) === '-'
 							}"
 						>
 							<div class="label" helpTooltip="Average MMR gain/loss per match">Net MMR</div>
@@ -126,11 +126,11 @@ export class BattlegroundsStatsHeroVignetteComponent implements AfterViewInit {
 	}
 
 	buildPercents(value: number): string {
-		return value == null ? 'N/A' : value.toFixed(1) + '%';
+		return value == null ? '-' : value.toFixed(1) + '%';
 	}
 
 	buildValue(value: number): string {
-		return !value ? 'N/A' : value.toFixed(2);
+		return !value ? '-' : value.toFixed(2);
 	}
 
 	// @HostListener('mouseenter') onMouseEnter() {

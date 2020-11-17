@@ -15,7 +15,7 @@ import { formatClass } from '../../../services/hs-utils';
 			</div>
 			<div class="recap winrate">
 				<div class="value">
-					{{ winrate != null ? winrate.toFixed(1) + '%' : 'N/A' }}
+					{{ winrate != null ? winrate.toFixed(1) + '%' : '-' }}
 				</div>
 			</div>
 			<div class="recap details">

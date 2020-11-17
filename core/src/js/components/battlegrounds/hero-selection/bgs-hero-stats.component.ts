@@ -137,10 +137,10 @@ export class BgsHeroStatsComponent {
 	}
 
 	buildPercents(value: number): string {
-		return value == null ? 'N/A' : value.toFixed(1) + '%';
+		return value == null || isNaN(value) ? '-' : value.toFixed(1) + '%';
 	}
 
 	buildValue(value: number): string {
-		return value == null ? 'N/A' : value.toFixed(2);
+		return value == null || isNaN(value) ? '-' : value.toFixed(2);
 	}
 }
