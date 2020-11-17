@@ -20,7 +20,7 @@ export class DeckManipulationHelper {
 		removeFillerCard = false,
 		normalizeUpgradedCards = false,
 	): readonly [readonly DeckCard[], DeckCard] {
-		const normalizedCardId = normalizeUpgradedCards ? this.normalizeCardId(cardId) : cardId;
+		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
 		const debug = false; // entityId === 2098;
 		// We have the entityId, so we just remove it
 		if (zone.some(card => card.entityId === entityId)) {
@@ -35,7 +35,7 @@ export class DeckManipulationHelper {
 				zone.find((card: DeckCard) => card.entityId === entityId),
 			];
 		}
-		if (!cardId) {
+		if (!normalizedCardId) {
 			// If there are some "fillter" cards (ie cards that exist only so that the deck has the right amount
 			// of cards), we remove one
 			if (zone.some(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
@@ -77,19 +77,31 @@ export class DeckManipulationHelper {
 		if (debug) {
 			console.debug(
 				'trying to remove a card from zone without using the entityId',
-				cardId,
+				normalizedCardId,
 				entityId,
 				zone.length,
 				removeFillerCard,
 			);
 		}
+		// Remove using the card id
 		let hasRemovedOnce = false;
 		let removedCard = null;
 		const result = [];
+		// By default, we don't want to remove a card with a known entity ID, as the entityId is some useful info
+		// on the card. We only do so if a) we find a card that matches our input card id and b) all such cards
+		// have a valid entityId (typically the case with Soul Fragments)
+		const shouldIgnoreEntityId =
+			zone.some(card => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId) &&
+			zone
+				.filter(card => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId)
+				.every(card => card.entityId);
 		for (const card of zone) {
+			// console.log('considering', normalizedCardId, card.cardId, card);
 			// We don't want to remove a card if it has a different entityId
-			const refCardId = normalizeUpgradedCards ? this.normalizeCardId(card.cardId) : card.cardId;
-			if (refCardId === normalizedCardId && !card.entityId && !hasRemovedOnce) {
+			const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
+			// Here we don't want to remove a card with a known entity id, as it might conflict
+			// with another
+			if (refCardId === normalizedCardId && (shouldIgnoreEntityId || !card.entityId) && !hasRemovedOnce) {
 				if (debug) {
 					console.debug('removing card', card);
 				}
@@ -186,7 +198,7 @@ export class DeckManipulationHelper {
 		entityId: number,
 		normalizeUpgradedCards = false,
 	): DeckCard {
-		const normalizedCardId = normalizeUpgradedCards ? this.normalizeCardId(cardId) : cardId;
+		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
 		// Explicit search by entity id
 		if (entityId) {
 			const found = zone.find(card => card.entityId === entityId);
@@ -194,7 +206,7 @@ export class DeckManipulationHelper {
 				// Card hasn't been found, so we provide a default return
 				if (cardId) {
 					const idByCardId = zone.find(card => {
-						const refCardId = normalizeUpgradedCards ? this.normalizeCardId(card.cardId) : card.cardId;
+						const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 						return refCardId === normalizedCardId && !card.entityId;
 					});
 					if (idByCardId) {
@@ -247,7 +259,7 @@ export class DeckManipulationHelper {
 		if (cardId) {
 			// console.log('trying to get a card without providing an entityId', cardId, zone);
 			const found = zone.find(card => {
-				const refCardId = normalizeUpgradedCards ? this.normalizeCardId(card.cardId) : card.cardId;
+				const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 				return refCardId === normalizedCardId && !card.entityId;
 			});
 			if (!found) {
@@ -392,7 +404,10 @@ export class DeckManipulationHelper {
 		}
 	}
 
-	private normalizeCardId(cardId: string): string {
+	private normalizeCardId(cardId: string, shouldNormalize: boolean): string {
+		if (!shouldNormalize) {
+			return cardId;
+		}
 		switch (cardId) {
 			case CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondTheApocalypseToken:
 			case CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondAzerothsEndToken:
