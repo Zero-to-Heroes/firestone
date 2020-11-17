@@ -4,6 +4,6 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_POSTMATCH_SHARE = true;
 	public static readonly ENABLE_DECK_DETAILS = true;
 
-	public static readonly ENABLE_DUELS = false;
+	public static readonly ENABLE_DUELS = true;
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;
 }
