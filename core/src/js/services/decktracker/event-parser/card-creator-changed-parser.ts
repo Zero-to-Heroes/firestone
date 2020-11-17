@@ -4,6 +4,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
+import { publicCardCreators } from './public-card-draws';
 
 export class CardCreatorChangedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -18,14 +19,18 @@ export class CardCreatorChangedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
+		// Issue: Mask of Mimicry has an info leak where it changes teh DISPLAYED_CREATOR tag
+		// for cards in hand
 		const cardInHand = this.helper.findCardInZone(deck.hand, null, entityId);
 		// console.debug('cardInHand', cardInHand);
 		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
 		// console.debug('cardInDeck', cardInDeck);
 
+		const isCardInfoPublic = isPlayer || publicCardCreators.includes(gameEvent.additionalData.creatorCardId);
 		const newCardInHand = cardInHand
 			? cardInHand.update({
-					creatorCardId: gameEvent.additionalData.creatorCardId,
+					// To avoid info leaks from Mask of Mimicry
+					creatorCardId: isCardInfoPublic ? gameEvent.additionalData.creatorCardId : cardInHand.creatorCardId,
 			  } as DeckCard)
 			: null;
 		// console.debug('newCardInHand', newCardInHand);
