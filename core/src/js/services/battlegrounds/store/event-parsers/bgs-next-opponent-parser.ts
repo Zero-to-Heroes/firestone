@@ -5,6 +5,7 @@ import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
 import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-game-stage';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsOpponentOverview } from '../../../../models/battlegrounds/in-game/bgs-opponent-overview';
+import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -15,6 +16,7 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
+		// console.log('parsing next opponent', event);
 		const newNextOpponentStage: BgsInGameStage = this.buildInGameStage(event.cardId, currentState);
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
 			stage.id === newNextOpponentStage.id ? newNextOpponentStage : stage,
@@ -52,7 +54,7 @@ export class BgsNextOpponentParser implements EventParser {
 		// const nextOpponent = currentState.currentGame.players.find(player => player.cardId === cardId);
 		const opponentOverview: BgsOpponentOverview = BgsOpponentOverview.create({
 			// Just use the cardId, and let the UI reconstruct from the state to avoid duplicating the info
-			cardId: cardId,
+			cardId: normalizeHeroCardId(cardId),
 		});
 		const currentTurn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		return BgsNextOpponentOverviewPanel.create({
