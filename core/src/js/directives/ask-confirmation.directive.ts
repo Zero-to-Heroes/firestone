@@ -128,7 +128,9 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 	}
 
 	private confirm() {
-		this.overlayRef.detach();
+		if (this.overlayRef) {
+			this.overlayRef.detach();
+		}
 		this.onConfirm.next(true);
 	}
 
