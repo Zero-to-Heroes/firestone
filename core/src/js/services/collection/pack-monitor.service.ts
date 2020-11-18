@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { captureEvent } from '@sentry/core';
 import { Key } from 'ts-keycode-enum';
 import { Card } from '../../models/card';
 import { Events } from '../../services/events.service';
@@ -181,16 +180,16 @@ export class PackMonitor {
 			ret = 1;
 		} else {
 			console.warn('[pack-monitor] Could not detect the clicked on card', x, y, data, result);
-			captureEvent({
-				message: 'could not identify the card the user clicked on',
-				extra: {
-					x: x,
-					y: y,
-					data: data,
-					result: result,
-					unrevealedCards: this.unrevealedCards,
-				},
-			});
+			// captureEvent({
+			// 	message: 'could not identify the card the user clicked on',
+			// 	extra: {
+			// 		x: x,
+			// 		y: y,
+			// 		data: data,
+			// 		result: result,
+			// 		unrevealedCards: this.unrevealedCards,
+			// 	},
+			// });
 			return;
 		}
 		// console.log('matching card position', ret);
