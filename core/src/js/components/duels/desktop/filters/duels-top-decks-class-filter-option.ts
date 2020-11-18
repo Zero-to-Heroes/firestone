@@ -8,7 +8,7 @@ import { DuelsTopDecksClassFilterSelectedEvent } from '../../../../services/main
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { DuelsDropdownOption } from './duels-dropdown-option';
 
-export class DuelsTopDecksClassFilterOption implements DuelsDropdownOption {
+export class DuelsClassFilterOption implements DuelsDropdownOption {
 	options: readonly TopDeckClassFilterOption[] = this.buildTopDeckClassFilterOptions();
 	activeFilterHandler: (state: MainWindowState) => string = (state: MainWindowState) =>
 		state.duels?.activeTopDecksClassFilter;
@@ -18,7 +18,8 @@ export class DuelsTopDecksClassFilterOption implements DuelsDropdownOption {
 			navigation &&
 			navigation.currentApp == 'duels' &&
 			navigation.navigationDuels &&
-			navigation.navigationDuels.selectedCategoryId === 'duels-top-decks'
+			(navigation.navigationDuels.selectedCategoryId === 'duels-top-decks' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-treasures')
 		);
 	};
 	selectHandler = (stateUpdater: EventEmitter<MainWindowStoreEvent>, option: TopDeckClassFilterOption) => {

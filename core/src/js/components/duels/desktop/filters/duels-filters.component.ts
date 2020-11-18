@@ -6,7 +6,7 @@ import { DuelsGameModeSortFilterOption } from './duels-game-mode-sort-filter-opt
 import { DuelsHeroFilterOption } from './duels-hero-filter-option';
 import { DuelsStatTypeOption } from './duels-stat-type-option';
 import { DuelsTimeSortFilterOption } from './duels-time-sort-filter-option';
-import { DuelsTopDecksClassFilterOption } from './duels-top-decks-class-filter-option';
+import { DuelsClassFilterOption } from './duels-top-decks-class-filter-option';
 import { DuelsTopDecksDustFilterOption } from './duels-top-decks-dust-filter-option';
 import { DuelsTreasurePassiveTypeOption } from './duels-treasure-passive-type-option';
 import { DuelsTreasureSortOption } from './duels-treasure-sort-option';
@@ -56,12 +56,12 @@ export class DuelsFiltersComponent {
 		}
 		this.options = [
 			{ class: 'game-mode-sort-filter', option: new DuelsGameModeSortFilterOption() } as InternalOption,
-			{ class: 'hero-sort-filter', option: new DuelsHeroFilterOption() } as InternalOption,
 			{ class: 'treasure-sort-filter', option: new DuelsTreasureSortOption() } as InternalOption,
 			{ class: 'stat-type-filter', option: new DuelsStatTypeOption() } as InternalOption,
 			{ class: 'treasure-passive-type-filter', option: new DuelsTreasurePassiveTypeOption() } as InternalOption,
+			{ class: 'hero-sort-filter', option: new DuelsHeroFilterOption() } as InternalOption,
 			{ class: 'time-sort-filter', option: new DuelsTimeSortFilterOption() } as InternalOption,
-			{ class: 'top-decks-class-filter', option: new DuelsTopDecksClassFilterOption() } as InternalOption,
+			{ class: 'class-filter', option: new DuelsClassFilterOption() } as InternalOption,
 			{ class: 'top-decks-dust-filter', option: new DuelsTopDecksDustFilterOption() } as InternalOption,
 		];
 	}

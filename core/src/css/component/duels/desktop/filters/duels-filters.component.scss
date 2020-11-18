@@ -8,8 +8,12 @@
 
 .duels-filters {
 	display: flex;
-	height: 30px;
-	margin-bottom: 15px;
+	// height: 30px;
+	flex-wrap: wrap;
+
+	duels-filter-dropdown {
+		margin-bottom: 15px;
+	}
 }
 
 ng-select.disabled {

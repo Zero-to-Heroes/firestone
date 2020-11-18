@@ -48,7 +48,7 @@ import { groupByFunction } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=12';
+const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=14';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
@@ -105,7 +105,7 @@ export class DuelsStateBuilderService {
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
 		const results: any = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
-		console.log('[duels-state-builder] loaded global stats');
+		console.log('[duels-state-builder] loaded global stats', results);
 		return results?.result;
 	}
 
@@ -210,7 +210,7 @@ export class DuelsStateBuilderService {
 		}
 		// const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
 		// Fallback until everything is properly deployed
-		const gameModeStats = this.getGameModeStats(globalStats, prefs) || globalStats;
+		const gameModeStats = this.getGameModeStats(globalStats, prefs) || globalStats.both;
 		const periodStats =
 			prefs.duelsActiveTimeFilter === 'all-time'
 				? gameModeStats.statsForFullPeriod
@@ -469,10 +469,10 @@ export class DuelsStateBuilderService {
 	}
 
 	private filterTopDeck(stat: DuelsDeckStat, prefs: Preferences): boolean {
-		return this.topDeckClassFilter(stat, prefs) && this.topDeckDustFilter(stat, prefs);
+		return this.playerClassFilter(stat, prefs) && this.topDeckDustFilter(stat, prefs);
 	}
 
-	private topDeckClassFilter(stat: DuelsDeckStat, prefs: Preferences): boolean {
+	private playerClassFilter(stat: DuelsDeckStat | TreasureStat, prefs: Preferences): boolean {
 		switch (prefs.duelsActiveTopDecksClassFilter) {
 			case 'all':
 				return true;
@@ -527,10 +527,12 @@ export class DuelsStateBuilderService {
 		treasureStats: readonly TreasureStat[],
 		prefs: Preferences,
 	): readonly DuelsTreasureStat[] {
-		const groupedByTreasures = groupByFunction((stat: TreasureStat) => stat.cardId)(treasureStats);
+		const treasuresForClass = treasureStats.filter(stat => this.playerClassFilter(stat, prefs));
+		console.log('[debug] filtering treasures', treasureStats, prefs, treasuresForClass);
+		const groupedByTreasures = groupByFunction((stat: TreasureStat) => stat.cardId)(treasuresForClass);
 		const treasureIds = Object.keys(groupedByTreasures);
-		const totalTreasureOfferings = treasureStats.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
-		const totalPick = treasureStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
+		const totalTreasureOfferings = treasuresForClass.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
+		// const totalPick = treasureStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
 		// if (totalPick * 3 !== totalTreasureOfferings) {
 		// 	console.error('[duels-state-builder] invalid data', totalPick, totalTreasureOfferings, treasureStats);
 		// }
