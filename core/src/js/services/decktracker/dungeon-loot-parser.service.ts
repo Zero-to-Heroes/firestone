@@ -85,7 +85,7 @@ export class DungeonLootParserService {
 	}
 
 	private async retrieveLootInfo() {
-		this.duelsInfo = await this.memory.getDuelsInfo(false, 10);
+		this.duelsInfo = await this.memory.getDuelsInfo(false, 5);
 		this.log('retrieved duels info', this.duelsInfo, this.currentGameType);
 		// Should already have picked something, but nothing is detected
 		if (
@@ -107,6 +107,7 @@ export class DungeonLootParserService {
 			this.log('starting a new run', this.duelsInfo);
 			await this.prefs.setDuelsRunId(uuid());
 		}
+		this.log('getting currentDuelsRunId');
 		this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
 		this.log('set currentDuelsRunId', this.currentDuelsRunId);
 		if (!this.currentDuelsRunId) {
