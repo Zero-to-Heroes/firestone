@@ -79,7 +79,7 @@ export class DungeonLootParserService {
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
 				this.currentReviewId = info.reviewId;
-				this.sendLootInfo();
+				// this.sendLootInfo();
 			}
 		});
 	}
