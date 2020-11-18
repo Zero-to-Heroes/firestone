@@ -34,6 +34,8 @@ export class DungeonLootParserService {
 	];
 
 	public currentDuelsRunId: string;
+	public busyRetrievingInfo: boolean;
+
 	private currentDuelsHeroPowerCardDbfId: number;
 	private currentDuelsSignatureTreasureCardId: string;
 	private currentDuelsWins: number;
@@ -85,6 +87,7 @@ export class DungeonLootParserService {
 	}
 
 	private async retrieveLootInfo() {
+		this.busyRetrievingInfo = true;
 		this.duelsInfo = await this.memory.getDuelsInfo(false, 5);
 		this.log('retrieved duels info', this.duelsInfo, this.currentGameType);
 		// Should already have picked something, but nothing is detected
@@ -115,6 +118,7 @@ export class DungeonLootParserService {
 			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
 			this.log('Could not retrieve duels run id, starting a new run');
 		}
+		this.busyRetrievingInfo = false;
 		this.sendLootInfo();
 	}
 

@@ -84,10 +84,6 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge]', currentReviewId, 'parsed format', gameResult.FormatType, game.gameFormat);
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
 		console.log('[manastorm-bridge]', currentReviewId, 'parsed type', gameResult.GameType, game.gameMode);
-		game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
-		if (game.gameMode === 'duels') {
-			console.log('[manastorm-bridge]', currentReviewId, 'added duels run id', game.currentDuelsRunId);
-		}
 
 		// Here we want to process the rank info as soon as possible to limit the chances of it
 		// being removed from memory by the player clicking away
@@ -224,19 +220,40 @@ export class EndGameUploaderService {
 		this.gameParserService.extractDuration(game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
-		if (!game.currentDuelsRunId && (game.gameMode === 'duels' || game.gameMode === 'paid-duels')) {
-			console.warn(
-				'[manastorm-bridge]',
-				currentReviewId,
-				'currentDuelsRunId is missing',
-				game.currentDuelsRunId,
-				game.gameMode,
-				this.dungeonLootParser.currentDuelsRunId,
-			);
-			game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+		game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+		if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
+			console.log('[manastorm-bridge]', currentReviewId, 'added duels run id', game.currentDuelsRunId);
+			if (!game.currentDuelsRunId) {
+				console.log(
+					'[manastorm-bridge]',
+					currentReviewId,
+					'currentDuelsRunId is missing, waiting for dungeon loot info to be retrieved',
+				);
+				while (this.dungeonLootParser.busyRetrievingInfo) {
+					await sleep(200);
+				}
+				game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+				console.log(
+					'[manastorm-bridge]',
+					currentReviewId,
+					'dungeon loot info retrieved, continuing',
+					game.currentDuelsRunId,
+				);
+			}
+			if (!game.currentDuelsRunId) {
+				console.warn(
+					'[manastorm-bridge]',
+					currentReviewId,
+					'currentDuelsRunId is missing',
+					game.currentDuelsRunId,
+					game.gameMode,
+					this.dungeonLootParser.currentDuelsRunId,
+				);
+				game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+				// So that we have time to collect more logs, especially the ones linked to replay upload
+				setTimeout(() => this.logService.reportSpecificBug('duels-empty-run-id'), 5000);
+			}
 			this.dungeonLootParser.resetDuelsRunId();
-			// So that we have time to collect more logs, especially the ones linked to replay upload
-			setTimeout(() => this.logService.reportSpecificBug('duels-empty-run-id'), 5000);
 		}
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
