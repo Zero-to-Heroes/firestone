@@ -121,9 +121,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		//	console.log('[debug] game event', gameEvent.Type, gameEvent);
-		//}
+		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+			console.log('[debug] game event', gameEvent.Type, gameEvent);
+		}
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -955,8 +955,12 @@ export class GameEvents {
 			console.log('[game-events] received CREATE_GAME log', data);
 		}
 
-		if (data.indexOf('GOLD_REWARD_STATE') !== -1) {
-			console.log('[game-events] received GOLD_REWARD_STATE log', data);
+		if (data.indexOf('tag=PLAYSTATE value=WON')) {
+			console.log('[game-events] received tag=PLAYSTATE value=WON log', data);
+		}
+
+		if (data.indexOf('tag=STATE value=COMPLETE') !== -1) {
+			console.log('[game-events] received tag=STATE value=COMPLETE log', data);
 		}
 
 		this.processingQueue.enqueue(data);
@@ -1006,7 +1010,10 @@ export class GameEvents {
 			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
 			this.existingLogLines = [];
 		}
-		if (existingLine.indexOf('GOLD_REWARD_STATE') !== -1) {
+		if (existingLine.indexOf('tag=PLAYSTATE value=WON')) {
+			console.log('[game-events] [existing] received tag=PLAYSTATE value=WON log', existingLine);
+		}
+		if (existingLine.indexOf('tag=STATE value=COMPLETE') !== -1) {
 			// Complete game, we don't handle it
 			console.log('[game-events] [existing] complete game, trashing all logs');
 			this.existingLogLines = [];
