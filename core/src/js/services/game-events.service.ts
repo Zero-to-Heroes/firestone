@@ -1010,7 +1010,7 @@ export class GameEvents {
 			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
 			this.existingLogLines = [];
 		}
-		if (existingLine.indexOf('tag=PLAYSTATE value=WON')) {
+		if (existingLine.indexOf('tag=PLAYSTATE value=WON') !== -1) {
 			console.log('[game-events] [existing] received tag=PLAYSTATE value=WON log', existingLine);
 		}
 		if (existingLine.indexOf('tag=STATE value=COMPLETE') !== -1) {

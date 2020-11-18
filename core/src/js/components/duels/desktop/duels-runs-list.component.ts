@@ -70,7 +70,7 @@ export class DuelsRunsListComponent {
 		const workingRuns = [...this.allRuns];
 		const step = 40;
 		while (workingRuns.length > 0) {
-			console.log('working runs', workingRuns.length);
+			// console.log('working runs', workingRuns.length);
 			const currentRuns = [];
 			while (
 				workingRuns.length > 0 &&
