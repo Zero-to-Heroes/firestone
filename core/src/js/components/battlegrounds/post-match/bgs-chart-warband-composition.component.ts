@@ -159,7 +159,7 @@ export class BgsChartWarbandCompositionComponent {
 
 	@HostListener('window:resize')
 	onResize() {
-		console.log('window resize');
+		// console.log('window resize');
 		this._dirty = true;
 		this.doResize();
 	}
