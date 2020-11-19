@@ -21,6 +21,7 @@ export class Preferences {
 	readonly shareGamesWithVS: boolean = true;
 	readonly setAllNotifications: boolean = true;
 	readonly contactEmail: string;
+	readonly lastSeenReleaseNotes: string;
 
 	readonly advancedModeToggledOn: boolean;
 

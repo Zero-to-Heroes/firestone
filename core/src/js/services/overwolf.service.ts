@@ -217,6 +217,7 @@ export class OverwolfService {
 		});
 	}
 
+	// Careful, this only returns the version, not the full manifest
 	public async getManifest(extensionId: string) {
 		return new Promise<string>(resolve => {
 			overwolf.extensions.getManifest(extensionId, result => {
