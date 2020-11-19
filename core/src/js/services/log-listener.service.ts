@@ -136,6 +136,12 @@ export class LogListenerService {
 				} else {
 					if (!lastLineIsNew && this.existingLineHandler) {
 						lastLineIsNew = true;
+						console.log(
+							'[log-listener] [' + this.logFile + '] finished catching up with existing data',
+							info,
+							lineInfo,
+							lastLineIsNew,
+						);
 						this.existingLineHandler('end_of_existing_data');
 					}
 					this.callback(lineInfo.content);

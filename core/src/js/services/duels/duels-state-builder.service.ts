@@ -180,7 +180,7 @@ export class DuelsStateBuilderService {
 			)
 			.filter(run => run)
 			.sort(this.getSortFunction());
-		console.log('[duels-state-builder] built runs', runs?.length, runs);
+		console.log('[duels-state-builder] built runs', runs?.length);
 
 		const playerStats = this.buildStatsWithPlayer(runs, currentState.globalStats, collectionState, prefs);
 		console.log('[duels-state-builder] playerStats');
@@ -528,7 +528,7 @@ export class DuelsStateBuilderService {
 		prefs: Preferences,
 	): readonly DuelsTreasureStat[] {
 		const treasuresForClass = treasureStats.filter(stat => this.playerClassFilter(stat, prefs));
-		console.log('[debug] filtering treasures', treasureStats, prefs, treasuresForClass);
+		// console.log('[debug] filtering treasures', treasureStats, prefs, treasuresForClass);
 		const groupedByTreasures = groupByFunction((stat: TreasureStat) => stat.cardId)(treasuresForClass);
 		const treasureIds = Object.keys(groupedByTreasures);
 		const totalTreasureOfferings = treasuresForClass.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
