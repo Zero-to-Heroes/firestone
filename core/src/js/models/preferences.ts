@@ -28,6 +28,8 @@ export class Preferences {
 	readonly dontRecordAchievements: boolean = true;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
 
+	readonly showXpRecapAtGameEnd: boolean = true;
+
 	readonly collectionEnableNotifications: boolean = true;
 	readonly showDust: boolean = true;
 	readonly showCommon: boolean = true;

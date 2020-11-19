@@ -62,6 +62,7 @@ import { PatchesConfigService } from '../../services/patches-config.service';
 import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { ReplaysNotificationService } from '../../services/replays/replays-notification.service';
+import { RewardMonitorService } from '../../services/rewards/rewards-monitor';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
@@ -180,6 +181,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		GlobalStatsNotifierService,
 
 		ReplaysNotificationService,
+		RewardMonitorService,
 
 		TemporaryResolutionOverrideService,
 		LZStringService,

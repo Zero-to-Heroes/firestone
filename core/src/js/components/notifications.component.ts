@@ -31,6 +31,7 @@ declare let amplitude;
 		'../../css/component/notifications/notifications-decktracker.scss',
 		'../../css/component/notifications/notifications-replays.scss',
 		'../../css/component/notifications/notifications-general.scss',
+		'../../css/component/notifications/notifications-rewards.scss',
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
@@ -42,6 +43,7 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
+// TODO: https://github.com/scttcper/ngx-toastr (19/11/2020)
 export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	timeout = 5000;
 	// timeout = 9999999;

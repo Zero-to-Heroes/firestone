@@ -34,6 +34,7 @@ import { OwNotificationsService } from './notifications.service';
 import { OverwolfService } from './overwolf.service';
 import { PreferencesService } from './preferences.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
+import { RewardMonitorService } from './rewards/rewards-monitor';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 
 declare let amplitude: any;
@@ -81,6 +82,7 @@ export class AppBootstrapService {
 		private init_BgsInitService: BgsInitService,
 		private init_BgsBestUserStatsService: BgsBestUserStatsService,
 		private init_LogRegisterService: LogRegisterService,
+		private init_RewardMonitorService: RewardMonitorService,
 	) {}
 
 	public async init() {

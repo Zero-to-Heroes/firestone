@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArenaInfo } from '../../../models/arena-info';
+import { RewardsTrackInfo } from '../../../models/rewards-track-info';
 
 declare let OverwolfPlugin: any;
 
@@ -97,6 +98,20 @@ export class MindVisionService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse activeDeck', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
+		return new Promise<RewardsTrackInfo>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.getRewardsTrackInfo(info => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse rewards track info', e);
 				resolve(null);
 			}
 		});

@@ -24,6 +24,11 @@ import { PreferencesService } from '../../../services/preferences.service';
 					tooltip="Shows a recap of the past session when you exit Hearthstone"
 				></preference-toggle>
 				<preference-toggle
+					field="showXpRecapAtGameEnd"
+					label="Show XP recap on game end"
+					tooltip="Shows a recap of the XP / levels gained after each match"
+				></preference-toggle>
+				<preference-toggle
 					field="shareGamesWithVS"
 					label="Contribute to the VS meta report"
 					tooltip="When turned on, you contribute to build the Vicious Syndicate meta report. The server parses your games and extracts some global info (like the game's rank, the cards played) and anonymously sends this aggregated data to Vicious Syndicate. We don't get paid for this, but we do get some exposure since they then talk about us :)"

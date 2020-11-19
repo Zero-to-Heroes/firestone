@@ -5,6 +5,7 @@ import { Card } from '../../models/card';
 import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
+import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { SetsService } from '../sets-service.service';
@@ -17,6 +18,7 @@ import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/get-current-scene-operation';
 import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
+import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
 
 @Injectable()
@@ -37,6 +39,7 @@ export class MemoryInspectionService {
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
+	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVision, this.ow);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
 
 	constructor(
@@ -78,6 +81,10 @@ export class MemoryInspectionService {
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
 		return this.getDuelsInfoOperation.call(numberOfRetries, forceReset);
+	}
+
+	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
+		return this.getRewardsTrackInfoOperation.call();
 	}
 
 	public async getCurrentSceneFromMindVision(): Promise<number> {
