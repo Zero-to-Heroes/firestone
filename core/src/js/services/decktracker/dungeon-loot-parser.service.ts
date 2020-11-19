@@ -1,10 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsInfo } from '../../models/duels-info';
 import { GameEvent } from '../../models/game-event';
 import { ApiRunner } from '../api-runner';
+import { isSignatureTreasure } from '../duels/duels-utils';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { DungeonLootInfoUpdatedEvent } from '../mainwindow/store/events/duels/dungeon-loot-info-updated-event';
@@ -19,20 +20,6 @@ const DUNGEON_LOOT_INFO_URL = 'https://e4rso1a869.execute-api.us-west-2.amazonaw
 
 @Injectable()
 export class DungeonLootParserService {
-	private readonly goingIntoQueueRegex = new RegExp('D \\d*:\\d*:\\d*.\\d* BeginEffect blur \\d => 1');
-	private readonly SIGNATURE_TREASUERS = [
-		CardIds.NonCollectible.Demonhunter.SummoningRitual2,
-		CardIds.NonCollectible.Druid.WardensInsight,
-		CardIds.NonCollectible.Hunter.SlatesSyringe,
-		CardIds.NonCollectible.Mage.WandOfDueling,
-		CardIds.NonCollectible.Paladin.RoyalGreatsword,
-		CardIds.NonCollectible.Priest.FracturedSpirits,
-		CardIds.NonCollectible.Rogue.DeadlyWeapons101,
-		CardIds.NonCollectible.Shaman.FluctuatingTotem,
-		CardIds.NonCollectible.Warlock.ImpishAid,
-		CardIds.NonCollectible.Warrior.AutoArmaments,
-	];
-
 	public currentDuelsRunId: string;
 	public busyRetrievingInfo: boolean;
 
@@ -239,7 +226,7 @@ export class DungeonLootParserService {
 	private findSignatureTreasure(deckList: readonly number[]): string {
 		return deckList
 			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
-			.find(card => this.SIGNATURE_TREASUERS.includes(card?.id))?.id;
+			.find(card => isSignatureTreasure(card?.id, this.allCards))?.id;
 	}
 
 	private log(...args) {
