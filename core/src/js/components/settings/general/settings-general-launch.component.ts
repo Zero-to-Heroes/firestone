@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component } from '@angular/core';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -24,6 +25,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					tooltip="Shows a recap of the past session when you exit Hearthstone"
 				></preference-toggle>
 				<preference-toggle
+					*ngIf="enableShowXpRecap"
 					field="showXpRecapAtGameEnd"
 					label="Show XP recap on game end"
 					tooltip="Shows a recap of the XP / levels gained after each match"
@@ -69,6 +71,7 @@ export class SettingsGeneralLaunchComponent implements AfterViewInit {
 	resetText = 'Reset preferences';
 	confirmationShown = false;
 	showResetConfirmationText = false;
+	enableShowXpRecap = FeatureFlags.ENABLE_XP_NOTIFICATION;
 
 	private reloadWindows;
 

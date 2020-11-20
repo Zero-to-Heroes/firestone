@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
+import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OwNotificationsService } from '../notifications.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -18,6 +19,9 @@ export class RewardMonitorService {
 		private readonly prefs: PreferencesService,
 		private readonly notificationService: OwNotificationsService,
 	) {
+		if (!FeatureFlags.ENABLE_XP_NOTIFICATION) {
+			return;
+		}
 		this.init();
 		window['hop'] = async (levels: number, xp: number) => {
 			this.showXpGainedNotification(levels, xp, {
