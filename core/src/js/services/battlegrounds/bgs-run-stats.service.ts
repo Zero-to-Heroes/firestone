@@ -60,7 +60,7 @@ export class BgsRunStatsService {
 			},
 		);
 		const result = results && results.length > 0 ? results[0] : null;
-		console.log('post-match results for review', reviewId, results && results.length > 0);
+		console.log('[bgs-run-stats] post-match results for review', reviewId, results && results.length > 0);
 		this.stateUpdater.next(new ShowMatchStatsEvent(reviewId, result?.stats));
 	}
 
@@ -88,7 +88,7 @@ export class BgsRunStatsService {
 	) {
 		if (retriesLeft <= 0) {
 			console.error(
-				'Could not load bgs post-match stats for',
+				'[bgs-run-stats] Could not load bgs post-match stats for',
 				heroCardId,
 				numberOfStats,
 				`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
@@ -104,7 +104,7 @@ export class BgsRunStatsService {
 		};
 		this.http.post(`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`, input).subscribe(
 			(result: any) => {
-				console.log('retrieved last hero stats for hero');
+				console.log('[bgs-run-stats] retrieved last hero stats for hero');
 				callback(result);
 			},
 			error => {
@@ -129,7 +129,7 @@ export class BgsRunStatsService {
 		bestBgsUserStats: readonly BgsBestStat[],
 		game: GameForUpload,
 	) {
-		console.log('starting to compute run stats');
+		console.log('[bgs-run-stats] starting to compute run stats');
 		const prefs = await this.prefs.getPreferences();
 		const user = await this.userService.getCurrentUser();
 		const newMmr = parseInt(game.newPlayerRank);
@@ -149,7 +149,7 @@ export class BgsRunStatsService {
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: isNaN(newMmr) ? null : newMmr,
 		};
-		// console.log('computing post-match stats input', input);
+		console.log('[bgs-run-stats] computing post-match stats input', input);
 
 		const [postMatchStats, newBestValues] = this.populateObject(
 			prefs.bgsUseLocalPostMatchStats
@@ -158,7 +158,7 @@ export class BgsRunStatsService {
 			input,
 			bestBgsUserStats || [],
 		);
-		// console.log('newBestVaues', newBestValues, postMatchStats);
+		console.log('[bgs-run-stats] newBestVaues', newBestValues, postMatchStats);
 
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
@@ -169,7 +169,7 @@ export class BgsRunStatsService {
 				error => console.error('issue while posting post-match stats', error),
 			);
 		}
-		console.log('postMatchStats built');
+		console.log('[bgs-run-stats] postMatchStats built');
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
@@ -190,9 +190,9 @@ export class BgsRunStatsService {
 				battleResultHistory: currentGame.battleResultHistory,
 				faceOffs: currentGame.faceOffs,
 			};
-			console.log('created worker');
+			console.log('[bgs-run-stats] created worker');
 			worker.postMessage(input);
-			console.log('posted worker message');
+			console.log('[bgs-run-stats] posted worker message');
 		});
 	}
 
@@ -247,7 +247,7 @@ export class BgsRunStatsService {
 			// This actually happens quite a lot, as you can't get the new rating before
 			// moving on to the next screen?
 			// Check BaconEndGameScreen
-			console.warn('Could not get new rating', previousRating);
+			console.warn('[bgs-run-stats] Could not get new rating', previousRating);
 			callback(previousRating);
 			return;
 		}
