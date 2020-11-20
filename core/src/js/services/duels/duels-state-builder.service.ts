@@ -179,6 +179,7 @@ export class DuelsStateBuilderService {
 				),
 			)
 			.filter(run => run)
+			.filter(run => this.isCorrectGameMode(run, prefs))
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs?.length);
 

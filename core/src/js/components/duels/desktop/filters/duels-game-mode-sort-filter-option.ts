@@ -33,6 +33,7 @@ export class DuelsGameModeSortFilterOption implements DuelsDropdownOption {
 			navigation.currentApp == 'duels' &&
 			navigation.navigationDuels &&
 			(navigation.navigationDuels.selectedCategoryId === 'duels-stats' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-runs' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-treasures' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
