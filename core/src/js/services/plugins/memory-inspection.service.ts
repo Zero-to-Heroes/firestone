@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
@@ -17,6 +18,7 @@ import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/get-current-scene-operation';
 import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
+import { GetDuelsRewardsInfoOperation } from './mind-vision/get-duels-rewards-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
@@ -39,6 +41,7 @@ export class MemoryInspectionService {
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
+	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVision, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVision, this.ow);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
 
@@ -81,6 +84,10 @@ export class MemoryInspectionService {
 
 	public async getDuelsInfo(forceReset = false, numberOfRetries = 1): Promise<DuelsInfo> {
 		return this.getDuelsInfoOperation.call(numberOfRetries, forceReset);
+	}
+
+	public async getDuelsRewardsInfo(): Promise<DuelsRewardsInfo> {
+		return this.getDuelsRewardsInfoOperation.call();
 	}
 
 	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {

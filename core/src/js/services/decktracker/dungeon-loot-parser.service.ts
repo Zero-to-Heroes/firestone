@@ -33,6 +33,8 @@ export class DungeonLootParserService {
 	private currentGameType: GameType;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private rewardsTimeout;
+	private shouldTryToGetRewards: boolean;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -43,17 +45,16 @@ export class DungeonLootParserService {
 		private prefs: PreferencesService,
 		private api: ApiRunner,
 	) {
+		window['hophop'] = async () => {
+			this.tryAndGetRewards();
+		};
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
-			// Only reset from a single place (the end-game-uploader)
-			// if (event.type === GameEvent.GAME_END) {
-			// 	this.duelsInfo = null;
-			// 	this.currentReviewId = null;
-			// 	this.currentGameType = null;
-			// } else
 			if (event.type === GameEvent.MATCH_METADATA) {
 				this.currentGameType = event.additionalData.metaData.GameType;
 				this.duelsInfo = null;
+				this.currentReviewId = null;
+				this.currentGameType = null;
 				this.log(
 					'retrieved match meta data',
 					this.currentGameType,
@@ -61,6 +62,19 @@ export class DungeonLootParserService {
 				);
 				if ([GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(this.currentGameType)) {
 					this.retrieveLootInfo();
+				}
+			} else if (event.type === GameEvent.SCENE_CHANGED) {
+				const newScene = event.additionalData.scene;
+				if (newScene === 'scene_pvp_dungeon_run') {
+					this.shouldTryToGetRewards = true;
+					this.tryAndGetRewards();
+				} else {
+					this.shouldTryToGetRewards = false;
+					if (this.rewardsTimeout) {
+						this.log('clearing rewards timeout');
+						clearTimeout(this.rewardsTimeout);
+						this.rewardsTimeout = null;
+					}
 				}
 			}
 		});
@@ -72,6 +86,50 @@ export class DungeonLootParserService {
 				// this.sendLootInfo();
 			}
 		});
+	}
+
+	private async tryAndGetRewards() {
+		if (!this.shouldTryToGetRewards) {
+			return;
+		}
+		const rewards = await this.memory.getDuelsRewardsInfo();
+		this.log('reward', rewards);
+		if (!rewards?.Rewards || rewards?.Rewards.length === 0) {
+			this.log('no rewards yet', this.currentDuelsWins, this.currentDuelsLosses);
+			if (this.rewardsTimeout) {
+				clearTimeout(this.rewardsTimeout);
+				this.rewardsTimeout = null;
+			}
+			this.rewardsTimeout = setTimeout(() => this.tryAndGetRewards(), 1000);
+			return;
+		}
+
+		this.currentDuelsRunId = this.currentDuelsRunId || (await this.prefs.getPreferences()).duelsRunUuid;
+		this.duelsInfo = this.duelsInfo || (await this.memory.getDuelsInfo(false, 5)) || ({} as any);
+
+		if (!this.currentDuelsRunId) {
+			this.log('not enough info to link an Arena Reward');
+			return;
+		}
+
+		this.updateCurrentDuelsInfo(this.duelsInfo);
+
+		const user = await this.ow.getCurrentUser();
+		const input: Input = {
+			type: this.currentGameType === GameType.GT_PVPDR ? 'duels' : 'paid-duels',
+			reviewId: this.currentReviewId,
+			runId: this.currentDuelsRunId,
+			userId: user.userId,
+			userName: user.username,
+			rewards: rewards,
+			currentWins: this.duelsInfo.Wins,
+			currentLosses: this.duelsInfo.Losses,
+			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
+			appVersion: process.env.APP_VERSION,
+		} as Input;
+		this.log('sending rewards info', input);
+		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
+		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
 	}
 
 	private async retrieveLootInfo() {
@@ -109,16 +167,6 @@ export class DungeonLootParserService {
 		this.busyRetrievingInfo = false;
 		this.sendLootInfo();
 	}
-
-	// public resetDuelsRunId() {
-	// 	this.log('resetting duels run info');
-	// 	this.prefs.setDuelsRunId(null);
-	// 	this.currentDuelsRunId = null;
-	// 	this.currentDuelsHeroPowerCardDbfId = null;
-	// 	this.currentDuelsSignatureTreasureCardId = null;
-	// 	this.currentDuelsWins = null;
-	// 	this.currentDuelsLosses = null;
-	// }
 
 	private isNewRun(duelsInfo: DuelsInfo): boolean {
 		if (!duelsInfo) {
@@ -209,6 +257,7 @@ export class DungeonLootParserService {
 			chosenLootIndex: this.duelsInfo.ChosenLoot,
 			treasureOptions: treasures,
 			chosenTreasureIndex: this.duelsInfo.ChosenTreasure,
+			rewards: null,
 			currentWins: this.duelsInfo.Wins,
 			currentLosses: this.duelsInfo.Losses,
 			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
@@ -221,7 +270,7 @@ export class DungeonLootParserService {
 
 	private updateCurrentDuelsInfo(duelsInfo: DuelsInfo) {
 		this.currentDuelsHeroPowerCardDbfId = duelsInfo.StartingHeroPower;
-		this.currentDuelsSignatureTreasureCardId = this.findSignatureTreasure(duelsInfo.DeckList);
+		this.currentDuelsSignatureTreasureCardId = this.findSignatureTreasure(duelsInfo.DeckList || []);
 		this.currentDuelsWins = duelsInfo.Wins;
 		this.currentDuelsLosses = duelsInfo.Losses;
 	}

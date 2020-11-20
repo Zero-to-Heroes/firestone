@@ -102,13 +102,13 @@ export class MindVisionOperationFacade<T> {
 		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
 		const resultFromMemory = await this.mindVisionOperation(forceReset);
 		// this.log('result from memory', resultFromMemory);
-		if (this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
+		if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
 			this.log('calling with a force reset');
 			setTimeout(() => this.callInternal(callback, retriesLeft - 1, true));
 			return;
 		}
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
-			this.log('result from memory is empty, retying');
+			// this.log('result from memory is empty, retying');
 			setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay);
 			return;
 		}

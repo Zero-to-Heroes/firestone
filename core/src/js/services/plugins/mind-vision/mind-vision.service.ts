@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../../models/arena-info';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
 
@@ -108,6 +109,20 @@ export class MindVisionService {
 			const plugin = await this.get();
 			try {
 				plugin.getRewardsTrackInfo(info => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse rewards track info', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo> {
+		return new Promise<DuelsRewardsInfo>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.getDuelsRewardsInfo(forceReset, info => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
