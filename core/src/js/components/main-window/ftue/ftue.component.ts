@@ -37,7 +37,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						class="knot"
 						*ngFor="let step of ftueSteps; let i = index"
 						[ngClass]="{ 'active': i === currentIndex }"
-						(click)="goToStep(step.id)"
 					></div>
 				</div>
 				<div class="previous-ftue ftue-nav-link" (click)="previous()" *ngIf="currentIndex > 0" growOnClick>
@@ -56,33 +55,11 @@ export class FtueComponent implements AfterViewInit {
 	isHome = true;
 	ftueSteps: FtueStep[] = [
 		{
-			id: 'achievements',
-			title: 'Achievements',
-			text: "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished",
-			icon: `assets/svg/ftue/achievements.svg`,
-			progressIndex: 0,
-		},
-		{
-			id: 'collection',
-			title: 'Collection',
-			text:
-				'Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)',
-			icon: `assets/svg/ftue/collection.svg`,
-			progressIndex: 1,
-		},
-		{
 			id: 'decktracker',
 			title: 'Deck Tracker',
 			text: 'Track your cards in game and your deck stats',
 			icon: `assets/svg/ftue/decktracker.svg`,
-			progressIndex: 2,
-		},
-		{
-			id: 'replays',
-			title: 'Replays',
-			text: 'Here you can find all your past games, broken into step by step actions',
-			icon: `assets/svg/ftue/replays.svg`,
-			progressIndex: 3,
+			progressIndex: 0,
 		},
 		{
 			id: 'battlegrounds',
@@ -90,6 +67,35 @@ export class FtueComponent implements AfterViewInit {
 			text:
 				'Our in game helper will appear once you start a game! We will accompany you along your game from hero selection to post match.',
 			icon: `assets/svg/ftue/battlegrounds.svg`,
+			progressIndex: 1,
+		},
+		// {
+		// 	id: 'duels',
+		// 	title: 'Duels',
+		// 	text: "Check global and personal stats, and see a selection of succesful decks for both Casual and Heroic Duels",
+		// 	icon: `assets/svg/ftue/duels.svg`,
+		// 	progressIndex: 0,
+		// },
+		{
+			id: 'replays',
+			title: 'Replays',
+			text: 'Here you can find all your past games, broken into step by step actions',
+			icon: `assets/svg/ftue/replays.svg`,
+			progressIndex: 2,
+		},
+		{
+			id: 'achievements',
+			title: 'Achievements',
+			text: "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished",
+			icon: `assets/svg/ftue/achievements.svg`,
+			progressIndex: 3,
+		},
+		{
+			id: 'collection',
+			title: 'Collection',
+			text:
+				'Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)',
+			icon: `assets/svg/ftue/collection.svg`,
 			progressIndex: 4,
 		},
 	];

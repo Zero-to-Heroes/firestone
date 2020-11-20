@@ -18,25 +18,25 @@ export class NextFtueProcessor implements Processor {
 		let showFtue = currentState.showFtue;
 		switch (navigationState.currentApp) {
 			case undefined:
+				nextStep = 'decktracker';
+				break;
+			case 'decktracker':
+				nextStep = 'battlegrounds';
+				break;
+			case 'battlegrounds':
+				nextStep = 'replays';
+				break;
+			case 'replays':
 				nextStep = 'achievements';
 				break;
 			case 'achievements':
 				nextStep = 'collection';
 				break;
 			case 'collection':
-				nextStep = 'decktracker';
-				break;
-			case 'decktracker':
-				nextStep = 'replays';
-				break;
-			case 'replays':
-				nextStep = 'battlegrounds';
-				break;
-			case 'battlegrounds':
-				nextStep = 'achievements'; // Default page
+				nextStep = 'decktracker'; // Default page
 				break;
 		}
-		if (navigationState.currentApp === 'battlegrounds') {
+		if (navigationState.currentApp === 'collection') {
 			await this.prefs.setGlobalFtueDone();
 			showFtue = false;
 		}
