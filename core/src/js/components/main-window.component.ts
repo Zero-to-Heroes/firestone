@@ -57,7 +57,7 @@ declare let amplitude: any;
 					<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
 				</div>
 			</section>
-			<!-- <ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue> -->
+			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
 			<ads [parentComponent]="'main-window'" *ngIf="!dataState.showFtue"></ads>
 			<section class="content-container" *ngIf="!dataState.showFtue">
 				<replays
