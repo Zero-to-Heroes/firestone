@@ -253,7 +253,7 @@ export class EndGameUploaderService {
 				// So that we have time to collect more logs, especially the ones linked to replay upload
 				setTimeout(() => this.logService.reportSpecificBug('duels-empty-run-id'), 5000);
 			}
-			this.dungeonLootParser.resetDuelsRunId();
+			// this.dungeonLootParser.resetDuelsRunId();
 		}
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');

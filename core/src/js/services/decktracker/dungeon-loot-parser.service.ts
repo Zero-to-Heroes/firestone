@@ -53,6 +53,7 @@ export class DungeonLootParserService {
 			// } else
 			if (event.type === GameEvent.MATCH_METADATA) {
 				this.currentGameType = event.additionalData.metaData.GameType;
+				this.duelsInfo = null;
 				this.log(
 					'retrieved match meta data',
 					this.currentGameType,
@@ -103,21 +104,21 @@ export class DungeonLootParserService {
 		if (!this.currentDuelsRunId) {
 			await this.prefs.setDuelsRunId(uuid());
 			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-			this.log('Could not retrieve duels run id, starting a new run');
+			this.log('Could not retrieve duels run id, starting a new run', this.currentDuelsRunId);
 		}
 		this.busyRetrievingInfo = false;
 		this.sendLootInfo();
 	}
 
-	public resetDuelsRunId() {
-		this.log('resetting duels run info');
-		this.prefs.setDuelsRunId(null);
-		this.currentDuelsRunId = null;
-		this.currentDuelsHeroPowerCardDbfId = null;
-		this.currentDuelsSignatureTreasureCardId = null;
-		this.currentDuelsWins = null;
-		this.currentDuelsLosses = null;
-	}
+	// public resetDuelsRunId() {
+	// 	this.log('resetting duels run info');
+	// 	this.prefs.setDuelsRunId(null);
+	// 	this.currentDuelsRunId = null;
+	// 	this.currentDuelsHeroPowerCardDbfId = null;
+	// 	this.currentDuelsSignatureTreasureCardId = null;
+	// 	this.currentDuelsWins = null;
+	// 	this.currentDuelsLosses = null;
+	// }
 
 	private isNewRun(duelsInfo: DuelsInfo): boolean {
 		if (!duelsInfo) {
@@ -127,6 +128,8 @@ export class DungeonLootParserService {
 			this.log('wins and losses are 0, starting new run', duelsInfo);
 			return true;
 		}
+
+		// TODO: look up the last match with this run info, and compare the wins to that
 		if (
 			(this.currentDuelsWins != null && duelsInfo.Wins < this.currentDuelsWins) ||
 			(this.currentDuelsLosses != null && duelsInfo.Losses < this.currentDuelsLosses)
