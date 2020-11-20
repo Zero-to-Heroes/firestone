@@ -51,10 +51,10 @@ export class DungeonLootParserService {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA) {
-				this.currentGameType = event.additionalData.metaData.GameType;
 				this.duelsInfo = null;
 				this.currentReviewId = null;
-				this.currentGameType = null;
+
+				this.currentGameType = event.additionalData.metaData.GameType;
 				this.log(
 					'retrieved match meta data',
 					this.currentGameType,
