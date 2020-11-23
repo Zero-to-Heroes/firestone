@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import {
 	DeckStat,
 	DuelsGlobalStats,
@@ -9,7 +8,8 @@ import {
 	HeroStat,
 	SignatureTreasureStat,
 	TreasureStat,
-} from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
+} from '@firestone-hs/duels-global-stats/dist/stat';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DeckDefinition, decode } from 'deckstrings';
@@ -48,7 +48,8 @@ import { groupByFunction } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=15';
+// const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=15';
+const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=3';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
@@ -104,9 +105,9 @@ export class DuelsStateBuilderService {
 	}
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
-		const results: any = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
-		console.log('[duels-state-builder] loaded global stats', results);
-		return results?.result;
+		const result: DuelsGlobalStats = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
+		console.log('[duels-state-builder] loaded global stats', result);
+		return result;
 	}
 
 	public initState(globalStats: DuelsGlobalStats, duelsRunInfo: readonly DuelsRunInfo[]): DuelsState {

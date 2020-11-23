@@ -1,4 +1,4 @@
-import { DuelsGlobalStats } from '@firestone-hs/retrieve-duels-global-stats/dist/stat';
+import { DuelsGlobalStats } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
