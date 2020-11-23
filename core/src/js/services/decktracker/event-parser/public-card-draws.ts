@@ -5,6 +5,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Druid.JuicyPsychmelon, // tested
 	CardIds.Collectible.Druid.LunarVisions, // tested
 	CardIds.Collectible.Druid.PredatoryInstincts, // tested
+	CardIds.Collectible.Druid.GuessTheWeight,
 	CardIds.Collectible.Hunter.ArcaneFletcher, // tested
 	CardIds.Collectible.Hunter.CallPet, // tested
 	CardIds.Collectible.Hunter.DivingGryphon, // tested
