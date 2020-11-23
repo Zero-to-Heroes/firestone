@@ -18,13 +18,14 @@ export class CardDrawParser implements EventParser {
 		// console.log('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
+
+		const isCardInfoPublic = isPlayer;
+		const isCreatorPublic = isCardInfoPublic || publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
-		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
-		const isCardInfoPublic = isPlayer;
-		const isCreatorPublic = isCardInfoPublic || publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
 		// console.log('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
 		const cardWithCreator = card.update({
 			creatorCardId: isCardInfoPublic ? creatorCardId : undefined,
@@ -34,9 +35,10 @@ export class CardDrawParser implements EventParser {
 		} as DeckCard);
 		// console.log('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
 		const previousDeck = deck.deck;
+
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId, deck.deckList.length === 0, true)[0]
-			: this.helper.removeSingleCardFromZone(previousDeck, cardId, -1, deck.deckList.length === 0, true)[0];
+			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
 		// console.log('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
