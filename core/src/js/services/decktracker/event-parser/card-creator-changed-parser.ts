@@ -2,9 +2,9 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { forcedHiddenCardCreators } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { publicCardCreators } from './public-card-draws';
 
 export class CardCreatorChangedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -26,7 +26,7 @@ export class CardCreatorChangedParser implements EventParser {
 		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
 		// console.debug('cardInDeck', cardInDeck);
 
-		const isCardInfoPublic = isPlayer || publicCardCreators.includes(gameEvent.additionalData.creatorCardId);
+		const isCardInfoPublic = isPlayer || !forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId);
 		const newCardInHand = cardInHand
 			? cardInHand.update({
 					// To avoid info leaks from Mask of Mimicry
