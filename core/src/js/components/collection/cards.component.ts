@@ -351,7 +351,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		}
 		this._activeCards = [];
 		const workingCards = [...cards];
-		const step = 2000;
+		const step = 200;
 		while (workingCards.length > 0) {
 			// console.log('working with array of', workingCards.length);
 			const cardsToAdd = workingCards.splice(0, Math.min(step, workingCards.length));
