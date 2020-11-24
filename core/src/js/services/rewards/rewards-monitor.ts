@@ -13,6 +13,8 @@ import { sleep } from '../utils';
 export class RewardMonitorService {
 	private infoAtGameStart: RewardsTrackInfo;
 
+	private xpGainedForGame: number;
+
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly memory: MemoryInspectionService,
@@ -33,23 +35,45 @@ export class RewardMonitorService {
 		};
 	}
 
+	public async getXpGained(): Promise<number> {
+		return new Promise<number>(async resolve => {
+			let maxLoops = 30;
+			while (this.xpGainedForGame == null && maxLoops >= 0) {
+				await sleep(100);
+				maxLoops--;
+			}
+			if (this.xpGainedForGame == null || this.xpGainedForGame === -1) {
+				console.log('[rewards-monitor] could not get rewards info', this.xpGainedForGame);
+				resolve(null);
+			}
+			resolve(this.xpGainedForGame);
+		});
+	}
+
 	private init() {
 		this.gameEvents.allEvents.subscribe(async (event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA) {
+				this.xpGainedForGame = undefined;
 				this.infoAtGameStart = await this.memory.getRewardsTrackInfo();
 				console.log('[rewards-monitor] rewards info at game start', this.infoAtGameStart);
 			} else if (event.type === GameEvent.GAME_END) {
 				const infoAtGameEnd = await this.getUpdatedRewardsInfo();
 				console.log('[rewards-monitor] rewards info at game end', infoAtGameEnd);
 				const prefs: Preferences = await this.prefs.getPreferences();
-				if (infoAtGameEnd && prefs.showXpRecapAtGameEnd) {
+				if (infoAtGameEnd) {
 					const levelsGained = infoAtGameEnd.Level - this.infoAtGameStart?.Level ?? 0;
 					const xpGained =
 						levelsGained === 0
 							? infoAtGameEnd.Xp - this.infoAtGameStart?.Xp ?? 0
-							: this.infoAtGameStart.Xp + (infoAtGameEnd.XpNeeded - this.infoAtGameStart.Xp);
-					console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
-					this.showXpGainedNotification(levelsGained, xpGained, infoAtGameEnd);
+							: infoAtGameEnd.Xp + this.infoAtGameStart.XpNeeded - this.infoAtGameStart.Xp;
+					const xpModifier = 1 + (infoAtGameEnd.XpBonusPercent ?? 0) / 100;
+					this.xpGainedForGame = xpGained / xpModifier;
+					if (!this.areEqual(infoAtGameEnd, this.infoAtGameStart) && prefs.showXpRecapAtGameEnd) {
+						console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
+						this.showXpGainedNotification(levelsGained, xpGained, infoAtGameEnd);
+					}
+				} else {
+					this.xpGainedForGame = -1;
 				}
 			}
 		});
@@ -64,9 +88,9 @@ export class RewardMonitorService {
 			info = await this.memory.getRewardsTrackInfo();
 			retriesLeft--;
 		}
-		if (this.areEqual(this.infoAtGameStart, info)) {
-			return null;
-		}
+		// if (this.areEqual(this.infoAtGameStart, info)) {
+		// 	return null;
+		// }
 		return info;
 	}
 

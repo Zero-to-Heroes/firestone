@@ -6,6 +6,7 @@ import { GameStateService } from '../decktracker/game-state.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
+import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { uuid } from '../utils';
 import { EndGameUploaderService } from './end-game-uploader.service';
 import { ReplayUploadService } from './replay-upload.service';
@@ -28,6 +29,7 @@ export class EndGameListenerService {
 		private gameState: GameStateService,
 		private replayUpload: ReplayUploadService,
 		private ow: OverwolfService,
+		private rewards: RewardMonitorService,
 	) {
 		this.init();
 	}
@@ -67,7 +69,10 @@ export class EndGameListenerService {
 					break;
 				case GameEvent.GAME_END:
 					console.log('[manastorm-bridge] end game, uploading?');
-					const reviewId = await this.gameState.getCurrentReviewId();
+					const [reviewId, xpGained] = await Promise.all([
+						this.gameState.getCurrentReviewId(),
+						this.rewards.getXpGained(),
+					]);
 					this.events.broadcast(Events.GAME_END, reviewId);
 
 					await this.endGameUploader.upload(
@@ -78,6 +83,7 @@ export class EndGameListenerService {
 						this.currentDeckname,
 						this.currentBuildNumber,
 						this.currentScenarioId,
+						xpGained,
 					);
 					if (this.deckTimeout) {
 						clearTimeout(this.deckTimeout);

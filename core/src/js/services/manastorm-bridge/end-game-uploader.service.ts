@@ -41,6 +41,7 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
+		xpGained: number,
 	): Promise<void> {
 		console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
@@ -51,6 +52,7 @@ export class EndGameUploaderService {
 			deckName,
 			buildNumber,
 			scenarioId,
+			xpGained,
 		);
 		await this.replayUploadService.uploadGame(game);
 	}
@@ -63,6 +65,7 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
+		xpGained: number,
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
@@ -199,6 +202,7 @@ export class EndGameUploaderService {
 		game.reviewId = currentReviewId;
 		game.buildNumber = buildNumber;
 		game.scenarioId = scenarioId;
+		game.xpGained = xpGained;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
 			console.log('[manastorm-bridge]', currentReviewId, 'adding deckstring', deckstring, game.gameMode);
 			game.deckstring = deckstring;

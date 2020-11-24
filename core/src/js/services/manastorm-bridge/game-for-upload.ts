@@ -25,6 +25,8 @@ export class GameForUpload {
 	durationTurns: number;
 	ended: boolean;
 
+	xpGained: number;
+
 	player: Player = new Player();
 	opponent: Player = new Player();
 
