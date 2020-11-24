@@ -1,1 +1,1 @@
-export type DuelsTimeFilterType = 'all-time' | 'last-patch';
+export type DuelsTimeFilterType = 'all-time' | 'past-three' | 'past-seven' | 'last-patch';

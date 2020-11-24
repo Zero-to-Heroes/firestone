@@ -16,6 +16,14 @@ export class DuelsTimeSortFilterOption implements DuelsDropdownOption {
 				label: 'Past 100 days',
 			} as TimeFilterOption,
 			{
+				value: 'past-seven',
+				label: 'Past 7 days',
+			} as TimeFilterOption,
+			{
+				value: 'past-three',
+				label: 'Past 3 days',
+			} as TimeFilterOption,
+			{
 				value: 'last-patch',
 				label: `Last patch`,
 				tooltip: formatPatch(state?.duels?.currentDuelsMetaPatch),

@@ -129,8 +129,16 @@ export class StoreBootstrapService {
 			console.log('setting current duels run id', lastRunId);
 			await this.prefs.setDuelsRunId(lastRunId);
 		}
+		const currentDuelsMetaPatch = patchConfig?.patches
+			? patchConfig.patches.find(patch => patch.number === patchConfig.currentDuelsMetaPatch)
+			: null;
 		const duelsStats: DuelsState = this.duels.initState(duelsGlobalStats, duelsRunInfo);
-		const newDuelsState = await this.duels.updateState(duelsStats, matchStats, collectionState);
+		const newDuelsState = await this.duels.updateState(
+			duelsStats,
+			matchStats,
+			collectionState,
+			duelsStats?.currentDuelsMetaPatch || currentDuelsMetaPatch,
+		);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,

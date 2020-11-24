@@ -4,6 +4,7 @@ import {
 	DeckStat,
 	DuelsGlobalStats,
 	DuelsGlobalStatsForGameMode,
+	DuelsGlobalStatsForPeriod,
 	HeroPowerStat,
 	HeroStat,
 	SignatureTreasureStat,
@@ -36,6 +37,7 @@ import { BinderState } from '../../models/mainwindow/binder-state';
 import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
@@ -48,8 +50,7 @@ import { groupByFunction } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-// const DUELS_GLOBAL_STATS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsGlobalStats/{proxy+}?v=15';
-const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=3';
+const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=4';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
@@ -163,6 +164,7 @@ export class DuelsStateBuilderService {
 		currentState: DuelsState,
 		matchStats: GameStats,
 		collectionState: BinderState,
+		currentDuelsMetaPatch?: PatchInfo,
 	): Promise<DuelsState> {
 		const prefs = await this.prefs.getPreferences();
 		const duelMatches = matchStats?.stats
@@ -198,6 +200,7 @@ export class DuelsStateBuilderService {
 			activeGameModeFilter: prefs.duelsActiveGameModeFilter,
 			activeTopDecksClassFilter: prefs.duelsActiveTopDecksClassFilter,
 			activeTopDecksDustFilter: prefs.duelsActiveTopDecksDustFilter,
+			currentDuelsMetaPatch: currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch,
 		} as DuelsState);
 	}
 
@@ -213,10 +216,7 @@ export class DuelsStateBuilderService {
 		// const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
 		// Fallback until everything is properly deployed
 		const gameModeStats = this.getGameModeStats(globalStats, prefs) || globalStats.both;
-		const periodStats =
-			prefs.duelsActiveTimeFilter === 'all-time'
-				? gameModeStats.statsForFullPeriod
-				: gameModeStats.statsSinceLastPatch;
+		const periodStats = this.getPeriodStats(gameModeStats, prefs);
 		if (!periodStats) {
 			console.error(
 				'[duels-state-builder] could not build period stats',
@@ -277,6 +277,20 @@ export class DuelsStateBuilderService {
 			case 'all':
 			default:
 				return globalStats.both;
+		}
+	}
+
+	private getPeriodStats(stats: DuelsGlobalStatsForGameMode, prefs: Preferences): DuelsGlobalStatsForPeriod {
+		switch (prefs.duelsActiveTimeFilter) {
+			case 'last-patch':
+				return stats.statsSinceLastPatch;
+			case 'past-three':
+				return stats.statsForThreeDays;
+			case 'past-seven':
+				return stats.statsForSevenDays;
+			case 'all-time':
+			default:
+				return stats.statsForFullPeriod;
 		}
 	}
 
