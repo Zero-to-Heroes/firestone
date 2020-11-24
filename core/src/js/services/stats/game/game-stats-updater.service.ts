@@ -34,7 +34,7 @@ export class GameStatsUpdaterService {
 		const durationInSeconds = extractTotalDuration(replay);
 		const durationInTurns = extractTotalTurns(replay);
 		return GameStat.create({
-			additionalResult: replay.additionalResult,
+			additionalResult: game.additionalResult,
 			buildNumber: game.buildNumber,
 			coinPlay: replay.playCoin,
 			creationTimestamp: Date.now(),
@@ -57,6 +57,7 @@ export class GameStatsUpdaterService {
 			gameDurationSeconds: durationInSeconds,
 			gameDurationTurns: durationInTurns,
 			currentDuelsRunId: game.currentDuelsRunId,
+			// xpGained: game.xpGained,
 		} as GameStat);
 	}
 }
