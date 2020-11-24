@@ -36,6 +36,8 @@ export class DungeonLootParserService {
 	private rewardsTimeout;
 	private shouldTryToGetRewards: boolean;
 
+	private debug: boolean;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
@@ -46,14 +48,14 @@ export class DungeonLootParserService {
 		private api: ApiRunner,
 	) {
 		window['hophop'] = async () => {
-			this.tryAndGetRewards();
+			this.debug = true;
+			this.retrieveLootInfo();
+			this.debug = false;
 		};
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA) {
 				this.duelsInfo = null;
-				this.currentReviewId = null;
-
 				this.currentGameType = event.additionalData.metaData.GameType;
 				this.log(
 					'retrieved match meta data',
@@ -79,10 +81,11 @@ export class DungeonLootParserService {
 			}
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
-			this.log('Received new review id event');
+			this.log('Received new review id event', event);
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
 				this.currentReviewId = info.reviewId;
+				this.log('set reviewId');
 				// this.sendLootInfo();
 			}
 		});
