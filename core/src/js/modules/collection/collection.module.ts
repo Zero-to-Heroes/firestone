@@ -104,6 +104,10 @@ import { DuelsFilterDropdownComponent } from '../../components/duels/desktop/fil
 import { DuelsFiltersComponent } from '../../components/duels/desktop/filters/duels-filters.component';
 import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.component';
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
+import {
+	DuelsClassesRecapComponent,
+	DuelsStatCellComponent,
+} from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
@@ -268,6 +272,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsPersonalDecksComponent,
 		DuelsPersonalDecksVignetteComponent,
 		DuelsPersonalDeckDetailsComponent,
+		DuelsClassesRecapComponent,
+		DuelsStatCellComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

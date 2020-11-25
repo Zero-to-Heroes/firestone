@@ -75,7 +75,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="enableDuels"></section>
+			<section class="secondary" *ngIf="enableDuels">
+				<duels-classes-recap
+					*ngIf="navigation.navigationDuels.selectedCategoryId === 'duels-runs'"
+					[state]="state.duels"
+				></duels-classes-recap>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
