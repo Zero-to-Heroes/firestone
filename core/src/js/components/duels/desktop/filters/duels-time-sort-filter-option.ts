@@ -16,17 +16,17 @@ export class DuelsTimeSortFilterOption implements DuelsDropdownOption {
 				label: 'Past 100 days',
 			} as TimeFilterOption,
 			{
+				value: 'last-patch',
+				label: `Last patch`,
+				tooltip: formatPatch(state?.duels?.currentDuelsMetaPatch),
+			} as TimeFilterOption,
+			{
 				value: 'past-seven',
 				label: 'Past 7 days',
 			} as TimeFilterOption,
 			{
 				value: 'past-three',
 				label: 'Past 3 days',
-			} as TimeFilterOption,
-			{
-				value: 'last-patch',
-				label: `Last patch`,
-				tooltip: formatPatch(state?.duels?.currentDuelsMetaPatch),
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 	};
@@ -38,6 +38,7 @@ export class DuelsTimeSortFilterOption implements DuelsDropdownOption {
 			navigation.currentApp == 'duels' &&
 			navigation.navigationDuels &&
 			(navigation.navigationDuels.selectedCategoryId === 'duels-stats' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-runs' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-treasures')
 		);
 	};

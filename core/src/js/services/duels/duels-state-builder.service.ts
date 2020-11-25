@@ -183,6 +183,7 @@ export class DuelsStateBuilderService {
 			)
 			.filter(run => run)
 			.filter(run => this.isCorrectGameMode(run, prefs))
+			.filter(run => this.isCorrectTime(run, prefs, currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch))
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs?.length);
 
@@ -368,6 +369,39 @@ export class DuelsStateBuilderService {
 				return run.type === 'paid-duels';
 			case 'all':
 			default:
+				return true;
+		}
+	}
+
+	private isCorrectTime(run: DuelsRun, prefs: Preferences, patch: PatchInfo): boolean {
+		if (prefs.duelsActiveTimeFilter === 'all-time') {
+			// console.log('returngin tryue', prefs.duelsActiveTimeFilter);
+			return true;
+		}
+		if (!run.steps || run.steps.filter(step => (step as GameStat).buildNumber).length === 0) {
+			// console.log('no matchg stat', run.steps, prefs.duelsActiveTimeFilter);
+			return false;
+		}
+		const firstMatch = run.steps.filter(step => (step as GameStat).buildNumber).map(step => step as GameStat)[0];
+		const firstMatchTimestamp = firstMatch.creationTimestamp;
+		// console.log(
+		// 	'checking all filters',
+		// 	prefs.duelsActiveTimeFilter,
+		// 	firstMatch.buildNumber >= patch.number,
+		// 	Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000,
+		// 	Date.now() - firstMatchTimestamp < 7 * 24 * 60 * 60 * 1000,
+		// 	Date.now(),
+		// 	firstMatchTimestamp,
+		// );
+		switch (prefs.duelsActiveTimeFilter) {
+			case 'last-patch':
+				return firstMatch.buildNumber >= patch.number;
+			case 'past-three':
+				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
+			case 'past-seven':
+				return Date.now() - firstMatchTimestamp < 7 * 24 * 60 * 60 * 1000;
+			default:
+				// console.log('returning defualt');
 				return true;
 		}
 	}
