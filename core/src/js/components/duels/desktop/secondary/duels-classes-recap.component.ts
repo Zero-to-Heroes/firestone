@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRun } from '../../../../models/duels/duels-run';
 import { DuelsState } from '../../../../models/duels/duels-state';
@@ -88,7 +88,7 @@ export class DuelsClassesRecapComponent {
 
 	private _state: DuelsState;
 
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: AllCardsService, private readonly cdr: ChangeDetectorRef) {}
 
 	private updateValues() {
 		const runs = this._state.runs;
@@ -98,13 +98,27 @@ export class DuelsClassesRecapComponent {
 		}
 		this.averageWinsPerRun = runs.map(run => run.wins).reduce((a, b) => a + b, 0) / this.totalRuns;
 
-		this.mostPlayedClasses = this.buildPlayerClass(runs, (a, b) => b.length - a.length);
-		this.bestWinrateClasses = this.buildPlayerClass(runs, (a, b) => this.buildWinrate(b) - this.buildWinrate(a));
-		this.mostFacedClasses = this.buildFacedClass(runs, (a, b) => b.length - a.length);
-		this.bestWinrateAgainstClasses = this.buildFacedClass(
-			runs,
-			(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
-		);
+		this.mostPlayedClasses = [];
+		this.bestWinrateClasses = [];
+		this.mostFacedClasses = [];
+		this.bestWinrateAgainstClasses = [];
+
+		// Get lots of errors otherwise when changing the filtesr
+		setTimeout(() => {
+			this.mostPlayedClasses = this.buildPlayerClass(runs, (a, b) => b.length - a.length);
+			this.bestWinrateClasses = this.buildPlayerClass(
+				runs,
+				(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
+			);
+			this.mostFacedClasses = this.buildFacedClass(runs, (a, b) => b.length - a.length);
+			this.bestWinrateAgainstClasses = this.buildFacedClass(
+				runs,
+				(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
+			);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	private buildPlayerClass(
