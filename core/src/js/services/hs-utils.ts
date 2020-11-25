@@ -29,6 +29,7 @@ export const globalEffectCards = [
 	CardIds.Collectible.Mage.DeckOfLunacy,
 	CardIds.Collectible.Mage.LunasPocketGalaxy,
 	CardIds.Collectible.Mage.IncantersFlow,
+	CardIds.NonCollectible.Mage.InfiniteArcane,
 	// CardIds.Collectible.Neutral.BakuTheMooneater,
 	CardIds.Collectible.Neutral.FrizzKindleroost,
 	CardIds.Collectible.Neutral.LorekeeperPolkelt,
