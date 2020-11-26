@@ -14,6 +14,7 @@ export class RewardMonitorService {
 	private infoAtGameStart: RewardsTrackInfo;
 
 	private xpGainedForGame: number;
+	private xpForGameInfo: XpForGameInfo;
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
@@ -50,10 +51,26 @@ export class RewardMonitorService {
 		});
 	}
 
+	public async getXpForGameInfo(): Promise<XpForGameInfo> {
+		return new Promise<XpForGameInfo>(async resolve => {
+			let maxLoops = 30;
+			while (this.xpForGameInfo == null && maxLoops >= 0) {
+				await sleep(100);
+				maxLoops--;
+			}
+			if (!this.xpForGameInfo) {
+				console.log('[rewards-monitor] could not get xpForGameInfo', this.xpForGameInfo);
+				resolve(null);
+			}
+			resolve(this.xpForGameInfo);
+		});
+	}
+
 	private init() {
 		this.gameEvents.allEvents.subscribe(async (event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA) {
 				this.xpGainedForGame = undefined;
+				this.xpForGameInfo = undefined;
 				this.infoAtGameStart = await this.memory.getRewardsTrackInfo();
 				console.log('[rewards-monitor] rewards info at game start', this.infoAtGameStart);
 			} else if (event.type === GameEvent.GAME_END) {
@@ -69,8 +86,15 @@ export class RewardMonitorService {
 					const xpModifier = 1 + (infoAtGameEnd.XpBonusPercent ?? 0) / 100;
 					this.xpGainedForGame = xpGained / xpModifier;
 					if (!this.areEqual(infoAtGameEnd, this.infoAtGameStart) && prefs.showXpRecapAtGameEnd) {
+						this.xpForGameInfo = {
+							xpGained: xpGained,
+							bonusXp: infoAtGameEnd.XpBonusPercent ?? 0,
+							levelsGained: levelsGained,
+							currentXp: infoAtGameEnd.Xp,
+							xpNeeded: infoAtGameEnd.XpNeeded,
+						};
 						console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
-						this.showXpGainedNotification(levelsGained, xpGained, infoAtGameEnd);
+						// this.showXpGainedNotification(levelsGained, xpGained, infoAtGameEnd);
 					}
 				} else {
 					this.xpGainedForGame = -1;
@@ -143,4 +167,12 @@ export class RewardMonitorService {
 			type: 'rewards',
 		});
 	}
+}
+
+export interface XpForGameInfo {
+	readonly xpGained: number;
+	readonly bonusXp: number;
+	readonly levelsGained: number;
+	readonly currentXp: number;
+	readonly xpNeeded: number;
 }

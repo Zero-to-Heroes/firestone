@@ -12,10 +12,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	template: `
 		<div class="replays-general">
 			<div class="settings-group">
-				<preference-toggle
+				<!-- <preference-toggle
 					[field]="'replaysShowNotification'"
 					[label]="'Show notifications'"
-				></preference-toggle>
+				></preference-toggle> -->
+				No settings there yet
 			</div>
 		</div>
 	`,

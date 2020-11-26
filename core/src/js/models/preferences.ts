@@ -127,7 +127,7 @@ export class Preferences {
 	readonly playerBgsPogoCounter: boolean = true;
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
 
-	readonly replaysShowNotification: boolean = true;
+	readonly replaysShowNotification: boolean = false;
 
 	readonly achievementsDisplayNotifications = true;
 	readonly resetAchievementsOnAppStart = false;
