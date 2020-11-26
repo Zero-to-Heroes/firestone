@@ -8,19 +8,21 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 const ctx: Worker = self as any;
 
 const cards = new AllCardsService();
+cards.initializeCardsDb();
 
 // Respond to message from parent thread
 ctx.onmessage = async ev => {
+	console.debug('[bgs-simulation] simulator received event');
 	await cards.initializeCardsDb();
-	// console.log('cards info initialized', ev);
+	console.debug('[bgs-simulation] cards info initialized');
 
 	const battleInfo: BgsBattleInfo = ev.data;
 	const cardsData = new CardsData(cards, false);
 	cardsData.inititialize(battleInfo.options.validTribes);
-	// console.log('received message in worker', battleInfo, ev);
+	console.debug('[bgs-simulation] cards data initialized');
 
 	const result: SimulationResult = simulateBattle(battleInfo, cards, cardsData);
-	// console.log('worker result', result);
+	console.debug('[bgs-simulation] simulation completed');
 
 	ctx.postMessage(JSON.stringify(result));
 };

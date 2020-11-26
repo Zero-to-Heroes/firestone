@@ -87,7 +87,7 @@ export class BgsGame {
 			console.warn('trying to set bgsinfo in full data', this, bgsInfo);
 			return this;
 		}
-		//console.log('stting battle info', bgsInfo, battleInfo);
+		console.debug('[bgs-game] setting battle info', battleInfo.opponentBoard?.player?.cardId);
 		return Object.assign(new BgsGame(), this, {
 			battleInfo: battleInfo,
 			battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',

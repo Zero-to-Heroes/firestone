@@ -13,6 +13,7 @@ export class BgsBattleSimulationParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BattlegroundsBattleSimulationEvent,
 	): Promise<BattlegroundsState> {
+		console.debug('[bgs-simulation-parser] setting battle result', event.result.damageWon);
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				battleResult: event.result,
