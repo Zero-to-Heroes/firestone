@@ -20,6 +20,7 @@ import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { UserService } from '../user.service';
+import { sleep } from '../utils';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
@@ -154,7 +155,7 @@ export class BgsRunStatsService {
 		const [postMatchStats, newBestValues] = this.populateObject(
 			prefs.bgsUseLocalPostMatchStats
 				? await this.buildStatsLocally(currentGame, game.uncompressedXmlReplay)
-				: ((await this.http.post(BGS_UPLOAD_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats),
+				: await this.buildStatsRemotely(input),
 			input,
 			bestBgsUserStats || [],
 		);
@@ -164,14 +165,24 @@ export class BgsRunStatsService {
 		// archive the data. However, this is non-blocking
 		if (prefs.bgsUseLocalPostMatchStats) {
 			// console.log('posting to endpoint');
-			this.http.post(BGS_UPLOAD_RUN_STATS_ENDPOINT, input).subscribe(
-				result => console.log('request remote post-match stats success'),
-				error => console.error('issue while posting post-match stats', error),
-			);
+			this.buildStatsRemotely(input);
 		}
 		console.log('[bgs-run-stats] postMatchStats built');
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
+	}
+
+	private async buildStatsRemotely(input: BgsComputeRunStatsInput): Promise<IBgsPostMatchStats> {
+		console.log('[bgs-run-stats] preparing to build stats remotely', input.reviewId);
+		// Because it takes some time for the review to be processed, and we don't want to
+		// use a lambda simply to wait, as it costs money :)
+		await sleep(5000);
+		console.log('[bgs-run-stats] contacting remote endpoint', input.reviewId);
+		try {
+			return (await this.http.post(BGS_UPLOAD_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats;
+		} catch (e) {
+			console.error('[bgs-run-stats] issue while posting post-match stats', input.reviewId, e);
+		}
 	}
 
 	private async buildStatsLocally(currentGame: BgsGame, replayXml: string): Promise<IBgsPostMatchStats> {
