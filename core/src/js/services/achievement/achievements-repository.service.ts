@@ -83,7 +83,7 @@ export class AchievementsRepository {
 		achievementsWithReplayInfos: readonly Achievement[],
 		completedAchievements: CompletedAchievement[],
 	): IterableIterator<void> {
-		console.log('starting loading cards');
+		// console.log('starting loading achievements');
 		const providers = [];
 		for (const provider of this.setProviders) {
 			providers.push(
