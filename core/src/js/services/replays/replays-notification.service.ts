@@ -98,23 +98,25 @@ export class ReplaysNotificationService {
 		// console.log('[replays-notification] preparing playerRankImage', playerRankImage);
 		const rankText = stat.buildRankText() || '';
 		const playerRankImage = playerRankArt ? `<img class="art" src="${playerRankArt}" />` : ``;
-		// const xpBonusEl = xpForGame.bonusXp
-		// 	? `
-		// 	<div class="xp-bonus">
-		// 		<span class="text">, Xp bonus:</span>
-		// 		<span class="value">${xpForGame.bonusXp}%</span>
-		// 	</div>`
-		// 	: '';
-		const bonusClass = xpForGame.bonusXp ? 'bonus' : '';
-		// const levelsGainedEl = xpForGame.levelsGained
-		// 	? `
-		// 	<div class="xp-level">
-		// 		<span class="text">Levels gained:</span>
-		// 		<span class="value">${xpForGame.levelsGained} </span>
-		// 	</div>`
-		// 	: '';
-		// console.log('[replays-notification] preparing rankText', rankText);
-		// <span class="text">Click here to watch the replay</span>
+		const bonusClass = xpForGame?.bonusXp ? 'bonus' : '';
+		const xpEl = xpForGame
+			? `
+			<div class="xp-text">
+				<span class="text">You gained</span>
+				<div class="value ${bonusClass} has-tooltip">
+					<span class="xp-value">${xpForGame.xpGained}</span>
+					<span class="tooltip xp-bonus ${bonusClass}">${xpForGame.bonusXp ? xpForGame.bonusXp : 'No'} XP bonus</span>
+				</div>
+				<span class="text">XP this match</span>
+				<div class="progress">
+					<span class="item bracket">(</span>
+					<span class="item">${xpForGame.currentXp}</span>
+					<span class="item separator">/</span>
+					<span class="item">${xpForGame.xpNeeded}</span>
+					<span class="item bracket">)</span>
+				</div>
+			</div>`
+			: '';
 		return `
 			<div class="match-stats-message-container replay-${stat.reviewId}">
 				<div class="mode rank-image has-tooltip">
@@ -130,21 +132,7 @@ export class ReplaysNotificationService {
 						<span>Your match has been recorded</span>
 					</div>
 					<div class="xp">
-						<div class="xp-text">
-							<span class="text">You gained</span>
-							<div class="value ${bonusClass} has-tooltip">
-								<span class="xp-value">${xpForGame.xpGained}</span>
-								<span class="tooltip xp-bonus ${bonusClass}">${xpForGame.bonusXp ? xpForGame.bonusXp : 'No'} XP bonus</span>
-							</div>
-							<span class="text">XP this match</span>
-							<div class="progress">
-								<span class="item bracket">(</span>
-								<span class="item">${xpForGame.currentXp}</span>
-								<span class="item separator">/</span>
-								<span class="item">${xpForGame.xpNeeded}</span>
-								<span class="item bracket">)</span>
-							</div>
-						</div>
+						${xpEl}
 					</div>
 				</div>
 				<button class="i-30 close-button">
