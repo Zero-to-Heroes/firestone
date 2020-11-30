@@ -36,8 +36,9 @@ export class AchievementsVideoCaptureService {
 		private init_TemporaryResolutionOverride: TemporaryResolutionOverrideService,
 		private ow: OverwolfService,
 	) {
-		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.onAchievementComplete(data));
-		this.listenToRecordingPrefUpdates();
+		console.log('deprecating video capture services, returning');
+		// this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.onAchievementComplete(data));
+		// this.listenToRecordingPrefUpdates();
 	}
 
 	private async listenToRecordingPrefUpdates() {

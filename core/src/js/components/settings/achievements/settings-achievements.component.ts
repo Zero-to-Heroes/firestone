@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			<settings-achievements-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">
 			</settings-achievements-menu>
 			<ng-container [ngSwitch]="_selectedMenu">
-				<settings-achievements-capture *ngSwitchCase="'capture'"></settings-achievements-capture>
+				<!-- <settings-achievements-capture *ngSwitchCase="'capture'"></settings-achievements-capture> -->
 				<settings-achievements-notifications
 					*ngSwitchCase="'notifications'"
 				></settings-achievements-notifications>
