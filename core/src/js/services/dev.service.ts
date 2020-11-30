@@ -237,32 +237,26 @@ export class DevService {
 	// 	};
 	// }
 
-	// private addCustomLogLoaderCommand() {
-	// 	window['loadLog'] = (logName, deckString) => {
-	// 		if (deckString) {
-	// 			this.deckService.currentDeck.deckstring = deckString;
-	// 			this.deckService.decodeDeckString();
-	// 		}
-	// 		overwolf.games.getRunningGameInfo(async (res: any) => {
-	// 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-	// 				const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + logName;
-	// 				const logContents = await this.io.getFileContents(logsLocation);
-	// 				this.loadArbitraryLogContent(logContents);
-	// 			}
-	// 		});
-	// 	};
-	// 	window['startDeckCycle'] = async (logName, deckString) => {
-	// 		console.log('starting new deck cycle', logName, deckString);
-	// 		this.deckService.currentDeck.deckstring = deckString;
-	// 		this.deckService.decodeDeckString();
-	// 		const logsLocation = `D:\\Games\\Hearthstone\\Logs\\${logName}`;
-	// 		const logContents = await this.io.getFileContents(logsLocation);
-	// 		const logLines = logContents.split('\n');
-	// 		await this.processLogLines(logLines);
-	// 		this.deckService.reset();
-	// 		window['startDeckCycle'](logName, deckString);
-	// 	};
-	// }
+	private addCustomLogLoaderCommand() {
+		// window['loadLog'] = (logName, deckString) => {
+		// 	if (deckString) {
+		// 		this.deckService.currentDeck.deckstring = deckString;
+		// 		this.deckService.decodeDeckString();
+		// 	}
+		// 	overwolf.games.getRunningGameInfo(async (res: any) => {
+		// 		if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
+		// 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + logName;
+		// 			const logContents = await this.io.getFileContents(logsLocation);
+		// 			this.loadArbitraryLogContent(logContents);
+		// 		}
+		// 	});
+		// };
+		window['startDeckCycle'] = async (logName, deckString) => {
+			console.log('starting new deck cycle', logName, deckString);
+			await window['loadEvents'](logName, true, deckString);
+			window['startDeckCycle'](logName, deckString);
+		};
+	}
 
 	// private async processLogLines(logLines) {
 	// 	const plugin = await this.gameEventsPlugin.get();
