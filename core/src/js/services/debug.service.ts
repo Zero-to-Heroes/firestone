@@ -43,7 +43,7 @@ export class DebugService {
 		if (debugMode) {
 			return function() {
 				// Sampling of events
-				if (Math.random() < 0.1) {
+				if (Math.random() < 0.001) {
 					amplitude.getInstance().logEvent('error-logged');
 				}
 				const stack = new Error().stack;
