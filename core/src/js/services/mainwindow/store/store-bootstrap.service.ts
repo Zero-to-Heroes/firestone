@@ -9,6 +9,7 @@ import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
+import { DungeonLootParserService } from '../../decktracker/dungeon-loot-parser.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
@@ -44,6 +45,7 @@ export class StoreBootstrapService {
 		private readonly collectionBootstrap: CollectionBootstrapService,
 		private readonly patchConfig: PatchesConfigService,
 		private readonly duels: DuelsStateBuilderService,
+		private readonly dungeonLoot: DungeonLootParserService,
 	) {
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -118,17 +120,19 @@ export class StoreBootstrapService {
 			isLoading: false,
 		} as AchievementsState);
 
-		const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
-		const lastRunId =
-			lastGameWithDuelsRunId &&
-			lastGameWithDuelsRunId.length > 0 &&
-			!this.isLastMatchInRun(lastGameWithDuelsRunId[0].additionalResult, lastGameWithDuelsRunId[0].result)
-				? lastGameWithDuelsRunId[0].currentDuelsRunId
-				: null;
-		if (lastRunId) {
-			console.log('setting current duels run id', lastRunId);
-			await this.prefs.setDuelsRunId(lastRunId);
-		}
+		this.dungeonLoot.setLastDuelsMatch(newStatsState.gameStats);
+		// const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
+		// const lastRunId =
+		// 	lastGameWithDuelsRunId &&
+		// 	lastGameWithDuelsRunId.length > 0 &&
+		// 	!this.isLastMatchInRun(lastGameWithDuelsRunId[0].additionalResult, lastGameWithDuelsRunId[0].result)
+		// 		? lastGameWithDuelsRunId[0].currentDuelsRunId
+		// 		: null;
+		// if (lastRunId) {
+		// 	console.log('setting current duels run id', lastRunId);
+		// 	await this.prefs.setDuelsRunId(lastRunId);
+		// }
+
 		const currentDuelsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find(patch => patch.number === patchConfig.currentDuelsMetaPatch)
 			: null;
@@ -154,24 +158,6 @@ export class StoreBootstrapService {
 			globalStats: globalStats,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState));
-	}
-
-	private isLastMatchInRun(additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean {
-		if (!additionalResult) {
-			return false;
-		}
-		const [wins, losses] = additionalResult.split('-').map(info => parseInt(info));
-		if (wins === 11 && result === 'won') {
-			console.log(
-				'[store-bootstrap] last duels match was the last of the run, not forwarding run id',
-				additionalResult,
-				result,
-			);
-			return true;
-		}
-		if (losses === 2 && result === 'lost') {
-			return false;
-		}
 	}
 
 	private async initializeSocialShareUserInfo(): Promise<SocialShareUserInfo> {

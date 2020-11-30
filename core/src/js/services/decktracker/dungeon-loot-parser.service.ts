@@ -4,6 +4,8 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsInfo } from '../../models/duels-info';
 import { GameEvent } from '../../models/game-event';
+import { GameStat } from '../../models/mainwindow/stats/game-stat';
+import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { ApiRunner } from '../api-runner';
 import { isSignatureTreasure } from '../duels/duels-utils';
 import { Events } from '../events.service';
@@ -23,6 +25,7 @@ export class DungeonLootParserService {
 	public currentDuelsRunId: string;
 	public busyRetrievingInfo: boolean;
 
+	private lastDuelsMatch: GameStat;
 	private currentDuelsHeroPowerCardDbfId: number;
 	private currentDuelsSignatureTreasureCardId: string;
 	private currentDuelsWins: number;
@@ -47,12 +50,16 @@ export class DungeonLootParserService {
 		private prefs: PreferencesService,
 		private api: ApiRunner,
 	) {
-		window['hophop'] = async () => {
-			this.debug = true;
-			this.retrieveLootInfo();
-			this.debug = false;
-		};
+		// window['hophop'] = async () => {
+		// 	this.debug = true;
+		// 	this.retrieveLootInfo();
+		// 	this.debug = false;
+		// };
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
+			const newGameStats: GameStats = event.data[0];
+			this.setLastDuelsMatch(newGameStats);
+		});
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA) {
 				this.duelsInfo = null;
@@ -89,6 +96,18 @@ export class DungeonLootParserService {
 				// this.sendLootInfo();
 			}
 		});
+	}
+
+	public setLastDuelsMatch(newGameStats: GameStats) {
+		if (
+			(newGameStats?.stats && newGameStats.stats.length > 0 && newGameStats.stats[0].gameMode === 'duels') ||
+			newGameStats.stats[0].gameMode === 'paid-duels'
+		) {
+			if (!this.isLastMatchInRun(newGameStats.stats[0].additionalResult, newGameStats.stats[0].result)) {
+				this.log('setting last duels', newGameStats.stats[0]);
+				this.lastDuelsMatch = newGameStats.stats[0];
+			}
+		}
 	}
 
 	private async tryAndGetRewards() {
@@ -193,6 +212,30 @@ export class DungeonLootParserService {
 			);
 			return true;
 		}
+
+		if (this.lastDuelsMatch) {
+			const [wins, losses] = this.lastDuelsMatch.additionalResult.split('-').map(info => parseInt(info));
+			if (duelsInfo.Wins < wins || duelsInfo.Losses < losses) {
+				this.log(
+					'wins or losses less than previous info, starting new run',
+					duelsInfo,
+					this.lastDuelsMatch.additionalResult,
+					this.lastDuelsMatch,
+				);
+				return true;
+			}
+			if (this.duelsInfo.HeroCardId !== this.lastDuelsMatch.playerCardId) {
+				this.log(
+					'different card id, starting new run',
+					this.duelsInfo.HeroCardId,
+					this.lastDuelsMatch.playerCardId,
+					duelsInfo,
+					this.lastDuelsMatch,
+				);
+				return true;
+			}
+		}
+
 		if (
 			this.currentDuelsHeroPowerCardDbfId &&
 			duelsInfo.StartingHeroPower !== this.currentDuelsHeroPowerCardDbfId
@@ -282,6 +325,20 @@ export class DungeonLootParserService {
 		return deckList
 			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
 			.find(card => isSignatureTreasure(card?.id, this.allCards))?.id;
+	}
+
+	private isLastMatchInRun(additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean {
+		if (!additionalResult) {
+			return false;
+		}
+		const [wins, losses] = additionalResult.split('-').map(info => parseInt(info));
+		if (wins === 11 && result === 'won') {
+			this.log('last duels match was the last of the run, not forwarding run id', additionalResult, result);
+			return true;
+		}
+		if (losses === 2 && result === 'lost') {
+			return false;
+		}
 	}
 
 	private log(...args) {
