@@ -920,6 +920,10 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string) {
+		if (this.shouldTriggerCatchUp) {
+			this.shouldTriggerCatchUp = false;
+			this.triggerCatchUp();
+		}
 		// In case the game overrides the info during the process, we stop everything and start from scratch
 		if (data === 'truncated') {
 			console.log(
@@ -928,9 +932,9 @@ export class GameEvents {
 				this.processingQueue.eventsPendingCount(),
 			);
 			this.spectating = false;
-			if (this.triggerTimeout) {
-				clearTimeout(this.triggerTimeout);
-			}
+			// if (this.triggerTimeout) {
+			// 	clearTimeout(this.triggerTimeout);
+			// }
 			this.existingLogLines = [];
 			this.processingQueue.clear();
 			return;
@@ -967,7 +971,8 @@ export class GameEvents {
 	}
 
 	private existingLogLines: string[] = [];
-	private triggerTimeout;
+	// private triggerTimeout;
+	private shouldTriggerCatchUp: boolean;
 
 	// Handles reading a log file mid-game, i.e. this data is already
 	// present in the log file when we're trying to read it
@@ -987,9 +992,10 @@ export class GameEvents {
 			return;
 		}
 
-		if (this.triggerTimeout) {
-			clearTimeout(this.triggerTimeout);
-		}
+		// if (this.triggerTimeout) {
+		// 	clearTimeout(this.triggerTimeout);
+		// 	this.triggerTimeout = null;
+		// }
 
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
 			// There is no automatic reconnect when spectating, so we can always safely say
@@ -1000,11 +1006,6 @@ export class GameEvents {
 			this.triggerCatchUp();
 			return;
 		}
-
-		// if (this.spectating) {
-		// 	// For now we're not interested in spectating events, but that will come out later
-		// 	return;
-		// }
 
 		if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
 			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
@@ -1019,8 +1020,9 @@ export class GameEvents {
 			this.existingLogLines = [];
 		}
 		this.existingLogLines.push(existingLine);
+		this.shouldTriggerCatchUp = true;
 
-		this.triggerTimeout = setTimeout(() => this.triggerCatchUp(), 2000);
+		// this.triggerTimeout = setTimeout(() => this.triggerCatchUp(), 2000);
 	}
 
 	private async triggerCatchUp() {
