@@ -9,9 +9,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
+import { GameEvent } from '../../models/game-event';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -74,10 +75,37 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 		this.isBgs = this.activeCounter.includes('bgs');
 	}
 
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		console.log('[shutdown] unsubscribing game-counters', this.activeCounter, this.side);
+		this.stateSubscription?.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
+		console.log('[shutdown] unsubscribed from game-counters');
+	}
+
+	@HostListener('mousedown')
+	dragMove() {
+		this.ow.dragMove(this.windowId, async result => {
+			const window = await this.ow.getCurrentWindow();
+			if (!window) {
+				return;
+			}
+			this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
+		});
+	}
+
 	async ngAfterViewInit() {
 		if (!this.activeCounter.includes('bgs')) {
 			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-			this.stateSubscription = deckEventBus.subscribe(async event => {
+			const subscriber = new Subscriber<any>(async event => {
+				// Ideally this should not be necessary, but it looks like that doing things in the beforeunload
+				// handler is not always enough
+				if (event.event.name === GameEvent.GAME_END) {
+					console.log('unsubscribing');
+					this.stateSubscription?.unsubscribe();
+					this.preferencesSubscription?.unsubscribe();
+					return;
+				}
 				if (!event?.state) {
 					return;
 				}
@@ -87,9 +115,11 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 					this.cdr.detectChanges();
 				}
 			});
+			this.stateSubscription = deckEventBus.subscribe(subscriber);
+			console.log('subscribed in game counters', subscriber, this.stateSubscription, deckEventBus);
 		} else {
 			const deckEventBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-			this.stateSubscription = deckEventBus.subscribe(async newState => {
+			const subscriber = new Subscriber<any>(async newState => {
 				if (!newState) {
 					return;
 				}
@@ -99,6 +129,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 					this.cdr.detectChanges();
 				}
 			});
+			subscriber['identifier'] = 'game-counters-bgs';
+			this.stateSubscription = deckEventBus.subscribe(subscriber);
 		}
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		await this.restoreWindowPosition();
@@ -137,23 +169,6 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			default:
 				console.warn('unexpected activeCounter for bgs', activeCounter);
 		}
-	}
-
-	@HostListener('window:beforeunload')
-	ngOnDestroy(): void {
-		this.stateSubscription.unsubscribe();
-		this.preferencesSubscription.unsubscribe();
-	}
-
-	@HostListener('mousedown')
-	dragMove() {
-		this.ow.dragMove(this.windowId, async result => {
-			const window = await this.ow.getCurrentWindow();
-			if (!window) {
-				return;
-			}
-			this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
-		});
 	}
 
 	private async restoreWindowPosition(): Promise<void> {

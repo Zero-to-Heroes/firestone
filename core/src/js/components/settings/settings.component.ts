@@ -84,7 +84,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
-		this.settingsSubscription.unsubscribe();
+		this.settingsSubscription?.unsubscribe();
 	}
 
 	onAppSelected(selectedApp: string, selectedMenu?: string) {

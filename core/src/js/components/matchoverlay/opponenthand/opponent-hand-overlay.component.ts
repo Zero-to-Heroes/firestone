@@ -9,7 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
@@ -59,12 +59,10 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	async ngAfterViewInit() {
-		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-		// this.cdr.detach();
-
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		this.deckSubscription = deckEventBus.subscribe(async event => {
+		const subscriber = new Subscriber<any>(async event => {
 			// Can happen because we now have a BehaviorSubject
 			if (event == null) {
 				return;
@@ -76,6 +74,9 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 		});
+		subscriber['identifier'] = 'opponent-hand-overlay';
+		this.deckSubscription = deckEventBus.subscribe(subscriber);
+
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.setDisplayPreferences(event.preferences);
@@ -100,8 +101,9 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.deckSubscription.unsubscribe();
-		this.preferencesSubscription.unsubscribe();
+		this.deckSubscription?.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
+		console.log('[shutdown] unsubscribed from opponent-hand-overlay');
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {

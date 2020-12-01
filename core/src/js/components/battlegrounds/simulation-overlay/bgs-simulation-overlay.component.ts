@@ -80,7 +80,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		this.storeSubscription.unsubscribe();
+		this.storeSubscription?.unsubscribe();
 	}
 
 	@HostListener('mousedown')

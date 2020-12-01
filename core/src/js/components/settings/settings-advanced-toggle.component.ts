@@ -57,7 +57,7 @@ export class SettingsAdvancedToggleComponent implements AfterViewInit, OnDestroy
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.preferencesSubscription.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	private async loadDefaultValues() {

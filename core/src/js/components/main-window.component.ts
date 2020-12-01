@@ -250,7 +250,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
-		this.dataStoreSubscription.unsubscribe();
+		this.dataStoreSubscription?.unsubscribe();
 	}
 
 	private async init() {

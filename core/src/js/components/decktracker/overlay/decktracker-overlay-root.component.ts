@@ -12,7 +12,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -167,8 +167,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	async ngAfterViewInit() {
 		this.cards.initializeCardsDb();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		this.deckSubscription = deckEventBus.subscribe(async event => {
+		const subscriber = new Subscriber<any>(async event => {
 			this.showTracker = event.state != null;
 			this.deckStatsRecap = (event.state as GameState).deckStatsRecap;
 			this.matchupStatsRecap = (event.state as GameState).matchupStatsRecap;
@@ -179,6 +180,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 				this.cdr.detectChanges();
 			}
 		});
+		subscriber['identifier'] = 'decktracker-overlay-root';
+		this.deckSubscription = deckEventBus.subscribe(subscriber);
+
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.handleDisplayPreferences(event.preferences);
@@ -218,12 +222,13 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.showTooltipSubscription.unsubscribe();
-		this.hideTooltipSubscription.unsubscribe();
-		this.deckSubscription.unsubscribe();
-		this.preferencesSubscription.unsubscribe();
+		this.showTooltipSubscription?.unsubscribe();
+		this.hideTooltipSubscription?.unsubscribe();
+		this.deckSubscription?.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 		this.deckStatsRecap = null;
 		this.matchupStatsRecap = null;
+		console.log('[shutdown] unsubscribed from decktracker-ovelray-root');
 	}
 
 	onMinimize() {

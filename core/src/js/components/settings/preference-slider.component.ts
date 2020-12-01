@@ -105,7 +105,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.subscription.unsubscribe();
+		this.subscription?.unsubscribe();
 	}
 
 	onValueChange(newValue: number): void {

@@ -72,7 +72,7 @@ export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		this.preferencesSubscription.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {

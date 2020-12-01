@@ -41,7 +41,7 @@ export class SettingsModalComponent implements OnInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.eventsSubscription.unsubscribe();
+		this.eventsSubscription?.unsubscribe();
 	}
 
 	closeModal() {

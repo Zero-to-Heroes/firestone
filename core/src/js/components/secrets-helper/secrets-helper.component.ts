@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { GameState } from '../../models/decktracker/game-state';
@@ -97,7 +97,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		this.deckSubscription = deckEventBus.subscribe(async event => {
+		const subscriber = new Subscriber<any>(async event => {
 			this.shouldShow = event?.state != null;
 			// this.gameState = event ? event.state : undefined;
 			this.active = (event.state as GameState)?.opponentDeck?.secretHelperActive;
@@ -107,6 +107,9 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 		});
+		subscriber['identifier'] = 'secrets-helper';
+		this.deckSubscription = deckEventBus.subscribe(subscriber);
+
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.handleDisplayPreferences(event.preferences);
@@ -130,10 +133,11 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.showTooltipSubscription.unsubscribe();
-		this.hideTooltipSubscription.unsubscribe();
-		this.deckSubscription.unsubscribe();
-		this.preferencesSubscription.unsubscribe();
+		this.showTooltipSubscription?.unsubscribe();
+		this.hideTooltipSubscription?.unsubscribe();
+		this.deckSubscription?.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
+		console.log('[shutdown] unsubscribed from secrets-helper');
 	}
 
 	@HostListener('mousedown')

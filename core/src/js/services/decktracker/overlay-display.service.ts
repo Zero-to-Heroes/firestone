@@ -1,6 +1,6 @@
 import { EventEmitter, HostListener, Injectable, OnDestroy } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
@@ -23,25 +23,24 @@ export class OverlayDisplayService implements OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		this.preferencesSubscription.unsubscribe();
-		this.deckSubscription.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
+		this.deckSubscription?.unsubscribe();
 	}
 
 	private init() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.pipe(debounceTime(200)).subscribe(event => {
-			// if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 			this.handleDisplayPreferences(this.gameState, event.preferences);
-			// }
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
-		this.deckSubscription = deckEventBus.subscribe(async event => {
-			// console.log('[overlay-display] received deck event', event);
+		const subscriber = new Subscriber<any>(async event => {
 			if (event) {
 				this.gameState = event.state;
 				await this.processEvent(event.event);
 			}
 		});
+		subscriber['identifier'] = 'overlay-display';
+		this.deckSubscription = deckEventBus.subscribe(subscriber);
 	}
 
 	private async processEvent(event) {

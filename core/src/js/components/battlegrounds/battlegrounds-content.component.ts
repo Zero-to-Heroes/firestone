@@ -128,7 +128,8 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.preferencesSubscription.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
+		this._state = null;
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {

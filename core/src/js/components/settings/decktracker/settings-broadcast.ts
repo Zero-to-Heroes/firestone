@@ -124,7 +124,7 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.preferencesSubscription.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	connect() {

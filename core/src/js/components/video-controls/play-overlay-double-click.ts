@@ -179,6 +179,6 @@ export class FsOverlayPlay implements OnInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.subscriptions.forEach(s => s.unsubscribe());
+		this.subscriptions.forEach(s => s?.unsubscribe());
 	}
 }

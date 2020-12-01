@@ -88,7 +88,7 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 		if (this.stateSubscription) {
 			this.stateSubscription.unsubscribe();
 		}
-		this.preferencesSubscription.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	@HostListener('mousedown')

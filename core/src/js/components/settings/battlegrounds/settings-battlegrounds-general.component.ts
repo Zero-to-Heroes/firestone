@@ -177,7 +177,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.preferencesSubscription.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	private async loadDefaultValues() {

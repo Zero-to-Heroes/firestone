@@ -128,7 +128,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		this.storeSubscription.unsubscribe();
+		this.storeSubscription?.unsubscribe();
 	}
 
 	private async positionWindowOnSecondScreen() {

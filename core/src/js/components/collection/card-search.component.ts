@@ -79,7 +79,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.subscription.unsubscribe();
+		this.subscription?.unsubscribe();
 	}
 
 	@Input('searchString') set searchString(searchString: string) {
