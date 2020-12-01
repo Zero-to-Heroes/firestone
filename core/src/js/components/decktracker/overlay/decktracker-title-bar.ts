@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 
@@ -33,4 +33,9 @@ export class DeckTrackerTitleBarComponent {
 	@Input() showMatchupWinrate: boolean;
 	@Input() deckWinrate: StatsRecap;
 	@Input() matchupWinrate: StatsRecap;
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		this.deck = null;
+	}
 }

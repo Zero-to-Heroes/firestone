@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -68,6 +68,12 @@ export class GroupedDeckListComponent {
 	// }
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		this.zone = null;
+		this._deckState = null;
+	}
 
 	private buildGroupedList() {
 		if (!this._deckState) {

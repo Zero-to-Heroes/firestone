@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, ViewRef } from '@angular/core';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { formatClass } from '../../../services/hs-utils';
 
@@ -56,6 +56,11 @@ export class DeckTrackerWinrateRecapComponent {
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		this._stats = null;
+	}
 
 	private updateInfo() {
 		if (!this._stats || !this._type) {

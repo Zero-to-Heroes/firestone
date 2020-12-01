@@ -105,6 +105,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription && this.preferencesSubscription.unsubscribe();
+		this._deckState = null;
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click

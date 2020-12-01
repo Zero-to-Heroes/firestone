@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -75,6 +75,16 @@ export class DeckListByZoneComponent {
 	private _sortCardsByManaCostInOtherZone: boolean;
 	private _deckState: DeckState;
 
+	trackZone(index, zone: DeckZone) {
+		return zone.id;
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		this._deckState = null;
+		this.zones = null;
+	}
+
 	private updateInfo() {
 		if (!this._deckState) {
 			return;
@@ -125,10 +135,6 @@ export class DeckListByZoneComponent {
 			zones.push(this.buildDynamicZone(zone, null));
 		});
 		this.zones = zones as readonly DeckZone[];
-	}
-
-	trackZone(index, zone: DeckZone) {
-		return zone.id;
 	}
 
 	private buildDynamicZone(

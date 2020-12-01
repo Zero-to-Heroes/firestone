@@ -222,6 +222,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.hideTooltipSubscription.unsubscribe();
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
+		this.deckStatsRecap = null;
+		this.matchupStatsRecap = null;
 	}
 
 	onMinimize() {
