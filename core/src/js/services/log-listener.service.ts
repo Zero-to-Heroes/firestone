@@ -81,14 +81,18 @@ export class LogListenerService {
 	async listenOnFileCreation(logsLocation: string) {
 		// console.log('[log-listener] [' + this.logFile + '] listening on file creation');
 		const fileExists = await this.ow.fileExists(logsLocation);
-		if (fileExists) {
-			this.listenOnFileUpdate(logsLocation);
-		} else {
-			this.fileInitiallyPresent = false;
-			setTimeout(() => {
-				this.listenOnFileCreation(logsLocation);
-			}, 2000);
+		if (!fileExists) {
+			await this.ow.writeFileContents(logsLocation, '');
 		}
+		this.listenOnFileUpdate(logsLocation);
+		// if (fileExists) {
+		// } else {
+		// 	this.ow.writeFileContents(logsLocation, '', 'UTF8');
+		// 	this.fileInitiallyPresent = false;
+		// 	setTimeout(() => {
+		// 		this.listenOnFileCreation(logsLocation);
+		// 	}, 2000);
+		// }
 	}
 
 	async listenOnFileUpdate(logsLocation: string) {

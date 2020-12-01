@@ -856,6 +856,15 @@ export class OverwolfService {
 		});
 	}
 
+	public async writeFileContents(filePathOnDisk: string, content: string): Promise<string> {
+		return new Promise<string>(resolve => {
+			overwolf.io.writeFileContents(filePathOnDisk, content, 'UTF8', false, (res, error) => {
+				console.log('[overwolf-service] written file', res, error);
+				resolve(res.success ? res.content : null);
+			});
+		});
+	}
+
 	public async getFileContents(filePathOnDisk: string): Promise<string> {
 		return new Promise<string>(resolve => {
 			overwolf.io.readTextFile(filePathOnDisk, { encoding: 'UTF8' }, (res, error) => {
