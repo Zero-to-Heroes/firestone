@@ -35,10 +35,10 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 							[state]="state"
 							[navigation]="navigation"
 						></decktracker-deck-details>
-						<decktracker-personal-stats-ranking
+						<!-- <decktracker-personal-stats-ranking
 							[hidden]="navigation.navigationDecktracker.currentView !== 'ranking'"
 							[state]="state"
-						></decktracker-personal-stats-ranking>
+						></decktracker-personal-stats-ranking> -->
 					</div>
 				</with-loading>
 			</section>

@@ -276,34 +276,6 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 			50 * inflationFactor + lowestLegendRank - 100,
 			50 * inflationFactor + lowestLegendRank - 10,
 		];
-		// const dataPlaceholders = thresholds.map(threshold => []);
-		// for (let i = 0; i < standard.length; i++) {
-		// 	// Make sure all values are initialized to null, and only fill the one that fits the highest threshold
-		// 	for (let j = thresholds.length - 1; j >= 0; j--) {
-		// 		dataPlaceholders[j][i] = null;
-		// 	}
-		// 	for (let j = thresholds.length - 1; j >= 0; j--) {
-		// 		// if (j === 0) {
-		// 		// 	console.log('adding to bronze?', standard[i], thresholds[j]);
-		// 		// }
-		// 		if (standard[i] >= thresholds[j]) {
-		// 			// console.log('adding to', j, standard[i], thresholds[j]);
-		// 			dataPlaceholders[j][i] = standard[i];
-		// 			// To avoid gaps in the line
-		// 			if (i > 0) {
-		// 			}
-		// 			if (j < thresholds.length - 2) {
-		// 				dataPlaceholders[j + 1][i] = standard[i];
-		// 			}
-		// 			break;
-		// 		}
-		// 	}
-		// }
-		// console.log('dataPlaceholders', dataPlaceholders);
-		// this.lineChartData = dataPlaceholders.reverse().map(data => ({
-		// 	data: data,
-		// 	label: 'Standard ranking',
-		// }));
 
 		this.lineChartData = [
 			{
@@ -321,7 +293,7 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 		);
 
 		if (!this.chartHeight) {
-			// console.log('rating chart height not present yet, refreshing', this.chartHeight);
+			console.log('rating chart height not present yet, refreshing', this.chartHeight);
 			setTimeout(() => {
 				this.updateValues();
 			}, 10);
@@ -365,15 +337,6 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 				code: '#ffb948',
 			},
 		];
-		// this.lineChartColors = colors.map(color => ({
-		// 	// backgroundColor: this.getBackgroundColor(),
-		// 	backgroundColor: 'transparent',
-		// 	borderColor: color.code,
-		// 	pointBackgroundColor: 'transparent',
-		// 	pointBorderColor: 'transparent',
-		// 	pointHoverBackgroundColor: 'transparent',
-		// 	pointHoverBorderColor: 'transparent',
-		// }));
 		this.lineChartColors = [
 			{
 				// backgroundColor: this.getBackgroundColor(),
