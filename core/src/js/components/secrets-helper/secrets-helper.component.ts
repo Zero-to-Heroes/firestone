@@ -41,7 +41,7 @@ declare let amplitude;
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="secrets-helper-container">
-					<div class="secrets-helper" *ngIf="gameState" [style.width.px]="widthInPx">
+					<div class="secrets-helper" *ngIf="shouldShow" [style.width.px]="widthInPx">
 						<div class="background"></div>
 						<secrets-helper-control-bar [windowId]="windowId"></secrets-helper-control-bar>
 						<secrets-helper-list
@@ -63,7 +63,8 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	secrets: readonly BoardSecret[];
 	active: boolean;
 
-	gameState: GameState;
+	// gameState: GameState;
+	shouldShow: boolean;
 	windowId: string;
 	widthInPx: number;
 	opacity: number;
@@ -97,10 +98,10 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			this.gameState = event ? event.state : undefined;
-			this.active =
-				this.gameState && this.gameState.opponentDeck && this.gameState.opponentDeck.secretHelperActive;
-			this.secrets = this.gameState && this.gameState.opponentDeck ? this.gameState.opponentDeck.secrets : null;
+			this.shouldShow = event?.state != null;
+			// this.gameState = event ? event.state : undefined;
+			this.active = (event.state as GameState)?.opponentDeck?.secretHelperActive;
+			this.secrets = (event.state as GameState)?.opponentDeck?.secrets;
 			// console.log('game state', this.secrets, this.gameState);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -126,6 +127,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		// console.log('handled after view init');
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.showTooltipSubscription.unsubscribe();

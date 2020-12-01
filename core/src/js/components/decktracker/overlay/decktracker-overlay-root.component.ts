@@ -16,6 +16,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
+import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { Events } from '../../../services/events.service';
@@ -49,7 +50,7 @@ declare let amplitude;
 				<div class="decktracker-container">
 					<div
 						class="decktracker"
-						*ngIf="gameState"
+						*ngIf="showTracker"
 						[style.width.px]="overlayWidthInPx"
 						[ngClass]="{ 'hide-control-bar': !showControlBar }"
 					>
@@ -65,8 +66,8 @@ declare let amplitude;
 							[showTitleBar]="showTitleBar"
 							[showDeckWinrate]="showDeckWinrate"
 							[showMatchupWinrate]="showMatchupWinrate"
-							[deckWinrate]="gameState.deckStatsRecap"
-							[matchupWinrate]="gameState.matchupStatsRecap"
+							[deckWinrate]="deckStatsRecap"
+							[matchupWinrate]="matchupStatsRecap"
 						></decktracker-title-bar>
 						<decktracker-deck-list
 							[deckState]="deck"
@@ -112,7 +113,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 
 	deck: DeckState;
 
-	gameState: GameState;
+	// gameState: GameState;
 	active = true;
 	windowId: string;
 	activeTooltip: string;
@@ -136,6 +137,10 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
+
+	showTracker: boolean;
+	deckStatsRecap: StatsRecap;
+	matchupStatsRecap: StatsRecap;
 
 	// private hasBeenMovedByUser: boolean;
 	private showTooltips = true;
@@ -164,9 +169,12 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			this.gameState = event ? event.state : undefined;
-			// console.log('received game state', this.gameState);
-			this.deck = this.gameState ? this.deckExtractor(this.gameState) : null;
+			this.showTracker = event.state != null;
+			this.deckStatsRecap = (event.state as GameState).deckStatsRecap;
+			this.matchupStatsRecap = (event.state as GameState).matchupStatsRecap;
+			// this.gameState = event ? event.state : undefined;
+			console.log('received game state', event);
+			this.deck = event.state ? this.deckExtractor(event.state) : null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -207,6 +215,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		// console.log('handled after view init');
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.showTooltipSubscription.unsubscribe();

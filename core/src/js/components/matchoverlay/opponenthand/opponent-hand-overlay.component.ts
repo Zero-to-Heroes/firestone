@@ -4,11 +4,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
@@ -25,8 +27,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<div class="opponent-hand-overlay overlay-container-parent">
 			<opponent-card-infos
-				*ngIf="gameState && gameState.opponentDeck"
-				[cards]="gameState.opponentDeck.hand"
+				*ngIf="shouldShow"
+				[cards]="hand"
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
 				[displayBuff]="displayBuff"
@@ -37,8 +39,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
-	gameState: GameState;
+	// gameState: GameState;
 	windowId: string;
+	shouldShow: boolean;
+	hand: readonly DeckCard[];
 	displayTurnNumber = true;
 	displayGuess = true;
 	displayBuff = true;
@@ -59,13 +63,15 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		// this.cdr.detach();
 
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
+		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			// Can happen because we now have a BehaviorSubject
 			if (event == null) {
 				return;
 			}
-			this.gameState = event.state;
+			this.shouldShow = event.state && (event.state as GameState).opponentDeck != null;
+			this.hand = (event.state as GameState).opponentDeck?.hand;
+			// this.gameState = event.state;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -91,6 +97,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		// console.log('handled after view init');
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.deckSubscription.unsubscribe();
