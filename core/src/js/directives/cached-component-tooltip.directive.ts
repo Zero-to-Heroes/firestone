@@ -84,6 +84,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		}
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		// console.log('on destroy for component tooltip');
 		this.tooltipRef = null;

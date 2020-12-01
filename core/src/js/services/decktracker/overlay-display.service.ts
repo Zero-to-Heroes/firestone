@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
+import { EventEmitter, HostListener, Injectable, OnDestroy } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -21,6 +21,7 @@ export class OverlayDisplayService implements OnDestroy {
 		window['decktrackerDisplayEventBus'] = this.decktrackerDisplayEventBus;
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.preferencesSubscription.unsubscribe();
 		this.deckSubscription.unsubscribe();

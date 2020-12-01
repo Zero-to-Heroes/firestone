@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -48,6 +56,7 @@ export class AchievementsFilterComponent implements AfterViewInit, OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.subscription.unsubscribe();
 	}

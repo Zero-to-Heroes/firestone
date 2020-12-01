@@ -4,6 +4,7 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
+	HostListener,
 	Input,
 	OnDestroy,
 	Renderer2,
@@ -69,6 +70,7 @@ export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 		await this.handleDisplayPreferences();
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.preferencesSubscription.unsubscribe();
 	}

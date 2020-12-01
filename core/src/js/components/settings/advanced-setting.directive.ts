@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, OnDestroy, Renderer2, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	Directive,
+	ElementRef,
+	HostListener,
+	OnDestroy,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -31,6 +40,7 @@ export class AdvancedSettingDirective implements AfterViewInit, OnDestroy {
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription.unsubscribe();
 	}

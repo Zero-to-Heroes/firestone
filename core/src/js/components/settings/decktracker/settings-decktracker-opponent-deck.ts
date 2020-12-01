@@ -258,6 +258,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.displaySubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();

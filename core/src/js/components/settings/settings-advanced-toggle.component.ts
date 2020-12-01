@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -54,6 +55,7 @@ export class SettingsAdvancedToggleComponent implements AfterViewInit, OnDestroy
 		this.prefs.updateAdvancedSettings(!this.advancedModeToggledOn);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription.unsubscribe();
 	}

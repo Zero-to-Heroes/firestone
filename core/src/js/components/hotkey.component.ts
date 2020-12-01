@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
@@ -36,6 +37,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.ow.removeHotkeyChangedListener(this.hotkeyChangedListener);
 	}

@@ -83,6 +83,7 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		if (this.stateSubscription) {
 			this.stateSubscription.unsubscribe();

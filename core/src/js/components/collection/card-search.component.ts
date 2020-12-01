@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -76,6 +77,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.subscription.unsubscribe();
 	}

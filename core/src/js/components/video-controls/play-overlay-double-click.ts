@@ -1,15 +1,15 @@
 import {
 	Component,
-	OnInit,
-	Input,
 	ElementRef,
-	HostListener,
-	ViewEncapsulation,
-	OnDestroy,
 	HostBinding,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+	ViewEncapsulation,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { VgAPI, VgFullscreenAPI, VgControlsHidden, VgStates } from 'videogular2/core';
+import { VgAPI, VgControlsHidden, VgFullscreenAPI, VgStates } from 'videogular2/core';
 
 @Component({
 	selector: 'fs-overlay-play',
@@ -177,6 +177,7 @@ export class FsOverlayPlay implements OnInit, OnDestroy {
 		return state;
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.subscriptions.forEach(s => s.unsubscribe());
 	}

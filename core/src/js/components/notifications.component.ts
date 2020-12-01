@@ -5,6 +5,7 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
+	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
@@ -115,6 +116,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		return eventQueue.slice(1);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);

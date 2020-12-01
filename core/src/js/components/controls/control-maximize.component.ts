@@ -5,6 +5,7 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -124,6 +125,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}

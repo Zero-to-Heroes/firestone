@@ -246,6 +246,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		// }
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);

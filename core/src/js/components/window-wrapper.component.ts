@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
@@ -90,6 +91,7 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 		this.ow.dragResize(window.id, edge);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}

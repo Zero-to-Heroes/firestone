@@ -3,6 +3,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
@@ -102,6 +103,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 			});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.subscription.unsubscribe();
 	}

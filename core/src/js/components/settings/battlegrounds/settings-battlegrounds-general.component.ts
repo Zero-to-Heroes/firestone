@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -174,6 +175,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription.unsubscribe();
 	}

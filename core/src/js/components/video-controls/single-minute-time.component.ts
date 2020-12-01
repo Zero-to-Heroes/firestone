@@ -1,4 +1,14 @@
-import { Component, Input, ElementRef, OnInit, PipeTransform, Pipe, ViewEncapsulation, OnDestroy } from '@angular/core';
+import {
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+	Pipe,
+	PipeTransform,
+	ViewEncapsulation,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { VgAPI } from 'videogular2/core';
 
@@ -96,6 +106,7 @@ export class FsTimeDisplay implements OnInit, OnDestroy {
 		return t;
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.subscriptions.forEach(s => s.unsubscribe());
 	}

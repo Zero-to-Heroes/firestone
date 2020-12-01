@@ -1,4 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import {
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+	Output,
+	ViewChild,
+} from '@angular/core';
 
 @Component({
 	selector: 'infinite-scroll',
@@ -34,6 +44,7 @@ export class InfiniteScrollComponent implements OnInit, OnDestroy {
 		this.observer.observe(this.anchor.nativeElement);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.observer.disconnect();
 	}

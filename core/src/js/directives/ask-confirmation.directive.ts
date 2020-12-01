@@ -95,6 +95,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		if (this.overlayRef) {
 			this.positionStrategy.detach();

@@ -102,6 +102,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription && this.preferencesSubscription.unsubscribe();
 	}

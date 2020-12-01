@@ -233,6 +233,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}

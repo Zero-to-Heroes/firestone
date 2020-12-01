@@ -5,6 +5,7 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
+	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -121,6 +122,7 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 		this.cdr.detach();
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription.unsubscribe();
 	}

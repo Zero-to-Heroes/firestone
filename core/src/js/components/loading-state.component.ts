@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	HostListener,
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
@@ -51,6 +52,7 @@ export class LoadingStateComponent implements AfterViewInit, OnDestroy {
 		this.handleHint();
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		if (this.interval) {
 			clearInterval(this.interval);

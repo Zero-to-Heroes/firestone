@@ -179,6 +179,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		if (this.resizeTimeout) {
 			clearTimeout(this.resizeTimeout);

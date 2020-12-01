@@ -126,6 +126,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		this.ow.dragMove(this.windowId);
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.storeSubscription.unsubscribe();
 	}

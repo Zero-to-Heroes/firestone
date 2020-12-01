@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	OnDestroy,
+	OnInit,
+	ViewRef,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Events } from '../../../services/events.service';
 
@@ -31,6 +39,7 @@ export class SettingsModalComponent implements OnInit, OnDestroy {
 			.subscribe(data => this.handleNewModal(data));
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.eventsSubscription.unsubscribe();
 	}

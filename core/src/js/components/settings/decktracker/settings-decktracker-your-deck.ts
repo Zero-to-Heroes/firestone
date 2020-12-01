@@ -170,6 +170,7 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.preferencesSubscription.unsubscribe();
 	}

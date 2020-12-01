@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -47,6 +48,7 @@ export class SettingsAchievementsStorageComponent implements AfterViewInit, OnDe
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}

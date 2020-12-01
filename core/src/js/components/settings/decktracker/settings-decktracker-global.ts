@@ -133,6 +133,7 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		});
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		this.displaySubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();

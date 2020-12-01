@@ -215,6 +215,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		if (this.processingTimeout) {
 			clearTimeout(this.processingTimeout);
