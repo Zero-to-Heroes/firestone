@@ -136,3 +136,44 @@ export const publicCardCreators = [
 	CardIds.NonCollectible.Neutral.WondrousWand,
 	CardIds.Collectible.Neutral.Wrathion, // tested
 ];
+
+export const getGalakrondCardFor = (className: string, invokeCount: number): string => {
+	switch (className) {
+		case 'priest':
+			if (invokeCount >= 4) {
+				return CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondAzerothsEndToken;
+			} else if (invokeCount >= 2) {
+				return CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondTheApocalypseToken;
+			}
+			return CardIds.Collectible.Priest.GalakrondTheUnspeakable;
+		case 'rogue':
+			if (invokeCount >= 4) {
+				return CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondAzerothsEndToken;
+			} else if (invokeCount >= 2) {
+				return CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondTheApocalypseToken;
+			}
+			return CardIds.Collectible.Rogue.GalakrondTheNightmare;
+		case 'shaman':
+			if (invokeCount >= 4) {
+				return CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondAzerothsEndToken;
+			} else if (invokeCount >= 2) {
+				return CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondTheApocalypseToken;
+			}
+			return CardIds.Collectible.Shaman.GalakrondTheTempest;
+		case 'warlock':
+			if (invokeCount >= 4) {
+				return CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondAzerothsEndToken;
+			} else if (invokeCount >= 2) {
+				return CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondTheApocalypseToken;
+			}
+			return CardIds.Collectible.Warlock.GalakrondTheWretched;
+		case 'warrior':
+			if (invokeCount >= 4) {
+				return CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken;
+			} else if (invokeCount >= 2) {
+				return CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondTheApocalypseToken;
+			}
+			return CardIds.Collectible.Warrior.GalakrondTheUnbreakable;
+	}
+	return CardIds.Collectible.Rogue.GalakrondTheNightmare;
+};

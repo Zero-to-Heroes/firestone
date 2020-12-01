@@ -14,6 +14,7 @@ import { CthunCounterComponent } from '../../components/game-counters/cthun-coun
 import { FatigueCounterComponent } from '../../components/game-counters/fatigue-counter.component';
 import { GalakrondCountersComponent } from '../../components/game-counters/galakrond-counter.component';
 import { GameCountersComponent } from '../../components/game-counters/game-counters.component';
+import { GenericCountersComponent } from '../../components/game-counters/generic-counter.component';
 import { JadeCounterComponent } from '../../components/game-counters/jade-counter.component';
 import { PogoHopperCountersComponent } from '../../components/game-counters/pogo-counter.component';
 import { DebugService } from '../../services/debug.service';
@@ -66,6 +67,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		AttackCountersComponent,
 		FatigueCounterComponent,
 		CthunCounterComponent,
+		GenericCountersComponent,
 	],
 	bootstrap: [GameCountersComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
