@@ -23,6 +23,7 @@
 	border-radius: 50%;
 	position: absolute;
 	top: 0;
+	background: transparent;
 }
 
 .value {
@@ -34,6 +35,7 @@
 	font-style: normal;
 	font-weight: bold;
 	font-size: 15px;
+	line-height: 15px;
 	display: flex;
 	align-items: center;
 	justify-content: center;

@@ -1,52 +1,46 @@
-:host {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-}
-
 .attack-counter {
 	--counter-border-color: #9fb6d7;
 	--counter-value-color: #9fb6d7;
-}
 
-.counter {
-	width: 50px;
-	height: 50px;
-	font-family: Sumana;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 15px;
-	color: var(--counter-border-color);
-}
+	.counter {
+		width: 50px;
+		height: 50px;
+		font-family: Sumana;
+		font-style: normal;
+		font-weight: bold;
+		font-size: 15px;
+		color: var(--counter-border-color);
+	}
 
-.frame {
-	width: 50px;
-	height: 50px;
-	border: 3px solid var(--counter-border-color);
-	border-radius: 50%;
-	position: absolute;
-	top: 0;
-	background: radial-gradient(44.58% 50% at 50% 50%, #302380 0%, #18182b 100%);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
+	.frame {
+		width: 50px;
+		height: 50px;
+		border: 3px solid var(--counter-border-color);
+		border-radius: 50%;
+		position: absolute;
+		top: 0;
+		background: radial-gradient(44.58% 50% at 50% 50%, #302380 0%, #18182b 100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--counter-value-color);
+	}
 
-.value {
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	background: var(--counter-border-color);
-	font-family: Sumana;
-	font-style: normal;
-	font-weight: bold;
-	font-size: 15px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: var(--counter-value-color);
-	position: absolute;
-	top: -12px;
-	left: 12px;
+	.value {
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
+		background: var(--counter-border-color);
+		font-family: Sumana;
+		font-style: normal;
+		font-weight: bold;
+		font-size: 15px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--counter-value-color);
+		position: absolute;
+		top: -12px;
+		left: 12px;
+	}
 }

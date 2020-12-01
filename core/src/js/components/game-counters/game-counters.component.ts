@@ -15,6 +15,14 @@ import { GameState } from '../../models/decktracker/game-state';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { AttackCounterDefinition } from './definitions/attack-counter';
+import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
+import { CthunCounterDefinition } from './definitions/cthun-counter';
+import { FatigueCounterDefinition } from './definitions/fatigue-counter';
+import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
+import { JadeCounterDefinition } from './definitions/jade-counter';
+import { PogoCounterDefinition } from './definitions/pogo-counter';
+import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 
 declare let amplitude;
 
@@ -28,32 +36,25 @@ declare let amplitude;
 	],
 	template: `
 		<div class="root overlay-container-parent" [ngClass]="{ 'isBgs': isBgs }" [activeTheme]="'decktracker'">
-			<galakrond-counter
-				*ngIf="activeCounter === 'galakrond'"
-				[state]="gameState"
-				[side]="side"
-			></galakrond-counter>
-			<pogo-counter
-				*ngIf="activeCounter === 'pogo' || activeCounter === 'bgsPogo'"
-				[state]="gameState || bgsGameState"
-				[side]="side"
-			></pogo-counter>
-			<jade-counter *ngIf="activeCounter === 'jadeGolem'" [state]="gameState" [side]="side"></jade-counter>
-			<cthun-counter *ngIf="activeCounter === 'cthun'" [state]="gameState" [side]="side"></cthun-counter>
-			<fatigue-counter *ngIf="activeCounter === 'fatigue'" [state]="gameState" [side]="side"></fatigue-counter>
-			<attack-counter *ngIf="activeCounter === 'attack'" [state]="gameState" [side]="side"></attack-counter>
+			<generic-counter
+				*ngIf="definition && activeCounter === definition.type"
+				[image]="definition.image"
+				[helpTooltipText]="definition.tooltip"
+				[value]="definition.value"
+				[counterClass]="definition.cssClass"
+				[standardCounter]="definition.standardCounter"
+			></generic-counter>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GameCountersComponent implements AfterViewInit, OnDestroy {
-	gameState: GameState;
-	bgsGameState: BattlegroundsState;
-	activeCounter: 'galakrond' | 'pogo' | 'bgsPogo' | 'attack' | 'jadeGolem' | 'cthun' | 'fatigue';
+	activeCounter: CounterType;
 	side: 'player' | 'opponent';
 	isBgs: boolean;
 
-	// private gameInfoUpdatedListener: (message: any) => void;
+	definition: CounterDefinition;
+
 	private windowId: string;
 	private stateSubscription: Subscription;
 	private preferencesSubscription: Subscription;
@@ -70,22 +71,30 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 		const nativeElement = el.nativeElement;
 		this.activeCounter = nativeElement.getAttribute('counter');
 		this.side = nativeElement.getAttribute('side');
+		this.isBgs = this.activeCounter.includes('bgs');
 	}
 
 	async ngAfterViewInit() {
 		if (!this.activeCounter.includes('bgs')) {
 			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 			this.stateSubscription = deckEventBus.subscribe(async event => {
-				this.gameState = event ? event.state : undefined;
+				if (!event?.state) {
+					return;
+				}
+				this.definition = this.buildDefinition(event?.state as GameState, this.activeCounter, this.side);
+				// console.log('built definition', this.definition, event?.state, this.activeCounter, this.side);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			});
 		} else {
-			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().battlegroundsStore;
+			const deckEventBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 			this.stateSubscription = deckEventBus.subscribe(async newState => {
-				this.bgsGameState = newState;
-				this.isBgs = true;
+				if (!newState) {
+					return;
+				}
+				this.definition = this.buildBgsDefinition(newState, this.activeCounter, this.side);
+				// console.log('built definition', this.definition, newState, this.activeCounter, this.side);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -98,6 +107,39 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	private buildDefinition(gameState: GameState, activeCounter: CounterType, side: string): CounterDefinition {
+		switch (activeCounter) {
+			case 'galakrond':
+				return GalakrondCounterDefinition.create(gameState, side);
+			case 'jadeGolem':
+				return JadeCounterDefinition.create(gameState, side);
+			case 'cthun':
+				return CthunCounterDefinition.create(gameState, side);
+			case 'fatigue':
+				return FatigueCounterDefinition.create(gameState, side);
+			case 'attack':
+				return AttackCounterDefinition.create(gameState, side);
+			case 'pogo':
+				return PogoCounterDefinition.create(gameState, side);
+			default:
+				console.warn('unexpected activeCounter for non-bgs', activeCounter);
+		}
+	}
+
+	private buildBgsDefinition(
+		gameState: BattlegroundsState,
+		activeCounter: CounterType,
+		side: string,
+	): CounterDefinition {
+		switch (activeCounter) {
+			case 'bgsPogo':
+				return BgsPogoCounterDefinition.create(gameState, side);
+			default:
+				console.warn('unexpected activeCounter for bgs', activeCounter);
+		}
+	}
+
+	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.stateSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
@@ -112,13 +154,6 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			}
 			this.prefs.updateCounterPosition(this.activeCounter, this.side, window.left, window.top);
 		});
-	}
-
-	private isBgsState(state: GameState | BattlegroundsState): state is BattlegroundsState {
-		if ((state as BattlegroundsState).currentGame) {
-			return true;
-		}
-		return false;
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
