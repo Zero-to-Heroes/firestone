@@ -18,7 +18,7 @@ export class GameEvents {
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
 	private plugin;
-	private hasSentToS3 = false;
+	// private hasSentToS3 = false;
 
 	private processingQueue = new ProcessingQueue<string>(
 		eventQueue => this.processQueue(eventQueue),
@@ -101,6 +101,10 @@ export class GameEvents {
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
+		if (this.shouldTriggerCatchUp) {
+			await this.triggerCatchUp();
+			this.shouldTriggerCatchUp = false;
+		}
 		if (eventQueue.some(data => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
@@ -127,7 +131,7 @@ export class GameEvents {
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
-				this.hasSentToS3 = false;
+				// this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
 				} as GameEvent);
@@ -920,10 +924,6 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string) {
-		if (this.shouldTriggerCatchUp) {
-			this.shouldTriggerCatchUp = false;
-			this.triggerCatchUp();
-		}
 		// In case the game overrides the info during the process, we stop everything and start from scratch
 		if (data === 'truncated') {
 			console.log(
@@ -1003,7 +1003,7 @@ export class GameEvents {
 			// not spectating
 			console.log('[game-events] [existing] end_of_existing_data');
 			this.spectating = false;
-			this.triggerCatchUp();
+			// this.triggerCatchUp();
 			return;
 		}
 
