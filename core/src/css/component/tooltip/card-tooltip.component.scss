@@ -2,6 +2,7 @@
 	width: 256px;
 	height: 388px;
 	height: auto; // forcing height will wreak havoc if the card is not exactly at the right dimensions
+	min-height: 400px;
 }
 
 .card-tooltip {
