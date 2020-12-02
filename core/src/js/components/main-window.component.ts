@@ -64,7 +64,7 @@ declare let amplitude: any;
 					class="main-section"
 					[state]="dataState.replays"
 					[navigation]="navigationState"
-					[hidden]="navigationState.currentApp !== 'replays'"
+					*ngxCacheIf="navigationState.currentApp === 'replays'"
 				></replays>
 				<achievements
 					class="main-section"
@@ -72,35 +72,35 @@ declare let amplitude: any;
 					[navigation]="navigationState"
 					[currentUser]="dataState.currentUser"
 					[socialShareUserInfo]="dataState.socialShareUserInfo"
-					[hidden]="navigationState.currentApp !== 'achievements'"
 					[globalStats]="dataState.globalStats"
+					*ngxCacheIf="navigationState.currentApp === 'achievements'"
 				>
 				</achievements>
 				<collection
 					class="main-section"
 					[state]="dataState.binder"
 					[navigation]="navigationState"
-					[hidden]="navigationState.currentApp !== 'collection'"
+					*ngxCacheIf="navigationState.currentApp === 'collection'"
 				></collection>
 				<decktracker
 					class="main-section"
 					[state]="dataState"
 					[navigation]="navigationState"
-					[hidden]="navigationState.currentApp !== 'decktracker'"
+					*ngxCacheIf="navigationState.currentApp === 'decktracker'"
 				>
 				</decktracker>
 				<battlegrounds-desktop
 					class="main-section"
 					[state]="dataState"
 					[navigation]="navigationState"
-					[hidden]="navigationState.currentApp !== 'battlegrounds'"
+					*ngxCacheIf="navigationState.currentApp === 'battlegrounds'"
 				>
 				</battlegrounds-desktop>
 				<duels-desktop
 					class="main-section"
 					[state]="dataState"
 					[navigation]="navigationState"
-					[hidden]="navigationState.currentApp !== 'duels'"
+					*ngxCacheIf="navigationState.currentApp === 'duels'"
 				>
 				</duels-desktop>
 			</section>

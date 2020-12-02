@@ -22,26 +22,26 @@
 	max-width: 100%;
 }
 
-.title {
-	color: var(--default-title-color);
-	margin-right: 15px;
-}
+// .title {
+// 	color: var(--default-title-color);
+// 	margin-right: 15px;
+// }
 
-.filters {
-	display: flex;
-	list-style: none;
+// .filters {
+// 	display: flex;
+// 	list-style: none;
 
-	.filter:after {
-		border-right: 1px solid;
-		content: '';
-		padding-right: 10px;
-		margin-right: 10px;
-	}
+// 	.filter:after {
+// 		border-right: 1px solid;
+// 		content: '';
+// 		padding-right: 10px;
+// 		margin-right: 10px;
+// 	}
 
-	.filter:last-child:after {
-		border-right: none;
-	}
-}
+// 	.filter:last-child:after {
+// 		border-right: none;
+// 	}
+// }
 
 .filter-info {
 	width: 20px;

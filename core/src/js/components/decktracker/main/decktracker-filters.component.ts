@@ -28,10 +28,11 @@ import { PreferencesService } from '../../../services/preferences.service';
 	selector: 'decktracker-filters',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/filters.scss`,
 		`../../../../css/component/decktracker/main/decktracker-filters.component.scss`,
 	],
 	template: `
-		<div class="decktracker-filters" *ngIf="anyVisible()">
+		<div class="filters decktracker-filters" *ngIf="anyVisible()">
 			<fs-filter-dropdown
 				class="format-filter"
 				[options]="formatFilterOptions"
