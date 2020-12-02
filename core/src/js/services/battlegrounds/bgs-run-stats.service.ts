@@ -8,7 +8,6 @@ import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { BgsPostMatchStats } from '../../models/battlegrounds/post-match/bgs-post-match-stats';
-import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from '../mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-with-remote-info-event';
@@ -77,53 +76,18 @@ export class BgsRunStatsService {
 		numberOfStats?: number,
 	): Promise<readonly BgsPostMatchStatsForReview[]> {
 		const user = await this.userService.getCurrentUser();
-		return new Promise<readonly BgsPostMatchStatsForReview[]>((resolve, reject) => {
-			this.retrieveLastBgsRunStatsInternal(user, heroCardId, numberOfStats, result => resolve(result));
-		});
-	}
-
-	private retrieveLastBgsRunStatsInternal(
-		user: CurrentUser,
-		heroCardId: string,
-		numberOfStats: number,
-		callback,
-		retriesLeft = 1,
-	) {
-		if (retriesLeft <= 0) {
-			console.error(
-				'[bgs-run-stats] Could not load bgs post-match stats for',
-				heroCardId,
-				numberOfStats,
-				`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
-			);
-			callback(null);
-			return;
-		}
 		const input = {
 			userId: user.userId,
 			userName: user.username,
 			heroCardId: heroCardId,
 			limitResults: numberOfStats,
 		};
-		this.http.post(`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`, input).subscribe(
-			(result: any) => {
-				console.log('[bgs-run-stats] retrieved last hero stats for hero');
-				callback(result);
-			},
-			error => {
-				setTimeout(
-					() =>
-						this.retrieveLastBgsRunStatsInternal(
-							user,
-							heroCardId,
-							numberOfStats,
-							callback,
-							retriesLeft - 1,
-						),
-					2000,
-				);
-			},
+		const results = await this.apiRunner.callPostApiWithRetries<readonly BgsPostMatchStatsForReview[]>(
+			`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
+			input,
 		);
+		console.log('[bgs-run-stats] last run stats', results);
+		return results;
 	}
 
 	private async computeRunStats(
