@@ -82,6 +82,7 @@ import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { ComponentTooltipDirective } from '../../directives/component-tooltip.directive';
 import { GrowOnClickDirective } from '../../directives/grow-on-click.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
+import { NgxCacheIfDirective } from '../../directives/ngx-cache-if.directive';
 import { PulseDirective } from '../../directives/pulse.directive';
 import { ScrollableDirective } from '../../directives/scrollable.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
@@ -133,6 +134,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		AskConfirmationDirective,
 		GrowOnClickDirective,
 		ScrollableDirective,
+		NgxCacheIfDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,
@@ -227,6 +229,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		AskConfirmationDirective,
 		GrowOnClickDirective,
 		ScrollableDirective,
+		NgxCacheIfDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,
