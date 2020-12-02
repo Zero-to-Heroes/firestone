@@ -128,8 +128,8 @@ export class DevService {
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {
 			console.log('starting new deck cycle', logName, repeats, deckString);
 			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${logName}.json`;
-			let logContents = await this.ow.getFileContents(logsLocation);
-			let events = JSON.parse(logContents);
+			const logContents = await this.ow.getFileContents(logsLocation);
+			const events = JSON.parse(logContents);
 			while (repeats > 0) {
 				console.log('starting iteration', repeats);
 				await this.loadEvents(events, true, deckString);
