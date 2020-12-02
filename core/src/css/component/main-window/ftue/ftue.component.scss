@@ -67,6 +67,12 @@
 
 		.icon {
 			margin-top: 20px;
+			height: 153px;
+
+			&.home {
+				height: 107px;
+				// width: 78px;
+			}
 		}
 
 		.progress {

@@ -19,7 +19,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<div class="element" *ngIf="isHome">
 				<div class="title">Welcome to Firestone</div>
 				<div class="text">How about a quick tour?</div>
-				<div class="icon" [inlineSVG]="'assets/svg/ftue/general.svg'"></div>
+				<div class="icon home" [inlineSVG]="'assets/svg/ftue/general.svg'"></div>
 				<button class="get-started" (click)="next()" growOnClick>Let's start</button>
 				<div class="skip-ftue ftue-nav-link" (click)="skip()" growOnClick>Skip</div>
 			</div>
