@@ -32,6 +32,8 @@ export class BgsRunStatsService {
 	private bgsStateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
+	private worker: Worker = new Worker();
+
 	constructor(
 		private readonly apiRunner: ApiRunner,
 		private readonly http: HttpClient,
@@ -187,12 +189,13 @@ export class BgsRunStatsService {
 
 	private async buildStatsLocally(currentGame: BgsGame, replayXml: string): Promise<IBgsPostMatchStats> {
 		return new Promise<IBgsPostMatchStats>(resolve => {
-			const worker = new Worker();
-			worker.onmessage = (ev: MessageEvent) => {
+			// const worker = new Worker();
+			this.worker.onmessage = (ev: MessageEvent) => {
 				// console.log('received worker message', ev);
-				worker.terminate();
-				const resultData: IBgsPostMatchStats = JSON.parse(ev.data);
+				let resultData: IBgsPostMatchStats = JSON.parse(ev.data);
 				resolve(resultData);
+				resultData = null;
+				// worker.terminate();
 			};
 
 			const input = {
@@ -202,7 +205,7 @@ export class BgsRunStatsService {
 				faceOffs: currentGame.faceOffs,
 			};
 			console.log('[bgs-run-stats] created worker');
-			worker.postMessage(input);
+			this.worker.postMessage(input);
 			console.log('[bgs-run-stats] posted worker message');
 		});
 	}

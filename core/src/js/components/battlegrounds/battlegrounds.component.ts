@@ -76,7 +76,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
 				// console.log('received state a', this.state);
-				this.state = newState;
+				this.state = { ...newState } as BattlegroundsState;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -129,6 +129,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.storeSubscription?.unsubscribe();
+		this.state = null;
 	}
 
 	private async positionWindowOnSecondScreen() {

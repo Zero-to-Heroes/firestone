@@ -3,7 +3,9 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	HostListener,
 	Input,
+	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
@@ -66,7 +68,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsNextOpponentOverviewComponent {
+export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	players: readonly BgsPlayer[];
 	opponents: readonly BgsPlayer[];
 	otherOpponents: readonly BgsPlayer[];
@@ -110,6 +112,12 @@ export class BgsNextOpponentOverviewComponent {
 		// console.log('after view init in next-opponent(view');
 	}
 
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		this._game = null;
+		this._panel = null;
+	}
+
 	trackByOpponentInfoFn(index, item: BgsPlayer) {
 		return item.cardId;
 	}
@@ -147,6 +155,7 @@ export class BgsNextOpponentOverviewComponent {
 			})
 			.sort((a, b) => (a.cardId === this.nextOpponentCardId ? -1 : b.cardId === this.nextOpponentCardId ? 1 : 0));
 		this.otherOpponents = this.opponents.slice(1);
+		this._game = null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

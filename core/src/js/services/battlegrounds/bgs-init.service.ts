@@ -38,7 +38,7 @@ export class BgsInitService {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
 			const newGameStats: GameStats = event.data[0];
 			console.log('[bgs-init] match stats updated');
-			this.bgsStateUpdater.next(new BgsStatUpdateEvent(newGameStats));
+			this.bgsStateUpdater?.next(new BgsStatUpdateEvent(newGameStats));
 		});
 		setTimeout(() => {
 			this.bgsStateUpdater = this.ow.getMainWindow().battlegroundsUpdater;

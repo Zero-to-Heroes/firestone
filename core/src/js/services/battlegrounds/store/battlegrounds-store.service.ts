@@ -70,7 +70,7 @@ import { BgsSimulationOverlay } from './overlay/bgs-simulation-overlay';
 export class BattlegroundsStoreService {
 	private mainWindowState: MainWindowState;
 	private state: BattlegroundsState = new BattlegroundsState();
-	private eventParsers: readonly EventParser[];
+	private eventParsers: readonly EventParser[] = [];
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
 	private battlegroundsStoreEventBus = new BehaviorSubject<BattlegroundsState>(null);
 	private battlegroundsWindowsListener: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -238,15 +238,6 @@ export class BattlegroundsStoreService {
 					),
 					GameEvent.BATTLEGROUNDS_COMBAT_START,
 				);
-				// this.battlegroundsUpdater.next(
-				// 	new BgsPlayerBoardEvent(
-				// 		gameEvent.additionalData.cardId,
-				// 		gameEvent.additionalData.board,
-				// 		gameEvent.additionalData.hero,
-				// 		gameEvent.additionalData.heroPowerCardId,
-				// 		gameEvent.additionalData.heroPowerUsed,
-				// 	),
-				// );
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
 				this.battlegroundsUpdater.next(
 					new BgsBattleResultEvent(
@@ -278,6 +269,7 @@ export class BattlegroundsStoreService {
 			}
 			this.processPendingEvents(gameEvent);
 		});
+
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
 			console.log('[bgs-store] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
@@ -332,19 +324,6 @@ export class BattlegroundsStoreService {
 		}
 	}
 
-	// private maybeHandleNextEvent(gameEvent: BattlegroundsStoreEvent, nextTrigger: string): void {
-	// 	if (this.state.currentGame?.battleInfo?.opponentBoard) {
-	// 		// console.log('requeueing', gameEvent);
-	// 		this.queuedEvents.push({ event: gameEvent, trigger: nextTrigger });
-	// 	} else {
-	// 		// console.log('sending event', gameEvent);
-	// 		// if (this.requeueTimeout) {
-	// 		// 	clearTimeout(this.requeueTimeout);
-	// 		// }
-	// 		this.battlegroundsUpdater.next(gameEvent);
-	// 	}
-	// }
-
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
 		await Promise.all(this.overlayHandlers.map(handler => handler.processEvent(gameEvent)));
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
@@ -353,20 +332,21 @@ export class BattlegroundsStoreService {
 			} as BattlegroundsState);
 			this.updateOverlay();
 		}
+		let newState = this.state;
 		for (const parser of this.eventParsers) {
 			try {
-				if (parser.applies(gameEvent, this.state)) {
-					const newState = await parser.parse(this.state, gameEvent);
-					if (newState !== this.state) {
-						this.state = newState;
-						this.eventEmitters.forEach(emitter => emitter(this.state));
-						// console.log('emitted state', gameEvent.type, this.state);
-						this.updateOverlay();
-					}
+				if (parser.applies(gameEvent, newState)) {
+					newState = await parser.parse(newState, gameEvent);
 				}
 			} catch (e) {
 				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e.message, e);
 			}
+		}
+		if (newState !== this.state) {
+			this.state = newState;
+			this.eventEmitters.forEach(emitter => emitter(this.state));
+			// console.log('emitted state', gameEvent.type, this.state);
+			this.updateOverlay();
 		}
 	}
 
@@ -394,7 +374,9 @@ export class BattlegroundsStoreService {
 	}
 
 	private async updateOverlay() {
-		await Promise.all(this.overlayHandlers.map(handler => handler.updateOverlay(this.state)));
+		if (this.overlayHandlers?.length) {
+			await Promise.all(this.overlayHandlers.map(handler => handler.updateOverlay(this.state)));
+		}
 		if (this.state.forceOpen) {
 			this.state = this.state.update({ forceOpen: false } as BattlegroundsState);
 		}

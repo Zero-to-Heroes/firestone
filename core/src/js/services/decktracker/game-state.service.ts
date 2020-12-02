@@ -164,10 +164,6 @@ export class GameStateService {
 		});
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckUpdater'] = this.deckUpdater;
-		// window['deckDebug'] = this;
-		window['logGameState'] = () => {
-			console.log(JSON.stringify(this.state));
-		};
 		setTimeout(() => {
 			const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow()
 				.decktrackerDisplayEventBus;

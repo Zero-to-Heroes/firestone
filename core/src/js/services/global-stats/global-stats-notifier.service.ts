@@ -45,10 +45,10 @@ export class GlobalStatsNotifierService {
 			uploaderToken: undefined,
 		};
 		const statsFromGame = await extractStatsForGame(message, game.uncompressedXmlReplay);
-		if (!statsFromGame) {
+		if (!statsFromGame?.stats) {
 			return currentGlobalStats;
 		}
-		if (!currentGlobalStats) {
+		if (!currentGlobalStats?.stats) {
 			return statsFromGame;
 		}
 		//console.log('[global-stats] built stats', statsFromGame, currentGlobalStats);
