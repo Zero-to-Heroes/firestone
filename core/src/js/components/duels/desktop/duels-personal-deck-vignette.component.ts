@@ -56,7 +56,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<!-- <button class="copy-deck-code" (click)="copyDeckcode()">
 				<span>{{ copyText }}</span>
 			</button> -->
-			<button class="view-details" (click)="viewDetails()">
+			<button class="view-details" (click)="viewDetails()" *ngIf="deckstring">
 				<span>View Details</span>
 			</button>
 		</div>
@@ -80,12 +80,12 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	skin: string;
 	totalRuns: number;
 	avgWins: number;
+	deckstring: string;
 
 	copyText = 'Copy deck code';
 
 	renaming: boolean;
 
-	private deckstring: string;
 	private inputCopy: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

@@ -324,10 +324,11 @@ export class DuelsStateBuilderService {
 	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
 		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 			(run: DuelsRun) => run.initialDeckList,
-		)(runs);
+		)(runs.filter(run => run.initialDeckList));
 		const decks: readonly DuelsDeckSummary[] = Object.keys(groupedByDecklist)
 			.filter(deckstring => deckstring)
 			.map(deckstring => {
+				// console.log('[debug] building deck', deckstring, '' + deckstring, deckstring == null);
 				const groupedByType: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 					(run: DuelsRun) => run.type,
 				)(groupedByDecklist[deckstring]);
