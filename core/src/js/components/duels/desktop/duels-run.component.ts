@@ -65,7 +65,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</div>
 			</div>
 			<div class="right-info">
-				<div class="group view-deck" (click)="showDeck()">View deck</div>
+				<div class="group view-deck" (click)="showDeck()" *ngIf="deckstring">View deck</div>
 				<div class="group show-more" (click)="toggleShowMore()">
 					{{ isExpanded ? 'Hide details' : 'Show details' }}
 				</div>
@@ -84,6 +84,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DuelsRunComponent implements AfterViewInit {
 	@Input() set run(value: DuelsRun) {
+		console.log('showing run', value);
 		this.deckstring = value.initialDeckList;
 		this.gameModeImage = 'assets/images/deck/ranks/duels.png';
 		this.gameModeTooltip = value.type === 'duels' ? 'Duels' : 'Heroic Duels';
