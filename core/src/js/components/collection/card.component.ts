@@ -78,6 +78,7 @@ export class CardComponent implements AfterViewInit {
 	_highRes = false;
 
 	private _loadImage = true;
+	private _imageLoaded: boolean;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -119,7 +120,8 @@ export class CardComponent implements AfterViewInit {
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
-		// console.log('image loaded', this.image);
+		this._imageLoaded = true;
+		console.log('image loaded', this.image);
 		this.imageLoaded.next(true);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -132,7 +134,9 @@ export class CardComponent implements AfterViewInit {
 			this.overlayMaskImage = undefined;
 			return;
 		}
-		this.showPlaceholder = true;
+		if (!this._imageLoaded) {
+			this.showPlaceholder = true;
+		}
 		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;
