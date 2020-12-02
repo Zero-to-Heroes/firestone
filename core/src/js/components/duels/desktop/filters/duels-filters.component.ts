@@ -14,11 +14,12 @@ import { DuelsTreasureSortOption } from './duels-treasure-sort-option';
 @Component({
 	selector: 'duels-filters',
 	styleUrls: [
+		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
 		`../../../../../css/component/duels/desktop/filters/duels-filters.component.scss`,
 	],
 	template: `
-		<div class="duels-filters" *ngIf="anyVisible()">
+		<div class="filters duels-filters" *ngIf="anyVisible()">
 			<duels-filter-dropdown
 				*ngFor="let option of options"
 				class="{{ option.class }}"

@@ -1,9 +1,10 @@
 @import '../../../global/variables';
 @import '../../../global/fonts';
 
-:host {
+:host() {
 	height: 100%;
 	display: flex;
+	min-height: 0;
 }
 
 .duels-decks {
