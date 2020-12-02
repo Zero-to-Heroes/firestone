@@ -12,29 +12,29 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 	template: `
 		<div class="battlegrounds-category-details" scrollable>
 			<battlegrounds-personal-stats-heroes
-				[hidden]="navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-heroes'"
+				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-heroes'"
 				[category]="category"
 				[state]="state.battlegrounds"
 			>
 			</battlegrounds-personal-stats-heroes>
 			<battlegrounds-personal-stats-rating
-				[hidden]="navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-rating'"
+				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-rating'"
 				[category]="category"
 				[state]="state.battlegrounds"
 			>
 			</battlegrounds-personal-stats-rating>
 			<battlegrounds-personal-stats-stats
-				[hidden]="navigation.navigationBattlegrounds.selectedCategoryId !== 'bgs-category-personal-stats'"
+				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-stats'"
 				[category]="category"
 				[state]="state"
 			>
 			</battlegrounds-personal-stats-stats>
 			<battlegrounds-personal-stats-hero-details
-				[hidden]="
-					!navigation.navigationBattlegrounds.selectedCategoryId ||
+				*ngxCacheIf="
+					navigation.navigationBattlegrounds.selectedCategoryId &&
 					navigation.navigationBattlegrounds.selectedCategoryId.indexOf(
 						'bgs-category-personal-hero-details'
-					) === -1
+					) !== -1
 				"
 				[category]="category"
 				[state]="state"

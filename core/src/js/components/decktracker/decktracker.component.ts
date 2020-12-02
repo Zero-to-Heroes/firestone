@@ -22,17 +22,17 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 						></global-header>
 						<menu-selection-decktracker
 							class="menu-selection"
-							*ngIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
+							*ngxCacheIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
 							[selectedTab]="navigation.navigationDecktracker.currentView"
 						>
 						</menu-selection-decktracker>
 						<decktracker-filters [state]="state" [navigation]="navigation"></decktracker-filters>
 						<decktracker-decks
-							[hidden]="navigation.navigationDecktracker.currentView !== 'decks'"
+							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
 							[decks]="state?.decktracker?.decks"
 						></decktracker-decks>
 						<decktracker-deck-details
-							[hidden]="navigation.navigationDecktracker.currentView !== 'deck-details'"
+							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
 							[state]="state"
 							[navigation]="navigation"
 						></decktracker-deck-details>
@@ -41,12 +41,12 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 			</section>
 			<section class="secondary">
 				<decktracker-deck-recap
-					[hidden]="navigation.navigationDecktracker.currentView !== 'deck-details'"
+					*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
 					[state]="state"
 					[navigation]="navigation"
 				></decktracker-deck-recap>
 				<decktracker-replays-recap
-					*ngIf="navigation.navigationDecktracker.currentView !== 'deck-details'"
+					*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
 					[state]="state"
 				></decktracker-replays-recap>
 			</section>

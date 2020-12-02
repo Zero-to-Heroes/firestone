@@ -62,19 +62,19 @@ declare let amplitude: any;
 				<div class="title">{{ currentPanel?.name }}</div>
 				<ng-container>
 					<bgs-hero-selection-overview
-						[hidden]="currentPanel?.id !== 'bgs-hero-selection-overview'"
+						*ngxCacheIf="currentPanel?.id === 'bgs-hero-selection-overview'"
 						[panel]="currentPanel"
 					>
 					</bgs-hero-selection-overview>
 					<bgs-next-opponent-overview
-						[hidden]="currentPanel?.id !== 'bgs-next-opponent-overview'"
+						*ngxCacheIf="currentPanel?.id === 'bgs-next-opponent-overview'"
 						[panel]="currentPanel"
 						[game]="_state?.currentGame"
 						[enableSimulation]="enableSimulation"
 					>
 					</bgs-next-opponent-overview>
 					<bgs-post-match-stats
-						[hidden]="currentPanel?.id !== 'bgs-post-match-stats'"
+						*ngxCacheIf="currentPanel?.id === 'bgs-post-match-stats'"
 						[panel]="currentPanel"
 						[game]="_state?.currentGame"
 					>

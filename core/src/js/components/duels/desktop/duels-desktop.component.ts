@@ -36,38 +36,40 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						</ul>
 						<duels-filters [state]="state" [navigation]="navigation"> </duels-filters>
 						<duels-runs-list
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-runs'"
+							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-runs'"
 							[state]="state.duels"
 						>
 						</duels-runs-list>
 						<duels-hero-stats
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-stats'"
+							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-stats'"
 							[state]="state.duels"
 						>
 						</duels-hero-stats>
 						<duels-treasure-stats
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-treasures'"
+							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-treasures'"
 							[state]="state.duels"
 						>
 						</duels-treasure-stats>
 						<duels-personal-decks
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-personal-decks'"
+							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks'"
 							[state]="state.duels"
 						>
 						</duels-personal-decks>
 						<duels-personal-deck-details
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-personal-deck-details'"
+							*ngxCacheIf="
+								navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details'
+							"
 							[state]="state.duels"
 							[navigation]="navigation.navigationDuels"
 						>
 						</duels-personal-deck-details>
 						<duels-top-decks
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-top-decks'"
+							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-top-decks'"
 							[state]="state.duels"
 						>
 						</duels-top-decks>
 						<duels-deck-details
-							[hidden]="navigation.navigationDuels.selectedCategoryId !== 'duels-deck-details'"
+							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-deck-details'"
 							[state]="state.duels"
 							[navigation]="navigation.navigationDuels"
 						>
@@ -77,7 +79,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			</section>
 			<section class="secondary" *ngIf="enableDuels">
 				<duels-classes-recap
-					*ngIf="navigation.navigationDuels.selectedCategoryId === 'duels-runs'"
+					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-runs'"
 					[state]="state.duels"
 				></duels-classes-recap>
 			</section>

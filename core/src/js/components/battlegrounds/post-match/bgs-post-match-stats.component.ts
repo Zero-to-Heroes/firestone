@@ -85,7 +85,7 @@ declare let amplitude: any;
 						<ng-container>
 							<bgs-chart-hp
 								class="stat"
-								[hidden]="selectedTab !== 'hp-by-turn'"
+								*ngxCacheIf="selectedTab === 'hp-by-turn'"
 								[stats]="_panel?.stats"
 								[mainPlayerCardId]="_game?.getMainPlayer()?.cardId || mainPlayerCardId"
 								[visible]="selectedTab === 'hp-by-turn'"
@@ -93,7 +93,7 @@ declare let amplitude: any;
 							</bgs-chart-hp>
 							<bgs-winrate-chart
 								class="stat"
-								[hidden]="selectedTab !== 'winrate-per-turn'"
+								*ngxCacheIf="selectedTab === 'winrate-per-turn'"
 								[player]="_panel?.player"
 								[globalStats]="_panel?.globalStats"
 								[stats]="_panel?.stats"
@@ -101,7 +101,7 @@ declare let amplitude: any;
 							</bgs-winrate-chart>
 							<bgs-chart-warband-stats
 								class="stat"
-								[hidden]="selectedTab !== 'warband-total-stats-by-turn'"
+								*ngxCacheIf="selectedTab === 'warband-total-stats-by-turn'"
 								[player]="_panel?.player"
 								[globalStats]="_panel?.globalStats"
 								[stats]="_panel?.stats"
@@ -109,7 +109,7 @@ declare let amplitude: any;
 							</bgs-chart-warband-stats>
 							<bgs-chart-warband-composition
 								class="stat"
-								[hidden]="selectedTab !== 'warband-composition-by-turn'"
+								*ngxCacheIf="selectedTab === 'warband-composition-by-turn'"
 								[stats]="_panel?.stats"
 								[visible]="selectedTab === 'warband-composition-by-turn'"
 							>

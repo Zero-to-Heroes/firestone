@@ -18,12 +18,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 						<replays-list
 							[state]="state"
-							[hidden]="navigation.navigationReplays.currentView !== 'list'"
+							*ngxCacheIf="navigation.navigationReplays.currentView === 'list'"
 						></replays-list>
 						<match-details
 							[state]="state"
 							[navigation]="navigation.navigationReplays"
-							[hidden]="navigation.navigationReplays.currentView !== 'match-details'"
+							*ngxCacheIf="navigation.navigationReplays.currentView === 'match-details'"
 						></match-details>
 					</div>
 				</with-loading>

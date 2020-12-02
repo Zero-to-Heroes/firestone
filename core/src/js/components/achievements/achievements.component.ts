@@ -21,17 +21,17 @@ import { VisualAchievement } from '../../models/visual-achievement';
 					<div class="content">
 						<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
 						<achievements-global-categories
-							[hidden]="navigation.navigationAchievements.currentView !== 'categories'"
+							*ngxCacheIf="navigation.navigationAchievements.currentView === 'categories'"
 							[globalCategories]="state.globalCategories"
 						>
 						</achievements-global-categories>
 						<achievements-categories
-							[hidden]="navigation.navigationAchievements.currentView !== 'category'"
+							*ngxCacheIf="navigation.navigationAchievements.currentView === 'category'"
 							[achievementSets]="getAchievementSets()"
 						>
 						</achievements-categories>
 						<achievements-list
-							[hidden]="navigation.navigationAchievements.currentView !== 'list'"
+							*ngxCacheIf="navigation.navigationAchievements.currentView === 'list'"
 							[socialShareUserInfo]="socialShareUserInfo"
 							[achievementsList]="getDisplayedAchievements()"
 							[selectedAchievementId]="navigation.navigationAchievements.selectedAchievementId"
@@ -41,7 +41,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 						>
 						</achievements-list>
 						<achievement-sharing-modal
-							[hidden]="!navigation.navigationAchievements.sharingAchievement"
+							*ngxCacheIf="navigation.navigationAchievements.sharingAchievement"
 							[socialShareUserInfo]="socialShareUserInfo"
 							[sharingAchievement]="navigation.navigationAchievements.sharingAchievement"
 						>

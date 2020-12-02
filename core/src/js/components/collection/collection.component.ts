@@ -20,20 +20,20 @@ import { SetsService } from '../../services/sets-service.service';
 							[standardSets]="standardSets"
 							[wildSets]="wildSets"
 							[selectedFormat]="_navigation.navigationCollection.selectedFormat"
-							[hidden]="_navigation.navigationCollection.currentView !== 'sets'"
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'sets'"
 						>
 						</sets>
 						<cards
 							[cardList]="_navigation.navigationCollection.cardList"
 							[set]="selectedSet"
 							[searchString]="_navigation.navigationCollection.searchString"
-							[hidden]="_navigation.navigationCollection.currentView !== 'cards'"
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'cards'"
 						>
 						</cards>
 						<full-card
 							class="full-card"
 							[selectedCard]="selectedCard"
-							[hidden]="_navigation.navigationCollection.currentView !== 'card-details'"
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-details'"
 						>
 						</full-card>
 					</div>

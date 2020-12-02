@@ -5,8 +5,8 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 @Component({
 	selector: 'decktracker-replays-recap',
 	styleUrls: [
-		`../../../../css/component/decktracker/main/decktracker-replays-recap.component.scss`,
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/decktracker/main/decktracker-replays-recap.component.scss`,
 	],
 	template: `
 		<div class="decktracker-replays-recap">

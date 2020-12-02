@@ -36,26 +36,26 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						class="stat"
 						[state]="_state"
 						[category]="_category"
-						[hidden]="selectedTab !== 'final-warbands'"
+						*ngxCacheIf="selectedTab === 'final-warbands'"
 					>
 					</bgs-last-warbands>
 					<bgs-mmr-evolution-for-hero
 						class="stat"
-						[hidden]="selectedTab !== 'mmr'"
+						*ngxCacheIf="selectedTab === 'mmr'"
 						[category]="_category"
 						[state]="_state.battlegrounds"
 					>
 					</bgs-mmr-evolution-for-hero>
 					<bgs-warband-stats-for-hero
 						class="stat"
-						[hidden]="selectedTab !== 'warband-stats'"
+						*ngxCacheIf="selectedTab === 'warband-stats'"
 						[category]="_category"
 						[state]="_state"
 					>
 					</bgs-warband-stats-for-hero>
 					<bgs-winrate-stats-for-hero
 						class="stat"
-						[hidden]="selectedTab !== 'winrate-stats'"
+						*ngxCacheIf="selectedTab === 'winrate-stats'"
 						[category]="_category"
 						[state]="_state"
 					>
