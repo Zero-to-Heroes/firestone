@@ -133,7 +133,7 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 
 	disconnect() {
 		console.log('disconnecting twitch');
-		this.prefs.disconnectTwitch();
+		this.prefs?.disconnectTwitch();
 	}
 
 	preventMiddleClick(event: MouseEvent) {

@@ -46,7 +46,7 @@ export class InfiniteScrollComponent implements OnInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.observer.disconnect();
+		this.observer?.disconnect();
 	}
 
 	private isHostScrollable() {

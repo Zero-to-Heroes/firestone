@@ -74,7 +74,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
-		this.adRef.removeEventListener(this.impressionListener);
+		this.adRef?.removeEventListener(this.impressionListener);
 	}
 
 	showSubscription() {
