@@ -48,7 +48,14 @@ export class BgsPlayerBoardParser implements EventParser {
 				} as BgsGame),
 			} as BattlegroundsState);
 		}
-		// console.log('finding player board', playerToUpdate, event, currentState);
+		console.log(
+			'found player board to update',
+			playerToUpdate.cardId,
+			'with new board',
+			event.board.map(entity => entity.CardId),
+			'from old board',
+			playerToUpdate.getLastKnownBoardState()?.map(entity => entity.cardID),
+		);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
 			BgsBoard.create({
@@ -59,6 +66,11 @@ export class BgsPlayerBoardParser implements EventParser {
 		const newPlayer: BgsPlayer = playerToUpdate.update({
 			boardHistory: newHistory,
 		} as BgsPlayer);
+		console.log(
+			'update board for player',
+			newPlayer.cardId,
+			newPlayer.getLastKnownBoardState()?.map(entity => entity.cardID),
+		);
 
 		// console.log(
 		// 	'building board to add to battle board',

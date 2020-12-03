@@ -125,7 +125,7 @@ export class BgsRunStatsService {
 			input,
 			bestBgsUserStats || [],
 		);
-		console.log('[bgs-run-stats] newBestVaues', newBestValues, postMatchStats);
+		console.log('[bgs-run-stats] newBestVaues');
 
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
