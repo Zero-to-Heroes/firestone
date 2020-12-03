@@ -99,12 +99,13 @@ export class DungeonLootParserService {
 	}
 
 	public setLastDuelsMatch(newGameStats: GameStats) {
+		this.log('trying to set last duels match', newGameStats.stats[0]);
 		if (
-			(newGameStats?.stats && newGameStats.stats.length > 0 && newGameStats.stats[0].gameMode === 'duels') ||
-			newGameStats.stats[0].gameMode === 'paid-duels'
+			newGameStats?.stats?.length &&
+			(newGameStats.stats[0].gameMode === 'duels' || newGameStats.stats[0].gameMode === 'paid-duels')
 		) {
 			if (!this.isLastMatchInRun(newGameStats.stats[0].additionalResult, newGameStats.stats[0].result)) {
-				this.log('setting last duels', newGameStats.stats[0]);
+				this.log('setting last duels', newGameStats.stats[0], newGameStats);
 				this.lastDuelsMatch = newGameStats.stats[0];
 			}
 		}
