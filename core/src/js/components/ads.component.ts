@@ -48,6 +48,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private adInit = false;
 	private stateChangedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
+	private refreshTimer;
 
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
 
@@ -135,6 +136,16 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 			}
 			console.log('[ads] refreshed ads');
 			this.adRef.refreshAd();
+
+			// We accept to refresh the ads every 7 minutes, to make it possible to have a video ad
+			// impression
+			if (this.refreshTimer) {
+				clearTimeout(this.refreshTimer);
+			}
+			this.refreshTimer = setTimeout(() => {
+				console.log('[ads] refreshing ad after 7 minutes timeout');
+				this.refreshAds();
+			}, 7 * 60 * 1000);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -147,10 +158,13 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private removeAds() {
+		if (this.refreshTimer) {
+			clearTimeout(this.refreshTimer);
+		}
 		if (!this.adRef) {
 			return;
 		}
-		console.log('removing ads');
+		console.log('[ads] removing ads');
 		this.adRef.removeAd();
 	}
 }
