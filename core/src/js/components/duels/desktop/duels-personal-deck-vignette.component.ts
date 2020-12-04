@@ -67,7 +67,7 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	@Input() set deck(value: DuelsDeckSummary) {
 		// console.log('[decktracker-deck-summary] setting value', value);
 		this._deck = value;
-		const heroCardName = this.allCards.getCard(value.heroCardId)?.name;
+		// const heroCardName = this.allCards.getCard(value.heroCardId)?.name;
 		this.deckName = value.deckName;
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`;
 		this.totalRuns = value.global.totalRunsPlayed;

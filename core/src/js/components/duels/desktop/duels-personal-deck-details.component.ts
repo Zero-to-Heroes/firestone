@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import {
 	DuelsDeckSummary,
@@ -11,7 +19,6 @@ import { DuelsState } from '../../../models/duels/duels-state';
 import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 
 @Component({
 	selector: 'duels-personal-deck-details',
@@ -30,7 +37,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 				<div class="section hero-powers">
 					<div class="title">Hero Powers</div>
 					<ul class="list powers">
-						<li *ngFor="let power of heroPowers" class="element">
+						<li *ngFor="let power of heroPowers; trackBy: trackById" class="element">
 							<img class="icon" [src]="power.icon" [cardTooltip]="power.heroPowerCardId" />
 							<div class="stat pick-rate">
 								<div class="header">Pick rate</div>
@@ -46,7 +53,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 				<div class="section signature-treasure">
 					<div class="title">Signature Treasures</div>
 					<ul class="list signature-treasures">
-						<li *ngFor="let treasure of signatureTreasures" class="element">
+						<li *ngFor="let treasure of signatureTreasures; trackBy: trackById" class="element">
 							<img class="icon" [src]="treasure.icon" [cardTooltip]="treasure.signatureTreasureCardId" />
 							<div class="stat pick-rate">
 								<div class="header">Pick rate</div>
@@ -62,7 +69,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 				<div class="section treasure">
 					<div class="title">Treasures</div>
 					<ul class="list treasures">
-						<li *ngFor="let treasure of treasures" class="element">
+						<li *ngFor="let treasure of treasures; trackBy: trackById" class="element">
 							<img class="icon" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
 							<div class="stat pick-rate">
 								<div class="header">Pick rate</div>
@@ -78,7 +85,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 				<div class="section loot">
 					<div class="title">Cards picked</div>
 					<ul class="list loot">
-						<li *ngFor="let loot of loots" class="element">
+						<li *ngFor="let loot of loots; trackBy: trackById" class="element">
 							<img class="icon" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 							<div class="stat pick-rate">
 								<div class="header">Pick rate</div>
@@ -99,12 +106,27 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	@Input() set state(value: DuelsState) {
 		this._state = value;
-		this.updateValues();
+		// If I don't do this angular protests with "cannot read property 'destroyed' of null when changing views"
+		this.heroPowers = [];
+		this.signatureTreasures = [];
+		this.treasures = [];
+		this.loots = [];
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => this.updateValues());
 	}
 
 	@Input() set navigation(value: NavigationDuels) {
 		this._navigation = value;
-		this.updateValues();
+		this.heroPowers = [];
+		this.signatureTreasures = [];
+		this.treasures = [];
+		this.loots = [];
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => this.updateValues());
 	}
 
 	deck: DuelsDeckSummary;
@@ -119,10 +141,14 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly owUtils: OwUtilsService) {}
+	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	trackById(index, item: HeroPower | SignatureTreasure | Treasure | Loot) {
+		return item.id;
 	}
 
 	private updateValues() {
@@ -136,12 +162,13 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		if (!this.deck) {
 			return;
 		}
-		console.log('setting deck', this.deck);
+		// console.log('setting deck', this.deck);
 		this.decklist = this.deck.initialDeckList;
 
 		this.heroPowers = this.deck.heroPowerStats.map(power => {
 			return {
 				...power,
+				id: this.deck.initialDeckList + 'power' + power.heroPowerCardId,
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${power.heroPowerCardId}.jpg`,
 				pickRate:
 					(100 * this.deck.runs.filter(run => run.heroPowerCardId === power.heroPowerCardId).length) /
@@ -153,6 +180,7 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		this.signatureTreasures = this.deck.signatureTreasureStats.map(treasure => {
 			return {
 				...treasure,
+				id: this.deck.initialDeckList + 'signature-treasure' + treasure.signatureTreasureCardId,
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${treasure.signatureTreasureCardId}.jpg`,
 				pickRate:
 					(100 *
@@ -176,9 +204,10 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 					(step.chosenOptionIndex === 2 && step.option2 === treasure.cardId) ||
 					(step.chosenOptionIndex === 3 && step.option3 === treasure.cardId),
 			);
-			console.log('offered', offered, 'picked', picked);
+			// console.log('offered', offered, 'picked', picked);
 			return {
 				...treasure,
+				id: this.deck.initialDeckList + 'treasure' + treasure.cardId,
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${treasure.cardId}.jpg`,
 				pickRate: (100 * picked.length) / offered.length,
 				avgWins: treasure.averageWinsPerRun,
@@ -202,33 +231,42 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 			);
 			return {
 				...loot,
+				id: this.deck.initialDeckList + 'loot' + loot.cardId,
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot.cardId}.jpg`,
 				pickRate: (100 * picked.length) / choices.length,
 				avgWins: loot.averageWinsPerRun,
 			};
 		});
+
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 
 interface HeroPower extends HeroPowerDuelsDeckStatInfo {
+	readonly id: string;
 	readonly icon: string;
 	readonly pickRate: number;
 	readonly avgWins: number;
 }
 
 interface SignatureTreasure extends SignatureTreasureDuelsDeckStatInfo {
+	readonly id: string;
 	readonly icon: string;
 	readonly pickRate: number;
 	readonly avgWins: number;
 }
 
 interface Treasure extends TreasureDuelsDeckStatInfo {
+	readonly id: string;
 	readonly icon: string;
 	readonly pickRate: number;
 	readonly avgWins: number;
 }
 
 interface Loot extends LootDuelsDeckStatInfo {
+	readonly id: string;
 	readonly icon: string;
 	readonly pickRate: number;
 	readonly avgWins: number;
