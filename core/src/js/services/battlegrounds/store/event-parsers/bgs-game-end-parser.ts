@@ -39,7 +39,7 @@ export class BgsGameEndParser implements EventParser {
 			stages: stages,
 			currentStageId: 'post-match',
 			currentPanelId: 'bgs-post-match-stats',
-			forceOpen: prefs.bgsForceShowPostMatchStats ? true : false,
+			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats ? true : false,
 			currentGame: currentState.currentGame.update({
 				reviewId: event.reviewId,
 			} as BgsGame),

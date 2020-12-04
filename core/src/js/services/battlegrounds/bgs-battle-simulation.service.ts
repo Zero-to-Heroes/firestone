@@ -44,7 +44,7 @@ export class BgsBattleSimulationService {
 
 	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo, races: readonly Race[]) {
 		const prefs = await this.prefs.getPreferences();
-		if (!prefs.bgsEnableSimulation) {
+		if (!prefs.bgsEnableSimulation || !prefs.bgsEnableApp) {
 			console.log('[bgs-simulation] simulation turned off');
 			return;
 		}
@@ -60,7 +60,6 @@ export class BgsBattleSimulationService {
 			'no-format',
 			'[bgs-simulation] battle simulation request prepared',
 			battleInfo,
-			prefs.bgsEnableSimulation,
 			prefs.bgsUseLocalSimulator,
 		);
 

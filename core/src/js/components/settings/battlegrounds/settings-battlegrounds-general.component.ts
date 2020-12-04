@@ -31,30 +31,39 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle field="bgsEnableApp" label="Enable Battlegrounds"></preference-toggle>
 					<preference-toggle
 						field="bgsEnableSimulation"
+						[ngClass]="{ 'disabled': !bgsEnableApp }"
 						label="Enable battle simulation"
 						tooltip="When active, you will know your chances to win / tie / lose each battle at the start of the battle"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsEnableBattleSimulationOverlay"
-						[ngClass]="{ 'disabled': !enableSimulation }"
+						[ngClass]="{ 'disabled': !enableSimulation || !bgsEnableApp }"
 						label="Battle Simulation overlay"
 						tooltip="Also show the current battle simulation results as an overlay on top of the game"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseLocalSimulator"
-						[ngClass]="{ 'disabled': !enableSimulation }"
+						[ngClass]="{ 'disabled': !enableSimulation || !bgsEnableApp }"
 						label="Use local battle simulator"
 						tooltip="Turning that off will run the battle simulations on a remote server, thus freeing your machine up. On the other hand, the results will take a bit longer to arrive"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseLocalPostMatchStats"
+						[ngClass]="{ 'disabled': !bgsEnableApp }"
 						label="Compute post-match stats locally"
 						tooltip="When turned on, the stats that appear on the post-match screen will be computed locally, which is faster but can be CPU intensive. Turn it off to compute the stats on the cloud (it will take a bit more time though)"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseOverlay"
+						[ngClass]="{ 'disabled': !bgsEnableApp }"
 						label="Set integrated mode"
 						tooltip="When turned on, the battlegrounds window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app"
+					></preference-toggle>
+					<preference-toggle
+						field="bgsForceShowPostMatchStats"
+						[ngClass]="{ 'disabled': !bgsEnableApp }"
+						label="Show post-match stats"
+						tooltip="When active, the battlegrounds window will be restored after a match to show the post-match stats, even if it was minimized"
 					></preference-toggle>
 					<preference-toggle
 						field="playerBgsPogoCounter"
@@ -66,11 +75,6 @@ import { Knob } from '../preference-slider.component';
 						label="Show banned tribes"
 						tooltip="Adds a small widget that shows what tribes are banned in the current run"
 					></preference-toggle>
-					<preference-toggle
-						field="bgsForceShowPostMatchStats"
-						label="Show post-match stats"
-						tooltip="When active, the battlegrounds window will be restored after a match to show the post-match stats, even if it was minimized"
-					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">
@@ -79,7 +83,7 @@ import { Knob } from '../preference-slider.component';
 			<div class="settings-group">
 				<div
 					class="text"
-					[ngClass]="{ 'disabled': !useLocalSimulator || !enableSimulation }"
+					[ngClass]="{ 'disabled': !useLocalSimulator || !enableSimulation || !bgsEnableApp }"
 					helpTooltip="The number of simulations ran for each battle. We found 2,500 simulations to be a perfect spot. Increasing the number will increase the accuracy of the calculation but will require more resources from your PC."
 				>
 					Number of simulations
@@ -87,7 +91,7 @@ import { Knob } from '../preference-slider.component';
 				<preference-slider
 					class="simulation-slider"
 					field="bgsSimulatorNumberOfSims"
-					[enabled]="useLocalSimulator"
+					[enabled]="useLocalSimulator && bgsEnableApp"
 					[showCurrentValue]="true"
 					displayedValueUnit=""
 					[min]="700"
@@ -131,6 +135,7 @@ import { Knob } from '../preference-slider.component';
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;
+	bgsEnableApp: boolean;
 	showBannedTribes: boolean;
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
@@ -168,6 +173,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 			const preferences: Preferences = event.preferences;
 			this.useLocalSimulator = preferences.bgsUseLocalSimulator;
 			this.enableSimulation = preferences.bgsEnableSimulation;
+			this.bgsEnableApp = preferences.bgsEnableApp;
 			this.showBannedTribes = preferences.bgsShowBannedTribesOverlay;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -184,6 +190,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		const prefs = await this.prefs.getPreferences();
 		this.useLocalSimulator = prefs.bgsUseLocalSimulator;
 		this.enableSimulation = prefs.bgsEnableSimulation;
+		this.bgsEnableApp = prefs.bgsEnableApp;
 		this.showBannedTribes = prefs.bgsShowBannedTribesOverlay;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
