@@ -34,6 +34,7 @@ export class DungeonLootParserService {
 	private currentReviewId: string;
 	private duelsInfo: DuelsInfo;
 	private currentGameType: GameType;
+	private rewardsInput: Input;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private rewardsTimeout;
@@ -76,6 +77,10 @@ export class DungeonLootParserService {
 				const newScene = event.additionalData.scene;
 				if (newScene === 'scene_pvp_dungeon_run') {
 					this.shouldTryToGetRewards = true;
+					if (this.rewardsTimeout) {
+						clearTimeout(this.rewardsTimeout);
+						this.rewardsTimeout = null;
+					}
 					this.tryAndGetRewards();
 				} else {
 					this.shouldTryToGetRewards = false;
@@ -115,6 +120,13 @@ export class DungeonLootParserService {
 		if (!this.shouldTryToGetRewards) {
 			return;
 		}
+
+		this.currentDuelsRunId = this.currentDuelsRunId || (await this.prefs.getPreferences()).duelsRunUuid;
+		if (!this.currentDuelsRunId) {
+			this.log('not enough info to link an Arena Reward');
+			return;
+		}
+
 		const rewards = await this.memory.getDuelsRewardsInfo();
 		this.log('reward', rewards);
 		if (!rewards?.Rewards || rewards?.Rewards.length === 0) {
@@ -127,18 +139,16 @@ export class DungeonLootParserService {
 			return;
 		}
 
-		this.currentDuelsRunId = this.currentDuelsRunId || (await this.prefs.getPreferences()).duelsRunUuid;
-		this.duelsInfo = this.duelsInfo || (await this.memory.getDuelsInfo(false, 5)) || ({} as any);
-
-		if (!this.currentDuelsRunId) {
-			this.log('not enough info to link an Arena Reward');
+		if (this.rewardsInput?.runId === this.currentDuelsRunId) {
+			this.log('already sent rewards for run', this.rewardsInput);
 			return;
 		}
 
+		this.duelsInfo = this.duelsInfo || (await this.memory.getDuelsInfo(false, 5)) || ({} as any);
 		this.updateCurrentDuelsInfo(this.duelsInfo);
 
 		const user = await this.ow.getCurrentUser();
-		const input: Input = {
+		this.rewardsInput = {
 			type: this.currentGameType === GameType.GT_PVPDR ? 'duels' : 'paid-duels',
 			reviewId: this.currentReviewId,
 			runId: this.currentDuelsRunId,
@@ -150,9 +160,9 @@ export class DungeonLootParserService {
 			rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
 			appVersion: process.env.APP_VERSION,
 		} as Input;
-		this.log('sending rewards info', input);
-		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
-		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
+		this.log('sending rewards info', this.rewardsInput);
+		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, this.rewardsInput);
+		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(this.rewardsInput));
 	}
 
 	private async retrieveLootInfo() {
