@@ -120,7 +120,9 @@ export class StoreBootstrapService {
 			isLoading: false,
 		} as AchievementsState);
 
-		this.dungeonLoot.setLastDuelsMatch(newStatsState.gameStats);
+		this.dungeonLoot.setLastDuelsMatch(
+			newStatsState.gameStats?.stats?.filter(stat => stat.gameMode === 'duels' || stat.gameMode === 'paid-duels'),
+		);
 		// const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
 		// const lastRunId =
 		// 	lastGameWithDuelsRunId &&

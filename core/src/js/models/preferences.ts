@@ -151,7 +151,7 @@ export class Preferences {
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
 
-	readonly duelsRunUuid: string;
+	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
 	readonly duelsActiveStatTypeFilter: DuelsStatTypeFilterType = 'hero';
 	readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-winrate';

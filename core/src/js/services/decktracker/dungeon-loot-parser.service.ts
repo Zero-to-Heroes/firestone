@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { CardClass, GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsInfo } from '../../models/duels-info';
@@ -56,10 +56,9 @@ export class DungeonLootParserService {
 		// 	this.retrieveLootInfo();
 		// 	this.debug = false;
 		// };
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
 			const newGameStats: GameStats = event.data[0];
-			this.setLastDuelsMatch(newGameStats);
+			this.setLastDuelsMatch(newGameStats?.stats);
 		});
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.MATCH_METADATA) {
@@ -101,17 +100,23 @@ export class DungeonLootParserService {
 				// this.sendLootInfo();
 			}
 		});
+		setTimeout(() => {
+			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		});
 	}
 
-	public setLastDuelsMatch(newGameStats: GameStats) {
-		this.log('trying to set last duels match', newGameStats.stats[0]);
-		if (
-			newGameStats?.stats?.length &&
-			(newGameStats.stats[0].gameMode === 'duels' || newGameStats.stats[0].gameMode === 'paid-duels')
-		) {
-			if (!this.isLastMatchInRun(newGameStats.stats[0].additionalResult, newGameStats.stats[0].result)) {
-				this.log('setting last duels', newGameStats.stats[0], newGameStats);
-				this.lastDuelsMatch = newGameStats.stats[0];
+	public setLastDuelsMatch(stats: readonly GameStat[]) {
+		this.log('trying to set last duels match', stats?.length && stats[0]);
+		if (!stats?.length) {
+			return;
+		}
+
+		if (stats[0].gameMode === 'duels' || stats[0].gameMode === 'paid-duels') {
+			if (!this.isLastMatchInRun(stats[0].additionalResult, stats[0].result)) {
+				this.log('setting last duels', stats[0]);
+				this.lastDuelsMatch = stats[0];
+				this.currentDuelsRunId = this.lastDuelsMatch.currentDuelsRunId;
+				this.log('set currentDuelsRunId', this.currentDuelsRunId);
 			}
 		}
 	}
@@ -121,7 +126,6 @@ export class DungeonLootParserService {
 			return;
 		}
 
-		this.currentDuelsRunId = this.currentDuelsRunId || (await this.prefs.getPreferences()).duelsRunUuid;
 		if (!this.currentDuelsRunId) {
 			this.log('not enough info to link an Arena Reward');
 			return;
@@ -186,15 +190,11 @@ export class DungeonLootParserService {
 
 		if (this.isNewRun(this.duelsInfo)) {
 			// Start a new run
+			this.currentDuelsRunId = uuid();
 			this.log('starting a new run', this.duelsInfo);
-			await this.prefs.setDuelsRunId(uuid());
 		}
-		this.log('getting currentDuelsRunId');
-		this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
-		this.log('set currentDuelsRunId', this.currentDuelsRunId);
 		if (!this.currentDuelsRunId) {
-			await this.prefs.setDuelsRunId(uuid());
-			this.currentDuelsRunId = (await this.prefs.getPreferences()).duelsRunUuid;
+			this.currentDuelsRunId = uuid();
 			this.log('Could not retrieve duels run id, starting a new run', this.currentDuelsRunId);
 		}
 		this.busyRetrievingInfo = false;
@@ -235,10 +235,13 @@ export class DungeonLootParserService {
 				);
 				return true;
 			}
-			if (this.duelsInfo.HeroCardId !== this.lastDuelsMatch.playerCardId) {
+			if (
+				CardClass[this.duelsInfo.PlayerClass]?.toLowerCase() !== this.lastDuelsMatch.playerClass.toLowerCase()
+			) {
 				this.log(
-					'different card id, starting new run',
-					this.duelsInfo.HeroCardId,
+					'different player class, starting new run',
+					this.duelsInfo.PlayerClass,
+					CardClass[this.duelsInfo.PlayerClass],
 					this.lastDuelsMatch.playerCardId,
 					duelsInfo,
 					this.lastDuelsMatch,

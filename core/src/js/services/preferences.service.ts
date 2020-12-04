@@ -64,11 +64,11 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async setDuelsRunId(id: string) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsRunUuid: id };
-		await this.savePreferences(newPrefs);
-	}
+	// public async setDuelsRunId(id: string) {
+	// 	const prefs = await this.getPreferences();
+	// 	const newPrefs: Preferences = { ...prefs, duelsRunUuid: id };
+	// 	await this.savePreferences(newPrefs);
+	// }
 
 	public async setDontConfirmVideoDeletion(dontAsk: boolean) {
 		const prefs = await this.getPreferences();
