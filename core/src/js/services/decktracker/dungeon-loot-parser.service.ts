@@ -91,6 +91,16 @@ export class DungeonLootParserService {
 				}
 			}
 		});
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			// console.log('[bootstrap] updated game status', res);
+			if (this.ow.exitGame(res)) {
+				if (this.rewardsTimeout) {
+					this.log('clearing rewards timeout');
+					clearTimeout(this.rewardsTimeout);
+					this.rewardsTimeout = null;
+				}
+			}
+		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
 			this.log('Received new review id event', event);
 			const info: ManastormInfo = event.data[0];
