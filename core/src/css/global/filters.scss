@@ -3,7 +3,8 @@
 
 .filters {
 	display: flex;
-	height: 30px;
+	// height: 30px;
+	min-height: 30px;
 	margin-bottom: 15px;
 
 	ng-select.disabled {
