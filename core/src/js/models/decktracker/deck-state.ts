@@ -24,10 +24,21 @@ export class DeckState {
 		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondTheApocalypseToken,
 		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken,
 	];
+
 	private static readonly POGO_CARD_IDS = [
 		CardIds.Collectible.Rogue.PogoHopper,
 		CardIds.NonCollectible.Rogue.PogoHopper,
 		CardIds.NonCollectible.Rogue.PogoHopperTavernBrawl,
+	];
+
+	private static readonly NEW_CTHUN_CARD_IDS = [
+		CardIds.Collectible.Neutral.CthunTheShattered,
+		CardIds.NonCollectible.Neutral.CThuntheShattered_BodyOfCthunToken,
+		CardIds.NonCollectible.Neutral.CThuntheShattered_CthunsBodyToken,
+		CardIds.NonCollectible.Neutral.CThuntheShattered_EyeOfCthunToken,
+		CardIds.NonCollectible.Neutral.CThuntheShattered_HeartOfCthunToken,
+		CardIds.NonCollectible.Neutral.CThuntheShattered_MawOfCthunToken,
+		CardIds.Collectible.Mage.MaskOfCthun,
 	];
 
 	readonly isFirstPlayer: boolean;
@@ -98,6 +109,7 @@ export class DeckState {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		const isCthun = allCardsInDeck
 			.filter(card => card.cardId)
+			.filter(card => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId))
 			.some(
 				card =>
 					card.cardId === CardIds.Collectible.Neutral.Cthun ||
