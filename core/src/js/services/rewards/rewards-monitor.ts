@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Map } from 'immutable';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
@@ -11,8 +12,70 @@ import { sleep } from '../utils';
 
 @Injectable()
 export class RewardMonitorService {
-	private infoAtGameStart: RewardsTrackInfo;
+	private static readonly XP_PER_LEVEL: Map<number, number> = Map([
+		[1, 0],
+		[2, 100],
+		[3, 150],
+		[4, 200],
+		[5, 300],
+		[6, 450],
+		[7, 600],
+		[8, 750],
+		[9, 900],
+		[10, 1050],
+		[11, 1250],
+		[12, 1500],
+		[13, 1750],
+		[14, 2000],
+		[15, 2200],
+		[16, 2400],
+		[17, 2500],
+		[18, 2600],
+		[19, 2700],
+		[20, 2800],
+		[21, 2900],
+		[22, 3000],
+		[23, 3100],
+		[24, 3200],
+		[25, 3300],
+		[26, 3450],
+		[27, 3600],
+		[28, 3750],
+		[29, 3900],
+		[30, 4050],
+		[31, 4250],
+		[32, 4450],
+		[33, 4650],
+		[34, 4850],
+		[35, 5050],
+		[36, 5300],
+		[37, 5550],
+		[38, 5800],
+		[39, 6050],
+		[40, 6300],
+		[41, 6600],
+		[42, 6900],
+		[43, 7200],
+		[44, 7500],
+		[45, 7800],
+		[46, 8100],
+		[47, 8400],
+		[48, 8700],
+		[49, 9000],
+		[50, 9300],
+		[51, 4000],
+		[52, 4050],
+		[53, 4100],
+		[54, 4150],
+		[55, 4200],
+		[56, 4250],
+		[57, 4300],
+		[58, 4350],
+		[59, 4400],
+		[60, 4500],
+	]);
 
+	private infoAtGameStart: RewardsTrackInfo;
 	private xpGainedForGame: number;
 	private xpForGameInfo: XpForGameInfo;
 
@@ -82,7 +145,9 @@ export class RewardMonitorService {
 					const xpGained =
 						levelsGained === 0
 							? infoAtGameEnd.Xp - this.infoAtGameStart?.Xp ?? 0
-							: infoAtGameEnd.Xp + this.infoAtGameStart.XpNeeded - this.infoAtGameStart.Xp;
+							: infoAtGameEnd.Xp +
+							  (this.infoAtGameStart.XpNeeded - this.infoAtGameStart.Xp) +
+							  this.getXpForIntermediaryLevels(this.infoAtGameStart?.Level, infoAtGameEnd.Level);
 					const xpModifier = 1 + (infoAtGameEnd.XpBonusPercent ?? 0) / 100;
 					this.xpGainedForGame = xpGained / xpModifier;
 					if (!this.areEqual(infoAtGameEnd, this.infoAtGameStart) && prefs.showXpRecapAtGameEnd) {
@@ -101,6 +166,19 @@ export class RewardMonitorService {
 				}
 			}
 		});
+	}
+
+	private getXpForIntermediaryLevels(startLevel: number, endLevel: number): number {
+		// There is no missing intermediary level in this case
+		if (endLevel - startLevel <= 1) {
+			return 0;
+		}
+		let totalMissingXp = 0;
+		for (let i = startLevel + 1; i <= endLevel - 1; i++) {
+			const xpForFullLevel = RewardMonitorService.XP_PER_LEVEL.get(i, 4500);
+			totalMissingXp += xpForFullLevel;
+		}
+		return totalMissingXp;
 	}
 
 	private async getUpdatedRewardsInfo() {
