@@ -95,6 +95,7 @@ import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-he
 import { DuelsPersonalDeckDetailsComponent } from '../../components/duels/desktop/duels-personal-deck-details.component';
 import { DuelsPersonalDecksVignetteComponent } from '../../components/duels/desktop/duels-personal-deck-vignette.component';
 import { DuelsPersonalDecksComponent } from '../../components/duels/desktop/duels-personal-decks.component';
+import { DuelsRewardComponent } from '../../components/duels/desktop/duels-reward.component';
 import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.component';
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
@@ -274,6 +275,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsPersonalDeckDetailsComponent,
 		DuelsClassesRecapComponent,
 		DuelsStatCellComponent,
+		DuelsRewardComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

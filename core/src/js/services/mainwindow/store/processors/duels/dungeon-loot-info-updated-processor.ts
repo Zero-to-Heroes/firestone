@@ -1,5 +1,6 @@
+import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { DuelsRewardsInfo as InputDuelsRewardsInfo, Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { DuelsState } from '../../../../../models/duels/duels-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -15,9 +16,12 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const dungeonLootInfo = event.dungeonLootInfo;
 		const newInfos: readonly DuelsRunInfo[] = this.buildNewInfos(dungeonLootInfo, currentState.duels.duelsRunInfos);
+		const rewards: readonly DuelsRewardsInfo[] = this.buildRewards(dungeonLootInfo.rewards);
+
 		const duelsRunInfos: readonly DuelsRunInfo[] = [...currentState.duels.duelsRunInfos, ...newInfos];
 		const newDuels = currentState.duels.update({
 			duelsRunInfos: duelsRunInfos,
+			duelsRewardsInfo: rewards,
 		} as DuelsState);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
@@ -25,6 +29,17 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 			} as MainWindowState),
 			null,
 		];
+	}
+
+	private buildRewards(rewards: InputDuelsRewardsInfo): readonly DuelsRewardsInfo[] {
+		return rewards.Rewards.map(
+			reward =>
+				({
+					rewardAmount: reward.Amount,
+					rewardBoosterId: reward.BoosterId,
+					rewardType: reward.Type,
+				} as DuelsRewardsInfo),
+		);
 	}
 
 	private buildNewInfos(dungeonLootInfo: Input, existingInfos: readonly DuelsRunInfo[]): readonly DuelsRunInfo[] {

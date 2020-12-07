@@ -65,9 +65,8 @@ export class StoreBootstrapService {
 				globalStats,
 				bgsBestUserStats,
 				collectionState,
-				duelsRunInfo,
 			],
-			duelsGlobalStats,
+			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats],
 		] = await Promise.all([
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
@@ -79,9 +78,8 @@ export class StoreBootstrapService {
 				this.globalStats.getGlobalStats(),
 				this.bestBgsStats.getBgsBestUserStats(),
 				this.collectionBootstrap.initCollectionState(),
-				this.duels.loadRuns(),
 			]),
-			this.duels.loadGlobalStats(),
+			Promise.all([this.duels.loadRuns(), this.duels.loadGlobalStats()]),
 		]);
 		console.log('loaded info');
 
@@ -138,7 +136,7 @@ export class StoreBootstrapService {
 		const currentDuelsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find(patch => patch.number === patchConfig.currentDuelsMetaPatch)
 			: null;
-		const duelsStats: DuelsState = this.duels.initState(duelsGlobalStats, duelsRunInfo);
+		const duelsStats: DuelsState = this.duels.initState(duelsGlobalStats, duelsRunInfo, duelsRewardsInfo);
 		const newDuelsState = await this.duels.updateState(
 			duelsStats,
 			matchStats,

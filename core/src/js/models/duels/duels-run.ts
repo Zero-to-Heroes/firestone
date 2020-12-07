@@ -1,3 +1,4 @@
+import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { GameStat } from '../mainwindow/stats/game-stat';
 
@@ -6,6 +7,7 @@ export class DuelsRun {
 	readonly type: 'duels' | 'paid-duels';
 	readonly initialDeckList: string;
 	readonly steps: readonly (GameStat | DuelsRunInfo)[];
+	readonly rewards: readonly DuelsRewardsInfo[];
 	readonly creationTimestamp: number;
 	readonly heroCardId: string;
 	readonly heroPowerCardId: string;

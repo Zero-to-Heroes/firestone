@@ -1,4 +1,5 @@
 import { DuelsGlobalStats } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
 import { PatchInfo } from '../patches';
@@ -17,6 +18,7 @@ export class DuelsState {
 	readonly loading: boolean = true;
 	readonly categories: readonly DuelsCategory[];
 	readonly duelsRunInfos: readonly DuelsRunInfo[];
+	readonly duelsRewardsInfo: readonly DuelsRewardsInfo[];
 	readonly runs: readonly DuelsRun[];
 	readonly globalStats: DuelsGlobalStats;
 	readonly playerStats: DuelsPlayerStats;

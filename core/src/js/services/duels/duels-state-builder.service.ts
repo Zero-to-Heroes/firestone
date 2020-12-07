@@ -11,6 +11,7 @@ import {
 	TreasureStat,
 } from '@firestone-hs/duels-global-stats/dist/stat';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
 import { DeckDefinition, decode } from 'deckstrings';
@@ -50,6 +51,7 @@ import { groupByFunction } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+const DUELS_REWARDS_INFO_URL = 'https://1ntio3mhgd.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=4';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
@@ -86,7 +88,7 @@ export class DuelsStateBuilderService {
 		);
 	}
 
-	public async loadRuns(): Promise<readonly DuelsRunInfo[]> {
+	public async loadRuns(): Promise<[readonly DuelsRunInfo[], readonly DuelsRewardsInfo[]]> {
 		const user = await this.ow.getCurrentUser();
 		const input: Input = {
 			userId: user.userId,
@@ -94,15 +96,18 @@ export class DuelsStateBuilderService {
 		};
 		const results: any = await this.api.callPostApiWithRetries(DUELS_RUN_INFO_URL, input);
 		console.log('[duels-state-builder] loaded result');
-		return results?.results.map(
-			info =>
-				({
-					...info,
-					option1Contents: info.option1Contents?.split(','),
-					option2Contents: info.option2Contents?.split(','),
-					option3Contents: info.option3Contents?.split(','),
-				} as DuelsRunInfo),
-		);
+		const stepResults: readonly DuelsRunInfo[] =
+			results?.results.map(
+				info =>
+					({
+						...info,
+						option1Contents: info.option1Contents?.split(','),
+						option2Contents: info.option2Contents?.split(','),
+						option3Contents: info.option3Contents?.split(','),
+					} as DuelsRunInfo),
+			) || [];
+		const rewardsResults: readonly DuelsRewardsInfo[] = results?.rewardsResults || [];
+		return [stepResults, rewardsResults];
 	}
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
@@ -111,12 +116,17 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
-	public initState(globalStats: DuelsGlobalStats, duelsRunInfo: readonly DuelsRunInfo[]): DuelsState {
+	public initState(
+		globalStats: DuelsGlobalStats,
+		duelsRunInfo: readonly DuelsRunInfo[],
+		duelsRewardsInfo: readonly DuelsRewardsInfo[],
+	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		return DuelsState.create({
 			categories: categories,
 			globalStats: globalStats,
 			duelsRunInfos: duelsRunInfo,
+			duelsRewardsInfo: duelsRewardsInfo,
 		} as DuelsState);
 	}
 
@@ -179,6 +189,7 @@ export class DuelsStateBuilderService {
 					runId,
 					matchesByRun[runId],
 					currentState.duelsRunInfos.filter(runInfo => runInfo.runId === runId),
+					currentState.duelsRewardsInfo.filter(runInfo => runInfo.runId === runId),
 				),
 			)
 			.filter(run => run)
@@ -773,13 +784,18 @@ export class DuelsStateBuilderService {
 		}
 	}
 
-	private buildRun(runId: string, matchesForRun: GameStat[], runInfo: DuelsRunInfo[]): DuelsRun {
+	private buildRun(
+		runId: string,
+		matchesForRun: readonly GameStat[],
+		runInfo: readonly DuelsRunInfo[],
+		rewardsInfo: readonly DuelsRewardsInfo[],
+	): DuelsRun {
 		if (!matchesForRun && !runInfo) {
 			return null;
 		}
-		const sortedMatches = matchesForRun.sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
+		const sortedMatches = [...matchesForRun].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
 		const firstMatch = this.getFirstMatchForRun(sortedMatches);
-		const sortedInfo = runInfo.sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
+		const sortedInfo = [...runInfo].sort((a, b) => (a.creationTimestamp <= b.creationTimestamp ? -1 : 1));
 		const steps: readonly (GameStat | DuelsRunInfo)[] = [
 			...(sortedMatches || []),
 			...(sortedInfo || []),
@@ -798,6 +814,7 @@ export class DuelsStateBuilderService {
 			ratingAtStart: this.extractRatingAtStart(sortedMatches),
 			ratingAtEnd: this.extractRatingAtEnd(sortedMatches),
 			steps: steps,
+			rewards: rewardsInfo,
 		} as DuelsRun);
 	}
 
