@@ -51,7 +51,31 @@ export const globalEffectCards = [
 	CardIds.NonCollectible.Rogue.TheCavernsBelow_CrystalCoreTokenUNGORO,
 ];
 
-export const cardsRevealedWhenDrawn = [CardIds.NonCollectible.Warlock.SchoolSpirits_SoulFragmentToken];
+export const cardsRevealedWhenDrawn = [
+	CardIds.NonCollectible.Druid.YseraUnleashed_DreamPortalToken,
+	CardIds.NonCollectible.Mage.DeckofWonders_ScrollOfWonderToken,
+	CardIds.NonCollectible.Neutral.AncientShade_AncientCurseToken,
+	CardIds.NonCollectible.Neutral.Chromie_BattleForMountHyjalToken,
+	CardIds.NonCollectible.Neutral.Chromie_CullingOfStratholmeToken,
+	CardIds.NonCollectible.Neutral.Chromie_EscapeFromDurnholdeToken,
+	CardIds.NonCollectible.Neutral.Chromie_OpeningTheDarkPortalToken,
+	CardIds.NonCollectible.Neutral.FlyBy_KadoomBotToken,
+	CardIds.NonCollectible.Neutral.HakkartheSoulflayer_CorruptedBloodToken,
+	CardIds.NonCollectible.Neutral.ImprovisedExplosive,
+	CardIds.NonCollectible.Neutral.PortalKeeper_FelhoundPortalToken,
+	CardIds.NonCollectible.Neutral.SeaforiumBomber_BombToken,
+	CardIds.NonCollectible.Neutral.SandTrap,
+	CardIds.NonCollectible.Neutral.TwistPlagueofMurlocs_SurpriseMurlocsToken,
+	CardIds.NonCollectible.Neutral.TheDarkness_DarknessCandleToken,
+	CardIds.NonCollectible.Rogue.BeneaththeGrounds_NerubianAmbushToken,
+	CardIds.NonCollectible.Rogue.FaldoreiStrider_SpiderAmbushEnchantment,
+	CardIds.NonCollectible.Rogue.ShadowofDeath_ShadowToken,
+	CardIds.NonCollectible.Rogue.TicketMaster_TicketsToken,
+	CardIds.NonCollectible.Rogue.Waxadred_WaxadredsCandleToken,
+	CardIds.NonCollectible.Warlock.SchoolSpirits_SoulFragmentToken,
+	CardIds.NonCollectible.Warrior.ImprovisedExplosiveTavernBrawl,
+	CardIds.NonCollectible.Warrior.IronJuggernaut_BurrowingMineToken,
+];
 
 export const forcedHiddenCardCreators = [
 	CardIds.NonCollectible.Neutral.MaskOfMimicryLOOTAPALOOZA,
