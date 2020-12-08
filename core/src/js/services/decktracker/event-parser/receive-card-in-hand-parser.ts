@@ -3,7 +3,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { publicCardCreators } from '../../hs-utils';
+import { cardsRevealedWhenDrawn, publicCardCreators } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -22,7 +22,10 @@ export class ReceiveCardInHandParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
-		const isCardInfoPublic = isPlayer || publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
+		const isCardInfoPublic =
+			isPlayer ||
+			cardsRevealedWhenDrawn.includes(cardId) ||
+			publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);

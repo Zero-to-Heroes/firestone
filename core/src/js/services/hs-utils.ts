@@ -51,6 +51,8 @@ export const globalEffectCards = [
 	CardIds.NonCollectible.Rogue.TheCavernsBelow_CrystalCoreTokenUNGORO,
 ];
 
+export const cardsRevealedWhenDrawn = [CardIds.NonCollectible.Warlock.SchoolSpirits_SoulFragmentToken];
+
 export const forcedHiddenCardCreators = [
 	CardIds.NonCollectible.Neutral.MaskOfMimicryLOOTAPALOOZA,
 	CardIds.NonCollectible.Neutral.MaskOfMimicryTavernBrawl,
