@@ -219,9 +219,10 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge]', currentReviewId, 'added meta data');
 		game.uncompressedXmlReplay = replayXml;
 		console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
-		this.gameParserService.extractMatchup(game);
+		const replay = parseHsReplayString(game.uncompressedXmlReplay);
+		this.gameParserService.extractMatchup(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted matchup');
-		this.gameParserService.extractDuration(game);
+		this.gameParserService.extractDuration(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
 		game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;

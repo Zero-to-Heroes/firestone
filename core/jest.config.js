@@ -1,7 +1,7 @@
 module.exports = {
 	roots: ['<rootDir>/src', '<rootDir>/test'],
 	setupFilesAfterEnv: ['<rootDir>/test/setup.js', 'jest-extended'],
-	testEnvironment: 'node',
+	testEnvironment: 'jsdom',
 	transform: {
 		// https://stackoverflow.com/questions/58096872/react-jest-test-fails-to-run-with-ts-jest-unexpected-token-on-imported-file
 		'^.+\\.jsx?$': 'babel-jest',
