@@ -153,15 +153,17 @@ export class DungeonLootParserService {
 			return;
 		}
 
+		this.duelsInfo = this.duelsInfo || (await this.memory.getDuelsInfo(false, 5)) || ({} as any);
+		this.updateCurrentDuelsInfo(this.duelsInfo);
+
+		const user = await this.ow.getCurrentUser();
+
+		// Put it later, so that we do the check at the last possible moment
 		if (this.rewardsInput?.runId === this.currentDuelsRunId) {
 			this.log('already sent rewards for run', this.rewardsInput);
 			return;
 		}
 
-		this.duelsInfo = this.duelsInfo || (await this.memory.getDuelsInfo(false, 5)) || ({} as any);
-		this.updateCurrentDuelsInfo(this.duelsInfo);
-
-		const user = await this.ow.getCurrentUser();
 		this.rewardsInput = {
 			type: this.currentGameType === GameType.GT_PVPDR ? 'duels' : 'paid-duels',
 			reviewId: this.currentReviewId,
