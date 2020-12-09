@@ -10,7 +10,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	template: `
 		<div
 			class="opponent-card-info-id"
-			*ngIf="cardId && displayGuess"
+			*ngIf="(hasBuffs && displayBuff) || (cardId && displayGuess)"
 			cardTooltip
 			[cardTooltipCard]="_card"
 			cardTooltipPosition="bottom-right"
