@@ -48,6 +48,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private adInit = false;
 	private stateChangedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
+	private displayImpressionListener: (message: any) => void;
 	private refreshTimer;
 
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
@@ -61,7 +62,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 				console.log('[ads] removing ad', message.window_state);
 				this.removeAds();
 			} else if (message.window_previous_state !== 'normal' && message.window_previous_state !== 'maximized') {
-				console.log('[ads] refreshing ad', message.window_state, message);
+				console.log('[ads] refreshing ad', message.window_state, message.window_previous_state, message);
 				this.refreshAds();
 			}
 		});
@@ -74,8 +75,10 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
+		console.log('[ads] removing event listeners');
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.adRef?.removeEventListener(this.impressionListener);
+		this.adRef?.removeEventListener(this.displayImpressionListener);
 	}
 
 	showSubscription() {
@@ -108,10 +111,11 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 				return;
 			}
 			if (!this.adRef) {
-				if (this.impressionListener) {
+				if (this.impressionListener || this.displayImpressionListener) {
 					console.warn(
 						'[ads] Redefining the impression listener, could cause memory leaks',
 						this.impressionListener,
+						this.displayImpressionListener,
 					);
 				}
 				this.adInit = true;
@@ -119,10 +123,27 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 				if (window.isVisible) {
 					console.log('[ads] first time init ads, creating OwAd');
 					this.adRef = new OwAd(document.getElementById('ad-div'));
-					this.impressionListener = data => {
+
+					this.impressionListener = async data => {
 						amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
+						console.log('[ads] impression');
 					};
 					this.adRef.addEventListener('impression', this.impressionListener);
+
+					this.displayImpressionListener = async data => {
+						console.log('[ads] display ad impression');
+						// We accept to refresh the ads every 7 minutes, to make it possible to have a video ad
+						// impression
+						if (!this.refreshTimer) {
+							this.refreshTimer = setTimeout(() => {
+								console.log('[ads] refreshing ad after 7 minutes timeout');
+								this.refreshTimer = null;
+								this.refreshAds();
+							}, 7 * 60 * 1000);
+						}
+					};
+					this.adRef.addEventListener('display_ad_loaded', this.displayImpressionListener);
+
 					console.log('[ads] init OwAd');
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
@@ -136,16 +157,6 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 			}
 			console.log('[ads] refreshed ads');
 			this.adRef.refreshAd();
-
-			// We accept to refresh the ads every 7 minutes, to make it possible to have a video ad
-			// impression
-			if (this.refreshTimer) {
-				clearTimeout(this.refreshTimer);
-			}
-			this.refreshTimer = setTimeout(() => {
-				console.log('[ads] refreshing ad after 7 minutes timeout');
-				this.refreshAds();
-			}, 7 * 60 * 1000);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -160,6 +171,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private removeAds() {
 		if (this.refreshTimer) {
 			clearTimeout(this.refreshTimer);
+			this.refreshTimer = null;
 		}
 		if (!this.adRef) {
 			return;
