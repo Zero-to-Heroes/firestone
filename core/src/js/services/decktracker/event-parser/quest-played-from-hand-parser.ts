@@ -28,6 +28,7 @@ export class QuestPlayedFromHandParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			otherZone: newOtherZone,
+			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + 1,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

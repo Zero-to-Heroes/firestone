@@ -123,6 +123,8 @@ export class Preferences {
 	readonly playerFatigueCounterWidgetPosition: { left: number; top: number };
 	readonly opponentFatigueCounter: boolean = true;
 	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
+	readonly playerSpellCounter: boolean = true;
+	readonly playerSpellCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerBgsPogoCounter: boolean = true;
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };

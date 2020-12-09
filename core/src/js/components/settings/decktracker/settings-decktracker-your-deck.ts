@@ -103,6 +103,11 @@ import { Knob } from '../preference-slider.component';
 						label="Attack on board"
 						tooltip="Show the total attack of minions on your board + your hero"
 					></preference-toggle>
+					<preference-toggle
+						field="playerSpellCounter"
+						label="Number of spells"
+						tooltip="Show the total number of spells you played this match. Shows up only if relevant cards are found in the deck"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

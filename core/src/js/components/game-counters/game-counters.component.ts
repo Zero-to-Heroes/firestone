@@ -23,6 +23,7 @@ import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
+import { SpellCounterDefinition } from './definitions/spell-counter';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 
 declare let amplitude;
@@ -153,6 +154,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				return AttackCounterDefinition.create(gameState, side);
 			case 'pogo':
 				return PogoCounterDefinition.create(gameState, side);
+			case 'spells':
+				return SpellCounterDefinition.create(gameState, side);
 			default:
 				console.warn('unexpected activeCounter for non-bgs', activeCounter);
 		}

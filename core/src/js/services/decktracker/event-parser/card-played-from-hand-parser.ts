@@ -51,6 +51,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
 		const isOnBoard = refCard && refCard.type === 'Minion';
+		const isSpell = refCard?.type === 'Spell';
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
@@ -81,6 +82,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			otherZone: newOtherZone,
 			cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
 			globalEffects: newGlobalEffects,
+			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (isSpell ? 1 : 0),
 		} as DeckState);
 		// console.log('[secret-turn-end] updated deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {

@@ -31,6 +31,11 @@ export class DeckState {
 		CardIds.NonCollectible.Rogue.PogoHopperTavernBrawl,
 	];
 
+	private static readonly SPELL_COUNTER_CARD_IDS = [
+		CardIds.Collectible.Neutral.YoggSaronHopesEnd,
+		CardIds.Collectible.Neutral.YoggSaronMasterOfFate,
+	];
+
 	private static readonly NEW_CTHUN_CARD_IDS = [
 		CardIds.Collectible.Neutral.CthunTheShattered,
 		CardIds.NonCollectible.Neutral.CThuntheShattered_BodyOfCthunToken,
@@ -65,6 +70,7 @@ export class DeckState {
 	readonly jadeGolemSize: number = 0;
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
+	readonly spellsPlayedThisMatch: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
@@ -140,5 +146,14 @@ export class DeckState {
 			.filter(card => card.cardId)
 			.some(card => DeckState.POGO_CARD_IDS.indexOf(card.cardId) !== -1);
 		return isPogo;
+	}
+
+	public containsSpellCounterMinion(): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const result = allCardsInDeck
+			.filter(card => card.cardId)
+			.some(card => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId));
+		console.log('spell counter', 'has', result, allCardsInDeck, DeckState.SPELL_COUNTER_CARD_IDS);
+		return result;
 	}
 }

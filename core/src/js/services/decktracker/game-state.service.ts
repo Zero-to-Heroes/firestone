@@ -94,6 +94,7 @@ import { FatiguePlayerCounterOverlayHandler } from './overlays/counter-player-fa
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
 import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
 import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
+import { SpellsPlayerCounterOverlayHandler } from './overlays/counter-player-spells-handler';
 import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
 import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
@@ -374,13 +375,7 @@ export class GameStateService {
 		}
 		// console.log('\tready to emit event');
 		// if (gameEvent.controllerId === 1) {
-		// 	console.log(
-		// 		'[game-state] will emit event',
-		// 		gameEvent.type,
-		// 		this.state.playerDeck.hand,
-		// 		this.state,
-		// 		gameEvent,
-		// 	);
+		// console.log('[game-state] will emit event', gameEvent.type, this.state.playerDeck.board, this.state, gameEvent);
 		// }
 		this.updateOverlays(
 			this.state,
@@ -436,7 +431,11 @@ export class GameStateService {
 				? Math.max(playerFromTracker?.Hero?.attack, 0) +
 				  (deck.isActivePlayer ? 0 : Math.max(playerFromTracker?.Weapon?.attack, 0))
 				: 0);
-		// console.log('heroAttack', playerFromTracker?.Hero, this.canAttack(playerFromTracker?.Hero));
+		// console.log(
+		// 	'heroAttack',
+		// 	playerFromTracker?.Hero,
+		// 	this.canAttack(playerFromTracker?.Hero, deck.isActivePlayer),
+		// );
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
 					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
@@ -525,6 +524,7 @@ export class GameStateService {
 			new CthunOpponentCounterOverlayHandler(this.ow, this.allCards),
 			new FatiguePlayerCounterOverlayHandler(this.ow, this.allCards),
 			new FatigueOpponentCounterOverlayHandler(this.ow, this.allCards),
+			new SpellsPlayerCounterOverlayHandler(this.ow, this.allCards),
 		];
 	}
 

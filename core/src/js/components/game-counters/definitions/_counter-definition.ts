@@ -7,4 +7,4 @@ export interface CounterDefinition {
 	readonly standardCounter: boolean;
 }
 
-export type CounterType = 'galakrond' | 'pogo' | 'bgsPogo' | 'attack' | 'jadeGolem' | 'cthun' | 'fatigue';
+export type CounterType = 'galakrond' | 'pogo' | 'bgsPogo' | 'attack' | 'jadeGolem' | 'cthun' | 'fatigue' | 'spells';
