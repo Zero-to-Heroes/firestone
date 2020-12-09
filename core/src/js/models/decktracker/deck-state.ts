@@ -98,6 +98,7 @@ export class DeckState {
 			.some(
 				card =>
 					DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
+					card.cardId === CardIds.Collectible.Neutral.KronxDragonhoof ||
 					(allCards &&
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
