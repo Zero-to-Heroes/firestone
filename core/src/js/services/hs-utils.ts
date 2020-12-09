@@ -125,6 +125,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Rogue.RaidingParty,
 	CardIds.Collectible.Rogue.Stowaway,
 	CardIds.Collectible.Rogue.Swindle,
+	CardIds.Collectible.Rogue.ThistleTea,
 	CardIds.Collectible.Shaman.Bogshaper,
 	CardIds.Collectible.Shaman.CagematchCustodian,
 	CardIds.Collectible.Shaman.ElementaryReaction,

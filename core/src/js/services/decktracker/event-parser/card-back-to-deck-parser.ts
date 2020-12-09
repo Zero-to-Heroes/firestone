@@ -32,9 +32,17 @@ export class CardBackToDeckParser implements EventParser {
 		// that goes back, and so we don't add them once again
 		const shouldKeepDeckAsIs = deck.deckstring && card.inInitialDeck && !card.cardId;
 		// console.log('shouldKeepDeckAsIs', shouldKeepDeckAsIs, deck.deckstring, card.isFiller(), deck, card);
+		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
+		// put back in the deck, then drawn again. If we don't reset the lastInfluencedBy, we
+		// could possibly have an info leak
+		const cardWithoutInfluence = card
+			? card.update({
+					lastAffectedByCardId: undefined,
+			  } as DeckCard)
+			: card;
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
-			: this.helper.addSingleCardToZone(previousDeck, card);
+			: this.helper.addSingleCardToZone(previousDeck, cardWithoutInfluence);
 		// console.log('updated deck', isPlayer, newDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
