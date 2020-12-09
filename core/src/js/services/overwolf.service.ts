@@ -40,6 +40,7 @@ export class OverwolfService {
 	public static COUNTER_PLAYER_ATTACK_WINDOW = 'CounterPlayerAttack';
 	public static COUNTER_OPPONENT_ATTACK_WINDOW = 'CounterOpponentAttack';
 	public static COUNTER_PLAYER_SPELL_WINDOW = 'CounterPlayerSpells';
+	public static COUNTER_PLAYER_ELEMENTAL_WINDOW = 'CounterPlayerElemental';
 	public static BGS_COUNTER_PLAYER_POGO_WINDOW = 'BgsCounterPlayerPogo';
 
 	public isOwEnabled(): boolean {
