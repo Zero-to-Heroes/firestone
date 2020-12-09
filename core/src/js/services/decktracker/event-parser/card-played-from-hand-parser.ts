@@ -1,3 +1,4 @@
+import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -51,7 +52,6 @@ export class CardPlayedFromHandParser implements EventParser {
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
 		const isOnBoard = refCard && refCard.type === 'Minion';
-		const isSpell = refCard?.type === 'Spell';
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
@@ -75,6 +75,10 @@ export class CardPlayedFromHandParser implements EventParser {
 		if (globalEffectCards.includes(card?.cardId)) {
 			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, cardWithZone);
 		}
+
+		const isElemental =
+			refCard?.type === 'Minion' && refCard?.race?.toLowerCase() === Race[Race.ELEMENTAL].toLowerCase();
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			board: newBoard,
@@ -82,7 +86,8 @@ export class CardPlayedFromHandParser implements EventParser {
 			otherZone: newOtherZone,
 			cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
 			globalEffects: newGlobalEffects,
-			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (isSpell ? 1 : 0),
+			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (refCard?.type === 'Spell' ? 1 : 0),
+			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (isElemental ? 1 : 0),
 		} as DeckState);
 		// console.log('[secret-turn-end] updated deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {

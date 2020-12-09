@@ -90,6 +90,7 @@ import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-oppon
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
 import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
 import { CthunPlayerCounterOverlayHandler } from './overlays/counter-player-cthun-handler';
+import { ElementalPlayerCounterOverlayHandler } from './overlays/counter-player-elemental-handler';
 import { FatiguePlayerCounterOverlayHandler } from './overlays/counter-player-fatigue-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
 import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
@@ -525,6 +526,7 @@ export class GameStateService {
 			new FatiguePlayerCounterOverlayHandler(this.ow, this.allCards),
 			new FatigueOpponentCounterOverlayHandler(this.ow, this.allCards),
 			new SpellsPlayerCounterOverlayHandler(this.ow, this.allCards),
+			new ElementalPlayerCounterOverlayHandler(this.ow, this.allCards),
 		];
 	}
 

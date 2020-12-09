@@ -71,6 +71,8 @@ export class DeckState {
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
 	readonly spellsPlayedThisMatch: number = 0;
+	readonly elementalsPlayedThisTurn: number = 0;
+	readonly elementalsPlayedLastTurn: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that

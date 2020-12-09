@@ -15,19 +15,26 @@ export class NewTurnParser implements EventParser {
 			: Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
 		// const numericTurn = Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
 		const currentTurn = currentState.mulliganOver ? numericTurn : 'mulligan';
+		const isPlayerActive = currentState.playerDeck.isFirstPlayer
+			? gameEvent.additionalData.turnNumber % 2 === 1
+			: gameEvent.additionalData.turnNumber % 2 === 0;
 		const playerDeck = currentState.playerDeck.update({
-			isActivePlayer: currentState.playerDeck.isFirstPlayer
-				? gameEvent.additionalData.turnNumber % 2 === 1
-				: gameEvent.additionalData.turnNumber % 2 === 0,
+			isActivePlayer: isPlayerActive,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],
 			damageTakenThisTurn: 0,
+			elementalsPlayedLastTurn: isPlayerActive
+				? currentState.playerDeck.elementalsPlayedLastTurn
+				: currentState.playerDeck.elementalsPlayedThisTurn,
+			elementalsPlayedThisTurn: 0,
 		} as DeckState);
 		const opponentDeck = currentState.opponentDeck.update({
-			isActivePlayer: currentState.opponentDeck.isFirstPlayer
-				? gameEvent.additionalData.turnNumber % 2 === 1
-				: gameEvent.additionalData.turnNumber % 2 === 0,
+			isActivePlayer: !isPlayerActive,
 			cardsPlayedThisTurn: [] as readonly DeckCard[],
 			damageTakenThisTurn: 0,
+			elementalsPlayedLastTurn: !isPlayerActive
+				? currentState.opponentDeck.elementalsPlayedLastTurn
+				: currentState.opponentDeck.elementalsPlayedThisTurn,
+			elementalsPlayedThisTurn: 0,
 		} as DeckState);
 		// console.log('[debug] new turn', numericTurn, currentTurn, currentState.mulliganOver);
 		return Object.assign(new GameState(), currentState, {

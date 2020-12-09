@@ -125,6 +125,8 @@ export class Preferences {
 	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
 	readonly playerSpellCounter: boolean = true;
 	readonly playerSpellCounterWidgetPosition: { left: number; top: number };
+	readonly playerElementalCounter: boolean = true;
+	readonly playerElementalCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerBgsPogoCounter: boolean = true;
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };

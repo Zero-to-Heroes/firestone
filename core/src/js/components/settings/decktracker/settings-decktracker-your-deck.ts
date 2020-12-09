@@ -108,6 +108,11 @@ import { Knob } from '../preference-slider.component';
 						label="Number of spells"
 						tooltip="Show the total number of spells you played this match. Shows up only if relevant cards are found in the deck"
 					></preference-toggle>
+					<preference-toggle
+						field="playerElementalCounter"
+						label="Elementals"
+						tooltip="Show the total number of elementals you played this turn and last turn. Shows up only if relevant cards are found in your hand"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

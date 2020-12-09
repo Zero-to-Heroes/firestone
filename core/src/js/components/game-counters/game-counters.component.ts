@@ -19,6 +19,7 @@ import { PreferencesService } from '../../services/preferences.service';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
+import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
@@ -156,8 +157,10 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				return PogoCounterDefinition.create(gameState, side);
 			case 'spells':
 				return SpellCounterDefinition.create(gameState, side);
+			case 'elemental':
+				return ElementalCounterDefinition.create(gameState, side);
 			default:
-				console.warn('unexpected activeCounter for non-bgs', activeCounter);
+				console.error('unexpected activeCounter for non-bgs', activeCounter);
 		}
 	}
 
