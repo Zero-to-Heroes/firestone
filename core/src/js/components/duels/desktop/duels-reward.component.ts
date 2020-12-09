@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RewardType } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
+import { capitalizeEachWord } from '../../../services/utils';
 
 @Component({
 	selector: 'duels-reward',
@@ -9,7 +10,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/d
 		`../../../../css/component/duels/desktop/duels-reward.component.scss`,
 	],
 	template: `
-		<div class="duels-reward">
+		<div class="duels-reward" [helpTooltip]="tooltip">
 			<img class="image" [src]="image" />
 			<div class="amount">{{ amount }}</div>
 		</div>
@@ -21,10 +22,14 @@ export class DuelsRewardComponent {
 		console.log('setting reward', value);
 		this.image = this.buildImage(value.rewardType);
 		this.amount = value.rewardAmount;
+		if (this.image) {
+			this.tooltip = `${value.rewardAmount} ${capitalizeEachWord(RewardType[value.rewardType].replace('_', ''))}`;
+		}
 	}
 
 	image: string;
 	amount: number;
+	tooltip: string;
 
 	private buildImage(rewardType: RewardType): string {
 		switch (rewardType) {
@@ -34,6 +39,8 @@ export class DuelsRewardComponent {
 				return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/duels/pack.png';
 			case RewardType.GOLD:
 				return 'https://static.zerotoheroes.com/hearthstone/asset/firestone/images/duels/gold.png';
+			default:
+				return null;
 		}
 	}
 }
