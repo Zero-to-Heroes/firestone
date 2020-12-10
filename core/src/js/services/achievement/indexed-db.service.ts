@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CompletedAchievement } from '../../models/completed-achievement';
+import { HsAchievementsInfo } from './achievements-info';
 
 @Injectable()
 export class AchievementsLocalDbService {
@@ -13,6 +14,43 @@ export class AchievementsLocalDbService {
 	constructor() {
 		// Necessary for history
 		this.init();
+	}
+
+	public async saveInGameAchievements(info: HsAchievementsInfo): Promise<HsAchievementsInfo> {
+		await this.waitForDbInit();
+		const dbInfo = {
+			id: 1,
+			info: info,
+		};
+		return new Promise<HsAchievementsInfo>(resolve => {
+			this.saveInGameAchievementsInternal(dbInfo, result => resolve(result));
+		});
+	}
+
+	private async saveInGameAchievementsInternal(dbInfo, callback, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('[achievements] [storage] could not update achievements-from-game');
+			callback(dbInfo.info);
+			return;
+		}
+		try {
+			await this.db.update('achievements-from-game', dbInfo);
+			callback(dbInfo.info);
+			return;
+		} catch (e) {
+			console.warn('[achievements] [storage] could not update achievements-from-game', e.message, e.name, e);
+			setTimeout(() => this.saveInGameAchievementsInternal(dbInfo, callback, retriesLeft - 1));
+		}
+	}
+
+	public async retrieveInGameAchievements(): Promise<HsAchievementsInfo> {
+		await this.waitForDbInit();
+		try {
+			const info = await this.db.getAll('achievements-from-game', null);
+			return info[0] ? info[0].info : [];
+		} catch (e) {
+			console.error('[achievements] [storage] could not get achievements-from-game', e.message, e.name, e);
+		}
 	}
 
 	public async save(achievement: CompletedAchievement): Promise<CompletedAchievement> {
@@ -68,7 +106,7 @@ export class AchievementsLocalDbService {
 		console.log('[achievements] [storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-achievements-db', 2);
 		this.db
-			.openDatabase(3, evt => {
+			.openDatabase(4, evt => {
 				console.log('[achievements] [storage] opendb successful', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[achievements] [storage] creating achievements store');
@@ -79,6 +117,12 @@ export class AchievementsLocalDbService {
 					evt.currentTarget.result.createObjectStore('achievement-history', {
 						keyPath: 'id',
 						autoIncrement: true,
+					});
+				}
+				if (evt.oldVersion < 4) {
+					console.log('[achievements] [storage] upgrade to version 4');
+					evt.currentTarget.result.createObjectStore('achievements-from-game', {
+						keyPath: 'id',
 					});
 				}
 				console.log('[achievements] [storage] indexeddb upgraded');

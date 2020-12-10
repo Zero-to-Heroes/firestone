@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../../models/achievement';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
+import { ApiRunner } from '../../api-runner';
 import { Challenge } from '../achievements/challenges/challenge';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
 
@@ -13,7 +13,7 @@ export class AchievementsLoaderService {
 
 	private achievements: readonly Achievement[];
 
-	constructor(private http: HttpClient, private challengeBuilder: ChallengeBuilderService) {}
+	constructor(private api: ApiRunner, private challengeBuilder: ChallengeBuilderService) {}
 
 	public async getAchievement(achievementId: string): Promise<Achievement> {
 		await this.waitForInit();
@@ -71,25 +71,16 @@ export class AchievementsLoaderService {
 			'galakrond',
 			'thijs',
 		];
-		const achievementsArray = await Promise.all(achievementFiles.map(fileName => this.loadAchievements(fileName)));
-		const result = achievementsArray.reduce((a, b) => a.concat(b), []);
+		const achievementsFromRemote = await Promise.all(
+			achievementFiles.map(fileName => this.loadAchievements(fileName)),
+		);
+		const result = achievementsFromRemote.reduce((a, b) => a.concat(b), []);
 		console.log('[achievements-loader] returning full achievements', result && result.length);
 		return result;
 	}
 
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
-		return new Promise<readonly RawAchievement[]>((resolve, reject) => {
-			console.log('[achievements-loader] retrieving local achievements', fileName);
-			this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=8`).subscribe(
-				(result: any[]) => {
-					console.log('[achievements-loader] retrieved all achievements from CDN', fileName);
-					resolve(result);
-				},
-				error => {
-					console.error('[achievements-loader] Could not retrieve achievements from CDN', fileName, error);
-				},
-			);
-		});
+		return this.api.callGetApiWithRetries(`${ACHIEVEMENTS_URL}/${fileName}.json?v=9`);
 	}
 
 	private wrapRawAchievement(raw: RawAchievement): Achievement {

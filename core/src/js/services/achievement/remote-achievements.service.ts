@@ -6,6 +6,7 @@ import { GameStateService } from '../decktracker/game-state.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { UserService } from '../user.service';
+import { AchievementsManager } from './achievements-manager.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
 
 const ACHIEVEMENTS_POST_URL = 'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
@@ -17,6 +18,7 @@ export class RemoteAchievementsService {
 		private http: HttpClient,
 		private indexedDb: AchievementsLocalDbService,
 		private ow: OverwolfService,
+		private manager: AchievementsManager,
 		private userService: UserService,
 		private gameService: GameStateService,
 		private prefs: PreferencesService,
@@ -37,24 +39,33 @@ export class RemoteAchievementsService {
 			machineId: currentUser.machineId,
 		};
 		console.log('[remote-achievements] loading from server');
-		const result = await this.loadRemoteAchievements(postEvent);
+		const [achievementsFromRemote, achievementsFromMemory] = await Promise.all([
+			this.loadRemoteAchievements(postEvent),
+			this.manager.getAchievements(),
+		]);
 		console.log(
-			'[remote-achievements] loaded from server',
-			result && result.results && result.results.length,
-			// postEvent,
-			// result.results.filter(ach => ach.id.indexOf('global_mana_spent_') !== -1),
+			'[remote-achievements] loaded',
+			achievementsFromRemote?.results?.length,
+			achievementsFromMemory?.achievements?.length,
 		);
-		if (!result || !result.results) {
+		if (!achievementsFromRemote?.results?.length && !achievementsFromMemory?.achievements?.length) {
 			return [];
 		}
 
 		// Update local cache
-		const achievements = result.results.map(ach => CompletedAchievement.create(ach));
+		const completedAchievementsFromRemote = achievementsFromRemote.results.map(ach =>
+			CompletedAchievement.create(ach),
+		);
+		const completedAchievementsFromMemory = achievementsFromMemory.achievements.map(ach =>
+			CompletedAchievement.create({
+				id: `hearthstone_game_${ach.id}`,
+				numberOfCompletions: ach.completed ? 1 : 0,
+			} as CompletedAchievement),
+		);
+		const achievements = [...completedAchievementsFromRemote, ...completedAchievementsFromMemory];
 		await this.indexedDb.setAll(achievements);
-		// await Promise.all(result.results.map(completedAchievement => this.indexedDb.saveAll(completedAchievement)));
 		console.log('[remote-achievements] updated local cache');
-
-		return result.results;
+		return achievements;
 	}
 
 	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 5): Promise<void> {

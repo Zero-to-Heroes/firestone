@@ -7,9 +7,11 @@ import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
+import { HsAchievementsInfo } from '../achievement/achievements-info';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { SetsService } from '../sets-service.service';
+import { GetAchievementsInfoOperation } from './mind-vision/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
 import { GetArenaInfoOperation } from './mind-vision/get-arena-info-operation';
 import { GetBattlegroundsEndGameOperation } from './mind-vision/get-battlegrounds-end-game-operation';
@@ -43,6 +45,7 @@ export class MemoryInspectionService {
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
 	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVision, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVision, this.ow);
+	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVision, this.ow);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
 
 	constructor(
@@ -92,6 +95,10 @@ export class MemoryInspectionService {
 
 	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
 		return this.getRewardsTrackInfoOperation.call();
+	}
+
+	public async getAchievementsInfo(): Promise<HsAchievementsInfo> {
+		return this.getAchievementsInfoOperation.call();
 	}
 
 	public async getCurrentSceneFromMindVision(): Promise<number> {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../../models/arena-info';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
+import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
 
 declare let OverwolfPlugin: any;
 
@@ -127,6 +128,20 @@ export class MindVisionService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse rewards track info', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getAchievementsInfo(forceReset = false): Promise<InternalHsAchievementsInfo> {
+		return new Promise<InternalHsAchievementsInfo>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.getAchievementsInfo(forceReset, info => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not get achievements info', e);
 				resolve(null);
 			}
 		});

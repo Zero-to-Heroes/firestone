@@ -6,6 +6,7 @@ import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { AppComponent } from '../../components/app.component';
+import { AchievementsManager } from '../../services/achievement/achievements-manager.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from '../../services/achievement/achievements-notification.service';
 import { RemoteAchievementsService } from '../../services/achievement/remote-achievements.service';
@@ -134,6 +135,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		RemoteAchievementsService,
 		AchievementStateHelper,
 		AchievementUpdateHelper,
+		AchievementsManager,
 
 		DecktrackerStateLoaderService,
 		DecksStateBuilderService,
