@@ -1,5 +1,3 @@
-import { ReplayInfo } from './replay-info';
-
 export class Achievement {
 	readonly id: string;
 	readonly type: string;
@@ -19,7 +17,6 @@ export class Achievement {
 	readonly points: number;
 	readonly numberOfCompletions: number = 0;
 	readonly linkedAchievementIds: readonly string[] = [];
-	readonly replayInfo: readonly ReplayInfo[] = [];
 
 	public update(value: Achievement): Achievement {
 		return Object.assign(new Achievement(), this, value);

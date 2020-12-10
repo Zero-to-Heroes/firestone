@@ -7,9 +7,9 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { ProcessingQueue } from '../processing-queue.service';
-import { AchievementsLocalStorageService } from './achievements-local-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
+import { AchievementsLocalDbService } from './indexed-db.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class AchievementsMonitor {
 		private events: Events,
 		private store: MainWindowStoreService,
 		private achievementStats: RemoteAchievementsService,
-		private achievementsStorage: AchievementsLocalStorageService,
+		private achievementsStorage: AchievementsLocalDbService,
 	) {
 		this.lastReceivedTimestamp = Date.now();
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
@@ -64,46 +64,23 @@ export class AchievementsMonitor {
 		// console.log('[achievement-monitor] will grant achievements?', allAchievements, achievement);
 		for (const achv of allAchievements) {
 			// console.log('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
-			const existingAchievement: CompletedAchievement = await this.achievementsStorage.loadAchievementFromCache(
-				achv.id,
-			);
-			// console.log(
-			// 	'no-format',
-			// 	'[achievement-monitor] loaded existing completed achievement',
-			// 	existingAchievement,
-			// );
+			const existingAchievement: CompletedAchievement = await this.achievementsStorage.getAchievement(achv.id);
 			// From now on, stop counting how many times each achievement has been unlocked
 			if (existingAchievement.numberOfCompletions >= 1) {
 				// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
 				continue;
 			}
-			// Don't grant a linked achievement more than once
-			// if (
-			// 	existingAchievement.numberOfCompletions >= 1 &&
-			// 	autoGrantAchievements.map(a => a.id).indexOf(achv.id) !== -1
-			// ) {
-			// 	// console.log(
-			// 	// 	'no-format',
-			// 	// 	'[achievement-monitor] linked achievement can be completed only once',
-			// 	// 	achv.id,
-			// 	// 	existingAchievement.numberOfCompletions,
-			// 	// 	autoGrantAchievements.map(a => a.id),
-			// 	// );
-			// 	continue;
-			// }
 			const completedAchievement = new CompletedAchievement(
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
-				existingAchievement.replayInfo || [],
 			);
 			// console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
 			const mergedAchievement = Object.assign(new Achievement(), achv, {
 				numberOfCompletions: completedAchievement.numberOfCompletions,
-				replayInfo: completedAchievement.replayInfo,
 			} as Achievement);
 
 			this.achievementStats.publishRemoteAchievement(mergedAchievement);
-			await this.achievementsStorage.cacheAchievement(completedAchievement);
+			await this.achievementsStorage.save(completedAchievement);
 			console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
 			// this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
 
@@ -135,7 +112,6 @@ export class AchievementsMonitor {
 		// 	betterCandidate.achievement.id,
 		// );
 		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, betterCandidate.achievement, betterCandidate.challenge);
-		// console.debug('found and broadcast achievemtn comleted');
 		this.prepareAchievementCompletedEvent(betterCandidate.achievement);
 
 		// Now remove all the related events

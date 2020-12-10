@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
-import { AchievementSet } from '../../models/achievement-set';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { VisualAchievement } from '../../models/visual-achievement';
+import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 
 @Component({
 	selector: 'achievements',
@@ -20,14 +20,10 @@ import { VisualAchievement } from '../../models/visual-achievement';
 				<with-loading [isLoading]="state.isLoading">
 					<div class="content">
 						<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
-						<achievements-global-categories
-							*ngxCacheIf="navigation.navigationAchievements.currentView === 'categories'"
-							[globalCategories]="state.globalCategories"
-						>
-						</achievements-global-categories>
+
 						<achievements-categories
-							*ngxCacheIf="navigation.navigationAchievements.currentView === 'category'"
-							[achievementSets]="getAchievementSets()"
+							*ngxCacheIf="navigation.navigationAchievements.currentView === 'categories'"
+							[categories]="getCategories()"
 						>
 						</achievements-categories>
 						<achievements-list
@@ -35,17 +31,11 @@ import { VisualAchievement } from '../../models/visual-achievement';
 							[socialShareUserInfo]="socialShareUserInfo"
 							[achievementsList]="getDisplayedAchievements()"
 							[selectedAchievementId]="navigation.navigationAchievements.selectedAchievementId"
-							[achievementSet]="getAchievementSet()"
+							[category]="getCategory()"
 							[activeFilter]="navigation.navigationAchievements.achievementActiveFilter"
 							[globalStats]="globalStats"
 						>
 						</achievements-list>
-						<achievement-sharing-modal
-							*ngxCacheIf="navigation.navigationAchievements.sharingAchievement"
-							[socialShareUserInfo]="socialShareUserInfo"
-							[sharingAchievement]="navigation.navigationAchievements.sharingAchievement"
-						>
-						</achievement-sharing-modal>
 					</div>
 				</with-loading>
 			</section>
@@ -58,7 +48,6 @@ import { VisualAchievement } from '../../models/visual-achievement';
 })
 export class AchievementsComponent {
 	@Input() state: AchievementsState;
-	// @Input() nonNavigationState: NonNavigationState;
 	@Input() currentUser: CurrentUser;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	// TODO: should probably refactor how state is handled, so that we could
@@ -67,51 +56,37 @@ export class AchievementsComponent {
 	@Input() globalStats: GlobalStats;
 	@Input() navigation: NavigationState;
 
-	getAchievementSet(): AchievementSet {
-		// console.log('[achievements] getting achievement set', this.state);
+	getCategories() {
+		if (!this.navigation.navigationAchievements.selectedCategoryId) {
+			return this.state.categories;
+		}
+		const currentCategory: VisualAchievementCategory = this.state.categories.find(cat =>
+			cat.findCategory(this.navigation.navigationAchievements.selectedCategoryId),
+		);
+		return currentCategory.categories;
+	}
+
+	getCategory(): VisualAchievementCategory {
 		if (!this.navigation.navigationAchievements.selectedCategoryId) {
 			return null;
 		}
-		const currentGlobalCategory = this.state.globalCategories.find(
-			cat => cat.id === this.navigation.navigationAchievements.selectedGlobalCategoryId,
+		const currentCategory: VisualAchievementCategory = this.state.findCategory(
+			this.navigation.navigationAchievements.selectedCategoryId,
 		);
-		// console.log('[achievements] currentGlobalCategory', currentGlobalCategory);
-		if (!currentGlobalCategory) {
-			return null;
-		}
-		// console.log(
-		// 	'[achievements] creturning set',
-		// 	currentGlobalCategory.achievementSets.find(set => set.id === this.state.selectedCategoryId),
-		// );
-		return currentGlobalCategory.achievementSets.find(
-			set => set.id === this.navigation.navigationAchievements.selectedCategoryId,
-		);
-	}
-
-	getAchievementSets(): readonly AchievementSet[] {
-		// console.log('getting achievement sets', this.state);
-		if (!this.navigation.navigationAchievements.selectedGlobalCategoryId) {
-			return null;
-		}
-		const currentGlobalCategory = this.state.globalCategories.find(
-			cat => cat.id === this.navigation.navigationAchievements.selectedGlobalCategoryId,
-		);
-		// console.log('will return', currentGlobalCategory.achievementSets);
-		return currentGlobalCategory.achievementSets;
+		return currentCategory;
 	}
 
 	getDisplayedAchievements(): readonly VisualAchievement[] {
 		if (
 			!this.navigation?.navigationAchievements?.displayedAchievementsList ||
 			!this.navigation?.navigationAchievements?.achievementsList ||
-			!this.state?.globalCategories
+			!this.state?.categories
 		) {
 			return [];
 		}
-		return this.state.globalCategories
-			.map(globalCategory => globalCategory.achievementSets)
-			.reduce((a, b) => a.concat(b), [])
-			.map(set => set.achievements)
+
+		return this.state.categories
+			.map(cat => cat.retrieveAllAchievements())
 			.reduce((a, b) => a.concat(b), [])
 			.filter(ach => this.navigation.navigationAchievements.displayedAchievementsList.indexOf(ach.id) !== -1);
 	}

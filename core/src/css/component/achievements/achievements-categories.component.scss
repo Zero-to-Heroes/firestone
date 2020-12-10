@@ -10,22 +10,22 @@
 	flex-direction: column;
 	flex-grow: 1;
 
-	ol {
+	ul {
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		width: 100%;
+		width: calc(100% + 5px); // For the "premium frame"
 		display: flex;
 		justify-content: flex-start;
 		flex-wrap: wrap;
 		overflow-y: scroll;
 		// flex-grow: 1;
 
-		li {
+		.item {
 			width: 155px;
 			height: 200px;
 			margin-right: 15px;
-			margin-bottom: 15px;
+			margin-bottom: 20px;
 		}
 	}
 }

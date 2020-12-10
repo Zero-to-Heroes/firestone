@@ -6,6 +6,7 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
+import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
@@ -31,6 +32,7 @@ export class StoreBootstrapService {
 
 	constructor(
 		private readonly events: Events,
+		private readonly achievementsRepository: AchievementsRepository,
 		private readonly achievementsHelper: AchievementUpdateHelper,
 		private readonly ow: OverwolfService,
 		private readonly userService: UserService,
@@ -59,7 +61,7 @@ export class StoreBootstrapService {
 				socialShareUserInfo,
 				currentUser,
 				prefs,
-				achievementGlobalCategories,
+				achievementTopCategories,
 				achievementHistory,
 				matchStats,
 				globalStats,
@@ -72,7 +74,7 @@ export class StoreBootstrapService {
 				this.initializeSocialShareUserInfo(),
 				this.userService.getCurrentUser(),
 				this.prefs.getPreferences(),
-				this.achievementsHelper.buildGlobalCategories(),
+				this.achievementsRepository.getTopLevelCategories(),
 				this.achievementsHelper.buildAchievementHistory(),
 				this.gameStatsLoader.retrieveStats(),
 				this.globalStats.getGlobalStats(),
@@ -113,7 +115,7 @@ export class StoreBootstrapService {
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
 		const newAchievementState = Object.assign(new AchievementsState(), {
-			globalCategories: achievementGlobalCategories,
+			categories: achievementTopCategories,
 			achievementHistory: achievementHistory,
 			isLoading: false,
 		} as AchievementsState);

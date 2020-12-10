@@ -5,7 +5,6 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
-	HostListener,
 	Input,
 	ViewEncapsulation,
 	ViewRef,
@@ -13,9 +12,9 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { IOption } from 'ng-select';
-import { AchievementSet } from '../../models/achievement-set';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { VisualAchievement } from '../../models/visual-achievement';
+import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { ChangeAchievementsActiveFilterEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-active-filter-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -28,7 +27,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="achievements-container">
+		<div class="achievements-container" scrollable>
 			<div class="show-filter">
 				<ng-select
 					class="filter"
@@ -50,15 +49,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</ng-template>
 				</ng-select>
 				<achievements-filter></achievements-filter>
-				<achievement-progress-bar [achievements]="_achievementSet ? _achievementSet.achievements : null">
-				</achievement-progress-bar>
+				<achievement-progress-bar [achieved]="achieved" [total]="totalAchievements"> </achievement-progress-bar>
 			</div>
 			<ul class="achievements-list" *ngIf="activeAchievements && activeAchievements.length > 0">
 				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId">
 					<achievement-view
 						[attr.data-achievement-id]="achievement.id.toLowerCase()"
 						[socialShareUserInfo]="socialShareUserInfo"
-						[showReplays]="_selectedAchievementId === achievement.id"
 						[achievement]="achievement"
 						[globalStats]="globalStats"
 					>
@@ -80,9 +77,10 @@ export class AchievementsListComponent implements AfterViewInit {
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	@Input() globalStats: GlobalStats;
 	_activeFilter: string;
-	_achievementSet: AchievementSet;
+	_category: VisualAchievementCategory;
 	_selectedAchievementId: string;
-	achievements: readonly VisualAchievement[];
+	totalAchievements: number;
+	achieved: number;
 
 	activeAchievements: VisualAchievement[];
 	filterOptions: IOption[];
@@ -91,6 +89,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	emptyStateTitle: string;
 	emptyStateText: string;
 
+	private achievements: readonly VisualAchievement[];
 	private filterFromPrefs: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -121,14 +120,20 @@ export class AchievementsListComponent implements AfterViewInit {
 		});
 	}
 
-	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
-		// console.log('[achievements-list] setting achievement set', achievementSet);
-		this._achievementSet = achievementSet;
-		if (achievementSet) {
-			this.filterOptions = this._achievementSet.filterOptions.map(option => ({
+	@Input() set category(value: VisualAchievementCategory) {
+		this._category = value;
+		if (value) {
+			this.filterOptions = this._category.filterOptions.map(option => ({
 				label: option.label,
 				value: option.value,
 			}));
+
+			const aggregatedAchievements = value.retrieveAllAchievements();
+			const flatCompletions = aggregatedAchievements
+				.map(achievement => achievement.completionSteps)
+				.reduce((a, b) => a.concat(b), []);
+			this.totalAchievements = flatCompletions.length;
+			this.achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
 			// console.log('[achievements-list] set active filter', this.activeFilter);
 			this.updateShownAchievements();
 		}
@@ -170,22 +175,6 @@ export class AchievementsListComponent implements AfterViewInit {
 		this._selectedAchievementId = selectedAchievementId;
 	}
 
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
-		const achievementsList = this.el.nativeElement.querySelector('.achievements-list');
-		if (!achievementsList) {
-			return;
-		}
-		const rect = achievementsList.getBoundingClientRect();
-		// console.log('element rect', rect);
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
-	}
-
 	selectFilter(option: IOption) {
 		console.log('[achievements-list] selected filter', option.value);
 		this.stateUpdater.next(new ChangeAchievementsActiveFilterEvent(option.value));
@@ -204,22 +193,20 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	private updateShownAchievements() {
 		// console.log('[achievements-list] updating shown achievements', this.achievements, this._achievementSet);
-		if (!this.achievements || !this._achievementSet) {
+		if (!this.achievements || !this._category) {
 			return;
 		}
 		this.updateActiveFilter();
-		const filterOption = this._achievementSet.filterOptions.filter(
-			option => option.value === this._activeFilter,
-		)[0];
+		const filterOption = this._category.filterOptions.filter(option => option.value === this._activeFilter)[0];
 		const filterFunction: (VisualAchievement) => boolean = filterOption?.filterFunction || (achievement => true);
-		this.emptyStateIcon = filterOption.emptyStateIcon;
-		this.emptyStateTitle = filterOption.emptyStateTitle;
-		this.emptyStateText = filterOption.emptyStateText;
+		this.emptyStateIcon = filterOption?.emptyStateIcon;
+		this.emptyStateTitle = filterOption?.emptyStateTitle;
+		this.emptyStateText = filterOption?.emptyStateText;
 		this.emptyStateSvgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
-			<svg class="svg-icon-fill">
-				<use xlink:href="assets/svg/sprite.svg#${this.emptyStateIcon}"/>
-			</svg>
-		`);
+				<svg class="svg-icon-fill">
+					<use xlink:href="assets/svg/sprite.svg#${this.emptyStateIcon}"/>
+				</svg>
+			`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
 		// console.log('[achievements-list] updated activeAchievements', this.activeAchievements);
 		if (!(this.cdr as ViewRef)?.destroyed) {

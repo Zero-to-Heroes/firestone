@@ -12,25 +12,18 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const globalCategory = currentState.achievements.globalCategories.find(cat =>
-			cat.achievementSets.some(set =>
-				set.achievements.some(achv => achv.completionSteps.some(setp => setp.id === event.achievementId)),
-			),
-		);
-		const achievementSet = globalCategory.achievementSets.find(set =>
-			set.achievements.some(achv => achv.completionSteps.some(setp => setp.id === event.achievementId)),
-		);
-		const newSelectedAchievement: VisualAchievement = achievementSet.achievements.find(ach =>
+		const hierarchy = currentState.achievements.findAchievementHierarchy(event.achievementId);
+		const category = hierarchy[0][hierarchy[0].length - 1];
+		const newSelectedAchievement: VisualAchievement = category.achievements.find(ach =>
 			ach.completionSteps.some(step => step.id === event.achievementId),
 		);
 		const newAchievements = navigationState.navigationAchievements.update({
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
-			selectedGlobalCategoryId: globalCategory.id,
-			selectedCategoryId: achievementSet.id,
+			selectedCategoryId: category.id,
 			selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
-			achievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
-			displayedAchievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
+			achievementsList: category.achievements.map(ach => ach.id) as readonly string[],
+			displayedAchievementsList: category.achievements.map(ach => ach.id) as readonly string[],
 			sharingAchievement: undefined,
 		} as NavigationAchievements);
 		return [

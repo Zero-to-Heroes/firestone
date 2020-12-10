@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../../models/achievement';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
-import { ReplayInfo } from '../../../models/replay-info';
 import { Challenge } from '../achievements/challenges/challenge';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
 
@@ -41,11 +40,9 @@ export class AchievementsLoaderService {
 		return this.challengeModules;
 	}
 
-	public async initializeAchievements(
-		inputAchievements?: readonly RawAchievement[],
-	): Promise<[readonly Achievement[], readonly Challenge[]]> {
-		console.log('[achievements-loader] Initializing achievements', inputAchievements && inputAchievements.length);
-		const rawAchievements: readonly RawAchievement[] = inputAchievements || (await this.loadAll());
+	public async initializeAchievements(): Promise<[readonly Achievement[], readonly Challenge[]]> {
+		console.log('[achievements-loader] Initializing achievements');
+		const rawAchievements: readonly RawAchievement[] = await this.loadAll();
 		console.log('[achievements-loader] loaded all', rawAchievements.length);
 		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
 			this.achievements = rawAchievements.map(rawAchievement => this.wrapRawAchievement(rawAchievement));
@@ -98,7 +95,6 @@ export class AchievementsLoaderService {
 		const { requirements, resetEvents, ...achievement } = raw;
 		return Object.assign(new Achievement(), achievement, {
 			numberOfCompletions: 0,
-			replayInfo: [] as readonly ReplayInfo[],
 		} as Achievement);
 	}
 

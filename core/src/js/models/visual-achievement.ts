@@ -1,7 +1,6 @@
-import { GenericSetProvider } from '../services/achievement/achievement-sets/generic-set-provider';
+import { AchievementsRepository } from '../services/achievement/achievements-repository.service';
 import { Achievement } from './achievement';
 import { AchievementStatus } from './achievement/achievement-status.type';
-import { ReplayInfo } from './replay-info';
 
 export class VisualAchievement {
 	readonly id: string;
@@ -11,7 +10,6 @@ export class VisualAchievement {
 	readonly cardType: string;
 	readonly text: string;
 	readonly completionSteps: CompletionStep[];
-	readonly replayInfo: readonly ReplayInfo[] = [];
 
 	public static create(value: VisualAchievement): VisualAchievement {
 		return Object.assign(new VisualAchievement(), value);
@@ -23,14 +21,13 @@ export class VisualAchievement {
 		}
 		// console.log('[visual-achievement] updating achievement', this, value);
 		const completionStepsWithNewCompletions = this.updateCompletionSteps(value);
-		const [completionSteps, text] = GenericSetProvider.buildCompletionSteps(
+		const [completionSteps, text] = AchievementsRepository.buildCompletionSteps(
 			completionStepsWithNewCompletions,
 			value,
 			this.text,
 		);
 		// console.log('[visual-achievement] completionSteps', completionSteps, text);
 		return Object.assign(new VisualAchievement(), this, {
-			replayInfo: [...value.replayInfo, ...this.replayInfo] as readonly ReplayInfo[],
 			completionSteps: completionSteps, //this.updateCompletionSteps(value),
 			text: text,
 		} as VisualAchievement);

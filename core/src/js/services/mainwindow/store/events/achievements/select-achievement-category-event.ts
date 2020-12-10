@@ -1,10 +1,10 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class SelectAchievementCategoryEvent implements MainWindowStoreEvent {
-	constructor(globalCategoryId: string) {
-		this.globalCategoryId = globalCategoryId;
+	constructor(categoryId: string) {
+		this.categoryId = categoryId;
 	}
-	readonly globalCategoryId: string;
+	readonly categoryId: string;
 
 	public static eventName(): string {
 		return 'SelectAchievementCategoryEvent';

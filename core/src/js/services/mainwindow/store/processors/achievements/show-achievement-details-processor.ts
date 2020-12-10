@@ -12,10 +12,10 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// console.log('[show-achievement-details] input', event, currentState);
-		const [globalCategory, achievementSet, visualAchievement] = currentState.achievements.findAchievementHierarchy(
+		const [categoryHierarchy, visualAchievement] = currentState.achievements.findAchievementHierarchy(
 			event.achievementId,
 		);
-		if (!globalCategory || !achievementSet || !visualAchievement) {
+		if (!categoryHierarchy || categoryHierarchy.length === 0 || !visualAchievement) {
 			return [null, null];
 		}
 		// console.log('[show-achievement-details] showing achievement', event, achievementSet, visualAchievement);
@@ -24,22 +24,23 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		const newAchievements = navigationState.navigationAchievements.update({
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
-			selectedGlobalCategoryId: globalCategory.id,
-			selectedCategoryId: achievementSet.id,
-			achievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
-			displayedAchievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
+			selectedCategoryId: categoryHierarchy[categoryHierarchy.length - 1].id,
+			achievementsList: categoryHierarchy[categoryHierarchy.length - 1].achievements.map(
+				ach => ach.id,
+			) as readonly string[],
+			displayedAchievementsList: categoryHierarchy[categoryHierarchy.length - 1].achievements.map(
+				ach => ach.id,
+			) as readonly string[],
 			selectedAchievementId: achievement,
 		} as NavigationAchievements);
+		const text = categoryHierarchy.map(cat => cat.name).join(' ');
 		return [
 			null,
 			navigationState.update({
 				isVisible: true,
 				currentApp: 'achievements',
 				navigationAchievements: newAchievements,
-				text:
-					globalCategory.name !== achievementSet.displayName
-						? globalCategory.name + ' ' + achievementSet.displayName
-						: achievementSet.displayName,
+				text: text,
 				image: null,
 			} as NavigationState),
 		];

@@ -4,7 +4,7 @@ import { SharingAchievement } from '../achievement/sharing-achievement';
 export class NavigationAchievements {
 	readonly currentView: CurrentView = 'categories';
 	readonly menuDisplayType: string = 'menu';
-	readonly selectedGlobalCategoryId: string;
+	// readonly selectedGlobalCategoryId: string;
 	readonly selectedCategoryId: string;
 	readonly selectedAchievementId: string;
 	readonly achievementActiveFilter: string;

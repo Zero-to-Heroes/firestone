@@ -11,24 +11,18 @@ import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { AchievementImageComponent } from 'src/js/components/achievements/achievement-image.component';
 import { AchievementProgressBarComponent } from 'src/js/components/achievements/achievement-progress-bar.component';
-import { AchievementRecordingsComponent } from 'src/js/components/achievements/achievement-recordings.component';
 import { FsOverlayPlay } from 'src/js/components/video-controls/play-overlay-double-click';
 import { VgBufferingModule } from 'videogular2/buffering';
 import { VgControlsModule } from 'videogular2/controls';
 import { VgCoreModule } from 'videogular2/core';
 import { VgOverlayPlayModule } from 'videogular2/overlay-play';
+import { AchievementCategoryComponent } from '../../components/achievements/achievement-category.component';
 import { AchievementCompletionStepComponent } from '../../components/achievements/achievement-completion-step.component';
 import { AchievementHistoryItemComponent } from '../../components/achievements/achievement-history-item.component';
 import { AchievementHistoryComponent } from '../../components/achievements/achievement-history.component';
-import { AchievementSetComponent } from '../../components/achievements/achievement-set.component';
-import { AchievementSharingModal } from '../../components/achievements/achievement-sharing-modal.component';
-import { AchievementSocialSharesComponent } from '../../components/achievements/achievement-social-shares.component';
-import { AchievementThumbnailComponent } from '../../components/achievements/achievement-thumbnail.component';
 import { AchievementViewComponent } from '../../components/achievements/achievement-view.component';
 import { AchievementsCategoriesComponent } from '../../components/achievements/achievements-categories.component';
 import { AchievementsFilterComponent } from '../../components/achievements/achievements-filter.component.ts';
-import { AchievementsGlobalCategoriesComponent } from '../../components/achievements/achievements-global-categories.component';
-import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
 import { AchievementsComponent } from '../../components/achievements/achievements.component';
 import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
@@ -192,19 +186,13 @@ console.log('version is ' + process.env.APP_VERSION);
 		AchievementsComponent,
 		AchievementCompletionStepComponent,
 		AchievementsCategoriesComponent,
-		AchievementsGlobalCategoriesComponent,
-		AchievementsGlobalCategoryComponent,
 		AchievementHistoryComponent,
 		AchievementHistoryItemComponent,
 		AchievementImageComponent,
 		AchievementsListComponent,
-		AchievementRecordingsComponent,
-		AchievementSetComponent,
+		AchievementCategoryComponent,
 		AchievementProgressBarComponent,
-		AchievementThumbnailComponent,
 		AchievementViewComponent,
-		AchievementSocialSharesComponent,
-		AchievementSharingModal,
 		AchievementsFilterComponent,
 
 		DecktrackerComponent,

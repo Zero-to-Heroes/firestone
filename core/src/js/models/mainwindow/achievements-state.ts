@@ -1,11 +1,10 @@
 import { Achievement } from '../achievement';
-import { AchievementSet } from '../achievement-set';
 import { AchievementHistory } from '../achievement/achievement-history';
 import { VisualAchievement } from '../visual-achievement';
 import { VisualAchievementCategory } from '../visual-achievement-category';
 
 export class AchievementsState {
-	readonly globalCategories: readonly VisualAchievementCategory[] = [];
+	readonly categories: readonly VisualAchievementCategory[] = [];
 	// Holds the IDs of all the relevant achievements. The real data is somewhere in the achievements catergories
 	readonly achievementHistory: readonly AchievementHistory[] = [];
 	readonly isLoading: boolean = true;
@@ -16,38 +15,40 @@ export class AchievementsState {
 
 	public updateAchievement(newAchievement: Achievement): AchievementsState {
 		return Object.assign(new AchievementsState(), this, {
-			globalCategories: this.globalCategories.map(cat =>
+			categories: this.categories.map(cat =>
 				cat.updateAchievement(newAchievement),
 			) as readonly VisualAchievementCategory[],
 		} as AchievementsState);
 	}
 
-	public findAchievementHierarchy(
-		achievementId: string,
-	): [VisualAchievementCategory, AchievementSet, VisualAchievement] {
-		if (!this.globalCategories) {
-			return [null, null, null];
+	public findCategory(categoryId: string): VisualAchievementCategory {
+		return this.categories.map(cat => cat.findCategory(categoryId)).filter(cat => cat)[0];
+	}
+
+	public findAchievementHierarchy(achievementId: string): [VisualAchievementCategory[], VisualAchievement] {
+		if (!this.categories) {
+			return [null, null];
 		}
-		for (const globalCategory of this.globalCategories) {
-			for (const achievementSet of globalCategory.achievementSets) {
-				for (const achievement of achievementSet.achievements) {
-					if (
-						achievement.id === achievementId ||
-						achievement.completionSteps.some(step => step.id === achievementId)
-					) {
-						return [globalCategory, achievementSet, achievement];
-					}
-				}
-			}
+
+		return this.categories
+			.map(cat => cat.findAchievementHierarchy(achievementId))
+			.find(result => result.length === 2 && result[1]);
+	}
+
+	public findCategoryHierarchy(categoryId: string): VisualAchievementCategory[] {
+		if (!this.categories) {
+			return null;
 		}
-		return [null, null, null];
+
+		return this.categories
+			.map(cat => cat.findCategoryHierarchy(categoryId))
+			.filter(cat => cat)
+			.find(result => result.length > 0);
 	}
 
 	public findAchievements(ids: readonly string[]): readonly VisualAchievement[] {
-		return this.globalCategories
-			.map(cat => cat.achievementSets)
-			.reduce((a, b) => a.concat(b), [])
-			.map(set => set.achievements)
+		return this.categories
+			.map(cat => cat.retrieveAllAchievements())
 			.reduce((a, b) => a.concat(b), [])
 			.filter(achv => ids.indexOf(achv.id) !== -1);
 	}

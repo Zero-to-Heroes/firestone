@@ -2,7 +2,6 @@ import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegr
 import { BattlegroundsCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsGlobalCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-global-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationAchievements } from '../../../../../models/mainwindow/navigation/navigation-achievements';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
@@ -64,38 +63,40 @@ export class NavigationBackProcessor implements Processor {
 		switch (navigationState.navigationAchievements.currentView) {
 			case 'categories':
 				return null;
-			case 'category':
-				return navigationState.update({
-					navigationAchievements: navigationState.navigationAchievements.update({
-						currentView: 'categories',
-					} as NavigationAchievements),
-					text: 'Categories',
-					isVisible: true,
-				} as NavigationState);
+			// TODO
+			// return navigationState.update({
+			// 	navigationAchievements: navigationState.navigationAchievements.update({
+			// 		currentView: 'categories',
+			// 	} as NavigationAchievements),
+			// 	text: 'Categories',
+			// 	isVisible: true,
+			// } as NavigationState);
 			case 'list':
-				const category = dataState.achievements.globalCategories.find(
-					cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
-				);
-				if (category.achievementSets.length === 1) {
-					return navigationState.update({
-						navigationAchievements: navigationState.navigationAchievements.update({
-							currentView: 'categories',
-						} as NavigationAchievements),
-						text: 'Categories',
-						isVisible: true,
-					} as NavigationState);
-				}
-				return navigationState.update({
-					navigationAchievements: navigationState.navigationAchievements.update({
-						currentView: 'category',
-					} as NavigationAchievements),
-					// This is starting to be weird. It would probably be best to have an FSM,
-					// and derive the name of the current navigation from the state we are in
-					text: dataState.achievements.globalCategories.find(
-						cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
-					).name,
-					isVisible: true,
-				} as NavigationState);
+				// TODO
+				return null;
+			// const category = dataState.achievements.categories.find(
+			// 	cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
+			// );
+			// if (category.categories.length === 1) {
+			// 	return navigationState.update({
+			// 		navigationAchievements: navigationState.navigationAchievements.update({
+			// 			currentView: 'categories',
+			// 		} as NavigationAchievements),
+			// 		text: 'Categories',
+			// 		isVisible: true,
+			// 	} as NavigationState);
+			// }
+			// return navigationState.update({
+			// 	navigationAchievements: navigationState.navigationAchievements.update({
+			// 		currentView: 'category',
+			// 	} as NavigationAchievements),
+			// 	// This is starting to be weird. It would probably be best to have an FSM,
+			// 	// and derive the name of the current navigation from the state we are in
+			// 	text: dataState.achievements.categories.find(
+			// 		cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
+			// 	).name,
+			// 	isVisible: true,
+			// } as NavigationState);
 			default:
 				return null;
 		}

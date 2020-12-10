@@ -12,7 +12,7 @@ export class AchievementStateHelper {
 		const achievementsList = this.updateAchievementsList(navigationState.achievementsList, newGlobalCategories);
 		return [
 			Object.assign(new AchievementsState(), dataState, {
-				globalCategories: newGlobalCategories,
+				categories: newGlobalCategories,
 			} as AchievementsState),
 			navigationState.update({
 				achievementsList: achievementsList,
@@ -23,12 +23,10 @@ export class AchievementStateHelper {
 
 	private updateAchievementsList(
 		existingList: readonly string[],
-		globalCategories: readonly VisualAchievementCategory[],
+		categories: readonly VisualAchievementCategory[],
 	): readonly string[] {
-		return globalCategories
-			.map(cat => cat.achievementSets)
-			.reduce((a, b) => a.concat(b), [])
-			.map(set => set.achievements)
+		return categories
+			.map(cat => cat.retrieveAllAchievements())
 			.reduce((a, b) => a.concat(b), [])
 			.filter(achv => existingList.indexOf(achv.id) !== -1)
 			.map(ach => ach.id);

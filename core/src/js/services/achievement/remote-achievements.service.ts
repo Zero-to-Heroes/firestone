@@ -13,10 +13,6 @@ const ACHIEVEMENTS_RETRIEVE_URL = ' https://mtpdm7a1e5.execute-api.us-west-2.ama
 
 @Injectable()
 export class RemoteAchievementsService {
-	// private userId: string;
-	// private userMachineId: string;
-	// private username: string;
-
 	constructor(
 		private http: HttpClient,
 		private indexedDb: AchievementsLocalDbService,
@@ -24,11 +20,7 @@ export class RemoteAchievementsService {
 		private userService: UserService,
 		private gameService: GameStateService,
 		private prefs: PreferencesService,
-	) {
-		// this.events.on(Events.ACHIEVEMENT_UNLOCKED).subscribe(event => this.publishAchievementStats(event));
-		// this.retrieveUserInfo();
-		// this.ow.addLoginStateChangedListener(() => this.retrieveUserInfo());
-	}
+	) {}
 
 	public async loadAchievements(): Promise<readonly CompletedAchievement[]> {
 		const prefs = this.prefs.getPreferences();
@@ -65,7 +57,6 @@ export class RemoteAchievementsService {
 		return result.results;
 	}
 
-	// TODO: at some point, use the CurrentUser from the state?
 	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 5): Promise<void> {
 		if (retriesLeft <= 0) {
 			console.error('Could not upload achievemnt stats after 15 retries');

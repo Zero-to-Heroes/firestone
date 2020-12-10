@@ -44,13 +44,6 @@ export class BoardFullOfSameLegendaryMinionReq implements Requirement {
 				legendaryMinionsOnBoard.length > 0
 					? [...new Set(legendaryMinionsOnBoard.map(entity => entity.id))].length
 					: 0;
-			// console.debug(
-			// 	'checking board state',
-			// 	[...new Set(legendaryMinionsOnBoard.map(entity => entity.id))],
-			// 	legendaryMinionsOnBoard.map(card => card.id),
-			// 	numberOfLegendaryMinions,
-			// 	numberOfDifferentMinions,
-			// );
 			this.isConditionMet = numberOfLegendaryMinions === 7 && numberOfDifferentMinions === 1;
 		}
 	}

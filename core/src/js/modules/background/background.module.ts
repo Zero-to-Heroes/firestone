@@ -6,10 +6,8 @@ import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { AppComponent } from '../../components/app.component';
-import { AchievementRecordingService } from '../../services/achievement/achievement-recording.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from '../../services/achievement/achievements-notification.service';
-import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
 import { RemoteAchievementsService } from '../../services/achievement/remote-achievements.service';
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
 import { ApiRunner } from '../../services/api-runner';
@@ -134,8 +132,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementsMonitor,
 		AchievementsNotificationService,
 		RemoteAchievementsService,
-		AchievementsVideoCaptureService,
-		AchievementRecordingService,
 		AchievementStateHelper,
 		AchievementUpdateHelper,
 

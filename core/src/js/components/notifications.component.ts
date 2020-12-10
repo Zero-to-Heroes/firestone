@@ -219,7 +219,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			if (type === 'achievement-no-record') {
 				override.timeOut = 999999; // Closing this one manually
 				timeoutHandler = setTimeout(() => {
-					console.debug('manually closing achievmeent notif');
 					this.fadeNotificationOut(messageObject.notificationId);
 				}, this.timeout + additionalTimeout);
 			}

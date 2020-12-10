@@ -6,7 +6,6 @@ import {
 	ElementRef,
 	EventEmitter,
 	Input,
-	ViewRef,
 } from '@angular/core';
 import { StatContext } from '@firestone-hs/build-global-stats/dist/model/context.type';
 import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/global-stat-key.type';
@@ -22,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/component/achievements/achievement-view.component.scss`],
 	template: `
 		<div class="achievement-container {{ achievementStatus }}">
-			<div class="stripe" (mousedown)="toggleRecordings()">
+			<div class="stripe">
 				<achievement-image
 					[imageId]="_achievement.cardId"
 					[imageType]="_achievement.cardType"
@@ -34,18 +33,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</div>
 					<div class="completion-date" *ngIf="completionDate">Completed: {{ completionDate }}</div>
 					<div class="completion-progress">
-						<div
-							class="recordings"
-							[ngClass]="{ 'empty': numberOfRecordings === 0 }"
-							[helpTooltip]="numberOfRecordings === 0 ? 'No video recordings for this achievement' : null"
-						>
-							<span class="number">{{ numberOfRecordings }}</span>
-							<i class="i-30x20">
-								<svg class="svg-icon-fill">
-									<use xlink:href="assets/svg/sprite.svg#video" />
-								</svg>
-							</i>
-						</div>
 						<achievement-completion-step
 							*ngFor="let completionStep of _achievement.completionSteps"
 							[step]="completionStep"
@@ -53,26 +40,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 						</achievement-completion-step>
 					</div>
 				</div>
-				<div class="collapse">
-					<i class="i-13X7" [ngClass]="{ 'open': showRecordings }" *ngIf="numberOfRecordings > 0">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
-						</svg>
-					</i>
-				</div>
 			</div>
-			<achievement-recordings
-				*ngIf="showRecordings"
-				[socialShareUserInfo]="socialShareUserInfo"
-				[achievement]="_achievement"
-			>
-			</achievement-recordings>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementViewComponent implements AfterViewInit {
-	showRecordings: boolean;
 	_achievement: VisualAchievement;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	_globalStats: GlobalStats;
@@ -80,18 +53,10 @@ export class AchievementViewComponent implements AfterViewInit {
 	achievementStatus: AchievementStatus;
 	achievementText: string;
 	completionDate: string;
-	numberOfRecordings: number;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	private placeholderRegex = new RegExp('.*(%%globalStats\\.(.*)\\.(.*)%%).*');
-
-	@Input() set showReplays(showReplays: boolean) {
-		// We just want to trigger the opening of the replay windows, not hide it
-		if (showReplays) {
-			this.showRecordings = true;
-		}
-	}
 
 	@Input() set achievement(achievement: VisualAchievement) {
 		// console.log('[achievement-view] setting achievement', achievement);
@@ -99,21 +64,6 @@ export class AchievementViewComponent implements AfterViewInit {
 		this.completionDate = undefined;
 		this.achievementStatus = this._achievement.achievementStatus();
 		this.achievementText = this.buildAchievementText(this._achievement.text);
-		this.numberOfRecordings = this._achievement.replayInfo.length;
-		if (this._achievement.replayInfo.length > 0) {
-			const allTs = this._achievement.replayInfo
-				.filter(info => info)
-				.map(info => info.creationTimestamp)
-				.filter(ts => ts);
-			if (allTs.length > 0) {
-				const completionTimestamp = allTs.reduce((a, b) => Math.min(a, b));
-				this.completionDate = new Date(completionTimestamp).toLocaleDateString('en-GB', {
-					day: '2-digit',
-					month: '2-digit',
-					year: '2-digit',
-				});
-			}
-		}
 	}
 
 	@Input() set globalStats(value: GlobalStats) {
@@ -126,15 +76,6 @@ export class AchievementViewComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	toggleRecordings() {
-		if (this._achievement && this._achievement.replayInfo.length > 0) {
-			this.showRecordings = !this.showRecordings;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}
 	}
 
 	private buildAchievementText(initialText: string): string {

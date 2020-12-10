@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
-import { AchievementsLocalStorageService } from '../../services/achievement/achievements-local-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { ChallengeBuilderService } from '../../services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../services/achievement/data/achievements-loader.service';
@@ -53,7 +52,6 @@ export class SharedServicesModule {
 
 				AchievementHistoryStorageService,
 				AchievementsRepository,
-				AchievementsLocalStorageService,
 				ChallengeBuilderService,
 				AchievementsLoaderService,
 				AchievementsDb,

@@ -47,7 +47,6 @@ export class CorrectStartingHealthReq implements Requirement {
 			gameEvent.additionalData.health === this.targetStartingHealth &&
 			!this.hasDefChangeOccured
 		) {
-			// console.debug('starting health without def change', gameEvent.additionalData.health);
 			this.isCorrectStartingHealth = true;
 		}
 	}
@@ -57,7 +56,6 @@ export class CorrectStartingHealthReq implements Requirement {
 		if (gameEvent.cardId === this.targetCardId && !this.hasDefChangeOccured && !this.isCorrectStartingHealth) {
 			this.hasDefChangeOccured = true;
 			this.isCorrectStartingHealth = gameEvent.additionalData.newHealth === this.targetStartingHealth;
-			// console.debug('starting health', gameEvent.additionalData.newHealth);
 		}
 	}
 }

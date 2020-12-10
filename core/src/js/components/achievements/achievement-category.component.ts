@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { AchievementSet } from '../../models/achievement-set';
+import { DomSanitizer } from '@angular/platform-browser';
+import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 
 @Component({
-	selector: 'achievement-set-view',
+	selector: 'achievement-category',
 	styleUrls: [
-		`../../../css/component/achievements/achievement-set.component.scss`,
+		`../../../css/component/achievements/achievement-category.component.scss`,
 		`../../../css/global/components-global.scss`,
 	],
 	template: `
@@ -33,36 +33,36 @@ import { AchievementSet } from '../../models/achievement-set';
 				</i>
 			</div>
 			<span class="text set-name">{{ displayName }}</span>
-			<i class="logo" [innerHTML]="svgTemplate"> </i>
-			<achievement-progress-bar [achievements]="_achievementSet.achievements"></achievement-progress-bar>
+			<i class="logo" [inlineSVG]="categoryIcon"> </i>
+			<achievement-progress-bar [achieved]="achieved" [total]="totalAchievements"></achievement-progress-bar>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementSetComponent {
-	_achievementSet: AchievementSet;
+export class AchievementCategoryComponent {
+	_category: VisualAchievementCategory;
+	achieved: number;
+	totalAchievements: number;
 	displayName: string;
-	svgTemplate: SafeHtml;
+	categoryIcon: string;
 	complete = false;
 	empty = false;
 
 	constructor(private domSanitizer: DomSanitizer) {}
 
-	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
-		this._achievementSet = achievementSet;
-		if (achievementSet) {
-			this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
-				<svg>
-					<use xlink:href="assets/svg/sprite.svg#${this._achievementSet.logoName}"/>
-				</svg>`);
-			this.displayName = achievementSet.displayName;
-			const flatCompletions = achievementSet.achievements
+	@Input() set category(value: VisualAchievementCategory) {
+		this._category = value;
+		if (value) {
+			this.categoryIcon = `assets/svg/achievements/categories/${value.icon}.svg`;
+			this.displayName = value.name;
+			const aggregatedAchievements = value.retrieveAllAchievements();
+			const flatCompletions = aggregatedAchievements
 				.map(achievement => achievement.completionSteps)
 				.reduce((a, b) => a.concat(b), []);
-			const total = flatCompletions.length;
-			const achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
-			this.empty = achieved === 0;
-			this.complete = total === achieved && !this.empty;
+			this.totalAchievements = flatCompletions.length;
+			this.achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
+			this.empty = this.achieved === 0;
+			this.complete = this.totalAchievements === this.achieved && !this.empty;
 		}
 	}
 }

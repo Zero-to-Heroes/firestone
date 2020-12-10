@@ -5,7 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
-import { AchievementsLocalStorageService } from '../../achievement/achievements-local-storage.service';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
 import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
@@ -32,15 +31,12 @@ import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.ser
 import { UserService } from '../../user.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
-import { AchievementRecordedEvent } from './events/achievements/achievement-recorded-event';
 import { AchievementsInitEvent } from './events/achievements/achievements-init-event';
 import { ChangeAchievementsActiveFilterEvent } from './events/achievements/change-achievements-active-filter-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
-import { SelectAchievementSetEvent } from './events/achievements/select-achievement-set-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
-import { VideoReplayDeletionRequestEvent } from './events/achievements/video-replay-deletion-request-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
@@ -114,15 +110,12 @@ import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
-import { AchievementRecordedProcessor } from './processors/achievements/achievement-recorded-processor';
 import { AchievementsInitProcessor } from './processors/achievements/achievements-init-processor';
 import { ChangeAchievementsActiveFilterProcessor } from './processors/achievements/change-achievements-active-filter-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
-import { SelectAchievementSetProcessor } from './processors/achievements/select-achievement-set-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
-import { VideoReplayDeletionRequestProcessor } from './processors/achievements/video-replay-deletion-request-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
@@ -223,7 +216,6 @@ export class MainWindowStoreService {
 		private achievementsRepository: AchievementsRepository,
 		private collectionManager: CollectionManager,
 		private cardHistoryStorage: CardHistoryStorageService,
-		private achievementsStorage: AchievementsLocalStorageService,
 		private achievementHistoryStorage: AchievementHistoryStorageService,
 		private achievementsLoader: AchievementsLoaderService,
 		private remoteAchievements: RemoteAchievementsService,
@@ -384,8 +376,6 @@ export class MainWindowStoreService {
 	private buildProcessors(): Map<string, Processor> {
 		const achievementStateHelper = new AchievementStateHelper();
 		const achievementUpdateHelper = new AchievementUpdateHelper(
-			this.achievementsRepository,
-			achievementStateHelper,
 			this.achievementHistoryStorage,
 			this.achievementsLoader,
 		);
@@ -467,22 +457,11 @@ export class MainWindowStoreService {
 			SelectAchievementCategoryEvent.eventName(),
 			new SelectAchievementCategoryProcessor(),
 
-			SelectAchievementSetEvent.eventName(),
-			new SelectAchievementSetProcessor(),
+			SelectAchievementCategoryEvent.eventName(),
+			new SelectAchievementCategoryProcessor(),
 
 			ShowAchievementDetailsEvent.eventName(),
 			new ShowAchievementDetailsProcessor(),
-
-			VideoReplayDeletionRequestEvent.eventName(),
-			new VideoReplayDeletionRequestProcessor(this.ow, achievementUpdateHelper, this.achievementsStorage),
-
-			AchievementRecordedEvent.eventName(),
-			new AchievementRecordedProcessor(
-				this.achievementsStorage,
-				achievementStateHelper,
-				this.achievementsLoader,
-				this.events,
-			),
 
 			AchievementCompletedEvent.eventName(),
 			new AchievementCompletedProcessor(

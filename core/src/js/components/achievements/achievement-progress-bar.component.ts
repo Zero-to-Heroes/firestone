@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
-import { VisualAchievement } from '../../models/visual-achievement';
 
 @Component({
 	selector: 'achievement-progress-bar',
@@ -17,16 +16,6 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementProgressBarComponent {
-	achieved: number;
-	total: number;
-
-	@Input('achievements') set achievements(achievements: readonly VisualAchievement[]) {
-		if (achievements) {
-			const flatCompletions = achievements
-				.map(achievement => achievement.completionSteps)
-				.reduce((a, b) => a.concat(b), []);
-			this.total = flatCompletions.length;
-			this.achieved = flatCompletions.map(step => step.numberOfCompletions).filter(a => a > 0).length;
-		}
-	}
+	@Input() achieved: number;
+	@Input() total: number;
 }

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CompletedAchievement } from '../../models/completed-achievement';
-import { ReplayInfo } from '../../models/replay-info';
 
 @Injectable()
 export class AchievementsLocalDbService {
@@ -16,88 +15,10 @@ export class AchievementsLocalDbService {
 		this.init();
 	}
 
-	public async getAchievement(achievementId: string): Promise<CompletedAchievement> {
-		const achievement =
-			this.achievementsCache[achievementId] ||
-			CompletedAchievement.create({
-				id: achievementId,
-				numberOfCompletions: 0,
-				replayInfo: [] as readonly ReplayInfo[],
-			} as CompletedAchievement);
-		const replayInfo = await this.loadReplayInfo(achievementId);
-		return achievement.update({
-			replayInfo: replayInfo,
-		} as CompletedAchievement);
-		// await this.waitForDbInit();
-		// try {
-		// 	const achievement = await this.db.getByKey('achievements', achievementId);
-		// 	return achievement;
-		// } catch (e) {
-		// 	console.error('[achievements] [storage] error while loading completed achievement', e.message, e.name, e);
-		// }
-	}
-
-	private async loadReplayInfo(achievementId: string): Promise<readonly ReplayInfo[]> {
-		await this.waitForDbInit();
-		try {
-			return ((await this.db.getByKey('achievements-replay-info', achievementId)) || ({} as CompletedAchievement))
-				.replayInfo;
-		} catch (e) {
-			console.error('[achievements] [storage] error while loading replay-info', e.message, e.name, e);
-		}
-	}
-
 	public async save(achievement: CompletedAchievement): Promise<CompletedAchievement> {
 		this.achievementsCache[achievement.id] = achievement;
-		if (achievement.replayInfo && achievement.replayInfo.length > 0) {
-			await this.saveReplayInfo(achievement.id, achievement.replayInfo);
-		}
 		return achievement;
-		// await this.waitForDbInit();
-		// try {
-		// 	const result = await this.db.update('achievements', achievement);
-		// 	return result;
-		// } catch (e) {
-		// 	console.error(
-		// 		'[achievements] [storage] error while saving completed achievement',
-		// 		achievement,
-		// 		e.message,
-		// 		e.name,
-		// 		e,
-		// 	);
-		// 	return achievement;
-		// }
 	}
-
-	private async saveReplayInfo(achievementId: string, replayInfo: readonly ReplayInfo[]) {
-		await this.waitForDbInit();
-		try {
-			const replayInfoData = {
-				id: achievementId,
-				replayInfo: replayInfo,
-			} as CompletedAchievement;
-			const result = await this.db.update('achievements-replay-info', replayInfoData);
-			return result;
-		} catch (e) {
-			console.error(
-				'[achievements] [storage] error while saving achievements-replay-info',
-				achievementId,
-				replayInfo,
-				e.message,
-				e.name,
-				e,
-			);
-			return [];
-		}
-	}
-
-	// public async saveAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
-	// 	if (!achievements) {
-	// 		return [];
-	// 	}
-	// 	achievements.forEach(achievement => this.save(achievement));
-	// 	return this.getAll();
-	// }
 
 	public async setAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
 		if (!achievements) {
@@ -108,40 +29,18 @@ export class AchievementsLocalDbService {
 		return this.getAll();
 	}
 
-	public async getAll(): Promise<CompletedAchievement[]> {
-		const replayInfos = await this.getAllReplayInfo();
-		return Object.values(this.achievementsCache).map(ach => {
-			const replays = replayInfos.find(info => info.id === ach.id);
-			return replays ? ach.update({ replayInfo: replays.replayInfo } as CompletedAchievement) : ach;
-		});
-		// await this.waitForDbInit();
-		// try {
-		// 	const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
-		// 	return achievements;
-		// } catch (e) {
-		// 	console.error(
-		// 		'[achievements] [storage] error while getting all completed achievements',
-		// 		e.message,
-		// 		e.name,
-		// 		e,
-		// 	);
-		// 	return [];
-		// }
+	public async getAchievement(achievementId: string): Promise<CompletedAchievement> {
+		const achievement =
+			this.achievementsCache[achievementId] ||
+			CompletedAchievement.create({
+				id: achievementId,
+				numberOfCompletions: 0,
+			} as CompletedAchievement);
+		return achievement;
 	}
 
-	public async getAllReplayInfo(): Promise<readonly CompletedAchievement[]> {
-		await this.waitForDbInit();
-		try {
-			return await this.db.getAll('achievements-replay-info', null);
-		} catch (e) {
-			console.error(
-				'[achievements] [storage] error while getting all achievements-replay-info',
-				e.message,
-				e.name,
-				e,
-			);
-			return [];
-		}
+	public async getAll(): Promise<CompletedAchievement[]> {
+		return Object.values(this.achievementsCache);
 	}
 
 	public async loadAllHistory(): Promise<AchievementHistory[]> {
@@ -180,13 +79,6 @@ export class AchievementsLocalDbService {
 					evt.currentTarget.result.createObjectStore('achievement-history', {
 						keyPath: 'id',
 						autoIncrement: true,
-					});
-				}
-				if (evt.oldVersion < 3) {
-					console.log('[achievements] [storage] upgrade to version 3');
-					evt.currentTarget.result.createObjectStore('achievements-replay-info', {
-						keyPath: 'id',
-						autoIncrement: false,
 					});
 				}
 				console.log('[achievements] [storage] indexeddb upgraded');

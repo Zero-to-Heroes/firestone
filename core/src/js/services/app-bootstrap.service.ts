@@ -2,7 +2,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { Preferences } from '../models/preferences';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
-import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
@@ -63,7 +62,6 @@ export class AppBootstrapService {
 		private packHistory: PackHistoryService,
 		private achievementsMonitor: AchievementsMonitor,
 		private init_AchievementsNotifications: AchievementsNotificationService,
-		private achievementsVideoCaptureService: AchievementsVideoCaptureService,
 		private packStatsService: PackStatsService,
 		private achievementStatsService: RemoteAchievementsService,
 		private collectionManager: CollectionManager,

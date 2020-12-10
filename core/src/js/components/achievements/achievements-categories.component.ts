@@ -1,14 +1,6 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	Input,
-} from '@angular/core';
-import { AchievementSet } from '../../models/achievement-set';
-import { SelectAchievementSetEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-set-event';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
+import { VisualAchievementCategory } from '../../models/visual-achievement-category';
+import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -19,21 +11,21 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/global/scrollbar.scss`,
 	],
 	template: `
-		<div class="achievements-categories">
-			<ol class="achievements-set-list">
-				<li *ngFor="let achievementSet of achievementSets; trackBy: trackById">
-					<achievement-set-view
-						[achievementSet]="achievementSet"
-						(mousedown)="selectSet(achievementSet)"
-					></achievement-set-view>
-				</li>
-			</ol>
+		<div class="achievements-categories" scrollable>
+			<ul class="categories">
+				<achievement-category
+					*ngFor="let category of categories"
+					class="item"
+					[category]="category"
+					(mousedown)="selectCategory(category)"
+				></achievement-category>
+			</ul>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementsCategoriesComponent implements AfterViewInit {
-	@Input() public achievementSets: AchievementSet[];
+	@Input() public categories: VisualAchievementCategory[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -43,27 +35,11 @@ export class AchievementsCategoriesComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	selectSet(set: AchievementSet) {
-		this.stateUpdater.next(new SelectAchievementSetEvent(set.id));
+	selectCategory(category: VisualAchievementCategory) {
+		this.stateUpdater.next(new SelectAchievementCategoryEvent(category.id));
 	}
 
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
-		const achievementsList = this.el.nativeElement.querySelector('.achievements-set-list');
-		if (!achievementsList) {
-			return;
-		}
-		const rect = achievementsList.getBoundingClientRect();
-		// console.log('element rect', rect);
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
-	}
-
-	trackById(achievementSet: AchievementSet, index: number) {
-		return achievementSet.id;
+	trackById(value: VisualAchievementCategory, index: number) {
+		return value.id;
 	}
 }

@@ -630,7 +630,7 @@ export class OverwolfService {
 	public async getExtensionInfo(extensionId: string): Promise<any> {
 		return new Promise<any>(resolve => {
 			overwolf.extensions.getInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb', callbackInfo => {
-				console.debug('[overwolf-service] Got extension info', callbackInfo);
+				console.log('[overwolf-service] Got extension info', callbackInfo);
 				resolve(callbackInfo);
 			});
 		});
