@@ -60,9 +60,7 @@ export class AchievementsComponent {
 		if (!this.navigation.navigationAchievements.selectedCategoryId) {
 			return this.state.categories;
 		}
-		const currentCategory: VisualAchievementCategory = this.state.categories.find(cat =>
-			cat.findCategory(this.navigation.navigationAchievements.selectedCategoryId),
-		);
+		const currentCategory = this.state.findCategory(this.navigation.navigationAchievements.selectedCategoryId);
 		return currentCategory.categories;
 	}
 

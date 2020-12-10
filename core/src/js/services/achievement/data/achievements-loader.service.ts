@@ -46,9 +46,9 @@ export class AchievementsLoaderService {
 		console.log('[achievements-loader] loaded all', rawAchievements.length);
 		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
 			this.achievements = rawAchievements.map(rawAchievement => this.wrapRawAchievement(rawAchievement));
-			this.challengeModules = rawAchievements.map(rawAchievement =>
-				this.challengeBuilder.buildChallenge(rawAchievement),
-			);
+			this.challengeModules = rawAchievements
+				.map(rawAchievement => this.challengeBuilder.buildChallenge(rawAchievement))
+				.filter(challenge => challenge);
 			console.log('[achievements-loader] init over', this.achievements.length, this.challengeModules.length);
 			resolve([this.achievements, this.challengeModules]);
 		});
@@ -57,6 +57,7 @@ export class AchievementsLoaderService {
 	private async loadAll(): Promise<readonly RawAchievement[]> {
 		console.log('[achievements-loader] loading all achievements');
 		const achievementFiles = [
+			'hearthstone_game',
 			'global',
 			'battlegrounds2',
 			'dungeon_run',

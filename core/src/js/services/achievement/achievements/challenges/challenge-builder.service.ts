@@ -74,6 +74,10 @@ export class ChallengeBuilderService {
 	constructor(private readonly cards: AllCardsService, private readonly memoryInspection: MemoryInspectionService) {}
 
 	public buildChallenge(raw: RawAchievement): Challenge {
+		// The case for the HS achievements, which are not computed by Firestone
+		if (!raw.requirements) {
+			return null;
+		}
 		const requirements: readonly Requirement[] = this.buildRequirements(raw.requirements);
 		return new GenericChallenge(raw.id, raw.resetEvents, requirements);
 	}

@@ -5,6 +5,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_DECK_DETAILS = true;
 	public static readonly ENABLE_XP_NOTIFICATION = true;
 
+	public static readonly SHOW_HS_ACHIEVEMENTS = false;
 	public static readonly ENABLE_DUELS = false;
 	public static readonly ENABLE_NEW_VERSION_NOTIFICATION = false;
 

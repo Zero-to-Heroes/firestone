@@ -7,6 +7,7 @@ import { IndexedVisualAchievement } from '../../models/indexed-visual-achievemen
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { ApiRunner } from '../api-runner';
+import { FeatureFlags } from '../feature-flags';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
 
@@ -111,13 +112,13 @@ export class AchievementsRepository {
 	}
 
 	private async loadConfiguration(): Promise<AchievementConfiguration> {
-		const config: any = await this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/_configuration.json?v=2`);
-		console.debug('config', config);
+		const config: any = await this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/_configuration.json?v=4`);
 		const fileNames: readonly string[] = config.categories;
 		const categories: readonly AchievementCategoryConfiguration[] = (await Promise.all(
-			fileNames.map(fileName => this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=2`)),
+			fileNames
+				.filter(fileName => (FeatureFlags.SHOW_HS_ACHIEVEMENTS ? true : fileName !== 'hearthstone_game'))
+				.map(fileName => this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=4`)),
 		)) as any;
-		console.debug('categories', categories);
 		return {
 			categories: categories,
 		};
