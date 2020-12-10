@@ -155,7 +155,7 @@ export class DeckState {
 		const result = allCardsInDeck
 			.filter(card => card.cardId)
 			.some(card => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId));
-		console.log('spell counter', 'has', result, allCardsInDeck, DeckState.SPELL_COUNTER_CARD_IDS);
+		// console.log('spell counter', 'has', result, allCardsInDeck, DeckState.SPELL_COUNTER_CARD_IDS);
 		return result;
 	}
 }
