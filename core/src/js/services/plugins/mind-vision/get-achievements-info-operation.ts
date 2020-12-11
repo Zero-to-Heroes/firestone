@@ -18,8 +18,8 @@ export class GetAchievementsInfoOperation extends MindVisionOperationFacade<HsAc
 						completed: ach.Status === 4,
 					})),
 				} as HsAchievementsInfo),
-			20,
-			5000,
+			5,
+			3000,
 		);
 	}
 }

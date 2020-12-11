@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
@@ -8,6 +8,9 @@ import { CompletionStep, VisualAchievement } from '../../models/visual-achieveme
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { ApiRunner } from '../api-runner';
 import { FeatureFlags } from '../feature-flags';
+import { AchievementsInitEvent } from '../mainwindow/store/events/achievements/achievements-init-event';
+import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../overwolf.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
 
@@ -18,13 +21,33 @@ export class AchievementsRepository {
 	public modulesLoaded = new BehaviorSubject<boolean>(false);
 
 	private categories: readonly VisualAchievementCategory[];
+	private storeUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private remoteAchievements: RemoteAchievementsService,
 		private achievementsLoader: AchievementsLoaderService,
+		private ow: OverwolfService,
 		private api: ApiRunner,
 	) {
 		this.init();
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			// console.debug('[achievements-repository] updated game status', res);
+			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
+				console.debug('[achievements-repository] reloading achievemnts from memory');
+				const allAchievements: readonly Achievement[] = await this.achievementsLoader.getAchievements();
+				const completedAchievements: readonly CompletedAchievement[] = await this.remoteAchievements.reloadFromMemory();
+				// const [allAchievements, completedAchievements] = await Promise.all([
+				// 	this.achievementsLoader.getAchievements(),
+				// 	this.remoteAchievements.reloadFromMemory(),
+				// ]);
+				const mergedAchievements = this.mergeAchievements(allAchievements, completedAchievements);
+				this.categories = await this.buildCategories(mergedAchievements);
+				this.storeUpdater.next(new AchievementsInitEvent(this.categories));
+			}
+		});
+		setTimeout(() => {
+			this.storeUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		});
 	}
 
 	public async getTopLevelCategories(): Promise<readonly VisualAchievementCategory[]> {

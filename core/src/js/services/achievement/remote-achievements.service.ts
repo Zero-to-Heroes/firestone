@@ -14,6 +14,8 @@ const ACHIEVEMENTS_RETRIEVE_URL = ' https://mtpdm7a1e5.execute-api.us-west-2.ama
 
 @Injectable()
 export class RemoteAchievementsService {
+	private completedAchievementsFromRemote: readonly CompletedAchievement[];
+
 	constructor(
 		private http: HttpClient,
 		private indexedDb: AchievementsLocalDbService,
@@ -43,20 +45,15 @@ export class RemoteAchievementsService {
 			this.loadRemoteAchievements(postEvent),
 			this.manager.getAchievements(),
 		]);
-		console.log(
-			'[remote-achievements] loaded',
-			achievementsFromRemote?.results?.length,
-			achievementsFromMemory?.achievements?.length,
-		);
-		if (!achievementsFromRemote?.results?.length && !achievementsFromMemory?.achievements?.length) {
+		console.log('[remote-achievements] loaded', achievementsFromRemote.length, achievementsFromMemory.length);
+		if (!achievementsFromRemote.length && !achievementsFromMemory.length) {
 			return [];
 		}
 
 		// Update local cache
-		const completedAchievementsFromRemote = achievementsFromRemote.results.map(ach =>
-			CompletedAchievement.create(ach),
-		);
-		const completedAchievementsFromMemory = achievementsFromMemory.achievements.map(ach =>
+		const completedAchievementsFromRemote = achievementsFromRemote.map(ach => CompletedAchievement.create(ach));
+		this.completedAchievementsFromRemote = completedAchievementsFromRemote;
+		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
 			CompletedAchievement.create({
 				id: `hearthstone_game_${ach.id}`,
 				numberOfCompletions: ach.completed ? 1 : 0,
@@ -65,6 +62,27 @@ export class RemoteAchievementsService {
 		const achievements = [...completedAchievementsFromRemote, ...completedAchievementsFromMemory];
 		await this.indexedDb.setAll(achievements);
 		console.log('[remote-achievements] updated local cache');
+		return achievements;
+	}
+
+	public async reloadFromMemory(): Promise<readonly CompletedAchievement[]> {
+		const prefs = this.prefs.getPreferences();
+		if (process.env.NODE_ENV !== 'production' && (await prefs).resetAchievementsOnAppStart) {
+			console.log('[remote-achievements] not loading achievements from remote - streamer mode');
+			await this.indexedDb.setAll([]);
+			return [];
+		}
+
+		const achievementsFromMemory = await this.manager.getAchievements();
+		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
+			CompletedAchievement.create({
+				id: `hearthstone_game_${ach.id}`,
+				numberOfCompletions: ach.completed ? 1 : 0,
+			} as CompletedAchievement),
+		);
+		const achievements = [...this.completedAchievementsFromRemote, ...completedAchievementsFromMemory];
+		await this.indexedDb.setAll(achievements);
+		console.log('[remote-achievements] re-updated local cache');
 		return achievements;
 	}
 
@@ -102,9 +120,9 @@ export class RemoteAchievementsService {
 		);
 	}
 
-	private async loadRemoteAchievements(userInfo): Promise<{ results: readonly CompletedAchievement[] }> {
-		return new Promise<{ results: readonly CompletedAchievement[] }>((resolve, reject) => {
-			this.loadAchievementsInternal(userInfo, result => resolve(result));
+	private async loadRemoteAchievements(userInfo): Promise<readonly CompletedAchievement[]> {
+		return new Promise<readonly CompletedAchievement[]>((resolve, reject) => {
+			this.loadAchievementsInternal(userInfo, result => resolve(result?.results || []));
 		});
 	}
 

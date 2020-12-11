@@ -1,4 +1,4 @@
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
+import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class AchievementsInitEvent implements MainWindowStoreEvent {
@@ -6,7 +6,7 @@ export class AchievementsInitEvent implements MainWindowStoreEvent {
 		return 'AchievementsInitEvent';
 	}
 
-	constructor(public readonly newState: AchievementsState) {}
+	constructor(public readonly categories: readonly VisualAchievementCategory[]) {}
 
 	public eventName(): string {
 		return 'AchievementsInitEvent';

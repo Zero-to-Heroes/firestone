@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { HsAchievementsInfo } from './achievements-info';
+import { HsAchievementInfo } from './achievements-info';
 import { AchievementsLocalDbService } from './indexed-db.service';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class AchievementsManager {
 	// TODO: update the achievements if the player goes into the game
 	constructor(private memoryReading: MemoryInspectionService, private db: AchievementsLocalDbService) {}
 
-	public async getAchievements(): Promise<HsAchievementsInfo> {
+	public async getAchievements(): Promise<readonly HsAchievementInfo[]> {
 		console.log('[achievements-manager] getting achievements');
 		const achievements = await this.memoryReading.getAchievementsInfo();
 		console.log('[achievements-manager] retrieved achievements from memory', achievements?.achievements?.length);
@@ -16,11 +16,11 @@ export class AchievementsManager {
 			console.log('[achievements-manager] retrieving achievements from db');
 			const fromDb = await this.db.retrieveInGameAchievements();
 			console.log('[achievements-manager] retrieved achievements from db', fromDb?.achievements?.length);
-			return fromDb;
+			return fromDb?.achievements || [];
 		} else {
 			console.log('[achievements-manager] updating achievements in db');
 			const savedCollection = await this.db.saveInGameAchievements(achievements);
-			return savedCollection;
+			return savedCollection?.achievements || [];
 		}
 	}
 }
