@@ -21,6 +21,7 @@ import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/get-current-scene-operation';
 import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
 import { GetDuelsRewardsInfoOperation } from './mind-vision/get-duels-rewards-info-operation';
+import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/get-in-game-achievements-progress-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
@@ -46,6 +47,10 @@ export class MemoryInspectionService {
 	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVision, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVision, this.ow);
 	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVision, this.ow);
+	private getInGameAchievementsProgressInfoOperation = new GetInGameAchievementsProgressInfoOperation(
+		this.mindVision,
+		this.ow,
+	);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
 
 	constructor(
@@ -55,6 +60,7 @@ export class MemoryInspectionService {
 		private cards: SetsService,
 	) {
 		this.init();
+		window['getAchievementsInfo'] = () => this.getAchievementsInfo();
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
@@ -97,8 +103,15 @@ export class MemoryInspectionService {
 		return this.getRewardsTrackInfoOperation.call();
 	}
 
-	public async getAchievementsInfo(): Promise<HsAchievementsInfo> {
-		return this.getAchievementsInfoOperation.call();
+	public async getAchievementsInfo(forceReset = false, numberOfRetries = 1): Promise<HsAchievementsInfo> {
+		return this.getAchievementsInfoOperation.call(numberOfRetries, forceReset);
+	}
+
+	public async getInGameAchievementsProgressInfo(
+		forceReset = false,
+		numberOfRetries = 1,
+	): Promise<HsAchievementsInfo> {
+		return this.getInGameAchievementsProgressInfoOperation.call(numberOfRetries, forceReset);
 	}
 
 	public async getCurrentSceneFromMindVision(): Promise<number> {

@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
+import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
+import { MemoryUpdate } from '../../models/memory-update';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
@@ -20,19 +23,60 @@ export class AchievementsMonitor {
 		'achievement-monitor',
 	);
 	private lastReceivedTimestamp;
+	private achievementQuotas: { [achievementId: number]: number };
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
 		private store: MainWindowStoreService,
-		private achievementStats: RemoteAchievementsService,
+		private remoteAchievements: RemoteAchievementsService,
 		private achievementsStorage: AchievementsLocalDbService,
+		private memory: MemoryInspectionService,
 	) {
 		this.lastReceivedTimestamp = Date.now();
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.handleEvent(gameEvent);
 		});
+		this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.DisplayingAchievementToast) {
+				setTimeout(() => {
+					this.detectNewAchievementFromMemory();
+				}, 500);
+			}
+		});
+		this.init();
+	}
+
+	private async init() {
+		const rawAchievements: readonly HsRawAchievement[] = await this.remoteAchievements.loadHsRawAchievements();
+		this.achievementQuotas = {};
+		for (const ach of rawAchievements) {
+			this.achievementQuotas[ach.id] = ach.quota;
+		}
+	}
+
+	private async detectNewAchievementFromMemory() {
+		const [existingAchievements, achievementsProgress] = await Promise.all([
+			this.achievementsStorage.retrieveInGameAchievements(),
+			this.memory.getInGameAchievementsProgressInfo(),
+		]);
+		const unlockedAchievements = (achievementsProgress?.achievements || [])
+			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
+			.map(progress => progress.id)
+			.map(id => existingAchievements.achievements.find(ach => ach.id === id))
+			.filter(ach => !ach.completed);
+		if (!unlockedAchievements.length) {
+			setTimeout(() => {
+				this.detectNewAchievementFromMemory();
+				return;
+			}, 200);
+		}
+		const achievements = await Promise.all(
+			unlockedAchievements.map(ach => this.achievementLoader.getAchievement(`hearthstone_game_${ach.id}`)),
+		);
+		await Promise.all(achievements.map(ach => this.sendUnlockEventFromAchievement(ach)));
 	}
 
 	private async handleEvent(gameEvent: GameEvent) {
@@ -49,42 +93,38 @@ export class AchievementsMonitor {
 
 	private async sendUnlockEvent(challenge: Challenge) {
 		const achievement: Achievement = await this.achievementLoader.getAchievement(challenge.achievementId);
+		await this.sendUnlockEventFromAchievement(achievement);
+	}
+
+	private async sendUnlockEventFromAchievement(achievement: Achievement) {
 		const autoGrantAchievements = await this.achievementLoader.getAchievementsById(
 			achievement.linkedAchievementIds,
 		);
-		// console.log(
-		// 	'no-format',
-		// 	'[achievement-monitor] autoGrantAchievements',
-		// 	achievement.id,
-		// 	achievement,
-		// 	autoGrantAchievements,
-		// );
 		const allAchievements =
 			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
-		// console.log('[achievement-monitor] will grant achievements?', allAchievements, achievement);
+		// console.debug('[achievement-monitor] will grant achievements?', allAchievements, achievement);
 		for (const achv of allAchievements) {
-			// console.log('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
+			// console.debug('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
 			const existingAchievement: CompletedAchievement = await this.achievementsStorage.getAchievement(achv.id);
 			// From now on, stop counting how many times each achievement has been unlocked
 			if (existingAchievement.numberOfCompletions >= 1) {
-				// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+				// console.debug('[achievement-monitor] achievement can be completed only once', achievement.id);
 				continue;
 			}
 			const completedAchievement = new CompletedAchievement(
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
 			);
-			// console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
+			console.log('[achievement-monitor] starting process of completed achievement', achievement.id);
 			const mergedAchievement = Object.assign(new Achievement(), achv, {
 				numberOfCompletions: completedAchievement.numberOfCompletions,
 			} as Achievement);
 
-			this.achievementStats.publishRemoteAchievement(mergedAchievement);
+			this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
 			await this.achievementsStorage.save(completedAchievement);
 			console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
-			// this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
 
-			this.enqueue({ achievement: mergedAchievement, challenge: challenge } as InternalEvent);
+			this.enqueue({ achievement: mergedAchievement } as InternalEvent);
 		}
 	}
 
@@ -101,17 +141,17 @@ export class AchievementsMonitor {
 			return eventQueue;
 		}
 		const candidate: InternalEvent = eventQueue[0];
-		// console.log('[achievements-monitor] found a candidate', candidate);
+		// console.debug('[achievements-monitor] found a candidate', candidate);
 		// Is there a better candidate?
 		const betterCandidate: InternalEvent = eventQueue
 			.filter(event => event.achievement.type === candidate.achievement.type)
 			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
-		// console.log(
+		// console.debug(
 		// 	'[achievements-monitor] emitted achievement completed event',
 		// 	betterCandidate,
 		// 	betterCandidate.achievement.id,
 		// );
-		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, betterCandidate.achievement, betterCandidate.challenge);
+		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, betterCandidate.achievement);
 		this.prepareAchievementCompletedEvent(betterCandidate.achievement);
 
 		// Now remove all the related events
@@ -125,5 +165,5 @@ export class AchievementsMonitor {
 
 interface InternalEvent {
 	readonly achievement: Achievement;
-	readonly challenge: Challenge;
+	// readonly challenge: Challenge;
 }

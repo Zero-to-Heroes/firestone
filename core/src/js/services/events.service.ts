@@ -8,6 +8,7 @@ export interface BroadcastEvent {
 
 export class Events {
 	public static readonly STORE_READY = 'EVENTS_STORE_READY';
+	public static readonly MEMORY_UPDATE = 'MEMORY_UPDATEd';
 
 	public static readonly NO_LOG_FILE = 'no-log-file';
 	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
@@ -17,13 +18,7 @@ export class Events {
 	public static readonly NEW_CARD = 'new-card';
 	public static readonly MORE_DUST = 'more-dust';
 
-	// When achievement has been completed, and before all similar achievements have been filtered out
-	public static readonly ACHIEVEMENT_UNLOCKED = 'achievement-unlocked';
-	// When similar achievements have been filtered out to only keep the more relevant one
 	public static readonly ACHIEVEMENT_COMPLETE = 'achievement-complete';
-	public static readonly ACHIEVEMENT_RECORDED = 'achievement-recorded';
-	public static readonly ACHIEVEMENT_RECORDING_STARTED = 'achievement-recording-started';
-	// public static readonly ACHIEVEMENT_RECORD_END = 'achievement-record-end';
 
 	public static readonly NEW_GAME_ID = 'new-game-id';
 	public static readonly REVIEW_FINALIZED = 'review-finalized';

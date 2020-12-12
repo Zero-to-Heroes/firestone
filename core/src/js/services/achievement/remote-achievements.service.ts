@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
+import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
+import { ApiRunner } from '../api-runner';
 import { GameStateService } from '../decktracker/game-state.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
@@ -10,14 +11,15 @@ import { AchievementsManager } from './achievements-manager.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
 
 const ACHIEVEMENTS_POST_URL = 'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
-const ACHIEVEMENTS_RETRIEVE_URL = ' https://mtpdm7a1e5.execute-api.us-west-2.amazonaws.com/Prod/completedAchievements';
+const ACHIEVEMENTS_RETRIEVE_URL = 'https://mtpdm7a1e5.execute-api.us-west-2.amazonaws.com/Prod/completedAchievements';
+const RAW_HS_ACHIEVEMENTS_RETRIEVE_URL = 'https://static.zerotoheroes.com/hearthstone/jsoncards/hs-achievements.json';
 
 @Injectable()
 export class RemoteAchievementsService {
 	private completedAchievementsFromRemote: readonly CompletedAchievement[];
 
 	constructor(
-		private http: HttpClient,
+		private api: ApiRunner,
 		private indexedDb: AchievementsLocalDbService,
 		private ow: OverwolfService,
 		private manager: AchievementsManager,
@@ -87,10 +89,6 @@ export class RemoteAchievementsService {
 	}
 
 	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 5): Promise<void> {
-		if (retriesLeft <= 0) {
-			console.error('Could not upload achievemnt stats after 15 retries');
-			return;
-		}
 		const [currentUser, reviewId] = await Promise.all([
 			this.userService.getCurrentUser(),
 			this.gameService.getCurrentReviewId(),
@@ -108,37 +106,15 @@ export class RemoteAchievementsService {
 			'cardId': achievement.displayCardId,
 			'numberOfCompletions': achievement.numberOfCompletions,
 		};
-		// console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
-		this.http.post(ACHIEVEMENTS_POST_URL, statEvent).subscribe(
-			result => {
-				// Do nothing
-			},
-			error => {
-				console.warn('Could not upload achievemnt stats, retrying', error);
-				setTimeout(() => this.publishRemoteAchievement(achievement, retriesLeft - 1), 3000);
-			},
-		);
+		this.api.callPostApiWithRetries(ACHIEVEMENTS_POST_URL, statEvent, retriesLeft);
+	}
+
+	public async loadHsRawAchievements(): Promise<readonly HsRawAchievement[]> {
+		const raw: any = await this.api.callGetApiWithRetries(RAW_HS_ACHIEVEMENTS_RETRIEVE_URL);
+		return raw?.achievements || [];
 	}
 
 	private async loadRemoteAchievements(userInfo): Promise<readonly CompletedAchievement[]> {
-		return new Promise<readonly CompletedAchievement[]>((resolve, reject) => {
-			this.loadAchievementsInternal(userInfo, result => resolve(result?.results || []));
-		});
-	}
-
-	private loadAchievementsInternal(userInfo, callback, retriesLeft = 5) {
-		if (retriesLeft <= 0) {
-			console.error('Could not load achievements', `${ACHIEVEMENTS_RETRIEVE_URL}`, userInfo);
-			callback([]);
-			return;
-		}
-		this.http.post(`${ACHIEVEMENTS_RETRIEVE_URL}`, userInfo).subscribe(
-			(result: any) => {
-				callback(result);
-			},
-			error => {
-				setTimeout(() => this.loadAchievementsInternal(userInfo, callback, retriesLeft - 1), 1000);
-			},
-		);
+		return ((await this.api.callPostApiWithRetries(ACHIEVEMENTS_RETRIEVE_URL, userInfo)) as any)?.results || [];
 	}
 }

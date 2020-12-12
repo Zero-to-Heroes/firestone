@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../../models/arena-info';
+import { MemoryUpdate } from '../../../models/memory-update';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
+import { Events } from '../../events.service';
 import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
 
 declare let OverwolfPlugin: any;
@@ -11,9 +13,32 @@ export class MindVisionService {
 	private mindVisionPlugin: any;
 
 	initialized = false;
+	memoryUpdateListener;
 
-	constructor() {
+	constructor(private readonly events: Events) {
 		this.initialize();
+		this.listenForUpdates();
+	}
+
+	public async listenForUpdates() {
+		const plugin = await this.get();
+		try {
+			this.memoryUpdateListener = (changes: MemoryUpdate | 'reset') => {
+				console.debug('[mind-vision] memory update', changes);
+				// Happens when the plugin is reset, we need to resubscribe
+				if (changes === 'reset') {
+					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+					this.listenForUpdates();
+				}
+				this.events.broadcast(Events.MEMORY_UPDATE, changes);
+			};
+			plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
+			plugin.listenForUpdates(updates => {
+				console.debug('update from game', updates);
+			});
+		} catch (e) {
+			console.error('[mind-vision] could not listenForUpdates', e);
+		}
 	}
 
 	public async getCollection(): Promise<any[]> {
@@ -147,6 +172,20 @@ export class MindVisionService {
 		});
 	}
 
+	public async getInGameAchievementsProgressInfo(forceReset = false): Promise<InternalHsAchievementsInfo> {
+		return new Promise<InternalHsAchievementsInfo>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.getInGameAchievementsProgressInfo(forceReset, info => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not get achievements info', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getCurrentScene(): Promise<number> {
 		return new Promise<number>(async resolve => {
 			const plugin = await this.get();
@@ -193,7 +232,7 @@ export class MindVisionService {
 				}
 				console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
 				this.mindVisionPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
-					console.log('[mind-vision] received global event', first, second);
+					console.debug('[mind-vision] received global event', first, second);
 				});
 				this.initialized = true;
 			});

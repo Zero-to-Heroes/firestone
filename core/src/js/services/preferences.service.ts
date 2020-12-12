@@ -82,12 +82,6 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async setDontRecordAchievements(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, dontRecordAchievements: pref };
-		await this.savePreferences(newPrefs);
-	}
-
 	public async updateAdvancedSettings(advancedSettings: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, advancedModeToggledOn: advancedSettings };

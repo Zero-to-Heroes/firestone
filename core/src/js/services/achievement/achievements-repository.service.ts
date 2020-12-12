@@ -31,7 +31,6 @@ export class AchievementsRepository {
 	) {
 		this.init();
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.debug('[achievements-repository] updated game status', res);
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
 				console.debug('[achievements-repository] reloading achievemnts from memory');
 				const allAchievements: readonly Achievement[] = await this.achievementsLoader.getAchievements();

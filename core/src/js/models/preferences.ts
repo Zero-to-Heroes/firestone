@@ -26,7 +26,6 @@ export class Preferences {
 	readonly advancedModeToggledOn: boolean;
 
 	readonly dontConfirmVideoReplayDeletion: boolean;
-	readonly dontRecordAchievements: boolean = true;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
 
 	readonly showXpRecapAtGameEnd: boolean = true;
