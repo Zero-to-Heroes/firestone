@@ -5,6 +5,7 @@ import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
 import { MemoryUpdate } from '../../models/memory-update';
 import { Events } from '../events.service';
+import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
@@ -38,14 +39,16 @@ export class AchievementsMonitor {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.handleEvent(gameEvent);
 		});
-		this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
-			const changes: MemoryUpdate = event.data[0];
-			if (changes.DisplayingAchievementToast) {
-				setTimeout(() => {
-					this.detectNewAchievementFromMemory();
-				}, 500);
-			}
-		});
+		if (FeatureFlags.SHOW_HS_ACHIEVEMENTS) {
+			this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
+				const changes: MemoryUpdate = event.data[0];
+				if (changes.DisplayingAchievementToast) {
+					setTimeout(() => {
+						this.detectNewAchievementFromMemory();
+					}, 500);
+				}
+			});
+		}
 		this.init();
 	}
 
