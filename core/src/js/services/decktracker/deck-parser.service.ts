@@ -96,7 +96,7 @@ export class DeckParserService {
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		// console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
+		console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
 			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
@@ -106,11 +106,12 @@ export class DeckParserService {
 		if (this.goingIntoQueueRegex.exec(logLine)) {
 			// We get this as soon as possible, since once the player has moved out from the
 			// dekc selection screen the info becomes unavailable
+			console.log('[deck-pareser] reading deck from memory');
 			const [deckFromMemory, currentScene] = await Promise.all([
 				this.memory.getActiveDeck(1),
 				this.memory.getCurrentScene(),
 			]);
-			console.log('[deck-parser] going into queue', currentScene);
+			console.log('[deck-parser] deck from memory', deckFromMemory, currentScene);
 			// Don't refresh the deck when leaving the match
 			// However scene_gameplay is also the current scene when selecting a friendly deck?
 			let currentSceneFromMindVision: number;
