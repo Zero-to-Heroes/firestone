@@ -32,6 +32,8 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				? navigationState.navigationAchievements.update({
 						currentView: 'categories',
 						menuDisplayType: 'menu',
+						selectedCategoryId: undefined,
+						selectedAchievementId: undefined,
 				  } as NavigationAchievements)
 				: navigationState.navigationAchievements;
 		const replays =
