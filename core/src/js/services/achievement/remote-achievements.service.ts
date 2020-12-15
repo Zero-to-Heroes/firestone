@@ -16,7 +16,7 @@ const RAW_HS_ACHIEVEMENTS_RETRIEVE_URL = 'https://static.zerotoheroes.com/hearth
 
 @Injectable()
 export class RemoteAchievementsService {
-	private completedAchievementsFromRemote: readonly CompletedAchievement[];
+	private completedAchievementsFromRemote: readonly CompletedAchievement[] = [];
 
 	constructor(
 		private api: ApiRunner,
