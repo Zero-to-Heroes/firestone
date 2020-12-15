@@ -36,7 +36,11 @@ export class AchievementsNotificationService {
 			return;
 		}
 		amplitude.getInstance().logEvent('new-achievement', { 'id': achievement.id });
-		const recapText = achievement.emptyText ?? achievement.completedText ?? `Achievement saved! Click to recap`;
+		const recapText = (
+			achievement.emptyText ??
+			achievement.completedText ??
+			`Achievement saved! Click to recap`
+		).replace('to get started', '');
 		console.log('[achievements-notification] sending new achievement completed notification', achievement.id);
 		this.notificationService.emitNewNotification({
 			notificationId: achievement.id + uuid(),
