@@ -37,6 +37,10 @@ export class GameReplayComponent implements OnInit {
 
 	private async loadReview(reviewId: string) {
 		const replayXml = await this.getReplayXml(reviewId);
+		if (!replayXml) {
+			console.error('[game-replay] could not load replay xml', reviewId);
+			return;
+		}
 		this.reload(replayXml, reviewId);
 	}
 
@@ -89,6 +93,9 @@ export class GameReplayComponent implements OnInit {
 		const review: any = await this.http
 			.get(`https://static-api.firestoneapp.com/retrieveReview/${reviewId}`)
 			.toPromise();
+		if (!review) {
+			return null;
+		}
 		const replay = await this.loadReplay(review.replayKey);
 		console.log('loaded replay');
 		return replay;
