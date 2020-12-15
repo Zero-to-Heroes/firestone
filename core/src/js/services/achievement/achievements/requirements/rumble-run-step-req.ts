@@ -14,12 +14,15 @@ export class RumbleRunStepReq implements Requirement {
 		return new RumbleRunStepReq(parseInt(rawReq.values[0]));
 	}
 
+	// Default to true because no event is sent in the first round of a rumble run match
+	// The scenario ID + the fact that achievements only complete once should be enough
+	// to work around this limitation
 	reset(): void {
-		this.isCorrectStep = undefined;
+		this.isCorrectStep = true;
 	}
 
 	afterAchievementCompletionReset(): void {
-		this.isCorrectStep = undefined;
+		this.isCorrectStep = true;
 	}
 
 	isCompleted(): boolean {
@@ -29,6 +32,7 @@ export class RumbleRunStepReq implements Requirement {
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.RUMBLE_RUN_STEP) {
 			this.isCorrectStep = gameEvent.additionalData.step === this.targetStep;
+			// console.log('[debug] is correct step?', this.isCorrectStep, gameEvent, this.targetStep);
 		}
 	}
 }

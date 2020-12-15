@@ -14,12 +14,15 @@ export class DungeonRunStepReq implements Requirement {
 		return new DungeonRunStepReq(parseInt(rawReq.values[0]));
 	}
 
+	// Default to true because no event is sent in the first round of a match
+	// The scenario ID + the fact that achievements only complete once should be enough
+	// to work around this limitation
 	reset(): void {
-		this.isCorrectStep = undefined;
+		this.isCorrectStep = true;
 	}
 
 	afterAchievementCompletionReset(): void {
-		this.isCorrectStep = undefined;
+		this.isCorrectStep = true;
 	}
 
 	isCompleted(): boolean {
