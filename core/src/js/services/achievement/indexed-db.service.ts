@@ -104,7 +104,7 @@ export class AchievementsLocalDbService {
 
 	private init() {
 		console.log('[achievements] [storage] starting init of indexeddb');
-		this.db = new AngularIndexedDB('hs-achievements-db', 2);
+		this.db = new AngularIndexedDB('hs-achievements-db', 4);
 		this.db
 			.openDatabase(4, evt => {
 				console.log('[achievements] [storage] opendb successful', evt);

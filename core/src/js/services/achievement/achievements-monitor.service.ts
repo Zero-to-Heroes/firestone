@@ -118,13 +118,22 @@ export class AchievementsMonitor {
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
 			);
-			console.log('[achievement-monitor] starting process of completed achievement', achievement.id);
+			console.log(
+				'[achievement-monitor] starting process of completed achievement',
+				achievement.id,
+				existingAchievement,
+				completedAchievement,
+			);
 			const mergedAchievement = Object.assign(new Achievement(), achv, {
 				numberOfCompletions: completedAchievement.numberOfCompletions,
 			} as Achievement);
 
-			this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
 			await this.achievementsStorage.save(completedAchievement);
+			console.log(
+				'[achievement-monitor] saved achievement',
+				await this.achievementsStorage.getAchievement(achv.id),
+			);
+			this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
 			console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
 
 			this.enqueue({ achievement: mergedAchievement } as InternalEvent);
