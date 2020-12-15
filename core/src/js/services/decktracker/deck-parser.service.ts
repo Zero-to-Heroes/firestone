@@ -227,12 +227,14 @@ export class DeckParserService {
 	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory) {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
 		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
-		console.log('[deck-parser] normalized decklist with dbf ids', decklist);
+		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		this.currentDeck.deck = {
 			format: deckFromMemory.IsWild ? GameFormat.FT_WILD : GameFormat.FT_STANDARD,
 			cards: this.explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
-			heroes: [this.normalizeHero(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId) || 7],
+			heroes: deckFromMemory.HeroCardId
+				? [this.normalizeHero(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId) || 7]
+				: [7],
 		};
 		console.log('[deck-parser] building deckstring', this.currentDeck.deck);
 		const deckString = encode(this.currentDeck.deck);
