@@ -83,16 +83,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.cdr.detach();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
 			const messageObject: Message = JSON.parse(message.content);
-			// console.log(
-			// 	'received message in notification window',
-			// 	messageObject.notificationId,
-			// 	messageObject.theClass,
-			// 	messageObject,
-			// );
 			this.processingQueue.enqueue(messageObject);
 		});
 		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
-			// console.log('state changed, resizing and repositioning', message);
 			this.resize();
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
@@ -136,16 +129,8 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private async sendNotification(messageObject: Message): Promise<void> {
 		return new Promise<void>(async resolve => {
 			await this.waitForInit();
-			const activeNotif = this.activeNotifications.find(
-				notif => notif.notificationId === messageObject.notificationId,
-			);
-			// console.log(
-			// 	'activeNotif',
-			// 	activeNotif,
-			// 	activeNotif && activeNotif.toast,
-			// 	activeNotif && activeNotif.toast.theClass,
-			// 	this.activeNotifications,
-			// 	messageObject,
+			// const activeNotif = this.activeNotifications.find(
+			// 	notif => notif.notificationId === messageObject.notificationId,
 			// );
 			let notification;
 			try {
@@ -154,21 +139,21 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				console.warn('could not get notif', this.elRef.nativeElement, e);
 			}
 
-			if (activeNotif) {
-				const previousClass = activeNotif.toast.theClass;
-				// console.log('notification', notification, previousClass);
-				if (previousClass === 'remove-on-update') {
-					this.notificationService.remove(activeNotif.toast.id);
-					// console.log('removing previous notif', activeNotif);
-					await this.showNotification(messageObject);
-					resolve();
-					return;
-				} else if (notification) {
-					await this.updateNotification(messageObject.notificationId, messageObject.theClass, notification);
-					resolve();
-					return;
-				}
-			}
+			// if (activeNotif) {
+			// 	const previousClass = activeNotif.toast.theClass;
+			// 	// console.log('notification', notification, previousClass);
+			// 	if (previousClass === 'remove-on-update') {
+			// 		this.notificationService.remove(activeNotif.toast.id);
+			// 		// console.log('removing previous notif', activeNotif);
+			// 		await this.showNotification(messageObject);
+			// 		resolve();
+			// 		return;
+			// 	} else if (notification) {
+			// 		await this.updateNotification(messageObject.notificationId, messageObject.theClass, notification);
+			// 		resolve();
+			// 		return;
+			// 	}
+			// }
 			// console.log('showing notif');
 			await this.showNotification(messageObject);
 			resolve();
@@ -176,28 +161,25 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		});
 	}
 
-	private async updateNotification(notificationId: string, newClass: string, notification) {
-		// console.log('in confirm achievement', notificationId);
-		const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
-		const toast = activeNotif.toast;
-		// console.log('active notif found', newClass, toast, activeNotif, notification);
-		toast.theClass = newClass;
-		notification.classList.add(newClass);
-		// console.log('updated notif', notification);
-		if (newClass === 'pending' && activeNotif.timeoutHandler) {
-			console.log('canceling fade out timeout');
-			clearTimeout(activeNotif.timeoutHandler);
-		} else if (newClass === 'active') {
-			notification.classList.remove('unclickable');
-			setTimeout(() => {
-				this.fadeNotificationOut(notificationId);
-			}, 5000);
-		}
+	// private async updateNotification(notificationId: string, newClass: string, notification) {
+	// 	// console.log('in confirm achievement', notificationId);
+	// 	const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
+	// 	const toast = activeNotif.toast;
+	// 	// console.log('active notif found', newClass, toast, activeNotif, notification);
+	// 	toast.theClass = newClass;
+	// 	notification.classList.add(newClass);
+	// 	// console.log('updated notif', notification);
+	// 	if (newClass === 'active') {
+	// 		notification.classList.remove('unclickable');
+	// 		setTimeout(() => {
+	// 			this.fadeNotificationOut(notificationId);
+	// 		}, 5000);
+	// 	}
 
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	// 	if (!(this.cdr as ViewRef)?.destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
 
 	private async showNotification(messageObject: Message) {
 		return new Promise<void>(async resolve => {
@@ -214,14 +196,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				timeOut: this.timeout + additionalTimeout,
 				clickToClose: messageObject.clickToClose === false ? false : true,
 			};
-			// console.log('will override with options', override, messageObject);
-			let timeoutHandler;
-			if (type === 'achievement-no-record') {
-				override.timeOut = 999999; // Closing this one manually
-				timeoutHandler = setTimeout(() => {
-					this.fadeNotificationOut(messageObject.notificationId);
-				}, this.timeout + additionalTimeout);
-			}
 
 			const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
 			toast.theClass = messageObject.theClass;
@@ -313,7 +287,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const activeNotif: ActiveNotification = {
 				toast: toast,
 				subscription: subscription,
-				timeoutHandler: timeoutHandler,
 				notificationId: messageObject.notificationId,
 				type: type,
 			};
@@ -415,5 +388,4 @@ interface ActiveNotification {
 	readonly subscription: Subscription;
 	readonly notificationId: string;
 	readonly type?: string;
-	readonly timeoutHandler?: NodeJS.Timeout;
 }
