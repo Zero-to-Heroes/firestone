@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -13,7 +14,7 @@ import { capitalizeEachWord } from '../../services/utils';
 	selector: 'replay-info',
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/replay-info.component.scss`],
 	template: `
-		<div class="replay-info {{ gameMode }}">
+		<div class="replay-info {{ gameMode }} {{ visualResult }}">
 			<div class="result-color-code {{ visualResult }}"></div>
 
 			<div class="left-info">
@@ -33,14 +34,14 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
-				<div class="group result-text {{ visualResult }}" *ngIf="gameMode !== 'battlegrounds'">
+				<!-- <div class="group result-text {{ visualResult }}" *ngIf="gameMode !== 'battlegrounds'">
 					{{ capitalize(visualResult) }}
-				</div>
+				</div> -->
 
-				<div class="group result">
+				<!-- <div class="group result">
 					<div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div>
 					<div class="result">{{ result }}</div>
-				</div>
+				</div> -->
 
 				<div
 					class="group mmr"
@@ -106,8 +107,8 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	@Input() set replay(value: GameStat) {
-		// console.log('[deck-replay-info] setting value', value);
+	@Input() set replay(value: GameStat | RunStep) {
+		console.log('[deck-replay-info] setting value', value);
 		this.replayInfo = value;
 		this.gameMode = value.gameMode;
 		// this.deckName = value.playerDeckName || value.playerName;

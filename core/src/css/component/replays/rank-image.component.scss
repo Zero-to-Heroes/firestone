@@ -1,6 +1,43 @@
 .rank-image {
 	height: 100%;
 	position: relative;
+
+	&.battlegrounds .frame {
+		height: 105%;
+		left: -17%;
+	}
+
+	&.duels,
+	&.paid-duels {
+		.frame {
+			height: 120%;
+			left: -12%;
+		}
+	}
+
+	.rank-text {
+		// position: absolute;
+		// bottom: -9%;
+		// text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+		// color: white;
+		// font-size: 12px;
+		// width: 100%;
+		// text-align: center;
+		position: absolute;
+		bottom: 3px;
+		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+		color: white;
+		font-size: 14px;
+		width: 100%;
+		text-align: center;
+		padding-right: 3px;
+		font-family: Passion One;
+	}
+
+	&.ranked .rank-text {
+		bottom: -2px;
+		left: 5%;
+	}
 }
 
 .icon {
@@ -23,14 +60,4 @@
 .frame {
 	height: 100%;
 	position: relative;
-}
-
-.rank-text {
-	position: absolute;
-	bottom: -9%;
-	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
-	color: white;
-	font-size: 12px;
-	width: 100%;
-	text-align: center;
 }

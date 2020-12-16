@@ -9,6 +9,13 @@
 	font-weight: normal;
 	color: var(--default-text-color);
 
+	&.lost {
+		background: linear-gradient(90deg, rgba(255, 71, 71, 0.2) 0%, rgba(255, 71, 71, 0) 100%);
+	}
+	&.won {
+		background: linear-gradient(90deg, rgba(77, 255, 61, 0.2) 0%, rgba(77, 255, 61, 0) 100%);
+	}
+
 	&.ranked {
 		// Probably temporary, but in the meantime we need to make the ranked icons bigger
 		.player-rank {
@@ -20,13 +27,13 @@
 		}
 	}
 
-	&.battlegrounds,
-	&.arena {
-		::ng-deep .rank-text {
-			bottom: -18%;
-			// padding-right: 13px;
-		}
-	}
+	// &.battlegrounds,
+	// &.arena {
+	// 	::ng-deep .rank-text {
+	// 		bottom: -18%;
+	// 		// padding-right: 13px;
+	// 	}
+	// }
 }
 
 .result-color-code {
@@ -130,16 +137,17 @@
 		margin-right: 5px;
 	}
 
-	.rank-text {
-		position: absolute;
-		bottom: -57%;
-		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
-		color: white;
-		font-size: 12px;
-		width: 100%;
-		text-align: center;
-		padding-right: 3px;
-	}
+	// .rank-text {
+	// 	position: absolute;
+	// 	bottom: 3px;
+	// 	text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+	// 	color: white;
+	// 	font-size: 14px;
+	// 	width: 100%;
+	// 	text-align: center;
+	// 	padding-right: 3px;
+	// 	font-family: Passion One;
+	// }
 }
 
 .player-name {
@@ -234,11 +242,11 @@
 }
 
 .replay-info.battlegrounds {
-	::ng-deep rank-image .frame {
-		height: 95%;
-		top: -4px;
-		left: -2px;
-	}
+	// ::ng-deep rank-image .frame {
+	// 	height: 95%;
+	// 	top: -4px;
+	// 	left: -2px;
+	// }
 	.group.result {
 		width: 40px;
 		display: flex;
