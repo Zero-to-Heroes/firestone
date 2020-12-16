@@ -35,6 +35,18 @@ export class ReplaysState {
 						label: 'Ranked',
 					} as IOption,
 					{
+						value: 'duels',
+						label: 'Casual Duels',
+					} as IOption,
+					{
+						value: 'paid-duels',
+						label: 'Heroic Duels',
+					} as IOption,
+					{
+						value: 'both-duels',
+						label: 'Duels (both)',
+					} as IOption,
+					{
 						value: 'arena',
 						label: 'Arena',
 					} as IOption,

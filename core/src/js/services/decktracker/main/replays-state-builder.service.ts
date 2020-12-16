@@ -25,8 +25,8 @@ export class ReplaysStateBuilderService {
 		} as ReplaysState);
 	}
 
+	// Update the filters
 	public filterReplays(replayState: ReplaysState, stats: StatsState, type: ReplaysFilterCategoryType, value: string) {
-		// Update the filters
 		// console.log('filtering replays', replayState, stats, type, value);
 		const updatedFilters = this.updateFilters(replayState.filters, type, value);
 		// console.log('updated filters', updatedFilters);

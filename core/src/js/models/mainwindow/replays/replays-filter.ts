@@ -27,11 +27,20 @@ export class ReplaysFilter {
 
 		switch (this.type) {
 			case 'gameMode':
-				return stat.gameMode === this.selectedOption;
+				return this.allowsGameMode(stat.gameMode, this.selectedOption);
 			case 'deckstring':
 				return stat.playerDecklist === this.selectedOption;
 			default:
 				return true;
+		}
+	}
+
+	allowsGameMode(gameMode: string, selectedOption: string): boolean {
+		switch (selectedOption) {
+			case 'both-duels':
+				return gameMode === 'duels' || gameMode === 'paid-duels';
+			default:
+				return gameMode === selectedOption;
 		}
 	}
 }
