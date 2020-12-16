@@ -89,7 +89,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DuelsRunComponent implements AfterViewInit {
 	@Input() set run(value: DuelsRun) {
-		console.log('showing run', value);
 		this.deckstring = value.initialDeckList;
 		this.gameModeImage = 'assets/images/deck/ranks/duels.png';
 		this.gameModeTooltip = value.type === 'duels' ? 'Duels' : 'Heroic Duels';
