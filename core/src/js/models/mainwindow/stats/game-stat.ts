@@ -92,10 +92,10 @@ export class GameStat {
 			rankIcon = 'friendly';
 			rankIconTooltip = 'Friendly';
 		} else if (this.gameMode === 'duels') {
-			rankIcon = `duels`;
+			rankIcon = `casual_duels`;
 			rankIconTooltip = 'Duels';
 		} else if (this.gameMode === 'paid-duels') {
-			rankIcon = `duels`;
+			rankIcon = `heroic_duels`;
 			rankIconTooltip = 'Heroic Duels';
 		} else if (this.gameMode === 'arena') {
 			// TODO: no-rank image
