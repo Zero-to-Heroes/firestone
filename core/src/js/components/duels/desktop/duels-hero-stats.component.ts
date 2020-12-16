@@ -11,9 +11,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/duels/desktop/duels-hero-stats.component.scss`,
 	],
 	template: `
-		<div class="duels-hero-stats" scrollable>
+		<div *ngIf="stats?.length" class="duels-hero-stats" scrollable>
 			<duels-hero-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-hero-stat-vignette>
 		</div>
+		<duels-empty-state *ngIf="!stats?.length"></duels-empty-state>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

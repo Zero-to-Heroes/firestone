@@ -11,13 +11,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/duels/desktop/duels-personal-decks.component.scss`,
 	],
 	template: `
-		<div class="duels-decks">
+		<div *ngIf="_decks?.length" class="duels-decks">
 			<ul class="deck-list">
 				<li *ngFor="let deck of _decks">
 					<duels-personal-deck-vignette [deck]="deck"></duels-personal-deck-vignette>
 				</li>
 			</ul>
 		</div>
+		<duels-empty-state *ngIf="!_decks?.length"></duels-empty-state>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

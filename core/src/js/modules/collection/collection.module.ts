@@ -80,6 +80,7 @@ import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/
 import { DuelsDeckDetailsComponent } from '../../components/duels/desktop/duels-deck-details.component';
 import { DuelsDeckStatVignetteComponent } from '../../components/duels/desktop/duels-deck-stat-vignette.component';
 import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
+import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-empty-state.component';
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
@@ -243,6 +244,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsGlobalValueComponent,
 
 		DuelsDesktopComponent,
+		DuelsEmptyStateComponent,
 		DuelsRunsListComponent,
 		DuelsRunComponent,
 		LootInfoComponent,

@@ -17,12 +17,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	styleUrls: [`../../../../css/component/duels/desktop/duels-runs-list.component.scss`],
 	template: `
 		<div class="duels-runs-container">
-			<infinite-scroll class="runs-list" (scrolled)="onScroll()" scrollable>
+			<infinite-scroll *ngIf="allRuns" class="runs-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let run of displayedRuns">
 					<duels-run [run]="run"></duels-run>
 				</li>
 				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
 			</infinite-scroll>
+			<duels-empty-state *ngIf="!allRuns?.length"></duels-empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

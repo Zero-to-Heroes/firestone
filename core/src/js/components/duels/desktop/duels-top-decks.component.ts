@@ -12,9 +12,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/duels/desktop/duels-top-decks.component.scss`,
 	],
 	template: `
-		<div class="duels-top-decks" scrollable>
+		<div *ngIf="groupedDecks?.length" class="duels-top-decks" scrollable>
 			<duels-grouped-top-decks *ngFor="let stat of groupedDecks" [groupedDecks]="stat"></duels-grouped-top-decks>
 		</div>
+		<duels-empty-state *ngIf="!groupedDecks?.length"></duels-empty-state>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
