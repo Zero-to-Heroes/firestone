@@ -11,7 +11,8 @@
 		"dev": "npm run postinstall && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
 		"dev:clean": "rimraf dist && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
 		"local-test": "rimraf dist  && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.localTest --progress --profile --bail --colors",
-		"build": "rimraf dist && npm audit fix && npm run lint && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
+		"zipdist": "node ./node_modules/zip-build/index.js dist .",
+		"build": "rimraf dist && npm audit fix && npm run lint && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors && zipdist",
 		"justbuild": "node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
 		"postinstall": "npm run remove_evil:sentry-types && npm run remove_evil:node_modules",
 		"dev-twitch": "npm run postinstall && rimraf dist-twitch && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
@@ -96,7 +97,6 @@
 		"eslint-loader": "^3.0.3",
 		"eslint-plugin-prettier": "^3.1.2",
 		"file-loader": "4.2.0",
-		"filemanager-webpack-plugin": "^3.0.0-beta.0",
 		"html-loader": "0.5.5",
 		"html-webpack-plugin": "4.0.0-beta.8",
 		"jest": "^25.1.0",
@@ -118,6 +118,7 @@
 		"webpack": "4.41.1",
 		"webpack-bundle-analyzer": "3.4.1",
 		"webpack-cli": "^3.3.11",
-		"worker-loader": "^2.0.0"
+		"worker-loader": "^2.0.0",
+		"zip-build": "^1.1.0"
 	}
 }

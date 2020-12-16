@@ -12,7 +12,6 @@ const BannerPlugin = require('webpack').BannerPlugin;
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 var path = require('path');
 
@@ -157,26 +156,6 @@ module.exports = function(env, argv) {
 		buildHtmlWebpackPluginConf('bgs_counter_player_pogo.html', 'gamecounters'),
 		// new BundleAnalyzerPlugin(),
 	];
-
-	if (env.production) {
-		plugins.push(
-			new FileManagerPlugin({
-				events: {
-					onEnd: {
-						archive: [
-							{
-								source: './dist',
-								destination: `./dist/Firestone ${env.appversion}.opk`,
-								format: 'zip',
-								options: {},
-							},
-						],
-					},
-				},
-				runTasksInSeries: true,
-			}),
-		);
-	}
 
 	return {
 		mode: env.production ? 'production' : 'development',
