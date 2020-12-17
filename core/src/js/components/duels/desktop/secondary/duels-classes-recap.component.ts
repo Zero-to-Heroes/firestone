@@ -10,7 +10,7 @@ import { groupByFunction } from '../../../../services/utils';
 	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-classes-recap.component.scss`],
 	template: `
 		<div class="duels-classes-recap">
-			<div class="header">Aggregated stats</div>
+			<div class="header">Stats overview</div>
 			<div class="stats">
 				<duels-stat-cell class="stat-cell" label="Total runs" [value]="totalRuns"> </duels-stat-cell>
 				<duels-stat-cell class="stat-cell" label="Avg. wins per run" [value]="averageWinsPerRun" [decimals]="1">
