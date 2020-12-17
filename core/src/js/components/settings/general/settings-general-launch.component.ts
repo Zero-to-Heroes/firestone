@@ -18,6 +18,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					field="launchAppOnGameStart"
 					label="Launch Firestone when game starts"
 					tooltip="When turned off, you need to manually launch Firestone every time"
+					advancedSetting
 				></preference-toggle>
 				<preference-toggle
 					field="showSessionRecapOnExit"
