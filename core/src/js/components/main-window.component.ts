@@ -192,7 +192,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					newState.isVisible &&
 					(!this.navigationState || !this.navigationState.isVisible || !currentlyVisible)
 				) {
-					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
+					// amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 					console.log('restoring window', this.isMaximized);
 					await this.ow.restoreWindow(this.windowId);
 					this.ow.bringToFront(this.windowId);
@@ -204,7 +204,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					await this.ow.hideWindow(this.windowId);
 				}
 				if (this.navigationState && newState.currentApp !== this.navigationState.currentApp) {
-					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
+					// amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 				}
 			});
 		});
