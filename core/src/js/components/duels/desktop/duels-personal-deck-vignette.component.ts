@@ -7,9 +7,10 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
+import { DuelsHidePersonalDeckSummaryEvent } from '../../../services/mainwindow/store/events/duels/duels-hide-personal-deck-summary-event';
 import { DuelsPersonalDeckRenameEvent } from '../../../services/mainwindow/store/events/duels/duels-personal-deck-rename-event';
+import { DuelsRestorePersonalDeckSummaryEvent } from '../../../services/mainwindow/store/events/duels/duels-restore-personal-deck-summary-event';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -18,47 +19,64 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	selector: 'duels-personal-deck-vignette',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		// `../../../../css/component/controls/controls.scss`,
-		// `../../../../css/component/controls/control-close.component.scss`,
+		`../../../../css/component/controls/controls.scss`,
+		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/global/menu.scss`,
 		`../../../../css/component/duels/desktop/duels-personal-deck-vignette.component.scss`,
 	],
 	template: `
-		<div class="duels-personal-deck-vignette">
-			<div class="deck-name-container" *ngIf="!renaming">
-				<div class="deck-name" [helpTooltip]="deckName + ' - Click to rename'" (mousedown)="startDeckRename()">
-					{{ deckName }}
+		<div class="duels-personal-deck-vignette" [ngClass]="{ 'hidden': hidden, 'has-details': deckstring != null }">
+			<div class="container" (click)="viewDetails($event)">
+				<div class="deck-name-container" *ngIf="!renaming">
+					<div class="deck-name" [helpTooltip]="deckName">
+						{{ deckName }}
+					</div>
+				</div>
+				<div class="deck-rename-container" *ngIf="renaming">
+					<input
+						class="name-input"
+						[(ngModel)]="deckName"
+						(mousedown)="preventDrag($event)"
+						(keydown.enter)="doRename()"
+					/>
+					<button class="validate-rename-button" (click)="doRename()">Ok</button>
+				</div>
+				<div class="deck-image">
+					<img class="skin" [src]="skin" />
+					<img class="frame" src="assets/images/deck/hero_frame.png" />
+				</div>
+				<div class="stats">
+					<div class="item total-runs">
+						<span class="text">Number of runs</span>
+						<span class="value">{{ totalRuns }}</span>
+					</div>
+					<div class="item avg-wins">
+						<span class="text">Avg. wins per run</span>
+						<span class="value">{{ avgWins.toFixed(1) }}</span>
+					</div>
 				</div>
 			</div>
-			<div class="deck-rename-container" *ngIf="renaming">
-				<input
-					class="name-input"
-					[(ngModel)]="deckName"
-					(mousedown)="preventDrag($event)"
-					(keydown.enter)="doRename()"
-				/>
-				<button class="rename-button" (click)="doRename()">
-					<span>Ok</span>
-				</button>
-			</div>
-			<div class="deck-image">
-				<img class="skin" [src]="skin" />
-				<img class="frame" src="assets/images/deck/hero_frame.png" />
-			</div>
-			<div class="stats">
-				<div class="item total-runs">
-					<span class="value">{{ totalRuns }}</span> runs
-				</div>
-				<div class="item avg-wins">
-					<span class="value">{{ avgWins.toFixed(1) }}</span> wins / run
-				</div>
-			</div>
-			<!-- <button class="copy-deck-code" (click)="copyDeckcode()">
-				<span>{{ copyText }}</span>
-			</button> -->
-			<button class="view-details" (click)="viewDetails()" *ngIf="deckstring">
-				<span>View Details</span>
-			</button>
+			<button
+				class="close-button"
+				helpTooltip="Archive deck (you can restore it later)"
+				(mousedown)="hideDeck($event)"
+				*ngIf="!renaming && !hidden"
+				inlineSVG="assets/svg/bin.svg"
+			></button>
+			<button
+				class="restore-button"
+				helpTooltip="Restore deck"
+				(mousedown)="restoreDeck($event)"
+				*ngIf="!renaming && hidden"
+				inlineSVG="assets/svg/restore.svg"
+			></button>
+			<button
+				class="rename-button"
+				helpTooltip="Rename deck"
+				*ngIf="!renaming"
+				(mousedown)="startDeckRename($event)"
+				inlineSVG="assets/svg/rename.svg"
+			></button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,6 +91,7 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		this.totalRuns = value.global.totalRunsPlayed;
 		this.avgWins = value.global.averageWinsPerRun;
 		this.deckstring = value.initialDeckList;
+		this.hidden = value.hidden;
 	}
 
 	_deck: DuelsDeckSummary;
@@ -81,42 +100,41 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	totalRuns: number;
 	avgWins: number;
 	deckstring: string;
-
-	copyText = 'Copy deck code';
+	hidden: boolean;
 
 	renaming: boolean;
 
-	private inputCopy: string;
-
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	async copyDeckcode() {
-		this.ow.placeOnClipboard(this.deckstring);
-		this.inputCopy = this.copyText;
-		this.copyText = 'Copied!';
-		console.log('copied deckstring to clipboard', this.deckstring);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		setTimeout(() => {
-			this.copyText = this.inputCopy;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}, 2000);
+	hideDeck(event: MouseEvent) {
+		event.stopPropagation();
+		event.preventDefault();
+		this.stateUpdater.next(new DuelsHidePersonalDeckSummaryEvent(this.deckstring));
 	}
 
-	viewDetails() {
+	restoreDeck(event: MouseEvent) {
+		event.stopPropagation();
+		event.preventDefault();
+		this.stateUpdater.next(new DuelsRestorePersonalDeckSummaryEvent(this.deckstring));
+	}
+
+	viewDetails(event: MouseEvent) {
+		event.stopPropagation();
+		event.preventDefault();
+		// console.debug('click', (event.target as any)?.tagName, event.target);
+		if (
+			(event.target as any)?.tagName?.toLowerCase() === 'button' ||
+			(event.target as any)?.tagName?.toLowerCase() === 'input' ||
+			(event.target as any)?.tagName?.toLowerCase() === 'svg'
+		) {
+			return;
+		}
 		this.stateUpdater.next(new DuelsViewPersonalDeckDetailsEvent(this.deckstring));
 	}
 
@@ -124,8 +142,9 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 		event.stopPropagation();
 	}
 
-	startDeckRename() {
-		console.log('start renaming deck');
+	startDeckRename(event: MouseEvent) {
+		event.stopPropagation();
+		event.preventDefault();
 		this.renaming = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -133,11 +152,6 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	}
 
 	doRename() {
-		console.log('done renaming deck');
 		this.stateUpdater.next(new DuelsPersonalDeckRenameEvent(this.deckstring, this.deckName));
-		// this.renaming = false;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
 	}
 }

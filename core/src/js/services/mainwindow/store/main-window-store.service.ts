@@ -73,10 +73,13 @@ import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-eve
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
 import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
+import { DuelsHidePersonalDeckSummaryEvent } from './events/duels/duels-hide-personal-deck-summary-event';
 import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
+import { DuelsRestorePersonalDeckSummaryEvent } from './events/duels/duels-restore-personal-deck-summary-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
 import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
 import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-selected-event';
+import { DuelsToggleShowHiddenPersonalDecksEvent } from './events/duels/duels-toggle-show-hidden-personal-decks-event';
 import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck-run-details-loaded-event';
 import { DuelsTopDecksClassFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
 import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-decks-dust-filter-selected-event';
@@ -152,10 +155,13 @@ import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-v
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
 import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
+import { DuelsHidePersonalDeckSummaryProcessor } from './processors/duels/duels-hide-personal-deck-summary-processor';
 import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
+import { DuelsRestorePersonalDeckSummaryProcessor } from './processors/duels/duels-restore-personal-deck-summary-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
 import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
 import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-filter-selected-processor';
+import { DuelsToggleShowHiddenPersonalDecksProcessor } from './processors/duels/duels-toggle-show-hidden-personal-decks-processor';
 import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-top-deck-run-details-loaded-processor';
 import { DuelsTopDecksClassFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
 import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/duels-top-decks-dust-filter-selected-processor';
@@ -633,6 +639,15 @@ export class MainWindowStoreService {
 
 			DuelsTopDeckRunDetailsLoadedEvent.eventName(),
 			new DuelsTopDeckRunDetailsLoadedProcessor(),
+
+			DuelsHidePersonalDeckSummaryEvent.eventName(),
+			new DuelsHidePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsRestorePersonalDeckSummaryEvent.eventName(),
+			new DuelsRestorePersonalDeckSummaryProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsToggleShowHiddenPersonalDecksEvent.eventName(),
+			new DuelsToggleShowHiddenPersonalDecksProcessor(this.duelsBuilder, this.prefs),
 		);
 	}
 

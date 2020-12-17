@@ -281,6 +281,13 @@ export class PreferencesService {
 		return newPrefs;
 	}
 
+	public async setDuelsPersonalDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsPersonalDeckHiddenDeckCodes: value };
+		this.savePreferences(newPrefs);
+		return newPrefs;
+	}
+
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		await this.indexedDb.saveUserPreferences(userPrefs);
 		// console.log('broadcasting new prefs', userPrefs);

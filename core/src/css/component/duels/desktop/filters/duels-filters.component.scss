@@ -8,112 +8,43 @@
 
 .duels-filters {
 	display: flex;
-	// height: 30px;
 	flex-wrap: wrap;
 	margin-bottom: 0;
+	width: 100%;
+	position: relative;
 
 	duels-filter-dropdown {
 		margin-bottom: 15px;
 	}
 }
 
-ng-select.disabled {
-	opacity: 0;
-	position: absolute;
-}
-
-::ng-deep ng-select {
-	@extend %search-active;
-	color: var(--color-1);
+.show-hidden-decks-link {
+	align-self: flex-end;
+	flex-grow: 1;
+	opacity: 0.5;
 	height: 30px;
-	background: rgba(255, 255, 255, 0.08);
-	margin-right: 15px;
-	width: 155px;
-	transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-end;
+	position: absolute;
+	top: 0;
+	right: 45px;
 
-	&:focus,
-	&:active {
-		outline: none;
-	}
-
-	& > div {
-		border: 1px solid var(--color-3) !important;
-		outline: none;
-
-		div.single > div.toggle:hover {
-			background: transparent;
+	::ng-deep .preference-toggle.preference-toggle.preference-toggle {
+		.toggle b {
+			border-color: var(--color-1);
+			&::before {
+				background: var(--color-1);
+			}
 		}
-	}
-
-	.placeholder {
-		position: relative;
-		color: var(--color-1) !important;
-	}
-
-	.toggle {
-		display: none;
-	}
-
-	.caret {
-		color: var(--color-1);
-	}
-	.selected-icon {
-		color: var(--color-1);
-		position: relative;
-		left: 8px;
-	}
-
-	.open .caret {
-		transform: scale(1, -1);
-	}
-
-	select-dropdown {
-		& > div {
-			background: $black;
-			border: 1px solid var(--secondary-text-color);
-			border-top: none;
-			outline: none;
-		}
-
-		.filter {
-			display: none;
-		}
-
-		& > div .options ul li {
+		.settings-p {
 			color: var(--color-1);
-			border-bottom: 1px solid var(--color-3);
-			padding: 0;
-			padding-left: 9px;
-			padding-right: 10px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			height: 30px;
-
-			&.selected {
-				background-color: inherit;
-				color: inherit;
-
-				&:hover {
-					color: inherit;
-				}
-			}
-
-			&.highlighted,
-			&:hover {
-				background-color: var(--color-4);
-			}
-
-			span {
-				max-width: 100%;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
+			width: auto;
+			margin-right: 10px;
 		}
 	}
-}
 
-.stat-type-filter ::ng-deep ng-select {
-	width: 170px;
+	&:hover {
+		opacity: 0.8;
+	}
 }

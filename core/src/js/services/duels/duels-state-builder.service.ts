@@ -367,8 +367,14 @@ export class DuelsStateBuilderService {
 					deckStatsForTypes: decksForTypes,
 					deckName: deckName,
 					runs: groupedByDecklist[deckstring],
+					hidden: prefs.duelsPersonalDeckHiddenDeckCodes.includes(deckstring),
 				} as DuelsDeckSummary;
-			});
+			})
+			.filter(
+				stat =>
+					prefs.duelsPersonalDeckShowHiddenDecks ||
+					!prefs.duelsPersonalDeckHiddenDeckCodes.includes(stat.initialDeckList),
+			);
 		console.log('[duels-state-builder] decks', decks?.length);
 		return decks;
 	}

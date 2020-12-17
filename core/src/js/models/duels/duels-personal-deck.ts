@@ -12,6 +12,7 @@ export interface DuelsDeckSummary {
 	readonly lootStats: readonly LootDuelsDeckStatInfo[];
 	readonly deckStatsForTypes: readonly DuelsDeckSummaryForType[];
 	readonly runs: readonly DuelsRun[];
+	readonly hidden: boolean;
 }
 
 export interface DuelsDeckSummaryForType {

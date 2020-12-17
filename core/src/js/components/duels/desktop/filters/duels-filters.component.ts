@@ -1,6 +1,18 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
+import { DuelsToggleShowHiddenPersonalDecksEvent } from '../../../../services/mainwindow/store/events/duels/duels-toggle-show-hidden-personal-decks-event';
+import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../../../../services/overwolf.service';
+import { PreferencesService } from '../../../../services/preferences.service';
 import { DuelsDropdownOption } from './duels-dropdown-option';
 import { DuelsGameModeSortFilterOption } from './duels-game-mode-sort-filter-option';
 import { DuelsHeroFilterOption } from './duels-hero-filter-option';
@@ -27,11 +39,18 @@ import { DuelsTreasureSortOption } from './duels-treasure-sort-option';
 				[state]="_state"
 				[navigation]="_navigation"
 			></duels-filter-dropdown>
+			<preference-toggle
+				class="show-hidden-decks-link"
+				*ngIf="showHiddenDecksLink"
+				field="duelsPersonalDeckShowHiddenDecks"
+				label="Show archived"
+				[toggleFunction]="toggleShowHiddenDecks"
+			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsFiltersComponent {
+export class DuelsFiltersComponent implements AfterViewInit {
 	@Input() set state(value: MainWindowState) {
 		this._state = value;
 		this.doSetValues();
@@ -45,13 +64,33 @@ export class DuelsFiltersComponent {
 	_state: MainWindowState;
 	_navigation: NavigationState;
 
+	showHiddenDecksLink: boolean;
 	options: readonly InternalOption[];
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(
+		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	ngAfterViewInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	anyVisible() {
 		return this.options.some(option => option.option.visibleHandler(this._navigation, this._state));
 	}
 
-	private doSetValues() {
+	toggleShowHiddenDecks = (newValue: boolean) => {
+		this.stateUpdater.next(new DuelsToggleShowHiddenPersonalDecksEvent(newValue));
+	};
+
+	private async doSetValues() {
 		if (!this._state || !this._navigation) {
 			return;
 		}
@@ -65,6 +104,17 @@ export class DuelsFiltersComponent {
 			{ class: 'class-filter', option: new DuelsClassFilterOption() } as InternalOption,
 			{ class: 'top-decks-dust-filter', option: new DuelsTopDecksDustFilterOption() } as InternalOption,
 		];
+		const prefs = await this.prefs.getPreferences();
+		this.showHiddenDecksLink =
+			this._state &&
+			prefs.duelsPersonalDeckHiddenDeckCodes &&
+			prefs.duelsPersonalDeckHiddenDeckCodes.length > 0 &&
+			this._navigation &&
+			this._navigation.currentApp == 'duels' &&
+			this._navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks';
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 

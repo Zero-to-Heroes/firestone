@@ -164,6 +164,8 @@ export class Preferences {
 	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsPersonalDeckNames: { [deckstring: string]: string } = {};
+	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];
+	readonly duelsPersonalDeckShowHiddenDecks: boolean;
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
