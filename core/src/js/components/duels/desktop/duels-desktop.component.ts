@@ -82,6 +82,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-runs'"
 					[state]="state.duels"
 				></duels-classes-recap>
+				<duels-replays-recap
+					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks'"
+					[state]="state"
+				></duels-replays-recap>
 			</section>
 		</div>
 	`,

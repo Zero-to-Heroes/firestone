@@ -104,6 +104,7 @@ import {
 	DuelsClassesRecapComponent,
 	DuelsStatCellComponent,
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
+import { DuelsReplaysRecapComponent } from '../../components/duels/desktop/secondary/duels-replays-recap.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
@@ -266,6 +267,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsClassesRecapComponent,
 		DuelsStatCellComponent,
 		DuelsRewardComponent,
+		DuelsReplaysRecapComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,
