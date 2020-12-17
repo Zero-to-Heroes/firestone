@@ -165,13 +165,29 @@
 	}
 }
 
-.player-class {
+.player-class,
+.pick {
 	width: 30px;
 	height: 30px;
 	clip-path: circle(10px at 50% 50%);
 	transform: scale(1.5);
 
 	&.opponent {
+		margin-right: 5px;
+	}
+}
+
+.loot,
+.treasure {
+	margin-right: 20px;
+	border-right: none;
+
+	.icon {
+		width: 20px;
+		margin-right: 10px;
+	}
+
+	.pick {
 		margin-right: 5px;
 	}
 }

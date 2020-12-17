@@ -11,6 +11,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsRun } from '../../../models/duels/duels-run';
+import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -21,6 +22,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	styleUrls: [`../../../../css/global/menu.scss`, `../../../../css/component/duels/desktop/duels-run.component.scss`],
 	template: `
 		<div class="duels-run">
+			<div class="mode-color-code {{ gameMode }}"></div>
+
 			<div class="left-info">
 				<div class="group mode">
 					<img class="game-mode" [src]="gameModeImage" [helpTooltip]="gameModeTooltip" />
@@ -37,21 +40,21 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<img
 						class="player-class"
 						[src]="playerClassImage"
-						[helpTooltip]="playerClassTooltip"
+						[cardTooltip]="playerCardId"
 						*ngIf="playerClassImage"
 					/>
-					<div class="separator" *ngIf="heroPowerImage">-</div>
+					<!-- <div class="separator" *ngIf="heroPowerImage">-</div> -->
 					<img
 						class="hero-power"
 						[src]="heroPowerImage"
-						[helpTooltip]="heroPowerTooltip"
+						[cardTooltip]="heroPowerCardId"
 						*ngIf="heroPowerImage"
 					/>
-					<div class="separator" *ngIf="signatureTreasureImage">-</div>
+					<!-- <div class="separator" *ngIf="signatureTreasureImage">-</div> -->
 					<img
 						class="signature-treasure"
 						[src]="signatureTreasureImage"
-						[helpTooltip]="signatureTreasureTooltip"
+						[cardTooltip]="signatureTreasureCardId"
 						*ngIf="signatureTreasureImage"
 					/>
 				</div>
@@ -70,17 +73,20 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</div>
 			</div>
 			<div class="right-info">
-				<div class="group view-deck" (click)="showDeck()" *ngIf="deckstring">View deck</div>
-				<div class="group show-more" (click)="toggleShowMore()">
-					{{ isExpanded ? 'Hide details' : 'Show details' }}
+				<div class="group view-deck" (click)="showDeck()" *ngIf="deckstring">
+					<div class="text">View deck</div>
+					<div class="icon" inlineSVG="assets/svg/view_deck.svg"></div>
+				</div>
+				<div class="group show-more" [ngClass]="{ 'expanded': isExpanded }" (click)="toggleShowMore()">
+					<div class="text">{{ isExpanded ? 'Minimize View' : 'View Run' }}</div>
+					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
 				</div>
 			</div>
 		</div>
 		<div class="run-details" *ngIf="isExpanded">
 			<ul class="details">
 				<li *ngFor="let step of steps">
-					<loot-info [loot]="step" *ngIf="isLootInfo(step)"></loot-info>
-					<replay-info [replay]="step" *ngIf="isReplayInfo(step)"></replay-info>
+					<replay-info [replay]="step" [displayCoin]="false"></replay-info>
 				</li>
 			</ul>
 		</div>
@@ -90,28 +96,35 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DuelsRunComponent implements AfterViewInit {
 	@Input() set run(value: DuelsRun) {
 		this.deckstring = value.initialDeckList;
-		this.gameModeImage = 'assets/images/deck/ranks/duels.png';
+		this.gameMode = value.type;
+		this.gameModeImage =
+			value.type === 'duels'
+				? 'assets/images/deck/ranks/casual_duels.png'
+				: 'assets/images/deck/ranks/heroic_duels.png';
 		this.gameModeTooltip = value.type === 'duels' ? 'Duels' : 'Heroic Duels';
 		this.wins = value.wins;
 		this.losses = value.losses;
 		this.rating = value.ratingAtStart;
 		this.deltaRating =
 			value.ratingAtEnd && !isNaN(value.ratingAtEnd) ? value.ratingAtEnd - value.ratingAtStart : null;
-		this.steps = value.steps;
+		this.steps = this.buildSteps(value.steps);
 		this.rewards = value.rewards;
 
 		this.playerClassImage = value.heroCardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`
 			: null;
+		this.playerCardId = value.heroCardId;
 		const heroCard = value.heroCardId ? this.allCards.getCard(value.heroCardId) : null;
 		this.playerClassTooltip = heroCard ? `${heroCard.name} (${heroCard.playerClass})` : null;
 
+		this.heroPowerCardId = value.heroPowerCardId;
 		this.heroPowerImage = value.heroPowerCardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroPowerCardId}.jpg`
 			: null;
 		const heroPowerCard = value.heroPowerCardId ? this.allCards.getCard(value.heroPowerCardId) : null;
 		this.heroPowerTooltip = heroPowerCard ? heroPowerCard.name : null;
 
+		this.signatureTreasureCardId = value.signatureTreasureCardId;
 		this.signatureTreasureImage = value.signatureTreasureCardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.signatureTreasureCardId}.jpg`
 			: null;
@@ -122,20 +135,24 @@ export class DuelsRunComponent implements AfterViewInit {
 		// console.log('setting value', value);
 	}
 
+	gameMode: 'duels' | 'paid-duels';
 	deckstring: string;
 	gameModeImage: string;
 	gameModeTooltip: string;
 	rating: number;
+	playerCardId: string;
 	playerClassImage: string;
 	playerClassTooltip: string;
+	heroPowerCardId: string;
 	heroPowerImage: string;
 	heroPowerTooltip: string;
+	signatureTreasureCardId: string;
 	signatureTreasureImage: string;
 	signatureTreasureTooltip: string;
 	wins: number;
 	losses: number;
 	deltaRating: number;
-	steps: readonly (GameStat | DuelsRunInfo)[];
+	steps: readonly RunStep[];
 	rewards: readonly DuelsRewardsInfo[];
 
 	isExpanded: boolean;
@@ -169,5 +186,39 @@ export class DuelsRunComponent implements AfterViewInit {
 
 	isLootInfo(value: GameStat | DuelsRunInfo): boolean {
 		return (value as DuelsRunInfo).bundleType === 'treasure';
+	}
+
+	buildSteps(steps: readonly (GameStat | DuelsRunInfo)[]): readonly RunStep[] {
+		const result: RunStep[] = [];
+		for (let i = 0; i < steps.length; i++) {
+			if ((steps[i] as GameStat).opponentCardId) {
+				result.push(
+					GameStat.create({
+						...steps[i],
+					} as RunStep) as RunStep,
+				);
+			} else if ((steps[i] as DuelsRunInfo).chosenOptionIndex && result.length > 0) {
+				const lastGameIndex = result.length - 1;
+				const info: DuelsRunInfo = steps[i] as DuelsRunInfo;
+				result[lastGameIndex] = GameStat.create({
+					...result[lastGameIndex],
+					treasureCardId:
+						info.bundleType === 'treasure'
+							? info[`option${info.chosenOptionIndex}`]
+							: result[lastGameIndex].treasureCardId,
+					lootCardIds:
+						info.bundleType === 'loot' ? this.extractLoot(info) : result[lastGameIndex].lootCardIds,
+				} as RunStep) as RunStep;
+			}
+		}
+		// console.debug('built steps', result, steps);
+		return result;
+	}
+
+	private extractLoot(info: DuelsRunInfo): readonly string[] {
+		if (info.chosenOptionIndex <= 0) {
+			return null;
+		}
+		return info[`option${info.chosenOptionIndex}Contents`];
 	}
 }

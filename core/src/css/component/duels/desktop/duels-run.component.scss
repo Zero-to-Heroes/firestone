@@ -14,12 +14,27 @@
 	}
 }
 
+.mode-color-code {
+	height: 40px;
+	width: 3px;
+	position: relative;
+	left: -10px;
+	flex-shrink: 0;
+
+	&.duels {
+		background: #9fb6d7;
+	}
+	&.paid-duels {
+		background: #ffb948;
+	}
+}
+
 .group {
 	border-right: 1px solid var(--default-text-color);
 	display: flex;
 	height: 100%;
 	padding-right: 10px;
-	margin-right: 10px;
+	margin-right: 15px;
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
@@ -74,22 +89,23 @@
 	position: relative;
 
 	.game-mode {
-		width: 30px;
-		height: 30px;
+		width: 40px;
+		height: 40px;
 		margin-right: 5px;
 		position: relative;
-		top: -4px;
+		top: 0px;
 	}
 
 	.rating {
 		position: absolute;
-		bottom: -9px;
-		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+		bottom: 3px;
+		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
 		color: white;
-		font-size: 12px;
+		font-size: 14px;
 		width: 100%;
 		text-align: center;
 		padding-right: 3px;
+		font-family: Passion One;
 	}
 }
 
@@ -104,54 +120,60 @@
 		height: 30px;
 		clip-path: circle(10px at 50% 50%);
 		transform: scale(1.5);
+		margin-right: 5px;
 	}
 }
 
 .result {
 	font-size: 13px;
 	line-height: 18px;
-	width: 40px;
+	width: 50px;
+	justify-content: flex-start;
+
+	.wins {
+		color: #61ff47;
+	}
+
+	.losses {
+		color: #ff4747;
+	}
 }
 
 .view-deck,
 .show-more {
 	font-size: 14px;
 
+	.icon {
+		margin-left: 8px;
+		transition: transform 0.4s ease-in-out;
+	}
+
 	&:hover {
 		color: var(--default-title-color);
+		--icon-color: var(--default-title-color);
+	}
+}
+
+.show-more.expanded {
+	.icon {
+		transform: scaleY(-1);
 	}
 }
 
 .run-details {
-	margin-bottom: 15px;
+	margin-bottom: 5px;
 
 	.details {
 		padding-left: 20px;
 		list-style: none;
 
 		li {
-			margin-top: 5px;
+			// margin-top: 5px;
 		}
 
-		::ng-deep loot-info {
-			.loot-info {
-				height: 40px;
-
-				.treasure-loot {
-					.options {
-						justify-content: flex-start;
-
-						.option {
-							width: auto;
-						}
-
-						.option-image {
-							width: 45px;
-							height: 45px;
-							clip-path: circle(15px at 50% 50%);
-						}
-					}
-				}
+		::ng-deep replay-info {
+			.player-name.opponent {
+				display: none;
 			}
 		}
 	}

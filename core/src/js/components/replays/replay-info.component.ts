@@ -34,6 +34,24 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
+				<div class="group loot" *ngIf="loots?.length">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/loot.svg"
+						helpTooltip="Cads added to deck after this round "
+					></div>
+					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
+				</div>
+
+				<div class="group treasure" *ngIf="treasure">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/treasure.svg"
+						helpTooltip="Treasure added to deck after this round"
+					></div>
+					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
+				</div>
+
 				<!-- <div class="group result-text {{ visualResult }}" *ngIf="gameMode !== 'battlegrounds'">
 					{{ capitalize(visualResult) }}
 				</div> -->
@@ -52,7 +70,7 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div class="text">MMR</div>
 				</div>
 
-				<div class="group coin" *ngIf="playCoinIconSvg">
+				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg">
 					<div
 						class="play-coin-icon icon"
 						[innerHTML]="playCoinIconSvg"
@@ -87,6 +105,7 @@ import { capitalizeEachWord } from '../../services/utils';
 export class ReplayInfoComponent implements AfterViewInit {
 	@Input() showStatsLabel = 'Stats';
 	@Input() showReplayLabel = 'Watch';
+	@Input() displayCoin: boolean = true;
 
 	replayInfo: GameStat;
 	visualResult: string;
@@ -104,6 +123,9 @@ export class ReplayInfoComponent implements AfterViewInit {
 	reviewId: string;
 	hasMatchStats: boolean;
 	deltaMmr: number;
+
+	treasure: InternalLoot;
+	loots: InternalLoot[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -127,6 +149,24 @@ export class ReplayInfoComponent implements AfterViewInit {
 			const deltaMmr = parseInt(value.newPlayerRank) - parseInt(value.playerRank);
 			if (!isNaN(deltaMmr)) {
 				this.deltaMmr = deltaMmr;
+			}
+		}
+
+		const isDuelsInfo = (value: any): value is RunStep =>
+			(value as RunStep).treasureCardId !== undefined || (value as RunStep).lootCardIds !== undefined;
+		if (isDuelsInfo(value)) {
+			console.debug('setting duels info', value);
+			if (value.treasureCardId) {
+				this.treasure = {
+					cardId: value.treasureCardId,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.treasureCardId}.jpg`,
+				};
+			}
+			if (value.lootCardIds?.length) {
+				this.loots = value.lootCardIds.map(loot => ({
+					cardId: loot,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot}.jpg`,
+				}));
 			}
 		}
 	}
@@ -233,4 +273,9 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 		return name.split('#')[0];
 	}
+}
+
+interface InternalLoot {
+	icon: string;
+	cardId: string;
 }

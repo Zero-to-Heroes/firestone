@@ -6,7 +6,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/rank-image.component.scss`],
 	template: `
 		<div
-			class="rank-image"
+			class="rank-image {{ gameMode }}"
 			[helpTooltip]="playerRank ? playerRankImageTooltip : 'We had an issue while retrieving the player rank'"
 		>
 			<div class="icon {{ gameMode }}" [ngClass]="{ 'missing-rank': !rankText }">
