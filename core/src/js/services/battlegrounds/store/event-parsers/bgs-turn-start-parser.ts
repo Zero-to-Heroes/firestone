@@ -26,6 +26,9 @@ export class BgsTurnStartParser implements EventParser {
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				currentTurn: newCurrentTurn,
+				battleInfo: undefined,
+				battleResult: undefined,
+				battleInfoStatus: 'empty',
 			} as BgsGame),
 			stages: stages,
 			currentStageId: newStageId,

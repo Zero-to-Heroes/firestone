@@ -12,9 +12,10 @@ export class BgsBattleResultParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsBattleResultEvent): Promise<BattlegroundsState> {
+		console.debug('[bgs-simulation] received battle result', event);
 		if (!currentState.currentGame.getMainPlayer()) {
 			console.error(
-				'Could not find main player in battle result parser',
+				'[bgs-simulation] Could not find main player in battle result parser',
 				currentState.currentGame.players.map(player => player.cardId),
 			);
 			return currentState;
@@ -35,7 +36,7 @@ export class BgsBattleResultParser implements EventParser {
 		) {
 			console.warn(
 				'no-format',
-				'Impossible battle victory',
+				'[bgs-simulation] Impossible battle victory',
 				currentState.currentGame.battleInfo,
 				currentState.currentGame.battleResult,
 			);
@@ -55,7 +56,7 @@ export class BgsBattleResultParser implements EventParser {
 		) {
 			console.warn(
 				'no-format',
-				'Impossible battle loss',
+				'[bgs-simulation] Impossible battle loss',
 				currentState.currentGame.battleInfo,
 				currentState.currentGame.battleResult,
 			);
@@ -71,9 +72,10 @@ export class BgsBattleResultParser implements EventParser {
 		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
 		const newGame = gameWithActualBattleResult.update({
 			faceOffs: [...gameWithActualBattleResult.faceOffs, faceOff] as readonly BgsFaceOff[],
-			battleInfo: undefined,
+			// battleInfo: undefined,
 			// battleResult: undefined,
 		} as BgsGame);
+		console.log('[bgs-simulation] updating with result and resetting battle info', event, newGame.battleInfo);
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

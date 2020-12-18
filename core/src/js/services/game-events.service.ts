@@ -731,7 +731,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value);
+				console.log(gameEvent.Type + ' event', gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
@@ -791,7 +791,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_COMBAT_START':
-				// console.log(gameEvent.Type + ' event', gameEvent);
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_COMBAT_START,
@@ -799,7 +799,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_BATTLE_RESULT':
-				// console.log(gameEvent.Type + ' event', gameEvent);
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
