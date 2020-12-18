@@ -18,13 +18,12 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 		<div class="duels-deck-details" scrollable>
 			<div class="deck-lists">
 				<div class="deck-list-container starting">
-					<copy-deckstring
-						class="copy-deckcode"
-						[deckstring]="deck?.decklist"
-						[showTooltip]="true"
-						title="Starting deck"
-					>
-					</copy-deckstring>
+					<div class="deck-selection">
+						<input type="radio" name="deck" id="initial" value="initial" />
+						<label for="initial">Starter deck</label>
+						<input type="radio" name="deck" id="final" value="final" />
+						<label for="Final">End deck</label>
+					</div>
 					<deck-list class="deck-list" [deckstring]="deck?.decklist"></deck-list>
 				</div>
 				<div class="deck-list-container final">

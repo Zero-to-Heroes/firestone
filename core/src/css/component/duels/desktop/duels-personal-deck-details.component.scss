@@ -1,7 +1,11 @@
+:host() {
+	display: flex;
+	min-height: 0;
+}
+
 .duels-personal-deck-details {
 	display: flex;
 	flex-grow: 1;
-	padding-left: 10px;
 	margin-top: 10px;
 	max-width: 100%;
 
@@ -13,63 +17,77 @@
 		min-height: 1px;
 		flex-shrink: 0;
 
-		.copy-deckcode {
+		.deck-selection {
+			display: flex;
+			align-items: center;
+			width: calc(100% + 20px);
 			margin-bottom: 10px;
-			justify-content: flex-start;
-		}
 
-		&.final {
-			margin-right: 30px;
+			label {
+				color: var(--color-3);
+				font-family: Open Sans;
+				font-style: normal;
+				font-weight: normal;
+				font-size: 14px;
+				display: flex;
+				align-items: center;
+
+				&.final {
+					margin-left: auto;
+				}
+
+				.icon {
+					width: 14px;
+					height: 14px;
+					margin-right: 8px;
+
+					&.checked {
+						display: none;
+					}
+				}
+
+				&:hover {
+					color: var(--default-title-color);
+				}
+			}
+
+			input[type='radio'] {
+				display: none;
+
+				&:checked + label {
+					color: var(--default-title-color);
+
+					.icon.checked {
+						display: block;
+					}
+
+					.icon.unchecked {
+						display: none;
+					}
+				}
+			}
 		}
 	}
 
 	.stats {
-		margin-left: 40px;
+		margin-left: 15px;
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
 		min-height: 0;
 		overflow: auto;
 
-		.section {
-			display: flex;
-			flex-direction: column;
-			margin-bottom: 15px;
+		.header {
+			font-size: 14px;
+			margin-bottom: 10px;
+		}
 
-			.title {
-				text-align: center;
-				margin-bottom: 10px;
-			}
-
-			.list {
-				list-style: none;
-				display: flex;
-				flex-wrap: wrap;
-
-				.element {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					margin-right: 15px;
-					margin-bottom: 15px;
-
-					.icon {
-						width: 90px;
-						height: 90px;
-						clip-path: circle(33px at 50% 50%);
-					}
-
-					.stat {
-						display: flex;
-						font-size: 13px;
-
-						.value {
-							font-weight: bold;
-							color: #ce73b4;
-							margin-left: 5px;
-						}
-					}
-				}
+		::ng-deep duels-runs-list {
+			.rewards,
+			.view-deck,
+			.loot,
+			.treasure {
+				display: none;
 			}
 		}
 	}

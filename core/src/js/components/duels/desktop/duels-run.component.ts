@@ -5,6 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	Output,
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -86,7 +87,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		<div class="run-details" *ngIf="isExpanded">
 			<ul class="details">
 				<li *ngFor="let step of steps">
-					<replay-info [replay]="step" [displayCoin]="false"></replay-info>
+					<replay-info [replay]="step" [displayCoin]="false" [displayLoot]="displayLoot"></replay-info>
 				</li>
 			</ul>
 		</div>
@@ -94,7 +95,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsRunComponent implements AfterViewInit {
+	@Output() runExpanded: EventEmitter<DuelsRun> = new EventEmitter<DuelsRun>();
+	@Output() runCollapsed: EventEmitter<DuelsRun> = new EventEmitter<DuelsRun>();
+
 	@Input() set run(value: DuelsRun) {
+		this._run = value;
+
 		this.deckstring = value.initialDeckList;
 		this.gameMode = value.type;
 		this.gameModeImage =
@@ -135,6 +141,8 @@ export class DuelsRunComponent implements AfterViewInit {
 		// console.log('setting value', value);
 	}
 
+	@Input() displayLoot: boolean = true;
+
 	gameMode: 'duels' | 'paid-duels';
 	deckstring: string;
 	gameModeImage: string;
@@ -157,6 +165,7 @@ export class DuelsRunComponent implements AfterViewInit {
 
 	isExpanded: boolean;
 
+	private _run: DuelsRun;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -171,6 +180,11 @@ export class DuelsRunComponent implements AfterViewInit {
 
 	toggleShowMore() {
 		this.isExpanded = !this.isExpanded;
+		if (this.isExpanded) {
+			this.runExpanded.next(this._run);
+		} else {
+			this.runCollapsed.next(this._run);
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

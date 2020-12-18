@@ -34,7 +34,7 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
-				<div class="group loot" *ngIf="loots?.length">
+				<div class="group loot" *ngIf="displayLoot && loots?.length">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
@@ -43,7 +43,7 @@ import { capitalizeEachWord } from '../../services/utils';
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
 
-				<div class="group treasure" *ngIf="treasure">
+				<div class="group treasure" *ngIf="displayLoot && treasure">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
@@ -170,6 +170,8 @@ export class ReplayInfoComponent implements AfterViewInit {
 			}
 		}
 	}
+
+	@Input() displayLoot: boolean = true;
 
 	constructor(
 		private readonly ow: OverwolfService,
