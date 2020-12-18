@@ -418,6 +418,7 @@
 				"default": "Alt+B"
 			}
 		},
-		"process_name": "Firestone"
+		"process_name": "Firestone",
+		"disable_cleanup": true
 	}
 }
