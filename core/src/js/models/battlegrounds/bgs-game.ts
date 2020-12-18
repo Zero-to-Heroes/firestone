@@ -84,7 +84,7 @@ export class BgsGame {
 		} else if (!battleInfo.opponentBoard) {
 			battleInfo.opponentBoard = bgsInfo;
 		} else {
-			console.warn('trying to set bgsinfo in full data', this, bgsInfo);
+			console.warn('trying to set bgsinfo in full data', bgsInfo);
 			return this;
 		}
 		console.log('[bgs-game] setting battle info', battleInfo.opponentBoard?.player?.cardId);

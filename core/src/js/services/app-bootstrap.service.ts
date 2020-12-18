@@ -144,7 +144,7 @@ export class AppBootstrapService {
 					this.handleExitGame();
 				}
 			} else if (await this.ow.inGame()) {
-				console.log('[bootstrap] game is running, showing loading screen');
+				// console.log('[bootstrap] game is running, showing loading screen');
 				this.showLoadingScreen();
 			}
 		});
@@ -188,7 +188,7 @@ export class AppBootstrapService {
 		const window = await this.ow.getCollectionWindow(prefs);
 		// console.log('retrieved', prefs, window);
 		if (window.isVisible) {
-			// console.log('closing main window', this.store, this);
+			console.log('[bootstrap] closing main window');
 			this.store.stateUpdater.next(new CloseMainWindowEvent());
 			await this.ow.hideCollectionWindow(prefs);
 			// await this.ow.closeWindow(window.id);
