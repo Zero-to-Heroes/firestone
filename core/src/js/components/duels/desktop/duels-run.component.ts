@@ -141,7 +141,7 @@ export class DuelsRunComponent implements AfterViewInit {
 		// console.log('setting value', value);
 	}
 
-	@Input() displayLoot: boolean = true;
+	@Input() displayLoot = true;
 
 	gameMode: 'duels' | 'paid-duels';
 	deckstring: string;

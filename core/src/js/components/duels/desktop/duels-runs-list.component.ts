@@ -53,7 +53,7 @@ export class DuelsRunsListComponent {
 		this.handleProgressiveDisplay();
 	}
 
-	@Input() displayLoot: boolean = true;
+	@Input() displayLoot = true;
 
 	displayedRuns: readonly DuelsRun[] = [];
 	allRuns: readonly DuelsRun[] = [];

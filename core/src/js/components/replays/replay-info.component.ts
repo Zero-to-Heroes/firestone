@@ -105,7 +105,7 @@ import { capitalizeEachWord } from '../../services/utils';
 export class ReplayInfoComponent implements AfterViewInit {
 	@Input() showStatsLabel = 'Stats';
 	@Input() showReplayLabel = 'Watch';
-	@Input() displayCoin: boolean = true;
+	@Input() displayCoin = true;
 
 	replayInfo: GameStat;
 	visualResult: string;
@@ -171,7 +171,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 	}
 
-	@Input() displayLoot: boolean = true;
+	@Input() displayLoot = true;
 
 	constructor(
 		private readonly ow: OverwolfService,
