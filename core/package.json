@@ -11,7 +11,7 @@
 		"dev": "npm run postinstall && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
 		"dev:clean": "rimraf dist && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
 		"local-test": "rimraf dist  && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.localTest --progress --profile --bail --colors",
-		"zipdist": "node ./node_modules/zip-build/index.js dist .",
+		"zipdist": "node ./node_modules/zip-build/src/index.js dist . -t %NAME%_%VERSION%.opk",
 		"build": "rimraf dist && npm audit fix && npm run lint && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors && npm run zipdist",
 		"justbuild": "node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
 		"postinstall": "npm run remove_evil:sentry-types && npm run remove_evil:node_modules",
@@ -119,6 +119,6 @@
 		"webpack-bundle-analyzer": "3.4.1",
 		"webpack-cli": "^3.3.11",
 		"worker-loader": "^2.0.0",
-		"zip-build": "^1.1.0"
+		"zip-build": "^1.3.0"
 	}
 }
