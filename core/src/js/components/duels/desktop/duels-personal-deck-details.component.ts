@@ -40,6 +40,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					</label>
 
 					<input
+						*ngIf="expandedRunIds?.length === 1"
 						type="radio"
 						name="deck"
 						id="final"
@@ -59,10 +60,9 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<div class="header">All runs with "{{ deckName }}"</div>
 				<duels-runs-list
 					[state]="_state"
+					[navigation]="_navigation"
 					[deckstring]="deckDecklist"
 					[displayLoot]="false"
-					(runExpanded)="onRunExpanded($event)"
-					(runCollapsed)="onRunCollapsed($event)"
 				></duels-runs-list>
 			</div>
 		</div>
@@ -86,9 +86,9 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	deckName: string;
 	currentRun: DuelsRun;
 	currentDeck: 'initial' | 'final';
+	expandedRunIds: readonly string[];
 	_state: DuelsState;
-
-	private _navigation: NavigationDuels;
+	_navigation: NavigationDuels;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -110,14 +110,6 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		}
 	}
 
-	onRunExpanded(run: DuelsRun) {
-		console.debug('run expanded', run);
-	}
-
-	onRunCollapsed(run: DuelsRun) {
-		console.debug('run collapsed', run);
-	}
-
 	private updateDecklist() {
 		switch (this.currentDeck) {
 			case 'initial':
@@ -125,6 +117,10 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 				console.debug('set decklist', this.decklist);
 				return;
 			case 'final':
+				if (!this.currentRun) {
+					this.decklist = null;
+					return;
+				}
 				const runMatches: readonly GameStat[] = this.currentRun.steps
 					.filter(step => (step as GameStat).playerDecklist)
 					.map(step => step as GameStat);
@@ -145,8 +141,9 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		if (!this.deck) {
 			return;
 		}
-		this.currentRun = this.deck.runs[0];
-		this.deckDecklist = this.currentRun.initialDeckList;
+		this.expandedRunIds = this._navigation.expandedRunIds;
+		this.currentRun = this.expandedRunIds?.length === 1 ? this.deck.runs[0] : null;
+		this.deckDecklist = this.deck.runs[0].initialDeckList;
 		this.currentDeck = 'initial';
 		this.updateDecklist();
 		this.deckName = this.deck.deckName;

@@ -38,6 +38,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						<duels-runs-list
 							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-runs'"
 							[state]="state.duels"
+							[navigation]="navigation.navigationDuels"
 						>
 						</duels-runs-list>
 						<duels-hero-stats

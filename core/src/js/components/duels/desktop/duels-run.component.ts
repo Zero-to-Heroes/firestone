@@ -5,7 +5,6 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	Output,
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -14,6 +13,7 @@ import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { DuelsToggleExpandedRunEvent } from '../../../services/mainwindow/store/events/duels/duels-toggle-expanded-run-event';
 import { DuelsViewPersonalDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-personal-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -78,13 +78,13 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<div class="text">View deck</div>
 					<div class="icon" inlineSVG="assets/svg/view_deck.svg"></div>
 				</div>
-				<div class="group show-more" [ngClass]="{ 'expanded': isExpanded }" (click)="toggleShowMore()">
-					<div class="text">{{ isExpanded ? 'Minimize View' : 'View Run' }}</div>
+				<div class="group show-more" [ngClass]="{ 'expanded': _isExpanded }" (click)="toggleShowMore()">
+					<div class="text">{{ _isExpanded ? 'Minimize View' : 'View Run' }}</div>
 					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
 				</div>
 			</div>
 		</div>
-		<div class="run-details" *ngIf="isExpanded">
+		<div class="run-details" *ngIf="_isExpanded">
 			<ul class="details">
 				<li *ngFor="let step of steps">
 					<replay-info [replay]="step" [displayCoin]="false" [displayLoot]="displayLoot"></replay-info>
@@ -95,50 +95,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsRunComponent implements AfterViewInit {
-	@Output() runExpanded: EventEmitter<DuelsRun> = new EventEmitter<DuelsRun>();
-	@Output() runCollapsed: EventEmitter<DuelsRun> = new EventEmitter<DuelsRun>();
+	@Input() set isExpanded(value: boolean) {
+		this._isExpanded = value;
+		this.updateValues();
+	}
 
 	@Input() set run(value: DuelsRun) {
 		this._run = value;
-
-		this.deckstring = value.initialDeckList;
-		this.gameMode = value.type;
-		this.gameModeImage =
-			value.type === 'duels'
-				? 'assets/images/deck/ranks/casual_duels.png'
-				: 'assets/images/deck/ranks/heroic_duels.png';
-		this.gameModeTooltip = value.type === 'duels' ? 'Duels' : 'Heroic Duels';
-		this.wins = value.wins;
-		this.losses = value.losses;
-		this.rating = value.ratingAtStart;
-		this.deltaRating =
-			value.ratingAtEnd && !isNaN(value.ratingAtEnd) ? value.ratingAtEnd - value.ratingAtStart : null;
-		this.steps = this.buildSteps(value.steps);
-		this.rewards = value.rewards;
-
-		this.playerClassImage = value.heroCardId
-			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`
-			: null;
-		this.playerCardId = value.heroCardId;
-		const heroCard = value.heroCardId ? this.allCards.getCard(value.heroCardId) : null;
-		this.playerClassTooltip = heroCard ? `${heroCard.name} (${heroCard.playerClass})` : null;
-
-		this.heroPowerCardId = value.heroPowerCardId;
-		this.heroPowerImage = value.heroPowerCardId
-			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroPowerCardId}.jpg`
-			: null;
-		const heroPowerCard = value.heroPowerCardId ? this.allCards.getCard(value.heroPowerCardId) : null;
-		this.heroPowerTooltip = heroPowerCard ? heroPowerCard.name : null;
-
-		this.signatureTreasureCardId = value.signatureTreasureCardId;
-		this.signatureTreasureImage = value.signatureTreasureCardId
-			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.signatureTreasureCardId}.jpg`
-			: null;
-		const signatureTreasureCard = value.signatureTreasureCardId
-			? this.allCards.getCard(value.signatureTreasureCardId)
-			: null;
-		this.signatureTreasureTooltip = signatureTreasureCard ? signatureTreasureCard.name : null;
-		// console.log('setting value', value);
+		this.updateValues();
 	}
 
 	@Input() displayLoot = true;
@@ -162,8 +126,7 @@ export class DuelsRunComponent implements AfterViewInit {
 	deltaRating: number;
 	steps: readonly RunStep[];
 	rewards: readonly DuelsRewardsInfo[];
-
-	isExpanded: boolean;
+	_isExpanded: boolean;
 
 	private _run: DuelsRun;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -179,15 +142,7 @@ export class DuelsRunComponent implements AfterViewInit {
 	}
 
 	toggleShowMore() {
-		this.isExpanded = !this.isExpanded;
-		if (this.isExpanded) {
-			this.runExpanded.next(this._run);
-		} else {
-			this.runCollapsed.next(this._run);
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.stateUpdater.next(new DuelsToggleExpandedRunEvent(this._run?.id));
 	}
 
 	showDeck() {
@@ -227,6 +182,56 @@ export class DuelsRunComponent implements AfterViewInit {
 		}
 		// console.debug('built steps', result, steps);
 		return result;
+	}
+
+	private updateValues() {
+		if (!this._run) {
+			return;
+		}
+
+		this.deckstring = this._run.initialDeckList;
+		this.gameMode = this._run.type;
+		this.gameModeImage =
+			this._run.type === 'duels'
+				? 'assets/images/deck/ranks/casual_duels.png'
+				: 'assets/images/deck/ranks/heroic_duels.png';
+		this.gameModeTooltip = this._run.type === 'duels' ? 'Duels' : 'Heroic Duels';
+		this.wins = this._run.wins;
+		this.losses = this._run.losses;
+		this.rating = this._run.ratingAtStart;
+		this.deltaRating =
+			this._run.ratingAtEnd && !isNaN(this._run.ratingAtEnd)
+				? this._run.ratingAtEnd - this._run.ratingAtStart
+				: null;
+		this.steps = this.buildSteps(this._run.steps);
+		this.rewards = this._run.rewards;
+
+		this.playerClassImage = this._run.heroCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.heroCardId}.jpg`
+			: null;
+		this.playerCardId = this._run.heroCardId;
+		const heroCard = this._run.heroCardId ? this.allCards.getCard(this._run.heroCardId) : null;
+		this.playerClassTooltip = heroCard ? `${heroCard.name} (${heroCard.playerClass})` : null;
+
+		this.heroPowerCardId = this._run.heroPowerCardId;
+		this.heroPowerImage = this._run.heroPowerCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.heroPowerCardId}.jpg`
+			: null;
+		const heroPowerCard = this._run.heroPowerCardId ? this.allCards.getCard(this._run.heroPowerCardId) : null;
+		this.heroPowerTooltip = heroPowerCard ? heroPowerCard.name : null;
+
+		this.signatureTreasureCardId = this._run.signatureTreasureCardId;
+		this.signatureTreasureImage = this._run.signatureTreasureCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.signatureTreasureCardId}.jpg`
+			: null;
+		const signatureTreasureCard = this._run.signatureTreasureCardId
+			? this.allCards.getCard(this._run.signatureTreasureCardId)
+			: null;
+		this.signatureTreasureTooltip = signatureTreasureCard ? signatureTreasureCard.name : null;
+		// console.log('setting value', value);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private extractLoot(info: DuelsRunInfo): readonly string[] {

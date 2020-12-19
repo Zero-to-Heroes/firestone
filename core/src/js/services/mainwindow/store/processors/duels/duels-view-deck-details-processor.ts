@@ -27,6 +27,7 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 					selectedCategoryId: 'duels-deck-details',
 					selectedDeckId: event.deckId,
 					menuDisplayType: 'breadcrumbs',
+					expandedRunIds: [] as readonly string[],
 				} as NavigationDuels),
 				text: this.getDeckName(currentState, event.deckId),
 			} as NavigationState),

@@ -18,6 +18,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 					selectedCategoryId: 'duels-personal-deck-details',
 					selectedPersonalDeckstring: event.deckstring,
 					menuDisplayType: 'breadcrumbs',
+					expandedRunIds: [] as readonly string[],
 				} as NavigationDuels),
 				text: this.getDeckName(currentState, event.deckstring),
 			} as NavigationState),

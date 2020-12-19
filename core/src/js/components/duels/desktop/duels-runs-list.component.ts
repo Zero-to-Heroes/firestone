@@ -5,11 +5,11 @@ import {
 	ElementRef,
 	EventEmitter,
 	Input,
-	Output,
 	ViewRef,
 } from '@angular/core';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { DuelsState } from '../../../models/duels/duels-state';
+import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -20,12 +20,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		<div class="duels-runs-container">
 			<infinite-scroll *ngIf="allRuns?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let run of displayedRuns">
-					<duels-run
-						[run]="run"
-						[displayLoot]="displayLoot"
-						(runExpanded)="onRunExpanded($event)"
-						(runCollapsed)="onRunCollapsed($event)"
-					></duels-run>
+					<duels-run [run]="run" [displayLoot]="displayLoot" [isExpanded]="isExpanded(run.id)"></duels-run>
 				</li>
 				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
 			</infinite-scroll>
@@ -35,9 +30,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsRunsListComponent {
-	@Output() runExpanded: EventEmitter<DuelsRun> = new EventEmitter<DuelsRun>();
-	@Output() runCollapsed: EventEmitter<DuelsRun> = new EventEmitter<DuelsRun>();
-
 	@Input() set state(value: DuelsState) {
 		if (value.loading) {
 			return;
@@ -53,13 +45,21 @@ export class DuelsRunsListComponent {
 		this.handleProgressiveDisplay();
 	}
 
+	@Input() set navigation(value: NavigationDuels) {
+		this.expandedRunIds = value.expandedRunIds || [];
+		this.displayedRuns = [];
+		this.handleProgressiveDisplay();
+	}
+
 	@Input() displayLoot = true;
 
 	displayedRuns: readonly DuelsRun[] = [];
 	allRuns: readonly DuelsRun[] = [];
 	_state: DuelsState;
+	_navigation: NavigationDuels;
 	_deckstring: string;
 	isLoading: boolean;
+	expandedRunIds: readonly string[] = [];
 
 	private runsIterator: IterableIterator<void>;
 
@@ -79,12 +79,8 @@ export class DuelsRunsListComponent {
 		this.runsIterator && this.runsIterator.next();
 	}
 
-	onRunExpanded(run: DuelsRun) {
-		this.runExpanded.next(run);
-	}
-
-	onRunCollapsed(run: DuelsRun) {
-		this.runCollapsed.next(run);
+	isExpanded(runId: string): boolean {
+		return this.expandedRunIds.includes(runId);
 	}
 
 	private handleProgressiveDisplay() {
