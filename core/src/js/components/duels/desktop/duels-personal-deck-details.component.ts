@@ -40,15 +40,20 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					</label>
 
 					<input
-						*ngIf="expandedRunIds?.length === 1"
 						type="radio"
 						name="deck"
 						id="final"
 						value="final"
 						[checked]="currentDeck === 'final'"
 						(change)="changeCurrentDeck($event)"
+						[disabled]="expandedRunIds?.length !== 1"
 					/>
-					<label for="final" class="final">
+					<label
+						for="final"
+						class="final"
+						[ngClass]="{ 'disabled': expandedRunIds?.length !== 1 }"
+						[helpTooltip]="helpTooltip"
+					>
 						<div class="icon unchecked" inlineSVG="assets/svg/radio_button.svg"></div>
 						<div class="icon checked" inlineSVG="assets/svg/radio_button_checked.svg"></div>
 						Final deck
@@ -87,6 +92,7 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	currentRun: DuelsRun;
 	currentDeck: 'initial' | 'final';
 	expandedRunIds: readonly string[];
+	helpTooltip: string;
 	_state: DuelsState;
 	_navigation: NavigationDuels;
 
@@ -114,7 +120,6 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		switch (this.currentDeck) {
 			case 'initial':
 				this.decklist = this.deck.initialDeckList;
-				console.debug('set decklist', this.decklist);
 				return;
 			case 'final':
 				if (!this.currentRun) {
@@ -125,7 +130,6 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 					.filter(step => (step as GameStat).playerDecklist)
 					.map(step => step as GameStat);
 				this.decklist = runMatches[runMatches.length - 1].playerDecklist;
-				console.debug('set decklist', this.decklist);
 				return;
 		}
 	}
@@ -141,11 +145,16 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		if (!this.deck) {
 			return;
 		}
-		this.expandedRunIds = this._navigation.expandedRunIds;
-		this.currentRun = this.expandedRunIds?.length === 1 ? this.deck.runs[0] : null;
 		this.deckDecklist = this.deck.runs[0].initialDeckList;
 		this.currentDeck = 'initial';
-		this.updateDecklist();
 		this.deckName = this.deck.deckName;
+
+		this.expandedRunIds = this._navigation.expandedRunIds;
+		this.currentRun = this.expandedRunIds?.length >= 1 ? this.deck.runs[0] : null;
+		this.helpTooltip =
+			this.expandedRunIds?.length === 1
+				? null
+				: 'Please expand a single run on the right column to view its final decklist';
+		this.updateDecklist();
 	}
 }

@@ -11,6 +11,10 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		const deck = currentState.duels.playerStats.personalDeckStats.find(
+			stat => stat.initialDeckList === event.deckstring,
+		);
+		const expandedRunIds: readonly string[] = [deck.runs[0].id];
 		return [
 			null,
 			navigationState.update({
@@ -18,7 +22,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 					selectedCategoryId: 'duels-personal-deck-details',
 					selectedPersonalDeckstring: event.deckstring,
 					menuDisplayType: 'breadcrumbs',
-					expandedRunIds: [] as readonly string[],
+					expandedRunIds: expandedRunIds,
 				} as NavigationDuels),
 				text: this.getDeckName(currentState, event.deckstring),
 			} as NavigationState),
