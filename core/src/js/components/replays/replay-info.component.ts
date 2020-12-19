@@ -130,7 +130,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set replay(value: GameStat | RunStep) {
-		console.log('[deck-replay-info] setting value', value);
 		this.replayInfo = value;
 		this.gameMode = value.gameMode;
 		// this.deckName = value.playerDeckName || value.playerName;
@@ -155,7 +154,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		const isDuelsInfo = (value: any): value is RunStep =>
 			(value as RunStep).treasureCardId !== undefined || (value as RunStep).lootCardIds !== undefined;
 		if (isDuelsInfo(value)) {
-			console.debug('setting duels info', value);
+			// console.debug('setting duels info', value);
 			if (value.treasureCardId) {
 				this.treasure = {
 					cardId: value.treasureCardId,
