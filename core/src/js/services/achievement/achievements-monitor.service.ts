@@ -69,6 +69,7 @@ export class AchievementsMonitor {
 			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
 			.map(progress => progress.id)
 			.map(id => existingAchievements.achievements.find(ach => ach.id === id))
+			.filter(ach => ach)
 			.filter(ach => !ach.completed);
 		if (!unlockedAchievements.length) {
 			setTimeout(() => {
