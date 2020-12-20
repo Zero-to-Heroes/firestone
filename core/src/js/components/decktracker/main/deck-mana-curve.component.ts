@@ -31,7 +31,7 @@ export class DeckManaCurveComponent implements AfterViewInit {
 		}
 
 		const cards = this.deckHandler.buildDeckList(value.deckstring);
-		const groupedByCost = groupByFunction((card: DeckCard) => '' + card.manaCost)(cards);
+		const groupedByCost = groupByFunction((card: DeckCard) => '' + Math.min(7, card.manaCost))(cards);
 		const cardsByCost: CardsByCost[] = [];
 		for (let i = 0; i < 8; i++) {
 			const cardsForCost: readonly DeckCard[] = groupedByCost['' + i] || [];

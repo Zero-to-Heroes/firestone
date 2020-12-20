@@ -135,7 +135,7 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		if (!this._state?.playerStats?.deckStats || !this._navigation) {
+		if (!this._state?.playerStats?.personalDeckStats || !this._navigation) {
 			return;
 		}
 
