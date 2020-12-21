@@ -13,7 +13,7 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 
 	public processEvent(gameEvent: GameEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
 		if (gameEvent.type === 'CLOSE_TRACKER') {
-			// console.log('[game-state] handling overlay for event', gameEvent.type);
+			console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = true;
 			this.updateOverlay(state, showDecktrackerFromGameMode);
 		} else if (gameEvent.type === GameEvent.GAME_START) {
@@ -89,7 +89,15 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 			!isWindowClosed(decktrackerWindow.window_state_ex) &&
 			(!shouldShowTracker || !showDecktrackerFromGameMode || this.closedByUser || !inGame)
 		) {
-			// console.log('[game-state] closing tracker');
+			console.log(
+				'[game-state] closing tracker',
+				decktrackerWindow,
+				shouldShowTracker,
+				showDecktrackerFromGameMode,
+				this.closedByUser,
+				inGame,
+				state.metadata.gameType,
+			);
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
 		// if (forceLogs) {
