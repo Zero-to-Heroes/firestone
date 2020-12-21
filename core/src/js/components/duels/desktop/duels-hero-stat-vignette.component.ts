@@ -69,7 +69,8 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		this.globalWinDistribution = {
 			data: value.globalWinDistribution.map(input => ({
 				label: '' + input.winNumber,
-				value: input.value,
+				// To never show an empty bar
+				value: Math.max(input.value, 0.5),
 			})),
 		} as SimpleBarChartData;
 	}
