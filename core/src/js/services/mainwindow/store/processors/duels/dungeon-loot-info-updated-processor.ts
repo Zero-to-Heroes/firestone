@@ -32,6 +32,10 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	}
 
 	private buildRewards(rewards: InputDuelsRewardsInfo): readonly DuelsRewardsInfo[] {
+		if (!rewards?.Rewards) {
+			return [];
+		}
+
 		return rewards.Rewards.map(
 			reward =>
 				({
