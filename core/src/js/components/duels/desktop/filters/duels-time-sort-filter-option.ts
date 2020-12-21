@@ -39,6 +39,8 @@ export class DuelsTimeSortFilterOption implements DuelsDropdownOption {
 			navigation.navigationDuels &&
 			(navigation.navigationDuels.selectedCategoryId === 'duels-stats' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-runs' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-treasures')
 		);
 	};
