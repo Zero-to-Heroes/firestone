@@ -56,10 +56,10 @@ import { capitalizeEachWord } from '../../services/utils';
 					{{ capitalize(visualResult) }}
 				</div> -->
 
-				<!-- <div class="group result">
+				<div class="group result">
 					<div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div>
 					<div class="result">{{ result }}</div>
-				</div> -->
+				</div>
 
 				<div
 					class="group mmr"
