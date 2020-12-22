@@ -162,7 +162,7 @@ export class DuelsStateBuilderService {
 			} as DuelsCategory),
 			DuelsCategory.create({
 				id: 'duels-top-decks',
-				name: '12-win decks',
+				name: '12-wins decks',
 				enabled: true,
 				icon: undefined,
 				categories: null,

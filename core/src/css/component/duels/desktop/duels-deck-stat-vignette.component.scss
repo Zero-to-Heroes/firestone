@@ -1,142 +1,132 @@
-:host() {
-	position: relative;
-}
-
-.duels-deck-stat-vignette {
+.duels-deck-stat {
+	background: rgba(255, 255, 255, 0.08);
 	display: flex;
 	align-items: center;
-	flex-direction: column;
-	height: 100%;
-	background: rgba(255, 255, 255, 0.08);
-	position: relative;
+	height: 40px;
 	padding: 10px;
-	padding-bottom: 12px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+}
 
-	.box-side {
-		width: 100%;
+.mode-color-code {
+	height: 40px;
+	width: 3px;
+	position: relative;
+	left: -10px;
+	flex-shrink: 0;
+
+	&.duels {
+		background: #9fb6d7;
 	}
+	&.paid-duels {
+		background: #ffb948;
+	}
+}
 
-	.deck-name {
-		width: 100%;
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		color: var(--default-title-color);
-		font-size: 16px;
-		line-height: 22px;
-		text-align: center;
+.group {
+	border-right: 1px solid var(--default-text-color);
+	display: flex;
+	height: 100%;
+	padding-right: 10px;
+	margin-right: 15px;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+
+	&.player-images {
+		padding-left: 0px;
+		padding-right: 10px;
+	}
+}
+
+.left-info,
+.right-info {
+	display: flex;
+	align-items: center;
+	height: 100%;
+
+	& > div:last-child {
+		border-right: none;
+		margin-right: 0;
+	}
+}
+
+.right-info {
+	margin-left: auto;
+
+	& > div:last-child {
+		// margin-right: 0;
+	}
+}
+
+.mode {
+	position: relative;
+
+	.game-mode {
+		width: 40px;
+		height: 40px;
+		margin-right: 5px;
 		position: relative;
-		margin: auto;
-		flex-grow: 0;
-		flex-shrink: 0;
-		margin-bottom: 10px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		top: 0px;
+	}
+}
+
+.separator {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.player-images {
+	img {
+		width: 30px;
+		height: 30px;
+		clip-path: circle(10px at 50% 50%);
+		transform: scale(1.5);
+		margin-right: 5px;
+	}
+}
+
+.result {
+	font-size: 13px;
+	line-height: 18px;
+	width: 50px;
+	justify-content: flex-start;
+
+	.wins {
+		color: #61ff47;
 	}
 
-	.summary {
-		display: flex;
+	.losses {
+		color: #ff4747;
 	}
+}
 
-	.deck-image {
-		width: 80px;
-		position: relative;
-		flex-grow: 0;
-		margin-bottom: 10px;
-		left: 7px;
-
-		.skin {
-			width: 100%;
-			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 75% 20%, 85% 56%, 85% 100%);
-		}
-		.frame {
-			position: absolute;
-			top: -8%;
-			left: -16%;
-			width: 120%;
-		}
-	}
-
-	.info {
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		font-size: 12px;
-		line-height: 16px;
-		color: var(--default-title-color);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		flex-grow: 1;
-	}
+.view-deck {
+	font-size: 12px;
 
 	.icon {
-		width: 22px;
-		height: 22px;
-		clip-path: circle(9px at 50% 50%);
-		transform: scale(2);
+		margin-left: 14px;
+		transform: rotateZ(-90deg);
+		position: relative;
 	}
 
-	.starting {
-		display: flex;
-		width: 100%;
-		align-items: center;
-		justify-content: space-around;
-		flex-direction: column;
-		height: 100%;
-		padding-bottom: 10px;
-	}
-
-	.dust-cost {
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		font-size: 12px;
-		line-height: 16px;
+	&:hover {
 		color: var(--default-title-color);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 30px;
-
-		.dust-icon {
-			width: 30px;
-			height: 30px;
-			margin-left: 5px;
-		}
+		--icon-color: var(--default-title-color);
 	}
+}
 
-	// .treasure {
-	// 	transform: scale(1.5);
-	// }
+.dust-cost {
+	display: flex;
 
-	.copy-deck-code,
-	.view-details {
-		padding: 5px 10px;
-		width: 100%;
-		display: flex;
-		align-self: center;
-		align-items: center;
-		background: var(--default-text-color);
-		color: var(--color-7);
-		margin-top: 5px;
-
-		span {
-			width: 100%;
-		}
-
-		div {
-			display: flex;
-		}
-
-		&:hover {
-			background: #ffb948;
-			border: none;
-
-			span {
-				color: #2f0d0d;
-			}
-		}
+	.dust-icon {
+		width: 20px;
+		height: 20px;
+		margin-left: -5px;
+	}
+	.value {
+		font-size: 13px;
 	}
 }

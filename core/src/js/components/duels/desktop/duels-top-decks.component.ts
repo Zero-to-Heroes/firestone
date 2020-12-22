@@ -1,9 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsState } from '../../../models/duels/duels-state';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'duels-top-decks',
@@ -12,51 +9,78 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/duels/desktop/duels-top-decks.component.scss`,
 	],
 	template: `
-		<div *ngIf="groupedDecks?.length" class="duels-top-decks" scrollable>
-			<duels-grouped-top-decks *ngFor="let stat of groupedDecks" [groupedDecks]="stat"></duels-grouped-top-decks>
+		<div class="duels-runs-container">
+			<infinite-scroll *ngIf="allDecks?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
+				<duels-grouped-top-decks
+					*ngFor="let stat of displayedDecks"
+					[groupedDecks]="stat"
+				></duels-grouped-top-decks>
+				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
+			</infinite-scroll>
+			<duels-empty-state *ngIf="!allDecks?.length"></duels-empty-state>
 		</div>
-		<duels-empty-state *ngIf="!groupedDecks?.length"></duels-empty-state>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// TODO: infinite scroll
-export class DuelsTopDecksComponent implements AfterViewInit {
+export class DuelsTopDecksComponent {
 	@Input() set state(value: DuelsState) {
 		if (value === this._state) {
 			return;
 		}
 		this._state = value;
+		this.displayedDecks = [];
 		this.updateValues();
 	}
 
-	_state: DuelsState;
-	groupedDecks: readonly DuelsGroupedDecks[];
+	allDecks: readonly DuelsGroupedDecks[];
+	displayedDecks: readonly DuelsGroupedDecks[];
+	isLoading: boolean;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private iterator: IterableIterator<void>;
+	private _state: DuelsState;
 
-	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	onScroll() {
+		this.iterator && this.iterator.next();
 	}
 
 	private updateValues() {
 		if (!this._state?.playerStats) {
 			return;
 		}
+		this.iterator = this.buildIterator();
+		this.onScroll();
+	}
 
-		this.groupedDecks = this._state.playerStats.deckStats;
-		// switch (this._state.activeTreasureStatTypeFilter) {
-		// 	case 'treasure':
-		// 		this.stats = this._state.playerStats.treasureStats.filter(
-		// 			stat => !isPassive(stat.cardId, this.allCards),
-		// 		);
-		// 		break;
-		// 	case 'passive':
-		// 		this.stats = this._state.playerStats.treasureStats.filter(stat =>
-		// 			isPassive(stat.cardId, this.allCards),
-		// 		);
-		// 		break;
-		// }
+	private *buildIterator(): IterableIterator<void> {
+		this.allDecks = this._state.playerStats.deckStats;
+		const workingRuns = [...this.allDecks];
+		const step = 40;
+		while (workingRuns.length > 0) {
+			// console.log('working runs', workingRuns.length);
+			const currentRuns = [];
+			while (
+				workingRuns.length > 0 &&
+				(currentRuns.length === 0 || this.getTotalRunsLength(currentRuns) < step)
+			) {
+				currentRuns.push(...workingRuns.splice(0, 1));
+			}
+			this.displayedDecks = [...this.displayedDecks, ...currentRuns];
+			this.isLoading = this.allDecks.length > step;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			yield;
+		}
+		this.isLoading = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		return;
+	}
+
+	private getTotalRunsLength(currentReplays: readonly DuelsGroupedDecks[]): number {
+		return currentReplays ? currentReplays.length : 0;
 	}
 }

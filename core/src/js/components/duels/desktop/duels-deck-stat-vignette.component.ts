@@ -5,11 +5,9 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
-import { formatClass } from '../../../services/hs-utils';
 import { DuelsViewDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -21,46 +19,56 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/global/components-global.scss`,
 	],
 	template: `
-		<div class="duels-deck-stat-vignette">
-			<div class="box-side">
-				<div class="deck-name">{{ deckName }}</div>
-				<div class="summary">
-					<div class="deck-image">
-						<img class="skin" [src]="skin" />
-						<img class="frame" src="assets/images/deck/hero_frame.png" />
-					</div>
-					<div class="info">
-						<div class="starting">
-							<img class="icon hero-power" [src]="heroPowerImage" [cardTooltip]="heroPowerCardId" />
-							<img
-								class="icon signature-treasure"
-								[src]="signatureTreasureImage"
-								[cardTooltip]="signatureTreasureCardId"
-							/>
-						</div>
-						<!-- <ul class="treasures">
-						<img
-							class="icon treasure"
-							*ngFor="let treasure of treasures"
-							[src]="treasure.icon"
-							[cardTooltip]="treasure.cardId"
-						/>
-					</ul> -->
-					</div>
+		<div class="duels-deck-stat">
+			<div class="mode-color-code {{ gameMode }}"></div>
+
+			<div class="left-info">
+				<div class="group mode">
+					<img class="game-mode" [src]="gameModeImage" [helpTooltip]="gameModeTooltip" />
 				</div>
+
+				<div class="group result" *ngIf="wins != null">
+					<div class="wins">{{ wins }}</div>
+					<div class="separator">-</div>
+					<div class="losses">{{ losses }}</div>
+				</div>
+
+				<div class="group player-images">
+					<img
+						class="player-class"
+						[src]="playerClassImage"
+						[cardTooltip]="playerCardId"
+						*ngIf="playerClassImage"
+					/>
+					<!-- <div class="separator" *ngIf="heroPowerImage">-</div> -->
+					<img
+						class="hero-power"
+						[src]="heroPowerImage"
+						[cardTooltip]="heroPowerCardId"
+						*ngIf="heroPowerImage"
+					/>
+					<!-- <div class="separator" *ngIf="signatureTreasureImage">-</div> -->
+					<img
+						class="signature-treasure"
+						[src]="signatureTreasureImage"
+						[cardTooltip]="signatureTreasureCardId"
+						*ngIf="signatureTreasureImage"
+					/>
+				</div>
+
 				<div class="dust-cost">
 					<svg class="dust-icon svg-icon-fill" *ngIf="dustCost">
 						<use xlink:href="assets/svg/sprite.svg#dust" />
 					</svg>
-					<div class="dust-cost" *ngIf="dustCost">{{ dustCost }}</div>
-					<div class="dust-cost" *ngIf="dustCost === 0">You have all cards</div>
+					<div class="value" *ngIf="dustCost">{{ dustCost }}</div>
+					<div class="value" *ngIf="dustCost === 0">You have all cards</div>
 				</div>
-				<button class="view-details" (click)="viewDetails()">
-					<span>View details</span>
-				</button>
-				<!-- <button class="copy-deck-code" (click)="copyDeckCode()">
-					<span>{{ copyText }}</span>
-				</button> -->
+			</div>
+			<div class="right-info">
+				<div class="group view-deck" (click)="viewDetails()" *ngIf="deckstring">
+					<div class="text">View Details</div>
+					<div class="icon" inlineSVG="assets/svg/collapse_caret.svg"></div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -73,65 +81,77 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 			return;
 		}
 		this._stat = value;
-		const deckNamePrefix = value.wins ? `${value.wins}-${value.losses} ` : '';
-		this.deckName = deckNamePrefix + formatClass(value.playerClass);
-		this.deckstring = value.decklist;
-		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroCardId}.jpg`;
-		this.heroPowerCardId = value.heroPowerCardId;
-		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.heroPowerCardId}.jpg`;
-		this.signatureTreasureCardId = value.signatureTreasureCardId;
-		this.signatureTreasureImage = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.signatureTreasureCardId}.jpg`;
 
+		this.gameMode = this._stat.gameMode;
+		this.gameModeImage =
+			this._stat.gameMode === 'duels'
+				? 'assets/images/deck/ranks/casual_duels.png'
+				: 'assets/images/deck/ranks/heroic_duels.png';
+		this.gameModeTooltip = this._stat.gameMode === 'duels' ? 'Duels' : 'Heroic Duels';
+
+		this.wins = this._stat.wins;
+		this.losses = this._stat.losses;
+
+		this.playerClassImage = this._stat.heroCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._stat.heroCardId}.jpg`
+			: null;
+		this.playerCardId = this._stat.heroCardId;
+		const heroCard = this._stat.heroCardId ? this.allCards.getCard(this._stat.heroCardId) : null;
+		this.playerClassTooltip = heroCard ? `${heroCard.name} (${heroCard.playerClass})` : null;
+
+		this.heroPowerCardId = this._stat.heroPowerCardId;
+		this.heroPowerImage = this._stat.heroPowerCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._stat.heroPowerCardId}.jpg`
+			: null;
+		const heroPowerCard = this._stat.heroPowerCardId ? this.allCards.getCard(this._stat.heroPowerCardId) : null;
+		this.heroPowerTooltip = this._stat ? heroPowerCard.name : null;
+
+		this.signatureTreasureCardId = this._stat.signatureTreasureCardId;
+		this.signatureTreasureImage = this._stat.signatureTreasureCardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._stat.signatureTreasureCardId}.jpg`
+			: null;
+		const signatureTreasureCard = this._stat.signatureTreasureCardId
+			? this.allCards.getCard(this._stat.signatureTreasureCardId)
+			: null;
+		this.signatureTreasureTooltip = signatureTreasureCard ? signatureTreasureCard.name : null;
+
+		this.deckstring = value.decklist;
 		this.dustCost = value.dustCost;
 	}
 
-	_stat: DuelsDeckStat;
-	deckName: string;
-	deckstring: string;
-	skin: string;
+	gameMode: 'duels' | 'paid-duels';
+	gameModeImage: string;
+	gameModeTooltip: string;
+
+	wins: number;
+	losses: number;
+
+	playerCardId: string;
+	playerClassImage: string;
+	playerClassTooltip: string;
+
 	heroPowerCardId: string;
 	heroPowerImage: string;
+	heroPowerTooltip: string;
+
 	signatureTreasureCardId: string;
 	signatureTreasureImage: string;
-	treasures: readonly { icon: string; cardId: string }[];
+	signatureTreasureTooltip: string;
+
+	deckstring: string;
 	dustCost: number;
 
-	copyText = 'Copy deck code';
-
+	private _stat: DuelsDeckStat;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly cards: AllCardsService,
+		private readonly allCards: AllCardsService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	async copyDeckCode() {
-		this.ow.placeOnClipboard(this.deckstring);
-		const inputCopy = this.copyText;
-		this.copyText = 'Copied!';
-		console.log('copied deckstring to clipboard', this.deckstring);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		setTimeout(() => {
-			this.copyText = inputCopy;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}, 2000);
-	}
-
-	buildPercents(value: number): string {
-		return value == null ? '-' : value.toFixed(1) + '%';
-	}
-
-	buildValue(value: number, decimal = 2): string {
-		return value == null ? '-' : value === 0 ? '0' : value.toFixed(decimal);
 	}
 
 	viewDetails() {
