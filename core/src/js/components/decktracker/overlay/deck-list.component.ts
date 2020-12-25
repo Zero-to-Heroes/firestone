@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { SetCard } from '../../../models/set';
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 
 @Component({
@@ -18,6 +19,7 @@ import { DeckHandlerService } from '../../../services/decktracker/deck-handler.s
 			[deckState]="deckState"
 			displayMode="DISPLAY_MODE_GROUPED"
 			[colorManaCost]="true"
+			[collection]="collection"
 			tooltipPosition="right"
 		></decktracker-deck-list>
 	`,
@@ -31,6 +33,8 @@ export class DeckListComponent {
 			deck: decklist,
 		} as DeckState);
 	}
+
+	@Input() collection: readonly SetCard[];
 
 	deckState: DeckState;
 

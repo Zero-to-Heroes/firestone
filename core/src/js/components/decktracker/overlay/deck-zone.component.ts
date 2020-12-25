@@ -10,7 +10,9 @@ import {
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { SetCard } from '../../../models/set';
 import { PreferencesService } from '../../../services/preferences.service';
+import { groupByFunction } from '../../../services/utils';
 
 @Component({
 	selector: 'deck-zone',
@@ -71,9 +73,15 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.refreshZone();
 	}
 
+	@Input() set collection(value: readonly SetCard[]) {
+		this._collection = value;
+		this.refreshZone();
+	}
+
 	@Input() side: 'player' | 'opponent';
 
 	_tooltipPosition: CardTooltipPositionType;
+	_collection: readonly SetCard[];
 	className: string;
 	zoneName: string;
 	showWarning: boolean;
@@ -116,32 +124,30 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.className = this._zone.id;
 		this.zoneName = this._zone.name;
 		this.showWarning = this._zone.showWarning;
-		// console.log('setting zone', zone);
-		// const cardsToDisplay = this._zone.sortingFunction
-		// 	? [...this._zone.cards].sort(this._zone.sortingFunction)
-		// 	: this._zone.cards;
-		// console.log('setting zone', this._zone, cardsToDisplay);
 		this.cardsInZone = this._zone.numberOfCards;
-		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
-		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(this._zone.cards, (card: VisualDeckCard) =>
-			this.buildGroupingKey(card),
-		);
+		const quantitiesLeftForCard = this.buildQuantitiesLeftForCard(this._zone.cards);
+		const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
+			this.buildGroupingKey(card, quantitiesLeftForCard),
+		)(this._zone.cards);
 		// console.log('grouped', grouped);
-		this.cards = Array.from(grouped.values(), cards => {
-			const creatorCardIds: readonly string[] = [
-				...new Set(
-					cards
-						.map(card => card.creatorCardIds)
-						.reduce((a, b) => a.concat(b), [])
-						.filter(creator => creator),
-				),
-			];
-			// console.log('creator card ids', creatorCardIds, cards);
-			return Object.assign(new VisualDeckCard(), cards[0], {
-				totalQuantity: cards.length,
-				creatorCardIds: creatorCardIds,
-			} as VisualDeckCard);
-		})
+		this.cards = Object.keys(grouped)
+			.map(groupingKey => {
+				const cards = grouped[groupingKey];
+				const creatorCardIds: readonly string[] = [
+					...new Set(
+						cards
+							.map(card => card.creatorCardIds)
+							.reduce((a, b) => a.concat(b), [])
+							.filter(creator => creator),
+					),
+				];
+				// console.log('creator card ids', creatorCardIds, cards);
+				return Object.assign(new VisualDeckCard(), cards[0], {
+					totalQuantity: cards.length,
+					creatorCardIds: creatorCardIds,
+					isMissing: groupingKey.includes('missing'),
+				} as VisualDeckCard);
+			})
 			.sort((a, b) => this.compare(a, b))
 			.sort((a, b) => this.sortByIcon(a, b));
 		if (this._zone.sortingFunction) {
@@ -151,12 +157,37 @@ export class DeckZoneComponent implements AfterViewInit {
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
 	}
 
-	private buildGroupingKey(card: VisualDeckCard): string {
+	private buildQuantitiesLeftForCard(cards: readonly VisualDeckCard[]) {
+		if (!this._collection?.length) {
+			return {};
+		}
+
+		//console.debug('building q left for cards', this._collection);
+		const result = {};
+		for (const card of cards) {
+			const cardInCollection = this._collection.find(c => c.id === card.cardId);
+			result[card.cardId] = cardInCollection?.getTotalOwned() ?? 0;
+		}
+		return result;
+	}
+
+	private buildGroupingKey(card: VisualDeckCard, quantitiesLeftForCard: { [cardId: string]: number }): string {
 		const keyWithGift = this._showGiftsSeparately
 			? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
 			: card.cardId;
 		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithGift + '-graveyard' : keyWithGift;
-		return keyWithGraveyard;
+		if (!this._collection?.length) {
+			return keyWithGraveyard;
+		}
+
+		// const cardInCollection = this._collection.find(c => c.id === card.cardId);
+		const quantityToAllocate = quantitiesLeftForCard[card.cardId];
+		quantitiesLeftForCard[card.cardId] = quantityToAllocate - 1;
+		if (quantityToAllocate > 0) {
+			return keyWithGraveyard;
+		}
+
+		return keyWithGraveyard + '-missing';
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
@@ -203,17 +234,17 @@ export class DeckZoneComponent implements AfterViewInit {
 		return 0;
 	}
 
-	private groupBy(list, keyGetter): Map<string, VisualDeckCard[]> {
-		const map = new Map();
-		list.forEach(item => {
-			const key = keyGetter(item);
-			const collection = map.get(key);
-			if (!collection) {
-				map.set(key, [item]);
-			} else {
-				collection.push(item);
-			}
-		});
-		return map;
-	}
+	// private groupBy(list, keyGetter): Map<string, VisualDeckCard[]> {
+	// 	const map = new Map();
+	// 	list.forEach(item => {
+	// 		const key = keyGetter(item);
+	// 		const collection = map.get(key);
+	// 		if (!collection) {
+	// 			map.set(key, [item]);
+	// 		} else {
+	// 			collection.push(item);
+	// 		}
+	// 	});
+	// 	return map;
+	// }
 }

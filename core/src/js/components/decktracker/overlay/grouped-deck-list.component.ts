@@ -4,6 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { SetCard } from '../../../models/set';
 
 @Component({
 	selector: 'grouped-deck-list',
@@ -20,6 +21,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				[colorManaCost]="colorManaCost"
 				[showGiftsSeparately]="showGiftsSeparately"
 				[side]="side"
+				[collection]="collection"
 			></deck-zone>
 		</ul>
 	`,
@@ -29,6 +31,8 @@ export class GroupedDeckListComponent {
 	@Input() colorManaCost: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() side: 'player' | 'opponent';
+	@Input() collection: readonly SetCard[];
+
 	_tooltipPosition: CardTooltipPositionType;
 	zone: DeckZone;
 

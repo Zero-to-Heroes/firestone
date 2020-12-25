@@ -9,9 +9,10 @@ import {
 } from '@angular/core';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
 import { DuelsRun } from '../../../models/duels/duels-run';
-import { DuelsState } from '../../../models/duels/duels-state';
+import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { SetCard } from '../../../models/set';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -59,12 +60,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						Final deck
 					</label>
 				</div>
-				<deck-list class="deck-list" [deckstring]="decklist"></deck-list>
+				<deck-list class="deck-list" [deckstring]="decklist" [collection]="getCollection()"></deck-list>
 			</div>
 			<div class="stats" scrollable *ngIf="isPersonalDeck">
 				<div class="header">All runs with "{{ deckName }}"</div>
 				<duels-runs-list
-					[state]="_state"
+					[state]="_state.duels"
 					[navigation]="_navigation"
 					[deckstring]="deckDecklist"
 					[displayLoot]="false"
@@ -79,7 +80,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
-	@Input() set state(value: DuelsState) {
+	@Input() set state(value: MainWindowState) {
 		this._state = value;
 		this.updateValues();
 	}
@@ -97,11 +98,12 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	currentDeck: 'initial' | 'final';
 	expandedRunIds: readonly string[];
 	helpTooltip: string;
+	collection: readonly SetCard[];
 
 	isPersonalDeck: boolean = true;
 	run: DuelsRun;
 
-	_state: DuelsState;
+	_state: MainWindowState;
 	_navigation: NavigationDuels;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -124,6 +126,12 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		}
 	}
 
+	getCollection(): readonly SetCard[] {
+		const result = this.currentDeck === 'final' ? null : this.collection;
+		//console.debug('getting collection', this.currentDeck, result);
+		return result;
+	}
+
 	private updateDecklist() {
 		switch (this.currentDeck) {
 			case 'initial':
@@ -143,10 +151,11 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		if (!this._state?.playerStats?.personalDeckStats || !this._navigation) {
+		if (!this._state?.duels?.playerStats?.personalDeckStats || !this._navigation) {
 			return;
 		}
 
+		console.debug('updating values', this._state, this._navigation);
 		this.deck = this.getDeck();
 		if (!this.deck) {
 			return;
@@ -154,6 +163,7 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		this.deckDecklist = this.deck.initialDeckList || this.deck.runs[0].initialDeckList;
 		this.currentDeck = 'initial';
 		this.deckName = this.deck.deckName;
+		this.collection = this._state.binder.allSets.map(set => set.allCards).reduce((a, b) => a.concat(b), []);
 
 		this.expandedRunIds = this._navigation.expandedRunIds;
 		this.currentRun = this.expandedRunIds?.length >= 1 ? this.deck.runs[0] : null;
@@ -166,16 +176,18 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 
 	private getDeck(): DuelsDeckSummary {
 		if (this._navigation.selectedPersonalDeckstring) {
-			return this._state.playerStats.personalDeckStats.find(
+			return this._state.duels.playerStats.personalDeckStats.find(
 				deck => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
 			);
 		}
 		if (this._navigation.selectedDeckId) {
-			const deckStat = this._state.playerStats.deckStats
+			const deckStat = this._state.duels.playerStats.deckStats
 				.map(grouped => grouped.decks)
 				.reduce((a, b) => a.concat(b), [])
 				.find(deck => deck.id === this._navigation.selectedDeckId);
-			const additionalStat = (this._state.additionalDeckDetails ?? []).find(stat => stat.id === deckStat.id);
+			const additionalStat = (this._state.duels.additionalDeckDetails ?? []).find(
+				stat => stat.id === deckStat.id,
+			);
 			//console.debug('deckStat', deckStat, this._state.additionalDeckDetails, this._state);
 			this.isPersonalDeck = false;
 			this.run = {

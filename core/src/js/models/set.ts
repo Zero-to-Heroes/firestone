@@ -147,6 +147,10 @@ export class SetCard {
 		}
 	}
 
+	getTotalOwned(): number {
+		return (this.ownedPremium || 0) + (this.ownedNonPremium || 0);
+	}
+
 	getNumberCollected(): number {
 		return ~~Math.min(this.ownedPremium + this.ownedNonPremium, this.getMaxCollectible());
 	}

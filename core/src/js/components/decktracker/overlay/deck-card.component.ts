@@ -13,15 +13,20 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	template: `
 		<div
 			class="deck-card {{ rarity }} {{ highlight }} {{ cardClass }}"
-			[ngClass]="{ 'color-mana-cost': _colorManaCost, 'color-class-cards': _colorClassCards }"
+			[ngClass]="{
+				'color-mana-cost': _colorManaCost,
+				'color-class-cards': _colorClassCards,
+				'missing': _isMissing
+			}"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="_tooltipPosition"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
-			<div class="gradiant"></div>
 			<div class="mana-cost">
 				<span>{{ manaCost === undefined ? '?' : manaCost }}</span>
 			</div>
+			<div class="missing-overlay" *ngIf="_isMissing"></div>
+			<div class="gradiant"></div>
 			<div class="card-name">
 				<span>{{ cardName || 'Unknown card' }}</span>
 			</div>
@@ -101,6 +106,7 @@ export class DeckCardComponent {
 	highlight: string;
 	_colorManaCost: boolean;
 	_colorClassCards: boolean;
+	_isMissing: boolean;
 	cardClass: string;
 	creatorCardIds: readonly string[];
 	giftTooltip: string;
@@ -135,6 +141,7 @@ export class DeckCardComponent {
 		this.isDiscarded = card.zone === 'DISCARD';
 		this.isGraveyard = card.zone === 'GRAVEYARD';
 		this.isTransformed = card.zone === 'TRANSFORMED_INTO_OTHER';
+		this._isMissing = card.isMissing;
 
 		this.cardClass = card.cardClass ? card.cardClass.toLowerCase() : null;
 		// console.log('setting card highlight', this.cardId, this.highlight, card);

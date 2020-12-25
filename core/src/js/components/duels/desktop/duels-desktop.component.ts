@@ -61,7 +61,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 								navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
 								navigation.navigationDuels.selectedCategoryId === 'duels-deck-details'
 							"
-							[state]="state.duels"
+							[state]="state"
 							[navigation]="navigation.navigationDuels"
 						>
 						</duels-personal-deck-details>

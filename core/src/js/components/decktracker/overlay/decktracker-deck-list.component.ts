@@ -14,6 +14,7 @@ import {
 import { Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { SetCard } from '../../../models/set';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -49,6 +50,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[cardsGoToBottom]="cardsGoToBottom"
 					[darkenUsedCards]="darkenUsedCards"
 					[tooltipPosition]="_tooltipPosition"
+					[collection]="collection"
 					[side]="side"
 				>
 				</grouped-deck-list>
@@ -67,6 +69,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() hideGeneratedCardsInOtherZone: boolean;
 	@Input() sortCardsByManaCostInOtherZone: boolean;
 	@Input() side: 'player' | 'opponent';
+	@Input() collection: readonly SetCard[];
 
 	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;

@@ -210,6 +210,41 @@
 			background: #ae7014;
 		}
 	}
+
+	&.missing {
+		--border-size: 3px;
+		.gradiant {
+			border: var(--border-size) solid;
+			border-right: none;
+			border-image: linear-gradient(89.94deg, #9fb6d7 0%, #9fb6d7 40%, rgba(159, 182, 215, 0) 100%) 1;
+		}
+		.mana-cost.mana-cost {
+			background: #bfc1c4;
+			position: relative;
+			top: 0px;
+			left: 3px;
+			height: calc(100% - 6px);
+			width: 27px;
+			padding-right: 3px;
+			padding-bottom: 3px;
+			span {
+				color: #5a5f87;
+			}
+		}
+		.card-name span {
+			color: #9fb6d7;
+		}
+		.missing-overlay {
+			background: linear-gradient(89.94deg, #303352 0%, #303352 40%, rgba(48, 51, 82, 0.5) 100%);
+			pointer-events: none;
+			position: absolute;
+			top: var(--border-size);
+			left: 30px;
+			bottom: var(--border-size);
+			right: 0;
+			z-index: 1;
+		}
+	}
 }
 
 @keyframes card-zoom {

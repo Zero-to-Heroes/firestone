@@ -6,6 +6,7 @@ export class VisualDeckCard extends DeckCard {
 	readonly totalQuantity: number;
 	readonly creatorCardIds?: readonly string[] = [];
 	readonly lastAffectedByCardIds?: readonly string[] = [];
+	readonly isMissing?: boolean;
 
 	constructor() {
 		super();
