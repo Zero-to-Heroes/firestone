@@ -90,12 +90,37 @@
 			margin-bottom: 10px;
 		}
 
-		::ng-deep duels-runs-list {
+		::ng-deep duels-runs-list,
+		::ng-deep duels-run {
 			.rewards,
 			.view-deck,
 			.loot,
 			.treasure {
 				display: none;
+			}
+		}
+	}
+
+	&.top-deck {
+		.stats {
+			::ng-deep duels-runs-list,
+			::ng-deep duels-run {
+				.rewards,
+				.view-deck {
+					display: none;
+				}
+
+				.loot,
+				.treasure {
+					display: inherit;
+				}
+			}
+
+			::ng-deep duels-run {
+				.replay,
+				.show-more {
+					display: none;
+				}
 			}
 		}
 	}

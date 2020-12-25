@@ -38,7 +38,7 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
-						helpTooltip="Cads added to deck after this round "
+						helpTooltip="Cards added to deck after this round "
 					></div>
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
@@ -56,8 +56,8 @@ import { capitalizeEachWord } from '../../services/utils';
 					{{ capitalize(visualResult) }}
 				</div> -->
 
-				<div class="group result">
-					<div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div>
+				<div class="group result" *ngIf="result">
+					<!-- <div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div> -->
 					<div class="result">{{ result }}</div>
 				</div>
 
@@ -116,7 +116,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	opponentClassImage: string;
 	opponentClassTooltip: string;
 	opponentName: string;
-	matchResultIconSvg: SafeHtml;
+	// matchResultIconSvg: SafeHtml;
 	result: string;
 	playCoinIconSvg: SafeHtml;
 	playCoinTooltip: SafeHtml;
@@ -135,7 +135,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		// this.deckName = value.playerDeckName || value.playerName;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(value, true);
 		[this.opponentClassImage, this.opponentClassTooltip] = this.buildPlayerClassImage(value, false);
-		this.matchResultIconSvg = this.buildMatchResultIconSvg(value);
+		// this.matchResultIconSvg = this.buildMatchResultIconSvg(value);
 		this.result = this.buildMatchResultText(value);
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(value);
 		this.reviewId = value.reviewId;
@@ -243,13 +243,14 @@ export class ReplayInfoComponent implements AfterViewInit {
 				case 8: return '8th';
 			}
 		}
+		return null;
 		// prettier-ignore
-		switch (info.result) {
-			case 'won': return 'Victory';
-			case 'lost': return 'Defeat';
-			case 'tied': return 'Tie';
-			default: return 'Unknown';
-		}
+		// switch (info.result) {
+		// 	case 'won': return 'Victory';
+		// 	case 'lost': return 'Defeat';
+		// 	case 'tied': return 'Tie';
+		// 	default: return 'Unknown';
+		// }
 	}
 
 	private buildPlayCoinIconSvg(info: GameStat): [SafeHtml, string] {

@@ -25,7 +25,7 @@ export class DuelsState {
 	// Used to store additional deck data loaded during the course of the app's use,
 	// like the 12-wins additional data. If we store it directly in the deck stats,
 	// it will be erased every time we recompute everything from the global stats
-	readonly additionalDeckDetails: readonly DuelsDeckStat[];
+	readonly additionalDeckDetails: readonly DuelsDeckStat[] = [];
 	readonly currentDuelsMetaPatch: PatchInfo;
 
 	readonly activeHeroSortFilter: DuelsHeroSortFilterType;

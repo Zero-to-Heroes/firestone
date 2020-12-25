@@ -19,15 +19,18 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 			.map(grouped => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])
 			.find(deck => deck.id === event.deckId);
-		this.events.broadcast(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS, deck?.runId, event.deckId);
+		if (!currentState.duels.additionalDeckDetails.map(stat => stat.runId).includes(deck?.runId)) {
+			this.events.broadcast(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS, deck?.runId, event.deckId);
+		}
 		return [
 			null,
 			navigationState.update({
 				navigationDuels: navigationState.navigationDuels.update({
 					selectedCategoryId: 'duels-deck-details',
 					selectedDeckId: event.deckId,
+					selectedPersonalDeckstring: undefined,
 					menuDisplayType: 'breadcrumbs',
-					expandedRunIds: [] as readonly string[],
+					expandedRunIds: [deck?.runId] as readonly string[],
 				} as NavigationDuels),
 				text: this.getDeckName(currentState, event.deckId),
 			} as NavigationState),

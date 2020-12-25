@@ -22,7 +22,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/duels/desktop/duels-personal-deck-details.component.scss`,
 	],
 	template: `
-		<div class="duels-personal-deck-details">
+		<div class="duels-personal-deck-details" [ngClass]="{ 'top-deck': !isPersonalDeck }">
 			<div class="deck-list-container">
 				<div class="deck-selection">
 					<input
@@ -61,7 +61,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</div>
 				<deck-list class="deck-list" [deckstring]="decklist"></deck-list>
 			</div>
-			<div class="stats" scrollable>
+			<div class="stats" scrollable *ngIf="isPersonalDeck">
 				<div class="header">All runs with "{{ deckName }}"</div>
 				<duels-runs-list
 					[state]="_state"
@@ -69,6 +69,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[deckstring]="deckDecklist"
 					[displayLoot]="false"
 				></duels-runs-list>
+			</div>
+			<div class="stats" scrollable *ngIf="!isPersonalDeck">
+				<div class="header">Run details</div>
+				<duels-run [run]="run" [displayLoot]="true" [isExpanded]="true"></duels-run>
 			</div>
 		</div>
 	`,
@@ -93,6 +97,10 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	currentDeck: 'initial' | 'final';
 	expandedRunIds: readonly string[];
 	helpTooltip: string;
+
+	isPersonalDeck: boolean = true;
+	run: DuelsRun;
+
 	_state: DuelsState;
 	_navigation: NavigationDuels;
 
@@ -139,13 +147,11 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 			return;
 		}
 
-		this.deck = this._state.playerStats.personalDeckStats.find(
-			deck => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
-		);
+		this.deck = this.getDeck();
 		if (!this.deck) {
 			return;
 		}
-		this.deckDecklist = this.deck.runs[0].initialDeckList;
+		this.deckDecklist = this.deck.initialDeckList || this.deck.runs[0].initialDeckList;
 		this.currentDeck = 'initial';
 		this.deckName = this.deck.deckName;
 
@@ -156,5 +162,47 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 				? null
 				: 'Please expand a single run on the right column to view its final decklist';
 		this.updateDecklist();
+	}
+
+	private getDeck(): DuelsDeckSummary {
+		if (this._navigation.selectedPersonalDeckstring) {
+			return this._state.playerStats.personalDeckStats.find(
+				deck => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
+			);
+		}
+		if (this._navigation.selectedDeckId) {
+			const deckStat = this._state.playerStats.deckStats
+				.map(grouped => grouped.decks)
+				.reduce((a, b) => a.concat(b), [])
+				.find(deck => deck.id === this._navigation.selectedDeckId);
+			const additionalStat = (this._state.additionalDeckDetails ?? []).find(stat => stat.id === deckStat.id);
+			//console.debug('deckStat', deckStat, this._state.additionalDeckDetails, this._state);
+			this.isPersonalDeck = false;
+			this.run = {
+				creationTimestamp: undefined,
+				id: deckStat.runId,
+				ratingAtEnd: undefined,
+				ratingAtStart: undefined,
+				rewards: undefined,
+				heroCardId: deckStat.heroCardId,
+				heroPowerCardId: deckStat.heroPowerCardId,
+				initialDeckList: deckStat.decklist,
+				losses: deckStat.losses,
+				signatureTreasureCardId: deckStat.signatureTreasureCardId,
+				type: deckStat.gameMode,
+				wins: deckStat.wins,
+				steps: deckStat.steps ?? additionalStat?.steps,
+			};
+			const runs: readonly DuelsRun[] = [this.run];
+			//console.debug('runs', runs);
+			return {
+				deckName: 'tmp',
+				initialDeckList: deckStat.decklist,
+				runs: runs,
+				heroCardId: deckStat.heroCardId,
+				playerClass: deckStat.playerClass,
+			} as DuelsDeckSummary;
+		}
+		return null;
 	}
 }

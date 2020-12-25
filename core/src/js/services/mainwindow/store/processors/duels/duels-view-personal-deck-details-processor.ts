@@ -21,6 +21,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 				navigationDuels: navigationState.navigationDuels.update({
 					selectedCategoryId: 'duels-personal-deck-details',
 					selectedPersonalDeckstring: event.deckstring,
+					selectedDeckId: undefined,
 					menuDisplayType: 'breadcrumbs',
 					expandedRunIds: expandedRunIds,
 				} as NavigationDuels),

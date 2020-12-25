@@ -95,7 +95,6 @@ export class DuelsStateBuilderService {
 			userName: user.username,
 		};
 		const results: any = await this.api.callPostApiWithRetries(DUELS_RUN_INFO_URL, input);
-		console.log('[duels-state-builder] loaded result');
 		const stepResults: readonly DuelsRunInfo[] =
 			results?.results.map(
 				info =>
@@ -107,6 +106,7 @@ export class DuelsStateBuilderService {
 					} as DuelsRunInfo),
 			) || [];
 		const rewardsResults: readonly DuelsRewardsInfo[] = results?.rewardsResults || [];
+		console.log('[duels-state-builder] loaded result');
 		return [stepResults, rewardsResults];
 	}
 

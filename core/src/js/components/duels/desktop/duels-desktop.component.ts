@@ -58,7 +58,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						</duels-personal-decks>
 						<duels-personal-deck-details
 							*ngxCacheIf="
-								navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details'
+								navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
+								navigation.navigationDuels.selectedCategoryId === 'duels-deck-details'
 							"
 							[state]="state.duels"
 							[navigation]="navigation.navigationDuels"
@@ -69,12 +70,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[state]="state.duels"
 						>
 						</duels-top-decks>
-						<duels-deck-details
+						<!-- <duels-deck-details
 							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-deck-details'"
 							[state]="state.duels"
 							[navigation]="navigation.navigationDuels"
 						>
-						</duels-deck-details>
+						</duels-deck-details> -->
 					</div>
 				</with-loading>
 			</section>
@@ -88,10 +89,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[state]="state"
 				></duels-replays-recap>
 				<duels-deck-stats
-					*ngxCacheIf="
-						navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
-						navigation.navigationDuels.selectedCategoryId === 'duels-deck-details'
-					"
+					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details'"
 					[state]="state.duels"
 					[navigation]="navigation.navigationDuels"
 				></duels-deck-stats>

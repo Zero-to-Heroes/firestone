@@ -77,7 +77,6 @@ import { DecktrackerFiltersComponent } from '../../components/decktracker/main/d
 import { DecktrackerPersonalStatsRankingComponent } from '../../components/decktracker/main/decktracker-personal-stats-ranking.component';
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
-import { DuelsDeckDetailsComponent } from '../../components/duels/desktop/duels-deck-details.component';
 import { DuelsDeckStatVignetteComponent } from '../../components/duels/desktop/duels-deck-stat-vignette.component';
 import { DuelsDesktopComponent } from '../../components/duels/desktop/duels-desktop.component';
 import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-empty-state.component';
@@ -261,7 +260,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsTopDecksComponent,
 		DuelsDeckStatVignetteComponent,
 		DuelsGroupedTopDecksComponent,
-		DuelsDeckDetailsComponent,
 		DuelsPersonalDecksComponent,
 		DuelsPersonalDecksVignetteComponent,
 		DuelsPersonalDeckDetailsComponent,

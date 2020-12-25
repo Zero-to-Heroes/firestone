@@ -56,7 +56,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					/>
 				</div>
 
-				<div class="dust-cost">
+				<div class="dust-cost" helpTooltip="Total dust you need to craft your missing cards in this deck">
 					<svg class="dust-icon svg-icon-fill" *ngIf="dustCost">
 						<use xlink:href="assets/svg/sprite.svg#dust" />
 					</svg>

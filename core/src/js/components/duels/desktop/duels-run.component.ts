@@ -60,7 +60,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					/>
 				</div>
 
-				<div class="group rewards">
+				<div class="group rewards" *ngIf="rewards?.length">
 					<duels-reward *ngFor="let reward of rewards" [reward]="reward"></duels-reward>
 				</div>
 
@@ -106,6 +106,7 @@ export class DuelsRunComponent implements AfterViewInit {
 	}
 
 	@Input() displayLoot = true;
+	@Input() hideDeckLink = false;
 
 	gameMode: 'duels' | 'paid-duels';
 	deckstring: string;
@@ -158,6 +159,11 @@ export class DuelsRunComponent implements AfterViewInit {
 	}
 
 	buildSteps(steps: readonly (GameStat | DuelsRunInfo)[]): readonly RunStep[] {
+		//console.debug('building steps', steps);
+		if (!steps) {
+			return [];
+		}
+
 		const result: RunStep[] = [];
 		for (let i = 0; i < steps.length; i++) {
 			if ((steps[i] as GameStat).opponentCardId) {
@@ -180,7 +186,7 @@ export class DuelsRunComponent implements AfterViewInit {
 				} as RunStep) as RunStep;
 			}
 		}
-		// console.debug('built steps', result, steps);
+		//console.debug('built steps', result, steps);
 		return result;
 	}
 
@@ -238,6 +244,10 @@ export class DuelsRunComponent implements AfterViewInit {
 		if (info.chosenOptionIndex <= 0) {
 			return null;
 		}
-		return info[`option${info.chosenOptionIndex}Contents`];
+		const result = info[`option${info.chosenOptionIndex}Contents`];
+		if (result && result.length === 3 && result.every(item => item === '0')) {
+			return null;
+		}
+		return result;
 	}
 }
