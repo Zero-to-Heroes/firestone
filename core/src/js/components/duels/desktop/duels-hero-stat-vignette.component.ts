@@ -58,10 +58,11 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		if (!value || value === this._stat) {
 			return;
 		}
+		const card = value.cardId ? this.cards.getCard(value.cardId) : null;
 		this._stat = value;
 		this.cardId = value.cardId;
-		this.name = this.cards.getCard(value.cardId)?.name;
-		this.playerClass = this.cards.getCard(value.cardId)?.playerClass;
+		this.name = card?.name;
+		this.playerClass = card?.playerClass;
 		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
 		this.playerWinrate = value.playerWinrate;
 		this.globalWinrate = value.globalWinrate;

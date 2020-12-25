@@ -70,12 +70,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[state]="state.duels"
 						>
 						</duels-top-decks>
-						<!-- <duels-deck-details
-							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-deck-details'"
-							[state]="state.duels"
-							[navigation]="navigation.navigationDuels"
-						>
-						</duels-deck-details> -->
 					</div>
 				</with-loading>
 			</section>
@@ -89,7 +83,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[state]="state"
 				></duels-replays-recap>
 				<duels-deck-stats
-					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details'"
+					*ngxCacheIf="
+						navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
+						navigation.navigationDuels.selectedCategoryId === 'duels-deck-details'
+					"
 					[state]="state.duels"
 					[navigation]="navigation.navigationDuels"
 				></duels-deck-stats>
