@@ -100,7 +100,7 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 	helpTooltip: string;
 	collection: readonly SetCard[];
 
-	isPersonalDeck: boolean = true;
+	isPersonalDeck = true;
 	run: DuelsRun;
 
 	_state: MainWindowState;
