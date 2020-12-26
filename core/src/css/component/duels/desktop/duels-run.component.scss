@@ -38,6 +38,7 @@
 	align-items: center;
 	justify-content: center;
 	flex-shrink: 0;
+	position: relative;
 
 	&.delta-rating {
 		font-size: 12px;
@@ -152,6 +153,16 @@
 		color: var(--default-title-color);
 		--icon-color: var(--default-title-color);
 	}
+}
+
+.view-deck .icon {
+	width: 30px;
+	height: 19px;
+}
+
+.show-more .icon {
+	width: 13px;
+	height: 7px;
 }
 
 .show-more.expanded {
