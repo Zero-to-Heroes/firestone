@@ -12,6 +12,10 @@ ng-select.disabled {
 	position: absolute;
 }
 
+::ng-deep fs-filter-dropdown filter-dropdown.visible {
+	margin-right: 15px;
+}
+
 ::ng-deep ng-select {
 	@extend %search-active;
 	color: var(--color-1);
