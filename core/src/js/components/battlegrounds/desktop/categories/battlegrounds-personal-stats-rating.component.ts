@@ -8,7 +8,7 @@ import {
 	HostListener,
 	Input,
 	ViewChild,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
@@ -203,9 +203,20 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 			  } as GameStat)
 			: null;
 		const dataWithCurrentMmr = fakeMatchWithCurrentMmr ? [...data, fakeMatchWithCurrentMmr] : data;
+		// Remove the first match if we're on a "last patch" filter
+		const finalData =
+			this._state.activeTimeFilter === 'last-patch'
+				? [
+						GameStat.create({
+							...dataWithCurrentMmr[0],
+							playerRank: '0',
+						} as GameStat),
+						...dataWithCurrentMmr.slice(1),
+				  ]
+				: dataWithCurrentMmr;
 		if (this._state.activeGroupMmrFilter === 'per-day') {
 			const groupedByDay = groupByFunction((match: GameStat) => formatDate(new Date(match.creationTimestamp)))(
-				dataWithCurrentMmr,
+				finalData,
 			);
 			//console.log('groupedByDay', groupedByDay);
 			const values = Object.values(groupedByDay).map((games: readonly GameStat[]) =>
@@ -223,7 +234,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		} else {
 			this.lineChartData = [
 				{
-					data: dataWithCurrentMmr.map(match => parseInt(match.playerRank)),
+					data: finalData.map(match => parseInt(match.playerRank)),
 					label: 'Rating',
 				},
 			];
