@@ -66,6 +66,14 @@ export class OpponentDeckOverlayHandler implements OverlayHandler {
 				this.closedByUser ||
 				!inGame)
 		) {
+			console.log(
+				'[opponent-overlay] closing window',
+				decktrackerWindow.window_state_ex,
+				shouldShowTracker,
+				this.showOpponentTracker,
+				this.closedByUser,
+				inGame,
+			);
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 		}
 	}

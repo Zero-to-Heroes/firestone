@@ -23,67 +23,81 @@ export class MindVisionOperationFacade<T> {
 		// this.log('processing queue', eventQueue);
 		// Since it's a queue of functions that build promises, we can't simply await the result
 		return new Promise<readonly InternalCall<T>[]>(resolve => {
-			const firstEvent = eventQueue[0];
-			// The idea here is that once we have the result for one event, we resolve all
-			// the pending events with the result from the first event
-			// this.log('resolving first event', eventQueue);
-			// The process is not ideal - we should in fact give the control back to the queue after the
-			// callinternal
-			firstEvent.apply(firstEvent.retriesLeft, (returnValue: T, retriesLeft: number) => {
-				if (!returnValue && retriesLeft > 0) {
-					// We can still try again!
-					// this.log('\tno result, trying again', event, eventQueue, returnValue, retriesLeft);
-					resolve([
-						// Don't forget to update the number of retry attempts left
-						Object.assign(firstEvent, { retriesLeft: firstEvent.retriesLeft - 1 } as InternalCall<T>),
-						...eventQueue.slice(1),
-					]);
-					return;
-				}
-				// We got something, we ping everyone in the queue
-				for (let i = 0; i < eventQueue.length; i++) {
-					const event = eventQueue[i];
-					// this.log(
-					// 	'\tresolving',
-					// 	event,
-					// 	this.transformer,
-					// 	returnValue ? this.transformer(returnValue) : returnValue,
-					// 	returnValue,
-					// );
-					// Already transformed before being passed to the callback
-					event.resolve(returnValue);
-					// Once all the processing is over, we return with an empty queue
-					if (i === eventQueue.length - 1) {
-						// this.log('\tfinal return', i, eventQueue.length, eventQueue);
-						resolve([]);
+			try {
+				const firstEvent = eventQueue[0];
+				// The idea here is that once we have the result for one event, we resolve all
+				// the pending events with the result from the first event
+				// this.log('resolving first event', eventQueue);
+				// The process is not ideal - we should in fact give the control back to the queue after the
+				// callinternal
+				firstEvent.apply(firstEvent.retriesLeft, (returnValue: T, retriesLeft: number) => {
+					if (!returnValue && retriesLeft > 0) {
+						// We can still try again!
+						// this.log('\tno result, trying again', event, eventQueue, returnValue, retriesLeft);
+						resolve([
+							// Don't forget to update the number of retry attempts left
+							Object.assign(firstEvent, { retriesLeft: firstEvent.retriesLeft - 1 } as InternalCall<T>),
+							...eventQueue.slice(1),
+						]);
+						return;
 					}
-				}
-			});
+					// We got something, we ping everyone in the queue
+					for (let i = 0; i < eventQueue.length; i++) {
+						const event = eventQueue[i];
+						// this.log(
+						// 	'\tresolving',
+						// 	event,
+						// 	this.transformer,
+						// 	returnValue ? this.transformer(returnValue) : returnValue,
+						// 	returnValue,
+						// );
+						// Already transformed before being passed to the callback
+						event.resolve(returnValue);
+						// Once all the processing is over, we return with an empty queue
+						if (i === eventQueue.length - 1) {
+							// this.log('\tfinal return', i, eventQueue.length, eventQueue);
+							resolve([]);
+						}
+					}
+				});
+			} catch (e) {
+				this.error('issue while processing queue', e);
+				resolve([]);
+			}
 		});
 	}
 
-	public async call(numberOfRetries?: number, forceReset = false): Promise<T> {
+	public async call(numberOfRetries?: number, forceReset = false, timeoutMs = 10000): Promise<T> {
 		if (!(await this.ow.inGame())) {
 			return null;
 		}
-		return new Promise<T>(resolve => {
-			this.processingQueue.enqueue({
-				retriesLeft: numberOfRetries ?? this.numberOfRetries,
-				// When processing the full queue in one go, we can use this to notify
-				// all pending processes
-				resolve: resolve,
-				// Actually perform the operation, and the callback is called with the result
-				// of the operation once it completes
-				apply: (left: number, callback: (result: T, retriesLeft: number) => void) =>
-					this.callInternal(
-						(returnValue: T, left: number) => {
-							callback(returnValue, left);
-						},
-						left,
-						forceReset,
-					),
-			});
-		});
+		return Promise.race([
+			new Promise<T>(resolve => {
+				this.processingQueue.enqueue({
+					retriesLeft: numberOfRetries ?? this.numberOfRetries,
+					// When processing the full queue in one go, we can use this to notify
+					// all pending processes
+					resolve: resolve,
+					// Actually perform the operation, and the callback is called with the result
+					// of the operation once it completes
+					apply: (left: number, callback: (result: T, retriesLeft: number) => void) =>
+						this.callInternal(
+							(returnValue: T, left: number) => {
+								callback(returnValue, left);
+							},
+							left,
+							forceReset,
+						),
+				});
+			}),
+			new Promise<T>(resolve => {
+				// Add a timeout, since no memory call should take too long to complete
+				setTimeout(() => {
+					this.error('timeout when trying to execute memory call');
+					resolve(null);
+				}, timeoutMs);
+			}),
+		]);
 	}
 
 	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number, forceReset = false) {
