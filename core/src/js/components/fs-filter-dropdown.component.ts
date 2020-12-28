@@ -5,7 +5,7 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
@@ -17,6 +17,7 @@ import { NavigationState } from '../models/mainwindow/navigation/navigation-stat
 	template: `
 		<filter-dropdown
 			class="hero-sort-filter"
+			[ngClass]="{ 'visible': visible }"
 			[options]="_options"
 			[filter]="filter"
 			[placeholder]="placeholder"
