@@ -69,26 +69,27 @@ export class FtueComponent implements AfterViewInit {
 			icon: `assets/svg/ftue/battlegrounds.svg`,
 			progressIndex: 1,
 		},
-		// {
-		// 	id: 'duels',
-		// 	title: 'Duels',
-		// 	text: "Check global and personal stats, and see a selection of succesful decks for both Casual and Heroic Duels",
-		// 	icon: `assets/svg/ftue/duels.svg`,
-		// 	progressIndex: 0,
-		// },
+		{
+			id: 'duels',
+			title: 'Duels',
+			text:
+				'Check global and personal stats, and see a selection of succesful decks for both Casual and Heroic Duels',
+			icon: `assets/svg/ftue/duels.svg`,
+			progressIndex: 2,
+		},
 		{
 			id: 'replays',
 			title: 'Replays',
 			text: 'Here you can find all your past games, broken into step by step actions',
 			icon: `assets/svg/ftue/replays.svg`,
-			progressIndex: 2,
+			progressIndex: 3,
 		},
 		{
 			id: 'achievements',
 			title: 'Achievements',
 			text: "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished",
 			icon: `assets/svg/ftue/achievements.svg`,
-			progressIndex: 3,
+			progressIndex: 4,
 		},
 		{
 			id: 'collection',
@@ -96,7 +97,7 @@ export class FtueComponent implements AfterViewInit {
 			text:
 				'Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)',
 			icon: `assets/svg/ftue/collection.svg`,
-			progressIndex: 4,
+			progressIndex: 5,
 		},
 	];
 

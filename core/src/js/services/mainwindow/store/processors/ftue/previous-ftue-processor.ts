@@ -16,20 +16,23 @@ export class PreviousFtueProcessor implements Processor {
 			case undefined:
 				nextStep = undefined;
 				break;
-			case 'achievements':
-				nextStep = 'replays';
-				break;
 			case 'collection':
 				nextStep = 'achievements';
 				break;
-			case 'decktracker':
-				nextStep = 'collection';
+			case 'achievements':
+				nextStep = 'replays';
 				break;
 			case 'replays':
-				nextStep = 'decktracker';
+				nextStep = 'duels';
+				break;
+			case 'duels':
+				nextStep = 'battlegrounds';
 				break;
 			case 'battlegrounds':
-				nextStep = 'replays';
+				nextStep = 'decktracker';
+				break;
+			case 'decktracker':
+				nextStep = undefined;
 				break;
 		}
 		return [null, navigationState.update({ currentApp: nextStep } as NavigationState)];
