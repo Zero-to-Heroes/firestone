@@ -41,7 +41,7 @@ import { BattlegroundsPersonalStatsStatsComponent } from '../../components/battl
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent,
+	BgsHeroDetailedStatsComponent
 } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
@@ -83,7 +83,7 @@ import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-e
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent,
+	DuelsHeroStatVignetteComponent
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsPersonalDeckDetailsComponent } from '../../components/duels/desktop/duels-personal-deck-details.component';
@@ -101,10 +101,12 @@ import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent,
+	DuelsStatCellComponent
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsReplaysRecapComponent } from '../../components/duels/desktop/secondary/duels-replays-recap.component';
+import { DuelsTierComponent } from '../../components/duels/desktop/secondary/duels-tier.component';
+import { DuelsTreasureTierListComponent } from '../../components/duels/desktop/secondary/duels-treasure-tier-list.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
@@ -268,6 +270,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsRewardComponent,
 		DuelsReplaysRecapComponent,
 		DuelsDeckStatsComponent,
+		DuelsTreasureTierListComponent,
+		DuelsTierComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

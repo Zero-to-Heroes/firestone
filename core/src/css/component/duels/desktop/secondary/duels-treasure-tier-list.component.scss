@@ -1,0 +1,21 @@
+.duels-treasure-tier-list {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 19px;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+	min-height: 1px;
+	padding: 10px;
+	padding-right: 30px;
+
+	.title {
+		color: var(--color-1);
+	}
+
+	.duels-tier {
+		margin-top: 16px;
+	}
+}
