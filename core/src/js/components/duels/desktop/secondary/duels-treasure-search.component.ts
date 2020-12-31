@@ -5,7 +5,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	OnDestroy
+	OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';

@@ -15,10 +15,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	],
 	template: `
 		<div class="duels-treasure-tier-list">
-			<div
-				class="title"
-				helpTooltip="The tiers are computed for your current filters"
-			>
+			<div class="title" helpTooltip="The tiers are computed for your current filters">
 				Tier List
 			</div>
 			<duels-tier class="duels-tier" *ngFor="let tier of tiers" [tier]="tier"></duels-tier>

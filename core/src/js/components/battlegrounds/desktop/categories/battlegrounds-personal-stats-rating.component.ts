@@ -8,7 +8,7 @@ import {
 	HostListener,
 	Input,
 	ViewChild,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';

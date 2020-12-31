@@ -5,7 +5,7 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
