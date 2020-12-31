@@ -67,10 +67,11 @@ export class MindVisionOperationFacade<T> {
 		});
 	}
 
-	public async call(numberOfRetries?: number, forceReset = false, timeoutMs = 10000): Promise<T> {
+	public async call(numberOfRetries?: number, forceReset = false, timeoutMs = 30000): Promise<T> {
 		if (!(await this.ow.inGame())) {
 			return null;
 		}
+		this.debug('race');
 		return Promise.race([
 			new Promise<T>(resolve => {
 				this.processingQueue.enqueue({
@@ -93,7 +94,6 @@ export class MindVisionOperationFacade<T> {
 			new Promise<T>(resolve => {
 				// Add a timeout, since no memory call should take too long to complete
 				setTimeout(() => {
-					this.error('timeout when trying to execute memory call');
 					resolve(null);
 				}, timeoutMs);
 			}),
@@ -130,6 +130,10 @@ export class MindVisionOperationFacade<T> {
 		const result = this.transformer(resultFromMemory);
 		callback(result, retriesLeft - 1);
 		return;
+	}
+
+	private debug(...args) {
+		console.debug(`[memory-service] ${this.serviceName}`, ...args);
 	}
 
 	private log(...args) {
