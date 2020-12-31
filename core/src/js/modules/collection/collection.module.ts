@@ -104,6 +104,7 @@ import {
 	DuelsStatCellComponent
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
+import { DuelsHeroTierListComponent } from '../../components/duels/desktop/secondary/duels-hero-tier-list.component';
 import { DuelsReplaysRecapComponent } from '../../components/duels/desktop/secondary/duels-replays-recap.component';
 import { DuelsTierComponent } from '../../components/duels/desktop/secondary/duels-tier.component';
 import { DuelsTreasureTierListComponent } from '../../components/duels/desktop/secondary/duels-treasure-tier-list.component';
@@ -271,6 +272,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsReplaysRecapComponent,
 		DuelsDeckStatsComponent,
 		DuelsTreasureTierListComponent,
+		DuelsHeroTierListComponent,
 		DuelsTierComponent,
 
 		FtueComponent,

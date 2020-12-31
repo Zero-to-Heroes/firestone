@@ -1,24 +1,20 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { DuelsTreasureStat } from '../../../../models/duels/duels-player-stats';
+import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../../models/duels/duels-state';
-import { isPassive } from '../../../../services/duels/duels-utils';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
-	selector: 'duels-treasure-tier-list',
+	selector: 'duels-hero-tier-list',
 	styleUrls: [
 		`../../../../../css/global/components-global.scss`,
-		`../../../../../css/component/duels/desktop/secondary/duels-treasure-tier-list.component.scss`,
+		`../../../../../css/component/duels/desktop/secondary/duels-hero-tier-list.component.scss`,
 	],
 	template: `
-		<div class="duels-treasure-tier-list">
-			<div
-				class="title"
-				helpTooltip="The tiers are computed for your current filters"
-			>
+		<div class="duels-hero-tier-list">
+			<div class="title" helpTooltip="The tiers are computed for your current filters">
 				Tier List
 			</div>
 			<duels-tier class="duels-tier" *ngFor="let tier of tiers" [tier]="tier"></duels-tier>
@@ -26,7 +22,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureTierListComponent implements AfterViewInit {
+export class DuelsHeroTierListComponent implements AfterViewInit {
 	_state: DuelsState;
 	tiers: DuelsTier[] = [];
 
@@ -87,7 +83,7 @@ export class DuelsTreasureTierListComponent implements AfterViewInit {
 	}
 
 	private filterItems(
-		stats: readonly DuelsTreasureStat[],
+		stats: readonly DuelsHeroPlayerStat[],
 		threshold: number,
 		upper: number,
 	): readonly DuelsTierItem[] {
@@ -100,12 +96,18 @@ export class DuelsTreasureTierListComponent implements AfterViewInit {
 			}));
 	}
 
-	private buildStats(): readonly DuelsTreasureStat[] {
-		switch (this._state.activeTreasureStatTypeFilter) {
-			case 'treasure':
-				return this._state.playerStats.treasureStats.filter(stat => !isPassive(stat.cardId, this.allCards));
-			case 'passive':
-				return this._state.playerStats.treasureStats.filter(stat => isPassive(stat.cardId, this.allCards));
+	private buildStats(): readonly DuelsHeroPlayerStat[] {
+		if (!this._state?.playerStats) {
+			return;
+		}
+		switch (this._state.activeStatTypeFilter) {
+			case 'hero-power':
+				return this._state.playerStats.heroPowerStats;
+			case 'signature-treasure':
+				return this._state.playerStats.signatureTreasureStats;
+			case 'hero':
+			default:
+				return this._state.playerStats.heroStats;
 		}
 	}
 }
