@@ -17,6 +17,7 @@ export class DuelsSelectCategoryProcessor implements Processor {
 				navigationDuels: navigationState.navigationDuels.update({
 					selectedCategoryId: event.categoryId,
 					expandedRunIds: [] as readonly string[],
+					treasureSearchString: null,
 				} as NavigationDuels),
 			} as NavigationState),
 		];

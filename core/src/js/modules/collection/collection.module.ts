@@ -107,6 +107,7 @@ import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondar
 import { DuelsHeroTierListComponent } from '../../components/duels/desktop/secondary/duels-hero-tier-list.component';
 import { DuelsReplaysRecapComponent } from '../../components/duels/desktop/secondary/duels-replays-recap.component';
 import { DuelsTierComponent } from '../../components/duels/desktop/secondary/duels-tier.component';
+import { DuelsTreasureSearchComponent } from '../../components/duels/desktop/secondary/duels-treasure-search.component';
 import { DuelsTreasureTierListComponent } from '../../components/duels/desktop/secondary/duels-treasure-tier-list.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
@@ -274,6 +275,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsTreasureTierListComponent,
 		DuelsHeroTierListComponent,
 		DuelsTierComponent,
+		DuelsTreasureSearchComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

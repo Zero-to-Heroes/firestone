@@ -8,7 +8,7 @@ import {
 	HeroPowerStat,
 	HeroStat,
 	SignatureTreasureStat,
-	TreasureStat,
+	TreasureStat
 } from '@firestone-hs/duels-global-stats/dist/stat';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
@@ -23,14 +23,14 @@ import {
 	HeroPowerDuelsDeckStatInfo,
 	LootDuelsDeckStatInfo,
 	SignatureTreasureDuelsDeckStatInfo,
-	TreasureDuelsDeckStatInfo,
+	TreasureDuelsDeckStatInfo
 } from '../../models/duels/duels-personal-deck';
 import {
 	DuelsDeckStat,
 	DuelsHeroPlayerStat,
 	DuelsPlayerStats,
 	DuelsTreasureStat,
-	DuelsTreasureStatForClass,
+	DuelsTreasureStatForClass
 } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsState } from '../../models/duels/duels-state';
@@ -610,6 +610,7 @@ export class DuelsStateBuilderService {
 					const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
 					return this.buildTreasureStat(treasureId, statsForTreasure, runs, totalTreasureOfferings);
 				})
+				.filter(stat => stat.globalWinrate)
 				// For now I want to keep the "rare" passives, since they have been confirmed
 				// .filter(stat => stat.globalTotalMatches > 0)
 				.sort(this.getTreasureSortFunction(prefs))

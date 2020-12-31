@@ -56,15 +56,26 @@
 		width: 400px;
 		height: calc(100% - 340px);
 		flex-shrink: 0;
-		background: rgba(255, 255, 255, 0.08);
-		padding-left: 10px;
+		// background: rgba(255, 255, 255, 0.08);
 
 		& > * {
 			min-height: 0;
 			max-height: 100%;
 			flex-shrink: 0;
 			display: flex;
-			height: 100%;
+			flex-grow: 1;
+			flex-shrink: 1;
+			padding-left: 10px;
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		duels-treasure-search {
+			width: 100%;
+			height: auto;
+			margin-bottom: 10px;
+			background: transparent;
+			padding-left: 0;
+			flex-shrink: 0;
 		}
 	}
 }

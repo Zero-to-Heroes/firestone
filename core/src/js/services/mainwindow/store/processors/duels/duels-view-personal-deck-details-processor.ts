@@ -24,6 +24,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 					selectedDeckId: undefined,
 					menuDisplayType: 'breadcrumbs',
 					expandedRunIds: expandedRunIds,
+					treasureSearchString: null,
 				} as NavigationDuels),
 				text: this.getDeckName(currentState, event.deckstring),
 			} as NavigationState),

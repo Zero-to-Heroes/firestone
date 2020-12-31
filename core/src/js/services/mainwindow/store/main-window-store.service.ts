@@ -85,6 +85,7 @@ import { DuelsTopDeckRunDetailsLoadedEvent } from './events/duels/duels-top-deck
 import { DuelsTopDecksClassFilterSelectedEvent } from './events/duels/duels-top-decks-class-filter-selected-event';
 import { DuelsTopDecksDustFilterSelectedEvent } from './events/duels/duels-top-decks-dust-filter-selected-event';
 import { DuelsTreasurePassiveTypeFilterSelectedEvent } from './events/duels/duels-treasure-passive-type-filter-selected-event';
+import { DuelsTreasureSearchEvent } from './events/duels/duels-treasure-search-event';
 import { DuelsTreasureSortFilterSelectedEvent } from './events/duels/duels-treasure-sort-filter-selected-event';
 import { DuelsViewDeckDetailsEvent } from './events/duels/duels-view-deck-details-event';
 import { DuelsViewPersonalDeckDetailsEvent } from './events/duels/duels-view-personal-deck-details-event';
@@ -168,6 +169,7 @@ import { DuelsTopDeckRunDetailsLoadedProcessor } from './processors/duels/duels-
 import { DuelsTopDecksClassFilterSelectedProcessor } from './processors/duels/duels-top-decks-class-filter-selected-processor';
 import { DuelsTopDecksDustFilterSelectedProcessor } from './processors/duels/duels-top-decks-dust-filter-selected-processor';
 import { DuelsTreasurePassiveTypeFilterSelectedProcessor } from './processors/duels/duels-treasure-passive-type-filter-selected-processor';
+import { DuelsTreasureSearchProcessor } from './processors/duels/duels-treasure-search-processor';
 import { DuelsTreasureSortFilterSelectedProcessor } from './processors/duels/duels-treasure-sort-filter-selected-processor';
 import { DuelsViewDeckDetailsProcessor } from './processors/duels/duels-view-deck-details-processor';
 import { DuelsViewPersonalDeckDetailsProcessor } from './processors/duels/duels-view-personal-deck-details-processor';
@@ -653,6 +655,9 @@ export class MainWindowStoreService {
 
 			DuelsToggleExpandedRunEvent.eventName(),
 			new DuelsToggleExpandedRunProcessor(),
+
+			DuelsTreasureSearchEvent.eventName(),
+			new DuelsTreasureSearchProcessor(),
 		);
 	}
 
