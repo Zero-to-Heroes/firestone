@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../../models/card';
+import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
 
 @Injectable()
 export class CollectionManager {
 	// TODO: update the collection if the player goes into the game
-	constructor(private memoryReading: MemoryInspectionService, private db: IndexedDbService) {}
+	constructor(
+		private memoryReading: MemoryInspectionService,
+		private db: IndexedDbService,
+		private ow: OverwolfService,
+	) {
+		this.init();
+	}
 
 	public async getCollection(): Promise<Card[]> {
 		console.log('[collection-manager] getting collection');
@@ -32,5 +39,14 @@ export class CollectionManager {
 			}
 		}
 		return null;
+	}
+
+	private init() {
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
+				console.debug('[collection-manager] reloading collection from memory');
+				await this.getCollection();
+			}
+		});
 	}
 }
