@@ -6,7 +6,7 @@ import {
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -169,7 +169,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				// First update the state before restoring the window
 				// console.log('received state', newState);
 				this.dataState = newState;
-				this.activeTheme = this.dataState.showFtue ? 'general' : this.navigationState?.currentApp;
+				this.activeTheme = this.buildActiveTheme();
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -182,7 +182,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				// First update the state before restoring the window
 				// console.log('received state', newState, this.dataState);
 				this.navigationState = newState;
-				this.activeTheme = this.dataState?.showFtue ? 'general' : this.navigationState.currentApp;
+				this.activeTheme = this.buildActiveTheme();
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -251,6 +251,14 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 		this.dataStoreSubscription?.unsubscribe();
+	}
+
+	private buildActiveTheme(): CurrentAppType {
+		return this.dataState.showFtue
+			? 'general'
+			: ['decktracker', 'duels'].includes(this.navigationState?.currentApp)
+			? 'battlegrounds'
+			: this.navigationState?.currentApp;
 	}
 
 	private async init() {

@@ -2,60 +2,56 @@
 .replays-theme {
 	--window-background-image-backup: radial-gradient(
 		44.58% 50% at 50% 50%,
-		rgba(11, 54, 23, 1) 0%,
-		rgba(13, 22, 14, 1) 100%
+		rgba(48, 35, 128, 1) 0%,
+		rgba(24, 24, 43, 1) 100%
 	);
 	--window-background-image: radial-gradient(
 			44.58% 50% at 50% 50%,
-			rgba(11, 54, 23, 0.7) 0%,
-			rgba(13, 22, 14, 0.7) 100%
+			rgba(48, 35, 128, 0.7) 0%,
+			rgba(24, 24, 43, 0.7) 100%
 		),
-		url('/Files/assets/images/backgrounds/replays_bg.png');
-	--color-1: #a2ccb0;
-	--color-2: #89ad9a;
-	--color-3: #5f7868;
-	--color-4: #3b5141;
-	--color-5: #061d14;
-	--color-6: #c4c4c4;
-	--color-7: #182d1e;
+		url('/Files/assets/images/backgrounds/decktracker_main_window.png');
+	--color-1: #9fb6d7;
+	--color-2: #767faf;
+	--color-3: #5a5f87;
+	--color-4: #303352;
+	--color-5: #1f2142;
+	--color-6: #101530;
+	--color-7: #07081f;
 	--color-common-1: #d9c3ab;
 	--color-common-2: #ffb948;
 
-	--window-outline-color: var(--color-4);
-	--default-text-color: var(--color-common-1);
-	--default-title-color: var(--color-common-2);
-	--secondary-text-color: var(--color-6);
+	--window-outline-color: #303352;
+	--default-text-color: #d9c3ab;
+	--default-title-color: #ffb948;
+	--secondary-text-color: #9fb6d7;
 
-	--menu-selection-color: var(--color-3);
-	--on-menu-selection-color: var(--default-title-color);
-	--menu-bar-bottom-border-color: var(--color-4);
+	--menu-selection-color: #5a5f87;
+	--on-menu-selection-color: #ffb948;
+	--menu-bar-bottom-border-color: #303352;
 
-	--tooltip-background-color: var(--color-6);
-	--tooltip-color: var(--color-5);
+	--tooltip-background-color: #9fb6d7;
+	--tooltip-color: #101530;
 
-	--ads-background-color: var(--color-5);
-	--ads-color: var(--color-7);
+	--ads-background-color: #07081f;
+	--ads-color: #101530;
 
-	--control-button-color: var(--color-1);
-	--on-control-button-background-color: var(--color-4);
-	--on-close-button-color: var(--color-4);
-	--on-close-button-background-color: var(--color-1);
+	--control-button-color: #9fb6d7;
+	--on-control-button-background-color: #303352;
+	--on-close-button-color: #101530;
+	--on-close-button-background-color: #9fb6d7;
 
-	--scrollbar-thumb-color: var(--color-3);
-	--on-scrollbar-thumb-color: var(--color-1);
-
-	--confirmation-text-color: var(--color-1);
-	--confirmation-background-color: var(--color-4);
-	--confirmation-backdrop-color: var(--color-5);
+	--scrollbar-thumb-color: #5a5f87;
+	--on-scrollbar-thumb-color: #9fb6d7;
 
 	--toggle-color-border: var(--color-1);
 	--toggle-color-knob: var(--color-1);
 
-	--confirmation-text-color: var(--color-1);
-	--confirmation-background-color: var(--color-4);
+	--confirmation-text-color: #9fb6d7;
+	--confirmation-background-color: #303352;
 	--on-confirmation-button-background-color: rgba(255, 255, 255, 0.08);
-	--confirmation-ok-button-color: var(--confirmation-text-color);
-	--confirmation-ok-button-background-color: var(--confirmation-background-color);
-	--on-confirmation-ok-button-background-color: var(--color-1);
-	--confirmation-backdrop-color: var(--color-5);
+	--confirmation-ok-button-color: #1f2142;
+	--confirmation-ok-button-background-color: #767faf;
+	--on-confirmation-ok-button-background-color: #9fb6d7;
+	--confirmation-backdrop-color: #07081f;
 }
