@@ -115,7 +115,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	dataState: MainWindowState;
 	navigationState: NavigationState;
 	windowId: string;
-	activeTheme: CurrentAppType;
+	activeTheme: CurrentAppType | 'decktracker-desktop';
 	cardsInitDone: boolean;
 
 	private isMaximized = false;
@@ -253,11 +253,11 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.dataStoreSubscription?.unsubscribe();
 	}
 
-	private buildActiveTheme(): CurrentAppType {
+	private buildActiveTheme(): CurrentAppType | 'decktracker-desktop' {
 		return this.dataState.showFtue
 			? 'general'
-			: ['decktracker', 'duels'].includes(this.navigationState?.currentApp)
-			? 'battlegrounds'
+			: ['decktracker'].includes(this.navigationState?.currentApp)
+			? 'decktracker-desktop'
 			: this.navigationState?.currentApp;
 	}
 

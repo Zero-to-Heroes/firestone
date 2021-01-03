@@ -89,14 +89,6 @@ export class RewardMonitorService {
 			return;
 		}
 		this.init();
-		window['hop'] = async (levels: number, xp: number) => {
-			this.showXpGainedNotification(levels, xp, {
-				Level: 16,
-				Xp: 20,
-				XpBonusPercent: 10,
-				XpNeeded: 2000,
-			});
-		};
 	}
 
 	public async getXpGained(): Promise<number> {
@@ -200,50 +192,6 @@ export class RewardMonitorService {
 		return (
 			a.Level === b.Level && a.Xp === b.Xp && a.XpNeeded === b.XpNeeded && a.XpBonusPercent === b.XpBonusPercent
 		);
-	}
-
-	private showXpGainedNotification(levelsGained: number, xpGained: number, infoAtGameEnd: RewardsTrackInfo) {
-		const levelsGainedEl = levelsGained
-			? `
-				<div class="xp-level">
-					<span class="text">Levels gained:</span>
-					<span class="value">${levelsGained}</span>
-				</div>`
-			: '';
-		const xpBonusEl = infoAtGameEnd.XpBonusPercent
-			? `
-				<div class="xp-bonus">
-					<span class="text">Xp bonus:</span>
-					<span class="value">${infoAtGameEnd.XpBonusPercent}%</span>
-				</div>`
-			: '';
-		this.notificationService.emitNewNotification({
-			content: `
-				<div class="rewards-message-container">
-					<div class="title">Match over!</div>
-					${levelsGainedEl}
-					<div class="xp-text">
-						<span class="text">Xp gained:</span>
-						<span class="value">${xpGained}</span>
-						<div class="progress">
-							<span class="item bracket">[</span>
-							<span class="item">${infoAtGameEnd.Xp}</span>
-							<span class="item separator">/</span>
-							<span class="item">${infoAtGameEnd.XpNeeded}</span>
-							<span class="item bracket">]</span>
-						</div>
-					</div>
-					${xpBonusEl}
-					<button class="i-30 close-button">
-						<svg class="svg-icon-fill">
-							<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
-						</svg>
-					</button>
-				</div>`,
-			notificationId: `rewards-${Date.now()}`,
-			timeout: 0,
-			type: 'rewards',
-		});
 	}
 }
 

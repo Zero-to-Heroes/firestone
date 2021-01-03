@@ -22,29 +22,10 @@ export class ReplaysNotificationService {
 			.subscribe(data => this.showNewMatchEndNotification(Object.assign(new GameStats(), data.data[0])));
 		// this.events.on(Events.GAME_END).subscribe(data => this.showReplayRecordingStart(data.data[0]));
 		console.log('[replays-notification] listening for achievement completion events');
+		window['hop'] = () => {
+			this.showNewMatchEndNotification({ stats: [GameStat.create({} as any)] } as any);
+		};
 	}
-
-	// private async showReplayRecordingStart(reviewId: string) {
-	// 	const prefs = await this.prefs.getPreferences();
-	// 	if (!prefs.replaysShowNotification) {
-	// 		console.log(
-	// 			'[replays-notification] preference is turned off, not showing replay start notification',
-	// 			reviewId,
-	// 		);
-	// 		return;
-	// 	}
-	// 	console.log('[replays-notification] preparing replay start notification', reviewId);
-	// 	// console.log('[replays-notification] will emit notif notification', stat);
-	// 	this.notificationService.emitNewNotification({
-	// 		notificationId: `replay-${reviewId}`,
-	// 		content: this.buildStartNotificationTemplate(reviewId),
-	// 		type: 'match-stats-recorded',
-	// 		app: 'replays',
-	// 		theClass: 'remove-on-update',
-	// 		clickToClose: true,
-	// 		timeout: 0,
-	// 	} as Message);
-	// }
 
 	private async showNewMatchEndNotification(stats: GameStats) {
 		const prefs = await this.prefs.getPreferences();
@@ -53,8 +34,6 @@ export class ReplaysNotificationService {
 			return;
 		}
 		const xpForGame = await this.rewards.getXpForGameInfo();
-		// Give some time for the replay to actually be recorded
-		// setTimeout(() => {
 		const stat = Object.assign(new GameStat(), stats.stats[0]);
 		console.log('[replays-notification] preparing new game stat notification', stat);
 		// console.log('[replays-notification] will emit notif notification', stat);
@@ -68,30 +47,7 @@ export class ReplaysNotificationService {
 			clickToClose: true,
 			eventToSendOnClick: () => new ShowReplayEvent(stat.reviewId),
 		} as Message);
-		// }, 3500);
 	}
-
-	// private buildStartNotificationTemplate(reviewId: string): string {
-	// 	return `
-	// 		<div class="match-stats-message-container replay-${reviewId} unclickable">
-	// 			<div class="loading-icon">
-	// 				<svg class="svg-icon-fill">
-	// 					<use xlink:href="assets/svg/sprite.svg#loading_spiral" />
-	// 				</svg>
-	// 			</div>
-	// 			<div class="message">
-	// 				<div class="title">
-	// 					<span>Game replay being recorded</span>
-	// 				</div>
-	// 				<span class="text">Hold tight!</span>
-	// 			</div>
-	// 			<button class="i-30 close-button">
-	// 				<svg class="svg-icon-fill">
-	// 					<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
-	// 				</svg>
-	// 			</button>
-	// 		</div>`;
-	// }
 
 	private buildNotificationTemplate(stat: GameStat, xpForGame: XpForGameInfo): string {
 		const [playerRankFrame, playerRankArt, playerRankTooltip] = stat.buildPlayerRankImage();

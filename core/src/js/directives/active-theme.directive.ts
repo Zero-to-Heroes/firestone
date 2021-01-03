@@ -18,6 +18,9 @@ export class ActiveThemeDirective {
 	@HostBinding('class.decktracker-theme') get decktrackerTheme() {
 		return this.activeTheme === 'decktracker';
 	}
+	@HostBinding('class.decktracker-desktop-theme') get decktrackerDesktopTheme() {
+		return this.activeTheme === 'decktracker-desktop';
+	}
 	@HostBinding('class.replays-theme') get replaysTheme() {
 		return this.activeTheme === 'replays';
 	}
@@ -27,5 +30,5 @@ export class ActiveThemeDirective {
 	@HostBinding('class.general-theme') get generalTheme() {
 		return this.activeTheme === 'general';
 	}
-	@Input() activeTheme: CurrentAppType | 'general' | 'battlegrounds';
+	@Input() activeTheme: CurrentAppType | 'general' | 'battlegrounds' | 'decktracker-desktop';
 }

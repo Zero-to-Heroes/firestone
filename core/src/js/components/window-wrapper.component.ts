@@ -7,7 +7,7 @@ import {
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { OverwolfService } from '../services/overwolf.service';
 
@@ -21,6 +21,7 @@ import { OverwolfService } from '../services/overwolf.service';
 		`../../css/themes/achievements-theme.scss`,
 		`../../css/themes/battlegrounds-theme.scss`,
 		`../../css/themes/decktracker-theme.scss`,
+		`../../css/themes/decktracker-desktop-theme.scss`,
 		`../../css/themes/replays-theme.scss`,
 		`../../css/themes/duels-theme.scss`,
 		`../../css/themes/general-theme.scss`,
