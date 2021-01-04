@@ -22,6 +22,7 @@ export class Preferences {
 	readonly setAllNotifications: boolean = true;
 	readonly contactEmail: string;
 	readonly lastSeenReleaseNotes: string;
+	readonly dontShowNewVersionNotif: boolean = false;
 
 	readonly advancedModeToggledOn: boolean;
 

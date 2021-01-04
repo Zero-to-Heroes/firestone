@@ -70,9 +70,15 @@ export class PreferencesService {
 	// 	await this.savePreferences(newPrefs);
 	// }
 
-	public async setDontConfirmVideoDeletion(dontAsk: boolean) {
+	// public async setDontConfirmVideoDeletion(dontAsk: boolean) {
+	// 	const prefs = await this.getPreferences();
+	// 	const newPrefs: Preferences = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk };
+	// 	await this.savePreferences(newPrefs);
+	// }
+
+	public async setDontShowNewVersionNotif(value: boolean) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk };
+		const newPrefs: Preferences = { ...prefs, dontShowNewVersionNotif: value };
 		await this.savePreferences(newPrefs);
 	}
 

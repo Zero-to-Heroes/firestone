@@ -21,10 +21,17 @@ import { PreferencesService } from '../../../services/preferences.service';
 					advancedSetting
 				></preference-toggle>
 				<preference-toggle
+					field="collectionUseOverlay"
+					label="Set integrated mode"
+					tooltip="When turned on, the main window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app. Changing this value will close then reopen the Settings window and the Main window"
+					[toggleFunction]="toggleOverlay"
+				></preference-toggle>
+				<preference-toggle
 					field="showSessionRecapOnExit"
 					label="Session recap on exit"
 					tooltip="Shows a recap of the past session when you exit Hearthstone"
 				></preference-toggle>
+				
 				<preference-toggle
 					*ngIf="enableShowXpRecap"
 					field="showXpRecapAtGameEnd"
@@ -32,15 +39,9 @@ import { PreferencesService } from '../../../services/preferences.service';
 					tooltip="Shows a recap of the XP / levels gained after each match"
 				></preference-toggle>
 				<preference-toggle
-					field="shareGamesWithVS"
-					label="Contribute to the VS meta report"
-					tooltip="When turned on, you contribute to build the Vicious Syndicate meta report. The server parses your games and extracts some global info (like the game's rank, the cards played) and anonymously sends this aggregated data to Vicious Syndicate. We don't get paid for this, but we do get some exposure since they then talk about us :)"
-				></preference-toggle>
-				<preference-toggle
-					field="collectionUseOverlay"
-					label="Set integrated mode"
-					tooltip="When turned on, the main window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app. Changing this value will close then reopen the Settings window and the Main window"
-					[toggleFunction]="toggleOverlay"
+					field="dontShowNewVersionNotif"
+					label="Hide release notes on app start"
+					tooltip="Don't show the new release notes for the new Firestone version"
 				></preference-toggle>
 				<preference-toggle
 					field="setAllNotifications"
@@ -49,6 +50,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 					advancedSetting
 					messageWhenToggleValue="Notifications now TURNED OFF globally."
 					[valueToDisplayMessageOn]="false"
+				></preference-toggle>
+				
+				<preference-toggle
+					field="shareGamesWithVS"
+					label="Contribute to the VS meta report"
+					tooltip="When turned on, you contribute to build the Vicious Syndicate meta report. The server parses your games and extracts some global info (like the game's rank, the cards played) and anonymously sends this aggregated data to Vicious Syndicate. We don't get paid for this, but we do get some exposure since they then talk about us :)"
 				></preference-toggle>
 			</section>
 		</div>

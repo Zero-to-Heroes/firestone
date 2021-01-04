@@ -6,6 +6,8 @@
 	bottom: 0;
 	z-index: 999999999999999;
 	pointer-events: none;
+
+	--tooltip-background-color: #a89782;
 }
 
 .new-version {
@@ -15,6 +17,7 @@
 	width: 100%;
 	height: 100%;
 	pointer-events: all;
+	color: #a89782;
 
 	.backdrop {
 		background: #190505;
@@ -29,8 +32,18 @@
 	.element {
 		position: relative;
 		z-index: 1;
-		width: 550px;
-		background: #472406;
+		width: 580px;
+		height: 540px;
+		background-size: 100%;
+		background-repeat: round;
+		background-image: radial-gradient(
+				29.81% 45.78% at 50% 50%,
+				rgba(142, 91, 35, 0.7) 0%,
+				rgba(102, 58, 26, 0.7) 0%,
+				rgba(47, 13, 13, 0.7) 100%
+			),
+			url('/Files/assets/images/backgrounds/whats_new.png');
+
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
@@ -38,33 +51,44 @@
 		font-style: normal;
 		text-align: center;
 		font-size: 14px;
-		color: #b88e61;
 		box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
-		margin-top: 30px;
-		margin-bottom: 20px;
+		margin: auto;
 		padding: 20px;
 		// border: 1px solid  #472406;
 
 		.title {
 			margin-top: 0;
-			margin-bottom: 20px;
-			margin-left: auto;
+			margin-bottom: 12px;
 			margin-right: auto;
 			font-weight: 600;
 			font-size: 18px;
 			color: #ffb948;
 		}
 
+		.sections {
+			background: rgba(255, 255, 255, 0.08);
+			padding: 15px;
+			overflow: auto;
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+		}
+
 		.section {
 			display: flex;
 			flex-direction: column;
 			align-items: flex-start;
-			margin-bottom: 15px;
+			margin-bottom: 25px;
 
 			.header {
 				font-weight: bold;
 				color: #d9c3ab;
 				margin-bottom: 10px;
+				text-transform: uppercase;
+			}
+
+			.section-text {
+				text-align: left;
 			}
 
 			.updates {
@@ -75,32 +99,54 @@
 				justify-content: flex-start;
 
 				.update {
-					text-align: start;
-					margin-bottom: 5px;
-					line-height: 22px;
+					display: flex;
+					flex-direction: column;
+					margin-bottom: 20px;
 
-					.category-icon,
-					.type-icon {
+					&:last-child {
+						margin-bottom: 0;
+					}
+
+					.update-header {
+						// font-weight: bold;
+						color: #d9c3ab;
+						margin-bottom: 5px;
+						text-align: left;
 						display: none;
-						width: 22px;
-						height: 22px;
-						margin-right: 3px;
-						float: left;
 					}
 
-					&.duels,
-					&.battlegrounds,
-					&.app {
-						.category-icon {
-							display: inherit;
-						}
+					.contents {
+						display: flex;
 					}
 
-					// &.feature {
-					// 	.category-icon {
-					// 		display: inherit;
-					// 	}
-					// }
+					.icon {
+						width: 60px;
+						height: 60px;
+						margin-right: 6px;
+						flex-shrink: 0;
+					}
+				}
+			}
+
+			.details {
+				list-style: none;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				justify-content: flex-start;
+
+				.detail {
+					text-align: start;
+					margin-bottom: 6px;
+
+					&:last-child {
+						margin-bottom: 0;
+					}
+
+					.detail-type {
+						color: #d9c3ab;
+						font-weight: bold;
+					}
 				}
 			}
 		}
@@ -109,16 +155,38 @@
 			display: flex;
 			width: 100%;
 			justify-content: flex-end;
+			margin-top: 10px;
 
-			button {
-				border: 1px solid #d9c3ab;
+			.dont-show {
+				display: flex;
+				flex-grow: 1;
+				align-items: center;
+				color: #d9c3ab;
+
+				label {
+					margin-bottom: 0;
+					margin-right: 5px;
+
+					i {
+						position: relative;
+						top: 3px;
+					}
+
+					p {
+						font-weight: bold;
+					}
+				}
+			}
+
+			.confirm {
+				border: 1px solid #ffb948;
 				padding-left: 25px;
 				padding-right: 25px;
 				width: auto;
 				height: 35px;
 				display: flex;
 				align-items: center;
-				color: #d9c3ab;
+				color: #ffb948;
 
 				div {
 					display: flex;

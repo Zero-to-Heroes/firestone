@@ -51,6 +51,7 @@ declare let amplitude: any;
 						[windowId]="windowId"
 						[settingsApp]="navigationState.currentApp"
 					></control-settings>
+					<control-help (help)="onHelp()"></control-help>
 					<control-discord></control-discord>
 					<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 					<control-maximize [windowId]="windowId"></control-maximize>
@@ -104,7 +105,12 @@ declare let amplitude: any;
 				>
 				</duels-desktop>
 			</section>
-			<new-version-notification class="new-version" *ngIf="newVersionNotification"></new-version-notification>
+			<new-version-notification
+				*ngIf="newVersionNotification"
+				class="new-version"
+				[forceOpen]="forceShowReleaseNotes"
+				(notificationDisplayed)="onNewVersionDisplayed($event)"
+			></new-version-notification>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,6 +123,8 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	windowId: string;
 	activeTheme: CurrentAppType | 'decktracker-desktop';
 	cardsInitDone: boolean;
+	displayingNewVersionNotification: boolean;
+	forceShowReleaseNotes: boolean;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
@@ -253,7 +261,28 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.dataStoreSubscription?.unsubscribe();
 	}
 
+	onHelp(event: MouseEvent) {
+		this.forceShowReleaseNotes = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	onNewVersionDisplayed(value: boolean) {
+		this.displayingNewVersionNotification = value;
+		this.activeTheme = this.buildActiveTheme();
+		if (!value) {
+			this.forceShowReleaseNotes = false;
+		}
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	private buildActiveTheme(): CurrentAppType | 'decktracker-desktop' {
+		if (this.displayingNewVersionNotification) {
+			return 'general';
+		}
 		return this.dataState.showFtue
 			? 'general'
 			: ['decktracker'].includes(this.navigationState?.currentApp)

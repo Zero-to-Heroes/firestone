@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
 	selector: 'control-help',
@@ -8,31 +8,18 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		`../../../css/component/controls/control-help.component.scss`,
 	],
 	template: `
-		<a
-			href="https://discord.gg/H4Hj7bC"
-			target="_blank"
-			(mousedown)="preventMiddleClick($event)"
-			(click)="preventMiddleClick($event)"
-			(auxclick)="preventMiddleClick($event)"
-		>
+		<button (mousedown)="showHelp()" helpTooltip="Show release notes">
 			<svg class="svg-icon-fill">
-				<use
-					xmlns:xlink="https://www.w3.org/1999/xlink"
-					xlink:href="assets/svg/sprite.svg#window-control_support"
-				></use>
+				<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#help"></use>
 			</svg>
-		</a>
+		</button>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlHelpComponent {
-	preventMiddleClick(event: MouseEvent) {
-		// console.log('intercepting mouse click?', event);
-		if (event.which === 2) {
-			// console.log('preventing middle click on href, as it messes up with the windowing system');
-			event.stopPropagation();
-			event.preventDefault();
-			return false;
-		}
+	@Output() help: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+	showHelp() {
+		this.help.next(true);
 	}
 }
