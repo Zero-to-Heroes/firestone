@@ -7,7 +7,7 @@ import {
 	Input,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { OverwolfService } from '../services/overwolf.service';
 

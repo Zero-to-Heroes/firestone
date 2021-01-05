@@ -11,7 +11,7 @@ import {
 	OnInit,
 	Optional,
 	Renderer2,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.component';
 import { OverwolfService } from '../services/overwolf.service';

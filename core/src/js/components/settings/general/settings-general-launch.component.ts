@@ -31,7 +31,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Session recap on exit"
 					tooltip="Shows a recap of the past session when you exit Hearthstone"
 				></preference-toggle>
-				
+
 				<preference-toggle
 					*ngIf="enableShowXpRecap"
 					field="showXpRecapAtGameEnd"
@@ -51,7 +51,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					messageWhenToggleValue="Notifications now TURNED OFF globally."
 					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
-				
+
 				<preference-toggle
 					field="shareGamesWithVS"
 					label="Contribute to the VS meta report"

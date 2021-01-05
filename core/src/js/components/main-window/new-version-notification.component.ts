@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../../services/overwolf.service';
