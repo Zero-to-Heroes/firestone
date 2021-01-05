@@ -45,6 +45,11 @@ export class GameStatsLoaderService {
 						.map(stat => ({
 							...stat,
 							playerDecklist: this.deckParser.normalizeDeckstring(stat.playerDecklist, stat.playerCardId),
+							// Because old stats are corrupted
+							currentDuelsRunId:
+								stat.creationTimestamp < new Date('2020-12-14').getTime()
+									? null
+									: stat.creationTimestamp,
 						}))
 						.map(stat => Object.assign(new GameStat(), stat)) as readonly GameStat[],
 				} as GameStats);
