@@ -41,7 +41,7 @@ export const updates: readonly Update[] = [
 					<br/>
 					<br/>
 					
-					And finally, I would like to thank you for using Firestone. It's thanks to you that the app can get where it is today, so a big thanks from the bottom of my heart.
+					And finally, I would like to thank you for using Firestone. It's thanks to you that the app can get where it is today, so thank you from the bottom of my heart.
 					<br/>
 					<br/>
 					Take care,
