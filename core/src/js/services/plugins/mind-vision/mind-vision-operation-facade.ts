@@ -71,7 +71,7 @@ export class MindVisionOperationFacade<T> {
 		if (!(await this.ow.inGame())) {
 			return null;
 		}
-		this.debug('race');
+		// this.debug('race');
 		return Promise.race([
 			new Promise<T>(resolve => {
 				this.processingQueue.enqueue({
