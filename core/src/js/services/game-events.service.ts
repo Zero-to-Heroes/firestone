@@ -839,11 +839,20 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_PLAYER_BOARD,
 						additionalData: {
-							cardId: gameEvent.Value.CardId,
-							board: gameEvent.Value.Board, // as is
-							hero: gameEvent.Value.Hero, // as is
-							heroPowerCardId: gameEvent.Value.HeroPowerCardId,
-							heroPowerUsed: gameEvent.Value.HeroPowerUsed,
+							playerBoard: {
+								cardId: gameEvent.Value.PlayerBoard.CardId,
+								board: gameEvent.Value.PlayerBoard.Board, // as is
+								hero: gameEvent.Value.PlayerBoard.Hero, // as is
+								heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
+								heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
+							},
+							opponentBoard: {
+								cardId: gameEvent.Value.OpponentBoard.CardId,
+								board: gameEvent.Value.OpponentBoard.Board, // as is
+								hero: gameEvent.Value.OpponentBoard.Hero, // as is
+								heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
+								heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,
+							},
 						},
 					} as GameEvent),
 				);

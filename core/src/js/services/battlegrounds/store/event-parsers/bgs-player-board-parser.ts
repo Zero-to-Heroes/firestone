@@ -1,5 +1,6 @@
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameTag } from '@firestone-hs/reference-data';
+import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { Map } from 'immutable';
@@ -9,7 +10,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
-import { BgsPlayerBoardEvent } from '../events/bgs-player-board-event';
+import { BgsPlayerBoardEvent, PlayerBoard } from '../events/bgs-player-board-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
@@ -21,24 +22,14 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsPlayerBoardEvent): Promise<BattlegroundsState> {
-		const playerToUpdate = currentState.currentGame.players.find(
-			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
-		);
-		if (!playerToUpdate) {
-			console.error(
-				'Could not idenfity player for whom to update board history',
-				event.heroCardId,
-				normalizeHeroCardId(event.heroCardId),
-				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
-			);
-			return currentState;
-		}
-		if (event.board.length > 7) {
+		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
 			console.error(
 				'no-format',
 				'Too many entities on the board',
-				event.heroCardId,
-				event.board.map(entity => entity.CardId),
+				event.playerBoard?.heroCardId,
+				event.playerBoard?.board?.map(entity => entity.CardId),
+				event.opponentBoard?.heroCardId,
+				event.opponentBoard?.board?.map(entity => entity.CardId),
 			);
 			return currentState.update({
 				currentGame: currentState.currentGame.update({
@@ -48,18 +39,92 @@ export class BgsPlayerBoardParser implements EventParser {
 				} as BgsGame),
 			} as BattlegroundsState);
 		}
+
+		const player: BgsPlayer = this.updatePlayer(currentState, event.playerBoard);
+		const opponent: BgsPlayer = this.updatePlayer(currentState, event.opponentBoard);
+		if (!player || !opponent) {
+			console.error(
+				'Could not idenfity player for whom to update board history',
+				event.playerBoard?.heroCardId,
+				event.opponentBoard?.heroCardId,
+				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
+			);
+			return currentState;
+		}
+
+		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
+			.map(p => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(player.cardId) ? player : p))
+			.map(p => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(opponent.cardId) ? opponent : p));
+
+		const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(player, event.playerBoard);
+		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(opponent, event.opponentBoard);
+		const battleInfo: BgsBattleInfo = {
+			playerBoard: bgsPlayer,
+			opponentBoard: bgsOpponent,
+			options: null,
+		};
+
+		const newGame = currentState.currentGame.update({
+			players: newPlayers,
+			battleInfo: battleInfo,
+			battleInfoStatus: 'waiting-for-result',
+		} as BgsGame);
+		const result = currentState.update({
+			currentGame: newGame,
+		} as BattlegroundsState);
+
+		if (result.currentGame.battleInfo.opponentBoard) {
+			this.simulation.startBgsBattleSimulation(result.currentGame.battleInfo, result.currentGame.availableRaces);
+		}
+		return result;
+	}
+
+	private buildBgsBoardInfo(player: BgsPlayer, playerBoard: PlayerBoard): BgsBoardInfo {
+		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board);
+		let tavernTier =
+			playerBoard.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
+			player.getCurrentTavernTier();
+		if (!tavernTier) {
+			console.warn('[bgs-simulation] no tavern tier', event);
+			tavernTier = 1;
+		}
+
+		return {
+			player: {
+				tavernTier: tavernTier,
+				cardId: playerBoard.hero?.CardId, // In case it's the ghost, the hero power is not active
+				heroPowerId: playerBoard.heroPowerCardId,
+				heroPowerUsed: playerBoard.heroPowerUsed,
+			},
+			board: bgsBoard,
+		};
+	}
+
+	private updatePlayer(currentState: BattlegroundsState, playerBoard: PlayerBoard): BgsPlayer {
+		const playerToUpdate = currentState.currentGame.players.find(
+			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(playerBoard.heroCardId),
+		);
+		if (!playerToUpdate) {
+			console.error(
+				'Could not idenfity player for whom to update board history',
+				playerBoard.heroCardId,
+				normalizeHeroCardId(playerBoard.heroCardId),
+				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
+			);
+			return null;
+		}
 		console.log(
 			'found player board to update',
 			playerToUpdate.cardId,
 			'with new board',
-			event.board.map(entity => entity.CardId),
+			playerBoard.board.map(entity => entity.CardId),
 			'from old board',
 			playerToUpdate.getLastKnownBoardState()?.map(entity => entity.cardID),
 		);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
 			BgsBoard.create({
-				board: this.buildEntities(event.board),
+				board: this.buildEntities(playerBoard.board),
 				turn: currentState.currentGame.currentTurn,
 			}),
 		];
@@ -71,42 +136,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			newPlayer.cardId,
 			newPlayer.getLastKnownBoardState()?.map(entity => entity.cardID),
 		);
-
-		// console.log(
-		// 	'building board to add to battle board',
-		// 	newPlayer.getLastKnownBoardState(),
-		// 	event.board,
-		// 	newPlayer,
-		// );
-		const bgsBoard: BoardEntity[] = newPlayer.buildBgsEntities(event.board);
-		let tavernTier =
-			event.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
-			newPlayer.getCurrentTavernTier();
-		if (!tavernTier) {
-			console.warn('[bgs-simulation] no tavern tier', event);
-			tavernTier = 1;
-		}
-		const bgsInfo: BgsBoardInfo = {
-			player: {
-				tavernTier: tavernTier,
-				cardId: event.hero?.CardId, // In case it's the ghost, the hero power is not active
-				heroPowerId: event.heroPowerCardId,
-				heroPowerUsed: event.heroPowerUsed,
-			},
-			board: bgsBoard,
-		};
-		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map(player =>
-			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
-		);
-		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame).addBattleBoardInfo(bgsInfo);
-		const result = currentState.update({
-			currentGame: newGame,
-		} as BattlegroundsState);
-
-		if (result.currentGame.battleInfo.opponentBoard) {
-			this.simulation.startBgsBattleSimulation(result.currentGame.battleInfo, result.currentGame.availableRaces);
-		}
-		return result;
+		return newPlayer;
 	}
 
 	private buildEntities(logEntities: readonly any[]): readonly Entity[] {

@@ -2,7 +2,6 @@ import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bg
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
-import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { BgsPlayer } from './bgs-player';
@@ -75,22 +74,22 @@ export class BgsGame {
 		return this.currentTurn;
 	}
 
-	public addBattleBoardInfo(bgsInfo: BgsBoardInfo): BgsGame {
-		const battleInfo: any = this.battleInfo || {};
-		//console.log('will set battle info', bgsInfo, battleInfo);
-		if (!battleInfo.playerBoard) {
-			battleInfo.playerBoard = bgsInfo;
-			// this.battleInfoStatus = 'waiting-for-result';
-		} else if (!battleInfo.opponentBoard) {
-			battleInfo.opponentBoard = bgsInfo;
-		} else {
-			console.warn('trying to set bgsinfo in full data', bgsInfo);
-			return this;
-		}
-		console.log('[bgs-game] setting battle info', battleInfo.opponentBoard?.player?.cardId);
-		return Object.assign(new BgsGame(), this, {
-			battleInfo: battleInfo,
-			battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',
-		} as BgsGame);
-	}
+	// public addBattleBoardInfo(bgsInfo: BgsBoardInfo): BgsGame {
+	// 	const battleInfo: any = this.battleInfo || {};
+	// 	//console.log('will set battle info', bgsInfo, battleInfo);
+	// 	if (!battleInfo.playerBoard) {
+	// 		battleInfo.playerBoard = bgsInfo;
+	// 		// this.battleInfoStatus = 'waiting-for-result';
+	// 	} else if (!battleInfo.opponentBoard) {
+	// 		battleInfo.opponentBoard = bgsInfo;
+	// 	} else {
+	// 		console.warn('trying to set bgsinfo in full data', bgsInfo);
+	// 		return this;
+	// 	}
+	// 	console.log('[bgs-game] setting battle info', battleInfo.opponentBoard?.player?.cardId);
+	// 	return Object.assign(new BgsGame(), this, {
+	// 		battleInfo: battleInfo,
+	// 		battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',
+	// 	} as BgsGame);
+	// }
 }

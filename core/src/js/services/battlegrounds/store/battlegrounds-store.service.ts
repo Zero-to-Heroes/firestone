@@ -230,11 +230,20 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.handleEventOnlyAfterTrigger(
 					new BgsPlayerBoardEvent(
-						gameEvent.additionalData.cardId,
-						gameEvent.additionalData.board,
-						gameEvent.additionalData.hero,
-						gameEvent.additionalData.heroPowerCardId,
-						gameEvent.additionalData.heroPowerUsed,
+						{
+							heroCardId: gameEvent.additionalData.playerBoard.cardId,
+							board: gameEvent.additionalData.playerBoard.board,
+							hero: gameEvent.additionalData.playerBoard.hero,
+							heroPowerCardId: gameEvent.additionalData.playerBoard.heroPowerCardId,
+							heroPowerUsed: gameEvent.additionalData.playerBoard.heroPowerUsed,
+						},
+						{
+							heroCardId: gameEvent.additionalData.opponentBoard.cardId,
+							board: gameEvent.additionalData.opponentBoard.board,
+							hero: gameEvent.additionalData.opponentBoard.hero,
+							heroPowerCardId: gameEvent.additionalData.opponentBoard.heroPowerCardId,
+							heroPowerUsed: gameEvent.additionalData.opponentBoard.heroPowerUsed,
+						},
 					),
 					GameEvent.BATTLEGROUNDS_COMBAT_START,
 				);
