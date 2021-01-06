@@ -61,16 +61,20 @@ export class AchievementsMonitor {
 	}
 
 	private async detectNewAchievementFromMemory() {
+		console.log('[achievement-monitor] detecting achievements from memory');
+
 		const [existingAchievements, achievementsProgress] = await Promise.all([
 			this.achievementsStorage.retrieveInGameAchievements(),
 			this.memory.getInGameAchievementsProgressInfo(),
 		]);
+		console.log('[achievement-monitor] retrieved achievements from memory');
 		const unlockedAchievements = (achievementsProgress?.achievements || [])
 			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
 			.map(progress => progress.id)
 			.map(id => existingAchievements.achievements.find(ach => ach.id === id))
 			.filter(ach => ach)
 			.filter(ach => !ach.completed);
+		console.log('[achievement-monitor] unlocked achievements', unlockedAchievements);
 		if (!unlockedAchievements.length) {
 			setTimeout(() => {
 				this.detectNewAchievementFromMemory();
@@ -80,6 +84,7 @@ export class AchievementsMonitor {
 		const achievements = await Promise.all(
 			unlockedAchievements.map(ach => this.achievementLoader.getAchievement(`hearthstone_game_${ach.id}`)),
 		);
+		console.log('[achievement-monitor] built achievements, emitting events', achievements);
 		await Promise.all(achievements.map(ach => this.sendUnlockEventFromAchievement(ach)));
 	}
 

@@ -93,7 +93,12 @@ export class EndGameListenerService {
 	}
 
 	private deckTimeout;
-	private listenToDeckUpdate() {
+	private listenToDeckUpdate(retriesLeft = 30) {
+		if (retriesLeft <= 0) {
+			console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
+			return;
+		}
+
 		if (this.deckTimeout) {
 			clearTimeout(this.deckTimeout);
 		}
@@ -102,8 +107,8 @@ export class EndGameListenerService {
 			this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
 			this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY
 		) {
-			console.log('[manastorm-bridge] no deckstring, waiting', this.currentGameMode);
-			this.deckTimeout = setTimeout(() => this.listenToDeckUpdate(), 2000);
+			// console.log('[manastorm-bridge] no deckstring, waiting', this.currentGameMode);
+			this.deckTimeout = setTimeout(() => this.listenToDeckUpdate(retriesLeft - 1), 2000);
 			return;
 		}
 		this.currentDeckstring = this.deckService.currentDeck.deckstring;
