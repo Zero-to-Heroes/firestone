@@ -44,11 +44,15 @@ export class LogListenerService {
 	}
 
 	async configureLogListeners() {
-		this.ow.addGameInfoUpdatedListener((res: any) => {
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			// console.log("onGameInfoUpdated: " + JSON.stringify(res));
+			this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 			if (this.ow.gameLaunched(res)) {
-				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
+			} else if (!(await this.ow.inGame())) {
+				console.log('[log-listener] [' + this.logFile + '] Left the game, cleaning log file');
+				await this.ow.writeFileContents(this.logsLocation, '');
+				console.log('[log-listener] [' + this.logFile + '] Cleaned log file');
 			}
 		});
 		const gameInfo = await this.ow.getRunningGameInfo();
