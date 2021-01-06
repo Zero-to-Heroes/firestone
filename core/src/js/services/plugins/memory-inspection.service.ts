@@ -109,7 +109,7 @@ export class MemoryInspectionService {
 
 	public async getInGameAchievementsProgressInfo(
 		forceReset = false,
-		numberOfRetries = 1,
+		numberOfRetries = 2,
 	): Promise<HsAchievementsInfo> {
 		return this.getInGameAchievementsProgressInfoOperation.call(numberOfRetries, forceReset);
 	}
