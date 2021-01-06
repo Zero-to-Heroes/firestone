@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '6.2.39',
+		version: '6.2.41',
 		sections: [
 			{
 				type: 'intro',
@@ -78,6 +78,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Changed the color scheme to unify all game modes (Ladder, Battlegrounds, Duels) and get rid of the green color for replays.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Deck detection is now supported in Book of Heroes, and AI decklists have been added for Garrosh and Uther adventures.`,
 							},
 						],
 					},
