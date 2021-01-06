@@ -114,13 +114,16 @@ export class GraphWithComparisonComponent {
 					return data.datasets?.map(dataset => dataset?.label || '') || [];
 				},
 			},
-			custom: function(tooltip: ChartTooltipModel) {
-				let tooltipEl = document.getElementById('chartjs-tooltip-stats');
+			custom: (tooltip: ChartTooltipModel) => {
+				const tooltipId = 'chartjs-tooltip-stats-' + this.id;
+				const chartParent = this.chart.nativeElement.parentNode;
+				let tooltipEl = document.getElementById(tooltipId);
 				// console.log('tooltip', tooltip);
 
 				if (!tooltipEl) {
 					tooltipEl = document.createElement('div');
-					tooltipEl.id = 'chartjs-tooltip-stats';
+					tooltipEl.id = tooltipId;
+					tooltipEl.classList.add('tooltip-container');
 					tooltipEl.innerHTML = `
 						<div class="stats-tooltip">					
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
@@ -128,15 +131,8 @@ export class GraphWithComparisonComponent {
 							</svg>
 							<div class="content"></div>
 						</div>`;
-					this._chart.canvas.parentNode.appendChild(tooltipEl);
+					chartParent.appendChild(tooltipEl);
 				}
-				// 230 is the current tooltip width
-				const left = Math.max(
-					0,
-					Math.min(tooltip.caretX - 110, this._chart.canvas.parentNode.getBoundingClientRect().right - 230),
-				);
-				const caretOffset = tooltip.caretX - 110 - left;
-				(tooltipEl.querySelector('.tooltip-arrow') as any).style.marginLeft = caretOffset + 'px';
 
 				// Hide if no tooltip
 				if (tooltip.opacity === 0) {
@@ -150,16 +146,22 @@ export class GraphWithComparisonComponent {
 					const yourLabel = tooltip.beforeBody[1];
 					const communityDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
 					const yourDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
+					const playerSection =
+						yourDatapoint?.value != null
+							? `
+								<div class="section player">
+									<div class="subtitle">${yourLabel}</div>
+									<div class="value">Turn ${yourDatapoint?.label}</div>
+									<div class="value">${yourDatapoint?.value ? 'Stat ' + parseInt(yourDatapoint.value).toFixed(0) : 'No data'}</div>
+								</div>
+							`
+							: '';
 					const innerHtml = `
 						<div class="body">
-							<div class="section player">
-								<div class="subtitle">${yourLabel}</div>
-								<div class="value">Turn ${yourDatapoint?.label}</div>
-								<div class="value">${yourDatapoint?.value ? 'Stat ' + parseInt(yourDatapoint.value).toFixed(0) : 'No data'}</div>
-							</div>
+							${playerSection}
 							<div class="section average">
 								<div class="subtitle">${communityLabel}</div>
-								<div class="value">Turn ${yourDatapoint?.label}</div>
+								<div class="value">Turn ${communityDatapoint?.label}</div>
 								<div class="value">${
 									communityDatapoint?.value
 										? 'Stat ' + parseInt(communityDatapoint.value).toFixed(0)
@@ -172,6 +174,19 @@ export class GraphWithComparisonComponent {
 					const tableRoot = tooltipEl.querySelector('.content');
 					tableRoot.innerHTML = innerHtml;
 				}
+
+				const tooltipWidth = tooltipEl.getBoundingClientRect().width;
+
+				const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
+				const left = Math.max(
+					0,
+					Math.min(tooltip.caretX - 110, chartParent.getBoundingClientRect().right - tooltipWidth),
+				);
+				// caret should always be positioned on the initial tooltip.caretX. However, since the
+				// position is relative to the tooltip element, we need to do some gymnastic :)
+				// 10 is because of padding
+				const carretLeft = tooltip.caretX - left - 10;
+				tooltipArrowEl.style.left = carretLeft + 'px';
 
 				// Display, position, and set styles for font
 				tooltipEl.style.opacity = '1';
@@ -195,6 +210,7 @@ export class GraphWithComparisonComponent {
 	@Input() yourLabel = 'You';
 	@Input() communityTooltip: string;
 	@Input() yourTooltip: string;
+	@Input() id: string;
 
 	@Input() set communityExtractor(value) {
 		if (value === this._communityExtractor) {
@@ -221,6 +237,7 @@ export class GraphWithComparisonComponent {
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
 
 	private updateValues() {
+		// console.log('updating values', this._yourExtractor, this._communityExtractor);
 		if (!this._yourExtractor || !this._communityExtractor) {
 			// console.log('not ready');
 			return;
@@ -250,6 +267,7 @@ export class GraphWithComparisonComponent {
 				label: this.yourLabel,
 			} as any,
 		];
+		// console.log('lineChartData', this.lineChartData);
 		// console.log(
 		// 	'last turn is',
 		// 	lastTurn,

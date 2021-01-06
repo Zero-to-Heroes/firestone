@@ -117,7 +117,7 @@ export class DevService {
 			deckstring?: string,
 			timeBetweenEvents?: number,
 		) => {
-			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${fileName}.json`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${fileName}.json`;
 			let logContents = await this.ow.getFileContents(logsLocation);
 			let events = JSON.parse(logContents);
 			await this.loadEvents(events, awaitEvents, deckstring, timeBetweenEvents);
@@ -127,7 +127,7 @@ export class DevService {
 		};
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {
 			console.log('starting new deck cycle', logName, repeats, deckString);
-			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${logName}.json`;
+			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${logName}.json`;
 			const logContents = await this.ow.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
 			while (repeats > 0) {

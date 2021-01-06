@@ -59,7 +59,7 @@
 }
 
 ::ng-deep {
-	#chartjs-tooltip-stats {
+	.tooltip-container {
 		position: absolute;
 		height: auto;
 		pointer-events: none;

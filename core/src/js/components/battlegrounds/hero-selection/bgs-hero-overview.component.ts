@@ -24,20 +24,18 @@ declare let amplitude: any;
 				[cardTooltipClass]="'bgs-hero-select'"
 			/>
 			<bgs-hero-stats [hero]="_hero" [patchNumber]="patchNumber"></bgs-hero-stats>
-			<div class="profile" *ngIf="warbandStats">
+			<div class="winrate">
 				<div
 					class="title"
 					[helpTooltip]="
-						'Board stats per turn, compared to the average board stats between all heroes (top4 6000+ MMR) since patch ' +
-						patchNumber?.number
+						'Battle winrate per turn (it gives you an indication of when this hero is the strongest)'
 					"
 				>
 					Winrate per turn
 				</div>
 				<bgs-winrate-chart [globalStats]="globalStats" [player]="player"></bgs-winrate-chart>
-				<!-- <bgs-hero-warband-stats [warbandStats]="warbandStats"></bgs-hero-warband-stats> -->
 			</div>
-			<bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes>
+			<bgs-hero-tribes class="tribes-overview" [hero]="_hero"></bgs-hero-tribes>
 		</div>
 		<div class="hero-overview empty" *ngIf="!_hero">
 			<i class="placeholder">
@@ -58,7 +56,7 @@ export class BgsHeroOverviewComponent {
 	icon: string;
 	tier: BgsHeroTier;
 	tribes: readonly { tribe: string; percent: string }[];
-	warbandStats: readonly { turn: number; totalStats: number }[];
+	// warbandStats: readonly { turn: number; totalStats: number }[];
 
 	@Input() set hero(value: BgsHeroStat) {
 		// console.log('setting hero', value, this._hero);
@@ -74,7 +72,7 @@ export class BgsHeroOverviewComponent {
 			.sort((a, b) => b.percent - a.percent)
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
-		this.warbandStats = value.warbandStats;
+		// this.warbandStats = value.warbandStats;
 		this.tier = value.tier;
 	}
 

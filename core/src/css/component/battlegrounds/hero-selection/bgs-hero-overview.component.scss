@@ -57,9 +57,22 @@
 		margin-bottom: 10px;
 	}
 
-	.profile {
+	.winrate {
 		margin-top: 20px;
 		width: 100%;
+
+		::ng-deep graph-with-comparison .container-1 {
+			height: 0;
+			padding-top: 56%;
+
+			& > div {
+				position: absolute !important;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+			}
+		}
 	}
 
 	&.empty {
@@ -76,7 +89,7 @@
 }
 
 @media (max-height: 900px) {
-	.profile {
+	.tribes-overview {
 		display: none;
 	}
 }
@@ -96,25 +109,25 @@
 }
 
 @media (min-height: 850px) {
-	.profile {
+	.winrate {
 		width: calc(min(33%, 6vh));
 	}
 }
 
 @media (min-height: 960px) {
-	.profile {
+	.winrate {
 		width: calc(min(33%, 7vh));
 	}
 }
 
 @media (min-height: 1000px) {
-	.profile {
+	.winrate {
 		width: calc(min(33%, 8vh));
 	}
 }
 
 @media (min-height: 1050px) {
-	.profile {
+	.winrate {
 		width: calc(min(33%, 9vh));
 	}
 }

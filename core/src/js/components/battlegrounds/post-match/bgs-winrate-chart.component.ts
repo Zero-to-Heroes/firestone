@@ -14,6 +14,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<graph-with-comparison
+			[id]="id"
 			communityLabel="Average for hero"
 			yourLabel="Current run"
 			[communityExtractor]="communityExtractor"
@@ -28,6 +29,7 @@ declare let amplitude: any;
 export class BgsWinrateChartComponent {
 	communityExtractor: () => readonly NumericTurnInfo[];
 	yourExtractor: () => readonly NumericTurnInfo[];
+	id: string;
 
 	private _globalStats: BgsStats;
 	private _stats: BgsPostMatchStats;
@@ -55,11 +57,13 @@ export class BgsWinrateChartComponent {
 			return;
 		}
 		this._player = value;
+		this.id = this._player.cardId;
 		this.updateInfo();
 	}
 
 	private updateInfo() {
-		if (!this._player || !this._stats || !this._globalStats) {
+		// console.log('updateInfo', this._player, this._stats, this._globalStats);
+		if (!this._player || !this._globalStats) {
 			return;
 		}
 		this.communityExtractor = (): readonly NumericTurnInfo[] => {
