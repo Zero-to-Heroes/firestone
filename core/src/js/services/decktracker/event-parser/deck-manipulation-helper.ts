@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { CardMetaInfo } from '../../../models/decktracker/card-meta-info';
@@ -319,7 +319,7 @@ export class DeckManipulationHelper {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard.creatorCardId && !removedCard.cardId) {
-			const newCardId = this.overrideCardIdForSomeAiCards(cardId);
+			const newCardId = getBaseCardId(cardId);
 			const result = this.removeSingleCardFromZone(deck.deck, newCardId, entityId);
 			return result[0];
 		}
@@ -360,48 +360,6 @@ export class DeckManipulationHelper {
 		return secret.update({
 			allPossibleOptions: newOptions,
 		} as BoardSecret);
-	}
-
-	// The spellstones are present in the AI decklist in their basic version
-	// However, if the AI plays the spellstone's upgraded version, we need to remove
-	// the basic one from the decklist
-	private overrideCardIdForSomeAiCards(cardId: string): string {
-		switch (cardId) {
-			// The spellstones
-			case 'LOOT_103t1':
-			case 'LOOT_103t2':
-				return 'LOOT_103';
-			case 'LOOT_043t2':
-			case 'LOOT_043t3':
-				return 'LOOT_043';
-			case 'LOOT_051t1':
-			case 'LOOT_051t2':
-				return 'LOOT_051';
-			case 'LOOT_064t1':
-			case 'LOOT_064t2':
-				return 'LOOT_064';
-			case 'LOOT_080t2':
-			case 'LOOT_080t3':
-				return 'LOOT_080';
-			case 'LOOT_091t1':
-			case 'LOOT_091t2':
-				return 'LOOT_091';
-			case 'LOOT_203t2':
-			case 'LOOT_203t3':
-				return 'LOOT_203';
-			case 'LOOT_503t':
-			case 'LOOT_503t2':
-				return 'LOOT_503';
-			case 'LOOT_507t':
-			case 'LOOT_507t2':
-				return 'LOOT_507';
-			case 'FB_Champs_LOOT_080t2':
-			case 'FB_Champs_LOOT_080t3':
-				return 'FB_Champs_LOOT_080';
-
-			default:
-				return cardId;
-		}
 	}
 
 	private normalizeCardId(cardId: string, shouldNormalize: boolean): string {

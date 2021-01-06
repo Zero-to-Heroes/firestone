@@ -35,7 +35,7 @@
 		"@firestone-hs/compute-bgs-run-stats": "^1.0.13",
 		"@firestone-hs/duels-global-stats": "^1.0.2",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.66",
-		"@firestone-hs/reference-data": "^0.1.59",
+		"@firestone-hs/reference-data": "^0.1.60",
 		"@firestone-hs/replay-parser": "^1.1.35",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.2",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.7",
