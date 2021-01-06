@@ -45,7 +45,11 @@ export class LogListenerService {
 
 	async configureLogListeners() {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.log("onGameInfoUpdated: " + JSON.stringify(res));
+			// console.log('onGameInfoUpdated: ' + JSON.stringify(res));
+			if (!res?.gameInfo) {
+				return;
+			}
+
 			this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 			if (this.ow.gameLaunched(res)) {
 				this.registerLogMonitor();
