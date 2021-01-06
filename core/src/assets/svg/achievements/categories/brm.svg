@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg enable-background="new 0 0 128 128" version="1.1" viewBox="0 0 128 128" style="padding: 15px; opacity: 0.6;" xml:space="preserve"
+	xmlns="http://www.w3.org/2000/svg">
+	<path d="m56.167 106h-49.562s-2.609-1.277 0-5.935 30.371-51.877 30.371-51.877 2.236-2.648 4.658-0.226 29.253 27.763 29.253 27.763l-25.713 9.32s-3.726 1.999-1.491 4.608c2.236 2.609 12.484 16.347 12.484 16.347z" fill="var(--icon-color, currentcolor)"/>
+	<path d="m48.837 88.513l20 17.487h11.552l11.179-17.487s1.491-3.74 3.726 0.359 9.503 17.128 9.503 17.128h15.465s3.726-1.277 1.677-5.562-18.632-35.297-18.632-35.297-3.511-5.766-7.144-0.179l-4.163 3.735v2.515l-43.163 17.301z" fill="var(--icon-color, currentcolor)"/>
+	<path d="m92.127 68.045l-12.484 4.658-31.302-22.917 15.659-24.409s4.091-5.403 6.886 0c2.795 5.404 21.241 42.668 21.241 42.668z" fill="var(--icon-color, currentcolor)"/>
+</svg>

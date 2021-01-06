@@ -32,7 +32,7 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 					</svg>
 				</i>
 			</div>
-			<span class="text set-name">{{ displayName }}</span>
+			<span class="text set-name" [helpTooltip]="displayName">{{ displayName }}</span>
 			<i class="logo" [inlineSVG]="categoryIcon"> </i>
 			<achievement-progress-bar [achieved]="achieved" [total]="totalAchievements"></achievement-progress-bar>
 		</div>
