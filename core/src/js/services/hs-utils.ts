@@ -39,6 +39,7 @@ export const globalEffectCards = [
 	CardIds.Collectible.Paladin.AldorAttendant,
 	CardIds.Collectible.Paladin.AldorTruthseeker,
 	CardIds.Collectible.Paladin.LothraxionTheRedeemed,
+	CardIds.NonCollectible.Paladin.RadiantLightspawn2,
 	CardIds.Collectible.Priest.ArchbishopBenedictus,
 	CardIds.Collectible.Priest.LadyInWhite,
 	CardIds.Collectible.Shaman.GrandTotemEysor, // TODO: count the number of times the effect triggered, not the card played
