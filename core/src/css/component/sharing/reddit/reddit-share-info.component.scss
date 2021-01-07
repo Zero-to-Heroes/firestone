@@ -19,3 +19,17 @@ input,
 	cursor: auto;
 	margin-bottom: 10px;
 }
+
+.subreddit {
+	display: flex;
+
+	input {
+		flex-grow: 1;
+		height: 32px;
+	}
+
+	.flairs {
+		flex-shrink: 0;
+		margin-left: 15px;
+	}
+}

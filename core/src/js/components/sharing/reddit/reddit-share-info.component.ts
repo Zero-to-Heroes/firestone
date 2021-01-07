@@ -1,4 +1,19 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	Output,
+	ViewRef,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { IOption } from 'ng-select';
+import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
@@ -12,13 +27,26 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				(ngModelChange)="handleTitleChange($event)"
 				placeholder="Your post title"
 			/>
-			<input
-				[ngModel]="subreddit"
-				(ngModelChange)="handleSubredditChange($event)"
-				*ngIf="loggedIn"
-				helpTooltip="Sharing to the hearthstone subreddit is not possible today because the rules require a flair"
-				placeholder="subreddit (without the /r/)"
-			/>
+			<div class="subreddit">
+				<input
+					[formControl]="form"
+					[ngModel]="subreddit"
+					*ngIf="loggedIn"
+					helpTooltip="Subreddit to post to. Most used subreddits are /r/hearthstone and /r/BobsTavern (with or without the leader /r/)."
+					placeholder="subreddit"
+				/>
+				<filter-dropdown
+					class="flairs"
+					*ngIf="loggedIn && flairs"
+					helpTooltip="Flair to tag your post with. Some subreddits rejects posts if no flair is assigned."
+					[options]="flairs"
+					[filter]="flair"
+					[placeholder]="placeholder"
+					[visible]="true"
+					(onOptionSelected)="onFlairSelected($event)"
+				></filter-dropdown>
+			</div>
+
 			<div class="login-message" *ngIf="!loggedIn">
 				Please use the button on the left to login before posting a message
 			</div>
@@ -26,14 +54,36 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RedditShareInfoComponent {
+export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 	@Output() onValidChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-	title: string;
-	subreddit = 'BobsTavern';
 
 	@Input() loggedIn: boolean;
 
-	constructor(private ow: OverwolfService) {}
+	form = new FormControl();
+	title: string;
+	subreddit = 'BobsTavern';
+	flairs: readonly IOption[];
+	placeholder: string;
+	flair: string;
+
+	private subscription: Subscription;
+
+	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
+
+	ngAfterViewInit() {
+		this.subscription = this.form.valueChanges
+			.pipe(debounceTime(400))
+			.pipe(distinctUntilChanged())
+			.subscribe(data => {
+				console.log('value changed', data);
+				this.onSubredditChanged(data);
+			});
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		this.subscription?.unsubscribe();
+	}
 
 	async handleTitleChange(newTitle: string) {
 		this.title = newTitle;
@@ -46,8 +96,36 @@ export class RedditShareInfoComponent {
 		);
 	}
 
-	async handleSubredditChange(subreddit: string) {
-		this.subreddit = subreddit;
+	async onSubredditChanged(subreddit: string) {
+		if (!subreddit) {
+			return;
+		}
+
+		const cleanedSubreddit = subreddit.startsWith('/r/') ? subreddit.split('/r/')[1] : subreddit;
+		this.subreddit = cleanedSubreddit;
+		// console.debug('subreddit changed', subreddit, cleanedSubreddit);
+		const flairs = await this.ow.getSubredditFlairs(this.subreddit);
+		// console.log('flairs', flairs);
+		if (!flairs?.length) {
+			this.flairs = null;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			this.onValidChange.next(this.title && this.title.length > 0 && this.subreddit && this.subreddit.length > 0);
+			return;
+		}
+
+		this.flairs = flairs.map(flair => ({
+			label: flair.text,
+			value: flair.id,
+		}));
+		this.flair = this.flairs[0].value;
+		this.placeholder = this.flairs[0].label;
+		// console.log('flairs', flairs, this.flairs, this.flair, this.placeholder);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+
 		this.onValidChange.next(
 			this.title &&
 				this.title.length > 0 &&
@@ -55,5 +133,10 @@ export class RedditShareInfoComponent {
 				this.subreddit.length > 0 &&
 				this.subreddit.toLowerCase() != 'hearthstone',
 		);
+	}
+
+	async onFlairSelected(event: any) {
+		console.debug('flair selected', event);
+		
 	}
 }

@@ -47,10 +47,6 @@ export class RedditShareModalComponent implements AfterViewInit {
 
 	@Input() fileLocation: string;
 	@Input() closeHandler: () => void;
-	imagePath: SafeResourceUrl;
-	sharing: boolean;
-	_socialUserInfo: RedditUserInfo;
-	dataValid: boolean;
 
 	@Input() set socialUserInfo(value: RedditUserInfo) {
 		this._socialUserInfo = value;
@@ -66,6 +62,11 @@ export class RedditShareModalComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 	}
+	
+	imagePath: SafeResourceUrl;
+	sharing: boolean;
+	_socialUserInfo: RedditUserInfo;
+	dataValid: boolean;
 
 	constructor(
 		private readonly sanitizer: DomSanitizer,
@@ -94,7 +95,8 @@ export class RedditShareModalComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		await this.ow.redditShare(this.fileLocation, this.shareInfo.title, this.shareInfo.subreddit);
+		const result = await this.ow.redditShare(this.fileLocation, this.shareInfo.title, this.shareInfo.subreddit, this.shareInfo.flair);
+		console.log('shared to reddit?', result);
 		this.sharing = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

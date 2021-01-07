@@ -321,10 +321,10 @@ export class OverwolfService {
 		});
 	}
 
-	public async hideCollectionWindow(prefs: Preferences) {
+	public async hideCollectionWindow(prefs: Preferences): Promise<void> {
 		const collectionWindow = await this.getCollectionWindow(prefs);
 		const settingsWindow = await this.getSettingsWindow(prefs);
-		return new Promise<any>(async resolve => {
+		return new Promise<void>(async resolve => {
 			await Promise.all([this.hideWindow(collectionWindow.id), this.hideWindow(settingsWindow.id)]);
 			resolve();
 		});
@@ -636,23 +636,23 @@ export class OverwolfService {
 		});
 	}
 
-	public async setExtensionInfo(info): Promise<any> {
-		return new Promise<any>(resolve => {
+	public async setExtensionInfo(info): Promise<void> {
+		return new Promise<void>(resolve => {
 			overwolf.extensions.setInfo(info);
 			resolve();
 		});
 	}
 
-	public async registerInfo(id: string, eventsCallback): Promise<any> {
-		return new Promise<any>(resolve => {
+	public async registerInfo(id: string, eventsCallback): Promise<void> {
+		return new Promise<void>(resolve => {
 			overwolf.extensions.registerInfo(id, eventsCallback, () => {
 				resolve();
 			});
 		});
 	}
 
-	public async setShelfStatusReady(): Promise<any> {
-		return new Promise<any>(resolve => {
+	public async setShelfStatusReady(): Promise<void> {
+		return new Promise<void>(resolve => {
 			if (!overwolf || !overwolf.egs || !overwolf.egs.setStatus) {
 				setTimeout(() => {
 					console.log('egs.setStatus not ready yet, waiting');
@@ -813,12 +813,22 @@ export class OverwolfService {
 		});
 	}
 
-	public async redditShare(filePathOnDisk: string, message: string, subreddit: string): Promise<boolean> {
+	public async getSubredditFlairs(subreddit: string): Promise<readonly Flair[]> {
+		return new Promise<readonly Flair[]>(resolve => {
+			overwolf.social.reddit.getSubredditFlairs(subreddit, (res, error) => {
+				console.log('[overwolf-service] got subreddit flairs', res, error);
+				resolve(res?.flairs);
+			});
+		});
+	}
+
+	public async redditShare(filePathOnDisk: string, message: string, subreddit: string, flair?: string): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
 			const shareParam = {
 				file: filePathOnDisk,
 				title: message,
 				subreddit: subreddit,
+				flair_id: flair,
 			};
 			console.log('[overwolf-service] sharing on Reddit', shareParam);
 			overwolf.social.reddit.share(shareParam, (res, error) => {
@@ -965,4 +975,11 @@ export interface ListenObject {
 	readonly state: 'running' | 'terminated' | 'truncated';
 	readonly content: string;
 	readonly info: string;
+}
+
+export interface Flair {
+	readonly id: string;
+	readonly text: string;
+	readonly mod_only: boolean;
+	readonly allowable_content: string;
 }
