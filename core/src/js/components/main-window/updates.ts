@@ -76,6 +76,10 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
+								type: 'feature',
+								text: `Added a button to directly share the current screen to Reddit (for now only on the Battlegrounds pages).`,
+							},
+							{
 								type: 'ui',
 								text: `Changed the color scheme to unify all game modes (Ladder, Battlegrounds, Duels) and get rid of the green color for replays.`,
 							},

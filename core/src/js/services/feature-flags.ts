@@ -4,6 +4,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_DECK_DETAILS = true;
 	public static readonly ENABLE_XP_NOTIFICATION = true;
 
+	// When changing these feature flags, don't forget to update the new-version component
 	public static readonly SHOW_HS_ACHIEVEMENTS = true;
 	public static readonly ENABLE_DUELS = true;
 	public static readonly ENABLE_NEW_VERSION_NOTIFICATION = true;
