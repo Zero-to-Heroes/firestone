@@ -2,6 +2,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	OnDestroy,
 	OnInit,
@@ -38,6 +39,7 @@ declare let amplitude: any;
 			<bgs-battle-status
 				[nextBattle]="nextBattle"
 				[battleSimulationStatus]="battleSimulationStatus"
+				[showReplayLink]="showSimulationSample"
 			></bgs-battle-status>
 		</div>
 	`,
@@ -46,9 +48,11 @@ declare let amplitude: any;
 export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
+	showSimulationSample: boolean;
 
 	private windowId: string;
 	private storeSubscription: Subscription;
+	private preferencesSubscription: Subscription;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -71,8 +75,17 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 				console.error('Exception while handling new state', e.message, e);
 			}
 		});
+		
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handleDisplayPreferences(event.preferences);
+		});
+		
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+
+		await this.handleDisplayPreferences();
 		await this.restoreWindowPosition();
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -81,6 +94,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.storeSubscription?.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	@HostListener('mousedown')
@@ -92,6 +106,15 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 			}
 			this.prefs.updateBgsSimulationWidgetPosition(window.left, window.top);
 		});
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		// console.log('updating prefs', preferences);
+		this.showSimulationSample = preferences.bgsEnableSimulationSampleInOverlay;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async restoreWindowPosition(): Promise<void> {

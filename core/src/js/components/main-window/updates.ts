@@ -73,6 +73,15 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now enable the "view replay example" in the battle simulation overlay. It opens the simulation example in a new browser tab, so the option is disabled by default.`,
+							},
+						],
+					},
+					{
 						category: 'general',
 						details: [
 							{

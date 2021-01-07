@@ -106,6 +106,8 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattleStatusComponent {
+	@Input() showReplayLink: boolean;
+	
 	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
 	battleSimulationResultLose: string;
@@ -115,7 +117,6 @@ export class BgsBattleStatusComponent {
 	temporaryBattleTooltip: string;
 	damageWon: string;
 	damageLost: string;
-	@Input() showReplayLink: boolean;
 
 	processingSimulationSample: boolean;
 
@@ -204,12 +205,13 @@ export class BgsBattleStatusComponent {
 			: await this.bgsSim.getIdForSimulationSampleWithFetch(simulationSample);
 		console.log('id', id);
 		if (id) {
-			if (this.ow?.isOwEnabled()) {
-				this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
-			} else {
-				console.log('window', window);
-				window.open(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`, '_blank');
-			}
+			window.open(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`, '_blank');
+			// if (this.ow?.isOwEnabled()) {
+			// 	// this.ow.openUrlInDefaultBrowser(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`);
+			// } else {
+			// 	// console.log('window', window);
+			// 	window.open(`http://replays.firestoneapp.com/?bgsSimulationId=${id}`, '_blank');
+			// }
 			try {
 				if (amplitude) {
 					amplitude.getInstance().logEvent('bgsSimulation', {

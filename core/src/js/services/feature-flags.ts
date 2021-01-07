@@ -9,6 +9,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_DUELS = true;
 	public static readonly ENABLE_NEW_VERSION_NOTIFICATION = true;
 	public static readonly ENABLE_BG_POSTMATCH_SHARE_REDDIT = true;
+	public static readonly ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY = true;
 
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;
 }

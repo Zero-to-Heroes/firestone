@@ -42,6 +42,14 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Also show the current battle simulation results as an overlay on top of the game"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsEnableSimulationSampleInOverlay"
+						[ngClass]="{
+							'disabled': !enableSimulation || !bgsEnableApp || !bgsEnableBattleSimulationOverlay
+						}"
+						label="Simulation example in overlay"
+						tooltip="Adds a button to view an example of how the simulator reached a specific result. WARNING: it will open a new tab in your default browser."
+					></preference-toggle>
+					<preference-toggle
 						field="bgsUseLocalSimulator"
 						[ngClass]="{ 'disabled': !enableSimulation || !bgsEnableApp }"
 						label="Use local battle simulator"
@@ -135,6 +143,7 @@ import { Knob } from '../preference-slider.component';
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;
+	bgsEnableBattleSimulationOverlay: boolean;
 	bgsEnableApp: boolean;
 	showBannedTribes: boolean;
 	numberOfSimsKnobs: readonly Knob[] = [
@@ -173,6 +182,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 			const preferences: Preferences = event.preferences;
 			this.useLocalSimulator = preferences.bgsUseLocalSimulator;
 			this.enableSimulation = preferences.bgsEnableSimulation;
+			this.bgsEnableBattleSimulationOverlay = preferences.bgsEnableBattleSimulationOverlay;
 			this.bgsEnableApp = preferences.bgsEnableApp;
 			this.showBannedTribes = preferences.bgsShowBannedTribesOverlay;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -190,6 +200,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		const prefs = await this.prefs.getPreferences();
 		this.useLocalSimulator = prefs.bgsUseLocalSimulator;
 		this.enableSimulation = prefs.bgsEnableSimulation;
+		this.bgsEnableBattleSimulationOverlay = prefs.bgsEnableBattleSimulationOverlay;
 		this.bgsEnableApp = prefs.bgsEnableApp;
 		this.showBannedTribes = prefs.bgsShowBannedTribesOverlay;
 		if (!(this.cdr as ViewRef)?.destroyed) {
