@@ -139,7 +139,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 								console.log('[ads] refreshing ad after 7 minutes timeout');
 								this.refreshTimer = null;
 								this.refreshAds();
-							}, 60 * 1000);
+							}, 7 * 60 * 1000);
 						}
 					};
 					this.adRef.addEventListener('display_ad_loaded', this.displayImpressionListener);
