@@ -14,7 +14,6 @@
 		"comment": "the zipbuild script has been modified manually because the % character does some funky stuff on windows",
 		"zipdist": "node ./node_modules/zip-build/src/index.js dist . -t @@NAME@@_@@VERSION@@.opk",
 		"build": "rimraf dist && npm audit fix && npm run lint && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors && npm run zipdist",
-		"justbuild": "node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
 		"postinstall": "npm run remove_evil:sentry-types && npm run remove_evil:node_modules",
 		"dev-twitch": "npm run postinstall && rimraf dist-twitch && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --watch",
 		"build-twitch": "rimraf dist-twitch && npm audit fix && node --max_old_space_size=8000 ./node_modules/webpack/bin/webpack.js --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
@@ -39,7 +38,7 @@
 		"@firestone-hs/replay-parser": "^1.1.35",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.2",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.7",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.41",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.42",
 		"@sentry/browser": "^5.7.1",
 		"@sentry/integrations": "^5.7.1",
 		"@swimlane/ngx-charts": "^14.0.0",
