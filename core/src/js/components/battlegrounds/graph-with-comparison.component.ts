@@ -54,163 +54,21 @@ declare let amplitude: any;
 export class GraphWithComparisonComponent {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
-	chartWidth: number;
-	chartHeight: number;
-	lineChartData: ChartDataSets[];
-	lineChartLabels: Label[];
-	lineChartOptions: ChartOptions = {
-		responsive: true,
-		maintainAspectRatio: false,
-		layout: {
-			padding: 0,
-		},
-		scales: {
-			xAxes: [
-				{
-					gridLines: {
-						color: '#841063',
-					},
-					ticks: {
-						fontColor: '#D9C3AB',
-						fontFamily: 'Open Sans',
-						fontStyle: 'normal',
-					},
-				},
-			],
-			yAxes: [
-				{
-					position: 'left',
-					gridLines: {
-						color: '#40032E',
-					},
-					ticks: {
-						fontColor: '#D9C3AB',
-						fontFamily: 'Open Sans',
-						fontStyle: 'normal',
-						beginAtZero: true,
-					},
-				},
-			],
-		},
-		tooltips: {
-			mode: 'index',
-			position: 'nearest',
-			intersect: false,
-			backgroundColor: '#CE73B4',
-			titleFontFamily: 'Open Sans',
-			titleFontColor: '#40032E',
-			bodyFontFamily: 'Open Sans',
-			bodyFontColor: '#40032E',
-			xPadding: 5,
-			yPadding: 5,
-			caretSize: 10,
-			caretPadding: 2,
-			cornerRadius: 0,
-			displayColors: false,
-			enabled: false,
-			callbacks: {
-				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					// console.log('beforeBody', item, data);
-					return data.datasets?.map(dataset => dataset?.label || '') || [];
-				},
-			},
-			custom: (tooltip: ChartTooltipModel) => {
-				const tooltipId = 'chartjs-tooltip-stats-' + this.id;
-				const chartParent = this.chart.nativeElement.parentNode;
-				let tooltipEl = document.getElementById(tooltipId);
-				// console.log('tooltip', tooltip);
-
-				if (!tooltipEl) {
-					tooltipEl = document.createElement('div');
-					tooltipEl.id = tooltipId;
-					tooltipEl.classList.add('tooltip-container');
-					tooltipEl.innerHTML = `
-						<div class="stats-tooltip">					
-							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-								<polygon points="0,0 8,-9 16,0"/>
-							</svg>
-							<div class="content"></div>
-						</div>`;
-					chartParent.appendChild(tooltipEl);
-				}
-
-				// Hide if no tooltip
-				if (tooltip.opacity === 0) {
-					tooltipEl.style.opacity = '0';
-					return;
-				}
-
-				// Set Text
-				if (tooltip.body) {
-					const communityLabel = tooltip.beforeBody[0];
-					const yourLabel = tooltip.beforeBody[1];
-					const communityDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
-					const yourDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
-					const playerSection =
-						yourDatapoint?.value != null
-							? `
-								<div class="section player">
-									<div class="subtitle">${yourLabel}</div>
-									<div class="value">Turn ${yourDatapoint?.label}</div>
-									<div class="value">${yourDatapoint?.value ? 'Stat ' + parseInt(yourDatapoint.value).toFixed(0) : 'No data'}</div>
-								</div>
-							`
-							: '';
-					const innerHtml = `
-						<div class="body">
-							${playerSection}
-							<div class="section average">
-								<div class="subtitle">${communityLabel}</div>
-								<div class="value">Turn ${communityDatapoint?.label}</div>
-								<div class="value">${
-									communityDatapoint?.value
-										? 'Stat ' + parseInt(communityDatapoint.value).toFixed(0)
-										: 'No data'
-								}</div>							
-							</div>
-						</div>
-					`;
-
-					const tableRoot = tooltipEl.querySelector('.content');
-					tableRoot.innerHTML = innerHtml;
-				}
-
-				const tooltipWidth = tooltipEl.getBoundingClientRect().width;
-
-				const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
-				const left = Math.max(
-					0,
-					Math.min(tooltip.caretX - 110, chartParent.getBoundingClientRect().right - tooltipWidth),
-				);
-				// caret should always be positioned on the initial tooltip.caretX. However, since the
-				// position is relative to the tooltip element, we need to do some gymnastic :)
-				// 10 is because of padding
-				const carretLeft = tooltip.caretX - left - 10;
-				tooltipArrowEl.style.left = carretLeft + 'px';
-
-				// Display, position, and set styles for font
-				tooltipEl.style.opacity = '1';
-				tooltipEl.style.left = left + 'px';
-				tooltipEl.style.top = tooltip.caretY + 8 - 100 + 'px';
-				tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
-				tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
-				tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
-				tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
-
-				// Set caret Position
-				tooltipEl.classList.remove('above', 'below', 'no-transform');
-				tooltipEl.classList.add('top');
-			},
-		},
-	};
-	lineChartColors: Color[];
-	opacity = 0;
-
 	@Input() communityLabel = 'Community';
 	@Input() yourLabel = 'You';
 	@Input() communityTooltip: string;
 	@Input() yourTooltip: string;
 	@Input() id: string;
+
+	@Input() set maxYValue(value: number) {
+		this._maxYValue = value;
+		this.updateChartOptions();
+	}
+
+	@Input() set stepSize(value: number) {
+		this._stepSize = value;
+		this.updateChartOptions();
+	}
 
 	@Input() set communityExtractor(value) {
 		if (value === this._communityExtractor) {
@@ -228,11 +86,21 @@ export class GraphWithComparisonComponent {
 		this.updateValues();
 	}
 
+	chartWidth: number;
+	chartHeight: number;
+	lineChartData: ChartDataSets[];
+	lineChartLabels: Label[];
+	lineChartOptions: ChartOptions = this.buildChartOptions();
+	lineChartColors: Color[];
+	opacity = 0;
+
 	yourInfo: boolean;
 
 	private _communityExtractor: () => readonly NumericTurnInfo[];
 	private _yourExtractor: () => readonly NumericTurnInfo[];
 	private _dirty = true;
+	private _maxYValue: number;
+	private _stepSize: number;
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
 
@@ -377,5 +245,159 @@ export class GraphWithComparisonComponent {
 		return input.filter(stat => stat.value).length === 0
 			? 0
 			: Math.max(...input.filter(stat => stat.value).map(stat => stat.turn));
+	}
+
+	private updateChartOptions() {
+		this.lineChartOptions = this.buildChartOptions();
+	}
+
+	private buildChartOptions(): ChartOptions {
+		return {
+			responsive: true,
+			maintainAspectRatio: false,
+			layout: {
+				padding: 0,
+			},
+			scales: {
+				xAxes: [
+					{
+						gridLines: {
+							color: '#841063',
+						},
+						ticks: {
+							fontColor: '#D9C3AB',
+							fontFamily: 'Open Sans',
+							fontStyle: 'normal',
+						},
+					},
+				],
+				yAxes: [
+					{
+						position: 'left',
+						gridLines: {
+							color: '#40032E',
+						},
+						ticks: {
+							fontColor: '#D9C3AB',
+							fontFamily: 'Open Sans',
+							fontStyle: 'normal',
+							beginAtZero: true,
+							max: this._maxYValue,
+							stepSize: this._stepSize,
+						},
+					},
+				],
+			},
+			tooltips: {
+				mode: 'index',
+				position: 'nearest',
+				intersect: false,
+				backgroundColor: '#CE73B4',
+				titleFontFamily: 'Open Sans',
+				titleFontColor: '#40032E',
+				bodyFontFamily: 'Open Sans',
+				bodyFontColor: '#40032E',
+				xPadding: 5,
+				yPadding: 5,
+				caretSize: 10,
+				caretPadding: 2,
+				cornerRadius: 0,
+				displayColors: false,
+				enabled: false,
+				callbacks: {
+					beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
+						// console.log('beforeBody', item, data);
+						return data.datasets?.map(dataset => dataset?.label || '') || [];
+					},
+				},
+				custom: (tooltip: ChartTooltipModel) => {
+					const tooltipId = 'chartjs-tooltip-stats-' + this.id;
+					const chartParent = this.chart.nativeElement.parentNode;
+					let tooltipEl = document.getElementById(tooltipId);
+					// console.log('tooltip', tooltip);
+
+					if (!tooltipEl) {
+						tooltipEl = document.createElement('div');
+						tooltipEl.id = tooltipId;
+						tooltipEl.classList.add('tooltip-container');
+						tooltipEl.innerHTML = `
+							<div class="stats-tooltip">					
+								<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+									<polygon points="0,0 8,-9 16,0"/>
+								</svg>
+								<div class="content"></div>
+							</div>`;
+						chartParent.appendChild(tooltipEl);
+					}
+
+					// Hide if no tooltip
+					if (tooltip.opacity === 0) {
+						tooltipEl.style.opacity = '0';
+						return;
+					}
+
+					// Set Text
+					if (tooltip.body) {
+						const communityLabel = tooltip.beforeBody[0];
+						const yourLabel = tooltip.beforeBody[1];
+						const communityDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
+						const yourDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
+						const playerSection =
+							yourDatapoint?.value != null
+								? `
+									<div class="section player">
+										<div class="subtitle">${yourLabel}</div>
+										<div class="value">Turn ${yourDatapoint?.label}</div>
+										<div class="value">${yourDatapoint?.value ? 'Stat ' + parseInt(yourDatapoint.value).toFixed(0) : 'No data'}</div>
+									</div>
+								`
+								: '';
+						const innerHtml = `
+							<div class="body">
+								${playerSection}
+								<div class="section average">
+									<div class="subtitle">${communityLabel}</div>
+									<div class="value">Turn ${communityDatapoint?.label}</div>
+									<div class="value">${
+										communityDatapoint?.value
+											? 'Stat ' + parseInt(communityDatapoint.value).toFixed(0)
+											: 'No data'
+									}</div>							
+								</div>
+							</div>
+						`;
+
+						const tableRoot = tooltipEl.querySelector('.content');
+						tableRoot.innerHTML = innerHtml;
+					}
+
+					const tooltipWidth = tooltipEl.getBoundingClientRect().width;
+
+					const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
+					const left = Math.max(
+						0,
+						Math.min(tooltip.caretX - 110, chartParent.getBoundingClientRect().right - tooltipWidth),
+					);
+					// caret should always be positioned on the initial tooltip.caretX. However, since the
+					// position is relative to the tooltip element, we need to do some gymnastic :)
+					// 10 is because of padding
+					const carretLeft = tooltip.caretX - left - 10;
+					tooltipArrowEl.style.left = carretLeft + 'px';
+
+					// Display, position, and set styles for font
+					tooltipEl.style.opacity = '1';
+					tooltipEl.style.left = left + 'px';
+					tooltipEl.style.top = tooltip.caretY + 8 - 100 + 'px';
+					tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
+					tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
+					tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
+					tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
+
+					// Set caret Position
+					tooltipEl.classList.remove('above', 'below', 'no-transform');
+					tooltipEl.classList.add('top');
+				},
+			},
+		};
 	}
 }

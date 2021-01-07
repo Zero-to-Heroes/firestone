@@ -19,6 +19,8 @@ declare let amplitude: any;
 			yourLabel="Current run"
 			[communityExtractor]="communityExtractor"
 			[yourExtractor]="yourExtractor"
+			[maxYValue]="80"
+			[stepSize]="20"
 			communityTooltip="Average winrate (the % chance to win a battle) for each run (7000+ MMR)"
 			yourTooltip="Your values for this run"
 		>
