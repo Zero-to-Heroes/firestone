@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
+import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 
 @Component({
@@ -29,10 +31,19 @@ export class DecktrackerReplaysRecapComponent {
 		this.updateValues();
 	}
 
+	@Input() set navigation(value: NavigationState) {
+		if (value === this._navigation) {
+			return;
+		}
+		this._navigation = value;
+		this.updateValues();
+	}
+
 	_numberOfReplays: number;
 	replays: GameStat[];
 
 	private _state: MainWindowState;
+	private _navigation: NavigationState;
 
 	private async updateValues() {
 		// console.log('tier updating values', this._state, this._category);
@@ -43,6 +54,11 @@ export class DecktrackerReplaysRecapComponent {
 		this.replays = (this._state.decktracker.decks
 			.map(deck => deck.replays)
 			.reduce((a, b) => a.concat(b), []) as GameStat[])
+			.filter(stat =>
+				this._navigation.navigationDecktracker.selectedDeckstring
+					? stat.playerDecklist === this._navigation.navigationDecktracker.selectedDeckstring
+					: true,
+			)
 			.sort((a: GameStat, b: GameStat) => {
 				if (a.creationTimestamp <= b.creationTimestamp) {
 					return 1;

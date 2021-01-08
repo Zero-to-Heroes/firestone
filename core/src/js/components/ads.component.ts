@@ -3,12 +3,16 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
+	Output,
 	ViewRef,
 } from '@angular/core';
 import { AdService } from '../services/ad.service';
+import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
+import { ShowAdsEvent } from '../services/mainwindow/store/events/show-ads-event';
 import { OverwolfService } from '../services/overwolf.service';
 
 declare let adsReady: any;
@@ -51,11 +55,16 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private displayImpressionListener: (message: any) => void;
 	private refreshTimer;
 
+	
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, message => {
 			// console.log('state changed', message);
 			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
@@ -67,6 +76,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
+		this.stateUpdater.next(new ShowAdsEvent(this.shouldDisplayAds));
 		this.refreshAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

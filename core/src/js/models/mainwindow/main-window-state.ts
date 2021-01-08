@@ -21,6 +21,7 @@ export class MainWindowState {
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly globalStats: GlobalStats = new GlobalStats();
+	readonly showAds: boolean = true;
 
 	public update(base: MainWindowState): MainWindowState {
 		return Object.assign(new MainWindowState(), this, base);

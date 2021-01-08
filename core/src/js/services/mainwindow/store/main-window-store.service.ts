@@ -101,6 +101,7 @@ import { SelectMatchStatsTabEvent } from './events/replays/select-match-stats-ta
 import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from './events/replays/trigger-show-match-stats-event';
+import { ShowAdsEvent } from './events/show-ads-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
 import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
@@ -185,6 +186,7 @@ import { SelectMatchStatsTabProcessor } from './processors/replays/select-match-
 import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
 import { TriggerShowMatchStatsProcessor } from './processors/replays/trigger-show-match-stats-processor';
+import { ShowAdsProcessor } from './processors/show-ads-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
 import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
@@ -410,6 +412,9 @@ export class MainWindowStoreService {
 
 			CurrentUserEvent.eventName(),
 			new CurrentUserProcessor(),
+
+			ShowAdsEvent.eventName(),
+			new ShowAdsProcessor(),
 
 			// Collection
 			CollectionInitEvent.eventName(),

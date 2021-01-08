@@ -12,7 +12,7 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 	template: `
 		<div class="app-section decktracker">
 			<section class="main divider">
-				<with-loading [isLoading]="!state?.decktracker || state?.decktracker.isLoading">
+				<with-loading [isLoading]="!_state?.decktracker || _state?.decktracker.isLoading">
 					<div class="content">
 						<global-header
 							[navigation]="navigation"
@@ -26,28 +26,34 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 							[selectedTab]="navigation.navigationDecktracker.currentView"
 						>
 						</menu-selection-decktracker>
-						<decktracker-filters [state]="state" [navigation]="navigation"></decktracker-filters>
+						<decktracker-filters [state]="_state" [navigation]="navigation"></decktracker-filters>
 						<decktracker-decks
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
-							[decks]="state?.decktracker?.decks"
+							[decks]="_state?.decktracker?.decks"
 						></decktracker-decks>
 						<decktracker-deck-details
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
-							[state]="state"
+							[state]="_state"
 							[navigation]="navigation"
 						></decktracker-deck-details>
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary">
+			<section
+				class="secondary"
+				[ngClass]="{
+					'second-display': !showAds && navigation.navigationDecktracker.currentView === 'deck-details'
+				}"
+			>
 				<decktracker-deck-recap
 					*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
-					[state]="state"
+					[state]="_state"
 					[navigation]="navigation"
 				></decktracker-deck-recap>
 				<decktracker-replays-recap
-					*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
-					[state]="state"
+					*ngxCacheIf="showReplaysRecap()"
+					[state]="_state"
+					[navigation]="navigation"
 				></decktracker-replays-recap>
 			</section>
 		</div>
@@ -55,6 +61,23 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerComponent {
-	@Input() state: MainWindowState;
+	@Input() set state(value: MainWindowState) {
+		if (this._state === value) {
+			return;
+		}
+		this._state = value;
+		this.showAds = this._state?.showAds;
+	}
+
 	@Input() navigation: NavigationState;
+
+	_state: MainWindowState;
+	showAds: boolean;
+
+	showReplaysRecap(): boolean {
+		return (
+			this.navigation.navigationDecktracker.currentView === 'decks' ||
+			(this.navigation.navigationDecktracker.currentView === 'deck-details' && !this.showAds)
+		);
+	}
 }

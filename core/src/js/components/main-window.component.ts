@@ -59,7 +59,7 @@ declare let amplitude: any;
 				</div>
 			</section>
 			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
-			<ads [parentComponent]="'main-window'" *ngIf="!dataState.showFtue"></ads>
+			<ads [parentComponent]="'main-window'" *ngIf="showAds()"></ads>
 			<section class="content-container" *ngIf="!dataState.showFtue">
 				<replays
 					class="main-section"
@@ -277,6 +277,21 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	showAds(): boolean {
+		if (this.dataState.showFtue) {
+			return false;
+		}
+
+		// Hide the ads for supporters and in the ladder deck details
+		if (!this.dataState.showAds) {
+			if (this.navigationState?.navigationDecktracker?.currentView === 'deck-details') {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private buildActiveTheme(): CurrentAppType | 'decktracker-desktop' {

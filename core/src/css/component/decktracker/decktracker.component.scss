@@ -41,11 +41,24 @@
 		width: 400px;
 		height: calc(100% - 350px);
 		flex-shrink: 0;
-		background: rgba(255, 255, 255, 0.08);
+		// background: rgba(255, 255, 255, 0.08);
 
 		& > * {
 			display: flex;
 			flex-grow: 1;
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		&.second-display {
+			height: calc(100% - 10px);
+
+			& > * {
+				height: 45%;
+			}
+
+			decktracker-replays-recap {
+				margin-top: 15px;
+			}
 		}
 	}
 }
