@@ -53,6 +53,8 @@ export class MemoryInspectionService {
 	);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
 
+	private listenersRegistered: boolean;
+
 	constructor(
 		private events: Events,
 		private ow: OverwolfService,
@@ -133,7 +135,7 @@ export class MemoryInspectionService {
 	private handleInfoUpdate(info) {
 		// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 		if (info.feature === 'scene_state') {
-			console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
+			// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 			this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);
 		} else if (info.feature === 'match') {
 			// This info is only sent when it changed since the last time. So we need to cache it
@@ -141,7 +143,7 @@ export class MemoryInspectionService {
 			if (info.info.playersInfo) {
 				const localPlayer: string = info.info.playersInfo.localPlayer;
 				const opponent: string = info.info.playersInfo.opponent;
-				console.log('[memory service] match playersInfo: ', info.info.playersInfo, localPlayer, opponent);
+				// console.log('[memory service] match playersInfo: ', info.info.playersInfo, localPlayer, opponent);
 				if (localPlayer) {
 					this.events.broadcast(Events.PLAYER_INFO, JSON.parse(localPlayer));
 				}
@@ -160,6 +162,10 @@ export class MemoryInspectionService {
 	}
 
 	private registerEvents() {
+		if (this.listenersRegistered) {
+			return;
+		}
+
 		// general events errors
 		this.ow.addGameEventsErrorListener(info => console.log('[memory service] Error: ', info));
 
@@ -170,6 +176,8 @@ export class MemoryInspectionService {
 
 		// an event triggerd
 		this.ow.addGameEventsListener(info => console.log('[memory service] EVENT FIRED: ', info));
+		this.listenersRegistered = true;
+		console.log('[memory-service] added events listeners');
 	}
 
 	private async setFeatures() {
