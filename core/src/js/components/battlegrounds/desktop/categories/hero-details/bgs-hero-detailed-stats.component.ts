@@ -139,6 +139,9 @@ export class BgsHeroDetailedStatsComponent {
 	}
 
 	buildValue(value: number, decimals = 2): string {
+		if (value === 100) {
+			return '100';
+		}
 		return !value ? '-' : value.toFixed(decimals);
 	}
 }
