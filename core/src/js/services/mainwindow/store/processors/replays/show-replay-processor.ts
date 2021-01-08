@@ -15,6 +15,8 @@ export class ShowReplayProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
+
 		// Figure out if we have already loaded the stats, or if we need a refresh
 		if (navigationState.navigationReplays.selectedReplay?.replayInfo?.reviewId === event.reviewId) {
 			return [
@@ -24,11 +26,15 @@ export class ShowReplayProcessor implements Processor {
 						currentView: 'match-details',
 						selectedTab: 'replay',
 					} as NavigationReplays),
+					text: new Date(selectedInfo.creationTimestamp).toLocaleDateString('en-US', {
+						month: 'short',
+						day: '2-digit',
+						year: 'numeric',
+					}),
 				} as NavigationState),
 			];
 		}
 
-		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
 		if (selectedInfo.gameMode === 'battlegrounds') {
 			this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
 		}
