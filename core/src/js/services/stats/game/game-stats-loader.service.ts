@@ -15,7 +15,7 @@ export class GameStatsLoaderService {
 
 	public async retrieveStats(retriesLeft = 5): Promise<GameStats> {
 		const user = await this.ow.getCurrentUser();
-		console.log('[game-stats-loader] retrieving stats', retriesLeft, user, this.gameStats && this.gameStats[0]);
+		console.log('[game-stats-loader] retrieving stats', retriesLeft, user);
 		return new Promise<GameStats>(async resolve => {
 			this.doRetrieve(user.userId, user.username, retriesLeft, resolve);
 		});
@@ -49,11 +49,15 @@ export class GameStatsLoaderService {
 							currentDuelsRunId:
 								stat.creationTimestamp < new Date('2020-12-14').getTime()
 									? null
-									: stat.creationTimestamp,
+									: stat.currentDuelsRunId,
 						}))
 						.map(stat => Object.assign(new GameStat(), stat)) as readonly GameStat[],
 				} as GameStats);
-				console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
+				console.log(
+					'[game-stats-loader] Retrieved game stats for user',
+					this.gameStats.stats?.length,
+					this.gameStats.stats?.length && this.gameStats.stats[0],
+				);
 				resolve(this.gameStats);
 			},
 			error => {
