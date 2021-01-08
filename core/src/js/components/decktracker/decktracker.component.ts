@@ -46,7 +46,7 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 					[navigation]="navigation"
 				></decktracker-deck-recap>
 				<decktracker-replays-recap
-					*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
+					*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
 					[state]="state"
 				></decktracker-replays-recap>
 			</section>
