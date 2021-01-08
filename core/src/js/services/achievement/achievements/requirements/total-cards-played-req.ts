@@ -64,7 +64,7 @@ export class TotalCardsPlayedReq implements Requirement {
 		if (!cardId) {
 			return;
 		}
-		
+
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const card = this.cards.getCard(cardId);

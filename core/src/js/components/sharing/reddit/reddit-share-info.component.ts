@@ -137,6 +137,5 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 
 	async onFlairSelected(event: any) {
 		console.debug('flair selected', event);
-		
 	}
 }

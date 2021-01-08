@@ -107,7 +107,7 @@ declare let amplitude: any;
 })
 export class BgsBattleStatusComponent {
 	@Input() showReplayLink: boolean;
-	
+
 	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
 	battleSimulationResultLose: string;

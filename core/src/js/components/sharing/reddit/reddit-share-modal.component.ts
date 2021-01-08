@@ -62,7 +62,7 @@ export class RedditShareModalComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 	}
-	
+
 	imagePath: SafeResourceUrl;
 	sharing: boolean;
 	_socialUserInfo: RedditUserInfo;
@@ -95,7 +95,12 @@ export class RedditShareModalComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		const result = await this.ow.redditShare(this.fileLocation, this.shareInfo.title, this.shareInfo.subreddit, this.shareInfo.flair);
+		const result = await this.ow.redditShare(
+			this.fileLocation,
+			this.shareInfo.title,
+			this.shareInfo.subreddit,
+			this.shareInfo.flair,
+		);
 		console.log('shared to reddit?', result);
 		this.sharing = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {

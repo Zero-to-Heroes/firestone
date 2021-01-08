@@ -75,12 +75,12 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 				console.error('Exception while handling new state', e.message, e);
 			}
 		});
-		
+
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.handleDisplayPreferences(event.preferences);
 		});
-		
+
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 
 		await this.handleDisplayPreferences();

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { Injectable } from '@angular/core';
 import { RedditUserInfo } from '../models/mainwindow/reddit-user-info';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
@@ -822,7 +823,12 @@ export class OverwolfService {
 		});
 	}
 
-	public async redditShare(filePathOnDisk: string, message: string, subreddit: string, flair?: string): Promise<boolean> {
+	public async redditShare(
+		filePathOnDisk: string,
+		message: string,
+		subreddit: string,
+		flair?: string,
+	): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
 			const shareParam = {
 				file: filePathOnDisk,

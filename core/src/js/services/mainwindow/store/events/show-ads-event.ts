@@ -4,7 +4,7 @@ export class ShowAdsEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
 		return 'ShowAdsEvent';
 	}
-	
+
 	constructor(public readonly showAds: boolean) {}
 
 	public eventName(): string {

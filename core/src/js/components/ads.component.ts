@@ -55,8 +55,6 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private displayImpressionListener: (message: any) => void;
 	private refreshTimer;
 
-	
-
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
