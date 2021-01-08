@@ -131,7 +131,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Supporters can now see the list of deck replays when browsing the deck list (below the deck recap, where the ad space normally is)`,
+								text: `Supporters can now see the list of deck replays when browsing the deck list (below the deck recap, where the ad space normally is).`,
 							},
 							{
 								type: 'bug',
