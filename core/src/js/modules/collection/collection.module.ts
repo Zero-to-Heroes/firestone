@@ -11,6 +11,7 @@ import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { AchievementImageComponent } from 'src/js/components/achievements/achievement-image.component';
 import { AchievementProgressBarComponent } from 'src/js/components/achievements/achievement-progress-bar.component';
+import { DuelsReplaysRecapForRunComponent } from 'src/js/components/duels/desktop/secondary/duels-replays-recap-for-run.component';
 import { FsOverlayPlay } from 'src/js/components/video-controls/play-overlay-double-click';
 import { VgBufferingModule } from 'videogular2/buffering';
 import { VgControlsModule } from 'videogular2/controls';
@@ -271,6 +272,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DuelsStatCellComponent,
 		DuelsRewardComponent,
 		DuelsReplaysRecapComponent,
+		DuelsReplaysRecapForRunComponent,
 		DuelsDeckStatsComponent,
 		DuelsTreasureTierListComponent,
 		DuelsHeroTierListComponent,

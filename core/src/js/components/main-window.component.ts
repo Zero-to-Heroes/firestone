@@ -63,7 +63,7 @@ declare let amplitude: any;
 			<section class="content-container" *ngIf="!dataState.showFtue">
 				<replays
 					class="main-section"
-					[state]="dataState.replays"
+					[state]="dataState"
 					[navigation]="navigationState"
 					*ngxCacheIf="navigationState.currentApp === 'replays'"
 				></replays>

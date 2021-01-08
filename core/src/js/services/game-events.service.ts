@@ -731,7 +731,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
-				console.log(gameEvent.Type + ' event');
+				// console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,

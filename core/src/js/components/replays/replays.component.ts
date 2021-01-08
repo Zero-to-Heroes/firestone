@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -13,15 +14,15 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="app-section replays">
 			<section class="main divider">
-				<with-loading [isLoading]="state.isLoading">
+				<with-loading [isLoading]="state.replays.isLoading">
 					<div class="content">
 						<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 						<replays-list
-							[state]="state"
+							[state]="state.replays"
 							*ngxCacheIf="navigation.navigationReplays.currentView === 'list'"
 						></replays-list>
 						<match-details
-							[state]="state"
+							[state]="state.replays"
 							[navigation]="navigation.navigationReplays"
 							*ngxCacheIf="navigation.navigationReplays.currentView === 'match-details'"
 						></match-details>
@@ -38,6 +39,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 						[stats]="navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel"
 					></bgs-post-match-stats-recap>
 				</div>
+				<div class="replays-list">
+					<duels-replays-recap-for-run
+						*ngxCacheIf="isShowingDuelsReplay()"
+						[state]="state"
+						[navigation]="navigation"
+					></duels-replays-recap-for-run>
+				</div>
 			</section>
 		</div>
 	`,
@@ -45,7 +53,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class ReplaysComponent {
 	@Input() navigation: NavigationState;
-	@Input() state: ReplaysState;
+	@Input() state: MainWindowState;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -53,5 +61,12 @@ export class ReplaysComponent {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	isShowingDuelsReplay(): boolean {
+		return (
+			this.navigation.navigationReplays.currentView === 'match-details' &&
+			this.navigation.navigationReplays.selectedReplay?.replayInfo?.isDuels()
+		);
 	}
 }

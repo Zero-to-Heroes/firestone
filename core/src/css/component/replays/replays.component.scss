@@ -38,6 +38,10 @@
 	color: var(--color-1);
 	font-size: 13px;
 
+	& > * {
+		flex-grow: 1;
+	}
+
 	.match-stats {
 		background: rgba(255, 255, 255, 0.08);
 		display: flex;

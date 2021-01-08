@@ -37,6 +37,10 @@ export class GameStat {
 		return Object.assign(new GameStat(), base);
 	}
 
+	public isDuels(): boolean {
+		return this.gameMode === 'duels' || this.gameMode === 'paid-duels';
+	}
+
 	public buildPlayerRankImage(): [string, string, string] {
 		// if (!this.playerRank) {
 		// 	return [null, null, null];
