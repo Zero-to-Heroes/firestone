@@ -63,18 +63,18 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
 				(state.playerDeck.board && state.playerDeck.board.length > 0) ||
 				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
-		// if (forceLogs) {
-		// 	console.log(
-		// 		'[game-state] should show tracker?',
-		// 		inGame,
-		// 		shouldShowTracker,
-		// 		showDecktrackerFromGameMode,
-		// 		decktrackerWindow.window_state_ex,
-		// 		this.closedByUser,
-		// 		state?.playerDeck,
-		// 		state?.metadata,
-		// 	);
-		// }
+		if (forceLogs) {
+			console.log(
+				'[game-state] should show tracker?',
+				inGame,
+				shouldShowTracker,
+				showDecktrackerFromGameMode,
+				decktrackerWindow.window_state_ex,
+				this.closedByUser,
+				state?.playerDeck,
+				state?.metadata,
+			);
+		}
 		if (
 			inGame &&
 			shouldShowTracker &&
