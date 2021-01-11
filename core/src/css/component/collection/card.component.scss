@@ -5,14 +5,14 @@
 	position: relative;
 	width: 100%;
 	height: 100%;
-	// height: 151px;
 	display: flex;
 	flex-direction: column;
 
-	img {
-		width: 100%;
+	.real-card {
+		width: 160px;
 		position: relative;
-		opacity: 0.7;
+		opacity: 0.9;
+		transition: transform 0.2s;
 	}
 
 	.placeholder {
@@ -21,6 +21,20 @@
 		top: -2%;
 		width: 95%;
 		left: 2%;
+		opacity: 0;
+	}
+
+	.perspective-wrapper {
+		transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
+	}
+
+	&.showing-placeholder {
+		.real-card {
+			opacity: 0;
+		}
+		.placeholder {
+			opacity: 1;
+		}
 	}
 
 	.count {
@@ -28,15 +42,13 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		height: 15%;
-		bottom: 9%;
-		bottom: 15%;
+		top: -8px;
 		width: 100%;
 
 		.non-premium,
 		.premium {
 			@extend %dust-number;
-			font-size: 1.7vh;
+			// font-size: 1.7vh;
 			border: 1px solid;
 			border-top: none;
 			padding: 0 5px 2px 5px;
@@ -108,8 +120,17 @@
 	}
 
 	&:hover {
-		img {
+		.real-card {
 			opacity: 1;
+			transform: scale3d(1.035, 1.035, 1.035);
+		}
+	}
+
+	&.high-res {
+		margin-bottom: -40px;
+
+		.count {
+			top: -32px;
 		}
 	}
 }

@@ -10,8 +10,8 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { SetCard } from '../../models/set';
-import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -20,19 +20,20 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'card-view',
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
-		<div class="card-container" [ngClass]="{ 'missing': missing }">
-			<div class="images" [cardTooltip]="_card.id">
-				<img
-					src="assets/images/placeholder.png"
-					class="pale-theme placeholder"
-					[style.opacity]="showPlaceholder ? 1 : 0"
-				/>
-				<img
-					[style.opacity]="showPlaceholder ? 0 : 1"
-					src="{{ image }}"
-					class="real-card"
-					(load)="imageLoadedHandler()"
-				/>
+		<div
+			class="card-container {{ secondaryClass }}"
+			[style.transform]="styleTransform"
+			[ngClass]="{ 'missing': missing, 'showing-placeholder': showPlaceholder }"
+		>
+			<div
+				class="images perspective-wrapper"
+				(mouseleave)="onMouseLeave($event)"
+				(mouseenter)="onMouseOver($event)"
+				(mousemove)="onMouseMove($event)"
+				[cardTooltip]="_card.id"
+			>
+				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
+				<img [src]="image" class="real-card" (load)="imageLoadedHandler()" />
 				<div
 					[hidden]="showPlaceholder"
 					class="overlay"
@@ -63,14 +64,35 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardComponent implements AfterViewInit {
+	@Output() imageLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+	@Input('card') set card(card: SetCard) {
+		this._card = card;
+		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
+		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
+		this.showPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
+		this.updateImage();
+	}
+
+	@Input() set loadImage(value: boolean) {
+		this._loadImage = value;
+		this.updateImage();
+	}
+
+	@Input() set highRes(value: boolean) {
+		this._highRes = value;
+		this.updateImage();
+	}
+
 	@Input() tooltips = true;
 	@Input() showCounts = false;
-	@Output() imageLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	showPlaceholder = true;
 	showNonPremiumCount: boolean;
 	showPremiumCount: boolean;
 
+	styleTransform: SafeStyle = 'scale3d(1, 1, 1)';
+	secondaryClass: string;
 	image: string;
 	overlayMaskImage: string;
 	missing: boolean;
@@ -81,47 +103,68 @@ export class CardComponent implements AfterViewInit {
 	private _imageLoaded: boolean;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
+	private imageWidth: number;
+	private imageHeight: number;
+	private isMouseOver: boolean;
+
 	constructor(
 		private el: ElementRef,
-		private events: Events,
+		private sanitizer: DomSanitizer,
 		private ow: OverwolfService,
 		private cdr: ChangeDetectorRef,
 	) {}
-
-	@Input('card') set card(card: SetCard) {
-		this._card = card;
-		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
-		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
-		this.showPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
-		this.updateImage();
-		// console.log('set card', card, this.image);
-	}
-
-	@Input() set loadImage(value: boolean) {
-		this._loadImage = value;
-		// console.log('set loadimage', this._card?.id, value);
-		this.updateImage();
-	}
-
-	@Input() set highRes(value: boolean) {
-		this._highRes = value;
-		this.updateImage();
-	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	@HostListener('mousedown') onClick() {
+	@HostListener('mousedown')
+	onClick() {
 		if (this.tooltips) {
 			this.stateUpdater.next(new ShowCardDetailsEvent(this._card.id));
+		}
+	}
+
+	onMouseOver(event: MouseEvent) {
+		this.isMouseOver = true;
+		if (!this.imageWidth) {
+			this.imageWidth = this.el.nativeElement.querySelector('.images')?.getBoundingClientRect()?.width;
+			this.imageHeight = this.el.nativeElement.querySelector('.images')?.getBoundingClientRect()?.height;
+		}
+	}
+
+	onMouseLeave(event: MouseEvent) {
+		this.isMouseOver = false;
+		this.styleTransform = this.sanitizer.bypassSecurityTrustStyle(
+			`perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`,
+		);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	onMouseMove(event: MouseEvent) {
+		if (!this.isMouseOver) {
+			return;
+		}
+
+		const xRatio = event.offsetX / this.imageWidth;
+		const yRatio = event.offsetY / this.imageHeight;
+		const styleAmplifier = 2;
+		const yRotation = styleAmplifier * (xRatio * 16 - 8);
+		const xRotation = styleAmplifier * (yRatio * 16 - 8);
+		this.styleTransform = this.sanitizer.bypassSecurityTrustStyle(
+			`perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale3d(1.035, 1.035, 1.035)`,
+		);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
 		this._imageLoaded = true;
-		console.log('image loaded', this.image);
+		// console.log('image loaded', this.image);
 		this.imageLoaded.next(true);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -140,7 +183,7 @@ export class CardComponent implements AfterViewInit {
 		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;
-		// console.log('updated image', this.image);
+		this.secondaryClass = this._highRes ? 'high-res' : '';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -8,7 +8,6 @@ import {
 	HostListener,
 	Input,
 	Output,
-	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -23,10 +22,9 @@ declare let amplitude;
 	selector: 'full-card',
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
-		`../../../css/component/collection/full-card.component.scss`,
 		`../../../css/global/scrollbar.scss`,
+		`../../../css/component/collection/full-card.component.scss`,
 	],
-	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="card-details-container" [ngClass]="{ 'owned': card.owned, 'missing': !card.owned }" *ngIf="card">
 			<div class="card-view-container">
