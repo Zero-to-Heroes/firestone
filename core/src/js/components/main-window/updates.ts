@@ -139,7 +139,16 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `If several Elistras are on the board, the simulator now always picks the first one to proc, instead of a random one.`,
+								text: `Fix an incorrect tooltip when mousing over the Win% Coin column in the deck details`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'ui',
+								text: `Add an empty placeholder for screens that don't have any information above the ad space`,
 							},
 						],
 					},
