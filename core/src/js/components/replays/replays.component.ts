@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
-import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -39,13 +38,20 @@ import { OverwolfService } from '../../services/overwolf.service';
 						[stats]="navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel"
 					></bgs-post-match-stats-recap>
 				</div>
-				<div class="replays-list">
+				<div class="replays-list" *ngxCacheIf="isShowingDuelsReplay()">
 					<duels-replays-recap-for-run
-						*ngxCacheIf="isShowingDuelsReplay()"
 						[state]="state"
 						[navigation]="navigation"
 					></duels-replays-recap-for-run>
 				</div>
+				<secondary-default
+					*ngxCacheIf="
+						navigation.navigationReplays.currentView === 'list' ||
+						(navigation.navigationReplays.currentView === 'match-details' &&
+							!navigation.navigationReplays.selectedReplay?.replayInfo?.isDuels() &&
+							!navigation?.navigationReplays?.selectedReplay?.bgsPostMatchStatsPanel?.player?.cardId)
+					"
+				></secondary-default>
 			</section>
 		</div>
 	`,

@@ -104,6 +104,9 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[state]="state.duels"
 					[navigation]="navigation.navigationDuels"
 				></duels-deck-stats>
+				<secondary-default
+					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-top-decks'"
+				></secondary-default>
 			</section>
 		</div>
 	`,
