@@ -9,14 +9,8 @@ import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { AttackCountersComponent } from '../../components/game-counters/attack-counter.component';
-import { CthunCounterComponent } from '../../components/game-counters/cthun-counter.component';
-import { FatigueCounterComponent } from '../../components/game-counters/fatigue-counter.component';
-import { GalakrondCountersComponent } from '../../components/game-counters/galakrond-counter.component';
 import { GameCountersComponent } from '../../components/game-counters/game-counters.component';
 import { GenericCountersComponent } from '../../components/game-counters/generic-counter.component';
-import { JadeCounterComponent } from '../../components/game-counters/jade-counter.component';
-import { PogoHopperCountersComponent } from '../../components/game-counters/pogo-counter.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
@@ -59,16 +53,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 		InlineSVGModule.forRoot(),
 	],
-	declarations: [
-		GameCountersComponent,
-		GalakrondCountersComponent,
-		PogoHopperCountersComponent,
-		JadeCounterComponent,
-		AttackCountersComponent,
-		FatigueCounterComponent,
-		CthunCounterComponent,
-		GenericCountersComponent,
-	],
+	declarations: [GameCountersComponent, GenericCountersComponent],
 	bootstrap: [GameCountersComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })
