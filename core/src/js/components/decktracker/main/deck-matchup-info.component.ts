@@ -38,7 +38,7 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 			value.totalWinsCoin != null && value.totalGamesCoin
 				? (100 * value.totalWinsCoin) / value.totalGamesCoin
 				: null;
-		this.winrateCoinTooltip = `Played ${value.totalGamesFirst} matches going second`;
+		this.winrateCoinTooltip = `Played ${value.totalGamesCoin} matches going second`;
 	}
 
 	icon: string;
