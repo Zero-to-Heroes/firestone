@@ -119,10 +119,10 @@
 	}
 }
 
-// .view-deck .icon {
-// 	width: 30px;
-// 	height: 19px;
-// }
+.view-deck .icon {
+	max-width: 20px;
+	max-height: 12px;
+}
 
 .dust-cost {
 	display: flex;
