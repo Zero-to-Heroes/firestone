@@ -12,7 +12,7 @@
 }
 
 .bar {
-	background: #130b2b;
+	background: var(--color-7);
 	width: 7px;
 	flex-grow: 1;
 	display: flex;
