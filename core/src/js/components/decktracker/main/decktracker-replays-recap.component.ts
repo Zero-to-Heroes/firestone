@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 
@@ -13,7 +12,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 	template: `
 		<div class="decktracker-replays-recap">
 			<div class="title">Last {{ _numberOfReplays }} replays</div>
-			<ul class="list">
+			<ul class="list" scrollable>
 				<li *ngFor="let replay of replays">
 					<replay-info [replay]="replay" [showStatsLabel]="null" [showReplayLabel]="null"></replay-info>
 				</li>
