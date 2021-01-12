@@ -139,7 +139,16 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix an incorrect tooltip when mousing over the Win% Coin column in the deck details`,
+								text: `Fix an incorrect tooltip when mousing over the Win% Coin column in the deck details.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'ui',
+								text: `Add mouse over effect on cards in your collection.`,
 							},
 						],
 					},
@@ -148,7 +157,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'ui',
-								text: `Add an empty placeholder for screens that don't have any information above the ad space`,
+								text: `Add an empty placeholder for screens that don't have any information above the ad space.`,
 							},
 						],
 					},
