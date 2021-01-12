@@ -15,6 +15,14 @@
 		.copy-deckcode {
 			margin-bottom: 10px;
 			justify-content: flex-start;
+
+			::ng-deep .copy-deckstring {
+				--icon-color: var(--color-5);
+
+				&:hover {
+					--icon-color: var(--color-1);
+				}
+			}
 		}
 	}
 
