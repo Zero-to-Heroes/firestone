@@ -9,6 +9,8 @@
 
 	&.duels,
 	&.paid-duels {
+		top: -3px;
+
 		.frame {
 			height: 120%;
 			left: -12%;
@@ -16,13 +18,6 @@
 	}
 
 	.rank-text {
-		// position: absolute;
-		// bottom: -9%;
-		// text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
-		// color: white;
-		// font-size: 12px;
-		// width: 100%;
-		// text-align: center;
 		position: absolute;
 		bottom: 3px;
 		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
@@ -42,11 +37,6 @@
 
 .icon {
 	height: 100%;
-
-	&.battlegrounds.missing-rank {
-		position: relative;
-		top: 4px;
-	}
 }
 
 .art {
