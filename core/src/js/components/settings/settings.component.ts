@@ -93,7 +93,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 
 	selectApp(selectedApp: string, selectedMenu?: string) {
 		// console.log('selectApp', selectedApp, selectedMenu);
-		this.selectedApp = selectedApp;
+		this.selectedApp = selectedApp === 'duels' ? 'general' : selectedApp;
 		this.selectedMenu = selectedMenu || this.getDefaultMenu(selectedApp);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
