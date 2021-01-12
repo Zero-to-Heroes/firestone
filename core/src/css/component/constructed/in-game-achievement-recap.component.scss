@@ -1,0 +1,77 @@
+.in-game-achievement-recap {
+	height: 40px;
+	display: flex;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 10px;
+	margin-bottom: 5px;
+
+	&.completed,
+	&.no-progress {
+		opacity: 0.7;
+
+		.graph {
+			.progress {
+				background-color: var(--color-2);
+			}
+		}
+	}
+
+	.name {
+		width: 200px;
+		color: var(--default-title-color);
+	}
+
+	.progress {
+		display: flex;
+
+		.gain {
+			color: var(--default-text-color);
+			margin-left: 10px;
+			font-size: 14px;
+		}
+	}
+
+	.count {
+		color: var(--color-1);
+		display: flex;
+		width: 80px;
+		margin-left: 5px;
+
+		.progress {
+			display: flex;
+
+			.current::after {
+				content: '/';
+			}
+		}
+	}
+
+	.graph {
+		width: 400px;
+		height: 20px;
+		display: flex;
+		position: relative;
+
+		.background {
+			height: 100%;
+			width: 100%;
+			background: var(--color-3);
+		}
+
+		.progress {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background: var(--default-title-color);
+		}
+
+		.gain-progress {
+			position: absolute;
+			height: 100%;
+			top: 0;
+			background: var(--default-text-color);
+		}
+	}
+}

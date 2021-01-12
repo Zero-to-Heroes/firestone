@@ -1,32 +1,30 @@
 import { GameType } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/decktracker/game-state';
-import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../overwolf.service';
 import { isWindowClosed } from '../../utils';
 import { OverlayHandler } from './overlay-handler';
 
-export class PlayerDeckOverlayHandler implements OverlayHandler {
+export class ConstructedWindowHandler implements OverlayHandler {
 	private closedByUser: boolean;
 
 	constructor(private readonly ow: OverwolfService) {}
 
-	public processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
-		if (gameEvent.type === 'CLOSE_TRACKER') {
-			console.log('[game-state] handling overlay for event', gameEvent.type);
+	public processEvent(gameEvent: GameEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
+		if (gameEvent.type === 'CLOSE_CONSTRUCTED_WINDOW') {
+			console.log('[constructed-window] handling overlay for event', gameEvent.type);
 			this.closedByUser = true;
 			this.updateOverlay(state, showDecktrackerFromGameMode);
 		} else if (gameEvent.type === GameEvent.GAME_START) {
-			// console.log('[game-state] handling overlay for event', gameEvent.type);
+			console.log('[constructed-window] handling overlay for event', gameEvent.type);
 			this.closedByUser = false;
-			// this.gameEnded = false;
 			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		}
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		// Nothing to do
+		// TODO
 	}
 
 	public async updateOverlay(
@@ -35,23 +33,14 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 		forceCloseWidgets = false,
 		forceLogs = false,
 	) {
+		const inGame = await this.ow.inGame();
+		const windowName = OverwolfService.CONSTRUCTED_WINDOW;
 		// if (forceLogs) {
-		// 	console.log(
-		// 		'[player-overlay] will consider overlay for player deck',
-		// 		state?.metadata,
-		// 		showDecktrackerFromGameMode,
-		// 		forceCloseWidgets,
-		// 	);
+		// 	console.log('[constructed-window] inGame?', inGame);
 		// }
-		// TODO: don't forget to change this
-		// For now, it looks like the scene_state event from the GEP isn't fired anymore?
-		const inGame = await this.ow.inGame(); //(this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
+		const theWindow = await this.ow.getWindowState(windowName);
 		// if (forceLogs) {
-		// 	console.log('[game-state] inGame?', inGame);
-		// }
-		const decktrackerWindow = await this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW);
-		// if (forceLogs) {
-		// 	console.log('[game-state] retrieved window', decktrackerWindow);
+		// 	console.log('[constructed-window] retrieved window', decktrackerWindow);
 		// }
 
 		const shouldShowTracker =
@@ -66,11 +55,11 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
 		if (forceLogs) {
 			console.log(
-				'[game-state] should show tracker?',
+				'[constructed-window] should show?',
 				inGame,
 				shouldShowTracker,
 				showDecktrackerFromGameMode,
-				decktrackerWindow.window_state_ex,
+				theWindow.window_state_ex,
 				this.closedByUser,
 				state?.playerDeck,
 				state?.metadata,
@@ -79,32 +68,32 @@ export class PlayerDeckOverlayHandler implements OverlayHandler {
 		if (
 			inGame &&
 			shouldShowTracker &&
-			isWindowClosed(decktrackerWindow.window_state_ex) &&
+			isWindowClosed(theWindow.window_state_ex) &&
 			showDecktrackerFromGameMode &&
 			!this.closedByUser
 		) {
-			// console.log('[game-state] showing tracker');
-			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
-			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
+			// console.log('[constructed-window] showing tracker');
+			await this.ow.obtainDeclaredWindow(windowName);
+			await this.ow.restoreWindow(windowName);
 		} else if (
-			!isWindowClosed(decktrackerWindow.window_state_ex) &&
+			!isWindowClosed(theWindow.window_state_ex) &&
 			(!shouldShowTracker || !showDecktrackerFromGameMode || this.closedByUser || !inGame)
 		) {
 			console.log(
-				'[game-state] closing tracker',
-				decktrackerWindow,
+				'[constructed-window] closing tracker',
+				theWindow,
 				shouldShowTracker,
 				showDecktrackerFromGameMode,
 				this.closedByUser,
 				inGame,
 				state.metadata.gameType,
 			);
-			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
+			await this.ow.closeWindow(windowName);
 		}
 		// if (forceLogs) {
 		// 	console.log(
-		// 		'[game-state] tracker window handled',
-		// 		await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW),
+		// 		'[constructed-window] tracker window handled',
+		// 		await this.ow.obtainDeclaredWindow(windowName),
 		// 	);
 		// }
 	}

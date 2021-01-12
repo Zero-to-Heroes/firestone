@@ -1,0 +1,13 @@
+.in-game-achievements-recap {
+	height: 100%;
+	width: 100%;
+}
+
+.achievements {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	overflow: auto;
+	height: 100%;
+	width: 100%;
+}

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
+import { AchievementProgress, AchievementsProgress } from '../../models/achievement/achievement-progress';
 import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
@@ -11,6 +12,7 @@ import { AchievementCompletedEvent } from '../mainwindow/store/events/achievemen
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ProcessingQueue } from '../processing-queue.service';
+import { HsAchievementsInfo } from './achievements-info';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
@@ -26,6 +28,8 @@ export class AchievementsMonitor {
 	private lastReceivedTimestamp;
 	private achievementQuotas: { [achievementId: number]: number };
 
+	private achievementsProgressInterval;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private achievementLoader: AchievementsLoaderService,
@@ -38,7 +42,16 @@ export class AchievementsMonitor {
 		this.lastReceivedTimestamp = Date.now();
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.handleEvent(gameEvent);
+
+			if (gameEvent.type === GameEvent.GAME_START) {
+				if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
+					this.startAchievementsProgressDetection();
+				}
+			} else if (gameEvent.type === GameEvent.GAME_END) {
+				this.stopAchievementsProgressDetection();
+			}
 		});
+
 		if (FeatureFlags.SHOW_HS_ACHIEVEMENTS) {
 			this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
 				const changes: MemoryUpdate = event.data[0];
@@ -189,6 +202,44 @@ export class AchievementsMonitor {
 
 	private async prepareAchievementCompletedEvent(achievement: Achievement) {
 		this.store.stateUpdater.next(new AchievementCompletedEvent(achievement));
+	}
+
+	private async startAchievementsProgressDetection() {
+		this.achievementsProgressInterval = setInterval(() => this.detectAchievementProgress(), 5000);
+	}
+
+	private async stopAchievementsProgressDetection() {
+		if (this.achievementsProgressInterval) {
+			clearInterval(this.achievementsProgressInterval);
+		}
+	}
+
+	private async detectAchievementProgress() {
+		const achievementsProgress: HsAchievementsInfo = await this.memory.getInGameAchievementsProgressInfo();
+		const allAchievements = await this.achievementLoader.getAchievements();
+		if (!achievementsProgress?.achievements?.length) {
+			return;
+		}
+
+		const achievementInfos: readonly AchievementProgress[] = achievementsProgress.achievements.map(ach => {
+			const ref = allAchievements.find(a => a.id === `hearthstone_game_${ach.id}`);
+			const quota = this.achievementQuotas[ach.id];
+			return {
+				id: ref.id,
+				progress: ach.progress,
+				quota: quota,
+				completed: ach.completed || ref.numberOfCompletions > 0 || ach.progress >= quota,
+				text: ref.text,
+				name: ref.name,
+				step: ref.priority,
+				type: ref.type,
+				ref: ref,
+			};
+		});
+		const achievementsInfo: AchievementsProgress = {
+			achievements: achievementInfos,
+		};
+		this.events.broadcast(Events.ACHIEVEMENT_PROGRESSION, achievementsInfo);
 	}
 }
 

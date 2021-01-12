@@ -1,6 +1,7 @@
+import { GameStateEvent } from './decktracker/game-state-event';
 import { Rank } from './player-info';
 
-export class GameEvent {
+export class GameEvent implements GameStateEvent {
 	public static readonly SCENE_CHANGED = 'SCENE_CHANGED'; // Not strictly a game event, but needed for requirements procesing
 	public static readonly GAME_STATS_UPDATED = 'GAME_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
 	public static readonly GLOBAL_STATS_UPDATED = 'GLOBAL_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
@@ -96,6 +97,8 @@ export class GameEvent {
 	public static readonly BATTLEGROUNDS_COMBAT_START = 'BATTLEGROUNDS_COMBAT_START';
 	public static readonly BATTLEGROUNDS_BATTLE_RESULT = 'BATTLEGROUNDS_BATTLE_RESULT';
 	public static readonly BATTLEGROUNDS_TRIPLE = 'BATTLEGROUNDS_TRIPLE';
+
+	public static readonly ACHIEVEMENT_PROGRESS = 'ACHIEVEMENT_PROGRESS';
 
 	readonly type: string;
 	readonly cardId: string;

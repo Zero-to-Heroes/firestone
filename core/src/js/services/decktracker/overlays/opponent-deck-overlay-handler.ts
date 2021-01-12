@@ -1,5 +1,6 @@
 import { GameType } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/decktracker/game-state';
+import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../overwolf.service';
@@ -12,7 +13,7 @@ export class OpponentDeckOverlayHandler implements OverlayHandler {
 
 	constructor(private readonly ow: OverwolfService) {}
 
-	public processEvent(gameEvent: GameEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
+	public processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
 		if (gameEvent.type === 'CLOSE_OPPONENT_TRACKER') {
 			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = true;

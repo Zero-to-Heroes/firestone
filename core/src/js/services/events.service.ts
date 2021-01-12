@@ -52,6 +52,8 @@ export class Events {
 
 	public static readonly DUELS_LOAD_TOP_DECK_RUN_DETAILS = 'DUELS_LOAD_TOP_DECK_RUN_DETAILS';
 
+	public static readonly ACHIEVEMENT_PROGRESSION = 'ACHIEVEMENT_PROGRESSION';
+
 	private _eventBus: Subject<BroadcastEvent>;
 
 	constructor() {

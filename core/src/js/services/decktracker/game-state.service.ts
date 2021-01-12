@@ -6,9 +6,11 @@ import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
+import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
 import { Events } from '../events.service';
+import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
@@ -36,6 +38,7 @@ import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
 import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
+import { ConstructedAchievementsProgressionParser } from './event-parser/constructed/constructed-achievements-progression-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { CthunParser } from './event-parser/cthun-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
@@ -81,7 +84,9 @@ import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
+import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
+import { ConstructedWindowHandler } from './overlays/constructed-window-handler';
 import { AttackOpponentCounterOverlayHandler } from './overlays/counter-opponent-attack-handler';
 import { CthunOpponentCounterOverlayHandler } from './overlays/counter-opponent-cthun-handler';
 import { FatigueOpponentCounterOverlayHandler } from './overlays/counter-opponent-fatigue-handler';
@@ -109,7 +114,9 @@ export class GameStateService {
 	public state: GameState = new GameState();
 	private eventParsers: readonly EventParser[];
 
-	private processingQueue = new ProcessingQueue<GameEvent>(
+	// Keep a single queue to avoid race conditions between the two queues (since they
+	// modify the same state)
+	private processingQueue = new ProcessingQueue<GameEvent | GameStateEvent>(
 		eventQueue => this.processQueue(eventQueue),
 		50,
 		'game-state',
@@ -193,6 +200,7 @@ export class GameStateService {
 				this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 				this.ow.closeWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
+				// this.ow.closeWindow(OverwolfService.CONSTRUCTED_WINDOW);
 			}
 			if (await this.ow.inGame()) {
 				this.updateOverlays(this.state);
@@ -200,10 +208,10 @@ export class GameStateService {
 		});
 	}
 
+	// TODO: this should move elsewhere
 	public async getCurrentReviewId(): Promise<string> {
 		return new Promise<string>(resolve => this.getCurrentReviewIdInternal(reviewId => resolve(reviewId)));
 	}
-
 	private async getCurrentReviewIdInternal(callback, retriesLeft = 15) {
 		if (retriesLeft <= 0) {
 			console.error('[game-state] Could not get current review id');
@@ -235,12 +243,17 @@ export class GameStateService {
 				this.currentReviewId = info.reviewId;
 			}
 		});
+		this.events
+			.on(Events.ACHIEVEMENT_PROGRESSION)
+			.subscribe(event =>
+				this.processingQueue.enqueue(new ConstructedAchievementsProgressionEvent(event.data[0])),
+			);
 		// Reset the deck if it exists
 		//console.log('[game-state] Enqueueing default game_end event');
 		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}
 
-	private async processQueue(eventQueue: readonly GameEvent[]) {
+	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
 		// const gameEvent = eventQueue[0];
 		try {
 			const stateUpdateEvents = eventQueue.filter(event => event.type === GameEvent.GAME_STATE_UPDATE);
@@ -250,7 +263,11 @@ export class GameStateService {
 			].filter(event => event);
 			// console.log('will processed', eventsToProcess.length, 'events');
 			for (let i = 0; i < eventsToProcess.length; i++) {
-				await this.processEvent(eventsToProcess[i], i === eventsToProcess.length - 1);
+				if (eventsToProcess[i] instanceof GameEvent) {
+					await this.processEvent(eventsToProcess[i] as GameEvent, i === eventsToProcess.length - 1);
+				} else {
+					await this.processNonMatchEvent(eventsToProcess[i] as GameStateEvent);
+				}
 			}
 		} catch (e) {
 			console.error('Exception while processing event', e);
@@ -258,7 +275,36 @@ export class GameStateService {
 		return [];
 	}
 
-	private previousStart: number = Date.now();
+	private async processNonMatchEvent(event: GameStateEvent) {
+		this.overlayHandlers.forEach(handler =>
+			handler.processEvent(event, this.state, this.showDecktrackerFromGameMode),
+		);
+
+		for (const parser of this.eventParsers) {
+			try {
+				if (parser.applies(event, this.state)) {
+					this.state = await parser.parse(this.state, event);
+				}
+			} catch (e) {
+				console.error(
+					'[game-state] Exception while applying parser for non-match event',
+					parser.event(),
+					e.message,
+					e.stack,
+					e,
+				);
+			}
+		}
+
+		this.updateOverlays(this.state);
+		const emittedEvent = {
+			event: {
+				name: event.type,
+			},
+			state: this.state,
+		};
+		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+	}
 
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
 		const allowRequeue = !(gameEvent as any).preventRequeue;
@@ -392,7 +438,7 @@ export class GameStateService {
 		};
 		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		// console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
-		this.previousStart = Date.now();
+		// this.previousStart = Date.now();
 	}
 
 	private hasPossibleCounterspell(secrets: readonly BoardSecret[]) {
@@ -404,6 +450,7 @@ export class GameStateService {
 		);
 	}
 
+	// TODO: this should move elsewhere
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
 		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
 		// Add missing info like card names, if the card added doesn't come from a deck state
@@ -528,6 +575,10 @@ export class GameStateService {
 			new SpellsPlayerCounterOverlayHandler(this.ow, this.allCards),
 			new ElementalPlayerCounterOverlayHandler(this.ow, this.allCards),
 		];
+
+		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
+			this.overlayHandlers.push(new ConstructedWindowHandler(this.ow));
+		}
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
@@ -591,9 +642,12 @@ export class GameStateService {
 			new EntityUpdateParser(this.helper, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
+
+			new ConstructedAchievementsProgressionParser(),
 		];
 	}
 
+	// TODO: this should move elsewhere
 	// On the opponent's turn, we show the total attack, except for dormant minions
 	private canAttack(entity, isActivePlayer: boolean): boolean {
 		const impossibleToAttack =
@@ -617,6 +671,7 @@ export class GameStateService {
 		return !impossibleToAttack;
 	}
 
+	// TODO: this should move elsewhere
 	private hasTag(entity, tag: number, value = 1): boolean {
 		if (!entity?.tags) {
 			return false;

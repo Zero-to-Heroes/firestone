@@ -1,9 +1,12 @@
 import { GameType } from '@firestone-hs/reference-data';
+import { ConstructedState } from '../constructed/constructed-state';
 import { GameStat } from '../mainwindow/stats/game-stat';
 import { DeckState } from './deck-state';
 import { Metadata } from './metadata';
 import { StatsRecap } from './stats-recap';
 
+// The goal of this state is ultimately to store all the information linked to the live data
+// (tracker, BG, constructed second screen, etc.)
 export class GameState {
 	readonly playerDeck: DeckState = new DeckState();
 	readonly opponentDeck: DeckState = new DeckState();
@@ -14,6 +17,8 @@ export class GameState {
 	readonly metadata: Metadata = new Metadata();
 	readonly currentTurn: number | 'mulligan' = 'mulligan';
 	readonly gameStarted: boolean;
+
+	readonly constructedState: ConstructedState = new ConstructedState();
 
 	public static create(): GameState {
 		return Object.assign(new GameState());
