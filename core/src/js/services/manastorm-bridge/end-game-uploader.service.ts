@@ -105,23 +105,25 @@ export class EndGameUploaderService {
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode, game);
 			const duelsInfo = await this.memoryInspection.getDuelsInfo();
-			console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo);
-			playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
-			game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
-			try {
-				const replay = parseHsReplayString(replayXml);
-				if (
-					(replay.result === 'won' && duelsInfo.Wins === 11) ||
-					(replay.result === 'lost' && duelsInfo.Losses === 2)
-				) {
-					const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
-					console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
-					if (newPlayerRank != null) {
-						game.newPlayerRank = '' + newPlayerRank;
+			if (duelsInfo) {
+				console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo);
+				playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
+				game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
+				try {
+					const replay = parseHsReplayString(replayXml);
+					if (
+						(replay.result === 'won' && duelsInfo.Wins === 11) ||
+						(replay.result === 'lost' && duelsInfo.Losses === 2)
+					) {
+						const newPlayerRank = await this.getDuelsNewPlayerRank(playerRank);
+						console.log('[manastorm-bridge]', currentReviewId, 'got duels new player rank', newPlayerRank);
+						if (newPlayerRank != null) {
+							game.newPlayerRank = '' + newPlayerRank;
+						}
 					}
+				} catch (e) {
+					console.error('[manastorm-bridge]', currentReviewId, 'Could not handle rating change in duels', e);
 				}
-			} catch (e) {
-				console.error('[manastorm-bridge]', currentReviewId, 'Could not handle rating change in duels', e);
 			}
 		} else if (game.gameMode === 'arena') {
 			const arenaInfo = await this.memoryInspection.getArenaInfo();
