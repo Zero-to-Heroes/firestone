@@ -199,6 +199,7 @@ export class DungeonLootParserService {
 
 		if (!this.duelsInfo) {
 			console.error('Could not retrieve duels info', this.currentDuelsRunId);
+			return;
 		}
 
 		if (this.isNewRun(this.duelsInfo)) {
