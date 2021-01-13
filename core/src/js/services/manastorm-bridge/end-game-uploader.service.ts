@@ -92,6 +92,7 @@ export class EndGameUploaderService {
 		// being removed from memory by the player clicking away
 		let playerRank;
 		let newPlayerRank;
+		const replay = parseHsReplayString(replayXml);
 		if (game.gameMode === 'battlegrounds') {
 			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
 			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
@@ -101,6 +102,7 @@ export class EndGameUploaderService {
 			);
 			game.availableTribes = availableRaces;
 			game.bannedTribes = bannedRaces;
+			game.additionalResult = replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode, game);
@@ -110,7 +112,6 @@ export class EndGameUploaderService {
 				playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
 				game.additionalResult = duelsInfo.Wins + '-' + duelsInfo.Losses;
 				try {
-					const replay = parseHsReplayString(replayXml);
 					if (
 						(replay.result === 'won' && duelsInfo.Wins === 11) ||
 						(replay.result === 'lost' && duelsInfo.Losses === 2)
@@ -221,7 +222,6 @@ export class EndGameUploaderService {
 		console.log('[manastorm-bridge]', currentReviewId, 'added meta data');
 		game.uncompressedXmlReplay = replayXml;
 		console.log('[manastorm-bridge]', currentReviewId, 'set xml replay');
-		const replay = parseHsReplayString(game.uncompressedXmlReplay);
 		this.gameParserService.extractMatchup(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted matchup');
 		this.gameParserService.extractDuration(replay, game);
