@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '6.2.41',
+		version: '7.0.0',
 		sections: [
 			{
 				type: 'intro',
@@ -63,31 +63,31 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'feature',
-								text: `The new HS in-game (native) achievements can now be browsed inside Firestone. Also, a pop-up appears when a new native achievement is completed telling you what the achievement is about.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now enable the "view replay example" in the battle simulation overlay. It opens the simulation example in a new browser tab, so the option is disabled by default.`,
-							},
-						],
-					},
+					// {
+					// 	category: 'achievements',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `The new HS in-game (native) achievements can now be browsed inside Firestone. Also, a pop-up appears when a new native achievement is completed telling you what the achievement is about.`,
+					// 		},
+					// 	],
+					// },
+					// {
+					// 	category: 'battlegrounds',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `You can now enable the "view replay example" in the battle simulation overlay. It opens the simulation example in a new browser tab, so the option is disabled by default.`,
+					// 		},
+					// 	],
+					// },
 					{
 						category: 'general',
 						details: [
-							{
-								type: 'feature',
-								text: `Added a button to directly share the current screen to Reddit (for now only on the Battlegrounds pages).`,
-							},
+							// {
+							// 	type: 'feature',
+							// 	text: `Added a button to directly share the current screen to Reddit (for now only on the Battlegrounds pages).`,
+							// },
 							{
 								type: 'ui',
 								text: `Changed the color scheme to unify all game modes (Ladder, Battlegrounds, Duels) and get rid of the green color for replays.`,
