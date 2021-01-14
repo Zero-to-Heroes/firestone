@@ -32,4 +32,11 @@ input,
 		flex-shrink: 0;
 		margin-left: 15px;
 	}
+
+	::ng-deep .flairs {
+		.selected-icon {
+			width: 40px;
+			height: 40px;
+		}
+	}
 }

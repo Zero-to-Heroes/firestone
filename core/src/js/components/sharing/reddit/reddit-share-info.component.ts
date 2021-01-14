@@ -18,7 +18,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'reddit-share-info',
-	styleUrls: [`../../../../css/component/sharing/reddit/reddit-share-info.component.scss`],
+	styleUrls: [
+		`../../../../css/global/scrollbar.scss`,
+		`../../../../css/component/sharing/reddit/reddit-share-info.component.scss`,
+	],
 	template: `
 		<div class="share-info">
 			<input

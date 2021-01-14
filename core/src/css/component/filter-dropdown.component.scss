@@ -49,11 +49,18 @@ ng-select.disabled {
 
 	.caret {
 		color: var(--color-1);
+		width: 30px;
+		height: 30px;
 	}
 	.selected-icon {
 		color: var(--color-1);
 		position: relative;
 		left: 8px;
+
+		& > svg {
+			width: 30px;
+			height: 30px;
+		}
 	}
 
 	.open .caret {

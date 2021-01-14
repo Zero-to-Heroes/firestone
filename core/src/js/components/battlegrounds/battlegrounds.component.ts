@@ -22,6 +22,7 @@ declare let amplitude: any;
 	selector: 'battlegrounds',
 	styleUrls: [
 		`../../../css/global/reset-styles.scss`,
+		`../../../css/global/scrollbar.scss`,
 		`../../../css/component/battlegrounds/ngx-tooltips.scss`,
 		`../../../css/component/battlegrounds/battlegrounds.component.scss`,
 	],
