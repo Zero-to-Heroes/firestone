@@ -40,6 +40,7 @@ export class TwitchBgsHeroOverviewComponent {
 	@Input() set config(value: { player: BgsPlayer; currentTurn: number }) {
 		this._opponent = value.player;
 		this.currentTurn = value.currentTurn;
+		console.log('set config', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

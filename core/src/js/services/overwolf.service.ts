@@ -26,6 +26,7 @@ export class OverwolfService {
 	public static SECRETS_HELPER_WINDOW = 'SecretsHelperWindow';
 	public static BATTLEGROUNDS_WINDOW = 'BattlegroundsWindow';
 	public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
+	public static BATTLEGROUNDS_WINDOW_MOUSE_OVER_OVERLAY = 'MatchOverlayBattlegroundsMouseOverWindow';
 	public static BATTLEGROUNDS_BATTLE_SIMULATION_WINDOW_OVERLAY = 'BgsBattleSimulationOverlay';
 	public static BATTLEGROUNDS_BANNED_TRIBES_WINDOW = 'BgsBannedTribes';
 	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
@@ -130,6 +131,15 @@ export class OverwolfService {
 
 	public removeMessageReceivedListener(listener: (message: any) => void): void {
 		overwolf.windows.onMessageReceived.removeListener(listener);
+	}
+
+	public setWindowPassthrough(windowId: string): Promise<void> {
+		return new Promise<void>(resolve => {
+			overwolf.windows.setWindowStyle(windowId, overwolf.windows.enums.WindowStyle.InputPassThrough, data => {
+				console.log('[overwolf-service] set window pass-through', windowId, data);
+				resolve();
+			});
+		});
 	}
 
 	public addVideoCaptureSettingsChangedListener(callback: (message: any) => void): (message: any) => void {

@@ -51,6 +51,8 @@ import { DeckListComponent } from '../../components/decktracker/overlay/deck-lis
 import { DeckZoneComponent } from '../../components/decktracker/overlay/deck-zone.component';
 import { DeckTrackerDeckListComponent } from '../../components/decktracker/overlay/decktracker-deck-list.component';
 import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
+import { LeaderboardEmptyCardComponent } from '../../components/decktracker/overlay/twitch/leaderboard-empty-card.component';
+import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { FilterDropdownComponent } from '../../components/filter-dropdown.component';
 import { FilterComponent } from '../../components/filter.component';
 import { FsFilterDropdownComponent } from '../../components/fs-filter-dropdown.component';
@@ -186,6 +188,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
 
+		LeaderboardEmptyCardComponent,
+		TwitchBgsHeroOverviewComponent,
+
 		GraphWithComparisonComponent,
 		SimpleBarChartComponent,
 
@@ -280,6 +285,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsChartWarbandStatsComponent,
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
+
+		LeaderboardEmptyCardComponent,
+		TwitchBgsHeroOverviewComponent,
 
 		GraphWithComparisonComponent,
 		SimpleBarChartComponent,

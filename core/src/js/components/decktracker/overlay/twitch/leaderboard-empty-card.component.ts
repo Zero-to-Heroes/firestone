@@ -19,7 +19,7 @@ import { TwitchBgsBoard, TwitchBgsPlayer } from './twitch-bgs-state';
 			componentTooltip
 			[componentType]="componentType"
 			[componentInput]="_bgsPlayer"
-			componentTooltipPosition="right"
+			[componentTooltipPosition]="position"
 		>
 			<!-- transparent image with 1:1 intrinsic aspect ratio -->
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
@@ -35,8 +35,10 @@ export class LeaderboardEmptyCardComponent {
 		currentTurn: number;
 	};
 
-	_previousPlayer: TwitchBgsPlayer;
+	_previousPlayer: TwitchBgsPlayer | BgsPlayer;
 	_currentTurn: number;
+
+	@Input() position: 'global-top-center' | 'right' = 'right';
 
 	@Input() set currentTurn(value: number) {
 		if (this._currentTurn === value) {
@@ -46,10 +48,11 @@ export class LeaderboardEmptyCardComponent {
 		this.updateInfo();
 	}
 
-	@Input() set bgsPlayer(value: TwitchBgsPlayer) {
+	@Input() set bgsPlayer(value: TwitchBgsPlayer | BgsPlayer) {
 		if (this._previousPlayer === value) {
 			return;
 		}
+		console.log('set bgsPLayer', value);
 		this._previousPlayer = value;
 		this.updateInfo();
 	}
@@ -58,6 +61,7 @@ export class LeaderboardEmptyCardComponent {
 		if (!this._previousPlayer) {
 			return;
 		}
+		const boardHistory = this.extractBoardHistory();
 		this._bgsPlayer = {
 			player: BgsPlayer.create({
 				cardId: this._previousPlayer.cardId,
@@ -69,10 +73,20 @@ export class LeaderboardEmptyCardComponent {
 				leaderboardPlace: this._previousPlayer.leaderboardPlace,
 				tavernUpgradeHistory: this._previousPlayer.tavernUpgradeHistory,
 				tripleHistory: this._previousPlayer.tripleHistory,
-				boardHistory: this.buildBoardHistory(this._previousPlayer.lastBoard),
+				boardHistory: boardHistory,
 			} as BgsPlayer),
 			currentTurn: this._currentTurn,
 		};
+	}
+
+	private extractBoardHistory(): readonly BgsBoard[] {
+		if ((this._previousPlayer as TwitchBgsPlayer).lastBoard) {
+			return this.buildBoardHistory((this._previousPlayer as TwitchBgsPlayer).lastBoard);
+		}
+		if ((this._previousPlayer as BgsPlayer).boardHistory?.length) {
+			return (this._previousPlayer as BgsPlayer).boardHistory;
+		}
+		return [];
 	}
 
 	private buildBoardHistory(lastBoard: TwitchBgsBoard): readonly BgsBoard[] {

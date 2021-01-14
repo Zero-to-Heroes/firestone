@@ -16,7 +16,7 @@ export class BgsBannedTribesOverlay implements BattlegroundsOverlay {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.active = preferences.bgsShowBannedTribesOverlay;
+		this.active = preferences.bgsShowBannedTribesOverlay && preferences.bgsFullToggle;
 	}
 
 	public async updateOverlay(state: BattlegroundsState) {

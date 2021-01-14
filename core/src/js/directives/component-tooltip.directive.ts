@@ -36,7 +36,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' = 'right';
+	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'global-top-center' = 'right';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -68,12 +68,19 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 			this.overlayRef.dispose();
 		}
 		const positions: ConnectedPosition[] = this.buildPositions();
-		this.positionStrategy = this.overlayPositionBuilder
-			// Create position attached to the elementRef
-			.flexibleConnectedTo(this.elementRef)
-			// Describe how to connect overlay to the elementRef
-			.withPositions(positions);
-		// console.log('[card-tooltip] elementRef', this.elementRef, positions, this.position);
+
+		if (this.position === 'global-top-center') {
+			this.positionStrategy = this.overlayPositionBuilder
+				.global()
+				.centerHorizontally()
+				.top();
+		} else {
+			this.positionStrategy = this.overlayPositionBuilder
+				// Create position attached to the elementRef
+				.flexibleConnectedTo(this.elementRef)
+				// Describe how to connect overlay to the elementRef
+				.withPositions(positions);
+		}
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
@@ -96,7 +103,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		// console.log('mouseenter');
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(this._componentType);
 

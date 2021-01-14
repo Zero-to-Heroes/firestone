@@ -1,0 +1,30 @@
+:host() {
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+.battlegrounds-mouse-over-overlay {
+	width: 100%;
+	height: 100%;
+}
+
+.bgs-leaderboard {
+	position: absolute;
+	height: 73%;
+	width: 9%;
+	left: 2%;
+	top: 15%;
+	display: flex;
+	flex-direction: column;
+	z-index: 1;
+}
+
+leaderboard-empty-card.opponent-overlay {
+	height: 12%;
+	background: rgba(255, 255, 255, 0.01);
+}
+
+twitch-bgs-hero-overview {
+	width: 780px !important;
+}

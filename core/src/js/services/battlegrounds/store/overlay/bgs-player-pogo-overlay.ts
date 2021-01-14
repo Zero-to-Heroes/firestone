@@ -15,7 +15,7 @@ export class BgsPlayerPogoOverlay implements BattlegroundsOverlay {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.showCounter = preferences.playerBgsPogoCounter;
+		this.showCounter = preferences.playerBgsPogoCounter && preferences.bgsFullToggle;
 	}
 
 	public async updateOverlay(state: BattlegroundsState) {

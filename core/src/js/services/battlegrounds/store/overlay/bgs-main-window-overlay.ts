@@ -21,7 +21,7 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.bgsActive = preferences.bgsEnableApp;
+		this.bgsActive = preferences.bgsEnableApp && preferences.bgsFullToggle;
 	}
 
 	public async updateOverlay(state: BattlegroundsState) {

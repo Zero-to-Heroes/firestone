@@ -31,7 +31,7 @@ export class BgsStartComputingPostMatchStatsParser implements EventParser {
 			stages: stages,
 			currentStageId: 'post-match',
 			currentPanelId: 'bgs-post-match-stats',
-			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats ? true : false,
+			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			gameEnded: true,
 			currentGame: currentState.currentGame.update({
 				replayXml: event.replayXml,

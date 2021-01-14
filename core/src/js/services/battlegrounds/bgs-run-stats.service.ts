@@ -119,7 +119,7 @@ export class BgsRunStatsService {
 		console.log('[bgs-run-stats] computing post-match stats input', input);
 
 		const [postMatchStats, newBestValues] = this.populateObject(
-			prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp
+			prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle
 				? await this.buildStatsLocally(currentGame, game.uncompressedXmlReplay)
 				: await this.buildStatsRemotely(input),
 			input,
@@ -129,7 +129,7 @@ export class BgsRunStatsService {
 
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
-		if (prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp) {
+		if (prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle) {
 			// console.log('posting to endpoint');
 			this.buildStatsRemotely(input);
 		}

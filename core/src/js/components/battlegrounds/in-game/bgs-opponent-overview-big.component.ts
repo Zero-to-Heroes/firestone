@@ -79,6 +79,7 @@ export class BgsOpponentOverviewBigComponent {
 			return;
 		}
 
+		console.log('getting info', value);
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
 		this.triples = value.tripleHistory;

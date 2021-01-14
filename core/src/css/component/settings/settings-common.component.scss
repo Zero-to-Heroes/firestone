@@ -21,6 +21,9 @@
 .subgroup {
 	padding-left: 10px;
 	margin-bottom: 25px;
+	display: flex;
+	flex-direction: column;
+
 	&:last-child {
 		margin-bottom: 0;
 	}
@@ -129,6 +132,8 @@ input[type='range'] {
 	background: rgba(255, 255, 255, 0.08);
 	padding: 15px;
 	margin-bottom: 15px;
+	display: flex;
+	flex-direction: column;
 }
 
 .info {
@@ -189,8 +194,16 @@ input[type='range'] {
 	}
 }
 
-::ng-deep preference-toggle .preference-toggle {
-	margin-top: 15px;
+::ng-deep preference-toggle {
+	&:first-child {
+		font-style: normal;
+		.preference-toggle {
+			margin-top: 0;
+		}
+	}
+	.preference-toggle {
+		margin-top: 15px;
+	}
 }
 
 ::ng-deep preference-toggle.disabled .preference-toggle,

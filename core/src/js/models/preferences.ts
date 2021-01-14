@@ -136,6 +136,7 @@ export class Preferences {
 	readonly achievementsDisplayNotifications = true;
 	readonly resetAchievementsOnAppStart = false;
 
+	readonly bgsFullToggle = true;
 	readonly bgsEnableApp = true;
 	readonly bgsUseOverlay = false;
 	readonly bgsEnableBattleSimulationOverlay = true;
@@ -150,6 +151,7 @@ export class Preferences {
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
 	readonly bgsBannedTribeScale = 100;
 	readonly bgsBannedTribesShowVertically: boolean;
+	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';

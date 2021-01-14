@@ -14,7 +14,6 @@ import { DeckTrackerOverlayContainerComponent } from '../../components/decktrack
 import { DeckTrackerOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
 import { DeckTrackerTwitchTitleBarComponent } from '../../components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
 import { EmptyCardComponent } from '../../components/decktracker/overlay/twitch/empty-card.component';
-import { LeaderboardEmptyCardComponent } from '../../components/decktracker/overlay/twitch/leaderboard-empty-card.component';
 import { StateMouseOverComponent } from '../../components/decktracker/overlay/twitch/state-mouse-over.component';
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
@@ -51,9 +50,6 @@ console.log('version is', process.env.APP_VERSION);
 		BgsSimulationOverlayStandaloneComponent,
 		EmptyCardComponent,
 		StateMouseOverComponent,
-
-		LeaderboardEmptyCardComponent,
-		TwitchBgsHeroOverviewComponent,
 	],
 	entryComponents: [TwitchBgsHeroOverviewComponent, BgsCardTooltipComponent],
 	bootstrap: [DeckTrackerOverlayContainerComponent],
