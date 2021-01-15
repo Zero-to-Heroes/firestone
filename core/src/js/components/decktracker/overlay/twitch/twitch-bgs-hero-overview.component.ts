@@ -12,7 +12,7 @@ declare let amplitude: any;
 		'../../../../../css/themes/battlegrounds-theme.scss',
 	],
 	template: `
-		<div class="logo-container battlegrounds-theme">
+		<div class="logo-container battlegrounds-theme" *ngIf="showLogo">
 			<div class="background-main-part"></div>
 			<div class="background-second-part"></div>
 			<i class="gold-theme logo">
@@ -34,12 +34,13 @@ declare let amplitude: any;
 })
 export class TwitchBgsHeroOverviewComponent {
 	_opponent: BgsPlayer;
-
 	currentTurn: number;
+	showLogo: boolean = true;
 
-	@Input() set config(value: { player: BgsPlayer; currentTurn: number }) {
+	@Input() set config(value: { player: BgsPlayer; currentTurn: number; showLogo: boolean }) {
 		this._opponent = value.player;
 		this.currentTurn = value.currentTurn;
+		this.showLogo = value.showLogo ?? true;
 		console.log('set config', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

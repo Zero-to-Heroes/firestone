@@ -33,6 +33,7 @@ export class LeaderboardEmptyCardComponent {
 	_bgsPlayer: {
 		player: BgsPlayer;
 		currentTurn: number;
+		showLogo: boolean;
 	};
 
 	_previousPlayer: TwitchBgsPlayer | BgsPlayer;
@@ -76,6 +77,7 @@ export class LeaderboardEmptyCardComponent {
 				boardHistory: boardHistory,
 			} as BgsPlayer),
 			currentTurn: this._currentTurn,
+			showLogo: false,
 		};
 	}
 
