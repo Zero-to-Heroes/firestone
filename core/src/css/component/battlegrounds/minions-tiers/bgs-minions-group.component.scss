@@ -1,0 +1,38 @@
+:host() {
+	display: flex;
+}
+
+.bgs-minions-group {
+	.header {
+		color: var(--default-title-color);
+	}
+
+	.minions {
+		display: flex;
+		list-style: none;
+
+		.minion {
+			width: 80px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-right: 10px;
+
+			.icon {
+				width: 100%;
+				clip-path: ellipse(30% 30% at 50% 50%);
+				transform: scale(1.2);
+			}
+
+			.name {
+				color: var(--default-text-color);
+				text-align: center;
+				max-width: 100%;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				font-size: 12px;
+			}
+		}
+	}
+}

@@ -153,6 +153,7 @@ export class Preferences {
 	readonly bgsBannedTribeScale = 100;
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
+	readonly bgsEnableMinionListOverlay: boolean = true;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';

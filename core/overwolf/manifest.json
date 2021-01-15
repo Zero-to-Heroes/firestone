@@ -43,6 +43,18 @@
 				"grab_focus_on_desktop": false,
 				"block_top_window_navigation": true
 			},
+			"MatchOverlayBattlegroundsMouseOverWindow": {
+				"file": "Files/match_overlay_bgs_mouse_over.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 300, "height": 720 },
+				"start_position": { "top": 0, "left": 0 },
+				"grab_keyboard_focus": false,
+				"grab_focus_on_desktop": false,
+				"block_top_window_navigation": true,
+				"in_game_only": true
+			},
 			"LoadingWindow": {
 				"file": "Files/loading.html",
 				"transparent": true,
@@ -174,6 +186,18 @@
 				"popup_blocker": true,
 				"mute": true
 			},
+			"BattlegroundsMinionsTiersWindow": {
+				"file": "Files/battlegrounds_minions_tiers.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 420, "height": 1300 },
+				"start_position": { "top": 0, "right": 0 },
+				"grab_keyboard_focus": false,
+				"grab_focus_on_desktop": false,
+				"block_top_window_navigation": true,
+				"in_game_only": true
+			},
 			"ConstructedWindow": {
 				"file": "Files/constructed.html",
 				"transparent": true,
@@ -197,18 +221,6 @@
 				"resizable": false,
 				"show_in_taskbar": false,
 				"size": { "width": 1170, "height": 720 },
-				"start_position": { "top": 0, "left": 0 },
-				"grab_keyboard_focus": false,
-				"grab_focus_on_desktop": false,
-				"block_top_window_navigation": true,
-				"in_game_only": true
-			},
-			"MatchOverlayBattlegroundsMouseOverWindow": {
-				"file": "Files/match_overlay_bgs_mouse_over.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-				"size": { "width": 300, "height": 720 },
 				"start_position": { "top": 0, "left": 0 },
 				"grab_keyboard_focus": false,
 				"grab_focus_on_desktop": false,

@@ -85,6 +85,13 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Show the last known opponent's board (and additional info) when mousing over their portrait in the leaderboard"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsEnableMinionListOverlay"
+					*ngIf="minionsListOverlay"
+					[ngClass]="{ 'disabled': !bgsFullToggle }"
+					label="Show minions list"
+					tooltip="Show the list of minions, grouped by tavern tier"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsEnableBattleSimulationOverlay"
 					[ngClass]="{ 'disabled': !enableSimulation || !bgsFullToggle }"
 					label="Battle Simulation overlay"
@@ -163,6 +170,7 @@ import { Knob } from '../preference-slider.component';
 })
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
 	opponentMouseOver: boolean = FeatureFlags.ENABLE_BG_OPPONENT_MOUSE_OVER;
+	minionsListOverlay: boolean = FeatureFlags.ENABLE_BG_MINIONS_LIST;
 
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;

@@ -1,4 +1,6 @@
 import { CardIds, Race } from '@firestone-hs/reference-data';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 
 export const getTribeIcon = (tribe: string | Race): string => {
 	let referenceCardId: string;
@@ -172,4 +174,55 @@ export const normalizeHeroCardId = (heroCardId: string): string => {
 		return 'TB_BaconShop_HERO_59';
 	}
 	return heroCardId;
+};
+
+const REMOVED_CARD_IDS = [
+	'GVG_085', // Annoy-o-Tron
+	'BGS_025', // Mounted Raptor
+	'GIL_681', // Nightmare Amalgam
+	'GVG_058', // Shielded Minibot
+	'ULD_179', // Phallanx Commander
+	'OG_145', // Psych-o-Tron
+	'UNG_037', // Tortollian Shellraiser
+	'GIL_655', // Festeroot Hulk
+	'BGS_024', // Piloted Sky Golem
+	'UNG_010', // Sated Threshadon
+	'OG_300', // Boogeymonster
+	CardIds.Collectible.Neutral.Zoobot,
+	CardIds.NonCollectible.Neutral.ZoobotTavernBrawl,
+	CardIds.Collectible.Neutral.MenagerieMagician,
+	CardIds.NonCollectible.Neutral.MenagerieMagicianTavernBrawl,
+	CardIds.Collectible.Paladin.CobaltGuardian,
+	CardIds.NonCollectible.Neutral.GentleMegasaur,
+	CardIds.NonCollectible.Neutral.GentleMegasaurTavernBrawl,
+	CardIds.NonCollectible.Neutral.NatPagleExtremeAngler_TreasureChestToken,
+	CardIds.NonCollectible.Neutral.NatPagleExtremeAngler_TreasureChestTokenTavernBrawl,
+	CardIds.Collectible.Neutral.WhirlwindTempest,
+	CardIds.NonCollectible.Neutral.WhirlwindTempestTavernBrawl,
+	CardIds.Collectible.Rogue.PogoHopper,
+	CardIds.NonCollectible.Rogue.PogoHopperTavernBrawl,
+	CardIds.Collectible.Paladin.RighteousProtector,
+	CardIds.NonCollectible.Paladin.RighteousProtectorTavernBrawl,
+	CardIds.Collectible.Neutral.TheBeast,
+	CardIds.NonCollectible.Neutral.TheBeastTavernBrawl,
+	CardIds.Collectible.Neutral.CrowdFavorite,
+	CardIds.NonCollectible.Neutral.CrowdFavoriteTavernBrawl,
+	CardIds.NonCollectible.Neutral.ShifterZerus,
+	CardIds.NonCollectible.Neutral.ShifterZerusTavernBrawl,
+];
+
+export const getAllCardsInGame = (
+	availableTribes: readonly Race[],
+	allCards: AllCardsService,
+): readonly ReferenceCard[] => {
+	return allCards
+		.getCards()
+		.filter(card => card.techLevel)
+		.filter(card => isValidTribe(availableTribes, card.race))
+		.filter(card => !card.id.startsWith('TB_BaconUps')); // Ignore golden
+};
+
+const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
+	const raceEnum: Race = Race[race];
+	return raceEnum === Race.ALL || !validTribes || validTribes.length === 0 || validTribes.includes(raceEnum);
 };
