@@ -14,6 +14,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 				<settings-achievements-notifications
 					*ngSwitchCase="'notifications'"
 				></settings-achievements-notifications>
+				<settings-achievements-live *ngSwitchCase="'live'"></settings-achievements-live>
 			</ng-container>
 		</ul>
 	`,

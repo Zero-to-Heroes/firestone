@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
+import { SettingsAchievementsLiveComponent } from '../../components/settings/achievements/settings-achievements-live.component';
 import { SettingsAchievementsMenuComponent } from '../../components/settings/achievements/settings-achievements-menu.component';
 import { SettingsAchievementsNotificationsComponent } from '../../components/settings/achievements/settings-achievements-notifications.component';
 import { SettingsAchievementsSoundCaptureComponent } from '../../components/settings/achievements/settings-achievements-sound-capture.component';
@@ -93,6 +94,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsAchievementsSoundCaptureComponent,
 		SettingsAchievementsStorageComponent,
 		SettingsAchievementsNotificationsComponent,
+		SettingsAchievementsLiveComponent,
 		SettingsModalComponent,
 		ModalVideoSettingsChangedComponent,
 

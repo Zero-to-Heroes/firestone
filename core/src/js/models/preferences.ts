@@ -26,6 +26,10 @@ export class Preferences {
 
 	readonly advancedModeToggledOn: boolean;
 
+	readonly achievementsLiveTracking: boolean = true;
+	readonly achievementsDisplayNotifications = true;
+	readonly resetAchievementsOnAppStart = false;
+	// TODO: both should be removed
 	readonly dontConfirmVideoReplayDeletion: boolean;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
 
@@ -132,9 +136,6 @@ export class Preferences {
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
 
 	readonly replaysShowNotification: boolean = false;
-
-	readonly achievementsDisplayNotifications = true;
-	readonly resetAchievementsOnAppStart = false;
 
 	readonly bgsFullToggle = true;
 	readonly bgsEnableApp = true;

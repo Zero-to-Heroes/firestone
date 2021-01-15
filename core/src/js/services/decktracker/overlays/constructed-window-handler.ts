@@ -1,18 +1,21 @@
 import { GameType } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/decktracker/game-state';
+import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../overwolf.service';
 import { isWindowClosed } from '../../utils';
+import { ConstructedCloseWindowEvent } from '../event/constructed-close-window-event';
 import { OverlayHandler } from './overlay-handler';
 
 export class ConstructedWindowHandler implements OverlayHandler {
 	private closedByUser: boolean;
+	private enabled: boolean;
 
 	constructor(private readonly ow: OverwolfService) {}
 
-	public processEvent(gameEvent: GameEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
-		if (gameEvent.type === 'CLOSE_CONSTRUCTED_WINDOW') {
+	public processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
+		if (gameEvent.type === ConstructedCloseWindowEvent.TYPE) {
 			console.log('[constructed-window] handling overlay for event', gameEvent.type);
 			this.closedByUser = true;
 			this.updateOverlay(state, showDecktrackerFromGameMode);
@@ -24,7 +27,7 @@ export class ConstructedWindowHandler implements OverlayHandler {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		// TODO
+		this.enabled = preferences.achievementsLiveTracking;
 	}
 
 	public async updateOverlay(

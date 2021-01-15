@@ -1,5 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { ConstructedState } from '../../models/constructed/constructed-state';
+import { GameStateEvent } from '../../models/decktracker/game-state-event';
+import { GameEvent } from '../../models/game-event';
+import { ConstructedCloseWindowEvent } from '../../services/decktracker/event/constructed-close-window-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 declare let amplitude: any;
@@ -62,21 +65,22 @@ declare let amplitude: any;
 })
 export class ConstructedContentComponent {
 	@Input() set state(value: ConstructedState) {
-		console.log('setting state', value);
 		this._state = value;
 		this.updateInfo();
 	}
 
 	windowId: string;
 	_state: ConstructedState;
-
 	closeHandler: () => void;
+
+	private deckUpdater: EventEmitter<GameEvent | GameStateEvent>;
 
 	constructor(private readonly ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		// this.closeHandler = () => this.battlegroundsUpdater.next(new BgsCloseWindowEvent());
+		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
+		this.closeHandler = () => this.deckUpdater.next(Object.assign(new ConstructedCloseWindowEvent()));
 	}
 
 	private updateInfo() {
