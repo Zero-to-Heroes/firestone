@@ -35,7 +35,7 @@ declare let amplitude: any;
 export class TwitchBgsHeroOverviewComponent {
 	_opponent: BgsPlayer;
 	currentTurn: number;
-	showLogo: boolean = true;
+	showLogo = true;
 
 	@Input() set config(value: { player: BgsPlayer; currentTurn: number; showLogo: boolean }) {
 		this._opponent = value.player;
