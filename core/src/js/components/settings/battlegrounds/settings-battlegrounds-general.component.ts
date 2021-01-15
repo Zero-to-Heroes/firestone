@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { Knob } from '../preference-slider.component';
@@ -78,6 +79,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableOpponentBoardMouseOver"
+					*ngIf="opponentMouseOver"
 					[ngClass]="{ 'disabled': !bgsFullToggle }"
 					label="Show last opponent board"
 					tooltip="Show the last known opponent's board (and additional info) when mousing over their portrait in the leaderboard"
@@ -160,6 +162,8 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
+	opponentMouseOver: boolean = FeatureFlags.ENABLE_BG_OPPONENT_MOUSE_OVER;
+
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;
 	bgsEnableBattleSimulationOverlay: boolean;
