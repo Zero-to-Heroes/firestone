@@ -213,9 +213,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				// console.log('currentElemetn', currentElement);
 				// Clicked on close, don't show the card
 				if (currentElement && currentElement.className && currentElement.className.indexOf('close') !== -1) {
-					amplitude
-						.getInstance()
-						.logEvent('notification', { 'event': 'close', 'app': messageObject.app, 'type': type });
+					// amplitude
+					// 	.getInstance()
+					// 	.logEvent('notification', { 'event': 'close', 'app': messageObject.app, 'type': type });
 					// Force close if it's not configured to auto close
 					if (override.clickToClose === false) {
 						this.notificationService.remove(toast.id);

@@ -67,7 +67,7 @@ export class LogParserService {
 			const setId = cards[0].set;
 			const packCards = this.toPackCards(toProcess);
 			console.log('[pack-parser] notifying new pack opening', setId, packCards);
-			amplitude.getInstance().logEvent('new-pack', { 'set': setId });
+			// amplitude.getInstance().logEvent('new-pack', { 'set': setId });
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
 		} else {
@@ -190,7 +190,7 @@ export class LogParserService {
 		setTimeout(() => {
 			this.events.broadcast(Events.NEW_CARD, card, type);
 		}, 20);
-		amplitude.getInstance().logEvent('new-card', { 'id': card.id });
+		// amplitude.getInstance().logEvent('new-card', { 'id': card.id });
 	}
 
 	private displayDustMessage(card: Card, type: string) {
@@ -200,7 +200,7 @@ export class LogParserService {
 		setTimeout(() => {
 			this.events.broadcast(Events.MORE_DUST, card, dust, type);
 		}, 20);
-		amplitude.getInstance().logEvent('dust', { 'amount': dust });
+		// amplitude.getInstance().logEvent('dust', { 'amount': dust });
 		console.log('[pack-parser] Got ' + dust + ' dust', card.id, type);
 	}
 
