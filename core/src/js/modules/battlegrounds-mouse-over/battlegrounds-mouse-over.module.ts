@@ -13,6 +13,7 @@ import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BattlegroundsMouseOverOverlayComponent } from '../../components/battlegrounds/overlay/battlegrounds-mouse-over-overlay.component';
+import { BgsTavernMinionComponent } from '../../components/battlegrounds/overlay/bgs-tavern-minion.component';
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
 import { AdService } from '../../services/ad.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
@@ -55,7 +56,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		ColiseumComponentsModule,
 		InlineSVGModule.forRoot(),
 	],
-	declarations: [BattlegroundsMouseOverOverlayComponent],
+	declarations: [BattlegroundsMouseOverOverlayComponent, BgsTavernMinionComponent],
 	entryComponents: [TwitchBgsHeroOverviewComponent],
 	bootstrap: [BattlegroundsMouseOverOverlayComponent],
 	providers: [AdService],

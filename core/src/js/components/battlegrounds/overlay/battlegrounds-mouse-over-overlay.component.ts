@@ -9,10 +9,13 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { DeckCard } from '../../../models/decktracker/deck-card';
+import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -26,8 +29,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 		'../../../../css/component/battlegrounds/overlay/battlegrounds-mouse-over-overlay.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-mouse-over-overlay overlay-container-parent">
-			<ul class="bgs-leaderboard" *ngIf="state && state.inGame && !state.gameEnded">
+		<div class="battlegrounds-mouse-over-overlay overlay-container-parent" *ngIf="inGame">
+			<ul class="bgs-leaderboard">
 				<leaderboard-empty-card
 					class="opponent-overlay"
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByFunction"
@@ -37,6 +40,16 @@ import { PreferencesService } from '../../../services/preferences.service';
 				>
 				</leaderboard-empty-card>
 			</ul>
+			<div class="board-container top-board">
+				<ul class="board">
+					<bgs-tavern-minion
+						class="tavern-minion"
+						*ngFor="let minion of minions; let i = index; trackBy: trackByMinion"
+						[minion]="minion"
+						[highlightedTribes]="highlightedTribes"
+					></bgs-tavern-minion>
+				</ul>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,9 +58,14 @@ import { PreferencesService } from '../../../services/preferences.service';
 export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, OnDestroy {
 	windowId: string;
 
-	state: BattlegroundsState;
+	// state: BattlegroundsState;
+	inGame: boolean;
+	tavernBoard: readonly DeckCard[];
 	bgsPlayers: readonly BgsPlayer[];
 	currentTurn: number;
+	phase: 'combat' | 'recruit';
+	minions: readonly DeckCard[];
+	highlightedTribes: readonly Race[];
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -67,17 +85,33 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.ow.setWindowPassthrough(this.windowId);
+
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
-			this.state = { ...newState } as BattlegroundsState;
-			this.bgsPlayers = [...this.state.currentGame.players].sort(
+			this.inGame = newState && newState.inGame && !newState.gameEnded;
+			this.bgsPlayers = [...newState.currentGame.players].sort(
 				(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
 			);
-			this.currentTurn = this.state.currentGame.currentTurn;
+			this.currentTurn = newState.currentGame.currentTurn;
+			this.phase = newState.currentGame.phase;
+			this.highlightedTribes = newState.highlightedTribes;
+			this.updateMinions();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
+
+		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
+		const subscriber = new Subscriber<any>(async event => {
+			const state = event.state as GameState;
+			this.tavernBoard = state?.opponentDeck?.board;
+			this.updateMinions();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+		subscriber['identifier'] = 'bgs-mouse-over';
+		this.deckSubscription = deckEventBus.subscribe(subscriber);
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
@@ -86,6 +120,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 				this.cdr.detectChanges();
 			}
 		});
+
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
@@ -98,16 +133,30 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 		}
 	}
 
+	private updateMinions() {
+		if (this.phase === 'recruit') {
+			this.minions = this.tavernBoard;
+			console.log('minions', this.minions, this.phase, this.highlightedTribes);
+		} else if (this.phase === 'combat') {
+			this.minions = [];
+		}
+	}
+
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.deckSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
+		this.storeSubscription?.unsubscribe();
 		console.log('[shutdown] unsubscribed from battlegrounds-mouse-over-overlay');
 	}
 
 	trackByFunction(player: BgsPlayer) {
 		return player.cardId;
+	}
+
+	trackByMinion(minion: DeckCard, index: number) {
+		return minion.entityId;
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {

@@ -1,5 +1,6 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../../../models/preferences';
+import { FeatureFlags } from '../../../feature-flags';
 import { OverwolfService } from '../../../overwolf.service';
 import { PreferencesService } from '../../../preferences.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -15,7 +16,10 @@ export class BgsMinionsListOverlay implements BattlegroundsOverlay {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.bgsActive = preferences.bgsEnableMinionListOverlay;
+		this.bgsActive =
+			(FeatureFlags.ENABLE_BG_MINIONS_LIST || FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT) &&
+			(preferences.bgsEnableMinionListOverlay || preferences.bgsShowTribesHighlight) &&
+			preferences.bgsFullToggle;
 	}
 
 	public async updateOverlay(state: BattlegroundsState) {

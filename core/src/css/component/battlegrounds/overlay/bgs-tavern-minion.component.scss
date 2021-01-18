@@ -1,0 +1,27 @@
+.card {
+	pointer-events: all;
+	height: 100%;
+	width: 100%;
+	position: relative;
+	background: rgba(255, 255, 255, 0.01);
+
+	img {
+		height: 100%;
+		width: 100%;
+	}
+
+	.highlight {
+		position: absolute;
+		width: 90%;
+		bottom: 0vh;
+		height: 2vh;
+		display: none;
+		background: green;
+	}
+
+	&.highlighted {
+		.highlight {
+			display: block;
+		}
+	}
+}

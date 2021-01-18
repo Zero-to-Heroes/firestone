@@ -10,6 +10,12 @@
 .battlegrounds-minions-tiers {
 	width: 100%;
 	height: 100%;
+	display: flex;
+}
+
+.tiers-container {
+	display: flex;
+	flex-direction: column;
 }
 
 .tiers {

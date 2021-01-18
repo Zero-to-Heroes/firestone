@@ -9,6 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -16,6 +17,7 @@ import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-
 import { Preferences } from '../../../models/preferences';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { groupByFunction } from '../../../services/utils';
@@ -30,24 +32,33 @@ import { groupByFunction } from '../../../services/utils';
 	],
 	template: `
 		<div class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme">
-			<ul class="tiers">
-				<tavern-level-icon
-					class="tavern"
-					*ngFor="let currentTier of tiers; trackBy: trackByFn(currentTier)"
-					[ngClass]="{
-						'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
-						'locked': isLocked(currentTier)
-					}"
-					[level]="currentTier.tavernTier"
-					(mouseover)="onTavernMouseOver(currentTier)"
-					(click)="onTavernClick(currentTier)"
-					(mouseleave)="onTavernMouseLeave(currentTier)"
-				></tavern-level-icon>
-			</ul>
-			<bgs-minions-list
-				*ngIf="displayedTier || lockedTier"
-				[cards]="(displayedTier || lockedTier).cards"
-			></bgs-minions-list>
+			<div class="tiers-container" *ngIf="showMinionsList">
+				<ul class="tiers">
+					<tavern-level-icon
+						class="tavern"
+						*ngFor="let currentTier of tiers; trackBy: trackByFn"
+						[ngClass]="{
+							'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
+							'locked': isLocked(currentTier)
+						}"
+						[level]="currentTier.tavernTier"
+						(mouseover)="onTavernMouseOver(currentTier)"
+						(click)="onTavernClick(currentTier)"
+						(mouseleave)="onTavernMouseLeave(currentTier)"
+					></tavern-level-icon>
+				</ul>
+				<bgs-minions-list
+					*ngIf="displayedTier || lockedTier"
+					[cards]="(displayedTier || lockedTier).cards"
+				></bgs-minions-list>
+			</div>
+			<tribes-highlight
+				class="tribe-highlight"
+				*ngIf="showTribesHighlight"
+				[cards]="cardsInGame"
+				[highlightedTribes]="highlightedTribes"
+			>
+			</tribes-highlight>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -57,11 +68,13 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	windowId: string;
 
 	state: BattlegroundsState;
+	highlightedTribes: readonly Race[];
+	cardsInGame: readonly ReferenceCard[];
 	tiers: readonly Tier[];
 	displayedTier: Tier;
 	lockedTier: Tier;
-
-	private cardsInGame: readonly ReferenceCard[];
+	showTribesHighlight: boolean;
+	showMinionsList: boolean;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -83,11 +96,15 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe(async (newState: BattlegroundsState) => {
+			if (!newState) {
+				return;
+			}
 			//console.log('got state', newState);
 			await this.allCards.initializeCardsDb();
 			await this.updateAvailableCards(newState);
 			//console.log('available cards', this.cardsInGame);
 			this.tiers = this.buildTiers(newState);
+			this.highlightedTribes = newState.highlightedTribes;
 			//console.log('updating tiers', this.tiers, newState, this.cardsInGame);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -185,12 +202,11 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
-		// this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
-		// this.displayGuess = preferences.dectrackerShowOpponentGuess;
-		// this.displayBuff = preferences.dectrackerShowOpponentBuffInHand;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
+		this.showMinionsList = FeatureFlags.ENABLE_BG_MINIONS_LIST && preferences.bgsEnableMinionListOverlay;
+		this.showTribesHighlight = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT && preferences.bgsShowTribesHighlight;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async changeWindowSize(): Promise<void> {

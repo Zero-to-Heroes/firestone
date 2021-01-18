@@ -10,6 +10,7 @@ export class BgsGame {
 	readonly reviewId: string;
 	readonly players: readonly BgsPlayer[] = [];
 	readonly currentTurn: number = 1;
+	readonly phase: 'recruit' | 'combat';
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 	readonly battleInfo: BgsBattleInfo;
 	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';

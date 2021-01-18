@@ -226,3 +226,14 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 	const raceEnum: Race = Race[race];
 	return raceEnum === Race.ALL || !validTribes || validTribes.length === 0 || validTribes.includes(raceEnum);
 };
+
+export const getEffectiveTribe = (card: ReferenceCard): string => {
+	const tribe: Race = getEffectiveTribeEnum(card);
+	return Race[tribe];
+};
+
+export const getEffectiveTribeEnum = (card: ReferenceCard): Race => {
+	// TODO: some cards should be categorized into other tribes, because they synergize with it
+	// For now, just use the nominal tribe
+	return card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
+};
