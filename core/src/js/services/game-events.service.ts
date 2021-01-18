@@ -798,6 +798,14 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'BATTLEGROUNDS_RECRUIT_PHASE':
+				console.log(gameEvent.Type + ' event');
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_RECRUIT_PHASE,
+					} as GameEvent),
+				);
+				break;
 			case 'BATTLEGROUNDS_BATTLE_RESULT':
 				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(

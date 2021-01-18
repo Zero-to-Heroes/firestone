@@ -1,3 +1,4 @@
+import { Race } from '@firestone-hs/reference-data';
 import { BgsGame } from './bgs-game';
 import { BgsPanelId } from './bgs-panel-id.type';
 import { BgsStage } from './bgs-stage';
@@ -15,6 +16,8 @@ export class BattlegroundsState {
 	readonly gameEnded: boolean; // Flag useful mostly for twitch to know when to hide the overlay
 	readonly forceOpen: boolean;
 	readonly postMatchStats: BgsPostMatchStats;
+
+	readonly highlightedTribes: readonly Race[] = [];
 
 	public static create(base: BattlegroundsState): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), base);

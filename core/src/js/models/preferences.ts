@@ -154,6 +154,7 @@ export class Preferences {
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
 	readonly bgsEnableMinionListOverlay: boolean = true;
+	readonly bgsShowTribesHighlight: boolean = true;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';

@@ -53,7 +53,6 @@ export class LeaderboardEmptyCardComponent {
 		if (this._previousPlayer === value) {
 			return;
 		}
-		console.log('set bgsPLayer', value);
 		this._previousPlayer = value;
 		this.updateInfo();
 	}

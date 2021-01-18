@@ -34,16 +34,19 @@ import { BgsNextOpponentParser } from './event-parsers/bgs-next-opponent-parser'
 import { BgsOpponentRevealedParser } from './event-parsers/bgs-opponent-revealed-parser';
 import { BgsPlayerBoardParser } from './event-parsers/bgs-player-board-parser';
 import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-match-stats-filter-change-parser';
+import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
 import { BgsStatUpdateParser } from './event-parsers/bgs-stat-update-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
+import { BgsToggleHighlightTribeOnBoardParser } from './event-parsers/bgs-toggle-highlight-tribe-on-board-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { NoBgsMatchParser } from './event-parsers/no-bgs-match-parser';
 import { EventParser } from './event-parsers/_event-parser';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
+import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
 import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
@@ -54,6 +57,7 @@ import { BgsMatchStartEvent } from './events/bgs-match-start-event';
 import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
 import { BgsOpponentRevealedEvent } from './events/bgs-opponent-revealed-event';
 import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
+import { BgsRecruitStartEvent } from './events/bgs-recruit-start-event';
 import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
 import { BgsTripleCreatedEvent } from './events/bgs-triple-created-event';
@@ -197,26 +201,21 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
-				// console.log('will handle next opponent?', this.state.currentGame?.battleInfo?.opponentBoard);
 				this.handleEventOnlyAfterTrigger(
 					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
-					// GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
 					GameEvent.TURN_START,
 				);
-				// console.log('[battlegrounds-store] getting battlegrounds info after opponent revealed');
 				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
-				// console.log('[battlegrounds-store] bgs info after opponent revealed', info);
-				// this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-				this.handleEventOnlyAfterTrigger(
-					new BgsGlobalInfoUpdatedEvent(info),
-					// GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
-					GameEvent.TURN_START,
-				);
+				this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(new BgsOpponentRevealedEvent(gameEvent.additionalData.cardId));
 			} else if (gameEvent.type === GameEvent.TURN_START) {
 				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
+				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_RECRUIT_PHASE) {
+				this.battlegroundsUpdater.next(new BgsRecruitStartEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE) {
 				this.battlegroundsUpdater.next(
 					new BgsTavernUpgradeEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.tavernLevel),
@@ -418,10 +417,12 @@ export class BattlegroundsStoreService {
 			// new BgsDamageDealtParser(),
 			new BgsLeaderboardPlaceParser(),
 			new BgsCombatStartParser(),
+			new BgsRecruitStartParser(),
 			new BgsGlobalInfoUpdatedParser(),
 			new BgsStartComputingPostMatchStatsParser(this.prefs),
 			new BgsInitMmrParser(this.memory),
 			new BgsCardPlayedParser(),
+			new BgsToggleHighlightTribeOnBoardParser(),
 		];
 	}
 

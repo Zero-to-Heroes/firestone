@@ -92,6 +92,13 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Show the list of minions, grouped by tavern tier"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowTribesHighlight"
+					*ngIf="showTribesHighlight"
+					[ngClass]="{ 'disabled': !bgsFullToggle }"
+					label="Show tribes highlight"
+					tooltip="Adds buttons to highlight specific tribes in Bob's Tavern"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsEnableBattleSimulationOverlay"
 					[ngClass]="{ 'disabled': !enableSimulation || !bgsFullToggle }"
 					label="Battle Simulation overlay"
@@ -171,6 +178,7 @@ import { Knob } from '../preference-slider.component';
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
 	opponentMouseOver: boolean = FeatureFlags.ENABLE_BG_OPPONENT_MOUSE_OVER;
 	minionsListOverlay: boolean = FeatureFlags.ENABLE_BG_MINIONS_LIST;
+	showTribesHighlight: boolean = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT;
 
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;

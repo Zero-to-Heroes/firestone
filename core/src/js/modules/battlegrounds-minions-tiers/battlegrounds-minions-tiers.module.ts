@@ -15,6 +15,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BattlegroundsMinionsTiersOverlayComponent } from '../../components/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component';
 import { BattlegroundsMinionsGroupComponent } from '../../components/battlegrounds/minions-tiers/bgs-minions-group.component';
 import { BattlegroundsMinionsListComponent } from '../../components/battlegrounds/minions-tiers/minions-list.component';
+import { BattlegroundsTribesHighlightComponent } from '../../components/battlegrounds/minions-tiers/tribes-highlight.component';
 import { AdService } from '../../services/ad.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
@@ -60,6 +61,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BattlegroundsMinionsTiersOverlayComponent,
 		BattlegroundsMinionsListComponent,
 		BattlegroundsMinionsGroupComponent,
+		BattlegroundsTribesHighlightComponent,
 	],
 	entryComponents: [],
 	bootstrap: [BattlegroundsMinionsTiersOverlayComponent],
