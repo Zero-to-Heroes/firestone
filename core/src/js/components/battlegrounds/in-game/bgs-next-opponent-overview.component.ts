@@ -128,7 +128,6 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 
 	isLastOpponent(opponent: BgsPlayer): boolean {
 		const result = normalizeHeroCardId(opponent.cardId) === this.lastOpponentCardId;
-		console.log('is last opponent', opponent.cardId, this.lastOpponentCardId);
 		return result;
 	}
 
