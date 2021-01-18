@@ -2,24 +2,26 @@
 	pointer-events: none;
 }
 
-::ng-deep card.tooltip {
-	pointer-events: none !important;
+.container {
+	position: relative;
+
 	.card {
-		height: 300px;
-
-		&::before {
-			padding-top: 0;
-		}
-
-		card-cost {
-			display: none;
-		}
+		width: 256px;
 	}
-}
 
-::ng-deep card.tooltip.hidden {
-	// pointer-events: none !important;
-	.card {
-		opacity: 0 !important;
+	::ng-deep card-stats {
+		.card-stats {
+			top: 81%;
+
+			.attack {
+				left: 0%;
+			}
+
+			.health {
+				left: 35%;
+				width: 34%;
+				top: -15%;
+			}
+		}
 	}
 }
