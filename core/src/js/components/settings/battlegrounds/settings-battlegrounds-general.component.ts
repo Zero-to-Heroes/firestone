@@ -92,6 +92,13 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Show the list of minions, grouped by tavern tier"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsEnableMinionListMouseOver"
+					*ngIf="minionsListOverlay"
+					[ngClass]="{ 'disabled': !bgsFullToggle || !bgsEnableMinionListOverlay }"
+					label="Show minions list on mouse over"
+					tooltip="When deactivated, you will have to click on the tavern tier icons to show the minions list"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsShowTribesHighlight"
 					*ngIf="showTribesHighlight"
 					[ngClass]="{ 'disabled': !bgsFullToggle }"
@@ -186,6 +193,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	bgsFullToggle: boolean;
 	bgsEnableApp: boolean;
 	showBannedTribes: boolean;
+	bgsEnableMinionListOverlay: boolean;
 	numberOfSimsKnobs: readonly Knob[] = [
 		{
 			absoluteValue: 2500,
@@ -226,6 +234,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 			this.bgsEnableApp = preferences.bgsEnableApp;
 			this.bgsFullToggle = preferences.bgsFullToggle;
 			this.showBannedTribes = preferences.bgsShowBannedTribesOverlay;
+			this.bgsEnableMinionListOverlay = preferences.bgsEnableMinionListOverlay;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -245,6 +254,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		this.bgsEnableApp = prefs.bgsEnableApp;
 		this.bgsFullToggle = prefs.bgsFullToggle;
 		this.showBannedTribes = prefs.bgsShowBannedTribesOverlay;
+		this.bgsEnableMinionListOverlay = prefs.bgsEnableMinionListOverlay;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

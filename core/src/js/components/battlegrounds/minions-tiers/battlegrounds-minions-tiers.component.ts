@@ -75,6 +75,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	lockedTier: Tier;
 	showTribesHighlight: boolean;
 	showMinionsList: boolean;
+	enableMouseOver: boolean;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -155,7 +156,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	}
 
 	onTavernMouseOver(tavernTier: Tier) {
-		if (this.lockedTier) {
+		if (this.lockedTier || !this.enableMouseOver) {
 			return;
 		}
 
@@ -204,6 +205,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	private setDisplayPreferences(preferences: Preferences) {
 		this.showMinionsList = FeatureFlags.ENABLE_BG_MINIONS_LIST && preferences.bgsEnableMinionListOverlay;
 		this.showTribesHighlight = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT && preferences.bgsShowTribesHighlight;
+		this.enableMouseOver = preferences.bgsEnableMinionListMouseOver;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
