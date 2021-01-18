@@ -2,6 +2,7 @@ import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bg
 import { captureEvent } from '@sentry/browser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
+import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -70,10 +71,11 @@ export class BgsBattleResultParser implements EventParser {
 			});
 		}
 		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
+		const lastOpponentCardId = normalizeHeroCardId(faceOff.opponentCardId);
+		console.debug('lastOpponentCardId', lastOpponentCardId, gameWithActualBattleResult.faceOffs);
 		const newGame = gameWithActualBattleResult.update({
 			faceOffs: [...gameWithActualBattleResult.faceOffs, faceOff] as readonly BgsFaceOff[],
-			// battleInfo: undefined,
-			// battleResult: undefined,
+			lastOpponentCardId: lastOpponentCardId,
 		} as BgsGame);
 		console.log('[bgs-simulation] updating with result and resetting battle info', event, newGame.battleInfo);
 		return currentState.update({

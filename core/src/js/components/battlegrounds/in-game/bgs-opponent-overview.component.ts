@@ -45,6 +45,12 @@ declare let amplitude: any;
 				></bgs-board>
 			</div>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
+			<div
+				class="last-opponent-icon"
+				*ngIf="enableLastOpponentIcon && showLastOpponentIcon"
+				helpTooltip="Was last round's opponent"
+				inlineSVG="assets/svg/last_opponent.svg"
+			></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,6 +67,8 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 	debug = false;
+
+	@Input() showLastOpponentIcon: boolean;
 
 	@Input() currentTurn: number;
 

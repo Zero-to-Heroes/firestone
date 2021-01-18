@@ -21,6 +21,7 @@ export class BgsGame {
 	readonly pogoHoppersCount: number;
 	readonly availableRaces: readonly Race[];
 	readonly bannedRaces: readonly Race[];
+	readonly lastOpponentCardId: string;
 
 	public static create(base: BgsGame): BgsGame {
 		return Object.assign(new BgsGame(), base);
