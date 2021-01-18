@@ -14,6 +14,7 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
+import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 
 declare let amplitude: any;
 
@@ -50,6 +51,7 @@ declare let amplitude: any;
 							*ngFor="let opponent of otherOpponents; trackBy: trackByOpponentInfoFn"
 							[opponent]="opponent"
 							[currentTurn]="currentTurn"
+							[showLastOpponentIcon]="isLastOpponent(opponent)"
 						></bgs-opponent-overview>
 					</div>
 				</div>
@@ -78,6 +80,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	nextOpponentCardId: string;
 	mmr: number;
+	lastOpponentCardId: string;
 
 	@Input() enableSimulation: boolean;
 
@@ -99,6 +102,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	@Input() set game(value: BgsGame) {
 		this._game = value;
 		this.mmr = value ? value.mmrAtStart : undefined;
+		console.debug('setting game', this._game);
 		this.updateInfo();
 	}
 
@@ -122,6 +126,12 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		return item.cardId;
 	}
 
+	isLastOpponent(opponent: BgsPlayer): boolean {
+		const result = normalizeHeroCardId(opponent.cardId) === this.lastOpponentCardId;
+		console.log('is last opponent', opponent.cardId, this.lastOpponentCardId);
+		return result;
+	}
+
 	private updateInfo() {
 		if (!this._panel || !this._game || !this._panel.opponentOverview) {
 			return;
@@ -136,6 +146,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		this.nextBattle = this._game.battleResult;
 		this.battleSimulationStatus = this._game.battleInfoStatus;
 		this.faceOffs = this._game.faceOffs;
+		this.lastOpponentCardId = this._game.lastOpponentCardId;
 		this.opponents = this._game.players
 			.filter(player => !player.isMainPlayer)
 			.sort((a, b) => {
