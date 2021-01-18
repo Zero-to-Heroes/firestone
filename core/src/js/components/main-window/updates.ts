@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.0.1',
+		version: '7.0.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -75,7 +75,15 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `You can now see the last known opponent's board (as well as other pieces of data) when mousing over the opponent's avatar in the leaderboard.`,
+								text: `(ALPHA) You can now see the last known opponent's board (as well as other pieces of data) when mousing over the opponent's avatar in the leaderboard.`,
+							},
+							{
+								type: 'feature',
+								text: `(ALPHA) You can now show the list of all minions, grouped by tavern tier.`,
+							},
+							{
+								type: 'feature',
+								text: `(ALPHA) You can now enable highlighting of minions that match specific tribes in the tavern.`,
 							},
 						],
 					},
@@ -90,11 +98,25 @@ export const updates: readonly Update[] = [
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'ui',
+								text: `Tavern level icons and minion tooltips now use the original image, so they should look better :)`,
+							},
+							{
+								type: 'ui',
+								text: `(ALPHA) Add an icon to identify last round's opponent`,
+							},
+						],
+					},
+				],
+			},
 		],
 	},
 ];
