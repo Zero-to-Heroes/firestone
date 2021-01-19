@@ -63,11 +63,11 @@ export class StoreBootstrapService {
 				prefs,
 				achievementTopCategories,
 				achievementHistory,
-				matchStats,
 				globalStats,
 				bgsBestUserStats,
 				collectionState,
 			],
+			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats],
 		] = await Promise.all([
 			Promise.all([
@@ -76,10 +76,14 @@ export class StoreBootstrapService {
 				this.prefs.getPreferences(),
 				this.achievementsRepository.getTopLevelCategories(),
 				this.achievementsHelper.buildAchievementHistory(),
-				this.gameStatsLoader.retrieveStats(),
 				this.globalStats.getGlobalStats(),
 				this.bestBgsStats.getBgsBestUserStats(),
 				this.collectionBootstrap.initCollectionState(),
+			]),
+			Promise.all([
+				this.gameStatsLoader.retrieveStats(),
+				this.gameStatsLoader.retrieveArchetypesConfig(),
+				this.gameStatsLoader.retrieveArchetypesStats(),
 			]),
 			Promise.all([this.duels.loadRuns(), this.duels.loadGlobalStats()]),
 		]);
@@ -100,6 +104,8 @@ export class StoreBootstrapService {
 
 		const newStatsState = StatsState.create({
 			gameStats: matchStats,
+			archetypesConfig: archetypesConfig,
+			archetypesStats: archetypesStats,
 			bestBgsUserStats: bgsBestUserStats,
 		} as StatsState);
 		const decktracker = this.decktrackerStateLoader.buildState(new DecktrackerState(), newStatsState, prefs);
