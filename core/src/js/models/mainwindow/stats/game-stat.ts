@@ -30,6 +30,8 @@ export class GameStat {
 	readonly gameDurationSeconds: number;
 	readonly gameDurationTurns: number;
 	readonly currentDuelsRunId: string;
+	readonly playerArchetypeId?: string;
+	readonly opponentArchetypeId?: string;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 

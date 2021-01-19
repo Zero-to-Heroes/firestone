@@ -46,7 +46,7 @@ export class DecktrackerReplaysRecapComponent {
 
 	private async updateValues() {
 		// console.log('tier updating values', this._state, this._category);
-		if (!this._state.decktracker?.decks) {
+		if (!this._state.decktracker?.decks || !this._navigation?.navigationDecktracker) {
 			return;
 		}
 

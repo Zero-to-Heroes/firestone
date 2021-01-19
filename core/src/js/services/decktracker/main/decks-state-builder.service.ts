@@ -148,6 +148,10 @@ export class DecksStateBuilderService {
 			stats.filter(stat => stat.playerDeckName).length > 0
 				? stats.filter(stat => stat.playerDeckName)[0].playerDeckName
 				: undefined;
+		const deckArchetype =
+			stats.filter(stat => stat.playerArchetypeId).length > 0
+				? stats.filter(stat => stat.playerArchetypeId)[0].playerArchetypeId
+				: undefined;
 		const deckSkin =
 			stats.filter(stat => stat.playerCardId).length > 0
 				? stats.filter(stat => stat.playerCardId)[0].playerCardId
@@ -165,6 +169,7 @@ export class DecksStateBuilderService {
 		return Object.assign(new DeckSummary(), {
 			class: deckClass,
 			deckName: deckName,
+			deckArchetype: deckArchetype,
 			deckstring: deckstring,
 			lastUsedTimestamp: lastUsed,
 			skin: deckSkin,

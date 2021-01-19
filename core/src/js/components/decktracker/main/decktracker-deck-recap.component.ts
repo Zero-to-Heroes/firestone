@@ -10,6 +10,7 @@ import {
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ReplaysFilterEvent } from '../../../services/mainwindow/store/events/replays/replays-filter-event';
@@ -32,12 +33,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</div>
 				<div class="deck-title">
 					<div class="deck-name">
-						<!-- <copy-deckstring
-							[deckstring]="deckstring"
-							[showTooltip]="true"
-							copyText="Copy deck code"
-						></copy-deckstring> -->
 						<div class="text">{{ deckName }}</div>
+						<div class="archetype" *ngIf="enableArchetype">
+							<div class="name">{{ deckArchetype }}</div>
+							<div
+								class="help"
+								inlineSVG="assets/svg/help.svg"
+								helpTooltip="Trying to guess the deck's archetype. Don't hesitate to ping me on Discord or report a bug if it's incorrect :)"
+							></div>
+						</div>
 					</div>
 					<div class="replay" (click)="showReplays()">
 						<div class="watch-icon">
@@ -86,6 +90,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerDeckRecapComponent implements AfterViewInit {
+	enableArchetype: boolean = FeatureFlags.ENABLE_RANKED_ARCHETYPE;
+
 	@Input() set state(value: MainWindowState) {
 		this._state = value;
 		this.updateValues();
@@ -100,6 +106,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 	deck: DeckSummary;
 	skin: string;
 	deckName: string;
+	deckArchetype: string;
 	deckstring: string;
 	winRatePercentage: string;
 	games: number;
@@ -134,6 +141,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.deck.skin}.jpg`;
 		this.deckName = this.deck.deckName;
+		this.deckArchetype = this.deck.deckArchetype;
 		this.deckstring = this.deck.deckstring;
 		this.winRatePercentage = parseFloat('' + this.deck.winRatePercentage).toLocaleString('en-US', {
 			minimumIntegerDigits: 1,
