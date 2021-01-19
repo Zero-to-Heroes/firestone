@@ -5,6 +5,10 @@
 .container {
 	position: relative;
 
+	&.hidden {
+		display: none;
+	}
+
 	.card {
 		width: 256px;
 	}
