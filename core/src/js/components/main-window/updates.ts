@@ -62,7 +62,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match`,
+								text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
 							},
 						],
 					},
@@ -111,7 +111,16 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'ui',
-								text: `(ALPHA) Add an icon to identify last round's opponent`,
+								text: `(ALPHA) Add an icon to identify last round's opponent.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'ui',
+								text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
 							},
 						],
 					},
