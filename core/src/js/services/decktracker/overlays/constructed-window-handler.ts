@@ -49,8 +49,10 @@ export class ConstructedWindowHandler implements OverlayHandler {
 		const shouldShowTracker =
 			state &&
 			state.metadata.gameType > 0 &&
-			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
-			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
+			(state.metadata.gameType === GameType.GT_ARENA ||
+				state.metadata.gameType === GameType.GT_PVPDR ||
+				state.metadata.gameType === GameType.GT_PVPDR_PAID ||
+				state.metadata.gameType === GameType.GT_RANKED) &&
 			state.playerDeck &&
 			((state.playerDeck.deck && state.playerDeck.deck.length > 0) ||
 				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
@@ -69,6 +71,7 @@ export class ConstructedWindowHandler implements OverlayHandler {
 			);
 		}
 		if (
+			this.enabled &&
 			inGame &&
 			shouldShowTracker &&
 			isWindowClosed(theWindow.window_state_ex) &&
