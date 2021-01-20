@@ -7,8 +7,8 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
-import { ConstructedState } from '../../models/constructed/constructed-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -31,7 +31,7 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedComponent implements AfterViewInit {
-	state: ConstructedState;
+	state: GameState;
 
 	windowId: string;
 
@@ -41,14 +41,17 @@ export class ConstructedComponent implements AfterViewInit {
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-	) {}
+		private readonly allCards: AllCardsService,
+	) {
+		allCards.initializeCardsDb();
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		const subscriber = new Subscriber<any>(async event => {
-			console.log('received', event);
-			this.state = (event.state as GameState)?.constructedState;
+			// console.log('received', event);
+			this.state = event.state as GameState;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}

@@ -39,6 +39,8 @@ import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand
 import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { ConstructedAchievementsProgressionParser } from './event-parser/constructed/constructed-achievements-progression-parser';
+import { ConstructedChangeTabParser } from './event-parser/constructed/constructed-change-tab-parser';
+import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { CthunParser } from './event-parser/cthun-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
@@ -126,7 +128,7 @@ export class GameStateService {
 	// so that we're sure teh state is update sequentially
 	// private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
 	private deckEventBus = new BehaviorSubject<any>(null);
-	private deckUpdater: EventEmitter<GameEvent> = new EventEmitter<GameEvent>();
+	private deckUpdater: EventEmitter<GameEvent | GameStateEvent> = new EventEmitter<GameEvent | GameStateEvent>();
 	private eventEmitters = [];
 	private overlayHandlers: OverlayHandler[] = [];
 
@@ -168,7 +170,7 @@ export class GameStateService {
 				return;
 			}
 		});
-		this.deckUpdater.subscribe((event: GameEvent) => {
+		this.deckUpdater.subscribe((event: GameEvent | GameStateEvent) => {
 			this.processingQueue.enqueue(event);
 		});
 		window['deckEventBus'] = this.deckEventBus;
@@ -644,6 +646,8 @@ export class GameStateService {
 			new DamageTakenParser(),
 
 			new ConstructedAchievementsProgressionParser(),
+			new ConstructedChangeTabParser(),
+			new ListCardsPlayedFromInitialDeckParser(this.helper),
 		];
 	}
 

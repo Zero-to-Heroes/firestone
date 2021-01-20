@@ -1,4 +1,3 @@
-import { GameType } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
@@ -49,10 +48,10 @@ export class ConstructedWindowHandler implements OverlayHandler {
 		const shouldShowTracker =
 			state &&
 			state.metadata.gameType > 0 &&
-			(state.metadata.gameType === GameType.GT_ARENA ||
-				state.metadata.gameType === GameType.GT_PVPDR ||
-				state.metadata.gameType === GameType.GT_PVPDR_PAID ||
-				state.metadata.gameType === GameType.GT_RANKED) &&
+			// (state.metadata.gameType === GameType.GT_ARENA ||
+			// 	state.metadata.gameType === GameType.GT_PVPDR ||
+			// 	state.metadata.gameType === GameType.GT_PVPDR_PAID ||
+			// 	state.metadata.gameType === GameType.GT_RANKED) &&
 			state.playerDeck &&
 			((state.playerDeck.deck && state.playerDeck.deck.length > 0) ||
 				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||

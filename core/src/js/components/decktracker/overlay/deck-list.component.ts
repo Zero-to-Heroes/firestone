@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Subscription } from 'rxjs';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { SetCard } from '../../../models/set';
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
@@ -34,11 +36,29 @@ export class DeckListComponent {
 		} as DeckState);
 	}
 
+	@Input() set cards(value: readonly string[]) {
+		const decklist: readonly DeckCard[] = value
+			.map(cardId => this.allCards.getCard(cardId))
+			.filter(card => card)
+			.map(card => {
+				return DeckCard.create({
+					cardId: card.id,
+					cardName: card.name,
+					manaCost: card.cost,
+					rarity: card.rarity ? card.rarity.toLowerCase() : null,
+				} as DeckCard);
+			});
+		this.deckState = DeckState.create({
+			deckList: decklist,
+			deck: decklist,
+		} as DeckState);
+	}
+
 	@Input() collection: readonly SetCard[];
 
 	deckState: DeckState;
 
 	private preferencesSubscription: Subscription;
 
-	constructor(private readonly deckHandler: DeckHandlerService) {}
+	constructor(private readonly deckHandler: DeckHandlerService, private readonly allCards: AllCardsService) {}
 }

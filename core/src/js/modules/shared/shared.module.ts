@@ -59,6 +59,7 @@ import { FsFilterDropdownComponent } from '../../components/fs-filter-dropdown.c
 import { HotkeyComponent } from '../../components/hotkey.component';
 import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
+import { SecondaryDefaultComponent } from '../../components/main-window/secondary-default.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
 import { RedditShareInfoComponent } from '../../components/sharing/reddit/reddit-share-info.component';
@@ -110,6 +111,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	],
 	declarations: [
 		WindowWrapperComponent,
+		SecondaryDefaultComponent,
 
 		ControlHelpComponent,
 		ControlMinimizeComponent,
@@ -209,6 +211,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	],
 	exports: [
 		WindowWrapperComponent,
+		SecondaryDefaultComponent,
 
 		ControlHelpComponent,
 		ControlMinimizeComponent,

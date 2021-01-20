@@ -13,9 +13,11 @@ import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { ConstructedContentComponent } from '../../components/constructed/constructed-content.component';
+import { ConstructedMenuSelectionComponent } from '../../components/constructed/constructed-menu-selection.component';
 import { ConstructedComponent } from '../../components/constructed/constructed.component';
 import { InGameAchievementRecapComponent } from '../../components/constructed/in-game-achievement-recap.component';
 import { InGameAchievementsRecapComponent } from '../../components/constructed/in-game-achievements-recap.component';
+import { InGameOpponentRecapComponent } from '../../components/constructed/in-game-opponent-recap.component';
 import { AdService } from '../../services/ad.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
@@ -62,6 +64,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		ConstructedContentComponent,
 		InGameAchievementsRecapComponent,
 		InGameAchievementRecapComponent,
+		InGameOpponentRecapComponent,
+		ConstructedMenuSelectionComponent,
 	],
 	entryComponents: [],
 	bootstrap: [ConstructedComponent],

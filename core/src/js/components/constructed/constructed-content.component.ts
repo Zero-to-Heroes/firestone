@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { ConstructedState } from '../../models/constructed/constructed-state';
+import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { ConstructedCloseWindowEvent } from '../../services/decktracker/event/constructed-close-window-event';
@@ -23,7 +23,7 @@ declare let amplitude: any;
 								<use xlink:href="assets/svg/sprite.svg#logo" />
 							</svg>
 						</i>
-						<!-- <menu-selection-constructed [state]="_state"></menu-selection-constructed> -->
+						<menu-selection-constructed [state]="_state?.constructedState"></menu-selection-constructed>
 					</div>
 				</div>
 				<!-- <hotkey class="exclude-dbclick" [hotkeyName]="'constructed'"></hotkey> -->
@@ -46,17 +46,20 @@ declare let amplitude: any;
 			</section>
 			<section class="content-container">
 				<section class="main">
-					<div class="title">Achievements Progress</div>
-					<ng-container>
-						<in-game-achievements-recap
-							*ngxCacheIf="_state?.currentTab === 'achievements'"
-							[state]="_state"
-						>
-						</in-game-achievements-recap>
-					</ng-container>
+					<!-- <div class="title">getTitle()</div> -->
+					<in-game-achievements-recap
+						*ngxCacheIf="_state?.constructedState?.currentTab === 'achievements'"
+						[state]="_state?.constructedState"
+					>
+					</in-game-achievements-recap>
+					<in-game-opponent-recap
+						*ngxCacheIf="_state?.constructedState?.currentTab === 'opponent'"
+						[state]="_state"
+					>
+					</in-game-opponent-recap>
 				</section>
 				<section class="secondary">
-					<!-- <secondary-default></secondary-default> -->
+					<secondary-default></secondary-default>
 				</section>
 			</section>
 		</div>
@@ -64,13 +67,13 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConstructedContentComponent {
-	@Input() set state(value: ConstructedState) {
+	@Input() set state(value: GameState) {
 		this._state = value;
 		this.updateInfo();
 	}
 
 	windowId: string;
-	_state: ConstructedState;
+	_state: GameState;
 	closeHandler: () => void;
 
 	private deckUpdater: EventEmitter<GameEvent | GameStateEvent>;
@@ -82,6 +85,15 @@ export class ConstructedContentComponent {
 		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
 		this.closeHandler = () => this.deckUpdater.next(Object.assign(new ConstructedCloseWindowEvent()));
 	}
+
+	// getTitle(): string {
+	// 	switch (this._state?.currentTab) {
+	// 		case 'achievements':
+	// 			return 'Achievements Progress';
+	// 		case 'opponent':
+	// 			return 'Opponent';
+	// 	}
+	// }
 
 	private updateInfo() {
 		if (!this._state) {

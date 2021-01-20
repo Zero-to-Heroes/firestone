@@ -86,6 +86,8 @@ export class MatchMetadataParser implements EventParser {
 			metadata: metaData,
 			deckStats: deckStats,
 			deckStatsRecap: statsRecap,
+			archetypesConfig: store.stats.archetypesConfig,
+			archetypesStats: store.stats.archetypesStats,
 			matchupStatsRecap: matchupStatsRecap,
 			playerDeck: currentState.playerDeck.update({
 				deckstring: deckstringToUse,

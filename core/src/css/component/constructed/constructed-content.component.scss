@@ -80,13 +80,15 @@
 .content-container {
 	display: flex;
 	min-height: 0;
+	flex-grow: 1;
+	padding-top: 15px;
 
 	.main {
 		position: relative;
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
-		// height: calc(100% - 62px);
+		width: calc(100% - 410px);
 
 		& > * {
 			flex-grow: 1;
@@ -107,7 +109,7 @@
 
 	.secondary {
 		width: 400px;
-		height: calc(100% - 300px);
+		height: calc(100% - 340px);
 		flex-shrink: 0;
 		order: 2;
 		font-size: 20px;
@@ -116,5 +118,9 @@
 		display: flex;
 		flex-direction: column;
 		position: relative;
+
+		secondary-default {
+			height: 100%;
+		}
 	}
 }

@@ -114,7 +114,6 @@ import { MainWindowComponent } from '../../components/main-window.component';
 import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
 import { NewVersionNotificationComponent } from '../../components/main-window/new-version-notification.component';
-import { SecondaryDefaultComponent } from '../../components/main-window/secondary-default.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
@@ -170,7 +169,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	],
 	declarations: [
 		GlobalHeaderComponent,
-		SecondaryDefaultComponent,
 
 		FsTimeDisplay,
 		FsUtcPipe,
