@@ -92,7 +92,7 @@ import { PreferencesService } from '../../services/preferences.service';
 						[card]="card"
 						(imageLoaded)="onImageLoaded()"
 						[loadImage]="shouldLoadImage(i)"
-						[highRes]="highRes"
+						[highRes]="false"
 						>/</card-view
 					>
 				</li>

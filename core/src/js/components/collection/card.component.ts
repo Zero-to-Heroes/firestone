@@ -30,10 +30,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 				(mouseleave)="onMouseLeave($event)"
 				(mouseenter)="onMouseOver($event)"
 				(mousemove)="onMouseMove($event)"
-				[cardTooltip]="_card.id"
+				[cardTooltip]="tooltips && _card.id"
 			>
 				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
-				<img [src]="image" class="real-card" (load)="imageLoadedHandler()" />
+				<img *ngIf="image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
 				<div
 					[hidden]="showPlaceholder"
 					class="overlay"
@@ -127,10 +127,8 @@ export class CardComponent implements AfterViewInit {
 
 	onMouseOver(event: MouseEvent) {
 		this.isMouseOver = true;
-		if (!this.imageWidth) {
-			this.imageWidth = this.el.nativeElement.querySelector('.images')?.getBoundingClientRect()?.width;
-			this.imageHeight = this.el.nativeElement.querySelector('.images')?.getBoundingClientRect()?.height;
-		}
+		this.imageWidth = this.el.nativeElement.querySelector('.images')?.getBoundingClientRect()?.width;
+		this.imageHeight = this.el.nativeElement.querySelector('.images')?.getBoundingClientRect()?.height;
 	}
 
 	onMouseLeave(event: MouseEvent) {
@@ -151,11 +149,24 @@ export class CardComponent implements AfterViewInit {
 		const xRatio = event.offsetX / this.imageWidth;
 		const yRatio = event.offsetY / this.imageHeight;
 		const styleAmplifier = 2;
-		const yRotation = styleAmplifier * (xRatio * 16 - 8);
-		const xRotation = styleAmplifier * (yRatio * 16 - 8);
+		const yRotation = Math.min(30, styleAmplifier * (xRatio * 16 - 8));
+		const xRotation = Math.min(30, styleAmplifier * (yRatio * 16 - 8));
 		this.styleTransform = this.sanitizer.bypassSecurityTrustStyle(
 			`perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale3d(1.035, 1.035, 1.035)`,
 		);
+		// console.log(
+		// 	'mousemove',
+		// 	event,
+		// 	this.imageWidth,
+		// 	this.imageHeight,
+		// 	xRatio,
+		// 	yRatio,
+		// 	xRatio * 16 - 8,
+		// 	yRatio * 16 - 8,
+		// 	xRotation,
+		// 	yRotation,
+		// 	this.styleTransform,
+		// );
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -164,7 +175,7 @@ export class CardComponent implements AfterViewInit {
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
 		this._imageLoaded = true;
-		// console.log('image loaded', this.image);
+		console.log('image loaded', this.image);
 		this.imageLoaded.next(true);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

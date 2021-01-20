@@ -114,6 +114,10 @@
 				display: flex;
 				flex-direction: column;
 
+				.images {
+					height: 420px;
+				}
+
 				.real-card {
 					opacity: 1;
 					width: 100%;

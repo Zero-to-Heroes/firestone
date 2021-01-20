@@ -24,6 +24,10 @@
 		opacity: 0;
 	}
 
+	.images {
+		height: 224px;
+	}
+
 	.perspective-wrapper {
 		transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);
 	}
