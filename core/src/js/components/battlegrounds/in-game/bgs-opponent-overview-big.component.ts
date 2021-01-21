@@ -40,8 +40,8 @@ declare let amplitude: any;
 					></bgs-battle-status>
 				</div>
 			</div>
-			<div class="tavern-upgrades">
-				<div class="title">Tavern upgrades</div>
+			<div class="tavern-upgrades" *ngIf="showTavernsIfEmpty || tavernUpgrades?.length">
+				<div class="title">{{ tavernTitle }}</div>
 				<div class="upgrades">
 					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
 						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
@@ -67,6 +67,8 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() nextBattle: SimulationResult;
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	@Input() maxBoardHeight = 1;
+	@Input() tavernTitle: string = 'Tavern upgrades';
+	@Input() showTavernsIfEmpty: boolean = true;
 
 	@Input() set opponent(value: BgsPlayer) {
 		if (value === this._opponent) {

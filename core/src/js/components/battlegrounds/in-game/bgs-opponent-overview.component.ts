@@ -11,6 +11,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
+import { FeatureFlags } from '../../../services/feature-flags';
 
 declare let amplitude: any;
 
@@ -56,6 +57,8 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsOpponentOverviewComponent implements AfterViewInit {
+	enableLastOpponentIcon: boolean = FeatureFlags.ENABLE_BG_LAST_ROUND_OPPONENT_ICON;
+
 	icon: string;
 	health: number;
 	maxHealth: number;

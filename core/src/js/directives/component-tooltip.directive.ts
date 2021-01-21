@@ -36,7 +36,13 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	@Input('componentTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'global-top-center' = 'right';
+	@Input('componentTooltipPosition') position:
+		| 'bottom'
+		| 'right'
+		| 'left'
+		| 'top'
+		| 'global-top-center'
+		| 'global-top-left' = 'right';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -74,6 +80,11 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 				.global()
 				.centerHorizontally()
 				.top();
+		} else if (this.position === 'global-top-left') {
+			this.positionStrategy = this.overlayPositionBuilder
+				.global()
+				.left()
+				.top();
 		} else {
 			this.positionStrategy = this.overlayPositionBuilder
 				// Create position attached to the elementRef
@@ -92,7 +103,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		// console.log('on destroy for component tooltip');
+		console.log('on destroy for component tooltip');
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {

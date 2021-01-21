@@ -41,7 +41,6 @@ export class TwitchBgsHeroOverviewComponent {
 		this._opponent = value.player;
 		this.currentTurn = value.currentTurn;
 		this.showLogo = value.showLogo ?? true;
-		console.log('set config', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

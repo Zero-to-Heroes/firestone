@@ -211,6 +211,15 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:resize')
 	async onResize() {
+		// Manual sizing
+		if (this.maxBoardHeight === -1) {
+			this.boardReady = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			return;
+		}
+
 		// if (!this.lastResizeOperationTimestamp || Date.now() - this.lastResizeOperationTimestamp )
 		if (this.resizeTimeout) {
 			clearTimeout(this.resizeTimeout);
