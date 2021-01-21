@@ -16,6 +16,7 @@ export class SetsService {
 		['black_temple', 'Ashes of Outland'],
 		['scholomance', 'Scholomance Academy'],
 		['darkmoon_faire', 'Darkmoon Faire'],
+		['darkmoon_races', 'Darkmoon Races'],
 	];
 
 	private readonly WILD_SETS = [

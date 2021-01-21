@@ -30,17 +30,17 @@ export const globalEffectCards = [
 	CardIds.Collectible.Mage.LunasPocketGalaxy,
 	CardIds.Collectible.Mage.IncantersFlow,
 	CardIds.NonCollectible.Mage.InfiniteArcane,
-	// CardIds.Collectible.Neutral.BakuTheMooneater,
 	CardIds.Collectible.Neutral.FrizzKindleroost,
 	CardIds.Collectible.Neutral.LorekeeperPolkelt,
-	// CardIds.Collectible.Neutral.GennGreymane,
 	CardIds.Collectible.Neutral.PrinceKeleseth,
 	CardIds.Collectible.Neutral.WyrmrestPurifier,
 	CardIds.Collectible.Paladin.AldorAttendant,
 	CardIds.Collectible.Paladin.AldorTruthseeker,
+	// CardIds.Collectible.Paladin.HumbleBlessings,
 	CardIds.Collectible.Paladin.LothraxionTheRedeemed,
 	CardIds.NonCollectible.Paladin.RadiantLightspawn2,
 	CardIds.Collectible.Priest.ArchbishopBenedictus,
+	// CardIds.Collectible.Priest.DarkInquisitorXanesh,
 	CardIds.Collectible.Priest.LadyInWhite,
 	CardIds.Collectible.Shaman.GrandTotemEysor, // TODO: count the number of times the effect triggered, not the card played
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
@@ -89,6 +89,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Druid.LunarVisions, // tested
 	CardIds.Collectible.Druid.PredatoryInstincts, // tested
 	CardIds.Collectible.Druid.GuessTheWeight,
+	// CardIds.Collectible.Druid.Guidance,
 	CardIds.Collectible.Hunter.ArcaneFletcher, // tested
 	CardIds.Collectible.Hunter.CallPet, // tested
 	CardIds.Collectible.Hunter.DivingGryphon, // tested

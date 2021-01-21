@@ -5,6 +5,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 import { TriggerOnAttackSecretsParser } from './trigger-on-attack-secrets-parser';
+import { TriggerOnCardDrawParser } from './trigger-on-card-draw-parser';
 import { TriggerOnDamageSecretsParser } from './trigger-on-damage-secrets-parser';
 import { TriggerOnFriendlyMinionDiedSecretsParser } from './trigger-on-friendly-minion-died-secrets-parser';
 import { TriggerOnHeroPowerSecretsParser } from './trigger-on-hero-power-secrets-parser';
@@ -48,6 +49,7 @@ export class SecretsParserService {
 			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnTurnStartSecretsParser(this.helper, this.allCards),
 			new TriggerOnTurnEndSecretsParser(this.helper, this.allCards),
+			new TriggerOnCardDrawParser(this.helper, this.allCards),
 		];
 	}
 }
