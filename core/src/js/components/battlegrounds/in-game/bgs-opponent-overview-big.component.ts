@@ -67,8 +67,8 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() nextBattle: SimulationResult;
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	@Input() maxBoardHeight = 1;
-	@Input() tavernTitle: string = 'Tavern upgrades';
-	@Input() showTavernsIfEmpty: boolean = true;
+	@Input() tavernTitle = 'Tavern upgrades';
+	@Input() showTavernsIfEmpty = true;
 
 	@Input() set opponent(value: BgsPlayer) {
 		if (value === this._opponent) {
