@@ -1,0 +1,157 @@
+:host() {
+	width: auto;
+	height: 105px;
+	position: relative;
+	left: 55px;
+	top: 10px;
+}
+
+.bgs-hero-overview-tooltip {
+	position: relative;
+	top: -1px;
+	left: -1px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+	font-size: 12px;
+	--variable-title-font-size: 12px !important;
+	padding: 0;
+	padding-left: 15px;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-image: url('/Files/assets/images/backgrounds/bg-opponent-mouse-over.png');
+	border-width: 1px;
+	border-style: solid;
+	// border-image-slice: 1;
+	border-image-source: linear-gradient(to right, rgba(255, 185, 72, 1) 0%, rgba(255, 185, 72, 0) 100%);
+	height: 100%;
+
+	bgs-opponent-overview-big {
+		height: 100%;
+
+		::ng-deep bgs-player-capsule {
+			height: 100%;
+			margin: 0;
+
+			.background-additions {
+				display: none;
+			}
+
+			.portrait {
+				position: relative;
+				top: 0;
+				width: 80px;
+				margin-right: 20px;
+
+				.health {
+					width: 40px;
+					height: 23px;
+					bottom: 19px;
+					right: 10px;
+
+					.value {
+						font-size: 22px;
+						margin: 0;
+						position: relative;
+						top: 3px;
+					}
+				}
+			}
+
+			.player-info {
+				background: transparent;
+				border: none;
+				padding: 0;
+
+				.main-info {
+					flex-direction: row;
+					border: none;
+					width: auto;
+				}
+
+				bgs-board {
+					min-width: 220px;
+				}
+
+				.board-turn {
+					margin: 0;
+					margin-right: 15px;
+				}
+
+				.board {
+					width: auto;
+					top: -3px;
+					margin-right: 15px;
+
+					.minion-container {
+						margin-right: 10px;
+						li {
+							width: 50px;
+							height: 75px;
+						}
+					}
+				}
+
+				.bottom-info {
+					border-left: 1px solid var(--color-3);
+					top: 0;
+					padding-left: 20px;
+				}
+
+				.triples-section {
+					flex-direction: column;
+					align-items: flex-start;
+					justify-content: space-between;
+					padding-bottom: 4px;
+					margin-right: 15px;
+
+					.triple {
+						height: 46px;
+						width: 39px;
+					}
+				}
+
+				.tavern-upgrades {
+					justify-content: space-between;
+					width: 120px;
+
+					.tavern-upgrade:not(:last-child) {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+
+	::ng-deep .opponent-info.opponent-info.opponent-info.opponent-info {
+		.bottom-info {
+			max-height: 25%;
+		}
+
+		.tavern-upgrades {
+			.tavern-upgrade .label {
+				font-size: 10px;
+			}
+		}
+
+		.triples-section {
+			.title {
+				margin-right: 15px;
+			}
+
+			.triple {
+				width: 1.8vw;
+				height: 2vw;
+				margin-right: 15px;
+
+				.number {
+					border-width: 2px;
+					font-size: 16px;
+				}
+			}
+		}
+	}
+}

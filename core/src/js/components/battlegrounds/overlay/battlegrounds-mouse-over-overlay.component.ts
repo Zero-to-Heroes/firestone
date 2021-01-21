@@ -31,14 +31,14 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<div class="battlegrounds-mouse-over-overlay overlay-container-parent" *ngIf="inGame">
 			<ul class="bgs-leaderboard">
-				<leaderboard-empty-card
+				<bgs-leaderboard-empty-card
 					class="opponent-overlay"
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByFunction"
 					[bgsPlayer]="bgsPlayer"
 					[currentTurn]="currentTurn"
-					position="global-top-center"
+					position="global-top-left"
 				>
-				</leaderboard-empty-card>
+				</bgs-leaderboard-empty-card>
 			</ul>
 			<div class="board-container top-board">
 				<ul class="board">
@@ -136,7 +136,6 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 	private updateMinions() {
 		if (this.phase === 'recruit') {
 			this.minions = this.tavernBoard;
-			console.log('minions', this.minions, this.phase, this.highlightedTribes);
 		} else if (this.phase === 'combat') {
 			this.minions = [];
 		}

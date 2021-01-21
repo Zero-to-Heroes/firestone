@@ -28,6 +28,8 @@ import { BgsBattleStatusComponent } from '../../components/battlegrounds/in-game
 import { BgsOpponentOverviewBigComponent } from '../../components/battlegrounds/in-game/bgs-opponent-overview-big.component';
 import { BgsTriplesComponent } from '../../components/battlegrounds/in-game/bgs-triples.component';
 import { MinionIconComponent } from '../../components/battlegrounds/minion-icon.component';
+import { BgsLeaderboardEmptyCardComponent } from '../../components/battlegrounds/overlay/bgs-leaderboard-empty-card.component';
+import { BgsOverlayHeroOverviewComponent } from '../../components/battlegrounds/overlay/bgs-overlay-hero-overview.component';
 import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/bgs-chart-hp.component';
 import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
 import { BgsChartWarbandStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-stats.component';
@@ -192,6 +194,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,
+		BgsLeaderboardEmptyCardComponent,
+		BgsOverlayHeroOverviewComponent,
 
 		GraphWithComparisonComponent,
 		SimpleBarChartComponent,
@@ -208,6 +212,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsHeroSelectionTooltipComponent,
 		TwitterShareModalComponent,
 		RedditShareModalComponent,
+		BgsOverlayHeroOverviewComponent,
 	],
 	exports: [
 		WindowWrapperComponent,
@@ -291,6 +296,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,
+		BgsLeaderboardEmptyCardComponent,
+		BgsOverlayHeroOverviewComponent,
 
 		GraphWithComparisonComponent,
 		SimpleBarChartComponent,
