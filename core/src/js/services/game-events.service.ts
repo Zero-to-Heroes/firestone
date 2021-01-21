@@ -661,6 +661,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'NUM_CARDS_DRAWN_THIS_TURN':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.NUM_CARDS_DRAW_THIS_TURN, gameEvent, {
+						cardsDrawn: gameEvent.Value.AdditionalProps.NumCardsDrawn,
+					}),
+				);
+				break;
 			case 'ATTACKING_HERO':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ATTACKING_HERO, gameEvent, {

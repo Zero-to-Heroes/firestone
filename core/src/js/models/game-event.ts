@@ -69,6 +69,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly ARMOR_CHANGED = 'ARMOR_CHANGED';
 	public static readonly HEALTH_DEF_CHANGED = 'HEALTH_DEF_CHANGED';
 	public static readonly NUM_CARDS_PLAYED_THIS_TURN = 'NUM_CARDS_PLAYED_THIS_TURN';
+	public static readonly NUM_CARDS_DRAW_THIS_TURN = 'NUM_CARDS_DRAW_THIS_TURN';
 	public static readonly FATIGUE_DAMAGE = 'FATIGUE_DAMAGE';
 	public static readonly ATTACKING_HERO = 'ATTACK_ON_HERO';
 	public static readonly ATTACKING_MINION = 'ATTACKING_MINION';

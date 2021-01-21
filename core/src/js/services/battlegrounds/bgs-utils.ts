@@ -164,6 +164,10 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.AvatarOfNzothTavernBrawl;
 		case CardIds.NonCollectible.Neutral.YshaarjTavernBrawl:
 			return CardIds.NonCollectible.Neutral.EmbraceYourRageTavernBrawl;
+		case CardIds.NonCollectible.Neutral.TickatusTavernBrawl:
+			return CardIds.NonCollectible.Neutral.PrizeWallTavernBrawl;
+		case CardIds.NonCollectible.Neutral.GreyboughTavernBrawl:
+			return CardIds.NonCollectible.Neutral.SproutItOutTavernBrawl;
 		case '':
 			return null; // new heroes
 	}
@@ -209,6 +213,8 @@ const REMOVED_CARD_IDS = [
 	CardIds.NonCollectible.Neutral.CrowdFavoriteTavernBrawl,
 	CardIds.NonCollectible.Neutral.ShifterZerus,
 	CardIds.NonCollectible.Neutral.ShifterZerusTavernBrawl,
+	CardIds.Collectible.Warlock.FloatingWatcher,
+	CardIds.NonCollectible.Warlock.FloatingWatcherTavernBrawl,
 ];
 
 export const getAllCardsInGame = (

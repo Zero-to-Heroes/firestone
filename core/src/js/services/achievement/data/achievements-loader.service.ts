@@ -84,7 +84,7 @@ export class AchievementsLoaderService {
 	}
 
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
-		return this.api.callGetApiWithRetries(`${ACHIEVEMENTS_URL}/${fileName}.json?v=10`);
+		return this.api.callGetApiWithRetries(`${ACHIEVEMENTS_URL}/${fileName}.json?v=12`);
 	}
 
 	private wrapRawAchievement(raw: RawAchievement): Achievement {

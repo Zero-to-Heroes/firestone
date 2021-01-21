@@ -30,17 +30,17 @@ export const globalEffectCards = [
 	CardIds.Collectible.Mage.LunasPocketGalaxy,
 	CardIds.Collectible.Mage.IncantersFlow,
 	CardIds.NonCollectible.Mage.InfiniteArcane,
-	// CardIds.Collectible.Neutral.BakuTheMooneater,
 	CardIds.Collectible.Neutral.FrizzKindleroost,
 	CardIds.Collectible.Neutral.LorekeeperPolkelt,
-	// CardIds.Collectible.Neutral.GennGreymane,
 	CardIds.Collectible.Neutral.PrinceKeleseth,
 	CardIds.Collectible.Neutral.WyrmrestPurifier,
 	CardIds.Collectible.Paladin.AldorAttendant,
 	CardIds.Collectible.Paladin.AldorTruthseeker,
+	CardIds.NonCollectible.Paladin.HumbleBlessings,
 	CardIds.Collectible.Paladin.LothraxionTheRedeemed,
 	CardIds.NonCollectible.Paladin.RadiantLightspawn2,
 	CardIds.Collectible.Priest.ArchbishopBenedictus,
+	CardIds.Collectible.Priest.DarkInquisitorXanesh,
 	CardIds.Collectible.Priest.LadyInWhite,
 	CardIds.Collectible.Shaman.GrandTotemEysor, // TODO: count the number of times the effect triggered, not the card played
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
@@ -152,6 +152,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Neutral.CaptainsParrot,
 	CardIds.Collectible.Neutral.ClawMachine,
 	CardIds.Collectible.Neutral.CountessAshmore, // tested
+	CardIds.Collectible.Neutral.Guidance,
 	CardIds.Collectible.Neutral.JepettoJoybuzz, // tested
 	CardIds.Collectible.Neutral.KronxDragonhoof,
 	CardIds.Collectible.Neutral.MurlocTastyfin, // tested
