@@ -96,6 +96,7 @@
 	}
 
 	.rating {
+		pointer-events: none;
 		position: absolute;
 		bottom: 1px;
 		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
