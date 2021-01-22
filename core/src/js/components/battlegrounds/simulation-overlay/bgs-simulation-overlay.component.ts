@@ -27,7 +27,7 @@ declare let amplitude: any;
 		'../../../../css/themes/battlegrounds-theme.scss',
 	],
 	template: `
-		<div class="logo-container battlegrounds-theme">
+		<!-- <div class="logo-container battlegrounds-theme">
 			<div class="background-main-part"></div>
 			<div class="background-second-part"></div>
 			<i class="gold-theme logo">
@@ -35,7 +35,7 @@ declare let amplitude: any;
 					<use xlink:href="assets/svg/sprite.svg#logo" />
 				</svg>
 			</i>
-		</div>
+		</div> -->
 		<div class="app-container overlay-container-parent battlegrounds-theme simulation-overlay">
 			<bgs-battle-status
 				[nextBattle]="nextBattle"
