@@ -33,7 +33,7 @@ export class Preferences {
 	readonly dontConfirmVideoReplayDeletion: boolean;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
 
-	readonly showXpRecapAtGameEnd: boolean = true;
+	readonly showXpRecapAtGameEnd: boolean = false;
 
 	readonly collectionEnableNotifications: boolean = true;
 	readonly showDust: boolean = true;
