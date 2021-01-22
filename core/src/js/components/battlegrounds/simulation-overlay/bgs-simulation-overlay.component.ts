@@ -12,6 +12,7 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../../models/preferences';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -111,7 +112,8 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
 		// console.log('updating prefs', preferences);
-		this.showSimulationSample = preferences.bgsEnableSimulationSampleInOverlay;
+		this.showSimulationSample =
+			preferences.bgsEnableSimulationSampleInOverlay && FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

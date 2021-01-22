@@ -113,6 +113,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableSimulationSampleInOverlay"
+					*ngIf="enableOverlayPlaySetting"
 					[ngClass]="{
 						'disabled': !enableSimulation || !bgsEnableBattleSimulationOverlay || !bgsFullToggle
 					}"
@@ -186,6 +187,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	opponentMouseOver: boolean = FeatureFlags.ENABLE_BG_OPPONENT_MOUSE_OVER;
 	minionsListOverlay: boolean = FeatureFlags.ENABLE_BG_MINIONS_LIST;
 	showTribesHighlight: boolean = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT;
+	enableOverlayPlaySetting: boolean = FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
 
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;
