@@ -38,7 +38,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 
 	deck: DeckSummary;
 
-	takeScreenshotFunction: () => Promise<[string, any]> = this.takeScreenshot();
+	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
 	private _state: MainWindowState;
 	private _navigation: NavigationState;
@@ -51,9 +51,9 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	private takeScreenshot(): () => Promise<[string, any]> {
-		//console.log('taking screenshot');
-		return () => this.owUtils.captureWindow('Firestone - MainWindow');
+	private takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
+		console.log('taking screenshot from deck details');
+		return copyToCliboard => this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
 	}
 
 	private updateValues() {

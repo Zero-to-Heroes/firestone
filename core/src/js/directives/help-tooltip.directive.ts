@@ -41,6 +41,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	}
 
 	@Input() bindTooltipToGameWindow = false;
+	@Input() stayOpenOnClick = false;
 
 	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
@@ -183,6 +184,22 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	}
 
 	@HostListener('click')
+	onMouseClick() {
+		if (this.stayOpenOnClick) {
+			return;
+		}
+		// console.log('onmouseleave');
+		if (this.overlayRef) {
+			this.overlayRef?.detach();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
+		if (this.tooltipRef) {
+			this.tooltipRef = undefined;
+		}
+	}
+
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		// console.log('onmouseleave');

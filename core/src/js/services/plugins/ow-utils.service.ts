@@ -12,13 +12,13 @@ export class OwUtilsService {
 		this.initialize();
 	}
 
-	public async captureWindow(windowName: string): Promise<[string, any]> {
+	public async captureWindow(windowName: string, copyToClipboard: boolean = false): Promise<[string, any]> {
 		return new Promise<[string, any]>(async (resolve, reject) => {
 			console.log('[ow-utils] capturing window', windowName);
 			const plugin = await this.get();
 			try {
 				const path = `${OverwolfService.getLocalAppDataFolder()}/Temp`;
-				plugin.captureWindow(windowName, path, (screenshotLocation, byteArray) => {
+				plugin.captureWindow(windowName, path, copyToClipboard, (screenshotLocation, byteArray) => {
 					console.log('[ow-utils] took screenshot', screenshotLocation, byteArray?.length);
 					resolve([screenshotLocation, byteArray]);
 				});

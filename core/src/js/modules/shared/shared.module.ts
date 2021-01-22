@@ -63,6 +63,7 @@ import { InfiniteScrollComponent } from '../../components/infinite-scroll.compon
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { SecondaryDefaultComponent } from '../../components/main-window/secondary-default.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
+import { ClipboardShareButtonComponent } from '../../components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
 import { RedditShareInfoComponent } from '../../components/sharing/reddit/reddit-share-info.component';
 import { RedditShareModalComponent } from '../../components/sharing/reddit/reddit-share-modal.component';
@@ -161,6 +162,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		RedditShareModalComponent,
 		RedditShareButtonComponent,
 		RedditShareInfoComponent,
+		ClipboardShareButtonComponent,
 
 		AdsComponent,
 
@@ -265,6 +267,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		RedditShareModalComponent,
 		RedditShareButtonComponent,
 		RedditShareInfoComponent,
+		ClipboardShareButtonComponent,
 
 		DeckCardComponent,
 		DeckTrackerDeckListComponent,

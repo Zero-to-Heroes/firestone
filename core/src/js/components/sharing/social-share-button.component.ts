@@ -24,7 +24,7 @@ export class SocialShareButtonComponent implements AfterViewInit {
 	networkTitle: string;
 	networkSvg: string;
 
-	@Input() onSocialClick: () => Promise<[string, any]>;
+	@Input() onSocialClick: (copyToCliboard: boolean) => Promise<[string, any]>;
 
 	protected set network(value: string) {
 		this._network = value;
@@ -52,13 +52,13 @@ export class SocialShareButtonComponent implements AfterViewInit {
 		this.overlayRef.backdropClick().subscribe(() => this.overlayRef.detach());
 	}
 
-	async startSharing() {
+	async startSharing(copyToCliboard: boolean = false) {
 		setTimeout(async () => {
 			amplitude.getInstance().logEvent('share', {
 				'page': 'bgs-post-match-stats',
 				'network': this._network,
 			});
-			const [screenshotLocation, base64Image] = await this.onSocialClick();
+			const [screenshotLocation, base64Image] = await this.onSocialClick(copyToCliboard);
 			if (!screenshotLocation || !base64Image) {
 				console.error('Could not take screenshot', screenshotLocation, base64Image);
 				return;

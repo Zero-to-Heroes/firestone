@@ -8,6 +8,7 @@ declare let amplitude;
 	styleUrls: [`../../../css/component/sharing/social-shares.component.scss`],
 	template: `
 		<div class="social-shares">
+			<clipboard-share-button [onSocialClick]="onSocialClick"></clipboard-share-button>
 			<twitter-share-button [onSocialClick]="onSocialClick"></twitter-share-button>
 			<reddit-share-button [onSocialClick]="onSocialClick" *ngIf="enableRedditShare"></reddit-share-button>
 		</div>
@@ -15,7 +16,8 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialSharesComponent {
-	@Input() onSocialClick: () => Promise<[string, any]>;
+	@Input() onSocialClick: (copyToCliboard: boolean) => Promise<[string, any]>;
 
-	enableRedditShare = FeatureFlags.ENABLE_BG_POSTMATCH_SHARE_REDDIT;
+	enableRedditShare = FeatureFlags.ENABLE_REDDIT_SHARE;
+	enableClipboardShare = FeatureFlags.ENABLE_CLIPBOARD_SHARE;
 }

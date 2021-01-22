@@ -151,7 +151,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	computing: boolean;
 	mmr: number;
 
-	takeScreenshotFunction: () => Promise<[string, any]> = this.takeScreenshot();
+	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
 	private loadingStart: number;
 	private loadingInterval;
@@ -263,9 +263,9 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		}
 	}
 
-	takeScreenshot(): () => Promise<[string, any]> {
-		console.log('taking screenshot');
-		return () => this.owUtils.captureWindow(this.parentWindow);
+	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
+		console.log('taking screenshot from bgs-post-match');
+		return (copyToCliboard: boolean) => this.owUtils.captureWindow(this.parentWindow, copyToCliboard);
 	}
 
 	private addMinionStats() {
