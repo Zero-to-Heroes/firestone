@@ -64,6 +64,10 @@ export class CardWithSameAttributePlayedReq implements Requirement {
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const card = this.cards.getCard(cardId);
+		if (!card?.type) {
+			return;
+		}
+
 		// console.log('handling card played event', cardId, controllerId, localPlayer.PlayerId);
 		if (
 			controllerId === localPlayer.PlayerId &&

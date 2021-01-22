@@ -68,27 +68,13 @@ export class TotalCardsPlayedReq implements Requirement {
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const card = this.cards.getCard(cardId);
-		// if (this.cardType === 'SECRET') {
-		// 	console.log('handling card played event', gameEvent, card);
-		// }
 		if (controllerId === localPlayer.PlayerId && this.getCardType(card) === this.cardType) {
 			this.playCounts++;
-			// if (this.cardType === 'SECRET') {
-			// 	console.log(
-			// 		'handling card played event',
-			// 		cardId,
-			// 		this.getCardType(card),
-			// 		card,
-			// 		controllerId,
-			// 		localPlayer.PlayerId,
-			// 		this.playCounts,
-			// 	);
-			// }
 		}
 	}
 
 	private getCardType(card: ReferenceCard): string {
-		if (!card) {
+		if (!card?.type) {
 			return null;
 		}
 		if (

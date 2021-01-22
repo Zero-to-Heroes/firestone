@@ -57,6 +57,10 @@ export class TotalMinionsSummonedReq implements Requirement {
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const card = this.cards.getCard(cardId);
+		if (!card?.type) {
+			return;
+		}
+
 		if (controllerId === localPlayer.PlayerId && CardType[card.type?.toUpperCase()] === CardType.MINION) {
 			this.summonCount = (this.summonCount || 0) + 1;
 		}
