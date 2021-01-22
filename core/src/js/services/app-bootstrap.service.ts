@@ -303,8 +303,8 @@ export class AppBootstrapService {
 		console.log('monitorsList', monitorsList);
 		const numberOfMonitors = monitorsList && monitorsList.displays ? monitorsList.displays.length : -1;
 		// console.log('number of monitors', numberOfMonitors, monitorsList);
-		if (numberOfMonitors > 0) {
-			amplitude.getInstance().logEvent('hardware', { 'number-of-monitors': numberOfMonitors });
-		}
+		// if (numberOfMonitors > 0) {
+		// 	amplitude.getInstance().logEvent('hardware', { 'number-of-monitors': numberOfMonitors });
+		// }
 	}
 }
