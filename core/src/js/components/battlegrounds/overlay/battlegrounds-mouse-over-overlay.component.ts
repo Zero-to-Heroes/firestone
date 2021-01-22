@@ -36,6 +36,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByFunction"
 					[bgsPlayer]="bgsPlayer"
 					[currentTurn]="currentTurn"
+					[lastOpponentCardId]="lastOpponentCardId"
 					position="global-top-left"
 				>
 				</bgs-leaderboard-empty-card>
@@ -62,6 +63,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 	inGame: boolean;
 	tavernBoard: readonly DeckCard[];
 	bgsPlayers: readonly BgsPlayer[];
+	lastOpponentCardId: string;
 	currentTurn: number;
 	phase: 'combat' | 'recruit';
 	minions: readonly DeckCard[];
@@ -93,6 +95,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 				(a: BgsPlayer, b: BgsPlayer) => a.leaderboardPlace - b.leaderboardPlace,
 			);
 			this.currentTurn = newState.currentGame.currentTurn;
+			this.lastOpponentCardId = newState.currentGame.lastOpponentCardId;
 			this.phase = newState.currentGame.phase;
 			this.highlightedTribes = newState.highlightedTribes;
 			this.updateMinions();

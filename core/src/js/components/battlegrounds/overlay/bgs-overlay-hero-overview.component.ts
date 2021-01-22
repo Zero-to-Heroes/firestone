@@ -20,6 +20,7 @@ declare let amplitude: any;
 				[currentTurn]="currentTurn"
 				tavernTitle="Latest upgrade"
 				[showTavernsIfEmpty]="false"
+				[showLastOpponentIcon]="isLastOpponent"
 			></bgs-opponent-overview-big>
 		</div>
 	`,
@@ -28,10 +29,12 @@ declare let amplitude: any;
 export class BgsOverlayHeroOverviewComponent {
 	_opponent: BgsPlayer;
 	currentTurn: number;
+	isLastOpponent: boolean;
 
-	@Input() set config(value: { player: BgsPlayer; currentTurn: number }) {
+	@Input() set config(value: { player: BgsPlayer; currentTurn: number; isLastOpponent: boolean }) {
 		this._opponent = value.player;
 		this.currentTurn = value.currentTurn;
+		this.isLastOpponent = value.isLastOpponent;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

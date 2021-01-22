@@ -32,6 +32,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 			cardId: normalizedCardId,
 			heroPowerCardId: getHeroPower(event.cardId),
 			name: this.allCards.getCard(event.cardId).name,
+			leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
 		} as BgsPlayer);
 		const newGame = currentState.currentGame.update({
 			players: [...currentState.currentGame.players, newPlayer] as readonly BgsPlayer[],

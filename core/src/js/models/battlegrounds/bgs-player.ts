@@ -1,7 +1,7 @@
 import { BgsPlayer as IBgsPlayer, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { getHeroPower } from '../../services/battlegrounds/bgs-utils';
+import { getHeroPower, normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { BgsBoard } from './in-game/bgs-board';
 import { BgsComposition } from './in-game/bgs-composition';
 import { BgsTavernUpgrade } from './in-game/bgs-tavern-upgrade';
@@ -30,6 +30,10 @@ export class BgsPlayer implements IBgsPlayer {
 
 	public update(base: BgsPlayer) {
 		return Object.assign(new BgsPlayer(), this, base);
+	}
+
+	public getNormalizedHeroCardId(): string {
+		return normalizeHeroCardId(this.cardId);
 	}
 
 	public getDisplayCardId(): string {

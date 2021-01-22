@@ -26,14 +26,6 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 export class BgsLeaderboardEmptyCardComponent {
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
 
-	_bgsPlayer: {
-		player: BgsPlayer;
-		currentTurn: number;
-	};
-
-	_previousPlayer: BgsPlayer;
-	_currentTurn: number;
-
 	@Input() position: 'global-top-center' | 'global-top-left' | 'right' = 'right';
 
 	@Input() set currentTurn(value: number) {
@@ -44,6 +36,14 @@ export class BgsLeaderboardEmptyCardComponent {
 		this.updateInfo();
 	}
 
+	@Input() set lastOpponentCardId(value: string) {
+		if (this._lastOpponentCardId === value) {
+			return;
+		}
+		this._lastOpponentCardId = value;
+		this.updateInfo();
+	}
+
 	@Input() set bgsPlayer(value: BgsPlayer) {
 		if (this._previousPlayer === value) {
 			return;
@@ -51,6 +51,16 @@ export class BgsLeaderboardEmptyCardComponent {
 		this._previousPlayer = value;
 		this.updateInfo();
 	}
+
+	_bgsPlayer: {
+		player: BgsPlayer;
+		currentTurn: number;
+		isLastOpponent: boolean;
+	};
+
+	_previousPlayer: BgsPlayer;
+	_currentTurn: number;
+	_lastOpponentCardId: string;
 
 	private updateInfo() {
 		if (!this._previousPlayer) {
@@ -71,6 +81,7 @@ export class BgsLeaderboardEmptyCardComponent {
 				boardHistory: this._previousPlayer?.boardHistory ?? [],
 			} as BgsPlayer),
 			currentTurn: this._currentTurn,
+			isLastOpponent: this._lastOpponentCardId === this._previousPlayer.getNormalizedHeroCardId(),
 		};
 	}
 }

@@ -844,6 +844,7 @@ export class GameEvents {
 						type: GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED,
 						additionalData: {
 							cardId: gameEvent.Value.CardId,
+							leaderboardPlace: gameEvent.Value.LeaderboardPlace,
 						},
 					} as GameEvent),
 				);

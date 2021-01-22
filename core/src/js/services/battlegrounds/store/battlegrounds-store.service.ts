@@ -208,7 +208,12 @@ export class BattlegroundsStoreService {
 				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
 				this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
-				this.battlegroundsUpdater.next(new BgsOpponentRevealedEvent(gameEvent.additionalData.cardId));
+				this.battlegroundsUpdater.next(
+					new BgsOpponentRevealedEvent(
+						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.leaderboardPlace,
+					),
+				);
 			} else if (gameEvent.type === GameEvent.TURN_START) {
 				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
