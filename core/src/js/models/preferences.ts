@@ -64,6 +64,8 @@ export class Preferences {
 	readonly dectrackerShowOpponentBuffInHand: boolean = true;
 	readonly decktrackerOpponentHandScale: number = 100;
 
+	readonly guessOpponentArchetype: boolean = true;
+
 	// readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
 	readonly overlayShowControlBar: boolean = true;

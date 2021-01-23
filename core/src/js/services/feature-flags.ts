@@ -5,7 +5,6 @@ export class FeatureFlags {
 	public static readonly ENABLE_XP_NOTIFICATION = true;
 	public static readonly ENABLE_DUELS = true;
 	public static readonly ENABLE_NEW_VERSION_NOTIFICATION = true;
-
 	public static readonly SHOW_HS_ACHIEVEMENTS = true;
 	public static readonly ENABLE_BG_LAST_ROUND_OPPONENT_ICON = true;
 

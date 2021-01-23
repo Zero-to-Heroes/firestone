@@ -2,6 +2,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
+import { FeatureFlags } from '../../feature-flags';
 import { OverwolfService } from '../../overwolf.service';
 import { isWindowClosed } from '../../utils';
 import { ConstructedCloseWindowEvent } from '../event/constructed-close-window-event';
@@ -26,7 +27,9 @@ export class ConstructedWindowHandler implements OverlayHandler {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.enabled = preferences.achievementsLiveTracking;
+		this.enabled =
+			FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW &&
+			(preferences.achievementsLiveTracking || preferences.guessOpponentArchetype);
 	}
 
 	public async updateOverlay(
