@@ -19,6 +19,7 @@ import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { AiDeckService } from './ai-deck-service.service';
 import { DeckCardService } from './deck-card.service';
+import { DeckHandlerService } from './deck-handler.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
@@ -153,6 +154,7 @@ export class GameStateService {
 		private aiDecks: AiDeckService,
 		private secretsConfig: SecretConfigService,
 		private secretsParser: SecretsParserService,
+		private readonly deckHandler: DeckHandlerService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -622,7 +624,7 @@ export class GameStateService {
 			new HeroPowerChangedParser(this.helper, this.allCards),
 			new WeaponEquippedParser(this.helper, this.allCards),
 			new WeaponDestroyedParser(),
-			new DeckstringOverrideParser(this.deckParser, this.allCards),
+			new DeckstringOverrideParser(this.deckHandler),
 			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),
 			new DecklistUpdateParser(this.aiDecks, this.deckParser, this.prefs),

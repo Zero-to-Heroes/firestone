@@ -83,7 +83,7 @@ export class ConstructedContentComponent {
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
-		this.closeHandler = () => this.deckUpdater.next(Object.assign(new ConstructedCloseWindowEvent()));
+		this.closeHandler = () => this.deckUpdater.next(new ConstructedCloseWindowEvent());
 	}
 
 	// getTitle(): string {

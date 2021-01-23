@@ -101,6 +101,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly BATTLEGROUNDS_TRIPLE = 'BATTLEGROUNDS_TRIPLE';
 
 	public static readonly ACHIEVEMENT_PROGRESS = 'ACHIEVEMENT_PROGRESS';
+	public static readonly DECKSTRING_OVERRIDE = 'DECKSTRING_OVERRIDE';
 
 	readonly type: string;
 	readonly cardId: string;

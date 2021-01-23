@@ -1,160 +1,75 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
-import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
-import { DeckParserService } from '../deck-parser.service';
+import { DeckHandlerService } from '../deck-handler.service';
+import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
 import { EventParser } from './event-parser';
 
 export class DeckstringOverrideParser implements EventParser {
-	constructor(private readonly deckParser: DeckParserService, private readonly allCards: AllCardsService) {}
+	constructor(private readonly deckHandler: DeckHandlerService) {}
 
-	// Whenever something occurs that publicly reveal a card, we try to assign its
-	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === 'DECKSTRING_OVERRIDE';
+		return state && gameEvent.type === GameEvent.DECKSTRING_OVERRIDE;
 	}
 
-	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		console.log('overriding deckstring', gameEvent);
-		const formattedData = this.formatData(gameEvent.additionalData.clipboardContent);
-		if (!formattedData) {
-			console.log('no new deckstring to import, returning', gameEvent);
+	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
+		const deckName = gameEvent.deckName;
+		const deckstring = gameEvent.deckstring;
+		const initialDeck = currentState.opponentDeck;
+		//console.debug('[deckstring-override-parser]', deckName, deckstring, initialDeck);
+
+		if (!deckstring) {
+			console.warn('[deckstring-override-parser] no deckstring passed, returning', gameEvent);
 			return currentState;
 		}
-		for (const line of formattedData) {
-			await this.deckParser.parseActiveDeck(line);
+
+		// We take the contents of the current deck, and we put aside all the cards that have
+		// been added afterwards (ie cards that have a creator)
+		// These are the cards that we will have to put back in the deck after the decklist
+		// has been overridden
+		const deckInfo = initialDeck.deck;
+		const cardsNotInInitialDeck = deckInfo.filter(card => card.creatorCardId);
+		//console.debug('[deckstring-override-parser] cardsNotInInitialDeck', cardsNotInInitialDeck);
+
+		// Now we do the opposite: on all the other zones, we need to find out the cards
+		// that were part of the initial deck and are not in the "deck" zone anymore
+		const cardsMovedOutOfInitialDeck = [...initialDeck.board, ...initialDeck.hand, ...initialDeck.otherZone]
+			.filter(card => card.cardId)
+			.filter(card => !card.creatorCardId);
+		//console.debug('[deckstring-override-parser] cardsMovedOutOfInitialDeck', cardsMovedOutOfInitialDeck);
+
+		const cardsFromDeckstring = this.deckHandler.buildDeckList(deckstring);
+		//console.debug('[deckstring-override-parser] cardsFromDeckstring', cardsFromDeckstring);
+
+		// Now remove the from this list the cards that were moved out of the initial deck
+		const newDeckContents = [...cardsFromDeckstring];
+		for (const movedOut of cardsMovedOutOfInitialDeck) {
+			const index = newDeckContents.map(card => card.cardId).indexOf(movedOut.cardId);
+			if (index !== -1) {
+				newDeckContents.splice(index, 1);
+			}
 		}
-		const currentDeck = await this.deckParser.getCurrentDeck(false, null);
-		if (!currentDeck || !currentDeck.deckstring || currentDeck.deckstring === currentState.playerDeck.deckstring) {
-			console.log('no new deckstring to import, returning', gameEvent, currentDeck);
-			return currentState;
-		}
-		console.log('retrieved current deck', currentDeck);
-		const deckList: readonly DeckCard[] = await this.deckParser.postProcessDeck(this.buildDeckList(currentDeck));
-		const hero: HeroCard = this.buildHero(currentDeck);
-		// Remove the cards that are not in deck anymore, i.e. the cards that are in the other zones
-		// It's not 100% accurate, but probably as good as we can do it without replaying all the match
-		const deck: DeckCard[] = [...deckList];
-		const allOtherZoneCards = [
-			...currentState.playerDeck.board,
-			...currentState.playerDeck.hand,
-			...currentState.playerDeck.otherZone,
-		].map(card => card.cardId);
-		for (const card of allOtherZoneCards) {
-			// https://stackoverflow.com/questions/53534721/find-and-remove-first-matching-element-in-an-array-of-javascript-objects
-			deck.find((o, i) => {
-				if (o.cardId === card) {
-					deck.splice(i, 1);
-					return true;
-				}
-				return false;
-			});
-		}
-		console.log('updated deck contents', deck, allOtherZoneCards);
-		const playerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
-			deckstring: currentDeck.deckstring,
-			name: currentDeck.name,
-			hero: hero,
-			deckList: deckList,
-			deck: [...deck] as readonly DeckCard[],
+		//console.debug('[deckstring-override-parser] updating new decks after cards moved out', newDeckContents);
+
+		// And add back the other cards
+		const finalDeckContents = [...newDeckContents, ...cardsNotInInitialDeck];
+		//console.debug('[deckstring-override-parser] finalDeckContents', finalDeckContents);
+
+		const newDeck = Object.assign(new DeckState(), currentState.opponentDeck, {
+			deckstring: deckstring,
+			name: deckName,
+			deckList: cardsFromDeckstring,
+			deck: finalDeckContents as readonly DeckCard[],
 		} as DeckState);
-		console.log('new player deck', playerDeck);
+		//console.log('newDeck', newDeck);
 		return Object.assign(new GameState(), currentState, {
-			playerDeck: playerDeck,
+			opponentDeck: newDeck,
 		} as GameState);
 	}
 
 	event(): string {
-		return 'DECKSTRING_OVERRIDE';
+		return GameEvent.DECKSTRING_OVERRIDE;
 	}
 
-	private buildHero(currentDeck: any): HeroCard {
-		if (!currentDeck || !currentDeck.deck || !currentDeck.deck.heroes || currentDeck.deck.heroes.length === 0) {
-			return null;
-		}
-		return currentDeck.deck.heroes
-			.map(hero => this.allCards.getCardFromDbfId(+hero))
-			.map(heroCard => {
-				if (!heroCard) {
-					console.error(
-						'could not map empty hero card',
-						currentDeck.deck.heroes,
-						currentDeck.deck,
-						currentDeck,
-					);
-				}
-				return heroCard;
-			})
-			.map(heroCard =>
-				Object.assign(new HeroCard(), {
-					cardId: heroCard.id,
-					name: heroCard.name,
-				} as HeroCard),
-			)[0];
-	}
-
-	private buildDeckList(currentDeck: any): readonly DeckCard[] {
-		if (!currentDeck || !currentDeck.deck) {
-			return [];
-		}
-		return (
-			currentDeck.deck.cards
-				// [dbfid, count] pair
-				.map(pair => this.buildDeckCards(pair))
-				.reduce((a, b) => a.concat(b), [])
-				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
-		);
-	}
-
-	private buildDeckCards(pair): DeckCard[] {
-		const card = this.allCards.getCardFromDbfId(+pair[0]);
-		const result: DeckCard[] = [];
-		if (!card) {
-			console.error('Could not build deck card', pair);
-			return result;
-		}
-		// Don't include passive buffs in the decklist
-		if (card.mechanics && card.mechanics.indexOf('DUNGEON_PASSIVE_BUFF') !== -1) {
-			return result;
-		}
-		for (let i = 0; i < pair[1]; i++) {
-			result.push(
-				DeckCard.create({
-					cardId: card.id,
-					cardName: card.name,
-					manaCost: card.cost,
-					rarity: card.rarity ? card.rarity.toLowerCase() : null,
-				} as DeckCard),
-			);
-		}
-		return result;
-	}
-
-	private formatData(deckstringFromClipboard: string): string[] {
-		if (!deckstringFromClipboard) {
-			console.log('invalid string from clipboard)', deckstringFromClipboard);
-			return null;
-		}
-		const lines = deckstringFromClipboard.split('\n');
-		// console.log('lines', lines);
-		const name = lines[0].split('### ') ? lines[0].split('### ')[1] : '';
-		const deckstring = lines
-			.map(line => new RegExp('^([a-zA-Z0-9\\/\\+=]+)').exec(line))
-			.filter(match => match)
-			.map(match => match[1])[0];
-		// console.log(
-		// 	'parsed clipboard content',
-		// 	name,
-		// 	deckstring,
-		// 	lines.map(line => new RegExp('^([a-zA-Z0-9\\/\\+=]+)').exec(line)),
-		// );
-		if (!deckstring) {
-			return null;
-		}
-		const result = [`I 00:00:00.000000 ### ${name}`, `I 00:00:00.000000 ${deckstring}`];
-		// console.log('returning', result);
-		return result;
-	}
 }
