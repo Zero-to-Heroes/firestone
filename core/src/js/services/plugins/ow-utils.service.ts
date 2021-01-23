@@ -12,7 +12,7 @@ export class OwUtilsService {
 		this.initialize();
 	}
 
-	public async captureWindow(windowName: string, copyToClipboard: boolean = false): Promise<[string, any]> {
+	public async captureWindow(windowName: string, copyToClipboard = false): Promise<[string, any]> {
 		return new Promise<[string, any]>(async (resolve, reject) => {
 			console.log('[ow-utils] capturing window', windowName);
 			const plugin = await this.get();

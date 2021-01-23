@@ -52,7 +52,7 @@ export class SocialShareButtonComponent implements AfterViewInit {
 		this.overlayRef.backdropClick().subscribe(() => this.overlayRef.detach());
 	}
 
-	async startSharing(copyToCliboard: boolean = false) {
+	async startSharing(copyToCliboard = false) {
 		setTimeout(async () => {
 			amplitude.getInstance().logEvent('share', {
 				'page': 'bgs-post-match-stats',

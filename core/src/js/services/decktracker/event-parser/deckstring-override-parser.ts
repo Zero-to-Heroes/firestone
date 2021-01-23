@@ -71,5 +71,4 @@ export class DeckstringOverrideParser implements EventParser {
 	event(): string {
 		return GameEvent.DECKSTRING_OVERRIDE;
 	}
-
 }

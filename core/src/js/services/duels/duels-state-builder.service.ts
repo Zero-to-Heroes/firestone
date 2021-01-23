@@ -112,9 +112,7 @@ export class DuelsStateBuilderService {
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
 		const result: DuelsGlobalStats = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
-		console.log(
-			'[duels-state-builder] loaded global stats'
-		);
+		console.log('[duels-state-builder] loaded global stats');
 		return result;
 	}
 
