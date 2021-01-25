@@ -306,7 +306,19 @@ export class TwitchAuthService {
 				}
 			},
 			error => {
-				console.error('[twitch-auth] Could not send deck event to EBS', error);
+				const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
+				let noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
+				if (!this.hasLoggedInfoOnce) {
+					this.hasLoggedInfoOnce = true;
+					console.error(
+						noFormat,
+						'[twitch-auth] Could not send deck event to EBS',
+						compressedMessage.length,
+						new Blob([compressedMessage]).size,
+						error,
+						newEvent,
+					);
+				}
 			},
 		);
 	}
