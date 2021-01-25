@@ -158,6 +158,7 @@ export class Preferences {
 	readonly bgsEnableMinionListOverlay: boolean = true;
 	readonly bgsEnableMinionListMouseOver: boolean = true;
 	readonly bgsShowTribesHighlight: boolean = true;
+	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';

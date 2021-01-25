@@ -78,6 +78,12 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Adds a small widget that shows what tribes are banned in the current run"
 				></preference-toggle>
 				<preference-toggle
+					field="bgsShowLastOpponentIconInOverlay"
+					[ngClass]="{ 'disabled': !bgsFullToggle }"
+					label="Last opponent icon"
+					tooltip="Adds an icon next to your last opponent in the leaderboard"
+				></preference-toggle>
+				<preference-toggle
 					field="bgsEnableOpponentBoardMouseOver"
 					*ngIf="opponentMouseOver"
 					[ngClass]="{ 'disabled': !bgsFullToggle }"

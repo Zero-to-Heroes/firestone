@@ -37,6 +37,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[bgsPlayer]="bgsPlayer"
 					[currentTurn]="currentTurn"
 					[lastOpponentCardId]="lastOpponentCardId"
+					[showLastOpponentIcon]="showLastOpponentIcon"
 					position="global-top-left"
 				>
 				</bgs-leaderboard-empty-card>
@@ -68,6 +69,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 	phase: 'combat' | 'recruit';
 	minions: readonly DeckCard[];
 	highlightedTribes: readonly Race[];
+	showLastOpponentIcon: boolean;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -162,12 +164,10 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
-		// this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
-		// this.displayGuess = preferences.dectrackerShowOpponentGuess;
-		// this.displayBuff = preferences.dectrackerShowOpponentBuffInHand;
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
+		this.showLastOpponentIcon = preferences.bgsShowLastOpponentIconInOverlay;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async changeWindowSize(): Promise<void> {

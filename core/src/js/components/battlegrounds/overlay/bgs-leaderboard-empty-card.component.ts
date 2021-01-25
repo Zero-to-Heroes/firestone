@@ -1,6 +1,7 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 
 @Component({
@@ -19,11 +20,19 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 		>
 			<!-- transparent image with 1:1 intrinsic aspect ratio -->
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+			<div
+				class="last-opponent-icon"
+				*ngIf="enableLastOpponentIcon && isLastOpponent && showLastOpponentIcon"
+				helpTooltip="Was last round's opponent"
+				inlineSVG="assets/svg/last_opponent.svg"
+			></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLeaderboardEmptyCardComponent {
+	enableLastOpponentIcon: boolean = FeatureFlags.ENABLE_BG_LAST_ROUND_OPPONENT_ICON;
+
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
 
 	@Input() position: 'global-top-center' | 'global-top-left' | 'right' = 'right';
@@ -52,6 +61,8 @@ export class BgsLeaderboardEmptyCardComponent {
 		this.updateInfo();
 	}
 
+	@Input() showLastOpponentIcon: boolean;
+
 	_bgsPlayer: {
 		player: BgsPlayer;
 		currentTurn: number;
@@ -61,12 +72,14 @@ export class BgsLeaderboardEmptyCardComponent {
 	_previousPlayer: BgsPlayer;
 	_currentTurn: number;
 	_lastOpponentCardId: string;
+	isLastOpponent: boolean;
 
 	private updateInfo() {
 		if (!this._previousPlayer) {
 			return;
 		}
 
+		this.isLastOpponent = this._lastOpponentCardId === this._previousPlayer.getNormalizedHeroCardId();
 		this._bgsPlayer = {
 			player: BgsPlayer.create({
 				cardId: this._previousPlayer.cardId,
@@ -81,7 +94,7 @@ export class BgsLeaderboardEmptyCardComponent {
 				boardHistory: this._previousPlayer?.boardHistory ?? [],
 			} as BgsPlayer),
 			currentTurn: this._currentTurn,
-			isLastOpponent: this._lastOpponentCardId === this._previousPlayer.getNormalizedHeroCardId(),
+			isLastOpponent: this.isLastOpponent,
 		};
 	}
 }
