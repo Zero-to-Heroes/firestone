@@ -32,7 +32,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						</svg>
 					</i>
 					<span class="title">Nothing here yet</span>
-					<span class="subtitle">Play a ranked match to get started!</span>
+					<span class="subtitle">Play a ranked match to get started, or check your filters above :)</span>
 				</div>
 			</section>
 		</div>
