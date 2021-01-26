@@ -27,7 +27,12 @@ export class RestoreDeckSummaryProcessor implements Processor {
 		// console.log('new hidden decks', newHiddenDecks);
 		const newPrefs = await this.prefs.setDesktopDeckHiddenDeckCodes(newHiddenDecks);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
-			decks: this.decksStateBuilder.buildState(currentState.stats, currentState.decktracker.filters, newPrefs),
+			decks: this.decksStateBuilder.buildState(
+				currentState.stats,
+				currentState.decktracker.filters,
+				currentState.decktracker.patch,
+				newPrefs,
+			),
 		} as DecktrackerState);
 		const replays = this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [

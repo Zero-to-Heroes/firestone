@@ -25,7 +25,12 @@ export class ChangeDeckSortProcessor implements Processor {
 		const prefs = await this.prefs.setDesktopDeckFilters(filters);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
 			filters: filters,
-			decks: this.decksStateBuilder.buildState(currentState.stats, filters, prefs),
+			decks: this.decksStateBuilder.buildState(
+				currentState.stats,
+				filters,
+				currentState.decktracker.patch,
+				prefs,
+			),
 		} as DecktrackerState);
 		return [
 			Object.assign(new MainWindowState(), currentState, {

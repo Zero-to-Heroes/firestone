@@ -108,7 +108,15 @@ export class StoreBootstrapService {
 			archetypesStats: archetypesStats,
 			bestBgsUserStats: bgsBestUserStats,
 		} as StatsState);
-		const decktracker = this.decktrackerStateLoader.buildState(new DecktrackerState(), newStatsState, prefs);
+		const currentRankedMetaPatch = patchConfig?.patches
+			? patchConfig.patches.find(patch => patch.number === patchConfig.currentConstructedMetaPatch)
+			: null;
+		const decktracker = this.decktrackerStateLoader.buildState(
+			new DecktrackerState(),
+			newStatsState,
+			currentRankedMetaPatch,
+			prefs,
+		);
 		const replayState: ReplaysState = this.replaysStateBuilder.buildState(
 			new ReplaysState(),
 			newStatsState,

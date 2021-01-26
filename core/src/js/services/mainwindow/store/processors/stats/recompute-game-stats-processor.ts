@@ -45,6 +45,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 		const decktracker: DecktrackerState = this.decktrackerStateLoader.buildState(
 			currentState.decktracker,
 			newStatsState,
+			currentState.decktracker.patch,
 			prefs,
 		);
 		console.log('[recompute-game-stats-processor] decktracker');

@@ -24,7 +24,12 @@ export class HideDeckSummaryProcessor implements Processor {
 		const newHiddenDecks = [...currentPrefs.desktopDeckHiddenDeckCodes, event.deckstring];
 		const newPrefs = await this.prefs.setDesktopDeckHiddenDeckCodes(newHiddenDecks);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
-			decks: this.decksStateBuilder.buildState(currentState.stats, currentState.decktracker.filters, newPrefs),
+			decks: this.decksStateBuilder.buildState(
+				currentState.stats,
+				currentState.decktracker.filters,
+				currentState.decktracker.patch,
+				newPrefs,
+			),
 		} as DecktrackerState);
 		const replays = this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [

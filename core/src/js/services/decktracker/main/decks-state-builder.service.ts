@@ -8,6 +8,7 @@ import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
+import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 
 const ALL_CLASSES = [
@@ -25,13 +26,18 @@ const ALL_CLASSES = [
 
 @Injectable()
 export class DecksStateBuilderService {
-	public buildState(stats: StatsState, filters: DeckFilters, prefs: Preferences = null): readonly DeckSummary[] {
+	public buildState(
+		stats: StatsState,
+		filters: DeckFilters,
+		patch: PatchInfo,
+		prefs: Preferences = null,
+	): readonly DeckSummary[] {
 		// console.log('[decktracker-stats-loader] update with stats');
 		if (!stats || !stats.gameStats) {
 			return [];
 		}
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
-		const validReplays = this.buildValidReplays(stats, filters, prefs);
+		const validReplays = this.buildValidReplays(stats, filters, prefs, patch);
 		// console.log('filtering done', prefs, validDecks, stats);
 		const groupByDeckstring = groupBy('playerDecklist');
 		const statsByDeck = groupByDeckstring(validReplays);
@@ -45,12 +51,17 @@ export class DecksStateBuilderService {
 		return decks;
 	}
 
-	private buildValidReplays(stats: StatsState, filters: DeckFilters, prefs: Preferences): readonly GameStat[] {
+	private buildValidReplays(
+		stats: StatsState,
+		filters: DeckFilters,
+		prefs: Preferences,
+		patch: PatchInfo,
+	): readonly GameStat[] {
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		const replaysForDate = stats.gameStats.stats
 			.filter(stat => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
 			.filter(stat => stat.gameMode === filters.gameMode)
-			.filter(stat => this.isValidDate(stat, filters.time));
+			.filter(stat => this.isValidDate(stat, filters.time, patch));
 		// Make sure that if the current filter is "season-start", the first game starts in Bronze
 		let indexOfFirstGame = replaysForDate.length;
 		// console.log('replaysForDate', replaysForDate);
@@ -99,12 +110,28 @@ export class DecksStateBuilderService {
 		}
 	}
 
-	private isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType): boolean {
+	private isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType, lastPatch: PatchInfo): boolean {
+		const now = Date.now();
 		switch (timeFilter) {
 			case 'season-start':
 				const startOfMonthDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 				// Season starts always in Bronze
 				return stat.creationTimestamp >= startOfMonthDate.getTime();
+			case 'last-patch':
+				return stat.buildNumber >= lastPatch.number;
+			case 'past-30':
+				const past30Date = new Date(now - 30 * 24 * 60 * 60 * 1000);
+				// Season starts always in Bronze
+				return stat.creationTimestamp >= past30Date.getTime();
+			case 'past-7':
+				const past7Date = new Date(now - 7 * 24 * 60 * 60 * 1000);
+				// Season starts always in Bronze
+				return stat.creationTimestamp >= past7Date.getTime();
+			case 'past-1':
+				const past1Date = new Date(now - 1 * 24 * 60 * 60 * 1000);
+				// Season starts always in Bronze
+				return stat.creationTimestamp >= past1Date.getTime();
+			case 'all-time':
 			default:
 				return true;
 		}

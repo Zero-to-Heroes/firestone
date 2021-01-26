@@ -27,7 +27,12 @@ export class ChangeDeckTimeFilterProcessor implements Processor {
 		const prefs = await this.prefs.setDesktopDeckFilters(filters);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
 			filters: filters,
-			decks: this.decksStateBuilder.buildState(currentState.stats, filters, prefs),
+			decks: this.decksStateBuilder.buildState(
+				currentState.stats,
+				filters,
+				currentState.decktracker.patch,
+				prefs,
+			),
 		} as DecktrackerState);
 		const replays = this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [

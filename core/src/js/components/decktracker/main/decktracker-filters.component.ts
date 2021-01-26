@@ -23,6 +23,7 @@ import { ToggleShowHiddenDecksEvent } from '../../../services/mainwindow/store/e
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { formatPatch } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-filters',
@@ -92,6 +93,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 	@Input() set state(value: MainWindowState) {
 		this._state = value;
 		// console.log('setting state', value);
+		this.buildTimeOptions();
 		this.doSetValues();
 	}
 
@@ -99,10 +101,6 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		this._navigation = value;
 		this.doSetValues();
 	}
-
-	_state: MainWindowState;
-	_navigation: NavigationState;
-	showHiddenDecksLink: boolean;
 
 	formatFilterOptions: readonly FormatFilterOption[] = [
 		{
@@ -128,16 +126,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		);
 	};
 
-	timeFilterOptions: readonly TimeFilterOption[] = [
-		{
-			value: 'all-time',
-			label: 'All time',
-		} as TimeFilterOption,
-		{
-			value: 'season-start',
-			label: 'This season',
-		} as TimeFilterOption,
-	] as readonly TimeFilterOption[];
+	timeFilterOptions: readonly TimeFilterOption[] = [];
 	activeTimeFilter: DeckTimeFilterType;
 	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
 		return state && navigation && navigation.currentApp == 'decktracker';
@@ -202,6 +191,10 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		);
 	};
 
+	_state: MainWindowState;
+	_navigation: NavigationState;
+	showHiddenDecksLink: boolean;
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -249,6 +242,36 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 			this.rankVisibleHandler(this._navigation, this._state) ||
 			this.sortVisibleHandler(this._navigation, this._state)
 		);
+	}
+
+	private buildTimeOptions() {
+		this.timeFilterOptions = [
+			{
+				value: 'all-time',
+				label: 'All time',
+			} as TimeFilterOption,
+			{
+				value: 'season-start',
+				label: 'This season',
+			} as TimeFilterOption,
+			{
+				value: 'last-patch',
+				label: 'Last patch',
+				tooltip: formatPatch(this._state?.decktracker?.patch),
+			} as TimeFilterOption,
+			{
+				value: 'past-30',
+				label: 'Past 30 days',
+			} as TimeFilterOption,
+			{
+				value: 'past-7',
+				label: 'Past 7 days',
+			} as TimeFilterOption,
+			{
+				value: 'past-1',
+				label: 'Past day',
+			} as TimeFilterOption,
+		] as readonly TimeFilterOption[];
 	}
 
 	private async doSetValues() {
