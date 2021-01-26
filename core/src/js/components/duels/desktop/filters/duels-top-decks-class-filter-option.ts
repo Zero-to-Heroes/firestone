@@ -18,7 +18,8 @@ export class DuelsClassFilterOption implements DuelsDropdownOption {
 			navigation &&
 			navigation.currentApp == 'duels' &&
 			navigation.navigationDuels &&
-			(navigation.navigationDuels.selectedCategoryId === 'duels-top-decks' ||
+			(navigation.navigationDuels.selectedCategoryId === 'duels-stats' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-top-decks' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-treasures')
 		);
 	};
