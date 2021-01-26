@@ -307,7 +307,7 @@ export class TwitchAuthService {
 			},
 			error => {
 				const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
-				let noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
+				const noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
 				if (!this.hasLoggedInfoOnce) {
 					this.hasLoggedInfoOnce = true;
 					console.error(
