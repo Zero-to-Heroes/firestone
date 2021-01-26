@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
@@ -14,12 +14,25 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	],
 	template: `
 		<div class="bgs-minions-list">
-			<bgs-minions-group class="minion-group" *ngFor="let group of groups" [group]="group"></bgs-minions-group>
+			<bgs-minions-group
+				class="minion-group"
+				*ngFor="let group of groups"
+				[group]="group"
+				[tooltipPosition]="_tooltipPosition"
+			></bgs-minions-group>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMinionsListComponent {
+	@Input() set tooltipPosition(value: string) {
+		// console.debug('[minions-list] tooltip position', value);
+		this._tooltipPosition = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	@Input() set cards(value: readonly ReferenceCard[]) {
 		this._cards = value;
 		this.updateInfos();
@@ -27,6 +40,9 @@ export class BattlegroundsMinionsListComponent {
 
 	_cards: readonly ReferenceCard[];
 	groups: readonly BgsMinionsGroup[];
+	_tooltipPosition: string;
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	private updateInfos() {
 		if (!this._cards) {

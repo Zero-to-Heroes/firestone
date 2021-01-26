@@ -17,8 +17,8 @@ export class BgsMinionsListOverlay implements BattlegroundsOverlay {
 
 	public async handleDisplayPreferences(preferences: Preferences) {
 		this.bgsActive =
-			(FeatureFlags.ENABLE_BG_MINIONS_LIST || FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT) &&
 			(preferences.bgsEnableMinionListOverlay || preferences.bgsShowTribesHighlight) &&
+			(FeatureFlags.ENABLE_BG_MINIONS_LIST || FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT) &&
 			preferences.bgsFullToggle;
 	}
 
@@ -26,6 +26,8 @@ export class BgsMinionsListOverlay implements BattlegroundsOverlay {
 		const windowId = OverwolfService.BATTLEGROUNDS_WINDOW_MINIONS_TIERS_OVERLAY;
 		const battlegroundsWindow = await this.ow.getWindowState(windowId);
 		const inGame = state && state.inGame && !state.gameEnded;
+		await this.ow.obtainDeclaredWindow(windowId);
+		await this.ow.restoreWindow(windowId);
 		if (inGame && this.bgsActive) {
 			if (battlegroundsWindow.window_state_ex !== 'normal' && battlegroundsWindow.stateEx !== 'normal') {
 				await this.ow.obtainDeclaredWindow(windowId);

@@ -25,6 +25,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input() cardTooltipText = undefined;
 	@Input() cardTooltipClass = undefined;
 	@Input() cardTooltipDisplayBuffs: boolean;
+	@Input() cardTooltipBgs: boolean;
 
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
 		// console.log('[card-tooltip-directive] setting tooltip position', value);
@@ -176,6 +177,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 			tooltipRef.instance.cardTooltipCard = undefined;
 			tooltipRef.instance.displayBuffs = undefined;
 			tooltipRef.instance.cardId = this.cardId;
+			tooltipRef.instance.cardTooltipBgs = this.cardTooltipBgs;
 			tooltipRef.instance.text = this.cardTooltipText;
 		}
 		tooltipRef.instance.additionalClass = this.cardTooltipClass;

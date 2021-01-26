@@ -224,7 +224,7 @@ export const getAllCardsInGame = (
 	return allCards
 		.getCards()
 		.filter(card => card.techLevel)
-		.filter(card => isValidTribe(availableTribes, card.race))
+		.filter(card => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
 		.filter(card => !card.id.startsWith('TB_BaconUps')); // Ignore golden
 };
 
@@ -233,13 +233,45 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 	return raceEnum === Race.ALL || !validTribes || validTribes.length === 0 || validTribes.includes(raceEnum);
 };
 
+export const getTribeForInclusion = (card: ReferenceCard): Race => {
+	switch (card.id) {
+		// Some cases are only included when specific tribes are
+		case CardIds.NonCollectible.Neutral.PackLeader:
+		case CardIds.NonCollectible.Neutral.PackLeaderTavernBrawl:
+		case CardIds.Collectible.Druid.VirmenSensei:
+		case CardIds.NonCollectible.Druid.VirmenSenseiTavernBrawl:
+			return Race.BEAST;
+		case CardIds.NonCollectible.Neutral.WrathWeaver:
+		case CardIds.NonCollectible.Neutral.WrathWeaverTavernBrawl:
+		case CardIds.NonCollectible.Warlock.SoulJuggler:
+		case CardIds.NonCollectible.Warlock.SoulJugglerTavernBrawl:
+			return Race.DEMON;
+		case CardIds.NonCollectible.Neutral.WaxriderTogwaggle:
+		case CardIds.NonCollectible.Neutral.WaxriderTogwaggleTavernBrawl:
+		case CardIds.NonCollectible.Neutral.NadinaTheRed:
+		case CardIds.NonCollectible.Neutral.NadinaTheRedTavernBrawl:
+			return Race.DRAGON;
+		case CardIds.NonCollectible.Neutral.MajordomoExecutusBATTLEGROUNDS:
+		case CardIds.NonCollectible.Neutral.MajordomoExecutusTavernBrawl:
+		case CardIds.NonCollectible.Neutral.NomiKitchenNightmare:
+		case CardIds.NonCollectible.Neutral.NomiKitchenNightmareTavernBrawl:
+			return Race.ELEMENTAL;
+		case CardIds.NonCollectible.Neutral.KangorsApprentice:
+		case CardIds.NonCollectible.Neutral.KangorsApprenticeTavernBrawl:
+			return Race.MECH;
+		case CardIds.NonCollectible.Neutral.TheTideRazor:
+		case CardIds.NonCollectible.Neutral.TheTideRazorTavernBrawl:
+			return Race.PIRATE;
+		default:
+			return getEffectiveTribeEnum(card);
+	}
+};
+
 export const getEffectiveTribe = (card: ReferenceCard): string => {
 	const tribe: Race = getEffectiveTribeEnum(card);
 	return Race[tribe];
 };
 
 export const getEffectiveTribeEnum = (card: ReferenceCard): Race => {
-	// TODO: some cards should be categorized into other tribes, because they synergize with it
-	// For now, just use the nominal tribe
 	return card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
 };

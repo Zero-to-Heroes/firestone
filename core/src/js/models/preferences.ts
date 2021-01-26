@@ -156,6 +156,7 @@ export class Preferences {
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
 	readonly bgsEnableMinionListOverlay: boolean = true;
+	readonly bgsMinionsListPosition: { left: number; top: number };
 	readonly bgsEnableMinionListMouseOver: boolean = true;
 	readonly bgsShowTribesHighlight: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;

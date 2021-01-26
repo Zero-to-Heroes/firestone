@@ -103,6 +103,9 @@ import { Knob } from '../preference-slider.component';
 					[ngClass]="{ 'disabled': !bgsFullToggle || !bgsEnableMinionListOverlay }"
 					label="Show minions list on mouse over"
 					tooltip="When deactivated, you will have to click on the tavern tier icons to show the minions list"
+					advancedSetting
+					messageWhenToggleValue="Got it, we will only show you the minions details when you click on a star"
+					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowTribesHighlight"

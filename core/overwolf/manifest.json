@@ -189,13 +189,11 @@
 			"BattlegroundsMinionsTiersWindow": {
 				"file": "Files/battlegrounds_minions_tiers.html",
 				"transparent": true,
-				"resizable": false,
+				"resizable": true,
 				"show_in_taskbar": false,
-				"size": { "width": 420, "height": 1300 },
-				"start_position": { "top": 0, "right": 0 },
-				"grab_keyboard_focus": false,
-				"grab_focus_on_desktop": false,
-				"block_top_window_navigation": true,
+				"size": { "width": 800, "height": 1300 },
+				"min_size": { "width": 800, "height": 1300 },
+				"start_position": { "top": 0, "left": 0 },
 				"in_game_only": true
 			},
 			"ConstructedWindow": {

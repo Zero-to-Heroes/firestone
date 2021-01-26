@@ -13,6 +13,7 @@ import { Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../../models/preferences';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
@@ -31,25 +32,36 @@ import { groupByFunction } from '../../../services/utils';
 		'../../../../css/component/battlegrounds/minions-tiers/battlegrounds-minions-tiers.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme">
+		<div
+			class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme"
+			(mouseleave)="onTavernMouseLeave()"
+			(mousedown)="dragMove()"
+		>
 			<div class="tiers-container" *ngIf="showMinionsList">
+				<div class="logo-container" *ngIf="currentTurn">
+					<div class="background-main-part"></div>
+					<div class="background-second-part"></div>
+					<div class="turn-number">Turn {{ currentTurn }}</div>
+				</div>
 				<ul class="tiers">
-					<tavern-level-icon
-						class="tavern"
+					<div
+						class="tier"
 						*ngFor="let currentTier of tiers; trackBy: trackByFn"
 						[ngClass]="{
 							'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
 							'locked': isLocked(currentTier)
 						}"
-						[level]="currentTier.tavernTier"
 						(mouseover)="onTavernMouseOver(currentTier)"
 						(click)="onTavernClick(currentTier)"
-						(mouseleave)="onTavernMouseLeave(currentTier)"
-					></tavern-level-icon>
+					>
+						<img class="icon" src="assets/images/bgs/star.png" />
+						<div class="number">{{ currentTier.tavernTier }}</div>
+					</div>
 				</ul>
 				<bgs-minions-list
 					*ngIf="displayedTier || lockedTier"
 					[cards]="(displayedTier || lockedTier).cards"
+					[tooltipPosition]="tooltipPosition"
 				></bgs-minions-list>
 			</div>
 			<tribes-highlight
@@ -76,6 +88,8 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	showTribesHighlight: boolean;
 	showMinionsList: boolean;
 	enableMouseOver: boolean;
+	currentTurn: number;
+	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -106,6 +120,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			//console.log('available cards', this.cardsInGame);
 			this.tiers = this.buildTiers(newState);
 			this.highlightedTribes = newState.highlightedTribes;
+			this.currentTurn = newState.currentGame?.currentTurn;
 			//console.log('updating tiers', this.tiers, newState, this.cardsInGame);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -126,6 +141,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		});
 		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.changeWindowSize();
+		await this.updateTooltipPosition();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -138,6 +154,23 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.preferencesSubscription?.unsubscribe();
 	}
 
+	dragMove() {
+		this.tooltipPosition = 'none';
+		// console.log('dragMode');
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		this.ow.dragMove(this.windowId, async result => {
+			await this.updateTooltipPosition();
+			const window = await this.ow.getCurrentWindow();
+			if (!window) {
+				return;
+			}
+			await this.prefs.updateBgsMinionsListPosition(window.left, window.top);
+			await this.restoreWindowPosition();
+		});
+	}
+
 	trackByFn(tavernTier: Tier) {
 		return tavernTier?.tavernTier;
 	}
@@ -146,6 +179,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.displayedTier = tavernTier;
 		if (this.isLocked(tavernTier)) {
 			this.lockedTier = undefined;
+			this.displayedTier = undefined;
 		} else {
 			this.lockedTier = tavernTier;
 			this.displayedTier = undefined;
@@ -166,7 +200,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		}
 	}
 
-	onTavernMouseLeave(tavernTier: Tier) {
+	onTavernMouseLeave() {
 		if (this.lockedTier) {
 			return;
 		}
@@ -181,10 +215,6 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	}
 
 	private updateAvailableCards(state: BattlegroundsState) {
-		if (!state?.currentGame?.availableRaces?.length) {
-			return;
-		}
-
 		if (!this.allCards.getCards()?.length) {
 			return;
 		}
@@ -224,11 +254,60 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		const dpi = gameInfo.logicalWidth / gameWidth;
 		const newLeft = dpi * (gameWidth - width);
 		await this.ow.changeWindowPosition(this.windowId, newLeft - 15, 15);
-		//console.log('changing size', width, height, newLeft, gameInfo);
+		await this.restoreWindowPosition();
+		await this.updateTooltipPosition();
 	}
 
 	private async init() {
 		await this.allCards.initializeCardsDb();
+	}
+
+	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
+		const width = 800;
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!gameInfo) {
+			return;
+		}
+		const gameWidth = gameInfo.logicalWidth;
+		const dpi = gameWidth / gameInfo.width;
+		const prefs = await this.prefs.getPreferences();
+		const windowPosition = prefs.bgsMinionsListPosition;
+		//console.log('window position', await this.ow.getCurrentWindow(), gameInfo);
+		//console.log('loaded tracker position', windowPosition);
+		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
+		const newLeft =
+			windowPosition && windowPosition.left < gameWidth && windowPosition.left > -width && !forceTrackerReposition
+				? windowPosition.left || 0
+				: gameWidth - width * dpi;
+		const newTop =
+			windowPosition &&
+			windowPosition.top < gameInfo.logicalHeight &&
+			windowPosition.top > -300 &&
+			!forceTrackerReposition
+				? windowPosition.top || 0
+				: 0;
+		console.log('updating tracker position', newLeft, newTop);
+		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+		console.log('after window position update', await this.ow.getCurrentWindow());
+		// console.log('monitors list', await this.ow.getMonitorsList());
+		// console.log('game info', await this.ow.getRunningGameInfo());
+		await this.updateTooltipPosition();
+	}
+
+	private async updateTooltipPosition() {
+		// console.log('updating tooltip position');
+		const window = await this.ow.getCurrentWindow();
+		if (!window) {
+			return;
+		}
+		if (window.left < 0) {
+			this.tooltipPosition = 'right';
+		} else {
+			this.tooltipPosition = 'left';
+		}
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 

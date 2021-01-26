@@ -32,9 +32,17 @@ export class CardTooltipComponent {
 	createdBy: boolean;
 	_additionalClass: string;
 	buffs: readonly { bufferCardId: string; buffCardId: string; count: number }[];
+	_cardId: string;
+	isBgs: boolean;
 
 	@Input() set cardId(value: string) {
-		this.doSetCardId(value);
+		this._cardId = value;
+		this.updateInfos();
+	}
+
+	@Input() set cardTooltipBgs(value: boolean) {
+		this.isBgs = value;
+		this.updateInfos();
 	}
 
 	@Input() set cardTooltipCard(value: DeckCard) {
@@ -60,7 +68,8 @@ export class CardTooltipComponent {
 			);
 			// console.log('buffs are', this.buffs);
 		}
-		this.doSetCardId(value.cardId || value.creatorCardId || value.lastAffectedByCardId);
+		this._cardId = value.cardId || value.creatorCardId || value.lastAffectedByCardId;
+		this.updateInfos();
 	}
 
 	@Input() set additionalClass(value: string) {
@@ -89,8 +98,8 @@ export class CardTooltipComponent {
 		}
 	}
 
-	private async doSetCardId(value: string) {
-		if (!value) {
+	private async updateInfos() {
+		if (!this._cardId) {
 			this.image = undefined;
 		} else {
 			const prefs: Preferences = this.prefs ? await this.prefs.getPreferences() : null;
@@ -99,7 +108,10 @@ export class CardTooltipComponent {
 			// 	this.cdr.detectChanges();
 			// }
 			const imagePath = highRes ? '512' : 'compressed';
-			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${value}.png`;
+			const withBgs = this.isBgs
+				? `compressed/battlegrounds/${this._cardId}_bgs.png`
+				: `${imagePath}/${this._cardId}.png`;
+			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}`;
 			// console.log('image is', this.image);
 		}
 		// console.log('setting tooltip', value, this.image);
