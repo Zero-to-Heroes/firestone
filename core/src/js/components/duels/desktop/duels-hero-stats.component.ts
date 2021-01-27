@@ -59,29 +59,32 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		const classFilter = prefs.duelsActiveTopDecksClassFilter;
 		switch (this._state.activeStatTypeFilter) {
 			case 'hero-power':
-				this.stats = this._state.playerStats.heroPowerStats.filter(
-					stat =>
-						!classFilter ||
-						classFilter === 'all' ||
-						stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
-				);
+				this.stats = this._state.playerStats.heroPowerStats;
+				// .filter(
+				// 	stat =>
+				// 		!classFilter ||
+				// 		classFilter === 'all' ||
+				// 		stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
+				// );
 				break;
 			case 'signature-treasure':
-				this.stats = this._state.playerStats.signatureTreasureStats.filter(
-					stat =>
-						!classFilter ||
-						classFilter === 'all' ||
-						stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
-				);
+				this.stats = this._state.playerStats.signatureTreasureStats;
+				// .filter(
+				// 	stat =>
+				// 		!classFilter ||
+				// 		classFilter === 'all' ||
+				// 		stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
+				// );
 				break;
 			case 'hero':
 			default:
-				this.stats = this._state.playerStats.heroStats.filter(
-					stat =>
-						!classFilter ||
-						classFilter === 'all' ||
-						stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
-				);
+				this.stats = this._state.playerStats.heroStats;
+				// .filter(
+				// 	stat =>
+				// 		!classFilter ||
+				// 		classFilter === 'all' ||
+				// 		stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
+				// );
 				break;
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {

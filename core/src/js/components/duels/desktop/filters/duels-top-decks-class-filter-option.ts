@@ -19,8 +19,11 @@ export class DuelsClassFilterOption implements DuelsDropdownOption {
 			navigation.currentApp == 'duels' &&
 			navigation.navigationDuels &&
 			(navigation.navigationDuels.selectedCategoryId === 'duels-stats' ||
-				navigation.navigationDuels.selectedCategoryId === 'duels-top-decks' ||
-				navigation.navigationDuels.selectedCategoryId === 'duels-treasures')
+				navigation.navigationDuels.selectedCategoryId === 'duels-runs' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-treasures' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks' ||
+				// navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
+				navigation.navigationDuels.selectedCategoryId === 'duels-top-decks')
 		);
 	};
 	selectHandler = (stateUpdater: EventEmitter<MainWindowStoreEvent>, option: TopDeckClassFilterOption) => {

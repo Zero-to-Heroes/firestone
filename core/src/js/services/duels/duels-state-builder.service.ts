@@ -194,6 +194,7 @@ export class DuelsStateBuilderService {
 			)
 			.filter(run => run)
 			.filter(run => this.isCorrectGameMode(run, prefs))
+			.filter(run => this.isCorrectPlayerClass(run, prefs))
 			.filter(run => this.isCorrectTime(run, prefs, currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch))
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs?.length);
@@ -242,18 +243,21 @@ export class DuelsStateBuilderService {
 		const heroStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
 			runs,
 			periodStats.heroStats,
+			(run: DuelsRun) => run.heroCardId,
 			(stat: HeroStat) => stat.heroCardId,
 			prefs,
 		);
 		const heroPowerStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
 			runs,
 			periodStats.heroPowerStats,
+			(run: DuelsRun) => run.heroPowerCardId,
 			(stat: HeroPowerStat) => stat.heroPowerCardId,
 			prefs,
 		);
 		const signatureTreasureStats: readonly DuelsHeroPlayerStat[] = this.buildStats(
 			runs,
 			periodStats.signatureTreasureStats,
+			(run: DuelsRun) => run.signatureTreasureCardId,
 			(stat: SignatureTreasureStat) => stat.signatureTreasureCardId,
 			prefs,
 		);
@@ -388,6 +392,18 @@ export class DuelsStateBuilderService {
 			case 'all':
 			default:
 				return true;
+		}
+	}
+
+	private isCorrectPlayerClass(run: DuelsRun, prefs: Preferences): boolean {
+		switch (prefs.duelsActiveTopDecksClassFilter) {
+			case 'all':
+				return true;
+			default:
+				return (
+					this.allCards.getCard(run.heroCardId)?.playerClass?.toLowerCase() ===
+					prefs.duelsActiveTopDecksClassFilter
+				);
 		}
 	}
 
@@ -705,15 +721,22 @@ export class DuelsStateBuilderService {
 	private buildStats(
 		runs: readonly DuelsRun[],
 		stats: readonly (HeroStat | HeroPowerStat | SignatureTreasureStat)[],
+		runIdExtractor: (run: DuelsRun) => string,
 		idExtractor: (stat: HeroStat | HeroPowerStat | SignatureTreasureStat) => string,
 		prefs: Preferences,
 	): readonly DuelsHeroPlayerStat[] {
 		const totalMatchesForPlayer = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
 		const totalStats = stats.map(stat => stat.totalMatches).reduce((a, b) => a + b, 0);
+
 		return stats
+			.filter(
+				stat =>
+					prefs.duelsActiveTopDecksClassFilter === 'all' ||
+					prefs.duelsActiveTopDecksClassFilter === stat.heroClass.toLowerCase(),
+			)
 			.map(stat => {
 				const playerTotalMatches = runs
-					.filter(run => run.heroCardId === idExtractor(stat))
+					.filter(run => runIdExtractor(run) === idExtractor(stat))
 					.map(run => run.wins + run.losses)
 					.reduce((a, b) => a + b, 0);
 				return {
