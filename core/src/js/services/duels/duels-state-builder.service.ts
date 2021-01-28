@@ -47,7 +47,7 @@ import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/du
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
-import { groupByFunction } from '../utils';
+import { groupByFunction, sumOnArray } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
@@ -728,7 +728,7 @@ export class DuelsStateBuilderService {
 		const totalMatchesForPlayer = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
 		const totalStats = stats.map(stat => stat.totalMatches).reduce((a, b) => a + b, 0);
 
-		return stats
+		const allStats = stats
 			.filter(
 				stat =>
 					prefs.duelsActiveTopDecksClassFilter === 'all' ||
@@ -755,13 +755,44 @@ export class DuelsStateBuilderService {
 							? 0
 							: (100 *
 									runs
-										.filter(run => run.heroCardId === idExtractor(stat))
+										.filter(run => runIdExtractor(run) === idExtractor(stat))
 										.map(run => run.wins)
 										.reduce((a, b) => a + b, 0)) /
 							  playerTotalMatches,
 				} as DuelsHeroPlayerStat;
 			})
 			.sort(this.getStatSortFunction(prefs));
+
+		const grouped = groupByFunction((stat: DuelsHeroPlayerStat) => stat.cardId)(allStats);
+		// TODO: group by cardId, because of signature treasures
+		return Object.values(grouped).map((stats: readonly DuelsHeroPlayerStat[]) => {
+			const refStat = stats[0];
+			const totalMatches = sumOnArray(stats, stat => stat.globalTotalMatches);
+			const playerTotalMatches = sumOnArray(stats, stat => stat.playerTotalMatches);
+			return {
+				cardId: refStat.cardId,
+				heroClass: refStat.heroClass,
+				periodStart: refStat.periodStart,
+				globalTotalMatches: totalMatches,
+				globalPopularity: sumOnArray(stats, stat => stat.globalPopularity),
+				globalWinrate:
+					totalMatches === 0
+						? 0
+						: sumOnArray(stats, stat => stat.globalWinrate * stat.globalTotalMatches) / totalMatches,
+				globalWinDistribution: this.mergeWinDistributions(...stats.map(stat => stat.globalWinDistribution)),
+				playerTotalMatches: playerTotalMatches,
+				playerPopularity: totalMatchesForPlayer === 0 ? 0 : playerTotalMatches / totalMatchesForPlayer,
+				playerWinrate:
+					playerTotalMatches === 0
+						? 0
+						: (100 *
+								runs
+									.filter(run => runIdExtractor(run) === refStat.cardId)
+									.map(run => run.wins)
+									.reduce((a, b) => a + b, 0)) /
+						  playerTotalMatches,
+			};
+		});
 	}
 
 	private buildWinDistribution(winDistribution: {
@@ -776,8 +807,25 @@ export class DuelsStateBuilderService {
 			.sort((a, b) => +a - +b)
 			.map(winNumber => ({
 				winNumber: +winNumber,
-				value: (100 * winDistribution[winNumber]) / total,
+				value: winDistribution[winNumber] / total,
 			}));
+	}
+
+	private mergeWinDistributions(
+		...winDistributions: (readonly { winNumber: number; value: number }[])[]
+	): readonly { winNumber: number; value: number }[] {
+		const totalGames: number = sumOnArray(winDistributions, dists => sumOnArray(dists, dist => dist.value));
+		const wins = [
+			...new Set(
+				winDistributions.map(dists => dists.map(dist => dist.winNumber)).reduce((a, b) => a.concat(b), []),
+			),
+		].sort((a, b) => a - b);
+		return wins.map(winNumber => ({
+			winNumber: +winNumber,
+			value:
+				(100 * sumOnArray(winDistributions, dists => dists.find(dist => dist.winNumber === winNumber).value)) /
+				totalGames,
+		}));
 	}
 
 	private getStatSortFunction(prefs: Preferences): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {

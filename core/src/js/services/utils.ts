@@ -64,6 +64,10 @@ export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]
 	return a.length === b.length && a.every((el, ix) => el === b[ix]);
 };
 
+export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
+	return array.map(item => prop(item)).reduce((a, b) => a + b, 0);
+};
+
 export const formatDate = (theDate: Date): string => {
 	return `${theDate.toISOString().slice(0, 10)}`;
 };
