@@ -135,6 +135,11 @@ export class GraphWithComparisonComponent {
 				label: this.yourLabel,
 			} as any,
 		];
+		const maxValue = Math.max(
+			...this.lineChartData.map(data => data.data as number[]).reduce((a, b) => a.concat(b), []),
+		);
+		this._maxYValue = this._maxYValue ? Math.max(this._maxYValue, maxValue) : undefined;
+		this.updateChartOptions();
 		// console.log('lineChartData', this.lineChartData);
 		// console.log(
 		// 	'last turn is',
