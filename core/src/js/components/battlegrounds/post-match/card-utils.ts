@@ -30,6 +30,8 @@ export const normalizeCardId = (cardId: string, allCards: AllCardsService) => {
 				normalCards = normalCards.filter(
 					card => card.id === CardIds.NonCollectible.Warlock.ImpGangBoss_ImpToken,
 				);
+			} else if (cardId === CardIds.NonCollectible.Mage.KhadgarTavernBrawl) {
+				normalCards = normalCards.filter(card => card.id === CardIds.Collectible.Mage.Khadgar);
 			} else {
 				console.warn('too many matches', cardId, normalCards);
 			}
