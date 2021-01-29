@@ -12,10 +12,11 @@ declare let amplitude;
 		`../../../../css/component/sharing/clipboard/clipboard-share-button.component.scss`,
 	],
 	template: `
+		<!-- We don't want it to stay open on click, because otherwise the tooltip is in the screenshot -->
 		<div
 			class="social-share {{ _network }}"
 			[helpTooltip]="tooltip"
-			[stayOpenOnClick]="true"
+			[stayOpenOnClick]="false"
 			[inlineSVG]="networkSvg"
 			(mousedown)="startSharing(true)"
 		></div>
