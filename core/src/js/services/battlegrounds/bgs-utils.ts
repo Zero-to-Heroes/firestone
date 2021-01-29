@@ -33,6 +33,10 @@ export const getTribeIcon = (tribe: string | Race): string => {
 		case Race.ELEMENTAL:
 			referenceCardId = CardIds.NonCollectible.Neutral.LilRag;
 			break;
+		case 'All':
+		case Race.ALL:
+			referenceCardId = CardIds.NonCollectible.Neutral.Amalgadon;
+			break;
 		default:
 			referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
 			break;
