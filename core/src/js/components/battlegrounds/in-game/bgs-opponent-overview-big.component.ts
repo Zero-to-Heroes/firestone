@@ -33,7 +33,7 @@ declare let amplitude: any;
 					[entities]="boardMinions"
 					[currentTurn]="currentTurn"
 					[boardTurn]="boardTurn"
-					[maxBoardHeight]="maxBoardHeight"
+					[maxBoardHeight]="-1"
 				></bgs-board>
 				<div class="bottom-info">
 					<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>

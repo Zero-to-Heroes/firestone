@@ -42,8 +42,18 @@ declare let amplitude: any;
 					[currentTurn]="currentTurn"
 					[boardTurn]="boardTurn"
 					[tooltipPosition]="'top'"
-					[maxBoardHeight]="1"
+					[maxBoardHeight]="-1"
 				></bgs-board>
+				<div class="filler"></div>
+			</div>
+			<div class="tavern-upgrades" *ngIf="tavernUpgrades?.length">
+				<div class="title">Last upgrades</div>
+				<div class="upgrades">
+					<div class="tavern-upgrade" *ngFor="let upgrade of tavernUpgrades || []; trackBy: trackByUpgradeFn">
+						<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
+						<div class="label">Turn {{ upgrade.turn }}</div>
+					</div>
+				</div>
 			</div>
 			<bgs-triples [triples]="triples" [boardTurn]="boardTurn"></bgs-triples>
 			<div
@@ -67,7 +77,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 	tavernTier: number;
 	boardMinions: readonly Entity[];
 	boardTurn: number;
-	tavernUpgrades: readonly BgsTavernUpgrade[];
+	tavernUpgrades: BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
 	debug = false;
 
@@ -96,7 +106,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		this.tavernTier = value.getCurrentTavernTier();
 		this.boardMinions = value.getLastKnownBoardState();
 		this.boardTurn = value.getLastBoardStateTurn();
-		this.tavernUpgrades = value.tavernUpgradeHistory;
+		this.tavernUpgrades = [...value.tavernUpgradeHistory].reverse();
 		this.triples = value.tripleHistory;
 	}
 
@@ -108,5 +118,9 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 		if (this.debug) {
 			// console.log('after view init in overview');
 		}
+	}
+
+	trackByUpgradeFn(index, item: BgsTavernUpgrade) {
+		return item.tavernTier;
 	}
 }

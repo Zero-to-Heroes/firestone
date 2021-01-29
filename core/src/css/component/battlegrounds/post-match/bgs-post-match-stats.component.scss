@@ -44,7 +44,7 @@
 }
 
 .opponent-overview {
-	height: 37%;
+	height: 190px;
 	flex-grow: 0;
 	flex-shrink: 0;
 
@@ -54,16 +54,15 @@
 
 		::ng-deep bgs-board .board {
 			width: 100%;
-			justify-content: space-between;
+			justify-content: flex-start;
 			margin: auto;
 			max-height: 80%;
 			height: auto;
 
 			.minion-container {
-				// width: 11%;
-
 				li {
-					width: 100%;
+					height: 88px;
+					width: 60px;
 				}
 			}
 		}
@@ -178,14 +177,14 @@ with-loading {
 	width: calc(100% - 410px);
 }
 
-@media (min-width: 1700px) {
-	.opponent-overview {
-		height: 40%;
-	}
-}
+// @media (min-width: 1700px) {
+// 	.opponent-overview {
+// 		height: 40%;
+// 	}
+// }
 
-@media (min-width: 1500px) {
-	.opponent-overview {
-		height: 40%;
-	}
-}
+// @media (min-width: 1500px) {
+// 	.opponent-overview {
+// 		height: 40%;
+// 	}
+// }

@@ -67,7 +67,7 @@ declare let amplitude: any;
 								[entities]="boardMinions"
 								[finalBoard]="true"
 								[minionStats]="minionStats"
-								[maxBoardHeight]="0.8"
+								[maxBoardHeight]="-1"
 							></bgs-board>
 						</div>
 					</bgs-player-capsule>
