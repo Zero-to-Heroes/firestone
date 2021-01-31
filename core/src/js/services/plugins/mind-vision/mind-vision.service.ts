@@ -10,31 +10,38 @@ declare let OverwolfPlugin: any;
 
 @Injectable()
 export class MindVisionService {
+	// Use two different instances so that the reset of the main plugin doesn't impact
+	// the listener
 	private mindVisionPlugin: any;
+	// private mindVisionListenerPlugin: any;
 
 	initialized = false;
+	// initializedListener = false;
 	memoryUpdateListener;
 
 	constructor(private readonly events: Events) {
 		this.initialize();
+		// this.initializeListener();
 		this.listenForUpdates();
 	}
 
 	public async listenForUpdates() {
 		const plugin = await this.get();
 		try {
+			console.debug('[mind-vision] getting ready to listen for updates');
 			this.memoryUpdateListener = (changes: MemoryUpdate | 'reset') => {
 				console.debug('[mind-vision] memory update', changes);
 				// Happens when the plugin is reset, we need to resubscribe
 				if (changes === 'reset') {
+					console.debug('[mind-vision] resetting memory update');
 					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 					this.listenForUpdates();
 				}
 				this.events.broadcast(Events.MEMORY_UPDATE, changes);
 			};
 			plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
-			plugin.listenForUpdates(updates => {
-				console.debug('update from game', updates);
+			plugin.listenForUpdates(result => {
+				console.debug('[mind-vision] listenForUpdates callback result: ', result);
 			});
 		} catch (e) {
 			console.error('[mind-vision] could not listenForUpdates', e);
@@ -200,7 +207,25 @@ export class MindVisionService {
 		});
 	}
 
+	public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
+		return new Promise<boolean>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.isMaybeOnDuelsRewardsScreen(result => {
+					resolve(result);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse isMaybeOnDuelsRewardsScreen', e);
+				resolve(null);
+			}
+		});
+	}
+
+	// Here we reset both plugins because this method is used only once, after
+	// initialization, to be sure we refresh the plugins once the memory is
+	// properly populated
 	public async reset(): Promise<void> {
+		console.log('[mind-vision] calling reset');
 		return new Promise<void>(async resolve => {
 			const plugin = await this.get();
 			try {

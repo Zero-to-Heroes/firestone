@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Events } from '../services/events.service';
 import { LogParserService } from './collection/log-parser.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
+import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.service';
 import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
 import { OverwolfService } from './overwolf.service';
@@ -20,6 +21,7 @@ export class LogRegisterService {
 		private collectionLogParserService: LogParserService,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
+		private dungeonLootParser: DungeonLootParserService,
 	) {
 		// Only init the log listener once the store has been initialized. This aims at preventing
 		// the app from starting to parse the game logs while in an uninitialized state, which in
@@ -58,6 +60,7 @@ export class LogRegisterService {
 		new LogListenerService(this.ow)
 			.configure('FullScreenFX.log', data => {
 				this.decksService.queueingIntoMatch(data);
+				this.dungeonLootParser.handleBlur(data);
 			})
 			.subscribe(status => {
 				console.log('[log-register] status for FullScreenFX', status);

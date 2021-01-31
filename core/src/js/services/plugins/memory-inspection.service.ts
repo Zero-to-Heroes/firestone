@@ -24,6 +24,7 @@ import { GetDuelsRewardsInfoOperation } from './mind-vision/get-duels-rewards-in
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/get-in-game-achievements-progress-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
+import { IsMaybeOnDuelsRewardsScreenOperation } from './mind-vision/is-maybe-on-duels-rewards-screen-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
 
 @Injectable()
@@ -52,6 +53,7 @@ export class MemoryInspectionService {
 		this.ow,
 	);
 	private getCurrentSceneOperation = new GetCurrentSceneOperation(this.mindVision, this.ow);
+	private isMaybeOnDuelsRewardsScreenOperation = new IsMaybeOnDuelsRewardsScreenOperation(this.mindVision, this.ow);
 
 	private listenersRegistered: boolean;
 
@@ -97,8 +99,8 @@ export class MemoryInspectionService {
 		return this.getDuelsInfoOperation.call(numberOfRetries, forceReset);
 	}
 
-	public async getDuelsRewardsInfo(): Promise<DuelsRewardsInfo> {
-		return this.getDuelsRewardsInfoOperation.call();
+	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo> {
+		return this.getDuelsRewardsInfoOperation.call(1, forceReset);
 	}
 
 	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
@@ -120,8 +122,12 @@ export class MemoryInspectionService {
 		return this.getCurrentSceneOperation.call();
 	}
 
+	public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
+		return this.isMaybeOnDuelsRewardsScreenOperation.call();
+	}
+
 	public async reset(): Promise<void> {
-		this.mindVision.reset();
+		await this.mindVision.reset();
 	}
 
 	public async getCurrentScene(): Promise<string> {

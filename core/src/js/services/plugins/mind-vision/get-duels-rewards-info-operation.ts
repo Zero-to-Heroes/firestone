@@ -8,14 +8,14 @@ export class GetDuelsRewardsInfoOperation extends MindVisionOperationFacade<Duel
 		super(
 			ow,
 			'getDuelsRewardsInfo',
-			(forceReset?: boolean) => mindVision.getDuelsRewardsInfo(forceReset),
+			() => mindVision.getDuelsRewardsInfo(true),
 			rewardsTrackInfo => false,
 			rewardsTrackInfo => {
 				return {
 					...rewardsTrackInfo,
 				};
 			},
-			5,
+			1, // No retry, because we need to reset the plugin anyway
 			1500,
 			(info: any) => !info,
 		);
