@@ -69,7 +69,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 			newGameStats,
 			currentState.binder,
 		);
-		console.log('[recompute-game-stats-processor] duels', duels);
+		console.log('[recompute-game-stats-processor] duels');
 
 		return [
 			Object.assign(new MainWindowState(), currentState, {
