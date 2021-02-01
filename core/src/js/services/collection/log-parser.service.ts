@@ -61,17 +61,18 @@ export class LogParserService {
 
 	private processLines(toProcess: string[]) {
 		// Are we opening a pack?
-		// console.log('[pack-parser] processing lines', toProcess);
+		// console.debug('[pack-parser] processing lines', toProcess);
 		const cards = this.extractCards(toProcess);
+		// console.debug('[pack-parser] cards', cards);
 		if (this.isPack(cards)) {
 			const setId = cards[0].set;
 			const packCards = this.toPackCards(toProcess);
-			console.log('[pack-parser] notifying new pack opening', setId, packCards);
+			console.log('[pack-parser] notifying new pack opening', setId);
 			// amplitude.getInstance().logEvent('new-pack', { 'set': setId });
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
 		} else {
-			console.log('[pack-parser] received cards outside of pack', cards, toProcess);
+			console.log('[pack-parser] received cards outside of pack');
 		}
 
 		for (const data of toProcess) {
@@ -141,7 +142,7 @@ export class LogParserService {
 		if (cards.length !== 5) {
 			return false;
 		}
-		const setIds: string[] = cards.map(card => card.set);
+		const setIds: string[] = cards.map(card => this.mapSet(card.set));
 		const uniqueSetIds = new Set(setIds);
 		return uniqueSetIds.size === 1;
 	}
@@ -214,6 +215,15 @@ export class LogParserService {
 				return 20;
 			default:
 				return 5;
+		}
+	}
+
+	private mapSet(set: string): string {
+		switch (set) {
+			case 'Darkmoon_races':
+				return 'Darkmoon_faire';
+			default:
+				return set;
 		}
 	}
 }

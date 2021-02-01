@@ -78,7 +78,7 @@ export class PackMonitor {
 			setTimeout(() => this.handleNewCardEvent(event), 100);
 			return;
 		}
-		console.log('[pack-monitor] preparing to handle new card event');
+		// console.log('[pack-monitor] preparing to handle new card event');
 		const card: Card = event.data[0];
 		const type: string = event.data[1];
 		this.cardEvents[card.id + type] = () => {
@@ -99,7 +99,7 @@ export class PackMonitor {
 			setTimeout(() => this.handleNewDustEvent(event), 100);
 			return;
 		}
-		console.log('[pack-monitor] preparing to handle new dust event');
+		// console.log('[pack-monitor] preparing to handle new dust event');
 		const card: Card = event.data[0];
 		const dust: number = event.data[1];
 		const type: string = event.data[2];
