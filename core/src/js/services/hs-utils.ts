@@ -137,6 +137,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Warlock.FelLordBetrug,
 	CardIds.Collectible.Warlock.FreeAdmission,
 	CardIds.Collectible.Warlock.SenseDemons,
+	CardIds.NonCollectible.Warlock.SupremeArchaeology_TomeOfOrigination,
 	CardIds.Collectible.Warrior.AkaliTheRhino,
 	CardIds.Collectible.Warrior.Ancharrr,
 	CardIds.Collectible.Warrior.CorsairCache,
