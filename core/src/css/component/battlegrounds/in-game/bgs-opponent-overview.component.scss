@@ -138,6 +138,7 @@
 			display: flex;
 			flex-wrap: wrap;
 			overflow: hidden;
+			justify-content: flex-end;
 
 			.upgrades {
 				display: flex;
@@ -147,7 +148,7 @@
 
 		.tavern-upgrade {
 			width: 90px;
-			margin: auto;
+			// margin: auto;
 			flex-shrink: 0;
 		}
 
