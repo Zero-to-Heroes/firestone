@@ -383,12 +383,13 @@ export class GameStateService {
 		}
 		// console.log('\thas applied secrets parser');
 
+		let newState: GameState;
 		if (allowRequeue) {
 			const prefs = await this.prefs.getPreferences();
 			for (const parser of this.eventParsers) {
 				try {
-					if (parser.applies(gameEvent, this.state, prefs)) {
-						this.state = await parser.parse(this.state, gameEvent);
+					if (parser.applies(gameEvent, newState ?? this.state, prefs)) {
+						newState = await parser.parse(newState ?? this.state, gameEvent);
 					}
 				} catch (e) {
 					console.error(
@@ -403,20 +404,20 @@ export class GameStateService {
 		}
 		// console.log('\thas applied other parsers');
 		try {
-			if (this.state) {
+			if (newState) {
 				// Add information that is not linked to events, like the number of turns the
 				// card has been present in the zone
 				const updatedPlayerDeck = this.updateDeck(
-					this.state.playerDeck,
-					this.state,
+					newState.playerDeck,
+					newState,
 					(gameEvent.gameState || ({} as any)).Player,
 				);
 				const udpatedOpponentDeck = this.updateDeck(
-					this.state.opponentDeck,
-					this.state,
+					newState.opponentDeck,
+					newState,
 					(gameEvent.gameState || ({} as any)).Opponent,
 				);
-				this.state = Object.assign(new GameState(), this.state, {
+				newState = Object.assign(new GameState(), newState, {
 					playerDeck: updatedPlayerDeck,
 					opponentDeck: udpatedOpponentDeck,
 				} as GameState);
@@ -428,19 +429,22 @@ export class GameStateService {
 		// if (gameEvent.controllerId === 1) {
 		// console.log('[game-state] will emit event', gameEvent.type, this.state.playerDeck.board, this.state, gameEvent);
 		// }
-		this.updateOverlays(
-			this.state,
-			false,
-			false, //[GameEvent.MATCH_METADATA, GameEvent.LOCAL_PLAYER].indexOf(gameEvent.type) !== -1,
-			shouldUpdateOverlays,
-		);
-		const emittedEvent = {
-			event: {
-				name: gameEvent.type,
-			},
-			state: this.state,
-		};
-		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+		if (newState) {
+			this.updateOverlays(
+				newState,
+				false,
+				false, //[GameEvent.MATCH_METADATA, GameEvent.LOCAL_PLAYER].indexOf(gameEvent.type) !== -1,
+				shouldUpdateOverlays,
+			);
+			const emittedEvent = {
+				event: {
+					name: gameEvent.type,
+				},
+				state: newState,
+			};
+			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+		}
+		this.state = newState ?? this.state;
 		// console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
 		// this.previousStart = Date.now();
 	}
@@ -586,7 +590,7 @@ export class GameStateService {
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
-		return [
+		const parsers: EventParser[] = [
 			new GameStartParser(this.deckParser, this.prefs, this.allCards),
 			new MatchMetadataParser(this.deckParser, this.prefs, this.allCards),
 			new MulliganOverParser(),
@@ -646,11 +650,15 @@ export class GameStateService {
 			new EntityUpdateParser(this.helper, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
-
-			new ConstructedAchievementsProgressionParser(),
-			new ConstructedChangeTabParser(),
-			new ListCardsPlayedFromInitialDeckParser(this.helper),
 		];
+
+		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
+			parsers.push(new ConstructedAchievementsProgressionParser());
+			parsers.push(new ConstructedChangeTabParser());
+			parsers.push(new ListCardsPlayedFromInitialDeckParser(this.helper));
+		}
+
+		return parsers;
 	}
 
 	// TODO: this should move elsewhere
