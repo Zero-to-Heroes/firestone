@@ -234,7 +234,13 @@ export const getAllCardsInGame = (
 
 const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 	const raceEnum: Race = Race[race];
-	return raceEnum === Race.ALL || !validTribes || validTribes.length === 0 || validTribes.includes(raceEnum);
+	return (
+		raceEnum === Race.ALL ||
+		raceEnum === Race.BLANK ||
+		!validTribes ||
+		validTribes.length === 0 ||
+		validTribes.includes(raceEnum)
+	);
 };
 
 export const getTribeForInclusion = (card: ReferenceCard): Race => {
