@@ -27,6 +27,7 @@ import { Knob } from '../preference-slider.component';
 	template: `
 		<div class="battlegrounds-general" scrollable>
 			<preference-toggle
+				class="enable-bgs"
 				field="bgsFullToggle"
 				label="Enable Battlegrounds"
 				tooltip="Turn off to disable all Battlegrounds live features"
@@ -40,6 +41,13 @@ import { Knob } from '../preference-slider.component';
 						[ngClass]="{ 'disabled': !bgsFullToggle }"
 						label="Enable battle simulation"
 						tooltip="When active, you will know your chances to win / tie / lose each battle at the start of the battle"
+					></preference-toggle>
+					<preference-toggle
+						*ngIf="enableBgsHideSimResultsOnRecruit"
+						field="bgsHideSimResultsOnRecruit"
+						[ngClass]="{ 'disabled': !bgsFullToggle }"
+						label="Hide simulation after battle"
+						tooltip="When active, simulation results will be hidden once the battle phase ends"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseLocalSimulator"
@@ -197,6 +205,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	minionsListOverlay: boolean = FeatureFlags.ENABLE_BG_MINIONS_LIST;
 	showTribesHighlight: boolean = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT;
 	enableOverlayPlaySetting: boolean = FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
+	enableBgsHideSimResultsOnRecruit: boolean = FeatureFlags.ENABLE_BG_SIMULATION_HIDE_ON_RECRUIT;
 
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;

@@ -148,6 +148,7 @@ export class Preferences {
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsUseLocalPostMatchStats = true;
 	readonly bgsEnableSimulation = true;
+	readonly bgsHideSimResultsOnRecruit = true;
 	readonly bgsEnableSimulationSampleInOverlay = false;
 	readonly bgsSimulatorNumberOfSims = 2500;
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };

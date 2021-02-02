@@ -14,6 +14,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_OPPONENT_MOUSE_OVER = true;
 	public static readonly ENABLE_BG_MINIONS_LIST = true;
 
+	public static readonly ENABLE_BG_SIMULATION_HIDE_ON_RECRUIT = true;
 	public static readonly ENABLE_DECKTRACKER_RESET_POSITIONS = false;
 	public static readonly ENABLE_REDDIT_SHARE = false;
 	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = false;

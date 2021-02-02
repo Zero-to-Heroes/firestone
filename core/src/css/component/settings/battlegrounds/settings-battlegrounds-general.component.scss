@@ -22,6 +22,10 @@
 		width: 320px;
 	}
 
+	.enable-bgs ::ng-deep .preference-toggle {
+		margin-bottom: 15px;
+	}
+
 	.banned-tribes-vertical ::ng-deep .preference-toggle {
 		margin-bottom: 15px;
 		margin-top: 0;

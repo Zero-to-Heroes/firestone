@@ -12,6 +12,9 @@ export class BgsCombatStartParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsCombatStartEvent): Promise<BattlegroundsState> {
 		const newGame = currentState.currentGame.update({
 			phase: 'combat',
+			battleInfo: undefined,
+			battleResult: undefined,
+			battleInfoStatus: 'empty',
 		} as BgsGame);
 		return currentState.update({
 			currentGame: newGame,

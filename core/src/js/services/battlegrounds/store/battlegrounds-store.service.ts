@@ -422,7 +422,7 @@ export class BattlegroundsStoreService {
 			// new BgsDamageDealtParser(),
 			new BgsLeaderboardPlaceParser(),
 			new BgsCombatStartParser(),
-			new BgsRecruitStartParser(),
+			new BgsRecruitStartParser(this.prefs),
 			new BgsGlobalInfoUpdatedParser(),
 			new BgsStartComputingPostMatchStatsParser(this.prefs),
 			new BgsInitMmrParser(this.memory),
