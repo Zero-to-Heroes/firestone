@@ -17,7 +17,10 @@ export class BgsSimulationOverlay implements BattlegroundsOverlay {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.active = preferences.bgsEnableBattleSimulationOverlay && preferences.bgsFullToggle;
+		this.active =
+			preferences.bgsEnableBattleSimulationOverlay &&
+			preferences.bgsEnableSimulation &&
+			preferences.bgsFullToggle;
 	}
 
 	public async updateOverlay(state: BattlegroundsState) {
