@@ -304,6 +304,20 @@ export class OverwolfService {
 		});
 	}
 
+	public async setTopmost(windowId: string) {
+		return new Promise<any>(resolve => {
+			try {
+				overwolf.windows.setTopmost(windowId, true, result => {
+					console.log('[overwolf-service] set topmost', windowId);
+					resolve(result);
+				});
+			} catch (e) {
+				console.warn('exception when setting topmost', windowId, e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async bringToFront(windowId: string) {
 		// console.log('[overwolf-service] asked to restore window', windowId, new Error().stack);
 		return new Promise<any>(resolve => {
@@ -314,7 +328,20 @@ export class OverwolfService {
 					resolve(result);
 				});
 			} catch (e) {
-				console.warn('exception when setting topmost', windowId, e);
+				console.warn('exception when bringing to front', windowId, e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async sendToBack(windowId: string) {
+		return new Promise<any>(resolve => {
+			try {
+				overwolf.windows.sendToBack(windowId, false, result => {
+					resolve(result);
+				});
+			} catch (e) {
+				console.warn('exception when sending to back', windowId, e);
 				resolve(null);
 			}
 		});
