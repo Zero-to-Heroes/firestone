@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { Knob } from '../preference-slider.component';
@@ -27,7 +28,6 @@ import { Knob } from '../preference-slider.component';
 		<div class="decktracker-appearance">
 			<div class="title">Activate / Deactivate features</div>
 			<div class="settings-group">
-				<div class="subtitle">Global</div>
 				<div class="subgroup">
 					<preference-toggle
 						field="overlayShowTitleBar"
@@ -73,11 +73,28 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 				</div>
 			</div>
+
+			<div class="reset-container" *ngIf="showDecktrackerResetPositions">
+				<button
+					(mousedown)="reset()"
+					helpTooltip="Reset the decktracker positions. This can solve an issue where your tracker doesn't show up anymore on screen."
+				>
+					<span>{{ resetText }}</span>
+				</button>
+				<div class="confirmation" *ngIf="showResetConfirmationText">
+					Decktracker positions have been reset, and will be applied in your next match.
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDestroy {
+	showDecktrackerResetPositions = FeatureFlags.ENABLE_DECKTRACKER_RESET_POSITIONS;
+	resetText = 'Reset positions';
+	confirmationShown = false;
+	showResetConfirmationText = false;
+
 	sliderEnabled = false;
 	showTitleBar: boolean;
 	overlayGroupByZone: boolean;
@@ -149,6 +166,19 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
+	}
+
+	async reset() {
+		if (!this.confirmationShown) {
+			this.confirmationShown = true;
+			this.resetText = 'Are you sure?';
+			return;
+		}
+
+		this.resetText = 'Reset positions';
+		this.confirmationShown = false;
+		this.showResetConfirmationText = true;
+		await this.prefs.resetDecktrackerPositions();
 	}
 
 	private async loadDefaultValues() {

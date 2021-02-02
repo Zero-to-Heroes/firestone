@@ -44,6 +44,16 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async resetDecktrackerPositions() {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = {
+			...prefs,
+			decktrackerPosition: undefined,
+			opponentOverlayPosition: undefined,
+		};
+		await this.savePreferences(newPrefs);
+	}
+
 	public async setValue(field: string, pref: boolean | number): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		// console.log('setting pref', field, pref);

@@ -68,3 +68,43 @@
 		margin-bottom: 40px;
 	}
 }
+
+.reset-container {
+	color: #d9c3ab;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+
+	button {
+		border: 1px solid #d9c3ab;
+		padding-left: 25px;
+		padding-right: 25px;
+		width: auto;
+		height: 35px;
+		display: flex;
+		align-self: flex-start;
+		align-items: center;
+
+		span {
+			color: #d9c3ab;
+		}
+
+		div {
+			display: flex;
+		}
+
+		&:hover {
+			background: #ffb948;
+			border: none;
+
+			span {
+				color: #2f0d0d;
+			}
+		}
+	}
+
+	.confirmation {
+		margin-top: 5px;
+		font-size: 12px;
+	}
+}
