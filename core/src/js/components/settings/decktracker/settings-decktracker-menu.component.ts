@@ -8,14 +8,14 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	],
 	template: `
 		<ul class="decktracker-menu">
+			<li [ngClass]="{ 'selected': selectedMenu === 'global' }" (mousedown)="selectMenu('global')">
+				<span>Global options</span>
+			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'your-deck' }" (mousedown)="selectMenu('your-deck')">
 				<span>Your deck</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'opponent-deck' }" (mousedown)="selectMenu('opponent-deck')">
 				<span>Opponent's deck</span>
-			</li>
-			<li [ngClass]="{ 'selected': selectedMenu === 'global' }" (mousedown)="selectMenu('global')">
-				<span>Global options</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'launch' }" (mousedown)="selectMenu('launch')">
 				<span>Launch options</span>
