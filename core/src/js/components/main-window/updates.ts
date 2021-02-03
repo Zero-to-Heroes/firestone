@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.2.3',
+		version: '7.2.4',
 		sections: [
 			{
 				type: 'intro',
@@ -89,6 +89,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add a button to directly copy the current screen to your clipboard (for now only on the Battlegrounds pages). Useful for quickly sharing your end comp on Discord :)`,
+							},
+							{
+								type: 'feature',
+								text: `Add a button to shrae the current screen to Reddit (for now only on the Battlegrounds pages).`,
 							},
 							// {
 							// 	type: 'feature',
