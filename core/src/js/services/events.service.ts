@@ -54,6 +54,8 @@ export class Events {
 
 	public static readonly ACHIEVEMENT_PROGRESSION = 'ACHIEVEMENT_PROGRESSION';
 
+	public static readonly SHOW_SCREEN_CAPTURE_EFFECT = 'SHOW_SCREEN_CAPTURE_EFFECT';
+
 	private _eventBus: Subject<BroadcastEvent>;
 
 	constructor() {

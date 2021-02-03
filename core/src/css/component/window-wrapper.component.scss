@@ -146,3 +146,15 @@ body {
 		cursor: se-resize;
 	}
 }
+
+.screen-capture-effect {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	display: flex;
+	background: white;
+	opacity: 1;
+	z-index: 1;
+}

@@ -1,5 +1,6 @@
 import { Overlay, OverlayPositionBuilder } from '@angular/cdk/overlay';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
+import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 
@@ -32,6 +33,7 @@ export class ClipboardShareButtonComponent extends SocialShareButtonComponent {
 		protected readonly elementRef: ElementRef,
 		protected readonly overlayPositionBuilder: OverlayPositionBuilder,
 		protected readonly cdr: ChangeDetectorRef,
+		private readonly events: Events,
 	) {
 		super(ow, overlay, elementRef, overlayPositionBuilder, cdr);
 		this.network = 'clipboard';
@@ -39,6 +41,7 @@ export class ClipboardShareButtonComponent extends SocialShareButtonComponent {
 	}
 
 	protected async doShare(screenshotLocation: string, base64Image: string) {
+		this.events.broadcast(Events.SHOW_SCREEN_CAPTURE_EFFECT);
 		this.tooltip = 'Image copied to clipboard';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

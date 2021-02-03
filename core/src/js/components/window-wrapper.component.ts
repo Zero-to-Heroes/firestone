@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
@@ -9,6 +10,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { Events } from '../services/events.service';
 import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
@@ -35,6 +37,7 @@ import { OverwolfService } from '../services/overwolf.service';
 				</div>
 
 				<version></version>
+				<div class="screen-capture-effect" *ngIf="screenCaptureOn" [@screenCapture]></div>
 			</div>
 
 			<div class="resize horizontal top" (mousedown)="dragResize($event, 'Top')"></div>
@@ -48,16 +51,27 @@ import { OverwolfService } from '../services/overwolf.service';
 			<div class="resize corner bottom-right" (mousedown)="dragResize($event, 'BottomRight')"></div>
 		</div>
 	`,
+	animations: [
+		trigger('screenCapture', [
+			transition(':enter', [style({ opacity: 0 }), animate('200ms', style({ opacity: 1 }))]),
+			transition(':leave', [style({ opacity: 1 }), animate('200ms', style({ opacity: 0 }))]),
+		]),
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
 export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 	@Input() allowResize = false;
 	maximized: boolean;
+	screenCaptureOn: boolean;
 
 	private stateChangedListener: (message: any) => void;
 
-	constructor(private readonly ow: OverwolfService, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly events: Events,
+	) {}
 
 	async ngAfterViewInit() {
 		const window = await this.ow.getCurrentWindow();
@@ -77,6 +91,19 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 					this.cdr.detectChanges();
 				}
 			}
+		});
+		this.events.on(Events.SHOW_SCREEN_CAPTURE_EFFECT).subscribe(event => {
+			this.screenCaptureOn = true;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+
+			setTimeout(() => {
+				this.screenCaptureOn = false;
+				if (!(this.cdr as ViewRef)?.destroyed) {
+					this.cdr.detectChanges();
+				}
+			}, 200);
 		});
 	}
 
