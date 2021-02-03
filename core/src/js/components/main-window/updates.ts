@@ -84,6 +84,15 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'content',
+								text: `Add player and AI decklists for Anduin's Book of Heroes.`,
+							},
+						],
+					},
+					{
 						category: 'general',
 						details: [
 							{
