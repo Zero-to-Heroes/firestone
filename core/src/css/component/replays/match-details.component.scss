@@ -54,5 +54,9 @@
 			right: -1px;
 			z-index: 1;
 		}
+
+		::ng-deep bgs-player-capsule .rating .value {
+			color: var(--default-text-color);
+		}
 	}
 }
