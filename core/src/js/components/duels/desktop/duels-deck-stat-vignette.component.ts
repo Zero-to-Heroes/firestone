@@ -63,7 +63,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<div
 						class="value"
 						*ngIf="dustCost"
-						helpTooltip="Total dust you need to craft your missing cards in this deck"
+						helpTooltip="Total dust required to craft the missing cards in this deck"
 					>
 						{{ dustCost }}
 					</div>
