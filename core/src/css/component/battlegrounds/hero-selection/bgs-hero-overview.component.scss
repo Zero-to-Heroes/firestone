@@ -88,9 +88,22 @@
 	}
 }
 
-@media (max-height: 900px) {
-	.tribes-overview {
+@media (max-height: 840px) {
+	.tribes-overview.tribes-overview.tribes-overview.tribes-overview.tribes-overview {
 		display: none;
+	}
+}
+
+@media (min-height: 840px) {
+	.tribes-overview.tribes-overview.tribes-overview.tribes-overview.tribes-overview ::ng-deep.composition {
+		max-height: 125px;
+		overflow: hidden;
+	}
+}
+
+@media (min-height: 1000px) {
+	.tribes-overview.tribes-overview.tribes-overview.tribes-overview.tribes-overview ::ng-deep.composition {
+		max-height: fit-content;
 	}
 }
 

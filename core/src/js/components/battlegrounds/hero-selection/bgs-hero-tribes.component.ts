@@ -14,7 +14,7 @@ declare let amplitude: any;
 	template: `
 		<div class="tribes">
 			<div class="title" helpTooltip="Percentage of each tribe present in average in top 4 warbands (6000+ MMR)">
-				Winning tribes
+				Top winning tribes
 			</div>
 			<div class="composition">
 				<div *ngFor="let tribe of tribes || []; trackBy: trackByTribeFn" class="tribe">

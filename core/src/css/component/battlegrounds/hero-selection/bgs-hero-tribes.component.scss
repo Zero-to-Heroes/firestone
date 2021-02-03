@@ -1,8 +1,14 @@
+:host() {
+	min-height: 0;
+	display: flex;
+}
+
 .tribes {
 	margin-top: 20px;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	min-height: 0;
 
 	.composition {
 		display: flex;
@@ -10,6 +16,7 @@
 		align-items: center;
 		justify-content: center;
 		flex-wrap: wrap;
+		min-height: 0;
 
 		.icon-container {
 			background: #ce73b4;
@@ -27,12 +34,12 @@
 		.tribe {
 			display: flex;
 			flex-direction: column;
-			// width: 6.5vh;
-			width: 33%;
+			width: 70px;
+			min-width: 70px;
 			overflow: hidden;
 			align-items: center;
 			justify-content: center;
-			margin-bottom: -5%;
+			margin-bottom: -15px;
 		}
 
 		.tribe-name {
