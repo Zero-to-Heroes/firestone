@@ -35,7 +35,11 @@ import { Knob } from '../preference-slider.component';
 			<div class="title">Companion App</div>
 			<div class="settings-group">
 				<div class="subgroup">
-					<preference-toggle field="bgsEnableApp" label="Enable App"></preference-toggle>
+					<preference-toggle
+						field="bgsEnableApp"
+						[ngClass]="{ 'disabled': !bgsFullToggle }"
+						label="Enable App"
+					></preference-toggle>
 					<preference-toggle
 						field="bgsEnableSimulation"
 						[ngClass]="{ 'disabled': !bgsFullToggle }"
