@@ -40,6 +40,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			event.module === 'replays'
 				? navigationState.navigationReplays.update({
 						currentView: 'list',
+						selectedReplay: undefined,
 				  } as NavigationReplays)
 				: navigationState.navigationReplays;
 		const battlegrounds =
