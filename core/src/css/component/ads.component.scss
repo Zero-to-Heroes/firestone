@@ -45,13 +45,12 @@
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 13px;
-	color: var(--default-text-color);
-	color: var(--color-3);
+	color: var(--ad-link-color);
 	text-align: center;
 	text-decoration: underline;
 
 	&:hover {
-		color: var(--color-1);
+		color: var(--on-ad-link-color-hover);
 	}
 }
 
