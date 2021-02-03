@@ -8,6 +8,7 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
+import { PreferencesService } from '../../../preferences.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsPlayerBoardEvent, PlayerBoard } from '../events/bgs-player-board-event';
@@ -15,7 +16,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsPlayerBoardParser implements EventParser {
-	constructor(private readonly simulation: BgsBattleSimulationService) {}
+	constructor(private readonly simulation: BgsBattleSimulationService, private readonly prefs: PreferencesService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsPlayerBoardEvent';
@@ -64,10 +65,12 @@ export class BgsPlayerBoardParser implements EventParser {
 			options: null,
 		};
 
+		const prefs = await this.prefs.getPreferences();
+		const showSimulation = !prefs.bgsShowSimResultsOnlyOnRecruit;
 		const newGame = currentState.currentGame.update({
 			players: newPlayers,
 			battleInfo: battleInfo,
-			battleInfoStatus: 'waiting-for-result',
+			battleInfoStatus: showSimulation ? 'waiting-for-result' : 'empty',
 		} as BgsGame);
 		const result = currentState.update({
 			currentGame: newGame,

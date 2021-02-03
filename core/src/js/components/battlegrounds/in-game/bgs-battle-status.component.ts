@@ -130,10 +130,23 @@ export class BgsBattleStatusComponent {
 			return;
 		}
 		this._previousStatus = value;
+		this.updateInfo();
+	}
+
+	@Input() set nextBattle(value: SimulationResult) {
+		if (value === this._previousBattle) {
+			// console.log('not setting next battle', value, this._previousBattle);
+			return;
+		}
+		this._previousBattle = value;
+		this.updateInfo();
+	}
+
+	private updateInfo() {
 		if (this.tempInterval) {
 			clearInterval(this.tempInterval);
 		}
-		if (!value || value === 'empty') {
+		if (!this._previousStatus || this._previousStatus === 'empty') {
 			// console.log('result empty', value);
 			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
 			this.battleSimulationResultWin = '--';
@@ -144,7 +157,7 @@ export class BgsBattleStatusComponent {
 			this.loseSimulationSample = [];
 			this.damageWon = null;
 			this.damageLost = null;
-		} else if (value === 'waiting-for-result') {
+		} else if (this._previousStatus === 'waiting-for-result') {
 			// console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.battleSimulationResultWin = '__';
@@ -155,26 +168,19 @@ export class BgsBattleStatusComponent {
 			this.temporaryBattleTooltip =
 				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
 		}
-	}
 
-	@Input() set nextBattle(value: SimulationResult) {
-		if (value === this._previousBattle) {
-			// console.log('not setting next battle', value, this._previousBattle);
-			return;
-		}
-		this._previousBattle = value;
-		// console.log('setting next battle', value);
-		if (value?.wonPercent != null) {
-			this.battleSimulationResultWin = value.wonPercent.toFixed(1) + '%';
-			this.battleSimulationResultTie = value.tiedPercent.toFixed(1) + '%';
-			this.battleSimulationResultLose = value.lostPercent.toFixed(1) + '%';
-			this.winSimulationSample = value.outcomeSamples.won;
-			this.tieSimulationSample = value.outcomeSamples.tied;
-			this.loseSimulationSample = value.outcomeSamples.lost;
-			this.damageWon = value.averageDamageWon?.toFixed(1);
-			this.damageLost = value.averageDamageLost?.toFixed(1);
+		console.log('setting next battle', this._previousBattle, this._previousStatus);
+		if (this._previousBattle?.wonPercent != null && this._previousStatus !== 'empty') {
+			this.battleSimulationResultWin = this._previousBattle.wonPercent.toFixed(1) + '%';
+			this.battleSimulationResultTie = this._previousBattle.tiedPercent.toFixed(1) + '%';
+			this.battleSimulationResultLose = this._previousBattle.lostPercent.toFixed(1) + '%';
+			this.winSimulationSample = this._previousBattle.outcomeSamples.won;
+			this.tieSimulationSample = this._previousBattle.outcomeSamples.tied;
+			this.loseSimulationSample = this._previousBattle.outcomeSamples.lost;
+			this.damageWon = this._previousBattle.averageDamageWon?.toFixed(1);
+			this.damageLost = this._previousBattle.averageDamageLost?.toFixed(1);
 		} else {
-			console.log('no value in nextbattle', value);
+			console.log('no value in nextbattle', this._previousBattle, this._previousStatus);
 		}
 	}
 

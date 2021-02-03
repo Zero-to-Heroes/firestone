@@ -49,9 +49,16 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle
 						*ngIf="enableBgsHideSimResultsOnRecruit"
 						field="bgsHideSimResultsOnRecruit"
-						[ngClass]="{ 'disabled': !bgsFullToggle }"
+						[ngClass]="{ 'disabled': !bgsFullToggle || bgsShowSimResultsOnlyOnRecruit }"
 						label="Hide simulation after battle"
 						tooltip="When active, simulation results will be hidden once the battle phase ends"
+					></preference-toggle>
+					<preference-toggle
+						*ngIf="enableBgsShowSimResultsOnlyOnRecruit"
+						field="bgsShowSimResultsOnlyOnRecruit"
+						[ngClass]="{ 'disabled': !bgsFullToggle || bgsHideSimResultsOnRecruit }"
+						label="Show simulation only in tavern"
+						tooltip="When active, simulation results will be hidden during the battle, and shown once you get back to the tavern"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsUseLocalSimulator"
@@ -210,10 +217,13 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	showTribesHighlight: boolean = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT;
 	enableOverlayPlaySetting: boolean = FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
 	enableBgsHideSimResultsOnRecruit: boolean = FeatureFlags.ENABLE_BG_SIMULATION_HIDE_ON_RECRUIT;
+	enableBgsShowSimResultsOnlyOnRecruit: boolean = FeatureFlags.ENABLE_BG_SIMULATION_SHOW_ONLY_ON_RECRUIT;
 
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;
 	bgsEnableBattleSimulationOverlay: boolean;
+	bgsHideSimResultsOnRecruit: boolean;
+	bgsShowSimResultsOnlyOnRecruit: boolean;
 	bgsFullToggle: boolean;
 	bgsEnableApp: boolean;
 	showBannedTribes: boolean;
@@ -255,6 +265,8 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 			this.useLocalSimulator = preferences.bgsUseLocalSimulator;
 			this.enableSimulation = preferences.bgsEnableSimulation;
 			this.bgsEnableBattleSimulationOverlay = preferences.bgsEnableBattleSimulationOverlay;
+			this.bgsHideSimResultsOnRecruit = preferences.bgsHideSimResultsOnRecruit;
+			this.bgsShowSimResultsOnlyOnRecruit = preferences.bgsShowSimResultsOnlyOnRecruit;
 			this.bgsEnableApp = preferences.bgsEnableApp;
 			this.bgsFullToggle = preferences.bgsFullToggle;
 			this.showBannedTribes = preferences.bgsShowBannedTribesOverlay;
@@ -275,6 +287,8 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		this.useLocalSimulator = prefs.bgsUseLocalSimulator;
 		this.enableSimulation = prefs.bgsEnableSimulation;
 		this.bgsEnableBattleSimulationOverlay = prefs.bgsEnableBattleSimulationOverlay;
+		this.bgsHideSimResultsOnRecruit = prefs.bgsHideSimResultsOnRecruit;
+		this.bgsShowSimResultsOnlyOnRecruit = prefs.bgsShowSimResultsOnlyOnRecruit;
 		this.bgsEnableApp = prefs.bgsEnableApp;
 		this.bgsFullToggle = prefs.bgsFullToggle;
 		this.showBannedTribes = prefs.bgsShowBannedTribesOverlay;
