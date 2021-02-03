@@ -103,7 +103,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		// console.log('on destroy for component tooltip');
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
