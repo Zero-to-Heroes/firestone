@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-const AI_DECKSTRINGS_URL = 'https://static.zerotoheroes.com/hearthstone/data/ai_decks?v=2';
+const AI_DECKSTRINGS_URL = 'https://static.zerotoheroes.com/hearthstone/data/ai_decks';
 
 @Injectable()
 export class AiDeckService {
@@ -51,7 +51,7 @@ export class AiDeckService {
 
 	private async loadAiDecks(fileName: string): Promise<readonly AiDeck[]> {
 		return new Promise<readonly AiDeck[]>(resolve => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json?v=2`).subscribe(
+			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json?v=3`).subscribe(
 				(result: any[]) => {
 					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
