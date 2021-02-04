@@ -8,6 +8,7 @@ import { RemoteAchievementsService } from './achievement/remote-achievements.ser
 import { BgsBestUserStatsService } from './battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BattlegroundsStoreService } from './battlegrounds/store/battlegrounds-store.service';
+import { RealTimeStatsService } from './battlegrounds/store/real-time-stats/real-time-stats.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
 import { PackHistoryService } from './collection/pack-history.service';
@@ -81,6 +82,7 @@ export class AppBootstrapService {
 		private init_BgsBestUserStatsService: BgsBestUserStatsService,
 		private init_LogRegisterService: LogRegisterService,
 		private init_RewardMonitorService: RewardMonitorService,
+		private init_BgsRealTimeStatsService: RealTimeStatsService,
 	) {}
 
 	public async init() {

@@ -13,6 +13,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = false;
 	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false;
 	public static readonly ENABLE_RANKED_ARCHETYPE = false;
+	public static readonly ENABLE_REAL_TIME_STATS = false;
 
 	// Deprecated, feature is sidelined for now
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;
