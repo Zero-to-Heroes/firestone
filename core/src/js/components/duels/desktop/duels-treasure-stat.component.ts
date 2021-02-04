@@ -17,7 +17,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		<div *ngIf="stats?.length" class="duels-treasure-stats" scrollable>
 			<duels-treasure-stat-vignette
 				*ngFor="let stat of stats; trackBy: trackByFn"
-				[stat]="stat"
+				[stat]="stat.stat"
+				[ngClass]="{ 'hidden': !stat.visible }"
 			></duels-treasure-stat-vignette>
 		</div>
 		<duels-empty-state *ngIf="!stats?.length"></duels-empty-state>
@@ -43,7 +44,7 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 
 	_state: DuelsState;
 	_navigation: NavigationDuels;
-	stats: readonly DuelsTreasureStat[];
+	stats: readonly DuelsTreasureStatContainer[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -53,8 +54,8 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	trackByFn(stat: DuelsTreasureStat) {
-		return stat.cardId;
+	trackByFn(stat: DuelsTreasureStatContainer) {
+		return stat?.stat?.cardId;
 	}
 
 	private updateValues() {
@@ -64,14 +65,17 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 		const stats = this.buildStats();
 
 		this.stats = this._navigation?.treasureSearchString
-			? stats.filter(stat =>
-					this.allCards
+			? stats.map(stat => ({
+					stat: stat,
+					visible: this.allCards
 						.getCard(stat.cardId)
 						?.name?.toLowerCase()
 						?.includes(this._navigation.treasureSearchString.toLowerCase()),
-			  )
-			: stats;
-		console.debug('stats', this.stats);
+			  }))
+			: stats.map(stat => ({
+					stat: stat,
+					visible: true,
+			  }));
 	}
 
 	private buildStats(): readonly DuelsTreasureStat[] {
@@ -82,4 +86,9 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 				return this._state.playerStats.treasureStats.filter(stat => isPassive(stat.cardId, this.allCards));
 		}
 	}
+}
+
+interface DuelsTreasureStatContainer {
+	readonly stat: DuelsTreasureStat;
+	readonly visible: boolean;
 }

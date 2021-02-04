@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -54,10 +62,10 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 })
 export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 	@Input() set stat(value: DuelsHeroPlayerStat) {
-		// console.log('setting stats', value);
 		if (!value || value === this._stat) {
 			return;
 		}
+		// console.debug('setting stat', value, this._stat);
 		const card = value.cardId ? this.cards.getCard(value.cardId) : null;
 		this._stat = value;
 		this.cardId = value.cardId;
@@ -74,6 +82,9 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 				value: Math.max(input.value, 0.5),
 			})),
 		} as SimpleBarChartData;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	_stat: DuelsHeroPlayerStat;
@@ -88,7 +99,11 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly cards: AllCardsService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cards: AllCardsService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

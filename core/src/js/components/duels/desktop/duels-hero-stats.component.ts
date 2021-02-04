@@ -5,7 +5,6 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
@@ -25,7 +24,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 		<div *ngIf="stats?.length" class="duels-hero-stats" scrollable>
 			<duels-hero-stat-vignette
 				*ngFor="let stat of stats; trackBy: trackByFn"
-				[stat]="stat"
+				[stat]="stat.stat"
+				[ngClass]="{ 'hidden': !stat.visible }"
 			></duels-hero-stat-vignette>
 		</div>
 		<duels-empty-state *ngIf="!stats?.length"></duels-empty-state>
@@ -52,7 +52,7 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 	_state: DuelsState;
 	_navigation: NavigationDuels;
 
-	stats: readonly DuelsHeroPlayerStat[];
+	stats: readonly DuelsHeroPlayerStatContainer[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	// private previewHeroStats: readonly DuelsHeroPlayerStat[];
@@ -68,8 +68,8 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	trackByFn(stat: DuelsHeroPlayerStat) {
-		return stat.cardId;
+	trackByFn(stat: DuelsHeroPlayerStatContainer) {
+		return stat?.stat?.cardId;
 	}
 
 	private async updateValues() {
@@ -92,15 +92,24 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		}
 
 		this.stats = this._navigation?.heroSearchString
-			? stats.filter(stat =>
-					this.allCards
-						.getCard(stat.cardId)
-						?.name?.toLowerCase()
-						?.includes(this._navigation.heroSearchString.toLowerCase()),
+			? stats.map(
+					stat =>
+						({
+							stat: stat,
+							visible: this.allCards
+								.getCard(stat.cardId)
+								?.name?.toLowerCase()
+								?.includes(this._navigation.heroSearchString.toLowerCase()),
+						} as DuelsHeroPlayerStatContainer),
 			  )
-			: stats;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+			: stats.map(stat => ({
+					stat: stat,
+					visible: true,
+			  }));
 	}
+}
+
+interface DuelsHeroPlayerStatContainer {
+	readonly stat: DuelsHeroPlayerStat;
+	readonly visible: boolean;
 }

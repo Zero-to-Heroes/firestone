@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsTreasureStat } from '../../../models/duels/duels-player-stats';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -63,6 +71,9 @@ export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 		this.globalPickRate = value.globalPickRate;
 		this.globalWinrate = value.globalWinrate;
 		this.globalOfferingRate = value.globalOfferingRate;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	_stat: DuelsTreasureStat;
@@ -77,7 +88,11 @@ export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly cards: AllCardsService) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly cards: AllCardsService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

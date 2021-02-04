@@ -16,5 +16,9 @@
 		height: 270px;
 		margin-right: 15px;
 		margin-bottom: 15px;
+
+		&.hidden {
+			display: none;
+		}
 	}
 }
