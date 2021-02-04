@@ -7,8 +7,10 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../models/duels/duels-state';
+import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -21,7 +23,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 	],
 	template: `
 		<div *ngIf="stats?.length" class="duels-hero-stats" scrollable>
-			<duels-hero-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-hero-stat-vignette>
+			<duels-hero-stat-vignette
+				*ngFor="let stat of stats; trackBy: trackByFn"
+				[stat]="stat"
+			></duels-hero-stat-vignette>
 		</div>
 		<duels-empty-state *ngIf="!stats?.length"></duels-empty-state>
 	`,
@@ -36,57 +41,64 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
+	@Input() set navigation(value: NavigationDuels) {
+		if (value === this._navigation) {
+			return;
+		}
+		this._navigation = value;
+		this.updateValues();
+	}
+
 	_state: DuelsState;
+	_navigation: NavigationDuels;
+
 	stats: readonly DuelsHeroPlayerStat[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	// private previewHeroStats: readonly DuelsHeroPlayerStat[];
 
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
+		private readonly allCards: AllCardsService,
+		private readonly cdr: ChangeDetectorRef,
 	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
+	trackByFn(stat: DuelsHeroPlayerStat) {
+		return stat.cardId;
+	}
+
 	private async updateValues() {
 		if (!this._state?.playerStats) {
 			return;
 		}
-		const prefs = await this.prefs.getPreferences();
-		const classFilter = prefs.duelsActiveTopDecksClassFilter;
+		// const prefs = await this.prefs.getPreferences();
+		let stats;
 		switch (this._state.activeStatTypeFilter) {
 			case 'hero-power':
-				this.stats = this._state.playerStats.heroPowerStats;
-				// .filter(
-				// 	stat =>
-				// 		!classFilter ||
-				// 		classFilter === 'all' ||
-				// 		stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
-				// );
+				stats = this._state.playerStats.heroPowerStats;
 				break;
 			case 'signature-treasure':
-				this.stats = this._state.playerStats.signatureTreasureStats;
-				// .filter(
-				// 	stat =>
-				// 		!classFilter ||
-				// 		classFilter === 'all' ||
-				// 		stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
-				// );
+				stats = this._state.playerStats.signatureTreasureStats;
 				break;
 			case 'hero':
 			default:
-				this.stats = this._state.playerStats.heroStats;
-				// .filter(
-				// 	stat =>
-				// 		!classFilter ||
-				// 		classFilter === 'all' ||
-				// 		stat.heroClass?.toLowerCase() === prefs.duelsActiveTopDecksClassFilter,
-				// );
+				stats = this._state.playerStats.heroStats;
 				break;
 		}
+
+		this.stats = this._navigation?.heroSearchString
+			? stats.filter(stat =>
+					this.allCards
+						.getCard(stat.cardId)
+						?.name?.toLowerCase()
+						?.includes(this._navigation.heroSearchString.toLowerCase()),
+			  )
+			: stats;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

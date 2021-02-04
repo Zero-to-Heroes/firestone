@@ -59,6 +59,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						menuDisplayType: 'menu',
 						expandedRunIds: [] as readonly string[],
 						treasureSearchString: null,
+						heroSearchString: null,
 				  } as NavigationDuels)
 				: navigationState.navigationDuels;
 		const decktracker =

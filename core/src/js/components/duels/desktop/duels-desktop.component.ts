@@ -43,6 +43,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						<duels-hero-stats
 							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-stats'"
 							[state]="state.duels"
+							[navigation]="navigation.navigationDuels"
 						>
 						</duels-hero-stats>
 						<duels-treasure-stats
@@ -74,6 +75,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</with-loading>
 			</section>
 			<section class="secondary">
+				<duels-hero-search
+					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-stats'"
+					[navigation]="navigation.navigationDuels"
+				></duels-hero-search>
 				<duels-treasure-search
 					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-treasures'"
 					[navigation]="navigation.navigationDuels"

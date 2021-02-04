@@ -1,24 +1,21 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationDuels } from '../../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { DuelsSelectCategoryEvent } from '../../events/duels/duels-select-category-event';
+import { DuelsHeroSearchEvent } from '../../events/duels/duels-hero-search-event';
 import { Processor } from '../processor';
 
-export class DuelsSelectCategoryProcessor implements Processor {
+export class DuelsHeroSearchProcessor implements Processor {
 	public async process(
-		event: DuelsSelectCategoryEvent,
+		event: DuelsHeroSearchEvent,
 		currentState: MainWindowState,
-		stateHistory,
+		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		return [
 			null,
 			navigationState.update({
 				navigationDuels: navigationState.navigationDuels.update({
-					selectedCategoryId: event.categoryId,
-					expandedRunIds: [] as readonly string[],
-					treasureSearchString: null,
-					heroSearchString: null,
+					heroSearchString: event.value,
 				} as NavigationDuels),
 			} as NavigationState),
 		];

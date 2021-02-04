@@ -20,6 +20,7 @@ export class DuelsToggleExpandedRunProcessor implements Processor {
 				navigationDuels: navigationState.navigationDuels.update({
 					expandedRunIds: expandedRunIds,
 					treasureSearchString: null,
+					heroSearchString: null,
 				} as NavigationDuels),
 			} as NavigationState),
 		];

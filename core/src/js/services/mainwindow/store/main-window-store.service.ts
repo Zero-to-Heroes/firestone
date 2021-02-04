@@ -72,6 +72,7 @@ import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
 import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
+import { DuelsHeroSearchEvent } from './events/duels/duels-hero-search-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsHidePersonalDeckSummaryEvent } from './events/duels/duels-hide-personal-deck-summary-event';
 import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
@@ -157,6 +158,7 @@ import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
 import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
+import { DuelsHeroSearchProcessor } from './processors/duels/duels-hero-search-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsHidePersonalDeckSummaryProcessor } from './processors/duels/duels-hide-personal-deck-summary-processor';
 import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
@@ -663,6 +665,9 @@ export class MainWindowStoreService {
 
 			DuelsTreasureSearchEvent.eventName(),
 			new DuelsTreasureSearchProcessor(),
+
+			DuelsHeroSearchEvent.eventName(),
+			new DuelsHeroSearchProcessor(),
 		);
 	}
 

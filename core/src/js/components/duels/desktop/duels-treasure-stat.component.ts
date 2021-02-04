@@ -15,7 +15,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div *ngIf="stats?.length" class="duels-treasure-stats" scrollable>
-			<duels-treasure-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-treasure-stat-vignette>
+			<duels-treasure-stat-vignette
+				*ngFor="let stat of stats; trackBy: trackByFn"
+				[stat]="stat"
+			></duels-treasure-stat-vignette>
 		</div>
 		<duels-empty-state *ngIf="!stats?.length"></duels-empty-state>
 	`,
@@ -48,6 +51,10 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	trackByFn(stat: DuelsTreasureStat) {
+		return stat.cardId;
 	}
 
 	private updateValues() {
