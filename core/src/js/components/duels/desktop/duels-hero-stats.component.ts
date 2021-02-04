@@ -7,7 +7,9 @@ import {
 	Input,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
+import { isEqual } from 'lodash-es';
+import { DuelsHeroPlayerStat, DuelsPlayerStats } from '../../../models/duels/duels-player-stats';
+import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -34,28 +36,42 @@ import { PreferencesService } from '../../../services/preferences.service';
 })
 export class DuelsHeroStatsComponent implements AfterViewInit {
 	@Input() set state(value: DuelsState) {
-		if (value === this._state) {
+		const stats = value?.playerStats;
+		if (stats === this._playerStats) {
 			return;
 		}
-		this._state = value;
+		// console.debug('updating stats', this._statType, stats, this._playerStats);
+		this._playerStats = stats;
 		this.updateValues();
 	}
 
 	@Input() set navigation(value: NavigationDuels) {
-		if (value === this._navigation) {
+		const searchString = value?.heroSearchString;
+		if (searchString === this._searchString) {
 			return;
 		}
-		this._navigation = value;
+		// console.debug('updating searchstring', this._statType);
+		this._searchString = searchString;
 		this.updateValues();
 	}
 
-	_state: DuelsState;
-	_navigation: NavigationDuels;
+	@Input() set statType(value: DuelsStatTypeFilterType) {
+		if (value === this._statType) {
+			return;
+		}
+		// console.debug('updating stat type', this._statType);
+		this._statType = value;
+		this.updateValues();
+	}
 
 	stats: readonly DuelsHeroPlayerStatContainer[];
 
+	private _playerStats: DuelsPlayerStats;
+	private _searchString: string;
+	private _statType: DuelsStatTypeFilterType;
+
+	private displayedStats: readonly DuelsHeroPlayerStat[];
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	// private previewHeroStats: readonly DuelsHeroPlayerStat[];
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -73,39 +89,48 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 	}
 
 	private async updateValues() {
-		if (!this._state?.playerStats) {
+		if (!this._playerStats || !this._statType) {
 			return;
 		}
-		// const prefs = await this.prefs.getPreferences();
-		let stats;
-		switch (this._state.activeStatTypeFilter) {
-			case 'hero-power':
-				stats = this._state.playerStats.heroPowerStats;
-				break;
-			case 'signature-treasure':
-				stats = this._state.playerStats.signatureTreasureStats;
-				break;
-			case 'hero':
-			default:
-				stats = this._state.playerStats.heroStats;
-				break;
+
+		// Usually we don't really mind, but here there are a lot of graphs to be rendered every time,
+		// so we only want to refresh the data if it really has changed
+		const newStats = this.getStats();
+		if (isEqual(newStats, this.displayedStats)) {
+			// console.debug('stats are equal, returning', newStats, this.displayedStats);
+			return;
 		}
 
-		this.stats = this._navigation?.heroSearchString
-			? stats.map(
+		// console.debug('updating values', this._statType);
+		this.displayedStats = newStats;
+
+		this.stats = this._searchString
+			? this.displayedStats.map(
 					stat =>
 						({
 							stat: stat,
 							visible: this.allCards
 								.getCard(stat.cardId)
 								?.name?.toLowerCase()
-								?.includes(this._navigation.heroSearchString.toLowerCase()),
+								?.includes(this._searchString.toLowerCase()),
 						} as DuelsHeroPlayerStatContainer),
 			  )
-			: stats.map(stat => ({
+			: this.displayedStats.map(stat => ({
 					stat: stat,
 					visible: true,
 			  }));
+	}
+
+	private getStats() {
+		switch (this._statType) {
+			case 'hero-power':
+				return this._playerStats.heroPowerStats;
+			case 'signature-treasure':
+				return this._playerStats.signatureTreasureStats;
+			case 'hero':
+			default:
+				return this._playerStats.heroStats;
+		}
 	}
 }
 

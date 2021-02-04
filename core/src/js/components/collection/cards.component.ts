@@ -10,7 +10,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { default as sortBy } from 'lodash-es/sortBy';
+import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
 import { Preferences } from '../../models/preferences';

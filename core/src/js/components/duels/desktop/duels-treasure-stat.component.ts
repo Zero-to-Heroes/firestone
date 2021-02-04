@@ -1,7 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { DuelsTreasureStat } from '../../../models/duels/duels-player-stats';
+import { isEqual } from 'lodash';
+import { DuelsPlayerStats, DuelsTreasureStat } from '../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../models/duels/duels-state';
+import { DuelsTreasureStatTypeFilterType } from '../../../models/duels/duels-treasure-stat-type-filter.type';
 import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
 import { isPassive } from '../../../services/duels/duels-utils';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -27,25 +29,41 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DuelsTreasureStatsComponent implements AfterViewInit {
 	@Input() set state(value: DuelsState) {
-		if (value === this._state) {
+		const stats = value?.playerStats;
+		if (stats === this._playerStats) {
 			return;
 		}
-		this._state = value;
+		// console.debug('updating stats', this._statType, stats, this._playerStats);
+		this._playerStats = stats;
 		this.updateValues();
 	}
 
 	@Input() set navigation(value: NavigationDuels) {
-		if (value === this._navigation) {
+		const searchString = value?.treasureSearchString;
+		if (searchString === this._searchString) {
 			return;
 		}
-		this._navigation = value;
+		// console.debug('updating searchstring', this._statType);
+		this._searchString = searchString;
 		this.updateValues();
 	}
 
-	_state: DuelsState;
-	_navigation: NavigationDuels;
+	@Input() set statType(value: DuelsTreasureStatTypeFilterType) {
+		if (value === this._statType) {
+			return;
+		}
+		// console.debug('updating stat type', this._statType);
+		this._statType = value;
+		this.updateValues();
+	}
+
 	stats: readonly DuelsTreasureStatContainer[];
 
+	private _playerStats: DuelsPlayerStats;
+	private _searchString: string;
+	private _statType: DuelsTreasureStatTypeFilterType;
+
+	private displayedStats: readonly DuelsTreasureStat[];
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
@@ -59,31 +77,39 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		if (!this._state) {
+		if (!this._playerStats || !this._statType) {
 			return;
 		}
-		const stats = this.buildStats();
 
-		this.stats = this._navigation?.treasureSearchString
-			? stats.map(stat => ({
+		// Usually we don't really mind, but here there are a lot of graphs to be rendered every time,
+		// so we only want to refresh the data if it really has changed
+		const newStats = this.getStats();
+		if (isEqual(newStats, this.displayedStats)) {
+			// console.debug('stats are equal, returning', newStats, this.displayedStats);
+			return;
+		}
+
+		this.displayedStats = newStats;
+		this.stats = this._searchString
+			? this.displayedStats.map(stat => ({
 					stat: stat,
 					visible: this.allCards
 						.getCard(stat.cardId)
 						?.name?.toLowerCase()
-						?.includes(this._navigation.treasureSearchString.toLowerCase()),
+						?.includes(this._searchString.toLowerCase()),
 			  }))
-			: stats.map(stat => ({
+			: this.displayedStats.map(stat => ({
 					stat: stat,
 					visible: true,
 			  }));
 	}
 
-	private buildStats(): readonly DuelsTreasureStat[] {
-		switch (this._state.activeTreasureStatTypeFilter) {
+	private getStats(): readonly DuelsTreasureStat[] {
+		switch (this._statType) {
 			case 'treasure':
-				return this._state.playerStats.treasureStats.filter(stat => !isPassive(stat.cardId, this.allCards));
+				return this._playerStats.treasureStats.filter(stat => !isPassive(stat.cardId, this.allCards));
 			case 'passive':
-				return this._state.playerStats.treasureStats.filter(stat => isPassive(stat.cardId, this.allCards));
+				return this._playerStats.treasureStats.filter(stat => isPassive(stat.cardId, this.allCards));
 		}
 	}
 }

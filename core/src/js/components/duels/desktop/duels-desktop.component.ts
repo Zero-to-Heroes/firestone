@@ -40,15 +40,55 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							[navigation]="navigation.navigationDuels"
 						>
 						</duels-runs-list>
+						<!-- Hero stats. Different component instances to improve caching -->
 						<duels-hero-stats
-							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-stats'"
+							*ngxCacheIf="
+								navigation.navigationDuels.selectedCategoryId === 'duels-stats' &&
+								state.duels?.activeStatTypeFilter === 'hero'
+							"
 							[state]="state.duels"
+							[statType]="'hero'"
 							[navigation]="navigation.navigationDuels"
 						>
 						</duels-hero-stats>
-						<duels-treasure-stats
-							*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-treasures'"
+						<duels-hero-stats
+							*ngxCacheIf="
+								navigation.navigationDuels.selectedCategoryId === 'duels-stats' &&
+								state.duels?.activeStatTypeFilter === 'hero-power'
+							"
 							[state]="state.duels"
+							[statType]="'hero-power'"
+							[navigation]="navigation.navigationDuels"
+						>
+						</duels-hero-stats>
+						<duels-hero-stats
+							*ngxCacheIf="
+								navigation.navigationDuels.selectedCategoryId === 'duels-stats' &&
+								state.duels?.activeStatTypeFilter === 'signature-treasure'
+							"
+							[state]="state.duels"
+							[statType]="'signature-treasure'"
+							[navigation]="navigation.navigationDuels"
+						>
+						</duels-hero-stats>
+						<!-- Treasure stats. Different component instances to improve caching -->
+						<duels-treasure-stats
+							*ngxCacheIf="
+								navigation.navigationDuels.selectedCategoryId === 'duels-treasures' &&
+								state.duels?.activeTreasureStatTypeFilter === 'treasure'
+							"
+							[state]="state.duels"
+							[statType]="'treasure'"
+							[navigation]="navigation.navigationDuels"
+						>
+						</duels-treasure-stats>
+						<duels-treasure-stats
+							*ngxCacheIf="
+								navigation.navigationDuels.selectedCategoryId === 'duels-treasures' &&
+								state.duels?.activeTreasureStatTypeFilter === 'passive'
+							"
+							[state]="state.duels"
+							[statType]="'passive'"
 							[navigation]="navigation.navigationDuels"
 						>
 						</duels-treasure-stats>
