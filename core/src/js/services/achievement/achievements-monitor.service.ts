@@ -52,16 +52,14 @@ export class AchievementsMonitor {
 			}
 		});
 
-		if (FeatureFlags.SHOW_HS_ACHIEVEMENTS) {
-			this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
-				const changes: MemoryUpdate = event.data[0];
-				if (changes.DisplayingAchievementToast) {
-					setTimeout(() => {
-						this.detectNewAchievementFromMemory();
-					}, 500);
-				}
-			});
-		}
+		this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.DisplayingAchievementToast) {
+				setTimeout(() => {
+					this.detectNewAchievementFromMemory();
+				}, 500);
+			}
+		});
 		this.init();
 	}
 

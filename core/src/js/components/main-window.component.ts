@@ -14,7 +14,6 @@ import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { DebugService } from '../services/debug.service';
-import { FeatureFlags } from '../services/feature-flags';
 import { OverwolfService } from '../services/overwolf.service';
 import { PreferencesService } from '../services/preferences.service';
 
@@ -106,7 +105,6 @@ declare let amplitude: any;
 				</duels-desktop>
 			</section>
 			<new-version-notification
-				*ngIf="newVersionNotification"
 				class="new-version"
 				[forceOpen]="forceShowReleaseNotes"
 				(notificationDisplayed)="onNewVersionDisplayed($event)"
@@ -116,8 +114,6 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainWindowComponent implements AfterViewInit, OnDestroy {
-	newVersionNotification = FeatureFlags.ENABLE_NEW_VERSION_NOTIFICATION;
-
 	dataState: MainWindowState;
 	navigationState: NavigationState;
 	windowId: string;

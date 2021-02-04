@@ -11,7 +11,6 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../models/battlegrounds/in-game/bgs-triple';
-import { FeatureFlags } from '../../services/feature-flags';
 
 declare let amplitude: any;
 
@@ -41,7 +40,7 @@ declare let amplitude: any;
 				<tavern-level-icon [level]="tavernTier" class="tavern" *ngIf="tavernTier"></tavern-level-icon>
 				<div
 					class="last-opponent-icon"
-					*ngIf="enableLastOpponentIcon && showLastOpponentIcon"
+					*ngIf="showLastOpponentIcon"
 					helpTooltip="Was last round's opponent"
 					inlineSVG="assets/svg/last_opponent.svg"
 				></div>
@@ -54,8 +53,6 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsPlayerCapsuleComponent {
-	enableLastOpponentIcon: boolean = FeatureFlags.ENABLE_BG_LAST_ROUND_OPPONENT_ICON;
-
 	icon: string;
 	health: number;
 	maxHealth: number;

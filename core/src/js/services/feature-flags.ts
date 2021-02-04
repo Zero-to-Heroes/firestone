@@ -1,13 +1,5 @@
 export class FeatureFlags {
 	// Deprecated, features are part of prod now
-	public static readonly ENABLE_BG_DESKTOP = true;
-	public static readonly ENABLE_DECK_DETAILS = true;
-	public static readonly ENABLE_XP_NOTIFICATION = true;
-	public static readonly ENABLE_DUELS = true;
-	public static readonly ENABLE_NEW_VERSION_NOTIFICATION = true;
-	public static readonly SHOW_HS_ACHIEVEMENTS = true;
-	public static readonly ENABLE_BG_LAST_ROUND_OPPONENT_ICON = true;
-
 	// When changing these feature flags, don't forget to update the new-version component
 	public static readonly ENABLE_CLIPBOARD_SHARE = true;
 	public static readonly ENABLE_REDDIT_SHARE = true;

@@ -3,7 +3,6 @@ import { DuelsCategory } from '../../../models/mainwindow/duels/duels-category';
 import { DuelsCategoryType } from '../../../models/mainwindow/duels/duels-category.type';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/events/duels/duels-select-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -17,8 +16,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	template: `
 		<div class="app-section duels">
 			<section class="main divider">
-				<with-loading [isLoading]="enableDuels && (!state.duels || state.duels.loading)">
-					<div class="content" *ngIf="enableDuels && state.duels">
+				<with-loading [isLoading]="!state.duels || state.duels.loading">
+					<div class="content" *ngIf="state.duels">
 						<global-header
 							[navigation]="navigation"
 							*ngIf="navigation.text && navigation?.navigationDuels.menuDisplayType === 'breadcrumbs'"
@@ -74,7 +73,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					</div>
 				</with-loading>
 			</section>
-			<section class="secondary" *ngIf="enableDuels">
+			<section class="secondary">
 				<duels-treasure-search
 					*ngxCacheIf="navigation.navigationDuels.selectedCategoryId === 'duels-treasures'"
 					[navigation]="navigation.navigationDuels"
@@ -115,8 +114,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DuelsDesktopComponent implements AfterViewInit {
 	@Input() state: MainWindowState;
 	@Input() navigation: NavigationState;
-
-	enableDuels = FeatureFlags.ENABLE_DUELS;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

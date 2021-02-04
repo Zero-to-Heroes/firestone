@@ -7,7 +7,6 @@ import { IndexedVisualAchievement } from '../../models/indexed-visual-achievemen
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { ApiRunner } from '../api-runner';
-import { FeatureFlags } from '../feature-flags';
 import { AchievementsInitEvent } from '../mainwindow/store/events/achievements/achievements-init-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
@@ -139,9 +138,7 @@ export class AchievementsRepository {
 		);
 		const fileNames: readonly string[] = config.categories;
 		const categories: readonly AchievementCategoryConfiguration[] = (await Promise.all(
-			fileNames
-				.filter(fileName => (FeatureFlags.SHOW_HS_ACHIEVEMENTS ? true : fileName !== 'hearthstone_game'))
-				.map(fileName => this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=14`)),
+			fileNames.map(fileName => this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=14`)),
 		)) as any;
 		return {
 			categories: categories,

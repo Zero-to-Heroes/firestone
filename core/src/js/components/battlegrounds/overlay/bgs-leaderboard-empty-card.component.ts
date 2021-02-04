@@ -1,7 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 
 @Component({
@@ -22,7 +21,7 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
 			<div
 				class="last-opponent-icon"
-				*ngIf="enableLastOpponentIcon && isLastOpponent && showLastOpponentIcon"
+				*ngIf="isLastOpponent && showLastOpponentIcon"
 				helpTooltip="Was last round's opponent"
 				inlineSVG="assets/svg/last_opponent.svg"
 			></div>
@@ -31,8 +30,6 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLeaderboardEmptyCardComponent {
-	enableLastOpponentIcon: boolean = FeatureFlags.ENABLE_BG_LAST_ROUND_OPPONENT_ICON;
-
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
 
 	@Input() position: 'global-top-center' | 'global-top-left' | 'right' = 'right';

@@ -9,7 +9,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
-import { FeatureFlags } from '../services/feature-flags';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
@@ -30,11 +29,7 @@ declare let amplitude;
 			>
 				<span>Battlegrounds</span>
 			</li>
-			<li
-				[ngClass]="{ 'selected': selectedModule === 'duels' }"
-				(mousedown)="selectModule('duels')"
-				*ngIf="showDuels"
-			>
+			<li [ngClass]="{ 'selected': selectedModule === 'duels' }" (mousedown)="selectModule('duels')">
 				<span>Duels</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'replays' }" (mousedown)="selectModule('replays')">
@@ -84,8 +79,6 @@ declare let amplitude;
 export class MenuSelectionComponent implements AfterViewInit {
 	@Input() selectedModule: string;
 	@Input() currentUser: CurrentUser;
-
-	showDuels = FeatureFlags.ENABLE_DUELS;
 	loginPopupActive: boolean;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
