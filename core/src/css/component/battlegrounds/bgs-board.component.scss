@@ -64,6 +64,10 @@ li {
 ::ng-deep {
 	board-card-stats .stat {
 		color: #fff;
+		.value.value.value.value.value {
+			font-size: 18px;
+			color: inherit;
+		}
 	}
 	card-on-board .card-on-board {
 		pointer-events: none; // So that the wider transparent borders of the card art doesn't interfere
