@@ -96,7 +96,7 @@ export class DeckParserService {
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
+		// console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
 			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY

@@ -806,7 +806,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_RECRUIT_PHASE':
-				console.log(gameEvent.Type + ' event');
+				// console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_RECRUIT_PHASE,
@@ -814,7 +814,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_BATTLE_RESULT':
-				console.log(gameEvent.Type + ' event');
+				// console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
@@ -887,7 +887,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_TAVERN_UPGRADE':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				// console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE,

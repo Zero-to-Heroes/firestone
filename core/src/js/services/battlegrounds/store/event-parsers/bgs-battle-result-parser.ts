@@ -13,7 +13,7 @@ export class BgsBattleResultParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsBattleResultEvent): Promise<BattlegroundsState> {
-		console.debug('[bgs-simulation] received battle result', event);
+		// console.debug('[bgs-simulation] received battle result', event);
 		if (!currentState.currentGame.getMainPlayer()) {
 			console.error(
 				'[bgs-simulation] Could not find main player in battle result parser',

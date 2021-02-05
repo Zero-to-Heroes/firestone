@@ -15,13 +15,13 @@ export class BgsRecruitStartParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsRecruitStartEvent): Promise<BattlegroundsState> {
 		const prefs = await this.prefs.getPreferences();
 		const shouldHideResultsOnRecruit = prefs.bgsHideSimResultsOnRecruit && !prefs.bgsShowSimResultsOnlyOnRecruit;
-		console.debug(
-			'shouldHideResultsOnRecruit',
-			shouldHideResultsOnRecruit,
-			prefs.bgsHideSimResultsOnRecruit,
-			prefs.bgsShowSimResultsOnlyOnRecruit,
-			currentState.currentGame.battleResult,
-		);
+		// console.debug(
+		// 	'shouldHideResultsOnRecruit',
+		// 	shouldHideResultsOnRecruit,
+		// 	prefs.bgsHideSimResultsOnRecruit,
+		// 	prefs.bgsShowSimResultsOnlyOnRecruit,
+		// 	currentState.currentGame.battleResult,
+		// );
 		const newGame = currentState.currentGame.update({
 			phase: 'recruit',
 			battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
