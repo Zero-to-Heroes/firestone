@@ -162,16 +162,17 @@ export class TwitchAuthService {
 		const stateToSend: TwitchBgsState = {
 			leaderboard: this.buildLeaderboard(state),
 			// TODO: remove this once everything is properly deployed on Twitch
-			currentBattle: {
-				battleInfo: state.currentGame?.battleResult,
-				status: state.currentGame?.battleInfoStatus,
-			},
+			// currentBattle: {
+			// 	battleInfo: state.currentGame?.battleResult,
+			// 	status: state.currentGame?.battleInfoStatus,
+			// },
 			currentTurn: state.currentGame?.currentTurn,
 			inGame: state.inGame,
 			gameEnded: state.gameEnded,
 		};
 
-		const shouldSplitMessage = this.shouldSplitMessage(stateToSend);
+		// For now remove this, as it's clearly not optimized and can cause some CPU issues
+		const shouldSplitMessage = false; // this.shouldSplitMessage(stateToSend);
 		if (!shouldSplitMessage) {
 			this.sendEvent({
 				type: 'bgs',
