@@ -668,6 +668,20 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'RESOURCES_THIS_TURN':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.RESOURCES_THIS_TURN, gameEvent, {
+						resources: gameEvent.Value.AdditionalProps.Resources,
+					}),
+				);
+				break;
+			case 'RESOURCES_USED_THIS_TURN':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.RESOURCES_USED_THIS_TURN, gameEvent, {
+						resources: gameEvent.Value.AdditionalProps.Resources,
+					}),
+				);
+				break;
 			case 'ATTACKING_HERO':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ATTACKING_HERO, gameEvent, {

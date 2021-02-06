@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../../models/game-event';
 import { RealTimeStatsState } from '../real-time-stats';
@@ -33,9 +34,11 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
 			.map((target: any) => target.Damage)
+			.filter((target: any) => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
 			.reduce((sum, current) => sum + current, 0);
 		return currentState.update({
 			totalDamageDealtByMainHero: currentState.totalDamageDealtByMainHero + damageDealt,
+			maxDamageDealtByMainHero: Math.max(currentState.maxDamageDealtByMainHero, damageDealt),
 		} as RealTimeStatsState);
 	}
 

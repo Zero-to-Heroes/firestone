@@ -4,9 +4,12 @@ import { GameEvent } from '../../../../models/game-event';
 import { FeatureFlags } from '../../../feature-flags';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
+import { RTStatsBgsBoardStatsParser } from './event-parsers/battlegrounds/rtstats-bgs-board-stats-parser';
 import { RTStatsBgsFaceOffParser } from './event-parsers/battlegrounds/rtstats-bgs-face-offs-parser';
+import { RTStatsBgsTriplesCreatedParser } from './event-parsers/battlegrounds/rtstats-bgs-triples-created-parser';
 import { RTStatsGameStartParser } from './event-parsers/rtstats-game-start-parser';
 import { RTStatsMetadataParser } from './event-parsers/rtstats-metadata-parser';
+import { RTStatsResourcesWastedPerTurnParser } from './event-parsers/rtstats-resources-wasted-per-turn-parser';
 import { RTStatsTotalDamageDealtByHeroesParser } from './event-parsers/rtstats-total-damage-dealt-by-heroes-parser';
 import { RTStatsTotalDamageDealtByMinionsParser } from './event-parsers/rtstats-total-damage-dealt-by-minions-parser';
 import { RTStatsTotalDamageTakenByHeroesParser } from './event-parsers/rtstats-total-damage-taken-by-heroes-parser';
@@ -82,9 +85,12 @@ export class RealTimeStatsService {
 			new RTStatsTotalDamageTakenByMinionsParser(this.allCards),
 			new RTStatsTotalDamageDealtByHeroesParser(this.allCards),
 			new RTStatsTotalDamageTakenByHeroesParser(this.allCards),
+			new RTStatsResourcesWastedPerTurnParser(this.allCards),
 
 			// BG-specific
 			new RTStatsBgsFaceOffParser(),
+			new RTStatsBgsTriplesCreatedParser(),
+			new RTStatsBgsBoardStatsParser(),
 		];
 	}
 
