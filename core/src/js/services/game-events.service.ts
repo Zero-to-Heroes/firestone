@@ -811,6 +811,22 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'BATTLEGROUNDS_REROLL':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_REROLL,
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_FREEZE':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_FREEZE,
+					} as GameEvent),
+				);
+				break;
 			case 'BATTLEGROUNDS_COMBAT_START':
 				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(

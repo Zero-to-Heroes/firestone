@@ -127,7 +127,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
 			BgsBoard.create({
-				board: this.buildEntities(playerBoard.board),
+				board: BgsPlayerBoardParser.buildEntities(playerBoard.board),
 				turn: currentState.currentGame.currentTurn,
 			}),
 		];
@@ -142,19 +142,19 @@ export class BgsPlayerBoardParser implements EventParser {
 		return newPlayer;
 	}
 
-	private buildEntities(logEntities: readonly any[]): readonly Entity[] {
-		return logEntities.map(entity => this.buildEntity(entity));
+	public static buildEntities(logEntities: readonly any[]): readonly Entity[] {
+		return logEntities.map(entity => BgsPlayerBoardParser.buildEntity(entity));
 	}
 
-	private buildEntity(logEntity): Entity {
+	private static buildEntity(logEntity): Entity {
 		return {
 			cardID: logEntity.CardId as string,
 			id: logEntity.Entity as number,
-			tags: this.buildTags(logEntity.Tags),
+			tags: BgsPlayerBoardParser.buildTags(logEntity.Tags),
 		} as Entity;
 	}
 
-	private buildTags(tags: { Name: number; Value: number }[]): Map<string, number> {
+	private static buildTags(tags: { Name: number; Value: number }[]): Map<string, number> {
 		return Map(tags.map(tag => [GameTag[tag.Name], tag.Value]));
 	}
 }

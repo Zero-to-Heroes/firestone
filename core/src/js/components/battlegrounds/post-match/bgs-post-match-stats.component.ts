@@ -8,7 +8,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsPostMatchStats as IBgsPostMatchStats, Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
@@ -16,6 +16,8 @@ import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-s
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { RealTimeStatsState } from '../../../services/battlegrounds/store/real-time-stats/real-time-stats';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -32,7 +34,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="container">
-			<div class="content empty-state" *ngIf="!computing && !_panel?.player && !mainPlayerCardId">
+			<div class="content empty-state" *ngIf="!liveStats && !computing && !_panel?.player && !mainPlayerCardId">
 				<i>
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
@@ -42,8 +44,8 @@ declare let amplitude: any;
 				<span class="subtitle">{{ emptySubtitle }} </span>
 			</div>
 			<with-loading
-				*ngIf="_panel?.player || computing || mainPlayerCardId"
-				[isLoading]="computing"
+				*ngIf="liveStats || _panel?.player || computing || mainPlayerCardId"
+				[isLoading]="!liveStats && computing"
 				[mainTitle]="loadingTitle"
 				[subtitle]="
 					loadingSubtitle != null
@@ -151,6 +153,8 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	computing: boolean;
 	mmr: number;
 
+	liveStats: RealTimeStatsState;
+
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
 	private loadingStart: number;
@@ -171,9 +175,28 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		}
 		this._game = value;
 		this.mmr = value ? value.mmrAtStart : undefined;
+		this.liveStats = value.liveStats;
+		console.debug('setting game', value);
+		// Override the panel info
+		if (FeatureFlags.ENABLE_REAL_TIME_STATS && this.liveStats) {
+			this.boardMinions = value.getMainPlayer().getLastKnownBoardState();
+			this.addMinionStats();
+			this.tavernTier = value.getMainPlayer().getCurrentTavernTier();
+			this._panel = {
+				stats: {
+					...this.liveStats,
+					tripleTimings: new Array(this.liveStats.triplesPerHero[value.getMainPlayer().cardId]),
+				} as IBgsPostMatchStats,
+				player: value.getMainPlayer(),
+			} as BgsPostMatchStatsPanel;
+		}
 	}
 
+	// Ideally we won't need this anymore at all at the end
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
+		if (FeatureFlags.ENABLE_REAL_TIME_STATS) {
+			return;
+		}
 		// console.log('setting panel in post-match stats', value?.isComputing, value?.player, value);
 		if (value) {
 			this.computing = value.isComputing;

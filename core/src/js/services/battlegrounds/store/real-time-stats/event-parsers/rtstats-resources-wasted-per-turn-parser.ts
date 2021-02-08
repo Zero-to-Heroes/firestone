@@ -1,3 +1,4 @@
+import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../../models/game-event';
 import { RealTimeStatsState } from '../real-time-stats';
@@ -27,12 +28,26 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 		const resourcesUsedThisTurn =
 			gameEvent.type === GameEvent.RESOURCES_USED_THIS_TURN ? resources : currentState.resourcesUsedThisTurn;
 		const resourcesWastedThisTurn = resourcesThisTurn - resourcesUsedThisTurn;
-		const resourcesWastedPerTurn = {
-			...currentState.resourcesWastedPerTurn,
-			[currentState.currentTurn]: resourcesWastedThisTurn,
-		};
+		const resourcesWastedPerTurn: readonly NumericTurnInfo[] = [
+			...currentState.coinsWastedOverTurn,
+			{
+				turn: currentState.currentTurn,
+				value: resourcesWastedThisTurn,
+			},
+		];
+		console.debug(
+			'[bgs-real-time-stats] updated resources wasted per turn',
+			gameEvent,
+			resourcesThisTurn,
+			resourcesUsedThisTurn,
+			resourcesWastedThisTurn,
+			resourcesWastedPerTurn,
+		);
+
 		return currentState.update({
-			resourcesWastedPerTurn: resourcesWastedPerTurn,
+			resourcesAvailableThisTurn: resourcesThisTurn,
+			resourcesUsedThisTurn: resourcesUsedThisTurn,
+			coinsWastedOverTurn: resourcesWastedPerTurn,
 		} as RealTimeStatsState);
 	}
 

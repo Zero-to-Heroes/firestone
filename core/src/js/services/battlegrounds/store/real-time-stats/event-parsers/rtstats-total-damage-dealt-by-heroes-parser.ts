@@ -1,3 +1,5 @@
+import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
+import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
 import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../../models/game-event';
@@ -36,9 +38,18 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 			.map((target: any) => target.Damage)
 			.filter((target: any) => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
 			.reduce((sum, current) => sum + current, 0);
+		const existingDamageForTurn =
+			currentState.damageToEnemyHeroOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
+		const newDamageForTurn = existingDamageForTurn + damageDealt;
+		const newDamageOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [
+			...currentState.damageToEnemyHeroOverTurn.filter(info => info.turn !== currentState.currentTurn),
+			{
+				turn: currentState.currentTurn,
+				value: newDamageForTurn,
+			},
+		];
 		return currentState.update({
-			totalDamageDealtByMainHero: currentState.totalDamageDealtByMainHero + damageDealt,
-			maxDamageDealtByMainHero: Math.max(currentState.maxDamageDealtByMainHero, damageDealt),
+			damageToEnemyHeroOverTurn: newDamageOverTurn,
 		} as RealTimeStatsState);
 	}
 

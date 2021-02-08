@@ -6,6 +6,8 @@ import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
 import { RTStatsBgsBoardStatsParser } from './event-parsers/battlegrounds/rtstats-bgs-board-stats-parser';
 import { RTStatsBgsFaceOffParser } from './event-parsers/battlegrounds/rtstats-bgs-face-offs-parser';
+import { RTStatsBgsFreezeParser } from './event-parsers/battlegrounds/rtstats-bgs-freeze-parser';
+import { RTStatsBgsRerollsParser } from './event-parsers/battlegrounds/rtstats-bgs-rerolls-parser';
 import { RTStatsBgsTriplesCreatedParser } from './event-parsers/battlegrounds/rtstats-bgs-triples-created-parser';
 import { RTStatsGameStartParser } from './event-parsers/rtstats-game-start-parser';
 import { RTStatsMetadataParser } from './event-parsers/rtstats-metadata-parser';
@@ -14,6 +16,7 @@ import { RTStatsTotalDamageDealtByHeroesParser } from './event-parsers/rtstats-t
 import { RTStatsTotalDamageDealtByMinionsParser } from './event-parsers/rtstats-total-damage-dealt-by-minions-parser';
 import { RTStatsTotalDamageTakenByHeroesParser } from './event-parsers/rtstats-total-damage-taken-by-heroes-parser';
 import { RTStatsTotalDamageTakenByMinionsParser } from './event-parsers/rtstats-total-damage-taken-by-minions-parser';
+import { RTStatTurnStartParser } from './event-parsers/rtstats-turn-start-parser';
 import { EventParser } from './event-parsers/_event-parser';
 import { RealTimeStatsState } from './real-time-stats';
 
@@ -27,12 +30,17 @@ export class RealTimeStatsService {
 		'bgs-real-time-stats-queue',
 	);
 	private eventParsers: readonly EventParser[];
+	private listeners: ((state: RealTimeStatsState) => void)[] = [];
 
 	constructor(private readonly gameEvents: GameEventsEmitterService, private readonly allCards: AllCardsService) {
 		if (!FeatureFlags.ENABLE_REAL_TIME_STATS) {
 			return;
 		}
 		this.init();
+	}
+
+	public addListener(listener: (state: RealTimeStatsState) => void): void {
+		this.listeners.push(listener);
 	}
 
 	private async processQueue(eventQueue: readonly GameEvent[]) {
@@ -67,6 +75,7 @@ export class RealTimeStatsService {
 		if (newState !== this.state) {
 			this.state = newState;
 			this.debug('state', this.state);
+			this.listeners.forEach(listener => listener(this.state));
 		}
 	}
 
@@ -81,6 +90,7 @@ export class RealTimeStatsService {
 		return [
 			new RTStatsGameStartParser(),
 			new RTStatsMetadataParser(),
+			new RTStatTurnStartParser(),
 			new RTStatsTotalDamageDealtByMinionsParser(this.allCards),
 			new RTStatsTotalDamageTakenByMinionsParser(this.allCards),
 			new RTStatsTotalDamageDealtByHeroesParser(this.allCards),
@@ -91,6 +101,8 @@ export class RealTimeStatsService {
 			new RTStatsBgsFaceOffParser(),
 			new RTStatsBgsTriplesCreatedParser(),
 			new RTStatsBgsBoardStatsParser(),
+			new RTStatsBgsRerollsParser(),
+			new RTStatsBgsFreezeParser(),
 		];
 	}
 

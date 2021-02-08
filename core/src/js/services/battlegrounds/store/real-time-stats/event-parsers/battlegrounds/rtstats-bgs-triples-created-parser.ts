@@ -16,6 +16,7 @@ export class RTStatsBgsTriplesCreatedParser implements EventParser {
 			...currentState.triplesPerHero,
 			[gameEvent.cardId]: existingTriples + 1,
 		};
+		console.debug('[bgs-real-time-stats] triples created', 'gameEvent', gameEvent, existingTriples, newTriples);
 		return currentState.update({
 			triplesPerHero: newTriples,
 		} as RealTimeStatsState);

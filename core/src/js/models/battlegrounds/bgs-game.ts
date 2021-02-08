@@ -4,6 +4,7 @@ import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
+import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
 import { BgsPlayer } from './bgs-player';
 
 export class BgsGame {
@@ -22,6 +23,7 @@ export class BgsGame {
 	readonly availableRaces: readonly Race[];
 	readonly bannedRaces: readonly Race[];
 	readonly lastOpponentCardId: string;
+	readonly liveStats: RealTimeStatsState;
 
 	public static create(base: BgsGame): BgsGame {
 		return Object.assign(new BgsGame(), base);

@@ -7,6 +7,7 @@ import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 import { Events } from '../../events.service';
+import { FeatureFlags } from '../../feature-flags';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
@@ -34,6 +35,7 @@ import { BgsNextOpponentParser } from './event-parsers/bgs-next-opponent-parser'
 import { BgsOpponentRevealedParser } from './event-parsers/bgs-opponent-revealed-parser';
 import { BgsPlayerBoardParser } from './event-parsers/bgs-player-board-parser';
 import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-match-stats-filter-change-parser';
+import { BgsRealTimeStatsUpdatedParser } from './event-parsers/bgs-real-time-stats-updated-parser';
 import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
@@ -57,6 +59,7 @@ import { BgsMatchStartEvent } from './events/bgs-match-start-event';
 import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
 import { BgsOpponentRevealedEvent } from './events/bgs-opponent-revealed-event';
 import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
+import { BgsRealTimeStatsUpdatedEvent } from './events/bgs-real-time-stats-updated-event';
 import { BgsRecruitStartEvent } from './events/bgs-recruit-start-event';
 import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
@@ -71,6 +74,8 @@ import { BgsMinionsListOverlay } from './overlay/bgs-minions-list-overlay';
 import { BgsMouseOverOverlay } from './overlay/bgs-mouse-over-overlay';
 import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
 import { BgsSimulationOverlay } from './overlay/bgs-simulation-overlay';
+import { RealTimeStatsState } from './real-time-stats/real-time-stats';
+import { RealTimeStatsService } from './real-time-stats/real-time-stats.service';
 
 @Injectable()
 export class BattlegroundsStoreService {
@@ -103,8 +108,12 @@ export class BattlegroundsStoreService {
 		private memory: MemoryInspectionService,
 		private twitch: TwitchAuthService,
 		private patchesService: PatchesConfigService,
+		private realTimeStats: RealTimeStatsService,
 		private init_BgsRunStatsService: BgsRunStatsService,
 	) {
+		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
+		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
+		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
 		this.buildEventEmitters();
@@ -117,9 +126,6 @@ export class BattlegroundsStoreService {
 			console.log('[bgs-store] hotkey pressed');
 			this.handleHotkeyPressed(true);
 		});
-		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
-		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
-		window['bgsHotkeyPressed'] = this.battlegroundsWindowsListener;
 
 		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
 			console.log('[bgs-store] hotkey pressed', hotkeyResult);
@@ -284,6 +290,9 @@ export class BattlegroundsStoreService {
 			}
 			this.processPendingEvents(gameEvent);
 		});
+		this.realTimeStats.addListener((state: RealTimeStatsState) => {
+			this.battlegroundsUpdater.next(new BgsRealTimeStatsUpdatedEvent(state));
+		});
 
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
 			console.log('[bgs-store] Replay created, received info');
@@ -398,7 +407,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
-		return [
+		const eventParsers = [
 			new NoBgsMatchParser(),
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(),
@@ -429,6 +438,11 @@ export class BattlegroundsStoreService {
 			new BgsCardPlayedParser(),
 			new BgsToggleHighlightTribeOnBoardParser(),
 		];
+
+		if (FeatureFlags.ENABLE_REAL_TIME_STATS) {
+			eventParsers.push(new BgsRealTimeStatsUpdatedParser());
+		}
+		return eventParsers;
 	}
 
 	private buildOverlayHandlers() {

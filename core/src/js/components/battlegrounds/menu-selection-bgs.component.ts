@@ -9,6 +9,7 @@ import {
 import { BgsStageId } from '../../models/battlegrounds/bgs-stage-id.type';
 import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/bgs-stage-change-event';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { FeatureFlags } from '../../services/feature-flags';
 import { OverwolfService } from '../../services/overwolf.service';
 
 declare let amplitude;
@@ -31,14 +32,17 @@ declare let amplitude;
 				<span>Opponent</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedStage === 'post-match' }" (mousedown)="selectStage('post-match')">
-				<span>Post-Match Stats</span>
+				<span>{{ enableLiveStats && !matchOver ? 'Live stats' : 'Post-Match Stats' }}</span>
 			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionBgsComponent implements AfterViewInit {
+	enableLiveStats = FeatureFlags.ENABLE_REAL_TIME_STATS;
+
 	@Input() selectedStage: string;
+	@Input() matchOver: boolean;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 

@@ -211,6 +211,7 @@ export class BgsPostMatchStatsRecapComponent {
 		}
 		this.triples = this._stats.stats.tripleTimings?.length;
 		//console.log('triples2', this.triples, this._stats);
+		// console.error('should reactivated coins wasted');
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
 		this.minionsBought = this._stats.stats.minionsBoughtOverTurn
@@ -221,6 +222,7 @@ export class BgsPostMatchStatsRecapComponent {
 			.map(value => value.value)
 			.reduce((a, b) => a + b, 0);
 		this.maxBoardStats = Math.max(...this._stats.stats.totalStatsOverTurn.map(stat => stat.value));
+		console.debug('maxBoardStats', this.maxBoardStats, this._stats.stats.totalStatsOverTurn);
 		// Hack for Toki, to avoid counting the hero power as a refresh (even though it technically
 		// is a refresh)
 		const rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);

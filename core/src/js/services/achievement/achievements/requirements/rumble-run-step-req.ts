@@ -3,7 +3,8 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class RumbleRunStepReq implements Requirement {
-	private isCorrectStep: boolean;
+	private isCorrectStep: boolean = true;
+	private assignedStep: boolean;
 
 	constructor(private readonly targetStep: number) {}
 
@@ -19,10 +20,12 @@ export class RumbleRunStepReq implements Requirement {
 	// to work around this limitation
 	reset(): void {
 		this.isCorrectStep = true;
+		this.assignedStep = false;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.isCorrectStep = true;
+		this.assignedStep = false;
 	}
 
 	isCompleted(): boolean {
@@ -30,9 +33,10 @@ export class RumbleRunStepReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.RUMBLE_RUN_STEP) {
+		if (!this.assignedStep && gameEvent.type === GameEvent.RUMBLE_RUN_STEP) {
 			this.isCorrectStep = gameEvent.additionalData.step === this.targetStep;
 			// console.log('[debug] is correct step?', this.isCorrectStep, gameEvent, this.targetStep);
+			this.assignedStep = true;
 		}
 	}
 }

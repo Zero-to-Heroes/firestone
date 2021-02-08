@@ -34,8 +34,13 @@ export class RTStatsTotalDamageDealtByMinionsParser implements EventParser {
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
 			.map((target: any) => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
+		const existingDamageForMinion = currentState.totalMinionsDamageDealt[sourceCardId] ?? 0;
+		const newTotalMinionsDamageDealt = {
+			...currentState.totalMinionsDamageDealt,
+			[sourceCardId]: existingDamageForMinion + damageDealt,
+		};
 		return currentState.update({
-			totalDamageDealtByMainMinions: currentState.totalDamageDealtByMainMinions + damageDealt,
+			totalMinionsDamageDealt: newTotalMinionsDamageDealt,
 		} as RealTimeStatsState);
 	}
 

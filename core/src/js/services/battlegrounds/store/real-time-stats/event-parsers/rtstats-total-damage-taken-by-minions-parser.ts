@@ -15,13 +15,19 @@ export class RTStatsTotalDamageTakenByMinionsParser implements EventParser {
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const localPlayerId = gameEvent.localPlayer.PlayerId;
-		const damageTaken = Object.values(gameEvent.additionalData.targets)
+		const targets: readonly any[] = Object.values(gameEvent.additionalData.targets)
 			.filter((target: any) => target.TargetControllerId === localPlayerId)
-			.filter((target: any) => this.allCards.getCard(target.TargetCardId)?.type === 'Minion')
-			.map((target: any) => target.Damage)
-			.reduce((sum, current) => sum + current, 0);
+			.filter((target: any) => this.allCards.getCard(target.TargetCardId)?.type === 'Minion');
+		console.debug('[bgs-real-time-stats] damage taken', 'targets', targets, gameEvent);
+		const damageTakenObj = currentState.totalMinionsDamageTaken;
+		console.debug('[bgs-real-time-stats] damage taken', 'damageTakenObj', damageTakenObj);
+		for (const target of targets) {
+			const existingDamage = damageTakenObj[target.TargetCardId] ?? 0;
+			damageTakenObj[target] = existingDamage + target.Damage;
+		}
+		console.debug('[bgs-real-time-stats] damage taken', 'updated damageTakenObj', damageTakenObj);
 		return currentState.update({
-			totalDamageTakenByMainMinions: currentState.totalDamageTakenByMainMinions + damageTaken,
+			totalMinionsDamageTaken: damageTakenObj,
 		} as RealTimeStatsState);
 	}
 

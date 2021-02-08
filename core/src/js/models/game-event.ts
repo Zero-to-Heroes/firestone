@@ -101,6 +101,8 @@ export class GameEvent implements GameStateEvent {
 	public static readonly BATTLEGROUNDS_RECRUIT_PHASE = 'BATTLEGROUNDS_RECRUIT_PHASE';
 	public static readonly BATTLEGROUNDS_BATTLE_RESULT = 'BATTLEGROUNDS_BATTLE_RESULT';
 	public static readonly BATTLEGROUNDS_TRIPLE = 'BATTLEGROUNDS_TRIPLE';
+	public static readonly BATTLEGROUNDS_REROLL = 'BATTLEGROUNDS_REROLL';
+	public static readonly BATTLEGROUNDS_FREEZE = 'BATTLEGROUNDS_FREEZE';
 
 	public static readonly ACHIEVEMENT_PROGRESS = 'ACHIEVEMENT_PROGRESS';
 	public static readonly DECKSTRING_OVERRIDE = 'DECKSTRING_OVERRIDE';

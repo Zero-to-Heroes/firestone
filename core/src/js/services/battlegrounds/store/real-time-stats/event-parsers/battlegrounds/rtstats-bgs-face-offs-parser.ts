@@ -1,3 +1,4 @@
+import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { GameEvent } from '../../../../../../models/game-event';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from './../_event-parser';
@@ -14,10 +15,18 @@ export class RTStatsBgsFaceOffParser implements EventParser {
 		const result = gameEvent.additionalData.result;
 		const currentWinStreak = result === 'won' ? currentState.currentWinStreak + 1 : 0;
 		const highestWinStreak = Math.max(currentState.highestWinStreak, currentWinStreak);
+		const newFaceOffs: readonly BgsFaceOff[] = [
+			...(currentState.faceOffs || []),
+			{
+				turn: currentState.currentTurn,
+				playerCardId: undefined,
+				damage: gameEvent.additionalData.damage,
+				opponentCardId: gameEvent.additionalData.opponent,
+				result: result,
+			},
+		];
 		return currentState.update({
-			totalBattlesWon: currentState.totalBattlesWon + (result === 'won' ? 1 : 0),
-			totalBattlesTied: currentState.totalBattlesTied + (result === 'tied' ? 1 : 0),
-			totalBattlesLost: currentState.totalBattlesLost + (result === 'lost' ? 1 : 0),
+			faceOffs: newFaceOffs,
 			currentWinStreak: currentWinStreak,
 			highestWinStreak: highestWinStreak,
 		} as RealTimeStatsState);

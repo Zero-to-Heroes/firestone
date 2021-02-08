@@ -37,7 +37,10 @@ declare let amplitude: any;
 								<use xlink:href="assets/svg/sprite.svg#logo" />
 							</svg>
 						</i>
-						<menu-selection-bgs [selectedStage]="currentStage?.id"></menu-selection-bgs>
+						<menu-selection-bgs
+							[selectedStage]="currentStage?.id"
+							[matchOver]="_state?.currentGame?.liveStats?.gameOver"
+						></menu-selection-bgs>
 					</div>
 				</div>
 				<hotkey class="exclude-dbclick" [hotkeyName]="'battlegrounds'"></hotkey>
