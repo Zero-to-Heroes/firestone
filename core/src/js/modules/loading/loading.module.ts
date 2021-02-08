@@ -8,6 +8,7 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { AdService } from '../../services/ad.service';
 import { DebugService } from '../../services/debug.service';
+import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -43,6 +44,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	],
 	declarations: [LoadingComponent],
 	bootstrap: [LoadingComponent],
-	providers: [DebugService, AdService, OverwolfService, PreferencesService, GenericIndexedDbService],
+	providers: [DebugService, AdService, OverwolfService, PreferencesService, GenericIndexedDbService, Events],
 })
 export class LoadingModule {}
