@@ -3,7 +3,8 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class MonsterHuntStepReq implements Requirement {
-	private isCorrectStep: boolean;
+	private isCorrectStep: boolean = true;
+	private assignedStep: boolean;
 
 	constructor(private readonly targetStep: number) {}
 
@@ -19,10 +20,12 @@ export class MonsterHuntStepReq implements Requirement {
 	// to work around this limitation
 	reset(): void {
 		this.isCorrectStep = true;
+		this.assignedStep = false;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.isCorrectStep = true;
+		this.assignedStep = false;
 	}
 
 	isCompleted(): boolean {
@@ -30,8 +33,11 @@ export class MonsterHuntStepReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.MONSTER_HUNT_STEP) {
+		// Because of how computing the step value for monter hunt had to change, it's now
+		// possible to receive the event several times in a match
+		if (!this.assignedStep && gameEvent.type === GameEvent.MONSTER_HUNT_STEP) {
 			this.isCorrectStep = gameEvent.additionalData.step === this.targetStep;
+			this.assignedStep = true;
 		}
 	}
 }

@@ -275,7 +275,7 @@ export class GameEvents {
 				);
 				break;
 			case 'RUMBLE_RUN_STEP':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
+				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.RUMBLE_RUN_STEP,
@@ -286,7 +286,7 @@ export class GameEvents {
 				);
 				break;
 			case 'DUNGEON_RUN_STEP':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
+				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DUNGEON_RUN_STEP,
@@ -297,7 +297,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MONSTER_HUNT_STEP':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
+				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MONSTER_HUNT_STEP,
