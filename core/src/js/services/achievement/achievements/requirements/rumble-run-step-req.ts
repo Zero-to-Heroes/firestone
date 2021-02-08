@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class RumbleRunStepReq implements Requirement {
-	private isCorrectStep: boolean = true;
+	private isCorrectStep = true;
 	private assignedStep: boolean;
 
 	constructor(private readonly targetStep: number) {}
