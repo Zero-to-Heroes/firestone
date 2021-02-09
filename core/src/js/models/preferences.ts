@@ -162,6 +162,7 @@ export class Preferences {
 	readonly bgsEnableMinionListMouseOver: boolean = true;
 	readonly bgsShowTribesHighlight: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
+	readonly bgsShowHeroSelectionScreen: boolean = true;
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';

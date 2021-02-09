@@ -67,6 +67,12 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Turning that off will run the battle simulations on a remote server, thus freeing your machine up. On the other hand, the results will take a bit longer to arrive"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowHeroSelectionScreen"
+						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle }"
+						label="Show hero selection screen"
+						tooltip="When turned on, a window with stats on the heroes offered is shown"
+					></preference-toggle>
+					<preference-toggle
 						field="bgsUseLocalPostMatchStats"
 						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle }"
 						label="Compute post-match stats locally"

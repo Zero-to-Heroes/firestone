@@ -421,7 +421,7 @@ export class BattlegroundsStoreService {
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
-			new BgsMatchStartParser(),
+			new BgsMatchStartParser(this.prefs),
 			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(),
