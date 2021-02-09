@@ -21,7 +21,7 @@ import { DebugService } from '../../../services/debug.service';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { groupByFunction } from '../../../services/utils';
+import { arraysEqual, groupByFunction } from '../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers',
@@ -94,6 +94,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
 	private preferencesSubscription: Subscription;
+	private previousAvailableRaces: readonly Race[];
 	private storeSubscription: Subscription;
 
 	constructor(
@@ -116,7 +117,14 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			}
 			//console.log('got state', newState);
 			await this.allCards.initializeCardsDb();
-			await this.updateAvailableCards(newState);
+
+			if (
+				!this.cardsInGame?.length ||
+				!arraysEqual(this.previousAvailableRaces, newState.currentGame.availableRaces)
+			) {
+				await this.updateAvailableCards(newState);
+				this.previousAvailableRaces = newState.currentGame.availableRaces;
+			}
 			//console.log('available cards', this.cardsInGame);
 			this.tiers = this.buildTiers(newState);
 			this.highlightedTribes = newState.highlightedTribes;
