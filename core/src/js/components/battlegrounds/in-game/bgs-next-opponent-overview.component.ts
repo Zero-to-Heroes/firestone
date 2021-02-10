@@ -2,11 +2,9 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	HostListener,
 	Input,
 	OnDestroy,
-	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
@@ -14,6 +12,7 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
+import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 
 declare let amplitude: any;
@@ -22,11 +21,11 @@ declare let amplitude: any;
 	selector: 'bgs-next-opponent-overview',
 	styleUrls: [
 		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`,
 		`../../../../css/global/scrollbar.scss`,
+		`../../../../css/component/battlegrounds/in-game/bgs-next-opponent-overview.component.scss`,
 	],
 	template: `
-		<div class="container">
+		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
 			<div class="content empty-state" *ngIf="!opponents || !opponents[0]">
 				<i>
 					<svg>
@@ -81,6 +80,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	nextOpponentCardId: string;
 	mmr: number;
 	lastOpponentCardId: string;
+	showAds: boolean = true;
 
 	@Input() enableSimulation: boolean;
 
@@ -106,11 +106,9 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		this.updateInfo();
 	}
 
-	constructor(
-		private readonly el: ElementRef,
-		private readonly renderer: Renderer2,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly ads: AdService) {
+		this.init();
+	}
 
 	ngAfterViewInit() {
 		// console.log('after view init in next-opponent(view');
@@ -171,6 +169,13 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 			.sort((a, b) => (a.cardId === this.nextOpponentCardId ? -1 : b.cardId === this.nextOpponentCardId ? 1 : 0));
 		this.otherOpponents = this.opponents.slice(1);
 		this._game = null;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private async init() {
+		this.showAds = await this.ads.shouldDisplayAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

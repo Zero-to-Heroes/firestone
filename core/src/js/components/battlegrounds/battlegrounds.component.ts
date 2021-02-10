@@ -12,6 +12,7 @@ import {
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { AdService } from '../../services/ad.service';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -29,7 +30,7 @@ declare let amplitude: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true">
-			<ads [parentComponent]="'battlegrounds'"></ads>
+			<ads [parentComponent]="'battlegrounds'" *ngIf="showAds"></ads>
 			<battlegrounds-content [state]="state" *ngIf="cardsLoaded"> </battlegrounds-content>
 		</window-wrapper>
 	`,
@@ -40,6 +41,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	// activeTheme: CurrentAppType;
 	state: BattlegroundsState;
 	cardsLoaded = false;
+	showAds: boolean = true;
 
 	private hotkeyPressedHandler: EventEmitter<boolean>;
 	// private messageReceivedListener: (message: any) => void;
@@ -52,6 +54,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		private readonly debug: DebugService,
 		private readonly cards: AllCardsService,
 		private readonly prefs: PreferencesService,
+		private readonly ads: AdService,
 	) {
 		this.init();
 	}
@@ -61,6 +64,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		this.cardsLoaded = true;
 		this.ow.getTwitterUserInfo();
 		this.ow.getRedditUserInfo();
+		this.showAds = await this.ads.shouldDisplayAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

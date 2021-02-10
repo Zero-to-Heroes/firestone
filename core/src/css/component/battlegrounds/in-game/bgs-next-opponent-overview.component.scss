@@ -3,6 +3,12 @@
 	height: 100%;
 	flex-grow: 1;
 	min-width: 0;
+
+	&.no-ads {
+		.left {
+			height: calc(100% + 25px);
+		}
+	}
 }
 
 .left {

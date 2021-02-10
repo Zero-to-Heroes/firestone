@@ -14,11 +14,11 @@ import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
+import { AdService } from '../../../services/ad.service';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
-import { PreferencesService } from '../../../services/preferences.service';
 import { normalizeCardId } from './card-utils';
 
 declare let amplitude: any;
@@ -31,7 +31,7 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/post-match/bgs-post-match-stats.component.scss`,
 	],
 	template: `
-		<div class="container">
+		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
 			<div class="content empty-state" *ngIf="!_panel?.player && !mainPlayerCardId">
 				<i>
 					<svg>
@@ -135,6 +135,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	tabs: readonly BgsStatsFilterId[];
 	// computing: boolean;
 	mmr: number;
+	showAds: boolean = true;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
@@ -204,10 +205,10 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly ow: OverwolfService,
 		private readonly allCards: AllCardsService,
 		private readonly owUtils: OwUtilsService,
-		private readonly prefs: PreferencesService,
+		private readonly ads: AdService,
 	) {
 		// console.log('in construftor');
-		allCards.initializeCardsDb();
+		this.init();
 	}
 
 	async ngAfterViewInit() {
@@ -269,5 +270,13 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			.filter(cardId => normalizeCardId(cardId, this.allCards) === normalizedCardId)
 			.map(cardId => totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
+	}
+
+	private async init() {
+		this.allCards.initializeCardsDb();
+		this.showAds = await this.ads.shouldDisplayAds();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

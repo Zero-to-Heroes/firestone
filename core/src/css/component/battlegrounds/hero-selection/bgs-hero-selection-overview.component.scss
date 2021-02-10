@@ -7,6 +7,12 @@
 	flex-grow: 0;
 	flex-shrink: 0;
 	width: 100%;
+
+	&.no-ads {
+		.left {
+			height: 100%;
+		}
+	}
 }
 
 .left {

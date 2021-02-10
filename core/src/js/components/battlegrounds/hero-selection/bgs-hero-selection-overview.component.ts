@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { BgsHeroSelectionOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
+import { AdService } from '../../../services/ad.service';
 import { groupByFunction } from '../../../services/utils';
 
 declare let amplitude: any;
@@ -10,11 +11,11 @@ declare let amplitude: any;
 	selector: 'bgs-hero-selection-overview',
 	styleUrls: [
 		`../../../../css/global/reset-styles.scss`,
-		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-overview.component.scss`,
 		`../../../../css/global/scrollbar.scss`,
+		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-overview.component.scss`,
 	],
 	template: `
-		<div class="container">
+		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
 			<div class="left">
 				<bgs-hero-tier *ngFor="let tier of tiers || []; trackBy: trackByTierFn" [tier]="tier"></bgs-hero-tier>
 			</div>
@@ -38,6 +39,7 @@ export class BgsHeroSelectionOverviewComponent {
 	_panel: BgsHeroSelectionOverview;
 	patchNumber: number;
 	globalStats: BgsStats;
+	showAds: boolean = true;
 
 	@Input() set panel(value: BgsHeroSelectionOverview) {
 		if (!value?.heroOverview) {
@@ -112,7 +114,9 @@ export class BgsHeroSelectionOverviewComponent {
 		// });
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly ads: AdService) {
+		this.init();
+	}
 
 	getOverviewWidth(): number {
 		return 24;
@@ -128,5 +132,12 @@ export class BgsHeroSelectionOverviewComponent {
 
 	trackByHeroFn(index, item: BgsHeroStat) {
 		return item?.id;
+	}
+
+	private async init() {
+		this.showAds = await this.ads.shouldDisplayAds();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
