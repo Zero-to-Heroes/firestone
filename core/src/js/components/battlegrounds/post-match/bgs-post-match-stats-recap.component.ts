@@ -135,8 +135,8 @@ export class BgsPostMatchStatsRecapComponent {
 
 	totalMinionsDamageDealt: number;
 	totalMinionsDamageTaken: number;
-	totalHeroDamageDealt: number = 0;
-	maxSingleTurnHeroDamageDealt: number = 0;
+	totalHeroDamageDealt = 0;
+	maxSingleTurnHeroDamageDealt = 0;
 	winStreak: number;
 	triples: number;
 	maxBoardStats: number;

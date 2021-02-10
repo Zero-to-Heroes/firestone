@@ -80,7 +80,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	nextOpponentCardId: string;
 	mmr: number;
 	lastOpponentCardId: string;
-	showAds: boolean = true;
+	showAds = true;
 
 	@Input() enableSimulation: boolean;
 

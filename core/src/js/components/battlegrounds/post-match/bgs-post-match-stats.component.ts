@@ -123,7 +123,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	_panel: BgsPostMatchStatsPanel;
 	_game: BgsGame;
 
-	boardTitle: string = 'Your current board';
+	boardTitle = 'Your current board';
 	icon: string;
 	health: number;
 	maxHealth: number;
@@ -135,7 +135,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	tabs: readonly BgsStatsFilterId[];
 	// computing: boolean;
 	mmr: number;
-	showAds: boolean = true;
+	showAds = true;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 

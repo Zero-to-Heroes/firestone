@@ -39,7 +39,7 @@ export class BgsHeroSelectionOverviewComponent {
 	_panel: BgsHeroSelectionOverview;
 	patchNumber: number;
 	globalStats: BgsStats;
-	showAds: boolean = true;
+	showAds = true;
 
 	@Input() set panel(value: BgsHeroSelectionOverview) {
 		if (!value?.heroOverview) {

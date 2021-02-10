@@ -215,7 +215,7 @@ export class BgsChartWarbandCompositionComponent {
 		const history = [...value.boardHistory];
 		if (history.length < 7) {
 			const length = history.length;
-			for (var i = length; i < 7; i++) {
+			for (let i = length; i < 7; i++) {
 				history.push({
 					turn: i,
 					board: [],

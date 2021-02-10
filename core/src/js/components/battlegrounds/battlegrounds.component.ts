@@ -41,7 +41,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	// activeTheme: CurrentAppType;
 	state: BattlegroundsState;
 	cardsLoaded = false;
-	showAds: boolean = true;
+	showAds = true;
 
 	private hotkeyPressedHandler: EventEmitter<boolean>;
 	// private messageReceivedListener: (message: any) => void;
