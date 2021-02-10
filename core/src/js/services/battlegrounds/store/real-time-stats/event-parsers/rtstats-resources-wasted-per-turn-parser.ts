@@ -17,7 +17,7 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
 		if (controllerId !== localPlayer.PlayerId) {
 			return currentState;
 		}
@@ -29,20 +29,20 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 			gameEvent.type === GameEvent.RESOURCES_USED_THIS_TURN ? resources : currentState.resourcesUsedThisTurn;
 		const resourcesWastedThisTurn = resourcesThisTurn - resourcesUsedThisTurn;
 		const resourcesWastedPerTurn: readonly NumericTurnInfo[] = [
-			...currentState.coinsWastedOverTurn,
+			...currentState.coinsWastedOverTurn.filter(info => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
 				value: resourcesWastedThisTurn,
 			},
 		];
-		console.debug(
-			'[bgs-real-time-stats] updated resources wasted per turn',
-			gameEvent,
-			resourcesThisTurn,
-			resourcesUsedThisTurn,
-			resourcesWastedThisTurn,
-			resourcesWastedPerTurn,
-		);
+		// console.debug(
+		// 	'[bgs-real-time-stats] updated resources wasted per turn',
+		// 	gameEvent,
+		// 	resourcesThisTurn,
+		// 	resourcesUsedThisTurn,
+		// 	resourcesWastedThisTurn,
+		// 	resourcesWastedPerTurn,
+		// );
 
 		return currentState.update({
 			resourcesAvailableThisTurn: resourcesThisTurn,

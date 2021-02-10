@@ -49,14 +49,11 @@ export class BgsSimulationOverlayStandaloneComponent {
 	@Input() set bgsState(value: TwitchBgsCurrentBattle) {
 		this.nextBattle = value?.battleInfo;
 		this.battleSimulationStatus = value?.status;
-		console.log('setting game state', value, this.nextBattle, this.battleSimulationStatus);
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	startDragging() {
-		// console.log('starting dragging');
-		// this.events.broadcast(Events.HIDE_TOOLTIP);
 		this.dragStart.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -64,7 +61,6 @@ export class BgsSimulationOverlayStandaloneComponent {
 	}
 
 	async stopDragging() {
-		// console.log('stopped dragging');
 		this.dragEnd.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

@@ -11,6 +11,7 @@ import {
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem, ChartTooltipModel } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { NumericTurnInfo } from '../../models/battlegrounds/post-match/numeric-turn-info';
+import { areEqualDataSets } from './post-match/chart-utils';
 
 declare let amplitude: any;
 
@@ -105,9 +106,7 @@ export class GraphWithComparisonComponent {
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
 
 	private updateValues() {
-		// console.log('updating values', this._yourExtractor, this._communityExtractor);
 		if (!this._yourExtractor || !this._communityExtractor) {
-			// console.log('not ready');
 			return;
 		}
 
@@ -119,13 +118,11 @@ export class GraphWithComparisonComponent {
 		const maxTurnFromCommunity = this.getMaxTurn(community);
 		const maxTurnFromYour = this.getMaxTurn(your);
 		const lastTurn = Math.max(maxTurnFromCommunity, maxTurnFromYour);
-		// console.log('max turn', maxTurnFromCommunity, maxTurnFromYour, lastTurn, community, your);
 
 		const filledCommunity = this.fillMissingData(community, lastTurn);
 		const filledYour = this.fillMissingData(your, lastTurn);
 
-		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter(turn => turn > 0).map(turn => '' + turn);
-		this.lineChartData = [
+		const newChartData = [
 			{
 				data: filledCommunity?.map(stat => stat.value) || [],
 				label: this.communityLabel,
@@ -135,22 +132,17 @@ export class GraphWithComparisonComponent {
 				label: this.yourLabel,
 			} as any,
 		];
+		if (areEqualDataSets(newChartData, this.lineChartData)) {
+			return;
+		}
+
+		this.lineChartData = newChartData;
+		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter(turn => turn > 0).map(turn => '' + turn);
 		const maxValue = Math.max(
 			...this.lineChartData.map(data => data.data as number[]).reduce((a, b) => a.concat(b), []),
 		);
 		this._maxYValue = this._maxYValue ? Math.max(this._maxYValue, maxValue) : undefined;
 		this.updateChartOptions();
-		// console.log('lineChartData', this.lineChartData);
-		// console.log(
-		// 	'last turn is',
-		// 	lastTurn,
-		// 	this.lineChartLabels,
-		// 	this.lineChartData,
-		// 	community,
-		// 	filledCommunity,
-		// 	your,
-		// 	filledYour,
-		// );
 		this.doResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -223,7 +215,6 @@ export class GraphWithComparisonComponent {
 			this.cdr.detectChanges();
 		}
 		this.opacity = gradient && this.lineChartData && this.lineChartData.length > 0 ? 1 : 0;
-		// console.log('setting opacity', this.opacity, gradient, this.lineChartData);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

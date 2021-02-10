@@ -29,8 +29,8 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly damageToEnemyHeroOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [];
 	readonly totalMinionsDamageDealt: { [cardId: string]: number } = {};
 	readonly totalMinionsDamageTaken: { [cardId: string]: number } = {};
-	readonly totalEnemyMinionsKilled: number;
-	readonly totalEnemyHeroesKilled: number;
+	readonly totalEnemyMinionsKilled: number = 0;
+	readonly totalEnemyHeroesKilled: number = 0;
 
 	// BG specific
 	readonly tavernTimings: readonly BgsTavernUpgrade[] = [];
@@ -42,7 +42,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[] = [];
 	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[] = [];
 	readonly minionsSoldOverTurn: readonly NumericTurnInfo[] = [];
-	readonly luckFactor: number;
+	readonly luckFactor: number = 0;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 	readonly currentWinStreak: number = 0;
@@ -54,7 +54,7 @@ export class RealTimeStatsState implements IBgsPostMatchStats {
 	readonly tripleTimings: readonly BgsTriple[] = [];
 	// Not sure what this is used for anymore, since we have rerollsOverTurn
 	/** @deprecated */
-	readonly rerolls: number;
+	readonly rerolls: number = 0;
 
 	public static create(base: RealTimeStatsState): RealTimeStatsState {
 		return Object.assign(new RealTimeStatsState(), base);

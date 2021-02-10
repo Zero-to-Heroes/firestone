@@ -39,7 +39,7 @@ declare let amplitude: any;
 						</i>
 						<menu-selection-bgs
 							[selectedStage]="currentStage?.id"
-							[matchOver]="_state?.currentGame?.liveStats?.gameOver"
+							[matchOver]="_state?.currentGame?.gameEnded"
 						></menu-selection-bgs>
 					</div>
 				</div>

@@ -546,7 +546,7 @@ export class DuelsStateBuilderService {
 				} as DuelsDeckStat;
 			})
 			.filter(stat => this.filterTopDeck(stat, prefs))
-			.sort((a, b) => new Date(b.runStartDate).getTime() - new Date(a.runStartDate).getTime());
+			.sort((a, b) => new Date(b.periodStart).getTime() - new Date(a.periodStart).getTime());
 		console.log('[duels-state-builder] decks', decks?.length);
 		const groupedDecks: readonly DuelsGroupedDecks[] = [...this.groupDecks(decks, prefs)];
 		return groupedDecks;
@@ -576,7 +576,7 @@ export class DuelsStateBuilderService {
 
 	private groupDecks(decks: readonly DuelsDeckStat[], prefs: Preferences): readonly DuelsGroupedDecks[] {
 		const groupingFunction = (deck: DuelsDeckStat) => {
-			const date = new Date(deck.runStartDate);
+			const date = new Date(deck.periodStart);
 			return date.toLocaleDateString('en-US', {
 				month: 'short',
 				day: '2-digit',

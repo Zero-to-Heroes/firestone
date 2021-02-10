@@ -96,12 +96,11 @@ export class BgsRunStatsService {
 		bestBgsUserStats: readonly BgsBestStat[],
 		game: GameForUpload,
 	) {
-		console.log('[bgs-run-stats] starting to compute run stats');
-		const prefs = await this.prefs.getPreferences();
-		const user = await this.userService.getCurrentUser();
 		const newMmr = parseInt(game.newPlayerRank);
-		// const newMmr = await this.getNewRating(currentGame.mmrAtStart);
+		const liveStats = currentGame.liveStats;
 
+		console.log('[bgs-run-stats] starting to compute run stats');
+		const user = await this.userService.getCurrentUser();
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
 			heroCardId: currentGame.getMainPlayer()?.cardId,
@@ -118,21 +117,25 @@ export class BgsRunStatsService {
 		};
 		console.log('[bgs-run-stats] computing post-match stats input', input);
 
-		const [postMatchStats, newBestValues] = this.populateObject(
-			prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle
-				? await this.buildStatsLocally(currentGame, game.uncompressedXmlReplay)
-				: await this.buildStatsRemotely(input),
-			input,
-			bestBgsUserStats || [],
-		);
+		const [postMatchStats, newBestValues] = this.populateObject(liveStats, input, bestBgsUserStats || []);
+
+		// const prefs = await this.prefs.getPreferences();
+
+		// const [postMatchStats, newBestValues] = this.populateObject(
+		// 	prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle
+		// 		? await this.buildStatsLocally(currentGame, game.uncompressedXmlReplay)
+		// 		: await this.buildStatsRemotely(input),
+		// 	input,
+		// 	bestBgsUserStats || [],
+		// );
 		console.log('[bgs-run-stats] newBestVaues');
 
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
-		if (prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle) {
-			// console.log('posting to endpoint');
-			this.buildStatsRemotely(input);
-		}
+		// if (prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle) {
+		// console.log('posting to endpoint');
+		this.buildStatsRemotely(input);
+		// }
 		console.log('[bgs-run-stats] postMatchStats built');
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
@@ -151,28 +154,28 @@ export class BgsRunStatsService {
 		}
 	}
 
-	private async buildStatsLocally(currentGame: BgsGame, replayXml: string): Promise<IBgsPostMatchStats> {
-		return new Promise<IBgsPostMatchStats>(resolve => {
-			// const worker = new Worker();
-			this.worker.onmessage = (ev: MessageEvent) => {
-				// console.log('received worker message', ev);
-				let resultData: IBgsPostMatchStats = JSON.parse(ev.data);
-				resolve(resultData);
-				resultData = null;
-				// worker.terminate();
-			};
+	// private async buildStatsLocally(currentGame: BgsGame, replayXml: string): Promise<IBgsPostMatchStats> {
+	// 	return new Promise<IBgsPostMatchStats>(resolve => {
+	// 		// const worker = new Worker();
+	// 		this.worker.onmessage = (ev: MessageEvent) => {
+	// 			// console.log('received worker message', ev);
+	// 			let resultData: IBgsPostMatchStats = JSON.parse(ev.data);
+	// 			resolve(resultData);
+	// 			resultData = null;
+	// 			// worker.terminate();
+	// 		};
 
-			const input = {
-				replayXml: replayXml,
-				mainPlayer: currentGame.getMainPlayer(),
-				battleResultHistory: currentGame.battleResultHistory,
-				faceOffs: currentGame.faceOffs,
-			};
-			console.log('[bgs-run-stats] created worker');
-			this.worker.postMessage(input);
-			console.log('[bgs-run-stats] posted worker message');
-		});
-	}
+	// 		const input = {
+	// 			replayXml: replayXml,
+	// 			mainPlayer: currentGame.getMainPlayer(),
+	// 			battleResultHistory: currentGame.battleResultHistory,
+	// 			faceOffs: currentGame.faceOffs,
+	// 		};
+	// 		console.log('[bgs-run-stats] created worker');
+	// 		this.worker.postMessage(input);
+	// 		console.log('[bgs-run-stats] posted worker message');
+	// 	});
+	// }
 
 	private populateObject(
 		data: IBgsPostMatchStats,

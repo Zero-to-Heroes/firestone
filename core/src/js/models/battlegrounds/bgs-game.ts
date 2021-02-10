@@ -24,6 +24,7 @@ export class BgsGame {
 	readonly bannedRaces: readonly Race[];
 	readonly lastOpponentCardId: string;
 	readonly liveStats: RealTimeStatsState;
+	readonly gameEnded: boolean;
 
 	public static create(base: BgsGame): BgsGame {
 		return Object.assign(new BgsGame(), base);

@@ -879,6 +879,19 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'BATTLEGROUNDS_MINION_BOUGHT':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_BOUGHT, gameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_MINION_SOLD':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BATTLEGROUNDS_MINION_SOLD, gameEvent));
+				break;
+			case 'BATTLEGROUNDS_ENEMY_HERO_KILLED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.BATTLEGROUNDS_ENEMY_HERO_KILLED, gameEvent),
+				);
+				break;
 			case 'BATTLEGROUNDS_PLAYER_BOARD':
 				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(

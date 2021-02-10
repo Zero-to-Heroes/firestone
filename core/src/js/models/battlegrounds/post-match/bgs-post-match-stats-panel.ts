@@ -17,7 +17,7 @@ export class BgsPostMatchStatsPanel implements BgsPanel {
 	readonly player: BgsPlayer;
 	readonly tabs: BgsStatsFilterId[];
 	readonly selectedStat: BgsStatsFilterId;
-	readonly isComputing: boolean;
+	// readonly isComputing: boolean;
 	readonly forceOpen: boolean;
 
 	public static create(base: BgsPostMatchStatsPanel): BgsPostMatchStatsPanel {

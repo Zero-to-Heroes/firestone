@@ -6,15 +6,14 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY = true;
 	public static readonly ENABLE_BG_OPPONENT_MOUSE_OVER = true;
 	public static readonly ENABLE_BG_MINIONS_LIST = true;
-
 	public static readonly ENABLE_BG_SIMULATION_SHOW_ONLY_ON_RECRUIT = true;
 	public static readonly ENABLE_BG_SIMULATION_HIDE_ON_RECRUIT = true;
 
-	public static readonly ENABLE_DECKTRACKER_RESET_POSITIONS = false;
-	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = false;
-	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false;
-	public static readonly ENABLE_RANKED_ARCHETYPE = false;
-	public static readonly ENABLE_REAL_TIME_STATS = false;
+	public static readonly ENABLE_DECKTRACKER_RESET_POSITIONS = true;
+	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = true;
+	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = true;
+	public static readonly ENABLE_RANKED_ARCHETYPE = true;
+	public static readonly ENABLE_REAL_TIME_STATS = true;
 
 	// Deprecated, feature is sidelined for now
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;

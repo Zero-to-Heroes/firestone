@@ -2,12 +2,15 @@ import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bg
 import { captureEvent } from '@sentry/browser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
+import { Events } from '../../../events.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBattleResultParser implements EventParser {
+	constructor(private readonly events: Events) {}
+
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsBattleResultEvent';
 	}
@@ -71,8 +74,8 @@ export class BgsBattleResultParser implements EventParser {
 			});
 		}
 		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
+		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, gameWithActualBattleResult);
 		const lastOpponentCardId = normalizeHeroCardId(faceOff.opponentCardId);
-		console.debug('lastOpponentCardId', lastOpponentCardId, gameWithActualBattleResult.faceOffs);
 		const newGame = gameWithActualBattleResult.update({
 			faceOffs: [...gameWithActualBattleResult.faceOffs, faceOff] as readonly BgsFaceOff[],
 			lastOpponentCardId: lastOpponentCardId,

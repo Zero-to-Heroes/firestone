@@ -168,7 +168,7 @@ export class TwitchAuthService {
 			// },
 			currentTurn: state.currentGame?.currentTurn,
 			inGame: state.inGame,
-			gameEnded: state.gameEnded,
+			gameEnded: state.currentGame?.gameEnded,
 		};
 
 		// For now remove this, as it's clearly not optimized and can cause some CPU issues

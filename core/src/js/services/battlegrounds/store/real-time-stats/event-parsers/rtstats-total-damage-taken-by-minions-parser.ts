@@ -18,14 +18,26 @@ export class RTStatsTotalDamageTakenByMinionsParser implements EventParser {
 		const targets: readonly any[] = Object.values(gameEvent.additionalData.targets)
 			.filter((target: any) => target.TargetControllerId === localPlayerId)
 			.filter((target: any) => this.allCards.getCard(target.TargetCardId)?.type === 'Minion');
-		console.debug('[bgs-real-time-stats] damage taken', 'targets', targets, gameEvent);
+		if (!targets.length) {
+			return currentState;
+		}
+
+		// console.debug('[bgs-real-time-stats] damage taken', 'targets', targets, gameEvent);
 		const damageTakenObj = currentState.totalMinionsDamageTaken;
-		console.debug('[bgs-real-time-stats] damage taken', 'damageTakenObj', damageTakenObj);
+		// console.debug('[bgs-real-time-stats] damage taken', 'damageTakenObj', damageTakenObj);
 		for (const target of targets) {
 			const existingDamage = damageTakenObj[target.TargetCardId] ?? 0;
-			damageTakenObj[target] = existingDamage + target.Damage;
+			// console.debug(
+			// 	'[bgs-real-time-stats] damage taken',
+			// 	'handling damage',
+			// 	target,
+			// 	existingDamage,
+			// 	damageTakenObj[target.TargetCardId],
+			// 	damageTakenObj,
+			// );
+			damageTakenObj[target.TargetCardId] = existingDamage + target.Damage;
 		}
-		console.debug('[bgs-real-time-stats] damage taken', 'updated damageTakenObj', damageTakenObj);
+		// console.debug('[bgs-real-time-stats] damage taken', 'updated damageTakenObj', damageTakenObj);
 		return currentState.update({
 			totalMinionsDamageTaken: damageTakenObj,
 		} as RealTimeStatsState);

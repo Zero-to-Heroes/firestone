@@ -38,7 +38,6 @@ export class BgsWinrateChartComponent {
 	private _player: BgsPlayer;
 
 	@Input() set globalStats(value: BgsStats) {
-		// console.log('setting global stats', value, this._globalStats);
 		if (value === this._globalStats) {
 			return;
 		}
@@ -64,13 +63,11 @@ export class BgsWinrateChartComponent {
 	}
 
 	private updateInfo() {
-		// console.log('updateInfo', this._player, this._stats, this._globalStats);
 		if (!this._player || !this._globalStats) {
 			return;
 		}
 		this.communityExtractor = (): readonly NumericTurnInfo[] => {
 			if (!this._globalStats?.heroStats || !this._player?.cardId) {
-				// console.log('no info, returning', this._globalStats, this._player);
 				return [];
 			}
 
@@ -84,7 +81,6 @@ export class BgsWinrateChartComponent {
 					} as NumericTurnInfo;
 				})
 				.filter(stat => stat);
-			// console.log('comunity result', result);
 			return result;
 		};
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
@@ -98,7 +94,6 @@ export class BgsWinrateChartComponent {
 						value: turnInfo.simulationResult?.wonPercent || 0,
 					} as NumericTurnInfo),
 			);
-			// console.log('your result', result);
 			return result;
 		};
 	}

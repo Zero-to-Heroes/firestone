@@ -424,7 +424,7 @@ export class BattlegroundsStoreService {
 			new BgsMatchStartParser(this.prefs),
 			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
-			new BgsBattleResultParser(),
+			new BgsBattleResultParser(this.events),
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(this.prefs),
 			new BgsPostMatchStatsFilterChangeParser(),

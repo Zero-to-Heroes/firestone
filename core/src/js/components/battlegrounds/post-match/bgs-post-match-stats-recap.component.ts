@@ -135,8 +135,8 @@ export class BgsPostMatchStatsRecapComponent {
 
 	totalMinionsDamageDealt: number;
 	totalMinionsDamageTaken: number;
-	totalHeroDamageDealt: number;
-	maxSingleTurnHeroDamageDealt: number;
+	totalHeroDamageDealt: number = 0;
+	maxSingleTurnHeroDamageDealt: number = 0;
 	winStreak: number;
 	triples: number;
 	maxBoardStats: number;
@@ -206,7 +206,7 @@ export class BgsPostMatchStatsRecapComponent {
 			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
 				.filter(info => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
 				.map(info => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
-			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero);
+			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero, this.maxSingleTurnHeroDamageDealt);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
 		}
 		this.triples = this._stats.stats.tripleTimings?.length;
@@ -221,8 +221,8 @@ export class BgsPostMatchStatsRecapComponent {
 		this.heroPowers = this._stats.stats.mainPlayerHeroPowersOverTurn
 			.map(value => value.value)
 			.reduce((a, b) => a + b, 0);
-		this.maxBoardStats = Math.max(...this._stats.stats.totalStatsOverTurn.map(stat => stat.value));
-		console.debug('maxBoardStats', this.maxBoardStats, this._stats.stats.totalStatsOverTurn);
+		this.maxBoardStats = Math.max(0, Math.max(...this._stats.stats.totalStatsOverTurn.map(stat => stat.value)));
+		// console.debug('maxBoardStats', this.maxBoardStats, this._stats.stats.totalStatsOverTurn);
 		// Hack for Toki, to avoid counting the hero power as a refresh (even though it technically
 		// is a refresh)
 		const rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
@@ -236,7 +236,10 @@ export class BgsPostMatchStatsRecapComponent {
 			.length;
 		const battlesGoingSecond = this._stats.stats.wentFirstInBattleOverTurn.filter(value => value.value === false)
 			.length;
-		this.percentageOfBattlesGoingFirst = (100 * battlesGoingFirst) / (battlesGoingFirst + battlesGoingSecond);
+		this.percentageOfBattlesGoingFirst =
+			this._stats.stats.wentFirstInBattleOverTurn.length === 0
+				? 0
+				: (100 * battlesGoingFirst) / (battlesGoingFirst + battlesGoingSecond);
 		this.luckFactor = 100 * this._stats.stats.luckFactor;
 	}
 

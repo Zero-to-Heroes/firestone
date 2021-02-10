@@ -37,7 +37,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 				stats: null,
 				globalStats: currentState.battlegrounds.globalStats,
 				player: null,
-				isComputing: true,
+				// isComputing: true,
 				selectedStat: null, // We use the navigation-level info, to avoid
 				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn'], //, 'warband-composition-by-turn'], <-- will be reintroduced later
 			} as BgsPostMatchStatsPanel),

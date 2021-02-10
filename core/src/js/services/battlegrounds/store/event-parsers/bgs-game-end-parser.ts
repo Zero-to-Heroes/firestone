@@ -41,6 +41,7 @@ export class BgsGameEndParser implements EventParser {
 			currentPanelId: 'bgs-post-match-stats',
 			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			currentGame: currentState.currentGame.update({
+				gameEnded: true,
 				reviewId: event.reviewId,
 			} as BgsGame),
 		} as BattlegroundsState);
@@ -84,7 +85,7 @@ export class BgsGameEndParser implements EventParser {
 			player: player,
 			selectedStat: 'hp-by-turn',
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
-			isComputing: false,
+			// isComputing: false,
 			name: 'You finished #' + finalPosition,
 		} as BgsPostMatchStatsPanel);
 	}

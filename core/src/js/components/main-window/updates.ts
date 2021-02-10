@@ -4,7 +4,7 @@ export interface Update {
 }
 
 export interface UpdateSection {
-	readonly type: 'intro' | 'main' | 'minor' | 'beta';
+	readonly type: 'intro' | 'main' | 'minor' | 'beta' | 'future';
 	readonly header?: string;
 	readonly updates?: readonly UpdateSectionItem[];
 	readonly text?: string;
@@ -175,6 +175,20 @@ export const updates: readonly Update[] = [
 						],
 					},
 				],
+			},
+			{
+				type: 'future',
+				header: 'What is next',
+				text: `
+					Finally some improvements to the in-game overlay in Battlegrounds! Now you don't need multiple monitors to take advantage of many of the BG features :)
+					<br/>
+					And I'm looking to rework the app's home page (at https://www.firestoneapp.com/) to better showcase everything the app can do. If you or someone you know are available for the job, please let me know (on Discord)!
+					<br/>
+					<br/>
+					Stay safe,
+					<br/>
+					Seb.
+				`,
 			},
 		],
 	},

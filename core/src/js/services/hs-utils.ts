@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { capitalizeEachWord } from './utils';
 
 export const classes = [
@@ -206,4 +206,16 @@ export const getGalakrondCardFor = (className: string, invokeCount: number): str
 			return CardIds.Collectible.Warrior.GalakrondTheUnbreakable;
 	}
 	return CardIds.Collectible.Rogue.GalakrondTheNightmare;
+};
+
+export const defaultStartingHp = (gameType: GameType, heroCardId: string): number => {
+	if ([GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(gameType)) {
+		switch (heroCardId) {
+			case CardIds.NonCollectible.Neutral.PatchwerkTavernBrawl2:
+				return 55;
+			default:
+				return 40;
+		}
+	}
+	return 30;
 };

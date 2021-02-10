@@ -45,7 +45,7 @@ import { normalizeCardId } from './post-match/card-utils';
 			Last board was empty
 		</div>
 		<ul class="board" *ngIf="_entities && _entities.length > 0" [style.opacity]="boardReady ? 1 : 0">
-			<div class="minion-container" *ngFor="let entity of _entities">
+			<div class="minion-container" *ngFor="let entity of _entities; trackBy: trackByEntity">
 				<li>
 					<card-on-board
 						transition-group-item
@@ -108,6 +108,9 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	@Input('entities') set entities(value: readonly Entity[]) {
+		if (this.debug) {
+			console.debug('[bgs-board] setting entities', value);
+		}
 		// if (this.inputEntities === value) {
 		// 	if (this.debug) {
 		// 		console.log('getting the same input entities, returning', value);
@@ -208,6 +211,10 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 
 	isNumber(value: number): boolean {
 		return !isNaN(value);
+	}
+
+	trackByEntity(entity: Entity) {
+		return entity.id;
 	}
 
 	@HostListener('window:resize')

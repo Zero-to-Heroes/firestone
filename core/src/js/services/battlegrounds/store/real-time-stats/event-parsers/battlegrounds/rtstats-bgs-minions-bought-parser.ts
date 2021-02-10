@@ -4,11 +4,11 @@ import { GameEvent } from '../../../../../../models/game-event';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
-export class RTStatsBgsFreezeParser implements EventParser {
+export class RTStatBgsMinionsBoughtParser implements EventParser {
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
 		return (
 			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(currentState.gameType) &&
-			gameEvent.type === GameEvent.BATTLEGROUNDS_FREEZE
+			gameEvent.type === GameEvent.BATTLEGROUNDS_MINION_BOUGHT
 		);
 	}
 
@@ -16,21 +16,29 @@ export class RTStatsBgsFreezeParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const freezeThisTurn =
-			currentState.freezesOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
-		const newFreeze: readonly NumericTurnInfo[] = [
-			...currentState.freezesOverTurn.filter(info => info.turn !== currentState.currentTurn),
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		if (!isPlayer) {
+			return currentState;
+		}
+
+		const boughtThisTurn =
+			currentState.minionsBoughtOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
+		const newBought: readonly NumericTurnInfo[] = [
+			...currentState.minionsBoughtOverTurn.filter(info => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
-				value: freezeThisTurn + 1,
+				value: boughtThisTurn + 1,
 			},
 		];
+
 		return currentState.update({
-			freezesOverTurn: newFreeze,
+			minionsBoughtOverTurn: newBought,
 		} as RealTimeStatsState);
 	}
 
 	name(): string {
-		return 'RTStatsBgsFreezeParser';
+		return 'RTStatBgsMinionsBoughtParser';
 	}
 }

@@ -25,7 +25,7 @@ export class BgsMinionsListOverlay implements BattlegroundsOverlay {
 	public async updateOverlay(state: BattlegroundsState) {
 		const windowId = OverwolfService.BATTLEGROUNDS_WINDOW_MINIONS_TIERS_OVERLAY;
 		const battlegroundsWindow = await this.ow.getWindowState(windowId);
-		const inGame = state && state.inGame && !state.gameEnded;
+		const inGame = state && state.inGame && !state.currentGame?.gameEnded;
 		await this.ow.obtainDeclaredWindow(windowId);
 		// await this.ow.restoreWindow(windowId);
 		if (inGame && this.bgsActive) {

@@ -46,7 +46,7 @@ export class ShowMatchStatsProcessor implements Processor {
 					  } as BgsPlayer)
 					: null,
 				selectedStat: null, // We use the navigation-level info, to avoid
-				isComputing: false,
+				// isComputing: false,
 				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn'], //, 'warband-composition-by-turn'], <-- will be reintroduced later
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);

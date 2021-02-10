@@ -26,7 +26,7 @@ export class BgsSimulationOverlay implements BattlegroundsOverlay {
 	public async updateOverlay(state: BattlegroundsState) {
 		const windowId = OverwolfService.BATTLEGROUNDS_BATTLE_SIMULATION_WINDOW_OVERLAY;
 		const window = await this.ow.getWindowState(windowId);
-		const inGame = state && state.inGame && !state.gameEnded;
+		const inGame = state && state.inGame && !state.currentGame?.gameEnded;
 		if (inGame && this.active) {
 			if (isWindowClosed(window.window_state_ex)) {
 				// console.log('[bgs-simulation-overlay] showing window', await this.ow.getWindowState(windowId));

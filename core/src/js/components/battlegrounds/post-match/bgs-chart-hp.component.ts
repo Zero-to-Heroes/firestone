@@ -15,6 +15,7 @@ import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.
 import { Color } from 'ng2-charts';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
+import { areEqualDataSets } from './chart-utils';
 
 declare let amplitude: any;
 
@@ -27,7 +28,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="legend">
-			<div *ngFor="let player of legend" class="item">
+			<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="item">
 				<img [src]="player.icon" class="portrait" />
 				<div class="position position-{{ player.position }}" [ngClass]="{ 'player': player.isPlayer }">
 					#{{ player.position }}
@@ -35,7 +36,7 @@ declare let amplitude: any;
 			</div>
 			<div class="toggles">
 				<div class="subtitle">Show me:</div>
-				<div *ngFor="let player of legend" class="toggle position">
+				<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="toggle position">
 					<input
 						type="checkbox"
 						name="player-toggled-{{ player.position }}"
@@ -195,14 +196,6 @@ export class BgsChartHpComponent {
 				const positionX = this._chart.canvas.offsetLeft;
 
 				let position = 'bottom';
-				// console.log(
-				// 	'adjusting?',
-				// 	tooltip,
-				// 	this._chart.canvas.height,
-				// 	positionY,
-				// 	tooltip.caretY,
-				// 	tooltip.height,
-				// );
 				const tooltipHeight = 220;
 				if (positionY + tooltip.caretY + tooltipHeight > this._chart.canvas.height) {
 					position = 'top';
@@ -241,15 +234,6 @@ export class BgsChartHpComponent {
 							return `<div></div>`;
 						}
 						const colorIndex = this.legend.map(leg => leg.cardId).indexOf(cardId);
-						// console.log(
-						// 	'before tooltip',
-						// 	datasetIndex,
-						// 	colorIndex,
-						// 	legendItem,
-						// 	item,
-						// 	data,
-						// 	this.legend,
-						// );
 						const color = this.playerColors[colorIndex];
 						return `<div class="node" style="background: ${color}"></div> ${playerItem?.value} health`;
 					});
@@ -264,27 +248,18 @@ export class BgsChartHpComponent {
 
 	private _stats: BgsPostMatchStats;
 	private _mainPlayerCardId: string;
-	// private _game: BgsGame;
 	private _visible: boolean;
 	private _dirty = true;
 
 	@Input() set stats(value: BgsPostMatchStats) {
-		// console.log('setting stats', value);
 		this._stats = value;
 		this.setStats();
 	}
 
 	@Input() set mainPlayerCardId(value: string) {
-		// console.log('setting stats', value);
 		this._mainPlayerCardId = value;
 		this.setStats();
 	}
-
-	// @Input() set game(value: BgsGame) {
-	// 	// console.log('setting game', value);
-	// 	this._game = value;
-	// 	this.setStats();
-	// }
 
 	@Input() set visible(value: boolean) {
 		if (value === this._visible) {
@@ -309,15 +284,6 @@ export class BgsChartHpComponent {
 		this.lineChartData = this.lineChartData.map(data =>
 			(data as any).cardId === playerCardId ? { ...data, hidden: !data.hidden } : data,
 		);
-		// for (let i = 0; i < this.lineChartData)
-		// this.lineChartColors = this.playerColors.map(color => ({
-		// 	backgroundColor: 'transparent',
-		// 	borderColor: color,
-		// 	pointBackgroundColor: 'transparent',
-		// 	pointBorderColor: 'transparent',
-		// 	pointHoverBackgroundColor: 'transparent',
-		// 	pointHoverBorderColor: 'transparent',
-		// }));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -329,6 +295,10 @@ export class BgsChartHpComponent {
 	onResize() {
 		this._dirty = true;
 		this.doResize();
+	}
+
+	trackByLegendFn(player: { cardId: string; icon: string; position: number; isPlayer: boolean; shown: boolean }) {
+		return player.cardId;
 	}
 
 	private doResize() {
@@ -343,7 +313,6 @@ export class BgsChartHpComponent {
 			return;
 		}
 
-		// console.log('on chart hp resize');
 		const chartContainer = this.el.nativeElement.querySelector('.container-1');
 		const rect = chartContainer?.getBoundingClientRect();
 		if (!rect?.width || !rect?.height || !this.chart?.nativeElement?.getContext('2d')) {
@@ -353,18 +322,10 @@ export class BgsChartHpComponent {
 			return;
 		}
 		if (rect.width === this.chartWidth && rect.height === this.chartHeight) {
-			// console.log('correct container size', this.previousWidth, this.chartWidth, this.chartHeight);
 			return;
 		}
-		// this.previousWidth = rect.width;
-		// console.log('chartContainer', chartContainer, rect);
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.height;
-		// if (this.chartHeight > rect.height) {
-		// 	this.chartHeight = rect.height;
-		// 	this.chartWidth = 2 * this.chartHeight;
-		// }
-		// console.log('setting chart dimensions', this.chartHeight, this.chartWidth);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -403,17 +364,11 @@ export class BgsChartHpComponent {
 						: info.lastKnownHp === 40,
 				)
 				.filter(info => info.playerCardId !== this._mainPlayerCardId);
-			console.log('candidates to remove', candidatesToRemove.length, playerOrder.length - 8, candidatesToRemove);
 			playerOrder = playerOrder.filter(
 				playerCardId => !candidatesToRemove.map(info => info.playerCardId).includes(playerCardId),
 			);
 		}
 
-		// const playerOrder = [...this._game.players]
-		// 	.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
-		// 	.map(player => player?.cardId);
-
-		// console.log('playerOrder', playerOrder);
 		const hpOverTurn = {};
 		for (const playerCardId of playerOrder) {
 			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
@@ -427,7 +382,12 @@ export class BgsChartHpComponent {
 			shown: true,
 		}));
 
-		this.lineChartData = await this.buildChartData(hpOverTurn);
+		const newChartData = await this.buildChartData(hpOverTurn);
+		if (areEqualDataSets(newChartData, this.lineChartData)) {
+			return;
+		}
+
+		this.lineChartData = newChartData;
 		this.lineChartLabels = await this.buildChartLabels(hpOverTurn);
 
 		this.lineChartColors = this.playerColors.map(color => ({
@@ -438,7 +398,6 @@ export class BgsChartHpComponent {
 			pointHoverBackgroundColor: 'transparent',
 			pointHoverBorderColor: 'transparent',
 		}));
-		// console.log('built line colors', this.lineChartColors);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

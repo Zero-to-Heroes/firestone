@@ -1,14 +1,16 @@
-import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/numeric-turn-info';
+import { buildLuckFactor } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameType } from '@firestone-hs/reference-data';
+import { BgsGame } from '../../../../../../models/battlegrounds/bgs-game';
 import { GameEvent } from '../../../../../../models/game-event';
+import { Events } from '../../../../../events.service';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
-export class RTStatsBgsFreezeParser implements EventParser {
+export class RTStatsBgsBattleHistoryUpdatedParser implements EventParser {
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
 		return (
 			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(currentState.gameType) &&
-			gameEvent.type === GameEvent.BATTLEGROUNDS_FREEZE
+			gameEvent.type === Events.BATTLE_SIMULATION_HISTORY_UPDATED
 		);
 	}
 
@@ -16,21 +18,15 @@ export class RTStatsBgsFreezeParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const freezeThisTurn =
-			currentState.freezesOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
-		const newFreeze: readonly NumericTurnInfo[] = [
-			...currentState.freezesOverTurn.filter(info => info.turn !== currentState.currentTurn),
-			{
-				turn: currentState.currentTurn,
-				value: freezeThisTurn + 1,
-			},
-		];
+		const history = (gameEvent.additionalData.game as BgsGame).battleResultHistory;
+		const luckFactor = buildLuckFactor(history) ?? 0;
 		return currentState.update({
-			freezesOverTurn: newFreeze,
+			luckFactor: luckFactor,
+			battleResultHistory: history,
 		} as RealTimeStatsState);
 	}
 
 	name(): string {
-		return 'RTStatsBgsFreezeParser';
+		return 'RTStatsBgsBattleHistoryUpdatedParser';
 	}
 }

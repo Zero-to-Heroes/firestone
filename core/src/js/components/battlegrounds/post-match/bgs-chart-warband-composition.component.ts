@@ -59,6 +59,7 @@ declare let amplitude: any;
 		</div>
 		<div class="chart-container">
 			<ngx-charts-bar-vertical-stacked
+				*ngIf="chartData"
 				[view]="dimensions"
 				[results]="chartData"
 				[scheme]="colorScheme"
@@ -70,6 +71,7 @@ declare let amplitude: any;
 				[trimYAxisTicks]="false"
 				[yAxisTicks]="[0, 1, 2, 3, 4, 5, 6, 7]"
 				[yAxisTickFormatting]="axisTickFormatter"
+				[yScaleMax]="7"
 				[showGridLines]="true"
 				[rotateXAxisTicks]="false"
 				[barPadding]="barPadding"
@@ -159,7 +161,6 @@ export class BgsChartWarbandCompositionComponent {
 
 	@HostListener('window:resize')
 	onResize() {
-		// console.log('window resize');
 		this._dirty = true;
 		this.doResize();
 	}
@@ -174,9 +175,7 @@ export class BgsChartWarbandCompositionComponent {
 			console.log('not dirty');
 			return;
 		}
-		// console.log('detected resize event', this._visible, this._dirty);
 		setTimeout(() => {
-			// console.log('handling resize');
 			const chartContainer = this.el.nativeElement.querySelector('.chart-container');
 			const rect = chartContainer?.getBoundingClientRect();
 			if (!rect?.width || !rect?.height) {
@@ -185,7 +184,6 @@ export class BgsChartWarbandCompositionComponent {
 				}, 500);
 				return;
 			}
-			// console.log('chartContainer', chartContainer, rect, rect.width, rect.height);
 			this._dirty = false;
 			this.dimensions = [rect.width, rect.height - 15];
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -195,8 +193,6 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	axisTickFormatter(text: string): string {
-		// console.log('formatting', text);
-
 		return parseInt(text).toFixed(0);
 	}
 
@@ -205,13 +201,8 @@ export class BgsChartWarbandCompositionComponent {
 			this.allCards.initializeCardsDb();
 			return;
 		}
-		// await this.allCards.initializeCardsDb();
 		this.chartData = this.buildChartData(value);
-		// console.log('chartData', this.chartData, value?.boardHistory, value);
-		this.barPadding = Math.min(40, 40 - 2 * (value.boardHistory.length - 12));
-		// this.chartLabels = await this.buildChartLabels(value);
-		// this.chartColors = this.buildChartColors(value);
-		// console.log('built line colors', this.chartColors);
+		this.barPadding = Math.min(40, 40 - 2 * (this.chartData.length - 12));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -221,7 +212,17 @@ export class BgsChartWarbandCompositionComponent {
 		if (!value || !value.boardHistory) {
 			return null;
 		}
-		return value.boardHistory
+		const history = [...value.boardHistory];
+		if (history.length < 7) {
+			const length = history.length;
+			for (var i = length; i < 7; i++) {
+				history.push({
+					turn: i,
+					board: [],
+				});
+			}
+		}
+		return history
 			.filter(history => history.turn > 0)
 			.map(history => ({
 				name: history.turn,
@@ -254,13 +255,6 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	private getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
-		// console.log(
-		// 	'getting minions',
-		// 	tribe,
-		// 	turn,
-		// 	this._stats?.boardHistory?.find(history => history.turn === turn)?.board,
-		// 	this._stats?.boardHistory?.find(history => history.turn === turn)?.board[0].tags.toJS(),
-		// );
 		return (
 			this._stats?.boardHistory
 				?.find(history => history.turn === turn)

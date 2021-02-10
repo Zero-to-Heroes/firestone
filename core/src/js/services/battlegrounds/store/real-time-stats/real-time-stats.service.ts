@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../models/game-event';
+import { Events } from '../../../events.service';
 import { FeatureFlags } from '../../../feature-flags';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
+import { RTStatBgsAttackFirstParser } from './event-parsers/battlegrounds/rtstats-bgs-attack-first-parser';
+import { RTStatsBgsBattleHistoryUpdatedParser } from './event-parsers/battlegrounds/rtstats-bgs-battle-history-updated-parser';
 import { RTStatsBgsBoardStatsParser } from './event-parsers/battlegrounds/rtstats-bgs-board-stats-parser';
+import { RTStatBgsEnemyHeroKilledParser } from './event-parsers/battlegrounds/rtstats-bgs-enemy-hero-killed-parser';
 import { RTStatsBgsFaceOffParser } from './event-parsers/battlegrounds/rtstats-bgs-face-offs-parser';
 import { RTStatsBgsFreezeParser } from './event-parsers/battlegrounds/rtstats-bgs-freeze-parser';
+import { RTStatsBgsHeroSelectedParser } from './event-parsers/battlegrounds/rtstats-bgs-hero-selected-parser';
+import { RTStatBgsMinionsBoughtParser } from './event-parsers/battlegrounds/rtstats-bgs-minions-bought-parser';
+import { RTStatBgsMinionsSoldParser } from './event-parsers/battlegrounds/rtstats-bgs-minions-sold-parser';
+import { RTStatsBgsOpponentRevealedParser } from './event-parsers/battlegrounds/rtstats-bgs-opponent-revealed-parser';
 import { RTStatsBgsRerollsParser } from './event-parsers/battlegrounds/rtstats-bgs-rerolls-parser';
 import { RTStatsBgsTriplesCreatedParser } from './event-parsers/battlegrounds/rtstats-bgs-triples-created-parser';
+import { RTStatBgsTurnStartParser } from './event-parsers/battlegrounds/rtstats-bgs-turn-start-parser';
 import { RTStatsGameStartParser } from './event-parsers/rtstats-game-start-parser';
+import { RTStatHeroPowerUsedParser } from './event-parsers/rtstats-hero-power-used-parser';
+import { RTStatHpOverTurnParser } from './event-parsers/rtstats-hp-over-turn-parser';
 import { RTStatsMetadataParser } from './event-parsers/rtstats-metadata-parser';
+import { RTStatsMinionsKilledParser } from './event-parsers/rtstats-minions-killed-parser';
 import { RTStatsResourcesWastedPerTurnParser } from './event-parsers/rtstats-resources-wasted-per-turn-parser';
 import { RTStatsTotalDamageDealtByHeroesParser } from './event-parsers/rtstats-total-damage-dealt-by-heroes-parser';
 import { RTStatsTotalDamageDealtByMinionsParser } from './event-parsers/rtstats-total-damage-dealt-by-minions-parser';
@@ -32,7 +44,11 @@ export class RealTimeStatsService {
 	private eventParsers: readonly EventParser[];
 	private listeners: ((state: RealTimeStatsState) => void)[] = [];
 
-	constructor(private readonly gameEvents: GameEventsEmitterService, private readonly allCards: AllCardsService) {
+	constructor(
+		private readonly gameEvents: GameEventsEmitterService,
+		private readonly events: Events,
+		private readonly allCards: AllCardsService,
+	) {
 		if (!FeatureFlags.ENABLE_REAL_TIME_STATS) {
 			return;
 		}
@@ -74,7 +90,7 @@ export class RealTimeStatsService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			this.debug('state', this.state);
+			// this.debug('state', this.state);
 			this.listeners.forEach(listener => listener(this.state));
 		}
 	}
@@ -83,6 +99,16 @@ export class RealTimeStatsService {
 		this.eventParsers = this.buildEventParsers();
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
+		});
+		this.events.on(Events.BATTLE_SIMULATION_HISTORY_UPDATED).subscribe(data => {
+			this.processingQueue.enqueue(
+				Object.assign(new GameEvent(), {
+					type: Events.BATTLE_SIMULATION_HISTORY_UPDATED,
+					additionalData: {
+						game: data.data[0],
+					},
+				}),
+			);
 		});
 	}
 
@@ -96,13 +122,24 @@ export class RealTimeStatsService {
 			new RTStatsTotalDamageDealtByHeroesParser(this.allCards),
 			new RTStatsTotalDamageTakenByHeroesParser(this.allCards),
 			new RTStatsResourcesWastedPerTurnParser(this.allCards),
+			new RTStatHeroPowerUsedParser(),
+			new RTStatsMinionsKilledParser(),
+			new RTStatHpOverTurnParser(this.allCards),
 
 			// BG-specific
+			new RTStatBgsTurnStartParser(),
+			new RTStatsBgsHeroSelectedParser(),
+			new RTStatsBgsOpponentRevealedParser(),
 			new RTStatsBgsFaceOffParser(),
+			new RTStatsBgsBattleHistoryUpdatedParser(),
 			new RTStatsBgsTriplesCreatedParser(),
 			new RTStatsBgsBoardStatsParser(),
 			new RTStatsBgsRerollsParser(),
 			new RTStatsBgsFreezeParser(),
+			new RTStatBgsMinionsBoughtParser(),
+			new RTStatBgsMinionsSoldParser(),
+			new RTStatBgsEnemyHeroKilledParser(),
+			new RTStatBgsAttackFirstParser(this.allCards),
 		];
 	}
 
