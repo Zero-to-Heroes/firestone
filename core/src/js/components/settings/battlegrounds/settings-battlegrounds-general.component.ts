@@ -85,6 +85,12 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When turned on, the battlegrounds window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowOverlayButton"
+						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle || !bgsUseOverlay }"
+						label="Show overlay button"
+						tooltip="Shows a button on the overlay to toggle the main window or on off, which you can use instead of the hotkeys"
+					></preference-toggle>
+					<preference-toggle
 						field="bgsForceShowPostMatchStats"
 						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle }"
 						label="Show post-match stats"
@@ -232,6 +238,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	bgsShowSimResultsOnlyOnRecruit: boolean;
 	bgsFullToggle: boolean;
 	bgsEnableApp: boolean;
+	bgsUseOverlay: boolean;
 	showBannedTribes: boolean;
 	bgsEnableMinionListOverlay: boolean;
 	numberOfSimsKnobs: readonly Knob[] = [
@@ -274,6 +281,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 			this.bgsHideSimResultsOnRecruit = preferences.bgsHideSimResultsOnRecruit;
 			this.bgsShowSimResultsOnlyOnRecruit = preferences.bgsShowSimResultsOnlyOnRecruit;
 			this.bgsEnableApp = preferences.bgsEnableApp;
+			this.bgsUseOverlay = preferences.bgsUseOverlay;
 			this.bgsFullToggle = preferences.bgsFullToggle;
 			this.showBannedTribes = preferences.bgsShowBannedTribesOverlay;
 			this.bgsEnableMinionListOverlay = preferences.bgsEnableMinionListOverlay;
@@ -296,6 +304,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		this.bgsHideSimResultsOnRecruit = prefs.bgsHideSimResultsOnRecruit;
 		this.bgsShowSimResultsOnlyOnRecruit = prefs.bgsShowSimResultsOnlyOnRecruit;
 		this.bgsEnableApp = prefs.bgsEnableApp;
+		this.bgsUseOverlay = prefs.bgsUseOverlay;
 		this.bgsFullToggle = prefs.bgsFullToggle;
 		this.showBannedTribes = prefs.bgsShowBannedTribesOverlay;
 		this.bgsEnableMinionListOverlay = prefs.bgsEnableMinionListOverlay;

@@ -50,10 +50,11 @@ export class DecktrackerWidgetIconComponent implements AfterViewInit {
 	}
 
 	toggleDecktracker(event: MouseEvent) {
-		console.log('toggling', this.isDragging);
 		if (this.isDragging || this.isDebounce) {
 			return;
 		}
+		console.log('toggling', this.isDragging);
+		amplitude.getInstance().logEvent('decktracker-widget-toggle');
 		this.big = true;
 		setTimeout(() => (this.big = false), 200);
 		this._decktrackerToggled = !this._decktrackerToggled;

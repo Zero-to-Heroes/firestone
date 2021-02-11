@@ -63,6 +63,7 @@ import { BgsRealTimeStatsUpdatedEvent } from './events/bgs-real-time-stats-updat
 import { BgsRecruitStartEvent } from './events/bgs-recruit-start-event';
 import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
+import { BgsToggleOverlayWindowEvent } from './events/bgs-toggle-overlay-window-event';
 import { BgsTripleCreatedEvent } from './events/bgs-triple-created-event';
 import { BgsTurnStartEvent } from './events/bgs-turn-start-event';
 import { NoBgsMatchEvent } from './events/no-bgs-match-event';
@@ -72,6 +73,7 @@ import { BgsBannedTribesOverlay } from './overlay/bgs-banned-tribes-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
 import { BgsMinionsListOverlay } from './overlay/bgs-minions-list-overlay';
 import { BgsMouseOverOverlay } from './overlay/bgs-mouse-over-overlay';
+import { BgsOverlayButtonOverlay } from './overlay/bgs-overlay-button-overlay';
 import { BgsPlayerPogoOverlay } from './overlay/bgs-player-pogo-overlay';
 import { BgsSimulationOverlay } from './overlay/bgs-simulation-overlay';
 import { RealTimeStatsState } from './real-time-stats/real-time-stats';
@@ -355,6 +357,17 @@ export class BattlegroundsStoreService {
 				forceOpen: false,
 			} as BattlegroundsState);
 			this.updateOverlay();
+		} else if (gameEvent.type === BgsToggleOverlayWindowEvent.NAME) {
+			const window = await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY);
+			if (window.stateEx === 'normal' || window.stateEx === 'maximized') {
+				await this.ow.minimizeWindow(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY);
+			} else {
+				this.state = this.state.update({
+					forceOpen: true,
+				} as BattlegroundsState);
+				// await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY);
+				await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY);
+			}
 		}
 		let newState = this.state;
 		for (const parser of this.eventParsers) {
@@ -453,6 +466,7 @@ export class BattlegroundsStoreService {
 			new BgsBannedTribesOverlay(this.prefs, this.ow),
 			new BgsMouseOverOverlay(this.prefs, this.ow),
 			new BgsMinionsListOverlay(this.prefs, this.ow),
+			new BgsOverlayButtonOverlay(this.ow),
 		];
 	}
 }

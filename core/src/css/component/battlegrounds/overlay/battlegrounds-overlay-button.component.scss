@@ -1,0 +1,43 @@
+.battlegrounds-overlay-button {
+	display: flex;
+
+	&:hover {
+		.close {
+			display: flex;
+		}
+	}
+}
+
+.battlegrounds-widget {
+	transition: transform 0.1s ease-out;
+	&.big {
+		transform: scale(1.1);
+	}
+	.icon {
+		width: 80px;
+		height: 80px;
+		fill: currentcolor;
+	}
+	.idle {
+		background: url(/Files/assets/svg/battlegrounds_widget_idle.svg) center center;
+	}
+	.active {
+		background: url(/Files/assets/svg/battlegrounds_widget_active.svg) center center;
+		display: none;
+	}
+	&:hover {
+		.active {
+			display: flex;
+		}
+		.idle {
+			display: none;
+		}
+	}
+}
+
+.close {
+	display: none;
+	background: var(--color-7);
+	height: 30px;
+	width: 30px;
+}

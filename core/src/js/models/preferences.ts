@@ -163,6 +163,8 @@ export class Preferences {
 	readonly bgsShowTribesHighlight: boolean = true;
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 	readonly bgsShowHeroSelectionScreen: boolean = true;
+	readonly bgsShowOverlayButton: boolean = true;
+	readonly bgsOverlayButtonPosition: { left: number; top: number };
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';

@@ -196,6 +196,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateBgsOverlayButtonPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsOverlayButtonPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async setZoneToggleDefaultClose(name: string, side: string, close: boolean) {
 		const prefs = await this.getPreferences();
 		const propertyName = 'overlayZoneToggleDefaultClose_' + side + '_' + name;

@@ -30,6 +30,7 @@ export class OverwolfService {
 	public static BATTLEGROUNDS_BATTLE_SIMULATION_WINDOW_OVERLAY = 'BgsBattleSimulationOverlay';
 	public static BATTLEGROUNDS_BANNED_TRIBES_WINDOW = 'BgsBannedTribes';
 	public static BATTLEGROUNDS_WINDOW_MINIONS_TIERS_OVERLAY = 'BattlegroundsMinionsTiersWindow';
+	public static BATTLEGROUNDS_OVERLAY_BUTTON_OVERLAY_WINDOW = 'BattlegroundsOverlayButtonWindow';
 	public static CONSTRUCTED_WINDOW = 'ConstructedWindow';
 	// public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
 	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
@@ -272,7 +273,7 @@ export class OverwolfService {
 	public async closeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.close(windowId, result => {
-				// console.log('[overwolf-service] closed window', windowId);
+				// console.log('[overwolf-service] closed window', windowId, new Error().stack);
 				resolve(result);
 			});
 		});
@@ -282,7 +283,7 @@ export class OverwolfService {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<any>(resolve => {
 			overwolf.windows.close(window.id, result => {
-				// console.log('[overwolf-service] closed window', windowName);
+				// console.log('[overwolf-service] closed window', windowName, new Error().stack);
 				resolve(result);
 			});
 		});

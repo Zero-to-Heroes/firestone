@@ -23,7 +23,6 @@ export class BgsBannedTribesOverlay implements BattlegroundsOverlay {
 		const windowId = OverwolfService.BATTLEGROUNDS_BANNED_TRIBES_WINDOW;
 		const theWindow = await this.ow.getWindowState(windowId);
 		const inGame = state && state.inGame && !state.currentGame?.gameEnded;
-		console.log('tribes overlay, should show?', inGame, this.active, state, theWindow);
 		if (inGame && this.active && isWindowClosed(theWindow.window_state_ex)) {
 			//console.log('[bgs-simulation-overlay] showing window', inGame, this.active, theWindow);
 			await this.ow.obtainDeclaredWindow(windowId);

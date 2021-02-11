@@ -69,7 +69,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `I have totally removed the ad space for supporters in the in-game window to give more space to the stats.`,
+								text: `For premium supporters: I have totally removed the ad space in the in-game window to give more space to the stats.`,
 							},
 						],
 					},
@@ -83,6 +83,10 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add an in-game button to show / hide the battlegrounds window, so you don't have to use any keyboard shortcut anymore. The button is only available if you have the "integrated mode" option toggled on, as I'm assuming you don't need it if you have multiple monitors. Let me know if I'm wrong!`,
+							},
+							{
 								type: 'bug',
 								text: `Fix a broken tooltip display when mousing over the heroes in the hero selection screen.`,
 							},
@@ -94,6 +98,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+							},
+							{
+								type: 'ui',
+								text: `Add a button in the settings to reset the tracker's position, which can be useful if for some reason it is not visible anymore.`,
 							},
 						],
 					},
