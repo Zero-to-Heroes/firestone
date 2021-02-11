@@ -36,14 +36,24 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	@Input('componentTooltipPosition') position:
+	@Input('componentTooltipPosition') set position(
+		value: 'bottom' | 'right' | 'left' | 'top' | 'global-top-center' | 'global-top-left' | 'global-bottom-left',
+	) {
+		if (value === this._position) {
+			return;
+		}
+		this._position = value;
+		this.updatePositionStrategy();
+	}
+
+	private _position:
 		| 'bottom'
 		| 'right'
 		| 'left'
 		| 'top'
 		| 'global-top-center'
-		| 'global-top-left' = 'right';
-
+		| 'global-top-left'
+		| 'global-bottom-left' = 'right';
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -64,27 +74,28 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		if (!this.viewInit) {
 			return;
 		}
-		if (this.positionStrategy) {
-			this.positionStrategy.detach();
-			this.positionStrategy.dispose();
-			this.positionStrategy = null;
-		}
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			this.overlayRef.dispose();
 		}
 		const positions: ConnectedPosition[] = this.buildPositions();
+		console.debug('building for position', this._position);
 
-		if (this.position === 'global-top-center') {
+		if (this._position === 'global-top-center') {
 			this.positionStrategy = this.overlayPositionBuilder
 				.global()
 				.centerHorizontally()
 				.top();
-		} else if (this.position === 'global-top-left') {
+		} else if (this._position === 'global-top-left') {
 			this.positionStrategy = this.overlayPositionBuilder
 				.global()
 				.left()
 				.top();
+		} else if (this._position === 'global-bottom-left') {
+			this.positionStrategy = this.overlayPositionBuilder
+				.global()
+				.left()
+				.bottom();
 		} else {
 			this.positionStrategy = this.overlayPositionBuilder
 				// Create position attached to the elementRef
@@ -140,7 +151,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	}
 
 	private buildPositions(): ConnectedPosition[] {
-		switch (this.position) {
+		switch (this._position) {
 			case 'right':
 				return [
 					{

@@ -1,6 +1,20 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
+import { Preferences } from '../../../models/preferences';
+import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.component';
 
 @Component({
@@ -29,10 +43,10 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsLeaderboardEmptyCardComponent {
+export class BgsLeaderboardEmptyCardComponent implements AfterViewInit, OnDestroy {
 	componentType: ComponentType<any> = BgsOverlayHeroOverviewComponent;
 
-	@Input() position: 'global-top-center' | 'global-top-left' | 'right' = 'right';
+	@Input() position: 'global-top-center' | 'global-top-left' | 'global-bottom-left' | 'right' = 'global-top-left';
 
 	@Input() set currentTurn(value: number) {
 		if (this._currentTurn === value) {
@@ -60,16 +74,52 @@ export class BgsLeaderboardEmptyCardComponent {
 
 	@Input() showLastOpponentIcon: boolean;
 
+	componentClass: string;
 	_bgsPlayer: {
 		player: BgsPlayer;
 		currentTurn: number;
 		isLastOpponent: boolean;
+		additionalClasses: string;
 	};
 
 	_previousPlayer: BgsPlayer;
 	_currentTurn: number;
 	_lastOpponentCardId: string;
 	isLastOpponent: boolean;
+
+	private preferencesSubscription: Subscription;
+
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	async ngAfterViewInit() {
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handleDisplayPreferences(event.preferences);
+		});
+		await this.handleDisplayPreferences();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy() {
+		this.preferencesSubscription?.unsubscribe();
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.position = preferences.bgsOpponentOverlayAtTop ? 'global-top-left' : 'global-bottom-left';
+		this.componentClass = preferences.bgsOpponentOverlayAtTop ? null : 'bottom';
+		this.updateInfo();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	private updateInfo() {
 		if (!this._previousPlayer) {
@@ -92,6 +142,7 @@ export class BgsLeaderboardEmptyCardComponent {
 			} as BgsPlayer),
 			currentTurn: this._currentTurn,
 			isLastOpponent: this.isLastOpponent,
+			additionalClasses: this.componentClass,
 		};
 	}
 }

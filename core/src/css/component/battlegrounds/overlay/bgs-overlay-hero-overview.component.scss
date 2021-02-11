@@ -4,6 +4,18 @@
 	position: relative;
 	left: 55px;
 	top: 10px;
+
+	transform: scale(1);
+	transform-origin: left top;
+	opacity: 1;
+	transition-property: transform, opacity;
+	transition-duration: 0.15s;
+	transition-timing-function: cubic-bezier(0, 0.26, 0.305, 1.65);
+
+	&.bottom {
+		bottom: 10px;
+		top: auto;
+	}
 }
 
 .bgs-hero-overview-tooltip {

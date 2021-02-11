@@ -8,7 +8,6 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsToggleOverlayWindowEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-overlay-window-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { DebugService } from '../../../services/debug.service';
@@ -54,10 +53,7 @@ export class BattlegroundsOverlayButtonComponent implements AfterViewInit {
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private init_DebugService: DebugService,
-		private allCards: AllCardsService,
-	) {
-		allCards.initializeCardsDb();
-	}
+	) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;

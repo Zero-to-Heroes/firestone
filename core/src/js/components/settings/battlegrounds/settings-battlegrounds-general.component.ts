@@ -167,6 +167,7 @@ import { Knob } from '../preference-slider.component';
 					tooltip="Show the number of times you played a Pogo-Hopper in Battlegrounds"
 				></preference-toggle>
 			</div>
+
 			<div class="title">
 				Local simulator configuration
 			</div>
@@ -219,6 +220,34 @@ import { Knob } from '../preference-slider.component';
 				>
 				</preference-slider>
 			</div>
+
+			<div class="title">
+				Opponent board
+			</div>
+			<div class="settings-group" [ngClass]="{ 'disabled': !showBannedTribes || !bgsFullToggle }">
+				<preference-toggle
+					class="opponent-board-top"
+					field="bgsOpponentOverlayAtTop"
+					[ngClass]="{ 'disabled': !bgsEnableOpponentBoardMouseOver || !bgsFullToggle }"
+					label="Show at top of the screen"
+					tooltip="Toggle to show the opponent board at the top or bottom of the screen"
+				></preference-toggle>
+				<div class="text">
+					Icon size
+				</div>
+				<preference-slider
+					class="opponent-board-size-slider"
+					field="bgsOpponentBoardScale"
+					[enabled]="bgsFullToggle && bgsEnableOpponentBoardMouseOver"
+					[showCurrentValue]="false"
+					displayedValueUnit=""
+					[min]="80"
+					[max]="150"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -236,6 +265,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	bgsEnableBattleSimulationOverlay: boolean;
 	bgsHideSimResultsOnRecruit: boolean;
 	bgsShowSimResultsOnlyOnRecruit: boolean;
+	bgsEnableOpponentBoardMouseOver: boolean;
 	bgsFullToggle: boolean;
 	bgsEnableApp: boolean;
 	bgsUseOverlay: boolean;
@@ -280,6 +310,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 			this.bgsEnableBattleSimulationOverlay = preferences.bgsEnableBattleSimulationOverlay;
 			this.bgsHideSimResultsOnRecruit = preferences.bgsHideSimResultsOnRecruit;
 			this.bgsShowSimResultsOnlyOnRecruit = preferences.bgsShowSimResultsOnlyOnRecruit;
+			this.bgsEnableOpponentBoardMouseOver = preferences.bgsEnableOpponentBoardMouseOver;
 			this.bgsEnableApp = preferences.bgsEnableApp;
 			this.bgsUseOverlay = preferences.bgsUseOverlay;
 			this.bgsFullToggle = preferences.bgsFullToggle;
@@ -303,6 +334,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 		this.bgsEnableBattleSimulationOverlay = prefs.bgsEnableBattleSimulationOverlay;
 		this.bgsHideSimResultsOnRecruit = prefs.bgsHideSimResultsOnRecruit;
 		this.bgsShowSimResultsOnlyOnRecruit = prefs.bgsShowSimResultsOnlyOnRecruit;
+		this.bgsEnableOpponentBoardMouseOver = prefs.bgsEnableOpponentBoardMouseOver;
 		this.bgsEnableApp = prefs.bgsEnableApp;
 		this.bgsUseOverlay = prefs.bgsUseOverlay;
 		this.bgsFullToggle = prefs.bgsFullToggle;

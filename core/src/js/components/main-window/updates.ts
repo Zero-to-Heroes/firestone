@@ -87,6 +87,14 @@ export const updates: readonly Update[] = [
 								text: `Add an in-game button to show / hide the battlegrounds window, so you don't have to use any keyboard shortcut anymore. The button is only available if you have the "integrated mode" option toggled on, as I'm assuming you don't need it if you have multiple monitors. Let me know if I'm wrong!`,
 							},
 							{
+								type: 'feature',
+								text: `Add an option to display the opponent's board tooltip at the bottom of the screen.`,
+							},
+							{
+								type: 'feature',
+								text: `Add controls to modify the size of the opponent's board tooltip.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix a broken tooltip display when mousing over the heroes in the hero selection screen.`,
 							},

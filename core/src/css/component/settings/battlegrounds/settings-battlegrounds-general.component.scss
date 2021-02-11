@@ -22,13 +22,13 @@
 		width: 320px;
 	}
 
-	.enable-bgs ::ng-deep .preference-toggle {
-		margin-bottom: 15px;
-	}
-
-	.banned-tribes-vertical ::ng-deep .preference-toggle {
-		margin-bottom: 15px;
-		margin-top: 0;
+	.enable-bgs,
+	.banned-tribes-vertical,
+	.opponent-board-top {
+		::ng-deep .preference-toggle {
+			margin-bottom: 15px;
+			margin-top: 0;
+		}
 	}
 
 	::ng-deep preference-toggle.disabled .preference-toggle,
@@ -38,10 +38,16 @@
 	}
 
 	// Hack because I can't manage to make the knobs always align perfectly with the snap value
-	::ng-deep preference-slider.simulation-slider .knobs .knob.knob.knob.knob {
-		padding-right: 7px;
+	::ng-deep preference-slider.simulation-slider {
+		.knobs .knob.knob.knob.knob {
+			padding-right: 7px;
+		}
 	}
-	::ng-deep preference-slider.banned-tribes-size-slider .knobs .knob.knob.knob.knob {
-		padding-right: 7px;
+
+	::ng-deep preference-slider.banned-tribes-size-slider,
+	::ng-deep preference-slider.opponent-board-size-slider {
+		.knobs .knob.knob.knob.knob {
+			padding-right: 7px;
+		}
 	}
 }

@@ -15,7 +15,11 @@ export class BgsOverlayButtonOverlay implements BattlegroundsOverlay {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.showButton = preferences.bgsFullToggle && preferences.bgsEnableApp && preferences.bgsShowOverlayButton;
+		this.showButton =
+			preferences.bgsFullToggle &&
+			preferences.bgsEnableApp &&
+			preferences.bgsUseOverlay &&
+			preferences.bgsShowOverlayButton;
 	}
 
 	public async updateOverlay(state: BattlegroundsState) {

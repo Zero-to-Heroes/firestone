@@ -154,9 +154,10 @@ export class Preferences {
 	readonly bgsSimulatorNumberOfSims = 2500;
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
-	readonly bgsBannedTribeScale = 100;
+	readonly bgsBannedTribeScale = 101.6;
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
+	readonly bgsOpponentBoardScale = 101.6;
 	readonly bgsEnableMinionListOverlay: boolean = true;
 	readonly bgsMinionsListPosition: { left: number; top: number };
 	readonly bgsEnableMinionListMouseOver: boolean = true;
@@ -164,6 +165,7 @@ export class Preferences {
 	readonly bgsShowLastOpponentIconInOverlay: boolean = true;
 	readonly bgsShowHeroSelectionScreen: boolean = true;
 	readonly bgsShowOverlayButton: boolean = true;
+	readonly bgsOpponentOverlayAtTop: boolean = true;
 	readonly bgsOverlayButtonPosition: { left: number; top: number };
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';

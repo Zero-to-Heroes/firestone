@@ -126,7 +126,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 			? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
 			: knob.percentageValue;
 		// console.log('knob percent', valueInPercent);
-		return Math.min(98.4, Math.max(1.6, valueInPercent));
+		return Math.min(98, Math.max(0.5, valueInPercent));
 	}
 
 	private snapValue() {
