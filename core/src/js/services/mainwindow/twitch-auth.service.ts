@@ -111,6 +111,10 @@ export class TwitchAuthService {
 		// First clean the stats
 		const newState = Object.assign(new GameState(), newEvent.state, {
 			deckStats: undefined,
+			archetypesConfig: undefined,
+			archetypesStats: undefined,
+			constructedState: undefined,
+			deckStatsRecap: undefined,
 		} as GameState);
 		newEvent = Object.assign({}, newEvent, {
 			state: newState,
@@ -293,9 +297,8 @@ export class TwitchAuthService {
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			(data: any) => {
 				// Do nothing
-				// console.log('[twitch] twitch event result', data);
-				const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
 				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
+					const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
 					this.hasLoggedInfoOnce = true;
 					console.error(
 						'no-format',
@@ -307,9 +310,9 @@ export class TwitchAuthService {
 				}
 			},
 			error => {
-				const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
-				const noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
 				if (!this.hasLoggedInfoOnce) {
+					const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
+					const noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
 					this.hasLoggedInfoOnce = true;
 					console.error(
 						noFormat,
