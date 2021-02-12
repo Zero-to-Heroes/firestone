@@ -31,7 +31,12 @@ export class JadeGolemOpponentCounterOverlayHandler implements OverlayHandler {
 			!forceCloseWidgets &&
 			state &&
 			(state?.opponentDeck?.jadeGolemSize || state?.opponentDeck?.containJade(this.allCards)) > 0 &&
-			state.gameStarted;
+			state.gameStarted &&
+			state.playerDeck &&
+			((state.playerDeck.deck && state.playerDeck.deck.length > 0) ||
+				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
+				(state.playerDeck.board && state.playerDeck.board.length > 0) ||
+				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
 		if (
 			inGame &&
 			showDecktrackerFromGameMode &&

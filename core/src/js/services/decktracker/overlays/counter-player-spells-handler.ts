@@ -30,7 +30,15 @@ export class SpellsPlayerCounterOverlayHandler implements OverlayHandler {
 		const inGame = await this.ow.inGame();
 		const theWindow = await this.ow.getWindowState(windowName);
 		const shouldShowWindow =
-			!forceCloseWidgets && state && state?.playerDeck?.containsSpellCounterMinion() && state.gameStarted;
+			!forceCloseWidgets &&
+			state &&
+			state?.playerDeck?.containsSpellCounterMinion() &&
+			state.gameStarted &&
+			state.playerDeck &&
+			((state.playerDeck.deck && state.playerDeck.deck.length > 0) ||
+				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
+				(state.playerDeck.board && state.playerDeck.board.length > 0) ||
+				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
 		// console.log(
 		// 	'spell counter',
 		// 	'should show?',

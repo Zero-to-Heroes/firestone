@@ -35,7 +35,12 @@ export class SecretsHelperOverlayHandler implements OverlayHandler {
 			state.opponentDeck.secrets &&
 			state.opponentDeck.secrets.length > 0 &&
 			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
-			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY;
+			state.metadata.gameType !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
+			state.playerDeck &&
+			((state.playerDeck.deck && state.playerDeck.deck.length > 0) ||
+				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
+				(state.playerDeck.board && state.playerDeck.board.length > 0) ||
+				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
 		if (
 			inGame &&
 			shouldShowSecretsHelper &&

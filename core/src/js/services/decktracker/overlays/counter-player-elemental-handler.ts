@@ -37,7 +37,16 @@ export class ElementalPlayerCounterOverlayHandler implements OverlayHandler {
 				CardIds.Collectible.Mage.GrandFinale,
 				CardIds.Collectible.Neutral.Ozruk,
 			]);
-		const shouldShowWindow = !forceCloseWidgets && state && hasRelevantInfo && state.gameStarted;
+		const shouldShowWindow =
+			!forceCloseWidgets &&
+			state &&
+			hasRelevantInfo &&
+			state.gameStarted &&
+			state.playerDeck &&
+			((state.playerDeck.deck && state.playerDeck.deck.length > 0) ||
+				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
+				(state.playerDeck.board && state.playerDeck.board.length > 0) ||
+				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
 		// console.log(
 		// 	'spell counter',
 		// 	'should show?',

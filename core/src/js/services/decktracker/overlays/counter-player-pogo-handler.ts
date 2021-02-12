@@ -31,7 +31,12 @@ export class PogoPlayerCounterOverlayHandler implements OverlayHandler {
 			!forceCloseWidgets &&
 			state &&
 			(state?.playerDeck?.pogoHopperSize > 0 || state?.playerDeck?.containsPogoHopper()) &&
-			state.gameStarted;
+			state.gameStarted &&
+			state.playerDeck &&
+			((state.playerDeck.deck && state.playerDeck.deck.length > 0) ||
+				(state.playerDeck.hand && state.playerDeck.hand.length > 0) ||
+				(state.playerDeck.board && state.playerDeck.board.length > 0) ||
+				(state.playerDeck.otherZone && state.playerDeck.otherZone.length > 0));
 		// console.log(
 		// 	'should show counter?',
 		// 	state?.playerDeck?.galakrondInvokesCount,
