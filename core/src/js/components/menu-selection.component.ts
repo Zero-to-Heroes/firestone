@@ -17,7 +17,11 @@ declare let amplitude;
 
 @Component({
 	selector: 'menu-selection',
-	styleUrls: [`../../css/global/menu.scss`, `../../css/component/menu-selection.component.scss`],
+	styleUrls: [
+		`../../css/global/components-global.scss`,
+		`../../css/global/menu.scss`,
+		`../../css/component/menu-selection.component.scss`,
+	],
 	template: `
 		<ul class="menu-selection">
 			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">

@@ -79,7 +79,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 			this.overlayRef.dispose();
 		}
 		const positions: ConnectedPosition[] = this.buildPositions();
-		console.debug('building for position', this._position);
 
 		if (this._position === 'global-top-center') {
 			this.positionStrategy = this.overlayPositionBuilder
