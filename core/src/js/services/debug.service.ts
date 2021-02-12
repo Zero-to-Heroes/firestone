@@ -5,6 +5,7 @@ declare let amplitude;
 @Injectable()
 export class DebugService {
 	constructor() {
+		// const debugMode = true;
 		const debugMode = process.env.NODE_ENV === 'production' || process.env.LOCAL_TEST != null;
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
