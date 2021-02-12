@@ -73,6 +73,19 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `(Twitch) When logged into Twitch, the app shouldn't take so much memory anymore.`,
+							},
+							{
+								type: 'bug',
+								text: `(Twitch) Events should be properly sent to the extension once again.`,
+							},
+						],
+					},
 				],
 			},
 			{
@@ -103,6 +116,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'decktracker',
 						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the option "don't close tracker after match ends" wouldn't work.`,
+							},
 							{
 								type: 'ui',
 								text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
