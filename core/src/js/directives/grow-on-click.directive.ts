@@ -1,11 +1,13 @@
 import { animate, AnimationBuilder, AnimationMetadata, AnimationPlayer, style } from '@angular/animations';
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { PreferencesService } from '../services/preferences.service';
 
 @Directive({
 	selector: '[growOnClick]',
 })
 export class GrowOnClickDirective {
+	@Input() growOnClickScale = 1.3;
+
 	private animationPlayer: AnimationPlayer;
 
 	constructor(
@@ -23,7 +25,7 @@ export class GrowOnClickDirective {
 			animate(
 				'0.15s',
 				style({
-					transform: 'scale(1.3)',
+					transform: `scale(${this.growOnClickScale})`,
 				}),
 			),
 			animate(
