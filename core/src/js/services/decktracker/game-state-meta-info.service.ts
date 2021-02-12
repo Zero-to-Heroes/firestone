@@ -5,19 +5,6 @@ import { DeckState } from '../../models/decktracker/deck-state';
 
 @Injectable()
 export class GameStateMetaInfoService {
-	// public addMetaInfos(gameState: GameState): GameState {
-	// 	if (!gameState) {
-	// 		return gameState;
-	// 	}
-	// 	const playerDeck = this.updateDeck(gameState.playerDeck, gameState.currentTurn);
-	// 	const opponentDeck = this.updateDeck(gameState.opponentDeck, gameState.currentTurn);
-
-	// 	return Object.assign(new GameState(), gameState, {
-	// 		playerDeck: playerDeck,
-	// 		opponentDeck: opponentDeck,
-	// 	} as GameState);
-	// }
-
 	public updateDeck(deckState: DeckState, currentTurn: number | 'mulligan'): DeckState {
 		return Object.assign(new DeckState(), deckState, {
 			board: this.cleanZone(deckState.board),

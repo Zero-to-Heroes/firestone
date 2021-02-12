@@ -7,13 +7,6 @@ import { DeckState } from '../../models/decktracker/deck-state';
 export class DeckCardService {
 	constructor(private cards: AllCardsService) {}
 
-	// public fillMissingCardInfo(gameState: GameState): GameState {
-	// 	return Object.assign(new GameState(), gameState, {
-	// 		playerDeck: this.fillMissingCardInfoInDeck(gameState.playerDeck),
-	// 		opponentDeck: this.fillMissingCardInfoInDeck(gameState.opponentDeck),
-	// 	} as GameState);
-	// }
-
 	// Doesn't handle dynamic zones, so should be called before dynamic zones are built
 	public fillMissingCardInfoInDeck(deckState: DeckState): DeckState {
 		return Object.assign(new DeckState(), deckState, {

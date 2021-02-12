@@ -44,9 +44,9 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 		const canShow = await this.canShowOverlay(theWindow, state, forceCloseWidgets);
 		const shouldShowFromState = this.shouldShowFromState(state, prefs, showDecktrackerFromGameMode);
 		const shouldShow = this.showOverlayPref && this.shouldShow(canShow, shouldShowFromState, prefs);
-		if (this.forceLogs) {
-			console.debug('should show?', shouldShow, state, new Error().stack);
-		}
+		// if (this.forceLogs) {
+		// 	console.debug('should show?', shouldShow, state, new Error().stack);
+		// }
 		if (shouldShow && isWindowClosed(theWindow.window_state_ex)) {
 			await this.ow.obtainDeclaredWindow(this.windowName);
 			await this.ow.restoreWindow(this.windowName);
