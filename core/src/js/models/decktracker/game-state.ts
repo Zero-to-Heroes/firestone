@@ -19,6 +19,7 @@ export class GameState {
 	readonly metadata: Metadata = new Metadata();
 	readonly currentTurn: number | 'mulligan' = 'mulligan';
 	readonly gameStarted: boolean;
+	readonly gameEnded: boolean;
 
 	// When adding new stuff, don't forget to clean them in twitch-auth.service.ts
 	readonly archetypesConfig: readonly ArchetypeConfig[];

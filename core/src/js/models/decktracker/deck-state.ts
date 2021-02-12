@@ -101,8 +101,12 @@ export class DeckState {
 
 	// TODO: Probably not the place for these methods
 	public containsGalakrond(allCards?: AllCardsService): boolean {
+		if (this.galakrondInvokesCount > 0) {
+			return true;
+		}
+
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
-		const isGalakrond = allCardsInDeck
+		return allCardsInDeck
 			.filter(card => card.cardId)
 			.some(
 				card =>
@@ -112,12 +116,15 @@ export class DeckState {
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
 			);
-		return isGalakrond;
 	}
 
 	public containsCthun(allCards: AllCardsService): boolean {
+		if (this.cthunSize > 0) {
+			return true;
+		}
+
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
-		const isCthun = allCardsInDeck
+		return allCardsInDeck
 			.filter(card => card.cardId)
 			.filter(card => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId))
 			.some(
@@ -127,12 +134,15 @@ export class DeckState {
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf("C'Thun") !== -1),
 			);
-		return isCthun;
 	}
 
-	public containJade(allCards?: AllCardsService): boolean {
+	public containsJade(allCards?: AllCardsService): boolean {
+		if (this.jadeGolemSize > 0) {
+			return true;
+		}
+
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
-		const isJade = allCardsInDeck
+		return allCardsInDeck
 			.filter(card => card.cardId)
 			.some(
 				card =>
@@ -140,15 +150,17 @@ export class DeckState {
 					allCards.getCard(card.cardId)?.referencedTags &&
 					allCards.getCard(card.cardId)?.referencedTags.includes('JADE_GOLEM'),
 			);
-		return isJade;
 	}
 
 	public containsPogoHopper(): boolean {
+		if (this.pogoHopperSize > 0) {
+			return true;
+		}
+
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
-		const isPogo = allCardsInDeck
+		return allCardsInDeck
 			.filter(card => card.cardId)
 			.some(card => DeckState.POGO_CARD_IDS.indexOf(card.cardId) !== -1);
-		return isPogo;
 	}
 
 	public containsSpellCounterMinion(): boolean {

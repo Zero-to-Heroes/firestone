@@ -15,12 +15,13 @@ export class GameEndParser implements EventParser {
 
 	async parse(currentState: GameState): Promise<GameState> {
 		const prefs = await this.prefs.getPreferences();
-		console.log('[deck-parser] resetting deck in game-end-parser');
 		this.deckParser.reset(currentState.metadata.gameType === GameType.GT_VS_AI);
 		if (prefs && prefs.decktrackerCloseOnGameEnd) {
 			return new GameState();
 		}
-		return currentState;
+		return currentState.update({
+			gameEnded: true,
+		} as GameState);
 	}
 
 	event(): string {

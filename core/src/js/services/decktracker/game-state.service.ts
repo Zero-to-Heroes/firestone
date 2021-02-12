@@ -136,7 +136,6 @@ export class GameStateService {
 	private currentReviewId: string;
 
 	private showDecktrackerFromGameMode: boolean;
-	private onGameScreen: boolean;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -184,9 +183,9 @@ export class GameStateService {
 				if (this.showDecktrackerFromGameMode === event) {
 					return;
 				}
-				console.log('decktracker display update', event);
+				//console.debug('decktracker display update', event);
 				this.showDecktrackerFromGameMode = event;
-				console.log('will update overlays', event, this.showDecktrackerFromGameMode);
+				//console.debug('will update overlays', event, this.showDecktrackerFromGameMode);
 				this.updateOverlays(this.state, false, false);
 			});
 		});
@@ -330,10 +329,9 @@ export class GameStateService {
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.GAME_END) {
-			this.updateOverlays(this.state, true, false, shouldUpdateOverlays);
-		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
-			console.log('[game-state] handling overlay for event', gameEvent.type, gameEvent);
-			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
+			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
+		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
+			// console.log('[game-state] handling overlay for event', gameEvent.type, gameEvent);
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		}
 
@@ -383,13 +381,15 @@ export class GameStateService {
 		}
 		// console.log('\thas applied secrets parser');
 
-		let newState: GameState;
+		// We have to always use this.state, otherwise there could be race conditions
+		// with subscribers
+		// let newState: GameState;
 		if (allowRequeue) {
 			const prefs = await this.prefs.getPreferences();
 			for (const parser of this.eventParsers) {
 				try {
-					if (parser.applies(gameEvent, newState ?? this.state, prefs)) {
-						newState = await parser.parse(newState ?? this.state, gameEvent);
+					if (parser.applies(gameEvent, this.state, prefs)) {
+						this.state = await parser.parse(this.state, gameEvent);
 					}
 				} catch (e) {
 					console.error(
@@ -404,20 +404,20 @@ export class GameStateService {
 		}
 		// console.log('\thas applied other parsers');
 		try {
-			if (newState) {
+			if (this.state) {
 				// Add information that is not linked to events, like the number of turns the
 				// card has been present in the zone
 				const updatedPlayerDeck = this.updateDeck(
-					newState.playerDeck,
-					newState,
+					this.state.playerDeck,
+					this.state,
 					(gameEvent.gameState || ({} as any)).Player,
 				);
 				const udpatedOpponentDeck = this.updateDeck(
-					newState.opponentDeck,
-					newState,
+					this.state.opponentDeck,
+					this.state,
 					(gameEvent.gameState || ({} as any)).Opponent,
 				);
-				newState = Object.assign(new GameState(), newState, {
+				this.state = Object.assign(new GameState(), this.state, {
 					playerDeck: updatedPlayerDeck,
 					opponentDeck: udpatedOpponentDeck,
 				} as GameState);
@@ -425,13 +425,10 @@ export class GameStateService {
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
-		// console.log('\tready to emit event');
-		// if (gameEvent.controllerId === 1) {
-		// console.log('[game-state] will emit event', gameEvent.type, this.state.playerDeck.board, this.state, gameEvent);
-		// }
-		if (newState) {
+		// console.debug('[game-state] will emit event', gameEvent.type, this.state, gameEvent);
+		if (this.state) {
 			this.updateOverlays(
-				newState,
+				this.state,
 				false,
 				false, //[GameEvent.MATCH_METADATA, GameEvent.LOCAL_PLAYER].indexOf(gameEvent.type) !== -1,
 				shouldUpdateOverlays,
@@ -440,11 +437,10 @@ export class GameStateService {
 				event: {
 					name: gameEvent.type,
 				},
-				state: newState,
+				state: this.state,
 			};
 			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		}
-		this.state = newState ?? this.state;
 		// console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
 		// this.previousStart = Date.now();
 	}
@@ -564,24 +560,24 @@ export class GameStateService {
 
 	private buildOverlayHandlers() {
 		this.overlayHandlers = [
-			new PlayerDeckOverlayHandler(this.ow),
-			new OpponentDeckOverlayHandler(this.ow),
-			new OpponentHandOverlayHandler(this.ow),
-			new SecretsHelperOverlayHandler(this.ow),
-			new GalakroundPlayerCounterOverlayHandler(this.ow, this.allCards),
-			new GalakroundOpponentCounterOverlayHandler(this.ow, this.allCards),
-			new PogoPlayerCounterOverlayHandler(this.ow, this.allCards),
-			new PogoOpponentCounterOverlayHandler(this.ow, this.allCards),
-			new AttackPlayerCounterOverlayHandler(this.ow, this.allCards),
-			new AttackOpponentCounterOverlayHandler(this.ow, this.allCards),
-			new JadeGolemPlayerCounterOverlayHandler(this.ow, this.allCards),
-			new JadeGolemOpponentCounterOverlayHandler(this.ow, this.allCards),
-			new CthunPlayerCounterOverlayHandler(this.ow, this.allCards),
-			new CthunOpponentCounterOverlayHandler(this.ow, this.allCards),
-			new FatiguePlayerCounterOverlayHandler(this.ow, this.allCards),
-			new FatigueOpponentCounterOverlayHandler(this.ow, this.allCards),
-			new SpellsPlayerCounterOverlayHandler(this.ow, this.allCards),
-			new ElementalPlayerCounterOverlayHandler(this.ow, this.allCards),
+			new PlayerDeckOverlayHandler(this.ow, this.allCards, this.prefs),
+			new OpponentDeckOverlayHandler(this.ow, this.allCards, this.prefs),
+			new OpponentHandOverlayHandler(this.ow, this.allCards, this.prefs),
+			new SecretsHelperOverlayHandler(this.ow, this.allCards, this.prefs),
+			new GalakroundPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new GalakroundOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new PogoPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new PogoOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new AttackPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new AttackOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new JadeGolemPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new JadeGolemOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new CthunPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new CthunOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new FatiguePlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new FatigueOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new SpellsPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new ElementalPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 		];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
