@@ -90,6 +90,7 @@ import { GrowOnClickDirective } from '../../directives/grow-on-click.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { NgxCacheIfDirective } from '../../directives/ngx-cache-if.directive';
 import { PulseDirective } from '../../directives/pulse.directive';
+import { RippleOnClickDirective } from '../../directives/ripple-on-click.directive';
 import { ScrollableDirective } from '../../directives/scrollable.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
@@ -140,6 +141,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		PulseDirective,
 		AskConfirmationDirective,
 		GrowOnClickDirective,
+		RippleOnClickDirective,
 		ScrollableDirective,
 		NgxCacheIfDirective,
 
@@ -243,6 +245,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		PulseDirective,
 		AskConfirmationDirective,
 		GrowOnClickDirective,
+		RippleOnClickDirective,
 		ScrollableDirective,
 		NgxCacheIfDirective,
 
