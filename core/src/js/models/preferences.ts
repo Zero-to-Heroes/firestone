@@ -151,7 +151,7 @@ export class Preferences {
 	readonly bgsHideSimResultsOnRecruit = true;
 	readonly bgsShowSimResultsOnlyOnRecruit = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;
-	readonly bgsSimulatorNumberOfSims = 2500;
+	readonly bgsSimulatorNumberOfSims = 5000;
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
 	readonly bgsBannedTribeScale = 101.6;
