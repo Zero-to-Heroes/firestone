@@ -73,6 +73,27 @@ export class BgsBattleResultParser implements EventParser {
 				},
 			});
 		}
+		if (
+			currentState.currentGame.battleResult &&
+			currentState.currentGame.battleResult.tied != null &&
+			currentState.currentGame.battleResult.tiedPercent === 0 &&
+			event.result === 'tied'
+		) {
+			console.warn(
+				'no-format',
+				'[bgs-simulation] Impossible battle tie',
+				currentState.currentGame.battleInfo,
+				currentState.currentGame.battleResult,
+			);
+			// Not possible to forcefully ignore sample rates
+			captureEvent({
+				message: 'Impossible battle tie',
+				extra: {
+					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
+					battleResult: JSON.stringify(currentState.currentGame.battleResult),
+				},
+			});
+		}
 		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
 		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, gameWithActualBattleResult);
 		const lastOpponentCardId = normalizeHeroCardId(faceOff.opponentCardId);
@@ -80,7 +101,7 @@ export class BgsBattleResultParser implements EventParser {
 			faceOffs: [...gameWithActualBattleResult.faceOffs, faceOff] as readonly BgsFaceOff[],
 			lastOpponentCardId: lastOpponentCardId,
 		} as BgsGame);
-		console.log('[bgs-simulation] updating with result and resetting battle info', event, newGame.battleInfo);
+		console.log('[bgs-simulation] updating with result and resetting battle info', event);
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

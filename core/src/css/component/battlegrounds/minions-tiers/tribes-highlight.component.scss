@@ -8,6 +8,17 @@
 	opacity: 0.8;
 	margin-bottom: -15px;
 
+	&.reset {
+		margin: 10px;
+		background: var(--color-4);
+		--icon-color: var(--color-1);
+
+		&:hover {
+			background: var(--color-1);
+			--icon-color: var(--color-7);
+		}
+	}
+
 	&.highlighted {
 		opacity: 0.9;
 		filter: drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7)) drop-shadow(0px 0px 10px rgba(159, 182, 215, 0.7));

@@ -38,7 +38,13 @@ export class BattlegroundsMinionsListComponent {
 		this.updateInfos();
 	}
 
+	@Input() set highlightedMinions(value: readonly string[]) {
+		this._highlightedMinions = value;
+		this.updateInfos();
+	}
+
 	_cards: readonly ReferenceCard[];
+	_highlightedMinions: readonly string[];
 	groups: readonly BgsMinionsGroup[];
 	_tooltipPosition: string;
 
@@ -53,6 +59,7 @@ export class BattlegroundsMinionsListComponent {
 		this.groups = Object.keys(groupedByTribe).map(tribeString => ({
 			tribe: Race[tribeString],
 			minions: groupedByTribe[tribeString],
+			highlightedMinions: this._highlightedMinions || [],
 		}));
 	}
 }

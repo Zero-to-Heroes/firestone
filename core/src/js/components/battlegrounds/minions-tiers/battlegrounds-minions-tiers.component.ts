@@ -61,6 +61,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 				<bgs-minions-list
 					*ngIf="displayedTier || lockedTier"
 					[cards]="(displayedTier || lockedTier).cards"
+					[highlightedMinions]="highlightedMinions"
 					[tooltipPosition]="tooltipPosition"
 				></bgs-minions-list>
 			</div>
@@ -81,6 +82,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 
 	state: BattlegroundsState;
 	highlightedTribes: readonly Race[];
+	highlightedMinions: readonly string[];
 	cardsInGame: readonly ReferenceCard[];
 	tiers: readonly Tier[];
 	displayedTier: Tier;
@@ -128,6 +130,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			//console.log('available cards', this.cardsInGame);
 			this.tiers = this.buildTiers(newState);
 			this.highlightedTribes = newState.highlightedTribes;
+			this.highlightedMinions = newState.highlightedMinions;
 			this.currentTurn = newState.currentGame?.currentTurn;
 			//console.log('updating tiers', this.tiers, newState, this.cardsInGame);
 			if (!(this.cdr as ViewRef)?.destroyed) {

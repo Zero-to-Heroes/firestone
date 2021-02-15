@@ -18,6 +18,7 @@ export class BattlegroundsState {
 	readonly postMatchStats: BgsPostMatchStats;
 
 	readonly highlightedTribes: readonly Race[] = [];
+	readonly highlightedMinions: readonly string[] = [];
 
 	public static create(base: BattlegroundsState): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), base);

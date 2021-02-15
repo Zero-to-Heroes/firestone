@@ -49,6 +49,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 						*ngFor="let minion of minions; let i = index; trackBy: trackByMinion"
 						[minion]="minion"
 						[highlightedTribes]="highlightedTribes"
+						[highlightedMinions]="highlightedMinions"
 					></bgs-tavern-minion>
 				</ul>
 			</div>
@@ -69,6 +70,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 	phase: 'combat' | 'recruit';
 	minions: readonly DeckCard[];
 	highlightedTribes: readonly Race[];
+	highlightedMinions: readonly string[];
 	showLastOpponentIcon: boolean;
 
 	private gameInfoUpdatedListener: (message: any) => void;
@@ -100,6 +102,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 			this.lastOpponentCardId = newState.currentGame.lastOpponentCardId;
 			this.phase = newState.currentGame.phase;
 			this.highlightedTribes = newState.highlightedTribes;
+			this.highlightedMinions = newState.highlightedMinions;
 			this.updateMinions();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

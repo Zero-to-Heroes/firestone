@@ -4,4 +4,5 @@ import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference
 export interface BgsMinionsGroup {
 	readonly tribe: Race;
 	readonly minions: readonly ReferenceCard[];
+	readonly highlightedMinions: readonly string[];
 }

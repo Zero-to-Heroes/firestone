@@ -37,10 +37,12 @@ import { BgsPlayerBoardParser } from './event-parsers/bgs-player-board-parser';
 import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-match-stats-filter-change-parser';
 import { BgsRealTimeStatsUpdatedParser } from './event-parsers/bgs-real-time-stats-updated-parser';
 import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
+import { BgsResetHighlightsParser } from './event-parsers/bgs-reset-highlights-processor';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
 import { BgsStatUpdateParser } from './event-parsers/bgs-stat-update-parser';
 import { BgsTavernUpgradeParser } from './event-parsers/bgs-tavern-upgrade-parser';
+import { BgsToggleHighlightMinionOnBoardParser } from './event-parsers/bgs-toggle-highlight-minion-on-board-parser';
 import { BgsToggleHighlightTribeOnBoardParser } from './event-parsers/bgs-toggle-highlight-tribe-on-board-parser';
 import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parser';
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
@@ -450,6 +452,8 @@ export class BattlegroundsStoreService {
 			new BgsInitMmrParser(this.memory),
 			new BgsCardPlayedParser(),
 			new BgsToggleHighlightTribeOnBoardParser(),
+			new BgsToggleHighlightMinionOnBoardParser(),
+			new BgsResetHighlightsParser(),
 		];
 
 		if (FeatureFlags.ENABLE_REAL_TIME_STATS) {

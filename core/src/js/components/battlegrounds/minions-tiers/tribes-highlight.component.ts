@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angula
 import { Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { getEffectiveTribeEnum, getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
+import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -25,6 +26,12 @@ import { capitalizeFirstLetter } from '../../../services/utils';
 			>
 				<img class="icon" [src]="tribe.image" />
 			</div>
+			<div
+				class="tribe reset"
+				inlineSVG="assets/svg/restore.svg"
+				(click)="resetHighlights()"
+				helpTooltip="Reset all highlights"
+			></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,6 +62,10 @@ export class BattlegroundsTribesHighlightComponent {
 	highlightTribe(tribe: Tribe) {
 		console.log('highlitghting tribe', tribe);
 		this.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(tribe.tribe));
+	}
+
+	resetHighlights() {
+		this.battlegroundsUpdater.next(new BgsResetHighlightsEvent());
 	}
 
 	trackByFn(tribe: Tribe) {

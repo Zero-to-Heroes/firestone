@@ -1,6 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
+import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { OverwolfService } from '../../../services/overwolf.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
 import { BgsMinionsGroup } from './bgs-minions-group';
 
@@ -23,6 +34,9 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					[cardTooltip]="minion.cardId"
 					[cardTooltipBgs]="true"
 					[cardTooltipPosition]="_tooltipPosition"
+					helpTooltip="Click to toggle minion highlight in the tavern"
+					[ngClass]="{ 'highlighted': minion.highlighted }"
+					(click)="highlightMinion(minion)"
 				>
 					<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 					<div class="name">{{ minion.name }}</div>
@@ -32,7 +46,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsGroupComponent {
+export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 	@Input() set tooltipPosition(value: string) {
 		this._tooltipPosition = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -49,6 +63,7 @@ export class BattlegroundsMinionsGroupComponent {
 				cardId: minion.id,
 				image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
 				name: card.name,
+				highlighted: value.highlightedMinions.includes(minion.id),
 			};
 		});
 	}
@@ -58,7 +73,21 @@ export class BattlegroundsMinionsGroupComponent {
 	_group: BgsMinionsGroup;
 	_tooltipPosition: string;
 
-	constructor(private readonly allCards: AllCardsService, private readonly cdr: ChangeDetectorRef) {}
+	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
+
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly allCards: AllCardsService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	async ngAfterViewInit() {
+		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
+	}
+
+	highlightMinion(minion: Minion) {
+		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent(minion.cardId));
+	}
 
 	private buildTitle(tribe: Race): string {
 		switch (tribe) {
@@ -74,4 +103,5 @@ interface Minion {
 	readonly cardId: string;
 	readonly image: string;
 	readonly name: string;
+	readonly highlighted: boolean;
 }

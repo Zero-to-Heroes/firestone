@@ -25,25 +25,31 @@ export class BgsTavernMinionComponent {
 	}
 
 	@Input() set highlightedTribes(value: readonly Race[]) {
-		this._highlightedTribes = value;
+		this._highlightedTribes = value ?? [];
+		this.updateValues();
+	}
+
+	@Input() set highlightedMinions(value: readonly string[]) {
+		this._highlightedMinions = value ?? [];
 		this.updateValues();
 	}
 
 	_minion: DeckCard;
-	_highlightedTribes: readonly Race[];
+	_highlightedTribes: readonly Race[] = [];
+	_highlightedMinions: readonly string[] = [];
 
 	highlighted: boolean;
 
 	constructor(private readonly allCards: AllCardsService) {}
 
 	private updateValues() {
-		if (!this._minion || !this._highlightedTribes?.length) {
+		if (!this._minion || (!this._highlightedTribes?.length && !this._highlightedMinions?.length)) {
 			this.highlighted = false;
 			return;
 		}
 
 		const card = this.allCards.getCard(this._minion.cardId);
 		const tribe: Race = card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
-		this.highlighted = this._highlightedTribes.includes(tribe);
+		this.highlighted = this._highlightedTribes.includes(tribe) || this._highlightedMinions.includes(card.id);
 	}
 }
