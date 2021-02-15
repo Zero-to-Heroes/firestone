@@ -50,6 +50,9 @@ export class BgsTavernMinionComponent {
 
 		const card = this.allCards.getCard(this._minion.cardId);
 		const tribe: Race = card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
-		this.highlighted = this._highlightedTribes.includes(tribe) || this._highlightedMinions.includes(card.id);
+		this.highlighted =
+			this._highlightedTribes.includes(tribe) ||
+			(this._highlightedTribes.length > 0 && tribe === Race.ALL) ||
+			this._highlightedMinions.includes(card.id);
 	}
 }
