@@ -12,6 +12,9 @@
 		margin: 10px;
 		background: var(--color-4);
 		--icon-color: var(--color-1);
+		position: relative;
+		left: -25px;
+		top: 25px;
 
 		&:hover {
 			background: var(--color-1);

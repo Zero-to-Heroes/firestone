@@ -17,7 +17,7 @@ import { capitalizeFirstLetter } from '../../../services/utils';
 	],
 	template: `
 		<div class="tribes-highlight">
-			<div
+			<!-- <div
 				class="tribe"
 				*ngFor="let tribe of tribes; trackBy: trackByFn"
 				[ngClass]="{ 'highlighted': tribe.highlighted }"
@@ -25,7 +25,7 @@ import { capitalizeFirstLetter } from '../../../services/utils';
 				(click)="highlightTribe(tribe)"
 			>
 				<img class="icon" [src]="tribe.image" />
-			</div>
+			</div> -->
 			<div
 				class="tribe reset"
 				inlineSVG="assets/svg/restore.svg"

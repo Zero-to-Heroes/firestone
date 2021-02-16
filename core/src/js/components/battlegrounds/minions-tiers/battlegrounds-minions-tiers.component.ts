@@ -62,6 +62,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 					*ngIf="displayedTier || lockedTier"
 					[cards]="(displayedTier || lockedTier).cards"
 					[highlightedMinions]="highlightedMinions"
+					[highlightedTribes]="highlightedTribes"
 					[tooltipPosition]="tooltipPosition"
 				></bgs-minions-list>
 			</div>

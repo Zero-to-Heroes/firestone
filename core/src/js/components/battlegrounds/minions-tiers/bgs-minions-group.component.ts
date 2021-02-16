@@ -10,6 +10,7 @@ import {
 import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
+import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
@@ -24,7 +25,12 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	],
 	template: `
 		<div class="bgs-minions-group">
-			<div class="header">
+			<div
+				class="header"
+				(click)="highlightTribe()"
+				[ngClass]="{ 'highlighted': highlighted }"
+				helpTooltip="Click to highlight all minions of that tribe in the tavern"
+			>
 				{{ title }}
 			</div>
 			<ul class="minions">
@@ -56,19 +62,11 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 
 	@Input() set group(value: BgsMinionsGroup) {
 		this._group = value;
-		this.title = this.buildTitle(value.tribe);
-		this.minions = value.minions.map(minion => {
-			const card = this.allCards.getCard(minion.id);
-			return {
-				cardId: minion.id,
-				image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
-				name: card.name,
-				highlighted: value.highlightedMinions.includes(minion.id),
-			};
-		});
+		this.updateInfos();
 	}
 
 	title: string;
+	highlighted: boolean;
 	minions: readonly Minion[];
 	_group: BgsMinionsGroup;
 	_tooltipPosition: string;
@@ -87,6 +85,30 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 
 	highlightMinion(minion: Minion) {
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent(minion.cardId));
+	}
+
+	highlightTribe() {
+		console.log('highlitghting tribe', this._group.tribe);
+		this.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(this._group.tribe));
+	}
+
+	private updateInfos() {
+		if (!this._group) {
+			return;
+		}
+
+		this.title = this.buildTitle(this._group.tribe);
+		this.highlighted =
+			this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
+		this.minions = this._group.minions.map(minion => {
+			const card = this.allCards.getCard(minion.id);
+			return {
+				cardId: minion.id,
+				image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
+				name: card.name,
+				highlighted: this._group.highlightedMinions.includes(minion.id),
+			};
+		});
 	}
 
 	private buildTitle(tribe: Race): string {
