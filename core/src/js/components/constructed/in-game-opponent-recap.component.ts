@@ -131,42 +131,34 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		setTimeout(() => {
 			this.playedCards = cardsFromInitialDeck;
 			this.playedCardsAsCollection = this.formatCardsAsCollection(this.playedCards);
-			console.log('playedCards', this.playedCards, this.playedCardsAsCollection);
 			this.archetypes = this.buildArchetypes(this._state, this.playedCards);
-			console.log('build archetypes', this.archetypes);
+			this.buildMissingCards(this.archetypes[0].decklist, this.playedCards);
 
 			const cardsMissingInEachDecklist = this.archetypes.map(arch => [...arch.cardsPlayedNotInList]);
-			console.debug('cardsMissingInEachDecklist', cardsMissingInEachDecklist);
 			// Loop twice, as there are max 2 copies of a card in a deck
 			const cardsMissingInAllDecklists: string[] = [];
 			for (let i = 0; i < 2; i++) {
 				const uniqueIds = [...new Set(cardsMissingInEachDecklist.reduce((a, b) => a.concat(b), []))];
-				console.debug('uniqueIds', uniqueIds, cardsMissingInEachDecklist);
 				for (const cardId of uniqueIds) {
 					if (cardsMissingInEachDecklist.every(decklist => decklist.includes(cardId))) {
 						cardsMissingInAllDecklists.push(cardId);
-						console.debug(
-							'card missing in all decklists',
-							cardId,
-							cardsMissingInAllDecklists,
-							cardsMissingInEachDecklist.filter(decklist => decklist.includes(cardId)),
-						);
+						// console.debug(
+						// 	'card missing in all decklists',
+						// 	cardId,
+						// 	cardsMissingInAllDecklists,
+						// 	cardsMissingInEachDecklist.filter(decklist => decklist.includes(cardId)),
+						// );
 					}
 					for (const decklist of cardsMissingInEachDecklist) {
-						console.debug('will remove', cardId, decklist);
 						removeFromArray(decklist, cardId);
-						console.debug('after remove', cardId, decklist);
 					}
 				}
 			}
-			console.debug('cardsMissingInAllDecklists', cardsMissingInAllDecklists);
 			const cardsInDecklists = [...this.playedCards];
 			for (const card of cardsMissingInAllDecklists) {
 				removeFromArray(cardsInDecklists, card);
 			}
-			console.debug('cardsInDecklists', cardsInDecklists);
 			this.cardsInDecklists = this.formatCardsAsCollection(cardsInDecklists);
-			console.debug('this.cardsInDecklists', this.cardsInDecklists);
 
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -305,15 +297,14 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 				score: this.buildScore(decklist, configForArchetype, playedCards),
 			}))
 			.sort((a, b) => b.score - a.score)
-			.map(
-				item =>
-					({
-						...item.decklist,
-						score: item.score,
-						approximate: true,
-						missingCards: this.buildMissingCards(item.decklist, playedCards),
-					} as InternalDeckList),
-			);
+			.map(item => {
+				return {
+					...item.decklist,
+					score: item.score,
+					approximate: true,
+					missingCards: this.buildMissingCards(item.decklist, playedCards),
+				} as InternalDeckList;
+			});
 	}
 
 	private buildScore(
@@ -340,9 +331,8 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 			if (index === -1) {
 				result.push(card);
 			}
-			cardsLeftInList = cardsLeftInList.splice(index, 1);
+			cardsLeftInList.splice(index, 1);
 		}
-		console.debug('building missing cards for', decklist, result);
 		return result;
 	}
 
@@ -356,10 +346,8 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 			console.debug('considering', card);
 			if (!result[card]) {
 				result[card] = new SetCard(card, null, null, null, null, 0, 0);
-				console.debug('not present, added', result[card]);
 			}
 			result[card] = new SetCard(card, null, null, null, null, result[card].ownedNonPremium + 1, 0);
-			console.debug('incremented', result[card]);
 		}
 		return Object.values(result);
 	}

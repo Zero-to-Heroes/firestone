@@ -58,7 +58,8 @@ export class ConstructedComponent implements AfterViewInit {
 		});
 		subscriber['identifier'] = 'constructed';
 		this.deckSubscription = deckEventBus.subscribe(subscriber);
-		this.positionWindowOnSecondScreen();
+		await this.positionWindowOnSecondScreen();
+		this.ow.bringToFront(this.windowId);
 	}
 
 	@HostListener('window:beforeunload')

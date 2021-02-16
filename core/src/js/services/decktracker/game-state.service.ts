@@ -581,7 +581,7 @@ export class GameStateService {
 		];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
-			this.overlayHandlers.push(new ConstructedWindowHandler(this.ow));
+			this.overlayHandlers.push(new ConstructedWindowHandler(this.ow, this.allCards, this.prefs));
 		}
 	}
 
