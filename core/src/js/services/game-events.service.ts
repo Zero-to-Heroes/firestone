@@ -333,6 +333,7 @@ export class GameEvents {
 					? {
 							targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
 							targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					  }
 					: {};
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent, props));
