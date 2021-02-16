@@ -49,7 +49,9 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 			return true;
 		}
 
-		if (!this.onGameScreen) {
+		// We explicitely don't check for null, so that if the memory updates are broken
+		// we still somehow show the info
+		if (this.onGameScreen === false) {
 			return false;
 		}
 

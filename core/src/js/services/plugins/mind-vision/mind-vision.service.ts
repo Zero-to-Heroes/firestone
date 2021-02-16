@@ -25,23 +25,29 @@ export class MindVisionService {
 		this.listenForUpdates();
 	}
 
-	public async listenForUpdates() {
+	private async listenForUpdates() {
 		const plugin = await this.get();
 		try {
-			console.debug('[mind-vision] getting ready to listen for updates');
+			console.log('[mind-vision] getting ready to listen for updates');
 			this.memoryUpdateListener = (changes: MemoryUpdate | 'reset') => {
-				console.debug('[mind-vision] memory update', changes);
+				console.log('[mind-vision] memory update', changes);
 				// Happens when the plugin is reset, we need to resubscribe
 				if (changes === 'reset') {
-					console.debug('[mind-vision] resetting memory update');
+					console.log('[mind-vision] resetting memory update');
 					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 					this.listenForUpdates();
+					return;
 				}
-				this.events.broadcast(Events.MEMORY_UPDATE, changes);
+				const changesToBroadcast = { ...changes };
+				if (changesToBroadcast.CurrentScene === 'INVALID') {
+					console.warn('[mind-vision] INVALID scene should not be raised', changes);
+					delete changesToBroadcast.CurrentScene;
+				}
+				this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
 			};
 			plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
 			plugin.listenForUpdates(result => {
-				console.debug('[mind-vision] listenForUpdates callback result: ', result);
+				console.log('[mind-vision] listenForUpdates callback result: ', result);
 			});
 		} catch (e) {
 			console.error('[mind-vision] could not listenForUpdates', e);
@@ -230,6 +236,7 @@ export class MindVisionService {
 			const plugin = await this.get();
 			try {
 				plugin.reset(result => {
+					console.log('reset done');
 					resolve(result);
 				});
 			} catch (e) {
@@ -257,7 +264,7 @@ export class MindVisionService {
 				}
 				console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
 				this.mindVisionPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
-					console.debug('[mind-vision] received global event', first, second);
+					console.log('[mind-vision] received global event', first, second);
 				});
 				this.initialized = true;
 			});
@@ -273,7 +280,7 @@ export class MindVisionService {
 				if (this.initialized) {
 					resolve();
 				} else {
-					setTimeout(() => dbWait(), 50);
+					setTimeout(() => dbWait(), 500);
 				}
 			};
 			dbWait();
