@@ -20,6 +20,7 @@ import { GameEvent } from '../../models/game-event';
 import { SetCard } from '../../models/set';
 import { DeckstringOverrideEvent } from '../../services/decktracker/event/deckstring-override-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { arraysEqual, removeFromArray } from '../../services/utils';
 
 declare let amplitude: any;
 
@@ -33,7 +34,13 @@ declare let amplitude: any;
 		<div class="in-game-opponent-recap">
 			<div class="played-cards-container">
 				<div class="header">Played Cards</div>
-				<deck-list class="played-cards" *ngIf="playedCards?.length" [cards]="playedCards"> </deck-list>
+				<deck-list
+					class="played-cards"
+					*ngIf="playedCards?.length"
+					[cards]="playedCards"
+					[collection]="cardsInDecklists"
+				>
+				</deck-list>
 				<div class="no-cards-played" *ngIf="!playedCards?.length">
 					Opponent has not played any cards yet
 				</div>
@@ -49,17 +56,20 @@ declare let amplitude: any;
 							<div class="archetype-name">
 								{{ archetype.name }} ({{ archetype.archetypeProbability.toFixed(0) }}%)
 							</div>
+							<div class="warning" *ngIf="archetype.approximate" [helpTooltip]="archetype.missingCards">
+								Some played cards are not in this list. TODO: show which ones
+							</div>
 							<deck-list
 								class="full-list"
 								*ngIf="archetype.decklist?.cards?.length"
-								[cards]="archetype.decklist?.cards"
+								[cards]="archetype.decklist.cards"
 							>
 							</deck-list>
 							<div class="decklist-popularity">Popularity: {{ archetype.popularity.toFixed(1) }}%</div>
 							<button
 								class="use-decklist-button"
 								(mousedown)="useDecklist(archetype)"
-								helpTooltip="Use this decklist in the opponent's tracker. It might cause a short lag while cards still in deck are recomputed."
+								helpTooltip="Use this decklist in the opponent's tracker. It might cause a short lag while the app recomputes everything."
 							>
 								<span>Use decklist</span>
 							</button>
@@ -83,6 +93,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 
 	_state: GameState;
 	playedCards: readonly string[];
+	cardsInDecklists: readonly SetCard[];
 	playedCardsAsCollection: readonly SetCard[];
 	archetypes: readonly Archetype[];
 
@@ -104,50 +115,91 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 
 	private updateInfo() {
 		if (!this._state?.opponentDeck?.cardsPlayedFromInitialDeck?.length || !this.allCards.getCards()?.length) {
-			this.playedCards = [];
+			// Don't reset the info when the game ends
+			this.playedCards = this.playedCards || [];
 			return;
 		}
 
-		if (this.playedCards === this._state.opponentDeck.cardsPlayedFromInitialDeck) {
+		const cardsFromInitialDeck = this._state.opponentDeck.cardsPlayedFromInitialDeck.map(card => card.cardId);
+		if (arraysEqual(this.playedCards, cardsFromInitialDeck)) {
 			return;
 		}
 
 		this.archetypes = [];
 
+		// Need a timeout to avoid the "cannot read property destroyed of null" error
 		setTimeout(() => {
-			this.playedCards = this._state.opponentDeck.cardsPlayedFromInitialDeck;
+			this.playedCards = cardsFromInitialDeck;
 			this.playedCardsAsCollection = this.formatCardsAsCollection(this.playedCards);
-			console.log('playedCards', this.playedCards);
-			// const format = 'standard';
-			const format = this._state.metadata.formatType === 1 ? 'wild' : 'standard';
-			const configForFormat = this._state.archetypesConfig.filter(conf => conf.gameFormat === format);
-			// TODO: use prefs to filter on the right time period
-			const stats: readonly ArchetypeResults[] = this._state.archetypesStats.lastPatch.filter(
-				stat => stat.gameFormat === format,
-			);
-			const opponentClass = this._state.opponentDeck.hero?.playerClass;
-
-			const archetypeScores: readonly ArchetypeScore[] = computeArchetypeScores(
-				configForFormat,
-				this.playedCards,
-				opponentClass,
-				format,
-			);
-			console.log('scores', archetypeScores);
-			const topScores = archetypeScores.slice(0, 3).filter(score => score.points > 0);
-			console.log('top scores', topScores);
-
-			this.archetypes = this.consolidateArchetypes(topScores, configForFormat, stats);
+			console.log('playedCards', this.playedCards, this.playedCardsAsCollection);
+			this.archetypes = this.buildArchetypes(this._state, this.playedCards);
 			console.log('build archetypes', this.archetypes);
+
+			const cardsMissingInEachDecklist = this.archetypes.map(arch => [...arch.cardsPlayedNotInList]);
+			console.debug('cardsMissingInEachDecklist', cardsMissingInEachDecklist);
+			// Loop twice, as there are max 2 copies of a card in a deck
+			const cardsMissingInAllDecklists: string[] = [];
+			for (let i = 0; i < 2; i++) {
+				const uniqueIds = [...new Set(cardsMissingInEachDecklist.reduce((a, b) => a.concat(b), []))];
+				console.debug('uniqueIds', uniqueIds, cardsMissingInEachDecklist);
+				for (const cardId of uniqueIds) {
+					if (cardsMissingInEachDecklist.every(decklist => decklist.includes(cardId))) {
+						cardsMissingInAllDecklists.push(cardId);
+						console.debug(
+							'card missing in all decklists',
+							cardId,
+							cardsMissingInAllDecklists,
+							cardsMissingInEachDecklist.filter(decklist => decklist.includes(cardId)),
+						);
+					}
+					for (const decklist of cardsMissingInEachDecklist) {
+						console.debug('will remove', cardId, decklist);
+						removeFromArray(decklist, cardId);
+						console.debug('after remove', cardId, decklist);
+					}
+				}
+			}
+			console.debug('cardsMissingInAllDecklists', cardsMissingInAllDecklists);
+			const cardsInDecklists = [...this.playedCards];
+			for (const card of cardsMissingInAllDecklists) {
+				removeFromArray(cardsInDecklists, card);
+			}
+			console.debug('cardsInDecklists', cardsInDecklists);
+			this.cardsInDecklists = this.formatCardsAsCollection(cardsInDecklists);
+			console.debug('this.cardsInDecklists', this.cardsInDecklists);
+
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
 	}
 
+	private buildArchetypes(state: GameState, playedCards: readonly string[]): readonly Archetype[] {
+		const format = state.metadata.formatType === 1 ? 'wild' : 'standard';
+		const configForFormat = state.archetypesConfig.filter(conf => conf.gameFormat === format);
+		// TODO: use prefs to filter on the right time period
+		const stats: readonly ArchetypeResults[] = state.archetypesStats.lastPatch.filter(
+			stat => stat.gameFormat === format,
+		);
+		const opponentClass = state.opponentDeck.hero?.playerClass;
+
+		const archetypeScores: readonly ArchetypeScore[] = computeArchetypeScores(
+			configForFormat,
+			playedCards,
+			opponentClass,
+			format,
+		);
+		console.log('scores', archetypeScores);
+		const topScores = archetypeScores.slice(0, 3).filter(score => score.points > 0);
+		console.log('top scores', topScores);
+
+		return this.consolidateArchetypes(topScores, configForFormat, playedCards, stats);
+	}
+
 	private consolidateArchetypes(
 		topScores: ArchetypeScore[],
 		config: readonly ArchetypeConfig[],
+		playedCards: readonly string[],
 		stats: readonly ArchetypeResults[],
 	): readonly Archetype[] {
 		if (topScores.length === 0) {
@@ -162,31 +214,33 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 			}))
 			.filter(score => score.points >= 0.3);
 		console.log('relativeScores', relativeScores);
-
 		// A single archetype, propose 3 decklists
 		if (relativeScores.length === 1) {
-			return [...this.buildArchetypes(relativeScores[0], config, stats).slice(0, 3)] as readonly Archetype[];
+			return [
+				...this.buildArchetypeDecklist(relativeScores[0], config, playedCards, stats).slice(0, 3),
+			] as readonly Archetype[];
 		}
 
 		if (relativeScores.length === 2) {
 			return [
-				...this.buildArchetypes(relativeScores[0], config, stats).slice(0, 2),
-				...this.buildArchetypes(relativeScores[1], config, stats).slice(0, 1),
+				...this.buildArchetypeDecklist(relativeScores[0], config, playedCards, stats).slice(0, 2),
+				...this.buildArchetypeDecklist(relativeScores[1], config, playedCards, stats).slice(0, 1),
 			] as readonly Archetype[];
 		}
 
 		if (relativeScores.length === 3) {
 			return [
-				...this.buildArchetypes(relativeScores[0], config, stats).slice(0, 1),
-				...this.buildArchetypes(relativeScores[1], config, stats).slice(0, 1),
-				...this.buildArchetypes(relativeScores[2], config, stats).slice(0, 1),
+				...this.buildArchetypeDecklist(relativeScores[0], config, playedCards, stats).slice(0, 1),
+				...this.buildArchetypeDecklist(relativeScores[1], config, playedCards, stats).slice(0, 1),
+				...this.buildArchetypeDecklist(relativeScores[2], config, playedCards, stats).slice(0, 1),
 			] as readonly Archetype[];
 		}
 	}
 
-	private buildArchetypes(
+	private buildArchetypeDecklist(
 		archetypeScore: ArchetypeScore,
 		config: readonly ArchetypeConfig[],
+		playedCards: readonly string[],
 		stats: readonly ArchetypeResults[],
 	): readonly Archetype[] {
 		const archetype = this.findArchetype(stats, archetypeScore.archetypeId);
@@ -200,28 +254,44 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 			return [];
 		}
 
-		const relevantLists = this.buildRelevantLists(archetype, configForArchetype);
+		const relevantLists = this.buildRelevantLists(archetype, configForArchetype, playedCards);
 
 		const totalMatches = relevantLists.map(list => list.wins + list.losses).reduce((a, b) => a + b, 0);
 		const decklists = relevantLists.sort((a, b) => b.wins + b.losses - (a.wins + a.losses)).slice(0, 3);
 		// console.log('decklists', decklists);
 
-		return decklists.map(decklist => ({
-			name: archetypeScore.archetypeId,
-			archetypeProbability: 100 * archetypeScore.points,
-			decklist: decklist,
-			popularity: (100 * (decklist.wins + decklist.losses)) / totalMatches,
-			deckstring: decklist.deckstring,
-		}));
+		return decklists.map(
+			decklist =>
+				({
+					name: archetypeScore.archetypeId,
+					archetypeProbability: 100 * archetypeScore.points,
+					decklist: decklist,
+					popularity: (100 * (decklist.wins + decklist.losses)) / totalMatches,
+					deckstring: decklist.deckstring,
+					cardsPlayedNotInList: this.buildCardsNotInDecklist(playedCards, decklist.cards),
+					approximate: decklist.approximate,
+					missingCards: decklist.missingCards,
+				} as Archetype),
+		);
+	}
+
+	private buildCardsNotInDecklist(playedCards: readonly string[], decklist: readonly string[]): readonly string[] {
+		const result = [...playedCards];
+		for (const deckCard of decklist) {
+			const index = result.indexOf(deckCard, 0);
+			if (index > -1) {
+				result.splice(index, 1);
+			}
+		}
+		return result;
 	}
 
 	private buildRelevantLists(
 		archetype: ArchetypeResults,
 		configForArchetype: readonly ArchetypeConfig[],
+		playedCards: readonly string[],
 	): InternalDeckList[] {
-		const fullLists = [...archetype.decklists].filter(decklist =>
-			this.hasAllPlayedCards(decklist, this.playedCards),
-		);
+		const fullLists = [...archetype.decklists].filter(decklist => this.hasAllPlayedCards(decklist, playedCards));
 		// console.log('fullLists', fullLists);
 		if (fullLists?.length) {
 			return fullLists;
@@ -232,7 +302,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		return [...archetype.decklists]
 			.map(decklist => ({
 				decklist: decklist,
-				score: this.buildScore(decklist, configForArchetype, this.playedCards),
+				score: this.buildScore(decklist, configForArchetype, playedCards),
 			}))
 			.sort((a, b) => b.score - a.score)
 			.map(
@@ -241,6 +311,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 						...item.decklist,
 						score: item.score,
 						approximate: true,
+						missingCards: this.buildMissingCards(item.decklist, playedCards),
 					} as InternalDeckList),
 			);
 	}
@@ -261,25 +332,34 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		return stats.find(archetype => archetype.archetypeId === archetypeId);
 	}
 
-	private hasAllPlayedCards(decklist: DeckList, playedCards: readonly string[]): boolean {
+	private buildMissingCards(decklist: DeckList, playedCards: readonly string[]): readonly string[] {
 		let cardsLeftInList = [...decklist.cards];
+		const result = [];
 		for (const card of playedCards) {
 			const index = cardsLeftInList.indexOf(card);
 			if (index === -1) {
-				return false;
+				result.push(card);
 			}
 			cardsLeftInList = cardsLeftInList.splice(index, 1);
 		}
-		return true;
+		console.debug('building missing cards for', decklist, result);
+		return result;
+	}
+
+	private hasAllPlayedCards(decklist: DeckList, playedCards: readonly string[]): boolean {
+		return this.buildMissingCards(decklist, playedCards).length === 0;
 	}
 
 	private formatCardsAsCollection(cards: readonly string[]): readonly SetCard[] {
 		const result: { [cardId: string]: SetCard } = {};
 		for (const card of cards) {
+			console.debug('considering', card);
 			if (!result[card]) {
-				result[card] = new SetCard(card, null, null, null, null, null, 0);
+				result[card] = new SetCard(card, null, null, null, null, 0, 0);
+				console.debug('not present, added', result[card]);
 			}
-			result[card] = new SetCard(card, null, null, null, null, null, result[card].ownedNonPremium + 1);
+			result[card] = new SetCard(card, null, null, null, null, result[card].ownedNonPremium + 1, 0);
+			console.debug('incremented', result[card]);
 		}
 		return Object.values(result);
 	}
@@ -291,9 +371,13 @@ interface Archetype {
 	readonly decklist: DeckList;
 	readonly popularity: number;
 	readonly deckstring: string;
+	readonly cardsPlayedNotInList: readonly string[];
+	readonly approximate: boolean;
+	readonly missingCards: readonly string[];
 }
 
 interface InternalDeckList extends DeckList {
 	readonly approximate?: boolean;
 	readonly score?: number;
+	readonly missingCards?: readonly string[];
 }

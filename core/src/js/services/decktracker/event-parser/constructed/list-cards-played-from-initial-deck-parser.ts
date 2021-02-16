@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
@@ -9,7 +9,10 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && [GameEvent.CARD_PLAYED].includes(gameEvent.type);
+		return (
+			state &&
+			[GameEvent.CARD_PLAYED, GameEvent.QUEST_PLAYED, GameEvent.QUEST_PLAYED_FROM_DECK].includes(gameEvent.type)
+		);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
@@ -21,19 +24,28 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
+		const baseCardId = getBaseCardId(cardId);
+		const card = this.helper.findCardInZone(deck.hand, baseCardId, entityId);
+		console.debug('considering card to add to list', baseCardId, cardId, card, gameEvent, currentState);
 		if (
 			card.creatorCardId ||
+			gameEvent.additionalData.creatorCardId ||
 			[
 				CardIds.NonCollectible.Neutral.TheCoinBasic,
 				CardIds.NonCollectible.Neutral.TheCoinDARKMOON_FAIRE1,
 				CardIds.NonCollectible.Neutral.TheCoinDARKMOON_FAIRE2,
-			].includes(cardId)
+			].includes(baseCardId)
 		) {
 			return currentState;
 		}
 
-		const cardsPlayedFromInitialDeck: readonly string[] = [...deck.cardsPlayedFromInitialDeck, cardId];
+		const cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [
+			...deck.cardsPlayedFromInitialDeck,
+			{
+				entityId: entityId,
+				cardId: baseCardId,
+			},
+		];
 		const newPlayerDeck = deck.update({
 			cardsPlayedFromInitialDeck: cardsPlayedFromInitialDeck,
 		} as DeckState);

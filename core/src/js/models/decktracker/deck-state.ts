@@ -89,7 +89,7 @@ export class DeckState {
 
 	readonly cardsPlayedThisTurn: readonly DeckCard[] = [];
 	readonly damageTakenThisTurn: number;
-	readonly cardsPlayedFromInitialDeck: readonly string[] = [];
+	readonly cardsPlayedFromInitialDeck: readonly { entityId: number; cardId: string }[] = [];
 
 	public static create(value: DeckState): DeckState {
 		return Object.assign(new DeckState(), value);
