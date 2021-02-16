@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.3.0',
+		version: '7.3.5',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -47,26 +47,26 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'feature',
-								text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
-							},
-						],
-					},
+					// {
+					// 	category: 'achievements',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
+					// 		},
+					// 	],
+					// },
 					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `(BETA) Stats are now computed live! There are still a few things to fix and polish, but I've been really enjoying it :)`,
+								text: `Stats are now computed live! You can now look at all the chart and the data in real time :)`,
 							},
-							{
-								type: 'feature',
-								text: `(ALPHA) You can now enable highlighting of minions that match specific tribes in the tavern.`,
-							},
+							// {
+							// 	type: 'feature',
+							// 	text: `(ALPHA) You can now enable highlighting of minions that match specific tribes in the tavern.`,
+							// },
 							{
 								type: 'feature',
 								text: `For premium supporters: I have totally removed the ad space in the in-game window to give more space to the stats.`,
@@ -120,30 +120,47 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the option "don't close tracker after match ends" wouldn't work.`,
 							},
-							{
-								type: 'ui',
-								text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
-							},
+							// {
+							// 	type: 'ui',
+							// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+							// },
 							{
 								type: 'ui',
 								text: `Add a button in the settings to reset the tracker's position, which can be useful if for some reason it is not visible anymore.`,
 							},
 						],
 					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where some Battlegrounds native achievements would not trigger the explaination pop-up.`,
+							},
+						],
+					},
 				],
 			},
-			// {
-			// 	type: 'future',
-			// 	header: 'What is next',
-			// 	text: `
-			// 		A few features are on my plate today.
-			// 		<br/>
-			// 		<br/>
-			// 		Stay safe,
-			// 		<br/>
-			// 		Seb.
-			// 	`,
-			// },
+			{
+				type: 'future',
+				header: 'What is next',
+				text: `
+					A few features are on alpha / beta testing phase today:
+					<br/>
+					<ul>
+						<li>(Battlegrounds) A way to highlight specific minions or tribes in the tavern.</li>
+						<li>(Constructed) A way to guess the opponent's archetype from the card they have played, and the ability to override their decklist with a popular list from that archetype.</li>
+						<li>A way to track the current progress you're making towards achievements while in a match.
+					</ul>
+					<br/>
+					If you are interested in helping me test and polish these, feel free to ping me on Discord :)
+					<br/>
+					<br/>
+					Stay safe,
+					<br/>
+					Seb.
+				`,
+			},
 		],
 	},
 ];

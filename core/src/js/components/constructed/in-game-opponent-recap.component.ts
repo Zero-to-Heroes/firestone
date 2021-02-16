@@ -324,7 +324,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 	}
 
 	private buildMissingCards(decklist: DeckList, playedCards: readonly string[]): readonly string[] {
-		let cardsLeftInList = [...decklist.cards];
+		const cardsLeftInList = [...decklist.cards];
 		const result = [];
 		for (const card of playedCards) {
 			const index = cardsLeftInList.indexOf(card);

@@ -12,6 +12,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_DECKTRACKER_RESET_POSITIONS = true;
 	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = true;
 	public static readonly ENABLE_REAL_TIME_STATS = true;
+
 	// Properly test the memory footprint of these features before release
 	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false;
 	public static readonly ENABLE_RANKED_ARCHETYPE = false;

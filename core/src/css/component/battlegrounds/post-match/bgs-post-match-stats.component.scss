@@ -35,6 +35,7 @@
 	flex-grow: 1;
 	flex-shrink: 1;
 	width: 100%;
+	max-width: calc(100% - 400px);
 	min-height: 0;
 	// overflow: hidden;
 	// So that the divine shields are the top are not truncated
