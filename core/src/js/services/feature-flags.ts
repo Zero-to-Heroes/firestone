@@ -10,12 +10,12 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_SIMULATION_HIDE_ON_RECRUIT = true;
 
 	public static readonly ENABLE_DECKTRACKER_RESET_POSITIONS = true;
-	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = true;
 	public static readonly ENABLE_REAL_TIME_STATS = true;
 
+	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = true;
 	// Properly test the memory footprint of these features before release
-	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false;
-	public static readonly ENABLE_RANKED_ARCHETYPE = false;
+	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = true;
+	public static readonly ENABLE_RANKED_ARCHETYPE = true;
 
 	// Deprecated, feature is sidelined for now
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;
