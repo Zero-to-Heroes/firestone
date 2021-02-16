@@ -85,16 +85,27 @@ export class AchievementsMonitor {
 		const unlockedAchievements = (achievementsProgress?.achievements || [])
 			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
 			.map(progress => progress.id)
-			.map(id => existingAchievements.achievements.find(ach => ach.id === id))
-			.filter(ach => ach)
+			.map(
+				id =>
+					// Only achievement with a current progress are in the game's memory, so the ones that are simply
+					// yes/no will always be missing
+					existingAchievements.achievements.find(ach => ach.id === id) || {
+						id: id,
+						progress: 0,
+						completed: false,
+					},
+			)
 			.filter(ach => !ach.completed);
 		console.log('[achievement-monitor] unlocked achievements', unlockedAchievements);
 		if (!unlockedAchievements.length) {
 			if (process.env.NODE_ENV !== 'production') {
 				console.log(
 					'[achievement-monitor] nothing from memory',
-					existingAchievements,
-					achievementsProgress,
+					existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
+					achievementsProgress, // This has the correct progress
+					(achievementsProgress?.achievements || [])?.filter(
+						progress => progress.progress >= this.achievementQuotas[progress.id],
+					),
 					unlockedAchievements,
 				);
 			}
@@ -102,6 +113,7 @@ export class AchievementsMonitor {
 				this.detectNewAchievementFromMemory(retriesLeft - 1);
 				return;
 			}, 150);
+			return;
 		}
 		const achievements = await Promise.all(
 			unlockedAchievements.map(ach => this.achievementLoader.getAchievement(`hearthstone_game_${ach.id}`)),
