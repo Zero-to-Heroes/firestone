@@ -24,7 +24,7 @@ export class BgsOverlayButtonOverlay implements BattlegroundsOverlay {
 
 	public async updateOverlay(state: BattlegroundsState) {
 		// const inGame = await this.ow.inGame();
-		const inGame = state && state.inGame;
+		const inGame = state && state.inGame && !state.currentGame?.gameEnded;
 		const windowId = OverwolfService.BATTLEGROUNDS_OVERLAY_BUTTON_OVERLAY_WINDOW;
 		const theWindow = await this.ow.getWindowState(windowId);
 		if (inGame && this.showButton && isWindowClosed(theWindow.window_state_ex)) {
