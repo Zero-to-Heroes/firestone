@@ -89,6 +89,10 @@
 
 			.section-text {
 				text-align: left;
+
+				::ng-deep ul {
+					padding-left: 30px;
+				}
 			}
 
 			.updates {

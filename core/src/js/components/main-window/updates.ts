@@ -143,7 +143,7 @@ export const updates: readonly Update[] = [
 			},
 			{
 				type: 'future',
-				header: 'What is next',
+				header: "What's next",
 				text: `
 					A few features are on alpha / beta testing phase today:
 					<br/>
