@@ -33,6 +33,9 @@
 		flex-grow: 1;
 		min-height: 0;
 
+		.content {
+			max-width: 100%;
+		}
 		.left {
 			display: none;
 		}
