@@ -134,6 +134,11 @@ input[type='range'] {
 	margin-bottom: 15px;
 	display: flex;
 	flex-direction: column;
+	color: var(--default-text-color);
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
 }
 
 .info {
