@@ -164,8 +164,8 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 				cardId =>
 					({
 						cardId: cardId,
-						damageDealt: this.extractDamage(cardId, postMatch?.stats.totalMinionsDamageDealt),
-						damageTaken: this.extractDamage(cardId, postMatch?.stats.totalMinionsDamageTaken),
+						damageDealt: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageDealt),
+						damageTaken: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageTaken),
 					} as MinionStat),
 			);
 			return {

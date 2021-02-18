@@ -256,8 +256,8 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			cardId =>
 				({
 					cardId: cardId,
-					damageDealt: this.extractDamage(cardId, this._panel.stats.totalMinionsDamageDealt),
-					damageTaken: this.extractDamage(cardId, this._panel.stats.totalMinionsDamageTaken),
+					damageDealt: this.extractDamage(cardId, this._panel.stats?.totalMinionsDamageDealt),
+					damageTaken: this.extractDamage(cardId, this._panel.stats?.totalMinionsDamageTaken),
 				} as MinionStat),
 		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
