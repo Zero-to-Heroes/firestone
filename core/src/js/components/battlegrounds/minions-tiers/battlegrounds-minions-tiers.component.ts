@@ -79,6 +79,8 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit, OnDestroy {
+	private static readonly WINDOW_WIDTH = 1000;
+
 	windowId: string;
 
 	state: BattlegroundsState;
@@ -261,7 +263,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 
 		const gameWidth = gameInfo.width;
 		const height = gameInfo.height;
-		const width = 400;
+		const width = BattlegroundsMinionsTiersOverlayComponent.WINDOW_WIDTH;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		const dpi = gameInfo.logicalWidth / gameWidth;
 		const newLeft = dpi * (gameWidth - width);
@@ -275,7 +277,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	}
 
 	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
-		const width = 800;
+		const width = BattlegroundsMinionsTiersOverlayComponent.WINDOW_WIDTH;
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
