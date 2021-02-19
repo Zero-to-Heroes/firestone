@@ -82,12 +82,16 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 	): Promise<boolean> {
 		const inGame = await this.ow.inGame();
 		if (!inGame) {
-			console.debug(`[${this.name}] not in game`);
+			if (this.forceLogs) {
+				console.debug(`[${this.name}] not in game`);
+			}
 			return false;
 		}
 
 		if (forceCloseWidgets) {
-			console.debug(`[${this.name}] forceCloseWidgets`);
+			if (this.forceLogs) {
+				console.debug(`[${this.name}] forceCloseWidgets`);
+			}
 			return false;
 		}
 

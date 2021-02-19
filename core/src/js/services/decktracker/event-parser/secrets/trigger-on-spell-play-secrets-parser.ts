@@ -38,6 +38,11 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		// console.warn('parsing event', gameEvent.type);
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		if (!cardId) {
+			console.warn('[trigger-on-spell-play] no card Id', gameEvent.parse());
+			return currentState;
+		}
+
 		if (gameEvent.type === GameEvent.SECRET_TRIGGERED) {
 			this.counterSpellTriggered = cardId === CardIds.Collectible.Mage.Counterspell;
 			// console.warn('counterspell triggered', this.counterSpellTriggered);
