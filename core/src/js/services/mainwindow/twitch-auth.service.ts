@@ -96,6 +96,7 @@ export class TwitchAuthService {
 	}
 
 	private async emitEvent(event: any) {
+		// return;
 		let newEvent = Object.assign(
 			{
 				type: 'deck-event',
@@ -108,14 +109,17 @@ export class TwitchAuthService {
 			});
 		}
 
-		// First clean the stats
-		const newState = Object.assign(new GameState(), newEvent.state, {
-			deckStats: undefined,
-			archetypesConfig: undefined,
-			archetypesStats: undefined,
-			constructedState: undefined,
-			deckStatsRecap: undefined,
+		// TODO: clean this to only send the relevant info
+		const newState = Object.assign(new GameState(), {
+			playerDeck: newEvent.state.playerDeck,
+			opponentDeck: newEvent.state.opponentDeck,
+			mulliganOver: newEvent.state.mulliganOver,
+			metadata: newEvent.state.metadata,
+			currentTurn: newEvent.state.currentTurn,
+			gameStarted: newEvent.state.gameStarted,
+			gameEnded: newEvent.state.gameEnded,
 		} as GameState);
+
 		newEvent = Object.assign({}, newEvent, {
 			state: newState,
 		});
@@ -286,6 +290,7 @@ export class TwitchAuthService {
 
 	private hasLoggedInfoOnce = false;
 	private async sendEvent(newEvent) {
+		// return;
 		// console.log('ready to emit twitch event', newEvent);
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
@@ -298,31 +303,18 @@ export class TwitchAuthService {
 			(data: any) => {
 				// Do nothing
 				if (!this.hasLoggedInfoOnce && data.statusCode === 422) {
-					const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
-					this.hasLoggedInfoOnce = true;
-					console.error(
-						'no-format',
-						'[twitch] Message sent to Twitch is too large',
-						compressedMessage.length,
-						new Blob([compressedMessage]).size,
-						newEvent,
-					);
+					// 	const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
+					// 	this.hasLoggedInfoOnce = true;
+					console.error('no-format', '[twitch] Message sent to Twitch is too large');
 				}
 			},
 			error => {
-				if (!this.hasLoggedInfoOnce) {
-					const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
-					const noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
-					this.hasLoggedInfoOnce = true;
-					console.error(
-						noFormat,
-						'[twitch-auth] Could not send deck event to EBS',
-						compressedMessage.length,
-						new Blob([compressedMessage]).size,
-						error,
-						newEvent,
-					);
-				}
+				// if (!this.hasLoggedInfoOnce) {
+				// 	const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
+				// 	const noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
+				// 	this.hasLoggedInfoOnce = true;
+				console.error('[twitch-auth] Could not send deck event to EBS', error);
+				// }
 			},
 		);
 	}
