@@ -81,7 +81,18 @@ export class AchievementsMonitor {
 			this.achievementsStorage.retrieveInGameAchievements(),
 			this.memory.getInGameAchievementsProgressInfo(),
 		]);
-		console.log('[achievement-monitor] retrieved achievements from memory');
+		if (process.env.NODE_ENV !== 'production') {
+			console.log(
+				'[achievement-monitor] retrieved achievements from memory',
+				existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
+				achievementsProgress, // This has the correct progress
+				(achievementsProgress?.achievements || [])?.filter(
+					progress => progress.progress >= this.achievementQuotas[progress.id],
+				),
+			);
+		} else {
+			console.log('[achievement-monitor] retrieved achievements from memory');
+		}
 		const unlockedAchievements = (achievementsProgress?.achievements || [])
 			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
 			.map(progress => progress.id)

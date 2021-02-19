@@ -21,7 +21,9 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 			ow,
 			prefs,
 			allCards,
+			true,
 		);
+		this.name = 'decktracker-player';
 	}
 
 	public processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
@@ -42,6 +44,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences) {
 		if (this.closedByUser || !this.gameStarted) {
+			console.debug(`[${this.name}] should not show`, this.closedByUser, this.gameStarted);
 			return false;
 		}
 
@@ -52,6 +55,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		// We explicitely don't check for null, so that if the memory updates are broken
 		// we still somehow show the info
 		if (this.onGameScreen === false) {
+			console.debug(`[${this.name}] not on game screen`, this.onGameScreen);
 			return false;
 		}
 
