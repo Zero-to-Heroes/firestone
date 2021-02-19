@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { FeatureFlags } from '../../../services/feature-flags';
 
 @Component({
 	selector: 'bgs-tavern-minion',
@@ -10,7 +11,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		'../../../../css/component/battlegrounds/overlay/bgs-tavern-minion.component.scss',
 	],
 	template: `
-		<div class="card" [ngClass]="{ 'highlighted': highlighted }">
+		<div class="card" [ngClass]="{ 'highlighted': showMinionHighlight && highlighted }">
 			<!-- transparent image with 1:1 intrinsic aspect ratio -->
 			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
 			<div class="highlight"></div>
@@ -19,6 +20,8 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsTavernMinionComponent {
+	showMinionHighlight = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT;
+
 	@Input() set minion(value: DeckCard) {
 		this._minion = value;
 		this.updateValues();
@@ -43,7 +46,11 @@ export class BgsTavernMinionComponent {
 	constructor(private readonly allCards: AllCardsService) {}
 
 	private updateValues() {
-		if (!this._minion || (!this._highlightedTribes?.length && !this._highlightedMinions?.length)) {
+		if (
+			!this.showMinionHighlight ||
+			!this._minion ||
+			(!this._highlightedTribes?.length && !this._highlightedMinions?.length)
+		) {
 			this.highlighted = false;
 			return;
 		}

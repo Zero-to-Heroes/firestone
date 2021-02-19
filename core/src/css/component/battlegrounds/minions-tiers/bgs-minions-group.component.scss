@@ -15,12 +15,12 @@
 		justify-content: center;
 		margin-bottom: 2px;
 
-		&.highlighted {
+		&:not(.no-highlight).highlighted {
 			background: var(--color-2);
 			color: var(--color-7);
 		}
 
-		&:hover {
+		&:not(.no-highlight):hover {
 			background: var(--color-1);
 			color: var(--color-7);
 		}
@@ -39,11 +39,11 @@
 			margin-bottom: 2px;
 			overflow: hidden;
 
-			&:hover {
+			&:not(.no-highlight):hover {
 				transform: scale(1.1);
 			}
 
-			&.highlighted {
+			&:not(.no-highlight).highlighted {
 				.name {
 					// background: var(--color-2);
 					background: linear-gradient(90deg, rgba(206, 115, 180, 1) 72%, rgba(9, 10, 13, 0) 100%);
