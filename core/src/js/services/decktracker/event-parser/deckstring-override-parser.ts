@@ -13,11 +13,15 @@ export class DeckstringOverrideParser implements EventParser {
 		return state && gameEvent.type === GameEvent.DECKSTRING_OVERRIDE;
 	}
 
-	async parse(currentState: GameState, gameEvent: DeckstringOverrideEvent): Promise<GameState> {
+	async parse(
+		currentState: GameState,
+		gameEvent: DeckstringOverrideEvent,
+		playerOrOpponent: 'player' | 'opponent' = 'opponent',
+	): Promise<GameState> {
 		const deckName = gameEvent.deckName;
 		const deckstring = gameEvent.deckstring;
-		const initialDeck = currentState.opponentDeck;
-		//console.debug('[deckstring-override-parser]', deckName, deckstring, initialDeck);
+		const initialDeck = playerOrOpponent === 'opponent' ? currentState.opponentDeck : currentState.playerDeck;
+		// console.debug('[deckstring-override-parser]', deckName, deckstring, initialDeck);
 
 		if (!deckstring) {
 			console.warn('[deckstring-override-parser] no deckstring passed, returning', gameEvent);
@@ -30,17 +34,17 @@ export class DeckstringOverrideParser implements EventParser {
 		// has been overridden
 		const deckInfo = initialDeck.deck;
 		const cardsNotInInitialDeck = deckInfo.filter(card => card.creatorCardId);
-		//console.debug('[deckstring-override-parser] cardsNotInInitialDeck', cardsNotInInitialDeck);
+		// console.debug('[deckstring-override-parser] cardsNotInInitialDeck', cardsNotInInitialDeck);
 
 		// Now we do the opposite: on all the other zones, we need to find out the cards
 		// that were part of the initial deck and are not in the "deck" zone anymore
 		const cardsMovedOutOfInitialDeck = [...initialDeck.board, ...initialDeck.hand, ...initialDeck.otherZone]
 			.filter(card => card.cardId)
 			.filter(card => !card.creatorCardId);
-		//console.debug('[deckstring-override-parser] cardsMovedOutOfInitialDeck', cardsMovedOutOfInitialDeck);
+		// console.debug('[deckstring-override-parser] cardsMovedOutOfInitialDeck', cardsMovedOutOfInitialDeck);
 
 		const cardsFromDeckstring = this.deckHandler.buildDeckList(deckstring);
-		//console.debug('[deckstring-override-parser] cardsFromDeckstring', cardsFromDeckstring);
+		// console.debug('[deckstring-override-parser] cardsFromDeckstring', cardsFromDeckstring);
 
 		// Now remove the from this list the cards that were moved out of the initial deck
 		const newDeckContents = [...cardsFromDeckstring];
@@ -50,22 +54,22 @@ export class DeckstringOverrideParser implements EventParser {
 				newDeckContents.splice(index, 1);
 			}
 		}
-		//console.debug('[deckstring-override-parser] updating new decks after cards moved out', newDeckContents);
+		// console.debug('[deckstring-override-parser] updating new decks after cards moved out', newDeckContents);
 
 		// And add back the other cards
 		const finalDeckContents = [...newDeckContents, ...cardsNotInInitialDeck];
-		//console.debug('[deckstring-override-parser] finalDeckContents', finalDeckContents);
+		// console.debug('[deckstring-override-parser] finalDeckContents', finalDeckContents);
 
-		const newDeck = Object.assign(new DeckState(), currentState.opponentDeck, {
+		const newDeck = Object.assign(new DeckState(), initialDeck, {
 			deckstring: deckstring,
 			name: deckName,
 			deckList: cardsFromDeckstring,
 			deck: finalDeckContents as readonly DeckCard[],
 		} as DeckState);
-		//console.log('newDeck', newDeck);
+		// console.log('newDeck', newDeck);
 		return Object.assign(new GameState(), currentState, {
-			opponentDeck: newDeck,
-		} as GameState);
+			[playerOrOpponent === 'opponent' ? 'opponentDeck' : 'playerDeck']: newDeck,
+		});
 	}
 
 	event(): string {

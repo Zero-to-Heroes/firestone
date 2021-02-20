@@ -481,6 +481,16 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'CREATE_CARD_IN_GRAVEYARD':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CREATE_CARD_IN_GRAVEYARD, gameEvent, {
+						// Not always present?
+						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
+						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
+					}),
+				);
+				break;
 			case 'CARD_BUFFED_IN_HAND':
 				// console.log('will emit ', GameEvent.CARD_BUFFED_IN_HAND, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
@@ -622,6 +632,7 @@ export class GameEvents {
 				const additionalProps = gameEvent.Value.AdditionalProps
 					? {
 							health: gameEvent.Value.AdditionalProps.Health,
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					  }
 					: null;
 				this.gameEventsEmitter.allEvents.next(
@@ -1006,6 +1017,16 @@ export class GameEvents {
 				break;
 			case 'ENTITY_UPDATE':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.ENTITY_UPDATE, gameEvent));
+				break;
+			case 'RECONNECT_START':
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_START }),
+				);
+				break;
+			case 'RECONNECT_OVER':
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_OVER }),
+				);
 				break;
 			default:
 				console.log('unsupported game event', gameEvent);

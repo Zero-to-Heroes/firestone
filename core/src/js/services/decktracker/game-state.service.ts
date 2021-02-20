@@ -43,6 +43,7 @@ import { ConstructedAchievementsProgressionParser } from './event-parser/constru
 import { ConstructedChangeTabParser } from './event-parser/constructed/constructed-change-tab-parser';
 import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed/list-cards-played-from-initial-deck-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
+import { CreateCardInGraveyardParser } from './event-parser/create-card-in-graveyard-parser';
 import { CthunParser } from './event-parser/cthun-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
@@ -79,6 +80,7 @@ import { QuestDestroyedParser } from './event-parser/quest-destroyed-parser';
 import { QuestPlayedFromDeckParser } from './event-parser/quest-played-from-deck-parser';
 import { QuestPlayedFromHandParser } from './event-parser/quest-played-from-hand-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
+import { ReconnectOverParser } from './event-parser/reconnect-over-parser';
 import { SecretCreatedInGameParser } from './event-parser/secret-created-in-game-parser';
 import { SecretDestroyedParser } from './event-parser/secret-destroyed-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
@@ -183,7 +185,7 @@ export class GameStateService {
 				if (this.showDecktrackerFromGameMode === event) {
 					return;
 				}
-				//console.debug('decktracker display update', event);
+				// console.debug('decktracker display update', event);
 				this.showDecktrackerFromGameMode = event;
 				//console.debug('will update overlays', event, this.showDecktrackerFromGameMode);
 				this.updateOverlays(this.state, false, false);
@@ -266,6 +268,7 @@ export class GameStateService {
 			].filter(event => event);
 			// console.log('will processed', eventsToProcess.length, 'events');
 			for (let i = 0; i < eventsToProcess.length; i++) {
+				// console.debug('will process', eventsToProcess[i]?.type, eventsToProcess[i]);
 				if (eventsToProcess[i] instanceof GameEvent) {
 					await this.processEvent(eventsToProcess[i] as GameEvent, i === eventsToProcess.length - 1);
 				} else {
@@ -311,7 +314,7 @@ export class GameStateService {
 
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
 		const allowRequeue = !(gameEvent as any).preventRequeue;
-		//console.log('processing event', gameEvent.type, allowRequeue, gameEvent);
+		// console.debug('processing event', gameEvent.type, allowRequeue, gameEvent);
 		this.overlayHandlers.forEach(handler =>
 			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
 		);
@@ -646,6 +649,9 @@ export class GameStateService {
 			new EntityUpdateParser(this.helper, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
+
+			new CreateCardInGraveyardParser(this.helper, this.allCards),
+			new ReconnectOverParser(this.deckHandler),
 		];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {

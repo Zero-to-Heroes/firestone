@@ -1,4 +1,3 @@
-import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -7,44 +6,40 @@ import { GameEvent } from '../../../models/game-event';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
-// Needed to not show the shrine as part of the deck
-export class CardOnBoardAtGameStart implements EventParser {
+export class CreateCardInGraveyardParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START;
+		return state && gameEvent.type === GameEvent.CREATE_CARD_IN_GRAVEYARD;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
-
+		// console.log('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 
-		const dbCard = this.allCards.getCard(cardId);
-		// console.log('dbCard', dbCard);
-		if (dbCard.type && CardType[dbCard.type.toUpperCase()] === CardType.HERO) {
-			// Do nothing, as we don't want to add the starting hero to the deck tracker
+		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
+		const cardData = cardId ? this.allCards.getCard(cardId) : null;
+		// Because of how reconnects work, we don't know whether the card is an enchantment just
+		// from the logs
+		if (!cardId || cardData?.type === 'Enchantment') {
 			return currentState;
 		}
 
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
-			deck.deck,
-			cardId,
-			entityId,
-			deck.deckList.length === 0,
-		)[0];
-		const cardWithZone = card.update({
-			zone: 'PLAY',
+		const cardWithDefault = DeckCard.create({
+			cardId: cardId,
+			entityId: entityId,
+			cardName: cardData && cardData.name,
+			manaCost: cardData && cardData.cost,
+			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 			creatorCardId: creatorCardId,
 		} as DeckCard);
+		const newOther = this.helper.addSingleCardToZone(deck.otherZone, cardWithDefault);
 
-		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
-			deck: newDeck,
-			board: newBoard,
+			otherZone: newOther,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
@@ -52,6 +47,6 @@ export class CardOnBoardAtGameStart implements EventParser {
 	}
 
 	event(): string {
-		return GameEvent.CARD_ON_BOARD_AT_GAME_START;
+		return GameEvent.CREATE_CARD_IN_GRAVEYARD;
 	}
 }

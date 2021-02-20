@@ -56,6 +56,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly DEATHRATTLE_TRIGGERED = 'DEATHRATTLE_TRIGGERED';
 	public static readonly CARD_DRAW_FROM_DECK = 'CARD_DRAW_FROM_DECK';
 	public static readonly RECEIVE_CARD_IN_HAND = 'RECEIVE_CARD_IN_HAND';
+	public static readonly CREATE_CARD_IN_GRAVEYARD = 'CREATE_CARD_IN_GRAVEYARD';
 	public static readonly CARD_BUFFED_IN_HAND = 'CARD_BUFFED_IN_HAND';
 	public static readonly CARD_CREATOR_CHANGED = 'CARD_CREATOR_CHANGED';
 	public static readonly END_OF_ECHO_IN_HAND = 'END_OF_ECHO_IN_HAND';
@@ -111,6 +112,9 @@ export class GameEvent implements GameStateEvent {
 
 	public static readonly ACHIEVEMENT_PROGRESS = 'ACHIEVEMENT_PROGRESS';
 	public static readonly DECKSTRING_OVERRIDE = 'DECKSTRING_OVERRIDE';
+
+	public static readonly RECONNECT_START = 'RECONNECT_START';
+	public static readonly RECONNECT_OVER = 'RECONNECT_OVER';
 
 	readonly type: string;
 	readonly cardId: string;
