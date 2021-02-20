@@ -8,8 +8,8 @@ export class AdService {
 
 	public async shouldDisplayAds(): Promise<boolean> {
 		if (process.env.NODE_ENV !== 'production') {
-			console.error('forcing display in dev');
-			return true;
+			console.error('random display in dev');
+			return Math.random() < 0.5;
 		}
 		return new Promise<boolean>(async resolve => {
 			// Use OW's subscription mechanism
