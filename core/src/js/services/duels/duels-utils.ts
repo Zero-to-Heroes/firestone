@@ -16,7 +16,7 @@ const SIGNATURE_TREASURES = [
 	CardIds.NonCollectible.Druid.WardensInsight,
 	CardIds.NonCollectible.Druid.ZukaraTheWild,
 	CardIds.NonCollectible.Hunter.Bonecrusher,
-	CardIds.NonCollectible.Hunter.BowOfTheBeast,
+	CardIds.NonCollectible.Hunter.CarrotOnAStick,
 	CardIds.NonCollectible.Hunter.Deathstrider,
 	CardIds.NonCollectible.Hunter.SlatesSyringe,
 	CardIds.NonCollectible.Hunter.StalkingPride,
