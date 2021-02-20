@@ -17,7 +17,8 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 		super(
 			OverwolfService.DECKTRACKER_OPPONENT_WINDOW,
 			prefs => prefs.opponentTracker,
-			(state, prefs, showDecktrackerFromGameMode) => !this.closedByUser && !state.isBattlegrounds(),
+			(state, prefs, showDecktrackerFromGameMode) =>
+				!this.closedByUser && !state.isBattlegrounds() && showDecktrackerFromGameMode,
 			ow,
 			prefs,
 			allCards,
