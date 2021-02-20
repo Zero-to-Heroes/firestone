@@ -27,6 +27,7 @@ export class AchievementsMonitor {
 	);
 	private lastReceivedTimestamp;
 	private achievementQuotas: { [achievementId: number]: number };
+	private previousAchievements: HsAchievementsInfo;
 
 	private achievementsProgressInterval;
 
@@ -44,6 +45,7 @@ export class AchievementsMonitor {
 			this.handleEvent(gameEvent);
 
 			if (gameEvent.type === GameEvent.GAME_START) {
+				this.assignPreviousAchievements();
 				if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
 					this.startAchievementsProgressDetection();
 				}
@@ -86,6 +88,8 @@ export class AchievementsMonitor {
 				'[achievement-monitor] retrieved achievements from memory',
 				existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
 				achievementsProgress, // This has the correct progress
+				this.achievementQuotas,
+				this.previousAchievements,
 				(achievementsProgress?.achievements || [])?.filter(
 					progress => progress.progress >= this.achievementQuotas[progress.id],
 				),
@@ -106,7 +110,13 @@ export class AchievementsMonitor {
 						completed: false,
 					},
 			)
-			.filter(ach => !ach.completed);
+			.filter(
+				ach =>
+					!ach.completed ||
+					// It looks like the game might be flagging the achievements as completed right away now
+					(this.previousAchievements?.achievements &&
+						this.previousAchievements.achievements.find(a => a.id === ach.id)?.completed === false),
+			);
 		console.log('[achievement-monitor] unlocked achievements', unlockedAchievements);
 		if (!unlockedAchievements.length) {
 			if (process.env.NODE_ENV !== 'production') {
@@ -131,6 +141,7 @@ export class AchievementsMonitor {
 		);
 		console.log('[achievement-monitor] built achievements, emitting events', achievements);
 		await Promise.all(achievements.map(ach => this.sendUnlockEventFromAchievement(ach)));
+		this.previousAchievements = existingAchievements;
 	}
 
 	private async handleEvent(gameEvent: GameEvent) {
@@ -232,6 +243,19 @@ export class AchievementsMonitor {
 	private async stopAchievementsProgressDetection() {
 		if (this.achievementsProgressInterval) {
 			clearInterval(this.achievementsProgressInterval);
+		}
+	}
+
+	private async assignPreviousAchievements() {
+		const existingAchievements = await this.achievementsStorage.retrieveInGameAchievements();
+		// console.debug('existing achievements', existingAchievements, this.previousAchievements);
+		if (!existingAchievements) {
+			return;
+		}
+
+		if (!this.previousAchievements) {
+			// console.debug('assigning previous achievements', existingAchievements);
+			this.previousAchievements = existingAchievements;
 		}
 	}
 
