@@ -43,14 +43,14 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		}
 	}
 
-	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences) {
+	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {
 		if (this.closedByUser || !this.gameStarted) {
 			console.debug(`[${this.name}] should not show`, this.closedByUser, this.gameStarted);
 			return false;
 		}
 
 		if (!prefs.decktrackerCloseOnGameEnd) {
-			return true;
+			return state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
 		}
 
 		// We explicitely don't check for null, so that if the memory updates are broken

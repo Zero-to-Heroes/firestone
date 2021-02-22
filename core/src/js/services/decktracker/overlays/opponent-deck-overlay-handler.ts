@@ -40,13 +40,14 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 		}
 	}
 
-	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences) {
+	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {
 		if (this.closedByUser || !this.gameStarted) {
 			return false;
 		}
 
 		if (!prefs.decktrackerCloseOnGameEnd) {
-			return true;
+			// console.debug('GAAAAAAA show', state);
+			return state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
 		}
 
 		// We explicitely don't check for null, so that if the memory updates are broken
