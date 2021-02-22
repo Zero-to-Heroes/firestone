@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.3.10',
+		version: '7.3.12',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -81,25 +81,29 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a bug where the option to disable the tracker in specific game modes would not work anymore.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix a bug where the tracker would appear in BG games if you have the "don't close tracker after match ends" option enabled.`,
+							},
 						],
 					},
 				],
 			},
-			{
-				type: 'minor',
-				header: 'Minor updates',
-				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							// {
-							// 	type: 'ui',
-							// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
-							// },
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'decktracker',
+			// 			details: [
+			// 				// {
+			// 				// 	type: 'ui',
+			// 				// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+			// 				// },
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'future',
 				header: "What's next",
