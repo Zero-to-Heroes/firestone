@@ -12,7 +12,8 @@ import { AchievementCompletedEvent } from '../mainwindow/store/events/achievemen
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ProcessingQueue } from '../processing-queue.service';
-import { HsAchievementsInfo } from './achievements-info';
+import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
+import { AchievementsManager } from './achievements-manager.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
@@ -27,7 +28,7 @@ export class AchievementsMonitor {
 	);
 	private lastReceivedTimestamp;
 	private achievementQuotas: { [achievementId: number]: number };
-	private previousAchievements: HsAchievementsInfo;
+	private previousAchievements: readonly HsAchievementInfo[];
 
 	private achievementsProgressInterval;
 
@@ -38,6 +39,7 @@ export class AchievementsMonitor {
 		private store: MainWindowStoreService,
 		private remoteAchievements: RemoteAchievementsService,
 		private achievementsStorage: AchievementsLocalDbService,
+		private achievementsManager: AchievementsManager,
 		private memory: MemoryInspectionService,
 	) {
 		this.lastReceivedTimestamp = Date.now();
@@ -73,14 +75,18 @@ export class AchievementsMonitor {
 		}
 	}
 
-	private async detectNewAchievementFromMemory(retriesLeft = 10) {
+	private async detectNewAchievementFromMemory(retriesLeft = 10, forceAchievementsUpdate = false) {
 		if (retriesLeft < 0) {
 			return;
 		}
 
+		// TODO: the "progress step" (like Setting the Standard) achievements are not
+		// returned here by the in game achievements progress
+		// Trying to read the achievements directly from memory, instead of from the
+		// indexeddb, to see if this solves the issue
 		console.log('[achievement-monitor] detecting achievements from memory');
 		const [existingAchievements, achievementsProgress] = await Promise.all([
-			this.achievementsStorage.retrieveInGameAchievements(),
+			this.achievementsManager.getAchievements(),
 			this.memory.getInGameAchievementsProgressInfo(),
 		]);
 		if (process.env.NODE_ENV !== 'production') {
@@ -104,7 +110,7 @@ export class AchievementsMonitor {
 				id =>
 					// Only achievement with a current progress are in the game's memory, so the ones that are simply
 					// yes/no will always be missing
-					existingAchievements.achievements.find(ach => ach.id === id) || {
+					existingAchievements.find(ach => ach.id === id) || {
 						id: id,
 						progress: 0,
 						completed: false,
@@ -114,8 +120,8 @@ export class AchievementsMonitor {
 				ach =>
 					!ach.completed ||
 					// It looks like the game might be flagging the achievements as completed right away now
-					(this.previousAchievements?.achievements &&
-						this.previousAchievements.achievements.find(a => a.id === ach.id)?.completed === false),
+					(this.previousAchievements &&
+						this.previousAchievements.find(a => a.id === ach.id)?.completed === false),
 			);
 		console.log('[achievement-monitor] unlocked achievements', unlockedAchievements);
 		if (!unlockedAchievements.length) {
@@ -131,7 +137,7 @@ export class AchievementsMonitor {
 				);
 			}
 			setTimeout(() => {
-				this.detectNewAchievementFromMemory(retriesLeft - 1);
+				this.detectNewAchievementFromMemory(retriesLeft - 1, true);
 				return;
 			}, 150);
 			return;
@@ -255,7 +261,7 @@ export class AchievementsMonitor {
 
 		if (!this.previousAchievements) {
 			// console.debug('assigning previous achievements', existingAchievements);
-			this.previousAchievements = existingAchievements;
+			this.previousAchievements = existingAchievements?.achievements;
 		}
 	}
 

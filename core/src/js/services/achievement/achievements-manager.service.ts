@@ -8,15 +8,19 @@ export class AchievementsManager {
 	// TODO: update the achievements if the player goes into the game
 	constructor(private memoryReading: MemoryInspectionService, private db: AchievementsLocalDbService) {}
 
-	public async getAchievements(): Promise<readonly HsAchievementInfo[]> {
+	public async getAchievements(forceMemory = false): Promise<readonly HsAchievementInfo[]> {
 		console.log('[achievements-manager] getting achievements');
 		const achievements = await this.memoryReading.getAchievementsInfo();
 		console.log('[achievements-manager] retrieved achievements from memory', achievements?.achievements?.length);
 		if (!achievements?.achievements?.length) {
-			console.log('[achievements-manager] retrieving achievements from db');
-			const fromDb = await this.db.retrieveInGameAchievements();
-			console.log('[achievements-manager] retrieved achievements from db', fromDb?.achievements?.length);
-			return fromDb?.achievements || [];
+			if (!forceMemory) {
+				console.log('[achievements-manager] retrieving achievements from db');
+				const fromDb = await this.db.retrieveInGameAchievements();
+				console.log('[achievements-manager] retrieved achievements from db', fromDb?.achievements?.length);
+				return fromDb?.achievements || [];
+			} else {
+				return [];
+			}
 		} else {
 			console.log('[achievements-manager] updating achievements in db');
 			const savedCollection = await this.db.saveInGameAchievements(achievements);
