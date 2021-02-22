@@ -12,7 +12,8 @@
 	.main-info {
 		display: flex;
 		flex-direction: column;
-		flex-grow: 0;
+		// flex-grow: 0;
+		flex-grow: 1; // We now fix the tavern section's size
 		flex-shrink: 0;
 		width: 80%;
 		border-right: 1px solid var(--color-3);
@@ -80,9 +81,11 @@
 	}
 
 	.tavern-upgrades {
-		width: 20%;
+		width: 170px;
 		display: flex;
 		flex-direction: column;
+		padding-left: 15px;
+		padding-right: 15px;
 
 		.title {
 			margin-bottom: 10px;
@@ -100,19 +103,20 @@
 
 		.tavern-upgrade {
 			// width: 40%;
-			width: 80%;
+			// width: 80%;
 			margin: auto;
-			margin-bottom: 10%;
+			margin-bottom: 3px;
 		}
 
 		.label {
-			margin-top: -10%;
+			margin-top: -10px;
 			text-align: center;
 		}
 
 		::ng-deep tavern-level-icon .tavern-level-icon {
 			position: relative;
-			width: 60%;
+			// width: 60%;
+			width: 40px;
 			margin: auto;
 		}
 	}
