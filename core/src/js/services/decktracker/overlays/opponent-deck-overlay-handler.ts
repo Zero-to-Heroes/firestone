@@ -37,6 +37,10 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
 			this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === SceneMode.GAMEPLAY;
 			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
+		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
+			this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === 'scene_gameplay';
+			console.log(`[${this.name}] received GEP scene changed`, (gameEvent as GameEvent).additionalData.scene);
+			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		}
 	}
 

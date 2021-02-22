@@ -42,6 +42,13 @@ export class MindVisionService {
 				if (changesToBroadcast.CurrentScene === 'INVALID') {
 					console.warn('[mind-vision] INVALID scene should not be raised', changes);
 					delete changesToBroadcast.CurrentScene;
+					// TODO: here we should reset if we get an invalid scene + no other valid state
+					// For now we only have two pieces of info so that's it
+					if (!changesToBroadcast.DisplayingAchievementToast) {
+						console.warn('[mind-vision] calling reset after invalid scene');
+						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+						this.listenForUpdates();
+					}
 				}
 				this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
 			};
