@@ -145,9 +145,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		// 	console.log('[debug] game event', gameEvent.Type, gameEvent);
-		// }
+		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		//	console.log('[debug] game event', gameEvent.Type, gameEvent);
+		//}
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -831,7 +831,14 @@ export class GameEvents {
 			case 'BATTLEGROUNDS_HERO_SELECTED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
 				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_SELECTED, gameEvent),
+					GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_SELECTED, gameEvent, {
+						// These are set after a reconnect, and usually not present when the match starts
+						leaderboardPlace: gameEvent.Value.LeaderboardPlace,
+						health: gameEvent.Value.Health,
+						damage: gameEvent.Value.Damage,
+						tavernLevel: gameEvent.Value.TavernLevel,
+						nextOpponentCardId: gameEvent.Value.NextOpponentCardId,
+					}),
 				);
 				break;
 			case 'BATTLEGROUNDS_TRIPLE':
