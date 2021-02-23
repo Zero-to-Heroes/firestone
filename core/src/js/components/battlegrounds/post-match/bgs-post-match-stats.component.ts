@@ -266,6 +266,9 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	private extractDamage(normalizedCardId: string, totalMinionsDamageDealt: { [cardId: string]: number }): number {
+		if (!totalMinionsDamageDealt) {
+			return 0;
+		}
 		return Object.keys(totalMinionsDamageDealt)
 			.filter(cardId => normalizeCardId(cardId, this.allCards) === normalizedCardId)
 			.map(cardId => totalMinionsDamageDealt[cardId])
