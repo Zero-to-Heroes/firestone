@@ -41,12 +41,16 @@ export class BgsBattleResultParser implements EventParser {
 			console.warn(
 				'no-format',
 				'[bgs-simulation] Impossible battle victory',
+				currentState.currentGame.reviewId,
+				currentState.currentGame.currentTurn,
 				currentState.currentGame.battleInfo,
 				currentState.currentGame.battleResult,
 			);
 			captureEvent({
 				message: 'Impossible battle victory',
 				extra: {
+					reviewId: currentState.currentGame.reviewId,
+					turnNumber: currentState.currentGame.currentTurn,
 					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
 					battleResult: JSON.stringify(currentState.currentGame.battleResult),
 				},
@@ -61,6 +65,8 @@ export class BgsBattleResultParser implements EventParser {
 			console.warn(
 				'no-format',
 				'[bgs-simulation] Impossible battle loss',
+				currentState.currentGame.reviewId,
+				currentState.currentGame.currentTurn,
 				currentState.currentGame.battleInfo,
 				currentState.currentGame.battleResult,
 			);
@@ -68,6 +74,8 @@ export class BgsBattleResultParser implements EventParser {
 			captureEvent({
 				message: 'Impossible battle loss',
 				extra: {
+					reviewId: currentState.currentGame.reviewId,
+					turnNumber: currentState.currentGame.currentTurn,
 					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
 					battleResult: JSON.stringify(currentState.currentGame.battleResult),
 				},
@@ -82,6 +90,8 @@ export class BgsBattleResultParser implements EventParser {
 			console.warn(
 				'no-format',
 				'[bgs-simulation] Impossible battle tie',
+				currentState.currentGame.reviewId,
+				currentState.currentGame.currentTurn,
 				currentState.currentGame.battleInfo,
 				currentState.currentGame.battleResult,
 			);
@@ -89,6 +99,8 @@ export class BgsBattleResultParser implements EventParser {
 			captureEvent({
 				message: 'Impossible battle tie',
 				extra: {
+					reviewId: currentState.currentGame.reviewId,
+					turnNumber: currentState.currentGame.currentTurn,
 					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
 					battleResult: JSON.stringify(currentState.currentGame.battleResult),
 				},
