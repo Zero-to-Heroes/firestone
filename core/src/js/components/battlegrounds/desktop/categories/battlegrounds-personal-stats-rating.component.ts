@@ -32,7 +32,7 @@ import { formatDate, groupByFunction } from '../../../../services/utils';
 				<div style="display: block; position: relative; height: 100%; width: 100%;">
 					<canvas
 						#chart
-						*ngIf="lineChartData"
+						*ngIf="lineChartData?.length && lineChartData[0]?.data?.length"
 						baseChart
 						[style.opacity]="opacity"
 						[style.width.px]="chartWidth"

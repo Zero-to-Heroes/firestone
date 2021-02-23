@@ -25,7 +25,7 @@ declare let amplitude: any;
 		<div class="chart-container" [style.opacity]="opacity">
 			<div style="display: block; position: relative; height: 100%; width: 100%;">
 				<canvas
-					*ngIf="chartData"
+					*ngIf="chartData?.length && chartData[0]?.data?.length"
 					#chart
 					baseChart
 					[style.width.px]="chartWidth"

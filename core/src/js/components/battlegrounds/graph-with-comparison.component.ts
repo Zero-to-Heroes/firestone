@@ -35,7 +35,7 @@ declare let amplitude: any;
 		<div class="container-1" [style.opacity]="opacity">
 			<div style="display: block; position: relative; height: 100%; width: 100%;">
 				<canvas
-					*ngIf="lineChartData"
+					*ngIf="lineChartData?.length && lineChartData[0].data?.length"
 					#chart
 					baseChart
 					[style.width.px]="chartWidth"
@@ -89,7 +89,7 @@ export class GraphWithComparisonComponent {
 
 	chartWidth: number;
 	chartHeight: number;
-	lineChartData: ChartDataSets[];
+	lineChartData: ChartDataSets[] = [{ data: [] }];
 	lineChartLabels: Label[];
 	lineChartOptions: ChartOptions = this.buildChartOptions();
 	lineChartColors: Color[];

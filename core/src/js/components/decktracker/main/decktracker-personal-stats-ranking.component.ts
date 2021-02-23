@@ -15,6 +15,7 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { OverwolfService } from '../../../services/overwolf.service';
 
+// https://github.com/valor-software/ng2-charts/issues/424
 @Component({
 	selector: 'decktracker-personal-stats-ranking',
 	styleUrls: [
@@ -28,7 +29,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<div style="display: block; position: relative; height: 100%; width: 100%;">
 					<canvas
 						#chart
-						*ngIf="lineChartData"
+						*ngIf="lineChartData?.length && lineChartData[0]?.data?.length"
 						baseChart
 						[style.opacity]="opacity"
 						[style.width.px]="chartWidth"

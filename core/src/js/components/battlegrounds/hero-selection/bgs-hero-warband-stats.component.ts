@@ -26,6 +26,7 @@ declare let amplitude: any;
 				<canvas
 					#chart
 					baseChart
+					*ngIf="lineChartData?.length && lineChartData[0]?.data?.length"
 					[style.width.px]="chartWidth"
 					[style.height.px]="chartHeight"
 					[datasets]="lineChartData"
