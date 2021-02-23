@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -18,13 +19,15 @@ export class BgsTavernUpgradeParser implements EventParser {
 			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
 		if (!playerToUpdate) {
-			console.error(
-				'No player found to update the history',
-				currentState.currentGame.reviewId,
-				event.heroCardId,
-				normalizeHeroCardId(event.heroCardId),
-				currentState.currentGame.players.map(player => player.cardId),
-			);
+			if (event.heroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2) {
+				console.error(
+					'No player found to update the history',
+					currentState.currentGame.reviewId,
+					event.heroCardId,
+					normalizeHeroCardId(event.heroCardId),
+					currentState.currentGame.players.map(player => player.cardId),
+				);
+			}
 			return currentState;
 		}
 		const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();

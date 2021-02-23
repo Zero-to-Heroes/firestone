@@ -44,12 +44,13 @@ export class BgsPlayerBoardParser implements EventParser {
 		const player: BgsPlayer = this.updatePlayer(currentState, event.playerBoard);
 		const opponent: BgsPlayer = this.updatePlayer(currentState, event.opponentBoard);
 		if (!player || !opponent) {
-			console.error(
-				'Could not idenfity player for whom to update board history',
-				event.playerBoard?.heroCardId,
-				event.opponentBoard?.heroCardId,
-				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
-			);
+			// console.error(
+			// 	'Could not idenfity player for whom to update board history',
+			// 	currentState.currentGame.reviewId,
+			// 	event.playerBoard?.heroCardId,
+			// 	event.opponentBoard?.heroCardId,
+			// 	currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
+			// );
 			return currentState;
 		}
 
@@ -110,6 +111,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		if (!playerToUpdate) {
 			console.error(
 				'Could not idenfity player for whom to update board history',
+				currentState.currentGame.reviewId,
 				playerBoard.heroCardId,
 				normalizeHeroCardId(playerBoard.heroCardId),
 				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),

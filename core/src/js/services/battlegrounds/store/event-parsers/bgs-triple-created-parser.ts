@@ -19,8 +19,9 @@ export class BgsTripleCreatedParser implements EventParser {
 		if (!playerToUpdate) {
 			console.error(
 				'Could not find player to update for triple history',
-				currentState.currentGame.players.map(player => player.cardId),
+				currentState.currentGame.reviewId,
 				event.heroCardId,
+				currentState.currentGame.players.map(player => player.cardId),
 			);
 			return currentState;
 		}

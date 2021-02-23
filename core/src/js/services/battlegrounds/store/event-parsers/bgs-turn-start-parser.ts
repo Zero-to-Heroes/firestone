@@ -22,7 +22,7 @@ export class BgsTurnStartParser implements EventParser {
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
 			stage.id === newNextOpponentStage.id ? newNextOpponentStage : stage,
 		);
-		// console.log('updating turn', currentState);
+		console.log('updating turn', newCurrentTurn);
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				currentTurn: newCurrentTurn,
