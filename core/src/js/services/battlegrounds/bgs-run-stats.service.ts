@@ -185,7 +185,7 @@ export class BgsRunStatsService {
 		const result: BgsPostMatchStats = BgsPostMatchStats.create({
 			...data,
 			// We do this because the immutable maps are all messed up when going back and forth
-			boardHistory: input.mainPlayer.boardHistory,
+			boardHistory: input.mainPlayer?.boardHistory || [],
 		});
 		//console.log('computing new best stats', data, input, existingBestStats);
 		const newBestStats = buildNewStats(
