@@ -15,14 +15,18 @@ export class BgsMatchStartParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsMatchStartEvent): Promise<BattlegroundsState> {
-		const newGame: BgsGame = BgsGame.create({} as BgsGame);
-		const prefs: Preferences = await this.prefs.getPreferences();
-		return currentState.update({
-			inGame: true,
-			// gameEnded: false,
-			currentGame: newGame,
-			forceOpen: prefs.bgsShowHeroSelectionScreen,
-			stages: BgsInitParser.buildEmptyStages(currentState),
-		} as BattlegroundsState);
+		if (currentState.reconnectOngoing) {
+			return currentState;
+		} else {
+			const newGame: BgsGame = BgsGame.create({} as BgsGame);
+			const prefs: Preferences = await this.prefs.getPreferences();
+			return currentState.update({
+				inGame: true,
+				// gameEnded: false,
+				currentGame: newGame,
+				forceOpen: prefs.bgsShowHeroSelectionScreen,
+				stages: BgsInitParser.buildEmptyStages(currentState),
+			} as BattlegroundsState);
+		}
 	}
 }

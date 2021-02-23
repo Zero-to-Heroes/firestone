@@ -36,6 +36,7 @@ import { BgsOpponentRevealedParser } from './event-parsers/bgs-opponent-revealed
 import { BgsPlayerBoardParser } from './event-parsers/bgs-player-board-parser';
 import { BgsPostMatchStatsFilterChangeParser } from './event-parsers/bgs-post-match-stats-filter-change-parser';
 import { BgsRealTimeStatsUpdatedParser } from './event-parsers/bgs-real-time-stats-updated-parser';
+import { BgsReconnectStatusParser } from './event-parsers/bgs-reconnect-status-parser';
 import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
 import { BgsResetHighlightsParser } from './event-parsers/bgs-reset-highlights-processor';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
@@ -62,6 +63,7 @@ import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
 import { BgsOpponentRevealedEvent } from './events/bgs-opponent-revealed-event';
 import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
 import { BgsRealTimeStatsUpdatedEvent } from './events/bgs-real-time-stats-updated-event';
+import { BgsReconnectStatusEvent } from './events/bgs-reconnect-status-event';
 import { BgsRecruitStartEvent } from './events/bgs-recruit-start-event';
 import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
@@ -168,7 +170,11 @@ export class BattlegroundsStoreService {
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			this.eventsThisTurn.push(gameEvent.type);
-			if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
+			if (gameEvent.type === GameEvent.RECONNECT_START) {
+				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(true));
+			} else if (gameEvent.type === GameEvent.RECONNECT_OVER) {
+				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(false));
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectionEvent(gameEvent.additionalData.heroCardIds));
 				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
@@ -454,6 +460,7 @@ export class BattlegroundsStoreService {
 			new BgsToggleHighlightTribeOnBoardParser(),
 			new BgsToggleHighlightMinionOnBoardParser(),
 			new BgsResetHighlightsParser(),
+			new BgsReconnectStatusParser(),
 		];
 
 		if (FeatureFlags.ENABLE_REAL_TIME_STATS) {

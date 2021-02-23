@@ -17,25 +17,27 @@ export class BgsOpponentRevealedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsOpponentRevealedEvent): Promise<BattlegroundsState> {
 		console.log('opponent revealed', event.cardId);
 		const normalizedCardId = normalizeHeroCardId(event.cardId);
-		if (
-			currentState.currentGame.players
-				.map(player => normalizeHeroCardId(player.cardId))
-				.includes(normalizedCardId)
-		) {
-			console.log(
-				'opponent already added',
-				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
-			);
-			return currentState;
-		}
-		const newPlayer: BgsPlayer = BgsPlayer.create({
-			cardId: normalizedCardId,
-			heroPowerCardId: getHeroPower(event.cardId),
-			name: this.allCards.getCard(event.cardId).name,
-			leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
-		} as BgsPlayer);
+		const existingPlayer = currentState.currentGame.players.find(
+			player => normalizeHeroCardId(player.cardId) === normalizedCardId,
+		);
+		const newPlayer =
+			existingPlayer != null
+				? existingPlayer.update({
+						leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
+				  } as BgsPlayer)
+				: BgsPlayer.create({
+						cardId: normalizedCardId,
+						heroPowerCardId: getHeroPower(event.cardId),
+						name: this.allCards.getCard(event.cardId).name,
+						leaderboardPlace: event.leaderboardPlace === -1 ? null : event.leaderboardPlace,
+				  } as BgsPlayer);
 		const newGame = currentState.currentGame.update({
-			players: [...currentState.currentGame.players, newPlayer] as readonly BgsPlayer[],
+			players: [
+				...currentState.currentGame.players.filter(
+					player => normalizeHeroCardId(player.cardId) !== normalizedCardId,
+				),
+				newPlayer,
+			] as readonly BgsPlayer[],
 		} as BgsGame);
 		return currentState.update({
 			currentGame: newGame,
