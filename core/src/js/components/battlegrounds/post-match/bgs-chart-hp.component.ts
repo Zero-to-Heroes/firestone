@@ -382,13 +382,13 @@ export class BgsChartHpComponent {
 			shown: true,
 		}));
 
-		const newChartData = await this.buildChartData(hpOverTurn);
+		const newChartData = this.buildChartData(hpOverTurn);
 		if (areEqualDataSets(newChartData, this.lineChartData)) {
 			return;
 		}
 
 		this.lineChartData = newChartData;
-		this.lineChartLabels = await this.buildChartLabels(hpOverTurn);
+		this.lineChartLabels = this.buildChartLabels(hpOverTurn);
 
 		this.lineChartColors = this.playerColors.map(color => ({
 			backgroundColor: 'transparent',
@@ -429,7 +429,8 @@ export class BgsChartHpComponent {
 			...Object.values(value)
 				.filter(turnInfos => turnInfos)
 				.map(turnInfos => turnInfos.map(turnInfo => turnInfo.turn))
-				.reduce((a, b) => a.concat(b), []),
+				.reduce((a, b) => a.concat(b), [])
+				.filter(turn => turn != null),
 		);
 		const turns: string[] = [];
 		for (let i = 0; i <= max; i++) {
