@@ -52,7 +52,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 	}
 
 	private takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
-		console.log('taking screenshot from deck details');
+		// console.log('taking screenshot from deck details');
 		return copyToCliboard => this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
 	}
 

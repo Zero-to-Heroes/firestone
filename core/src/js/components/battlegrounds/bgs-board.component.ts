@@ -108,9 +108,9 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	@Input('entities') set entities(value: readonly Entity[]) {
-		if (this.debug) {
-			console.debug('[bgs-board] setting entities', value);
-		}
+		// if (this.debug) {
+		// 	console.debug('[bgs-board] setting entities', value);
+		// }
 		// if (this.inputEntities === value) {
 		// 	if (this.debug) {
 		// 		console.log('getting the same input entities, returning', value);
