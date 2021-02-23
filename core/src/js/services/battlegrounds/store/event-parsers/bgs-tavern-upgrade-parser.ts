@@ -20,6 +20,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 		if (!playerToUpdate) {
 			console.error(
 				'No player found to update the history',
+				currentState.currentGame.reviewId,
 				event.heroCardId,
 				normalizeHeroCardId(event.heroCardId),
 				currentState.currentGame.players.map(player => player.cardId),
