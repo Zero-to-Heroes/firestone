@@ -14,6 +14,7 @@ import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-t
 import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
 
 export class RealTimeStatsState implements IBgsPostMatchStats {
+	readonly reconnectOngoing: boolean;
 	readonly gameType: GameType;
 	readonly currentTurn: number;
 	readonly gameOver: boolean;

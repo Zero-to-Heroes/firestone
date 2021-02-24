@@ -336,12 +336,14 @@ export class BgsChartHpComponent {
 		if (!this._stats) {
 			return;
 		}
-		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn).map(playerCardId => ({
-			playerCardId: playerCardId,
-			turnDeath: this._stats.hpOverTurn[playerCardId].find(turnInfo => turnInfo.value <= 0)?.turn ?? 99,
-			lastKnownHp:
-				this._stats.hpOverTurn[playerCardId][this._stats.hpOverTurn[playerCardId].length - 1]?.value ?? 99,
-		}));
+		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn)
+			.filter(playerCardId => playerCardId !== CardIds.NonCollectible.Neutral.BaconphheroTavernBrawl)
+			.map(playerCardId => ({
+				playerCardId: playerCardId,
+				turnDeath: this._stats.hpOverTurn[playerCardId].find(turnInfo => turnInfo.value <= 0)?.turn ?? 99,
+				lastKnownHp:
+					this._stats.hpOverTurn[playerCardId][this._stats.hpOverTurn[playerCardId].length - 1]?.value ?? 99,
+			}));
 		let playerOrder: string[] = turnAtWhichEachPlayerDies
 			.sort((a, b) => {
 				if (a.turnDeath < b.turnDeath) {
@@ -364,6 +366,7 @@ export class BgsChartHpComponent {
 						: info.lastKnownHp === 40,
 				)
 				.filter(info => info.playerCardId !== this._mainPlayerCardId);
+			// console.debug('cleaning player order', playerOrder, candidatesToRemove, turnAtWhichEachPlayerDies);
 			playerOrder = playerOrder.filter(
 				playerCardId => !candidatesToRemove.map(info => info.playerCardId).includes(playerCardId),
 			);
@@ -389,6 +392,7 @@ export class BgsChartHpComponent {
 
 		this.lineChartData = newChartData;
 		this.lineChartLabels = this.buildChartLabels(hpOverTurn);
+		// console.debug('set hp data', this.lineChartData, this.lineChartLabels, this.legend, this._stats.hpOverTurn);
 
 		this.lineChartColors = this.playerColors.map(color => ({
 			backgroundColor: 'transparent',

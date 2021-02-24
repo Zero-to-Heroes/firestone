@@ -30,7 +30,12 @@ export class RTStatHpOverTurnParser implements EventParser {
 
 		const hpOverTurn = currentState.hpOverTurn;
 		for (const target of targets) {
-			if (target.hero === CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2) {
+			if (
+				[
+					CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2,
+					CardIds.NonCollectible.Neutral.BaconphheroTavernBrawl,
+				].includes(target.hero)
+			) {
 				continue;
 			}
 			const currentHps = hpOverTurn[target.hero] ?? [];

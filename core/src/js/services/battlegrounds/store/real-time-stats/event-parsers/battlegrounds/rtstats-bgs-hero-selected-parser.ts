@@ -19,13 +19,22 @@ export class RTStatsBgsHeroSelectedParser implements EventParser {
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		// still not working
 		const heroCardId = normalizeHeroCardId(gameEvent.cardId);
+		const turn = currentState.reconnectOngoing ? currentState.currentTurn : 0;
 		const hpOverTurn = currentState.hpOverTurn;
-		hpOverTurn[heroCardId] = [
+		const existingData = hpOverTurn[heroCardId] ?? [];
+		// console.debug('current turn for hero selected', heroCardId, turn, existingData, currentState);
+		const newData = [
+			...existingData.filter(data => data.turn !== turn),
 			{
-				turn: 0,
-				value: defaultStartingHp(currentState.gameType, heroCardId),
+				turn: turn,
+				value:
+					turn === 0 || existingData.length === 0
+						? defaultStartingHp(currentState.gameType, heroCardId)
+						: existingData[existingData.length - 1].value,
 			},
 		];
+		hpOverTurn[heroCardId] = newData;
+		// console.debug('setting starting hp in stats for heo selected', heroCardId, hpOverTurn, gameEvent, currentState);
 		return currentState.update({
 			hpOverTurn: hpOverTurn,
 		} as RealTimeStatsState);

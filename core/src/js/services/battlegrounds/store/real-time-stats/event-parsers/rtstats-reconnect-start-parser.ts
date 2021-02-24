@@ -2,22 +2,21 @@ import { GameEvent } from '../../../../../models/game-event';
 import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
-export class RTStatsGameStartParser implements EventParser {
+export class RTStatsReconnectStartParser implements EventParser {
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
-		return gameEvent.type === GameEvent.GAME_START;
+		return gameEvent.type === GameEvent.RECONNECT_START;
 	}
 
 	parse(
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		if (currentState?.reconnectOngoing) {
-			return currentState;
-		}
-		return new RealTimeStatsState();
+		return currentState.update({
+			reconnectOngoing: true,
+		} as RealTimeStatsState);
 	}
 
 	name(): string {
-		return 'RTStatsGameStartParser';
+		return 'RTStatsReconnectStartParser';
 	}
 }
