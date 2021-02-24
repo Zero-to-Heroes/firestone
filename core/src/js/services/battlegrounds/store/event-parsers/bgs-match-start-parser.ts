@@ -25,7 +25,7 @@ export class BgsMatchStartParser implements EventParser {
 				// gameEnded: false,
 				currentGame: newGame,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
-				stages: BgsInitParser.buildEmptyStages(currentState),
+				stages: BgsInitParser.buildEmptyStages(currentState, prefs),
 			} as BattlegroundsState);
 		}
 	}

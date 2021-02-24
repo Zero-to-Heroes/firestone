@@ -21,6 +21,7 @@ import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
 import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
+import { BgsChangePostMatchStatsTabsNumberParser } from './event-parsers/bgs-change-post-match-stats-tabs-number-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
 import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-updated-parser';
@@ -431,7 +432,7 @@ export class BattlegroundsStoreService {
 		const eventParsers = [
 			new NoBgsMatchParser(),
 			// new BattlegroundsResetBattleStateParser(),
-			new BgsInitParser(),
+			new BgsInitParser(this.prefs),
 			new BgsStatUpdateParser(this.allCards, this.patchesService),
 			new BgsHeroSelectionParser(this.memory, this.patchesService),
 			new BgsHeroSelectedParser(this.allCards),
@@ -448,7 +449,8 @@ export class BattlegroundsStoreService {
 			new BgsBattleResultParser(this.events),
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(this.prefs),
-			new BgsPostMatchStatsFilterChangeParser(),
+			new BgsPostMatchStatsFilterChangeParser(this.prefs),
+			new BgsChangePostMatchStatsTabsNumberParser(this.prefs),
 			// new BgsDamageDealtParser(),
 			new BgsLeaderboardPlaceParser(),
 			new BgsCombatStartParser(),

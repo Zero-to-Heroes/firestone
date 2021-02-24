@@ -1,15 +1,16 @@
 import { BgsPostMatchStatsPanel } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BgsStatsFilterId } from '../../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
+import { Preferences } from '../../../../../models/preferences';
 import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
+import { PreferencesService } from '../../../../preferences.service';
 import { TriggerShowMatchStatsEvent } from '../../events/replays/trigger-show-match-stats-event';
 import { Processor } from '../processor';
 
 export class TriggerShowMatchStatsProcessor implements Processor {
-	constructor(private readonly bgsRunStats: BgsRunStatsService) {}
+	constructor(private readonly bgsRunStats: BgsRunStatsService, private readonly prefs: PreferencesService) {}
 
 	public async process(
 		event: TriggerShowMatchStatsEvent,
@@ -30,6 +31,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 			];
 		}
 
+		const prefs: Preferences = await this.prefs.getPreferences();
 		this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
 		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
 		const matchDetail = Object.assign(new MatchDetail(), {
@@ -40,13 +42,13 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 				player: null,
 				// isComputing: true,
 				selectedStats: null, // We use the navigation-level info, to avoid
-				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn'], //, 'warband-composition-by-turn'], <-- will be reintroduced later
+				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);
 		const newReplays = navigationState.navigationReplays.update({
 			currentView: 'match-details',
 			selectedTab: 'match-stats',
-			selectedStatsTabs: ['hp-by-turn'] as readonly BgsStatsFilterId[],
+			selectedStatsTabs: prefs.bgsSelectedTabs,
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
 		return [

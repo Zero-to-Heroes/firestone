@@ -1,3 +1,4 @@
+import { BgsStatsFilterId } from './battlegrounds/post-match/bgs-stats-filter-id.type';
 import { DuelsClassFilterType } from './duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
 import { DuelsHeroSortFilterType } from './duels/duels-hero-sort-filter.type';
@@ -172,6 +173,13 @@ export class Preferences {
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
+	readonly bgsSelectedTabs: readonly BgsStatsFilterId[] = [
+		'hp-by-turn',
+		'winrate-per-turn',
+		'warband-total-stats-by-turn',
+		'warband-composition-by-turn',
+	];
+	readonly bgsNumberOfDisplayedTabs: number = 1;
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';

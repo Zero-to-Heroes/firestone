@@ -15,6 +15,7 @@ import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.
 import { Color } from 'ng2-charts';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
+import { thisAsThat } from '../../../services/utils';
 import { areEqualDataSets } from './chart-utils';
 
 declare let amplitude: any;
@@ -143,22 +144,24 @@ export class BgsChartHpComponent {
 			caretPadding: 2,
 			cornerRadius: 0,
 			enabled: false,
-			custom: function(tooltip) {
+			custom: thisAsThat((that: any, tooltip: any) => {
 				// Tooltip Element
-				// console.log('requesting tooltip', tooltip);
-				let tooltipEl = document.getElementById('chartjs-tooltip-hp');
+				// console.log('requesting tooltip', tooltip, this, that);
+				const tooltipId = `chartjs-tooltip-hp-${this.tooltipSuffix ?? 'default'}`;
+				let tooltipEl = document.getElementById(tooltipId);
 
 				if (!tooltipEl) {
 					tooltipEl = document.createElement('div');
-					tooltipEl.id = 'chartjs-tooltip-hp';
+					tooltipEl.id = tooltipId;
+					tooltipEl.classList.add('chartjs-tooltip-hp');
 					tooltipEl.innerHTML = `
-					<div class="hp-tooltip">					
-						<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-							<polygon points="0,0 8,-9 16,0"/>
-						</svg>
-						<div class="content"></div>
-					</div>`;
-					this._chart.canvas.parentNode.appendChild(tooltipEl);
+						<div class="hp-tooltip">					
+							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+								<polygon points="0,0 8,-9 16,0"/>
+							</svg>
+							<div class="content"></div>
+						</div>`;
+					that._chart.canvas.parentNode.appendChild(tooltipEl);
 				}
 
 				// Hide if no tooltip
@@ -192,12 +195,12 @@ export class BgsChartHpComponent {
 					tableRoot.innerHTML = innerHtml;
 				}
 
-				const positionY = this._chart.canvas.offsetTop;
-				const positionX = this._chart.canvas.offsetLeft;
+				const positionY = that._chart.canvas.offsetTop;
+				const positionX = that._chart.canvas.offsetLeft;
 
 				let position = 'bottom';
 				const tooltipHeight = 220;
-				if (positionY + tooltip.caretY + tooltipHeight > this._chart.canvas.height) {
+				if (positionY + tooltip.caretY + tooltipHeight > that._chart.canvas.height) {
 					position = 'top';
 					// console.log('will adjust');
 					tooltipEl.classList.remove('bottom');
@@ -213,14 +216,14 @@ export class BgsChartHpComponent {
 					tooltipEl.style.top = positionY + tooltip.caretY + 8 + 'px';
 					tooltipEl.style.bottom = 'auto';
 				} else {
-					tooltipEl.style.bottom = positionY + this._chart.canvas.height - tooltip.caretY + 8 + 'px';
+					tooltipEl.style.bottom = positionY + that._chart.canvas.height - tooltip.caretY + 8 + 'px';
 					tooltipEl.style.top = 'auto';
 				}
 				tooltipEl.style.fontFamily = tooltip._bodyFontFamily;
 				tooltipEl.style.fontSize = tooltip.bodyFontSize + 'px';
 				tooltipEl.style.fontStyle = tooltip._bodyFontStyle;
 				tooltipEl.style.padding = tooltip.yPadding + 'px ' + tooltip.xPadding + 'px';
-			},
+			}),
 			callbacks: {
 				title: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
 					return 'Turn ' + item[0].label;
@@ -270,6 +273,8 @@ export class BgsChartHpComponent {
 			this.doResize();
 		}
 	}
+
+	@Input() tooltipSuffix: string = '';
 
 	constructor(
 		private readonly el: ElementRef,

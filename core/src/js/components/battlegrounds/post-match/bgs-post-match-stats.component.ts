@@ -15,7 +15,9 @@ import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
 import { AdService } from '../../../services/ad.service';
+import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { normalizeCardId } from './card-utils';
@@ -55,13 +57,36 @@ declare let amplitude: any;
 						></bgs-board>
 					</div>
 				</bgs-player-capsule>
-				<bgs-post-match-stats-tabs
-					[game]="_game"
-					[panel]="_panel"
-					[mainPlayerCardId]="mainPlayerCardId"
-					[selectedTab]="selectedTabs ? selectedTabs[0] : null"
-					[selectTabHandler]="selectTabHandler"
-				></bgs-post-match-stats-tabs>
+				<div class="tabs-container multi-{{ selectedTabs.length }}">
+					<bgs-post-match-stats-tabs
+						*ngFor="let selectedTab of selectedTabs; let i = index"
+						[game]="_game"
+						[panel]="_panel"
+						[mainPlayerCardId]="mainPlayerCardId"
+						[selectedTab]="selectedTab"
+						[selectTabHandler]="selectTabHandler"
+						[tabIndex]="i"
+					></bgs-post-match-stats-tabs>
+					<div class="tabs-layout-selection" *ngIf="enableMultiGraphs">
+						<div class="layout one" (click)="changeTabsNumberHandler(1)" helpTooltip="Show a single graph">
+							1
+						</div>
+						<div
+							class="layout two"
+							(click)="changeTabsNumberHandler(2)"
+							helpTooltip="Show two graphs side-by-side"
+						>
+							2
+						</div>
+						<div
+							class="layout four"
+							(click)="changeTabsNumberHandler(4)"
+							helpTooltip="Show four graphs in a grid"
+						>
+							4
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="left empty" *ngIf="!_panel?.player"></div>
 			<div class="left" *ngIf="_panel?.player">
@@ -73,6 +98,8 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsPostMatchStatsComponent implements AfterViewInit {
+	enableMultiGraphs = FeatureFlags.ENABLE_MULTI_GRAPHS;
+
 	@Input() loadingTitle = "We're building the stats";
 	@Input() loadingSubtitle: string;
 	@Input() loadingSvg = 'ftue/battlegrounds';
@@ -85,8 +112,11 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	@Input() mainPlayerCardId?: string;
 	@Input() inputMmr?: number;
 
-	@Input() selectedTabs: readonly BgsStatsFilterId[];
-	@Input() selectTabHandler: (tab: BgsStatsFilterId) => void;
+	@Input() selectedTabs: readonly BgsStatsFilterId[] = [];
+	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
+	@Input() changeTabsNumberHandler: (numberOfTabs: number) => void = (numberOfTabs: number) => {
+		this.battlegroundsUpdater.next(new BgsChangePostMatchStatsTabsNumberEvent(numberOfTabs));
+	};
 
 	@Input() set game(value: BgsGame) {
 		if (value === this._game) {
@@ -94,7 +124,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		}
 		this._game = value;
 		this.mmr = value ? value.mmrAtStart : undefined;
-		this.boardTitle = this._game.gameEnded ? 'Your final board' : 'Your current board';
+		this.boardTitle = this._game?.gameEnded ? 'Your final board' : 'Your current board';
 	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
@@ -112,7 +142,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		if (!this.boardMinions || this.boardMinions.length === 0) {
 			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
 		}
-		this.selectedTabs = value.selectedStats ?? this.selectedTabs;
+		this.selectedTabs = value.selectedStats ?? this.selectedTabs ?? [];
 		this.addMinionStats();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

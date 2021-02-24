@@ -97,6 +97,7 @@ import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
+import { ChangeMatchStatsNumberOfTabsEvent } from './events/replays/change-match-stats-number-of-tabs-event';
 import { ReplaysFilterEvent } from './events/replays/replays-filter-event';
 import { SelectMatchStatsTabEvent } from './events/replays/select-match-stats-tab-event';
 import { ShowMatchStatsEvent } from './events/replays/show-match-stats-event';
@@ -183,6 +184,7 @@ import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
+import { ChangeMatchStatsNumberOfTabsProcessor } from './processors/replays/change-match-stats-number-of-tabs-processor';
 import { ReplaysFilterProcessor } from './processors/replays/replays-filter-processor';
 import { SelectMatchStatsTabProcessor } from './processors/replays/select-match-stats-tab-processor';
 import { ShowMatchStatsProcessor } from './processors/replays/show-match-stats-processor';
@@ -535,13 +537,16 @@ export class MainWindowStoreService {
 			new ShowReplayProcessor(this.bgsRunStatsService),
 
 			TriggerShowMatchStatsEvent.eventName(),
-			new TriggerShowMatchStatsProcessor(this.bgsRunStatsService),
+			new TriggerShowMatchStatsProcessor(this.bgsRunStatsService, this.prefs),
 
 			ShowMatchStatsEvent.eventName(),
 			new ShowMatchStatsProcessor(this.bgsRunStatsService),
 
 			SelectMatchStatsTabEvent.eventName(),
 			new SelectMatchStatsTabProcessor(),
+
+			ChangeMatchStatsNumberOfTabsEvent.eventName(),
+			new ChangeMatchStatsNumberOfTabsProcessor(this.prefs),
 
 			ReplaysFilterEvent.eventName(),
 			new ReplaysFilterProcessor(this.replaysStateBuilder),

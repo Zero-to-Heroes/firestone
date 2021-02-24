@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { DuelsClassFilterType } from '../models/duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from '../models/duels/duels-game-mode-filter.type';
 import { DuelsHeroSortFilterType } from '../models/duels/duels-hero-sort-filter.type';
@@ -199,6 +200,18 @@ export class PreferencesService {
 	public async updateBgsOverlayButtonPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsOverlayButtonPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateBgsSelectedTabs(selectedStats: readonly BgsStatsFilterId[]) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsSelectedTabs: selectedStats };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateBgsNumberOfDisplayedTabs(tabsNumber: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsNumberOfDisplayedTabs: tabsNumber };
 		await this.savePreferences(newPrefs);
 	}
 

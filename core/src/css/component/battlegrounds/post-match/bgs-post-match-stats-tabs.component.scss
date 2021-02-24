@@ -6,6 +6,8 @@
 	flex-shrink: 1;
 	display: flex;
 	min-height: 0;
+	max-width: 100%;
+	overflow: hidden;
 }
 
 .stats {
@@ -14,7 +16,6 @@
 	display: flex;
 	min-height: 0;
 	flex-direction: column;
-	margin-top: 30px;
 	max-width: 100%;
 
 	.tabs {

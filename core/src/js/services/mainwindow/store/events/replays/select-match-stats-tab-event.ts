@@ -2,7 +2,7 @@ import { BgsStatsFilterId } from '../../../../../models/battlegrounds/post-match
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class SelectMatchStatsTabEvent implements MainWindowStoreEvent {
-	constructor(public readonly tab: BgsStatsFilterId) {}
+	constructor(public readonly tab: BgsStatsFilterId, public readonly tabIndex: number) {}
 
 	public static eventName(): string {
 		return 'SelectMatchStatsTabEvent';

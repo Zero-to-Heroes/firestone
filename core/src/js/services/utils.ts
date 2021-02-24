@@ -88,3 +88,11 @@ export const removeFromArray = <T>(array: T[], element: T) => {
 		array.splice(index, 1);
 	}
 };
+
+// For ng2-charts
+export const thisAsThat = (callBack: Function) => {
+	const self = this;
+	return function() {
+		return callBack.apply(self, [this].concat(Array.prototype.slice.call(arguments)));
+	};
+};

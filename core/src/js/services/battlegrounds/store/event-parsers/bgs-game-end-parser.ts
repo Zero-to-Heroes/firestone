@@ -8,7 +8,6 @@ import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-
 import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BgsStatsFilterId } from '../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { Preferences } from '../../../../models/preferences';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../../preferences.service';
@@ -32,6 +31,7 @@ export class BgsGameEndParser implements EventParser {
 			event.postMatchStats,
 			newBestUserStats,
 			currentState,
+			prefs,
 		);
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
 			stage.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : stage,
@@ -52,10 +52,11 @@ export class BgsGameEndParser implements EventParser {
 		postMatchStats: BgsPostMatchStats,
 		newBestUserStats: readonly BgsBestStat[],
 		currentState: BattlegroundsState,
+		prefs: Preferences,
 	): BgsPostMatchStage {
 		const stageToRebuild =
 			currentState.stages.find(stage => stage.id === 'post-match') || this.createNewStage(currentState);
-		const panelToRebuild = this.createNewPanel(currentState, postMatchStats, newBestUserStats);
+		const panelToRebuild = this.createNewPanel(currentState, postMatchStats, newBestUserStats, prefs);
 
 		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>
 			panel.id === 'bgs-post-match-stats' ? panelToRebuild : panel,
@@ -75,6 +76,7 @@ export class BgsGameEndParser implements EventParser {
 		currentState: BattlegroundsState,
 		postMatchStats: BgsPostMatchStats,
 		newBestUserStats: readonly BgsBestStat[],
+		prefs: Preferences,
 	): BgsPostMatchStatsPanel {
 		const player: BgsPlayer = currentState.currentGame.getMainPlayer();
 		const finalPosition = player?.leaderboardPlace;
@@ -84,7 +86,7 @@ export class BgsGameEndParser implements EventParser {
 			newBestUserStats: newBestUserStats,
 			globalStats: currentState.globalStats,
 			player: player,
-			selectedStats: ['hp-by-turn'] as readonly BgsStatsFilterId[],
+			selectedStats: prefs.bgsSelectedTabs,
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 			// isComputing: false,
 			name: 'You finished #' + finalPosition,

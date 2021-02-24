@@ -23,7 +23,7 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/post-match/bgs-chart-warband-composition.component.scss`,
 	],
 	template: `
-		<div class="legend">
+		<div class="legend" *ngIf="chartData?.length">
 			<div class="item beast">
 				<div class="node"></div>
 				Beast
@@ -57,7 +57,7 @@ declare let amplitude: any;
 				No tribe / All
 			</div>
 		</div>
-		<div class="chart-container">
+		<div class="chart-container" *ngIf="chartData?.length">
 			<ngx-charts-bar-vertical-stacked
 				*ngIf="chartData"
 				[view]="dimensions"
@@ -85,6 +85,17 @@ declare let amplitude: any;
 				</ng-template>
 			</ngx-charts-bar-vertical-stacked>
 		</div>
+		<div class="content empty-state" *ngIf="!chartData?.length">
+			<i>
+				<svg>
+					<use xlink:href="assets/svg/sprite.svg#empty_state_tracker" />
+				</svg>
+			</i>
+			<span class="title">No information available</span>
+			<span class="subtitle"
+				>Older games, or very long games, don't have the turn-by-turn composition stored.
+			</span>
+		</div>
 	`,
 	// changeDetection: ChangeDetectionStrategy.OnPush,
 	changeDetection: ChangeDetectionStrategy.Default,
@@ -97,10 +108,7 @@ export class BgsChartWarbandCompositionComponent {
 	};
 	barPadding: number;
 
-	private _stats: BgsPostMatchStats;
-	private boardHistory: readonly ParserEntity[];
-	private _visible: boolean;
-	private _dirty = true;
+	@Input() invalidLimit: number;
 
 	@Input() set stats(value: BgsPostMatchStats) {
 		if (value === this._stats) {
@@ -133,6 +141,11 @@ export class BgsChartWarbandCompositionComponent {
 		} else {
 		}
 	}
+
+	private _stats: BgsPostMatchStats;
+	private boardHistory: readonly ParserEntity[];
+	private _visible: boolean;
+	private _dirty = true;
 
 	constructor(
 		private readonly el: ElementRef,
@@ -201,6 +214,14 @@ export class BgsChartWarbandCompositionComponent {
 			this.allCards.initializeCardsDb();
 			return;
 		}
+		if (this.invalidLimit && value.boardHistory.length <= this.invalidLimit) {
+			this.chartData = [];
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			return;
+		}
+
 		this.chartData = this.buildChartData(value);
 		this.barPadding = Math.min(40, 40 - 2 * (this.chartData.length - 12));
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -212,6 +233,7 @@ export class BgsChartWarbandCompositionComponent {
 		if (!value || !value.boardHistory) {
 			return null;
 		}
+		// console.debug('building data for', value);
 		const history = [...value.boardHistory];
 		if (history.length < 7) {
 			const length = history.length;

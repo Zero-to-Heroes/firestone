@@ -6,6 +6,7 @@ import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeMatchStatsNumberOfTabsEvent } from '../../services/mainwindow/store/events/replays/change-match-stats-number-of-tabs-event';
 import { SelectMatchStatsTabEvent } from '../../services/mainwindow/store/events/replays/select-match-stats-tab-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -23,6 +24,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				[panel]="panel"
 				[selectedTabs]="selectedTabs"
 				[selectTabHandler]="selectTabHandler"
+				[changeTabsNumberHandler]="changeTabsNumberHandler"
 				parentWindow="Firestone - MainWindow"
 				emptyTitle="Nothing here"
 				emptySubtitle="We couldn't retrieve the stats"
@@ -61,8 +63,12 @@ export class MatchDetailsComponent {
 	playerCardId: string;
 	panel: BgsPostMatchStatsPanel;
 
-	selectTabHandler: (tab: string) => void = (tab: BgsStatsFilterId) => {
-		this.stateUpdater.next(new SelectMatchStatsTabEvent(tab));
+	selectTabHandler: (tab: string, tabIndex: number) => void = (tab: BgsStatsFilterId, tabIndex: number) => {
+		this.stateUpdater.next(new SelectMatchStatsTabEvent(tab, tabIndex));
+	};
+
+	changeTabsNumberHandler = (numbersOfTabs: number) => {
+		this.stateUpdater.next(new ChangeMatchStatsNumberOfTabsEvent(numbersOfTabs));
 	};
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

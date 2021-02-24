@@ -45,6 +45,7 @@ declare let amplitude: any;
 					[stats]="_panel?.stats"
 					[mainPlayerCardId]="_game?.getMainPlayer()?.cardId || mainPlayerCardId"
 					[visible]="selectedTab === 'hp-by-turn'"
+					[tooltipSuffix]="tabIndex"
 				>
 				</bgs-chart-hp>
 				<bgs-winrate-chart
@@ -68,6 +69,7 @@ declare let amplitude: any;
 					*ngxCacheIf="selectedTab === 'warband-composition-by-turn'"
 					[stats]="_panel?.stats"
 					[visible]="selectedTab === 'warband-composition-by-turn'"
+					[invalidLimit]="1"
 				>
 				</bgs-chart-warband-composition>
 			</ng-container>
@@ -81,8 +83,9 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 	tabs: readonly BgsStatsFilterId[];
 
 	@Input() selectedTab: BgsStatsFilterId;
-	@Input() selectTabHandler: (tab: BgsStatsFilterId) => void;
+	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
 	@Input() mainPlayerCardId?: string;
+	@Input() tabIndex = 0;
 
 	@Input() set game(value: BgsGame) {
 		if (value === this._game) {
@@ -126,8 +129,8 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 	selectTab(tab: BgsStatsFilterId) {
 		console.log('selecting tab', tab);
 		this.selectTabHandler
-			? this.selectTabHandler(tab)
-			: this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab));
+			? this.selectTabHandler(tab, this.tabIndex)
+			: this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab, this.tabIndex));
 	}
 
 	getLabel(tab: BgsStatsFilterId): string {
