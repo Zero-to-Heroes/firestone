@@ -34,6 +34,7 @@ import { BgsChartHpComponent } from '../../components/battlegrounds/post-match/b
 import { BgsChartWarbandCompositionComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-composition.component';
 import { BgsChartWarbandStatsComponent } from '../../components/battlegrounds/post-match/bgs-chart-warband-stats.component';
 import { BgsPostMatchStatsRecapComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats-recap.component';
+import { BgsPostMatchStatsTabsComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats-tabs.component';
 import { BgsPostMatchStatsComponent } from '../../components/battlegrounds/post-match/bgs-post-match-stats.component';
 import { BgsWinrateChartComponent } from '../../components/battlegrounds/post-match/bgs-winrate-chart.component';
 import { StatCellComponent } from '../../components/battlegrounds/post-match/stat-cell.component';
@@ -190,6 +191,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
 		BgsPostMatchStatsComponent,
+		BgsPostMatchStatsTabsComponent,
 		BgsPostMatchStatsRecapComponent,
 		BgsChartHpComponent,
 		BgsChartWarbandStatsComponent,
@@ -294,6 +296,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsHeroStatsComponent,
 		BgsPlayerCapsuleComponent,
 		BgsPostMatchStatsComponent,
+		BgsPostMatchStatsTabsComponent,
 		BgsPostMatchStatsRecapComponent,
 		BgsChartHpComponent,
 		BgsChartWarbandStatsComponent,

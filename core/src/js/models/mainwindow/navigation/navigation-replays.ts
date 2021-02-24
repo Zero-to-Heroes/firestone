@@ -6,7 +6,7 @@ export class NavigationReplays {
 	readonly currentView: CurrentViewType = 'list';
 	readonly selectedReplay: MatchDetail;
 	readonly selectedTab: ReplaysTab;
-	readonly selectedStatsTab: BgsStatsFilterId = 'hp-by-turn';
+	readonly selectedStatsTabs: readonly BgsStatsFilterId[] = ['hp-by-turn'];
 
 	public update(base: NavigationReplays): NavigationReplays {
 		return Object.assign(new NavigationReplays(), this, base);

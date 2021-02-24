@@ -21,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				[mainPlayerCardId]="playerCardId"
 				[inputMmr]="mmr"
 				[panel]="panel"
-				[selectedTab]="selectedTab"
+				[selectedTabs]="selectedTabs"
 				[selectTabHandler]="selectTabHandler"
 				parentWindow="Firestone - MainWindow"
 				emptyTitle="Nothing here"
@@ -48,14 +48,14 @@ export class MatchDetailsComponent {
 		this.replayInfo = value.selectedReplay?.replayInfo;
 		this.panel = value.selectedReplay?.bgsPostMatchStatsPanel;
 		this.playerCardId = this.panel?.player?.cardId;
-		this.selectedTab = value.selectedStatsTab;
+		this.selectedTabs = value.selectedStatsTabs;
 		this.mmr = parseInt(value.selectedReplay?.replayInfo?.playerRank);
 		// console.log('built panel', this.panel);
 	}
 
 	selectedView: string;
 	selectedReplay: MatchDetail;
-	selectedTab: BgsStatsFilterId;
+	selectedTabs: readonly BgsStatsFilterId[];
 	replayInfo: GameStat;
 	mmr: number;
 	playerCardId: string;

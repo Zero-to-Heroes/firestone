@@ -1,0 +1,49 @@
+@import '../../../global/variables';
+@import '../../../global/fonts';
+
+:host() {
+	flex-grow: 1;
+	flex-shrink: 1;
+	display: flex;
+	min-height: 0;
+}
+
+.stats {
+	flex-grow: 1;
+	flex-shrink: 1;
+	display: flex;
+	min-height: 0;
+	flex-direction: column;
+	margin-top: 30px;
+	max-width: 100%;
+
+	.tabs {
+		display: flex;
+		list-style: none;
+		flex-grow: 0;
+		flex-shrink: 0;
+		font-size: var(--variable-title-font-size);
+
+		.tab {
+			margin-right: 30px;
+			color: var(--color-3);
+			padding-bottom: 7px;
+
+			&.active,
+			&:hover {
+				color: var(--default-title-color);
+				border-bottom: 1px solid var(--default-title-color);
+			}
+		}
+	}
+
+	.stat {
+		display: flex;
+		flex-grow: 1;
+		flex-shrink: 1;
+		min-height: 0;
+		position: relative;
+		background: rgba(255, 255, 255, 0.08);
+		padding: 15px;
+	}
+}

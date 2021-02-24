@@ -1,4 +1,5 @@
 import { BgsPostMatchStatsPanel } from '../../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { BgsStatsFilterId } from '../../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -38,14 +39,14 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 				globalStats: currentState.battlegrounds.globalStats,
 				player: null,
 				// isComputing: true,
-				selectedStat: null, // We use the navigation-level info, to avoid
+				selectedStats: null, // We use the navigation-level info, to avoid
 				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn'], //, 'warband-composition-by-turn'], <-- will be reintroduced later
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);
 		const newReplays = navigationState.navigationReplays.update({
 			currentView: 'match-details',
 			selectedTab: 'match-stats',
-			selectedStatsTab: 'hp-by-turn',
+			selectedStatsTabs: ['hp-by-turn'] as readonly BgsStatsFilterId[],
 			selectedReplay: matchDetail,
 		} as NavigationReplays);
 		return [

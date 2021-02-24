@@ -15,7 +15,6 @@ import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { MinionStat } from '../../../models/battlegrounds/post-match/minion-stat';
 import { AdService } from '../../../services/ad.service';
-import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
@@ -41,7 +40,7 @@ declare let amplitude: any;
 				<span class="title">{{ emptyTitle }}</span>
 				<span class="subtitle">{{ emptySubtitle }} </span>
 			</div>
-			<div class="content">
+			<div class="content" *ngIf="_panel?.player || mainPlayerCardId">
 				<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
 				<bgs-player-capsule [player]="_panel?.player" [rating]="mmr || inputMmr" class="opponent-overview">
 					<div class="main-info">
@@ -56,51 +55,13 @@ declare let amplitude: any;
 						></bgs-board>
 					</div>
 				</bgs-player-capsule>
-				<div class="stats">
-					<ul class="tabs">
-						<li
-							*ngFor="let tab of tabs"
-							class="tab"
-							[ngClass]="{ 'active': tab === selectedTab }"
-							(mousedown)="selectTab(tab)"
-						>
-							{{ getLabel(tab) }}
-						</li>
-					</ul>
-					<ng-container>
-						<bgs-chart-hp
-							class="stat"
-							*ngxCacheIf="selectedTab === 'hp-by-turn'"
-							[stats]="_panel?.stats"
-							[mainPlayerCardId]="_game?.getMainPlayer()?.cardId || mainPlayerCardId"
-							[visible]="selectedTab === 'hp-by-turn'"
-						>
-						</bgs-chart-hp>
-						<bgs-winrate-chart
-							class="stat"
-							*ngxCacheIf="selectedTab === 'winrate-per-turn'"
-							[player]="_panel?.player"
-							[globalStats]="_panel?.globalStats"
-							[stats]="_panel?.stats"
-						>
-						</bgs-winrate-chart>
-						<bgs-chart-warband-stats
-							class="stat"
-							*ngxCacheIf="selectedTab === 'warband-total-stats-by-turn'"
-							[player]="_panel?.player"
-							[globalStats]="_panel?.globalStats"
-							[stats]="_panel?.stats"
-						>
-						</bgs-chart-warband-stats>
-						<bgs-chart-warband-composition
-							class="stat"
-							*ngxCacheIf="selectedTab === 'warband-composition-by-turn'"
-							[stats]="_panel?.stats"
-							[visible]="selectedTab === 'warband-composition-by-turn'"
-						>
-						</bgs-chart-warband-composition>
-					</ng-container>
-				</div>
+				<bgs-post-match-stats-tabs
+					[game]="_game"
+					[panel]="_panel"
+					[mainPlayerCardId]="mainPlayerCardId"
+					[selectedTab]="selectedTabs ? selectedTabs[0] : null"
+					[selectTabHandler]="selectTabHandler"
+				></bgs-post-match-stats-tabs>
 			</div>
 			<div class="left empty" *ngIf="!_panel?.player"></div>
 			<div class="left" *ngIf="_panel?.player">
@@ -112,42 +73,19 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsPostMatchStatsComponent implements AfterViewInit {
-	loadingElapsed = 0;
-
 	@Input() loadingTitle = "We're building the stats";
 	@Input() loadingSubtitle: string;
 	@Input() loadingSvg = 'ftue/battlegrounds';
 	@Input() showHints = true;
 	@Input() hideDefaultLoadingSubtitle: boolean;
 
-	_panel: BgsPostMatchStatsPanel;
-	_game: BgsGame;
-
-	boardTitle = 'Your current board';
-	icon: string;
-	health: number;
-	maxHealth: number;
-	heroPowerCardId: string;
-	name: string;
-	tavernTier: number;
-	boardMinions: readonly Entity[] = [];
-	minionStats: readonly MinionStat[];
-	tabs: readonly BgsStatsFilterId[];
-	// computing: boolean;
-	mmr: number;
-	showAds = true;
-
-	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
-
-	private loadingStart: number;
-	private loadingInterval;
-
 	@Input() emptyTitle = 'Nothing here yet';
 	@Input() emptySubtitle = 'Finish the run to get some stats!';
 	@Input() parentWindow = `Firestone - Battlegrounds`;
-	@Input() selectedTab: BgsStatsFilterId;
 	@Input() mainPlayerCardId?: string;
 	@Input() inputMmr?: number;
+
+	@Input() selectedTabs: readonly BgsStatsFilterId[];
 	@Input() selectTabHandler: (tab: BgsStatsFilterId) => void;
 
 	@Input() set game(value: BgsGame) {
@@ -160,21 +98,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	@Input() set panel(value: BgsPostMatchStatsPanel) {
-		// if (value) {
-		// 	// this.computing = value.isComputing;
-		// 	// if (this.computing) {
-		// 	// 	if (this.loadingInterval) {
-		// 	// 		clearInterval(this.loadingInterval);
-		// 	// 	}
-		// 	// 	this.loadingStart = Date.now();
-		// 	// 	this.loadingInterval = setInterval(() => {
-		// 	// 		this.loadingElapsed = (Date.now() - this.loadingStart) / 1000;
-		// 	// 		if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	// 			this.cdr.detectChanges();
-		// 	// 		}
-		// 	// 	}, 500);
-		// 	// }
-		// }
 		if (!value?.player || value === this._panel) {
 			return;
 		}
@@ -189,13 +112,30 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		if (!this.boardMinions || this.boardMinions.length === 0) {
 			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
 		}
-		this.tabs = value.tabs;
-		this.selectedTab = value.selectedStat ?? this.selectedTab;
+		this.selectedTabs = value.selectedStats ?? this.selectedTabs;
 		this.addMinionStats();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
+
+	_panel: BgsPostMatchStatsPanel;
+	_game: BgsGame;
+
+	loadingElapsed = 0;
+	boardTitle = 'Your current board';
+	icon: string;
+	health: number;
+	maxHealth: number;
+	heroPowerCardId: string;
+	name: string;
+	tavernTier: number;
+	boardMinions: readonly Entity[] = [];
+	minionStats: readonly MinionStat[];
+	mmr: number;
+	showAds = true;
+
+	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
@@ -215,28 +155,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
-		}
-	}
-
-	selectTab(tab: BgsStatsFilterId) {
-		console.log('selecting tab', tab);
-		this.selectTabHandler
-			? this.selectTabHandler(tab)
-			: this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab));
-	}
-
-	getLabel(tab: BgsStatsFilterId): string {
-		switch (tab) {
-			case 'hp-by-turn':
-				return 'Health by turn';
-			case 'stats':
-				return 'Stats';
-			case 'warband-composition-by-turn':
-				return 'Compositions';
-			case 'warband-total-stats-by-turn':
-				return 'Warband stats';
-			case 'winrate-per-turn':
-				return 'Winrate';
 		}
 	}
 

@@ -8,6 +8,7 @@ import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { BgsStatsFilterId } from '../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsInitEvent } from '../events/bgs-init-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -88,7 +89,7 @@ export class BgsInitParser implements EventParser {
 			newBestUserStats: null,
 			globalStats: currentState.globalStats,
 			player: player,
-			selectedStat: 'hp-by-turn',
+			selectedStats: ['hp-by-turn'] as readonly BgsStatsFilterId[],
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 			// isComputing: false,
 			name: 'Live stats',

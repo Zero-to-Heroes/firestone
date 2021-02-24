@@ -8,6 +8,7 @@ import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-
 import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStats } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { BgsStatsFilterId } from '../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { Preferences } from '../../../../models/preferences';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../../preferences.service';
@@ -83,7 +84,7 @@ export class BgsGameEndParser implements EventParser {
 			newBestUserStats: newBestUserStats,
 			globalStats: currentState.globalStats,
 			player: player,
-			selectedStat: 'hp-by-turn',
+			selectedStats: ['hp-by-turn'] as readonly BgsStatsFilterId[],
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 			// isComputing: false,
 			name: 'You finished #' + finalPosition,

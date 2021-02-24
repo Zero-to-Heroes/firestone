@@ -3,6 +3,7 @@ import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
 import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
+import { BgsStatsFilterId } from '../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { BgsPostMatchStatsFilterChangeEvent } from '../events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -22,7 +23,7 @@ export class BgsPostMatchStatsFilterChangeParser implements EventParser {
 			panel => panel.id === 'bgs-post-match-stats',
 		) as BgsPostMatchStatsPanel;
 		const newPanel = panel.update({
-			selectedStat: event.statId,
+			selectedStats: [event.statId] as readonly BgsStatsFilterId[],
 		} as BgsPostMatchStatsPanel);
 		const newStage = stage.update({
 			panels: stage.panels.map(panel =>
