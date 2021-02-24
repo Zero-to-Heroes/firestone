@@ -36,7 +36,7 @@ export class TotalDiscardedCardsReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
+		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const controllerId = gameEvent.controllerId;
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
 		if (controllerId === localPlayerId) {

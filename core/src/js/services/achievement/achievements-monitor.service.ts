@@ -151,6 +151,7 @@ export class AchievementsMonitor {
 	}
 
 	private async handleEvent(gameEvent: GameEvent) {
+		// TODO: handle reconnects
 		for (const challenge of await this.achievementLoader.getChallengeModules()) {
 			try {
 				challenge.detect(gameEvent, () => {
