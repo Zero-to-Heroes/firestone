@@ -120,8 +120,9 @@ export class AchievementsMonitor {
 				ach =>
 					!ach.completed ||
 					// It looks like the game might be flagging the achievements as completed right away now
-					(this.previousAchievements &&
-						this.previousAchievements.find(a => a.id === ach.id)?.completed === false),
+					// Using a === false check doesn't work if the achievement was not part of the previous
+					// achievements, which is the case for BG top finishes
+					(this.previousAchievements && !this.previousAchievements.find(a => a.id === ach.id)?.completed),
 			);
 		console.log('[achievement-monitor] unlocked achievements', unlockedAchievements);
 		if (!unlockedAchievements.length) {
