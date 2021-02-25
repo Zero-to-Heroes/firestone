@@ -67,7 +67,7 @@ declare let amplitude: any;
 						[selectTabHandler]="selectTabHandler"
 						[tabIndex]="i"
 					></bgs-post-match-stats-tabs>
-					<div class="tabs-layout-selection" *ngIf="enableMultiGraphs">
+					<div class="tabs-layout-selection" *ngIf="enableMultiGraphs || selectedTabs?.length > 1">
 						<div class="layout one" (click)="changeTabsNumberHandler(1)" helpTooltip="Show a single graph">
 							1
 						</div>
