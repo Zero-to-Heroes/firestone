@@ -61,45 +61,50 @@ export const updates: readonly Update[] = [
 					// 		},
 					// 	],
 					// },
+					// {
+					// 	category: 'battlegrounds',
+					// 	details: [
+					// 		// {
+					// 		// 	type: 'feature',
+					// 		// 	text: `(ALPHA) You can now enable highlighting of minions that match specific tribes in the tavern.`,
+					// 		// },
+					// 	],
+					// },
+				],
+			},
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					// {
+					// 	category: 'decktracker',
+					// 	details: [
+					// 		// {
+					// 		// 	type: 'ui',
+					// 		// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+					// 		// },
+					// 	],
+					// },
 					{
 						category: 'battlegrounds',
 						details: [
-							// {
-							// 	type: 'feature',
-							// 	text: `(ALPHA) You can now enable highlighting of minions that match specific tribes in the tavern.`,
-							// },
 							{
 								type: 'feature',
-								text: `Reconnects are now properly supported. There might be a few issues here and there if something major happens while you're disconnected, so let me know :)`,
+								text: `The simulator will now wait until the minion is created by Embrace Your Rage (Y'Shaarj's hero power) to compute the win chances.`,
 							},
 						],
 					},
 					{
-						category: 'decktracker',
+						category: 'replays',
 						details: [
 							{
-								type: 'feature',
-								text: `Reconnects are now properly supported. I expect a few bugs here and there still, so please open a bug if you find something wrong.`,
+								type: 'ui',
+								text: `Fix a bug where secrets that are discovered would not have a proper image.`,
 							},
 						],
 					},
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				// {
-			// 				// 	type: 'ui',
-			// 				// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
-			// 				// },
-			// 			],
-			// 		},
-			// 	],
-			// },
 			// {
 			// 	type: 'future',
 			// 	header: "What's next",
