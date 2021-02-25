@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
 import { Card } from '../../models/card';
+import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { PackHistory } from '../../models/pack-history';
 import { PityTimer } from '../../models/pity-timer';
@@ -26,6 +27,33 @@ export class IndexedDbService {
 		});
 	}
 
+	public async saveCardBacks(cardBacks: readonly CardBack[]): Promise<readonly CardBack[]> {
+		await this.waitForDbInit();
+		const dbCollection = {
+			id: 1,
+			cardBacks: cardBacks,
+		};
+		return new Promise<readonly CardBack[]>(resolve => {
+			this.saveCardBacksInternal(dbCollection, result => resolve(result));
+		});
+	}
+
+	private async saveCardBacksInternal(dbCollection, callback, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('[collection] [storage] could not update card backs');
+			callback(dbCollection.cardBacks);
+			return;
+		}
+		try {
+			await this.db.update('card-backs', dbCollection);
+			callback(dbCollection.cardBacks);
+			return;
+		} catch (e) {
+			console.warn('[collection] [storage] could not update card backs', e.message, e.name, e);
+			setTimeout(() => this.saveCollectionInternal(dbCollection, callback, retriesLeft - 1));
+		}
+	}
+
 	private async saveCollectionInternal(dbCollection, callback, retriesLeft = 10) {
 		if (retriesLeft <= 0) {
 			console.error('[collection] [storage] could not update collection');
@@ -49,6 +77,16 @@ export class IndexedDbService {
 			return collection[0] ? collection[0].cards : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get collection', e.message, e.name, e);
+		}
+	}
+
+	public async getCardBacks(): Promise<readonly CardBack[]> {
+		await this.waitForDbInit();
+		try {
+			const cardBacks = await this.db.getAll('card-backs', null);
+			return cardBacks[0] ? cardBacks[0].cardBacks : [];
+		} catch (e) {
+			console.error('[collection] [storage] could not get cardBacks', e.message, e.name, e);
 		}
 	}
 
@@ -161,9 +199,9 @@ export class IndexedDbService {
 
 	private init() {
 		console.log('[collection] [storage] starting init of indexeddb');
-		this.db = new AngularIndexedDB('hs-collection-db', 9);
+		this.db = new AngularIndexedDB('hs-collection-db', 10);
 		this.db
-			.openDatabase(9, evt => {
+			.openDatabase(10, evt => {
 				console.log('[collection] [storage] upgrading db', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[collection] [storage] upgrade to version 1');
@@ -188,6 +226,10 @@ export class IndexedDbService {
 						keyPath: 'setId',
 						autoIncrement: false,
 					});
+				}
+				if (evt.oldVersion < 10) {
+					console.log('[collection] [storage] upgrade to version 10');
+					evt.currentTarget.result.createObjectStore('card-backs', { keyPath: 'id', autoIncrement: false });
 				}
 				console.log('[collection] [storage] indexeddb upgraded');
 			})

@@ -1,8 +1,10 @@
+import { CardBack } from '../card-back';
 import { CardHistory } from '../card-history';
 import { Set, SetCard } from '../set';
 
 export class BinderState {
 	readonly allSets: readonly Set[] = [];
+	readonly cardBacks: readonly CardBack[] = [];
 	readonly cardHistory: readonly CardHistory[] = [];
 	readonly totalHistoryLength: number;
 	readonly isLoading: boolean = true;

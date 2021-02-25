@@ -32,13 +32,15 @@ export class CollectionBootstrapService {
 
 	public async initCollectionState(): Promise<BinderState> {
 		console.log('initializing collection state');
-		const [cardHistory, sets, totalHistoryLength] = await Promise.all([
+		const [cardHistory, sets, totalHistoryLength, cardBacks] = await Promise.all([
 			this.cardHistoryStorage.loadAll(100),
 			this.buildSets(),
 			this.cardHistoryStorage.countHistory(),
+			this.collectionManager.getCardBacks(),
 		]);
 		const newState = Object.assign(new BinderState(), {
 			allSets: sets,
+			cardBacks: cardBacks,
 			cardHistory: cardHistory,
 			// shownCardHistory: cardHistory,
 			totalHistoryLength: totalHistoryLength,

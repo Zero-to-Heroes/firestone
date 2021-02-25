@@ -3,6 +3,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/inpu
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
+import { CardBack } from '../../models/card-back';
 import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
@@ -17,6 +18,7 @@ import { GetArenaInfoOperation } from './mind-vision/get-arena-info-operation';
 import { GetBattlegroundsEndGameOperation } from './mind-vision/get-battlegrounds-end-game-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-match-operation';
+import { GetCardBacksOperation } from './mind-vision/get-card-backs-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/get-current-scene-operation';
 import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
@@ -38,6 +40,7 @@ export class MemoryInspectionService {
 	];
 
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
+	private getCardBacksOperation = new GetCardBacksOperation(this.mindVision, this.ow, this.cards);
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
@@ -69,6 +72,10 @@ export class MemoryInspectionService {
 
 	public async getCollection(): Promise<readonly Card[]> {
 		return this.getCollectionOperation.call();
+	}
+
+	public async getCardBacks(): Promise<readonly CardBack[]> {
+		return this.getCardBacksOperation.call();
 	}
 
 	public async getMatchInfo(): Promise<MatchInfo> {

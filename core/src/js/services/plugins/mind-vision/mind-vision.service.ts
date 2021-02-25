@@ -75,6 +75,20 @@ export class MindVisionService {
 		});
 	}
 
+	public async getCardBacks(): Promise<any[]> {
+		return new Promise<any[]>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.getCardBacks(cardBacks => {
+					resolve(cardBacks ? JSON.parse(cardBacks) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getCardBacks', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getMatchInfo(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
 			const plugin = await this.get();
