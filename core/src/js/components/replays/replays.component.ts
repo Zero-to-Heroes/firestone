@@ -14,7 +14,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="app-section replays">
 			<section class="main divider">
 				<with-loading [isLoading]="state.replays.isLoading">
-					<div class="content">
+					<div class="content main-content">
 						<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 						<replays-list
 							[state]="state.replays"

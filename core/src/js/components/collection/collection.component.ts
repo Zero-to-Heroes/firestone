@@ -18,7 +18,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 		<div class="app-section collection">
 			<section class="main" [ngClass]="{ 'divider': _navigation.navigationCollection.currentView === 'cards' }">
 				<with-loading [isLoading]="dataState.isLoading">
-					<div class="content">
+					<div class="content main-content">
 						<global-header
 							[navigation]="_navigation"
 							*ngIf="

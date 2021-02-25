@@ -1,24 +1,55 @@
+.layout {
+	display: flex;
+	padding: 1px;
+	min-height: 0;
+	flex-grow: 1;
+}
+
 .navigation {
 	display: flex;
+	flex-direction: column;
 	position: relative;
 	flex-shrink: 0;
-	height: 60px;
+	height: 100%;
+	width: 65px;
+	background: var(--main-menu-background-color);
+	top: 0px;
+	flex-grow: 0;
+	align-items: stretch;
 
 	.logo {
 		position: relative;
-		top: 16px;
-		margin-left: 5px;
-		margin-right: 40px;
+		top: 10px;
+		margin-bottom: 10px;
+		--icon-color: var(--default-title-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		svg {
+			width: 45px;
+		}
 	}
 
 	menu-selection {
 		display: flex;
-		align-items: flex-end;
+		flex-grow: 1;
 	}
 
-	.main-section {
-		display: flex;
+	&.navigation-ftue {
+		menu-selection {
+			pointer-events: none;
+		}
+		.attention-icon-container {
+			display: none;
+		}
 	}
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
 }
 
 .menu-bar {
@@ -27,20 +58,12 @@
 	flex-direction: row;
 	align-items: stretch;
 	position: relative;
-	width: calc(100% + 20px);
-	left: -10px;
-	padding-left: 10px;
-	padding-right: 10px;
-	height: 62px;
+	width: 100%;
+	height: 30px;
 	z-index: 400;
 	flex-shrink: 0;
 	border: none;
-	border-bottom: 1px solid var(--menu-bar-bottom-border-color);
-
-	.first {
-		display: flex;
-		flex-direction: column;
-	}
+	pointer-events: none;
 
 	hotkey {
 		display: flex;
@@ -51,6 +74,9 @@
 		align-items: flex-start;
 		position: relative;
 		top: 5px;
+		flex-grow: 0;
+		margin-left: auto;
+		pointer-events: all;
 
 		.key {
 			border: none;
@@ -65,22 +91,11 @@
 	.controls {
 		height: 30px;
 		display: flex;
-		margin-right: -10px;
-		// margin-top: -10px;
-	}
-
-	&.ftue {
-		menu-selection {
-			pointer-events: none;
-		}
-		.attention-icon-container {
-			display: none;
-		}
+		pointer-events: all;
 	}
 }
 
-.content-container,
-ftue {
+.content-container {
 	position: relative;
 	flex-grow: 1;
 	display: flex;
@@ -96,8 +111,22 @@ ftue {
 
 .content-container.hide-ads {
 	.secondary.secondary.secondary {
-		height: 100%;
+		height: calc(100% - 10px);
 	}
+}
+
+ftue {
+	position: absolute;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: 100%;
+	left: 65px;
+}
+
+.content-container {
+	padding-right: 10px;
 }
 
 tooltips {

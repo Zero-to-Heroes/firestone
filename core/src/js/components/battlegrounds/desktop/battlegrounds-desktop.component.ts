@@ -12,13 +12,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	selector: 'battlegrounds-desktop',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,
+		`../../../../css/component/menu-selection.component.scss`,
 		`../../../../css/component/battlegrounds/desktop/battlegrounds-desktop.component.scss`,
 	],
 	template: `
 		<div class="app-section battlegrounds {{ category?.id }}">
 			<section class="main divider">
 				<with-loading [isLoading]="!state.battlegrounds || state.battlegrounds.loading">
-					<div class="content" *ngIf="state.battlegrounds">
+					<div class="content main-content" *ngIf="state.battlegrounds">
 						<global-header
 							[navigation]="navigation"
 							*ngIf="

@@ -13,7 +13,7 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 		<div class="app-section decktracker">
 			<section class="main divider">
 				<with-loading [isLoading]="!_state?.decktracker || _state?.decktracker.isLoading">
-					<div class="content">
+					<div class="content main-content">
 						<global-header
 							[navigation]="navigation"
 							*ngIf="

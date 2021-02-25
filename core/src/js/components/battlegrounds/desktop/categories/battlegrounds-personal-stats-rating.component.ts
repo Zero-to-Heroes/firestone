@@ -22,8 +22,8 @@ import { formatDate, groupByFunction } from '../../../../services/utils';
 @Component({
 	selector: 'battlegrounds-personal-stats-rating',
 	styleUrls: [
-		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component.scss`,
 		`../../../../../css/global/components-global.scss`,
+		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component.scss`,
 	],
 	template: `
 		<div class="battlegrounds-personal-stats-rating">

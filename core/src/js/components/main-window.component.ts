@@ -29,81 +29,88 @@ declare let amplitude: any;
 			[activeTheme]="activeTheme"
 			[allowResize]="true"
 		>
-			<section class="menu-bar" [ngClass]="{ 'ftue': dataState.showFtue }">
-				<div class="first">
-					<div class="navigation">
-						<i class="i-117X33 gold-theme logo">
-							<svg class="svg-icon-fill">
-								<use xlink:href="assets/svg/sprite.svg#logo" />
-							</svg>
-						</i>
-						<menu-selection
-							[selectedModule]="navigationState.currentApp"
-							[currentUser]="dataState.currentUser"
-						></menu-selection>
-					</div>
+			<section class="layout">
+				<div class="navigation" [ngClass]="{ 'navigation-ftue': dataState.showFtue }">
+					<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
+					<div class="main-menu-separator"></div>
+					<menu-selection
+						[selectedModule]="navigationState.currentApp"
+						[currentUser]="dataState.currentUser"
+					></menu-selection>
 				</div>
-				<hotkey></hotkey>
-				<div class="controls">
-					<control-bug></control-bug>
-					<control-settings
-						[windowId]="windowId"
-						[settingsApp]="navigationState.currentApp"
-					></control-settings>
-					<control-help (help)="onHelp()"></control-help>
-					<control-discord></control-discord>
-					<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
-					<control-maximize [windowId]="windowId"></control-maximize>
-					<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
+				<div class="main">
+					<section class="menu-bar">
+						<hotkey></hotkey>
+						<div class="controls">
+							<control-bug></control-bug>
+							<control-settings
+								[windowId]="windowId"
+								[settingsApp]="navigationState.currentApp"
+							></control-settings>
+							<control-help (help)="onHelp()"></control-help>
+							<control-discord></control-discord>
+							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
+							<control-maximize [windowId]="windowId"></control-maximize>
+							<control-close
+								[windowId]="windowId"
+								[isMainWindow]="true"
+								[closeAll]="true"
+							></control-close>
+						</div>
+					</section>
+					<section
+						class="content-container"
+						*ngIf="!dataState.showFtue"
+						[ngClass]="{ 'hide-ads': !_showAds }"
+					>
+						<replays
+							class="main-section"
+							[state]="dataState"
+							[navigation]="navigationState"
+							*ngxCacheIf="navigationState.currentApp === 'replays'"
+						></replays>
+						<achievements
+							class="main-section"
+							[state]="dataState.achievements"
+							[navigation]="navigationState"
+							[currentUser]="dataState.currentUser"
+							[socialShareUserInfo]="dataState.socialShareUserInfo"
+							[globalStats]="dataState.globalStats"
+							*ngxCacheIf="navigationState.currentApp === 'achievements'"
+						>
+						</achievements>
+						<collection
+							class="main-section"
+							[state]="dataState.binder"
+							[navigation]="navigationState"
+							*ngxCacheIf="navigationState.currentApp === 'collection'"
+						></collection>
+						<decktracker
+							class="main-section"
+							[state]="dataState"
+							[navigation]="navigationState"
+							*ngxCacheIf="navigationState.currentApp === 'decktracker'"
+						>
+						</decktracker>
+						<battlegrounds-desktop
+							class="main-section"
+							[state]="dataState"
+							[navigation]="navigationState"
+							*ngxCacheIf="navigationState.currentApp === 'battlegrounds'"
+						>
+						</battlegrounds-desktop>
+						<duels-desktop
+							class="main-section"
+							[state]="dataState"
+							[navigation]="navigationState"
+							*ngxCacheIf="navigationState.currentApp === 'duels'"
+						>
+						</duels-desktop>
+					</section>
 				</div>
 			</section>
 			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
 			<ads [parentComponent]="'main-window'" *ngIf="_showAds"></ads>
-			<section class="content-container" *ngIf="!dataState.showFtue" [ngClass]="{ 'hide-ads': !_showAds }">
-				<replays
-					class="main-section"
-					[state]="dataState"
-					[navigation]="navigationState"
-					*ngxCacheIf="navigationState.currentApp === 'replays'"
-				></replays>
-				<achievements
-					class="main-section"
-					[state]="dataState.achievements"
-					[navigation]="navigationState"
-					[currentUser]="dataState.currentUser"
-					[socialShareUserInfo]="dataState.socialShareUserInfo"
-					[globalStats]="dataState.globalStats"
-					*ngxCacheIf="navigationState.currentApp === 'achievements'"
-				>
-				</achievements>
-				<collection
-					class="main-section"
-					[state]="dataState.binder"
-					[navigation]="navigationState"
-					*ngxCacheIf="navigationState.currentApp === 'collection'"
-				></collection>
-				<decktracker
-					class="main-section"
-					[state]="dataState"
-					[navigation]="navigationState"
-					*ngxCacheIf="navigationState.currentApp === 'decktracker'"
-				>
-				</decktracker>
-				<battlegrounds-desktop
-					class="main-section"
-					[state]="dataState"
-					[navigation]="navigationState"
-					*ngxCacheIf="navigationState.currentApp === 'battlegrounds'"
-				>
-				</battlegrounds-desktop>
-				<duels-desktop
-					class="main-section"
-					[state]="dataState"
-					[navigation]="navigationState"
-					*ngxCacheIf="navigationState.currentApp === 'duels'"
-				>
-				</duels-desktop>
-			</section>
 			<new-version-notification
 				class="new-version"
 				[forceOpen]="forceShowReleaseNotes"
@@ -173,6 +180,9 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			setTimeout(async () => {
 				// First update the state before restoring the window
 				// console.log('received state', newState);
+				// if (this.dataState) {
+				// 	return;
+				// }
 				this.dataState = newState;
 				this.activeTheme = this.buildActiveTheme();
 				this._showAds = this.showAds();

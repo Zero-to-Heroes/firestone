@@ -17,6 +17,7 @@ declare let amplitude;
 	selector: 'collection-menu-selection',
 	styleUrls: [
 		`../../../css/global/menu.scss`,
+		`../../../css/component/menu-selection.component.scss`,
 		`../../../css/component/collection/collection-menu-selection.component.scss`,
 	],
 	template: `

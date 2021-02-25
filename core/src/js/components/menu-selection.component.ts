@@ -20,60 +20,72 @@ declare let amplitude;
 	styleUrls: [
 		`../../css/global/components-global.scss`,
 		`../../css/global/menu.scss`,
-		`../../css/component/menu-selection.component.scss`,
+		`../../css/component/main-menu.component.scss`,
 	],
 	template: `
-		<ul class="menu-selection">
+		<ul class="menu-selection main-menu">
 			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">
-				<span>Ladder</span>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/decktracker.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Constructed</div>
+					<div class="menu-text-details">See all your constructed stuff!</div>
+				</div>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedModule === 'battlegrounds' }"
 				(mousedown)="selectModule('battlegrounds')"
 			>
-				<span>Battlegrounds</span>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/battlegrounds.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Battlegrounds</div>
+				</div>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'duels' }" (mousedown)="selectModule('duels')">
-				<span>Duels</span>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/duels.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Duels</div>
+				</div>
 			</li>
+			<li class="main-menu-separator"></li>
 			<li [ngClass]="{ 'selected': selectedModule === 'replays' }" (mousedown)="selectModule('replays')">
-				<span>Replays</span>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/replays.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Replays</div>
+				</div>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedModule === 'achievements' }"
 				(mousedown)="selectModule('achievements')"
 			>
-				<span
-					>Achievements
-					<div *ngIf="!currentUser || !currentUser.username" class="attention-icon-container">
-						<svg
-							[helpTooltip]="
-								loginPopupActive ? null : 'Click on the icon to log in to save your achievements online'
-							"
-							helpTooltipPosition="right"
-							class="svg-icon-fill attention-icon pulse"
-							pulse="hasSeenAchievementsLoginButton"
-							(click)="toggleLoginPopup()"
-							[ngClass]="{ 'active': loginPopupActive }"
-						>
-							<use xlink:href="assets/svg/sprite.svg#attention" />
-						</svg>
-						<div class="login-conf-popup" *ngIf="loginPopupActive">
-							<div class="text">
-								Log in to Overwolf and save your achievements online
-							</div>
-							<div class="buttons">
-								<button class="cancel" (click)="cancel()">Cancel</button>
-								<button class="log-in" (click)="login()">Log in</button>
-							</div>
-							<svg class="svg-icon-fill tooltip-arrow" viewBox="0 0 16 9">
-								<polygon points="0,0 8,-9 16,0" />
-							</svg>
-						</div></div
-				></span>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/achievements.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Achievements</div>
+				</div>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
-				<span>Collection</span>
+				<div class="icon" inlineSVG="assets/svg/whatsnew/collection.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Collection</div>
+				</div>
+			</li>
+			<li class="login-info" (click)="login()">
+				<img class="avatar" [src]="avatarUrl" />
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-text-details">
+						{{
+							_currentUser?.username
+								? 'Logged in as ' + _currentUser.username
+								: 'Log in to save your progress online'
+						}}
+					</div>
+				</div>
 			</li>
 		</ul>
 	`,
@@ -82,8 +94,18 @@ declare let amplitude;
 })
 export class MenuSelectionComponent implements AfterViewInit {
 	@Input() selectedModule: string;
-	@Input() currentUser: CurrentUser;
-	loginPopupActive: boolean;
+
+	@Input() set currentUser(value: CurrentUser) {
+		console.debug('setting current user', value);
+		this._currentUser = value;
+		this.avatarUrl = value?.avatar?.length > 0 ? value.avatar : 'assets/images/social-share-login.png';
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	_currentUser: CurrentUser;
+	avatarUrl: string = 'assets/images/social-share-login.png';
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -97,28 +119,7 @@ export class MenuSelectionComponent implements AfterViewInit {
 		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
 	}
 
-	toggleLoginPopup() {
-		this.loginPopupActive = !this.loginPopupActive;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	cancel() {
-		this.loginPopupActive = false;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	login() {
 		this.ow.openLoginDialog();
-		this.loginPopupActive = false;
-		amplitude.getInstance().logEvent('log-in', {
-			'source': 'menu-icon',
-		});
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

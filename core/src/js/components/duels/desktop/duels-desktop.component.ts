@@ -11,13 +11,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	selector: 'duels-desktop',
 	styleUrls: [
 		`../../../../css/component/app-section.component.scss`,
+		`../../../../css/component/menu-selection.component.scss`,
 		`../../../../css/component/duels/desktop/duels-desktop.component.scss`,
 	],
 	template: `
 		<div class="app-section duels">
 			<section class="main divider">
 				<with-loading [isLoading]="!state.duels || state.duels.loading">
-					<div class="content" *ngIf="state.duels">
+					<div class="content main-content" *ngIf="state.duels">
 						<global-header
 							[navigation]="navigation"
 							*ngIf="navigation.text && navigation?.navigationDuels.menuDisplayType === 'breadcrumbs'"

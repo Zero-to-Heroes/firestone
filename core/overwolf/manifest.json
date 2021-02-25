@@ -116,17 +116,6 @@
 				"min_size": { "width": 680, "height": 620 },
 				"max_size": { "width": 680, "height": 620 }
 			},
-			"CollectionOverlayWindow": {
-				"file": "Files/collection.html",
-				"transparent": true,
-				"resizable": true,
-				"show_in_taskbar": false,
-				"size": { "width": 1150, "height": 700 },
-				"min_size": { "width": 1150, "height": 700 },
-				"block_top_window_navigation": true,
-				"popup_blocker": true,
-				"mute": true
-			},
 			"SettingsWindow": {
 				"file": "Files/settings.html",
 				"transparent": true,
@@ -142,6 +131,17 @@
 				"min_size": { "width": 680, "height": 620 },
 				"max_size": { "width": 680, "height": 620 }
 			},
+			"CollectionOverlayWindow": {
+				"file": "Files/collection.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": false,
+				"size": { "width": 1215, "height": 700 },
+				"min_size": { "width": 1215, "height": 700 },
+				"block_top_window_navigation": true,
+				"popup_blocker": true,
+				"mute": true
+			},
 			"CollectionWindow": {
 				"file": "Files/collection.html",
 				"transparent": true,
@@ -152,8 +152,8 @@
 				"desktop_only": true,
 				"topmost": false,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 1150, "height": 700 },
-				"min_size": { "width": 1150, "height": 700 },
+				"size": { "width": 1215, "height": 700 },
+				"min_size": { "width": 1215, "height": 700 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true

@@ -1,157 +1,82 @@
 @import '../global/variables';
 
-.zth-tooltip {
-	background-color: $grey03;
-	text-align: center;
-	cursor: default;
-	opacity: 0;
-	position: absolute;
-	width: 110px;
-	height: 30px;
-	pointer-events: none;
-	z-index: 100;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	bottom: -29px;
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
-	// Center it
-	left: 50%;
-	transform: translateX(-50%);
-
-	.tooltip-arrow {
-		position: absolute;
-		width: 16px;
-		height: 9px;
-		fill: $grey03;
-		overflow: visible;
-	}
-
-	p {
-		white-space: nowrap;
-		cursor: default;
-		color: $black;
-		margin: 0;
-		font-size: 13px;
-	}
-
-	&.bottom {
-		.tooltip-arrow {
-			top: 0px;
-		}
-	}
-}
-
 .menu-selection {
 	color: var(--menu-selection-color);
 
 	li {
-		margin-right: 25px;
-		padding-bottom: 14px;
-
 		&:hover {
-			.zth-tooltip {
-				opacity: 1;
-			}
-
 			&:not(.disabled) {
-				color: $yellow03;
+				color: var(--on-menu-selection-color);
 			}
 		}
-
-		span {
-			display: flex;
-		}
 	}
 }
 
-.attention-icon-container {
-	margin-left: 10px;
-	display: flex;
-	align-items: center;
-	position: relative;
-}
+// .login-conf-popup {
+// 	position: absolute;
+// 	background: #7d5a87;
+// 	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
+// 	padding: 15px;
+// 	left: 40px;
+// 	z-index: 99999;
+// 	top: -20px;
 
-.attention-icon {
-	color: transparent;
-	--icon-color: #d9c3ab;
-	--pulse-color: var(--icon-color);
-	// See https://github.com/sass/node-sass/issues/2251
-	// --icon-blink-color: 217, 195, 171; // The RGBA equivalent of the above --icon-color
-	width: 17px;
-	height: 17px;
+// 	.text {
+// 		font-family: Open Sans;
+// 		font-style: normal;
+// 		font-weight: normal;
+// 		font-size: 13px;
+// 		line-height: 18px;
+// 		text-align: center;
+// 		color: #1b071f;
+// 	}
 
-	&.active,
-	&:hover {
-		--icon-color: #ffb948;
-	}
-}
+// 	.buttons {
+// 		display: flex;
+// 		margin-top: 15px;
+// 	}
 
-.login-conf-popup {
-	position: absolute;
-	background: #7d5a87;
-	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
-	padding: 15px;
-	left: 40px;
-	z-index: 99999;
-	top: -20px;
+// 	button {
+// 		width: 80px;
+// 		height: 30px;
+// 		font-family: Open Sans;
+// 		font-style: normal;
+// 		font-weight: normal;
+// 		font-size: 13px;
+// 		line-height: 18px;
+// 		text-align: center;
+// 		opacity: 0.8;
+// 		background: transparent;
+// 	}
 
-	.text {
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		font-size: 13px;
-		line-height: 18px;
-		text-align: center;
-		color: #1b071f;
-	}
+// 	.cancel {
+// 		color: #2f0d0d;
+// 		border: 1px solid #2f0d0d;
 
-	.buttons {
-		display: flex;
-		margin-top: 15px;
-	}
+// 		&:hover {
+// 			background: rgba(75, 48, 82, 0.3);
+// 			opacity: 1;
+// 		}
+// 	}
 
-	button {
-		width: 80px;
-		height: 30px;
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		font-size: 13px;
-		line-height: 18px;
-		text-align: center;
-		opacity: 0.8;
-		background: transparent;
-	}
+// 	.log-in {
+// 		color: #a276af;
+// 		background: #4b3052;
+// 		margin-left: 10px;
 
-	.cancel {
-		color: #2f0d0d;
-		border: 1px solid #2f0d0d;
+// 		&:hover {
+// 			opacity: 1;
+// 		}
+// 	}
 
-		&:hover {
-			background: rgba(75, 48, 82, 0.3);
-			opacity: 1;
-		}
-	}
-
-	.log-in {
-		color: #a276af;
-		background: #4b3052;
-		margin-left: 10px;
-
-		&:hover {
-			opacity: 1;
-		}
-	}
-
-	.tooltip-arrow {
-		position: absolute;
-		width: 16px;
-		height: 9px;
-		fill: #7d5a87;
-		overflow: visible;
-		transform: rotate(-90deg);
-		left: -3px;
-		top: 23%;
-	}
-}
+// 	.tooltip-arrow {
+// 		position: absolute;
+// 		width: 16px;
+// 		height: 9px;
+// 		fill: #7d5a87;
+// 		overflow: visible;
+// 		transform: rotate(-90deg);
+// 		left: -3px;
+// 		top: 23%;
+// 	}
+// }

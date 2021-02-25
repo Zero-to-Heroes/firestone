@@ -5,4 +5,5 @@ export interface CurrentUser {
 	machineId: string;
 	partnerId: number;
 	channel: string;
+	avatar: string;
 }

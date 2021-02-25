@@ -30,6 +30,14 @@ export class UserService {
 		console.log('retrieved user info', this.currentUser);
 		await this.sendCurrentUser();
 		this.store.stateUpdater.next(new CurrentUserEvent(this.currentUser));
+		if (this.currentUser?.username) {
+			setTimeout(async () => {
+				// The avatar is not set right away
+				this.currentUser = await this.ow.getCurrentUser();
+				console.debug('user info after a while', this.currentUser);
+				this.store.stateUpdater.next(new CurrentUserEvent(this.currentUser));
+			}, 2000);
+		}
 	}
 
 	private async sendCurrentUser() {
