@@ -156,6 +156,10 @@ export class SetsService {
 	}
 
 	public setName(setId: string) {
+		if (!setId) {
+			return;
+		}
+
 		setId = setId.toLowerCase();
 		for (let i = 0; i < this.STANDARD_SETS.length; i++) {
 			if (setId === this.STANDARD_SETS[i][0]) {
@@ -177,6 +181,10 @@ export class SetsService {
 	}
 
 	public getSet(setId: string) {
+		if (!setId) {
+			return new Set(setId, setId, true);
+		}
+
 		setId = setId.toLowerCase();
 		for (const theSet of this.getStandardSets()) {
 			if (theSet.id === setId) {
