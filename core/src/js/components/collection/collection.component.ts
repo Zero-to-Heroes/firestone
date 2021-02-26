@@ -15,7 +15,21 @@ import { SetsService } from '../../services/sets-service.service';
 			<section class="main" [ngClass]="{ 'divider': _navigation.navigationCollection.currentView === 'cards' }">
 				<with-loading [isLoading]="dataState.isLoading">
 					<div class="content">
-						<global-header [navigation]="_navigation" *ngIf="_navigation.text"> </global-header>
+						<global-header
+							[navigation]="_navigation"
+							*ngIf="
+								_navigation.text && _navigation?.navigationCollection.menuDisplayType === 'breadcrumbs'
+							"
+						>
+						</global-header>
+						<collection-menu-selection
+							class="menu-selection"
+							*ngxCacheIf="
+								!_navigation?.text && _navigation?.navigationCollection.menuDisplayType === 'menu'
+							"
+							[selectedTab]="_navigation.navigationCollection.currentView"
+						>
+						</collection-menu-selection>
 						<sets
 							[standardSets]="standardSets"
 							[wildSets]="wildSets"
@@ -102,6 +116,7 @@ export class CollectionComponent {
 						.reduce((a, b) => a.concat(b), [])
 						.filter(card => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
 				: null;
+		console.log('updated', this._navigation);
 	}
 
 	private async init() {
