@@ -34,10 +34,8 @@
 		flex-shrink: 0;
 		align-items: center;
 		margin-right: 20px;
-		padding-bottom: 18px;
+		margin-bottom: 20px;
 		justify-content: flex-start;
-		margin-bottom: 10px;
-		border-bottom: 1px solid $grey04;
 
 		ng-select {
 			@extend %search-active;
@@ -133,7 +131,6 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		margin-top: -6px;
 		width: 100%;
 		height: 100%;
 		justify-content: flex-start;
@@ -147,6 +144,8 @@
 			margin-right: 14px;
 			margin-bottom: 4px;
 			transition: all 0.15s ease;
+			position: relative;
+			top: -20px; // So that there is not a big gap at the top (which looks weird because of hte scrollbar)
 
 			&.hidden {
 				opacity: 0;
