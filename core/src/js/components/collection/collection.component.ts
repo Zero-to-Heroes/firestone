@@ -1,9 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { CardBack } from '../../models/card-back';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { Set, SetCard } from '../../models/set';
 import { SetsService } from '../../services/sets-service.service';
+import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
 	selector: 'collection',
@@ -62,6 +65,11 @@ import { SetsService } from '../../services/sets-service.service';
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-back-details'"
 						>
 						</full-card-back>
+						<hero-portraits
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'hero-portraits'"
+							[heroPortraits]="heroPortraits"
+						>
+						</hero-portraits>
 					</div>
 				</with-loading>
 			</section>
@@ -90,9 +98,10 @@ export class CollectionComponent {
 	wildSets: Set[];
 
 	selectedSet: Set;
-	selectedCard: SetCard;
+	selectedCard: SetCard | ReferenceCard;
 	selectedCardBack: CardBack;
 	searchResults: readonly SetCard[];
+	heroPortraits: readonly CollectionReferenceCard[] = [];
 
 	@Input() set state(state: BinderState) {
 		this.dataState = state;
@@ -107,7 +116,7 @@ export class CollectionComponent {
 		this.updateValues();
 	}
 
-	constructor(private cards: SetsService, private cdr: ChangeDetectorRef) {
+	constructor(private cards: SetsService, private readonly allCards: AllCardsService) {
 		this.init();
 	}
 
@@ -118,10 +127,13 @@ export class CollectionComponent {
 		this.selectedSet = this.dataState.allSets.find(
 			set => set.id === this._navigation.navigationCollection?.selectedSetId,
 		);
-		this.selectedCard = this.dataState.allSets
-			.map(set => set.allCards)
-			.reduce((a, b) => a.concat(b), [])
-			.find(card => card.id === this._navigation.navigationCollection?.selectedCardId);
+		this.selectedCard =
+			this.dataState.allSets
+				.map(set => set.allCards)
+				.reduce((a, b) => a.concat(b), [])
+				.find(card => card.id === this._navigation.navigationCollection?.selectedCardId) ??
+			// This is the case when it's not a collectible card for instance
+			this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId);
 		this.selectedCardBack = this.dataState.cardBacks.find(
 			cardBack => cardBack.id === this._navigation.navigationCollection?.selectedCardBackId,
 		);
@@ -132,7 +144,28 @@ export class CollectionComponent {
 						.reduce((a, b) => a.concat(b), [])
 						.filter(card => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
 				: null;
+		this.heroPortraits = this.buildHeroPortraits();
 		console.log('updated', this._navigation);
+	}
+
+	private buildHeroPortraits(): readonly CollectionReferenceCard[] {
+		const allPortraits: readonly ReferenceCard[] = this.allCards
+			.getCards()
+			.filter(card => card.set === 'Hero_skins')
+			.filter(card => card.collectible);
+		const portraitCardIds = allPortraits.map(card => card.id);
+		const ownedPortraits = this.dataState.collection
+			.filter(card => (card.count ?? 0) + (card.premiumCount ?? 0) > 0)
+			.map(card => card.id)
+			.filter(cardId => portraitCardIds.includes(cardId));
+		return allPortraits.map(card =>
+			ownedPortraits.includes(card.id)
+				? ({
+						...card,
+						numberOwned: 1,
+				  } as CollectionReferenceCard)
+				: card,
+		) as CollectionReferenceCard[];
 	}
 
 	private async init() {

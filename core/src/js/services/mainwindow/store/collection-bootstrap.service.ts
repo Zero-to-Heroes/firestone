@@ -32,13 +32,15 @@ export class CollectionBootstrapService {
 
 	public async initCollectionState(): Promise<BinderState> {
 		console.log('initializing collection state');
+		const collection: readonly Card[] = await this.collectionManager.getCollection();
 		const [cardHistory, sets, totalHistoryLength, cardBacks] = await Promise.all([
 			this.cardHistoryStorage.loadAll(100),
-			this.buildSets(),
+			this.buildSets(collection),
 			this.cardHistoryStorage.countHistory(),
 			this.collectionManager.getCardBacks(),
 		]);
 		const newState = Object.assign(new BinderState(), {
+			collection: collection,
 			allSets: sets,
 			cardBacks: cardBacks,
 			cardHistory: cardHistory,
@@ -51,12 +53,11 @@ export class CollectionBootstrapService {
 		return newState;
 	}
 
-	private async buildSets(): Promise<readonly Set[]> {
-		const collection = await this.collectionManager.getCollection();
+	private async buildSets(collection: readonly Card[]): Promise<readonly Set[]> {
 		return this.buildSetsFromCollection(collection);
 	}
 
-	private async buildSetsFromCollection(collection: Card[]): Promise<readonly Set[]> {
+	private async buildSetsFromCollection(collection: readonly Card[]): Promise<readonly Set[]> {
 		const pityTimers = await this.pityTimer.getPityTimers();
 		return this.cards
 			.getAllSets()
@@ -64,7 +65,7 @@ export class CollectionBootstrapService {
 			.map(set => this.mergeSet(collection, set.set, set.pityTimer));
 	}
 
-	private mergeSet(collection: Card[], set: Set, pityTimer: PityTimer): Set {
+	private mergeSet(collection: readonly Card[], set: Set, pityTimer: PityTimer): Set {
 		const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
 		const ownedLimitCollectibleCards = updatedCards
 			.map((card: SetCard) => card.getNumberCollected())
@@ -86,7 +87,7 @@ export class CollectionBootstrapService {
 		);
 	}
 
-	private mergeFullCards(collection: Card[], setCards: readonly SetCard[]): SetCard[] {
+	private mergeFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
 		return setCards.map((card: SetCard) => {
 			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
 			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;

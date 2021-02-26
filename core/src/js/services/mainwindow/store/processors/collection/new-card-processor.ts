@@ -31,7 +31,7 @@ export class NewCardProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const collection = await this.collectionManager.getCollection();
+		const collection: readonly Card[] = await this.collectionManager.getCollection();
 		if (collection && collection.length > 0) {
 			await this.indexedDb.saveCollection(collection);
 		}
@@ -44,6 +44,7 @@ export class NewCardProcessor implements Processor {
 		// console.log('new cardHistory', cardHistory);
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: await this.buildSetsFromCollection(collection),
+			collection: collection,
 			cardHistory: cardHistory,
 		} as BinderState);
 		const newCollection = navigationState.navigationCollection.update({

@@ -1,0 +1,9 @@
+.hero-portrait {
+	img {
+		width: 100%;
+	}
+
+	&.missing {
+		opacity: 0.2;
+	}
+}

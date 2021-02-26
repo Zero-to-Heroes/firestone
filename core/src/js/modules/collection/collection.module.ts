@@ -66,6 +66,8 @@ import { CollectionComponent } from '../../components/collection/collection.comp
 import { OwnedFilterComponent } from '../../components/collection/filters/owned-filter.component';
 import { FullCardBackComponent } from '../../components/collection/full-card-back.component';
 import { FullCardComponent } from '../../components/collection/full-card.component';
+import { HeroPortraitComponent } from '../../components/collection/hero-portrait.component';
+import { HeroPortraitsComponent } from '../../components/collection/hero-portraits.component';
 import { RarityComponent } from '../../components/collection/rarity.component';
 import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainer } from '../../components/collection/sets-container.component';
@@ -199,6 +201,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		CardBacksComponent,
 		CardBackComponent,
 		FullCardBackComponent,
+		HeroPortraitsComponent,
+		HeroPortraitComponent,
 		OwnedFilterComponent,
 
 		AchievementsComponent,

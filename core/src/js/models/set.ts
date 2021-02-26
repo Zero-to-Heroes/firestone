@@ -113,6 +113,7 @@ export class SetCard {
 	readonly ownedNonPremium: number = 0;
 	readonly ownedPremium: number = 0;
 	readonly displayed: boolean = true;
+	readonly collectible: boolean = true;
 
 	constructor(
 		id?: string,

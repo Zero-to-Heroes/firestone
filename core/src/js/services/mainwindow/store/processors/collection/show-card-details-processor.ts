@@ -16,14 +16,15 @@ export class ShowCardDetailsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const selectedSet: Set = this.pickSet(currentState.binder.allSets, event.cardId);
-		const selectedCard: SetCard = this.pickCard(selectedSet, event.cardId);
+		const selectedCard: SetCard = selectedSet ? this.pickCard(selectedSet, event.cardId) : null;
+		const referenceCard = this.cards.getCard(event.cardId);
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'card-details',
 			menuDisplayType: 'breadcrumbs',
-			selectedSetId: selectedSet.id,
+			selectedSetId: selectedSet?.id,
 			selectedCardId: event.cardId,
 			selectedCardBackId: undefined,
-			selectedFormat: selectedSet.standard ? 'standard' : 'wild',
+			selectedFormat: selectedSet ? (selectedSet.standard ? 'standard' : 'wild') : null,
 			searchString: undefined,
 		} as NavigationCollection);
 		return [
@@ -32,7 +33,7 @@ export class ShowCardDetailsProcessor implements Processor {
 				isVisible: true,
 				currentApp: 'collection',
 				navigationCollection: newCollection,
-				text: selectedCard.name,
+				text: referenceCard.name,
 				image: null,
 			} as NavigationState),
 		];

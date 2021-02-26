@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
 import { PreferencesService } from '../../services/preferences.service';
@@ -28,7 +29,7 @@ declare let amplitude;
 	template: `
 		<div class="card-details-container" [ngClass]="{ 'owned': card.owned, 'missing': !card.owned }" *ngIf="card">
 			<div class="card-view-container">
-				<card-view [card]="card" [tooltips]="false" [showCounts]="true" [highRes]="true">/</card-view>
+				<card-view [card]="card" [tooltips]="false" [showCounts]="showCount" [highRes]="true">/</card-view>
 			</div>
 			<div class="details">
 				<h1>{{ card.name }}</h1>
@@ -82,6 +83,7 @@ export class FullCardComponent implements AfterViewInit {
 	audioClips: any[];
 	// TODO: get rid of this and use a typed model for our own components at least
 	card: any;
+	showCount: boolean;
 	flavor;
 
 	highRes: boolean;
@@ -89,7 +91,7 @@ export class FullCardComponent implements AfterViewInit {
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips = [];
 
-	@Input('selectedCard') set selectedCard(selectedCard: SetCard) {
+	@Input() set selectedCard(selectedCard: SetCard | ReferenceCard) {
 		if (!selectedCard) {
 			return;
 		}
@@ -121,8 +123,11 @@ export class FullCardComponent implements AfterViewInit {
 			});
 		}
 		this.card = card;
-		this.card.ownedPremium = selectedCard.ownedPremium;
-		this.card.ownedNonPremium = selectedCard.ownedNonPremium;
+		if (selectedCard instanceof SetCard) {
+			this.showCount = true;
+			this.card.ownedPremium = selectedCard.ownedPremium;
+			this.card.ownedNonPremium = selectedCard.ownedNonPremium;
+		}
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
 		this.class = card.playerClass === 'Neutral' ? 'All classes' : card.playerClass;
 		this.type = card.type;

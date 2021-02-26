@@ -44,11 +44,11 @@ export class OwnedFilterComponent implements AfterViewInit {
 	private labelFor(filter: string) {
 		switch (filter) {
 			case this.FILTER_ALL:
-				return 'All card backs';
+				return 'All';
 			case this.FILTER_OWN:
-				return 'Only card backs I have';
+				return 'Only the ones I have';
 			case this.FILTER_DONT_OWN:
-				return 'Only card backs I do not have';
+				return 'Only the ones I do not have';
 
 			default:
 				console.log('unknown filter', filter);
