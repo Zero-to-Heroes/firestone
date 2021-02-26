@@ -58,6 +58,7 @@ import { NewPackEvent } from './events/collection/new-pack-event';
 import { SearchCardsEvent } from './events/collection/search-cards-event';
 import { SelectCollectionFormatEvent } from './events/collection/select-collection-format-event';
 import { SelectCollectionSetEvent } from './events/collection/select-collection-set-event';
+import { ShowCardBackDetailsEvent } from './events/collection/show-card-back-details-event';
 import { ShowCardDetailsEvent } from './events/collection/show-card-details-event';
 import { ToggleShowOnlyNewCardsInHistoryEvent } from './events/collection/toggle-show-only-new-cards-in-history-event';
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
@@ -146,6 +147,7 @@ import { NewPackProcessor } from './processors/collection/new-pack-processor';
 import { SearchCardProcessor } from './processors/collection/search-card-processor';
 import { SelectCollectionFormatProcessor } from './processors/collection/select-collection-format-processor';
 import { SelectCollectionSetProcessor } from './processors/collection/select-collection-set-processor';
+import { ShowCardBackDetailsProcessor } from './processors/collection/show-card-back-details-processor';
 import { ShowCardDetailsProcessor } from './processors/collection/show-card-details-processor';
 import { ToggleShowOnlyNewCardsInHistoryProcessor } from './processors/collection/toggle-show-only-new-cards-in-history-processor';
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
@@ -446,6 +448,9 @@ export class MainWindowStoreService {
 
 			ShowCardDetailsEvent.eventName(),
 			new ShowCardDetailsProcessor(this.cards),
+
+			ShowCardBackDetailsEvent.eventName(),
+			new ShowCardBackDetailsProcessor(this.cards),
 
 			ToggleShowOnlyNewCardsInHistoryEvent.eventName(),
 			new ToggleShowOnlyNewCardsInHistoryProcessor(),

@@ -1,0 +1,57 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.card-back-details-container {
+	display: flex;
+	position: relative;
+	width: 100%;
+
+	.card-back {
+		width: 42vh;
+		padding: 5vh;
+	}
+
+	.details {
+		// width: 413px;
+		flex-grow: 1;
+		padding-right: 55px;
+		padding-top: 41px;
+		display: flex;
+		flex-direction: column;
+
+		h1 {
+			@extend %card-title;
+			padding-bottom: 14px;
+			border-bottom: 1px solid $yellow03;
+			margin-bottom: 20px;
+			// width: 265px;
+		}
+
+		.card-back-details {
+			overflow-y: scroll;
+		}
+
+		.card-back-info {
+			@extend %you-have-viewed;
+			margin-top: 9px;
+
+			.sub-title {
+				@extend %card-details;
+				margin-right: 10px;
+			}
+
+			&.description {
+				margin-top: 20px;
+
+				.sub-title {
+					display: block;
+				}
+
+				i {
+					display: inline;
+					font-style: italic;
+				}
+			}
+		}
+	}
+}

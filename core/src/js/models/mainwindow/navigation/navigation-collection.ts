@@ -9,6 +9,7 @@ export class NavigationCollection {
 	readonly selectedFormat: StatGameFormatType = 'standard';
 	readonly selectedSetId: string;
 	readonly selectedCardId: string;
+	readonly selectedCardBackId: number;
 	readonly searchString: string;
 	readonly searchResults: readonly string[] = [];
 	readonly cardList: readonly SetCard[] = [];

@@ -22,6 +22,7 @@ export class ShowCardDetailsProcessor implements Processor {
 			menuDisplayType: 'breadcrumbs',
 			selectedSetId: selectedSet.id,
 			selectedCardId: event.cardId,
+			selectedCardBackId: undefined,
 			selectedFormat: selectedSet.standard ? 'standard' : 'wild',
 			searchString: undefined,
 		} as NavigationCollection);

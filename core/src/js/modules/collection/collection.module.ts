@@ -64,6 +64,7 @@ import { CollectionEmptyStateComponent } from '../../components/collection/colle
 import { CollectionMenuSelectionComponent } from '../../components/collection/collection-menu-selection.component';
 import { CollectionComponent } from '../../components/collection/collection.component';
 import { OwnedFilterComponent } from '../../components/collection/filters/owned-filter.component';
+import { FullCardBackComponent } from '../../components/collection/full-card-back.component';
 import { FullCardComponent } from '../../components/collection/full-card.component';
 import { RarityComponent } from '../../components/collection/rarity.component';
 import { SetComponent } from '../../components/collection/set.component';
@@ -197,6 +198,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SetsContainer,
 		CardBacksComponent,
 		CardBackComponent,
+		FullCardBackComponent,
 		OwnedFilterComponent,
 
 		AchievementsComponent,

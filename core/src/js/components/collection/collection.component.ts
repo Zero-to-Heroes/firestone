@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { CardBack } from '../../models/card-back';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { Set, SetCard } from '../../models/set';
@@ -55,6 +56,12 @@ import { SetsService } from '../../services/sets-service.service';
 							[cardBacks]="dataState?.cardBacks"
 						>
 						</card-backs>
+						<full-card-back
+							class="full-card"
+							[cardBack]="selectedCardBack"
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-back-details'"
+						>
+						</full-card-back>
 					</div>
 				</with-loading>
 			</section>
@@ -84,6 +91,7 @@ export class CollectionComponent {
 
 	selectedSet: Set;
 	selectedCard: SetCard;
+	selectedCardBack: CardBack;
 	searchResults: readonly SetCard[];
 
 	@Input() set state(state: BinderState) {
@@ -114,6 +122,9 @@ export class CollectionComponent {
 			.map(set => set.allCards)
 			.reduce((a, b) => a.concat(b), [])
 			.find(card => card.id === this._navigation.navigationCollection?.selectedCardId);
+		this.selectedCardBack = this.dataState.cardBacks.find(
+			cardBack => cardBack.id === this._navigation.navigationCollection?.selectedCardBackId,
+		);
 		this.searchResults =
 			this._navigation.navigationCollection.searchResults?.length > 0
 				? this.dataState.allSets

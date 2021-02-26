@@ -5,9 +5,9 @@ import { InternalCardBack } from './internal-card-back';
 	selector: 'card-back',
 	styleUrls: [`../../../css/component/collection/card-back.component.scss`],
 	template: `
-		<li class="card-back" [ngClass]="{ 'missing': !cardBack.owned }" rotateOnMouseOver>
+		<div class="card-back" [ngClass]="{ 'missing': !cardBack.owned }" rotateOnMouseOver>
 			<img [src]="cardBack.image" />
-		</li>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

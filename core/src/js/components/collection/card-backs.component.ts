@@ -1,8 +1,19 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
+import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../../services/overwolf.service';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -17,11 +28,11 @@ import { InternalCardBack } from './internal-card-back';
 				></collection-owned-filter>
 			</div>
 			<ul class="cards-list" scrollable>
-				<!-- TODO: extract to own component -->
 				<card-back
 					class="card-back"
 					*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
 					[cardBack]="cardBack"
+					(click)="showFullCardBack(cardBack)"
 				>
 				</card-back>
 			</ul>
@@ -30,7 +41,7 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBacksComponent {
+export class CardBacksComponent implements AfterViewInit {
 	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
 
 	@Input() set cardBacks(cardBacks: readonly CardBack[]) {
@@ -47,11 +58,21 @@ export class CardBacksComponent {
 	shownCardBacks: readonly InternalCardBack[];
 	_navigation: NavigationCollection;
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
+
+	ngAfterViewInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
 
 	selectCardsOwnedFilter(option: IOption) {
 		this.cardsOwnedActiveFilter = option.value as any;
 		this.updateInfo();
+	}
+
+	showFullCardBack(cardBack: CardBack) {
+		this.stateUpdater.next(new ShowCardBackDetailsEvent(cardBack.id));
 	}
 
 	trackByCardId(card: CardBack, index: number) {
