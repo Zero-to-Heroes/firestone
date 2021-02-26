@@ -7,7 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { sortBy } from 'lodash';
+import { orderBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
@@ -45,7 +45,7 @@ export class CardBacksComponent implements AfterViewInit {
 	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
 
 	@Input() set cardBacks(cardBacks: readonly CardBack[]) {
-		this._cardBacks = sortBy(cardBacks, 'id');
+		this._cardBacks = orderBy(cardBacks, 'id', 'desc');
 		this.updateInfo();
 	}
 
