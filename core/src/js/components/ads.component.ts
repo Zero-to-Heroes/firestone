@@ -7,7 +7,6 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	Output,
 	ViewRef,
 } from '@angular/core';
 import { AdService } from '../services/ad.service';
@@ -17,7 +16,7 @@ import { OverwolfService } from '../services/overwolf.service';
 
 declare let adsReady: any;
 declare let OwAd: any;
-declare let amplitude: any;
+// declare let amplitude: any;
 
 @Component({
 	selector: 'ads',
@@ -133,7 +132,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 					this.adRef = new OwAd(document.getElementById('ad-div'));
 
 					this.impressionListener = async data => {
-						amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
+						// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
 						console.log('[ads] impression');
 					};
 					this.adRef.addEventListener('impression', this.impressionListener);
