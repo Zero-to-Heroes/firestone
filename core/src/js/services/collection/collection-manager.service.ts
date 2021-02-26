@@ -6,7 +6,7 @@ import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
 
-const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=1';
+const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=2';
 
 @Injectable()
 export class CollectionManager {
@@ -39,7 +39,9 @@ export class CollectionManager {
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
 		console.log('[collection-manager] getting reference card backs');
-		this.referenceCardBacks = this.referenceCardBacks ?? (await this.api.callGetApiWithRetries(CARD_BACKS_URL));
+		this.referenceCardBacks =
+			this.referenceCardBacks ?? (await this.api.callGetApiWithRetries(CARD_BACKS_URL)) ?? [];
+
 		console.log('[collection-manager] getting card backs');
 		const cardBacks = await this.memoryReading.getCardBacks();
 		//console.log('[collection-manager] retrieved card backs from MindVision', cardBacks);
@@ -50,7 +52,7 @@ export class CollectionManager {
 			return cardBacksFromDb;
 		} else {
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
-			//console.log('[collection-manager] updating card backs in db', merged);
+			// console.log('[collection-manager] updating card backs in db', merged);
 			const saved = await this.db.saveCardBacks(merged);
 			return saved;
 		}
