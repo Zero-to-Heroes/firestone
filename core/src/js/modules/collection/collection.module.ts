@@ -52,6 +52,7 @@ import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battle
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
 import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
+import { CardBacksComponent } from '../../components/collection/card-backs.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
 import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
@@ -61,6 +62,7 @@ import { CardsComponent } from '../../components/collection/cards.component';
 import { CollectionEmptyStateComponent } from '../../components/collection/collection-empty-state.component';
 import { CollectionMenuSelectionComponent } from '../../components/collection/collection-menu-selection.component';
 import { CollectionComponent } from '../../components/collection/collection.component';
+import { OwnedFilterComponent } from '../../components/collection/filters/owned-filter.component';
 import { FullCardComponent } from '../../components/collection/full-card.component';
 import { RarityComponent } from '../../components/collection/rarity.component';
 import { SetComponent } from '../../components/collection/set.component';
@@ -192,6 +194,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		SetComponent,
 		SetsComponent,
 		SetsContainer,
+		CardBacksComponent,
+		OwnedFilterComponent,
 
 		AchievementsComponent,
 		AchievementCompletionStepComponent,

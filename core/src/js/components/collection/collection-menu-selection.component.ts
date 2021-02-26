@@ -7,6 +7,7 @@ import {
 	Input,
 } from '@angular/core';
 import { CurrentView } from '../../models/mainwindow/collection/current-view.type';
+import { CollectionSelectCurrentTabEvent } from '../../services/mainwindow/store/events/collection/collection-select-current-tab-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -22,6 +23,9 @@ declare let amplitude;
 		<ul class="menu-selection">
 			<li [ngClass]="{ 'selected': selectedTab === 'sets' }" (mousedown)="selectTab('sets')">
 				<span>Sets</span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedTab === 'card-backs' }" (mousedown)="selectTab('card-backs')">
+				<span>Card Backs</span>
 			</li>
 		</ul>
 	`,
@@ -39,6 +43,6 @@ export class CollectionMenuSelectionComponent implements AfterViewInit {
 	}
 
 	selectTab(stage: CurrentView) {
-		// this.stateUpdater.next(new CollectionSelectCurrentTabEvent(stage));
+		this.stateUpdater.next(new CollectionSelectCurrentTabEvent(stage));
 	}
 }

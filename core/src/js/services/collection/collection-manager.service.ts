@@ -42,15 +42,15 @@ export class CollectionManager {
 		this.referenceCardBacks = this.referenceCardBacks ?? (await this.api.callGetApiWithRetries(CARD_BACKS_URL));
 		console.log('[collection-manager] getting card backs');
 		const cardBacks = await this.memoryReading.getCardBacks();
-		console.log('[collection-manager] retrieved card backs from MindVision');
+		//console.log('[collection-manager] retrieved card backs from MindVision', cardBacks);
 		if (!cardBacks || cardBacks.length === 0) {
 			console.log('[collection-manager] retrieving card backs from db');
 			const cardBacksFromDb = await this.db.getCardBacks();
 			console.log('[collection-manager] retrieved card backs from db', cardBacksFromDb.length);
 			return cardBacksFromDb;
 		} else {
-			console.log('[collection-manager] updating card backs in db');
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
+			//console.log('[collection-manager] updating card backs in db', merged);
 			const saved = await this.db.saveCardBacks(merged);
 			return saved;
 		}
@@ -58,10 +58,10 @@ export class CollectionManager {
 
 	private mergeCardBacksData(
 		referenceCardBacks: readonly CardBack[],
-		cardBacks: readonly CardBack[],
+		ownedCardBacks: readonly CardBack[],
 	): readonly CardBack[] {
 		return referenceCardBacks.map(cardBack => {
-			const owned = cardBacks.find(cb => cb.id === cardBack.id);
+			const owned = ownedCardBacks.find(cb => cb.id === cardBack.id);
 			return owned
 				? ({
 						...cardBack,

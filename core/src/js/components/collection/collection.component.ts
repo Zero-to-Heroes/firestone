@@ -50,6 +50,11 @@ import { SetsService } from '../../services/sets-service.service';
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-details'"
 						>
 						</full-card>
+						<card-backs
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-backs'"
+							[cardBacks]="dataState?.cardBacks"
+						>
+						</card-backs>
 					</div>
 				</with-loading>
 			</section>

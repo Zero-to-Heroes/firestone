@@ -50,6 +50,7 @@ import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegro
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
+import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
 import { CollectionSetsFilterEvent } from './events/collection/collection-sets-filter-event';
 import { LoadMoreCardHistoryEvent } from './events/collection/load-more-card-history-event';
 import { NewCardEvent } from './events/collection/new-card-event';
@@ -137,6 +138,7 @@ import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/batt
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
+import { CollectionSelectCurrentTabProcessor } from './processors/collection/collection-select-current-tab-processor';
 import { CollectionSetsFilterProcessor } from './processors/collection/collection-sets-filter-processor';
 import { LoadMoreCardHistoryProcessor } from './processors/collection/load-more-card-history-processor';
 import { NewCardProcessor } from './processors/collection/new-card-processor';
@@ -423,6 +425,9 @@ export class MainWindowStoreService {
 			// Collection
 			CollectionInitEvent.eventName(),
 			new CollectionInitProcessor(),
+
+			CollectionSelectCurrentTabEvent.eventName(),
+			new CollectionSelectCurrentTabProcessor(),
 
 			CollectionSetsFilterEvent.eventName(),
 			new CollectionSetsFilterProcessor(),

@@ -1,0 +1,4 @@
+// Colors are not properly aligned between all the themes
+::ng-deep filter-dropdown ng-select select-dropdown .below {
+	background: var(--color-5);
+}

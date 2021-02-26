@@ -2,3 +2,11 @@
 	display: flex;
 	height: 30px;
 }
+
+filter-dropdown {
+	width: 100%;
+
+	::ng-deep ng-select {
+		width: 100%;
+	}
+}
