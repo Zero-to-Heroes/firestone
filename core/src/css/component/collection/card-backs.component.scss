@@ -46,26 +46,12 @@
 		align-content: start;
 
 		.card-back {
-			margin-right: 15px;
-			margin-bottom: 15px;
+			margin-right: 0;
+			margin-bottom: 0;
 			position: relative;
 			transition: all 0.15s ease;
-			width: 125px;
-
-			img {
-				width: 100%;
-			}
-
-			&.hidden {
-				opacity: 0;
-				visibility: hidden;
-				width: 0;
-				margin: 0;
-			}
-
-			&.missing {
-				opacity: 0.5;
-			}
+			width: 140px;
+			padding: 10px;
 		}
 	}
 }

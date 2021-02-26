@@ -3,6 +3,7 @@ import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
+import { InternalCardBack } from './internal-card-back';
 
 @Component({
 	selector: 'card-backs',
@@ -16,13 +17,13 @@ import { NavigationCollection } from '../../models/mainwindow/navigation/navigat
 				></collection-owned-filter>
 			</div>
 			<ul class="cards-list" scrollable>
-				<li
+				<!-- TODO: extract to own component -->
+				<card-back
 					class="card-back"
 					*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
-					[ngClass]="{ 'missing': !cardBack.owned }"
+					[cardBack]="cardBack"
 				>
-					<img [src]="cardBack.image" />
-				</li>
+				</card-back>
 			</ul>
 			<!-- TODO: empty state -->
 		</div>
@@ -84,8 +85,4 @@ export class CardBacksComponent {
 				return (card: CardBack) => true;
 		}
 	}
-}
-
-interface InternalCardBack extends CardBack {
-	image: string;
 }

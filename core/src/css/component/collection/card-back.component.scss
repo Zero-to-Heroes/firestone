@@ -1,0 +1,9 @@
+.card-back {
+	img {
+		width: 100%;
+	}
+
+	&.missing {
+		opacity: 0.5;
+	}
+}

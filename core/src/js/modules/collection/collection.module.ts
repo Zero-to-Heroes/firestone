@@ -52,6 +52,7 @@ import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battle
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
 import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
+import { CardBackComponent } from '../../components/collection/card-back.component';
 import { CardBacksComponent } from '../../components/collection/card-backs.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
@@ -195,6 +196,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SetsComponent,
 		SetsContainer,
 		CardBacksComponent,
+		CardBackComponent,
 		OwnedFilterComponent,
 
 		AchievementsComponent,
