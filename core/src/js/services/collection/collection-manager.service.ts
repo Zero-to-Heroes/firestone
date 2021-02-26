@@ -41,7 +41,6 @@ export class CollectionManager {
 		console.log('[collection-manager] getting reference card backs');
 		this.referenceCardBacks =
 			this.referenceCardBacks ?? (await this.api.callGetApiWithRetries(CARD_BACKS_URL)) ?? [];
-
 		console.log('[collection-manager] getting card backs');
 		const cardBacks = await this.memoryReading.getCardBacks();
 		//console.log('[collection-manager] retrieved card backs from MindVision', cardBacks);

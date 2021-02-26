@@ -3,5 +3,5 @@ export interface CardBack {
 	readonly sortOrder: number;
 	readonly owned: boolean;
 	readonly name: string;
-	readonly description: string;
+	readonly text: string;
 }

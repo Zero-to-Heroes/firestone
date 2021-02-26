@@ -19,7 +19,7 @@ declare let amplitude;
 				<div class="card-back-details">
 					<div class="card-back-info description">
 						<!-- <span class="sub-title">Description:</span> -->
-						<span class="value">{{ _cardBack.description }}</span>
+						<span class="value">{{ _cardBack.text }}</span>
 					</div>
 				</div>
 			</div>
@@ -34,6 +34,7 @@ export class FullCardBackComponent {
 		if (!value) {
 			return;
 		}
+		console.debug('full-card(back(', value);
 		this._cardBack = {
 			...value,
 			image: `https://static.zerotoheroes.com/hearthstone/cardBacks/${value.id}.png`,
