@@ -34,11 +34,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 			>
 				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
 				<img *ngIf="image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
-				<div
+				<!-- <div
 					[hidden]="showPlaceholder"
 					class="overlay"
 					[ngStyle]="{ '-webkit-mask-image': overlayMaskImage }"
-				></div>
+				></div> -->
 			</div>
 
 			<div class="count" *ngIf="!showPlaceholder">
