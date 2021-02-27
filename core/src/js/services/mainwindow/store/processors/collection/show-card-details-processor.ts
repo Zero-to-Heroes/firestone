@@ -24,7 +24,11 @@ export class ShowCardDetailsProcessor implements Processor {
 			selectedSetId: selectedSet?.id,
 			selectedCardId: event.cardId,
 			selectedCardBackId: undefined,
-			selectedFormat: selectedSet ? (selectedSet.standard ? 'standard' : 'wild') : null,
+			selectedFormat: selectedSet
+				? selectedSet.standard
+					? 'standard'
+					: 'wild'
+				: navigationState.navigationCollection.selectedFormat,
 			searchString: undefined,
 		} as NavigationCollection);
 		return [

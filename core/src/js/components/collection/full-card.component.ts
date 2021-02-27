@@ -27,9 +27,13 @@ declare let amplitude;
 		`../../../css/component/collection/full-card.component.scss`,
 	],
 	template: `
-		<div class="card-details-container" [ngClass]="{ 'owned': card.owned, 'missing': !card.owned }" *ngIf="card">
+		<div
+			class="card-details-container"
+			[ngClass]="{ 'owned': card.owned, 'missing': !card.owned, 'hero': isHero }"
+			*ngIf="card"
+		>
 			<div class="card-view-container">
-				<card-view [card]="card" [tooltips]="false" [showCounts]="showCount" [highRes]="true">/</card-view>
+				<card-view [card]="card" [tooltips]="false" [showCounts]="showCount" [highRes]="!isHero">/</card-view>
 			</div>
 			<div class="details">
 				<h1>{{ card.name }}</h1>
@@ -42,7 +46,7 @@ declare let amplitude;
 						<span class="sub-title">Type:</span>
 						<span class="value">{{ type }}</span>
 					</div>
-					<div class="card-info set">
+					<div class="card-info set" *ngIf="set">
 						<span class="sub-title">Set:</span>
 						<span class="value">{{ set }}</span>
 					</div>
@@ -51,7 +55,7 @@ declare let amplitude;
 						<span class="value">{{ rarity }}</span>
 					</div>
 					<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
-						<span class="sub-title">Sound:</span>
+						<span class="sub-title">Sounds:</span>
 						<ul class="value">
 							<li class="sound" *ngFor="let sound of audioClips" (mousedown)="playSound(sound)">
 								<span class="label">{{ sound.name }}</span>
@@ -63,7 +67,7 @@ declare let amplitude;
 							</li>
 						</ul>
 					</div>
-					<div class="card-info flavor-text">
+					<div class="card-info flavor-text" *ngIf="flavor">
 						<span class="sub-title">Flavor Text:</span>
 						<span class="value" [innerHTML]="flavor"></span>
 					</div>
@@ -86,7 +90,7 @@ export class FullCardComponent implements AfterViewInit {
 	showCount: boolean;
 	flavor;
 
-	highRes: boolean;
+	isHero: boolean;
 
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips = [];
@@ -98,6 +102,8 @@ export class FullCardComponent implements AfterViewInit {
 		this.previousClips = this.audioClips || [];
 		this.audioClips = [];
 		const card = this.cards.getCard(selectedCard.id);
+		// Because the high res images we have for the heroes are a bit weird
+		this.isHero = card.type === 'Hero';
 		// console.log('setting full card', card, selectedCard);
 		if (card.audio) {
 			Object.keys(card.audio).forEach((key, index) => {
@@ -146,7 +152,6 @@ export class FullCardComponent implements AfterViewInit {
 
 	async ngAfterViewInit() {
 		const prefs: Preferences = await this.prefs.getPreferences();
-		this.highRes = prefs.collectionUseHighResImages;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -7,8 +7,15 @@
 	width: 100%;
 
 	.card-back {
-		width: 42vh;
-		padding: 5vh;
+		width: 45%;
+		padding: 5%;
+		padding-top: 3%;
+		flex-shrink: 0;
+		max-width: 400px;
+
+		::ng-deep .missing {
+			opacity: 1;
+		}
 	}
 
 	.details {
