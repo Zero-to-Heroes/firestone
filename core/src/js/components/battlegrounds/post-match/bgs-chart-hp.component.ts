@@ -274,7 +274,7 @@ export class BgsChartHpComponent {
 		}
 	}
 
-	@Input() tooltipSuffix: string = '';
+	@Input() tooltipSuffix = '';
 
 	constructor(
 		private readonly el: ElementRef,

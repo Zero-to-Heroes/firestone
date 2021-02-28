@@ -52,6 +52,19 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now track all the card backs you've unlocked (and the ones you're still missing).`,
+							},
+							{
+								type: 'feature',
+								text: `You can now track all the card backs hero skins you've unlocked (and the ones you're still missing).`,
+							},
+						],
+					},
 					// {
 					// 	category: 'achievements',
 					// 	details: [
@@ -91,6 +104,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `The simulator will now wait until the minion is created by Embrace Your Rage (Y'Shaarj's hero power) to compute the win chances.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'ui',
+								text: `Missing cards are now shown using a lower opacity, instead of the previous red filter.`,
 							},
 						],
 					},

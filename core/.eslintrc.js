@@ -46,5 +46,7 @@ module.exports = {
 			},
 		],
 		'@typescript-eslint/no-use-before-define': 0,
+		// Used at a single place, in utils.ts
+		'@typescript-eslint/no-this-alias': 0,
 	},
 };
