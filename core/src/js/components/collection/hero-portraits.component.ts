@@ -29,6 +29,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 					class="owned-filter"
 					(onOptionSelected)="selectCardsOwnedFilter($event)"
 				></collection-owned-filter>
+				<progress-bar class="progress-bar" [current]="unlocked" [total]="total"></progress-bar>
 			</div>
 			<ul class="cards-list" *ngIf="shownHeroPortraits?.length" scrollable>
 				<hero-portrait
@@ -60,6 +61,8 @@ export class HeroPortraitsComponent implements AfterViewInit {
 	_heroPortraits: readonly CollectionReferenceCard[];
 	shownHeroPortraits: readonly CollectionReferenceCard[];
 	_navigation: NavigationCollection;
+	unlocked: number;
+	total: number;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -86,6 +89,9 @@ export class HeroPortraitsComponent implements AfterViewInit {
 		if (!this._heroPortraits) {
 			return;
 		}
+
+		this.total = this._heroPortraits.length;
+		this.unlocked = this._heroPortraits.filter(item => item.numberOwned > 0).length;
 
 		this.shownHeroPortraits = this._heroPortraits.filter(this.filterCardsOwned());
 		if (!(this.cdr as ViewRef)?.destroyed) {

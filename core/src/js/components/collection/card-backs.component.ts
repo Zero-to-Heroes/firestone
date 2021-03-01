@@ -26,6 +26,7 @@ import { InternalCardBack } from './internal-card-back';
 					class="owned-filter"
 					(onOptionSelected)="selectCardsOwnedFilter($event)"
 				></collection-owned-filter>
+				<progress-bar class="progress-bar" [current]="unlocked" [total]="total"></progress-bar>
 			</div>
 			<ul class="cards-list" *ngIf="shownCardBacks?.length" scrollable>
 				<card-back
@@ -57,6 +58,8 @@ export class CardBacksComponent implements AfterViewInit {
 	_cardBacks: readonly CardBack[];
 	shownCardBacks: readonly InternalCardBack[];
 	_navigation: NavigationCollection;
+	unlocked: number;
+	total: number;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -83,6 +86,9 @@ export class CardBacksComponent implements AfterViewInit {
 		if (!this._cardBacks) {
 			return;
 		}
+
+		this.total = this._cardBacks.length;
+		this.unlocked = this._cardBacks.filter(item => item.owned).length;
 
 		this.shownCardBacks = this._cardBacks.filter(this.filterCardsOwned()).map(cardBack => ({
 			...cardBack,

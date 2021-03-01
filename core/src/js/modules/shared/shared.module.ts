@@ -63,6 +63,7 @@ import { HotkeyComponent } from '../../components/hotkey.component';
 import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { SecondaryDefaultComponent } from '../../components/main-window/secondary-default.component';
+import { ProgressBarComponent } from '../../components/progress-bar.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { ClipboardShareButtonComponent } from '../../components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
@@ -212,6 +213,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		FsFilterDropdownComponent,
 
 		StatCellComponent,
+		ProgressBarComponent,
 	],
 	entryComponents: [
 		HelpTooltipComponent,
@@ -318,6 +320,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		FsFilterDropdownComponent,
 
 		StatCellComponent,
+		ProgressBarComponent,
 	],
 	providers: [
 		{ provide: OverlayContainer, useClass: CdkOverlayContainer },

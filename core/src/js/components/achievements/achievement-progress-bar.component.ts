@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 
+/** @deprecated Use generic progress-bar component instead */
 @Component({
 	selector: 'achievement-progress-bar',
 	styleUrls: [`../../../css/component/achievements/achievement-progress-bar.component.scss`],
