@@ -20,7 +20,7 @@
 		"@firestone-hs/build-global-stats": "^1.0.4",
 		"@firestone-hs/coliseum-components": "0.0.8",
 		"@firestone-hs/compute-bgs-run-stats": "^1.0.13",
-		"@firestone-hs/hs-replay-xml-parser": "0.0.66",
+		"@firestone-hs/hs-replay-xml-parser": "0.0.70",
 		"@firestone-hs/reference-data": "^0.1.53",
 		"@firestone-hs/replay-parser": "^1.1.35",
 		"@firestone-hs/retrieve-duels-global-stats": "^1.0.7",

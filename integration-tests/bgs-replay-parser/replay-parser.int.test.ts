@@ -24,7 +24,7 @@ describe('BGS Replay-parser - basic test', () => {
 		const stats: BgsPostMatchStats = parseBattlegroundsGame(replayXml, BgsPlayer.create({} as BgsPlayer), [], []);
 
 		expect(stats).not.toBe(null);
-		console.debug(stats.tripleTimings);
+		console.debug(stats.totalEnemyMinionsKilled);
 	});
 });
 
