@@ -38,6 +38,7 @@ export class OwnedFilterComponent implements AfterViewInit {
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
+		this.cardsOwnedActiveFilter = option.value;
 		this.onOptionSelected.next(option);
 	}
 
