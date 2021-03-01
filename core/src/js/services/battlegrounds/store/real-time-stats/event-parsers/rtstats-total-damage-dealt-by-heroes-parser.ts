@@ -3,6 +3,7 @@ import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model
 import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../../models/game-event';
+import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
@@ -14,7 +15,7 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 	}
 
 	parse(
-		gameEvent: GameEvent,
+		gameEvent: DamageGameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const localPlayerId = gameEvent.localPlayer.PlayerId;
@@ -35,17 +36,25 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 		}
 
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
-			.map((target: any) => target.Damage)
-			.filter((target: any) => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+			.filter(target => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+			.map(target => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
+		if (damageDealt === 0) {
+			return currentState;
+		}
+
 		const existingDamageForTurn =
-			currentState.damageToEnemyHeroOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
+			currentState.damageToEnemyHeroOverTurn.find(info => info.turn === currentState.currentTurn)?.value?.value ??
+			0;
 		const newDamageForTurn = existingDamageForTurn + damageDealt;
 		const newDamageOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [
 			...currentState.damageToEnemyHeroOverTurn.filter(info => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
-				value: newDamageForTurn,
+				value: {
+					enemyHeroCardId: Object.values(gameEvent.additionalData.targets)[0]?.TargetCardId,
+					value: newDamageForTurn,
+				},
 			},
 		];
 		return currentState.update({

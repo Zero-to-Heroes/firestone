@@ -1,5 +1,6 @@
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
+import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { Requirement } from './_requirement';
 
 export class TotalDamageTakenReq implements Requirement {
@@ -28,16 +29,18 @@ export class TotalDamageTakenReq implements Requirement {
 
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.DAMAGE) {
-			this.handleDamageEvent(gameEvent);
+			this.handleDamageEvent(gameEvent as DamageGameEvent);
 		} else if (gameEvent.type === GameEvent.FATIGUE_DAMAGE) {
 			this.handleFatigueDamageEvent(gameEvent);
 		}
 	}
 
-	private handleDamageEvent(gameEvent: GameEvent) {
+	private handleDamageEvent(gameEvent: DamageGameEvent) {
 		const localPlayerCardId = gameEvent.localPlayer.CardID;
 		const localPlayerId = gameEvent.localPlayer.PlayerId;
-		const damageForLocalPlayer = gameEvent.additionalData.targets[localPlayerCardId];
+		const damageForLocalPlayer = Object.values(gameEvent.additionalData.targets).find(
+			target => target.TargetCardId === localPlayerCardId,
+		);
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
 		if (damageForLocalPlayer && damageForLocalPlayer.TargetControllerId === localPlayerId) {
 			this.totalDamageTaken += damageForLocalPlayer.Damage;

@@ -1,6 +1,7 @@
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { EventParser } from './event-parser';
 
 export class DamageTakenParser implements EventParser {
@@ -8,10 +9,10 @@ export class DamageTakenParser implements EventParser {
 		return state && gameEvent.type === GameEvent.DAMAGE;
 	}
 
-	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: DamageGameEvent): Promise<GameState> {
 		const localPlayerCardId = gameEvent.localPlayer.CardID;
 		const localPlayerId = gameEvent.localPlayer.PlayerId;
-		const damageForLocalPlayer = gameEvent.additionalData.targets[localPlayerCardId];
+		const damageForLocalPlayer = gameEvent.findTarget(localPlayerCardId);
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
 		const localPlayerDamage =
 			damageForLocalPlayer && damageForLocalPlayer.TargetControllerId === localPlayerId
@@ -20,7 +21,7 @@ export class DamageTakenParser implements EventParser {
 
 		const opponentPlayerCardId = gameEvent.opponentPlayer.CardID;
 		const opponentPlayerId = gameEvent.opponentPlayer.PlayerId;
-		const damageForOpponentPlayer = gameEvent.additionalData.targets[opponentPlayerCardId];
+		const damageForOpponentPlayer = gameEvent.findTarget(opponentPlayerCardId);
 		const opponentPlayerDamage =
 			damageForOpponentPlayer && damageForOpponentPlayer.TargetControllerId === opponentPlayerId
 				? damageForOpponentPlayer.Damage

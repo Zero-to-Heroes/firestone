@@ -4,6 +4,7 @@ import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
+import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
@@ -16,7 +17,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		return state && gameEvent.gameState && gameEvent.type === GameEvent.DAMAGE;
 	}
 
-	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+	async parse(currentState: GameState, gameEvent: DamageGameEvent): Promise<GameState> {
 		const [, , localPlayer] = gameEvent.parse();
 		const sourceControllerId = gameEvent.additionalData.sourceControllerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
@@ -28,7 +29,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			: gameEvent.gameState.Player.Hero.entityId;
 		const heroTarget = gameEvent.additionalData.targets
 			? Object.values(gameEvent.additionalData.targets).find(
-					(target: any) => target.TargetEntityId === enemyHeroEntityId,
+					target => target.TargetEntityId === enemyHeroEntityId,
 			  )
 			: null;
 

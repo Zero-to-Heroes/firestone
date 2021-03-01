@@ -43,6 +43,7 @@ export class ShowMatchStatsProcessor implements Processor {
 							displayedCardId: playerCardId,
 							tavernUpgradeHistory: matchStats?.tavernTimings || [],
 							boardHistory: mappedBoardInfo as readonly BgsBoard[],
+							highestWinStreak: matchStats.highestWinStreak,
 					  } as BgsPlayer)
 					: null,
 				selectedStats: null, // We use the navigation-level info, to avoid

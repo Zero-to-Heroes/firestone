@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
+import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
 import { MemoryUpdate } from '../models/memory-update';
 import { SceneMode } from '../models/scenes';
 import { DeckParserService } from './decktracker/deck-parser.service';
@@ -754,8 +755,9 @@ export class GameEvents {
 				);
 				break;
 			case 'DAMAGE':
+				//console.debug('processing DAMAGE event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
-					Object.assign(new GameEvent(), {
+					Object.assign(new DamageGameEvent(), {
 						type: GameEvent.DAMAGE,
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
@@ -765,7 +767,7 @@ export class GameEvents {
 							sourceControllerId: gameEvent.Value.SourceControllerId,
 							targets: gameEvent.Value.Targets,
 						},
-					} as GameEvent),
+					} as DamageGameEvent),
 				);
 				break;
 			case 'HEALING':

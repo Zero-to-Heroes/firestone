@@ -22,6 +22,7 @@ import { UserService } from '../user.service';
 import { sleep } from '../utils';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
+import { RealTimeStatsState } from './store/real-time-stats/real-time-stats';
 
 const BGS_UPLOAD_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const BGS_RETRIEVE_RUN_STATS_ENDPOINT = ' https://pbd6q0rx4h.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
@@ -99,7 +100,7 @@ export class BgsRunStatsService {
 		const newMmr = parseInt(game.newPlayerRank);
 		const liveStats = currentGame.liveStats;
 
-		console.log('[bgs-run-stats] starting to compute run stats');
+		//console.log('[bgs-run-stats] starting to compute run stats', liveStats);
 		const user = await this.userService.getCurrentUser();
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
@@ -115,28 +116,15 @@ export class BgsRunStatsService {
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: isNaN(newMmr) ? null : newMmr,
 		};
-		console.log('[bgs-run-stats] computing post-match stats input', input);
+		//console.debug('[bgs-run-stats] computing post-match stats input', input, liveStats);
 
 		const [postMatchStats, newBestValues] = this.populateObject(liveStats, input, bestBgsUserStats || []);
-
-		// const prefs = await this.prefs.getPreferences();
-
-		// const [postMatchStats, newBestValues] = this.populateObject(
-		// 	prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle
-		// 		? await this.buildStatsLocally(currentGame, game.uncompressedXmlReplay)
-		// 		: await this.buildStatsRemotely(input),
-		// 	input,
-		// 	bestBgsUserStats || [],
-		// );
 		console.log('[bgs-run-stats] newBestVaues');
 
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
-		// if (prefs.bgsUseLocalPostMatchStats && prefs.bgsEnableApp && prefs.bgsFullToggle) {
-		// console.log('posting to endpoint');
 		this.buildStatsRemotely(input);
-		// }
-		console.log('[bgs-run-stats] postMatchStats built');
+		//console.debug('[bgs-run-stats] postMatchStats built', postMatchStats);
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
@@ -154,43 +142,27 @@ export class BgsRunStatsService {
 		}
 	}
 
-	// private async buildStatsLocally(currentGame: BgsGame, replayXml: string): Promise<IBgsPostMatchStats> {
-	// 	return new Promise<IBgsPostMatchStats>(resolve => {
-	// 		// const worker = new Worker();
-	// 		this.worker.onmessage = (ev: MessageEvent) => {
-	// 			// console.log('received worker message', ev);
-	// 			let resultData: IBgsPostMatchStats = JSON.parse(ev.data);
-	// 			resolve(resultData);
-	// 			resultData = null;
-	// 			// worker.terminate();
-	// 		};
-
-	// 		const input = {
-	// 			replayXml: replayXml,
-	// 			mainPlayer: currentGame.getMainPlayer(),
-	// 			battleResultHistory: currentGame.battleResultHistory,
-	// 			faceOffs: currentGame.faceOffs,
-	// 		};
-	// 		console.log('[bgs-run-stats] created worker');
-	// 		this.worker.postMessage(input);
-	// 		console.log('[bgs-run-stats] posted worker message');
-	// 	});
-	// }
-
+	// TODO: damage dealt / taken by minions (seems lower in live stats, but not sure there is a pattern)
+	// minions sold (fewer in live stats)
+	// enemy minions killed (fewer in live stats)
+	// battle luck
 	private populateObject(
-		data: IBgsPostMatchStats,
+		realTimeStatsState: RealTimeStatsState,
 		input: BgsComputeRunStatsInput,
 		existingBestStats: readonly BgsBestStat[],
 	): [BgsPostMatchStats, readonly BgsBestStat[]] {
 		const result: BgsPostMatchStats = BgsPostMatchStats.create({
-			...data,
-			// We do this because the immutable maps are all messed up when going back and forth
+			...realTimeStatsState,
 			boardHistory: input.mainPlayer?.boardHistory || [],
+			tripleTimings:
+				input.mainPlayer && realTimeStatsState.triplesPerHero[input.mainPlayer.cardId]
+					? new Array(realTimeStatsState.triplesPerHero[input.mainPlayer.cardId])
+					: [],
 		});
-		//console.log('computing new best stats', data, input, existingBestStats);
+		//console.debug('computing new best stats', realTimeStatsState, input, existingBestStats, result);
 		const newBestStats = buildNewStats(
 			existingBestStats,
-			data,
+			realTimeStatsState,
 			({
 				mainPlayer: input.mainPlayer,
 				reviewId: input.reviewId,

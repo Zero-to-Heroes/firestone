@@ -16,6 +16,7 @@ export class BgsPostMatchStats implements IBgsPostMatchStats {
 	readonly tavernTimings: readonly BgsTavernUpgrade[];
 	readonly tripleTimings: readonly BgsTriple[];
 	readonly rerolls: number;
+	readonly highestWinStreak: number;
 
 	readonly replayLink: string;
 

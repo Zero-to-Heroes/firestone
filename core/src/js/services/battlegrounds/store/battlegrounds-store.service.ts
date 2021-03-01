@@ -4,6 +4,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
+import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 import { Events } from '../../events.service';
@@ -247,8 +248,9 @@ export class BattlegroundsStoreService {
 				gameEvent.additionalData.targets &&
 				Object.keys(gameEvent.additionalData.targets).length === 1
 			) {
-				const playerCardId = Object.keys(gameEvent.additionalData.targets)[0];
-				const damage = gameEvent.additionalData.targets[playerCardId].Damage;
+				const targetValues = Object.values((gameEvent as DamageGameEvent).additionalData.targets);
+				const playerCardId = targetValues[0].TargetCardId;
+				const damage = targetValues.find(target => target.TargetCardId === playerCardId)?.Damage;
 				this.battlegroundsUpdater.next(new BgsDamageDealtEvent(playerCardId, damage));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.handleEventOnlyAfterTrigger(

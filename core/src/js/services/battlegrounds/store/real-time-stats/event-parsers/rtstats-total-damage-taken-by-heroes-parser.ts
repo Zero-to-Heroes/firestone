@@ -1,5 +1,6 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../../models/game-event';
+import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
@@ -13,7 +14,7 @@ export class RTStatsTotalDamageTakenByHeroesParser implements EventParser {
 
 	// Will be used sometimes for constructed maybe?
 	parse(
-		gameEvent: GameEvent,
+		gameEvent: DamageGameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		return currentState;

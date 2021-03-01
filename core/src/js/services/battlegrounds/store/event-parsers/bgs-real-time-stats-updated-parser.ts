@@ -7,6 +7,7 @@ import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/b
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsRealTimeStatsUpdatedEvent } from '../events/bgs-real-time-stats-updated-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
+import { RealTimeStatsState } from '../real-time-stats/real-time-stats';
 import { EventParser } from './_event-parser';
 
 export class BgsRealTimeStatsUpdatedParser implements EventParser {
@@ -21,21 +22,9 @@ export class BgsRealTimeStatsUpdatedParser implements EventParser {
 		const postMatchStage: BgsPostMatchStage = currentState.stages.find(
 			stage => stage.id === 'post-match',
 		) as BgsPostMatchStage;
-		const mainPlayer = currentState.currentGame.getMainPlayer();
 		const panels: readonly BgsPanel[] = postMatchStage.panels.map(panel =>
 			panel.id === 'bgs-post-match-stats'
-				? (panel as BgsPostMatchStatsPanel).update({
-						stats: {
-							...event.realTimeStatsState,
-							tripleTimings:
-								mainPlayer && event.realTimeStatsState.triplesPerHero[mainPlayer.cardId]
-									? new Array(event.realTimeStatsState.triplesPerHero[mainPlayer.cardId])
-									: [],
-						} as IBgsPostMatchStats,
-						// isComputing: false,
-						player: mainPlayer,
-						name: `Live stats - Turn ${currentState.currentGame.currentTurn}`,
-				  } as BgsPostMatchStatsPanel)
+				? this.updatePostMatch(panel, currentState, event.realTimeStatsState)
 				: panel,
 		);
 		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
@@ -52,5 +41,25 @@ export class BgsRealTimeStatsUpdatedParser implements EventParser {
 			stages: stages,
 			currentGame: newGame,
 		} as BattlegroundsState);
+	}
+
+	private updatePostMatch(
+		panel: BgsPanel,
+		currentState: BattlegroundsState,
+		realTimeStatsState: RealTimeStatsState,
+	): BgsPostMatchStatsPanel {
+		const mainPlayer = currentState.currentGame.getMainPlayer();
+		const triples =
+			mainPlayer && realTimeStatsState.triplesPerHero[mainPlayer.cardId]
+				? new Array(realTimeStatsState.triplesPerHero[mainPlayer.cardId])
+				: [];
+		return (panel as BgsPostMatchStatsPanel).update({
+			stats: {
+				...realTimeStatsState,
+				tripleTimings: triples,
+			} as IBgsPostMatchStats,
+			player: mainPlayer,
+			name: `Live stats - Turn ${currentState.currentGame.currentTurn}`,
+		} as BgsPostMatchStatsPanel);
 	}
 }

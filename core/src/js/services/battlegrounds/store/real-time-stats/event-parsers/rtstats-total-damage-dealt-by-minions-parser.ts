@@ -1,5 +1,6 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../../models/game-event';
+import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
@@ -11,7 +12,7 @@ export class RTStatsTotalDamageDealtByMinionsParser implements EventParser {
 	}
 
 	parse(
-		gameEvent: GameEvent,
+		gameEvent: DamageGameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const localPlayerId = gameEvent.localPlayer.PlayerId;
@@ -32,7 +33,7 @@ export class RTStatsTotalDamageDealtByMinionsParser implements EventParser {
 		}
 
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
-			.map((target: any) => target.Damage)
+			.map(target => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
 		const existingDamageForMinion = currentState.totalMinionsDamageDealt[sourceCardId] ?? 0;
 		const newTotalMinionsDamageDealt = {

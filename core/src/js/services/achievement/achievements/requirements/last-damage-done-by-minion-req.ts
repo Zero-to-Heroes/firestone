@@ -1,5 +1,6 @@
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
+import { DamageGameEvent } from '../../../../models/mainwindow/game-events/damage-game-event';
 import { Requirement } from './_requirement';
 
 export class LastDamageDoneByMinionReq implements Requirement {
@@ -28,14 +29,16 @@ export class LastDamageDoneByMinionReq implements Requirement {
 
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.DAMAGE) {
-			this.handleDamageEvent(gameEvent);
+			this.handleDamageEvent(gameEvent as DamageGameEvent);
 		}
 	}
 
-	private handleDamageEvent(gameEvent: GameEvent) {
+	private handleDamageEvent(gameEvent: DamageGameEvent) {
 		const opponentPlayerCardId = gameEvent.opponentPlayer.CardID;
 		const opponentPlayerId = gameEvent.opponentPlayer.PlayerId;
-		const damageForOpponentPlayer = gameEvent.additionalData.targets[opponentPlayerCardId];
+		const damageForOpponentPlayer = Object.values(gameEvent.additionalData.targets).find(
+			target => target.TargetCardId === opponentPlayerCardId,
+		);
 		// We check that the cardID is indeed the opponent's cardId, in case of mirror matches for instance
 		if (damageForOpponentPlayer && damageForOpponentPlayer.TargetControllerId === opponentPlayerId) {
 			this.lastMinionThatDamagedOpponent = gameEvent.additionalData.sourceCardId;

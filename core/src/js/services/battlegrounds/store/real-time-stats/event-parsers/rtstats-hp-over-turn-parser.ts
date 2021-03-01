@@ -2,6 +2,7 @@ import { NumericTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/mod
 import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../../models/game-event';
+import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { defaultStartingHp } from '../../../../hs-utils';
 import { normalizeHeroCardId } from '../../../bgs-utils';
 import { RealTimeStatsState } from '../real-time-stats';
@@ -15,14 +16,14 @@ export class RTStatHpOverTurnParser implements EventParser {
 	}
 
 	parse(
-		gameEvent: GameEvent,
+		gameEvent: DamageGameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const targets = Object.keys(gameEvent.additionalData.targets)
-			.filter(cardId => this.allCards.getCard(cardId)?.type === 'Hero')
-			.map(cardId => ({
-				hero: normalizeHeroCardId(cardId),
-				value: gameEvent.additionalData.targets[cardId].Damage,
+		const targets = Object.values(gameEvent.additionalData.targets)
+			.filter(target => this.allCards.getCard(target.TargetCardId)?.type === 'Hero')
+			.map(target => ({
+				hero: normalizeHeroCardId(target.TargetCardId),
+				value: target.Damage,
 			}));
 		if (!targets?.length) {
 			return currentState;
