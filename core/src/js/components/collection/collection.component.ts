@@ -134,6 +134,11 @@ export class CollectionComponent {
 				.find(card => card.id === this._navigation.navigationCollection?.selectedCardId) ??
 			// This is the case when it's not a collectible card for instance
 			this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId);
+		// console.debug(
+		// 	'selected card',
+		// 	this.selectedCard,
+		// 	this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId),
+		// );
 		this.selectedCardBack = this.dataState.cardBacks.find(
 			cardBack => cardBack.id === this._navigation.navigationCollection?.selectedCardBackId,
 		);

@@ -10,17 +10,17 @@
 	.details {
 		// width: 413px;
 		flex-grow: 1;
-		padding-right: 55px;
 		padding-top: 41px;
 		display: flex;
 		flex-direction: column;
+		min-width: 0;
 
 		h1 {
 			@extend %card-title;
 			padding-bottom: 14px;
 			border-bottom: 1px solid $yellow03;
 			margin-bottom: 20px;
-			// width: 265px;
+			margin-right: 55px;
 		}
 
 		.card-details {
@@ -37,25 +37,38 @@
 			}
 
 			&.audio {
+				margin-top: 40px;
 				flex-direction: column;
 
-				.label {
-					text-transform: capitalize;
+				.sub-title {
+					@extend %card-title;
+					border-bottom: 1px solid $yellow03;
+					margin-bottom: 20px;
+					padding-bottom: 9px;
+					font-size: 16px;
+					margin-right: 55px;
 				}
 
-				ul {
-					list-style: none;
+				.audio-category {
 					display: flex;
 					flex-direction: column;
+					list-style: none;
+					margin-bottom: 15px;
 
-					li {
+					.audio-category-title {
+						margin-bottom: 5px;
+					}
+
+					.sound {
 						display: flex;
 						align-items: center;
 						margin-right: 11px;
 						padding-right: 11px;
+						margin-left: 10px;
 
 						span {
 							margin-right: 6px;
+							margin-left: 6px;
 						}
 
 						&:hover {
@@ -67,16 +80,10 @@
 							}
 						}
 					}
+				}
 
-					li:last-child {
-						border: none;
-						padding-right: 0;
-						margin-right: 0;
-					}
-
-					li:nth-child(4) {
-						margin-left: 0;
-					}
+				.label {
+					text-transform: capitalize;
 				}
 			}
 
