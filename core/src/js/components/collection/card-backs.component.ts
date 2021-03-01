@@ -27,7 +27,7 @@ import { InternalCardBack } from './internal-card-back';
 					(onOptionSelected)="selectCardsOwnedFilter($event)"
 				></collection-owned-filter>
 			</div>
-			<ul class="cards-list" scrollable>
+			<ul class="cards-list" *ngIf="shownCardBacks?.length" scrollable>
 				<card-back
 					class="card-back"
 					*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
@@ -36,7 +36,7 @@ import { InternalCardBack } from './internal-card-back';
 				>
 				</card-back>
 			</ul>
-			<!-- TODO: empty state -->
+			<collection-empty-state *ngIf="!shownCardBacks?.length"> </collection-empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

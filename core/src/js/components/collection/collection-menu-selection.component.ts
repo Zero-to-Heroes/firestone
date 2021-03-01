@@ -22,7 +22,7 @@ declare let amplitude;
 	template: `
 		<ul class="menu-selection">
 			<li [ngClass]="{ 'selected': selectedTab === 'sets' }" (mousedown)="selectTab('sets')">
-				<span>Sets</span>
+				<span>Cards</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedTab === 'card-backs' }" (mousedown)="selectTab('card-backs')">
 				<span>Card Backs</span>

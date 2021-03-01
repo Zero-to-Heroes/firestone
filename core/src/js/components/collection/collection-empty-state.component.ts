@@ -53,6 +53,17 @@ import { Set } from '../../models/set';
 					<span class="subtitle">Don't give up - check the spelling or try less specific terms.</span>
 				</div>
 			</section>
+			<section class="empty-state no-search-result" *ngSwitchCase="DEFAULT">
+				<div class="state-container">
+					<i class="i-236X165 pale-pink-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#No_result_illustration" />
+						</svg>
+					</i>
+					<span class="title">Nothing to show here</span>
+					<span class="subtitle">Please start Hearthstone to synchronize the collection.</span>
+				</div>
+			</section>
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,6 +73,7 @@ export class CollectionEmptyStateComponent {
 	readonly NO_CARD_IN_SET = 'no-card-in-set';
 	readonly NO_GOLDEN_IN_SET = 'no-golden-in-set';
 	readonly NO_SEARCH_RESULT = 'no-search-result';
+	readonly DEFAULT = 'default';
 
 	// TODO: duplicate from CardsComponent, not good
 	readonly FILTER_OWN = 'own';
@@ -69,7 +81,7 @@ export class CollectionEmptyStateComponent {
 	readonly FILTER_DONT_OWN = 'dontown';
 	readonly FILTER_ALL = 'all';
 
-	sectionSelector: string;
+	sectionSelector: string = this.DEFAULT;
 
 	_set: Set;
 	_activeFilter: string;

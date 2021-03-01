@@ -30,7 +30,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 					(onOptionSelected)="selectCardsOwnedFilter($event)"
 				></collection-owned-filter>
 			</div>
-			<ul class="cards-list" scrollable>
+			<ul class="cards-list" *ngIf="shownHeroPortraits?.length" scrollable>
 				<hero-portrait
 					class="hero-portrait"
 					*ngFor="let heroPortrait of shownHeroPortraits; let i = index; trackBy: trackByCardId"
@@ -39,7 +39,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				>
 				</hero-portrait>
 			</ul>
-			<!-- TODO: empty state -->
+			<collection-empty-state *ngIf="!shownHeroPortraits?.length"> </collection-empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
