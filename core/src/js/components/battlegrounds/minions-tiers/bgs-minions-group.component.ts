@@ -139,15 +139,32 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		this.title = this.buildTitle(this._group.tribe);
 		this.highlighted =
 			this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
-		this.minions = this._group.minions.map(minion => {
-			const card = this.allCards.getCard(minion.id);
-			return {
-				cardId: minion.id,
-				image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
-				name: card.name,
-				highlighted: this._group.highlightedMinions.includes(minion.id),
-			};
-		});
+		this.minions = this._group.minions
+			.map(minion => {
+				const card = this.allCards.getCard(minion.id);
+				return {
+					cardId: minion.id,
+					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
+					name: card.name,
+					highlighted: this._group.highlightedMinions.includes(minion.id),
+				};
+			})
+			.sort((a, b) => {
+				if (a.name?.toLowerCase() < b.name?.toLowerCase()) {
+					return -1;
+				}
+				if (a.name?.toLowerCase() > b.name?.toLowerCase()) {
+					return -1;
+				}
+				// To keep sorting consistent
+				if (a.cardId < b.cardId) {
+					return -1;
+				}
+				if (a.cardId > b.cardId) {
+					return -1;
+				}
+				return 1;
+			});
 	}
 
 	private buildTitle(tribe: Race): string {
