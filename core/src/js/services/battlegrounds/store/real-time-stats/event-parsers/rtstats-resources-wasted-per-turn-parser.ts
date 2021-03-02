@@ -18,7 +18,7 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
-		if (controllerId !== localPlayer.PlayerId) {
+		if (controllerId !== localPlayer?.PlayerId) {
 			return currentState;
 		}
 
