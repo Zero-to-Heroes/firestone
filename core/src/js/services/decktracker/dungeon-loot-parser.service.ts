@@ -167,6 +167,7 @@ export class DungeonLootParserService {
 			return;
 		}
 
+		// Don't do it before the rewards, otherwise it might bring a heavy toll on the CPU
 		this.duelsInfo = this.duelsInfo || (await this.memory.getDuelsInfo(false, 5)) || ({} as any);
 		this.updateCurrentDuelsInfo(this.duelsInfo);
 
@@ -371,9 +372,14 @@ export class DungeonLootParserService {
 
 		if (this.duelsInfo?.Wins === 0 && this.duelsInfo?.Losses === 0) {
 			this.log('not sending info in the first game, as data might be from the previous run');
+			this.currentDuelsLosses = 0;
+			this.currentDuelsWins = 0;
+			this.currentDuelsHeroPowerCardDbfId = undefined;
+			this.currentDuelsSignatureTreasureCardId = undefined;
 			return;
 		}
 
+		// No need to set it first, as it might contain some outdated info from the previous run
 		this.updateCurrentDuelsInfo(this.duelsInfo);
 
 		const user = await this.ow.getCurrentUser();
@@ -418,6 +424,13 @@ export class DungeonLootParserService {
 		this.currentDuelsSignatureTreasureCardId = this.findSignatureTreasure(duelsInfo.DeckList || []);
 		this.currentDuelsWins = duelsInfo.Wins;
 		this.currentDuelsLosses = duelsInfo.Losses;
+		this.log(
+			'updated current duels info',
+			this.currentDuelsWins,
+			this.currentDuelsLosses,
+			this.currentDuelsHeroPowerCardDbfId,
+			this.currentDuelsSignatureTreasureCardId,
+		);
 	}
 
 	private findSignatureTreasure(deckList: readonly number[]): string {
