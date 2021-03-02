@@ -276,20 +276,24 @@ export class DeckParserService {
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
 			const isLastSectionDeckSelectLine =
-				lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
-				lines[lines.length - 4].indexOf('Duel Deck') !== -1 ||
-				lines[lines.length - 3].indexOf('Duel Deck') !== -1;
-			console.log('isLastSectionDeckSelectLine', isLastSectionDeckSelectLine);
+				lines[lines.length - 4].indexOf('Finding Game With Hero:') !== -1 ||
+				lines[lines.length - 4].indexOf('Duels Deck') !== -1 ||
+				lines[lines.length - 3].indexOf('Duels Deck') !== -1;
+			console.debug('[deck-parser] isLastSectionDeckSelectLine', isLastSectionDeckSelectLine, lines);
 			if (!isLastSectionDeckSelectLine) {
 				return;
 			}
 			// deck name
 			this.parseActiveDeck(
-				lines[lines.length - 4].indexOf('Duel Deck') !== -1 ? lines[lines.length - 4] : lines[lines.length - 3],
+				lines[lines.length - 4].indexOf('Duels Deck') !== -1
+					? lines[lines.length - 4]
+					: lines[lines.length - 3],
 			);
 			// deckstring
 			this.parseActiveDeck(
-				lines[lines.length - 4].indexOf('Duel Deck') !== -1 ? lines[lines.length - 2] : lines[lines.length - 1],
+				lines[lines.length - 4].indexOf('Duels Deck') !== -1
+					? lines[lines.length - 2]
+					: lines[lines.length - 1],
 			);
 			console.log('[deck-parser] finished reading previous deck from logs');
 		}
@@ -319,7 +323,11 @@ export class DeckParserService {
 			console.log('[deck-parser] finished editing deck');
 			return;
 		}
-		if (data.indexOf('Finding Game With Deck') !== -1 || data.indexOf('Duel deck') !== -1) {
+		if (
+			data.indexOf('Finding Game With Deck') !== -1 ||
+			data.indexOf('Finding Game With Hero') !== -1 ||
+			data.indexOf('Duels deck') !== -1
+		) {
 			this.lastDeckTimestamp = Date.now();
 			this.currentBlock = 'DECK_SELECTED';
 			console.log('[deck-parser] found deck selection block');
