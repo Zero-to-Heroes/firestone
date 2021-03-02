@@ -1,6 +1,6 @@
 export const replayXmlTest = `
 <?xml version="1.0" encoding="utf-8"?>
-<HSReplay xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<HSReplay xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" build="43246" version="1.0">
   <Game ts="21:26:24.485974" buildNumber="74257" type="0" gameType="23" formatType="1" scenarioID="3459">
     <GameEntity ts="24:00:00.000000" id="4">
       <Tag tag="202" value="1" />
@@ -53026,6 +53026,7 @@ export const replayXmlTest = `
     <Block ts="21:45:48.439218" entity="47" index="0" effectIndex="8" type="5" subOption="-1" triggerKeyword="1" />
     <Block ts="21:45:48.439218" entity="47" index="0" effectIndex="15" type="5" subOption="-1" triggerKeyword="1" />
     <Block ts="21:45:48.439218" entity="47" index="0" effectIndex="17" type="5" subOption="-1" triggerKeyword="1" />
+    <TagChange ts="21:45:48.439218" entity="4" tag="204" value="3" defChange="" />
   </Game>
 </HSReplay>
 `;

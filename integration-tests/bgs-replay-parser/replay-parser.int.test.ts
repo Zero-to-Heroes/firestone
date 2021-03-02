@@ -23,8 +23,12 @@ describe('BGS Replay-parser - basic test', () => {
 		// Here it's serialized, so we lose the methods and only keey the data
 		const stats: BgsPostMatchStats = parseBattlegroundsGame(replayXml, BgsPlayer.create({} as BgsPlayer), [], []);
 
+		// TODO: ti's likely that non-direct damage, like Wildfire Elemental, is not shown as a damage event
+		// in the live stats, hence undercounting some damage
 		expect(stats).not.toBe(null);
-		console.debug(stats.totalEnemyMinionsKilled);
+		console.debug(stats.totalMinionsDamageTaken);
+		// console.debug(Object.values(stats.totalMinionsDamageDealt).reduce((a, b) => a + b, 0));
+		console.debug(Object.values(stats.totalMinionsDamageTaken).reduce((a, b) => a + b, 0));
 	});
 });
 
