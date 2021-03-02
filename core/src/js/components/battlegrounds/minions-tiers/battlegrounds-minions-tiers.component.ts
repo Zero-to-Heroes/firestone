@@ -61,18 +61,12 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 				<bgs-minions-list
 					*ngIf="displayedTier || lockedTier"
 					[cards]="(displayedTier || lockedTier).cards"
+					[showTribesHighlight]="showTribesHighlight"
 					[highlightedMinions]="highlightedMinions"
 					[highlightedTribes]="highlightedTribes"
 					[tooltipPosition]="tooltipPosition"
 				></bgs-minions-list>
 			</div>
-			<tribes-highlight
-				class="tribe-highlight"
-				*ngIf="showTribesHighlight"
-				[cards]="cardsInGame"
-				[highlightedTribes]="highlightedTribes"
-			>
-			</tribes-highlight>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -120,7 +114,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			if (!newState) {
 				return;
 			}
-			//console.log('got state', newState);
+			console.log('got state', newState);
 			await this.allCards.initializeCardsDb();
 
 			if (
@@ -131,7 +125,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 				this.previousAvailableRaces = newState.currentGame.availableRaces;
 			}
 			//console.log('available cards', this.cardsInGame);
-			this.tiers = this.buildTiers(newState);
+			this.tiers = this.buildTiers();
 			this.highlightedTribes = newState.highlightedTribes;
 			this.highlightedMinions = newState.highlightedMinions;
 			this.currentTurn = newState.currentGame?.currentTurn;
@@ -140,6 +134,10 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 				this.cdr.detectChanges();
 			}
 		});
+		// console.error('debug: remove static init');
+		// await this.allCards.initializeCardsDb();
+		// this.cardsInGame = getAllCardsInGame([Race.DEMON, Race.DRAGON], this.allCards);
+		// this.tiers = this.buildTiers();
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
@@ -236,7 +234,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.cardsInGame = getAllCardsInGame(state.currentGame.availableRaces, this.allCards);
 	}
 
-	private buildTiers(state: BattlegroundsState): readonly Tier[] {
+	private buildTiers(): readonly Tier[] {
 		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
 			(card: ReferenceCard) => '' + card.techLevel,
 		)(this.cardsInGame);

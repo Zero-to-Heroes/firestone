@@ -18,6 +18,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
+import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -48,6 +49,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 						class="tavern-minion"
 						*ngFor="let minion of minions; let i = index; trackBy: trackByMinion"
 						[minion]="minion"
+						[showTribesHighlight]="showTribesHighlight"
 						[highlightedTribes]="highlightedTribes"
 						[highlightedMinions]="highlightedMinions"
 					></bgs-tavern-minion>
@@ -72,6 +74,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 	highlightedTribes: readonly Race[];
 	highlightedMinions: readonly string[];
 	showLastOpponentIcon: boolean;
+	showTribesHighlight: boolean;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
@@ -168,6 +171,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 
 	private setDisplayPreferences(preferences: Preferences) {
 		this.showLastOpponentIcon = preferences.bgsShowLastOpponentIconInOverlay;
+		this.showTribesHighlight = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT && preferences.bgsShowTribesHighlight;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

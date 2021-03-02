@@ -1,0 +1,6 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <circle cx="8" cy="8" r="7.5" fill="var(--icon-secondary-color, currentcolor)" stroke="var(--icon-color, currentcolor)"/>
+    <path d="M13.09 7.99893C13.09 7.99893 10.8107 10.908 7.99911 10.908C5.18748 10.908 2.9082 7.99893 2.9082 7.99893C2.9082 7.99893 5.18748 5.08984 7.99911 5.08984C10.8107 5.08984 13.09 7.99893 13.09 7.99893Z" fill="var(--icon-color, currentcolor)"/>
+    <circle cx="8.00018" cy="8.00213" r="2.18182" fill="var(--icon-secondary-color, currentcolor)"/>
+</svg>

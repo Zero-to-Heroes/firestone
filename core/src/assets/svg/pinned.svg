@@ -1,0 +1,5 @@
+<svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+    xmlns="http://www.w3.org/2000/svg">
+    <circle cx="8" cy="8" r="7.5" fill="#1E0116" stroke="var(--icon-color, currentcolor)"/>
+    <path d="M10.4218 5.73433L10.4216 5.73467L8.67184 8.2454L8.4896 8.0638L7.7376 7.3144L10.2474 5.5772C10.2477 5.57703 10.2479 5.57686 10.2482 5.57669C10.2969 5.54305 10.3452 5.50889 10.3913 5.47544L10.517 5.6007C10.4854 5.64402 10.4534 5.6891 10.4218 5.73433Z" fill="var(--icon-secondary-color, currentcolor)" stroke="var(--icon-color, currentcolor)" stroke-width="3"/>
+</svg>

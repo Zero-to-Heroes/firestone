@@ -12,16 +12,9 @@
 
 	.highlight {
 		position: absolute;
-		width: 90%;
-		bottom: 0vh;
-		height: 2vh;
-		display: none;
-		background: green;
-	}
-
-	&.highlighted {
-		.highlight {
-			display: block;
-		}
+		width: 30px;
+		height: 30px;
+		--icon-color: var(--default-title-color);
+		--icon-secondary-color: var(--color-7);
 	}
 }

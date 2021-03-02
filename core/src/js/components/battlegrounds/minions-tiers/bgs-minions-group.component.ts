@@ -12,7 +12,6 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsToggleHighlightMinionOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-minion-on-board-event';
 import { BgsToggleHighlightTribeOnBoardEvent } from '../../../services/battlegrounds/store/events/bgs-toggle-highlight-tribe-on-board-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
 import { BgsMinionsGroup } from './bgs-minions-group';
@@ -26,16 +25,26 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	],
 	template: `
 		<div class="bgs-minions-group">
-			<div
-				class="header"
-				(click)="highlightTribe()"
-				[ngClass]="{ 'highlighted': showTribesHighlight && highlighted, 'no-highlight': !showTribesHighlight }"
-				[helpTooltip]="
-					showTribesHighlight ? 'Click to highlight all minions of that tribe in the tavern' : null
-				"
-			>
-				{{ title }}
+			<div class="header">
+				<div>{{ title }}</div>
+				<div
+					class="highlight-button"
+					[ngClass]="{
+						'highlighted': _showTribesHighlight && highlighted,
+						'no-highlight': !_showTribesHighlight
+					}"
+					inlineSVG="assets/svg/created_by.svg"
+					(click)="highlightTribe()"
+					[helpTooltip]="
+						_showTribesHighlight
+							? !highlighted
+								? 'Click to highlight all ' + title + 's in the tavern'
+								: 'Click to remove the ' + title + 's highlight in the tavern'
+							: null
+					"
+				></div>
 			</div>
+
 			<ul class="minions">
 				<li
 					class="minion"
@@ -43,15 +52,25 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					[cardTooltip]="minion.cardId"
 					[cardTooltipBgs]="true"
 					[cardTooltipPosition]="_tooltipPosition"
-					[helpTooltip]="showTribesHighlight ? 'Click to toggle minion highlight in the tavern' : null"
-					[ngClass]="{
-						'highlighted': showTribesHighlight && minion.highlighted,
-						'no-highlight': !showTribesHighlight
-					}"
-					(click)="highlightMinion(minion)"
 				>
 					<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 					<div class="name">{{ minion.name }}</div>
+					<div
+						class="highlight-minion-button"
+						[ngClass]="{
+							'highlighted': _showTribesHighlight && minion.highlighted,
+							'no-highlight': !_showTribesHighlight
+						}"
+						inlineSVG="assets/svg/pinned.svg"
+						(click)="highlightMinion(minion)"
+						[helpTooltip]="
+							_showTribesHighlight
+								? !minion.highlighted
+									? 'Pin this minion to highlight it in the tavern'
+									: 'Unpin this minion to remove the highlight in the tavern'
+								: null
+						"
+					></div>
 				</li>
 			</ul>
 		</div>
@@ -59,8 +78,6 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
-	showTribesHighlight = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT;
-
 	@Input() set tooltipPosition(value: string) {
 		this._tooltipPosition = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -73,11 +90,19 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		this.updateInfos();
 	}
 
+	@Input() set showTribesHighlight(value: boolean) {
+		this._showTribesHighlight = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	title: string;
 	highlighted: boolean;
 	minions: readonly Minion[];
 	_group: BgsMinionsGroup;
 	_tooltipPosition: string;
+	_showTribesHighlight: boolean;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
@@ -92,14 +117,14 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 	}
 
 	highlightMinion(minion: Minion) {
-		if (!this.showTribesHighlight) {
+		if (!this._showTribesHighlight) {
 			return;
 		}
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent(minion.cardId));
 	}
 
 	highlightTribe() {
-		if (!this.showTribesHighlight) {
+		if (!this._showTribesHighlight) {
 			return;
 		}
 		console.log('highlitghting tribe', this._group.tribe);
