@@ -99,6 +99,7 @@ export class BgsRunStatsService {
 	) {
 		const newMmr = parseInt(game.newPlayerRank);
 		const liveStats = currentGame.liveStats;
+		// console.debug('[bgs-run-stats] damage dealt', liveStats.luckFactor);
 
 		//console.log('[bgs-run-stats] starting to compute run stats', liveStats);
 		const user = await this.userService.getCurrentUser();
@@ -142,10 +143,6 @@ export class BgsRunStatsService {
 		}
 	}
 
-	// TODO: damage dealt / taken by minions (seems lower in live stats, but not sure there is a pattern)
-	// minions sold (fewer in live stats)
-	// enemy minions killed (fewer in live stats)
-	// battle luck
 	private populateObject(
 		realTimeStatsState: RealTimeStatsState,
 		input: BgsComputeRunStatsInput,
