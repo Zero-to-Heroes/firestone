@@ -1,4 +1,5 @@
 import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
+import { Race } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
@@ -41,6 +42,8 @@ export class BgsGameEndParser implements EventParser {
 			currentStageId: 'post-match',
 			currentPanelId: 'bgs-post-match-stats',
 			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
+			highlightedMinions: [] as readonly string[],
+			highlightedTribes: [] as readonly Race[],
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				reviewId: event.reviewId,
