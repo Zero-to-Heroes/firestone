@@ -33,6 +33,12 @@ export class UserService {
 	}
 
 	private async sendCurrentUser() {
+		// Don't send anything in dev to allow for impersonation
+		if (process.env.NODE_ENV !== 'production') {
+			console.warn('not sending user mapping in dev');
+			return;
+		}
+
 		this.currentUser = await this.ow.getCurrentUser();
 		return new Promise<void>(resolve => {
 			this.http
