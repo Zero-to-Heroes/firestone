@@ -1,5 +1,5 @@
 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
     xmlns="http://www.w3.org/2000/svg">
-    <circle cx="8" cy="8" r="7.5" fill="#1E0116" stroke="var(--icon-color, currentcolor)"/>
-    <path d="M10.4218 5.73433L10.4216 5.73467L8.67184 8.2454L8.4896 8.0638L7.7376 7.3144L10.2474 5.5772C10.2477 5.57703 10.2479 5.57686 10.2482 5.57669C10.2969 5.54305 10.3452 5.50889 10.3913 5.47544L10.517 5.6007C10.4854 5.64402 10.4534 5.6891 10.4218 5.73433Z" fill="var(--icon-secondary-color, currentcolor)" stroke="var(--icon-color, currentcolor)" stroke-width="3"/>
+    <circle cx="8" cy="8" r="7.5" fill="var(--icon-secondary-color, currentcolor)" stroke="var(--icon-color, currentcolor)"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.0001 3C9.8334 3 9.50007 3.21156 9.50007 4.05779L6.50007 6.17336C6.00007 5.99707 5.00007 5.85603 5.00007 6.70226L6.47052 8.25769L6.68983 8.48967L6.07014 9.14281L6.07424 9.14714C5.3474 9.95447 3.86316 11.8469 4.00007 11.9912C4.13698 12.1355 5.84673 10.4808 6.61291 9.71479L6.61701 9.71912L7.23566 9.06704L9.00007 10.9334C9.80007 10.9334 9.66674 9.87562 9.50007 9.34673L11.5001 6.17336C12.3001 6.17336 12.5001 5.82077 12.5001 5.64447L11.5001 4.58668L11.0001 4.05779L10.0001 3Z" fill="var(--icon-color, currentcolor)"/>
 </svg>
