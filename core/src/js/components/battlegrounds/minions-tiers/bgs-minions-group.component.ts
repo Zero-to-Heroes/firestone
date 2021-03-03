@@ -42,6 +42,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 								: 'Click to remove the ' + title + 's highlight in the tavern'
 							: null
 					"
+					[helpTooltipPosition]="'left'"
 				></div>
 			</div>
 
@@ -70,6 +71,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 									: 'Unpin this minion to remove the highlight in the tavern'
 								: null
 						"
+						[helpTooltipPosition]="'left'"
 					></div>
 				</li>
 			</ul>

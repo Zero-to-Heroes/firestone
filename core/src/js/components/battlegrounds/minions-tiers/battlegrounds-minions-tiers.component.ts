@@ -114,7 +114,6 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			if (!newState) {
 				return;
 			}
-			console.log('got state', newState);
 			await this.allCards.initializeCardsDb();
 
 			if (
