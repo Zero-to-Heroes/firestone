@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.3.13',
+		version: '7.4.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -63,6 +63,10 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `You can now track all the card backs hero skins you've unlocked (and the ones you're still missing).`,
 							},
+							{
+								type: 'feature',
+								text: `When viewing hero cards in full details, you should now be ablt to listen to most of their voice lines.`,
+							},
 						],
 					},
 					// {
@@ -74,15 +78,24 @@ export const updates: readonly Update[] = [
 					// 		},
 					// 	],
 					// },
-					// {
-					// 	category: 'battlegrounds',
-					// 	details: [
-					// 		// {
-					// 		// 	type: 'feature',
-					// 		// 	text: `(ALPHA) You can now enable highlighting of minions that match specific tribes in the tavern.`,
-					// 		// },
-					// 	],
-					// },
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now highlight a specific minions, or all minions of a tribe, in the tavern.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the first match of a run would always be grouped outside of the main run, causing corruption of many kinds of data (fix is not retroactive though).`,
+							},
+						],
+					},
 				],
 			},
 			{
@@ -104,6 +117,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `The simulator will now wait until the minion is created by Embrace Your Rage (Y'Shaarj's hero power) to compute the win chances.`,
+							},
+							{
+								type: 'ui',
+								text: `Minions are now sorted alphabetically in the minions list.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix several inconsistencies between the live stats and post-match stats.`,
 							},
 						],
 					},
