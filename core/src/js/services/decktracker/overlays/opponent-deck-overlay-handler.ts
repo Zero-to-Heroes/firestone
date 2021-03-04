@@ -22,7 +22,9 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 			ow,
 			prefs,
 			allCards,
+			true,
 		);
+		this.name = 'opponent-deck';
 	}
 
 	public processEvent(gameEvent: GameEvent | GameStateEvent, state: GameState, showDecktrackerFromGameMode: boolean) {
