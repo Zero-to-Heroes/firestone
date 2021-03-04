@@ -314,12 +314,16 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = this.trackerPositionExtractor(prefs);
 		console.log('window position', await this.ow.getCurrentWindow(), gameInfo);
-		console.log('loaded tracker position', trackerPosition, this.player);
-		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-		const newLeft =
-			trackerPosition && !forceTrackerReposition
-				? trackerPosition.left || 0
-				: this.defaultTrackerPositionLeftProvider(gameWidth, width, dpi);
+		console.log('loaded tracker position', trackerPosition);
+		const newLeft = Math.min(
+			gameWidth - 250,
+			Math.max(
+				-250,
+				trackerPosition && !forceTrackerReposition
+					? trackerPosition.left || 0
+					: this.defaultTrackerPositionLeftProvider(gameWidth, width, dpi),
+			),
+		);
 		const newTop =
 			trackerPosition && !forceTrackerReposition
 				? trackerPosition.top || 0
