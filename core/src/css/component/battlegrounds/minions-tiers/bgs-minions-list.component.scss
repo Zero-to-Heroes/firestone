@@ -27,11 +27,35 @@
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
+	overflow: hidden;
 
 	.background-main-part,
 	.background-second-part {
 		height: 100%;
 		background: var(--color-4);
+		overflow: hidden;
+	}
+
+	&:after {
+		content: '';
+		background: var(--color-1);
+		display: block;
+		position: absolute;
+		padding-top: 300%;
+		padding-left: 350%;
+		margin-left: -20px !important;
+		margin-top: -120%;
+		opacity: 0;
+		transition: all 0.8s;
+		right: 0;
+	}
+
+	// Click effect
+	&:active:after {
+		padding: 0;
+		margin: 0;
+		opacity: 1;
+		transition: 0s;
 	}
 
 	.background-main-part {

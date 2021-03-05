@@ -24,7 +24,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				[tooltipPosition]="_tooltipPosition"
 				[showTribesHighlight]="showTribesHighlight"
 			></bgs-minions-group>
-			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="showTribesHighlight" growOnClick>
+			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="showTribesHighlight">
 				<div class="background-second-part"></div>
 				<div class="background-main-part"></div>
 				<div class="content">
