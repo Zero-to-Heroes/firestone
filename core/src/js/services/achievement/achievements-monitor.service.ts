@@ -178,7 +178,7 @@ export class AchievementsMonitor {
 		// console.debug('[achievement-monitor] will grant achievements?', allAchievements, achievement);
 		for (const achv of allAchievements) {
 			// console.debug('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
-			const existingAchievement: CompletedAchievement = await this.achievementsStorage.getAchievement(achv.id);
+			const existingAchievement: CompletedAchievement = this.achievementsStorage.getAchievement(achv.id);
 			// From now on, stop counting how many times each achievement has been unlocked
 			if (existingAchievement.numberOfCompletions >= 1) {
 				// console.debug('[achievement-monitor] achievement can be completed only once', achievement.id);
@@ -198,11 +198,8 @@ export class AchievementsMonitor {
 				numberOfCompletions: completedAchievement.numberOfCompletions,
 			} as Achievement);
 
-			await this.achievementsStorage.save(completedAchievement);
-			console.log(
-				'[achievement-monitor] saved achievement',
-				await this.achievementsStorage.getAchievement(achv.id),
-			);
+			this.achievementsStorage.save(completedAchievement);
+			console.log('[achievement-monitor] saved achievement', this.achievementsStorage.getAchievement(achv.id));
 			this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
 			console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
 

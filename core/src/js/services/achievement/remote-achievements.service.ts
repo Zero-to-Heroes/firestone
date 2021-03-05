@@ -32,7 +32,7 @@ export class RemoteAchievementsService {
 		const prefs = this.prefs.getPreferences();
 		if (process.env.NODE_ENV !== 'production' && (await prefs).resetAchievementsOnAppStart) {
 			console.log('[remote-achievements] not loading achievements from remote - streamer mode');
-			await this.indexedDb.setAll([]);
+			this.indexedDb.setAll([]);
 			return [];
 		}
 		const currentUser = await this.userService.getCurrentUser();
@@ -62,8 +62,8 @@ export class RemoteAchievementsService {
 			} as CompletedAchievement),
 		);
 		const achievements = [...completedAchievementsFromRemote, ...completedAchievementsFromMemory];
-		await this.indexedDb.setAll(achievements);
-		console.log('[remote-achievements] updated local cache');
+		this.indexedDb.setAll(achievements);
+		console.log('[remote-achievements] updated local cache', achievements?.length);
 		return achievements;
 	}
 
@@ -71,7 +71,7 @@ export class RemoteAchievementsService {
 		const prefs = this.prefs.getPreferences();
 		if (process.env.NODE_ENV !== 'production' && (await prefs).resetAchievementsOnAppStart) {
 			console.log('[remote-achievements] not loading achievements from remote - streamer mode');
-			await this.indexedDb.setAll([]);
+			this.indexedDb.setAll([]);
 			return [];
 		}
 
@@ -83,8 +83,8 @@ export class RemoteAchievementsService {
 			} as CompletedAchievement),
 		);
 		const achievements = [...this.completedAchievementsFromRemote, ...completedAchievementsFromMemory];
-		await this.indexedDb.setAll(achievements);
-		console.log('[remote-achievements] re-updated local cache');
+		this.indexedDb.setAll(achievements);
+		console.log('[remote-achievements] re-updated local cache', achievements?.length);
 		return achievements;
 	}
 

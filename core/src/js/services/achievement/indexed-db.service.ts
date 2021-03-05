@@ -53,12 +53,12 @@ export class AchievementsLocalDbService {
 		}
 	}
 
-	public async save(achievement: CompletedAchievement): Promise<CompletedAchievement> {
+	public save(achievement: CompletedAchievement): CompletedAchievement {
 		this.achievementsCache[achievement.id] = achievement;
 		return achievement;
 	}
 
-	public async setAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
+	public setAll(achievements: readonly CompletedAchievement[]): readonly CompletedAchievement[] {
 		if (!achievements) {
 			return [];
 		}
@@ -67,7 +67,7 @@ export class AchievementsLocalDbService {
 		return this.getAll();
 	}
 
-	public async getAchievement(achievementId: string): Promise<CompletedAchievement> {
+	public getAchievement(achievementId: string): CompletedAchievement {
 		const achievement =
 			this.achievementsCache[achievementId] ||
 			CompletedAchievement.create({
@@ -77,7 +77,7 @@ export class AchievementsLocalDbService {
 		return achievement;
 	}
 
-	public async getAll(): Promise<CompletedAchievement[]> {
+	public getAll(): CompletedAchievement[] {
 		return Object.values(this.achievementsCache);
 	}
 
