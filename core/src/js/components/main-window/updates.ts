@@ -102,15 +102,23 @@ export const updates: readonly Update[] = [
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
-					// {
-					// 	category: 'decktracker',
-					// 	details: [
-					// 		// {
-					// 		// 	type: 'ui',
-					// 		// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
-					// 		// },
-					// 	],
-					// },
+					{
+						category: 'decktracker',
+						details: [
+							// {
+							// 	type: 'ui',
+							// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+							// },
+							{
+								type: 'bug',
+								text: `Fix a bug where deactivating the tracker for some specific modes would not work if the "close decktracker after match ends" option was enabled.`,
+							},
+							{
+								type: 'bug',
+								text: `Try to prevent cases where the decktracker is completely dragged off-screen and never shows up anymore.`,
+							},
+						],
+					},
 					{
 						category: 'battlegrounds',
 						details: [
