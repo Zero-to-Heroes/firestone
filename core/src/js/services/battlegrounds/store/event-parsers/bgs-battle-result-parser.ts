@@ -1,4 +1,7 @@
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
+import { CardIds } from '@firestone-hs/reference-data';
+import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
+import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { captureEvent } from '@sentry/browser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -46,15 +49,17 @@ export class BgsBattleResultParser implements EventParser {
 				currentState.currentGame.battleInfo,
 				currentState.currentGame.battleResult,
 			);
-			captureEvent({
-				message: 'Impossible battle victory',
-				extra: {
-					reviewId: currentState.currentGame.reviewId,
-					turnNumber: currentState.currentGame.currentTurn,
-					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
-					battleResult: JSON.stringify(currentState.currentGame.battleResult),
-				},
-			});
+			if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
+				captureEvent({
+					message: 'Impossible battle victory',
+					extra: {
+						reviewId: currentState.currentGame.reviewId,
+						turnNumber: currentState.currentGame.currentTurn,
+						battleInput: JSON.stringify(currentState.currentGame.battleInfo),
+						battleResult: JSON.stringify(currentState.currentGame.battleResult),
+					},
+				});
+			}
 		}
 		if (
 			currentState.currentGame.battleResult &&
@@ -71,15 +76,17 @@ export class BgsBattleResultParser implements EventParser {
 				currentState.currentGame.battleResult,
 			);
 			// Not possible to forcefully ignore sample rates
-			captureEvent({
-				message: 'Impossible battle loss',
-				extra: {
-					reviewId: currentState.currentGame.reviewId,
-					turnNumber: currentState.currentGame.currentTurn,
-					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
-					battleResult: JSON.stringify(currentState.currentGame.battleResult),
-				},
-			});
+			if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
+				captureEvent({
+					message: 'Impossible battle loss',
+					extra: {
+						reviewId: currentState.currentGame.reviewId,
+						turnNumber: currentState.currentGame.currentTurn,
+						battleInput: JSON.stringify(currentState.currentGame.battleInfo),
+						battleResult: JSON.stringify(currentState.currentGame.battleResult),
+					},
+				});
+			}
 		}
 		if (
 			currentState.currentGame.battleResult &&
@@ -96,15 +103,17 @@ export class BgsBattleResultParser implements EventParser {
 				currentState.currentGame.battleResult,
 			);
 			// Not possible to forcefully ignore sample rates
-			captureEvent({
-				message: 'Impossible battle tie',
-				extra: {
-					reviewId: currentState.currentGame.reviewId,
-					turnNumber: currentState.currentGame.currentTurn,
-					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
-					battleResult: JSON.stringify(currentState.currentGame.battleResult),
-				},
-			});
+			if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
+				captureEvent({
+					message: 'Impossible battle tie',
+					extra: {
+						reviewId: currentState.currentGame.reviewId,
+						turnNumber: currentState.currentGame.currentTurn,
+						battleInput: JSON.stringify(currentState.currentGame.battleInfo),
+						battleResult: JSON.stringify(currentState.currentGame.battleResult),
+					},
+				});
+			}
 		}
 		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
 		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, gameWithActualBattleResult);
@@ -117,5 +126,54 @@ export class BgsBattleResultParser implements EventParser {
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);
+	}
+
+	private isSupportedScenario(battleInfo: BgsBattleInfo): boolean {
+		return (
+			this.isSupportedScenarioForPlayer(battleInfo.playerBoard) &&
+			this.isSupportedScenarioForPlayer(battleInfo.opponentBoard)
+		);
+	}
+
+	private isSupportedScenarioForPlayer(boardInfo: BgsBoardInfo): boolean {
+		try {
+			if (this.hasScallywag(boardInfo) && (this.hasBaron(boardInfo) || this.hasKhadgar(boardInfo))) {
+				console.warn('[bgs-simulation] Unsupported Scallywag exodia, not reporting an error');
+				return false;
+			}
+			return true;
+		} catch (e) {
+			console.error('[bgs-simularion] Error when parsing board', e);
+			return true;
+		}
+	}
+
+	private hasScallywag(boardInfo: BgsBoardInfo) {
+		return (
+			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.Scallywag) ||
+			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.ScallywagTavernBrawl)
+		);
+	}
+
+	private hasBaron(boardInfo: BgsBoardInfo) {
+		return (
+			this.hasMinionOnBoard(boardInfo, CardIds.Collectible.Neutral.BaronRivendare) ||
+			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.BaronRivendareTavernBrawl)
+		);
+	}
+
+	private hasKhadgar(boardInfo: BgsBoardInfo) {
+		return (
+			this.hasMinionOnBoard(boardInfo, CardIds.Collectible.Mage.Khadgar) ||
+			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Mage.KhadgarTavernBrawl)
+		);
+	}
+
+	private hasMinionOnBoard(boardInfo: BgsBoardInfo, cardId: string): boolean {
+		if (!boardInfo?.board?.length) {
+			return false;
+		}
+
+		return boardInfo.board.find(entity => entity.cardId === cardId) != null;
 	}
 }
