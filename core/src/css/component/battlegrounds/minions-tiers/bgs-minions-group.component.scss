@@ -19,7 +19,8 @@
 			--icon-color: var(--color-2);
 			--icon-secondary-color: var(--color-7);
 			position: absolute;
-			right: 15px;
+			right: 10px;
+			padding: 5px;
 
 			&:not(.no-highlight):hover {
 				--icon-color: var(--color-1);
@@ -64,8 +65,9 @@
 				--icon-color: var(--color-2);
 				--icon-secondary-color: var(--color-7);
 				position: absolute;
-				right: 5px;
-				top: 5px;
+				padding: 5px;
+				right: 0;
+				top: 0;
 				display: none;
 
 				&:not(.no-highlight):hover {
