@@ -45,10 +45,10 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private async processEvent(event) {
 		switch (event.name) {
-			case GameEvent.GAME_END:
-				console.log('[overlay-display] received GAME_END event from game-state, sending false');
-				this.decktrackerDisplayEventBus.next(false);
-				break;
+			// case GameEvent.GAME_END:
+			// 	console.log('[overlay-display] received GAME_END event from game-state, sending false');
+			// 	this.decktrackerDisplayEventBus.next(false);
+			// 	break;
 			// In case one event is missing or arrives too fast, we have fallback
 			case GameEvent.MATCH_METADATA:
 			case GameEvent.LOCAL_PLAYER:

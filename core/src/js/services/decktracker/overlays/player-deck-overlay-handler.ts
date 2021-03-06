@@ -56,7 +56,12 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		}
 
 		if (!prefs.decktrackerCloseOnGameEnd) {
-			return state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
+			// console.debug(
+			// 	`[${this.name}] not closing on game end, should show?`,
+			// 	shouldShowFromState,
+			// 	state.gameStarted,
+			// );
+			return shouldShowFromState && state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
 		}
 
 		// We explicitely don't check for null, so that if the memory updates are broken

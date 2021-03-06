@@ -53,7 +53,7 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 
 		if (!prefs.decktrackerCloseOnGameEnd) {
 			// console.debug('GAAAAAAA show', state);
-			return state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
+			return shouldShowFromState && state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
 		}
 
 		// We explicitely don't check for null, so that if the memory updates are broken
