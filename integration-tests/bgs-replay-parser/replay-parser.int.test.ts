@@ -5,11 +5,12 @@ import {
 	parseHsReplayString,
 	Replay
 } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { CardIds, CardType, MetaTags, Zone } from '@firestone-hs/reference-data';
+import { BlockType, CardIds, GameTag } from '@firestone-hs/reference-data';
 import { Element } from 'elementtree';
-import { Map } from 'immutable';
 import { BgsPlayer } from '../../core/src/js/models/battlegrounds/bgs-player';
 import { BgsPostMatchStats } from '../../core/src/js/models/battlegrounds/post-match/bgs-post-match-stats';
+import { groupByFunction } from '../../core/src/js/services/utils';
+import { parseBgsGame, Parser, ParsingStructure } from './bgs-parser';
 import { replayXmlTest } from './replay';
 
 describe('BGS Replay-parser - basic test', () => {
@@ -23,128 +24,93 @@ describe('BGS Replay-parser - basic test', () => {
 		// Here it's serialized, so we lose the methods and only keey the data
 		const stats: BgsPostMatchStats = parseBattlegroundsGame(replayXml, BgsPlayer.create({} as BgsPlayer), [], []);
 
-		// TODO: ti's likely that non-direct damage, like Wildfire Elemental, is not shown as a damage event
-		// in the live stats, hence undercounting some damage
-		expect(stats).not.toBe(null);
-		console.debug(stats.totalMinionsDamageTaken);
-		// console.debug(Object.values(stats.totalMinionsDamageDealt).reduce((a, b) => a + b, 0));
-		console.debug(Object.values(stats.totalMinionsDamageTaken).reduce((a, b) => a + b, 0));
+		const parser = new EntityBuffParser();
+		parseBgsGame(replay, [parser]);
+		console.debug('transforming', parser.enchantmentsForTurn);
+
+		// // TODO: ti's likely that non-direct damage, like Wildfire Elemental, is not shown as a damage event
+		// // in the live stats, hence undercounting some damage
+		// expect(stats).not.toBe(null);
+		// console.debug(stats.totalMinionsDamageTaken);
+		// // console.debug(Object.values(stats.totalMinionsDamageDealt).reduce((a, b) => a + b, 0));
+		// console.debug(Object.values(stats.totalMinionsDamageTaken).reduce((a, b) => a + b, 0));
 	});
 });
 
-export interface ParsingStructure {
-	entities: {
-		[entityId: number]: ParsingEntity;
-	};
-	gameEntityId: number;
-	currentTurn: number;
-	parsers: readonly Parser[];
-}
+// Change of scope: lightfang vs lil'rag vs Nomi
+// Keep only the games where at least one buff of any of them applied
+class EntityBuffParser implements Parser {
+	private validBuffers = [
+		CardIds.NonCollectible.Neutral.LightfangEnforcer,
+		CardIds.NonCollectible.Neutral.LightfangEnforcerTavernBrawl,
+		CardIds.NonCollectible.Neutral.LilRag,
+		CardIds.NonCollectible.Neutral.LilRagTavernBrawl,
+		// CardIds.NonCollectible.Neutral.NomiKitchenNightmare,
+		// CardIds.NonCollectible.Neutral.NomiKitchenNightmareTavernBrawl,
+	];
 
-export interface ParsingEntity {
-	entityId: number;
-	cardId: string;
-	controller: number;
-	creatorEntityId: number;
-	zone: number;
-	zonePosition: number;
-	cardType: number;
-	tribe: number;
-	atk: number;
-	health: number;
-	techLevel: number;
-	hasBeenReborn: number;
-	boardVisualState: number;
-	summonedInCombat: boolean;
-}
-
-export interface Parser {
-	parse: (structure: ParsingStructure) => (element: Element) => void;
-	populate: (structure: ParsingStructure) => (currentTurn: number) => void;
-}
-
-class HeroAttackParser implements Parser {
-	entitiesThatDealHeroDamageThisTurn: readonly string[] = [];
-	entitiesThatDealHeroDamagePerTurn: Map<number, readonly string[]> = Map.of();
-
-	creatorsThatDealHeroDamageThisTurn: readonly CreatorDamage[] = [];
-	creatorsThatDealHeroDamagePerCreator: Map<string, readonly string[]> = Map.of();
+	enchantmentsAppliedThisTurn: readonly BuffApplied[] = [];
+	enchantmentsForTurn: { [turnNumber: number]: readonly BuffApplied[] } = {};
 
 	parse = (structure: ParsingStructure) => {
 		return (element: Element) => {
-			if (element.tag === 'MetaData' && parseInt(element.get('meta')) === MetaTags.DAMAGE) {
-				const infos = element.findall(`.Info`);
-				const heroInfos = infos.filter(
-					info => structure.entities[parseInt(info.get('entity'))]?.cardType === CardType.HERO,
-				);
-				if (!heroInfos || heroInfos.length === 0) {
-					return;
-				}
-
-				// Now find out all the entities that are still on the board
-				const entitiesInPlay = Object.values(structure.entities)
-					.filter(entity => entity.zone === Zone.PLAY)
-					.filter(entity => entity.cardType === CardType.MINION);
-				const tokensThatDamage = entitiesInPlay
-					.filter(entity => entity.creatorEntityId)
-					.filter(entity => entity.hasBeenReborn !== 1)
-					.filter(entity => entity.summonedInCombat)
-					.filter(
-						entity =>
-							structure.entities[entity.creatorEntityId].cardId !==
-							CardIds.NonCollectible.Neutral.Baconshop8playerenchantTavernBrawl,
-					);
-				this.entitiesThatDealHeroDamageThisTurn = tokensThatDamage.map(entity => entity.cardId);
-				this.creatorsThatDealHeroDamageThisTurn = tokensThatDamage.map(entity => ({
-					// TODO: find a ghstcoiler game to test
-					creatorCardId: this.getCreatorCardId(entity, structure),
-					cards: [entity.cardId],
-				}));
-				// .map(entity => ({
-				// 	id: entity.entityId,
-				// 	cardId: entity.cardId,
-				// 	creatorEntityId: entity.creator,
-				// }));
-				console.debug('this.entitiesThatDealHeroDamageThisTurn', this.entitiesThatDealHeroDamageThisTurn);
+			// Can also be a play block, when the buff is a battlecry
+			if (element.tag !== 'Block' || parseInt(element.get('type')) !== BlockType.TRIGGER) {
+				return;
 			}
+
+			const buffingCardId = structure.entities[parseInt(element.get('entity'))]?.cardId;
+			if (!this.validBuffers.includes(buffingCardId)) {
+				return;
+			}
+
+			// For now only handle summons while in tavern
+			if (structure.entities[structure.gameEntityId].boardVisualState === 2) {
+				return;
+			}
+
+			const attackChanges = element.findall(`TagChange[@tag='${GameTag.ATK}']`);
+			const attackBuff = attackChanges.map(change => {
+				const buffedEntity = structure.entities[parseInt(change.get('entity'))];
+				const previousAttack = buffedEntity.atk;
+				const buff = parseInt(change.get('value')) - previousAttack;
+				return buff;
+			}).reduce((a, b) => a + b, 0);
+			const bufferCardId = structure.entities[parseInt(element.get('entity'))].cardId;
+			this.enchantmentsAppliedThisTurn = [...this.enchantmentsAppliedThisTurn, {
+				cardId: bufferCardId,
+				buffValue: 2 * attackBuff,
+			} as BuffApplied];
 		};
 	};
 
 	populate = (structure: ParsingStructure) => {
-		return currentTurn => {
-			this.entitiesThatDealHeroDamagePerTurn = this.entitiesThatDealHeroDamagePerTurn.set(
-				currentTurn,
-				this.entitiesThatDealHeroDamageThisTurn,
-			);
-			this.entitiesThatDealHeroDamageThisTurn = [];
-
-			for (const creatorInfo of this.creatorsThatDealHeroDamageThisTurn) {
-				this.creatorsThatDealHeroDamagePerCreator = this.creatorsThatDealHeroDamagePerCreator.set(
-					creatorInfo.creatorCardId,
-					[
-						...this.creatorsThatDealHeroDamagePerCreator.get(creatorInfo.creatorCardId, []),
-						...creatorInfo.cards,
-					],
-				);
+		return (currentTurn: number) => {
+			if (currentTurn) {
+				const groupedByEnchantments: { [cardId: string]: readonly BuffApplied[] } = groupByFunction(
+					(buff: BuffApplied) => buff.cardId,
+				)(this.enchantmentsAppliedThisTurn);
+				// console.debug('echantments this turn', this.enchantmentsAppliedThisTurn);
+				const enchantmentsForTurn: readonly BuffApplied[] = Object.keys(groupedByEnchantments)
+					.map(
+						(cardId) => {
+							const buffsForCard = groupedByEnchantments[cardId];
+							const totalBuffValue = buffsForCard.map(buff => buff.buffValue).reduce((a, b) => a + b, 0);
+							return {
+								cardId: cardId,
+								buffValue: totalBuffValue
+							}
+						}
+					);
+				// console.debug('applied on turn ', currentTurn, enchantmentsForTurn);
+				this.enchantmentsForTurn[currentTurn] = enchantmentsForTurn;
 			}
-			this.creatorsThatDealHeroDamageThisTurn = [];
+			this.enchantmentsAppliedThisTurn = [];
 		};
 	};
-
-	private isValidCreator(entity: ParsingEntity, structure: ParsingStructure): boolean {
-		return !entity.summonedInCombat;
-	}
-
-	private getCreatorCardId(entity: ParsingEntity, structure: ParsingStructure): string {
-		let creatorEntity = structure.entities[entity.creatorEntityId];
-		while (!this.isValidCreator(creatorEntity, structure)) {
-			creatorEntity = structure.entities[creatorEntity.creatorEntityId];
-		}
-		return creatorEntity.cardId;
-	}
 }
 
-interface CreatorDamage {
-	creatorCardId: string;
-	cards: readonly string[];
+interface BuffApplied {
+	cardId: string;
+	buffValue: number;
 }
