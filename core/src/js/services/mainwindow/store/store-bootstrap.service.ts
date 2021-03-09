@@ -55,12 +55,21 @@ export class StoreBootstrapService {
 	}
 
 	public async initStore() {
+		// First load for the FTUE
+		const prefs = await this.prefs.getPreferences();
+		const showFtue = !prefs.ftue.hasSeenGlobalFtue;
+		if (showFtue) {
+			const windowStateForFtue = Object.assign(new MainWindowState(), {
+				showFtue: showFtue,
+			} as MainWindowState);
+			this.stateUpdater.next(new StoreInitEvent(windowStateForFtue));
+		}
+
 		// Load all the initial data
 		const [
 			[
 				socialShareUserInfo,
 				currentUser,
-				prefs,
 				achievementTopCategories,
 				achievementHistory,
 				globalStats,
@@ -73,7 +82,6 @@ export class StoreBootstrapService {
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
 				this.userService.getCurrentUser(),
-				this.prefs.getPreferences(),
 				this.achievementsRepository.getTopLevelCategories(),
 				this.achievementsHelper.buildAchievementHistory(),
 				this.globalStats.getGlobalStats(),
