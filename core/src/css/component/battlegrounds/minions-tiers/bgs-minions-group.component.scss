@@ -21,6 +21,8 @@
 			position: absolute;
 			right: 10px;
 			padding: 5px;
+			width: 26px;
+			max-width: 26px;
 
 			&:not(.no-highlight):hover {
 				--icon-color: var(--color-1);
@@ -65,6 +67,8 @@
 				--icon-color: var(--color-2);
 				--icon-secondary-color: var(--color-7);
 				position: absolute;
+				width: 26px;
+				max-width: 26px;
 				padding: 5px;
 				right: 0;
 				top: 0;
