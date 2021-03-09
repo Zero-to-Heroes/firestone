@@ -58,8 +58,8 @@ declare let amplitude: any;
 				</div>
 			</section>
 			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
-			<ads [parentComponent]="'main-window'" *ngIf="showAds()"></ads>
-			<section class="content-container" *ngIf="!dataState.showFtue">
+			<ads [parentComponent]="'main-window'" *ngIf="_showAds"></ads>
+			<section class="content-container" *ngIf="!dataState.showFtue" [ngClass]="{ 'hide-ads': !_showAds }">
 				<replays
 					class="main-section"
 					[state]="dataState"
@@ -121,6 +121,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	cardsInitDone: boolean;
 	displayingNewVersionNotification: boolean;
 	forceShowReleaseNotes: boolean;
+	_showAds: boolean = true;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
@@ -174,6 +175,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				// console.log('received state', newState);
 				this.dataState = newState;
 				this.activeTheme = this.buildActiveTheme();
+				this._showAds = this.showAds();
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -282,9 +284,10 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 
 		// Hide the ads for supporters and in the ladder deck details
 		if (!this.dataState.showAds) {
-			if (this.navigationState?.navigationDecktracker?.currentView === 'deck-details') {
-				return false;
-			}
+			return false;
+			// if (this.navigationState?.navigationDecktracker?.currentView === 'deck-details') {
+			// 	return false;
+			// }
 		}
 
 		return true;

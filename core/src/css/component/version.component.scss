@@ -3,7 +3,7 @@
 .version-info {
 	@extend %patch-number;
 	position: absolute;
-	bottom: 2px;
+	bottom: 0;
 	right: 15px;
 	z-index: 1;
 	font-size: 10px;
