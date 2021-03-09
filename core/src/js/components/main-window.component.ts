@@ -128,7 +128,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	cardsInitDone: boolean;
 	displayingNewVersionNotification: boolean;
 	forceShowReleaseNotes: boolean;
-	_showAds: boolean = true;
+	_showAds = true;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;

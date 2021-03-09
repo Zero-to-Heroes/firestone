@@ -105,7 +105,7 @@ export class MenuSelectionComponent implements AfterViewInit {
 	}
 
 	_currentUser: CurrentUser;
-	avatarUrl: string = 'assets/images/social-share-login.png';
+	avatarUrl = 'assets/images/social-share-login.png';
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

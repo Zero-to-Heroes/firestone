@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.4.0',
+		version: '7.5.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -53,19 +53,11 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'collection',
+						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `You can now track all the card backs you've unlocked (and the ones you're still missing).`,
-							},
-							{
-								type: 'feature',
-								text: `You can now track all the card backs hero skins you've unlocked (and the ones you're still missing).`,
-							},
-							{
-								type: 'feature',
-								text: `When viewing hero cards in full details, you should now be ablt to listen to most of their voice lines.`,
+								type: 'ui',
+								text: `New navigation menu redesign for the main app!`,
 							},
 						],
 					},
@@ -78,61 +70,27 @@ export const updates: readonly Update[] = [
 					// 		},
 					// 	],
 					// },
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now highlight a specific minions, or all minions of a tribe, in the tavern.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the first match of a run would always be grouped outside of the main run, causing corruption of many kinds of data (fix is not retroactive though).`,
-							},
-						],
-					},
 				],
 			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							// {
-							// 	type: 'ui',
-							// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
-							// },
-							{
-								type: 'bug',
-								text: `Fix a bug where deactivating the tracker for some specific modes would not work if the "close decktracker after match ends" option was enabled.`,
-							},
-							{
-								type: 'bug',
-								text: `Try to prevent cases where the decktracker is completely dragged off-screen and never shows up anymore.`,
-							},
-						],
-					},
+					// {
+					// 	category: 'decktracker',
+					// 	details: [
+					// 		// {
+					// 		// 	type: 'ui',
+					// 		// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+					// 		// },
+					// 	],
+					// },
 					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `The simulator will now wait until the minion is created by Embrace Your Rage (Y'Shaarj's hero power) to compute the win chances.`,
-							},
-							{
-								type: 'ui',
-								text: `Minions are now sorted alphabetically in the minions list.`,
-							},
-							{
 								type: 'bug',
-								text: `Fix several inconsistencies between the live stats and post-match stats.`,
+								text: `Fix a bug where the simulator would sometimes let Illidan attack again after using his hero power.`,
 							},
 						],
 					},
@@ -141,16 +99,16 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'ui',
-								text: `Missing cards are now shown using a lower opacity, instead of the previous red filter.`,
+								text: `Sets are now sorted from newest to oldest.`,
 							},
 						],
 					},
 					{
-						category: 'replays',
+						category: 'general',
 						details: [
 							{
 								type: 'ui',
-								text: `Fix a bug where secrets that are discovered would not have a proper image.`,
+								text: `Premium supporters: the empty ad space should now be totally removed from the main app.`,
 							},
 						],
 					},
