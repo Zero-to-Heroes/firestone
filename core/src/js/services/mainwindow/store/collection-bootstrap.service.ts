@@ -6,9 +6,9 @@ import { Set, SetCard } from '../../../models/set';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
+import { SetsService } from '../../collection/sets-service.service';
 import { Events } from '../../events.service';
 import { OverwolfService } from '../../overwolf.service';
-import { SetsService } from '../../sets-service.service';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 
@@ -79,6 +79,7 @@ export class CollectionBootstrapService {
 		return new Set(
 			set.id,
 			set.name,
+			set.launchDate,
 			set.standard,
 			updatedCards,
 			pityTimer,

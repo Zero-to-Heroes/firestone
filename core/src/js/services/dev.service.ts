@@ -11,6 +11,7 @@ import { AchievementsMonitor } from './achievement/achievements-monitor.service'
 import { Challenge } from './achievement/achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
+import { SetsService } from './collection/sets-service.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
@@ -19,7 +20,6 @@ import { GameEvents } from './game-events.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
-import { SetsService } from './sets-service.service';
 
 // const HEARTHSTONE_GAME_ID = 9898;
 

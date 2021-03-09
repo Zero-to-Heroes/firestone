@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
 import { AppBootstrapService } from '../services/app-bootstrap.service';
+import { SetsService } from '../services/collection/sets-service.service';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { PreferencesService } from '../services/preferences.service';
-import { SetsService } from '../services/sets-service.service';
 
 @Component({
 	selector: 'app-root',

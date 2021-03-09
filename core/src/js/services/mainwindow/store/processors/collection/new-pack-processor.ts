@@ -67,7 +67,7 @@ export class NewPackProcessor implements Processor {
 		}
 		const newPityTimer = this.buildNewPityTimer(pityTimer, packCards);
 		const result = await this.indexedDb.savePityTimer(newPityTimer);
-		return Object.assign(new Set(), setToUpdate, {
+		return Object.assign(new Set(setToUpdate?.id, setToUpdate?.name, setToUpdate?.launchDate), setToUpdate, {
 			pityTimer: result,
 		} as Set);
 	}

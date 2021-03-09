@@ -2,7 +2,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
-import { SetsService } from '../../../../sets-service.service';
+import { SetsService } from '../../../../collection/sets-service.service';
 import { UpdateCardSearchResultsEvent } from '../../events/collection/update-card-search-results-event';
 import { Processor } from '../processor';
 

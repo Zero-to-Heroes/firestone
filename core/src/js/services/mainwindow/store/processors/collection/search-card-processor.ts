@@ -5,7 +5,7 @@ import { NavigationCollection } from '../../../../../models/mainwindow/navigatio
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { SetCard } from '../../../../../models/set';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
-import { SetsService } from '../../../../sets-service.service';
+import { SetsService } from '../../../../collection/sets-service.service';
 import { SearchCardsEvent } from '../../events/collection/search-cards-event';
 import { Processor } from '../processor';
 

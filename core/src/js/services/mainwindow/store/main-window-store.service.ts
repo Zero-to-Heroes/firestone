@@ -14,6 +14,7 @@ import { CardHistoryStorageService } from '../../collection/card-history-storage
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
+import { SetsService } from '../../collection/sets-service.service';
 import { DecksStateBuilderService } from '../../decktracker/main/decks-state-builder.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
@@ -25,7 +26,6 @@ import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
-import { SetsService } from '../../sets-service.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
 import { UserService } from '../../user.service';

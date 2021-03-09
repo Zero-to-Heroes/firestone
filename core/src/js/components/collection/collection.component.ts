@@ -5,7 +5,7 @@ import { CardBack } from '../../models/card-back';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { Set, SetCard } from '../../models/set';
-import { SetsService } from '../../services/sets-service.service';
+import { SetsService } from '../../services/collection/sets-service.service';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({

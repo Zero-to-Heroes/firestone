@@ -15,8 +15,8 @@ import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
+import { SetsService } from '../../services/collection/sets-service.service';
 import { PreferencesService } from '../../services/preferences.service';
-import { SetsService } from '../../services/sets-service.service';
 
 declare let amplitude;
 

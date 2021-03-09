@@ -11,6 +11,7 @@ import { CardHistoryStorageService } from '../../services/collection/card-histor
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { IndexedDbService } from '../../services/collection/indexed-db.service';
 import { PackHistoryService } from '../../services/collection/pack-history.service';
+import { SetsService } from '../../services/collection/sets-service.service';
 import { DebugService } from '../../services/debug.service';
 import { DeckHandlerService } from '../../services/decktracker/deck-handler.service';
 import { Events } from '../../services/events.service';
@@ -24,7 +25,6 @@ import { OwUtilsService } from '../../services/plugins/ow-utils.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
-import { SetsService } from '../../services/sets-service.service';
 
 @NgModule({
 	imports: [BrowserModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],

@@ -10,7 +10,7 @@ import { CardHistoryStorageService } from '../../../../collection/card-history-s
 import { CollectionManager } from '../../../../collection/collection-manager.service';
 import { IndexedDbService } from '../../../../collection/indexed-db.service';
 import { PackHistoryService } from '../../../../collection/pack-history.service';
-import { SetsService } from '../../../../sets-service.service';
+import { SetsService } from '../../../../collection/sets-service.service';
 import { NewCardEvent } from '../../events/collection/new-card-event';
 import { Processor } from '../processor';
 
@@ -79,6 +79,7 @@ export class NewCardProcessor implements Processor {
 		return new Set(
 			set.id,
 			set.name,
+			set.launchDate,
 			set.standard,
 			updatedCards,
 			pityTimer,

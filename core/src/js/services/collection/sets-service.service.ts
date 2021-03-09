@@ -1,42 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { Set, SetCard } from '../models/set';
+import { ReferenceSet } from '../../models/collection/reference-set';
+import { Set, SetCard } from '../../models/set';
+import { sets, standardSets } from './sets.ref';
 
 @Injectable()
 export class SetsService {
-	private readonly STANDARD_SETS = [
-		['core', 'Basic'],
-		['expert1', 'Classic'],
-		['demon_hunter_initiate', 'Demon Hunter Initiate'],
-		['dalaran', 'Rise of Shadows'],
-		['uldum', 'Saviors of Uldum'],
-		['dragons', 'Descent of Dragons'],
-		['yod', "Galakrond's Awakening"],
-		['black_temple', 'Ashes of Outland'],
-		['scholomance', 'Scholomance Academy'],
-		['darkmoon_faire', 'Darkmoon Faire'],
-		['darkmoon_races', 'Darkmoon Races'],
-	];
-
-	private readonly WILD_SETS = [
-		['naxx', 'Naxxramas'],
-		['gvg', 'Goblins vs Gnomes'],
-		['brm', 'Blackrock Mountain'],
-		['tgt', 'The Grand Tournament'],
-		['loe', 'League of Explorers'],
-		['hof', 'Hall of Fame'],
-		['og', 'Whispers of the Old Gods'],
-		['kara', 'One Night in Karazhan'],
-		['gangs', 'Mean Streets of Gadgetzan'],
-		['ungoro', "Journey to Un'Goro"],
-		['icecrown', 'Knights of the Frozen Throne'],
-		['lootapalooza', 'Kobolds and Catacombs'],
-		['gilneas', 'The Witchwood'],
-		['boomsday', 'The Boomsday Project'],
-		['troll', "Rastakhan's Rumble"],
-	];
-
 	// I can't find anything in the card data that sets these apart
 	private readonly NON_COLLECTIBLE_HEROES = [
 		'HERO_01',
@@ -62,15 +32,21 @@ export class SetsService {
 	}
 
 	public getSetIds(): string[] {
-		return this.STANDARD_SETS.concat(this.WILD_SETS).map(([setId]) => setId);
+		return sets.map(set => set.id);
 	}
 
 	public getStandardSets(): Set[] {
-		return this.getSets(this.STANDARD_SETS, true);
+		return this.getSets(
+			sets.filter(set => standardSets.includes(set.id)),
+			true,
+		);
 	}
 
 	public getWildSets(): Set[] {
-		return this.getSets(this.WILD_SETS, false);
+		return this.getSets(
+			sets.filter(set => !standardSets.includes(set.id)),
+			false,
+		);
 	}
 
 	public getAllSets(): Set[] {
@@ -155,36 +131,22 @@ export class SetsService {
 		return this.allCards.getCardsFromDbfIds(dbfIds);
 	}
 
-	public setName(setId: string) {
+	public setName(setId: string): string {
 		if (!setId) {
-			return;
+			return '';
 		}
 
 		setId = setId.toLowerCase();
-		for (let i = 0; i < this.STANDARD_SETS.length; i++) {
-			if (setId === this.STANDARD_SETS[i][0]) {
-				return this.STANDARD_SETS[i][1];
-			}
-		}
-		for (let i = 0; i < this.WILD_SETS.length; i++) {
-			if (setId === this.WILD_SETS[i][0]) {
-				return this.WILD_SETS[i][1];
-			}
-		}
-		return '';
+		return sets.find(set => set.id === setId)?.name ?? '';
 	}
 
-	public getSetFromCardId(cardId: string) {
+	public getSetFromCardId(cardId: string): Set {
 		const card = this.getCard(cardId);
 		const setId = card.set.toLowerCase();
 		return this.getSet(setId);
 	}
 
-	public getSet(setId: string) {
-		if (!setId) {
-			return new Set(setId, setId, true);
-		}
-
+	public getSet(setId: string): Set {
 		setId = setId.toLowerCase();
 		for (const theSet of this.getStandardSets()) {
 			if (theSet.id === setId) {
@@ -196,14 +158,15 @@ export class SetsService {
 				return theSet;
 			}
 		}
-		return new Set(setId, setId, true);
+		console.error('[sets-service] incorrect call to getSet', setId);
+		return new Set(setId, setId, new Date());
 	}
 
-	private getSets(references, isStandard: boolean): Set[] {
-		const standardSets: Set[] = references.map(set => new Set(set[0], set[1], isStandard));
-		return standardSets.map(set => {
+	private getSets(references: readonly ReferenceSet[], isStandard: boolean): Set[] {
+		const referenceSets: Set[] = references.map(set => new Set(set.id, set.name, set.launchDate, isStandard));
+		return referenceSets.map(set => {
 			const setCards = this.getCollectibleSetCards(set.id);
-			return new Set(set.id, set.name, set.standard, setCards);
+			return new Set(set.id, set.name, set.launchDate, set.standard, setCards);
 		});
 	}
 

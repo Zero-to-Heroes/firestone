@@ -1,6 +1,6 @@
 import { Card } from '../../../models/card';
+import { SetsService } from '../../collection/sets-service.service';
 import { OverwolfService } from '../../overwolf.service';
-import { SetsService } from '../../sets-service.service';
 import { MindVisionOperationFacade } from './mind-vision-operation-facade';
 import { MindVisionService } from './mind-vision.service';
 

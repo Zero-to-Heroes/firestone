@@ -1,5 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, HostListener, ElementRef } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Input } from '@angular/core';
 import { Set } from '../../models/set';
 
 @Component({

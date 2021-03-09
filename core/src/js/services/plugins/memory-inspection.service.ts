@@ -9,9 +9,9 @@ import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-inf
 import { MatchInfo } from '../../models/match-info';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
+import { SetsService } from '../collection/sets-service.service';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
-import { SetsService } from '../sets-service.service';
 import { GetAchievementsInfoOperation } from './mind-vision/get-achievements-info-operation';
 import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
 import { GetArenaInfoOperation } from './mind-vision/get-arena-info-operation';

@@ -22,7 +22,6 @@ export class BgsMatchStartParser implements EventParser {
 			const prefs: Preferences = await this.prefs.getPreferences();
 			return currentState.update({
 				inGame: true,
-				// gameEnded: false,
 				currentGame: newGame,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
 				stages: BgsInitParser.buildEmptyStages(currentState, prefs),

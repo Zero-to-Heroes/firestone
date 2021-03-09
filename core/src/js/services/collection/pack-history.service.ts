@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PityTimer } from '../../models/pity-timer';
-import { SetsService } from '../sets-service.service';
 import { IndexedDbService } from './indexed-db.service';
+import { SetsService } from './sets-service.service';
 
 @Injectable()
 export class PackHistoryService {

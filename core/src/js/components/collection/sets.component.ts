@@ -72,17 +72,29 @@ export class SetsComponent {
 		}
 		switch (this.activeFilter) {
 			case 'standard':
-				this.sets = this._standardSets;
+				this.sets = this._standardSets.sort(this.sortSets());
 				this.category = 'Standard';
 				break;
 			case 'wild':
-				this.sets = this._wildSets;
+				this.sets = this._wildSets.sort(this.sortSets());
 				this.category = 'Wild';
 				break;
 			case 'all':
 			default:
-				this.sets = [...this._wildSets, ...this._standardSets];
+				this.sets = [...this._wildSets, ...this._standardSets].sort(this.sortSets());
 				this.category = 'All';
 		}
+	}
+
+	private sortSets(): (a: Set, b: Set) => number {
+		return (a: Set, b: Set) => {
+			if (!a.launchDate) {
+				return -1;
+			}
+			if (!b.launchDate) {
+				return 1;
+			}
+			return b.launchDate.getTime() - a.launchDate.getTime();
+		};
 	}
 }
