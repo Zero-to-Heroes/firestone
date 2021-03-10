@@ -228,17 +228,6 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.highRes = preferences.collectionUseHighResImages;
-		const cardScale = preferences.collectionCardScale / 100;
-		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-		this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
 		if (this.processingTimeout) {
@@ -337,6 +326,17 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	shouldLoadImage(index: number) {
 		// console.log('should load image?', index, this.imagestoLoad);
 		return index <= this.imagestoLoad;
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.highRes = preferences.collectionUseHighResImages;
+		const cardScale = preferences.collectionCardScale / 100;
+		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+		this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private updateShownCards() {

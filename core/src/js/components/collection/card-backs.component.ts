@@ -5,15 +5,19 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { orderBy } from 'lodash';
 import { IOption } from 'ng-select';
+import { Subscription } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
+import { Preferences } from '../../models/preferences';
 import { ShowCardBackDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-back-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 import { InternalCardBack } from './internal-card-back';
 
 @Component({
@@ -33,6 +37,7 @@ import { InternalCardBack } from './internal-card-back';
 					class="card-back"
 					*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
 					[cardBack]="cardBack"
+					[style.width.px]="cardWidth"
 					(click)="showFullCardBack(cardBack)"
 				>
 				</card-back>
@@ -42,7 +47,11 @@ import { InternalCardBack } from './internal-card-back';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBacksComponent implements AfterViewInit {
+export class CardBacksComponent implements AfterViewInit, OnDestroy {
+	readonly DEFAULT_CARD_WIDTH = 139;
+
+	cardWidth = this.DEFAULT_CARD_WIDTH;
+
 	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
 
 	@Input() set cardBacks(cardBacks: readonly CardBack[]) {
@@ -62,11 +71,25 @@ export class CardBacksComponent implements AfterViewInit {
 	total: number;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private preferencesSubscription: Subscription;
 
-	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handleDisplayPreferences(event.preferences);
+		});
+		await this.handleDisplayPreferences();
+	}
+
+	ngOnDestroy() {
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
@@ -80,6 +103,15 @@ export class CardBacksComponent implements AfterViewInit {
 
 	trackByCardId(card: CardBack, index: number) {
 		return card.id;
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		const cardScale = preferences.collectionCardScale / 100;
+		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private updateInfo() {
