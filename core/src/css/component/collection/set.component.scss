@@ -203,6 +203,9 @@
 				height: 4px;
 				margin-top: 10px;
 				background-color: rgba(217, 195, 171, 0.3);
+				display: flex;
+				align-items: flex-start;
+				justify-content: flex-start;
 			}
 
 			.progress-bar-filled {
