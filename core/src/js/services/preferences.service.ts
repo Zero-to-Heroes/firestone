@@ -322,6 +322,13 @@ export class PreferencesService {
 		return newPrefs;
 	}
 
+	public async updateDesktopDecktrackerChangeMatchupAsPercentages(value: boolean) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, desktopDeckShowMatchupAsPercentages: value };
+		await this.savePreferences(newPrefs);
+		return newPrefs;
+	}
+
 	public async setDesktopDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckHiddenDeckCodes: value };

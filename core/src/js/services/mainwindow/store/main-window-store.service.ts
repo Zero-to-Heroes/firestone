@@ -68,6 +68,7 @@ import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode
 import { ChangeDeckRankFilterEvent } from './events/decktracker/change-deck-rank-filter-event';
 import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
+import { DesktopDecktrackerChangeMatchupAsPercentagesEvent } from './events/decktracker/desktop-decktracker-change-matchup-as-percentage-event';
 import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summary-event';
 import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
@@ -157,6 +158,7 @@ import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-d
 import { ChangeDeckRankFilterProcessor } from './processors/decktracker/change-deck-rank-filter-processor';
 import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
+import { DesktopDecktrackerChangeMatchupAsPercentagesProcessor } from './processors/decktracker/desktop-decktracker-change-matchup-as-percentage-processor';
 import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
 import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-deck-summary-processor';
 import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
@@ -591,6 +593,9 @@ export class MainWindowStoreService {
 
 			ToggleShowHiddenDecksEvent.eventName(),
 			new ToggleShowHiddenDecksProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
+
+			DesktopDecktrackerChangeMatchupAsPercentagesEvent.eventName(),
+			new DesktopDecktrackerChangeMatchupAsPercentagesProcessor(this.prefs),
 
 			// Battlegrounds
 			SelectBattlegroundsGlobalCategoryEvent.eventName(),

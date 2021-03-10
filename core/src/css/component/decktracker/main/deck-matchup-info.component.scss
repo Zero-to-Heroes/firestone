@@ -13,4 +13,17 @@
 	.icon {
 		width: 30px;
 	}
+
+	.number {
+		display: flex;
+
+		.wins {
+			margin-right: 5px;
+			color: #61ff47;
+		}
+		.losses {
+			margin-left: 5px;
+			color: #ff4747;
+		}
+	}
 }

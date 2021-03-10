@@ -8,4 +8,8 @@ export class DecktrackerState {
 	readonly decks: readonly DeckSummary[];
 	readonly patch: PatchInfo;
 	readonly isLoading: boolean = true;
+
+	public update(base: DecktrackerState): DecktrackerState {
+		return Object.assign(new DecktrackerState(), this, base);
+	}
 }

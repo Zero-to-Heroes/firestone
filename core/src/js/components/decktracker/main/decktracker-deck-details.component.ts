@@ -19,7 +19,8 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 				</copy-deckstring>
 				<deck-list class="deck-list" [deckstring]="deck?.deckstring"></deck-list>
 			</div>
-			<deck-winrate-matrix [deck]="deck"> </deck-winrate-matrix>
+			<deck-winrate-matrix [deck]="deck" [showMatchupAsPercentages]="showMatchupAsPercentages">
+			</deck-winrate-matrix>
 			<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
 		</div>
 	`,
@@ -36,6 +37,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
+	showMatchupAsPercentages: boolean;
 	deck: DeckSummary;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
@@ -64,5 +66,6 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.deck = this._state.decktracker.decks.find(
 			deck => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
+		this.showMatchupAsPercentages = this._navigation.navigationDecktracker.showMatchupAsPercentages;
 	}
 }

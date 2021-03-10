@@ -16,40 +16,67 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<img class="icon" [src]="icon" [helpTooltip]="className" />
 			</div>
 			<div class="cell total-games">{{ games }}</div>
-			<div class="cell winrate">{{ buildValue(winrate) }}</div>
-			<div class="cell winrate-first" [helpTooltip]="winrateFirstTooltip">{{ buildValue(winrateFirst) }}</div>
-			<div class="cell winrate-coin" [helpTooltip]="winrateCoinTooltip">{{ buildValue(winrateCoin) }}</div>
+			<div class="cell winrate" *ngIf="_showMatchupAsPercentages">{{ buildValue(winrate) }}</div>
+			<div class="cell winrate-first" *ngIf="_showMatchupAsPercentages" [helpTooltip]="winrateFirstTooltip">
+				{{ buildValue(winrateFirst) }}
+			</div>
+			<div class="cell winrate-coin" *ngIf="_showMatchupAsPercentages" [helpTooltip]="winrateCoinTooltip">
+				{{ buildValue(winrateCoin) }}
+			</div>
+
+			<div class="cell winrate number" *ngIf="!_showMatchupAsPercentages">
+				<span class="wins" *ngIf="wins > 0 || losses > 0">{{ wins }}</span>
+				<span class="separator">-</span>
+				<span class="losses" *ngIf="wins > 0 || losses > 0">{{ losses }}</span>
+			</div>
+			<div
+				class="cell winrate-first number"
+				*ngIf="!_showMatchupAsPercentages"
+				[helpTooltip]="winrateFirstTooltip"
+			>
+				<span class="wins" *ngIf="winsFirst > 0 || lossesFirst > 0">{{ winsFirst }}</span>
+				<span class="separator">-</span>
+				<span class="losses" *ngIf="winsFirst > 0 || lossesFirst > 0">{{ lossesFirst }}</span>
+			</div>
+			<div class="cell winrate-coin number" *ngIf="!_showMatchupAsPercentages" [helpTooltip]="winrateCoinTooltip">
+				<span class="wins" *ngIf="winsSecond > 0 || lossesSecond > 0">{{ winsSecond }}</span>
+				<span class="separator">-</span>
+				<span class="losses" *ngIf="winsSecond > 0 || lossesSecond > 0">{{ lossesSecond }}</span>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckMatchupInfoComponent implements AfterViewInit {
 	@Input() set matchup(value: MatchupStat) {
-		this.icon = `assets/images/deck/classes/${value.opponentClass.toLowerCase()}.png`;
-		this.className = formatClass(value.opponentClass);
-		this.games = value.totalGames;
-		this.winrate = value.totalWins != null && value.totalGames ? (100 * value.totalWins) / value.totalGames : null;
-		this.winrateFirst =
-			value.totalWinsFirst != null && value.totalGamesFirst
-				? (100 * value.totalWinsFirst) / value.totalGamesFirst
-				: null;
-		this.winrateFirstTooltip = `Played ${value.totalGamesFirst} matches going first`;
-		this.winrateCoin =
-			value.totalWinsCoin != null && value.totalGamesCoin
-				? (100 * value.totalWinsCoin) / value.totalGamesCoin
-				: null;
-		this.winrateCoinTooltip = `Played ${value.totalGamesCoin} matches going second`;
+		this._matchup = value;
+		this.updateInfos();
+	}
+
+	@Input() set showMatchupAsPercentages(value: boolean) {
+		this._showMatchupAsPercentages = value;
+		this.updateInfos();
 	}
 
 	icon: string;
 	className: string;
 	games: number;
+	_showMatchupAsPercentages: boolean = true;
+
 	winrate: number;
 	winrateFirst: number;
 	winrateFirstTooltip: string;
 	winrateCoin: number;
 	winrateCoinTooltip: string;
 
+	wins: number;
+	losses: number;
+	winsFirst: number;
+	lossesFirst: number;
+	winsSecond: number;
+	lossesSecond: number;
+
+	private _matchup: MatchupStat;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService) {}
@@ -60,5 +87,36 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 
 	buildValue(value: number): string {
 		return value == null ? '-' : value.toFixed(0) + '%';
+	}
+
+	private updateInfos() {
+		if (!this._matchup) {
+			return;
+		}
+
+		// console.debug('updating', this._showMatchupAsPercentages);
+		this.icon = `assets/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
+		this.className = formatClass(this._matchup.opponentClass);
+		this.games = this._matchup.totalGames;
+		this.wins = this._matchup.totalWins;
+		this.losses = this._matchup.totalGames - this._matchup.totalWins;
+		this.winsFirst = this._matchup.totalWinsFirst;
+		this.lossesFirst = this._matchup.totalGamesFirst - this._matchup.totalWinsFirst;
+		this.winsSecond = this._matchup.totalWinsCoin;
+		this.lossesSecond = this._matchup.totalGamesCoin - this._matchup.totalWinsCoin;
+		this.winrate =
+			this._matchup.totalWins != null && this._matchup.totalGames
+				? (100 * this._matchup.totalWins) / this._matchup.totalGames
+				: null;
+		this.winrateFirst =
+			this._matchup.totalWinsFirst != null && this._matchup.totalGamesFirst
+				? (100 * this._matchup.totalWinsFirst) / this._matchup.totalGamesFirst
+				: null;
+		this.winrateFirstTooltip = `Played ${this._matchup.totalGamesFirst} matches going first`;
+		this.winrateCoin =
+			this._matchup.totalWinsCoin != null && this._matchup.totalGamesCoin
+				? (100 * this._matchup.totalWinsCoin) / this._matchup.totalGamesCoin
+				: null;
+		this.winrateCoinTooltip = `Played ${this._matchup.totalGamesCoin} matches going second`;
 	}
 }

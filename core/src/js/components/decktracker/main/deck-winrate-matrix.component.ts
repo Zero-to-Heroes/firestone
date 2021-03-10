@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { DesktopDecktrackerChangeMatchupAsPercentagesEvent } from '../../../services/mainwindow/store/events/decktracker/desktop-decktracker-change-matchup-as-percentage-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -15,15 +16,22 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<div class="header">
 				<div class="cell class"></div>
 				<div class="cell total-games">Total matches</div>
-				<div class="cell winrate">Win%</div>
-				<div class="cell winrate">Win% Play</div>
-				<div class="cell winrate">Win% Coin</div>
+				<div class="cell winrate">{{ showMatchupAsPercentages ? 'Win%' : 'Wins' }}</div>
+				<div class="cell winrate">{{ showMatchupAsPercentages ? 'Win% Play' : 'Wins Play' }}</div>
+				<div class="cell winrate">{{ showMatchupAsPercentages ? 'Win% Coin' : 'Wins Coin' }}</div>
 			</div>
 			<deck-matchup-info
 				*ngFor="let matchup of matchups"
 				[matchup]="matchup"
+				[showMatchupAsPercentages]="showMatchupAsPercentages"
 				[ngClass]="{ 'no-data': !matchup.totalGames }"
 			></deck-matchup-info>
+			<preference-toggle
+				class="percentage-toggle"
+				field="desktopDeckShowMatchupAsPercentages"
+				label="Show as %"
+				[toggleFunction]="toggleShowAsPercentage"
+			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +43,8 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
+	@Input() showMatchupAsPercentages: boolean = true;
+
 	_deck: DeckSummary;
 	matchups: readonly MatchupStat[];
 
@@ -45,6 +55,10 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
+
+	toggleShowAsPercentage = (newValue: boolean) => {
+		this.stateUpdater.next(new DesktopDecktrackerChangeMatchupAsPercentagesEvent(newValue));
+	};
 
 	private updateValues() {
 		if (!this._deck) {
