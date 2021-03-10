@@ -76,15 +76,19 @@ export const updates: readonly Update[] = [
 				type: 'minor',
 				header: 'Minor updates',
 				updates: [
-					// {
-					// 	category: 'decktracker',
-					// 	details: [
-					// 		// {
-					// 		// 	type: 'ui',
-					// 		// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
-					// 		// },
-					// 	],
-					// },
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a bug where Shenanigans would be greyed out by the secrets tracker if the opponent made you draw 2+ cards during their turn.`,
+							},
+							// {
+							// 	type: 'ui',
+							// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+							// },
+						],
+					},
 					{
 						category: 'battlegrounds',
 						details: [
@@ -92,11 +96,19 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix a bug where the simulator would sometimes let Illidan attack again after using his hero power.`,
 							},
+							{
+								type: 'feature',
+								text: `Show pinned minions earlier when you're refreshing the tavern.`,
+							},
 						],
 					},
 					{
 						category: 'collection',
 						details: [
+							{
+								type: 'feature',
+								text: `Add an option to change the size of the cards / card backs / hero portraits in the collection.`,
+							},
 							{
 								type: 'ui',
 								text: `Sets are now sorted from newest to oldest.`,
@@ -106,6 +118,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'general',
 						details: [
+							{
+								type: 'feature',
+								text: `The app now remembers the last tab you were on in your previous session, and restores to it.`,
+							},
 							{
 								type: 'ui',
 								text: `Premium supporters: the empty ad space should now be totally removed from the main app.`,
