@@ -21,10 +21,8 @@ export class TriggerOnNumCardDrawSecretsParser implements EventParser {
 		const isPlayerWhoDrewCard = cardPlayedControllerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayerWhoDrewCard ? currentState.opponentDeck : currentState.playerDeck;
 
-		// TODO: maybe we'll get a new game tab like NUM_CARDS_DRAWN_THIS_TURN which would
-		// make our life easier, so let's wait and see for now
 		const toExclude = [];
-		if (gameEvent.additionalData.cardsDrawn < 2) {
+		if (gameEvent.additionalData.cardsDrawn < 2 || currentState.opponentDeck.isActivePlayer) {
 			toExclude.push(CardIds.Collectible.Rogue.Shenanigans);
 		}
 
