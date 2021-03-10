@@ -5,6 +5,7 @@ import { AchievementsNotificationService } from './achievement/achievements-noti
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
+import { AdService } from './ad.service';
 import { BgsBestUserStatsService } from './battlegrounds/bgs-best-user-stats.service';
 import { BgsInitService } from './battlegrounds/bgs-init.service';
 import { BattlegroundsStoreService } from './battlegrounds/store/battlegrounds-store.service';
@@ -53,6 +54,7 @@ export class AppBootstrapService {
 	constructor(
 		private store: MainWindowStoreService,
 		private ow: OverwolfService,
+		private ads: AdService,
 		private twitchAuth: TwitchAuthService,
 		private debugService: DebugService,
 		private dev: DevService,
@@ -208,7 +210,7 @@ export class AppBootstrapService {
 		const prefs = await this.prefs.getPreferences();
 		this.ow.hideCollectionWindow(prefs);
 
-		const shouldShowAds = await this.ow.shouldShowAds();
+		const shouldShowAds = await this.ads.shouldDisplayAds();
 		// console.log('shouldshow ads?', shouldShowAds);
 		if (shouldShowAds) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);

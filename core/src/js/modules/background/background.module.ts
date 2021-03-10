@@ -11,6 +11,7 @@ import { AchievementsMonitor } from '../../services/achievement/achievements-mon
 import { AchievementsNotificationService } from '../../services/achievement/achievements-notification.service';
 import { RemoteAchievementsService } from '../../services/achievement/remote-achievements.service';
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
+import { AdService } from '../../services/ad.service';
 import { ApiRunner } from '../../services/api-runner';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
@@ -110,6 +111,7 @@ export class SentryErrorHandler implements ErrorHandler {
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 		AppBootstrapService,
+		AdService,
 		MainWindowStoreService,
 		StoreBootstrapService,
 		CollaboratorsService,
