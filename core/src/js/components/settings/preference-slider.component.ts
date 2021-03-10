@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
@@ -21,22 +21,6 @@ import { PreferencesService } from '../../services/preferences.service';
 	],
 	template: `
 		<div class="preference-slider" [ngClass]="{ 'disabled': !enabled }">
-			<!-- <label for="{{ field }}-slider" *ngIf="label">
-				<span>{{ label }}</span>
-				<i class="info" *ngIf="tooltip || tooltipDisabled">
-					<svg>
-						<use xlink:href="assets/svg/sprite.svg#info" />
-					</svg>
-					<div class="zth-tooltip right">
-						<p>
-							{{ !enabled && tooltipDisabled ? tooltipDisabled : tooltip }}
-						</p>
-						<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-							<polygon points="0,0 8,-9 16,0" />
-						</svg>
-					</div>
-				</i>
-			</label> -->
 			<input
 				[disabled]="!enabled"
 				type="range"
@@ -54,7 +38,7 @@ import { PreferencesService } from '../../services/preferences.service';
 				<div class="currentValue" *ngIf="showCurrentValue">{{ displayedValue }}</div>
 			</div>
 			<div class="knobs" *ngIf="knobs">
-				<div *ngFor="let knob of knobs" class="knob" [style.left.%]="getKnobRealValue(knob)">
+				<div *ngFor="let knob of knobs" class="knob {{ knob.label }}" [style.left.%]="getKnobRealValue(knob)">
 					<div class="circle"></div>
 					<div class="label" *ngIf="knob.label">{{ knob.label }}</div>
 				</div>
@@ -75,6 +59,8 @@ export class PreferenceSliderComponent implements OnDestroy {
 	@Input() knobs: readonly Knob[];
 	@Input() showCurrentValue: boolean;
 	@Input() displayedValueUnit = '%';
+	@Input() hackRightOffset = 6;
+	@Input() hackLeftOffset = 6;
 
 	value: number;
 	progress: number;
@@ -89,18 +75,21 @@ export class PreferenceSliderComponent implements OnDestroy {
 		this.loadDefaultValues();
 		this.subscription = this.valueChanged
 			.pipe(
-				// debounceTime(20),
 				distinctUntilChanged(),
+				map(model => {
+					this.value = model;
+					this.updateValueElements();
+					if (!(this.cdr as ViewRef)?.destroyed) {
+						this.cdr.detectChanges();
+					}
+				}),
+				debounceTime(20),
+				map(model => {
+					// console.log('changing slider value', this.value, this.progress);
+					this.prefs.setValue(this.field, this.value);
+				}),
 			)
-			.subscribe(model => {
-				this.value = model;
-				this.updateValueElements();
-				// console.log('changing slider value', this.value, this.progress);
-				this.prefs.setValue(this.field, this.value);
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
+			.subscribe();
 	}
 
 	@HostListener('window:beforeunload')
@@ -165,7 +154,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 
 	private updateValueElements() {
 		this.progress = ((this.value - this.min) / (this.max - this.min)) * 100;
-		// console.log('updating progress', this.progress, this.value, this.min, this.max);
+		console.log('updating progress', this.progress, this.value, this.min, this.max);
 		this.displayedValue = this.value.toFixed(0) + this.displayedValueUnit;
 		const width = this.el.nativeElement.querySelector('input').getBoundingClientRect().width - 8;
 		// console.log('updating left', width, this.el.nativeElement.getBoundingClientRect(), this.progress);
@@ -173,7 +162,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 			this.knobs && this.knobs.some(knob => knob.percentageValue === 0)
 				? Math.min(10, Math.max(2, (this.progress / 100) * width))
 				: 0;
-		this.right = ((100 - this.progress) * width) / 100 + 6;
+		this.right = ((100 - this.progress) * width) / 100 + this.hackRightOffset;
 	}
 }
 

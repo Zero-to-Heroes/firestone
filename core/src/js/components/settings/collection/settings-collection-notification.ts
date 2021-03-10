@@ -10,6 +10,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-collection-notification',
@@ -29,6 +30,18 @@ import { PreferencesService } from '../../../services/preferences.service';
 					field="collectionEnableNotifications"
 					label="Enable notifications"
 				></preference-toggle>
+				<div class="text card-size-label">Card size in collection</div>
+				<preference-slider
+					class="first-slider"
+					[field]="'collectionCardScale'"
+					[enabled]="true"
+					[min]="75"
+					[max]="150"
+					[snapSensitivity]="5"
+					[knobs]="cardSizeKnobs"
+					[hackRightOffset]="8"
+				>
+				</preference-slider>
 			</section>
 			<!-- For now we group them all together to avoid needless clutter of the tabs -->
 			<section class="settings-group toggle-label" [ngClass]="{ 'disabled': !enableNotifications }">
@@ -47,6 +60,20 @@ import { PreferencesService } from '../../../services/preferences.service';
 })
 export class SettingsCollectionNotificationComponent implements AfterViewInit {
 	enableNotifications: boolean;
+	cardSizeKnobs: readonly Knob[] = [
+		{
+			absoluteValue: 75,
+			label: 'Small',
+		},
+		{
+			absoluteValue: 100,
+			label: 'Default',
+		},
+		{
+			absoluteValue: 150,
+			label: 'Large',
+		},
+	];
 
 	private preferencesSubscription: Subscription;
 

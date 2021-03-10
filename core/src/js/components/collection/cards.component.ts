@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
@@ -12,9 +13,11 @@ import {
 } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
+import { Subscription } from 'rxjs';
 import { Card } from '../../models/card';
 import { Preferences } from '../../models/preferences';
 import { Set, SetCard } from '../../models/set';
+import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
@@ -87,6 +90,8 @@ import { PreferencesService } from '../../services/preferences.service';
 				<li
 					*ngFor="let card of _activeCards; let i = index; trackBy: trackByCardId"
 					[ngClass]="{ 'hidden visuallyHidden': !card.displayed }"
+					[style.width.px]="cardWidth"
+					[style.height.px]="cardHeight"
 				>
 					<card-view
 						[card]="card"
@@ -138,7 +143,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	readonly FILTER_NOT_COMPLETED = 'notcompleted';
 	readonly FILTER_ALL = 'all';
 
-	raritySelectOptions: IOption[] = [
+	readonly raritySelectOptions: IOption[] = [
 		{ label: this.labelFor(this.RARITY_FILTER_ALL), value: this.RARITY_FILTER_ALL },
 		{ label: this.labelFor(this.RARITY_FILTER_COMMON), value: this.RARITY_FILTER_COMMON },
 		{ label: this.labelFor(this.RARITY_FILTER_RARE), value: this.RARITY_FILTER_RARE },
@@ -146,7 +151,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		{ label: this.labelFor(this.RARITY_FILTER_LEGENDARY), value: this.RARITY_FILTER_LEGENDARY },
 	];
 
-	classSelectOptions: IOption[] = [
+	readonly classSelectOptions: IOption[] = [
 		{ label: this.labelFor(this.CLASS_FILTER_ALL), value: this.CLASS_FILTER_ALL },
 		{ label: this.labelFor(this.CLASS_FILTER_NEUTRAL), value: this.CLASS_FILTER_NEUTRAL },
 		{ label: this.labelFor(this.CLASS_DEMON_HUNTER), value: this.CLASS_DEMON_HUNTER },
@@ -161,7 +166,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		{ label: this.labelFor(this.CLASS_WARRIOR), value: this.CLASS_WARRIOR },
 	];
 
-	cardsOwnedSelectOptions: IOption[] = [
+	readonly cardsOwnedSelectOptions: IOption[] = [
 		{ label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN },
 		{ label: this.labelFor(this.FILTER_MISSING_PLAYABLE_COPIES), value: this.FILTER_MISSING_PLAYABLE_COPIES },
 		{ label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN },
@@ -170,6 +175,9 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		{ label: this.labelFor(this.FILTER_NOT_COMPLETED), value: this.FILTER_NOT_COMPLETED },
 		{ label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL },
 	];
+
+	readonly DEFAULT_CARD_WIDTH = 155;
+	readonly DEFAULT_CARD_HEIGHT = 240;
 
 	_searchString: string;
 	_cardList: SetCard[];
@@ -182,18 +190,23 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	imagestoLoad = 0;
 	highRes: boolean;
 
+	cardWidth = this.DEFAULT_CARD_WIDTH;
+	cardHeight = this.DEFAULT_CARD_HEIGHT;
+
 	private imagesLoaded = 0;
 
 	private processingTimeout;
+	private preferencesSubscription: Subscription;
 
 	constructor(
-		private elRef: ElementRef,
-		private cdr: ChangeDetectorRef,
+		private readonly elRef: ElementRef,
+		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
+		private readonly ow: OverwolfService,
 	) {}
 
 	async ngAfterViewInit() {
-		// console.log('after view init', isEqual(1, 1));
+		// TODO: extract that to its own component
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
 		singleEls.forEach(singleEl => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
@@ -203,13 +216,24 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');
 		});
-		// setTimeout(() => {
-		// 	if (!(this.cdr as ViewRef)?.destroyed) {
-		// 		this.cdr.detectChanges();
-		// 	}
-		// });
-		const prefs: Preferences = await this.prefs.getPreferences();
-		this.highRes = prefs.collectionUseHighResImages;
+
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handleDisplayPreferences(event.preferences);
+		});
+
+		await this.handleDisplayPreferences();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.highRes = preferences.collectionUseHighResImages;
+		const cardScale = preferences.collectionCardScale / 100;
+		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+		this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -220,6 +244,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		if (this.processingTimeout) {
 			clearTimeout(this.processingTimeout);
 		}
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	@Input('set') set cardSet(set: Set) {

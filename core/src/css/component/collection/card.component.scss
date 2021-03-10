@@ -9,7 +9,8 @@
 	flex-direction: column;
 
 	.real-card {
-		width: 160px;
+		// width: 160px;
+		width: 100%;
 		position: relative;
 		opacity: 0.9;
 		transition: transform 0.2s;
@@ -25,8 +26,8 @@
 	}
 
 	.images {
-		height: 224px;
-		width: 146px;
+		// height: 224px;
+		// width: 146px;
 	}
 
 	.perspective-wrapper {

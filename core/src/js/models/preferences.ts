@@ -45,6 +45,7 @@ export class Preferences {
 	readonly showCardsOutsideOfPacks: boolean = true;
 	readonly collectionHistoryShowOnlyNewCards: boolean = false;
 	readonly collectionUseHighResImages: boolean = false;
+	readonly collectionCardScale: number = 100;
 
 	readonly collectionUseOverlay: boolean;
 
