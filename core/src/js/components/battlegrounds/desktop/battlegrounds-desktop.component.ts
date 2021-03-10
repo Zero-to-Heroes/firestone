@@ -28,7 +28,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						></global-header>
 						<ul
 							class="menu-selection"
-							*ngIf="!navigation?.text && navigation?.navigationBattlegrounds.menuDisplayType === 'menu'"
+							*ngIf="navigation?.navigationBattlegrounds.menuDisplayType === 'menu'"
 						>
 							<li
 								*ngFor="let category of buildCategories()"

@@ -1,10 +1,8 @@
+import { CurrentAppType } from '../../../../models/mainwindow/current-app.type';
 import { MainWindowStoreEvent } from './main-window-store-event';
 
 export class ChangeVisibleApplicationEvent implements MainWindowStoreEvent {
-	constructor(module: string) {
-		this.module = module;
-	}
-	readonly module: string;
+	constructor(public readonly module: CurrentAppType) {}
 
 	public static eventName(): string {
 		return 'ChangeVisibleApplicationEvent';

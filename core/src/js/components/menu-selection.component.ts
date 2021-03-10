@@ -8,6 +8,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
@@ -115,7 +116,7 @@ export class MenuSelectionComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	selectModule(module: string) {
+	selectModule(module: CurrentAppType) {
 		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
 	}
 

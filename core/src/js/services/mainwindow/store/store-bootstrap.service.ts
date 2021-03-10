@@ -58,12 +58,11 @@ export class StoreBootstrapService {
 		// First load for the FTUE
 		const prefs = await this.prefs.getPreferences();
 		const showFtue = !prefs.ftue.hasSeenGlobalFtue;
-		if (showFtue) {
-			const windowStateForFtue = Object.assign(new MainWindowState(), {
-				showFtue: showFtue,
-			} as MainWindowState);
-			this.stateUpdater.next(new StoreInitEvent(windowStateForFtue));
-		}
+		// Early init to avoid having the navigation jump when restoring the app to the previous tab
+		const windowStateForFtue = Object.assign(new MainWindowState(), {
+			showFtue: showFtue,
+		} as MainWindowState);
+		this.stateUpdater.next(new StoreInitEvent(windowStateForFtue));
 
 		// Load all the initial data
 		const [

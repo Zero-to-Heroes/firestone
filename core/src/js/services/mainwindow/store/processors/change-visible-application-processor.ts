@@ -6,10 +6,13 @@ import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/
 import { NavigationDuels } from '../../../../models/mainwindow/navigation/navigation-duels';
 import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
+import { PreferencesService } from '../../../preferences.service';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
 import { Processor } from './processor';
 
 export class ChangeVisibleApplicationProcessor implements Processor {
+	constructor(private readonly prefs: PreferencesService) {}
+
 	public async process(
 		event: ChangeVisibleApplicationEvent,
 		currentState: MainWindowState,
@@ -20,6 +23,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		// 	return [null, null];
 		// }
 		// console.log('changing application', event);
+
 		const binder =
 			event.module === 'collection'
 				? navigationState.navigationCollection.update({
@@ -70,6 +74,8 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						selectedDeckstring: null,
 				  } as NavigationDecktracker)
 				: navigationState.navigationBattlegrounds;
+		// TODO: if this is the live tab, default to the decktracker
+		await this.prefs.setMainVisibleSection(event.module === 'live' ? 'decktracker' : event.module);
 		return [
 			null,
 			navigationState.update({

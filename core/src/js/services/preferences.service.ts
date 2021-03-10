@@ -12,6 +12,7 @@ import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-
 import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group-filter-type';
+import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
@@ -90,6 +91,12 @@ export class PreferencesService {
 	public async setDontShowNewVersionNotif(value: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontShowNewVersionNotif: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async setMainVisibleSection(value: CurrentAppType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, currentMainVisibleSection: value };
 		await this.savePreferences(newPrefs);
 	}
 

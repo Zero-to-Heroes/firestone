@@ -28,9 +28,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 						</global-header>
 						<collection-menu-selection
 							class="menu-selection"
-							*ngxCacheIf="
-								!_navigation?.text && _navigation?.navigationCollection.menuDisplayType === 'menu'
-							"
+							*ngxCacheIf="_navigation?.navigationCollection.menuDisplayType === 'menu'"
 							[selectedTab]="_navigation.navigationCollection.currentView"
 						>
 						</collection-menu-selection>

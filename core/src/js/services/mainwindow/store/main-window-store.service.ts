@@ -325,7 +325,7 @@ export class MainWindowStoreService {
 			}
 			if (newState) {
 				this.state = newState;
-				// console.log('emitting new state', this.state, this.navigationState);
+				// console.log('[store] emitting new state', event.eventName(), this.state, this.navigationState);
 				this.stateEmitter.next(this.state);
 				if (Date.now() - start > 1000) {
 					console.warn(
@@ -410,7 +410,7 @@ export class MainWindowStoreService {
 			new NavigationNextProcessor(),
 
 			ChangeVisibleApplicationEvent.eventName(),
-			new ChangeVisibleApplicationProcessor(),
+			new ChangeVisibleApplicationProcessor(this.prefs),
 
 			CloseMainWindowEvent.eventName(),
 			new CloseMainWindowProcessor(),

@@ -11,6 +11,7 @@ import { BgsActiveTimeFilterType } from './mainwindow/battlegrounds/bgs-active-t
 import { BgsHeroSortFilterType } from './mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-type';
+import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { Ftue } from './preferences/ftue';
 
@@ -26,6 +27,8 @@ export class Preferences {
 	readonly dontShowNewVersionNotif: boolean = false;
 
 	readonly advancedModeToggledOn: boolean;
+
+	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
 	readonly achievementsLiveTracking: boolean = true;
 	readonly achievementsDisplayNotifications = true;

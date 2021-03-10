@@ -5,4 +5,5 @@ export type CurrentAppType =
 	| 'replays'
 	| 'battlegrounds'
 	| 'general'
-	| 'duels';
+	| 'duels'
+	| 'live';
