@@ -23,6 +23,10 @@ export class DeckTrackerDeckNameComponent {
 	copyText: string;
 
 	@Input() set deck(value: DeckState) {
+		if (!value) {
+			return;
+		}
+
 		this.deckName = value.name || (value.hero ? value.hero.playerName || value.hero.name : 'Unnamed deck');
 		this.deckstring = value.deckstring;
 		this.copyText = 'Copy deck';
