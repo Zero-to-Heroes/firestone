@@ -37,6 +37,12 @@ export class StoreInitProcessor implements Processor {
 		navigationState: NavigationState,
 		prefs: Preferences,
 	): Promise<NavigationState> {
+		const currentNavApp = navigationState.currentApp;
+		// Don't change it if the user has already started to navigate
+		if (currentNavApp) {
+			return navigationState;
+		}
+
 		const currentAppFromPrefs = prefs.currentMainVisibleSection;
 		if (currentAppFromPrefs) {
 			console.debug('setting current app from prefs', currentAppFromPrefs);

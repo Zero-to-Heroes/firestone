@@ -75,9 +75,12 @@ card-search {
 	min-height: 30px;
 }
 
-.app-section .secondary card-history {
-	flex-grow: 1;
-	flex-shrink: 1;
-	position: relative;
-	display: flex;
+.app-section .secondary {
+	card-history,
+	set-stats {
+		flex-grow: 1;
+		flex-shrink: 1;
+		position: relative;
+		display: flex;
+	}
 }

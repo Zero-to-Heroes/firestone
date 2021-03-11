@@ -75,14 +75,17 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				<card-search
 					[searchString]="_navigation.navigationCollection.searchString"
 					[searchResults]="searchResults"
+					*ngxCacheIf="!isSetDetails()"
 				></card-search>
 				<card-history
 					[selectedCard]="selectedCard"
 					[cardHistory]="dataState.cardHistory"
 					[shownHistory]="_navigation.navigationCollection.shownCardHistory"
 					[totalHistoryLength]="dataState.totalHistoryLength"
+					*ngxCacheIf="!isSetDetails()"
 				>
 				</card-history>
+				<set-stats [set]="selectedSet" *ngxCacheIf="isSetDetails()"> </set-stats>
 			</section>
 		</div>
 	`,
@@ -112,6 +115,14 @@ export class CollectionComponent {
 	@Input() set navigation(value: NavigationState) {
 		this._navigation = value;
 		this.updateValues();
+	}
+
+	isSetDetails(): boolean {
+		return (
+			this._navigation.navigationCollection.currentView === 'cards' &&
+			this.selectedSet &&
+			!this._navigation.navigationCollection.searchString
+		);
 	}
 
 	constructor(private cards: SetsService, private readonly allCards: AllCardsService) {

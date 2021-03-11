@@ -220,3 +220,20 @@ export const defaultStartingHp = (gameType: GameType, heroCardId: string): numbe
 	}
 	return 30;
 };
+
+export const dustFor = (rarity: string): number => {
+	switch (rarity) {
+		case 'legendary':
+			return 400;
+		case 'epic':
+			return 100;
+		case 'rare':
+			return 20;
+		default:
+			return 5;
+	}
+};
+
+export const dustForPremium = (rarity: string): number => {
+	return 4 * dustFor(rarity);
+};

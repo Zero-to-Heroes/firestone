@@ -69,6 +69,8 @@ import { FullCardComponent } from '../../components/collection/full-card.compone
 import { HeroPortraitComponent } from '../../components/collection/hero-portrait.component';
 import { HeroPortraitsComponent } from '../../components/collection/hero-portraits.component';
 import { RarityComponent } from '../../components/collection/rarity.component';
+import { SetStatCellComponent } from '../../components/collection/set-stat-cell.component';
+import { SetStatsComponent } from '../../components/collection/set-stats.component';
 import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainer } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
@@ -185,6 +187,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		CardComponent,
 		CardHistoryComponent,
 		CardHistoryItemComponent,
+		SetStatsComponent,
+		SetStatCellComponent,
 		CardsComponent,
 		CardSearchComponent,
 		CardSearchAutocompleteItemComponent,

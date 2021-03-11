@@ -1,0 +1,62 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.set-stats {
+	width: 100%;
+	height: 100%;
+	// background: rgba(255, 255, 255, 0.08);
+	font-family: Open Sans;
+	font-size: 20px;
+	display: flex;
+	flex-direction: column;
+
+	.title {
+		@extend %sub-title;
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+		font-size: 20px;
+	}
+
+	.stats {
+		color: var(--color-1);
+		background: var(--color-5);
+		padding: 10px;
+		flex-grow: 1;
+		min-height: 0;
+		overflow: auto;
+	}
+
+	set-stat-cell {
+		height: 60px;
+		min-height: 60px;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--color-3);
+		}
+	}
+
+	.stat {
+		height: 60px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 60px;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--color-3);
+		}
+
+		.text {
+			width: 200px;
+			flex-shrink: 0;
+		}
+
+		.value {
+			display: flex;
+			flex-grow: 1;
+			justify-content: space-around;
+			color: var(--default-text-color);
+		}
+	}
+}

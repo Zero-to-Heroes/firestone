@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Card } from '../../models/card';
 import { Events } from '../events.service';
+import { dustFor } from '../hs-utils';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -196,26 +197,13 @@ export class LogParserService {
 
 	private displayDustMessage(card: Card, type: string) {
 		const dbCard = this.cards.getCard(card.id);
-		let dust = this.dustFor(dbCard.rarity?.toLowerCase());
+		let dust = dustFor(dbCard.rarity?.toLowerCase());
 		dust = type === 'GOLDEN' ? dust * 4 : dust;
 		setTimeout(() => {
 			this.events.broadcast(Events.MORE_DUST, card, dust, type);
 		}, 20);
 		// amplitude.getInstance().logEvent('dust', { 'amount': dust });
 		console.log('[pack-parser] Got ' + dust + ' dust', card.id, type);
-	}
-
-	private dustFor(rarity: string): number {
-		switch (rarity) {
-			case 'legendary':
-				return 400;
-			case 'epic':
-				return 100;
-			case 'rare':
-				return 20;
-			default:
-				return 5;
-		}
 	}
 
 	private mapSet(set: string): string {
