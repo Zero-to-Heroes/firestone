@@ -4,6 +4,7 @@ import { dustFor, dustForPremium } from '../../services/hs-utils';
 import { CollectionSetShowGoldenStatsEvent } from '../../services/mainwindow/store/events/collection/collection-set-show-golden-stats-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 
 @Component({
 	selector: 'set-stats',
@@ -25,13 +26,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 					></preference-toggle>
 				</section>
 			</div>
-			<div class="stats">
+			<div class="stats" scrollable>
 				<set-stat-cell
 					*ngFor="let stat of stats"
 					[text]="stat.text"
 					[current]="stat.current"
 					[total]="stat.total"
 				></set-stat-cell>
+				<pie-chart [data]="pieChartData"></pie-chart>
 			</div>
 		</div>
 	`,
@@ -51,6 +53,7 @@ export class SetStatsComponent implements AfterViewInit {
 	_set: Set;
 	_showGoldenStats: boolean;
 	stats: readonly Stat[];
+	pieChartData: readonly InputPieChartData[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -70,6 +73,97 @@ export class SetStatsComponent implements AfterViewInit {
 		}
 
 		this.stats = this._showGoldenStats ? this.buildGoldenStats() : this.buildStats();
+		this.pieChartData = this._showGoldenStats ? this.buildGoldenPieChartData() : this.buildPieChartData();
+	}
+
+	private buildPieChartData(): readonly InputPieChartData[] {
+		return [
+			{
+				label: 'Commons',
+				data: this.getOwned('common'),
+				color: 'rgba(217, 195, 171, 1)',
+			},
+			{
+				label: 'Missing Commons',
+				data: this.getTotal('common') - this.getOwned('common'),
+				color: 'rgba(135, 121, 106, 1)',
+			},
+			{
+				label: 'Rares',
+				data: this.getOwned('rare'),
+				color: 'rgba(64, 78, 211, 1)',
+			},
+			{
+				label: 'Missing Rares',
+				data: this.getTotal('rare') - this.getOwned('rare'),
+				color: 'rgba(40, 49, 130, 1)',
+			},
+			{
+				label: 'Epics',
+				data: this.getOwned('epic'),
+				color: 'rgba(162, 118, 175, 1)',
+			},
+			{
+				label: 'Missing Epics',
+				data: this.getTotal('epic') - this.getOwned('epic'),
+				color: 'rgba(106, 78, 114, 1)',
+			},
+			{
+				label: 'Legendaries',
+				data: this.getOwned('legendary'),
+				color: 'rgba(233, 169, 67, 1)',
+			},
+			{
+				label: 'Missing Legendaries',
+				data: this.getTotal('legendary') - this.getOwned('legendary'),
+				color: 'rgba(150, 107, 43, 1)',
+			},
+		];
+	}
+
+	private buildGoldenPieChartData(): readonly InputPieChartData[] {
+		return [
+			{
+				label: 'Golden Commons',
+				data: this.getOwned('common', true),
+				color: 'rgba(217, 195, 171, 1)',
+			},
+			{
+				label: 'Missing Golden Commons',
+				data: this.getTotal('common', true) - this.getOwned('common', true),
+				color: 'rgba(135, 121, 106, 1)',
+			},
+			{
+				label: 'Golden Rares',
+				data: this.getOwned('rare', true),
+				color: 'rgba(64, 78, 211, 1)',
+			},
+			{
+				label: 'Missing Golden Rares',
+				data: this.getTotal('rare', true) - this.getOwned('rare', true),
+				color: 'rgba(40, 49, 130, 1)',
+			},
+			{
+				label: 'Golden Epics',
+				data: this.getOwned('epic', true),
+				color: 'rgba(162, 118, 175, 1)',
+			},
+			{
+				label: 'Missing Golden Epics',
+				data: this.getTotal('epic', true) - this.getOwned('epic', true),
+				color: 'rgba(106, 78, 114, 1)',
+			},
+			{
+				label: 'Golden Legendaries',
+				data: this.getOwned('legendary', true),
+				color: 'rgba(233, 169, 67, 1)',
+			},
+			{
+				label: 'Missing Golden Legendaries',
+				data: this.getTotal('legendary', true) - this.getOwned('legendary', true),
+				color: 'rgba(150, 107, 43, 1)',
+			},
+		];
 	}
 
 	private buildStats(): readonly Stat[] {

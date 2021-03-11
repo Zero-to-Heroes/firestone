@@ -78,4 +78,13 @@
 			color: var(--default-text-color);
 		}
 	}
+
+	pie-chart {
+		// Also includes the padding in the chart area itself to make room for the labels
+		width: 400px;
+		margin-top: 36px;
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: 20px;
+	}
 }
