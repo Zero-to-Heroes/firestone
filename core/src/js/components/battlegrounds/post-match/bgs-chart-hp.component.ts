@@ -31,7 +31,12 @@ declare let amplitude: any;
 		<div class="legend">
 			<div *ngFor="let player of legend; trackBy: trackByLegendFn" class="item">
 				<img [src]="player.icon" class="portrait" />
-				<div class="position position-{{ player.position }}" [ngClass]="{ 'player': player.isPlayer }">
+				<div
+					class="position"
+					[ngClass]="{ 'player': player.isPlayer }"
+					bindCssVariable="legend-icon-border-color"
+					[bindCssVariableValue]="player.color"
+				>
 					#{{ player.position }}
 				</div>
 			</div>
@@ -87,7 +92,14 @@ export class BgsChartHpComponent {
 	@ViewChild('chart', { static: false }) chart: ElementRef;
 
 	playerColors = ['#FFB948', '#FF8A48', '#42D8A2', '#55D6FF', '#4376D8', '#B346E7', '#F44CCF', '#F44C60'];
-	legend: readonly { cardId: string; icon: string; position: number; isPlayer: boolean; shown: boolean }[];
+	legend: readonly {
+		cardId: string;
+		icon: string;
+		position: number;
+		isPlayer: boolean;
+		shown: boolean;
+		color: string;
+	}[];
 
 	chartWidth: number;
 	chartHeight: number;
@@ -98,6 +110,11 @@ export class BgsChartHpComponent {
 		maintainAspectRatio: false,
 		layout: {
 			padding: 0,
+		},
+		plugins: {
+			datalabels: {
+				display: false,
+			},
 		},
 		scales: {
 			xAxes: [
@@ -341,6 +358,62 @@ export class BgsChartHpComponent {
 		if (!this._stats) {
 			return;
 		}
+
+		const playerOrder: readonly string[] = this.buildPlayerOrder();
+		const hpOverTurn = {};
+		for (const playerCardId of playerOrder) {
+			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
+		}
+
+		// It's just a way to arbitrarily always assign the same color to a player
+		const sortedPlayerCardIds = [...playerOrder].sort();
+		const players = playerOrder.map(cardId => ({
+			cardId: cardId,
+			color: this.playerColors[sortedPlayerCardIds.indexOf(cardId)],
+			position: playerOrder.indexOf(cardId) + 1,
+			isPlayer: cardId === this._mainPlayerCardId,
+			hpOverTurn: hpOverTurn[cardId]?.filter(turnInfo => turnInfo).map(turnInfo => turnInfo.value) || [],
+		}));
+		// console.debug('playerOrder', playerOrder, players, hpOverTurn);
+
+		this.legend = players.map(player => ({
+			cardId: player.cardId,
+			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${player.cardId}.png`,
+			position: player.position,
+			isPlayer: player.isPlayer,
+			shown: true,
+			color: player.color,
+		}));
+		const newChartData: ChartDataSets[] = players.map(player => ({
+			data: player.hpOverTurn,
+			cardId: player.cardId,
+			label: player.cardId,
+			borderCapStyle: 'square',
+			borderJoinStyle: 'miter',
+			lineTension: 0,
+			borderWidth: 2,
+			hidden: false,
+		}));
+		if (areEqualDataSets(newChartData, this.lineChartData)) {
+			return;
+		}
+
+		this.lineChartData = newChartData;
+		this.lineChartColors = players.map(player => ({
+			backgroundColor: 'transparent',
+			borderColor: player.color,
+			pointBackgroundColor: 'transparent',
+			pointBorderColor: 'transparent',
+			pointHoverBackgroundColor: 'transparent',
+			pointHoverBorderColor: 'transparent',
+		}));
+		this.lineChartLabels = this.buildChartLabels(hpOverTurn);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private buildPlayerOrder(): readonly string[] {
 		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn)
 			.filter(playerCardId => playerCardId !== CardIds.NonCollectible.Neutral.BaconphheroTavernBrawl)
 			.map(playerCardId => ({
@@ -349,6 +422,7 @@ export class BgsChartHpComponent {
 				lastKnownHp:
 					this._stats.hpOverTurn[playerCardId][this._stats.hpOverTurn[playerCardId].length - 1]?.value ?? 99,
 			}));
+		// console.debug('turn at which each player dies', turnAtWhichEachPlayerDies);
 		let playerOrder: string[] = turnAtWhichEachPlayerDies
 			.sort((a, b) => {
 				if (a.turnDeath < b.turnDeath) {
@@ -360,6 +434,7 @@ export class BgsChartHpComponent {
 				return b.lastKnownHp - a.lastKnownHp;
 			})
 			.map(playerInfo => playerInfo.playerCardId);
+		// console.debug('first playerOrder', playerOrder);
 		// Legacy issue - the heroes that were offered during the hero selection phase are
 		// also proposed there
 		if (playerOrder.length > 8) {
@@ -376,58 +451,26 @@ export class BgsChartHpComponent {
 				playerCardId => !candidatesToRemove.map(info => info.playerCardId).includes(playerCardId),
 			);
 		}
-
-		const hpOverTurn = {};
-		for (const playerCardId of playerOrder) {
-			hpOverTurn[playerCardId] = this._stats.hpOverTurn[playerCardId];
-		}
-		// console.log('hpOverTurn', hpOverTurn);
-		this.legend = playerOrder.map(cardId => ({
-			cardId: cardId,
-			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${cardId}.png`,
-			position: playerOrder.indexOf(cardId) + 1,
-			isPlayer: cardId === this._mainPlayerCardId,
-			shown: true,
-		}));
-
-		const newChartData = this.buildChartData(hpOverTurn);
-		if (areEqualDataSets(newChartData, this.lineChartData)) {
-			return;
-		}
-
-		this.lineChartData = newChartData;
-		this.lineChartLabels = this.buildChartLabels(hpOverTurn);
-		// console.debug('set hp data', this.lineChartData, this.lineChartLabels, this.legend, this._stats.hpOverTurn);
-
-		this.lineChartColors = this.playerColors.map(color => ({
-			backgroundColor: 'transparent',
-			borderColor: color,
-			pointBackgroundColor: 'transparent',
-			pointBorderColor: 'transparent',
-			pointHoverBackgroundColor: 'transparent',
-			pointHoverBorderColor: 'transparent',
-		}));
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// console.debug('second playerOrder', playerOrder);
+		return playerOrder;
 	}
 
-	private buildChartData(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): ChartDataSets[] {
-		if (!value || !Object.keys(value)) {
-			console.error('Could not build chart data for', value);
-			return [];
-		}
-		return Object.keys(value).map(playerId => ({
-			data: value[playerId]?.filter(turnInfo => turnInfo).map(turnInfo => turnInfo.value) || [],
-			cardId: playerId,
-			label: playerId,
-			borderCapStyle: 'square',
-			borderJoinStyle: 'miter',
-			lineTension: 0,
-			borderWidth: 2,
-			hidden: false,
-		}));
-	}
+	// private buildChartData(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): ChartDataSets[] {
+	// 	if (!value || !Object.keys(value)) {
+	// 		console.error('Could not build chart data for', value);
+	// 		return [];
+	// 	}
+	// 	return Object.keys(value).map(playerId => ({
+	// 		data: value[playerId]?.filter(turnInfo => turnInfo).map(turnInfo => turnInfo.value) || [],
+	// 		cardId: playerId,
+	// 		label: playerId,
+	// 		borderCapStyle: 'square',
+	// 		borderJoinStyle: 'miter',
+	// 		lineTension: 0,
+	// 		borderWidth: 2,
+	// 		hidden: false,
+	// 	}));
+	// }
 
 	private buildChartLabels(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): Label[] {
 		if (!value || !Object.values(value)) {

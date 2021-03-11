@@ -86,6 +86,7 @@ import { WindowWrapperComponent } from '../../components/window-wrapper.componen
 import { WithLoadingComponent } from '../../components/with-loading.component';
 import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { AskConfirmationDirective } from '../../directives/ask-confirmation.directive';
+import { BindCssVariableDirective } from '../../directives/bind-css-variable-directive';
 import { CachedComponentTooltipDirective } from '../../directives/cached-component-tooltip.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { ComponentTooltipDirective } from '../../directives/component-tooltip.directive';
@@ -144,6 +145,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
+		BindCssVariableDirective,
 		GrowOnClickDirective,
 		RippleOnClickDirective,
 		ScrollableDirective,
@@ -252,6 +254,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
+		BindCssVariableDirective,
 		GrowOnClickDirective,
 		RippleOnClickDirective,
 		ScrollableDirective,
