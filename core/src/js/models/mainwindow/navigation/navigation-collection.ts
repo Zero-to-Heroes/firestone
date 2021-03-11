@@ -15,6 +15,7 @@ export class NavigationCollection {
 	readonly cardList: readonly SetCard[] = [];
 	readonly shownCardHistory: readonly CardHistory[] = [];
 	readonly showOnlyNewCardsInHistory: boolean = false;
+	readonly collectionSetShowGoldenStats: boolean = false;
 
 	public update(base: NavigationCollection): NavigationCollection {
 		return Object.assign(new NavigationCollection(), this, base);

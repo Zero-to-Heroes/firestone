@@ -10,12 +10,31 @@
 	display: flex;
 	flex-direction: column;
 
-	.title {
-		@extend %sub-title;
+	.top-container {
 		display: flex;
+		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 20px;
-		font-size: 20px;
+		flex-shrink: 0;
+		padding: 10px;
+
+		.toggle-label {
+			display: flex;
+			align-items: center;
+
+			::ng-deep .toggle p {
+				color: var(--color-1);
+			}
+			::ng-deep .preference-toggle {
+				margin: 0;
+			}
+		}
+
+		.title {
+			@extend %sub-title;
+			display: flex;
+			align-items: center;
+			font-size: 20px;
+		}
 	}
 
 	.stats {

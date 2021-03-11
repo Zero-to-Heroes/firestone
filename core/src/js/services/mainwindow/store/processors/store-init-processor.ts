@@ -1,4 +1,5 @@
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { NavigationCollection } from '../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../../../models/preferences';
@@ -28,6 +29,9 @@ export class StoreInitProcessor implements Processor {
 			navigationDecktracker: navState.navigationDecktracker.update({
 				showMatchupAsPercentages: prefs.desktopDeckShowMatchupAsPercentages,
 			} as NavigationDecktracker),
+			navigationCollection: navState.navigationCollection.update({
+				collectionSetShowGoldenStats: prefs.collectionSetShowGoldenStats,
+			} as NavigationCollection),
 		} as NavigationState);
 		return [newState, navStateWithPrefs];
 	}

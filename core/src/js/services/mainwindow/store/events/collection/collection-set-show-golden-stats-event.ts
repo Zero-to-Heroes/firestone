@@ -1,14 +1,14 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
-export class ToggleShowOnlyNewCardsInHistoryEvent implements MainWindowStoreEvent {
+export class CollectionSetShowGoldenStatsEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
-		return 'ToggleShowOnlyNewCardsInHistoryEvent';
+		return 'CollectionSetShowGoldenStatsEvent';
 	}
 
-	constructor(public newValue: boolean) {}
+	constructor(public readonly newValue: boolean) {}
 
 	public eventName(): string {
-		return 'ToggleShowOnlyNewCardsInHistoryEvent';
+		return 'CollectionSetShowGoldenStatsEvent';
 	}
 
 	public isNavigationEvent(): boolean {

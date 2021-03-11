@@ -1,6 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { Set } from '../../models/set';
-import { dustFor } from '../../services/hs-utils';
+import { dustFor, dustForPremium } from '../../services/hs-utils';
+import { CollectionSetShowGoldenStatsEvent } from '../../services/mainwindow/store/events/collection/collection-set-show-golden-stats-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'set-stats',
@@ -12,8 +15,16 @@ import { dustFor } from '../../services/hs-utils';
 	],
 	template: `
 		<div class="set-stats">
-			<!-- TODO: add toggle for golden / basic -->
-			<div class="title">Set stats</div>
+			<div class="top-container">
+				<div class="title">Set stats</div>
+				<section class="toggle-label">
+					<preference-toggle
+						field="collectionSetShowGoldenStats"
+						label="Show stats for golden"
+						[toggleFunction]="toggleShowGolden"
+					></preference-toggle>
+				</section>
+			</div>
 			<div class="stats">
 				<set-stat-cell
 					*ngFor="let stat of stats"
@@ -26,21 +37,43 @@ import { dustFor } from '../../services/hs-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetStatsComponent {
+export class SetStatsComponent implements AfterViewInit {
 	@Input() set set(value: Set) {
 		this._set = value;
 		this.updateInfos();
 	}
 
+	@Input() set showGoldenStats(value: boolean) {
+		this._showGoldenStats = value;
+		this.updateInfos();
+	}
+
 	_set: Set;
+	_showGoldenStats: boolean;
 	stats: readonly Stat[];
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
+
+	ngAfterViewInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	toggleShowGolden = (newValue: boolean) => {
+		this.stateUpdater.next(new CollectionSetShowGoldenStatsEvent(newValue));
+	};
 
 	private updateInfos() {
 		if (!this._set) {
 			return;
 		}
 
-		this.stats = [
+		this.stats = this._showGoldenStats ? this.buildGoldenStats() : this.buildStats();
+	}
+
+	private buildStats(): readonly Stat[] {
+		return [
 			{
 				text: 'Dust',
 				current: this._set.allCards
@@ -71,23 +104,50 @@ export class SetStatsComponent {
 				total: this.getTotal('legendary'),
 			},
 		];
-
-		// this.totalDustGolden = this._set.allCards
-		// 	.map(card => dustForPremium(card.rarity) * card.getMaxCollectible())
-		// 	.reduce((a, b) => a + b, 0);
-		// this.completedDustGolden = this._set.allCards
-		// 	.map(card => dustForPremium(card.rarity) * card.getNumberCollectedPremium())
-		// 	.reduce((a, b) => a + b, 0);
 	}
 
-	private getOwned(rarity: 'common' | 'rare' | 'epic' | 'legendary'): number {
+	private buildGoldenStats(): readonly Stat[] {
+		return [
+			{
+				text: 'Golden Dust',
+				current: this._set.allCards
+					.map(card => dustForPremium(card.rarity) * card.getNumberCollectedPremium())
+					.reduce((a, b) => a + b, 0),
+				total: this._set.allCards
+					.map(card => dustForPremium(card.rarity) * card.getMaxCollectible())
+					.reduce((a, b) => a + b, 0),
+			},
+			{
+				text: 'Golden Common',
+				current: this.getOwned('common', true),
+				total: this.getTotal('common', true),
+			},
+			{
+				text: 'Golden Rare',
+				current: this.getOwned('rare', true),
+				total: this.getTotal('rare', true),
+			},
+			{
+				text: 'Golden Epic',
+				current: this.getOwned('epic', true),
+				total: this.getTotal('epic', true),
+			},
+			{
+				text: 'Golden Legendary',
+				current: this.getOwned('legendary', true),
+				total: this.getTotal('legendary', true),
+			},
+		];
+	}
+
+	private getOwned(rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
 		return this._set.allCards
 			.filter(card => card.rarity === rarity)
-			.map(card => card.getNumberCollected())
+			.map(card => (golden ? card.getNumberCollectedPremium() : card.getNumberCollected()))
 			.reduce((a, b) => a + b, 0);
 	}
 
-	private getTotal(rarity: 'common' | 'rare' | 'epic' | 'legendary'): number {
+	private getTotal(rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
 		return this._set.allCards
 			.filter(card => card.rarity === rarity)
 			.map(card => card.getMaxCollectible())
