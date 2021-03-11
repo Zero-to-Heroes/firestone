@@ -12,6 +12,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 			</div>
 		</div>
 	`,
+	// TODO: remove this
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
