@@ -10,6 +10,7 @@ import {
 import { ChartOptions } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Color, Label } from 'ng2-charts';
+import { sleep } from '../../../services/utils';
 import { InputPieChartData } from './input-pie-chart-data';
 
 declare let amplitude: any;
@@ -24,7 +25,7 @@ declare let amplitude: any;
 		<div class="container-1">
 			<div style="display: block; position: relative; height: 100%; width: 100%;">
 				<canvas
-					*ngIf="chartData?.length"
+					*ngIf="chartData?.length && chartOptions"
 					#chart
 					baseChart
 					[data]="chartData"
@@ -50,7 +51,7 @@ export class PieChartComponent {
 
 	chartData: readonly number[] = [];
 	chartLabels: readonly Label[];
-	chartOptions: ChartOptions = this.buildChartOptions();
+	chartOptions: ChartOptions;
 	chartColors: Color[];
 	chartPlugins = [ChartDataLabels];
 
@@ -58,7 +59,7 @@ export class PieChartComponent {
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
 
-	private updateValues() {
+	private async updateValues() {
 		if (!this._inputData?.length) {
 			return;
 		}
@@ -72,7 +73,7 @@ export class PieChartComponent {
 			},
 		];
 		console.debug('set chart data', this.chartData, this.chartLabels, this.chartColors);
-		this.updateChartOptions();
+		await this.updateChartOptions();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -80,11 +81,13 @@ export class PieChartComponent {
 
 	previousWidth: number;
 
-	private updateChartOptions() {
-		this.chartOptions = this.buildChartOptions();
+	private async updateChartOptions() {
+		this.chartOptions = await this.buildChartOptions();
 	}
 
-	private buildChartOptions(): ChartOptions {
+	private async buildChartOptions(): Promise<ChartOptions> {
+		const tooltipBackgroundColor = await this.getCssPropetyValue('--color-5');
+		const fontColor = await this.getCssPropetyValue('--default-text-color');
 		return {
 			responsive: true,
 			// maintainAspectRatio: true,
@@ -96,6 +99,18 @@ export class PieChartComponent {
 					left: 50,
 					right: 80,
 				},
+			},
+			tooltips: {
+				backgroundColor: tooltipBackgroundColor,
+				bodyFontFamily: 'Open Sans',
+				titleFontFamily: 'Open Sans',
+				bodyFontColor: fontColor,
+				titleFontColor: fontColor,
+				bodyAlign: 'right',
+				titleAlign: 'right',
+				displayColors: true,
+				xPadding: 5,
+				yPadding: 5,
 			},
 			plugins: {
 				datalabels: {
@@ -109,5 +124,16 @@ export class PieChartComponent {
 				},
 			},
 		};
+	}
+
+	private async getCssPropetyValue(prop: string): Promise<string> {
+		let tooltipBackgroundColor = getComputedStyle(this.el.nativeElement).getPropertyValue(prop);
+		let tries = 0;
+		while (!tooltipBackgroundColor?.length && tries < 100) {
+			await sleep(50);
+			tooltipBackgroundColor = getComputedStyle(this.el.nativeElement).getPropertyValue(prop);
+			tries++;
+		}
+		return tooltipBackgroundColor;
 	}
 }
