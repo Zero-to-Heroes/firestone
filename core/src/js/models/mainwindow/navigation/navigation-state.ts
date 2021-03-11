@@ -8,7 +8,7 @@ import { NavigationReplays } from './navigation-replays';
 
 export class NavigationState {
 	readonly isVisible: boolean = false;
-	readonly currentApp: CurrentAppType = 'decktracker';
+	readonly currentApp: CurrentAppType;
 	readonly navigationReplays: NavigationReplays = new NavigationReplays();
 	readonly navigationCollection: NavigationCollection = new NavigationCollection();
 	readonly navigationAchievements: NavigationAchievements = new NavigationAchievements();
