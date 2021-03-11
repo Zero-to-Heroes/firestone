@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { dustFor, dustForPremium } from '../../services/hs-utils';
-import { CollectionSetShowGoldenStatsEvent } from '../../services/mainwindow/store/events/collection/collection-set-show-golden-stats-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
@@ -22,7 +22,6 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 					<preference-toggle
 						field="collectionSetShowGoldenStats"
 						label="Show stats for golden"
-						[toggleFunction]="toggleShowGolden"
 					></preference-toggle>
 				</section>
 			</div>
@@ -45,8 +44,8 @@ export class SetStatsComponent implements AfterViewInit {
 		this.updateInfos();
 	}
 
-	@Input() set showGoldenStats(value: boolean) {
-		this._showGoldenStats = value;
+	@Input() set prefs(value: Preferences) {
+		this._showGoldenStats = value.collectionSetShowGoldenStats;
 		this.updateInfos();
 	}
 
@@ -62,10 +61,6 @@ export class SetStatsComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
-
-	toggleShowGolden = (newValue: boolean) => {
-		this.stateUpdater.next(new CollectionSetShowGoldenStatsEvent(newValue));
-	};
 
 	private updateInfos() {
 		if (!this._set) {

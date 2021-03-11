@@ -1,16 +1,17 @@
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	EventEmitter,
-	HostListener,
 	Input,
+	ViewRef,
 } from '@angular/core';
 import { CardHistory } from '../../models/card-history';
+import { BinderState } from '../../models/mainwindow/binder-state';
+import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
 import { LoadMoreCardHistoryEvent } from '../../services/mainwindow/store/events/collection/load-more-card-history-event';
-import { ToggleShowOnlyNewCardsInHistoryEvent } from '../../services/mainwindow/store/events/collection/toggle-show-only-new-cards-in-history-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -31,11 +32,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<preference-toggle
 							field="collectionHistoryShowOnlyNewCards"
 							label="Show only new cards"
-							[toggleFunction]="toggleShowOnlyNewCards"
 						></preference-toggle>
 					</section>
 				</div>
-				<ul>
+				<ul scrollable>
 					<li *ngFor="let historyItem of shownHistory; trackBy: trackById">
 						<card-history-item
 							[historyItem]="historyItem"
@@ -67,19 +67,33 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class CardHistoryComponent implements AfterViewInit {
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
-	_selectedCard: SetCard;
-	// @Input() showOnlyNewCards: boolean;
-	@Input() cardHistory: readonly CardHistory[];
-	@Input() shownHistory: readonly CardHistory[];
-	@Input() totalHistoryLength: number;
+	@Input() set state(value: BinderState) {
+		this._state = value;
+		this.cardHistory = value.cardHistory;
+		this.totalHistoryLength = value.totalHistoryLength;
+		this.updateInfos();
+	}
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	@Input() set prefs(value: Preferences) {
+		this._showOnlyNewCards = value?.collectionHistoryShowOnlyNewCards;
+		this.updateInfos();
+	}
 
 	@Input() set selectedCard(selectedCard: SetCard) {
 		this._selectedCard = selectedCard;
+		this.updateInfos();
 	}
 
-	constructor(private el: ElementRef, private ow: OverwolfService) {}
+	_state: BinderState;
+	totalHistoryLength: number;
+	cardHistory: readonly CardHistory[];
+	shownHistory: readonly CardHistory[];
+	_selectedCard: SetCard;
+	_showOnlyNewCards: boolean;
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -89,23 +103,20 @@ export class CardHistoryComponent implements AfterViewInit {
 		this.stateUpdater.next(new LoadMoreCardHistoryEvent(this.MAX_RESULTS_DISPLAYED));
 	}
 
-	toggleShowOnlyNewCards = (newValue: boolean) => {
-		this.stateUpdater.next(new ToggleShowOnlyNewCardsInHistoryEvent(newValue));
-	};
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
-		const rect = this.el.nativeElement.querySelector('.history').getBoundingClientRect();
-		// console.log('element rect', rect);
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
-	}
-
 	trackById(index, history: CardHistory) {
 		return history.id;
+	}
+
+	private updateInfos() {
+		if (!this._state) {
+			return;
+		}
+
+		this.shownHistory = this._state.cardHistory.filter(
+			(card: CardHistory) => !this._showOnlyNewCards || card.isNewCard,
+		);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

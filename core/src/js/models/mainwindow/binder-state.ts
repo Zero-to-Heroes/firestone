@@ -11,6 +11,10 @@ export class BinderState {
 	readonly totalHistoryLength: number;
 	readonly isLoading: boolean = true;
 
+	public update(base: BinderState): BinderState {
+		return Object.assign(new BinderState(), this, base);
+	}
+
 	public getCard(cardId: string): SetCard {
 		return this.allSets.map(set => set.getCard(cardId)).find(card => card);
 	}

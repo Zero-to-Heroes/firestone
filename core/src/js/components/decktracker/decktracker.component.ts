@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { Preferences } from '../../models/preferences';
 
 @Component({
 	selector: 'decktracker',
@@ -34,6 +35,7 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 						<decktracker-deck-details
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
 							[state]="_state"
+							[prefs]="prefs"
 							[navigation]="navigation"
 						></decktracker-deck-details>
 					</div>
@@ -70,6 +72,8 @@ export class DecktrackerComponent {
 	}
 
 	@Input() navigation: NavigationState;
+
+	@Input() prefs: Preferences;
 
 	_state: MainWindowState;
 	showAds: boolean;

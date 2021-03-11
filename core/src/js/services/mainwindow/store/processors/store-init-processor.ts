@@ -1,6 +1,4 @@
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../models/mainwindow/navigation/navigation-collection';
-import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../../../models/preferences';
 import { Events } from '../../../events.service';
@@ -20,20 +18,14 @@ export class StoreInitProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.log('[store-init] populating store');
-		const newState = currentState.update(event.initialState);
-		console.log('[store-init] emitting STORE_READY event');
-		this.events.broadcast(Events.STORE_READY);
 		const prefs = await this.prefs.getPreferences();
+		const newState = currentState.update(event.initialState);
+		if (event.storeReady) {
+			console.log('[store-init] emitting STORE_READY event');
+			this.events.broadcast(Events.STORE_READY);
+		}
 		const navState = await this.buildCurrentAppNavState(currentState, navigationState, prefs);
-		const navStateWithPrefs = navState.update({
-			navigationDecktracker: navState.navigationDecktracker.update({
-				showMatchupAsPercentages: prefs.desktopDeckShowMatchupAsPercentages,
-			} as NavigationDecktracker),
-			navigationCollection: navState.navigationCollection.update({
-				collectionSetShowGoldenStats: prefs.collectionSetShowGoldenStats,
-			} as NavigationCollection),
-		} as NavigationState);
-		return [newState, navStateWithPrefs];
+		return [newState, navState];
 	}
 
 	private async buildCurrentAppNavState(

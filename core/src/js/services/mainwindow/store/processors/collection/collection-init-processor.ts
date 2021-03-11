@@ -1,6 +1,5 @@
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { CollectionInitEvent } from '../../events/collection/collection-init-event';
 import { Processor } from '../processor';
@@ -17,11 +16,7 @@ export class CollectionInitProcessor implements Processor {
 			Object.assign(new MainWindowState(), currentState, {
 				binder: newCollection,
 			} as MainWindowState),
-			navigationState.update({
-				navigationCollection: navigationState.navigationCollection.update({
-					shownCardHistory: newCollection.cardHistory,
-				} as NavigationCollection),
-			} as NavigationState),
+			null,
 		];
 	}
 }

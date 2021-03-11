@@ -62,7 +62,7 @@ export class StoreBootstrapService {
 		const windowStateForFtue = Object.assign(new MainWindowState(), {
 			showFtue: showFtue,
 		} as MainWindowState);
-		this.stateUpdater.next(new StoreInitEvent(windowStateForFtue));
+		this.stateUpdater.next(new StoreInitEvent(windowStateForFtue, false));
 
 		// Load all the initial data
 		const [
@@ -180,7 +180,7 @@ export class StoreBootstrapService {
 			stats: newStatsState,
 			globalStats: globalStats,
 		} as MainWindowState);
-		this.stateUpdater.next(new StoreInitEvent(initialWindowState));
+		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
 	}
 
 	private async initializeSocialShareUserInfo(): Promise<SocialShareUserInfo> {

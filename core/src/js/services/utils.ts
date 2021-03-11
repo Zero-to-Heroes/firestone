@@ -42,7 +42,7 @@ export const isCharLowerCase = (character: string): boolean => {
 export const isVersionBefore = (appVersion: string, reference: string): boolean => {
 	const appValue = buildAppValue(appVersion);
 	const referenceValue = buildAppValue(reference);
-	console.debug('is before?', appValue, referenceValue, appVersion, reference);
+	// console.debug('is before?', appValue, referenceValue, appVersion, reference);
 	return appValue < referenceValue;
 };
 

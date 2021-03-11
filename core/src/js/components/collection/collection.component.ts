@@ -4,6 +4,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { CardBack } from '../../models/card-back';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { Preferences } from '../../models/preferences';
 import { Set, SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { CollectionReferenceCard } from './collection-reference-card';
@@ -79,18 +80,12 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				></card-search>
 				<card-history
 					[selectedCard]="selectedCard"
-					[cardHistory]="dataState.cardHistory"
-					[shownHistory]="_navigation.navigationCollection.shownCardHistory"
-					[totalHistoryLength]="dataState.totalHistoryLength"
+					[prefs]="prefs"
+					[state]="dataState"
 					*ngxCacheIf="!isSetDetails()"
 				>
 				</card-history>
-				<set-stats
-					[set]="selectedSet"
-					[showGoldenStats]="_navigation.navigationCollection.collectionSetShowGoldenStats"
-					*ngxCacheIf="isSetDetails()"
-				>
-				</set-stats>
+				<set-stats [set]="selectedSet" [prefs]="prefs" *ngxCacheIf="isSetDetails()"> </set-stats>
 			</section>
 		</div>
 	`,
@@ -122,6 +117,8 @@ export class CollectionComponent {
 		this.updateValues();
 	}
 
+	@Input() prefs: Preferences;
+
 	isSetDetails(): boolean {
 		return (
 			this._navigation.navigationCollection.currentView === 'cards' &&
@@ -138,21 +135,18 @@ export class CollectionComponent {
 		if (!this.dataState || !this._navigation) {
 			return;
 		}
+
 		this.selectedSet = this.dataState.allSets.find(
 			set => set.id === this._navigation.navigationCollection?.selectedSetId,
 		);
-		this.selectedCard =
-			this.dataState.allSets
-				.map(set => set.allCards)
-				.reduce((a, b) => a.concat(b), [])
-				.find(card => card.id === this._navigation.navigationCollection?.selectedCardId) ??
-			// This is the case when it's not a collectible card for instance
-			this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId);
-		// console.debug(
-		// 	'selected card',
-		// 	this.selectedCard,
-		// 	this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId),
-		// );
+		this.selectedCard = this._navigation.navigationCollection?.selectedCardId
+			? this.dataState.allSets
+					.map(set => set.allCards)
+					.reduce((a, b) => a.concat(b), [])
+					.find(card => card.id === this._navigation.navigationCollection?.selectedCardId) ??
+			  // This is the case when it's not a collectible card for instance
+			  this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId)
+			: null;
 		this.selectedCardBack = this.dataState.cardBacks.find(
 			cardBack => cardBack.id === this._navigation.navigationCollection?.selectedCardBackId,
 		);
@@ -164,7 +158,6 @@ export class CollectionComponent {
 						.filter(card => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
 				: null;
 		this.heroPortraits = this.buildHeroPortraits();
-		console.log('updated', this._navigation);
 	}
 
 	private buildHeroPortraits(): readonly CollectionReferenceCard[] {

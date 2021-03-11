@@ -51,7 +51,6 @@ import { ChangeVisibleApplicationEvent } from './events/change-visible-applicati
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { CollectionSelectCurrentTabEvent } from './events/collection/collection-select-current-tab-event';
-import { CollectionSetShowGoldenStatsEvent } from './events/collection/collection-set-show-golden-stats-event';
 import { CollectionSetsFilterEvent } from './events/collection/collection-sets-filter-event';
 import { LoadMoreCardHistoryEvent } from './events/collection/load-more-card-history-event';
 import { NewCardEvent } from './events/collection/new-card-event';
@@ -61,7 +60,6 @@ import { SelectCollectionFormatEvent } from './events/collection/select-collecti
 import { SelectCollectionSetEvent } from './events/collection/select-collection-set-event';
 import { ShowCardBackDetailsEvent } from './events/collection/show-card-back-details-event';
 import { ShowCardDetailsEvent } from './events/collection/show-card-details-event';
-import { ToggleShowOnlyNewCardsInHistoryEvent } from './events/collection/toggle-show-only-new-cards-in-history-event';
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
 import { CurrentUserEvent } from './events/current-user-event';
 import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-format-filter-event';
@@ -69,7 +67,6 @@ import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode
 import { ChangeDeckRankFilterEvent } from './events/decktracker/change-deck-rank-filter-event';
 import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
-import { DesktopDecktrackerChangeMatchupAsPercentagesEvent } from './events/decktracker/desktop-decktracker-change-matchup-as-percentage-event';
 import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summary-event';
 import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details-event';
@@ -142,7 +139,6 @@ import { ChangeVisibleApplicationProcessor } from './processors/change-visible-a
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
 import { CollectionSelectCurrentTabProcessor } from './processors/collection/collection-select-current-tab-processor';
-import { CollectionSetShowGoldenStatsProcessor } from './processors/collection/collection-set-show-golden-stats-processor';
 import { CollectionSetsFilterProcessor } from './processors/collection/collection-sets-filter-processor';
 import { LoadMoreCardHistoryProcessor } from './processors/collection/load-more-card-history-processor';
 import { NewCardProcessor } from './processors/collection/new-card-processor';
@@ -152,7 +148,6 @@ import { SelectCollectionFormatProcessor } from './processors/collection/select-
 import { SelectCollectionSetProcessor } from './processors/collection/select-collection-set-processor';
 import { ShowCardBackDetailsProcessor } from './processors/collection/show-card-back-details-processor';
 import { ShowCardDetailsProcessor } from './processors/collection/show-card-details-processor';
-import { ToggleShowOnlyNewCardsInHistoryProcessor } from './processors/collection/toggle-show-only-new-cards-in-history-processor';
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
 import { CurrentUserProcessor } from './processors/current-user-process.ts';
 import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change-deck-format-filter-processor';
@@ -160,7 +155,6 @@ import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-d
 import { ChangeDeckRankFilterProcessor } from './processors/decktracker/change-deck-rank-filter-processor';
 import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
-import { DesktopDecktrackerChangeMatchupAsPercentagesProcessor } from './processors/decktracker/desktop-decktracker-change-matchup-as-percentage-processor';
 import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
 import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-deck-summary-processor';
 import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck-details-processor';
@@ -456,12 +450,6 @@ export class MainWindowStoreService {
 			ShowCardBackDetailsEvent.eventName(),
 			new ShowCardBackDetailsProcessor(this.cards),
 
-			ToggleShowOnlyNewCardsInHistoryEvent.eventName(),
-			new ToggleShowOnlyNewCardsInHistoryProcessor(),
-
-			CollectionSetShowGoldenStatsEvent.eventName(),
-			new CollectionSetShowGoldenStatsProcessor(),
-
 			UpdateCardSearchResultsEvent.eventName(),
 			new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),
 
@@ -598,9 +586,6 @@ export class MainWindowStoreService {
 
 			ToggleShowHiddenDecksEvent.eventName(),
 			new ToggleShowHiddenDecksProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
-
-			DesktopDecktrackerChangeMatchupAsPercentagesEvent.eventName(),
-			new DesktopDecktrackerChangeMatchupAsPercentagesProcessor(this.prefs),
 
 			// Battlegrounds
 			SelectBattlegroundsGlobalCategoryEvent.eventName(),

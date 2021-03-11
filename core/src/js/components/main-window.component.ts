@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
@@ -13,6 +14,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
+import { Preferences } from '../models/preferences';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { PreferencesService } from '../services/preferences.service';
@@ -83,12 +85,14 @@ declare let amplitude: any;
 							class="main-section"
 							[state]="dataState.binder"
 							[navigation]="navigationState"
+							[prefs]="prefs"
 							*ngxCacheIf="navigationState.currentApp === 'collection'"
 						></collection>
 						<decktracker
 							class="main-section"
 							[state]="dataState"
 							[navigation]="navigationState"
+							[prefs]="prefs"
 							*ngxCacheIf="navigationState.currentApp === 'decktracker'"
 						>
 						</decktracker>
@@ -128,6 +132,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	cardsInitDone: boolean;
 	displayingNewVersionNotification: boolean;
 	forceShowReleaseNotes: boolean;
+	prefs: Preferences;
 	_showAds = true;
 
 	private isMaximized = false;
@@ -136,6 +141,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private dataStoreSubscription: Subscription;
 	private navigationStoreSubscription: Subscription;
+	private preferencesSubscription: Subscription;
 	private hotkeyPressedHandler;
 	private hotkey;
 
@@ -144,7 +150,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
 		private readonly cards: AllCardsService,
-		private readonly prefs: PreferencesService,
+		private readonly preferencesService: PreferencesService,
 	) {
 		this.init();
 	}
@@ -160,7 +166,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				this.ow.changeWindowPosition(this.windowId, newX, newY);
 			}
 		});
-		const prefs = await this.prefs.getPreferences();
+		const prefs = await this.preferencesService.getPreferences();
 		const windowName = await this.ow.getCollectionWindowName(prefs);
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, message => {
 			// console.log('received collection window message', message, this.isMaximized);
@@ -224,6 +230,12 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				}
 			});
 		});
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.handlePreferences(event.preferences);
+		});
+		await this.handlePreferences();
+
 		this.hotkey = await this.ow.getHotKey('collection');
 		console.log('assigned hotkey', this.hotkey);
 		this.hotkeyPressedHandler = this.ow.getMainWindow().mainWindowHotkeyPressed;
@@ -267,6 +279,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 		this.dataStoreSubscription?.unsubscribe();
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	onHelp(event: MouseEvent) {
@@ -301,6 +314,14 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		}
 
 		return true;
+	}
+
+	private async handlePreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.preferencesService.getPreferences());
+		this.prefs = preferences;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildActiveTheme(): CurrentAppType | 'decktracker-desktop' {

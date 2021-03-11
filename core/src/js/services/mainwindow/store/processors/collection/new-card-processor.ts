@@ -2,7 +2,6 @@ import { Card } from '../../../../../models/card';
 import { CardHistory } from '../../../../../models/card-history';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PityTimer } from '../../../../../models/pity-timer';
 import { Set, SetCard } from '../../../../../models/set';
@@ -47,16 +46,11 @@ export class NewCardProcessor implements Processor {
 			collection: collection,
 			cardHistory: cardHistory,
 		} as BinderState);
-		const newCollection = navigationState.navigationCollection.update({
-			shownCardHistory: cardHistory,
-		} as NavigationCollection);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				binder: newBinder,
 			} as MainWindowState),
-			navigationState.update({
-				navigationCollection: newCollection,
-			} as NavigationState),
+			null,
 		];
 	}
 

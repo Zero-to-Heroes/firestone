@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { Preferences } from '../../../models/preferences';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
@@ -19,7 +20,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 				</copy-deckstring>
 				<deck-list class="deck-list" [deckstring]="deck?.deckstring"></deck-list>
 			</div>
-			<deck-winrate-matrix [deck]="deck" [showMatchupAsPercentages]="showMatchupAsPercentages">
+			<deck-winrate-matrix [deck]="deck" [showMatchupAsPercentagesValue]="showMatchupAsPercentages">
 			</deck-winrate-matrix>
 			<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
 		</div>
@@ -37,7 +38,12 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	showMatchupAsPercentages: boolean;
+	@Input() set prefs(value: Preferences) {
+		this.showMatchupAsPercentages = value?.desktopDeckShowMatchupAsPercentages ?? true;
+		this.updateValues();
+	}
+
+	showMatchupAsPercentages: boolean = true;
 	deck: DeckSummary;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
@@ -66,6 +72,5 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.deck = this._state.decktracker.decks.find(
 			deck => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
-		this.showMatchupAsPercentages = this._navigation.navigationDecktracker.showMatchupAsPercentages;
 	}
 }
