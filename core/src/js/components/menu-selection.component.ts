@@ -30,7 +30,7 @@ declare let amplitude;
 				<div class="text">
 					<div class="text-background"></div>
 					<div class="menu-header">Constructed</div>
-					<div class="menu-text-details">See all your constructed stuff!</div>
+					<!-- <div class="menu-text-details">See all your constructed stuff!</div> -->
 				</div>
 			</li>
 			<li
