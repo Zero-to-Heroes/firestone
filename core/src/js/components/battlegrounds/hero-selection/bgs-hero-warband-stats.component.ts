@@ -53,6 +53,11 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 		layout: {
 			padding: 0,
 		},
+		plugins: {
+			datalabels: {
+				display: false,
+			},
+		},
 		scales: {
 			xAxes: [
 				{

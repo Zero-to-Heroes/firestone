@@ -56,6 +56,11 @@ export class SimpleBarChartComponent {
 		layout: {
 			padding: 0,
 		},
+		plugins: {
+			datalabels: {
+				display: false,
+			},
+		},
 		scales: {
 			xAxes: [
 				{

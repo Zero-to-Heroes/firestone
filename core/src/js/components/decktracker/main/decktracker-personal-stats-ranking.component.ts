@@ -64,6 +64,11 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 		layout: {
 			padding: 0,
 		},
+		plugins: {
+			datalabels: {
+				display: false,
+			},
+		},
 		scales: {
 			xAxes: [
 				{
