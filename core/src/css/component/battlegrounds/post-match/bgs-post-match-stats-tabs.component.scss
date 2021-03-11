@@ -7,7 +7,9 @@
 	display: flex;
 	min-height: 0;
 	max-width: 100%;
-	overflow: hidden;
+	// overflow: hidden;
+	// For the tooltips
+	overflow: visible;
 }
 
 .stats {
