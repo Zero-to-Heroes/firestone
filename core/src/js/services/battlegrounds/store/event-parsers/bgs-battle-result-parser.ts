@@ -6,13 +6,14 @@ import { captureEvent } from '@sentry/browser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Events } from '../../../events.service';
+import { OverwolfService } from '../../../overwolf.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBattleResultParser implements EventParser {
-	constructor(private readonly events: Events) {}
+	constructor(private readonly events: Events, private readonly ow: OverwolfService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsBattleResultEvent';
@@ -35,85 +36,14 @@ export class BgsBattleResultParser implements EventParser {
 			damage: event.damage,
 		} as BgsFaceOff);
 		// Error checks
-		if (
-			currentState.currentGame.battleResult &&
-			currentState.currentGame.battleResult.won != null &&
-			currentState.currentGame.battleResult.won === 0 &&
-			event.result === 'won'
-		) {
-			console.warn(
-				'no-format',
-				'[bgs-simulation] Impossible battle victory',
-				currentState.currentGame.reviewId,
-				currentState.currentGame.currentTurn,
-				currentState.currentGame.battleInfo,
-				currentState.currentGame.battleResult,
-			);
-			if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
-				captureEvent({
-					message: 'Impossible battle victory',
-					extra: {
-						reviewId: currentState.currentGame.reviewId,
-						turnNumber: currentState.currentGame.currentTurn,
-						battleInput: JSON.stringify(currentState.currentGame.battleInfo),
-						battleResult: JSON.stringify(currentState.currentGame.battleResult),
-					},
-				});
-			}
+		if (currentState.currentGame.battleResult?.won === 0 && event.result === 'won') {
+			this.report('victory', currentState);
 		}
-		if (
-			currentState.currentGame.battleResult &&
-			currentState.currentGame.battleResult.lost != null &&
-			currentState.currentGame.battleResult.lost === 0 &&
-			event.result === 'lost'
-		) {
-			console.warn(
-				'no-format',
-				'[bgs-simulation] Impossible battle loss',
-				currentState.currentGame.reviewId,
-				currentState.currentGame.currentTurn,
-				currentState.currentGame.battleInfo,
-				currentState.currentGame.battleResult,
-			);
-			// Not possible to forcefully ignore sample rates
-			if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
-				captureEvent({
-					message: 'Impossible battle loss',
-					extra: {
-						reviewId: currentState.currentGame.reviewId,
-						turnNumber: currentState.currentGame.currentTurn,
-						battleInput: JSON.stringify(currentState.currentGame.battleInfo),
-						battleResult: JSON.stringify(currentState.currentGame.battleResult),
-					},
-				});
-			}
+		if (currentState.currentGame.battleResult?.lost === 0 && event.result === 'lost') {
+			this.report('loss', currentState);
 		}
-		if (
-			currentState.currentGame.battleResult &&
-			currentState.currentGame.battleResult.tied != null &&
-			currentState.currentGame.battleResult.tied === 0 &&
-			event.result === 'tied'
-		) {
-			console.warn(
-				'no-format',
-				'[bgs-simulation] Impossible battle tie',
-				currentState.currentGame.reviewId,
-				currentState.currentGame.currentTurn,
-				currentState.currentGame.battleInfo,
-				currentState.currentGame.battleResult,
-			);
-			// Not possible to forcefully ignore sample rates
-			if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
-				captureEvent({
-					message: 'Impossible battle tie',
-					extra: {
-						reviewId: currentState.currentGame.reviewId,
-						turnNumber: currentState.currentGame.currentTurn,
-						battleInput: JSON.stringify(currentState.currentGame.battleInfo),
-						battleResult: JSON.stringify(currentState.currentGame.battleResult),
-					},
-				});
-			}
+		if (currentState.currentGame.battleResult?.tied === 0 && event.result === 'tied') {
+			this.report('tie', currentState);
 		}
 		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
 		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, gameWithActualBattleResult);
@@ -175,5 +105,29 @@ export class BgsBattleResultParser implements EventParser {
 		}
 
 		return boardInfo.board.find(entity => entity.cardId === cardId) != null;
+	}
+
+	private async report(status: string, currentState: BattlegroundsState) {
+		const user = await this.ow.getCurrentUser();
+		console.warn(
+			'no-format',
+			'[bgs-simulation] Impossible battle ' + status,
+			currentState.currentGame.reviewId,
+			currentState.currentGame.currentTurn,
+			currentState.currentGame.battleInfo,
+			currentState.currentGame.battleResult,
+		);
+		if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
+			captureEvent({
+				message: 'Impossible battle ' + status,
+				extra: {
+					reviewId: currentState.currentGame.reviewId,
+					user: user,
+					turnNumber: currentState.currentGame.currentTurn,
+					battleInput: JSON.stringify(currentState.currentGame.battleInfo),
+					battleResult: JSON.stringify(currentState.currentGame.battleResult),
+				},
+			});
+		}
 	}
 }
