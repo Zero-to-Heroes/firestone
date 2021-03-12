@@ -61,6 +61,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Add stats when browsing each set.`,
+							},
+						],
+					},
 					// {
 					// 	category: 'achievements',
 					// 	details: [
@@ -80,6 +89,10 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Add an option to show the matchup stats as win-loss instead of percentages in the Deck details tab.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix a bug where Shenanigans would be greyed out by the secrets tracker if the opponent made you draw 2+ cards during their turn.`,
 							},
@@ -93,12 +106,20 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Show pinned minions earlier when you're refreshing the tavern.`,
+							},
+							{
+								type: 'ui',
+								text: `The live HP graph now use the same color for each player throughout the whole game (instead of changing the color based on the player current's leaderboard position), which should make it easier to follow things.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix a bug where the simulator would sometimes let Illidan attack again after using his hero power.`,
 							},
 							{
-								type: 'feature',
-								text: `Show pinned minions earlier when you're refreshing the tavern.`,
+								type: 'bug',
+								text: `Fix an issue where the live stats could sometimes show incorrect HP for enemy heroes we just faced.`,
 							},
 						],
 					},
