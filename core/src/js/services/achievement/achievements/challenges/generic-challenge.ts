@@ -26,10 +26,20 @@ export class GenericChallenge implements Challenge {
 			this.resetState();
 		}
 		this.requirements.forEach(req => {
-			if (req.individualResetEvents && req.individualResetEvents.indexOf(gameEvent.type) !== -1) {
-				req.reset();
+			try {
+				if (req.individualResetEvents && req.individualResetEvents.indexOf(gameEvent.type) !== -1) {
+					req.reset();
+				}
+				req.test(gameEvent);
+			} catch (e) {
+				console.warn('[achievements-monitor] Exception', e);
+				console.error(
+					'no-format',
+					'[achievements-monitor] Exception while parsing req',
+					JSON.stringify(req['rawReq']),
+				);
+				throw e;
 			}
-			req.test(gameEvent);
 		});
 		this.testCompletion();
 	}
