@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Card } from '../../../models/card';
+import { PackInfo } from '../../../models/collection/pack-info';
 import { BinderState } from '../../../models/mainwindow/binder-state';
 import { PityTimer } from '../../../models/pity-timer';
 import { Set, SetCard } from '../../../models/set';
@@ -32,7 +33,10 @@ export class CollectionBootstrapService {
 
 	public async initCollectionState(): Promise<BinderState> {
 		console.log('initializing collection state');
-		const collection: readonly Card[] = await this.collectionManager.getCollection();
+		const [collection, packs] = await Promise.all([
+			this.collectionManager.getCollection(),
+			this.collectionManager.getPacks(),
+		]);
 		const [cardHistory, sets, totalHistoryLength, cardBacks] = await Promise.all([
 			this.cardHistoryStorage.loadAll(100),
 			this.buildSets(collection),
@@ -40,7 +44,8 @@ export class CollectionBootstrapService {
 			this.collectionManager.getCardBacks(),
 		]);
 		const newState = Object.assign(new BinderState(), {
-			collection: collection,
+			collection: collection as readonly Card[],
+			packs: packs as readonly PackInfo[],
 			allSets: sets,
 			cardBacks: cardBacks,
 			cardHistory: cardHistory,

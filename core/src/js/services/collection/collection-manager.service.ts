@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
+import { PackInfo } from '../../models/collection/pack-info';
 import { ApiRunner } from '../api-runner';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -34,6 +35,20 @@ export class CollectionManager {
 			console.log('[collection-manager] updating collection in db');
 			const savedCollection = await this.db.saveCollection(collection);
 			return savedCollection;
+		}
+	}
+
+	public async getPacks(): Promise<readonly PackInfo[]> {
+		console.log('[collection-manager] getting pack info');
+		const packInfo = await this.memoryReading.getBoostersInfo();
+		if (!packInfo || packInfo.length === 0) {
+			console.log('[collection-manager] retrieving pack info from db');
+			const packsFromDb = await this.db.getPackInfos();
+			console.log('[collection-manager] retrieved pack info from db', packsFromDb.length);
+			return packsFromDb;
+		} else {
+			const saved = await this.db.savePackInfos(packInfo);
+			return saved;
 		}
 	}
 
@@ -85,7 +100,7 @@ export class CollectionManager {
 	private init() {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
-				await Promise.all([this.getCollection(), this.getCardBacks()]);
+				await Promise.all([this.getCollection(), this.getCardBacks(), this.getPacks()]);
 			}
 		});
 	}

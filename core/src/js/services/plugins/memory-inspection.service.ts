@@ -4,6 +4,7 @@ import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
+import { PackInfo } from '../../models/collection/pack-info';
 import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
@@ -18,6 +19,7 @@ import { GetArenaInfoOperation } from './mind-vision/get-arena-info-operation';
 import { GetBattlegroundsEndGameOperation } from './mind-vision/get-battlegrounds-end-game-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-match-operation';
+import { GetBoostersInfoOperation } from './mind-vision/get-boosters-info-operation';
 import { GetCardBacksOperation } from './mind-vision/get-card-backs-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/get-current-scene-operation';
@@ -50,6 +52,7 @@ export class MemoryInspectionService {
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
 	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVision, this.ow);
 	private getRewardsTrackInfoOperation = new GetRewardsTrackInfoOperation(this.mindVision, this.ow);
+	private getBoostersInfoOperation = new GetBoostersInfoOperation(this.mindVision, this.ow);
 	private getAchievementsInfoOperation = new GetAchievementsInfoOperation(this.mindVision, this.ow);
 	private getInGameAchievementsProgressInfoOperation = new GetInGameAchievementsProgressInfoOperation(
 		this.mindVision,
@@ -67,7 +70,6 @@ export class MemoryInspectionService {
 		private cards: SetsService,
 	) {
 		this.init();
-		window['getAchievementsInfo'] = () => this.getAchievementsInfo();
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
@@ -116,6 +118,10 @@ export class MemoryInspectionService {
 
 	public async getAchievementsInfo(forceReset = false, numberOfRetries = 1): Promise<HsAchievementsInfo> {
 		return this.getAchievementsInfoOperation.call(numberOfRetries, forceReset);
+	}
+
+	public async getBoostersInfo(): Promise<readonly PackInfo[]> {
+		return this.getBoostersInfoOperation.call();
 	}
 
 	public async getInGameAchievementsProgressInfo(

@@ -1,4 +1,4 @@
-import { CardIds, GameType } from '@firestone-hs/reference-data';
+import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { capitalizeEachWord } from './utils';
 
 export const CARDS_VERSION = '74257';
@@ -238,4 +238,55 @@ export const dustFor = (rarity: string): number => {
 
 export const dustForPremium = (rarity: string): number => {
 	return 4 * dustFor(rarity);
+};
+
+export const boosterIdToSetId = (boosterId: BoosterType): string => {
+	switch (boosterId) {
+		case BoosterType.CLASSIC:
+		case BoosterType.GOLDEN_CLASSIC_PACK:
+			return 'expert1';
+		case BoosterType.GOBLINS_VS_GNOMES:
+			return 'gvg';
+		case BoosterType.THE_GRAND_TOURNAMENT:
+			return 'tgt';
+		case BoosterType.OLD_GODS:
+		case BoosterType.FIRST_PURCHASE_OLD:
+			return 'og';
+		case BoosterType.MEAN_STREETS:
+			return 'gangs';
+		case BoosterType.UNGORO:
+			return 'ungoro';
+		case BoosterType.FROZEN_THRONE:
+			return 'icecrown';
+		case BoosterType.KOBOLDS_AND_CATACOMBS:
+		case BoosterType.KOBOLDS_CATACOMBS:
+			return 'lootapalooza';
+		case BoosterType.WITCHWOOD:
+			return 'gilneas';
+		case BoosterType.THE_BOOMSDAY_PROJECT:
+			return 'boomsday';
+		case BoosterType.RASTAKHANS_RUMBLE:
+			return 'troll';
+		case BoosterType.DALARAN:
+			return 'dalaran';
+		case BoosterType.ULDUM:
+			return 'uldum';
+		case BoosterType.DRAGONS:
+			return 'dragons';
+		case BoosterType.BLACK_TEMPLE:
+			return 'black_temple';
+		case BoosterType.SCHOLOMANCE:
+			return 'scholomance';
+		case BoosterType.DARKMOON_FAIRE:
+			return 'darkmoon_faire';
+		case BoosterType.THE_BARRENS:
+		case BoosterType.SIGNUP_INCENTIVE:
+		case BoosterType.MAMMOTH_BUNDLE:
+		case BoosterType.FIRST_PURCHASE:
+		case BoosterType.STANDARD_HUNTER:
+		case BoosterType.YEAR_OF_DRAGON:
+		case BoosterType.STANDARD_MAGE:
+			console.warn('unsupported booster type', boosterId);
+			return null;
+	}
 };

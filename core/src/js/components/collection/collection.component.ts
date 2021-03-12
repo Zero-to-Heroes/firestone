@@ -85,7 +85,8 @@ import { CollectionReferenceCard } from './collection-reference-card';
 					*ngxCacheIf="!isSetDetails()"
 				>
 				</card-history>
-				<set-stats [set]="selectedSet" [prefs]="prefs" *ngxCacheIf="isSetDetails()"> </set-stats>
+				<set-stats [set]="selectedSet" [state]="dataState" [prefs]="prefs" *ngxCacheIf="isSetDetails()">
+				</set-stats>
 			</section>
 		</div>
 	`,

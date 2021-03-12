@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
-import { MemoryUpdate } from '../models/memory-update';
+import { MemoryUpdate } from '../models/memory/memory-update';
 import { SceneMode } from '../models/scenes';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';

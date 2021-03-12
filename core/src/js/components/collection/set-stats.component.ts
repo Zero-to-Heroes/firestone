@@ -1,7 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { PackInfo } from '../../models/collection/pack-info';
+import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
-import { dustFor, dustForPremium } from '../../services/hs-utils';
+import { boosterIdToSetId, dustFor, dustForPremium } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
@@ -32,6 +34,12 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 					[current]="stat.current"
 					[total]="stat.total"
 				></set-stat-cell>
+				<set-stat-cell
+					*ngIf="packsReceived"
+					[text]="'Packs received'"
+					[current]="packsReceived"
+					helpTooltip="Total packs received, including the ones that are still unopened"
+				></set-stat-cell>
 				<pie-chart [data]="pieChartData"></pie-chart>
 			</div>
 		</div>
@@ -45,14 +53,24 @@ export class SetStatsComponent implements AfterViewInit {
 	}
 
 	@Input() set prefs(value: Preferences) {
-		this._showGoldenStats = value.collectionSetShowGoldenStats;
+		this._showGoldenStats = value?.collectionSetShowGoldenStats;
+		this.updateInfos();
+	}
+
+	@Input() set state(value: BinderState) {
+		if (value.packs === this._packs) {
+			return;
+		}
+		this._packs = value?.packs ?? [];
 		this.updateInfos();
 	}
 
 	_set: Set;
 	_showGoldenStats: boolean;
+	_packs: readonly PackInfo[] = [];
 	stats: readonly Stat[];
 	pieChartData: readonly InputPieChartData[];
+	packsReceived: number;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -69,6 +87,8 @@ export class SetStatsComponent implements AfterViewInit {
 
 		this.stats = this._showGoldenStats ? this.buildGoldenStats() : this.buildStats();
 		this.pieChartData = this._showGoldenStats ? this.buildGoldenPieChartData() : this.buildPieChartData();
+		this.packsReceived =
+			this._packs.find(pack => boosterIdToSetId(pack.packType) === this._set.id)?.totalObtained ?? 0;
 	}
 
 	private buildPieChartData(): readonly InputPieChartData[] {

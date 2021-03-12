@@ -4,7 +4,7 @@ import { AchievementProgress, AchievementsProgress } from '../../models/achievem
 import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
-import { MemoryUpdate } from '../../models/memory-update';
+import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';

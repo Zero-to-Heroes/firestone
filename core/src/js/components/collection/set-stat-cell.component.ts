@@ -14,8 +14,8 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			<div class="text">{{ text }}</div>
 			<div class="value" [ngClass]="{ 'completed': current === total }">
 				<div class="item">{{ current }}</div>
-				<div class="item">/</div>
-				<div class="item">{{ total }}</div>
+				<div class="item" *ngIf="total">/</div>
+				<div class="item" *ngIf="total">{{ total }}</div>
 			</div>
 		</div>
 	`,

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../../models/arena-info';
-import { MemoryUpdate } from '../../../models/memory-update';
+import { BoostersInfo } from '../../../models/memory/boosters-info';
+import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
 import { Events } from '../../events.service';
 import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
@@ -229,6 +230,20 @@ export class MindVisionService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse activeDeck', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getBoostersInfo(): Promise<BoostersInfo> {
+		return new Promise<BoostersInfo>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.getBoostersInfo(info => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getBoostersInfo', e);
 				resolve(null);
 			}
 		});

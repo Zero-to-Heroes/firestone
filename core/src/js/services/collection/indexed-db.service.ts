@@ -3,6 +3,7 @@ import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
+import { PackInfo } from '../../models/collection/pack-info';
 import { PackHistory } from '../../models/pack-history';
 import { PityTimer } from '../../models/pity-timer';
 
@@ -27,33 +28,6 @@ export class IndexedDbService {
 		});
 	}
 
-	public async saveCardBacks(cardBacks: readonly CardBack[]): Promise<readonly CardBack[]> {
-		await this.waitForDbInit();
-		const dbCollection = {
-			id: 1,
-			cardBacks: cardBacks,
-		};
-		return new Promise<readonly CardBack[]>(resolve => {
-			this.saveCardBacksInternal(dbCollection, result => resolve(result));
-		});
-	}
-
-	private async saveCardBacksInternal(dbCollection, callback, retriesLeft = 10) {
-		if (retriesLeft <= 0) {
-			console.error('[collection] [storage] could not update card backs');
-			callback(dbCollection.cardBacks);
-			return;
-		}
-		try {
-			await this.db.update('card-backs', dbCollection);
-			callback(dbCollection.cardBacks);
-			return;
-		} catch (e) {
-			console.warn('[collection] [storage] could not update card backs', e.message, e.name, e);
-			setTimeout(() => this.saveCollectionInternal(dbCollection, callback, retriesLeft - 1));
-		}
-	}
-
 	private async saveCollectionInternal(dbCollection, callback, retriesLeft = 10) {
 		if (retriesLeft <= 0) {
 			console.error('[collection] [storage] could not update collection');
@@ -70,11 +44,66 @@ export class IndexedDbService {
 		}
 	}
 
+	public async saveCardBacks(cardBacks: readonly CardBack[]): Promise<readonly CardBack[]> {
+		await this.waitForDbInit();
+		const dbCollection = {
+			id: 2,
+			cardBacks: cardBacks,
+		};
+		return new Promise<readonly CardBack[]>(resolve => {
+			this.saveCardBacksInternal(dbCollection, result => resolve(result));
+		});
+	}
+
+	private async saveCardBacksInternal(dbCollection, callback, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('[collection] [storage] could not update card backs');
+			callback(dbCollection.cardBacks);
+			return;
+		}
+		try {
+			await this.db.update('collection', dbCollection);
+			callback(dbCollection.cardBacks);
+			return;
+		} catch (e) {
+			console.warn('[collection] [storage] could not update card backs', e.message, e.name, e);
+			setTimeout(() => this.saveCardBacksInternal(dbCollection, callback, retriesLeft - 1));
+		}
+	}
+
+	public async savePackInfos(packInfos: readonly PackInfo[]): Promise<readonly PackInfo[]> {
+		await this.waitForDbInit();
+		const dbCollection = {
+			id: 3,
+			packInfos: packInfos,
+		};
+		return new Promise<readonly PackInfo[]>(resolve => {
+			this.savePackInfosInternal(dbCollection, result => resolve(result));
+		});
+	}
+
+	private async savePackInfosInternal(dbCollection, callback, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('[collection] [storage] could not update pack infos');
+			callback(dbCollection.packInfos);
+			return;
+		}
+		try {
+			await this.db.update('collection', dbCollection);
+			callback(dbCollection.packInfos);
+			return;
+		} catch (e) {
+			console.warn('[collection] [storage] could not update packInfos', e.message, e.name, e);
+			setTimeout(() => this.savePackInfosInternal(dbCollection, callback, retriesLeft - 1));
+		}
+	}
+
 	public async getCollection(): Promise<Card[]> {
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
-			return collection[0] ? collection[0].cards : [];
+			console.debug('got collection', collection);
+			return collection?.length > 0 ? collection.find(info => info.id === 1)?.cards ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get collection', e.message, e.name, e);
 		}
@@ -83,10 +112,20 @@ export class IndexedDbService {
 	public async getCardBacks(): Promise<readonly CardBack[]> {
 		await this.waitForDbInit();
 		try {
-			const cardBacks = await this.db.getAll('card-backs', null);
-			return cardBacks[0] ? cardBacks[0].cardBacks : [];
+			const collection = await this.db.getAll('collection', null);
+			return collection?.length > 0 ? collection.find(info => info.id === 2)?.cardBacks ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get cardBacks', e.message, e.name, e);
+		}
+	}
+
+	public async getPackInfos(): Promise<readonly PackInfo[]> {
+		await this.waitForDbInit();
+		try {
+			const collection = await this.db.getAll('collection', null);
+			return collection?.length > 0 ? collection.find(info => info.id === 3)?.packInfos ?? [] : [];
+		} catch (e) {
+			console.error('[collection] [storage] could not get pack infos', e.message, e.name, e);
 		}
 	}
 
@@ -227,10 +266,10 @@ export class IndexedDbService {
 						autoIncrement: false,
 					});
 				}
-				if (evt.oldVersion < 10) {
-					console.log('[collection] [storage] upgrade to version 10');
-					evt.currentTarget.result.createObjectStore('card-backs', { keyPath: 'id', autoIncrement: false });
-				}
+				// if (evt.oldVersion < 10) {
+				// 	console.log('[collection] [storage] upgrade to version 10');
+				// 	evt.currentTarget.result.createObjectStore('card-backs', { keyPath: 'id', autoIncrement: false });
+				// }
 				console.log('[collection] [storage] indexeddb upgraded');
 			})
 			.then(
