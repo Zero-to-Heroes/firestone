@@ -19,6 +19,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { FeatureFlags } from '../../../services/feature-flags';
+import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -88,7 +89,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 		private init_DebugService: DebugService,
 		private allCards: AllCardsService,
 	) {
-		allCards.initializeCardsDb();
+		allCards.initializeCardsDb(CARDS_VERSION);
 	}
 
 	async ngAfterViewInit() {

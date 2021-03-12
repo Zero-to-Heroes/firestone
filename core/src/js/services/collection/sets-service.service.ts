@@ -3,6 +3,7 @@ import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ReferenceSet } from '../../models/collection/reference-set';
 import { Set, SetCard } from '../../models/set';
+import { CARDS_VERSION } from '../hs-utils';
 import { sets, standardSets } from './sets.ref';
 
 @Injectable()
@@ -28,7 +29,7 @@ export class SetsService {
 	}
 
 	public async initializeCardsDb(): Promise<void> {
-		return this.allCards.initializeCardsDb();
+		return this.allCards.initializeCardsDb(CARDS_VERSION);
 	}
 
 	public getSetIds(): string[] {

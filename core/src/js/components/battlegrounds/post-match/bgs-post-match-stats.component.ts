@@ -18,6 +18,7 @@ import { AdService } from '../../../services/ad.service';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { FeatureFlags } from '../../../services/feature-flags';
+import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { normalizeCardId } from './card-utils';
@@ -224,7 +225,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	private async init() {
-		this.allCards.initializeCardsDb();
+		this.allCards.initializeCardsDb(CARDS_VERSION);
 		this.showAds = await this.ads.shouldDisplayAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

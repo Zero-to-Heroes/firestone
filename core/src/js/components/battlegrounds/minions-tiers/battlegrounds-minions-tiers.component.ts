@@ -19,6 +19,7 @@ import { Preferences } from '../../../models/preferences';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { FeatureFlags } from '../../../services/feature-flags';
+import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
@@ -114,7 +115,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			if (!newState) {
 				return;
 			}
-			await this.allCards.initializeCardsDb();
+			await this.allCards.initializeCardsDb(CARDS_VERSION);
 
 			if (
 				!this.cardsInGame?.length ||
@@ -270,7 +271,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	}
 
 	private async init() {
-		await this.allCards.initializeCardsDb();
+		await this.allCards.initializeCardsDb(CARDS_VERSION);
 	}
 
 	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {

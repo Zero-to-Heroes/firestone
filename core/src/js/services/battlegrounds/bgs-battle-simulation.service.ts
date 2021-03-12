@@ -9,6 +9,7 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import Worker from 'worker-loader!../../workers/bgs-simulation.worker';
 import { Preferences } from '../../models/preferences';
+import { CARDS_VERSION } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
@@ -37,7 +38,7 @@ export class BgsBattleSimulationService {
 	}
 
 	private async init() {
-		await this.cards.initializeCardsDb();
+		await this.cards.initializeCardsDb(CARDS_VERSION);
 		this.cardsData = new CardsData(this.cards.service, false);
 		this.cardsData.inititialize();
 	}

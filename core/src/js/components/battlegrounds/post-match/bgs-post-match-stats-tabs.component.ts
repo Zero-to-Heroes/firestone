@@ -15,6 +15,7 @@ import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-s
 import { AdService } from '../../../services/ad.service';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
+import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 
@@ -149,6 +150,6 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 	}
 
 	private async init() {
-		this.allCards.initializeCardsDb();
+		this.allCards.initializeCardsDb(CARDS_VERSION);
 	}
 }

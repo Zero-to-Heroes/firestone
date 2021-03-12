@@ -12,6 +12,7 @@ import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { AllCardsService, Entity as ParserEntity } from '@firestone-hs/replay-parser';
 import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
+import { CARDS_VERSION } from '../../../services/hs-utils';
 
 declare let amplitude: any;
 
@@ -153,7 +154,7 @@ export class BgsChartWarbandCompositionComponent {
 		private readonly allCards: AllCardsService,
 		private readonly appRef: ApplicationRef,
 	) {
-		allCards.initializeCardsDb();
+		allCards.initializeCardsDb(CARDS_VERSION);
 	}
 
 	async ngAfterViewInit() {
@@ -211,7 +212,7 @@ export class BgsChartWarbandCompositionComponent {
 
 	private async setStats(value: BgsPostMatchStats) {
 		if (!value || !value.boardHistory) {
-			this.allCards.initializeCardsDb();
+			this.allCards.initializeCardsDb(CARDS_VERSION);
 			return;
 		}
 		if (this.invalidLimit && value.boardHistory.length <= this.invalidLimit) {

@@ -20,6 +20,7 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { Events } from '../../../services/events.service';
+import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -165,7 +166,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	) {}
 
 	async ngAfterViewInit() {
-		this.cards.initializeCardsDb();
+		this.cards.initializeCardsDb(CARDS_VERSION);
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;

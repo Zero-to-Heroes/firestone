@@ -16,6 +16,7 @@ import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../models/preferences';
 import { DebugService } from '../services/debug.service';
+import { CARDS_VERSION } from '../services/hs-utils';
 import { OverwolfService } from '../services/overwolf.service';
 import { PreferencesService } from '../services/preferences.service';
 
@@ -336,7 +337,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async init() {
-		await this.cards.initializeCardsDb();
+		await this.cards.initializeCardsDb(CARDS_VERSION);
 		this.cardsInitDone = true;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

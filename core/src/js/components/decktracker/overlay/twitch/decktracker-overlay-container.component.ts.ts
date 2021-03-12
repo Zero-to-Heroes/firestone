@@ -4,6 +4,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
+import { CARDS_VERSION } from '../../../../services/hs-utils';
 import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
@@ -74,7 +75,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			});
 		});
 		console.log('init done');
-		await this.allCards.initializeCardsDb();
+		await this.allCards.initializeCardsDb(CARDS_VERSION);
 		// this.addDebugGameState();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
