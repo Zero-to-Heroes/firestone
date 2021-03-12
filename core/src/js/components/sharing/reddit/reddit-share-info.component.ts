@@ -135,5 +135,7 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 		);
 	}
 
-	async onFlairSelected(event: any) {}
+	async onFlairSelected(event: any) {
+		// Do nothing
+	}
 }

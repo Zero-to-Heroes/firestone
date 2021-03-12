@@ -36,8 +36,6 @@ export class MemoryInspectionService {
 	// https://overwolf.github.io/docs/api/overwolf-games-events-heartstone
 	readonly g_interestedInFeatures = [
 		'scene_state', // Used to detect when the UI shows the game
-		// 'collection',
-		// 'match', // Used to get the rank info of the player
 		'match_info', // For the GEP game ID
 	];
 
