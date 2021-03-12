@@ -61,7 +61,7 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 	icon: string;
 	className: string;
 	games: number;
-	_showMatchupAsPercentages: boolean = true;
+	_showMatchupAsPercentages = true;
 
 	winrate: number;
 	winrateFirst: number;
@@ -94,7 +94,6 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 			return;
 		}
 
-		// console.debug('updating', this._showMatchupAsPercentages);
 		this.icon = `assets/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
 		this.className = formatClass(this._matchup.opponentClass);
 		this.games = this._matchup.totalGames;

@@ -54,7 +54,7 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	_deck: DeckSummary;
-	_showMatchupAsPercentagesValue: boolean = true;
+	_showMatchupAsPercentagesValue = true;
 	matchups: readonly MatchupStat[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;

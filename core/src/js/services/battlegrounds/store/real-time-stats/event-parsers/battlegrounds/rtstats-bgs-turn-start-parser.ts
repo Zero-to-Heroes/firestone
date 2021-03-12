@@ -31,7 +31,6 @@ export class RTStatBgsTurnStartParser implements EventParser {
 				},
 			];
 			hpOverTurn[hero] = newStats;
-			// console.debug('updated hp over turn in turn start', hero, gameEvent, currentState);
 		}
 
 		return currentState.update({

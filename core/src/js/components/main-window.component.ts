@@ -186,7 +186,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.dataStoreSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				// First update the state before restoring the window
-				console.log('received state', newState);
 				// if (this.dataState) {
 				// 	return;
 				// }
@@ -203,7 +202,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.navigationStoreSubscription = navigationStoreBus.subscribe((newState: NavigationState) => {
 			setTimeout(async () => {
 				// First update the state before restoring the window
-				console.log('received nav state', newState, this.dataState);
 				this.navigationState = newState;
 				this.activeTheme = this.buildActiveTheme();
 				if (!(this.cdr as ViewRef)?.destroyed) {

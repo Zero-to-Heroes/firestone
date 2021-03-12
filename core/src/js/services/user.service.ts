@@ -34,7 +34,6 @@ export class UserService {
 			setTimeout(async () => {
 				// The avatar is not set right away
 				this.currentUser = await this.ow.getCurrentUser();
-				console.debug('user info after a while', this.currentUser);
 				this.store.stateUpdater.next(new CurrentUserEvent(this.currentUser));
 			}, 2000);
 		}

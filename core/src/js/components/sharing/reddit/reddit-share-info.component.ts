@@ -106,9 +106,7 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 
 		const cleanedSubreddit = subreddit.startsWith('/r/') ? subreddit.split('/r/')[1] : subreddit;
 		this.subreddit = cleanedSubreddit;
-		// console.debug('subreddit changed', subreddit, cleanedSubreddit);
 		const flairs = await this.ow.getSubredditFlairs(this.subreddit);
-		// console.log('flairs', flairs);
 		if (!flairs?.length) {
 			this.flairs = null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -124,7 +122,6 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 		}));
 		this.flair = this.flairs[0].value;
 		this.placeholder = this.flairs[0].label;
-		// console.log('flairs', flairs, this.flairs, this.flair, this.placeholder);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -138,7 +135,5 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 		);
 	}
 
-	async onFlairSelected(event: any) {
-		console.debug('flair selected', event);
-	}
+	async onFlairSelected(event: any) {}
 }

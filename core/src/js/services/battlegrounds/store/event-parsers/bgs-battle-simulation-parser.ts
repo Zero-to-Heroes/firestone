@@ -18,7 +18,6 @@ export class BgsBattleSimulationParser implements EventParser {
 	): Promise<BattlegroundsState> {
 		const prefs = await this.prefs.getPreferences();
 		const showSimulation = !prefs.bgsShowSimResultsOnlyOnRecruit;
-		console.debug('[bgs-simulation-parser] setting battle result', event.result.damageWon, showSimulation);
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				battleResult: event.result,

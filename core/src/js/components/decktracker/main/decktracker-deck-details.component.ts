@@ -43,7 +43,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	showMatchupAsPercentages: boolean = true;
+	showMatchupAsPercentages = true;
 	deck: DeckSummary;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();

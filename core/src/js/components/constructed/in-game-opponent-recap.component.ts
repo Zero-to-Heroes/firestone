@@ -142,12 +142,6 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 				for (const cardId of uniqueIds) {
 					if (cardsMissingInEachDecklist.every(decklist => decklist.includes(cardId))) {
 						cardsMissingInAllDecklists.push(cardId);
-						// console.debug(
-						// 	'card missing in all decklists',
-						// 	cardId,
-						// 	cardsMissingInAllDecklists,
-						// 	cardsMissingInEachDecklist.filter(decklist => decklist.includes(cardId)),
-						// );
 					}
 					for (const decklist of cardsMissingInEachDecklist) {
 						removeFromArray(decklist, cardId);
@@ -343,7 +337,6 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 	private formatCardsAsCollection(cards: readonly string[]): readonly SetCard[] {
 		const result: { [cardId: string]: SetCard } = {};
 		for (const card of cards) {
-			console.debug('considering', card);
 			if (!result[card]) {
 				result[card] = new SetCard(card, null, null, null, null, 0, 0);
 			}

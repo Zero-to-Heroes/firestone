@@ -34,7 +34,6 @@ export class FullCardBackComponent {
 		if (!value) {
 			return;
 		}
-		console.debug('full-card(back(', value);
 		this._cardBack = {
 			...value,
 			image: `https://static.zerotoheroes.com/hearthstone/cardBacks/${value.id}.png`,

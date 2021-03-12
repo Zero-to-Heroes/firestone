@@ -55,7 +55,7 @@ export class CardComponent implements AfterViewInit {
 
 	@Input() set card(card: SetCard) {
 		this._card = card;
-		// console.debug('set card', this._card);
+		// ('set card', this._card);
 		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
 		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
 		this.showPremiumCount = this._card.ownedPremium > 0 || this.showCounts;

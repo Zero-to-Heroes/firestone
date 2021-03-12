@@ -162,7 +162,6 @@ export class DeckZoneComponent implements AfterViewInit {
 			return {};
 		}
 
-		//console.debug('building q left for cards', this._collection);
 		const result = {};
 		for (const card of cards) {
 			const cardInCollection = this._collection.find(c => c.id === card.cardId);

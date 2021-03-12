@@ -22,7 +22,6 @@ export class RTStatsBgsHeroSelectedParser implements EventParser {
 		const turn = currentState.reconnectOngoing ? currentState.currentTurn : 0;
 		const hpOverTurn = currentState.hpOverTurn;
 		const existingData = hpOverTurn[heroCardId] ?? [];
-		// console.debug('current turn for hero selected', heroCardId, turn, existingData, currentState);
 		const newData = [
 			...existingData.filter(data => data.turn !== turn),
 			{
@@ -34,7 +33,6 @@ export class RTStatsBgsHeroSelectedParser implements EventParser {
 			},
 		];
 		hpOverTurn[heroCardId] = newData;
-		// console.debug('setting starting hp in stats for heo selected', heroCardId, hpOverTurn, gameEvent, currentState);
 		return currentState.update({
 			hpOverTurn: hpOverTurn,
 		} as RealTimeStatsState);

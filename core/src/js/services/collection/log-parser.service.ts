@@ -62,9 +62,7 @@ export class LogParserService {
 
 	private processLines(toProcess: string[]) {
 		// Are we opening a pack?
-		// console.debug('[pack-parser] processing lines', toProcess);
 		const cards = this.extractCards(toProcess);
-		// console.debug('[pack-parser] cards', cards);
 		if (this.isPack(cards)) {
 			const setId = cards[0].set;
 			const packCards = this.toPackCards(toProcess);

@@ -152,7 +152,6 @@ export class NewVersionNotificationComponent implements AfterViewInit {
 	}
 
 	toggleDontShowAgain(value: boolean) {
-		console.debug('toggling', value);
 		this.dontShowAgain = !this.dontShowAgain;
 		this.prefs.setDontShowNewVersionNotif(this.dontShowAgain);
 		if (!(this.cdr as ViewRef)?.destroyed) {

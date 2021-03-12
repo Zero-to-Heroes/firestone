@@ -128,7 +128,6 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 
 	getCollection(): readonly SetCard[] {
 		const result = this.currentDeck === 'final' ? null : this.collection;
-		//console.debug('getting collection', this.currentDeck, result);
 		return result;
 	}
 
@@ -155,7 +154,6 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 			return;
 		}
 
-		console.debug('updating values', this._state, this._navigation);
 		this.deck = this.getDeck();
 		if (!this.deck) {
 			return;
@@ -188,7 +186,6 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 			const additionalStat = (this._state.duels.additionalDeckDetails ?? []).find(
 				stat => stat.id === deckStat.id,
 			);
-			//console.debug('deckStat', deckStat, this._state.additionalDeckDetails, this._state);
 			this.isPersonalDeck = false;
 			this.run = {
 				creationTimestamp: undefined,
@@ -206,7 +203,6 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 				steps: deckStat.steps ?? additionalStat?.steps,
 			};
 			const runs: readonly DuelsRun[] = [this.run];
-			//console.debug('runs', runs);
 			return {
 				deckName: 'tmp',
 				initialDeckList: deckStat.decklist,

@@ -50,7 +50,6 @@ export class DeckbuildingTextReq implements Requirement {
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
 			const numberOfMatchingCards: number = cards.filter(card => this.cardMatches(card)).length;
-			// console.debug('number of matching', numberOfMatchingCards, cards);
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetCardQuantity;
 			} else if (this.qualifier === 'AT_MOST') {

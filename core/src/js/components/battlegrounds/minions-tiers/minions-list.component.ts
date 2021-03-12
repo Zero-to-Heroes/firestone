@@ -38,7 +38,6 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 })
 export class BattlegroundsMinionsListComponent {
 	@Input() set tooltipPosition(value: string) {
-		// console.debug('[minions-list] tooltip position', value);
 		this._tooltipPosition = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

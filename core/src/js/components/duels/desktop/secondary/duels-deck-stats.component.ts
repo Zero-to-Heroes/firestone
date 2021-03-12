@@ -78,7 +78,6 @@ export class DuelsDeckStatsComponent {
 			return;
 		}
 
-		//console.debug('deck', deck);
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${deck.heroCardId}.jpg`;
 		this.deckDecklist = deck.runs[0].initialDeckList;
 		this.deckName = deck.deckName;
@@ -126,7 +125,6 @@ export class DuelsDeckStatsComponent {
 				steps: deckStat.steps ?? additionalStat?.steps,
 			};
 			const runs: readonly DuelsRun[] = [run];
-			//console.debug('runs', runs);
 			return {
 				deckName: `${formatClass(deckStat.playerClass)} deck`,
 				initialDeckList: deckStat.decklist,

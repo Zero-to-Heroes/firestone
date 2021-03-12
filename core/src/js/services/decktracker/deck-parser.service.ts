@@ -279,7 +279,6 @@ export class DeckParserService {
 				lines[lines.length - 4].indexOf('Finding Game With Hero:') !== -1 ||
 				lines[lines.length - 4].indexOf('Duels Deck') !== -1 ||
 				lines[lines.length - 3].indexOf('Duels Deck') !== -1;
-			console.debug('[deck-parser] isLastSectionDeckSelectLine', isLastSectionDeckSelectLine, lines);
 			if (!isLastSectionDeckSelectLine) {
 				return;
 			}
@@ -378,7 +377,6 @@ export class DeckParserService {
 	public decodeDeckString() {
 		if (this.currentDeck) {
 			if (this.currentDeck.deckstring) {
-				// console.debug('[deck-parser] deck updated', this.currentDeck);
 				const deck = decode(this.currentDeck.deckstring);
 				this.currentDeck.deck = deck;
 				return;

@@ -23,22 +23,11 @@ export class RTStatsTotalDamageTakenByMinionsParser implements EventParser {
 			return currentState;
 		}
 
-		// console.debug('[bgs-real-time-stats] damage taken', 'targets', targets, gameEvent);
 		const damageTakenObj = currentState.totalMinionsDamageTaken;
-		// console.debug('[bgs-real-time-stats] damage taken', 'damageTakenObj', damageTakenObj);
 		for (const target of targets) {
 			const existingDamage = damageTakenObj[target.TargetCardId] ?? 0;
-			// console.debug(
-			// 	'[bgs-real-time-stats] damage taken',
-			// 	'handling damage',
-			// 	target,
-			// 	existingDamage,
-			// 	damageTakenObj[target.TargetCardId],
-			// 	damageTakenObj,
-			// );
 			damageTakenObj[target.TargetCardId] = existingDamage + target.Damage;
 		}
-		// console.debug('[bgs-real-time-stats] damage taken', 'updated damageTakenObj', damageTakenObj);
 		return currentState.update({
 			totalMinionsDamageTaken: damageTakenObj,
 		} as RealTimeStatsState);

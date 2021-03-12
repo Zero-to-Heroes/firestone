@@ -222,7 +222,6 @@ export class BgsPostMatchStatsRecapComponent {
 			.map(value => value.value)
 			.reduce((a, b) => a + b, 0);
 		this.maxBoardStats = Math.max(0, Math.max(...this._stats.stats.totalStatsOverTurn.map(stat => stat.value)));
-		// console.debug('maxBoardStats', this.maxBoardStats, this._stats.stats.totalStatsOverTurn);
 		// Hack for Toki, to avoid counting the hero power as a refresh (even though it technically
 		// is a refresh)
 		const rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);

@@ -23,7 +23,7 @@ export class BgsMatchStartParser implements EventParser {
 			const newGame: BgsGame = BgsGame.create({
 				reviewId: reviewId,
 			} as BgsGame);
-			console.debug('created new bgs game with reviewId', reviewId);
+			console.log('created new bgs game with reviewId', reviewId);
 			const prefs: Preferences = await this.prefs.getPreferences();
 			return currentState.update({
 				inGame: true,

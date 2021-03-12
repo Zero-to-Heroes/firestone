@@ -58,28 +58,6 @@ export class DeckbuildingCardAttributeReq implements Requirement {
 						? parseInt(card[this.targetAttribute]) <= this.targetAttributeValue
 						: parseInt(card[this.targetAttribute]) === this.targetAttributeValue,
 				).length;
-			// console.debug(
-			// 	'number of matching cards',
-			// 	numberOfMatchingCards,
-			// 	this.targetAttributeValue,
-			// 	this.targetAttribute,
-			// 	this.attributeQualifier,
-			// );
-			// console.debug(
-			// 	'cards taht dont match',
-			// 	cards
-			// 		.filter(
-			// 			card =>
-			// 				!card[this.targetAttribute] ||
-			// 				(this.attributeQualifier === 'AT_LEAST'
-			// 					? parseInt(card[this.targetAttribute]) < this.targetAttributeValue
-			// 					: this.attributeQualifier === 'AT_MOST'
-			// 					? parseInt(card[this.targetAttribute]) > this.targetAttributeValue
-			// 					: parseInt(card[this.targetAttribute]) !== this.targetAttributeValue),
-			// 		)
-			// 		.map(card => card.name),
-			// );
-			// console.debug('number of matching', numberOfMatchingCards);
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfCards;
 			} else if (this.qualifier === 'AT_MOST') {

@@ -99,9 +99,6 @@ export class BgsRunStatsService {
 	) {
 		const newMmr = parseInt(game.newPlayerRank);
 		const liveStats = currentGame.liveStats;
-		// console.debug('[bgs-run-stats] damage dealt', liveStats.luckFactor);
-
-		//console.log('[bgs-run-stats] starting to compute run stats', liveStats);
 		const user = await this.userService.getCurrentUser();
 		const input: BgsComputeRunStatsInput = {
 			reviewId: reviewId,
@@ -117,7 +114,6 @@ export class BgsRunStatsService {
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: isNaN(newMmr) ? null : newMmr,
 		};
-		//console.debug('[bgs-run-stats] computing post-match stats input', input, liveStats);
 
 		const [postMatchStats, newBestValues] = this.populateObject(liveStats, input, bestBgsUserStats || []);
 		console.log('[bgs-run-stats] newBestVaues');
@@ -125,7 +121,6 @@ export class BgsRunStatsService {
 		// Even if stats are computed locally, we still do it on the server so that we can
 		// archive the data. However, this is non-blocking
 		this.buildStatsRemotely(input);
-		//console.debug('[bgs-run-stats] postMatchStats built', postMatchStats);
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
@@ -156,7 +151,6 @@ export class BgsRunStatsService {
 					? new Array(realTimeStatsState.triplesPerHero[input.mainPlayer.cardId])
 					: [],
 		});
-		//console.debug('computing new best stats', realTimeStatsState, input, existingBestStats, result);
 		const newBestStats = buildNewStats(
 			existingBestStats,
 			realTimeStatsState,

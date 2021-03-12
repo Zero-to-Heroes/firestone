@@ -97,7 +97,6 @@ export class MenuSelectionComponent implements AfterViewInit {
 	@Input() selectedModule: string;
 
 	@Input() set currentUser(value: CurrentUser) {
-		console.debug('setting current user', value);
 		this._currentUser = value;
 		this.avatarUrl = value?.avatar?.length > 0 ? value.avatar : 'assets/images/social-share-login.png';
 		if (!(this.cdr as ViewRef)?.destroyed) {

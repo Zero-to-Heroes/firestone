@@ -72,7 +72,6 @@ export class PieChartComponent {
 				borderColor: 'transparent',
 			},
 		];
-		console.debug('set chart data', this.chartData, this.chartLabels, this.chartColors);
 		await this.updateChartOptions();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

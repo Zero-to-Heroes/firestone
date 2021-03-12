@@ -742,7 +742,6 @@ export class GameEvents {
 				);
 				break;
 			case 'DAMAGE':
-				//console.debug('processing DAMAGE event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new DamageGameEvent(), {
 						type: GameEvent.DAMAGE,
@@ -958,7 +957,6 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_TAVERN_UPGRADE':
-				// console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE,

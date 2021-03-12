@@ -41,7 +41,6 @@ export class StoreInitProcessor implements Processor {
 
 		const currentAppFromPrefs = prefs.currentMainVisibleSection;
 		if (currentAppFromPrefs) {
-			console.debug('setting current app from prefs', currentAppFromPrefs);
 			const [, navState] = await new ChangeVisibleApplicationProcessor(this.prefs).process(
 				new ChangeVisibleApplicationEvent(currentAppFromPrefs),
 				currentState,

@@ -127,7 +127,6 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	viewDetails(event: MouseEvent) {
 		event.stopPropagation();
 		event.preventDefault();
-		// console.debug('click', (event.target as any)?.tagName, event.target);
 		if (
 			(event.target as any)?.tagName?.toLowerCase() === 'button' ||
 			(event.target as any)?.tagName?.toLowerCase() === 'input' ||

@@ -102,7 +102,6 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	@Input() set game(value: BgsGame) {
 		this._game = value;
 		this.mmr = value ? value.mmrAtStart : undefined;
-		// console.debug('setting game', this._game);
 		this.updateInfo();
 	}
 

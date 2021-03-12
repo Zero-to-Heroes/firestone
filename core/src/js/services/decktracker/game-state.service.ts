@@ -185,9 +185,7 @@ export class GameStateService {
 				if (this.showDecktrackerFromGameMode === event) {
 					return;
 				}
-				// console.debug('decktracker display update', event);
 				this.showDecktrackerFromGameMode = event;
-				//console.debug('will update overlays', event, this.showDecktrackerFromGameMode);
 				this.updateOverlays(this.state, false, false);
 			});
 		});
@@ -205,7 +203,6 @@ export class GameStateService {
 				this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 				this.ow.closeWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
-				// this.ow.closeWindow(OverwolfService.CONSTRUCTED_WINDOW);
 			}
 			if (await this.ow.inGame()) {
 				this.updateOverlays(this.state);
@@ -259,16 +256,13 @@ export class GameStateService {
 	}
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
-		// const gameEvent = eventQueue[0];
 		try {
 			const stateUpdateEvents = eventQueue.filter(event => event.type === GameEvent.GAME_STATE_UPDATE);
 			const eventsToProcess = [
 				...eventQueue.filter(event => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 			].filter(event => event);
-			// console.log('will processed', eventsToProcess.length, 'events');
 			for (let i = 0; i < eventsToProcess.length; i++) {
-				// console.debug('will process', eventsToProcess[i]?.type, eventsToProcess[i]);
 				if (eventsToProcess[i] instanceof GameEvent) {
 					await this.processEvent(eventsToProcess[i] as GameEvent, i === eventsToProcess.length - 1);
 				} else {
@@ -314,13 +308,11 @@ export class GameStateService {
 
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
 		const allowRequeue = !(gameEvent as any).preventRequeue;
-		// console.debug('processing event', gameEvent.type, allowRequeue, gameEvent);
 		this.overlayHandlers.forEach(handler =>
 			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
 		);
 
 		if (gameEvent.type === 'TOGGLE_SECRET_HELPER') {
-			// console.log('[game-state] handling overlay for event', gameEvent.type);
 			this.state = this.state.update({
 				opponentDeck: this.state.opponentDeck.update({
 					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
@@ -334,7 +326,6 @@ export class GameStateService {
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
-			// console.log('[game-state] handling overlay for event', gameEvent.type, gameEvent);
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		}
 
@@ -428,7 +419,6 @@ export class GameStateService {
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
-		// console.debug('[game-state] will emit event', gameEvent.type, this.state, gameEvent);
 		if (this.state) {
 			this.updateOverlays(
 				this.state,
@@ -444,8 +434,6 @@ export class GameStateService {
 			};
 			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		}
-		// console.log('processed', gameEvent.type, 'in', Date.now() - this.previousStart);
-		// this.previousStart = Date.now();
 	}
 
 	private hasPossibleCounterspell(secrets: readonly BoardSecret[]) {

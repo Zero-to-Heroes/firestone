@@ -381,7 +381,6 @@ export class BgsChartHpComponent {
 			isPlayer: cardId === this._mainPlayerCardId,
 			hpOverTurn: hpOverTurn[cardId]?.filter(turnInfo => turnInfo).map(turnInfo => turnInfo.value) || [],
 		}));
-		// console.debug('playerOrder', playerOrder, players, hpOverTurn);
 
 		this.legend = players.map(player => ({
 			cardId: player.cardId,
@@ -429,7 +428,6 @@ export class BgsChartHpComponent {
 				lastKnownHp:
 					this._stats.hpOverTurn[playerCardId][this._stats.hpOverTurn[playerCardId].length - 1]?.value ?? 99,
 			}));
-		// console.debug('turn at which each player dies', turnAtWhichEachPlayerDies);
 		let playerOrder: string[] = turnAtWhichEachPlayerDies
 			.sort((a, b) => {
 				if (a.turnDeath < b.turnDeath) {
@@ -441,7 +439,6 @@ export class BgsChartHpComponent {
 				return b.lastKnownHp - a.lastKnownHp;
 			})
 			.map(playerInfo => playerInfo.playerCardId);
-		// console.debug('first playerOrder', playerOrder);
 		// Legacy issue - the heroes that were offered during the hero selection phase are
 		// also proposed there
 		if (playerOrder.length > 8) {
@@ -453,12 +450,10 @@ export class BgsChartHpComponent {
 						: info.lastKnownHp === 40,
 				)
 				.filter(info => info.playerCardId !== this._mainPlayerCardId);
-			// console.debug('cleaning player order', playerOrder, candidatesToRemove, turnAtWhichEachPlayerDies);
 			playerOrder = playerOrder.filter(
 				playerCardId => !candidatesToRemove.map(info => info.playerCardId).includes(playerCardId),
 			);
 		}
-		// console.debug('second playerOrder', playerOrder);
 		return playerOrder;
 	}
 

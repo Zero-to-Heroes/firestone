@@ -40,7 +40,6 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		if (stats === this._playerStats) {
 			return;
 		}
-		// console.debug('updating stats', this._statType, stats, this._playerStats);
 		this._playerStats = stats;
 		this.updateValues();
 	}
@@ -50,7 +49,6 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		if (searchString === this._searchString) {
 			return;
 		}
-		// console.debug('updating searchstring', this._statType);
 		this._searchString = searchString;
 		this.updateValues();
 	}
@@ -59,7 +57,6 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		if (value === this._statType) {
 			return;
 		}
-		// console.debug('updating stat type', this._statType);
 		this._statType = value;
 		this.updateValues();
 	}
@@ -97,11 +94,9 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		// so we only want to refresh the data if it really has changed
 		const newStats = this.getStats();
 		if (isEqual(newStats, this.displayedStats)) {
-			// console.debug('stats are equal, returning', newStats, this.displayedStats);
 			return;
 		}
 
-		// console.debug('updating values', this._statType);
 		this.displayedStats = newStats;
 
 		this.stats = this._searchString

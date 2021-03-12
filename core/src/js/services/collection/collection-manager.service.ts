@@ -85,7 +85,6 @@ export class CollectionManager {
 	private init() {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
-				console.debug('[collection-manager] reloading collection from memory');
 				await Promise.all([this.getCollection(), this.getCardBacks()]);
 			}
 		});

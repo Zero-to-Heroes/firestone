@@ -51,7 +51,7 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 			await this.ow.restoreWindow(this.windowName);
 		} else if (!shouldShow && !isWindowClosed(theWindow.window_state_ex)) {
 			if (this.forceLogs) {
-				console.debug(
+				console.log(
 					`[${this.name}] closing`,
 					shouldShow,
 					canShow,
@@ -69,7 +69,7 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 			}
 			await this.ow.closeWindow(this.windowName);
 		} else if (this.forceLogs && forceLogs && !shouldShow && isWindowClosed(theWindow.window_state_ex)) {
-			console.debug(
+			console.log(
 				`[${this.name}] not opening`,
 				shouldShow,
 				canShow,
@@ -99,14 +99,14 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 		const inGame = await this.ow.inGame();
 		if (!inGame) {
 			if (this.forceLogs) {
-				console.debug(`[${this.name}] not in game`);
+				console.log(`[${this.name}] not in game`);
 			}
 			return false;
 		}
 
 		if (forceCloseWidgets) {
 			if (this.forceLogs) {
-				console.debug(`[${this.name}] forceCloseWidgets`);
+				console.log(`[${this.name}] forceCloseWidgets`);
 			}
 			return false;
 		}

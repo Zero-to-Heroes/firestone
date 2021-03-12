@@ -73,7 +73,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
-		console.debug('[ads] should display ads?', this.shouldDisplayAds);
+		console.log('[ads] should display ads?', this.shouldDisplayAds);
 		this.stateUpdater.next(new ShowAdsEvent(this.shouldDisplayAds));
 		this.refreshAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {

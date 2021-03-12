@@ -154,7 +154,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 		const isDuelsInfo = (value: any): value is RunStep =>
 			(value as RunStep).treasureCardId !== undefined || (value as RunStep).lootCardIds !== undefined;
 		if (isDuelsInfo(value)) {
-			// console.debug('setting duels info', value);
 			if (value.treasureCardId) {
 				this.treasure = {
 					cardId: value.treasureCardId,

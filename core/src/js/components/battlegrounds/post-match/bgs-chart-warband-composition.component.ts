@@ -234,7 +234,6 @@ export class BgsChartWarbandCompositionComponent {
 		if (!value || !value.boardHistory) {
 			return null;
 		}
-		// console.debug('building data for', value);
 		const history = [...value.boardHistory];
 		if (history.length < 7) {
 			const length = history.length;

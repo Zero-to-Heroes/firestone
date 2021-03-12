@@ -52,7 +52,6 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 		}
 
 		if (!prefs.decktrackerCloseOnGameEnd) {
-			// console.debug('GAAAAAAA show', state);
 			return shouldShowFromState && state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
 		}
 

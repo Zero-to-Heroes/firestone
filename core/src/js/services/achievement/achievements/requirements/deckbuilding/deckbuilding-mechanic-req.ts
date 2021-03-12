@@ -42,21 +42,11 @@ export class DeckbuildingMechanicReq implements Requirement {
 
 	private handleEvent(gameEvent: GameEvent) {
 		const deck = gameEvent.localPlayer.deck ? gameEvent.localPlayer.deck.deck : null;
-		// console.log('[debug] [mechanic] deck', deck);
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
-			// console.log('[debug] [mechanic] cards', cards);
 			const numberOfMatchingCards: number = cards.filter(
 				card => card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1,
 			).length;
-			// console.log(
-			// 	'no-format',
-			// 	'[debug] [mechanic] numberOfMatchingCards',
-			// 	numberOfMatchingCards,
-			// 	cards.filter(card => card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1),
-			// 	cards.filter(card => !(card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1)),
-			// );
-			// console.debug('number of matching', numberOfMatchingCards, cards);
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetLifestealMinions;
 			} else if (this.qualifier === 'AT_MOST') {
@@ -67,6 +57,5 @@ export class DeckbuildingMechanicReq implements Requirement {
 		} else {
 			this.doesDeckMeetSpec = false;
 		}
-		// console.log('no-format', '[debug] [mechanic] doesDeckMeetSpec', this.doesDeckMeetSpec);
 	}
 }

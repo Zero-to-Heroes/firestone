@@ -35,14 +35,6 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 				value: resourcesWastedThisTurn,
 			},
 		];
-		// console.debug(
-		// 	'[bgs-real-time-stats] updated resources wasted per turn',
-		// 	gameEvent,
-		// 	resourcesThisTurn,
-		// 	resourcesUsedThisTurn,
-		// 	resourcesWastedThisTurn,
-		// 	resourcesWastedPerTurn,
-		// );
 
 		return currentState.update({
 			resourcesAvailableThisTurn: resourcesThisTurn,

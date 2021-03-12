@@ -102,7 +102,6 @@ export class FullCardComponent implements AfterViewInit {
 			return;
 		}
 
-		console.debug('setting selected card', selectedCard, selectedCard instanceof SetCard);
 		this.previousClips = this.audioClips || [];
 		this.audioCategories = this.buildAudio(selectedCard);
 		this.audioClips = this.audioCategories
@@ -117,7 +116,6 @@ export class FullCardComponent implements AfterViewInit {
 			this.showCount = true;
 			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium;
 			this.card.ownedNonPremium = (selectedCard as SetCard).ownedNonPremium;
-			// console.debug('setting count', this.card, this.showCount);
 		} else {
 			this.showCount = false;
 		}
@@ -174,7 +172,6 @@ export class FullCardComponent implements AfterViewInit {
 	private buildAudio(inputCard: ReferenceCard | SetCard): readonly AudioClipCategory[] {
 		const card = this.allCards.getCard(inputCard.id);
 		if (!(card as ReferenceCard).audio) {
-			// console.debug('no audio', inputCard);
 			return [];
 		}
 
@@ -200,7 +197,6 @@ export class FullCardComponent implements AfterViewInit {
 				clips: this.buildAudioClips(card.audio, 'emote', 'error'),
 			},
 		];
-		console.debug('built audio', result, inputCard);
 		return result.filter(cat => cat.clips.length > 0);
 	}
 

@@ -15,12 +15,10 @@ export class CreateCardInDeckParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.debug('applying create card in deck', cardId, entityId);
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		// console.debug('adding card to deck', cardId, controllerId, entityId, isPlayer, deck.deck.length);
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const card = DeckCard.create({
 			cardId: cardId,
@@ -32,7 +30,6 @@ export class CreateCardInDeckParser implements EventParser {
 		} as DeckCard);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
-		// console.debug('new deck', previousDeck.length, newDeck.length);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 		});

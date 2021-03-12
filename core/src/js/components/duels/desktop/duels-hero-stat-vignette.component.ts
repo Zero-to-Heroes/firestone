@@ -65,7 +65,6 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		if (!value || value === this._stat) {
 			return;
 		}
-		// console.debug('setting stat', value, this._stat);
 		const card = value.cardId ? this.cards.getCard(value.cardId) : null;
 		this._stat = value;
 		this.cardId = value.cardId;

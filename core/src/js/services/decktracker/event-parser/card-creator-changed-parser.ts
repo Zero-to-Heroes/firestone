@@ -15,16 +15,13 @@ export class CardCreatorChangedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.debug('card creator changed', cardId, entityId);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		// Issue: Mask of Mimicry has an info leak where it changes teh DISPLAYED_CREATOR tag
 		// for cards in hand
 		const cardInHand = this.helper.findCardInZone(deck.hand, null, entityId);
-		// console.debug('cardInHand', cardInHand);
 		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
-		// console.debug('cardInDeck', cardInDeck);
 
 		const isCardInfoPublic = isPlayer || !forcedHiddenCardCreators.includes(gameEvent.additionalData.creatorCardId);
 		const newCardInHand = cardInHand
@@ -33,18 +30,14 @@ export class CardCreatorChangedParser implements EventParser {
 					creatorCardId: isCardInfoPublic ? gameEvent.additionalData.creatorCardId : cardInHand.creatorCardId,
 			  } as DeckCard)
 			: null;
-		// console.debug('newCardInHand', newCardInHand);
 		const newCardInDeck = cardInDeck
 			? cardInDeck.update({
 					creatorCardId: gameEvent.additionalData.creatorCardId,
 			  } as DeckCard)
 			: null;
-		// console.debug('newCardInDeck', newCardInDeck);
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
-		// console.debug('newHand', newHand);
 		const newDeck = newCardInDeck ? this.helper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
-		// console.debug('newDeck', newDeck);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,

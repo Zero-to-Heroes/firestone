@@ -159,7 +159,6 @@ export class DuelsRunComponent implements AfterViewInit {
 	}
 
 	buildSteps(steps: readonly (GameStat | DuelsRunInfo)[]): readonly RunStep[] {
-		//console.debug('building steps', steps);
 		if (!steps) {
 			return [];
 		}
@@ -186,7 +185,6 @@ export class DuelsRunComponent implements AfterViewInit {
 				} as RunStep) as RunStep;
 			}
 		}
-		//console.debug('built steps', result, steps);
 		return result;
 	}
 
