@@ -37,8 +37,8 @@ export class BgsBattleResultParser implements EventParser {
 		// Error checks
 		if (
 			currentState.currentGame.battleResult &&
-			currentState.currentGame.battleResult.wonPercent != null &&
-			currentState.currentGame.battleResult.wonPercent === 0 &&
+			currentState.currentGame.battleResult.won != null &&
+			currentState.currentGame.battleResult.won === 0 &&
 			event.result === 'won'
 		) {
 			console.warn(
@@ -63,8 +63,8 @@ export class BgsBattleResultParser implements EventParser {
 		}
 		if (
 			currentState.currentGame.battleResult &&
-			currentState.currentGame.battleResult.lostPercent != null &&
-			currentState.currentGame.battleResult.lostPercent === 0 &&
+			currentState.currentGame.battleResult.lost != null &&
+			currentState.currentGame.battleResult.lost === 0 &&
 			event.result === 'lost'
 		) {
 			console.warn(
@@ -91,7 +91,7 @@ export class BgsBattleResultParser implements EventParser {
 		if (
 			currentState.currentGame.battleResult &&
 			currentState.currentGame.battleResult.tied != null &&
-			currentState.currentGame.battleResult.tiedPercent === 0 &&
+			currentState.currentGame.battleResult.tied === 0 &&
 			event.result === 'tied'
 		) {
 			console.warn(
