@@ -11,12 +11,12 @@ import { CardsByCost } from './cards-by-cost';
 	],
 	template: `
 		<div class="deck-mana-curve-bar">
-			<div class="quantity">{{ _info.quantity }}</div>
+			<div class="quantity">{{ _info?.quantity }}</div>
 			<div class="bar">
 				<!-- <div class="container"></div> -->
 				<div class="fill" [style.height.%]="fillHeight"></div>
 			</div>
-			<div class="label">{{ _info.label }}</div>
+			<div class="label">{{ _info?.label }}</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
