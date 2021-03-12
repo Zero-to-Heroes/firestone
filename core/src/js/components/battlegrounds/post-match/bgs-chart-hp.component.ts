@@ -246,17 +246,24 @@ export class BgsChartHpComponent {
 					return 'Turn ' + item[0].label;
 				},
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					return this.legend.map(legendItem => {
+					const sortWeight = (legendItem): number => {
 						const cardId = legendItem.cardId;
 						const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
 						const playerItem = item.find(it => it.datasetIndex === datasetIndex);
-						if (!playerItem) {
-							return `<div></div>`;
-						}
-						const colorIndex = this.legend.map(leg => leg.cardId).indexOf(cardId);
-						const color = this.playerColors[colorIndex];
-						return `<div class="node" style="background: ${color}"></div> ${playerItem?.value} health`;
-					});
+						return +playerItem?.value;
+					};
+					return [...this.legend]
+						.sort((a, b) => sortWeight(b) - sortWeight(a))
+						.map(legendItem => {
+							const cardId = legendItem.cardId;
+							const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
+							const playerItem = item.find(it => it.datasetIndex === datasetIndex);
+							if (!playerItem) {
+								return `<div></div>`;
+							}
+							const color = legendItem.color;
+							return `<div class="node" style="background: ${color}"></div> ${playerItem.value} health`;
+						});
 				},
 				label: (item: ChartTooltipItem, data: ChartData): string | string[] => {
 					return null;
