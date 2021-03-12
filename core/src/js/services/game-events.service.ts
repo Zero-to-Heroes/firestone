@@ -174,20 +174,7 @@ export class GameEvents {
 				break;
 			case 'LOCAL_PLAYER':
 				console.log(gameEvent.Type + ' event');
-				// First try without waiting for a callback, which is most of the cases
-				// const playerInfo = await this.playersInfoService.getPlayerInfo();
-				// // console.log('LOCAL_PLAYER info', playerInfo);
-				// if (!playerInfo) {
-				// 	console.warn('[game-events] no local player info returned by mmindvision');
-				// 	amplitude.getInstance().logEvent('error-logged', {
-				// 		'error-category': 'memory-reading',
-				// 		'error-id': 'no-player-info',
-				// 	});
-				// }
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
-					// standard: playerInfo?.standard,
-					// wild: playerInfo?.wild,
-					// cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
 					deck: this.deckParser.currentDeck,
 				} as GameEventPlayer);
 				console.log('sending LOCAL_PLAYER info', localPlayer);
