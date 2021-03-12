@@ -310,7 +310,7 @@ export class DungeonLootParserService {
 			return true;
 		}
 
-		if (this.lastDuelsMatch) {
+		if (this.lastDuelsMatch?.additionalResult) {
 			const [wins, losses] = this.lastDuelsMatch.additionalResult.split('-').map(info => parseInt(info));
 			if (duelsInfo.Wins < wins || duelsInfo.Losses < losses) {
 				this.log(
