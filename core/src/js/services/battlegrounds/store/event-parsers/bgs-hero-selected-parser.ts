@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -20,6 +21,11 @@ export class BgsHeroSelectedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectedEvent): Promise<BattlegroundsState> {
 		const existingMainPlayer = currentState.reconnectOngoing ? currentState.currentGame.getMainPlayer() : null;
 		const normalizedCardId = normalizeHeroCardId(event.cardId);
+		if (normalizedCardId === CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2) {
+			console.error('selecting KelThuzad in hero selection???');
+			return currentState;
+		}
+
 		const newPlayer = existingMainPlayer
 			? existingMainPlayer.update({
 					cardId: normalizedCardId,

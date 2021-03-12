@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
@@ -17,6 +18,10 @@ export class BgsOpponentRevealedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsOpponentRevealedEvent): Promise<BattlegroundsState> {
 		console.log('opponent revealed', event.cardId);
 		const normalizedCardId = normalizeHeroCardId(event.cardId);
+		if (normalizedCardId === CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2) {
+			return currentState;
+		}
+
 		const existingPlayer = currentState.currentGame.players.find(
 			player => normalizeHeroCardId(player.cardId) === normalizedCardId,
 		);
