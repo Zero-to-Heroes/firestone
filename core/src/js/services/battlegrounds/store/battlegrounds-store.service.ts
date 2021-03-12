@@ -7,6 +7,7 @@ import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
+import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { FeatureFlags } from '../../feature-flags';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
@@ -117,6 +118,7 @@ export class BattlegroundsStoreService {
 		private twitch: TwitchAuthService,
 		private patchesService: PatchesConfigService,
 		private realTimeStats: RealTimeStatsService,
+		private gameState: GameStateService,
 		private init_BgsRunStatsService: BgsRunStatsService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
@@ -445,10 +447,10 @@ export class BattlegroundsStoreService {
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
-			new BgsMatchStartParser(this.prefs),
+			new BgsMatchStartParser(this.prefs, this.gameState),
 			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
-			new BgsBattleResultParser(this.events),
+			new BgsBattleResultParser(this.events, this.ow),
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(this.prefs),
 			new BgsPostMatchStatsFilterChangeParser(this.prefs),
