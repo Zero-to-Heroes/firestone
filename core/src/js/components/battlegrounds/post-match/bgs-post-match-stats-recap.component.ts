@@ -185,7 +185,7 @@ export class BgsPostMatchStatsRecapComponent {
 	// When adding stats here, also add them to the api-compute-bgs-single-run-stats lambda
 	private updateStats() {
 		if (!this._stats?.player || !this._stats?.stats) {
-			console.warn('[stats-recap] missing player', this._stats?.player, this._stats?.stats);
+			// console.warn('[stats-recap] missing player', this._stats?.player, this._stats?.stats);
 			this.reset();
 			return;
 		}
