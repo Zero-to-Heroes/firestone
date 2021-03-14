@@ -17,6 +17,7 @@ import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { capitalizeEachWord } from '../../services/utils';
 
 declare let amplitude;
 
@@ -196,13 +197,23 @@ export class FullCardComponent implements AfterViewInit {
 				name: 'Errors',
 				clips: this.buildAudioClips(card.audio, 'emote', 'error'),
 			},
+			{
+				name: 'Other',
+				clips: this.buildAudioClips(card.audio, null),
+			},
 		];
 		return result.filter(cat => cat.clips.length > 0);
 	}
 
-	private buildAudioClips(audio, type: 'basic' | 'spell' | 'emote', category?: string): readonly AudioClip[] {
+	private buildAudioClips(audio, type: 'basic' | 'spell' | 'emote' | null, category?: string): readonly AudioClip[] {
 		return Object.keys(audio)
-			.filter(key => key.toLowerCase().includes(type + '_'))
+			.filter(key =>
+				type !== null
+					? key.toLowerCase().includes(type + '_')
+					: !key.toLowerCase().includes('basic_') &&
+					  !key.toLowerCase().includes('spell_') &&
+					  !key.toLowerCase().includes('emote_'),
+			)
 			.filter(key => !category || this.REGEXES.find(regex => regex.regex.test(key))?.category === category)
 			.map(key => {
 				const files = [...audio[key]];
@@ -215,187 +226,188 @@ export class FullCardComponent implements AfterViewInit {
 				};
 				audioClip.audios.forEach(audio => audio.load());
 				return audioClip;
-			});
+			})
+			.filter(audio => audio.name);
 	}
 
 	private readonly REGEXES = [
 		{
-			regex: /GAMEPLAY_EMOTE_.*_GREETINGS/g,
+			regex: /GAMEPLAY_EMOTE_.*GREETINGS/g,
 			value: 'Greetings',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_GREETINGS_RESPONSE/g,
+			regex: /GAMEPLAY_EMOTE_.*GREETINGS_RESPONSE/g,
 			value: 'Greetings Response',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_WELL_PLAYED/g,
+			regex: /GAMEPLAY_EMOTE_.*WELL_PLAYED/g,
 			value: 'Well played',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_OOPS/g,
+			regex: /GAMEPLAY_EMOTE_.*OOPS/g,
 			value: 'Oops',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_THREATEN/g,
+			regex: /GAMEPLAY_EMOTE_.*THREATEN/g,
 			value: 'Threaten',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_THANKS/g,
+			regex: /GAMEPLAY_EMOTE_.*THANKS/g,
 			value: 'Thanks',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_SORRY/g,
+			regex: /GAMEPLAY_EMOTE_.*SORRY/g,
 			value: 'Sorry',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_CONCEDE/g,
+			regex: /GAMEPLAY_EMOTE_.*CONCEDE/g,
 			value: 'Concede',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_START/g,
+			regex: /GAMEPLAY_EMOTE_.*START/g,
 			value: 'Start',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_TIMER/g,
+			regex: /GAMEPLAY_EMOTE_.*TIMER/g,
 			value: 'Timer',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_THINK1/g,
+			regex: /GAMEPLAY_EMOTE_.*THINK1/g,
 			value: 'Think 1',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_THINK2/g,
+			regex: /GAMEPLAY_EMOTE_.*THINK2/g,
 			value: 'Think 2',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_THINK3/g,
+			regex: /GAMEPLAY_EMOTE_.*THINK3/g,
 			value: 'Think 3',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_LOW_CARDS/g,
+			regex: /GAMEPLAY_EMOTE_.*LOW_CARDS/g,
 			value: 'Low Cards',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_NO_CARDS/g,
+			regex: /GAMEPLAY_EMOTE_.*NO_CARDS/g,
 			value: 'No Cards',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_WON/g,
+			regex: /GAMEPLAY_EMOTE_.*WON/g,
 			value: 'Won',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_MIRROR_START/g,
+			regex: /GAMEPLAY_EMOTE_.*MIRROR_START/g,
 			value: 'Mirror Start',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_NEED_WEAPON/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_NEED_WEAPON/g,
 			value: 'Error Need Weapon',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_NEED_MANA/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_NEED_MANA/g,
 			value: 'Error Need Mana',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_MINION_ATTACKED/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_MINION_ATTACKED/g,
 			value: 'Error Minion Attacked',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_I_ATTACKED/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_I_ATTACKED/g,
 			value: 'Error I Attacked',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_JUST_PLAYED/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_JUST_PLAYED/g,
 			value: 'Error Just Played',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_HAND_FULL/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_HAND_FULL/g,
 			value: 'Error Hand Full',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_FULL_MINIONS/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_FULL_MINIONS/g,
 			value: 'Error Full Minions',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_STEALTH/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_STEALTH/g,
 			value: 'Error Stealth',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_PLAY/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_PLAY/g,
 			value: 'Error Play',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_TARGET/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_TARGET/g,
 			value: 'Error Target',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_TAUNT/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_TAUNT/g,
 			value: 'Error Taunt',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_ERROR_GENERIC/g,
+			regex: /GAMEPLAY_EMOTE_.*ERROR_GENERIC/g,
 			value: 'Error Generic',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_EVENT_LUNAR_NEW_YEAR/g,
+			regex: /GAMEPLAY_EMOTE_.*EVENT_LUNAR_NEW_YEAR/g,
 			value: 'Lunar New Year',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_WINTERVEIL_GREETINGS/g,
+			regex: /GAMEPLAY_EMOTE_.*WINTERVEIL_GREETINGS/g,
 			value: 'Winterveil Greetings',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_HAPPY_NEW_YEAR_20/g,
+			regex: /GAMEPLAY_EMOTE_.*HAPPY_NEW_YEAR_20/g,
 			value: 'Happy New Year 20',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_FIRE_FESTIVAL/g,
+			regex: /GAMEPLAY_EMOTE_.*FIRE_FESTIVAL/g,
 			value: 'Fire Festival',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_PIRATE_DAY/g,
+			regex: /GAMEPLAY_EMOTE_.*PIRATE_DAY/g,
 			value: 'Pirate Day',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_HALLOWS_END/g,
+			regex: /GAMEPLAY_EMOTE_.*HALLOWS_END/g,
 			value: "Hallow's End",
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*_NOBLEGARDEN/g,
+			regex: /GAMEPLAY_EMOTE_.*NOBLEGARDEN/g,
 			value: 'Noblegarden',
 			category: 'event',
 		},
@@ -411,11 +423,31 @@ export class FullCardComponent implements AfterViewInit {
 				return 'Attack';
 		}
 		for (const regex of this.REGEXES) {
-			if (regex.regex.test(key)) {
+			// I have no idea why, but testing the regex once doesn't always work for some,
+			// while redoing the test fixes the isse
+			if (regex.regex.test(key) || regex.regex.test(key)) {
 				return regex.value;
 			}
 		}
-		return key ? key.replace('GAMEPLAY_EMOTE_', '') : '';
+		// console.debug('transformling', key);
+		return key
+			? capitalizeEachWord(
+					key
+						.replace(/GAMEPLAY_EMOTE_/g, '')
+						.replace(/SPELL/g, '')
+						.replace(/Spell/g, '')
+						.replace(/spell/g, '')
+						// Order is important here
+						.replace(/Hero(_\d*[a-z]?)?/g, '')
+						.replace(/HERO(_\d*[a-z]?)?/g, '')
+						.replace(/VO__Male/g, '')
+						.replace(/VO__Female/g, '')
+						.replace(/VO__(MALE)?/g, '')
+						.replace(/VO__(FEMALE)?/g, '')
+						.replace(/_/g, ' ')
+						.trim(),
+			  )
+			: '';
 	}
 
 	private cancelPlayingSounds() {

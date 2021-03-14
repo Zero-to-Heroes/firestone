@@ -1,7 +1,7 @@
 import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { capitalizeEachWord } from './utils';
 
-export const CARDS_VERSION = '74257';
+export const CARDS_VERSION = '74257-2';
 
 export const classes = [
 	'demonhunter',
