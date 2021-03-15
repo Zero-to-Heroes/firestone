@@ -7,7 +7,7 @@ import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
 
-const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=2';
+const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=3';
 
 @Injectable()
 export class CollectionManager {
@@ -63,7 +63,10 @@ export class CollectionManager {
 			console.log('[collection-manager] retrieving card backs from db');
 			const cardBacksFromDb = await this.db.getCardBacks();
 			console.log('[collection-manager] retrieved card backs from db', cardBacksFromDb.length);
-			return cardBacksFromDb;
+			// We do this so that if we update the reference, we still see them until the info
+			// has been refreshed from the in-game memory
+			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacksFromDb);
+			return merged;
 		} else {
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
 			// console.log('[collection-manager] updating card backs in db', merged);

@@ -11,7 +11,7 @@ import { InternalCardBack } from './internal-card-back';
 			[helpTooltip]="cardBack.name"
 			rotateOnMouseOver
 		>
-			<img [src]="cardBack.image" />
+			<img [src]="cardBack.image + '?v=2'" />
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
