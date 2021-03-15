@@ -63,40 +63,8 @@ export class NavigationBackProcessor implements Processor {
 		switch (navigationState.navigationAchievements.currentView) {
 			case 'categories':
 				return null;
-			// TODO
-			// return navigationState.update({
-			// 	navigationAchievements: navigationState.navigationAchievements.update({
-			// 		currentView: 'categories',
-			// 	} as NavigationAchievements),
-			// 	text: 'Categories',
-			// 	isVisible: true,
-			// } as NavigationState);
 			case 'list':
-				// TODO
 				return null;
-			// const category = dataState.achievements.categories.find(
-			// 	cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
-			// );
-			// if (category.categories.length === 1) {
-			// 	return navigationState.update({
-			// 		navigationAchievements: navigationState.navigationAchievements.update({
-			// 			currentView: 'categories',
-			// 		} as NavigationAchievements),
-			// 		text: 'Categories',
-			// 		isVisible: true,
-			// 	} as NavigationState);
-			// }
-			// return navigationState.update({
-			// 	navigationAchievements: navigationState.navigationAchievements.update({
-			// 		currentView: 'category',
-			// 	} as NavigationAchievements),
-			// 	// This is starting to be weird. It would probably be best to have an FSM,
-			// 	// and derive the name of the current navigation from the state we are in
-			// 	text: dataState.achievements.categories.find(
-			// 		cat => cat.id === navigationState.navigationAchievements.selectedGlobalCategoryId,
-			// 	).name,
-			// 	isVisible: true,
-			// } as NavigationState);
 			default:
 				return null;
 		}
@@ -132,29 +100,29 @@ export class NavigationBackProcessor implements Processor {
 			case 'category':
 				// console.log('going back', navigationState.navigationBattlegrounds.currentView);
 				return null;
-			// return navigationState.update({
-			// 	navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
-			// 		currentView: 'categories',
-			// 	} as NavigationBattlegrounds),
-			// 	text: null,
-			// } as NavigationState);
 			case 'list':
 				const currentCategory: BattlegroundsCategory = BattlegroundsAppState.findCategory(
 					dataState.battlegrounds,
+					navigationState.navigationBattlegrounds.selectedCategoryId,
+				);
+				console.log(
+					'currentCategory',
+					currentCategory,
+					currentCategory?.id,
 					navigationState.navigationBattlegrounds.selectedCategoryId,
 				);
 				const parentCategory:
 					| BattlegroundsCategory
 					| BattlegroundsGlobalCategory = BattlegroundsAppState.findParentCategory(
 					dataState.battlegrounds,
-					currentCategory.id,
+					currentCategory?.id,
 				);
-				// console.log('hop', currentCategory, parentCategory);
+				console.log('parentCategory', parentCategory, parentCategory?.id);
 				return navigationState.update({
 					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 						menuDisplayType: 'menu',
 						currentView: 'list',
-						selectedCategoryId: parentCategory.id,
+						selectedCategoryId: parentCategory?.id,
 					} as NavigationBattlegrounds),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in
@@ -192,8 +160,8 @@ export class NavigationBackProcessor implements Processor {
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({
 						currentView: 'cards',
-						selectedSetId: selectedSet.id,
-						cardList: selectedSet.allCards,
+						selectedSetId: selectedSet?.id,
+						cardList: selectedSet?.allCards,
 					} as NavigationCollection),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in
