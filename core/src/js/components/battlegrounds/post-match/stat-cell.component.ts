@@ -29,14 +29,14 @@ declare let amplitude: any;
 					[src]="
 						'https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/' +
 						heroCardId +
-						'.png'
+						'.png?v=2'
 					"
 					class="portrait"
 				/>
 				<img
 					*ngIf="heroIcon"
 					[helpTooltip]="'Best stat unlocked with ' + getCardName(heroIcon)"
-					[src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + heroIcon + '.jpg'"
+					[src]="'https://static.zerotoheroes.com/hearthstone/cardart/256x/' + heroIcon + '.jpg?v=2'"
 					class="portrait"
 				/>
 			</div>

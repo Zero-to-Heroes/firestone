@@ -384,7 +384,7 @@ export class BgsChartHpComponent {
 
 		this.legend = players.map(player => ({
 			cardId: player.cardId,
-			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${player.cardId}.png`,
+			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${player.cardId}.png?v=2`,
 			position: player.position,
 			isPlayer: player.isPlayer,
 			shown: true,

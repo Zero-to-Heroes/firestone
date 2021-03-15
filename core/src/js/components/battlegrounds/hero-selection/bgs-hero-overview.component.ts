@@ -67,7 +67,7 @@ export class BgsHeroOverviewComponent {
 		this.player = BgsPlayer.create({
 			cardId: value.id,
 		} as BgsPlayer);
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=2`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))

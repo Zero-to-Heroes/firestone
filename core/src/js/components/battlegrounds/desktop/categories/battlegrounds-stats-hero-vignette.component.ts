@@ -106,7 +106,7 @@ export class BattlegroundsStatsHeroVignetteComponent implements AfterViewInit {
 		}
 		this._stat = value;
 		this.heroName = value.name;
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=2`;
 		this.averagePosition = value.playerAveragePosition;
 		this.gamesPlayed = value.playerGamesPlayed;
 		this.netMmr = value.playerAverageMmr;

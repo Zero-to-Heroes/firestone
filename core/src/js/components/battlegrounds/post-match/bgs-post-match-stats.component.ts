@@ -133,7 +133,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			return;
 		}
 		this._panel = value;
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.getDisplayCardId()}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.player.getDisplayCardId()}.png?v=2`;
 		this.health = value.player.initialHealth - value.player.damageTaken;
 		this.maxHealth = value.player.initialHealth;
 		this.heroPowerCardId = value.player.getDisplayHeroPowerCardId();

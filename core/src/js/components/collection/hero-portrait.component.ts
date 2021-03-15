@@ -21,7 +21,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 export class HeroPortraitComponent {
 	@Input() set heroPortrait(value: CollectionReferenceCard) {
 		this._heroPortrait = value;
-		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${value.id}.png`;
+		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${value.id}.png?v=2`;
 		this.playerClass = formatClass(value.playerClass);
 	}
 

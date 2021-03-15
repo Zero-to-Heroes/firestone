@@ -29,7 +29,7 @@ export class EmptyCardComponent {
 
 	@Input('cardId') set cardId(value: string) {
 		this._cardId = value;
-		const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
+		const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png?v=2`;
 		// Preload
 		const image = new Image();
 		image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);

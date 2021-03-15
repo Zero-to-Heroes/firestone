@@ -151,7 +151,7 @@ export class DeckCardComponent {
 		}
 		// Preload
 		if (this.cardId) {
-			const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
+			const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png?v=2`;
 			const image = new Image();
 			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 			image.src = imageUrl;

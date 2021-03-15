@@ -95,7 +95,7 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 			console.warn('[opponent-overview] setting empty value');
 			return;
 		}
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=2`;
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId();
