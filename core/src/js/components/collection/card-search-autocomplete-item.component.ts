@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 
 @Component({
 	selector: 'card-search-autocomplete-item',
@@ -22,6 +22,9 @@ export class CardSearchAutocompleteItemComponent implements OnInit {
 	last: string;
 
 	ngOnInit() {
+		if (!this.fullString || !this.searchString) {
+			return;
+		}
 		const searchIndex = this.fullString.toLowerCase().indexOf(this.searchString.toLowerCase());
 		const searchEnd = searchIndex + this.searchString.length;
 		this.first = this.fullString.substring(0, searchIndex);
