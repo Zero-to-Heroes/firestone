@@ -222,4 +222,19 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			this.tooltipRef = undefined;
 		}
 	}
+
+	// Hide tooltip if a scroll wheel is detected anywhere
+	@HostListener('window:mousewheel')
+	onMouseWheel() {
+		// console.log('onmouseleave');
+		if (this.overlayRef) {
+			this.overlayRef?.detach();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
+		if (this.tooltipRef) {
+			this.tooltipRef = undefined;
+		}
+	}
 }
