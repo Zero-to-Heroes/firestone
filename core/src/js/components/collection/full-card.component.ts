@@ -5,7 +5,6 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
-	HostListener,
 	Input,
 	Output,
 	ViewRef,
@@ -37,7 +36,7 @@ declare let amplitude;
 			<div class="card-view-container">
 				<card-view [card]="card" [tooltips]="false" [showCounts]="showCount" [highRes]="!isHero">/</card-view>
 			</div>
-			<div class="details">
+			<div class="details" scrollable>
 				<h1>{{ card.name }}</h1>
 				<div class="card-details">
 					<div class="card-info class">
@@ -58,7 +57,7 @@ declare let amplitude;
 					</div>
 					<div class="card-info flavor-text" *ngIf="flavor">
 						<span class="sub-title">Flavor Text:</span>
-						<span class="value" [innerHTML]="flavor"></span>
+						<p class="value" [innerHTML]="flavor"></p>
 					</div>
 					<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
 						<div class="sub-title">Sounds:</div>
@@ -125,7 +124,7 @@ export class FullCardComponent implements AfterViewInit {
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
 		this.rarity = card.rarity;
-		this.flavor = card.flavor ? this.sanitizer.bypassSecurityTrustHtml(card.flavor) : null;
+		this.flavor = card.flavor ? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(card.flavor)) : null;
 	}
 
 	constructor(
@@ -157,17 +156,6 @@ export class FullCardComponent implements AfterViewInit {
 
 	closeWindow() {
 		this.close.emit(null);
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		const rect = this.elRef.nativeElement.querySelector('.card-details').getBoundingClientRect();
-		const scrollbarWidth = 5;
-		// console.log('mousedown on sets container', rect, event);
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
 	}
 
 	private buildAudio(inputCard: ReferenceCard | SetCard): readonly AudioClipCategory[] {
@@ -444,6 +432,10 @@ export class FullCardComponent implements AfterViewInit {
 						.replace(/VO__Female/g, '')
 						.replace(/VO__(MALE)?/g, '')
 						.replace(/VO__(FEMALE)?/g, '')
+						.replace(/VO_/g, '')
+						.replace(/MALE_/g, '')
+						.replace(/Male_/g, '')
+						.replace(/Female_/g, '')
 						.replace(/_/g, ' ')
 						.trim(),
 			  )
@@ -469,6 +461,15 @@ export class FullCardComponent implements AfterViewInit {
 		const audio = new Audio();
 		audio.src = src;
 		return audio;
+	}
+
+	private transformFlavor(flavor: string): string {
+		const result = flavor
+			.replace(/\n/g, '<br>')
+			.replace(/<i>/g, '')
+			.replace(/<\/i>/g, '');
+		console.debug('flvor', flavor, result);
+		return result;
 	}
 }
 
