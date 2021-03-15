@@ -24,6 +24,7 @@ export class ShowCardBackDetailsProcessor implements Processor {
 			selectedCardId: undefined,
 			selectedCardBackId: event.cardBackId,
 			searchString: undefined,
+			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [
 			null,

@@ -30,6 +30,7 @@ export class ShowCardDetailsProcessor implements Processor {
 					: 'wild'
 				: navigationState.navigationCollection.selectedFormat,
 			searchString: undefined,
+			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [
 			null,

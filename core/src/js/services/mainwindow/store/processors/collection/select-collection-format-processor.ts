@@ -18,6 +18,7 @@ export class SelectCollectionFormatProcessor implements Processor {
 			selectedFormat: event.format,
 			searchString: undefined,
 			selectedCardId: undefined,
+			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [
 			null,

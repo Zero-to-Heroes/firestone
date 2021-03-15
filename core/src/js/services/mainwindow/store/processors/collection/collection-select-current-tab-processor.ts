@@ -18,6 +18,7 @@ export class CollectionSelectCurrentTabProcessor implements Processor {
 			// selectedFormat: undefined,
 			searchString: undefined,
 			selectedCardId: undefined,
+			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [
 			null,

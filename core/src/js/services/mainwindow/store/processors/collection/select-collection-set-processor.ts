@@ -25,6 +25,7 @@ export class SelectCollectionSetProcessor implements Processor {
 			cardList: selectedSet.allCards,
 			searchString: undefined,
 			selectedCardId: undefined,
+			searchResults: [] as readonly string[],
 		} as NavigationCollection);
 		return [
 			null,
