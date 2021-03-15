@@ -280,6 +280,7 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.DARKMOON_FAIRE:
 			return 'darkmoon_faire';
 		case BoosterType.THE_BARRENS:
+			return 'the_barrens';
 		case BoosterType.SIGNUP_INCENTIVE:
 		case BoosterType.MAMMOTH_BUNDLE:
 		case BoosterType.FIRST_PURCHASE:
