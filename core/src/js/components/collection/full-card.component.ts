@@ -15,6 +15,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
+import { formatClass } from '../../services/hs-utils';
 import { PreferencesService } from '../../services/preferences.service';
 import { capitalizeEachWord } from '../../services/utils';
 
@@ -120,7 +121,12 @@ export class FullCardComponent implements AfterViewInit {
 			this.showCount = false;
 		}
 		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
-		this.class = card.playerClass === 'Neutral' ? 'All classes' : card.playerClass;
+		this.class =
+			card.playerClass !== 'Neutral'
+				? card.playerClass
+				: card.classes?.length
+				? card.classes.map(playerClass => formatClass(playerClass)).join(', ')
+				: 'All classes';
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
 		this.rarity = card.rarity;
