@@ -108,9 +108,8 @@
 		align-items: flex-start;
 		justify-content: center;
 		margin-right: 40px;
-		width: 42vh;
-		min-width: 42vh;
-		// height: 100%;
+		width: 360px;
+		min-width: 360px;
 
 		::ng-deep card-view {
 			// margin-top: 10px;
@@ -120,6 +119,7 @@
 			.card-container {
 				display: flex;
 				flex-direction: column;
+				align-items: center;
 
 				.images {
 					height: 420px;
