@@ -23,7 +23,7 @@ import { OverwolfService } from '../services/overwolf.service';
 export class HelpTooltipDirective implements OnInit, OnDestroy {
 	_text = '';
 
-	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' = 'bottom';
+	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' = 'bottom';
 
 	@Input('helpTooltip') set text(value: string) {
 		if (value === this._text) {
@@ -90,6 +90,15 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 							originY: 'center',
 							overlayX: 'start',
 							overlayY: 'center',
+						},
+				  ]
+				: this.position === 'top'
+				? [
+						{
+							originX: 'center',
+							originY: 'top',
+							overlayX: 'center',
+							overlayY: 'bottom',
 						},
 				  ]
 				: [

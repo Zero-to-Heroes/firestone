@@ -10,6 +10,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 			class="hero-portrait"
 			[ngClass]="{ 'missing': !_heroPortrait.numberOwned }"
 			[helpTooltip]="playerClass"
+			[helpTooltipPosition]="'top'"
 			rotateOnMouseOver
 		>
 			<img [src]="image" />
