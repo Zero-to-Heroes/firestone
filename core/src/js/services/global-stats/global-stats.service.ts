@@ -16,7 +16,7 @@ export class GlobalStatsService {
 		return new Promise<GlobalStats>(async resolve => {
 			const user = await this.ow.getCurrentUser();
 			if (!user.userId || !user.username) {
-				console.warn('[global-stats] user not logged in', user);
+				console.log('[global-stats] user not logged in', user);
 			}
 			this.getGlobalStatsInternal(user, stats => resolve(stats), 5);
 		});

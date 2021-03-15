@@ -22,7 +22,7 @@ export class PatchesConfigService {
 			return;
 		}
 		this.patchesConfig = await this.getPatchesConfig();
-		console.log('[patches-config] loaded patches config', this.patchesConfig);
+		console.log('[patches-config] loaded patches config');
 	}
 
 	private async getPatchesConfig(): Promise<PatchesConfig> {

@@ -27,7 +27,7 @@ export class SecretConfigService {
 
 	private async init() {
 		this.secretConfigs = await this.getSecretsConfig();
-		console.log('[secrets-config] loaded secrets config', this.secretConfigs);
+		console.log('[secrets-config] loaded secrets config');
 	}
 
 	private async getSecretsConfig(): Promise<readonly SecretsConfig[]> {
