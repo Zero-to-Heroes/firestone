@@ -57,8 +57,7 @@ export class CardComponent implements AfterViewInit {
 		this._card = card;
 		// ('set card', this._card);
 		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
-		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
-		this.showPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
+		this.updateInfo();
 		this.updateImage();
 	}
 
@@ -73,8 +72,13 @@ export class CardComponent implements AfterViewInit {
 	}
 
 	@Input() tooltips = true;
-	@Input() showCounts = false;
 
+	@Input() set showCounts(value: boolean) {
+		this._showCounts = value;
+		this.updateInfo();
+	}
+
+	_showCounts = false;
 	showPlaceholder = true;
 	showNonPremiumCount: boolean;
 	showPremiumCount: boolean;
@@ -126,5 +130,14 @@ export class CardComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private updateInfo() {
+		if (!this._card) {
+			return;
+		}
+
+		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this._showCounts;
+		this.showPremiumCount = this._card.ownedPremium > 0 || this._showCounts;
 	}
 }
