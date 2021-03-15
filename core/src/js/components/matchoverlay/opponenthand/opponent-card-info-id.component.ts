@@ -49,7 +49,7 @@ export class OpponentCardInfoIdComponent {
 			: undefined;
 		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
 		this.hasBuffs = value.buffCardIds?.length > 0;
-		// console.log('set card in hand', value);
+		// console.debug('set card in hand', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

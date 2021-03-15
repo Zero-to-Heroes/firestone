@@ -12,7 +12,6 @@ export class DeckHandlerService {
 			return this.buildEmptyDeckList(deckSize);
 		}
 
-		console.log('decoding', deckstring);
 		const deck = decode(deckstring);
 		return deck
 			? deck.cards
