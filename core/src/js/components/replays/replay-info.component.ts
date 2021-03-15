@@ -146,7 +146,10 @@ export class ReplayInfoComponent implements AfterViewInit {
 		this.visualResult = isBg ? (parseInt(value.additionalResult) <= 4 ? 'won' : 'lost') : value.result;
 		if (isBg) {
 			const deltaMmr = parseInt(value.newPlayerRank) - parseInt(value.playerRank);
-			if (!isNaN(deltaMmr)) {
+			// This is most likely a season reset
+			if (deltaMmr < -500) {
+				this.deltaMmr = parseInt(value.newPlayerRank);
+			} else if (!isNaN(deltaMmr)) {
 				this.deltaMmr = deltaMmr;
 			}
 		}
