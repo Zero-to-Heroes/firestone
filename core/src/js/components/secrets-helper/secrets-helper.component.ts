@@ -194,17 +194,23 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		if (!gameInfo) {
 			return;
 		}
+		const gameWidth = gameInfo.logicalWidth;
+		const gameHeight = gameInfo.logicalHeight;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
-		const newLeft = (trackerPosition && trackerPosition.left) || (await this.buildDefaultLeft());
-		const newTop = (trackerPosition && trackerPosition.top) || (await this.buildDefaultTop());
-		// console.log('updating tracker position', newLeft, newTop);
+		const newLeft = Math.min(
+			gameWidth - 100,
+			Math.max(0, (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft())),
+		);
+		const newTop = Math.min(
+			gameHeight - 100,
+			Math.max(0, (trackerPosition && trackerPosition.top) || (await this.getDefaultTop())),
+		);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-		// console.log('after window position update', await this.ow.getCurrentWindow());
 		await this.updateTooltipPosition();
 	}
 
-	private async buildDefaultLeft(): Promise<number> {
+	private async getDefaultLeft(): Promise<number> {
 		const width = Math.max(252, 252 * 2);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		const gameWidth = gameInfo.logicalWidth;
@@ -214,7 +220,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		return gameWidth / 2 - width * dpi - gameInfo.logicalHeight * 0.3;
 	}
 
-	private async buildDefaultTop(): Promise<number> {
+	private async getDefaultTop(): Promise<number> {
 		const gameInfo = await this.ow.getRunningGameInfo();
 		return gameInfo.logicalHeight * 0.05;
 	}

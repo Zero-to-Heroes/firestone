@@ -119,7 +119,6 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				}
 			});
 			this.stateSubscription = deckEventBus.subscribe(subscriber);
-			console.log('subscribed in game counters', subscriber, this.stateSubscription, deckEventBus);
 		} else {
 			const deckEventBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 			const subscriber = new Subscriber<any>(async newState => {
@@ -183,9 +182,18 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 		if (!gameInfo) {
 			return;
 		}
+		const gameWidth = gameInfo.logicalWidth;
+		const gameHeight = gameInfo.logicalHeight;
+
 		const trackerPosition = await this.prefs.getCounterPosition(this.activeCounter, this.side);
-		const newLeft = (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft());
-		const newTop = (trackerPosition && trackerPosition.top) || (await this.getDefaultTop());
+		const newLeft = Math.min(
+			gameWidth - 100,
+			Math.max(0, (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft())),
+		);
+		const newTop = Math.min(
+			gameHeight - 100,
+			Math.max(0, (trackerPosition && trackerPosition.top) || (await this.getDefaultTop())),
+		);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 
