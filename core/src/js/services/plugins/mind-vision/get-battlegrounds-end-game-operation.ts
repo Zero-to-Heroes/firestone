@@ -18,7 +18,10 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 				} as BattlegroundsInfo),
 			5,
 			2000,
-			battlegroundsInfo => !battlegroundsInfo,
+			// Some users randomly have missing info, so trying to force resets more ofteo to see
+			// if it improves anything
+			battlegroundsInfo =>
+				!battlegroundsInfo || battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1,
 		);
 	}
 }
