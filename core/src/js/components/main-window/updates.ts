@@ -62,11 +62,20 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Show pinned minions earlier when you're refreshing the tavern.`,
+							},
+						],
+					},
+					{
 						category: 'collection',
 						details: [
 							{
 								type: 'feature',
-								text: `Add stats when browsing each set.`,
+								text: `Add stats when browsing each set, including total amount of packs ever opened for that set.`,
 							},
 						],
 					},
@@ -94,7 +103,23 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Now properly show the pieces of C'Thun in the tracker once more.`,
+							},
+							{
+								type: 'bug',
 								text: `Fix a bug where Shenanigans would be greyed out by the secrets tracker if the opponent made you draw 2+ cards during their turn.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a bug where Pen Flinger would be shown as the first card to the left (instead of the right-most one) in the opponent's hand right after being bumped back.`,
+							},
+							{
+								type: 'bug',
+								text: `Add more safeguards to prevent the counters or the secret helper from being moved off-screen.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix cards being always flagged as 'M' in the opponent's hand after a reconnect. Cards drawn before the reconnect will still show as 'M' (this is a fix for a future version), but subsequent cards drawn will properly show the turn at which they are drawn now.`,
 							},
 							// {
 							// 	type: 'ui',
@@ -105,10 +130,6 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
-							{
-								type: 'feature',
-								text: `Show pinned minions earlier when you're refreshing the tavern.`,
-							},
 							{
 								type: 'ui',
 								text: `The live HP graph now use the same color for each player throughout the whole game (instead of changing the color based on the player current's leaderboard position), which should make it easier to follow things.`,
@@ -131,8 +152,16 @@ export const updates: readonly Update[] = [
 								text: `Add an option to change the size of the cards / card backs / hero portraits in the collection.`,
 							},
 							{
+								type: 'content',
+								text: `Add support for Forged in the Barrens.`,
+							},
+							{
 								type: 'ui',
 								text: `Sets are now sorted from newest to oldest.`,
+							},
+							{
+								type: 'bug',
+								text: `Lots of small-ish UI bugs have been fixed, mostly linked to the card sounds and navigation.`,
 							},
 						],
 					},
