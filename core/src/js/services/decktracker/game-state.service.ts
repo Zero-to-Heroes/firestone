@@ -45,6 +45,7 @@ import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { CreateCardInGraveyardParser } from './event-parser/create-card-in-graveyard-parser';
 import { CthunParser } from './event-parser/cthun-parser';
+import { CthunRevealedParser } from './event-parser/cthun-revealed-parser';
 import { DamageTakenParser } from './event-parser/damage-taken-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
@@ -637,6 +638,7 @@ export class GameStateService {
 			new EntityUpdateParser(this.helper, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
+			new CthunRevealedParser(this.helper, this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards),
 			new ReconnectOverParser(this.deckHandler),

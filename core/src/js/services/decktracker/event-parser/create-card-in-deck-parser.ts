@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -17,8 +18,15 @@ export class CreateCardInDeckParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
-		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		// Don't add the cards created by C'Thun, as they are added via the subspell handling
+		// There is the risk that, if C'Thun is enchanted and that enchantment creates a card in deck, this
+		// hack will discard it. For now it's supposed to be enough of a fringe case to not matter vs
+		// properly flagging the cards created by C'Thun
+		if (gameEvent.additionalData.creatorCardId === CardIds.Collectible.Neutral.CthunTheShattered) {
+			return currentState;
+		}
 
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const card = DeckCard.create({
 			cardId: cardId,

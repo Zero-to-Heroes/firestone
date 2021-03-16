@@ -215,20 +215,11 @@ export class GameEvents {
 				break;
 			case 'OPPONENT_PLAYER':
 				console.log(gameEvent.Type + ' event');
-				// const opponentInfo = await this.playersInfoService.getOpponentInfo();
-				// // console.log('OPPONENT_PLAYER info', opponentInfo);
-				// if (!opponentInfo) {
-				// 	console.warn('[game-events] no local player info returned by mmindvision');
-				// 	amplitude.getInstance().logEvent('error-logged', {
-				// 		'error-category': 'memory-reading',
-				// 		'error-id': 'no-player-info',
-				// 	});
-				// }
-				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value.OpponentPlayer, {
-					// standard: opponentInfo?.standard,
-					// wild: opponentInfo?.wild,
-					// cardBackId: opponentInfo?.cardBackId,
-				} as GameEventPlayer);
+				const opponentPlayer: GameEventPlayer = Object.assign(
+					{},
+					gameEvent.Value.OpponentPlayer,
+					{} as GameEventPlayer,
+				);
 				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
@@ -279,6 +270,13 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.DECKLIST_UPDATE, gameEvent, {
 						deckId: gameEvent.Value.AdditionalProps.DeckId,
+					}),
+				);
+				break;
+			case 'SUB_SPELL_START':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SUB_SPELL_START, gameEvent, {
+						prefabId: gameEvent.Value.PrefabId,
 					}),
 				);
 				break;

@@ -21,6 +21,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly MULLIGAN_DONE = 'MULLIGAN_DONE';
 	public static readonly MAIN_STEP_READY = 'MAIN_STEP_READY';
 	public static readonly DECKLIST_UPDATE = 'DECKLIST_UPDATE';
+	public static readonly SUB_SPELL_START = 'SUB_SPELL_START';
 	public static readonly TURN_START = 'TURN_START';
 	public static readonly GAME_RESULT = 'GAME_RESULT';
 	public static readonly MAYBE_DUNGEON_INFO_PICK = 'MAYBE_DUNGEON_INFO_PICK';

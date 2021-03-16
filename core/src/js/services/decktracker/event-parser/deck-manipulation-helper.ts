@@ -155,7 +155,7 @@ export class DeckManipulationHelper {
 		// Safeguard to not add twice the same card to the zone
 		// This is useful in case of cards stolen, where the power.log moves the card to SETASIDE, then changes the controller
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
-		if (zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
+		if (cardTemplate.entityId != null && zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
 			if (debug) {
 				console.debug(
 					'card already added to zone',
