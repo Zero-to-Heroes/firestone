@@ -15,8 +15,6 @@ export class Events {
 	public static readonly STREAMING_LOG_FILE = 'streaming-log-file';
 
 	public static readonly NEW_PACK = 'new-pack';
-	public static readonly NEW_CARD = 'new-card';
-	public static readonly MORE_DUST = 'more-dust';
 
 	public static readonly ACHIEVEMENT_COMPLETE = 'achievement-complete';
 
