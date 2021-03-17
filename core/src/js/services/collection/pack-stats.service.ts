@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BoosterType } from '@firestone-hs/reference-data';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { SetsService } from './sets-service.service';
@@ -36,13 +37,14 @@ export class PackStatsService {
 	private async publishPackStat(event: any) {
 		const setId = event.data[0];
 		const cards: any[] = event.data[1];
+		const boosterId: BoosterType = event.data[2];
 		await this.retrieveUserInfo();
 		const statEvent = {
-			'creationDate': new Date(),
-			'userId': this.userId,
-			// 'userMachineId': this.userMachineId,
-			'userName': this.username,
-			'setId': setId,
+			creationDate: new Date(),
+			userId: this.userId,
+			userName: this.username,
+			setId: setId,
+			boosterId: boosterId,
 		};
 		for (let i = 0; i < cards.length; i++) {
 			statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId.toLowerCase();
@@ -67,34 +69,4 @@ export class PackStatsService {
 			},
 		);
 	}
-
-	// private publishCardStat(card: Card, type: string, isNew: boolean) {
-	// 	console.log('ready to publish card stat event', card, type, isNew);
-	// 	const statEvent = {
-	// 		'creationDate': new Date(),
-	// 		'userId': this.userId,
-	// 		'userMachineId': this.userMachineId,
-	// 		'userName': this.username,
-	// 		'cardId': card.id,
-	// 		'type': type.toLowerCase(),
-	// 		'rarity': this.allCards.getCard(card.id).rarity?.toLowerCase(),
-	// 		'isNew': isNew,
-	// 	};
-	// 	console.log('posting card stat event', statEvent);
-	// 	this.publishCardStatsInternal(statEvent);
-	// }
-
-	// private publishCardStatsInternal(statEvent, retriesLeft = 5) {
-	// 	if (retriesLeft <= 0) {
-	// 		console.error('Could not send card stats info');
-	// 		return;
-	// 	}
-	// 	this.http.post(this.CARD_STAT_URL, statEvent).subscribe(
-	// 		result => console.log('card stat event result', result),
-	// 		error => {
-	// 			console.warn('Could not send card stats info', error);
-	// 			setTimeout(() => this.publishCardStatsInternal(statEvent, retriesLeft - 1));
-	// 		},
-	// 	);
-	// }
 }

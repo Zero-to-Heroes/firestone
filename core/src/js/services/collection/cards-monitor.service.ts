@@ -99,7 +99,6 @@ export class CardsMonitorService {
 	}
 
 	private async handleNewPack(pack: PackInfo) {
-		// TODO: send the boosterId to the server
 		const boosterId = pack.BoosterId;
 		// Get the collection as it was before opening cards
 		const collection = await this.collectionManager.getCollection(true);
@@ -117,7 +116,7 @@ export class CardsMonitorService {
 		const setId = this.cards.getCard(packCards[0].cardId).set.toLowerCase();
 		console.log('[pack-parser] notifying new pack opening', setId, boosterId, packCards);
 
-		this.events.broadcast(Events.NEW_PACK, setId, packCards);
+		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
 		this.stateUpdater.next(new NewPackEvent(setId, packCards));
 
 		const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
