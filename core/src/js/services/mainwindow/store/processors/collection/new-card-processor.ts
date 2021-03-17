@@ -30,17 +30,17 @@ export class NewCardProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		// console.debug('receiving new card history', event);
 		const collection: readonly Card[] = await this.collectionManager.getCollection();
 		if (collection && collection.length > 0) {
 			await this.indexedDb.saveCollection(collection);
 		}
-		const relevantCount = event.type === 'GOLDEN' ? event.card.premiumCount : event.card.count;
-		const history = this.isDust(event.card, event.type)
-			? new CardHistory(event.card.id, event.type === 'GOLDEN', false, -1)
-			: new CardHistory(event.card.id, event.type === 'GOLDEN', true, relevantCount);
+		const history = event.isDust
+			? new CardHistory(event.cardId, event.type === 'GOLDEN', false, -1)
+			: new CardHistory(event.cardId, event.type === 'GOLDEN', true, event.newCount);
 		this.cardHistoryStorage.newHistory(history);
 		const cardHistory = [history, ...currentState.binder.cardHistory] as readonly CardHistory[];
-		// console.log('new cardHistory', cardHistory);
+		// console.debug('new cardHistory', cardHistory);
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: await this.buildSetsFromCollection(collection),
 			collection: collection,
@@ -97,47 +97,5 @@ export class NewCardProcessor implements Processor {
 				ownedPremium,
 			);
 		});
-	}
-
-	private isDust(card: Card, type: string): boolean {
-		// Card is not in collection at all
-		// Should never occur
-		if (!card) {
-			console.warn(
-				'Should never have a missing card in collection, since the collection is retrieved after card pack opening',
-			);
-			return false;
-		}
-
-		const dbCard = this.cards.getCard(card.id);
-		if (!dbCard) {
-			console.warn('unknown card', card.id, card);
-			return false;
-		}
-		if ((type === 'NORMAL' && dbCard.rarity === 'Legendary' && card.count >= 2) || card.count >= 3) {
-			return true;
-		}
-		if ((type === 'GOLDEN' && dbCard.rarity === 'Legendary' && card.premiumCount >= 2) || card.premiumCount >= 3) {
-			return true;
-		}
-		return false;
-	}
-
-	private getDust(dbCard: any, type: string) {
-		const dust = this.dustFor(dbCard.rarity?.toLowerCase());
-		return type === 'GOLDEN' ? dust * 4 : dust;
-	}
-
-	private dustFor(rarity: string): number {
-		switch (rarity) {
-			case 'legendary':
-				return 400;
-			case 'epic':
-				return 100;
-			case 'rare':
-				return 20;
-			default:
-				return 5;
-		}
 	}
 }

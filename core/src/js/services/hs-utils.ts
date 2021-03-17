@@ -224,7 +224,7 @@ export const defaultStartingHp = (gameType: GameType, heroCardId: string): numbe
 };
 
 export const dustFor = (rarity: string): number => {
-	switch (rarity) {
+	switch (rarity?.toLowerCase()) {
 		case 'legendary':
 			return 400;
 		case 'epic':
@@ -237,7 +237,7 @@ export const dustFor = (rarity: string): number => {
 };
 
 export const dustForPremium = (rarity: string): number => {
-	return 4 * dustFor(rarity);
+	return 4 * dustFor(rarity?.toLowerCase());
 };
 
 export const boosterIdToSetId = (boosterId: BoosterType): string => {

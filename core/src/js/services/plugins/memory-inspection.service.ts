@@ -8,6 +8,7 @@ import { PackInfo } from '../../models/collection/pack-info';
 import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
+import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
 import { SetsService } from '../collection/sets-service.service';
@@ -27,6 +28,7 @@ import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
 import { GetDuelsRewardsInfoOperation } from './mind-vision/get-duels-rewards-info-operation';
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/get-in-game-achievements-progress-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
+import { GetMemoryChangesOperation } from './mind-vision/get-memory-changes-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
 import { IsMaybeOnDuelsRewardsScreenOperation } from './mind-vision/is-maybe-on-duels-rewards-screen-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
@@ -39,6 +41,7 @@ export class MemoryInspectionService {
 		'match_info', // For the GEP game ID
 	];
 
+	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVision, this.ow);
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
 	private getCardBacksOperation = new GetCardBacksOperation(this.mindVision, this.ow, this.cards);
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
@@ -68,6 +71,10 @@ export class MemoryInspectionService {
 		private cards: SetsService,
 	) {
 		this.init();
+	}
+
+	public async getMemoryChanges(): Promise<MemoryUpdate> {
+		return this.getMemoryChangesOperation.call();
 	}
 
 	public async getCollection(): Promise<readonly Card[]> {
