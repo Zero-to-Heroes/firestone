@@ -58,7 +58,11 @@ export class CardsMonitorService {
 		this.pendingTimeout = setTimeout(() => this.triggerMemoryDetection(), 400);
 	}
 
-	private async triggerMemoryDetection(process = true) {
+	private async triggerMemoryDetection(process = true, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			return;
+		}
+
 		// console.debug('triggerging memory detection');
 		const changes: MemoryUpdate = await this.memoryService.getMemoryChanges();
 		// console.debug('memoryChanges detection', changes);
@@ -66,9 +70,9 @@ export class CardsMonitorService {
 			return;
 		}
 
-		if (!changes.NewCards) {
-			console.warn('empty changeset');
-			setTimeout(() => this.receiveLogLine('force refetch'));
+		if (!changes?.NewCards) {
+			console.warn('empty changeset', retriesLeft);
+			setTimeout(() => this.triggerMemoryDetection(process, retriesLeft - 1));
 			return;
 		}
 
