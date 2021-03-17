@@ -22,7 +22,8 @@ import { BgsInitService } from '../../services/battlegrounds/bgs-init.service';
 import { BgsRunStatsService } from '../../services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from '../../services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from '../../services/battlegrounds/store/real-time-stats/real-time-stats.service';
-import { LogParserService } from '../../services/collection/log-parser.service';
+import { CardNotificationsService } from '../../services/collection/card-notifications.service';
+import { CardsMonitorService } from '../../services/collection/cards-monitor.service';
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
 import { PackStatsService } from '../../services/collection/pack-stats.service';
 import { AiDeckService } from '../../services/decktracker/ai-deck-service.service';
@@ -123,7 +124,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameEventsEmitterService,
 		GameEventsPluginService,
 		LogListenerService,
-		LogParserService,
+		CardsMonitorService,
 		LogRegisterService,
 		SettingsCommunicationService,
 		TwitchAuthService,
@@ -132,6 +133,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		CollectionBootstrapService,
 		PackMonitor,
 		PackStatsService,
+		CardNotificationsService,
 
 		AchievementsMonitor,
 		AchievementsNotificationService,

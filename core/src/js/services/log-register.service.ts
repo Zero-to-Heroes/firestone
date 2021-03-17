@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Events } from '../services/events.service';
-import { LogParserService } from './collection/log-parser.service';
+import { CardsMonitorService } from './collection/cards-monitor.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.service';
 import { GameEvents } from './game-events.service';
@@ -18,7 +18,7 @@ export class LogRegisterService {
 	constructor(
 		private events: Events,
 		private decksService: DeckParserService,
-		private collectionLogParserService: LogParserService,
+		private cardsMonitor: CardsMonitorService,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
 		private dungeonLootParser: DungeonLootParserService,
@@ -34,7 +34,7 @@ export class LogRegisterService {
 	private init(): void {
 		console.log('[log-register] initiating log registerservice');
 		new LogListenerService(this.ow)
-			.configure('Achievements.log', data => this.collectionLogParserService.receiveLogLine(data))
+			.configure('Achievements.log', data => this.cardsMonitor.receiveLogLine(data))
 			.subscribe(status => {
 				console.log('[log-register] status for achievements', status);
 				this.events.broadcast(status, 'Achiements.log');

@@ -53,7 +53,7 @@ export class CollectionBootstrapService {
 			totalHistoryLength: totalHistoryLength,
 			isLoading: false,
 		} as BinderState);
-		console.warn('collection loading card history');
+		console.log('collection loading card history');
 		this.stateUpdater.next(new CollectionInitEvent(newState));
 		return newState;
 	}

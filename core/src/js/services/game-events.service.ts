@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
 import { MemoryUpdate } from '../models/memory/memory-update';
-import { SceneMode } from '../models/scenes';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEventsEmitterService } from './game-events-emitter.service';
@@ -79,11 +78,10 @@ export class GameEvents {
 			const changes: MemoryUpdate = event.data[0];
 			if (changes.CurrentScene) {
 				try {
-					const scene: SceneMode = SceneMode[changes.CurrentScene as string];
 					this.gameEventsEmitter.allEvents.next(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.SCENE_CHANGED_MINDVISION,
-							additionalData: { scene: scene },
+							additionalData: { scene: changes.CurrentScene },
 						} as GameEvent),
 					);
 				} catch (e) {

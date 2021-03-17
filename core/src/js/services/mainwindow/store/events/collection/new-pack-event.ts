@@ -1,12 +1,8 @@
+import { InternalCardInfo } from '../../../../../models/collection/internal-card-info';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class NewPackEvent implements MainWindowStoreEvent {
-	constructor(setId: string, packCards: readonly any[]) {
-		this.setId = setId;
-		this.packCards = packCards;
-	}
-	readonly setId: string;
-	readonly packCards: readonly any[];
+	constructor(public readonly setId: string, public readonly packCards: readonly InternalCardInfo[]) {}
 
 	public static eventName(): string {
 		return 'NewPackEvent';
