@@ -22,17 +22,16 @@ export class CollectionManager {
 		this.init();
 	}
 
-	public async getCollection(): Promise<Card[]> {
+	public async getCollection(skipMemoryReading = false): Promise<Card[]> {
 		console.log('[collection-manager] getting collection');
-		const collection = await this.memoryReading.getCollection();
-		console.log('[collection-manager] retrieved collection from MindVision');
+		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();
 			console.log('[collection-manager] retrieved collection from db', collectionFromDb.length);
 			return collectionFromDb;
 		} else {
-			console.log('[collection-manager] updating collection in db');
+			console.log('[collection-manager] retrieved collection from MindVision, updating collection in db');
 			const savedCollection = await this.db.saveCollection(collection);
 			return savedCollection;
 		}

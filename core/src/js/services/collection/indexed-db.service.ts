@@ -102,7 +102,6 @@ export class IndexedDbService {
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
-			console.debug('got collection', collection);
 			return collection?.length > 0 ? collection.find(info => info.id === 1)?.cards ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get collection', e.message, e.name, e);

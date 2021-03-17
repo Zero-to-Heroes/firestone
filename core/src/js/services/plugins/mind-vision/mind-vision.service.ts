@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../../models/arena-info';
 import { BoostersInfo } from '../../../models/memory/boosters-info';
@@ -30,7 +31,7 @@ export class MindVisionService {
 		const plugin = await this.get();
 		try {
 			console.log('[mind-vision] getting ready to listen for updates');
-			this.memoryUpdateListener = (changes: MemoryUpdate | 'reset') => {
+			this.memoryUpdateListener = (changes: string | 'reset') => {
 				console.log('[mind-vision] memory update', changes);
 				// Happens when the plugin is reset, we need to resubscribe
 				if (changes === 'reset') {
@@ -39,13 +40,17 @@ export class MindVisionService {
 					this.listenForUpdates();
 					return;
 				}
-				const changesToBroadcast = { ...changes };
-				if (changesToBroadcast.CurrentScene === 'INVALID') {
+				const changesToBroadcast = JSON.parse(changes);
+				if (changesToBroadcast.CurrentScene === SceneMode.INVALID) {
 					console.warn('[mind-vision] INVALID scene should not be raised', changes);
 					delete changesToBroadcast.CurrentScene;
 					// TODO: here we should reset if we get an invalid scene + no other valid state
 					// For now we only have two pieces of info so that's it
-					if (!changesToBroadcast.DisplayingAchievementToast) {
+					if (
+						!changesToBroadcast.DisplayingAchievementToast &&
+						!changesToBroadcast.OpenedPack &&
+						!changesToBroadcast.NewCards?.length
+					) {
 						console.warn('[mind-vision] calling reset after invalid scene');
 						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 						this.listenForUpdates();
@@ -60,6 +65,20 @@ export class MindVisionService {
 		} catch (e) {
 			console.error('[mind-vision] could not listenForUpdates', e);
 		}
+	}
+
+	public async getMemoryChanges(): Promise<MemoryUpdate> {
+		return new Promise<MemoryUpdate>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.getMemoryChanges(info => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse memory update', e);
+				resolve(null);
+			}
+		});
 	}
 
 	public async getCollection(): Promise<any[]> {

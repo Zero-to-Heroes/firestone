@@ -1,13 +1,12 @@
-import { Card } from '../../../../../models/card';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class NewCardEvent implements MainWindowStoreEvent {
-	constructor(card: Card, type: string) {
-		this.card = card;
-		this.type = type;
-	}
-	readonly card: Card;
-	readonly type: string;
+	constructor(
+		public readonly cardId: string,
+		public readonly type: 'GOLDEN' | 'NORMAL',
+		public readonly newCount: number,
+		public readonly isDust: boolean,
+	) {}
 
 	public static eventName(): string {
 		return 'NewCardEvent';
