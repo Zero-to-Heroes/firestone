@@ -139,8 +139,10 @@
 		overflow-y: scroll;
 		align-content: start;
 		// So that the cards don't get cropped by the overflow when moused over
-		padding-top: 15px;
-		// margin-top: -15px;
+		padding-top: 45px;
+		margin-top: -30px;
+		padding-left: 15px;
+		margin-left: -15px;
 
 		li {
 			margin-right: 14px;
