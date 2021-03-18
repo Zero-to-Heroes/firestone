@@ -1,6 +1,7 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Preferences } from '../../../../models/preferences';
+import { VisualAchievement } from '../../../../models/visual-achievement';
 import { GameStateService } from '../../../decktracker/game-state.service';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsMatchStartEvent } from '../events/bgs-match-start-event';
@@ -19,6 +20,10 @@ export class BgsMatchStartParser implements EventParser {
 		if (currentState.reconnectOngoing) {
 			return currentState;
 		} else {
+			const heroesAchievementCategory = event.mainWindowState.achievements.findCategory(
+				'hearthstone_game_section_49',
+			);
+			const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory.retrieveAllAchievements();
 			const reviewId = await this.gameState.getCurrentReviewId();
 			const newGame: BgsGame = BgsGame.create({
 				reviewId: reviewId,
@@ -30,6 +35,7 @@ export class BgsMatchStartParser implements EventParser {
 				currentGame: newGame,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
 				stages: BgsInitParser.buildEmptyStages(currentState, prefs),
+				heroAchievements: heroAchievements,
 			} as BattlegroundsState);
 		}
 	}
