@@ -47,6 +47,7 @@ export class Preferences {
 	readonly collectionUseHighResImages: boolean = false;
 	readonly collectionCardScale: number = 100;
 	readonly collectionSetShowGoldenStats: boolean = false;
+	readonly collectionUseAnimatedCardBacks: boolean = false;
 
 	readonly collectionUseOverlay: boolean;
 

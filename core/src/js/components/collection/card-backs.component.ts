@@ -37,6 +37,7 @@ import { InternalCardBack } from './internal-card-back';
 					class="card-back"
 					*ngFor="let cardBack of shownCardBacks; let i = index; trackBy: trackByCardId"
 					[cardBack]="cardBack"
+					[animated]="animated"
 					[style.width.px]="cardWidth"
 					(click)="showFullCardBack(cardBack)"
 				>
@@ -51,6 +52,7 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 	readonly DEFAULT_CARD_WIDTH = 139;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
+	animated = false;
 
 	cardsOwnedActiveFilter: 'own' | 'dontown' | 'all';
 
@@ -109,6 +111,7 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 		preferences = preferences || (await this.prefs.getPreferences());
 		const cardScale = preferences.collectionCardScale / 100;
 		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+		this.animated = preferences.collectionUseAnimatedCardBacks;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -125,6 +128,7 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 		this.shownCardBacks = this._cardBacks.filter(this.filterCardsOwned()).map(cardBack => ({
 			...cardBack,
 			image: `https://static.zerotoheroes.com/hearthstone/cardBacks/${cardBack.id}.png`,
+			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,
 		}));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
