@@ -123,7 +123,7 @@ export class CardComponent implements AfterViewInit {
 			this.showPlaceholder = true;
 		}
 		const imagePath = this._highRes ? '512' : 'compressed';
-		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png?v=2`;
+		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png?v=3`;
 		this.secondaryClass = this._highRes ? 'high-res' : '';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
