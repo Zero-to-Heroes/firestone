@@ -7,15 +7,25 @@ import { InternalCardBack } from './internal-card-back';
 	template: `
 		<div
 			class="card-back"
-			[ngClass]="{ 'missing': !cardBack.owned }"
-			[helpTooltip]="cardBack.name"
+			*ngIf="_cardBack"
+			[ngClass]="{ 'missing': !_cardBack.owned }"
+			[helpTooltip]="_cardBack.name"
 			rotateOnMouseOver
 		>
-			<img [src]="cardBack.image + '?v=3'" />
+			<div class="perspective-wrapper" rotateOnMouseOver>
+				<img [src]="_cardBack.image + '?v=3'" />
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardBackComponent {
-	@Input() cardBack: InternalCardBack;
+	@Input() set cardBack(value: InternalCardBack) {
+		this._cardBack = value;
+	}
+
+	@Input() animated: boolean;
+	@Input() alwaysOn: boolean;
+
+	_cardBack: InternalCardBack;
 }
