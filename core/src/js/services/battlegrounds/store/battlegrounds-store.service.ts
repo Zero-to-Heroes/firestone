@@ -189,7 +189,7 @@ export class BattlegroundsStoreService {
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS ||
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 				) {
-					this.battlegroundsUpdater.next(new BgsMatchStartEvent());
+					this.battlegroundsUpdater.next(new BgsMatchStartEvent(this.mainWindowState));
 					if (this.memoryInterval) {
 						clearInterval(this.memoryInterval);
 						this.memoryInterval = null;

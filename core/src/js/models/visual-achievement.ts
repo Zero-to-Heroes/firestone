@@ -9,7 +9,8 @@ export class VisualAchievement {
 	readonly cardId: string;
 	readonly cardType: string;
 	readonly text: string;
-	readonly completionSteps: CompletionStep[];
+	// TODO: make sure the steps are sorted, but I think that's the case already
+	readonly completionSteps: readonly CompletionStep[];
 
 	public static create(value: VisualAchievement): VisualAchievement {
 		return Object.assign(new VisualAchievement(), value);
@@ -33,6 +34,10 @@ export class VisualAchievement {
 		} as VisualAchievement);
 	}
 
+	public isFullyCompleted(): boolean {
+		return this.completionSteps.every(step => step.numberOfCompletions > 0);
+	}
+
 	public achievementStatus(): AchievementStatus {
 		if (this.completionSteps.every(step => step.numberOfCompletions > 0)) {
 			return 'completed';
@@ -40,6 +45,10 @@ export class VisualAchievement {
 			return 'partially-completed';
 		}
 		return 'missing';
+	}
+
+	public getFirstMissingStep(): CompletionStep {
+		return this.completionSteps.find(step => !step.numberOfCompletions);
 	}
 
 	private updateCompletionSteps(value: Achievement): readonly CompletionStep[] {

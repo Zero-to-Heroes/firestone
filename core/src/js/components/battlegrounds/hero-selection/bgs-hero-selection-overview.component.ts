@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsHeroSelectionOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
+import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
 import { groupByFunction } from '../../../services/utils';
 
@@ -25,6 +27,7 @@ declare let amplitude: any;
 					[hero]="hero"
 					[globalStats]="globalStats"
 					[patchNumber]="patchNumber"
+					[achievements]="hero.achievements"
 					[style.width.%]="getOverviewWidth()"
 				></bgs-hero-overview>
 			</div>
@@ -33,7 +36,7 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionOverviewComponent {
-	heroOverviews: BgsHeroStat[];
+	heroOverviews: InternalBgsHeroStat[];
 	smallOverviews: readonly BgsHeroStat[];
 	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] = [];
 	_panel: BgsHeroSelectionOverview;
@@ -93,16 +96,23 @@ export class BgsHeroSelectionOverviewComponent {
 		// console.log('setting hero overviews', this._panel);
 		this.heroOverviews = this._panel.heroOptionCardIds.map(cardId => {
 			const existingStat = this._panel.heroOverview.find(overview => overview.id === cardId);
-			return (
+			const statWithDefault =
 				existingStat ||
 				BgsHeroStat.create({
 					id: cardId,
 					tribesStat: [] as readonly { tribe: string; percent: number }[],
-				} as BgsHeroStat)
+				} as BgsHeroStat);
+			const achievementsForHero: readonly VisualAchievement[] = this.getAchievementsForHero(
+				cardId,
+				value.heroAchievements,
+				this.allCards,
 			);
+			return {
+				...statWithDefault,
+				achievements: achievementsForHero,
+			};
 		});
-		// Add null-safe in case the heroes have been updated but not the code
-		// .filter(hero => hero);
+
 		if (this.heroOverviews.length === 2) {
 			this.heroOverviews = [null, ...this.heroOverviews, null];
 		} else if (this.heroOverviews.length === 3) {
@@ -111,10 +121,13 @@ export class BgsHeroSelectionOverviewComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// });
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly ads: AdService) {
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ads: AdService,
+		private readonly allCards: AllCardsService,
+	) {
 		this.init();
 	}
 
@@ -140,4 +153,22 @@ export class BgsHeroSelectionOverviewComponent {
 			this.cdr.detectChanges();
 		}
 	}
+
+	private getAchievementsForHero(
+		heroCardId: string,
+		heroAchievements: readonly VisualAchievement[],
+		allCards: AllCardsService,
+	): readonly VisualAchievement[] {
+		const dbHero = allCards.getCard(heroCardId);
+		if (!dbHero?.name) {
+			return [];
+		}
+
+		const searchName = `as ${dbHero.name}`;
+		return heroAchievements.filter(ach => ach.text.includes(searchName));
+	}
+}
+
+interface InternalBgsHeroStat extends BgsHeroStat {
+	readonly achievements: readonly VisualAchievement[];
 }

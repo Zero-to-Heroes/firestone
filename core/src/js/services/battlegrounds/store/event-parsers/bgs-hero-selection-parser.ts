@@ -100,6 +100,7 @@ export class BgsHeroSelectionParser implements EventParser {
 			heroOverview: heroOverview,
 			heroOptionCardIds: heroCardIds,
 			globalStats: currentState.globalStats,
+			heroAchievements: currentState.heroAchievements,
 			patchNumber:
 				stats?.currentBattlegroundsMetaPatch ||
 				(await this.patchConfig.getConf()).currentBattlegroundsMetaPatch,

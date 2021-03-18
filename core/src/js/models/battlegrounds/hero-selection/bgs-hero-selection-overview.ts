@@ -1,3 +1,4 @@
+import { VisualAchievement } from '../../visual-achievement';
 import { BgsPanel } from '../bgs-panel';
 import { BgsPanelId } from '../bgs-panel-id.type';
 import { BgsHeroStat } from '../stats/bgs-hero-stat';
@@ -11,6 +12,7 @@ export class BgsHeroSelectionOverview implements BgsPanel {
 	readonly heroOptionCardIds: readonly string[];
 	readonly patchNumber: number;
 	readonly globalStats: BgsStats;
+	readonly heroAchievements: readonly VisualAchievement[];
 
 	public static create(base: BgsHeroSelectionOverview): BgsHeroSelectionOverview {
 		return Object.assign(new BgsHeroSelectionOverview(), base);
