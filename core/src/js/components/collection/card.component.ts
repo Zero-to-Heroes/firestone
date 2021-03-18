@@ -22,27 +22,26 @@ import { OverwolfService } from '../../services/overwolf.service';
 			[ngClass]="{ 'missing': missing, 'showing-placeholder': showPlaceholder }"
 			rotateOnMouseOver
 		>
-			<div class="images perspective-wrapper" [cardTooltip]="tooltips && _card.id">
+			<div class="perspective-wrapper" [cardTooltip]="tooltips && _card.id" rotateOnMouseOver>
 				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
 				<img *ngIf="image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
-			</div>
-
-			<div class="count" *ngIf="!showPlaceholder">
-				<div class="non-premium" *ngIf="showNonPremiumCount">
-					<span>{{ _card.ownedNonPremium }}</span>
-				</div>
-				<div class="premium" *ngIf="showPremiumCount">
-					<i class="gold-theme left">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
-						</svg>
-					</i>
-					<span>{{ _card.ownedPremium + _card.ownedDiamond }}</span>
-					<i class="gold-theme right">
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
-						</svg>
-					</i>
+				<div class="count" *ngIf="!showPlaceholder">
+					<div class="non-premium" *ngIf="showNonPremiumCount">
+						<span>{{ _card.ownedNonPremium }}</span>
+					</div>
+					<div class="premium" *ngIf="showPremiumCount">
+						<i class="gold-theme left">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
+							</svg>
+						</i>
+						<span>{{ _card.ownedPremium + _card.ownedDiamond }}</span>
+						<i class="gold-theme right">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
+							</svg>
+						</i>
+					</div>
 				</div>
 			</div>
 		</div>

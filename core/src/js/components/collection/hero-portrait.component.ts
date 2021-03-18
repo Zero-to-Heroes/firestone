@@ -13,7 +13,9 @@ import { CollectionReferenceCard } from './collection-reference-card';
 			[helpTooltipPosition]="'top'"
 			rotateOnMouseOver
 		>
-			<img [src]="image" />
+			<div class="perspective-wrapper" rotateOnMouseOver>
+				<img [src]="image" />
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -43,8 +43,8 @@ export class RotateOnMouseOverDirective {
 
 		const xRatio = event.offsetX / this.imageWidth;
 		const yRatio = event.offsetY / this.imageHeight;
-		const styleAmplifier = 2;
-		const yRotation = Math.min(30, styleAmplifier * (xRatio * 16 - 8));
+		const styleAmplifier = 1;
+		const yRotation = -Math.min(30, styleAmplifier * (xRatio * 16 - 8));
 		const xRotation = Math.min(30, styleAmplifier * (yRatio * 16 - 8));
 		this.styleTransform = this.sanitizer.bypassSecurityTrustStyle(
 			`perspective(1000px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) scale3d(1.035, 1.035, 1.035)`,
