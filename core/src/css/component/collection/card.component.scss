@@ -108,22 +108,8 @@
 
 	&.missing {
 		.real-card {
-			// filter: grayscale(1);
-			opacity: 0.2;
+			opacity: 0.4;
 		}
-		// .overlay {
-		// 	display: block;
-		// 	position: absolute;
-		// 	width: 100%;
-		// 	height: 100%;
-		// 	margin: auto;
-		// 	background: #5e0d23;
-		// 	opacity: 0.5;
-		// 	top: 0;
-		// 	left: 0;
-		// 	-webkit-mask-size: 100%;
-		// 	-webkit-mask-repeat: no-repeat;
-		// }
 	}
 
 	&:hover {

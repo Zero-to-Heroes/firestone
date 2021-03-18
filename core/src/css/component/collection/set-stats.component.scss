@@ -23,6 +23,8 @@
 
 			::ng-deep .toggle p {
 				color: var(--color-1);
+				width: auto;
+				margin-right: 10px;
 			}
 			::ng-deep .preference-toggle {
 				margin: 0;
