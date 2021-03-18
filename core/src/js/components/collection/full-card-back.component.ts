@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardBack } from '../../models/card-back';
+import { Preferences } from '../../models/preferences';
 import { InternalCardBack } from './internal-card-back';
 
 declare let amplitude;
@@ -13,12 +14,11 @@ declare let amplitude;
 	],
 	template: `
 		<div class="card-back-details-container" *ngIf="_cardBack">
-			<card-back class="card-back" [cardBack]="_cardBack">/</card-back>
+			<card-back class="card-back" [cardBack]="_cardBack" [animated]="_animated" [alwaysOn]="true">/</card-back>
 			<div class="details">
 				<h1>{{ _cardBack.name }}</h1>
 				<div class="card-back-details">
 					<div class="card-back-info description">
-						<!-- <span class="sub-title">Description:</span> -->
 						<span class="value">{{ _cardBack.text }}</span>
 					</div>
 				</div>
@@ -29,6 +29,7 @@ declare let amplitude;
 })
 export class FullCardBackComponent {
 	_cardBack: InternalCardBack;
+	_animated: boolean;
 
 	@Input() set cardBack(value: CardBack) {
 		if (!value) {
@@ -37,6 +38,16 @@ export class FullCardBackComponent {
 		this._cardBack = {
 			...value,
 			image: `https://static.zerotoheroes.com/hearthstone/cardBacks/${value.id}.png`,
+			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${value.id}.webm`,
 		};
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
+
+	@Input() set prefs(value: Preferences) {
+		this._animated = value?.collectionUseAnimatedCardBacks;
+	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 }
