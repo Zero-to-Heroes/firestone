@@ -338,11 +338,11 @@ export class GraphWithComparisonComponent {
 					}
 
 					// Set Text
+					const yourDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
 					if (tooltip.body) {
 						const communityLabel = tooltip.beforeBody[0];
 						const yourLabel = tooltip.beforeBody[1];
 						const communityDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
-						const yourDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
 						const playerSection =
 							yourDatapoint?.value != null
 								? `
@@ -374,14 +374,19 @@ export class GraphWithComparisonComponent {
 
 					const tooltipWidth = tooltipEl.getBoundingClientRect().width;
 
-					const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
+					const leftOffset = yourDatapoint?.value != null ? 0 : 50;
 					const left = Math.max(
 						0,
-						Math.min(tooltip.caretX - 110, chartParent.getBoundingClientRect().right - tooltipWidth),
+						Math.min(
+							tooltip.caretX - 110 + leftOffset,
+							chartParent.getBoundingClientRect().right - tooltipWidth,
+						),
 					);
 					// caret should always be positioned on the initial tooltip.caretX. However, since the
 					// position is relative to the tooltip element, we need to do some gymnastic :)
 					// 10 is because of padding
+					// const carretLeftOffset = yourDatapoint?.value != null ? 0 : -50;
+					const tooltipArrowEl: any = tooltipEl.querySelector('.tooltip-arrow');
 					const carretLeft = tooltip.caretX - left - 10;
 					tooltipArrowEl.style.left = carretLeft + 'px';
 
