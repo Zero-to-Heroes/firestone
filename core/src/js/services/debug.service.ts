@@ -69,7 +69,7 @@ export class DebugService {
 					cache = null; // Enable garbage collection + " | "
 				}
 				oldConsoleLogFunc.apply(console, [argsString]);
-				oldConsoleLogFunc.apply(console, ...arguments);
+				oldConsoleLogFunc.apply(console, arguments);
 			};
 		}
 		return oldConsoleLogFunc;
