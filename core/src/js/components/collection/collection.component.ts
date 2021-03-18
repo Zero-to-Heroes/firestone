@@ -61,6 +61,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 						<full-card-back
 							class="full-card"
 							[cardBack]="selectedCardBack"
+							[prefs]="prefs"
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'card-back-details'"
 						>
 						</full-card-back>
