@@ -3,6 +3,12 @@
 		width: 100%;
 	}
 
+	.perspective-wrapper {
+		backface-visibility: hidden;
+		transform-style: preserve-3d;
+		width: 100%;
+	}
+
 	&.missing {
 		opacity: 0.4;
 	}
