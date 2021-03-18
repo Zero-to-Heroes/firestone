@@ -81,7 +81,7 @@ export class CollectionManager {
 	): readonly CardBack[] {
 		return referenceCardBacks.map(cardBack => {
 			const owned = ownedCardBacks.find(cb => cb.id === cardBack.id);
-			return owned.owned
+			return owned?.owned
 				? ({
 						...cardBack,
 						owned: true,
