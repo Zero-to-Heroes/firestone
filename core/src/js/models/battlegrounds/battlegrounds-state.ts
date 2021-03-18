@@ -1,4 +1,5 @@
 import { Race } from '@firestone-hs/reference-data';
+import { VisualAchievement } from '../visual-achievement';
 import { BgsGame } from './bgs-game';
 import { BgsPanelId } from './bgs-panel-id.type';
 import { BgsStage } from './bgs-stage';
@@ -20,6 +21,8 @@ export class BattlegroundsState {
 
 	readonly highlightedTribes: readonly Race[] = [];
 	readonly highlightedMinions: readonly string[] = [];
+
+	readonly heroAchievements: readonly VisualAchievement[];
 
 	public static create(base: BattlegroundsState): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), base);

@@ -3,6 +3,7 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 import { PatchInfo } from '../../../models/patches';
+import { VisualAchievement } from '../../../models/visual-achievement';
 
 declare let amplitude: any;
 
@@ -17,12 +18,27 @@ declare let amplitude: any;
 		<div class="hero-overview" *ngIf="_hero">
 			<div class="name">{{ _hero.name }}</div>
 			<div class="tier {{ tier?.toLowerCase() }}">{{ tier }}</div>
-			<img
-				[src]="icon"
-				class="portrait"
-				[cardTooltip]="_hero.heroPowerCardId"
-				[cardTooltipClass]="'bgs-hero-select'"
-			/>
+			<div class="portrait">
+				<img
+					[src]="icon"
+					class="portrait"
+					[cardTooltip]="_hero.heroPowerCardId"
+					[cardTooltipClass]="'bgs-hero-select'"
+				/>
+				<div class="achievements" *ngIf="achievementsToDisplay?.length">
+					<div
+						class="achievement"
+						*ngFor="let achievement of achievementsToDisplay; let i = index"
+						[ngClass]="{ 'completed': achievement.completed }"
+					>
+						<div
+							class="icon"
+							inlineSVG="assets/svg/achievements/categories/hearthstone_game.svg"
+							[helpTooltip]="achievement.text"
+						></div>
+					</div>
+				</div>
+			</div>
 			<bgs-hero-stats [hero]="_hero" [patchNumber]="patchNumber"></bgs-hero-stats>
 			<div class="winrate">
 				<div
@@ -56,7 +72,7 @@ export class BgsHeroOverviewComponent {
 	icon: string;
 	tier: BgsHeroTier;
 	tribes: readonly { tribe: string; percent: string }[];
-	// warbandStats: readonly { turn: number; totalStats: number }[];
+	achievementsToDisplay: readonly InternalAchievement[];
 
 	@Input() set hero(value: BgsHeroStat) {
 		// console.log('setting hero', value, this._hero);
@@ -72,8 +88,29 @@ export class BgsHeroOverviewComponent {
 			.sort((a, b) => b.percent - a.percent)
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
-		// this.warbandStats = value.warbandStats;
 		this.tier = value.tier;
+	}
+
+	@Input() set achievements(value: readonly VisualAchievement[]) {
+		this.achievementsToDisplay = value
+			.map(ach => ach.completionSteps)
+			.reduce((a, b) => a.concat(b), [])
+			.filter(step => step)
+			.map(step => ({
+				completed: !!step.numberOfCompletions,
+				text: `Achievement ${!!step.numberOfCompletions ? 'completed' : 'missing'}: ${step.completedText}`,
+			}))
+			.sort((a, b) => {
+				if (a.completed) {
+					return 1;
+				}
+				if (b.completed) {
+					return -1;
+				}
+				return 0;
+			})
+			.slice(0, 4);
+		// console.debug('setting achievements', this.achievementsToDisplay, value);
 	}
 
 	getIcon(tribe: string): string {
@@ -112,4 +149,9 @@ export class BgsHeroOverviewComponent {
 		}
 		return tribe.charAt(0).toUpperCase() + tribe.slice(1);
 	}
+}
+
+interface InternalAchievement {
+	readonly completed: boolean;
+	readonly text: string;
 }
