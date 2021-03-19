@@ -32,11 +32,12 @@ export class GenericChallenge implements Challenge {
 				}
 				req.test(gameEvent);
 			} catch (e) {
-				console.warn('[achievements-monitor] Exception', e);
 				console.error(
 					'no-format',
 					'[achievements-monitor] Exception while parsing req',
-					JSON.stringify(req['rawReq']),
+					req['rawReq'],
+					gameEvent,
+					e,
 				);
 				throw e;
 			}
