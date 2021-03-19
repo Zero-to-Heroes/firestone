@@ -44,6 +44,7 @@ export class BgsGameEndParser implements EventParser {
 			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			highlightedMinions: [] as readonly string[],
 			highlightedTribes: [] as readonly Race[],
+			heroSelectionDone: false,
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				reviewId: event.reviewId,
