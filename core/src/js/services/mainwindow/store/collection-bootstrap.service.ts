@@ -37,17 +37,19 @@ export class CollectionBootstrapService {
 			this.collectionManager.getCollection(),
 			this.collectionManager.getPacks(),
 		]);
-		const [cardHistory, sets, totalHistoryLength, cardBacks] = await Promise.all([
+		const [cardHistory, sets, totalHistoryLength, cardBacks, coins] = await Promise.all([
 			this.cardHistoryStorage.loadAll(100),
 			this.buildSets(collection),
 			this.cardHistoryStorage.countHistory(),
 			this.collectionManager.getCardBacks(),
+			this.collectionManager.getCoins(),
 		]);
 		const newState = Object.assign(new BinderState(), {
 			collection: collection as readonly Card[],
 			packs: packs as readonly PackInfo[],
 			allSets: sets,
 			cardBacks: cardBacks,
+			coins: coins,
 			cardHistory: cardHistory,
 			// shownCardHistory: cardHistory,
 			totalHistoryLength: totalHistoryLength,

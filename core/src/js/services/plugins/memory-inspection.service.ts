@@ -8,6 +8,7 @@ import { PackInfo } from '../../models/collection/pack-info';
 import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
+import { CoinInfo } from '../../models/memory/coin-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
@@ -22,6 +23,7 @@ import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-i
 import { GetBattlegroundsMatchOperation } from './mind-vision/get-battlegrounds-match-operation';
 import { GetBoostersInfoOperation } from './mind-vision/get-boosters-info-operation';
 import { GetCardBacksOperation } from './mind-vision/get-card-backs-operation';
+import { GetCoinsOperation } from './mind-vision/get-coins-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetCurrentSceneOperation } from './mind-vision/get-current-scene-operation';
 import { GetDuelsInfoOperation } from './mind-vision/get-duels-info-operation';
@@ -44,6 +46,7 @@ export class MemoryInspectionService {
 	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVision, this.ow);
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
 	private getCardBacksOperation = new GetCardBacksOperation(this.mindVision, this.ow, this.cards);
+	private getCoinsOperation = new GetCoinsOperation(this.mindVision, this.ow, this.cards);
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
@@ -83,6 +86,10 @@ export class MemoryInspectionService {
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
 		return this.getCardBacksOperation.call();
+	}
+
+	public async getCoins(): Promise<readonly CoinInfo[]> {
+		return this.getCoinsOperation.call();
 	}
 
 	public async getMatchInfo(): Promise<MatchInfo> {

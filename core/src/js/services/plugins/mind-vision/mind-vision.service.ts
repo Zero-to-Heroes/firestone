@@ -3,6 +3,7 @@ import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../../models/arena-info';
 import { BoostersInfo } from '../../../models/memory/boosters-info';
+import { CoinInfo } from '../../../models/memory/coin-info';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
 import { Events } from '../../events.service';
@@ -153,6 +154,20 @@ export class MindVisionService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse getCardBacks', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getCoins(): Promise<CoinInfo[]> {
+		return new Promise<CoinInfo[]>(async (resolve, reject) => {
+			const plugin = await this.get();
+			try {
+				plugin.getCoins(cardBacks => {
+					resolve(cardBacks ? JSON.parse(cardBacks) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getCoins', e);
 				resolve(null);
 			}
 		});

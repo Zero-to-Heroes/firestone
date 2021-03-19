@@ -12,6 +12,7 @@ import { SetCard } from '../../models/set';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
 	selector: 'card-view',
@@ -25,9 +26,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<div class="perspective-wrapper" [cardTooltip]="tooltips && _card.id" rotateOnMouseOver>
 				<img src="assets/images/placeholder.png" class="pale-theme placeholder" />
 				<img *ngIf="image" [src]="image" class="real-card" (load)="imageLoadedHandler()" />
-				<div class="count" *ngIf="!showPlaceholder">
+				<div class="count" *ngIf="!showPlaceholder && showCounts">
 					<div class="non-premium" *ngIf="showNonPremiumCount">
-						<span>{{ _card.ownedNonPremium }}</span>
+						<span>{{ ownedNonPremium }}</span>
 					</div>
 					<div class="premium" *ngIf="showPremiumCount">
 						<i class="gold-theme left">
@@ -35,7 +36,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 							</svg>
 						</i>
-						<span>{{ _card.ownedPremium + _card.ownedDiamond }}</span>
+						<span>{{ ownedPremium }}</span>
 						<i class="gold-theme right">
 							<svg class="svg-icon-fill">
 								<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
@@ -53,8 +54,25 @@ export class CardComponent implements AfterViewInit {
 
 	@Input() set card(card: SetCard) {
 		this._card = card;
+		if (!card) {
+			return;
+		}
+
+		this.ownedNonPremium = (this._card as SetCard).ownedNonPremium ?? 0;
+		this.showNonPremiumCount = this.ownedNonPremium > 0;
+
+		this.ownedPremium = (this._card as SetCard).ownedPremium ?? 0 + (this._card as SetCard).ownedDiamond ?? 0;
+		this.showPremiumCount = this.ownedPremium > 0;
 		this.missing = this._card.ownedNonPremium + this._card.ownedPremium + this._card.ownedDiamond === 0;
-		this.updateInfo();
+	}
+
+	@Input() set collectionCard(card: CollectionReferenceCard) {
+		this._card = card;
+		if (!card) {
+			return;
+		}
+
+		this.missing = !card.numberOwned;
 		this.updateImage();
 	}
 
@@ -69,13 +87,8 @@ export class CardComponent implements AfterViewInit {
 	}
 
 	@Input() tooltips = true;
+	@Input() showCounts: boolean;
 
-	@Input() set showCounts(value: boolean) {
-		this._showCounts = value;
-		this.updateInfo();
-	}
-
-	_showCounts = false;
 	showPlaceholder = true;
 	showNonPremiumCount: boolean;
 	showPremiumCount: boolean;
@@ -83,8 +96,10 @@ export class CardComponent implements AfterViewInit {
 	secondaryClass: string;
 	image: string;
 	missing: boolean;
-	_card: SetCard;
+	_card: SetCard | CollectionReferenceCard;
 	_highRes = false;
+	ownedPremium: number;
+	ownedNonPremium: number;
 
 	// private _loadImage = true;
 	private _imageLoaded: boolean;
@@ -127,14 +142,5 @@ export class CardComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private updateInfo() {
-		if (!this._card) {
-			return;
-		}
-
-		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this._showCounts;
-		this.showPremiumCount = this._card.ownedPremium + this._card.ownedDiamond > 0 || this._showCounts;
 	}
 }

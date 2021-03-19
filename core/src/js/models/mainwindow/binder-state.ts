@@ -1,6 +1,7 @@
 import { Card } from '../card';
 import { CardBack } from '../card-back';
 import { CardHistory } from '../card-history';
+import { Coin } from '../coin';
 import { PackInfo } from '../collection/pack-info';
 import { Set, SetCard } from '../set';
 
@@ -9,6 +10,7 @@ export class BinderState {
 	readonly packs: readonly PackInfo[];
 	readonly allSets: readonly Set[] = [];
 	readonly cardBacks: readonly CardBack[] = [];
+	readonly coins: readonly Coin[] = [];
 	readonly cardHistory: readonly CardHistory[] = [];
 	readonly totalHistoryLength: number;
 	readonly isLoading: boolean = true;
