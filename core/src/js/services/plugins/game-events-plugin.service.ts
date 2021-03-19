@@ -12,7 +12,7 @@ export class GameEventsPluginService {
 		this.initialize();
 	}
 
-	initialize() {
+	async initialize() {
 		this.initialized = false;
 		try {
 			this.gameEventsPlugin.initialize((status: boolean) => {
@@ -24,7 +24,8 @@ export class GameEventsPluginService {
 				console.log('[game-events] Plugin ' + this.gameEventsPlugin.get()._PluginName_ + ' was loaded!');
 				this.initialized = true;
 			});
-			this.gameEventsPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
+			const plugin = await this.get();
+			plugin.onGlobalEvent.addListener((first: string, second: string) => {
 				if (first && first.includes('ERROR TO LOG')) {
 					console.error('[game-events] received global event', first, second);
 				}
