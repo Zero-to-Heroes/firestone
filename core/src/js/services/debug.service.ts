@@ -9,7 +9,7 @@ export class DebugService {
 		const debugMode = process.env.NODE_ENV === 'production' || process.env.LOCAL_TEST != null;
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
-		console.error = this.overrideError(console.error, debugMode);
+		console.error = this.overrideError(console.error, console.warn, debugMode);
 	}
 
 	private override(oldConsoleLogFunc: any, debugMode: boolean) {
@@ -40,7 +40,7 @@ export class DebugService {
 		return oldConsoleLogFunc;
 	}
 
-	private overrideError(oldConsoleLogFunc: any, debugMode: boolean) {
+	private overrideError(oldConsoleLogFunc: any, oldWarnFunc: any, debugMode: boolean) {
 		if (debugMode) {
 			return function() {
 				// Sampling of events
@@ -68,7 +68,8 @@ export class DebugService {
 						).substring(0, 1000) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
-				oldConsoleLogFunc.apply(console, [argsString]);
+				// So that errors are only reported once by Sentry
+				oldWarnFunc.apply(console, '(ERROR)', [argsString]);
 				oldConsoleLogFunc.apply(console, arguments);
 			};
 		}
