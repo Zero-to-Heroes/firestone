@@ -287,6 +287,7 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.YEAR_OF_DRAGON:
 		case BoosterType.STANDARD_MAGE:
+		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
 	}
