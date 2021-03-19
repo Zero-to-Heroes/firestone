@@ -65,6 +65,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Show collected coins.`,
+							},
+						],
+					},
 				],
 			},
 			{
