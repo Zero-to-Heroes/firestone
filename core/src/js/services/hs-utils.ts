@@ -276,17 +276,24 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.BLACK_TEMPLE:
 			return 'black_temple';
 		case BoosterType.SCHOLOMANCE:
+		case BoosterType.GOLDEN_SCHOLOMANCE:
 			return 'scholomance';
 		case BoosterType.DARKMOON_FAIRE:
+		case BoosterType.GOLDEN_DARKMOON_FAIRE:
 			return 'darkmoon_faire';
 		case BoosterType.THE_BARRENS:
+		case BoosterType.GOLDEN_THE_BARRENS:
 			return 'the_barrens';
+		case BoosterType.STANDARD_HUNTER:
+		case BoosterType.STANDARD_MAGE:
+		case BoosterType.STANDARD_PALADIN:
+		case BoosterType.STANDARD_WARRIOR:
+		case BoosterType.STANDARD_PRIEST:
+		case BoosterType.STANDARD_ROGUE:
 		case BoosterType.SIGNUP_INCENTIVE:
 		case BoosterType.MAMMOTH_BUNDLE:
 		case BoosterType.FIRST_PURCHASE:
-		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.YEAR_OF_DRAGON:
-		case BoosterType.STANDARD_MAGE:
 			console.warn('unsupported booster type', boosterId);
 			return null;
 	}
