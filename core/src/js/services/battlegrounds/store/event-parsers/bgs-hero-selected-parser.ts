@@ -63,6 +63,7 @@ export class BgsHeroSelectedParser implements EventParser {
 		} as BgsGame);
 		const updatedState = currentState.update({
 			currentGame: newGame,
+			heroSelectionDone: true,
 		} as BattlegroundsState);
 		if (event.additionalData?.nextOpponentCardId) {
 			return new BgsNextOpponentParser().parse(

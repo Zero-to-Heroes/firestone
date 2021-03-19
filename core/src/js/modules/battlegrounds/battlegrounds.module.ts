@@ -15,7 +15,6 @@ import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
-import { BgsHeroOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-overview.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
 import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
@@ -69,20 +68,12 @@ console.log('version is ' + process.env.APP_VERSION);
 		BattlegroundsComponent,
 		BattlegroundsContentComponent,
 		BgsHeroSelectionOverviewComponent,
-		BgsHeroOverviewComponent,
 		BgsHeroWarbandStatsComponent,
 		BgsNextOpponentOverviewComponent,
 		BgsHeroFaceOffComponent,
 		BgsOpponentOverviewComponent,
 		MenuSelectionBgsComponent,
-		// BgsOpponentOverviewBigComponent,
 		BgsHeroFaceOffsComponent,
-		// BgsBoardComponent,
-		// BgsCardTooltipComponent,
-		// BgsHeroPortraitComponent,
-		// BgsBattleStatusComponent,
-		// BgsTriplesComponent,
-		// MinionIconComponent,
 	],
 	entryComponents: [BgsCardTooltipComponent],
 	bootstrap: [BattlegroundsComponent],

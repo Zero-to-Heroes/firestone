@@ -255,6 +255,16 @@
 				"start_position": { "top": 500, "left": 600 },
 				"in_game_only": true
 			},
+			"BgsHeroSelectionOverlay": {
+				"file": "Files/bgs_hero_selection_overlay.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 500, "height": 400 },
+				"min_size": { "width": 500, "height": 400 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
 			"CounterPlayerGalakrond": {
 				"file": "Files/counter_player_galakrond.html",
 				"transparent": true,
