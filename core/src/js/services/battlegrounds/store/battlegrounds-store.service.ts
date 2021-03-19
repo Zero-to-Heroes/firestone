@@ -275,6 +275,21 @@ export class BattlegroundsStoreService {
 					GameEvent.BATTLEGROUNDS_COMBAT_START,
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
+				// Sometimes the battle result arrives before the simulation is completed
+				if (
+					!this.state.currentGame.battleResult ||
+					!this.state.currentGame.battleInfo ||
+					!this.state.currentGame.battleInfo.opponentBoard?.player?.cardId !==
+						gameEvent.additionalData.opponent
+				) {
+					console.error(
+						'[bgs-simulation] Received battle result with an incompatible battle sim',
+						this.state.currentGame.battleInfo.opponentBoard?.player?.cardId,
+						gameEvent.additionalData.opponent,
+						this.state.currentGame.battleInfo,
+						this.state.currentGame.battleResult,
+					);
+				}
 				this.battlegroundsUpdater.next(
 					new BgsBattleResultEvent(
 						gameEvent.additionalData.opponent,

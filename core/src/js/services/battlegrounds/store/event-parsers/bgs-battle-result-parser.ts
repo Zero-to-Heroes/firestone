@@ -35,14 +35,23 @@ export class BgsBattleResultParser implements EventParser {
 			damage: event.damage,
 		} as BgsFaceOff);
 		// Error checks
-		if (currentState.currentGame.battleResult?.won === 0 && event.result === 'won') {
-			this.report('victory', currentState);
-		}
-		if (currentState.currentGame.battleResult?.lost === 0 && event.result === 'lost') {
-			this.report('loss', currentState);
-		}
-		if (currentState.currentGame.battleResult?.tied === 0 && event.result === 'tied') {
-			this.report('tie', currentState);
+		// First validate that we are reporting a valid battle. Another error is raised if that's not the case
+		if (currentState.currentGame.battleInfo?.opponentBoard?.player?.cardId === event.opponentCardId) {
+			if (currentState.currentGame.battleResult?.won === 0 && event.result === 'won') {
+				this.report('victory', currentState);
+			}
+			if (currentState.currentGame.battleResult?.lost === 0 && event.result === 'lost') {
+				this.report('loss', currentState);
+			}
+			if (currentState.currentGame.battleResult?.tied === 0 && event.result === 'tied') {
+				this.report('tie', currentState);
+			}
+		} else {
+			console.warn(
+				'[bgs-simulation] Invalid battle, should have been reported elsewhere already',
+				currentState.currentGame.battleInfo?.opponentBoard?.player?.cardId,
+				event.opponentCardId,
+			);
 		}
 		const gameWithActualBattleResult = currentState.currentGame.updateActualBattleResult(event.result);
 		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, gameWithActualBattleResult);
