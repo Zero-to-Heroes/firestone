@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.6.1',
+		version: '7.5.10',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -48,11 +48,44 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'general',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'content',
-								text: `The app has been updated for the release of Forged in the Barrens and the new Core set.`,
+								type: 'feature',
+								text: `Show missing achievements for heroes on hero selection screen.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'feature',
+								text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
+							},
+						],
+					},
+				],
+			},
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'ui',
+								text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an option to show animated card backs instead of static images.`,
 							},
 						],
 					},
