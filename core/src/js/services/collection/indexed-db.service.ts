@@ -3,6 +3,7 @@ import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
+import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
 import { PackHistory } from '../../models/pack-history';
 import { PityTimer } from '../../models/pity-timer';
@@ -98,6 +99,33 @@ export class IndexedDbService {
 		}
 	}
 
+	public async saveCoins(coins: readonly Coin[]): Promise<readonly Coin[]> {
+		await this.waitForDbInit();
+		const dbCollection = {
+			id: 4,
+			coins: coins,
+		};
+		return new Promise<readonly Coin[]>(resolve => {
+			this.saveCoinsInternal(dbCollection, result => resolve(result));
+		});
+	}
+
+	private async saveCoinsInternal(dbCollection, callback, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('[collection] [storage] could not update coins');
+			callback(dbCollection.cardBacks);
+			return;
+		}
+		try {
+			await this.db.update('collection', dbCollection);
+			callback(dbCollection.coins);
+			return;
+		} catch (e) {
+			console.warn('[collection] [storage] could not update coins', e.message, e.name, e);
+			setTimeout(() => this.saveCoinsInternal(dbCollection, callback, retriesLeft - 1));
+		}
+	}
+
 	public async getCollection(): Promise<Card[]> {
 		await this.waitForDbInit();
 		try {
@@ -125,6 +153,16 @@ export class IndexedDbService {
 			return collection?.length > 0 ? collection.find(info => info.id === 3)?.packInfos ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get pack infos', e.message, e.name, e);
+		}
+	}
+
+	public async getCoins(): Promise<readonly Coin[]> {
+		await this.waitForDbInit();
+		try {
+			const collection = await this.db.getAll('collection', null);
+			return collection?.length > 0 ? collection.find(info => info.id === 4)?.coins ?? [] : [];
+		} catch (e) {
+			console.error('[collection] [storage] could not get coins', e.message, e.name, e);
 		}
 	}
 

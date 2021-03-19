@@ -31,6 +31,9 @@ declare let amplitude;
 			<li [ngClass]="{ 'selected': selectedTab === 'hero-portraits' }" (mousedown)="selectTab('hero-portraits')">
 				<span>Portraits</span>
 			</li>
+			<li [ngClass]="{ 'selected': selectedTab === 'coins' }" (mousedown)="selectTab('coins')">
+				<span>Coins</span>
+			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
