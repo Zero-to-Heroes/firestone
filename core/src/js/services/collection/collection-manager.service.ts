@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
+import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
+import { CoinInfo } from '../../models/memory/coin-info';
 import { ApiRunner } from '../api-runner';
 import { boosterIdToSetId } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
@@ -15,10 +18,11 @@ export class CollectionManager {
 	private referenceCardBacks: readonly CardBack[];
 
 	constructor(
-		private memoryReading: MemoryInspectionService,
-		private db: IndexedDbService,
-		private ow: OverwolfService,
-		private api: ApiRunner,
+		private readonly memoryReading: MemoryInspectionService,
+		private readonly db: IndexedDbService,
+		private readonly ow: OverwolfService,
+		private readonly api: ApiRunner,
+		private readonly allCards: AllCardsService,
 	) {
 		this.init();
 	}
@@ -41,7 +45,7 @@ export class CollectionManager {
 
 	public async getPacks(): Promise<readonly PackInfo[]> {
 		console.log('[collection-manager] getting pack info');
-		const packInfo = await this.memoryReading.getBoostersInfo();
+		const packInfo = (await this.memoryReading.getBoostersInfo()) ?? [];
 		console.log(
 			'no-format',
 			'[collection-manager] retrieved pack info from memory',
@@ -79,6 +83,30 @@ export class CollectionManager {
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
 			// console.log('[collection-manager] updating card backs in db', merged);
 			const saved = await this.db.saveCardBacks(merged);
+			return saved;
+		}
+	}
+
+	public async getCoins(): Promise<readonly Coin[]> {
+		console.log('[collection-manager] getting coin');
+		const memoryCoins: readonly CoinInfo[] = await this.memoryReading.getCoins();
+		if (!memoryCoins || memoryCoins.length === 0) {
+			console.log('[collection-manager] retrieving coins from db');
+			const coinsFromDb = await this.db.getCoins();
+			console.log('[collection-manager] retrieved coins from db', coinsFromDb.length);
+			return coinsFromDb;
+		} else {
+			const refCoins = this.allCards
+				.getCards()
+				.filter(card => card.name === 'The Coin')
+				.filter(card => card.type === 'Spell');
+			const coins: readonly Coin[] = refCoins.map(coin => ({
+				cardId: coin.id,
+				owned: memoryCoins.find(c => c.CoinId === coin.dbfId) != null,
+				cardDbfId: coin.dbfId,
+			}));
+			console.log('[collection-manager] updating coins in db', coins);
+			const saved = await this.db.saveCoins(coins);
 			return saved;
 		}
 	}

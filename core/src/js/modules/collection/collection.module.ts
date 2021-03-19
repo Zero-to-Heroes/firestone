@@ -74,6 +74,7 @@ import { SetStatsComponent } from '../../components/collection/set-stats.compone
 import { SetComponent } from '../../components/collection/set.component';
 import { SetsContainer } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
+import { TheCoinsComponent } from '../../components/collection/the-coins.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
 import { DeckManaCurveBarComponent } from '../../components/decktracker/main/deck-mana-curve-bar.component';
 import { DeckManaCurveComponent } from '../../components/decktracker/main/deck-mana-curve.component';
@@ -207,6 +208,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		FullCardBackComponent,
 		HeroPortraitsComponent,
 		HeroPortraitComponent,
+		TheCoinsComponent,
 		OwnedFilterComponent,
 
 		AchievementsComponent,

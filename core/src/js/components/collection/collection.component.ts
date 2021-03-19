@@ -70,6 +70,11 @@ import { CollectionReferenceCard } from './collection-reference-card';
 							[heroPortraits]="heroPortraits"
 						>
 						</hero-portraits>
+						<the-coins
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'coins'"
+							[coins]="coins"
+						>
+						</the-coins>
 					</div>
 				</with-loading>
 			</section>
@@ -105,6 +110,7 @@ export class CollectionComponent {
 	selectedCardBack: CardBack;
 	searchResults: readonly SetCard[];
 	heroPortraits: readonly CollectionReferenceCard[] = [];
+	coins: readonly CollectionReferenceCard[] = [];
 
 	@Input() set state(state: BinderState) {
 		this.dataState = state;
@@ -160,6 +166,7 @@ export class CollectionComponent {
 						.filter(card => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
 				: null;
 		this.heroPortraits = this.buildHeroPortraits();
+		this.coins = this.buildCoins();
 	}
 
 	private buildHeroPortraits(): readonly CollectionReferenceCard[] {
@@ -180,6 +187,18 @@ export class CollectionComponent {
 				  } as CollectionReferenceCard)
 				: card,
 		) as CollectionReferenceCard[];
+	}
+
+	private buildCoins(): readonly CollectionReferenceCard[] {
+		return this.dataState.coins
+			.map(coin => {
+				const refCoin = this.allCards.getCard(coin.cardId);
+				return {
+					...refCoin,
+					numberOwned: coin.owned ? 1 : 0,
+				};
+			})
+			.sort((a, b) => a.dbfId - b.dbfId);
 	}
 
 	private async init() {

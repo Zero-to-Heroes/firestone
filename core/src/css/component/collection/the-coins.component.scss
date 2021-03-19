@@ -1,0 +1,72 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.the-coins {
+	position: relative;
+	top: -2px;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+
+	collection-empty-state {
+		flex-grow: 1;
+		display: flex;
+	}
+
+	.show-filter {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		margin-right: 20px;
+		padding-bottom: 18px;
+		justify-content: flex-start;
+		margin-bottom: 10px;
+
+		.owned-filter {
+			width: 250px;
+
+			// Colors are not properly aligned between all the themes
+			::ng-deep filter-dropdown ng-select select-dropdown .below {
+				background: var(--color-5);
+			}
+		}
+
+		.progress-bar {
+			margin-left: auto;
+		}
+	}
+
+	.cards-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		margin-top: -6px;
+		width: 100%;
+		height: 100%;
+		justify-content: flex-start;
+		display: flex;
+		flex-wrap: wrap;
+		overflow-y: scroll;
+		align-content: start;
+
+		.card {
+			margin-right: 0;
+			margin-bottom: 0;
+			position: relative;
+			transition: all 0.15s ease;
+			padding: 10px;
+		}
+	}
+}
+
+.loading {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 16px;
+	color: #d9c3ab;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
