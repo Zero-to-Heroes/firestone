@@ -28,7 +28,6 @@ import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
 import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-updated-parser';
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
-import { BgsHeroSelectionDoneParser } from './event-parsers/bgs-hero-selection-done-parser';
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
 import { BgsInitMmrParser } from './event-parsers/bgs-init-mmr-parser';
 import { BgsInitParser } from './event-parsers/bgs-init-parser';
@@ -77,6 +76,7 @@ import { NoBgsMatchEvent } from './events/no-bgs-match-event';
 import { BattlegroundsStoreEvent } from './events/_battlegrounds-store-event';
 import { BattlegroundsOverlay } from './overlay/battlegrounds-overlay';
 import { BgsBannedTribesOverlay } from './overlay/bgs-banned-tribes-overlay';
+import { BgsHeroSelectionOverlay } from './overlay/bgs-hero-selection-overlay';
 import { BgsMainWindowOverlay } from './overlay/bgs-main-window-overlay';
 import { BgsMinionsListOverlay } from './overlay/bgs-minions-list-overlay';
 import { BgsMouseOverOverlay } from './overlay/bgs-mouse-over-overlay';
@@ -461,7 +461,6 @@ export class BattlegroundsStoreService {
 			new BgsStatUpdateParser(this.allCards, this.patchesService),
 			new BgsHeroSelectionParser(this.memory, this.patchesService),
 			new BgsHeroSelectedParser(this.allCards),
-			new BgsHeroSelectionDoneParser(),
 			new BgsNextOpponentParser(),
 			new BgsTavernUpgradeParser(),
 			new BgsPlayerBoardParser(this.simulation, this.prefs),
@@ -505,6 +504,7 @@ export class BattlegroundsStoreService {
 			new BgsMouseOverOverlay(this.prefs, this.ow),
 			new BgsMinionsListOverlay(this.prefs, this.ow),
 			new BgsOverlayButtonOverlay(this.ow),
+			new BgsHeroSelectionOverlay(this.ow),
 		];
 	}
 }

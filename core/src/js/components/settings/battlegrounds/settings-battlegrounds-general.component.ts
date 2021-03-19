@@ -73,6 +73,13 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When turned on, a window with stats on the heroes offered is shown"
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowHeroSelectionAchievements"
+						*ngIf="showHeroSelectionAchievements"
+						[ngClass]="{ 'disabled': !bgsFullToggle }"
+						label="Show achievements"
+						tooltip="Shows the missing achievements for each hero at the hero selection stage."
+					></preference-toggle>
+					<preference-toggle
 						field="bgsUseLocalPostMatchStats"
 						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle }"
 						label="Compute post-match stats locally"
@@ -259,6 +266,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	enableOverlayPlaySetting: boolean = FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
 	enableBgsHideSimResultsOnRecruit: boolean = FeatureFlags.ENABLE_BG_SIMULATION_HIDE_ON_RECRUIT;
 	enableBgsShowSimResultsOnlyOnRecruit: boolean = FeatureFlags.ENABLE_BG_SIMULATION_SHOW_ONLY_ON_RECRUIT;
+	showHeroSelectionAchievements: boolean = FeatureFlags.ENABLE_BG_SHOW_ACHIEVEMENTS;
 
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;

@@ -18,6 +18,7 @@ export class BgsMatchStartParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsMatchStartEvent): Promise<BattlegroundsState> {
 		if (currentState.reconnectOngoing) {
+			console.warn('reconnect, returning');
 			return currentState;
 		} else {
 			const heroesAchievementCategory = event.mainWindowState.achievements.findCategory(
@@ -36,6 +37,7 @@ export class BgsMatchStartParser implements EventParser {
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
 				stages: BgsInitParser.buildEmptyStages(currentState, prefs),
 				heroAchievements: heroAchievements,
+				heroSelectionDone: false,
 			} as BattlegroundsState);
 		}
 	}
