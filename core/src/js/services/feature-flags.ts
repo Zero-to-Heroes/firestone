@@ -15,8 +15,8 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_SHOW_ACHIEVEMENTS = true;
 	public static readonly ENABLE_MULTI_GRAPHS = true;
 	// Properly test the memory footprint of these features before release
-	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false;
-	public static readonly ENABLE_RANKED_ARCHETYPE = false;
+	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = true;
+	public static readonly ENABLE_RANKED_ARCHETYPE = true;
 
 	// Deprecated, feature is sidelined for now
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;
