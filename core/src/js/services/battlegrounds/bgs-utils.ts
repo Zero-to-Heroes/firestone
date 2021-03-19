@@ -1,6 +1,7 @@
 import { CardIds, Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { VisualAchievement } from '../../models/visual-achievement';
 
 export const getTribeIcon = (tribe: string | Race): string => {
 	let referenceCardId: string;
@@ -289,4 +290,31 @@ export const getEffectiveTribe = (card: ReferenceCard): string => {
 
 export const getEffectiveTribeEnum = (card: ReferenceCard): Race => {
 	return card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
+};
+
+export const getAchievementsForHero = (
+	heroCardId: string,
+	heroAchievements: readonly VisualAchievement[],
+	allCards: AllCardsService,
+): readonly VisualAchievement[] => {
+	const dbHero = allCards.getCard(heroCardId);
+	const heroName = formatHeroNameForAchievements(dbHero);
+	if (!heroName) {
+		return [];
+	}
+
+	const searchName = `as ${heroName}`;
+	return heroAchievements.filter(ach => ach.text.includes(searchName));
+};
+
+// Because inconsistencies
+const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
+	switch (hero?.id) {
+		case CardIds.NonCollectible.Neutral.MaievShadowsongTavernBrawl:
+			return 'Maiev';
+		case CardIds.NonCollectible.Neutral.KingMuklaTavernBrawl:
+			return 'Mukla';
+		default:
+			return hero?.name?.replace(/,/g, '');
+	}
 };

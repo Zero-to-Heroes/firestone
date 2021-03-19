@@ -31,6 +31,7 @@ export class OverwolfService {
 	public static BATTLEGROUNDS_BANNED_TRIBES_WINDOW = 'BgsBannedTribes';
 	public static BATTLEGROUNDS_WINDOW_MINIONS_TIERS_OVERLAY = 'BattlegroundsMinionsTiersWindow';
 	public static BATTLEGROUNDS_OVERLAY_BUTTON_OVERLAY_WINDOW = 'BattlegroundsOverlayButtonWindow';
+	public static BATTLEGROUNDS_HERO_SELECTION_OVERLAY = 'BgsHeroSelectionOverlay';
 	public static CONSTRUCTED_WINDOW = 'ConstructedWindow';
 	// public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
 	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';

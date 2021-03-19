@@ -156,6 +156,7 @@ export class Preferences {
 	readonly bgsUseLocalSimulator = true;
 	readonly bgsUseLocalPostMatchStats = true;
 	readonly bgsEnableSimulation = true;
+	readonly bgsShowHeroSelectionAchievements = true;
 	readonly bgsHideSimResultsOnRecruit = true;
 	readonly bgsShowSimResultsOnlyOnRecruit = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;

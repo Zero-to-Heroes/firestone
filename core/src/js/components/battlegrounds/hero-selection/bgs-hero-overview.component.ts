@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
@@ -89,6 +89,9 @@ export class BgsHeroOverviewComponent {
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
 		this.tier = value.tier;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@Input() set achievements(value: readonly VisualAchievement[]) {
@@ -110,8 +113,13 @@ export class BgsHeroOverviewComponent {
 				return 0;
 			})
 			.slice(0, 4);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 		// console.debug('setting achievements', this.achievementsToDisplay, value);
 	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	getIcon(tribe: string): string {
 		let referenceCardId: string;

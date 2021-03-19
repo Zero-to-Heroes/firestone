@@ -67,6 +67,7 @@ declare let amplitude: any;
 					<bgs-hero-selection-overview
 						*ngxCacheIf="currentPanel?.id === 'bgs-hero-selection-overview'"
 						[panel]="currentPanel"
+						[showAchievements]="showHeroSelectionAchievements"
 					>
 					</bgs-hero-selection-overview>
 					<bgs-next-opponent-overview
@@ -93,6 +94,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	currentStage: BgsStage;
 	currentPanel: BgsPanel;
 	enableSimulation: boolean;
+	showHeroSelectionAchievements: boolean;
 	windowId: string;
 
 	closeHandler: () => void;
@@ -139,6 +141,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 		preferences = preferences || (await this.prefs.getPreferences());
 		// console.log('updating prefs', preferences);
 		this.enableSimulation = preferences.bgsEnableSimulation;
+		this.showHeroSelectionAchievements = preferences.bgsShowHeroSelectionAchievements;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

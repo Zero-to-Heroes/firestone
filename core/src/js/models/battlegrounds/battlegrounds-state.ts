@@ -8,13 +8,14 @@ import { BgsPostMatchStats } from './post-match/bgs-post-match-stats';
 import { BgsStats } from './stats/bgs-stats';
 
 export class BattlegroundsState {
+	readonly inGame: boolean;
 	readonly reconnectOngoing: boolean;
+	readonly heroSelectionDone: boolean;
 	readonly stages: readonly BgsStage[] = [];
 	readonly currentStageId: BgsStageId;
 	readonly currentPanelId: BgsPanelId;
 	readonly globalStats: BgsStats;
 	readonly currentGame: BgsGame;
-	readonly inGame: boolean;
 	// readonly gameEnded: boolean; // Flag useful mostly for twitch to know when to hide the overlay
 	readonly forceOpen: boolean;
 	readonly postMatchStats: BgsPostMatchStats;

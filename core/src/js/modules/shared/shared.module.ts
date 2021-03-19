@@ -20,6 +20,7 @@ import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-her
 import { BgsPlayerCapsuleComponent } from '../../components/battlegrounds/bgs-player-capsule.component';
 import { GraphWithComparisonComponent } from '../../components/battlegrounds/graph-with-comparison.component';
 import { BgsHeroMiniComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-mini.component';
+import { BgsHeroOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-overview.component';
 import { BgsHeroSelectionTooltipComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component';
 import { BgsHeroStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-stats.component';
 import { BgsHeroTierComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tier.component.ts';
@@ -203,6 +204,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsChartWarbandStatsComponent,
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
+		BgsHeroOverviewComponent,
 
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,
@@ -312,6 +314,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsChartWarbandStatsComponent,
 		BgsWinrateChartComponent,
 		BgsChartWarbandCompositionComponent,
+		BgsHeroOverviewComponent,
 
 		LeaderboardEmptyCardComponent,
 		TwitchBgsHeroOverviewComponent,

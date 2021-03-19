@@ -5,6 +5,7 @@ import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bg
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
+import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { groupByFunction } from '../../../services/utils';
 
 declare let amplitude: any;
@@ -39,26 +40,45 @@ export class BgsHeroSelectionOverviewComponent {
 	heroOverviews: InternalBgsHeroStat[];
 	smallOverviews: readonly BgsHeroStat[];
 	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] = [];
-	_panel: BgsHeroSelectionOverview;
 	patchNumber: number;
 	globalStats: BgsStats;
 	showAds = true;
 
-	@Input() set panel(value: BgsHeroSelectionOverview) {
-		if (!value?.heroOverview) {
+	private _panel: BgsHeroSelectionOverview;
+	private _showAchievements: boolean;
+
+	@Input() set showAchievements(value: boolean) {
+		// console.debug('showing achievements', this._showAchievements, value);
+		if (value === this._showAchievements) {
 			return;
 		}
+		this._showAchievements = value;
+		this.updateInfos();
+	}
+
+	@Input() set panel(value: BgsHeroSelectionOverview) {
 		if (value === this._panel) {
+			return;
+		}
+		if (!value?.heroOverview) {
 			return;
 		}
 		// console.log('setting panel', value, this._panel);
 		this._panel = value;
+		this.updateInfos();
+	}
+
+	private updateInfos() {
+		if (!this._panel) {
+			return;
+		}
+
 		this.globalStats = this._panel.globalStats;
-		this.patchNumber = value.patchNumber;
+		this.patchNumber = this._panel.patchNumber;
 		const allOverviews = this._panel.heroOverview.filter(overview => overview.id !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
 		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(allOverviews));
-		if (!value?.heroOptionCardIds || !groupedByTier) {
+		if (!this._panel?.heroOptionCardIds || !groupedByTier) {
 			return;
 		}
 		this.tiers = [
@@ -102,11 +122,10 @@ export class BgsHeroSelectionOverviewComponent {
 					id: cardId,
 					tribesStat: [] as readonly { tribe: string; percent: number }[],
 				} as BgsHeroStat);
-			const achievementsForHero: readonly VisualAchievement[] = this.getAchievementsForHero(
-				cardId,
-				value.heroAchievements,
-				this.allCards,
-			);
+			const achievementsForHero: readonly VisualAchievement[] = this._showAchievements
+				? getAchievementsForHero(cardId, this._panel.heroAchievements, this.allCards)
+				: [];
+			// console.debug('achievementsForHero', achievementsForHero, this._showAchievements);
 			return {
 				...statWithDefault,
 				achievements: achievementsForHero,
@@ -152,20 +171,6 @@ export class BgsHeroSelectionOverviewComponent {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private getAchievementsForHero(
-		heroCardId: string,
-		heroAchievements: readonly VisualAchievement[],
-		allCards: AllCardsService,
-	): readonly VisualAchievement[] {
-		const dbHero = allCards.getCard(heroCardId);
-		if (!dbHero?.name) {
-			return [];
-		}
-
-		const searchName = `as ${dbHero.name}`;
-		return heroAchievements.filter(ach => ach.text.includes(searchName));
 	}
 }
 
