@@ -114,7 +114,7 @@
 				}
 			}
 
-			&.completed {
+			&:not(.completed) {
 				.icon {
 					opacity: 0.2;
 				}
