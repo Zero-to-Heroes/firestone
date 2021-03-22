@@ -105,7 +105,7 @@ export class CardsMonitorService {
 		console.log('[pack-parser] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
-		this.stateUpdater.next(new NewPackEvent(setId, packCards));
+		this.stateUpdater.next(new NewPackEvent(setId, boosterId, packCards));
 	}
 
 	private async handleNewCards(newCards: readonly CardPackInfo[], showNotifs = true) {

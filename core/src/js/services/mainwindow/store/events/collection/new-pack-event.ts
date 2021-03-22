@@ -2,7 +2,11 @@ import { InternalCardInfo } from '../../../../../models/collection/internal-card
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class NewPackEvent implements MainWindowStoreEvent {
-	constructor(public readonly setId: string, public readonly packCards: readonly InternalCardInfo[]) {}
+	constructor(
+		public readonly setId: string,
+		public readonly boosterId: number,
+		public readonly packCards: readonly InternalCardInfo[],
+	) {}
 
 	public static eventName(): string {
 		return 'NewPackEvent';

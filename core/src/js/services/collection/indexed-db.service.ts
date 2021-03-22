@@ -5,7 +5,6 @@ import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
-import { PackHistory } from '../../models/pack-history';
 import { PityTimer } from '../../models/pity-timer';
 
 @Injectable()
@@ -177,17 +176,17 @@ export class IndexedDbService {
 		}
 	}
 
-	public async saveNewPack(newPack: PackHistory): Promise<PackHistory> {
-		await this.waitForDbInit();
-		try {
-			console.log('[collection] [storage] saving pack history', newPack);
-			const history = await this.db.add('pack-history', newPack);
-			return history;
-		} catch (e) {
-			console.error('[collection] [storage] error while saving new pack', e.message, e.name, e);
-			return newPack;
-		}
-	}
+	// public async saveNewPack(newPack: PackHistory): Promise<PackHistory> {
+	// 	await this.waitForDbInit();
+	// 	try {
+	// 		console.log('[collection] [storage] saving pack history', newPack);
+	// 		const history = await this.db.add('pack-history', newPack);
+	// 		return history;
+	// 	} catch (e) {
+	// 		console.error('[collection] [storage] error while saving new pack', e.message, e.name, e);
+	// 		return newPack;
+	// 	}
+	// }
 
 	public async getPityTimer(setId: any): Promise<PityTimer> {
 		await this.waitForDbInit();

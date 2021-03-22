@@ -10,7 +10,15 @@ import { groupByFunction } from '../../services/utils';
 	template: `
 		<div class="card-tooltip {{ _additionalClass }}">
 			<div *ngIf="createdBy" class="created-by">Created by</div>
-			<img *ngIf="image" [src]="image" (onload)="refresh()" class="tooltip-image" />
+			<img *ngIf="image && _cardType === 'NORMAL'" [src]="image" (onload)="refresh()" class="tooltip-image" />
+			<video *ngIf="_cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
+				<source
+					src="{{
+						'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' + _cardId + '.webm?v=2'
+					}}"
+					type="video/webm"
+				/>
+			</video>
 			<div *ngIf="_text" class="text">{{ _text }}</div>
 			<div class="buffs" *ngIf="buffs && _displayBuffs" [ngClass]="{ 'only-buffs': !image }">
 				<div class="background">
@@ -33,10 +41,16 @@ export class CardTooltipComponent {
 	_additionalClass: string;
 	buffs: readonly { bufferCardId: string; buffCardId: string; count: number }[];
 	_cardId: string;
+	_cardType: 'NORMAL' | 'GOLDEN' = 'NORMAL';
 	isBgs: boolean;
 
 	@Input() set cardId(value: string) {
 		this._cardId = value;
+		this.updateInfos();
+	}
+
+	@Input() set cardType(value: 'NORMAL' | 'GOLDEN') {
+		this._cardType = value;
 		this.updateInfos();
 	}
 

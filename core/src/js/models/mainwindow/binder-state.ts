@@ -1,3 +1,4 @@
+import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { Card } from '../card';
 import { CardBack } from '../card-back';
 import { CardHistory } from '../card-history';
@@ -8,6 +9,7 @@ import { Set, SetCard } from '../set';
 export class BinderState {
 	readonly collection: readonly Card[] = [];
 	readonly packs: readonly PackInfo[];
+	readonly packStats: readonly PackResult[];
 	readonly allSets: readonly Set[] = [];
 	readonly cardBacks: readonly CardBack[] = [];
 	readonly coins: readonly Coin[] = [];

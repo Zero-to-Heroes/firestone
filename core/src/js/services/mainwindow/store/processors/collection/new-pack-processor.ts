@@ -1,9 +1,9 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardPackResult, PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
-import { PackHistory } from '../../../../../models/pack-history';
 import { PityTimer } from '../../../../../models/pity-timer';
 import { Set } from '../../../../../models/set';
 import { IndexedDbService } from '../../../../collection/indexed-db.service';
@@ -21,8 +21,23 @@ export class NewPackProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		// Save the new pack info
-		const newPack: PackHistory = new PackHistory(event.setId, event.packCards);
-		await this.indexedDb.saveNewPack(newPack);
+		const newPackStats: readonly PackResult[] = [
+			{
+				id: 0,
+				creationDate: Date.now(),
+				boosterId: event.boosterId,
+				setId: event.setId,
+				cards: event.packCards.map(
+					card =>
+						({
+							cardId: card.cardId,
+							cardType: card.cardType,
+							cardRarity: this.allCards.getCard(card.cardId)?.rarity?.toLowerCase(),
+						} as CardPackResult),
+				),
+			},
+			...currentState.binder.packStats,
+		];
 
 		// Update the pity timers
 		const setToUpdate = currentState.binder.allSets.find(set => set.id === event.setId);
@@ -35,13 +50,10 @@ export class NewPackProcessor implements Processor {
 				newSets.push(set);
 			}
 		}
-		// console.error('TODO: change this logic to only store the ID in the navigation, like we do for achievements');
-		// const newSelectedSet =
-		// 	navigationState.navigationCollection.selectedSetId === updatedSet.id
-		// 		? updatedSet
-		// 		: navigationState.navigationCollection.selectedSet;
+
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: newSets as readonly Set[],
+			packStats: newPackStats,
 		} as BinderState);
 		const newCollection = navigationState.navigationCollection.update({
 			selectedSetId: updatedSet.id,
