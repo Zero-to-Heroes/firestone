@@ -230,6 +230,7 @@ export class DuelsStateBuilderService {
 		// Fallback until everything is properly deployed
 		const gameModeStats = this.getGameModeStats(globalStats, prefs) || globalStats.both;
 		const periodStats = this.getPeriodStats(gameModeStats, prefs);
+		// console.debug('periodStats', prefs.duelsActiveTimeFilter, periodStats);
 		if (!periodStats) {
 			console.error(
 				'[duels-state-builder] could not build period stats',
@@ -616,18 +617,14 @@ export class DuelsStateBuilderService {
 		const groupedByTreasures = groupByFunction((stat: TreasureStat) => stat.cardId)(treasuresForClass);
 		const treasureIds = Object.keys(groupedByTreasures);
 		const totalTreasureOfferings = treasuresForClass.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
-		// const totalPick = treasureStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
-		// if (totalPick * 3 !== totalTreasureOfferings) {
-		// 	console.error('[duels-state-builder] invalid data', totalPick, totalTreasureOfferings, treasureStats);
-		// }
 		return (
 			treasureIds
 				.map(treasureId => {
 					const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
 					return this.buildTreasureStat(treasureId, statsForTreasure, runs, totalTreasureOfferings);
 				})
-				.filter(stat => stat.globalWinrate)
 				// For now I want to keep the "rare" passives, since they have been confirmed
+				// .filter(stat => stat.globalWinrate)
 				// .filter(stat => stat.globalTotalMatches > 0)
 				.sort(this.getTreasureSortFunction(prefs))
 		);
@@ -671,7 +668,7 @@ export class DuelsStateBuilderService {
 								(step.chosenOptionIndex === 3 && step.option3 === treasureId),
 						).length) /
 				  treasureOfferings.length;
-		return {
+		const result = {
 			cardId: treasureId,
 			periodStart: statsForClass[0].periodStart,
 			statsForClass: statsForClass,
@@ -687,6 +684,7 @@ export class DuelsStateBuilderService {
 			playerPickRate: playerPickRate,
 			// playerWinrate: playerWinrate,
 		} as DuelsTreasureStat;
+		return result;
 	}
 
 	private buildTreasureForClass(

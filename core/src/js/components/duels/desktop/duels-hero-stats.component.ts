@@ -50,7 +50,7 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 			return;
 		}
 		this._searchString = searchString;
-		this.updateValues();
+		this.updateValues(true);
 	}
 
 	@Input() set statType(value: DuelsStatTypeFilterType) {
@@ -85,7 +85,7 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		return stat?.stat?.cardId;
 	}
 
-	private async updateValues() {
+	private async updateValues(searchStringUpdated = false) {
 		if (!this._playerStats || !this._statType) {
 			return;
 		}
@@ -93,7 +93,7 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		// Usually we don't really mind, but here there are a lot of graphs to be rendered every time,
 		// so we only want to refresh the data if it really has changed
 		const newStats = this.getStats();
-		if (isEqual(newStats, this.displayedStats)) {
+		if (!searchStringUpdated && isEqual(newStats, this.displayedStats)) {
 			return;
 		}
 

@@ -39,11 +39,12 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 
 	@Input() set navigation(value: NavigationDuels) {
 		const searchString = value?.treasureSearchString;
+		// console.debug('update search string', searchString);
 		if (searchString === this._searchString) {
 			return;
 		}
 		this._searchString = searchString;
-		this.updateValues();
+		this.updateValues(true);
 	}
 
 	@Input() set statType(value: DuelsTreasureStatTypeFilterType) {
@@ -73,7 +74,7 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 		return stat?.stat?.cardId;
 	}
 
-	private updateValues() {
+	private updateValues(searchStringUpdated = false) {
 		if (!this._playerStats || !this._statType) {
 			return;
 		}
@@ -81,7 +82,7 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 		// Usually we don't really mind, but here there are a lot of graphs to be rendered every time,
 		// so we only want to refresh the data if it really has changed
 		const newStats = this.getStats();
-		if (isEqual(newStats, this.displayedStats)) {
+		if (!searchStringUpdated && isEqual(newStats, this.displayedStats)) {
 			return;
 		}
 

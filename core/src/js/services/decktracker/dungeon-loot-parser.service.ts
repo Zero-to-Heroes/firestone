@@ -196,64 +196,6 @@ export class DungeonLootParserService {
 		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(this.rewardsInput));
 	}
 
-	// private async tryAndGetRewards() {
-	// 	if (!this.shouldTryToGetRewards) {
-	// 		return;
-	// 	}
-
-	// 	if (!this.currentDuelsRunId) {
-	// 		this.log('not enough info to link an Arena Reward');
-	// 		return;
-	// 	}
-
-	// 	// Try to limit as much as possible the calls to getDuelsRewardsInfo, because resets
-	// 	// take a strong toll on the CPU (because we need to reset everything)
-	// 	// const isMaybeOnRewardsScreen = await this.memory.isMaybeOnDuelsRewardsScreen();
-	// 	// if (!isMaybeOnRewardsScreen) {
-	// 	// 	return;
-	// 	// }
-
-	// 	this.logDebug('trying to get rewards');
-	// 	const rewards = await this.memory.getDuelsRewardsInfo(true);
-	// 	this.logDebug('reward', rewards);
-	// 	if (!rewards?.Rewards || rewards?.Rewards.length === 0) {
-	// 		this.log('no rewards yet', this.currentDuelsWins, this.currentDuelsLosses);
-	// 		if (this.rewardsTimeout) {
-	// 			clearTimeout(this.rewardsTimeout);
-	// 			this.rewardsTimeout = null;
-	// 		}
-	// 		this.rewardsTimeout = setTimeout(() => this.tryAndGetRewards(), 5000);
-	// 		return;
-	// 	}
-
-	// 	this.duelsInfo = this.duelsInfo || (await this.memory.getDuelsInfo(false, 5)) || ({} as any);
-	// 	this.updateCurrentDuelsInfo(this.duelsInfo);
-
-	// 	const user = await this.ow.getCurrentUser();
-
-	// 	// Put it later, so that we do the check at the last possible moment
-	// 	if (this.rewardsInput?.runId === this.currentDuelsRunId) {
-	// 		this.log('already sent rewards for run', this.rewardsInput);
-	// 		return;
-	// 	}
-
-	// 	this.rewardsInput = {
-	// 		type: this.currentGameType === GameType.GT_PVPDR ? 'duels' : 'paid-duels',
-	// 		reviewId: this.currentReviewId,
-	// 		runId: this.currentDuelsRunId,
-	// 		userId: user.userId,
-	// 		userName: user.username,
-	// 		rewards: rewards,
-	// 		currentWins: this.duelsInfo.Wins,
-	// 		currentLosses: this.duelsInfo.Losses,
-	// 		rating: this.currentGameType === GameType.GT_PVPDR ? this.duelsInfo.Rating : this.duelsInfo.PaidRating,
-	// 		appVersion: process.env.APP_VERSION,
-	// 	} as Input;
-	// 	this.log('sending rewards info', this.rewardsInput);
-	// 	this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, this.rewardsInput, 3);
-	// 	this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(this.rewardsInput));
-	// }
-
 	private async retrieveLootInfo() {
 		this.busyRetrievingInfo = true;
 		this.duelsInfo = await this.memory.getDuelsInfo(false, 5);
