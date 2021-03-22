@@ -276,7 +276,10 @@ export class MainWindowStoreService {
 				const prefs = await this.prefs.getPreferences();
 				this.ow.hideCollectionWindow(prefs);
 				this.stateUpdater.next(new CloseMainWindowEvent());
-				this.populateStore(true);
+				// Give a bit of time for memory info to be there?
+				setTimeout(() => {
+					this.populateStore(true);
+				}, 2000);
 			}
 		});
 
