@@ -13,10 +13,10 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_TRIBE_HIGHLIGHT = true;
 
 	public static readonly ENABLE_BG_SHOW_ACHIEVEMENTS = true;
-	public static readonly ENABLE_MULTI_GRAPHS = true;
+	public static readonly ENABLE_MULTI_GRAPHS = false; // Doesn't work anymore?
 	// Properly test the memory footprint of these features before release
-	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = true;
-	public static readonly ENABLE_RANKED_ARCHETYPE = true;
+	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false; // Doesn't work anymore?
+	public static readonly ENABLE_RANKED_ARCHETYPE = false; // Doesn't work anymore?
 
 	// Deprecated, feature is sidelined for now
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;
