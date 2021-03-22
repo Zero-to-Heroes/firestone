@@ -1,8 +1,10 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
+import { FeatureFlags } from '../../services/feature-flags';
 import { boosterIdToSetId, dustFor, dustForPremium } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -34,19 +36,66 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 					[current]="stat.current"
 					[total]="stat.total"
 				></set-stat-cell>
+				<pie-chart [data]="pieChartData"></pie-chart>
 				<set-stat-cell
 					*ngIf="packsReceived"
 					[text]="'Packs received'"
 					[current]="packsReceived"
-					helpTooltip="Total packs received, including the ones that are still unopened"
+					helpTooltip="All-time packs received, including the ones that are still unopened."
 				></set-stat-cell>
-				<pie-chart [data]="pieChartData"></pie-chart>
+				<div class="set-stat-cell">
+					<div class="text">Best known pack</div>
+					<div class="value">
+						<div class="item">
+							<div class="dust">{{ bestKnownPackDust }}</div>
+							<div class="icon" inlineSVG="assets/svg/rewards/reward_dust.svg"></div>
+						</div>
+					</div>
+				</div>
+				<div class="best-known-pack" *ngIf="bestKnownPack">
+					<div
+						class="card"
+						*ngFor="let card of bestKnownPack.cards; let i = index"
+						[style.left.%]="getLeft(i)"
+						[style.top.%]="getTop(i)"
+						[cardTooltip]="card.cardId"
+						[cardTooltipType]="!enableBestKnownPack ? 'NORMAL' : card.cardType"
+						[cardTooltipText]="!enableBestKnownPack && card.cardType === 'GOLDEN' ? 'Golden' : ''"
+					>
+						<img
+							*ngIf="!enableBestKnownPack || card.cardType === 'NORMAL'"
+							[src]="
+								'https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/' +
+								card.cardId +
+								'.png?v=3'
+							"
+						/>
+						<video
+							*ngIf="enableBestKnownPack && card.cardType === 'GOLDEN'"
+							#videoPlayer
+							loop="loop"
+							[autoplay]="true"
+							[preload]="true"
+						>
+							<source
+								src="{{
+									'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' +
+										card.cardId +
+										'.webm?v=2'
+								}}"
+								type="video/webm"
+							/>
+						</video>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetStatsComponent implements AfterViewInit {
+	enableBestKnownPack = FeatureFlags.ENABLE_BEST_KNOWN_PACK;
+
 	@Input() set set(value: Set) {
 		this._set = value;
 		this.updateInfos();
@@ -58,19 +107,23 @@ export class SetStatsComponent implements AfterViewInit {
 	}
 
 	@Input() set state(value: BinderState) {
-		if (value.packs === this._packs) {
+		if (value.packs === this._packs && value.packStats === this._packStats) {
 			return;
 		}
 		this._packs = value?.packs ?? [];
+		this._packStats = value?.packStats ?? [];
 		this.updateInfos();
 	}
 
 	_set: Set;
 	_showGoldenStats: boolean;
 	_packs: readonly PackInfo[] = [];
+	_packStats: readonly PackResult[] = [];
 	stats: readonly Stat[];
 	pieChartData: readonly InputPieChartData[];
 	packsReceived: number;
+	bestKnownPackDust: number;
+	bestKnownPack: PackResult;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -78,6 +131,38 @@ export class SetStatsComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	getLeft(i: number): number {
+		const offset = 5;
+		switch (i) {
+			case 0:
+				return offset + 0;
+			case 1:
+				return offset + 30;
+			case 2:
+				return offset + 60;
+			case 3:
+				return offset + 45;
+			case 4:
+				return offset + 15;
+		}
+	}
+
+	getTop(i: number): number {
+		const offset = 5;
+		switch (i) {
+			case 0:
+				return offset + 15;
+			case 1:
+				return offset + 0;
+			case 2:
+				return offset + 15;
+			case 3:
+				return offset + 50;
+			case 4:
+				return offset + 50;
+		}
 	}
 
 	private updateInfos() {
@@ -89,6 +174,18 @@ export class SetStatsComponent implements AfterViewInit {
 		this.pieChartData = this._showGoldenStats ? this.buildGoldenPieChartData() : this.buildPieChartData();
 		this.packsReceived =
 			this._packs.find(pack => boosterIdToSetId(pack.packType) === this._set.id)?.totalObtained ?? 0;
+		const orderedPacks = [...this._packStats]
+			.filter(pack => pack.setId === this._set.id)
+			.sort((a, b) => this.getPackDustValue(b) - this.getPackDustValue(a));
+		this.bestKnownPack = orderedPacks.length ? orderedPacks[0] : null;
+		this.bestKnownPackDust = this.bestKnownPack ? this.getPackDustValue(this.bestKnownPack) : 0;
+		console.debug('best known pack', this.bestKnownPack, this.bestKnownPackDust);
+	}
+
+	private getPackDustValue(pack: PackResult): number {
+		return pack.cards
+			.map(card => (card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity)))
+			.reduce((a, b) => a + b, 0);
 	}
 
 	private buildPieChartData(): readonly InputPieChartData[] {
