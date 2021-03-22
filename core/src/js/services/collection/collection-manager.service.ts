@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
@@ -12,6 +13,7 @@ import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
 
 const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=3';
+const CARD_PACKS_URL = 'https://api.firestoneapp.com/retrieveUserPackStats/packStats';
 
 @Injectable()
 export class CollectionManager {
@@ -62,6 +64,17 @@ export class CollectionManager {
 			const saved = await this.db.savePackInfos(packInfo);
 			return saved;
 		}
+	}
+
+	public async getPackStats(): Promise<readonly PackResult[]> {
+		const user = await this.ow.getCurrentUser();
+		const input = {
+			userId: user.userId,
+			userName: user.username,
+		};
+		const data: any = await this.api.callPostApiWithRetries<any>(CARD_PACKS_URL, input, 3);
+		//console.debug('loaded pack stats', data);
+		return data.results;
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {

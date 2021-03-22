@@ -21,6 +21,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input('cardTooltip') cardId = undefined;
+	@Input() cardTooltipType: 'GOLDEN' | 'NORMAL' = 'NORMAL';
 	@Input() cardTooltipCard: DeckCard = undefined;
 	@Input() cardTooltipText = undefined;
 	@Input() cardTooltipClass = undefined;
@@ -177,6 +178,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 			tooltipRef.instance.cardTooltipCard = undefined;
 			tooltipRef.instance.displayBuffs = undefined;
 			tooltipRef.instance.cardId = this.cardId;
+			tooltipRef.instance.cardType = this.cardTooltipType;
 			tooltipRef.instance.cardTooltipBgs = this.cardTooltipBgs;
 			tooltipRef.instance.text = this.cardTooltipText;
 		}

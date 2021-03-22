@@ -117,7 +117,7 @@ export class CardsMonitorService {
 		console.log('[pack-parser] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
-		this.stateUpdater.next(new NewPackEvent(setId, packCards));
+		this.stateUpdater.next(new NewPackEvent(setId, boosterId, packCards));
 
 		const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
 			(card: InternalCardInfo) => card.cardId + card.cardType,
