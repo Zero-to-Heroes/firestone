@@ -198,6 +198,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		const gameHeight = gameInfo.logicalHeight;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
+		console.log('retrieved position from prefs', trackerPosition, gameWidth, gameHeight);
 		const newLeft = Math.min(
 			gameWidth - 100,
 			Math.max(0, (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft())),
@@ -206,6 +207,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 			gameHeight - 100,
 			Math.max(0, (trackerPosition && trackerPosition.top) || (await this.getDefaultTop())),
 		);
+		console.log('setting new position', trackerPosition, newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		await this.updateTooltipPosition();
 	}

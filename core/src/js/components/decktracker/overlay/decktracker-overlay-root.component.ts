@@ -210,10 +210,10 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 
 		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
-		amplitude.getInstance().logEvent('match-start', {
-			'display-mode': this.displayMode,
-			'player': this.player,
-		});
+		// amplitude.getInstance().logEvent('match-start', {
+		// 	'display-mode': this.displayMode,
+		// 	'player': this.player,
+		// });
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
