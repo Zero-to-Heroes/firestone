@@ -13,6 +13,8 @@
 		width: 25%;
 
 		::ng-deep .hero-overview {
+			background: transparent;
+
 			.name,
 			.tier,
 			.winrate,
@@ -40,10 +42,6 @@
 						.icon svg {
 							width: 100%;
 							height: 100%;
-						}
-
-						&.completed .icon {
-							opacity: 0.5;
 						}
 					}
 				}

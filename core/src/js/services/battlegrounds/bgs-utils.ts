@@ -314,6 +314,8 @@ const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 			return 'Maiev';
 		case CardIds.NonCollectible.Neutral.KingMuklaTavernBrawl:
 			return 'Mukla';
+		case CardIds.NonCollectible.Neutral.DinotamerBrannTavernBrawl:
+			return 'Brann';
 		default:
 			return hero?.name?.replace(/,/g, '');
 	}

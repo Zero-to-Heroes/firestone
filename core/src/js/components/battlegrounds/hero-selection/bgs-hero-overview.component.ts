@@ -28,7 +28,7 @@ declare let amplitude: any;
 				<div class="achievements" *ngIf="achievementsToDisplay?.length">
 					<div
 						class="achievement"
-						*ngFor="let achievement of achievementsToDisplay; let i = index"
+						*ngFor="let achievement of achievementsToDisplay; let i = index; trackBy: trackByFn"
 						[ngClass]="{ 'completed': achievement.completed }"
 					>
 						<div
@@ -95,28 +95,32 @@ export class BgsHeroOverviewComponent {
 	}
 
 	@Input() set achievements(value: readonly VisualAchievement[]) {
-		this.achievementsToDisplay = value
-			.map(ach => ach.completionSteps)
-			.reduce((a, b) => a.concat(b), [])
-			.filter(step => step)
-			.map(step => ({
-				completed: !!step.numberOfCompletions,
-				text: `Achievement ${!!step.numberOfCompletions ? 'completed' : 'missing'}: ${step.completedText}`,
-			}))
-			.sort((a, b) => {
-				if (a.completed) {
-					return 1;
-				}
-				if (b.completed) {
-					return -1;
-				}
-				return 0;
-			})
-			.slice(0, 4);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		// console.debug('setting achievements', this.achievementsToDisplay, value);
+		this.achievementsToDisplay = [];
+		setTimeout(() => {
+			this.achievementsToDisplay = value
+				.map(ach => ach.completionSteps)
+				.reduce((a, b) => a.concat(b), [])
+				.filter(step => step)
+				.map(step => ({
+					completed: !!step.numberOfCompletions,
+					text: `Achievement ${!!step.numberOfCompletions ? 'completed' : 'missing'}: ${step.completedText}`,
+				}))
+				.sort((a, b) => {
+					if (a.completed) {
+						return 1;
+					}
+					if (b.completed) {
+						return -1;
+					}
+					return 0;
+				})
+				.slice(0, 4);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+			//console.debug('setting achievements in tilmeout', this.achievementsToDisplay, value);
+		});
+		//console.debug('setting achievements', this.achievementsToDisplay, value);
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
@@ -147,6 +151,10 @@ export class BgsHeroOverviewComponent {
 				break;
 		}
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+	}
+
+	trackByFn(index, item: InternalAchievement) {
+		return index;
 	}
 
 	private getTribe(tribe: string): string {
