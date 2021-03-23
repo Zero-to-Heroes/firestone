@@ -124,13 +124,13 @@ export class GraphWithComparisonComponent {
 
 		const newChartData = [
 			{
-				data: filledCommunity?.map(stat => stat.value) || [],
-				label: this.communityLabel,
-			},
-			{
 				data: filledYour?.map(stat => stat.value) || [],
 				label: this.yourLabel,
 			} as any,
+			{
+				data: filledCommunity?.map(stat => stat.value) || [],
+				label: this.communityLabel,
+			},
 		];
 		if (areEqualDataSets(newChartData, this.lineChartData)) {
 			return;
@@ -195,16 +195,16 @@ export class GraphWithComparisonComponent {
 		// console.log('gradient', gradient);
 		this.lineChartColors = [
 			{
-				backgroundColor: gradient,
-				borderColor: '#CE73B4',
+				backgroundColor: 'transparent',
+				borderColor: '#FFB948',
 				pointBackgroundColor: 'transparent',
 				pointBorderColor: 'transparent',
 				pointHoverBackgroundColor: 'transparent',
 				pointHoverBorderColor: 'transparent',
 			},
 			{
-				backgroundColor: 'transparent',
-				borderColor: '#FFB948',
+				backgroundColor: gradient,
+				borderColor: '#CE73B4',
 				pointBackgroundColor: 'transparent',
 				pointBorderColor: 'transparent',
 				pointHoverBackgroundColor: 'transparent',
