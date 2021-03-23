@@ -68,6 +68,7 @@ import { FullCardBackComponent } from '../../components/collection/full-card-bac
 import { FullCardComponent } from '../../components/collection/full-card.component';
 import { HeroPortraitComponent } from '../../components/collection/hero-portrait.component';
 import { HeroPortraitsComponent } from '../../components/collection/hero-portraits.component';
+import { PackDisplayComponent } from '../../components/collection/pack-display.component';
 import { PackHistoryItemComponent } from '../../components/collection/pack-history-item.component';
 import { PackHistoryComponent } from '../../components/collection/pack-history.component';
 import { CollectionPackStatsComponent } from '../../components/collection/pack-stats.component';
@@ -216,6 +217,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		CollectionPackStatsComponent,
 		PackHistoryComponent,
 		PackHistoryItemComponent,
+		PackDisplayComponent,
 
 		AchievementsComponent,
 		AchievementCompletionStepComponent,

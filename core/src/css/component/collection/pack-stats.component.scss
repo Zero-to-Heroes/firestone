@@ -13,6 +13,8 @@
 	color: #d9c3ab;
 	min-width: 0;
 	max-width: 100%;
+	min-height: 0;
+	overflow: auto;
 
 	.header {
 		font-size: 16px;
@@ -26,6 +28,7 @@
 		flex-wrap: wrap;
 		min-height: 0;
 		overflow: auto;
+		flex-shrink: 0;
 
 		.pack-stat {
 			margin-right: 15px;
@@ -52,6 +55,37 @@
 
 			&:hover {
 				opacity: 1;
+			}
+		}
+	}
+
+	.best-packs-container {
+		flex-shrink: 0;
+		margin-top: 15px;
+
+		.best-pack {
+			display: flex;
+
+			pack-history-item ::ng-deep {
+				.pack-history-item {
+					height: 100%;
+
+					.set-icon {
+						width: 80px;
+					}
+
+					.name {
+						display: none;
+					}
+
+					.date {
+						display: none;
+					}
+				}
+			}
+
+			pack-display {
+				width: 400px;
 			}
 		}
 	}
