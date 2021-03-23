@@ -279,7 +279,7 @@ export class BattlegroundsStoreService {
 				if (
 					!this.state.currentGame.battleResult ||
 					!this.state.currentGame.battleInfo ||
-					!this.state.currentGame.battleInfo.opponentBoard?.player?.cardId !==
+					this.state.currentGame.battleInfo.opponentBoard?.player?.cardId !==
 						gameEvent.additionalData.opponent
 				) {
 					console.error(
