@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { Card } from '../../models/card';
@@ -67,7 +68,23 @@ export class CollectionManager {
 		};
 		const data: any = await this.api.callPostApiWithRetries<any>(CARD_PACKS_URL, input, 3);
 		//console.debug('loaded pack stats', data);
-		return data.results;
+		return (
+			data.results
+				// Because of how pack logging used to work, when you received the 5 galakrond cards,
+				// the app flagged that as a new pack
+				.filter(pack => !this.isPackAllGalakronds(pack))
+		);
+	}
+
+	private isPackAllGalakronds(pack: PackResult): boolean {
+		return (
+			pack.setId === 'dragons' &&
+			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Priest.GalakrondTheUnspeakable) &&
+			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Shaman.GalakrondTheTempest) &&
+			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Warlock.GalakrondTheWretched) &&
+			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Warrior.GalakrondTheUnbreakable) &&
+			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Rogue.GalakrondTheNightmare)
+		);
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {

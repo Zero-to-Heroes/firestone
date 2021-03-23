@@ -52,41 +52,7 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 						</div>
 					</div>
 				</div>
-				<div class="best-known-pack" *ngIf="bestKnownPack">
-					<div
-						class="card"
-						*ngFor="let card of bestKnownPack.cards; let i = index"
-						[style.left.%]="getLeft(i)"
-						[cardTooltip]="card.cardId"
-						[cardTooltipType]="!enableBestKnownPack ? 'NORMAL' : card.cardType"
-						[cardTooltipText]="!enableBestKnownPack && card.cardType === 'GOLDEN' ? 'Golden' : ''"
-					>
-						<img
-							*ngIf="!enableBestKnownPack || card.cardType === 'NORMAL'"
-							[src]="
-								'https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/' +
-								card.cardId +
-								'.png?v=3'
-							"
-						/>
-						<video
-							*ngIf="enableBestKnownPack && card.cardType === 'GOLDEN'"
-							#videoPlayer
-							loop="loop"
-							[autoplay]="true"
-							[preload]="true"
-						>
-							<source
-								src="{{
-									'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' +
-										card.cardId +
-										'.webm?v=2'
-								}}"
-								type="video/webm"
-							/>
-						</video>
-					</div>
-				</div>
+				<pack-display [pack]="bestKnownPack" *ngIf="bestKnownPack"></pack-display>
 			</div>
 		</div>
 	`,
@@ -130,12 +96,6 @@ export class SetStatsComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	getLeft(i: number): number {
-		const offset = 0;
-		const step = 18;
-		return offset + i * step;
 	}
 
 	private updateInfos() {

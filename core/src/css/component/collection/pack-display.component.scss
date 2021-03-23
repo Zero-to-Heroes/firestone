@@ -1,0 +1,19 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.pack-display {
+	height: 150px;
+	position: relative;
+	margin-top: 10px;
+	width: 100%;
+
+	.card {
+		position: absolute;
+		width: 100px;
+
+		img,
+		video {
+			width: 100%;
+		}
+	}
+}

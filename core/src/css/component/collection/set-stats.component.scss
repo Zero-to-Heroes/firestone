@@ -126,19 +126,7 @@
 		margin-bottom: 20px;
 	}
 
-	.best-known-pack {
-		height: 150px;
-		position: relative;
-		margin-top: 10px;
-
-		.card {
-			position: absolute;
-			width: 100px;
-
-			img,
-			video {
-				width: 100%;
-			}
-		}
+	pack-display {
+		width: 400px;
 	}
 }

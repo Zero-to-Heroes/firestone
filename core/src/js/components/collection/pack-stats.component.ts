@@ -11,7 +11,7 @@ import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
-import { boosterIdToBoosterName } from '../../services/hs-utils';
+import { boosterIdToBoosterName, getPackDustValue } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -25,7 +25,7 @@ import { PreferencesService } from '../../services/preferences.service';
 			<div class="packs-container">
 				<div
 					class="pack-stat"
-					*ngFor="let pack of _packs"
+					*ngFor="let pack of _packs; trackBy: trackByPackFn"
 					[ngClass]="{ 'missing': !pack.totalObtained }"
 					scrollable
 				>
@@ -51,6 +51,15 @@ import { PreferencesService } from '../../services/preferences.service';
 					<div class="value">{{ pack.totalObtained }}</div>
 				</div>
 			</div>
+			<div class="header" *ngIf="bestPacks?.length" helpTooltip="Best packs you opened with Firestone running">
+				Best {{ bestPacks.length }} opened packs
+			</div>
+			<div class="best-packs-container" *ngIf="bestPacks?.length">
+				<div class="best-pack" *ngFor="let pack of bestPacks">
+					<pack-history-item class="info" [historyItem]="pack"></pack-history-item>
+					<pack-display class="display" [pack]="pack"></pack-display>
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -70,7 +79,7 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		}
 		this._packs = Object.values(BoosterType)
 			.map((boosterId: BoosterType) => {
-				console.debug('considering', boosterId, isNaN(boosterId));
+				// console.debug('considering', boosterId, isNaN(boosterId));
 				if (isNaN(boosterId)) {
 					return null;
 				}
@@ -78,7 +87,7 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 					return null;
 				}
 				const pack = (value?.packs ?? []).find(p => p.packType === boosterId);
-				console.debug('finding pack for', boosterId, pack);
+				// console.debug('finding pack for', boosterId, pack);
 				return {
 					packType: boosterId,
 					totalObtained: pack?.totalObtained ?? 0,
@@ -88,17 +97,20 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 			})
 			.filter(info => info);
 		this._packStats = value?.packStats ?? [];
-		this.updateInfo();
+
+		const orderedPacks = [...this._packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
+		// console.debug('best poacks', orderedPacks);
+		this.bestPacks = orderedPacks.slice(0, 5);
 	}
 
 	@Input() set navigation(value: NavigationCollection) {
 		this._navigation = value;
-		this.updateInfo();
 	}
 
 	_packs: readonly InternalPackInfo[] = [];
 	_packStats: readonly PackResult[];
 	_navigation: NavigationCollection;
+	bestPacks: readonly PackResult[] = [];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -112,7 +124,9 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	private updateInfo() {}
+	trackByPackFn(item: InternalPackInfo) {
+		return item.packType;
+	}
 }
 
 interface InternalPackInfo extends PackInfo {
