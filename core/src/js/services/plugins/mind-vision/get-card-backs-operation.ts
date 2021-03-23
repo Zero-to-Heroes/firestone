@@ -16,6 +16,7 @@ export class GetCardBacksOperation extends MindVisionOperationFacade<readonly Ca
 					cardBack =>
 						({
 							id: cardBack.CardBackId,
+							owned: true,
 						} as CardBack),
 				),
 			20,
