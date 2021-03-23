@@ -1,0 +1,44 @@
+@import '../../global/fonts';
+
+.pack-history-item {
+	@extend %you-have-viewed;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	cursor: pointer;
+	height: 40px;
+
+	.set-icon {
+		width: 25px;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+
+	.name {
+		// width: 195px;
+		flex-grow: 1;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.dust-amount {
+		width: 95px;
+		text-align: center;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin-right: 10px;
+	}
+
+	.dust-amount {
+		span {
+			margin-right: 6px;
+		}
+	}
+
+	.date {
+		@extend %breadcrumbs;
+		margin-right: 12px;
+	}
+}

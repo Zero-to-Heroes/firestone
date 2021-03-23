@@ -1,4 +1,5 @@
 import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
+import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { capitalizeEachWord } from './utils';
 
 export const CARDS_VERSION = '77662-5';
@@ -311,6 +312,51 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 	}
 };
 
+export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
+	switch (setId) {
+		case 'expert1':
+			return BoosterType.CLASSIC;
+		case 'gvg':
+			return BoosterType.GOBLINS_VS_GNOMES;
+		case 'tgt':
+			return BoosterType.THE_GRAND_TOURNAMENT;
+		case 'og':
+			return BoosterType.OLD_GODS;
+		case 'gangs':
+			return BoosterType.MEAN_STREETS;
+		case 'ungoro':
+			return BoosterType.UNGORO;
+		case 'icecrown':
+			return BoosterType.FROZEN_THRONE;
+		case 'lootapalooza':
+			return BoosterType.KOBOLDS_AND_CATACOMBS;
+		case 'gilneas':
+			return BoosterType.WITCHWOOD;
+		case 'boomsday':
+			return BoosterType.THE_BOOMSDAY_PROJECT;
+		case 'troll':
+			return BoosterType.RASTAKHANS_RUMBLE;
+		case 'dalaran':
+			return BoosterType.DALARAN;
+		case 'uldum':
+			return BoosterType.ULDUM;
+		case 'dragons':
+			return BoosterType.DRAGONS;
+		case 'black_temple':
+			return BoosterType.BLACK_TEMPLE;
+		case 'scholomance':
+			return BoosterType.SCHOLOMANCE;
+		case 'darkmoon_faire':
+		case 'darkmoon_races':
+			return BoosterType.DARKMOON_FAIRE;
+		case 'the_barrens':
+			return BoosterType.THE_BARRENS;
+		default:
+			console.warn('no default booster type for set id', setId);
+			return null;
+	}
+};
+
 export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 	switch (boosterId) {
 		case BoosterType.CLASSIC:
@@ -383,4 +429,10 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			console.warn('unsupported booster type', boosterId);
 			return null;
 	}
+};
+
+export const getPackDustValue = (pack: PackResult): number => {
+	return pack.cards
+		.map(card => (card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity)))
+		.reduce((a, b) => a + b, 0);
 };
