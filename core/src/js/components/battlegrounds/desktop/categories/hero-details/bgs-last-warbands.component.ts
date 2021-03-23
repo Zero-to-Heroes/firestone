@@ -189,7 +189,6 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 	}
 
 	private formatDate(creationTimestamp: number): string {
-		console.log('formatting date', new Date(creationTimestamp));
 		return new Date(creationTimestamp).toLocaleString('en-us', {
 			month: 'long',
 			day: 'numeric',
