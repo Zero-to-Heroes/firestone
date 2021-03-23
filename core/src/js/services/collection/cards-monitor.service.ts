@@ -50,6 +50,10 @@ export class CardsMonitorService {
 			return;
 		}
 
+		if (!data.includes('NotifyOfCardGained')) {
+			return;
+		}
+
 		// To give time to log lines to appear
 		// console.debug('receive log line', data);
 		if (this.pendingTimeout) {
