@@ -6,4 +6,5 @@ export type CurrentView =
 	| 'card-back-details'
 	| 'hero-portraits'
 	| 'coins'
+	| 'packs'
 	| undefined;
