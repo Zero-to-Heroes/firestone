@@ -58,7 +58,6 @@ export class TheCoinsComponent implements AfterViewInit, OnDestroy {
 
 	@Input() set coins(value: readonly CollectionReferenceCard[]) {
 		this._cards = sortBy(value, 'dbfId');
-		console.debug('coins', this._cards);
 		this.updateInfo();
 	}
 
