@@ -68,6 +68,8 @@ import { FullCardBackComponent } from '../../components/collection/full-card-bac
 import { FullCardComponent } from '../../components/collection/full-card.component';
 import { HeroPortraitComponent } from '../../components/collection/hero-portrait.component';
 import { HeroPortraitsComponent } from '../../components/collection/hero-portraits.component';
+import { PackHistoryItemComponent } from '../../components/collection/pack-history-item.component';
+import { PackHistoryComponent } from '../../components/collection/pack-history.component';
 import { CollectionPackStatsComponent } from '../../components/collection/pack-stats.component';
 import { RarityComponent } from '../../components/collection/rarity.component';
 import { SetStatCellComponent } from '../../components/collection/set-stat-cell.component';
@@ -212,6 +214,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		TheCoinsComponent,
 		OwnedFilterComponent,
 		CollectionPackStatsComponent,
+		PackHistoryComponent,
+		PackHistoryItemComponent,
 
 		AchievementsComponent,
 		AchievementCompletionStepComponent,

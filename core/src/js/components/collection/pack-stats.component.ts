@@ -23,7 +23,12 @@ import { PreferencesService } from '../../services/preferences.service';
 		<div class="pack-stats">
 			<div class="header">All-time packs</div>
 			<div class="packs-container">
-				<div class="pack-stat" *ngFor="let pack of _packs" [ngClass]="{ 'missing': !pack.totalObtained }">
+				<div
+					class="pack-stat"
+					*ngFor="let pack of _packs"
+					[ngClass]="{ 'missing': !pack.totalObtained }"
+					scrollable
+				>
 					<div
 						class="icon-container"
 						[style.width.px]="cardWidth"

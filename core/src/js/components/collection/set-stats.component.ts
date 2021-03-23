@@ -5,7 +5,7 @@ import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { FeatureFlags } from '../../services/feature-flags';
-import { boosterIdToSetId, dustFor, dustForPremium } from '../../services/hs-utils';
+import { boosterIdToSetId, dustFor, dustForPremium, getPackDustValue } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
@@ -149,16 +149,10 @@ export class SetStatsComponent implements AfterViewInit {
 			this._packs.find(pack => boosterIdToSetId(pack.packType) === this._set.id)?.totalObtained ?? 0;
 		const orderedPacks = [...this._packStats]
 			.filter(pack => pack.setId === this._set.id)
-			.sort((a, b) => this.getPackDustValue(b) - this.getPackDustValue(a));
+			.sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
 		this.bestKnownPack = orderedPacks.length ? orderedPacks[0] : null;
-		this.bestKnownPackDust = this.bestKnownPack ? this.getPackDustValue(this.bestKnownPack) : 0;
+		this.bestKnownPackDust = this.bestKnownPack ? getPackDustValue(this.bestKnownPack) : 0;
 		// console.debug('best known pack', this.bestKnownPack, this.bestKnownPackDust);
-	}
-
-	private getPackDustValue(pack: PackResult): number {
-		return pack.cards
-			.map(card => (card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity)))
-			.reduce((a, b) => a + b, 0);
 	}
 
 	private buildPieChartData(): readonly InputPieChartData[] {

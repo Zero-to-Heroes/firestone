@@ -87,15 +87,20 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				<card-search
 					[searchString]="_navigation.navigationCollection.searchString"
 					[searchResults]="searchResults"
-					*ngxCacheIf="!isSetDetails()"
+					*ngxCacheIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
 				></card-search>
 				<card-history
 					[selectedCard]="selectedCard"
 					[prefs]="prefs"
 					[state]="dataState"
-					*ngxCacheIf="!isSetDetails()"
+					*ngxCacheIf="_navigation.navigationCollection.currentView !== 'packs' && !isSetDetails()"
 				>
 				</card-history>
+				<pack-history
+					[state]="dataState"
+					*ngxCacheIf="_navigation.navigationCollection.currentView === 'packs'"
+				>
+				</pack-history>
 				<set-stats [set]="selectedSet" [state]="dataState" [prefs]="prefs" *ngxCacheIf="isSetDetails()">
 				</set-stats>
 			</section>
