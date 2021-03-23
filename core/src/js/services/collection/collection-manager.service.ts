@@ -7,7 +7,6 @@ import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
 import { CoinInfo } from '../../models/memory/coin-info';
 import { ApiRunner } from '../api-runner';
-import { boosterIdToSetId } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
@@ -47,13 +46,7 @@ export class CollectionManager {
 	public async getPacks(): Promise<readonly PackInfo[]> {
 		console.log('[collection-manager] getting pack info');
 		const packInfo = (await this.memoryReading.getBoostersInfo()) ?? [];
-		console.log(
-			'no-format',
-			'[collection-manager] retrieved pack info from memory',
-			packInfo.map(info => info.packType),
-			packInfo.map(info => info.packType).map(type => boosterIdToSetId(type)),
-			packInfo,
-		);
+		console.log('[collection-manager] retrieved pack info from memory', packInfo?.length);
 		if (!packInfo || packInfo.length === 0) {
 			console.log('[collection-manager] retrieving pack info from db');
 			const packsFromDb = await this.db.getPackInfos();
@@ -82,7 +75,7 @@ export class CollectionManager {
 			this.referenceCardBacks ?? (await this.api.callGetApiWithRetries(CARD_BACKS_URL)) ?? [];
 		console.log('[collection-manager] getting card backs');
 		const cardBacks = await this.memoryReading.getCardBacks();
-		//console.log('[collection-manager] retrieved card backs from MindVision', cardBacks);
+		console.log('[collection-manager] retrieved card backs from MindVision', cardBacks?.length, cardBacks);
 		if (!cardBacks || cardBacks.length === 0) {
 			console.log('[collection-manager] retrieving card backs from db');
 			const cardBacksFromDb = await this.db.getCardBacks();
@@ -93,7 +86,7 @@ export class CollectionManager {
 			return merged;
 		} else {
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
-			// console.log('[collection-manager] updating card backs in db', merged);
+			console.debug('[collection-manager] updating card backs in db', merged);
 			const saved = await this.db.saveCardBacks(merged);
 			return saved;
 		}

@@ -30,7 +30,7 @@ export class NewCardProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		// console.debug('receiving new card history', event);
+		console.debug('receiving new card history', event);
 		const collection: readonly Card[] = await this.collectionManager.getCollection();
 		if (collection && collection.length > 0) {
 			await this.indexedDb.saveCollection(collection);

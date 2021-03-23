@@ -63,15 +63,15 @@ export class CardsMonitorService {
 			return;
 		}
 
-		// console.debug('triggerging memory detection');
+		console.log('[pack-parser] triggerging memory detection');
 		const changes: MemoryUpdate = await this.memoryService.getMemoryChanges();
-		// console.debug('memoryChanges detection', changes);
+		console.log('[pack-parser] memoryChanges detected', changes);
 		if (!process) {
 			return;
 		}
 
 		if (!changes?.NewCards) {
-			console.warn('empty changeset', retriesLeft);
+			console.warn('[pack-parser] empty changeset', retriesLeft);
 			setTimeout(() => this.triggerMemoryDetection(process, retriesLeft - 1));
 			return;
 		}
