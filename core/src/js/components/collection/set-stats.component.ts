@@ -57,7 +57,6 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 						class="card"
 						*ngFor="let card of bestKnownPack.cards; let i = index"
 						[style.left.%]="getLeft(i)"
-						[style.top.%]="getTop(i)"
 						[cardTooltip]="card.cardId"
 						[cardTooltipType]="!enableBestKnownPack ? 'NORMAL' : card.cardType"
 						[cardTooltipText]="!enableBestKnownPack && card.cardType === 'GOLDEN' ? 'Golden' : ''"
@@ -134,35 +133,9 @@ export class SetStatsComponent implements AfterViewInit {
 	}
 
 	getLeft(i: number): number {
-		const offset = 5;
-		switch (i) {
-			case 0:
-				return offset + 0;
-			case 1:
-				return offset + 30;
-			case 2:
-				return offset + 60;
-			case 3:
-				return offset + 45;
-			case 4:
-				return offset + 15;
-		}
-	}
-
-	getTop(i: number): number {
-		const offset = 5;
-		switch (i) {
-			case 0:
-				return offset + 15;
-			case 1:
-				return offset + 0;
-			case 2:
-				return offset + 15;
-			case 3:
-				return offset + 50;
-			case 4:
-				return offset + 50;
-		}
+		const offset = 0;
+		const step = 18;
+		return offset + i * step;
 	}
 
 	private updateInfos() {
@@ -179,7 +152,7 @@ export class SetStatsComponent implements AfterViewInit {
 			.sort((a, b) => this.getPackDustValue(b) - this.getPackDustValue(a));
 		this.bestKnownPack = orderedPacks.length ? orderedPacks[0] : null;
 		this.bestKnownPackDust = this.bestKnownPack ? this.getPackDustValue(this.bestKnownPack) : 0;
-		console.debug('best known pack', this.bestKnownPack, this.bestKnownPackDust);
+		// console.debug('best known pack', this.bestKnownPack, this.bestKnownPackDust);
 	}
 
 	private getPackDustValue(pack: PackResult): number {
