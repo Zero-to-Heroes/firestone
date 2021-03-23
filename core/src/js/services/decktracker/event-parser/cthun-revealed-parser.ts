@@ -46,7 +46,6 @@ export class CthunRevealedParser implements EventParser {
 					rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 					creatorCardId: gameEvent.cardId,
 				} as DeckCard),
-				true,
 			);
 			// console.debug('added to deck', cardId, deckContents);
 		}
