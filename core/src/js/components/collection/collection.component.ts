@@ -75,6 +75,11 @@ import { CollectionReferenceCard } from './collection-reference-card';
 							[coins]="coins"
 						>
 						</the-coins>
+						<pack-stats
+							*ngxCacheIf="_navigation.navigationCollection.currentView === 'packs'"
+							[state]="dataState"
+						>
+						</pack-stats>
 					</div>
 				</with-loading>
 			</section>
