@@ -305,6 +305,81 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.MAMMOTH_BUNDLE:
 		case BoosterType.FIRST_PURCHASE:
 		case BoosterType.YEAR_OF_DRAGON:
+		default:
+			console.warn('unsupported booster type', boosterId);
+			return null;
+	}
+};
+
+export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
+	switch (boosterId) {
+		case BoosterType.CLASSIC:
+			return 'Classic';
+		case BoosterType.GOLDEN_CLASSIC_PACK:
+			return 'Golden Classic';
+		case BoosterType.GOBLINS_VS_GNOMES:
+			return 'Goblins vs Gnomes';
+		case BoosterType.THE_GRAND_TOURNAMENT:
+			return 'The Grand Tournament';
+		case BoosterType.OLD_GODS:
+		case BoosterType.FIRST_PURCHASE_OLD:
+			return 'Whispers of the Old Gods';
+		case BoosterType.MEAN_STREETS:
+			return 'Main Streets of Gadgetzan';
+		case BoosterType.UNGORO:
+			return "Return to Un'Goro";
+		case BoosterType.FROZEN_THRONE:
+			return 'Knights of the Frozen Throne';
+		case BoosterType.KOBOLDS_AND_CATACOMBS:
+		case BoosterType.KOBOLDS_CATACOMBS:
+			return 'Kobolds and Catacombs';
+		case BoosterType.WITCHWOOD:
+			return 'The Witchwood';
+		case BoosterType.THE_BOOMSDAY_PROJECT:
+			return 'The Boomsday Project';
+		case BoosterType.RASTAKHANS_RUMBLE:
+			return "Rastakhan's Rumble";
+		case BoosterType.DALARAN:
+			return 'Rise of Shadows';
+		case BoosterType.ULDUM:
+			return 'Saviors of Uldum';
+		case BoosterType.DRAGONS:
+			return 'Descent of Dragons';
+		case BoosterType.BLACK_TEMPLE:
+			return 'Ashes of Outland';
+		case BoosterType.SCHOLOMANCE:
+			return 'Scholomance Academy';
+		case BoosterType.GOLDEN_SCHOLOMANCE:
+			return 'Golden Scholomance Academy';
+		case BoosterType.DARKMOON_FAIRE:
+			return 'Madness at the Darkmoon Faire';
+		case BoosterType.GOLDEN_DARKMOON_FAIRE:
+			return 'Golden Madness at the Darkmoon Faire';
+		case BoosterType.THE_BARRENS:
+			return 'Forged in the Barrens';
+		case BoosterType.GOLDEN_THE_BARRENS:
+			return 'Golden Forged in the Barrens';
+		case BoosterType.STANDARD_HUNTER:
+			return 'Standard Hunter';
+		case BoosterType.STANDARD_MAGE:
+			return 'Standard Mage';
+		case BoosterType.STANDARD_PALADIN:
+			return 'Standard Paladin';
+		case BoosterType.STANDARD_WARRIOR:
+			return 'Standard Warrior';
+		case BoosterType.STANDARD_PRIEST:
+			return 'Standard Priest';
+		case BoosterType.STANDARD_ROGUE:
+			return 'Standard Rogue';
+		case BoosterType.MAMMOTH_BUNDLE:
+			return 'Year of the Mammoth';
+		case BoosterType.YEAR_OF_DRAGON:
+			return 'Year of the Dragon';
+		case BoosterType.SIGNUP_INCENTIVE:
+			return 'First Signup';
+		case BoosterType.FIRST_PURCHASE:
+			return 'First Purchase';
+		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
 	}
