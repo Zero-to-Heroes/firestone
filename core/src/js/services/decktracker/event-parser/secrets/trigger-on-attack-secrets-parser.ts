@@ -18,10 +18,11 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.Collectible.Hunter.FreezingTrap,
 		CardIds.Collectible.Hunter.VenomstrikeTrap,
 		CardIds.Collectible.Hunter.WanderingMonster,
-		CardIds.Collectible.Mage.IceBarrier,
-		CardIds.Collectible.Mage.Vaporize,
-		CardIds.Collectible.Mage.SplittingImage,
 		CardIds.Collectible.Mage.FlameWard,
+		CardIds.Collectible.Mage.IceBarrier,
+		CardIds.Collectible.Mage.OasisAlly,
+		CardIds.Collectible.Mage.SplittingImage,
+		CardIds.Collectible.Mage.Vaporize,
 		CardIds.Collectible.Paladin.AutodefenseMatrix,
 		CardIds.Collectible.Paladin.NobleSacrifice,
 		CardIds.Collectible.Rogue.Bamboozle,
@@ -123,6 +124,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.OasisAlly);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrifice);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 		}
@@ -137,6 +139,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.OasisAlly);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Bamboozle);
 			if (enemyBoard.length === 1) {

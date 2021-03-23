@@ -26,12 +26,14 @@ export const formatClass = (playerClass: string): string => {
 
 export const globalEffectCards = [
 	CardIds.Collectible.Druid.Embiggen,
+	CardIds.Collectible.Druid.CelestialAlignment,
 	CardIds.Collectible.Druid.SurvivalOfTheFittest,
 	CardIds.Collectible.Hunter.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
 	CardIds.Collectible.Mage.DeckOfLunacy,
 	CardIds.Collectible.Mage.LunasPocketGalaxy,
 	CardIds.Collectible.Mage.IncantersFlow,
 	CardIds.NonCollectible.Mage.InfiniteArcane,
+	CardIds.Collectible.Mage.Wildfire,
 	CardIds.Collectible.Neutral.FrizzKindleroost,
 	CardIds.Collectible.Neutral.LorekeeperPolkelt,
 	CardIds.Collectible.Neutral.PrinceKeleseth,
@@ -48,6 +50,7 @@ export const globalEffectCards = [
 	CardIds.Collectible.Shaman.GrandTotemEysor, // TODO: count the number of times the effect triggered, not the card played
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
 	CardIds.Collectible.Warlock.DeckOfChaos,
+	CardIds.Collectible.Warlock.NeeruFireblade,
 	CardIds.Collectible.Warlock.RenounceDarkness,
 	CardIds.NonCollectible.Neutral.ReductomaraToken,
 	CardIds.NonCollectible.Neutral.UpgradedPackMule,
