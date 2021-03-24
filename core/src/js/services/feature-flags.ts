@@ -14,7 +14,7 @@ export class FeatureFlags {
 
 	// Next version
 	public static readonly ENABLE_BG_SHOW_ACHIEVEMENTS = true;
-	public static readonly ENABLE_BEST_KNOWN_PACK = false;
+	public static readonly ENABLE_BEST_KNOWN_PACK = true;
 
 	public static readonly ENABLE_MULTI_GRAPHS = false; // Doesn't work anymore?
 	// Properly test the memory footprint of these features before release
