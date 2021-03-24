@@ -75,6 +75,7 @@ import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
 import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
 import { PassiveTriggeredParser } from './event-parser/passive-triggered-parser';
+import { PlayersInfoParser } from './event-parser/players-info-parser';
 import { PogoPlayedParser } from './event-parser/pogo-played-parser';
 import { QuestCreatedInGameParser } from './event-parser/quest-created-in-game-parser';
 import { QuestDestroyedParser } from './event-parser/quest-destroyed-parser';
@@ -623,6 +624,7 @@ export class GameStateService {
 			new DeckstringOverrideParser(this.deckHandler),
 			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),
+			new PlayersInfoParser(),
 			new DecklistUpdateParser(this.aiDecks, this.deckParser, this.prefs),
 			new CardOnBoardAtGameStart(this.helper, this.allCards),
 			new GameRunningParser(this.deckParser),
