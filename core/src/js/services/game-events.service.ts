@@ -202,10 +202,10 @@ export class GameEvents {
 					}
 					this.gameEventsEmitter.allEvents.next(
 						Object.assign(new GameEvent(), {
-							type: GameEvent.PLAYER_RANKS,
+							type: GameEvent.PLAYERS_INFO,
 							additionalData: {
-								playerRank: playerInfo,
-								opponentRank: opponentInfo,
+								playerInfo: playerInfo,
+								opponentInfo: opponentInfo,
 							},
 						} as GameEvent),
 					);
