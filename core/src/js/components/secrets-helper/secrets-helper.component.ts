@@ -201,7 +201,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		console.log('retrieved position from prefs', trackerPosition, gameWidth, gameHeight);
 		const newLeft = Math.min(
 			gameWidth - 100,
-			Math.max(0, (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft())),
+			Math.max(-250, (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft())),
 		);
 		const newTop = Math.min(
 			gameHeight - 100,
