@@ -69,7 +69,7 @@ export class DebugService {
 					cache = null; // Enable garbage collection + " | "
 				}
 				// So that errors are only reported once by Sentry
-				oldWarnFunc.apply(console, '(ERROR)', [argsString]);
+				oldWarnFunc.apply(console, ['(ERROR)', argsString]);
 				oldConsoleLogFunc.apply(console, arguments);
 			};
 		}
