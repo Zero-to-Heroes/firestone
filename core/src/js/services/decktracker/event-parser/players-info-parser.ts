@@ -5,8 +5,6 @@ import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
 export class PlayersInfoParser implements EventParser {
-	constructor() {}
-
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.PLAYERS_INFO;
 	}
