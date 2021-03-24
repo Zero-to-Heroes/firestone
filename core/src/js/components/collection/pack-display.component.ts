@@ -48,7 +48,7 @@ import { FeatureFlags } from '../../services/feature-flags';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackDisplayComponent {
-	enablePack = FeatureFlags.ENABLE_BEST_KNOWN_PACK;
+	enablePack = FeatureFlags.ENABLE_GOLDEN_CARDS;
 
 	@Input() set pack(value: PackResult) {
 		this.cards = value.cards;
