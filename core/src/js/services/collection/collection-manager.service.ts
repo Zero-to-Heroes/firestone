@@ -98,9 +98,11 @@ export class CollectionManager {
 			console.log('[collection-manager] retrieving card backs from db');
 			const cardBacksFromDb = await this.db.getCardBacks();
 			console.log('[collection-manager] retrieved card backs from db', cardBacksFromDb.length);
+			console.debug('[collection-manager] card from db', cardBacksFromDb);
 			// We do this so that if we update the reference, we still see them until the info
 			// has been refreshed from the in-game memory
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacksFromDb);
+			console.debug('[collection-manager] merged cards from db', merged);
 			return merged;
 		} else {
 			const merged = this.mergeCardBacksData(this.referenceCardBacks, cardBacks);
