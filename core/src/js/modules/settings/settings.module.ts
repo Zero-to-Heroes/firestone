@@ -30,6 +30,7 @@ import { SettingsDecktrackerComponent } from '../../components/settings/decktrac
 import { SettingsGeneralBugReportComponent } from '../../components/settings/general/settings-general-bug-report.component';
 import { SettingsGeneralLaunchComponent } from '../../components/settings/general/settings-general-launch.component';
 import { SettingsGeneralMenuComponent } from '../../components/settings/general/settings-general-menu.component';
+import { SettingsGeneralThirdPartyComponent } from '../../components/settings/general/settings-general-third-party.component';
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
 import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 import { SettingsModalComponent } from '../../components/settings/modal/settings-modal.component';
@@ -83,6 +84,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsGeneralMenuComponent,
 		SettingsGeneralLaunchComponent,
 		SettingsGeneralBugReportComponent,
+		SettingsGeneralThirdPartyComponent,
 
 		SettingsCollectionComponent,
 		SettingsCollectionMenuComponent,

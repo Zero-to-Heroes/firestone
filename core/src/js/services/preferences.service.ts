@@ -17,6 +17,7 @@ import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
+import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { OverwolfService } from './overwolf.service';
 import { capitalizeFirstLetter } from './utils';
 
@@ -134,6 +135,12 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, twitchAccessToken: undefined };
 		await this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
+	}
+
+	public async udpateOutOfCardsToken(token: OutOfCardsToken) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, outOfCardsToken: token };
+		await this.savePreferences(newPrefs);
 	}
 
 	public async acknowledgeFtue(pref: string) {

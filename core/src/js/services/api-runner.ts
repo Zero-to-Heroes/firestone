@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable()
@@ -11,19 +11,51 @@ export class ApiRunner {
 		});
 	}
 
-	private callPostApiWithRetriesInternal(url: string, input: any, callback, retriesLeft = 1) {
+	public async callPostApi<T>(
+		url: string,
+		input: any,
+		options?: {
+			contentType?: string;
+			bearerToken?: string;
+		},
+	): Promise<T> {
+		return new Promise<T>((resolve, reject) => {
+			this.callPostApiWithRetriesInternal(url, input, result => resolve(result), 1, options);
+		});
+	}
+
+	private callPostApiWithRetriesInternal(
+		url: string,
+		input: any,
+		callback,
+		retriesLeft = 1,
+		options?: {
+			contentType?: string;
+			bearerToken?: string;
+		},
+	) {
 		if (retriesLeft <= 0) {
 			console.error('Could not execute POST call', url, input);
 			callback(null);
 			return;
 		}
-		this.http.post(url, input).subscribe(
+		let headers = new HttpHeaders({
+			'Content-Type': options?.contentType ?? 'application/json',
+		});
+		if (options?.bearerToken) {
+			headers = headers.set('Authorization', `Bearer ${options.bearerToken}`);
+			console.debug('set authorization', headers, options.bearerToken);
+		}
+		this.http.post(url, input, { headers: headers }).subscribe(
 			(result: any) => {
 				console.log('retrieved POST call', url, input);
 				callback(result);
 			},
 			error => {
-				setTimeout(() => this.callPostApiWithRetriesInternal(url, input, callback, retriesLeft - 1), 2000);
+				setTimeout(
+					() => this.callPostApiWithRetriesInternal(url, input, callback, retriesLeft - 1, options),
+					2000,
+				);
 			},
 		);
 	}

@@ -49,6 +49,7 @@ import { GlobalStatsNotifierService } from '../../services/global-stats/global-s
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
+import { OutOfCardsService } from '../../services/mainwindow/out-of-cards.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { CollectionBootstrapService } from '../../services/mainwindow/store/collection-bootstrap.service';
 import { AchievementStateHelper } from '../../services/mainwindow/store/helper/achievement-state-helper';
@@ -128,6 +129,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		LogRegisterService,
 		SettingsCommunicationService,
 		TwitchAuthService,
+		OutOfCardsService,
 		PlayersInfoService,
 
 		CollectionBootstrapService,
