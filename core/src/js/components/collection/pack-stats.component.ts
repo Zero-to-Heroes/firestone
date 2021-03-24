@@ -20,14 +20,13 @@ import { PreferencesService } from '../../services/preferences.service';
 	selector: 'pack-stats',
 	styleUrls: [`../../../css/global/scrollbar.scss`, `../../../css/component/collection/pack-stats.component.scss`],
 	template: `
-		<div class="pack-stats">
+		<div class="pack-stats" scrollable>
 			<div class="header">All-time packs</div>
 			<div class="packs-container">
 				<div
 					class="pack-stat"
 					*ngFor="let pack of _packs; trackBy: trackByPackFn"
 					[ngClass]="{ 'missing': !pack.totalObtained }"
-					scrollable
 				>
 					<div
 						class="icon-container"
@@ -51,7 +50,11 @@ import { PreferencesService } from '../../services/preferences.service';
 					<div class="value">{{ pack.totalObtained }}</div>
 				</div>
 			</div>
-			<div class="header" *ngIf="bestPacks?.length" helpTooltip="Best packs you opened with Firestone running">
+			<div
+				class="header best-packs-header"
+				*ngIf="bestPacks?.length"
+				helpTooltip="Best packs you opened with Firestone running"
+			>
 				Best {{ bestPacks.length }} opened packs
 			</div>
 			<div class="best-packs-container" *ngIf="bestPacks?.length">
