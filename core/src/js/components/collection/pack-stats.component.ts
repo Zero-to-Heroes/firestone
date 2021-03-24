@@ -86,7 +86,15 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 				if (isNaN(boosterId)) {
 					return null;
 				}
-				if ([BoosterType.INVALID, BoosterType.KOBOLDS_CATACOMBS].includes(boosterId)) {
+				if (
+					[
+						BoosterType.INVALID,
+						BoosterType.KOBOLDS_CATACOMBS,
+						BoosterType.FIRST_PURCHASE,
+						BoosterType.FIRST_PURCHASE_OLD,
+						BoosterType.MAMMOTH_BUNDLE,
+					].includes(boosterId)
+				) {
 					return null;
 				}
 				const pack = (value?.packs ?? []).find(p => p.packType === boosterId);
