@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.5.10',
+		version: '7.5.12',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -56,21 +56,29 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'feature',
-								text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
-							},
-						],
-					},
+					// {
+					// 	category: 'achievements',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
+					// 		},
+					// 	],
+					// },
 					{
 						category: 'collection',
 						details: [
 							{
 								type: 'feature',
 								text: `Show collected coins.`,
+							},
+							{
+								type: 'feature',
+								text: `Show all-time packs received. This also includes the info from before you had Firestone.`,
+							},
+							{
+								type: 'feature',
+								text: `Show the best packs that you opened while Firestone was running. It also shows the best pack for each set when viewing the stats for that set.`,
 							},
 						],
 					},
@@ -83,9 +91,17 @@ export const updates: readonly Update[] = [
 					{
 						category: 'decktracker',
 						details: [
+							// {
+							// 	type: 'ui',
+							// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+							// },
 							{
-								type: 'ui',
-								text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
+								type: 'bug',
+								text: `The secrets helper should now stay where you last dragged it between games.`,
+							},
+							{
+								type: 'bug',
+								text: `Now properly shows the opponent's name in their side of the tracker, instead of UNKNOWN HUMAIN PLAYER.`,
 							},
 						],
 					},
@@ -95,6 +111,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add an option to show animated card backs instead of static images.`,
+							},
+							{
+								type: 'feature',
+								text: `Show the pack history when in the Packs tab.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'ui',
+								text: `Show the current run's info on top of the community info on the various graphs to make it more legible.`,
 							},
 						],
 					},
