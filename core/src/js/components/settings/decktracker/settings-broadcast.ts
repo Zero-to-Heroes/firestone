@@ -24,7 +24,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		`../../../../css/component/settings/decktracker/settings-broadcast.component.scss`,
 	],
 	template: `
-		<div class="decktracker-broadcast">
+		<div class="decktracker-broadcast" scrollable>
 			<h2>Broadcast on Twitch</h2>
 			<p class="text">
 				Firestone twitch extension allows you to stream while showing your deck tracker in the Twitch player, as

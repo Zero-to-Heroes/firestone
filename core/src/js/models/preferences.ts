@@ -1,3 +1,4 @@
+import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
 import { BgsStatsFilterId } from './battlegrounds/post-match/bgs-stats-filter-id.type';
 import { DuelsClassFilterType } from './duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
@@ -204,6 +205,8 @@ export class Preferences {
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
+
+	readonly outOfCardsToken: OutOfCardsToken;
 
 	readonly ftue: Ftue = new Ftue();
 }

@@ -14,6 +14,9 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ 'selected': selectedMenu === 'bugreport' }" (mousedown)="selectMenu('bugreport')">
 				<span>Report a bug</span>
 			</li>
+			<li [ngClass]="{ 'selected': selectedMenu === 'third-party' }" (mousedown)="selectMenu('third-party')">
+				<span>Third party</span>
+			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'broadcast' }" (mousedown)="selectMenu('broadcast')">
 				<span>Twitch</span>
 			</li>

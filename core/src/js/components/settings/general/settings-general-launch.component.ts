@@ -84,11 +84,9 @@ export class SettingsGeneralLaunchComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.reloadWindows = this.ow.getMainWindow().reloadWindows;
-		console.log('setting reloadWindows', this.reloadWindows, this.ow.getMainWindow());
 	}
 
 	toggleOverlay = () => {
-		console.log('reloading windows', this.reloadWindows, this);
 		this.reloadWindows();
 	};
 

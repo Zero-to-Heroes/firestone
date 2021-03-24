@@ -24,6 +24,7 @@ import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
 import { LogRegisterService } from './log-register.service';
+import { OutOfCardsService } from './mainwindow/out-of-cards.service';
 import { CollectionBootstrapService } from './mainwindow/store/collection-bootstrap.service';
 import { ChangeVisibleApplicationEvent } from './mainwindow/store/events/change-visible-application-event';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
@@ -57,6 +58,7 @@ export class AppBootstrapService {
 		private ow: OverwolfService,
 		private ads: AdService,
 		private twitchAuth: TwitchAuthService,
+		private init_OutOfCardsAuth: OutOfCardsService,
 		private debugService: DebugService,
 		private dev: DevService,
 		private collectionDb: IndexedDbService,

@@ -1,0 +1,13 @@
+<body>
+  Should be redirected to another page soon
+  <script>
+    (function () {
+      console.log("redirecting");
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      window.location.replace(
+        `overwolf-extension://lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob/Files/outofcards-callback.html?code=${code}`
+      );
+    })();
+  </script>
+</body>
