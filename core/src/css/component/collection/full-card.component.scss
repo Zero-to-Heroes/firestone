@@ -113,6 +113,7 @@
 		// This means that we can't go back (in the navigation) while mousing over a card,
 		// but it just looks much better that way
 		z-index: 1;
+		padding-top: 55px;
 
 		::ng-deep card-view {
 			// margin-top: 10px;
