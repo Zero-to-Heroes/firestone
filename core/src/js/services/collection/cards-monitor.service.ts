@@ -140,6 +140,12 @@ export class CardsMonitorService {
 	}
 
 	private async handleNewCards(newCards: readonly CardPackInfo[], showNotifs = true) {
+		// Put in place a protection to avoid renotifying the whole initial collection
+		if (newCards?.length && newCards.length > 30) {
+			console.warn('[card-parser] not processing cards, too many', newCards.length);
+			return;
+		}
+
 		const groupedBy: { [key: string]: readonly CardPackInfo[] } = groupByFunction(
 			(card: CardPackInfo) => card.CardId + card.Premium,
 		)(newCards);
