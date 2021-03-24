@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Board, CardIds, GameFormat, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
+import {
+	Board,
+	CardIds,
+	GameFormat,
+	GameType,
+	PRACTICE_ALL,
+	ScenarioId,
+	SceneMode,
+} from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
@@ -123,10 +131,12 @@ export class DeckParserService {
 		// console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
-			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
+			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY ||
+			(await this.memory.getCurrentSceneFromMindVision()) === SceneMode.BACON
 		) {
 			return;
 		}
+
 		if (this.goingIntoQueueRegex.exec(logLine)) {
 			// We get this as soon as possible, since once the player has moved out from the
 			// dekc selection screen the info becomes unavailable
