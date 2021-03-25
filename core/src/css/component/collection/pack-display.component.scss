@@ -15,5 +15,10 @@
 		video {
 			width: 100%;
 		}
+
+		&.golden {
+			width: 110px;
+			top: -10px;
+		}
 	}
 }

@@ -13,7 +13,7 @@ import { FeatureFlags } from '../../services/feature-flags';
 	template: `
 		<div class="pack-display" *ngIf="cards?.length">
 			<div
-				class="card"
+				class="card {{ card.cardType?.toLowerCase() }}"
 				*ngFor="let card of cards; let i = index; trackBy: trackByFn"
 				[style.left.%]="getLeft(i)"
 				[cardTooltip]="card.cardId"
