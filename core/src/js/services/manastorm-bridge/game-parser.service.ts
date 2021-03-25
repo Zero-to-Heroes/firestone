@@ -22,6 +22,8 @@ export class GameParserService {
 				return 'wild';
 			case 2:
 				return 'standard';
+			case 3:
+				return 'classic';
 			default:
 				console.warn('unsupported format type', formatType);
 				return 'unknown';

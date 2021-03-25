@@ -11,8 +11,9 @@ export const standardSets: readonly string[] = [
 	'dragons',
 	'uldum',
 	'dalaran',
-	'expert1',
 	'core',
+	'expert1', // This should be removed soon?
+	'basic', // This should be removed soon
 ];
 
 export const sets: readonly ReferenceSet[] = [
@@ -142,8 +143,13 @@ export const sets: readonly ReferenceSet[] = [
 		launchDate: new Date('2014-07-22'),
 	},
 	{
+		id: 'core',
+		name: 'Vanilla',
+		launchDate: new Date('2021-03-25'),
+	},
+	{
 		id: 'expert1',
-		name: 'Classic',
+		name: 'Expert',
 		launchDate: new Date('2014-03-11'),
 	},
 	{

@@ -130,7 +130,7 @@ export class EndGameUploaderService {
 			const arenaInfo = await this.memoryInspection.getArenaInfo();
 			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
-		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
+		} else if (game.gameFormat !== 'unknown') {
 			const playerInfo = await this.playersInfo.getPlayerInfo();
 			if (playerInfo && game.gameFormat === 'standard') {
 				if (playerInfo.standard?.legendRank > 0) {
@@ -141,7 +141,7 @@ export class EndGameUploaderService {
 					console.warn(
 						'[manastorm-bridge]',
 						currentReviewId,
-						'Could not extract player rank',
+						'Could not extract standard player rank',
 						playerInfo.standard,
 					);
 					playerRank = null;
@@ -155,8 +155,22 @@ export class EndGameUploaderService {
 					console.warn(
 						'[manastorm-bridge]',
 						currentReviewId,
-						'Could not extract player rank',
+						'Could not extract wild player rank',
 						playerInfo.wild,
+					);
+					playerRank = null;
+				}
+			} else if (playerInfo && game.gameFormat === 'classic') {
+				if (playerInfo.classic?.legendRank > 0) {
+					playerRank = `legend-${playerInfo.classic.legendRank}`;
+				} else if (playerInfo.classic.leagueId >= 0 && playerInfo.classic.rankValue >= 0) {
+					playerRank = `${playerInfo.classic.leagueId}-${playerInfo.classic.rankValue}`;
+				} else {
+					console.warn(
+						'[manastorm-bridge]',
+						currentReviewId,
+						'Could not extract classic player rank',
+						playerInfo.classic,
 					);
 					playerRank = null;
 				}

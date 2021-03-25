@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Board, CardIds, GameFormat, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
+import { Board, CardIds, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
@@ -229,7 +229,7 @@ export class DeckParserService {
 		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		this.currentDeck.deck = {
-			format: deckFromMemory.IsWild ? GameFormat.FT_WILD : GameFormat.FT_STANDARD,
+			format: deckFromMemory.FormatType,
 			cards: this.explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId

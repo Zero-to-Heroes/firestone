@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
+import { formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/decktracker/metadata';
 
-const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=3';
+const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=4';
 
 @Injectable()
 export class SecretConfigService {
@@ -77,10 +77,12 @@ export class SecretConfigService {
 		) {
 			if (metadata.formatType === GameFormat.FT_STANDARD) {
 				return 'standard';
+			} else if (metadata.formatType === GameFormat.FT_CLASSIC) {
+				return 'classic';
 			}
 			return 'wild';
 		}
-		return metadata.formatType === GameFormat.FT_STANDARD ? 'standard' : 'wild';
+		return formatFormat(metadata.formatType);
 	}
 }
 

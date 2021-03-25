@@ -13,6 +13,7 @@ import {
 	computeArchetypeScores,
 } from '@firestone-hs/categorize-deck/dist/archetype-service';
 import { ArchetypeResults, DeckList } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
+import { formatFormat } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
@@ -161,7 +162,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 	}
 
 	private buildArchetypes(state: GameState, playedCards: readonly string[]): readonly Archetype[] {
-		const format = state.metadata.formatType === 1 ? 'wild' : 'standard';
+		const format = formatFormat(state.metadata.formatType);
 		const configForFormat = state.archetypesConfig.filter(conf => conf.gameFormat === format);
 		// TODO: use prefs to filter on the right time period
 		const stats: readonly ArchetypeResults[] = state.archetypesStats.lastPatch.filter(

@@ -1,3 +1,5 @@
+import { GameFormat } from '@firestone-hs/reference-data';
+
 export interface DuelsInfo {
 	readonly Wins: number;
 	readonly Losses: number;
@@ -14,7 +16,7 @@ export interface DuelsInfo {
 
 	// Not read from memory, just there for compatiblity with standard decklists
 	/** @deprecated */
-	readonly IsWild: boolean;
+	readonly FormatType: GameFormat;
 	/** @deprecated */
 	readonly Name: string;
 	/** @deprecated */

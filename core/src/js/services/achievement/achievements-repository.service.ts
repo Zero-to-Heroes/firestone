@@ -132,12 +132,10 @@ export class AchievementsRepository {
 	}
 
 	private async loadConfiguration(): Promise<AchievementConfiguration> {
-		const config: any = await this.api.callGetApiWithRetries(
-			`${CATEGORIES_CONFIG_URL}/_configuration_dev.json?v=8`,
-		);
+		const config: any = await this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/_configuration.json?v=9`);
 		const fileNames: readonly string[] = config.categories;
 		const categories: readonly AchievementCategoryConfiguration[] = (await Promise.all(
-			fileNames.map(fileName => this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=14`)),
+			fileNames.map(fileName => this.api.callGetApiWithRetries(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=15`)),
 		)) as any;
 		return {
 			categories: categories,

@@ -43,6 +43,11 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 				rankValue: matchPlayer.Wild?.RankValue,
 				legendRank: matchPlayer.Wild?.LegendRank,
 			},
+			classic: {
+				leagueId: matchPlayer.Classic?.LeagueId,
+				rankValue: matchPlayer.Classic?.RankValue,
+				legendRank: matchPlayer.Classic?.LegendRank,
+			},
 		} as PlayerInfo;
 	}
 }

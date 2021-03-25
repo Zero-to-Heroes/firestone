@@ -3,6 +3,7 @@ export interface PlayerInfo {
 	readonly cardBackId: number;
 	readonly standard: Rank;
 	readonly wild: Rank;
+	readonly classic: Rank;
 }
 
 export interface Rank {

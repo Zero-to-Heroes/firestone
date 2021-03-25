@@ -1,3 +1,4 @@
+import { formatFormat } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -10,7 +11,6 @@ import { AiDeckService } from '../ai-deck-service.service';
 import { DeckParserService } from '../deck-parser.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
-import { MatchMetadataParser } from './match-metadata-parser';
 
 export class OpponentPlayerParser implements EventParser {
 	constructor(
@@ -38,7 +38,7 @@ export class OpponentPlayerParser implements EventParser {
 		let matchupStatsRecap = currentState.matchupStatsRecap;
 		console.log('parsing opponent', currentState.metadata);
 		if (currentState.metadata.formatType && currentState.deckStats) {
-			const convertedFormat = MatchMetadataParser.convertFormat(currentState.metadata.formatType);
+			const convertedFormat = formatFormat(currentState.metadata.formatType);
 			const statsAgainstOpponent = currentState.deckStats.filter(
 				stat => stat.opponentClass === newHero.playerClass,
 			);

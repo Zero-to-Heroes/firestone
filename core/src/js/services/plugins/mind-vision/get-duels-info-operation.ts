@@ -1,3 +1,4 @@
+import { GameFormat } from '@firestone-hs/reference-data';
 import { DuelsInfo } from '../../../models/duels-info';
 import { OverwolfService } from '../../overwolf.service';
 import { MindVisionOperationFacade } from './mind-vision-operation-facade';
@@ -13,7 +14,7 @@ export class GetDuelsInfoOperation extends MindVisionOperationFacade<DuelsInfo> 
 			info =>
 				({
 					...info,
-					IsWild: true,
+					FormatType: GameFormat.FT_WILD,
 					Name: 'Duels deck',
 					HeroCardId: 'HERO_01', // Fake
 				} as DuelsInfo),

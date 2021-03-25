@@ -30,9 +30,12 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 			card.creatorCardId ||
 			gameEvent.additionalData.creatorCardId ||
 			[
-				CardIds.NonCollectible.Neutral.TheCoinBasic,
+				CardIds.NonCollectible.Neutral.TheCoinBASIC,
 				CardIds.NonCollectible.Neutral.TheCoinDARKMOON_FAIRE1,
 				CardIds.NonCollectible.Neutral.TheCoinDARKMOON_FAIRE2,
+				CardIds.NonCollectible.Neutral.TheCoinTHE_BARRENS1,
+				CardIds.NonCollectible.Neutral.TheCoinTHE_BARRENS2,
+				CardIds.NonCollectible.Neutral.TheCoinSCHOLOMANCE,
 			].includes(baseCardId)
 		) {
 			return currentState;

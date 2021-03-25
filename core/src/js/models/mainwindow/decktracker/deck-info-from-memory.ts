@@ -1,6 +1,8 @@
+import { GameFormat } from '@firestone-hs/reference-data';
+
 export interface DeckInfoFromMemory {
 	readonly Name: string;
 	readonly DeckList: readonly (string | number)[];
 	readonly HeroCardId: string;
-	readonly IsWild: boolean;
+	readonly FormatType: GameFormat;
 }

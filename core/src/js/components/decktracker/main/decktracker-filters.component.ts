@@ -115,6 +115,10 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 			value: 'wild',
 			label: 'Wild',
 		} as FormatFilterOption,
+		{
+			value: 'classic',
+			label: 'Classic',
+		} as FormatFilterOption,
 	] as readonly FormatFilterOption[];
 	activeFormatFilter: StatGameFormatType;
 	formatVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {

@@ -601,7 +601,14 @@ export class DuelsStateBuilderService {
 			.map(cards => cards[0])
 			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
 			.filter(card => card)
-			.map(card => collectionState.getCard(card.id))
+			.map(card => {
+				const out = collectionState.getCard(card.id);
+				if (!out) {
+					console.warn('[duels-state-builder] Could not find card for', card.id, card);
+				}
+				return out;
+			})
+			.filter(card => card)
 			.filter(card => card.getNumberCollected() === 0)
 			.map(card => card.getRegularDustCost())
 			.reduce((a, b) => a + b, 0);

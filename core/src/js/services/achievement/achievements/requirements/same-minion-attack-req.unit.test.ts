@@ -65,7 +65,7 @@ describe('same-minion-attack-req', () => {
 				type: GameEvent.ATTACKING_MINION,
 				localPlayer: { PlayerId: 1 },
 				additionalData: {
-					attackerCardId: CardIds.Collectible.Warrior.GarroshHellscreamHero,
+					attackerCardId: CardIds.Collectible.Warrior.GarroshHellscreamHeroHeroSkins,
 					attackerEntityId: 1,
 					attackerControllerId: 1,
 				},

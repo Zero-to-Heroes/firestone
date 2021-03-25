@@ -1,4 +1,4 @@
-import { GameFormat, GameType } from '@firestone-hs/reference-data';
+import { formatFormat, GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -9,7 +9,6 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { PreferencesService } from '../../preferences.service';
 import { DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
@@ -29,7 +28,7 @@ export class MatchMetadataParser implements EventParser {
 		const store: MainWindowState = gameEvent.additionalData.state;
 		// const stats: StatsState = gameEvent.additionalData?.stats;
 		const format = gameEvent.additionalData.metaData.FormatType as number;
-		const convertedFormat = MatchMetadataParser.convertFormat(format);
+		const convertedFormat = formatFormat(format);
 
 		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
 		if (noDeckMode) {
@@ -104,16 +103,6 @@ export class MatchMetadataParser implements EventParser {
 
 	event(): string {
 		return GameEvent.MATCH_METADATA;
-	}
-
-	public static convertFormat(format: number): StatGameFormatType {
-		if (format === GameFormat.FT_WILD) {
-			return 'wild';
-		} else if (format === GameFormat.FT_STANDARD) {
-			return 'standard';
-		} else {
-			return 'unknown';
-		}
 	}
 
 	private buildHero(currentDeck: any): HeroCard {

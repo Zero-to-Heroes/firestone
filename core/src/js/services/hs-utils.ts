@@ -1,7 +1,7 @@
 import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { capitalizeEachWord } from './utils';
 
-export const CARDS_VERSION = '74257-3';
+export const CARDS_VERSION = '77662';
 
 export const classes = [
 	'demonhunter',
@@ -90,16 +90,19 @@ export const forcedHiddenCardCreators = [
 ];
 
 export const publicCardCreators = [
+	CardIds.Collectible.Demonhunter.VengefulSpirit,
 	CardIds.Collectible.Druid.FungalFortunes, // tested
 	CardIds.Collectible.Druid.JuicyPsychmelon, // tested
 	CardIds.Collectible.Druid.LunarVisions, // tested
 	CardIds.Collectible.Druid.PredatoryInstincts, // tested
 	CardIds.Collectible.Druid.GuessTheWeight,
 	CardIds.Collectible.Hunter.ArcaneFletcher, // tested
+	CardIds.Collectible.Hunter.BarakKodobane,
 	CardIds.Collectible.Hunter.CallPet, // tested
 	CardIds.Collectible.Hunter.DivingGryphon, // tested
 	CardIds.Collectible.Hunter.KingsElekk,
 	CardIds.Collectible.Hunter.MastersCall, // tested
+	CardIds.Collectible.Hunter.PackKodo,
 	CardIds.Collectible.Hunter.ScavengersIngenuity, // tested
 	CardIds.Collectible.Hunter.TolvirWarden, // tested
 	CardIds.Collectible.Hunter.Ursatron, // tested
@@ -163,11 +166,15 @@ export const publicCardCreators = [
 	CardIds.Collectible.Neutral.JepettoJoybuzz, // tested
 	CardIds.Collectible.Neutral.KronxDragonhoof,
 	CardIds.Collectible.Neutral.MurlocTastyfin, // tested
+	CardIds.Collectible.Neutral.Peon,
+	CardIds.Collectible.Neutral.PrimordialProtector,
 	CardIds.Collectible.Neutral.Sandbinder,
+	CardIds.Collectible.Neutral.SouthseaScoundrel,
 	CardIds.Collectible.Neutral.Subject9, // tested
 	CardIds.Collectible.Neutral.TentacledMenace, // tested
 	CardIds.Collectible.Neutral.TheCurator, // tested
 	CardIds.Collectible.Neutral.UtgardeGrapplesniper, // tested
+	CardIds.Collectible.Neutral.VenomousScorpid,
 	CardIds.Collectible.Neutral.WitchwoodPiper, // tested
 	CardIds.NonCollectible.Neutral.WondrousWand,
 	CardIds.Collectible.Neutral.Wrathion, // tested
