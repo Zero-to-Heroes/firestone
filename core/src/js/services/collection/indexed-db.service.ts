@@ -315,6 +315,9 @@ export class IndexedDbService {
 				},
 				error => {
 					console.error('[collection] [storage] error in openDatabase', error);
+					setTimeout(() => {
+						this.init();
+					}, 100);
 				},
 			);
 	}
