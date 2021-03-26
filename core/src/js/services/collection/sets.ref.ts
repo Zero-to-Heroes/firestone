@@ -144,7 +144,7 @@ export const sets: readonly ReferenceSet[] = [
 	},
 	{
 		id: 'core',
-		name: 'Vanilla',
+		name: 'Core',
 		launchDate: new Date('2021-03-25'),
 	},
 	{
@@ -153,7 +153,7 @@ export const sets: readonly ReferenceSet[] = [
 		launchDate: new Date('2014-03-11'),
 	},
 	{
-		id: 'core',
+		id: 'basic',
 		name: 'Basic',
 		launchDate: new Date('2014-03-11'),
 	},
