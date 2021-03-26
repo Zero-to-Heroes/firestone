@@ -42,9 +42,30 @@ export class CardsMonitorService {
 		};
 
 		// We do this to force the population of the initial memory for cards
-		this.triggerMemoryDetection(false);
+		this.triggerMemoryDetection(null, false);
+
+		this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
+			const changes: MemoryUpdate = data.data[0];
+			console.debug('[pack-parser] detected memory changes', changes);
+			if (changes.OpenedPack) {
+				this.triggerMemoryDetection(changes);
+			}
+		});
 	}
 
+	/**
+	 * @deprecated
+	 * The game doesn't log cards received in the Achievements.log anymore.
+	 * We might be able to use the Net.log, but it needs to be added to the OW 
+	 * config first.
+	 * A pack opening looks like this:
+	 * D 09:24:45.5861915 Handling card collection modification (collection version 4643): {
+		  AmountSeen: 0
+		  AssetCardId: 61171
+		  Premium: 0
+		  Quantity: 1
+		}
+	 */
 	public receiveLogLine(data: string) {
 		if (!data?.length) {
 			return;
@@ -58,17 +79,19 @@ export class CardsMonitorService {
 		this.pendingTimeout = setTimeout(() => this.triggerMemoryDetection(), 400);
 	}
 
-	private async triggerMemoryDetection(process = true) {
+	private async triggerMemoryDetection(changesInput?: MemoryUpdate, process = true) {
 		// console.debug('triggerging memory detection');
-		const changes: MemoryUpdate = await this.memoryService.getMemoryChanges();
-		// console.debug('memoryChanges detection', changes);
+		const memoryChanges = await this.memoryService.getMemoryChanges();
+		const changes: MemoryUpdate = changesInput ?? memoryChanges;
+		console.debug('memoryChanges detection', changesInput, memoryChanges, changes);
 		if (!process) {
 			return;
 		}
 
-		if (!changes.NewCards) {
+		// When using the memory updates, the NewCards is never populated
+		if (!memoryChanges.NewCards) {
 			console.warn('empty changeset');
-			setTimeout(() => this.receiveLogLine('force refetch'));
+			setTimeout(() => this.triggerMemoryDetection(changesInput, process), 300);
 			return;
 		}
 
@@ -78,8 +101,8 @@ export class CardsMonitorService {
 		// Cards received outside of packs
 		// We still use this method to add the info to the history in case packs are opened, but
 		// skip the notifications part
-		if (changes.NewCards) {
-			this.handleNewCards(changes.NewCards, !changes.OpenedPack);
+		if (memoryChanges.NewCards) {
+			this.handleNewCards(memoryChanges.NewCards, !changes.OpenedPack);
 		}
 	}
 
