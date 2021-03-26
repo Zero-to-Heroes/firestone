@@ -215,7 +215,7 @@ export class FullCardComponent implements AfterViewInit {
 					name: this.getSoundName(key),
 					files: files,
 					audios: files.map(file =>
-						this.createAudio(`https://static.zerotoheroes.com/hearthstone/audio/${file}`),
+						this.createAudio(`https://static.zerotoheroes.com/hearthstone/audio/${file}?v=2`),
 					),
 				};
 				audioClip.audios.forEach(audio => audio.load());
