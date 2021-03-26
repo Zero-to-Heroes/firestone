@@ -446,59 +446,62 @@ export class DeckParserService {
 			return cardId;
 		}
 
+		// Don't use generated card ids here, as they are changing all the time
 		switch (matchInfo.boardId) {
 			case Board.STORMWIND:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken1;
+				return 'SCH_199t';
 			case Board.ORGRIMMAR:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken12;
+				return 'SCH_199t2';
 			case Board.PANDARIA:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken21;
+				return 'SCH_199t3';
 			case Board.STRANGLETHORN:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken22;
+				return 'SCH_199t4';
 			case Board.NAXXRAMUS:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken23;
+				return 'SCH_199t5';
 			case Board.GOBLINS_VS_GNOMES:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken24;
+				return 'SCH_199t6';
 			case Board.BLACKROCK_MOUNTAIN:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken25;
+				return 'SCH_199t7';
 			case Board.THE_GRAND_TOURNAMENT:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken26;
+				return 'SCH_199t8';
 			case Board.THE_MUSEUM:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken27;
+				return 'SCH_199t9';
 			case Board.EXCAVATION_SITE:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken17;
+				return 'SCH_199t24';
 			case Board.WHISPERS_OF_THE_OLD_GODS:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken2;
+				return 'SCH_199t10';
 			case Board.KARAZHAN:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken3;
+				return 'SCH_199t11';
 			case Board.GADGETZAN:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken4;
+				return 'SCH_199t12';
 			case Board.UNGORO:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken5;
+				return 'SCH_199t13';
 			case Board.ICECROWN_CITADEL:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken6;
+				return 'SCH_199t14';
 			case Board.THE_CATACOMBS:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken7;
+				return 'SCH_199t15';
 			case Board.THE_WITCHWOOD:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken8;
+				return 'SCH_199t16';
 			case Board.THE_BOOMSDAY_PROJECT:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken9;
+				return 'SCH_199t17';
 			case Board.GURUBASHI_ARENA:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken10;
+				return 'SCH_199t18';
 			case Board.DALARAN:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken11;
+				return 'SCH_199t19';
 			case Board.ULDUM_TOMB:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken13;
+				return 'SCH_199t20';
 			case Board.ULDUM_CITY:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken18;
+				return 'SCH_199t25';
 			case Board.DRAGONBLIGHT:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken14;
+				return 'SCH_199t21';
 			case Board.OUTLAND:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken15;
+				return 'SCH_199t22';
 			case Board.SCHOLOMANCE:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken16;
+				return 'SCH_199t23';
 			case Board.DARKMOON_FAIRE:
-				return CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken19;
+				return 'SCH_199t26';
+			case Board.THE_BARRENS:
+				return 'SCH_199t27';
 			default:
 				return cardId;
 		}
