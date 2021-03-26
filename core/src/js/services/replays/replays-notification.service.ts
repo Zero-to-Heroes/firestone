@@ -50,10 +50,10 @@ export class ReplaysNotificationService {
 	}
 
 	private buildNotificationTemplate(stat: GameStat, xpForGame: XpForGameInfo): string {
-		const [playerRankFrame, playerRankArt, playerRankTooltip] = stat.buildPlayerRankImage();
+		const rankImage = stat.buildPlayerRankImage();
 		// console.log('[replays-notification] preparing playerRankImage', playerRankImage);
 		const rankText = stat.buildRankText() || '';
-		const playerRankImage = playerRankArt ? `<img class="art" src="${playerRankArt}" />` : ``;
+		const playerRankImage = rankImage.frameImage ? `<img class="art" src="${rankImage.frameImage}" />` : ``;
 		const bonusClass = xpForGame?.bonusXp ? 'bonus' : '';
 		const xpEl = xpForGame
 			? `
@@ -78,7 +78,7 @@ export class ReplaysNotificationService {
 				<div class="mode rank-image has-tooltip">
 					<div class="rank-icon">
 						${playerRankImage}
-						<img class="frame" src="${playerRankFrame}" />
+						<img class="frame" src="${rankImage.frameImage}" />
 					</div>
 					<div class="rank-text">${rankText}</div>
 					<span class="tooltip">Click to watch the replay</span>

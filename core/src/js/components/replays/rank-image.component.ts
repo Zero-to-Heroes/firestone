@@ -12,6 +12,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 			<div class="icon {{ gameMode }}" [ngClass]="{ 'missing-rank': !rankText }">
 				<img class="art" *ngIf="playerRankArt" [src]="playerRankArt" />
 				<img class="frame" *ngIf="playerRankImage" [src]="playerRankImage" />
+				<img class="decoration" *ngIf="playerRankDecoration" [src]="playerRankDecoration" />
 			</div>
 			<div class="rank-text" *ngIf="rankText">{{ rankText }}</div>
 		</div>
@@ -21,7 +22,11 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 export class RankImageComponent {
 	@Input() set stat(value: GameStat) {
 		this.playerRank = value.playerRank;
-		[this.playerRankImage, this.playerRankArt, this.playerRankImageTooltip] = value.buildPlayerRankImage();
+		const rankImage = value.buildPlayerRankImage();
+		this.playerRankImage = rankImage.frameImage;
+		this.playerRankArt = rankImage.medalImage;
+		this.playerRankImageTooltip = rankImage.tooltip;
+		this.playerRankDecoration = rankImage.frameDecoration;
 		this.rankText = value.buildRankText();
 	}
 
@@ -30,6 +35,7 @@ export class RankImageComponent {
 	playerRank: string;
 	playerRankImage: string;
 	playerRankArt: string;
+	playerRankDecoration: string;
 	playerRankImageTooltip: string;
 	rankText: string;
 }

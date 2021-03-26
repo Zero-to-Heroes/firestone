@@ -1,5 +1,6 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GALAKROND_EVIL, GALAKROND_EXPLORER } from '@firestone-hs/reference-data';
+import { capitalizeEachWord } from '../../../services/utils';
 import { CoinPlayType } from '../replays/coin-play.type';
 import { MatchResultType } from '../replays/match-result.type';
 import { StatGameFormatType } from './stat-game-format.type';
@@ -43,38 +44,45 @@ export class GameStat {
 		return this.gameMode === 'duels' || this.gameMode === 'paid-duels';
 	}
 
-	public buildPlayerRankImage(): [string, string, string] {
+	public buildPlayerRankImage(): {
+		frameImage?: string;
+		medalImage?: string;
+		tooltip?: string;
+		frameDecoration?: string;
+	} {
 		// if (!this.playerRank) {
 		// 	return [null, null, null];
 		// }
 		let rankIcon;
 		let rankIconTooltip;
 		if (this.gameMode === 'ranked') {
-			const standard = 'standard_ranked';
+			const prefix = 'standard_ranked';
+			const decoration = this.buildDecoration(this.gameFormat);
 			// TODO: add a "no-rank" image
 			if (!this.playerRank) {
 				// console.log('no player rank, returning null', this);
-				return [null, null, null];
+				return {};
 			}
 			if (this.playerRank.indexOf('legend') !== -1) {
-				rankIcon = `${standard}/legend`;
-				rankIconTooltip = 'Legend';
+				rankIcon = `${prefix}/legend`;
+				rankIconTooltip = `${capitalizeEachWord(this.gameFormat)} Legend`;
 			} else if (this.playerRank.indexOf('-') > -1) {
 				const leagueId = parseInt(this.playerRank.split('-')[0]);
 				const rank = this.playerRank.split('-')[1];
 				const paddedRank = rank.padStart(2, '0');
 				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId);
-				return [
-					leagueFrame,
-					`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
-					`${leagueName} ${rank}`,
-				];
+				return {
+					frameImage: leagueFrame,
+					medalImage: `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
+					tooltip: `${capitalizeEachWord(this.gameFormat)} ${leagueName} ${rank}`,
+					frameDecoration: decoration,
+				};
 			} else if (this.playerRank.indexOf('-') === -1) {
-				rankIcon = `${standard}/rank${this.playerRank}_small`;
-				rankIconTooltip = 'Rank ' + this.playerRank;
+				rankIcon = `${prefix}/rank${this.playerRank}_small`;
+				rankIconTooltip = `${capitalizeEachWord(this.gameFormat)} ${this.playerRank}`;
 			} else {
-				rankIcon = `${standard}/rank25_small`;
-				rankIconTooltip = 'Rank 25';
+				rankIcon = `${prefix}/rank25_small`;
+				rankIconTooltip = `${capitalizeEachWord(this.gameFormat)} Rank 25`;
 			}
 		} else if (this.gameMode === 'battlegrounds') {
 			rankIcon = 'battlegrounds';
@@ -107,7 +115,7 @@ export class GameStat {
 			// TODO: no-rank image
 			if (!this.playerRank) {
 				// console.log('no player rank, returning null', this);
-				return [null, null, null];
+				return {};
 			}
 			// New format
 			if (this.playerRank.indexOf('-') !== -1) {
@@ -126,7 +134,21 @@ export class GameStat {
 			rankIcon = 'arenadraft';
 		}
 		// console.log('returning', rankIcon, rankIconTooltip);
-		return [`assets/images/deck/ranks/${rankIcon}.png`, null, rankIconTooltip];
+		return {
+			frameImage: `assets/images/deck/ranks/${rankIcon}.png`,
+			tooltip: rankIconTooltip,
+		};
+	}
+
+	private buildDecoration(gameFormat: StatGameFormatType) {
+		switch (gameFormat) {
+			case 'classic':
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Medal_Classic.png`;
+			case 'wild':
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Medal_Wild.png`;
+			default:
+				return null;
+		}
 	}
 
 	public buildRankText(): string {
