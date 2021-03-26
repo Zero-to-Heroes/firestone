@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Board, CardIds, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
+import { Board, CardIds, GameFormat, GameType, PRACTICE_ALL, ScenarioId } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
@@ -59,28 +59,52 @@ export class DeckParserService {
 					this.currentScenarioId,
 					this.currentDeck,
 				);
-			} else if (event.type === GameEvent.SCENE_CHANGED) {
-				// Doing that because the first time we access the deck selection screen the memory reading can be weird
-				// So we reset the memory reading once the game has been fully loaded
-				if (!this.deckSanityDone) {
-					const scene = event.additionalData.scene;
-					if (
-						[
-							'scene_tournament',
-							'scene_friendly',
-							'scene_adventure',
-							'unknown_18',
-							'scene_pvp_dungeon_run',
-							'scene_bacon',
-							'scene_arena',
-						].includes(scene)
-					) {
-						console.log('[deck-parser] resetting mindvision once fully in game');
-						this.deckSanityDone = true;
-						this.memory.reset();
-					}
-				}
 			}
+			// TODO: this should move elsewhere
+			// else if (event.type === GameEvent.SCENE_CHANGED) {
+			// 	// Doing that because the first time we access the deck selection screen the memory reading can be weird
+			// 	// So we reset the memory reading once the game has been fully loaded
+			// 	if (!this.deckSanityDone) {
+			// 		const scene = event.additionalData.scene;
+			// 		if (
+			// 			[
+			// 				'scene_tournament',
+			// 				'scene_friendly',
+			// 				'scene_adventure',
+			// 				'unknown_18',
+			// 				'scene_pvp_dungeon_run',
+			// 				'scene_bacon',
+			// 				'scene_arena',
+			// 			].includes(scene)
+			// 		) {
+			// 			console.log('[memory-service] resetting mindvision from GEP once fully in game');
+			// 			this.deckSanityDone = true;
+			// 			this.memory.reset();
+			// 		}
+			// 	}
+			// } else if (event.type === GameEvent.SCENE_CHANGED_MINDVISION) {
+			// 	// Doing that because the first time we access the deck selection screen the memory reading can be weird
+			// 	// So we reset the memory reading once the game has been fully loaded
+			// 	if (!this.deckSanityDone) {
+			// 		const scene: SceneMode = event.additionalData.scene;
+			// 		if (
+			// 			[
+			// 				SceneMode.TOURNAMENT,
+			// 				SceneMode.FRIENDLY,
+			// 				SceneMode.ADVENTURE,
+			// 				SceneMode.PVP_DUNGEON_RUN,
+			// 				SceneMode.BACON,
+			// 				SceneMode.PACKOPENING,
+			// 				SceneMode.COLLECTIONMANAGER,
+			// 				SceneMode.GAME_MODE,
+			// 			].includes(scene)
+			// 		) {
+			// 			console.log('[memory-service] resetting mindvision once fully in game');
+			// 			this.deckSanityDone = true;
+			// 			this.memory.reset();
+			// 		}
+			// 	}
+			// }
 		});
 		// window['memory'] = this.memory;
 		// window['currentScene'] = async () => {
@@ -229,7 +253,7 @@ export class DeckParserService {
 		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		this.currentDeck.deck = {
-			format: deckFromMemory.FormatType,
+			format: deckFromMemory.FormatType || GameFormat.FT_WILD,
 			cards: this.explodeDecklist(decklist),
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
