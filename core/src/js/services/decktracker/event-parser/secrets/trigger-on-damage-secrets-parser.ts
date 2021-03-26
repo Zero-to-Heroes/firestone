@@ -9,7 +9,12 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnDamageSecretsParser implements EventParser {
-	private secretsTriggeringOnDamage = [CardIds.Collectible.Paladin.EyeForAnEye, CardIds.Collectible.Rogue.Evasion];
+	private secretsTriggeringOnDamage = [
+		CardIds.Collectible.Paladin.EyeForAnEye,
+		CardIds.Collectible.Paladin.EyeForAnEyeVanilla,
+		// CardIds.Collectible.Paladin.ReckoningCore,
+		CardIds.Collectible.Rogue.Evasion,
+	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -24,6 +29,9 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 
 		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayerActive ? currentState.opponentDeck : currentState.playerDeck;
+
+		const secretsWeCantRuleOut = [];
+
 		const enemyHeroEntityId = isPlayerActive
 			? gameEvent.gameState.Opponent.Hero.entityId
 			: gameEvent.gameState.Player.Hero.entityId;
@@ -32,11 +40,9 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 					target => target.TargetEntityId === enemyHeroEntityId,
 			  )
 			: null;
-
-		const secretsWeCantRuleOut = [];
-
 		if (!heroTarget) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEye);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEyeVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Evasion);
 		}
 

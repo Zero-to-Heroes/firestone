@@ -12,8 +12,11 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Hunter.CatTrick,
 		CardIds.Collectible.Hunter.PressurePlate,
 		CardIds.Collectible.Mage.Counterspell,
+		CardIds.Collectible.Mage.CounterspellCore,
+		CardIds.Collectible.Mage.CounterspellVanilla,
 		CardIds.Collectible.Mage.NetherwindPortal,
 		CardIds.Collectible.Mage.Spellbender,
+		CardIds.Collectible.Mage.SpellbenderVanilla,
 		CardIds.Collectible.Mage.ManaBind,
 		CardIds.Collectible.Paladin.NeverSurrender,
 		CardIds.Collectible.Paladin.OhMyYogg,
@@ -44,7 +47,11 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		}
 
 		if (gameEvent.type === GameEvent.SECRET_TRIGGERED) {
-			this.counterSpellTriggered = cardId === CardIds.Collectible.Mage.Counterspell;
+			this.counterSpellTriggered = [
+				CardIds.Collectible.Mage.Counterspell,
+				CardIds.Collectible.Mage.CounterspellCore,
+				CardIds.Collectible.Mage.CounterspellVanilla,
+			].includes(cardId);
 			// console.warn('counterspell triggered', this.counterSpellTriggered);
 			return currentState;
 		}
@@ -68,6 +75,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		const targetCardId = gameEvent.additionalData.targetCardId;
 		if (!targetCardId) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Spellbender);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SpellbenderVanilla);
 		} else {
 			const targetCard = this.allCards.getCard(targetCardId);
 			if (
@@ -75,7 +83,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 				!targetCard.type ||
 				targetCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()
 			) {
-				secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Spellbender);
+				secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SpellbenderVanilla);
 			}
 		}
 
