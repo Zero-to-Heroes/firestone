@@ -127,7 +127,7 @@ export class DeckCardComponent {
 
 	@Input('card') set card(card: VisualDeckCard) {
 		this.cardId = card.cardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg?v=2)`;
 		this.manaCost = card.manaCost;
 		this.cardName = card.cardName;
 		this.numberOfCopies = card.totalQuantity;
