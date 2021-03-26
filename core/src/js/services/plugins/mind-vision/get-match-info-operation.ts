@@ -25,6 +25,7 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 			},
 			3,
 			1500,
+			matchInfo => !matchInfo?.LocalPlayer?.name,
 		);
 	}
 
