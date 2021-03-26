@@ -46,7 +46,7 @@ export class CardsMonitorService {
 
 		this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
 			const changes: MemoryUpdate = data.data[0];
-			console.debug('[pack-parser] detected memory changes', changes);
+			console.log('[pack-parser] detected memory changes', changes);
 			if (changes.OpenedPack) {
 				this.triggerMemoryDetection(changes);
 			}
@@ -79,19 +79,12 @@ export class CardsMonitorService {
 		this.pendingTimeout = setTimeout(() => this.triggerMemoryDetection(), 400);
 	}
 
-	private async triggerMemoryDetection(changesInput?: MemoryUpdate, process = true) {
+	private async triggerMemoryDetection(changesInput?: MemoryUpdate, process = true, retriesLeft = 10) {
 		// console.debug('triggerging memory detection');
 		const memoryChanges = await this.memoryService.getMemoryChanges();
 		const changes: MemoryUpdate = changesInput ?? memoryChanges;
-		console.debug('memoryChanges detection', changesInput, memoryChanges, changes);
+		console.log('memoryChanges detection', changesInput, memoryChanges, changes);
 		if (!process) {
-			return;
-		}
-
-		// When using the memory updates, the NewCards is never populated
-		if (!memoryChanges.NewCards) {
-			console.warn('empty changeset');
-			setTimeout(() => this.triggerMemoryDetection(changesInput, process), 300);
 			return;
 		}
 
@@ -99,9 +92,7 @@ export class CardsMonitorService {
 			this.handleNewPack(changes.OpenedPack);
 		}
 		// Cards received outside of packs
-		// We still use this method to add the info to the history in case packs are opened, but
-		// skip the notifications part
-		if (memoryChanges.NewCards) {
+		else if (memoryChanges?.NewCards) {
 			this.handleNewCards(memoryChanges.NewCards, !changes.OpenedPack);
 		}
 	}
@@ -126,6 +117,21 @@ export class CardsMonitorService {
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards);
 		this.stateUpdater.next(new NewPackEvent(setId, packCards));
+
+		const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
+			(card: InternalCardInfo) => card.cardId + card.cardType,
+		)(packCards);
+		for (const data of Object.values(groupedBy)) {
+			const cardId = data[0].cardId;
+			const type = data[0].cardType;
+			const cardInCollection = collection.find(c => c.id === cardId);
+			const existingCount =
+				data[0].cardType === 'GOLDEN' ? cardInCollection.premiumCount : cardInCollection.count;
+			// console.debug('handling', data, existingCount, cardId, type, cardInCollection);
+			for (let i = existingCount; i < existingCount + data.length; i++) {
+				this.handleNotification(cardId, type, i + 1, false);
+			}
+		}
 	}
 
 	private async handleNewCards(newCards: readonly CardPackInfo[], showNotifs = true) {

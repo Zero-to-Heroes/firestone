@@ -11,8 +11,8 @@ export class GetMemoryChangesOperation extends MindVisionOperationFacade<MemoryU
 			() => mindVision.getMemoryChanges(),
 			info => false,
 			info => info,
-			3,
-			1500,
+			2,
+			200,
 		);
 	}
 }
