@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/decktracker/metadata';
 
-const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=4';
+const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=5';
 
 @Injectable()
 export class SecretConfigService {
@@ -21,7 +21,7 @@ export class SecretConfigService {
 		const mode: string = this.getMode(metadata);
 		const config = this.secretConfigs.find(conf => conf.mode === mode);
 		const result = config.secrets.filter(secret => secret.playerClass === playerClass).map(secret => secret.cardId);
-		// console.log('getting valid secrets', metadata, playerClass, mode, config, result);
+		console.log('[secrets-config] getting valid secrets', metadata, playerClass, mode, config, result);
 		return result;
 	}
 
