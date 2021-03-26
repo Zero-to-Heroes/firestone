@@ -172,6 +172,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.PrizeWallTavernBrawl;
 		case CardIds.NonCollectible.Neutral.GreyboughTavernBrawl:
 			return CardIds.NonCollectible.Neutral.SproutItOutTavernBrawl;
+		case CardIds.NonCollectible.Neutral.OverlordSaurfang:
+			return CardIds.NonCollectible.Warrior.OverlordSaurfang_ForTheHorde2;
 		case '':
 			return null; // new heroes
 	}
@@ -205,6 +207,8 @@ const REMOVED_CARD_IDS = [
 	CardIds.NonCollectible.Neutral.GentleMegasaurTavernBrawl,
 	CardIds.NonCollectible.Neutral.NatPagleExtremeAngler_TreasureChestToken,
 	CardIds.NonCollectible.Neutral.NatPagleExtremeAngler_TreasureChestTokenTavernBrawl,
+	CardIds.NonCollectible.Neutral.PilotedShredder,
+	CardIds.NonCollectible.Neutral.PilotedShredderTavernBrawl,
 	CardIds.Collectible.Neutral.WhirlwindTempest,
 	CardIds.NonCollectible.Neutral.WhirlwindTempestTavernBrawl,
 	CardIds.Collectible.Rogue.PogoHopper,
