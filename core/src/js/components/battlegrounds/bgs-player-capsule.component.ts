@@ -5,7 +5,7 @@ import {
 	ElementRef,
 	Input,
 	Renderer2,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer } from '../../models/battlegrounds/bgs-player';
@@ -78,7 +78,7 @@ export class BgsPlayerCapsuleComponent {
 			return;
 		}
 		// console.log('setting next opponent info', value, value.getCurrentTavernTier());
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=2`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId();

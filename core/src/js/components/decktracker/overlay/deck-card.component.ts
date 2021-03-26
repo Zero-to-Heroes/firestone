@@ -127,7 +127,7 @@ export class DeckCardComponent {
 
 	@Input('card') set card(card: VisualDeckCard) {
 		this.cardId = card.cardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg?v=2)`;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg?v=3)`;
 		this.manaCost = card.manaCost;
 		this.cardName = card.cardName;
 		this.numberOfCopies = card.totalQuantity;
@@ -151,7 +151,7 @@ export class DeckCardComponent {
 		}
 		// Preload
 		if (this.cardId) {
-			const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png?v=2`;
+			const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png?v=3`;
 			const image = new Image();
 			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 			image.src = imageUrl;

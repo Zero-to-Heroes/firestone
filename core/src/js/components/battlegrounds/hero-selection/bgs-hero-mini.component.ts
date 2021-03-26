@@ -30,6 +30,6 @@ export class BgsHeroMiniComponent {
 	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
 	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=2`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
 	}
 }

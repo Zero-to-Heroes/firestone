@@ -111,7 +111,7 @@ export class CardTooltipComponent {
 			const withBgs = this.isBgs
 				? `compressed/battlegrounds/${this._cardId}_bgs.png`
 				: `${imagePath}/${this._cardId}.png`;
-			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}?v=2`;
+			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}?v=3`;
 			// console.log('image is', this.image);
 		}
 		// console.log('setting tooltip', value, this.image);

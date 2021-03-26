@@ -186,7 +186,7 @@ export class GameStat {
 	private getLeagueInfo(leagueId: number): [string, string] {
 		const leagueName = this.getLeagueName(leagueId);
 		return [
-			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Ranked_Medal_Frame_${leagueName}.png?v=2`,
+			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Ranked_Medal_Frame_${leagueName}.png?v=3`,
 			leagueName,
 		];
 	}

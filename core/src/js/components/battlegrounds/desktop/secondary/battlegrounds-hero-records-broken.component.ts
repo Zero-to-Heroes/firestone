@@ -27,7 +27,7 @@ export class BattlegroundsHeroRecordsBrokenComponent {
 	numberOfRecords: number;
 
 	@Input() set stat(value: HeroStat) {
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.heroId}.png?v=2`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.heroId}.png?v=3`;
 		this.numberOfRecords = value.numberOfRecords;
 	}
 }

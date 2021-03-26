@@ -76,7 +76,7 @@ export class DuelsStateBuilderService {
 	}
 
 	private async loadTopDeckRunDetails(runId: string, deckId: number) {
-		const results: any = await this.api.callGetApiWithRetries(`${DUELS_RUN_DETAILS_URL}/${runId}?v=2`);
+		const results: any = await this.api.callGetApiWithRetries(`${DUELS_RUN_DETAILS_URL}/${runId}?v=3`);
 		console.log('[duels-state-builder] laoded run details', results);
 		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
 		this.mainWindowStateUpdater.next(

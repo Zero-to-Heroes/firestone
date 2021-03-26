@@ -43,7 +43,7 @@ export class BgsHeroFaceOffComponent {
 	@Input() isNextOpponent: boolean;
 
 	@Input() set opponent(value: BgsPlayer) {
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=2`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
 		this.heroPowerIcon = value.getDisplayHeroPowerCardId();
 		this.name = value.name;
 		this.health = Math.max(value.initialHealth - value.damageTaken, 0);
