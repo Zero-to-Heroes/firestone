@@ -232,6 +232,7 @@ export const getAllCardsInGame = (
 	return allCards
 		.getCards()
 		.filter(card => card.techLevel)
+		.filter(card => card.set !== 'Vanilla')
 		.filter(card => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
 		.filter(card => !card.id.startsWith('TB_BaconUps')); // Ignore golden
 };
