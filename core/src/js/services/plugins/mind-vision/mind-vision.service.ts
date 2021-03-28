@@ -12,6 +12,8 @@ declare let OverwolfPlugin: any;
 
 @Injectable()
 export class MindVisionService {
+	private static readonly MAX_RETRIES_FOR_MEMORY_LISTENING = 3;
+
 	// Use two different instances so that the reset of the main plugin doesn't impact
 	// the listener
 	private mindVisionPlugin: any;
@@ -27,6 +29,8 @@ export class MindVisionService {
 		this.listenForUpdates();
 	}
 
+	private retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
+
 	private async listenForUpdates() {
 		const plugin = await this.get();
 		try {
@@ -35,12 +39,20 @@ export class MindVisionService {
 				console.log('[mind-vision] memory update', changes);
 				// Happens when the plugin is reset, we need to resubscribe
 				if (changes === 'reset') {
-					console.log('[mind-vision] resetting memory update');
-					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
-					this.listenForUpdates();
+					if (this.retriesLeft >= 0) {
+						console.log('[mind-vision] resetting memory update', this.retriesLeft);
+						this.retriesLeft--;
+						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+						this.listenForUpdates();
+					} else {
+						console.error('[mind-vision] stopping after 5 resets');
+					}
 					return;
 				}
+				// Retry only a few times in a row
 				const changesToBroadcast = JSON.parse(changes);
+				// I don't think we go into this branch anymore, which was caused by an incorrect serialization
+				// Keeping it just in case for now
 				if (changesToBroadcast.CurrentScene === SceneMode.INVALID) {
 					console.warn('[mind-vision] INVALID scene should not be raised', changes);
 					delete changesToBroadcast.CurrentScene;
@@ -52,9 +64,12 @@ export class MindVisionService {
 						!changesToBroadcast.NewCards?.length
 					) {
 						console.warn('[mind-vision] calling reset after invalid scene');
+						this.retriesLeft--;
 						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 						this.listenForUpdates();
 					}
+				} else {
+					this.retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
 				}
 				this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
 			};
