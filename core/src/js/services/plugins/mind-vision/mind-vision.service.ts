@@ -6,6 +6,7 @@ import { BoostersInfo } from '../../../models/memory/boosters-info';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
 import { Events } from '../../events.service';
+import { OverwolfService } from '../../overwolf.service';
 import { InternalHsAchievementsInfo } from './get-achievements-info-operation';
 
 declare let OverwolfPlugin: any;
@@ -23,10 +24,35 @@ export class MindVisionService {
 	// initializedListener = false;
 	memoryUpdateListener;
 
-	constructor(private readonly events: Events) {
-		this.initialize();
-		// this.initializeListener();
-		this.listenForUpdates();
+	constructor(private readonly events: Events, private readonly ow: OverwolfService) {
+		this.init();
+	}
+
+	private async init() {
+		const inGame = await this.ow.inGame();
+		if (inGame) {
+			this.initialize();
+			this.listenForUpdates();
+		} else {
+			console.log('[mind-vision] not in game, not starting memory poll or memory reading plugin');
+		}
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			// console.log('[mind-vision] updated game status', res);
+			if (this.ow.exitGame(res)) {
+				if (this.memoryUpdateListener) {
+					console.log('[mind-vision] leaving game, stopping memory poll');
+					const plugin = await this.get();
+					plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+					this.memoryUpdateListener = null;
+				}
+				await this.reset();
+			} else if ((await this.ow.inGame()) && res.gameChanged) {
+				if (!this.memoryUpdateListener) {
+					console.log('[mind-vision] starting game, starting memory poll');
+					this.listenForUpdates();
+				}
+			}
+		});
 	}
 
 	private retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
@@ -34,15 +60,21 @@ export class MindVisionService {
 	private async listenForUpdates() {
 		const plugin = await this.get();
 		try {
-			console.log('[mind-vision] getting ready to listen for updates');
+			console.log('[mind-vision] getting ready to listen for updates', this.memoryUpdateListener == null);
+			if (this.memoryUpdateListener) {
+				plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+			}
+
+			console.log('[mind-vision] adding updates listener');
 			this.memoryUpdateListener = (changes: string | 'reset') => {
 				console.log('[mind-vision] memory update', changes);
 				// Happens when the plugin is reset, we need to resubscribe
 				if (changes === 'reset') {
+					console.log('[mind-vision] resetting memory update?', this.retriesLeft);
 					if (this.retriesLeft >= 0) {
-						console.log('[mind-vision] resetting memory update', this.retriesLeft);
 						this.retriesLeft--;
 						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+						this.memoryUpdateListener = null;
 						this.listenForUpdates();
 					} else {
 						console.error('[mind-vision] stopping after 5 resets');
@@ -66,6 +98,7 @@ export class MindVisionService {
 						console.warn('[mind-vision] calling reset after invalid scene');
 						this.retriesLeft--;
 						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
+						this.memoryUpdateListener = null;
 						this.listenForUpdates();
 					}
 				} else {
@@ -306,8 +339,8 @@ export class MindVisionService {
 			const plugin = await this.get();
 			try {
 				plugin.reset(result => {
-					console.log('reset done');
-					resolve(result);
+					console.log('[mind-vision] reset done');
+					resolve();
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not reset', e);
@@ -321,7 +354,7 @@ export class MindVisionService {
 		return this.mindVisionPlugin.get();
 	}
 
-	private initialize() {
+	private async initialize() {
 		this.initialized = false;
 		try {
 			console.log('[mind-vision] plugin init starting', this.mindVisionPlugin);
@@ -333,10 +366,11 @@ export class MindVisionService {
 					return;
 				}
 				console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
-				this.mindVisionPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
-					console.log('[mind-vision] received global event', first, second);
-				});
 				this.initialized = true;
+			});
+			const plugin = await this.get();
+			plugin.onGlobalEvent.addListener((first: string, second: string) => {
+				console.log('[mind-vision] received global event', first, second);
 			});
 		} catch (e) {
 			console.warn('[mind-vision]Could not load plugin, retrying', e);
