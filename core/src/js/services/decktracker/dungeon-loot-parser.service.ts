@@ -234,8 +234,17 @@ export class DungeonLootParserService {
 			return false;
 		}
 		if (duelsInfo?.Wins === 0 && duelsInfo?.Losses === 0) {
-			this.log('wins and losses are 0, starting new run', duelsInfo);
-			return true;
+			if (
+				// In case of ties for the first match, we don't want to start a new run
+				this.lastDuelsMatch?.result === 'tied' &&
+				this.currentDuelsWins === 0 &&
+				this.currentDuelsLosses === 0
+			) {
+				this.log('had a tie on the first round, not starting a new run');
+			} else {
+				this.log('wins and losses are 0, starting new run', duelsInfo);
+				return true;
+			}
 		}
 
 		// TODO: look up the last match with this run info, and compare the wins to that
@@ -388,11 +397,12 @@ export class DungeonLootParserService {
 		const [wins, losses] = additionalResult.split('-').map(info => parseInt(info));
 		if (wins === 11 && result === 'won') {
 			this.log('last duels match was the last of the run, not forwarding run id', additionalResult, result);
-			return true;
+			return false;
 		}
 		if (losses === 2 && result === 'lost') {
 			return false;
 		}
+		return true;
 	}
 
 	private logDebug(...args) {
