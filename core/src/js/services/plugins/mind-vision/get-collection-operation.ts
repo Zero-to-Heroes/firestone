@@ -19,7 +19,7 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 				// been fetched from memory yet
 				memoryCollection
 					.filter(entry => this.getBasicCards().indexOf(entry.CardId) !== -1)
-					.every(entry => entry.Count + entry.PremiumCount === 0),
+					.every(entry => entry.Count + entry.PremiumCount + entry.DiamondCount === 0),
 			memoryCollection =>
 				memoryCollection.map(
 					memoryCard =>
@@ -27,6 +27,7 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 							id: memoryCard.CardId,
 							count: memoryCard.Count,
 							premiumCount: memoryCard.PremiumCount,
+							diamondCount: memoryCard.DiamondCount,
 						} as Card),
 				),
 			20,

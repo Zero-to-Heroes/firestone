@@ -113,9 +113,13 @@ export class FullCardComponent implements AfterViewInit {
 		// Because the high res images we have for the heroes are a bit weird
 		this.isHero = card.type === 'Hero';
 		this.card = card as InternalReferenceCard;
-		if ((selectedCard as SetCard).ownedNonPremium || (selectedCard as SetCard).ownedPremium) {
+		if (
+			(selectedCard as SetCard).ownedNonPremium ||
+			(selectedCard as SetCard).ownedPremium ||
+			(selectedCard as SetCard).ownedDiamond
+		) {
 			this.showCount = true;
-			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium;
+			this.card.ownedPremium = (selectedCard as SetCard).ownedPremium + (selectedCard as SetCard).ownedDiamond;
 			this.card.ownedNonPremium = (selectedCard as SetCard).ownedNonPremium;
 		} else {
 			this.showCount = false;

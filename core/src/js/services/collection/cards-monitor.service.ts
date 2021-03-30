@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { CardPackInfo, PackInfo } from '../../models/memory/pack-info';
@@ -106,6 +107,7 @@ export class CardsMonitorService {
 			const cardInCollection = collection.find(c => c.id === card.CardId);
 			return {
 				cardId: card.CardId,
+				// No diamond card in pack, so we can leave it like this for now
 				cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
 				isNew: card.Premium ? cardInCollection.premiumCount === 0 : cardInCollection.count === 0,
 				// TODO: handle the case where two copies of the same card are in the same pack
@@ -152,7 +154,7 @@ export class CardsMonitorService {
 		}
 	}
 
-	private async handleNotification(cardId: string, type: 'NORMAL' | 'GOLDEN', newCount: number, showNotifs = true) {
+	private async handleNotification(cardId: string, type: CollectionCardType, newCount: number, showNotifs = true) {
 		const prefs = await this.prefs.getPreferences();
 		const isDust = this.hasReachedMaxCollectibleOf(cardId, newCount);
 		if (prefs.showCardsOutsideOfPacks && showNotifs) {

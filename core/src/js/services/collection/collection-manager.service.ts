@@ -25,6 +25,7 @@ export class CollectionManager {
 	public async getCollection(skipMemoryReading = false): Promise<Card[]> {
 		console.log('[collection-manager] getting collection');
 		const collection = !skipMemoryReading ? await this.memoryReading.getCollection() : null;
+		// console.debug('[collection-manager] got collection', collection);
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();

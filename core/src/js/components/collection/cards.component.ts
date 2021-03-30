@@ -421,18 +421,20 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			case this.FILTER_ALL:
 				return (card: SetCard) => true;
 			case this.FILTER_OWN:
-				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium > 0;
+				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium + card.ownedDiamond > 0;
 			case this.FILTER_MISSING_PLAYABLE_COPIES:
-				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium < card.getMaxCollectible();
+				return (card: SetCard) =>
+					card.ownedNonPremium + card.ownedPremium + card.ownedDiamond < card.getMaxCollectible();
 			case this.FILTER_GOLDEN_OWN:
-				return (card: SetCard) => card.ownedPremium > 0;
+				return (card: SetCard) => card.ownedPremium + card.ownedDiamond > 0;
 			case this.FILTER_NON_PREMIUM_NOT_COMPLETED:
 				return (card: SetCard) => card.ownedNonPremium < card.getMaxCollectible();
 			case this.FILTER_NOT_COMPLETED:
 				return (card: SetCard) =>
-					card.ownedPremium < card.getMaxCollectible() || card.ownedNonPremium < card.getMaxCollectible();
+					card.ownedPremium + card.ownedDiamond < card.getMaxCollectible() ||
+					card.ownedNonPremium < card.getMaxCollectible();
 			case this.FILTER_DONT_OWN:
-				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium === 0;
+				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium + card.ownedDiamond === 0;
 			default:
 				console.log('unknown filter', this.cardsOwnedActiveFilter);
 		}

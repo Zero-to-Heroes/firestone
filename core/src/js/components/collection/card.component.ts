@@ -38,7 +38,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 							<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
 						</svg>
 					</i>
-					<span>{{ _card.ownedPremium }}</span>
+					<span>{{ _card.ownedPremium + _card.ownedDiamond }}</span>
 					<i class="gold-theme right">
 						<svg class="svg-icon-fill">
 							<use xlink:href="assets/svg/sprite.svg#two_gold_leaves" />
@@ -55,8 +55,7 @@ export class CardComponent implements AfterViewInit {
 
 	@Input() set card(card: SetCard) {
 		this._card = card;
-		// ('set card', this._card);
-		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
+		this.missing = this._card.ownedNonPremium + this._card.ownedPremium + this._card.ownedDiamond === 0;
 		this.updateInfo();
 		this.updateImage();
 	}
@@ -138,6 +137,6 @@ export class CardComponent implements AfterViewInit {
 		}
 
 		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this._showCounts;
-		this.showPremiumCount = this._card.ownedPremium > 0 || this._showCounts;
+		this.showPremiumCount = this._card.ownedPremium + this._card.ownedDiamond > 0 || this._showCounts;
 	}
 }

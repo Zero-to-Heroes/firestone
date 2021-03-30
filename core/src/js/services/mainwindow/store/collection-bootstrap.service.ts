@@ -96,8 +96,9 @@ export class CollectionBootstrapService {
 	private mergeFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
 		return setCards.map((card: SetCard) => {
 			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
-			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
 			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
+			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
+			const ownedDiamond = collectionCard ? collectionCard.diamondCount : 0;
 			return new SetCard(
 				card.id,
 				card.name,
@@ -106,6 +107,7 @@ export class CollectionBootstrapService {
 				card.cost,
 				ownedNonPremium,
 				ownedPremium,
+				ownedDiamond,
 			);
 		});
 	}

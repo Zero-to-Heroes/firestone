@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 
@@ -11,7 +12,7 @@ export class CardNotificationsService {
 		private readonly prefs: PreferencesService,
 	) {}
 
-	public async createNewCardToast(cardId: string, isSecondCopy: boolean, type: 'NORMAL' | 'GOLDEN') {
+	public async createNewCardToast(cardId: string, isSecondCopy: boolean, type: CollectionCardType) {
 		const dbCard = this.cards.getCard(cardId);
 		if (!dbCard) {
 			console.warn('[card-notification] missing card', cardId);
@@ -28,7 +29,8 @@ export class CardNotificationsService {
 			return;
 		}
 
-		const cardName: string = type === 'GOLDEN' ? `Golden ${dbCard.name}` : dbCard.name;
+		const cardName: string =
+			type === 'GOLDEN' ? `Golden ${dbCard.name}` : type === 'DIAMOND' ? `Diamond ${dbCard.name}` : dbCard.name;
 		const goldenClass = type === 'GOLDEN' ? 'premium' : '';
 		const newLabel = isSecondCopy ? 'Second copy' : 'New card';
 		console.log('[card-notification] displaying new card toast notification for', cardName);
