@@ -1,10 +1,12 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
+import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { HideDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from '../../../services/mainwindow/store/events/decktracker/restore-deck-summary-event';
 import { SelectDeckDetailsEvent } from '../../../services/mainwindow/store/events/decktracker/select-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { capitalizeEachWord } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-deck-summary',
@@ -17,10 +19,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div class="decktracker-deck-summary" [ngClass]="{ 'hidden': hidden }" (click)="selectDeck($event)">
-			<div class="deck-name" [helpTooltip]="deckName">{{ deckName }}</div>
+			<div class="deck-name" [helpTooltip]="deckNameTooltip">{{ deckName }}</div>
 			<div class="deck-image">
 				<img class="skin" [src]="skin" />
 				<img class="frame" src="assets/images/deck/hero_frame.png" />
+				<img class="decoration {{ format }}" *ngIf="decoration" [src]="decoration" />
 			</div>
 			<div class="stats">
 				<div class="text total-games">{{ totalGames }} games</div>
@@ -51,6 +54,8 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		// console.log('[decktracker-deck-summary] setting value', value);
 		this._deck = value;
 		this.deckName = value.deckName || 'Deck name';
+		this.format = value.format;
+		this.deckNameTooltip = `${this.deckName} (${capitalizeEachWord(this.format)})`;
 		this.totalGames = value.totalGames;
 		this.winRatePercentage = parseFloat('' + value.winRatePercentage).toLocaleString('en-US', {
 			minimumIntegerDigits: 1,
@@ -59,16 +64,20 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this.lastUsed = this.buildLastUsedDate(value.lastUsedTimestamp);
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.skin}.jpg`;
 		this.hidden = value.hidden;
+		this.decoration = this.buildDecoration(value.format);
 	}
 
 	_deck: DeckSummary;
 	deckName: string;
+	deckNameTooltip: string;
 	deckNameClass: string;
 	totalGames: number;
 	winRatePercentage: string;
 	lastUsed: string;
 	skin: string;
 	hidden: boolean;
+	decoration: string;
+	format: StatGameFormatType;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -106,5 +115,16 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 			day: '2-digit',
 			year: 'numeric',
 		});
+	}
+
+	private buildDecoration(gameFormat: StatGameFormatType) {
+		switch (gameFormat) {
+			case 'classic':
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Medal_Classic.png`;
+			case 'wild':
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Medal_Wild.png`;
+			default:
+				return null;
+		}
 	}
 }

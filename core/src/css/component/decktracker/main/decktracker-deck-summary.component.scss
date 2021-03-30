@@ -47,6 +47,16 @@
 			left: -16%;
 			width: 120%;
 		}
+		.decoration {
+			position: absolute;
+			top: -8%;
+			left: 0%;
+			width: 100%;
+
+			&.wild {
+				left: -15%;
+			}
+		}
 	}
 
 	.stats {
