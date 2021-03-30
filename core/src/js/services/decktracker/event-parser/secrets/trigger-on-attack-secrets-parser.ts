@@ -9,7 +9,6 @@ import { EventParser } from '../event-parser';
 
 // https://hearthstone.gamepedia.com/Advanced_rulebook#Combat
 export class TriggerOnAttackSecretsParser implements EventParser {
-	// TODO: add the Vanilla secrets here as well
 	private secretsTriggeringOnAttack = [
 		CardIds.Collectible.Hunter.BearTrap,
 		CardIds.Collectible.Hunter.Misdirection,

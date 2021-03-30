@@ -29,12 +29,18 @@ export class SecretsParserService {
 	// that some other conditions (like having space on board) are not met and thus secrets
 	// should not be ticked off
 	public async parseSecrets(gameState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		for (const parser of this.secretParsers) {
-			if (parser.applies(gameEvent, gameState)) {
-				gameState = await parser.parse(gameState, gameEvent);
+		if (this.isSecretInPlayer(gameState)) {
+			for (const parser of this.secretParsers) {
+				if (parser.applies(gameEvent, gameState)) {
+					gameState = await parser.parse(gameState, gameEvent);
+				}
 			}
 		}
 		return gameState;
+	}
+
+	private isSecretInPlayer(gameState: GameState) {
+		return gameState.playerDeck?.secrets?.length > 0 || gameState?.opponentDeck?.secrets?.length > 0;
 	}
 
 	// Ice block is never handled, because ruling it out means ending the game
