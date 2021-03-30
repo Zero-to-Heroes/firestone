@@ -49,6 +49,7 @@ export class MindVisionService {
 			} else if ((await this.ow.inGame()) && res.gameChanged) {
 				if (!this.memoryUpdateListener) {
 					console.log('[mind-vision] starting game, starting memory poll');
+					this.initialize();
 					this.listenForUpdates();
 				}
 			}
@@ -355,6 +356,10 @@ export class MindVisionService {
 	}
 
 	private async initialize() {
+		if (this.initialized) {
+			return;
+		}
+
 		this.initialized = false;
 		try {
 			console.log('[mind-vision] plugin init starting', this.mindVisionPlugin);
