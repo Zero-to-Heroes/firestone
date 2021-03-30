@@ -19,8 +19,8 @@ export class GetInGameAchievementsProgressInfoOperation extends MindVisionOperat
 						completed: undefined,
 					})),
 				} as HsAchievementsInfo),
-			5,
-			3000,
+			2,
+			1000,
 		);
 	}
 }

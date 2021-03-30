@@ -10,6 +10,7 @@ import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
@@ -41,6 +42,7 @@ export class AchievementsMonitor {
 		private achievementsStorage: AchievementsLocalDbService,
 		private achievementsManager: AchievementsManager,
 		private memory: MemoryInspectionService,
+		private ow: OverwolfService,
 	) {
 		this.lastReceivedTimestamp = Date.now();
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
@@ -73,14 +75,27 @@ export class AchievementsMonitor {
 		for (const ach of rawAchievements) {
 			this.achievementQuotas[ach.id] = ach.quota;
 		}
+		if (await this.ow.inGame()) {
+			this.assignPreviousAchievements();
+		}
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			// console.log('[mind-vision] updated game status', res);
+			if (this.ow.exitGame(res)) {
+				this.previousAchievements = null;
+			} else if ((await this.ow.inGame()) && res.gameChanged) {
+				if (!this.previousAchievements) {
+					this.assignPreviousAchievements();
+				}
+			}
+		});
 	}
 
 	private async detectNewAchievementFromMemory(retriesLeft = 10, forceAchievementsUpdate = false) {
 		if (retriesLeft < 0) {
 			return;
 		}
-
 		// TODO: the "progress step" (like Setting the Standard) achievements are not
+
 		// returned here by the in game achievements progress
 		// Trying to read the achievements directly from memory, instead of from the
 		// indexeddb, to see if this solves the issue
@@ -90,20 +105,31 @@ export class AchievementsMonitor {
 			this.memory.getInGameAchievementsProgressInfo(),
 		]);
 		if (process.env.NODE_ENV !== 'production') {
-			console.log(
-				'[achievement-monitor] retrieved achievements from memory',
-				existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
-				achievementsProgress, // This has the correct progress
-				this.achievementQuotas,
-				this.previousAchievements,
-				(achievementsProgress?.achievements || [])?.filter(
+			console.debug('[achievement-monitor] retrieved achievements from memory', {
+				existingAchievements: existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
+				achievementsProgress: achievementsProgress, // This has the correct progress, unbless you're not in a game?
+				achievementQuotas: this.achievementQuotas,
+				previousAchievements: this.previousAchievements,
+				prorgressWithQuota: (achievementsProgress?.achievements || [])?.filter(
 					progress => progress.progress >= this.achievementQuotas[progress.id],
 				),
-			);
+			});
 		} else {
 			console.log('[achievement-monitor] retrieved achievements from memory');
 		}
-		const unlockedAchievements = (achievementsProgress?.achievements || [])
+		const computedProgress: readonly HsAchievementInfo[] = achievementsProgress?.achievements?.length
+			? achievementsProgress.achievements
+			: this.achievementsDiff(this.previousAchievements, existingAchievements);
+		// if (process.env.NODE_ENV !== 'production') {
+		// 	console.debug(
+		// 		'[achievement-monitor] computed progress',
+		// 		computedProgress,
+		// 		achievementsProgress,
+		// 		this.previousAchievements,
+		// 		existingAchievements,
+		// 	);
+		// }
+		const unlockedAchievements = computedProgress
 			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
 			.map(progress => progress.id)
 			.map(
@@ -149,6 +175,35 @@ export class AchievementsMonitor {
 		console.log('[achievement-monitor] built achievements, emitting events', achievements);
 		await Promise.all(achievements.map(ach => this.sendUnlockEventFromAchievement(ach)));
 		this.previousAchievements = existingAchievements;
+	}
+
+	private achievementsDiff(
+		previousAchievements: readonly HsAchievementInfo[],
+		currentAchievements: readonly HsAchievementInfo[],
+	): readonly HsAchievementInfo[] {
+		if (!previousAchievements?.length) {
+			return currentAchievements ?? [];
+		}
+		if (!currentAchievements?.length) {
+			return previousAchievements ?? [];
+		}
+		const allKeys = [...previousAchievements.map(a => a.id), ...currentAchievements.map(a => a.id)];
+		const uniqueKeys = [...new Set(allKeys)];
+		return uniqueKeys
+			.map(achievementId => {
+				const previousAchievement = previousAchievements.find(a => a.id === achievementId);
+				const currentAchievement = currentAchievements.find(a => a.id === achievementId);
+				const progress = currentAchievement?.progress ?? 0 - previousAchievement?.progress ?? 0;
+				if (progress <= 0) {
+					return null;
+				}
+				return {
+					id: achievementId,
+					progress: progress,
+					completed: currentAchievement.completed || previousAchievement.completed,
+				};
+			})
+			.filter(a => a);
 	}
 
 	private async handleEvent(gameEvent: GameEvent) {
@@ -252,15 +307,15 @@ export class AchievementsMonitor {
 	}
 
 	private async assignPreviousAchievements() {
-		const existingAchievements = await this.achievementsStorage.retrieveInGameAchievements();
+		const existingAchievements = await this.achievementsManager.getAchievements(true);
 		// console.debug('existing achievements', existingAchievements, this.previousAchievements);
 		if (!existingAchievements) {
 			return;
 		}
 
 		if (!this.previousAchievements) {
-			// console.debug('assigning previous achievements', existingAchievements);
-			this.previousAchievements = existingAchievements?.achievements;
+			//console.debug('assigning previous achievements', existingAchievements);
+			this.previousAchievements = existingAchievements;
 		}
 	}
 
