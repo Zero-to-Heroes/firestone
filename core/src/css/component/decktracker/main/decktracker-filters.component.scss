@@ -20,59 +20,38 @@
 	z-index: 2;
 	flex-wrap: wrap;
 	max-width: 100%;
-}
 
-// .title {
-// 	color: var(--default-title-color);
-// 	margin-right: 15px;
-// }
-
-// .filters {
-// 	display: flex;
-// 	list-style: none;
-
-// 	.filter:after {
-// 		border-right: 1px solid;
-// 		content: '';
-// 		padding-right: 10px;
-// 		margin-right: 10px;
-// 	}
-
-// 	.filter:last-child:after {
-// 		border-right: none;
-// 	}
-// }
-
-.filter-info {
-	width: 20px;
-	height: 20px;
-	position: relative;
-	top: 5px;
-	right: -15px;
-	margin-left: -20px;
-	--icon-color: var(--secondary-text-color);
-}
-
-.show-hidden-decks-link {
-	align-self: flex-end;
-	flex-grow: 1;
-	opacity: 0.8;
-	height: 30px;
-	display: flex;
-	align-items: flex-end;
-	justify-content: flex-end;
-	position: absolute;
-	top: -45px;
-	right: -15px;
-
-	::ng-deep .preference-toggle.preference-toggle.preference-toggle .settings-p {
-		color: var(--secondary-text-color);
-		width: auto;
-		margin-right: 10px;
+	.filter-info {
+		width: 20px;
+		height: 20px;
+		position: relative;
+		top: 5px;
+		right: -15px;
+		margin-left: -20px;
+		--icon-color: var(--secondary-text-color);
 	}
 
-	&:hover {
-		opacity: 1;
+	.show-hidden-decks-link {
+		align-self: flex-end;
+		flex-grow: 1;
+		opacity: 0.8;
+		height: 30px;
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-end;
+		position: absolute;
+		top: -45px;
+		right: -15px;
+
+		::ng-deep .preference-toggle.preference-toggle.preference-toggle .settings-p {
+			color: var(--secondary-text-color);
+			width: auto;
+			margin-right: 10px;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
 	}
 }
 
