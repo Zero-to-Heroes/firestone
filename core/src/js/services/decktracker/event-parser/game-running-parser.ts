@@ -42,7 +42,7 @@ export class GameRunningParser implements EventParser {
 			return state;
 		}
 		const newDeck = this.deckParser.buildEmptyDeckList(deckCount);
-		console.log('[game-running] building new deck', newDeck);
+		// console.log('[game-running] building new deck', newDeck);
 		return state.update({
 			deckList: [] as readonly DeckCard[],
 			deck: newDeck,
