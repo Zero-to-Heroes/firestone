@@ -207,6 +207,7 @@ export class Preferences {
 	readonly twitchUserName: string;
 
 	readonly outOfCardsToken: OutOfCardsToken;
+	readonly outOfCardsShowNotifOnSync: boolean = false;
 
 	readonly ftue: Ftue = new Ftue();
 }

@@ -90,6 +90,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 						</button>
 					</div>
 				</div>
+				<preference-toggle
+					*ngIf="oocLoginUrl && oocLoggedIn"
+					class="collection-sync-notif"
+					field="outOfCardsShowNotifOnSync"
+					label="Show notification when collection is synchronizeed"
+				></preference-toggle>
 			</section>
 		</div>
 	`,
@@ -112,8 +118,6 @@ export class SettingsGeneralThirdPartyComponent implements AfterViewInit {
 			await this.loadDefaultValues();
 		});
 		this.cdr.detach();
-		const mainWindow = this.ow.getMainWindow();
-		const stateUpdater = mainWindow.outOfCardsAuthUpdater;
 	}
 
 	@HostListener('window:beforeunload')
