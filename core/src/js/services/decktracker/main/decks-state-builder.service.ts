@@ -7,6 +7,7 @@ import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
@@ -204,8 +205,20 @@ export class DecksStateBuilderService {
 			winRatePercentage: (100.0 * totalWins) / totalGames,
 			hidden: hiddenDeckCodes.includes(deckstring),
 			matchupStats: matchupStats,
+			format: this.buildFormat(stats),
 			replays: stats,
 		} as DeckSummary);
+	}
+
+	private buildFormat(stats: readonly GameStat[]): StatGameFormatType {
+		const uniqueFormats: readonly StatGameFormatType[] = [...new Set(stats.map(stat => stat.gameFormat))];
+		if (uniqueFormats.includes('wild')) {
+			return 'wild';
+		}
+		if (uniqueFormats.includes('classic')) {
+			return 'classic';
+		}
+		return 'standard';
 	}
 
 	private buildMatchupStats(stats: readonly GameStat[]): readonly MatchupStat[] {
