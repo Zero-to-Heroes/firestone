@@ -22,6 +22,8 @@
 
 		::ng-deep bgs-board {
 			flex-shrink: 0;
+			height: calc(100% - 70px);
+
 			.board {
 				margin-bottom: 0px;
 
@@ -37,6 +39,7 @@
 		display: flex;
 		position: relative;
 		top: 10px;
+		height: 70px;
 
 		.triples-section {
 			display: flex;
