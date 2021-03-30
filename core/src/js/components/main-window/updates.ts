@@ -31,18 +31,18 @@ export const updates: readonly Update[] = [
 	{
 		version: '7.6.1',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Biggest HS patch ever',
-				text: `
-					Patch 20.0 is the biggest patch ever for Hearthstone. The app should now be fully working, but it's likely that some bugs slipped through the cracks. Please use the "report a bug" button at the top right if you see anything strange :)
-					<br/>
-					<br/>
-					Take care,
-					<br/>
-					Seb.
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Biggest HS patch ever',
+			// 	text: `
+			// 		Patch 20.0 is the biggest patch ever for Hearthstone. The app should now be fully working, but it's likely that some bugs slipped through the cracks. Please use the "report a bug" button at the top right if you see anything strange :)
+			// 		<br/>
+			// 		<br/>
+			// 		Take care,
+			// 		<br/>
+			// 		Seb.
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -52,7 +52,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'content',
-								text: `The app has been updated for patch 20.0, and the biggest bugs have been fixed.`,
+								text: `The app has been updated for the release of Forged in the Barrens and the new Core set.`,
 							},
 						],
 					},

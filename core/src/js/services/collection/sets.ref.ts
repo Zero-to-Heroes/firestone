@@ -5,15 +5,7 @@ export const standardSets: readonly string[] = [
 	'darkmoon_races',
 	'darkmoon_faire',
 	'scholomance',
-	'black_temple',
-	'demon_hunter_initiate',
-	'yod',
-	'dragons',
-	'uldum',
-	'dalaran',
 	'core',
-	'expert1', // This should be removed soon?
-	'basic', // This should be removed soon
 ];
 
 export const sets: readonly ReferenceSet[] = [
