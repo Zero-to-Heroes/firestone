@@ -7,6 +7,7 @@ import { ApiRunner } from '../api-runner';
 import { CollectionManager } from '../collection/collection-manager.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { OwNotificationsService } from '../notifications.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
@@ -27,6 +28,7 @@ export class OutOfCardsService {
 		@Optional() private events: Events,
 		@Optional() private ow: OverwolfService,
 		@Optional() private gameEvents: GameEventsEmitterService,
+		@Optional() private notifs: OwNotificationsService,
 	) {
 		window['outOfCardsAuthUpdater'] = this.stateUpdater;
 		this.stateUpdater.subscribe((token: OutOfCardsToken) => {
@@ -39,7 +41,7 @@ export class OutOfCardsService {
 
 	private async initCollectionRefreshListeners() {
 		if (this.events) {
-			this.events.on(Events.NEW_PACK).subscribe(event => this.queueCollectionRefresh());
+			this.events.on(Events.NEW_PACK).subscribe(event => this.queueCollectionRefresh(REFRESH_DEBOUNCE_MS));
 		}
 
 		if (this.gameEvents) {
@@ -56,7 +58,7 @@ export class OutOfCardsService {
 		if (this.ow) {
 			this.ow.addGameInfoUpdatedListener(async (res: any) => {
 				if ((await this.ow.inGame()) && res.gameChanged) {
-					this.queueCollectionRefresh();
+					this.queueCollectionRefresh(REFRESH_DEBOUNCE_MS);
 				}
 			});
 			if (await this.ow.inGame()) {
@@ -87,17 +89,15 @@ export class OutOfCardsService {
 		this.uploadCollection();
 	}
 
-	private async queueCollectionRefresh() {
+	private async queueCollectionRefresh(debounceTime = 0) {
 		if (this.refreshTimer) {
 			clearTimeout(this.refreshTimer);
 		}
 		this.refreshTimer = setTimeout(() => {
 			this.uploadCollection();
-		}, REFRESH_DEBOUNCE_MS);
+		}, debounceTime);
 	}
 
-	// TODO: add timer when listening to events, so that the collection is not uploaded right away
-	// (e.g. if the user opens many packs)
 	private async uploadCollection() {
 		const token: OutOfCardsToken = await this.getToken();
 		console.debug('[ooc-auth] retrieved token', token);
@@ -114,6 +114,32 @@ export class OutOfCardsService {
 			bearerToken: token.access_token,
 		});
 		console.log('[ooc-auth] collection sync result', result);
+
+		const prefs = await this.prefs.getPreferences();
+		if (prefs.outOfCardsShowNotifOnSync) {
+			this.notifs.emitNewNotification({
+				content: `
+					<div class="general-message-container general-theme">
+						<div class="firestone-icon">
+							<svg class="svg-icon-fill">
+								<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
+							</svg>
+						</div>
+						<div class="message">
+							<div class="title">
+								<span>Out of Cards</span>
+							</div>
+							<span class="text">Collection synchronized</span>
+						</div>
+						<button class="i-30 close-button">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="assets/svg/sprite.svg#window-control_close"></use>
+							</svg>
+						</button>
+					</div>`,
+				notificationId: `ooc-collection-synchronized`,
+			});
+		}
 	}
 
 	private async getToken(): Promise<OutOfCardsToken> {
