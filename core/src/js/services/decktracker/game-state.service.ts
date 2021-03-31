@@ -664,13 +664,14 @@ export class GameStateService {
 			// Here technically it's not totally correct, as you'd have to know if the
 			// frozen minion will unfreeze in the opponent's turn
 			(isActivePlayer && this.hasTag(entity, GameTag.FROZEN)) ||
-			(isActivePlayer && this.hasTag(entity, GameTag.CANT_ATTACK));
+			this.hasTag(entity, GameTag.CANT_ATTACK);
 		// console.log(
 		// 	'can attack?',
 		// 	!impossibleToAttack,
-		// 	entity.cardId,
+		// 	entity?.cardId,
 		// 	this.hasTag(entity, GameTag.EXHAUSTED),
 		// 	this.hasTag(entity, GameTag.ATTACKABLE_BY_RUSH),
+		// 	this.hasTag(entity, GameTag.CANT_ATTACK),
 		// 	entity,
 		// );
 		// charge / rush?
