@@ -3,7 +3,6 @@ import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
 import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BgsStatsFilterId } from '../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -20,16 +19,14 @@ export class BgsChangePostMatchStatsTabsNumberParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsChangePostMatchStatsTabsNumberEvent,
 	): Promise<BattlegroundsState> {
-		// console.log('updating new stats', event, currentState);
+		// console.debug('updating new stats', event, currentState);
 		const stage = currentState.stages.find(stage => stage.id === 'post-match') as BgsPostMatchStage;
 		const panel: BgsPostMatchStatsPanel = stage.panels.find(
 			panel => panel.id === 'bgs-post-match-stats',
 		) as BgsPostMatchStatsPanel;
 		await this.prefs.updateBgsNumberOfDisplayedTabs(event.tabsNumber);
-		const tabs = (await this.prefs.getPreferences()).bgsSelectedTabs;
-		const selectedStats: readonly BgsStatsFilterId[] = tabs.slice(0, event.tabsNumber);
 		const newPanel = panel.update({
-			selectedStats: selectedStats,
+			numberOfDisplayedTabs: event.tabsNumber,
 		} as BgsPostMatchStatsPanel);
 		const newStage = stage.update({
 			panels: stage.panels.map(panel =>

@@ -122,6 +122,10 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `(ALPHA) Add option to show multiple graphs at the same time in live stats and replays stats.`,
+							},
+							{
 								type: 'ui',
 								text: `Show the current run's info on top of the community info on the various graphs to make it more legible.`,
 							},

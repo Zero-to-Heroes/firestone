@@ -16,8 +16,8 @@ export class FeatureFlags {
 	public static readonly ENABLE_BG_SHOW_ACHIEVEMENTS = true;
 	public static readonly ENABLE_BEST_KNOWN_PACK = true;
 	public static readonly ENABLE_GOLDEN_CARDS = true;
+	public static readonly ENABLE_MULTI_GRAPHS = true;
 
-	public static readonly ENABLE_MULTI_GRAPHS = false; // Doesn't work anymore?
 	// Properly test the memory footprint of these features before release
 	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false; // Doesn't work anymore?
 	public static readonly ENABLE_RANKED_ARCHETYPE = false; // Doesn't work anymore?

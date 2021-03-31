@@ -143,8 +143,14 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		if (!this.boardMinions || this.boardMinions.length === 0) {
 			console.warn('missing board minions in final board state', value.player.boardHistory?.length);
 		}
-		// Hard-code first tab to prevent weird bug where multi select is still occurring
-		this.selectedTabs = [(value.selectedStats ?? this.selectedTabs ?? ['hp-by-turn'])[0]];
+		let tabs = value.selectedStats ?? this.selectedTabs ?? ['hp-by-turn'];
+		if (!FeatureFlags.ENABLE_MULTI_GRAPHS) {
+			// Hard-code first tab to prevent weird bug where multi select is still occurring
+			tabs = [tabs[0]];
+		}
+		const numberOfTabsToShow = value.numberOfDisplayedTabs ?? 1;
+		this.selectedTabs = tabs.slice(0, numberOfTabsToShow);
+		console.debug('showing tabs', tabs, numberOfTabsToShow, this.selectedTabs, value);
 		this.addMinionStats();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

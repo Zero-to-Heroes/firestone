@@ -6,12 +6,12 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationReplays } from '../../../../../models/mainwindow/navigation/navigation-replays';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { MatchDetail } from '../../../../../models/mainwindow/replays/match-detail';
-import { BgsRunStatsService } from '../../../../battlegrounds/bgs-run-stats.service';
+import { PreferencesService } from '../../../../preferences.service';
 import { ShowMatchStatsEvent } from '../../events/replays/show-match-stats-event';
 import { Processor } from '../processor';
 
 export class ShowMatchStatsProcessor implements Processor {
-	constructor(private readonly bgsRunStats: BgsRunStatsService) {}
+	constructor(private readonly prefs: PreferencesService) {}
 
 	public async process(
 		event: ShowMatchStatsEvent,
@@ -48,6 +48,7 @@ export class ShowMatchStatsProcessor implements Processor {
 					: null,
 				selectedStats: null, // We use the navigation-level info, to avoid
 				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
+				numberOfDisplayedTabs: (await this.prefs.getPreferences()).bgsNumberOfDisplayedTabs,
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);
 		const newReplays = navigationState.navigationReplays.update({

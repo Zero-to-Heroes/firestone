@@ -89,6 +89,10 @@
 		display: grid;
 		grid-gap: 20px;
 		grid-template-columns: repeat(2, calc(50% - 10px));
+
+		::ng-deep bgs-chart-hp .legend .item .portrait {
+			max-width: 40px;
+		}
 	}
 
 	&.multi-4 {

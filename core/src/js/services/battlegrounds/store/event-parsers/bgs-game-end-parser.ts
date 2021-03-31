@@ -90,7 +90,7 @@ export class BgsGameEndParser implements EventParser {
 			newBestUserStats: newBestUserStats,
 			globalStats: currentState.globalStats,
 			player: player,
-			selectedStats: prefs.bgsSelectedTabs,
+			selectedStats: prefs.bgsSelectedTabs2,
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 			// isComputing: false,
 			name: 'You finished #' + finalPosition,

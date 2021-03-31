@@ -16,10 +16,11 @@ export class ChangeMatchStatsNumberOfTabsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateBgsNumberOfDisplayedTabs(event.tabsNumber);
-		const tabs = (await this.prefs.getPreferences()).bgsSelectedTabs;
+		const tabs = (await this.prefs.getPreferences()).bgsSelectedTabs2;
 		const selectedStats: readonly BgsStatsFilterId[] = tabs.slice(0, event.tabsNumber);
+		// console.debug('changing number of displayed tabs', event, tabs, selectedStats);
 		const newReplays = navigationState.navigationReplays.update({
-			selectedStatsTabs: selectedStats,
+			numberOfDisplayedTabs: event.tabsNumber,
 		} as NavigationReplays);
 		return [
 			null,

@@ -92,7 +92,7 @@ export class BgsInitParser implements EventParser {
 			newBestUserStats: null,
 			globalStats: currentState.globalStats,
 			player: player,
-			selectedStats: prefs.bgsSelectedTabs,
+			selectedStats: prefs.bgsSelectedTabs2,
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 			// isComputing: false,
 			name: 'Live stats',

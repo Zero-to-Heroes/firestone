@@ -44,15 +44,14 @@ export class MatchDetailsComponent {
 	}
 
 	@Input() set navigation(value: NavigationReplays) {
-		// console.log('setting replay info', value);
 		this.selectedView = value.currentView === 'match-details' ? value.selectedTab : null;
 		this.selectedReplay = value.selectedReplay;
 		this.replayInfo = value.selectedReplay?.replayInfo;
 		this.panel = value.selectedReplay?.bgsPostMatchStatsPanel;
 		this.playerCardId = this.panel?.player?.cardId;
-		this.selectedTabs = value.selectedStatsTabs;
 		this.mmr = parseInt(value.selectedReplay?.replayInfo?.playerRank);
-		// console.log('built panel', this.panel);
+		this.selectedTabs = value.selectedStatsTabs.slice(0, value.numberOfDisplayedTabs);
+		console.log('setting replay info', this.selectedTabs, value);
 	}
 
 	selectedView: string;
