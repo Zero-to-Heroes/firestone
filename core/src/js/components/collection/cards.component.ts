@@ -85,9 +85,7 @@ import { PreferencesService } from '../../services/preferences.service';
 					</ng-template>
 				</ng-select>
 			</div>
-			<div class="loading" [hidden]="!loading"><div>Loading cards...</div></div>
-			<!-- TODO: infinite scroll for cards list -->
-			<ul class="cards-list" [hidden]="loading || _activeCards.length === 0" scrollable>
+			<infinite-scroll class="cards-list" (scrolled)="onScroll()" scrollable>
 				<li
 					*ngFor="let card of _activeCards; let i = index; trackBy: trackByCardId"
 					[ngClass]="{ 'hidden visuallyHidden': !card.displayed }"
@@ -96,7 +94,8 @@ import { PreferencesService } from '../../services/preferences.service';
 				>
 					<card-view [card]="card" [highRes]="false">/</card-view>
 				</li>
-			</ul>
+				<div class="loading" *ngIf="loading">Loading more cards...</div>
+			</infinite-scroll>
 			<collection-empty-state
 				[set]="_set"
 				[activeFilter]="cardsOwnedActiveFilter"
@@ -193,6 +192,8 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	private processingTimeout;
 	private preferencesSubscription: Subscription;
 
+	private iterator: IterableIterator<void>;
+
 	constructor(
 		private readonly elRef: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
@@ -280,6 +281,10 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		return card.id;
 	}
 
+	onScroll() {
+		this.iterator && this.iterator.next();
+	}
+
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
@@ -295,36 +300,6 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	// onImageLoaded(cardId: string) {
-	// 	if (!this.imagesLoaded.includes(cardId)) {
-	// 		console.log('new image loaded', this.imagesLoaded);
-	// 		this.imagesLoaded.push(cardId);
-	// 	}
-	// 	this.imagesToLoad = this.imagesToLoad.filter(id => id !== cardId);
-
-	// 	if (this.imagesToLoad.length === 0) {
-	// 		setTimeout(() => {
-	// 			console.log('requesting to load more images', this.imagesLoaded, this.imagesToLoad);
-	// 			this.updateImagesToLoad();
-	// 		}, 200);
-	// 	}
-
-	// 	// if (this.imagesLoaded >= this.imagestoLoad) {
-	// 	// 	setTimeout(() => {
-	// 	// 		console.log('requesting to load more images', this.imagesLoaded, this.imagestoLoad);
-	// 	// 		this.imagestoLoad += 7;
-	// 	// 		if (!(this.cdr as ViewRef)?.destroyed) {
-	// 	// 			this.cdr.detectChanges();
-	// 	// 		}
-	// 	// 	}, 200);
-	// 	// }
-	// }
-
-	// shouldLoadImage(cardId: string) {
-	// 	console.log('should load image?', cardId, this.imagesToLoad);
-	// 	return this.imagesToLoad.includes(cardId);
-	// }
-
 	private updateShownCards() {
 		this._activeCards = (this._cardList || []).map(card =>
 			this.shouldBeShown(card)
@@ -339,29 +314,20 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private shouldBeShown(card: SetCard): boolean {
-		const shouldBeShown = this.filterRarity()(card) && this.filterClass()(card) && this.filterCardsOwned()(card);
-		return shouldBeShown;
+		return this.filterRarity()(card) && this.filterClass()(card) && this.filterCardsOwned()(card);
 	}
 
 	private gradualLoadActiveCards(cards: SetCard[]) {
-		const it = this.doGradualLoad(cards);
-		this.progressiveLoad(it);
+		// Scroll to top
+		const listEl = this.elRef.nativeElement.querySelector('.cards-list');
+		if (listEl) {
+			listEl.scrollTo(0, 0);
+		}
+		this.iterator = this.buildIterator(cards);
+		this.onScroll();
 	}
 
-	private progressiveLoad(it: IterableIterator<void>) {
-		const itValue = it.next();
-		if (!itValue.done) {
-			// For now, do it in a single big step, and show the results once evrything is loaded
-			this.processingTimeout = setTimeout(() => this.progressiveLoad(it), 1);
-		}
-	}
-
-	private *doGradualLoad(cards: SetCard[]): IterableIterator<void> {
-		// console.log('starting loading cards', cards);
-		this.loading = true;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+	private *buildIterator(cards: SetCard[]): IterableIterator<void> {
 		this._activeCards = [];
 		const workingCards = [...cards];
 		const step = 50;
@@ -369,6 +335,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			// console.log('working with array of', workingCards.length);
 			const cardsToAdd = workingCards.splice(0, Math.min(step, workingCards.length));
 			this._activeCards.push(...cardsToAdd);
+			this.loading = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -378,25 +345,8 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// this.imagesToLoad = [];
-		// this.updateImagesToLoad();
 		return;
 	}
-
-	// private updateImagesToLoad() {
-	// 	if (this.imagesToLoad.length >= 10) {
-	// 		return;
-	// 	}
-
-	// 	for (const card of this._activeCards) {
-	// 		if (!this.imagesLoaded.includes(card.id) && this.imagesToLoad.length < 10) {
-	// 			this.imagesToLoad.push(card.id);
-	// 		}
-	// 	}
-	// 	if (!(this.cdr as ViewRef)?.destroyed) {
-	// 		this.cdr.detectChanges();
-	// 	}
-	// }
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
