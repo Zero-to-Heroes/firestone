@@ -160,7 +160,7 @@ export class RewardMonitorService {
 
 	public async getXpGained(): Promise<number> {
 		const xpForGame = await this.getXpForGameInfo();
-		return xpForGame.xpGainedWithoutBonus;
+		return xpForGame?.xpGainedWithoutBonus;
 	}
 
 	public async getXpForGameInfo(): Promise<XpForGameInfo> {
