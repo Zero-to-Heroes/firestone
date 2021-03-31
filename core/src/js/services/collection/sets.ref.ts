@@ -89,11 +89,11 @@ export const sets: readonly ReferenceSet[] = [
 		name: "Journey to Un'Goro",
 		launchDate: new Date('2017-04-06'),
 	},
-	{
-		id: 'hof',
-		name: 'Hall of Fame',
-		launchDate: new Date('2017-04-04'),
-	},
+	// {
+	// 	id: 'hof',
+	// 	name: 'Hall of Fame',
+	// 	launchDate: new Date('2017-04-04'),
+	// },
 	{
 		id: 'gangs',
 		name: 'Mean Streets of Gadgetzan',
@@ -139,14 +139,19 @@ export const sets: readonly ReferenceSet[] = [
 		name: 'Core',
 		launchDate: new Date('2021-03-25'),
 	},
+	// {
+	// 	id: 'expert1',
+	// 	name: 'Expert',
+	// 	launchDate: new Date('2014-03-11'),
+	// },
+	// {
+	// 	id: 'basic',
+	// 	name: 'Basic',
+	// 	launchDate: new Date('2014-03-11'),
+	// },
 	{
-		id: 'expert1',
-		name: 'Expert',
-		launchDate: new Date('2014-03-11'),
-	},
-	{
-		id: 'basic',
-		name: 'Basic',
-		launchDate: new Date('2014-03-11'),
+		id: 'legacy',
+		name: 'Legacy',
+		launchDate: new Date('2021-03-30'),
 	},
 ];
