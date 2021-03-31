@@ -86,20 +86,15 @@ import { PreferencesService } from '../../services/preferences.service';
 				</ng-select>
 			</div>
 			<div class="loading" [hidden]="!loading"><div>Loading cards...</div></div>
-			<ul class="cards-list" [hidden]="loading || _activeCards.length === 0">
+			<!-- TODO: infinite scroll for cards list -->
+			<ul class="cards-list" [hidden]="loading || _activeCards.length === 0" scrollable>
 				<li
 					*ngFor="let card of _activeCards; let i = index; trackBy: trackByCardId"
 					[ngClass]="{ 'hidden visuallyHidden': !card.displayed }"
 					[style.width.px]="cardWidth"
 					[style.height.px]="cardHeight"
 				>
-					<card-view
-						[card]="card"
-						(imageLoaded)="onImageLoaded()"
-						[loadImage]="shouldLoadImage(i)"
-						[highRes]="false"
-						>/</card-view
-					>
+					<card-view [card]="card" [highRes]="false">/</card-view>
 				</li>
 			</ul>
 			<collection-empty-state
@@ -186,14 +181,14 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	classActiveFilter = this.CLASS_FILTER_ALL;
 	rarityActiveFilter = this.RARITY_FILTER_ALL;
 	cardsOwnedActiveFilter = this.FILTER_ALL;
-	loading = false;
-	imagestoLoad = 0;
 	highRes: boolean;
+	loading = false;
 
 	cardWidth = this.DEFAULT_CARD_WIDTH;
 	cardHeight = this.DEFAULT_CARD_HEIGHT;
 
-	private imagesLoaded = 0;
+	// private imagesLoaded: string[] = [];
+	// private imagesToLoad: string[] = [];
 
 	private processingTimeout;
 	private preferencesSubscription: Subscription;
@@ -289,15 +284,6 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
 		const scrollbarWidth = 15;
-		const cardsList = this.elRef.nativeElement.querySelector('.cards-list');
-		if (cardsList) {
-			const rect = cardsList.getBoundingClientRect();
-			if (event.offsetX >= rect.width - scrollbarWidth) {
-				event.stopPropagation();
-				return;
-			}
-		}
-
 		const optionsDropDown = this.elRef.nativeElement.querySelector('.options');
 		// If not hidden
 		if (optionsDropDown) {
@@ -309,35 +295,35 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	onImageLoaded() {
-		this.imagesLoaded++;
-		// console.log('image loaded', this.imagesLoaded);
-		if (this.imagesLoaded >= this.imagestoLoad) {
-			setTimeout(() => {
-				// console.log('requesting to load more images', this.imagesLoaded, this.imagestoLoad);
-				this.imagestoLoad += 7;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
-			}, 200);
-		}
-	}
+	// onImageLoaded(cardId: string) {
+	// 	if (!this.imagesLoaded.includes(cardId)) {
+	// 		console.log('new image loaded', this.imagesLoaded);
+	// 		this.imagesLoaded.push(cardId);
+	// 	}
+	// 	this.imagesToLoad = this.imagesToLoad.filter(id => id !== cardId);
 
-	shouldLoadImage(index: number) {
-		// console.log('should load image?', index, this.imagestoLoad);
-		return index <= this.imagestoLoad;
-	}
+	// 	if (this.imagesToLoad.length === 0) {
+	// 		setTimeout(() => {
+	// 			console.log('requesting to load more images', this.imagesLoaded, this.imagesToLoad);
+	// 			this.updateImagesToLoad();
+	// 		}, 200);
+	// 	}
 
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.highRes = preferences.collectionUseHighResImages;
-		const cardScale = preferences.collectionCardScale / 100;
-		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
-		this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	// 	// if (this.imagesLoaded >= this.imagestoLoad) {
+	// 	// 	setTimeout(() => {
+	// 	// 		console.log('requesting to load more images', this.imagesLoaded, this.imagestoLoad);
+	// 	// 		this.imagestoLoad += 7;
+	// 	// 		if (!(this.cdr as ViewRef)?.destroyed) {
+	// 	// 			this.cdr.detectChanges();
+	// 	// 		}
+	// 	// 	}, 200);
+	// 	// }
+	// }
+
+	// shouldLoadImage(cardId: string) {
+	// 	console.log('should load image?', cardId, this.imagesToLoad);
+	// 	return this.imagesToLoad.includes(cardId);
+	// }
 
 	private updateShownCards() {
 		this._activeCards = (this._cardList || []).map(card =>
@@ -347,12 +333,13 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 						displayed: false,
 				  } as SetCard),
 		);
+		// console.debug('active cards', this._activeCards);
+
 		this.gradualLoadActiveCards(this._activeCards.filter(card => card.displayed));
 	}
 
 	private shouldBeShown(card: SetCard): boolean {
 		const shouldBeShown = this.filterRarity()(card) && this.filterClass()(card) && this.filterCardsOwned()(card);
-		// console.log('should be shown?', shouldBeShown, card);
 		return shouldBeShown;
 	}
 
@@ -377,7 +364,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		}
 		this._activeCards = [];
 		const workingCards = [...cards];
-		const step = 200;
+		const step = 50;
 		while (workingCards.length > 0) {
 			// console.log('working with array of', workingCards.length);
 			const cardsToAdd = workingCards.splice(0, Math.min(step, workingCards.length));
@@ -388,14 +375,38 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			yield;
 		}
 		this.loading = false;
-		this.imagestoLoad = 10;
-		this.imagesLoaded = 0;
-		// console.log('init images to load', this.imagestoLoad);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// console.log('dragual load over', this._activeCards.length);
+		// this.imagesToLoad = [];
+		// this.updateImagesToLoad();
 		return;
+	}
+
+	// private updateImagesToLoad() {
+	// 	if (this.imagesToLoad.length >= 10) {
+	// 		return;
+	// 	}
+
+	// 	for (const card of this._activeCards) {
+	// 		if (!this.imagesLoaded.includes(card.id) && this.imagesToLoad.length < 10) {
+	// 			this.imagesToLoad.push(card.id);
+	// 		}
+	// 	}
+	// 	if (!(this.cdr as ViewRef)?.destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.highRes = preferences.collectionUseHighResImages;
+		const cardScale = preferences.collectionCardScale / 100;
+		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
+		this.cardHeight = cardScale * this.DEFAULT_CARD_HEIGHT;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private filterRarity() {

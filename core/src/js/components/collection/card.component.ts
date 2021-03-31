@@ -6,7 +6,6 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
-	Output,
 	ViewRef,
 } from '@angular/core';
 import { SetCard } from '../../models/set';
@@ -51,7 +50,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardComponent implements AfterViewInit {
-	@Output() imageLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
+	// @Output() imageLoaded: EventEmitter<string> = new EventEmitter<string>();
 
 	@Input() set card(card: SetCard) {
 		this._card = card;
@@ -60,10 +59,10 @@ export class CardComponent implements AfterViewInit {
 		this.updateImage();
 	}
 
-	@Input() set loadImage(value: boolean) {
-		this._loadImage = value;
-		this.updateImage();
-	}
+	// @Input() set loadImage(value: boolean) {
+	// 	this._loadImage = value;
+	// 	this.updateImage();
+	// }
 
 	@Input() set highRes(value: boolean) {
 		this._highRes = value;
@@ -88,7 +87,7 @@ export class CardComponent implements AfterViewInit {
 	_card: SetCard;
 	_highRes = false;
 
-	private _loadImage = true;
+	// private _loadImage = true;
 	private _imageLoaded: boolean;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -109,17 +108,17 @@ export class CardComponent implements AfterViewInit {
 		this.showPlaceholder = false;
 		this._imageLoaded = true;
 		// console.log('image loaded', this.image);
-		this.imageLoaded.next(true);
+		// this.imageLoaded.next(this._card.id);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	private updateImage() {
-		if (!this._loadImage) {
-			this.image = undefined;
-			return;
-		}
+		// if (!this._loadImage) {
+		// 	this.image = undefined;
+		// 	return;
+		// }
 		if (!this._imageLoaded) {
 			this.showPlaceholder = true;
 		}
