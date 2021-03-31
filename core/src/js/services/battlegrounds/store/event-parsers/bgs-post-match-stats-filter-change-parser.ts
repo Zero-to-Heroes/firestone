@@ -20,7 +20,7 @@ export class BgsPostMatchStatsFilterChangeParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsPostMatchStatsFilterChangeEvent,
 	): Promise<BattlegroundsState> {
-		console.log('updating new stats', event, currentState);
+		console.debug('updating new stats', event, currentState);
 		const stage = currentState.stages.find(stage => stage.id === 'post-match') as BgsPostMatchStage;
 		const panel: BgsPostMatchStatsPanel = stage.panels.find(
 			panel => panel.id === 'bgs-post-match-stats',
@@ -29,6 +29,7 @@ export class BgsPostMatchStatsFilterChangeParser implements EventParser {
 			index === event.tabIndex ? event.statId : tab,
 		);
 		await this.prefs.updateBgsSelectedTabs(selectedStats);
+		console.debug('selectedStats', selectedStats);
 
 		const newPanel = panel.update({
 			selectedStats: selectedStats,

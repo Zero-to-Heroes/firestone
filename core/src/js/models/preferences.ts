@@ -182,7 +182,7 @@ export class Preferences {
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
-	readonly bgsSelectedTabs: readonly BgsStatsFilterId[] = [
+	readonly bgsSelectedTabs2: readonly BgsStatsFilterId[] = [
 		'hp-by-turn',
 		'winrate-per-turn',
 		'warband-total-stats-by-turn',

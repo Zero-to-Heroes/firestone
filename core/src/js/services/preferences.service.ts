@@ -219,7 +219,7 @@ export class PreferencesService {
 
 	public async updateBgsSelectedTabs(selectedStats: readonly BgsStatsFilterId[]) {
 		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, bgsSelectedTabs: selectedStats };
+		const newPrefs: Preferences = { ...prefs, bgsSelectedTabs2: selectedStats };
 		await this.savePreferences(newPrefs);
 	}
 
