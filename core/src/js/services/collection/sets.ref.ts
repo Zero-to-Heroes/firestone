@@ -6,6 +6,7 @@ export const standardSets: readonly string[] = [
 	'darkmoon_faire',
 	'scholomance',
 	'core',
+	'black_temple',
 ];
 
 export const sets: readonly ReferenceSet[] = [
