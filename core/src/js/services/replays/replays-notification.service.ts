@@ -20,11 +20,7 @@ export class ReplaysNotificationService {
 		this.events
 			.on(Events.GAME_STATS_UPDATED)
 			.subscribe(data => this.showNewMatchEndNotification(Object.assign(new GameStats(), data.data[0])));
-		// this.events.on(Events.GAME_END).subscribe(data => this.showReplayRecordingStart(data.data[0]));
 		console.log('[replays-notification] listening for achievement completion events');
-		window['hop'] = () => {
-			this.showNewMatchEndNotification({ stats: [GameStat.create({} as any)] } as any);
-		};
 	}
 
 	private async showNewMatchEndNotification(stats: GameStats) {
@@ -60,7 +56,7 @@ export class ReplaysNotificationService {
 			<div class="xp-text">
 				<span class="text">You gained</span>
 				<div class="value ${bonusClass} has-tooltip">
-					<span class="xp-value">${xpForGame.xpGained}</span>
+					<span class="xp-value">${xpForGame.realXpGained}</span>
 					<span class="tooltip xp-bonus ${bonusClass}">${xpForGame.bonusXp ? xpForGame.bonusXp : 'No'} XP bonus</span>
 				</div>
 				<span class="text">XP this match</span>

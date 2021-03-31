@@ -8,16 +8,14 @@
 	background-image: url('/Files/assets/images/backgrounds/home-screen-bg.png');
 	background-size: 100%;
 	background-position: center center;
-	outline: 1px solid #303352;
+	outline: 1px solid #472406;
+	width: 350px;
+	height: 80px;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
 	padding: 15px;
-	font-family: 'Open Sans', sans-serif;
-	font-weight: 400;
-	color: #a89782;
-	font-size: 13px;
-	width: 280px;
 
 	.title {
+		@extend %achievement-name;
 		font-weight: bold;
 		font-size: 13px;
 		margin-bottom: 5px;
@@ -51,11 +49,12 @@
 		right: 0;
 		width: 30px;
 		height: 30px;
-		--icon-color: #9fb6d7;
+		--icon-color: #d9c3ab;
 
 		&:hover {
-			--icon-color: #303352;
-			background: #9fb6d7;
+			color: #190505;
+			--icon-color: #190505;
+			background: #d9c3ab;
 		}
 	}
 }

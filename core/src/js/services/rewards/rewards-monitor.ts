@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Map } from 'immutable';
-import { GameEvent } from '../../models/game-event';
+import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Preferences } from '../../models/preferences';
-import { RewardsTrackInfo } from '../../models/rewards-track-info';
+import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OwNotificationsService } from '../notifications.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -14,72 +14,143 @@ export class RewardMonitorService {
 	private static readonly XP_PER_LEVEL: Map<number, number> = Map([
 		[1, 0],
 		[2, 100],
-		[3, 150],
-		[4, 200],
-		[5, 300],
-		[6, 450],
-		[7, 600],
-		[8, 750],
-		[9, 900],
-		[10, 1050],
-		[11, 1250],
-		[12, 1500],
-		[13, 1750],
-		[14, 2000],
-		[15, 2200],
-		[16, 2400],
-		[17, 2500],
-		[18, 2600],
-		[19, 2700],
-		[20, 2800],
-		[21, 2900],
-		[22, 3000],
-		[23, 3100],
-		[24, 3200],
-		[25, 3300],
-		[26, 3450],
-		[27, 3600],
-		[28, 3750],
-		[29, 3900],
-		[30, 4050],
-		[31, 4250],
-		[32, 4450],
-		[33, 4650],
-		[34, 4850],
-		[35, 5000],
-		[36, 5000],
-		[37, 5000],
-		[38, 5000],
-		[39, 5000],
-		[40, 5000],
-		[41, 5000],
-		[42, 5000],
-		[43, 5000],
-		[44, 5000],
-		[45, 5000],
-		[46, 5000],
-		[47, 5000],
-		[48, 5000],
-		[49, 5000],
-		[50, 5000],
-		[51, 4000],
-		[52, 4050],
-		[53, 4100],
-		[54, 4150],
-		[55, 4200],
-		[56, 4250],
-		[57, 4300],
-		[58, 4350],
-		[59, 4400],
-		[60, 4500],
+		[3, 100],
+		[4, 150],
+		[5, 150],
+		[6, 225],
+		[7, 225],
+		[8, 300],
+		[9, 300],
+		[10, 325],
+		[11, 325],
+		[12, 350],
+		[13, 350],
+		[14, 375],
+		[15, 375],
+		[16, 400],
+		[17, 400],
+		[18, 425],
+		[19, 425],
+		[20, 450],
+		[21, 450],
+		[22, 550],
+		[23, 600],
+		[24, 650],
+		[25, 675],
+		[26, 675],
+		[27, 875],
+		[28, 875],
+		[29, 1000],
+		[30, 1100],
+		[31, 1200],
+		[32, 1200],
+		[33, 1250],
+		[34, 1250],
+		[35, 1300],
+		[36, 1300],
+		[37, 1350],
+		[38, 1350],
+		[39, 1400],
+		[40, 1400],
+		[41, 1450],
+		[42, 1450],
+		[43, 1500],
+		[44, 1500],
+		[45, 1550],
+		[46, 1550],
+		[47, 1600],
+		[48, 1600],
+		[49, 1650],
+		[50, 1650],
+		[51, 1700],
+		[52, 1700],
+		[53, 1750],
+		[54, 1750],
+		[55, 1800],
+		[56, 1800],
+		[57, 1850],
+		[58, 1850],
+		[59, 1900],
+		[60, 1900],
+		[61, 1950],
+		[62, 1950],
+		[63, 2000],
+		[64, 2000],
+		[65, 2050],
+		[66, 2050],
+		[67, 2125],
+		[68, 2125],
+		[69, 2250],
+		[70, 2250],
+		[71, 2375],
+		[72, 2375],
+		[73, 2500],
+		[74, 2500],
+		[75, 2500],
+		[76, 2500],
+		[77, 2500],
+		[78, 2500],
+		[79, 2500],
+		[80, 2500],
+		[81, 2500],
+		[82, 2500],
+		[83, 2500],
+		[84, 2500],
+		[85, 2500],
+		[86, 2500],
+		[87, 2500],
+		[88, 2500],
+		[89, 2500],
+		[90, 2500],
+		[91, 2500],
+		[92, 2500],
+		[93, 2500],
+		[94, 2500],
+		[95, 2500],
+		[96, 2500],
+		[97, 2500],
+		[98, 2500],
+		[99, 2500],
+		[100, 2500],
+		[101, 1325],
+		[102, 1325],
+		[103, 1350],
+		[104, 1350],
+		[105, 1350],
+		[106, 1350],
+		[107, 1350],
+		[108, 1350],
+		[109, 1375],
+		[110, 1375],
+		[111, 1375],
+		[112, 1375],
+		[113, 1400],
+		[114, 1400],
+		[115, 1400],
+		[116, 1400],
+		[117, 1400],
+		[118, 1400],
+		[119, 1425],
+		[120, 1425],
+		[121, 1425],
+		[122, 1450],
+		[123, 1450],
+		[124, 1450],
+		[125, 1450],
+		[126, 1450],
+		[127, 1450],
+		[128, 1475],
+		[129, 1475],
+		[130, 1475],
 	]);
 
-	private infoAtGameStart: RewardsTrackInfo;
+	// private infoAtGameStart: RewardsTrackInfo;
 	private xpGainedForGame: number;
 	private xpForGameInfo: XpForGameInfo;
 
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
+		private readonly events: Events,
 		private readonly memory: MemoryInspectionService,
 		private readonly prefs: PreferencesService,
 		private readonly notificationService: OwNotificationsService,
@@ -88,18 +159,8 @@ export class RewardMonitorService {
 	}
 
 	public async getXpGained(): Promise<number> {
-		return new Promise<number>(async resolve => {
-			let maxLoops = 30;
-			while (this.xpGainedForGame == null && maxLoops >= 0) {
-				await sleep(100);
-				maxLoops--;
-			}
-			if (this.xpGainedForGame == null || this.xpGainedForGame === -1) {
-				console.log('[rewards-monitor] could not get rewards info', this.xpGainedForGame);
-				resolve(null);
-			}
-			resolve(this.xpGainedForGame);
-		});
+		const xpForGame = await this.getXpForGameInfo();
+		return xpForGame.xpGainedWithoutBonus;
 	}
 
 	public async getXpForGameInfo(): Promise<XpForGameInfo> {
@@ -118,39 +179,34 @@ export class RewardMonitorService {
 	}
 
 	private init() {
-		this.gameEvents.allEvents.subscribe(async (event: GameEvent) => {
-			if (event.type === GameEvent.MATCH_METADATA) {
-				this.xpGainedForGame = undefined;
-				this.xpForGameInfo = undefined;
-				this.infoAtGameStart = await this.memory.getRewardsTrackInfo();
-				console.log('[rewards-monitor] rewards info at game start', this.infoAtGameStart);
-			} else if (event.type === GameEvent.GAME_END) {
-				const infoAtGameEnd = await this.getUpdatedRewardsInfo();
-				console.log('[rewards-monitor] rewards info at game end', infoAtGameEnd);
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async data => {
+			const changes: MemoryUpdate = data.data[0];
+			if (changes?.XpChanges?.length) {
+				console.log('[rewards-monitor] received xp changes', changes.XpChanges);
+				// Not sure what the other items are about
+				const xpChange = changes.XpChanges[0];
 				const prefs: Preferences = await this.prefs.getPreferences();
-				if (infoAtGameEnd) {
-					const levelsGained = infoAtGameEnd.Level - this.infoAtGameStart?.Level ?? 0;
-					const xpGained =
-						levelsGained === 0
-							? infoAtGameEnd.Xp - this.infoAtGameStart?.Xp ?? 0
-							: infoAtGameEnd.Xp +
-							  (this.infoAtGameStart.XpNeeded - this.infoAtGameStart.Xp) +
-							  this.getXpForIntermediaryLevels(this.infoAtGameStart?.Level, infoAtGameEnd.Level);
-					const xpModifier = 1 + (infoAtGameEnd.XpBonusPercent ?? 0) / 100;
-					this.xpGainedForGame = xpGained / xpModifier;
-					if (!this.areEqual(infoAtGameEnd, this.infoAtGameStart) && prefs.showXpRecapAtGameEnd) {
-						this.xpForGameInfo = {
-							xpGained: xpGained,
-							bonusXp: infoAtGameEnd.XpBonusPercent ?? 0,
-							levelsGained: levelsGained,
-							currentXp: infoAtGameEnd.Xp,
-							xpNeeded: infoAtGameEnd.XpNeeded,
-						};
-						console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
-						// this.showXpGainedNotification(levelsGained, xpGained, infoAtGameEnd);
-					}
-				} else {
-					this.xpGainedForGame = -1;
+				const levelsGained = xpChange.CurrentLevel - xpChange.PreviousLevel;
+				const xpGained =
+					levelsGained === 0
+						? xpChange.CurrentXp - xpChange.PreviousXp
+						: xpChange.CurrentXp +
+						  // Xp needed to finish the previous level
+						  (RewardMonitorService.XP_PER_LEVEL.get(xpChange.PreviousLevel, 1500) - xpChange.PreviousXp) +
+						  this.getXpForIntermediaryLevels(xpChange.PreviousLevel, xpChange.CurrentLevel);
+				const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
+				const xpModifier = 1 + (rewardTrackInfo.XpBonusPercent ?? 0) / 100;
+				const rawXpGained = xpGained / xpModifier;
+				if (prefs.showXpRecapAtGameEnd) {
+					this.xpForGameInfo = {
+						xpGainedWithoutBonus: rawXpGained,
+						realXpGained: xpGained,
+						bonusXp: rewardTrackInfo.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
+						levelsGained: levelsGained,
+						currentXp: xpChange.CurrentXp,
+						xpNeeded: RewardMonitorService.XP_PER_LEVEL.get(xpChange.CurrentLevel, 1500),
+					};
+					console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
 				}
 			}
 		});
@@ -163,36 +219,16 @@ export class RewardMonitorService {
 		}
 		let totalMissingXp = 0;
 		for (let i = startLevel + 1; i <= endLevel - 1; i++) {
-			const xpForFullLevel = RewardMonitorService.XP_PER_LEVEL.get(i, 4500);
+			const xpForFullLevel = RewardMonitorService.XP_PER_LEVEL.get(i, 1500);
 			totalMissingXp += xpForFullLevel;
 		}
 		return totalMissingXp;
 	}
-
-	private async getUpdatedRewardsInfo() {
-		let info = await this.memory.getRewardsTrackInfo();
-		let retriesLeft = 5;
-		while (retriesLeft >= 0 && this.infoAtGameStart && (!info || this.areEqual(this.infoAtGameStart, info))) {
-			console.log('[rewards-monitor] info not updated', info, this.infoAtGameStart, retriesLeft);
-			await sleep(1000);
-			info = await this.memory.getRewardsTrackInfo();
-			retriesLeft--;
-		}
-		// if (this.areEqual(this.infoAtGameStart, info)) {
-		// 	return null;
-		// }
-		return info;
-	}
-
-	private areEqual(a: RewardsTrackInfo, b: RewardsTrackInfo): boolean {
-		return (
-			a.Level === b.Level && a.Xp === b.Xp && a.XpNeeded === b.XpNeeded && a.XpBonusPercent === b.XpBonusPercent
-		);
-	}
 }
 
 export interface XpForGameInfo {
-	readonly xpGained: number;
+	readonly xpGainedWithoutBonus: number;
+	readonly realXpGained: number;
 	readonly bonusXp: number;
 	readonly levelsGained: number;
 	readonly currentXp: number;
