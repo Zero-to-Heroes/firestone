@@ -416,6 +416,7 @@ export class GameStateService {
 					playerDeck: updatedPlayerDeck,
 					opponentDeck: udpatedOpponentDeck,
 				} as GameState);
+				// console.debug('[game-state] emitting new state', gameEvent.type, gameEvent, this.state);
 			}
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);

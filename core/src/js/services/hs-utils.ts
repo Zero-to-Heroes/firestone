@@ -166,6 +166,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Neutral.JepettoJoybuzz, // tested
 	CardIds.Collectible.Neutral.KronxDragonhoof,
 	CardIds.Collectible.Neutral.MurlocTastyfin, // tested
+	CardIds.Collectible.Neutral.Mankrik, // tested
 	CardIds.Collectible.Neutral.Peon,
 	CardIds.Collectible.Neutral.PrimordialProtector,
 	CardIds.Collectible.Neutral.Sandbinder,

@@ -37,6 +37,7 @@ export class CardChangedInDeckParser implements EventParser {
 			cardName: cardData.name,
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+			creatorCardId: gameEvent.additionalData?.creatorCardId,
 		} as DeckCard);
 		const deckWithNewCard: readonly DeckCard[] = this.helper.addSingleCardToZone(newDeck, newCard);
 

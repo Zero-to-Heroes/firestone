@@ -654,7 +654,11 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_IN_HAND, gameEvent));
 				break;
 			case 'CARD_CHANGED_IN_DECK':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_IN_DECK, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_CHANGED_IN_DECK, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
 				break;
 			case 'ARMOR_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
