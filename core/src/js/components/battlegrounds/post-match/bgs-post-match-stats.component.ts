@@ -61,6 +61,7 @@ declare let amplitude: any;
 				<div class="tabs-container multi-{{ selectedTabs.length }}">
 					<bgs-post-match-stats-tabs
 						*ngFor="let selectedTab of selectedTabs; let i = index"
+						class="tab tab-{{ i + 1 }}"
 						[game]="_game"
 						[panel]="_panel"
 						[mainPlayerCardId]="mainPlayerCardId"
