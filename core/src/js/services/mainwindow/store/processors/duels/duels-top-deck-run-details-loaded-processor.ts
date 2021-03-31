@@ -12,7 +12,6 @@ export class DuelsTopDeckRunDetailsLoadedProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('processing deck', event);
 		if (!event.deck) {
 			return [null, null];
 		}
@@ -21,7 +20,6 @@ export class DuelsTopDeckRunDetailsLoadedProcessor implements Processor {
 			...(currentState.duels.additionalDeckDetails || []),
 			event.deck,
 		];
-		console.log('newDeckDetails', newDeckDetails);
 		return [
 			currentState.update({
 				duels: currentState.duels.update({

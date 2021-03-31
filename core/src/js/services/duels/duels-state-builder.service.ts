@@ -77,7 +77,7 @@ export class DuelsStateBuilderService {
 
 	private async loadTopDeckRunDetails(runId: string, deckId: number) {
 		const results: any = await this.api.callGetApiWithRetries(`${DUELS_RUN_DETAILS_URL}/${runId}?v=3`);
-		console.log('[duels-state-builder] laoded run details', results);
+		// console.log('[duels-state-builder] laoded run details', results);
 		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
 		this.mainWindowStateUpdater.next(
 			new DuelsTopDeckRunDetailsLoadedEvent({
@@ -604,7 +604,7 @@ export class DuelsStateBuilderService {
 			.map(card => {
 				const out = collectionState.getCard(card.id);
 				if (!out) {
-					console.warn('[duels-state-builder] Could not find card for', card.id, card);
+					console.warn('[duels-state-builder] Could not find card for', card.id);
 				}
 				return out;
 			})

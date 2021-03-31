@@ -169,7 +169,7 @@ export class BgsBattleStatusComponent {
 				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
 		}
 
-		console.log('setting next battle', this._previousBattle, this._previousStatus);
+		// console.log('setting next battle', this._previousBattle, this._previousStatus);
 		if (this._previousBattle?.wonPercent != null && this._previousStatus !== 'empty') {
 			this.battleSimulationResultWin = this._previousBattle.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = this._previousBattle.tiedPercent.toFixed(1) + '%';
@@ -180,7 +180,7 @@ export class BgsBattleStatusComponent {
 			this.damageWon = this._previousBattle.averageDamageWon?.toFixed(1);
 			this.damageLost = this._previousBattle.averageDamageLost?.toFixed(1);
 		} else {
-			console.log('no value in nextbattle', this._previousBattle, this._previousStatus);
+			// console.log('no value in nextbattle', this._previousBattle, this._previousStatus);
 		}
 	}
 
