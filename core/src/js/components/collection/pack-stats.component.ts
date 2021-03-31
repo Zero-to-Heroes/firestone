@@ -93,6 +93,7 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 						BoosterType.FIRST_PURCHASE,
 						BoosterType.FIRST_PURCHASE_OLD,
 						BoosterType.MAMMOTH_BUNDLE,
+						BoosterType.WAILING_CAVERNS,
 					].includes(boosterId)
 				) {
 					return null;
