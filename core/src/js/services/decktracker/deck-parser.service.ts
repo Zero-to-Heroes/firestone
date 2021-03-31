@@ -301,6 +301,7 @@ export class DeckParserService {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
 			const isLastSectionDeckSelectLine =
 				lines[lines.length - 4].indexOf('Finding Game With Hero:') !== -1 ||
+				lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
 				lines[lines.length - 4].indexOf('Duels Deck') !== -1 ||
 				lines[lines.length - 3].indexOf('Duels Deck') !== -1;
 			if (!isLastSectionDeckSelectLine) {
