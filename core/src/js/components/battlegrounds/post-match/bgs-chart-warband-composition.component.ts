@@ -60,7 +60,7 @@ declare let amplitude: any;
 		</div>
 		<div class="chart-container" *ngIf="chartData?.length">
 			<ngx-charts-bar-vertical-stacked
-				*ngIf="chartData"
+				*ngIf="loaded"
 				[view]="dimensions"
 				[results]="chartData"
 				[scheme]="colorScheme"
@@ -76,6 +76,7 @@ declare let amplitude: any;
 				[showGridLines]="true"
 				[rotateXAxisTicks]="false"
 				[barPadding]="barPadding"
+				[animations]="false"
 				(activate)="onActivate($event)"
 				(deactivate)="onDeactivate($event)"
 			>
@@ -108,6 +109,7 @@ export class BgsChartWarbandCompositionComponent {
 		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#43403d', '#DE5959', '#D9C3AB', '#D9C3AB'],
 	};
 	barPadding: number;
+	loaded = false;
 
 	@Input() invalidLimit: number;
 
@@ -200,6 +202,9 @@ export class BgsChartWarbandCompositionComponent {
 			}
 			this._dirty = false;
 			this.dimensions = [rect.width, rect.height - 15];
+			this.barPadding = Math.max(25 - this.chartData.length, Math.min(40, 40 - 2 * this.chartData.length));
+			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
+			// console.debug('dimensions', this.dimensions, this.barPadding);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -217,17 +222,21 @@ export class BgsChartWarbandCompositionComponent {
 		}
 		if (this.invalidLimit && value.boardHistory.length <= this.invalidLimit) {
 			this.chartData = [];
+			this.loaded = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			return;
 		}
 
-		this.chartData = this.buildChartData(value);
-		this.barPadding = Math.min(40, 40 - 2 * (this.chartData.length - 12));
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		setTimeout(() => {
+			this.chartData = this.buildChartData(value);
+			// console.debug('chart data', this.chartData);
+			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 200);
 	}
 
 	private buildChartData(value: BgsPostMatchStats): object[] {
@@ -273,7 +282,7 @@ export class BgsChartWarbandCompositionComponent {
 
 	private getTribe(tribe: string, board: readonly Entity[]): number {
 		// Don't use === because tribe can be null / undefined
-		return board.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe).length;
+		return board?.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe)?.length ?? 0;
 	}
 
 	private getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
