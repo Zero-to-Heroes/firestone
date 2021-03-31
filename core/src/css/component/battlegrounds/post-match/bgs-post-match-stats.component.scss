@@ -124,6 +124,51 @@
 	}
 }
 
+@media (max-width: 1650px) {
+	.tabs-container {
+		&.multi-2,
+		&.multi-4 {
+			display: flex;
+		}
+
+		&.multi-4 {
+			grid-template-rows: repeat(2, calc(50% - 10px));
+		}
+
+		.tabs-layout-selection {
+			.two,
+			.four {
+				display: none;
+			}
+		}
+		.tab-2,
+		.tab-3,
+		.tab-4 {
+			display: none;
+		}
+	}
+}
+
+@media (max-height: 950px) {
+	.tabs-container {
+		&.multi-2,
+		&.multi-4 {
+			grid-template-columns: repeat(2, calc(50% - 10px));
+			grid-template-rows: none;
+		}
+
+		.tabs-layout-selection {
+			.four {
+				display: none;
+			}
+		}
+		.tab-3,
+		.tab-4 {
+			display: none;
+		}
+	}
+}
+
 .left {
 	width: 400px;
 	height: calc(100% - 300px);
