@@ -49,7 +49,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 			prefs,
 		);
 		console.log('[recompute-game-stats-processor] decktracker');
-		const replayState: ReplaysState = this.replaysStateBuilder.buildState(
+		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
 			currentState.replays,
 			newStatsState,
 			decktracker.decks,

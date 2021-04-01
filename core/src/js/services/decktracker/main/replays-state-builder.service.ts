@@ -7,28 +7,44 @@ import { ReplaysFilterCategoryType } from '../../../models/mainwindow/replays/re
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
+import { Preferences } from '../../../models/preferences';
+import { PreferencesService } from '../../preferences.service';
+import { groupByFunction } from '../../utils';
 
 @Injectable()
 export class ReplaysStateBuilderService {
-	public buildState(replayState: ReplaysState, stats: StatsState, decks: readonly DeckSummary[]): ReplaysState {
+	constructor(private readonly prefs: PreferencesService) {}
+
+	public async buildState(
+		replayState: ReplaysState,
+		stats: StatsState,
+		decks: readonly DeckSummary[],
+	): Promise<ReplaysState> {
 		if (!stats || !stats.gameStats || !stats.gameStats.stats) {
 			console.error('Could not build replay state from empty stats', stats);
 			return replayState;
 		}
 		const allReplays: readonly GameStat[] = [...stats.gameStats.stats];
 		const groupedReplays: readonly GroupedReplays[] = this.groupReplays(allReplays, replayState.groupByCriteria);
-		return Object.assign(new ReplaysState(), replayState, {
+		const state = Object.assign(new ReplaysState(), replayState, {
 			allReplays: allReplays,
 			groupedReplays: groupedReplays,
 			isLoading: false,
 			filters: ReplaysState.buildFilters(decks),
 		} as ReplaysState);
+		const stateWithFilters = await this.filterReplays(state, stats);
+		return stateWithFilters;
 	}
 
 	// Update the filters
-	public filterReplays(replayState: ReplaysState, stats: StatsState, type: ReplaysFilterCategoryType, value: string) {
+	public async filterReplays(replayState: ReplaysState, stats: StatsState): Promise<ReplaysState> {
 		// console.log('filtering replays', replayState, stats, type, value);
-		const updatedFilters = this.updateFilters(replayState.filters, type, value);
+		const prefs = await this.prefs.getPreferences();
+		const allFilters: readonly FilterValue[] = this.buildReplayFilters(prefs);
+		let updatedFilters = replayState.filters;
+		for (const filter of allFilters) {
+			updatedFilters = this.updateFilters(replayState.filters, filter.type, filter.value);
+		}
 		// console.log('updated filters', updatedFilters);
 		const filteredStats: readonly GameStat[] = this.filterStats(stats, updatedFilters);
 		// console.log('filtereallReplaysdStats', allReplays);
@@ -39,6 +55,19 @@ export class ReplaysStateBuilderService {
 			groupedReplays: groupedReplays,
 			filters: updatedFilters,
 		} as ReplaysState);
+	}
+
+	private buildReplayFilters(prefs: Preferences): readonly FilterValue[] {
+		return [
+			{
+				type: 'deckstring',
+				value: prefs.replaysFilterDeckstring,
+			},
+			{
+				type: 'gameMode',
+				value: prefs.replaysFilterGameMode,
+			},
+		];
 	}
 
 	private updateFilters(
@@ -88,9 +117,7 @@ export class ReplaysStateBuilderService {
 	}
 }
 
-const groupByFunction = (keyExtractor: (obj: object) => string) => array =>
-	array.reduce((objectsByKeyValue, obj) => {
-		const value = keyExtractor(obj);
-		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-		return objectsByKeyValue;
-	}, {});
+interface FilterValue {
+	readonly type: ReplaysFilterCategoryType;
+	readonly value: string;
+}

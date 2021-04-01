@@ -1,5 +1,6 @@
 import { IOption } from 'ng-select';
 import { GameStat } from '../stats/game-stat';
+import { StatGameFormatType } from '../stats/stat-game-format.type';
 import { ReplaysFilterCategoryType } from './replays-filter-category.type';
 
 export class ReplaysFilter {
@@ -27,7 +28,7 @@ export class ReplaysFilter {
 
 		switch (this.type) {
 			case 'gameMode':
-				return this.allowsGameMode(stat.gameMode, this.selectedOption);
+				return this.allowsGameMode(stat.gameMode, stat.gameFormat, this.selectedOption);
 			case 'deckstring':
 				return stat.playerDecklist === this.selectedOption;
 			default:
@@ -35,10 +36,16 @@ export class ReplaysFilter {
 		}
 	}
 
-	allowsGameMode(gameMode: string, selectedOption: string): boolean {
+	allowsGameMode(gameMode: string, format: StatGameFormatType, selectedOption: string): boolean {
 		switch (selectedOption) {
 			case 'both-duels':
 				return gameMode === 'duels' || gameMode === 'paid-duels';
+			case 'ranked-standard':
+				return gameMode === 'ranked' && format === 'standard';
+			case 'ranked-wild':
+				return gameMode === 'ranked' && format === 'wild';
+			case 'ranked-classic':
+				return gameMode === 'ranked' && format === 'classic';
 			default:
 				return gameMode === selectedOption;
 		}

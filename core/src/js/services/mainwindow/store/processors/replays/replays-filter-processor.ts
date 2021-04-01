@@ -2,11 +2,12 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { ReplaysState } from '../../../../../models/mainwindow/replays/replays-state';
 import { ReplaysStateBuilderService } from '../../../../decktracker/main/replays-state-builder.service';
+import { PreferencesService } from '../../../../preferences.service';
 import { ReplaysFilterEvent } from '../../events/replays/replays-filter-event';
 import { Processor } from '../processor';
 
 export class ReplaysFilterProcessor implements Processor {
-	constructor(private readonly builder: ReplaysStateBuilderService) {}
+	constructor(private readonly builder: ReplaysStateBuilderService, private readonly prefs: PreferencesService) {}
 
 	public async process(
 		event: ReplaysFilterEvent,
@@ -14,12 +15,15 @@ export class ReplaysFilterProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const newState: ReplaysState = this.builder.filterReplays(
-			currentState.replays,
-			currentState.stats,
-			event.type,
-			event.selectedValue,
-		);
+		switch (event.type) {
+			case 'deckstring':
+				await this.prefs.updateReplayFilterDeckstring(event.type, event.selectedValue);
+				break;
+			case 'gameMode':
+				await this.prefs.updateReplayFilterGameMode(event.type, event.selectedValue);
+				break;
+		}
+		const newState: ReplaysState = await this.builder.filterReplays(currentState.replays, currentState.stats);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				replays: newState,

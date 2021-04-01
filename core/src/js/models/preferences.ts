@@ -147,6 +147,8 @@ export class Preferences {
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
 
 	readonly replaysShowNotification: boolean = false;
+	readonly replaysFilterDeckstring: string;
+	readonly replaysFilterGameMode: string;
 
 	readonly bgsFullToggle = true;
 	readonly bgsEnableApp = true;
