@@ -215,6 +215,7 @@ export class GameStateService {
 	public async getCurrentReviewId(): Promise<string> {
 		return new Promise<string>(resolve => this.getCurrentReviewIdInternal(reviewId => resolve(reviewId)));
 	}
+
 	private async getCurrentReviewIdInternal(callback, retriesLeft = 15) {
 		if (retriesLeft <= 0) {
 			console.error('[game-state] Could not get current review id');
@@ -264,6 +265,7 @@ export class GameStateService {
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 			].filter(event => event);
 			for (let i = 0; i < eventsToProcess.length; i++) {
+				console.debug('event to process', eventsToProcess[i]);
 				if (eventsToProcess[i] instanceof GameEvent) {
 					await this.processEvent(eventsToProcess[i] as GameEvent, i === eventsToProcess.length - 1);
 				} else {
@@ -277,6 +279,15 @@ export class GameStateService {
 	}
 
 	private async processNonMatchEvent(event: GameStateEvent) {
+		console.debug('process non matc hevent', event);
+		if (event.type === 'TOGGLE_SECRET_HELPER') {
+			this.state = this.state.update({
+				opponentDeck: this.state.opponentDeck.update({
+					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
+				} as DeckState),
+			} as GameState);
+		}
+
 		this.overlayHandlers.forEach(handler =>
 			handler.processEvent(event, this.state, this.showDecktrackerFromGameMode),
 		);
@@ -308,21 +319,13 @@ export class GameStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
+		console.debug('process matc hevent', gameEvent);
 		const allowRequeue = !(gameEvent as any).preventRequeue;
 		this.overlayHandlers.forEach(handler =>
 			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
 		);
 
-		if (gameEvent.type === 'TOGGLE_SECRET_HELPER') {
-			this.state = this.state.update({
-				opponentDeck: this.state.opponentDeck.update({
-					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
-				} as DeckState),
-			} as GameState);
-			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
-		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
-		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
-		} else if (gameEvent.type === GameEvent.GAME_START) {
+		if (gameEvent.type === GameEvent.GAME_START) {
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
@@ -416,7 +419,7 @@ export class GameStateService {
 					playerDeck: updatedPlayerDeck,
 					opponentDeck: udpatedOpponentDeck,
 				} as GameState);
-				// console.debug('[game-state] emitting new state', gameEvent.type, gameEvent, this.state);
+				console.debug('[game-state] emitting new state', gameEvent.type, gameEvent, this.state);
 			}
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
