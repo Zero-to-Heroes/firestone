@@ -156,7 +156,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 			if (!window) {
 				return;
 			}
-			// console.log('updating tracker position', window.left, window.top);
+			console.log('updating position', window.left, window.top);
 			this.prefs.updateSecretsHelperPosition(window.left, window.top);
 		});
 	}
@@ -194,18 +194,22 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		if (!gameInfo) {
 			return;
 		}
+
 		const gameWidth = gameInfo.logicalWidth;
-		const gameHeight = gameInfo.logicalHeight;
+		const dpi = gameWidth / gameInfo.width;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
-		console.log('retrieved position from prefs', trackerPosition, gameWidth, gameHeight);
+		const currentWindow = await this.ow.getCurrentWindow();
+		const width = currentWindow.width;
+		console.log('window position', currentWindow, gameInfo, dpi, width);
+		console.log('loaded tracker position', trackerPosition);
 		const newLeft = Math.min(
-			gameWidth - 100,
-			Math.max(0, (trackerPosition && trackerPosition.left) || (await this.getDefaultLeft())),
+			gameInfo.width + width / 2,
+			Math.max(-100 * dpi, (trackerPosition && trackerPosition.left) ?? (await this.getDefaultLeft())),
 		);
 		const newTop = Math.min(
-			gameHeight - 100,
-			Math.max(0, (trackerPosition && trackerPosition.top) || (await this.getDefaultTop())),
+			gameInfo.height - 100 * dpi,
+			Math.max(0, (trackerPosition && trackerPosition.top) ?? (await this.getDefaultTop())),
 		);
 		console.log('setting new position', trackerPosition, newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
@@ -213,26 +217,27 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async getDefaultLeft(): Promise<number> {
-		const width = Math.max(252, 252 * 2);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		const gameWidth = gameInfo.logicalWidth;
 		const dpi = gameWidth / gameInfo.width;
+		const width = Math.max(252, 252 * 2) / dpi;
 		// Use the height as a way to change the position, as the width can expand around the play
 		// area based on the screen resolution
-		return gameWidth / 2 - width * dpi - gameInfo.logicalHeight * 0.3;
+		return gameInfo.width / 2 - width - gameInfo.height * 0.3;
 	}
 
 	private async getDefaultTop(): Promise<number> {
 		const gameInfo = await this.ow.getRunningGameInfo();
-		return gameInfo.logicalHeight * 0.05;
+		return gameInfo.height * 0.05;
 	}
 
 	private async changeWindowSize(): Promise<void> {
-		const width = Math.max(252, 252 * 3); // Max scale
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}
+		const dpi = gameInfo.logicalWidth / gameInfo.width;
+		const width = Math.max(252, 252 * 3) / dpi; // Max scale
 		const gameHeight = gameInfo.logicalHeight;
 		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
 		await this.updateTooltipPosition();

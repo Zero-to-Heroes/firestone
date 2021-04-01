@@ -306,37 +306,37 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	}
 
 	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {
-		const width = 252 * 2;
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}
+
 		const gameWidth = gameInfo.logicalWidth;
-		const gameHeight = gameInfo.logicalHeight;
 		const dpi = gameWidth / gameInfo.width;
+		const width = (252 * 2) / dpi;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = this.trackerPositionExtractor(prefs);
-		console.log('window position', await this.ow.getCurrentWindow(), gameInfo);
+		console.log('window position', await this.ow.getCurrentWindow(), gameInfo, dpi);
 		console.log('loaded tracker position', trackerPosition);
 		const newLeft = Math.min(
-			gameWidth - width + 100,
+			gameInfo.width - width + 100 * dpi,
 			Math.max(
-				-300,
+				-300 * dpi,
 				trackerPosition && !forceTrackerReposition
 					? trackerPosition.left || 0
-					: this.defaultTrackerPositionLeftProvider(gameWidth, width, dpi),
+					: this.defaultTrackerPositionLeftProvider(gameInfo.width, width, dpi),
 			),
 		);
 		const newTop = Math.min(
-			gameHeight - 250,
+			gameInfo.height - 250 * dpi,
 			Math.max(
-				-100,
+				-100 * dpi,
 				trackerPosition && !forceTrackerReposition
 					? trackerPosition.top || 0
-					: this.defaultTrackerPositionTopProvider(gameWidth, width, dpi),
+					: this.defaultTrackerPositionTopProvider(gameInfo.width, width, dpi),
 			),
 		);
-		console.log('updating tracker position', newLeft, newTop, gameWidth);
+		console.log('updating tracker position', newLeft, newTop, gameWidth, gameInfo.width);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		console.log('after window position update', await this.ow.getCurrentWindow());
 		// console.log('monitors list', await this.ow.getMonitorsList());
