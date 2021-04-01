@@ -31,18 +31,18 @@ export const updates: readonly Update[] = [
 	{
 		version: '7.5.12',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Biggest HS patch ever',
-			// 	text: `
-			// 		Patch 20.0 is the biggest patch ever for Hearthstone. The app should now be fully working, but it's likely that some bugs slipped through the cracks. Please use the "report a bug" button at the top right if you see anything strange :)
-			// 		<br/>
-			// 		<br/>
-			// 		Take care,
-			// 		<br/>
-			// 		Seb.
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `
+					Getting the app fully ready for the core set and Forged in the Barrens expansion was a bit more chaotic than planned, but things should be stable now. This updates is thus a big one, with all the things that I've been delaying until the dust settled from the latest patch. I hope you'll enjoy it :)
+					<br/>
+					<br/>
+					Take care,
+					<br/>
+					Seb.
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -68,6 +68,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'collection',
 						details: [
+							{
+								type: 'feature',
+								text: `You can now synchronize your collection to Out of Cards via the Settings > General tab.`,
+							},
 							{
 								type: 'feature',
 								text: `Show collected coins.`,
@@ -103,6 +107,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Now properly shows the opponent's name in their side of the tracker, instead of UNKNOWN HUMAIN PLAYER.`,
 							},
+							{
+								type: 'ui',
+								text: `Add an icon for Wild / Classic decks in the deck stats.`,
+							},
 						],
 					},
 					{
@@ -128,6 +136,24 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Show the current run's info on top of the community info on the various graphs to make it more legible.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'ui',
+								text: `Personal runs are now grouped by date.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'feature',
+								text: `You can now filter ranked replays to include only Standard, Wild or Classic matches.`,
 							},
 						],
 					},
