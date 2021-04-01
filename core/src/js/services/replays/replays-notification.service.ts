@@ -29,7 +29,12 @@ export class ReplaysNotificationService {
 			console.log('[replays-notification] preference is turned off, not showing replay notification');
 			return;
 		}
+
 		const xpForGame = await this.rewards.getXpForGameInfo();
+		if (!xpForGame?.realXpGained) {
+			return;
+		}
+
 		const stat = Object.assign(new GameStat(), stats.stats[0]);
 		console.log('[replays-notification] preparing new game stat notification', stat);
 		// console.log('[replays-notification] will emit notif notification', stat);
