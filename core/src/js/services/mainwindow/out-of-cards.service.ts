@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/camelcase */
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -13,6 +14,7 @@ import { PreferencesService } from '../preferences.service';
 
 const COLLECTION_UPLOAD = `https://outof.cards/api/hearthstone/collection/import/`;
 const REFRESH_DEBOUNCE_MS = 30 * 1000;
+
 @Injectable()
 export class OutOfCardsService {
 	public stateUpdater = new EventEmitter<any>();
