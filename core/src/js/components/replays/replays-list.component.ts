@@ -4,7 +4,6 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
-	HostListener,
 	Input,
 	ViewRef,
 } from '@angular/core';
@@ -22,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<replays-filter [state]="_state" [filterCategory]="'gameMode'"></replays-filter>
 				<replays-filter [state]="_state" [filterCategory]="'deckstring'"></replays-filter>
 			</div>
-			<infinite-scroll class="replays-list" (scrolled)="onScroll()">
+			<infinite-scroll class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let replay of displayedReplays">
 					<grouped-replays [groupedReplays]="replay"></grouped-replays>
 				</li>
@@ -75,22 +74,6 @@ export class ReplaysListComponent {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	// Prevent the window from being dragged around if user scrolls with click
-	@HostListener('mousedown', ['$event'])
-	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
-		const replaysList = this.el.nativeElement.querySelector('.replays-list');
-		if (!replaysList) {
-			return;
-		}
-		const rect = replaysList.getBoundingClientRect();
-		// console.log('element rect', rect);
-		const scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-		}
 	}
 
 	trackGroupedReplay(value: GroupedReplays, index: number) {
