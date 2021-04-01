@@ -48,8 +48,8 @@ export class DeckTrackerOverlayOpponentComponent {
 	showDeckWinrateExtractor = (prefs: Preferences) => false;
 	showMatchupWinrateExtractor = (prefs: Preferences) => false;
 	// Because whitespace for the tooltips
-	defaultTrackerPositionLeftProvider = (gameWidth: number, width: number, dpi: number) => -200;
-	defaultTrackerPositionTopProvider = (gameWidth: number, width: number, dpi: number) => 150;
+	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => -windowWidth / 2 + 250;
+	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;
 
 	constructor(private prefs: PreferencesService) {}
 }

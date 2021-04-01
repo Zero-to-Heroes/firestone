@@ -105,8 +105,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@Input() deckExtractor: (state: GameState) => DeckState;
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
 	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
-	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number, dpi: number) => number;
-	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number, dpi: number) => number;
+	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
+	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
 	@Input() showDeckWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() showMatchupWinrateExtractor: (prefs: Preferences) => boolean;
 	@Input() closeEvent: string;
@@ -260,10 +260,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			if (!window) {
 				return;
 			}
-			// console.log('updating tracker position', window.left, window.top);
+
+			console.log('updating tracker position', window.left, window.top);
 			this.trackerPositionUpdater(window.left, window.top);
-			// this.prefs.updateTrackerPosition(window.left, window.top);
-			// console.log('updated tracker position', window.left, window.top);
 		});
 	}
 
@@ -311,36 +310,42 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			return;
 		}
 
-		const gameWidth = gameInfo.logicalWidth;
-		const dpi = gameWidth / gameInfo.width;
-		const width = (252 * 2) / dpi;
+		const currentWindow = await this.ow.getCurrentWindow();
+		// window.width does not include DPI, see https://overwolf.github.io/docs/topics/windows-resolution-size-position#dpi
+		// logical* properties are not DPI aware either, so we should work with them
+		const windowWidth = currentWindow.width;
+		console.log('window position', currentWindow, gameInfo, windowWidth);
+
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = this.trackerPositionExtractor(prefs);
-		console.log('window position', await this.ow.getCurrentWindow(), gameInfo, dpi);
 		console.log('loaded tracker position', trackerPosition);
-		const newLeft = Math.min(
-			gameInfo.width - width + 100 * dpi,
+
+		const minAcceptableLeft = -windowWidth / 2;
+		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
+		const minAcceptableTop = -100;
+		const maxAcceptableTop = gameInfo.logicalHeight - 100;
+		console.log('acceptable values', minAcceptableLeft, maxAcceptableLeft, minAcceptableTop, maxAcceptableTop);
+		const newLogicalLeft = Math.min(
+			maxAcceptableLeft,
 			Math.max(
-				-300 * dpi,
+				minAcceptableLeft,
 				trackerPosition && !forceTrackerReposition
 					? trackerPosition.left || 0
-					: this.defaultTrackerPositionLeftProvider(gameInfo.width, width, dpi),
+					: this.defaultTrackerPositionLeftProvider(gameInfo.logicalWidth, windowWidth),
 			),
 		);
-		const newTop = Math.min(
-			gameInfo.height - 250 * dpi,
+		const newLogicalTop = Math.min(
+			maxAcceptableTop,
 			Math.max(
-				-100 * dpi,
+				minAcceptableTop,
 				trackerPosition && !forceTrackerReposition
 					? trackerPosition.top || 0
-					: this.defaultTrackerPositionTopProvider(gameInfo.width, width, dpi),
+					: this.defaultTrackerPositionTopProvider(gameInfo.logicalHeight, gameInfo.logicalHeight),
 			),
 		);
-		console.log('updating tracker position', newLeft, newTop, gameWidth, gameInfo.width);
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+		console.log('updating tracker position', newLogicalLeft, newLogicalTop, gameInfo.logicalWidth, gameInfo.width);
+		await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newLogicalTop);
 		console.log('after window position update', await this.ow.getCurrentWindow());
-		// console.log('monitors list', await this.ow.getMonitorsList());
-		// console.log('game info', await this.ow.getRunningGameInfo());
 		await this.updateTooltipPosition();
 	}
 

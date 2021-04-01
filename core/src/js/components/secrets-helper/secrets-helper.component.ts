@@ -197,35 +197,34 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		const gameWidth = gameInfo.logicalWidth;
-		const dpi = gameWidth / gameInfo.width;
+		const currentWindow = await this.ow.getCurrentWindow();
+		const windowWidth = currentWindow.width;
+		console.log('window position', currentWindow, gameInfo, windowWidth);
+
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
-		const currentWindow = await this.ow.getCurrentWindow();
-		const width = currentWindow.width / dpi;
-		console.log('window position', currentWindow, gameInfo, dpi, width);
 		console.log('loaded tracker position', trackerPosition);
-		const newLeft = Math.min(
-			gameInfo.width + width / 2,
-			Math.max(
-				-width / 2 - 100 * dpi,
-				(trackerPosition && trackerPosition.left) ?? (await this.getDefaultLeft()),
-			),
+
+		const minAcceptableLeft = -windowWidth / 2;
+		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
+		const minAcceptableTop = -100;
+		const maxAcceptableTop = gameInfo.logicalHeight - 100;
+		const newLogicalLeft = Math.min(
+			maxAcceptableLeft,
+			Math.max(minAcceptableLeft, (trackerPosition && trackerPosition.left) ?? (await this.getDefaultLeft())),
 		);
 		const newTop = Math.min(
-			gameInfo.height - 100 * dpi,
-			Math.max(0, (trackerPosition && trackerPosition.top) ?? (await this.getDefaultTop())),
+			maxAcceptableTop,
+			Math.max(minAcceptableTop, (trackerPosition && trackerPosition.top) ?? (await this.getDefaultTop())),
 		);
-		console.log('setting new position', trackerPosition, newLeft, newTop);
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+		console.log('setting new position', trackerPosition, newLogicalLeft, newTop);
+		await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newTop);
 		await this.updateTooltipPosition();
 	}
 
 	private async getDefaultLeft(): Promise<number> {
 		const gameInfo = await this.ow.getRunningGameInfo();
-		const gameWidth = gameInfo.logicalWidth;
-		const dpi = gameWidth / gameInfo.width;
-		const width = Math.max(252, 252 * 2) / dpi;
+		const width = Math.max(252, 252 * 2);
 		// Use the height as a way to change the position, as the width can expand around the play
 		// area based on the screen resolution
 		return gameInfo.width / 2 - width - gameInfo.height * 0.3;
