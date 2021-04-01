@@ -32,19 +32,31 @@ export class ReplaysState {
 					} as IOption,
 					{
 						value: 'ranked',
-						label: 'Ranked',
+						label: 'Ranked (All)',
 					} as IOption,
 					{
-						value: 'duels',
-						label: 'Casual Duels',
+						value: 'ranked-standard',
+						label: 'Ranked Standard',
 					} as IOption,
 					{
-						value: 'paid-duels',
-						label: 'Heroic Duels',
+						value: 'ranked-wild',
+						label: 'Ranked Wild',
+					} as IOption,
+					{
+						value: 'ranked-classic',
+						label: 'Ranked Classic',
 					} as IOption,
 					{
 						value: 'both-duels',
-						label: 'Duels (both)',
+						label: 'Duels (All)',
+					} as IOption,
+					{
+						value: 'duels',
+						label: 'Duels Casual',
+					} as IOption,
+					{
+						value: 'paid-duels',
+						label: 'Duels Heroic',
 					} as IOption,
 					{
 						value: 'arena',
@@ -52,11 +64,11 @@ export class ReplaysState {
 					} as IOption,
 					{
 						value: 'casual',
-						label: 'Casual',
+						label: 'Casual (All)',
 					} as IOption,
 					{
 						value: 'friendly',
-						label: 'Friendly',
+						label: 'Friendly (All)',
 					} as IOption,
 					{
 						value: 'tavern-brawl',

@@ -557,7 +557,7 @@ export class MainWindowStoreService {
 			new ChangeMatchStatsNumberOfTabsProcessor(this.prefs),
 
 			ReplaysFilterEvent.eventName(),
-			new ReplaysFilterProcessor(this.replaysStateBuilder),
+			new ReplaysFilterProcessor(this.replaysStateBuilder, this.prefs),
 
 			// Decktracker
 			SelectDecksViewEvent.eventName(),

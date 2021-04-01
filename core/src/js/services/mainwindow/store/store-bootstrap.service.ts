@@ -124,7 +124,7 @@ export class StoreBootstrapService {
 			currentRankedMetaPatch,
 			prefs,
 		);
-		const replayState: ReplaysState = this.replaysStateBuilder.buildState(
+		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
 			new ReplaysState(),
 			newStatsState,
 			decktracker.decks,

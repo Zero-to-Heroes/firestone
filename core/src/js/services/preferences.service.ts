@@ -14,6 +14,7 @@ import { BgsRankFilterType } from '../models/mainwindow/battlegrounds/bgs-rank-f
 import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
+import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
 import { Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
@@ -77,17 +78,17 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	// public async setDuelsRunId(id: string) {
-	// 	const prefs = await this.getPreferences();
-	// 	const newPrefs: Preferences = { ...prefs, duelsRunUuid: id };
-	// 	await this.savePreferences(newPrefs);
-	// }
+	public async updateReplayFilterDeckstring(type: ReplaysFilterCategoryType, value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, replaysFilterDeckstring: value };
+		await this.savePreferences(newPrefs);
+	}
 
-	// public async setDontConfirmVideoDeletion(dontAsk: boolean) {
-	// 	const prefs = await this.getPreferences();
-	// 	const newPrefs: Preferences = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk };
-	// 	await this.savePreferences(newPrefs);
-	// }
+	public async updateReplayFilterGameMode(type: ReplaysFilterCategoryType, value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, replaysFilterGameMode: value };
+		await this.savePreferences(newPrefs);
+	}
 
 	public async setDontShowNewVersionNotif(value: boolean) {
 		const prefs = await this.getPreferences();
