@@ -37,12 +37,12 @@ export class SecretsHelperWidgetIconComponent implements AfterViewInit {
 	}
 
 	toggleSecretsHelper(event: MouseEvent) {
-		console.log('toggling', this.isDragging);
 		if (this.isDragging) {
 			return;
 		}
 		this.big = true;
 		setTimeout(() => (this.big = false), 200);
+		console.log('toggling');
 		this.deckUpdater.next(
 			Object.assign(new GameEvent(), {
 				type: 'TOGGLE_SECRET_HELPER',

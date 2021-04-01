@@ -28,8 +28,8 @@ declare let amplitude;
 	styleUrls: [
 		'../../../css/global/components-global.scss',
 		`../../../css/global/cdk-overlay.scss`,
-		'../../../css/component/secrets-helper/secrets-helper.component.scss',
 		`../../../css/themes/decktracker-theme.scss`,
+		'../../../css/component/secrets-helper/secrets-helper.component.scss',
 	],
 	template: `
 		<div
@@ -38,21 +38,23 @@ declare let amplitude;
 			[style.opacity]="opacity"
 			[ngClass]="{ 'active': active }"
 		>
-			<secrets-helper-widget-icon class="icon" [active]="active"></secrets-helper-widget-icon>
-			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
-			<div class="scalable">
-				<div class="secrets-helper-container">
-					<div class="secrets-helper" *ngIf="shouldShow" [style.width.px]="widthInPx">
-						<div class="background"></div>
-						<secrets-helper-control-bar [windowId]="windowId"></secrets-helper-control-bar>
-						<secrets-helper-list
-							[secrets]="secrets"
-							[colorManaCost]="colorManaCost"
-							[cardsGoToBottom]="cardsGoToBottom"
-							[tooltipPosition]="tooltipPosition"
-						>
-						</secrets-helper-list>
-						<div class="backdrop" *ngIf="showBackdrop"></div>
+			<div class="main-container">
+				<secrets-helper-widget-icon class="icon" [active]="active"></secrets-helper-widget-icon>
+				<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
+				<div class="scalable">
+					<div class="secrets-helper-container">
+						<div class="secrets-helper" *ngIf="shouldShow" [style.width.px]="widthInPx">
+							<div class="background"></div>
+							<secrets-helper-control-bar [windowId]="windowId"></secrets-helper-control-bar>
+							<secrets-helper-list
+								[secrets]="secrets"
+								[colorManaCost]="colorManaCost"
+								[cardsGoToBottom]="cardsGoToBottom"
+								[tooltipPosition]="tooltipPosition"
+							>
+							</secrets-helper-list>
+							<div class="backdrop" *ngIf="showBackdrop"></div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -103,7 +105,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 			// this.gameState = event ? event.state : undefined;
 			this.active = (event.state as GameState)?.opponentDeck?.secretHelperActive;
 			this.secrets = (event.state as GameState)?.opponentDeck?.secrets;
-			// console.log('game state', this.secrets, this.gameState);
+			console.debug('is active', this.active);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -200,12 +202,15 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
 		const currentWindow = await this.ow.getCurrentWindow();
-		const width = currentWindow.width;
+		const width = currentWindow.width / dpi;
 		console.log('window position', currentWindow, gameInfo, dpi, width);
 		console.log('loaded tracker position', trackerPosition);
 		const newLeft = Math.min(
 			gameInfo.width + width / 2,
-			Math.max(-100 * dpi, (trackerPosition && trackerPosition.left) ?? (await this.getDefaultLeft())),
+			Math.max(
+				-width / 2 - 100 * dpi,
+				(trackerPosition && trackerPosition.left) ?? (await this.getDefaultLeft()),
+			),
 		);
 		const newTop = Math.min(
 			gameInfo.height - 100 * dpi,
@@ -236,8 +241,9 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		if (!gameInfo) {
 			return;
 		}
-		const dpi = gameInfo.logicalWidth / gameInfo.width;
-		const width = Math.max(252, 252 * 3) / dpi; // Max scale
+		// const dpi = gameInfo.logicalWidth / gameInfo.width;
+		// We don't divide by the DPI here, because we need a lot of space when displaying tooltips
+		const width = 252 * 3; // Max scale
 		const gameHeight = gameInfo.logicalHeight;
 		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
 		await this.updateTooltipPosition();
