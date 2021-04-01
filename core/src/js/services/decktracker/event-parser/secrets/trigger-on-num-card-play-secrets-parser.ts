@@ -8,7 +8,11 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnNumCardPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [CardIds.Collectible.Hunter.RatTrap, CardIds.Collectible.Paladin.HiddenWisdom];
+	private secretsTriggeringOnAttack = [
+		CardIds.Collectible.Hunter.RatTrap,
+		CardIds.Collectible.Paladin.HiddenWisdom,
+		CardIds.Collectible.Paladin.GallopingSavior,
+	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -25,9 +29,11 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 		if (gameEvent.additionalData.cardsPlayed < 3) {
 			toExclude.push(CardIds.Collectible.Hunter.RatTrap);
 			toExclude.push(CardIds.Collectible.Paladin.HiddenWisdom);
+			toExclude.push(CardIds.Collectible.Paladin.GallopingSavior);
 		}
 		if (deckWithSecretToCheck.board.length === 7) {
 			toExclude.push(CardIds.Collectible.Hunter.RatTrap);
+			toExclude.push(CardIds.Collectible.Paladin.GallopingSavior);
 		}
 		if (deckWithSecretToCheck.hand.length === 10) {
 			toExclude.push(CardIds.Collectible.Paladin.HiddenWisdom);
