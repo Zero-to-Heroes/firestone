@@ -52,7 +52,7 @@ import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_REWARDS_INFO_URL = 'https://1ntio3mhgd.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=5';
+const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=6';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
@@ -604,9 +604,10 @@ export class DuelsStateBuilderService {
 			.map(card => {
 				const out = collectionState.getCard(card.id);
 				if (!out) {
-					console.warn('[duels-state-builder] Could not find card for', card.id);
+					console.warn('[duels-state-builder] Could not find card for', card.id, deck);
 				}
 				return out;
+				// ?? new SetCard(card.id, card.name, card.playerClass, card.rarity, card.cost, 0, 0, 0);
 			})
 			.filter(card => card)
 			.filter(card => card.getNumberCollected() === 0)
