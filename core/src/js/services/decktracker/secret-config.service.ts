@@ -21,7 +21,7 @@ export class SecretConfigService {
 		const mode: string = this.getMode(metadata);
 		const config = this.secretConfigs.find(conf => conf.mode === mode);
 		const result = config.secrets.filter(secret => secret.playerClass === playerClass).map(secret => secret.cardId);
-		console.log('[secrets-config] getting valid secrets', metadata, playerClass, mode, config, result);
+		// console.log('[secrets-config] getting valid secrets', metadata, playerClass, mode, config, result);
 		return result;
 	}
 

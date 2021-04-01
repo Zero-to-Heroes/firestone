@@ -27,6 +27,7 @@ export class DeckstringOverrideParser implements EventParser {
 			return currentState;
 		}
 
+		console.log('[deckstring-override-parser] overriding with deckstring', playerOrOpponent, deckstring);
 		// We take the contents of the current deck, and we put aside all the cards that have
 		// been added afterwards (ie cards that have a creator)
 		// These are the cards that we will have to put back in the deck after the decklist

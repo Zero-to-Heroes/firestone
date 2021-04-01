@@ -52,7 +52,6 @@ export class OpponentPlayerParser implements EventParser {
 		const aiDeck = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
 		const aiDeckString = shouldLoadDecklist && aiDeck ? aiDeck.deckstring : null;
 
-		// console.log('[opponent-player] got deckstring', aiDeckString, aiDeck, currentState.metadata);
 		// No deckstring, so don't change anything
 		if (!aiDeckString) {
 			const newPlayerDeck = currentState.opponentDeck.update({
@@ -65,6 +64,7 @@ export class OpponentPlayerParser implements EventParser {
 			} as GameState);
 		}
 
+		console.log('[opponent-player] got AI deckstring', aiDeckString, currentState.metadata);
 		const decklist = await this.deckParser.postProcessDeck(this.deckParser.buildDeckList(aiDeckString));
 		// console.log('[opponent-player] parsed decklist', decklist);
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck

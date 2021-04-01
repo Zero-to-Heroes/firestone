@@ -35,10 +35,18 @@ export class DecklistUpdateParser implements EventParser {
 			? this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId)
 			: null;
 		const newDeckstring = aiDeck && aiDeck.decks && aiDeck.decks[deckId];
+		console.log(
+			'[decklist-update] loading AI deck',
+			gameEvent.opponentPlayer.CardID,
+			currentState.metadata.scenarioId,
+			deckId,
+			newDeckstring,
+		);
 		if (!newDeckstring) {
-			// console.log('[decklist-update] could not find new deck', gameEvent, aiDeck);
+			console.log('[decklist-update] could not find new deck');
 			return currentState;
 		}
+
 		const decklist = await this.deckParser.postProcessDeck(this.deckParser.buildDeckList(newDeckstring));
 		// console.log('[decklist-update] parsed decklist', decklist);
 		const newPlayerDeck = currentState.opponentDeck.update({
