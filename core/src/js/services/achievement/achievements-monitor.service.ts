@@ -94,11 +94,7 @@ export class AchievementsMonitor {
 		if (retriesLeft < 0) {
 			return;
 		}
-		// TODO: the "progress step" (like Setting the Standard) achievements are not
 
-		// returned here by the in game achievements progress
-		// Trying to read the achievements directly from memory, instead of from the
-		// indexeddb, to see if this solves the issue
 		console.log('[achievement-monitor] detecting achievements from memory');
 		const [existingAchievements, achievementsProgress] = await Promise.all([
 			this.achievementsManager.getAchievements(),
@@ -120,15 +116,15 @@ export class AchievementsMonitor {
 		const computedProgress: readonly HsAchievementInfo[] = achievementsProgress?.achievements?.length
 			? achievementsProgress.achievements
 			: this.achievementsDiff(this.previousAchievements, existingAchievements);
-		// if (process.env.NODE_ENV !== 'production') {
-		// 	console.debug(
-		// 		'[achievement-monitor] computed progress',
-		// 		computedProgress,
-		// 		achievementsProgress,
-		// 		this.previousAchievements,
-		// 		existingAchievements,
-		// 	);
-		// }
+		if (process.env.NODE_ENV !== 'production') {
+			console.debug(
+				'[achievement-monitor] computed progress',
+				computedProgress,
+				achievementsProgress,
+				this.previousAchievements,
+				existingAchievements,
+			);
+		}
 		const unlockedAchievements = computedProgress
 			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
 			.map(progress => progress.id)
@@ -308,13 +304,14 @@ export class AchievementsMonitor {
 
 	private async assignPreviousAchievements() {
 		const existingAchievements = await this.achievementsManager.getAchievements(true);
-		// console.debug('existing achievements', existingAchievements, this.previousAchievements);
+		// console.debug('[achievements-monitor] existing achievements', existingAchievements, this.previousAchievements);
 		if (!existingAchievements) {
 			return;
 		}
 
 		if (!this.previousAchievements) {
-			//console.debug('assigning previous achievements', existingAchievements);
+			// console.debug('[achievements-monitor] assigning previous achievements', existingAchievements);
+			console.log('[achievements-monitor] assigning previous achievements', existingAchievements.length);
 			this.previousAchievements = existingAchievements;
 		}
 	}
