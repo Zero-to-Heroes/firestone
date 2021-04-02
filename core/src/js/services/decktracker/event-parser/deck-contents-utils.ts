@@ -36,7 +36,7 @@ export const modifyDeckForSpecialCards = (
 
 const handleEmbiggen = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCost(
-		(card, refCard) => refCard.type === 'Minion' || card.cardType === 'Minion',
+		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		card => card.getEffectiveManaCost() + 1,
 		deckState,
 		allCards,
@@ -45,7 +45,7 @@ const handleEmbiggen = (deckState: DeckState, allCards: AllCardsService): DeckSt
 
 const handleIncantersFlow = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCost(
-		(card, refCard) => refCard.type === 'Spell' || card.cardType === 'Spell',
+		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
 		card => Math.max(0, card.getEffectiveManaCost() - 1),
 		deckState,
 		allCards,
@@ -54,7 +54,7 @@ const handleIncantersFlow = (deckState: DeckState, allCards: AllCardsService): D
 
 const handleFrizzKindleroost = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCost(
-		(card, refCard) => refCard.race === Race.DRAGON.toString(),
+		(card, refCard) => refCard?.race === Race.DRAGON.toString(),
 		card => Math.max(0, card.getEffectiveManaCost() - 2),
 		deckState,
 		allCards,
@@ -63,7 +63,7 @@ const handleFrizzKindleroost = (deckState: DeckState, allCards: AllCardsService)
 
 const handleLunasPocketGalaxy = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCost(
-		(card, refCard) => refCard.type === 'Minion' || card.cardType === 'Minion',
+		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		card => 1,
 		deckState,
 		allCards,
@@ -72,7 +72,7 @@ const handleLunasPocketGalaxy = (deckState: DeckState, allCards: AllCardsService
 
 const handleWyrmrestPurifier = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCard(
-		(card, refCard) => refCard.playerClass === 'Neutral',
+		(card, refCard) => refCard?.playerClass === 'Neutral',
 		card =>
 			card.update({
 				cardId: undefined,
@@ -91,7 +91,7 @@ const handleWyrmrestPurifier = (deckState: DeckState, allCards: AllCardsService)
 
 const handleDeckOfLunacy = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCard(
-		(card, refCard) => refCard.type === 'Spell' || card.cardType === 'Spell',
+		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
 		card =>
 			card.update({
 				cardId: undefined,
@@ -117,10 +117,10 @@ const handleHemet = (deckState: DeckState, allCards: AllCardsService): DeckState
 
 const handleDeckOfChaos = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCard(
-		(card, refCard) => refCard.type === 'Minion' || card.cardType === 'Minion',
+		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card, refCard) =>
 			card.update({
-				actualManaCost: refCard.attack,
+				actualManaCost: refCard?.attack,
 			} as DeckCard),
 		deckState,
 		allCards,
@@ -129,7 +129,7 @@ const handleDeckOfChaos = (deckState: DeckState, allCards: AllCardsService): Dec
 
 const handlePrinceLiam = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCard(
-		(card, refCard) => card.getEffectiveManaCost() === 1,
+		(card, refCard) => card?.getEffectiveManaCost() === 1,
 		card =>
 			card.update({
 				cardId: undefined,
