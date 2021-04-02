@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.5.12',
+		version: '7.7.0',
 		sections: [
 			{
 				type: 'intro',
@@ -53,6 +53,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Show missing achievements for heroes on hero selection screen.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `The tracker now updates the cards in the list after some global cards are played, like Deck of Lunacy. For now, the effects that are supported are cost changes, and card transform (like Prince Liam). Minions buff and other similar effects are not handled yet.`,
 							},
 						],
 					},
