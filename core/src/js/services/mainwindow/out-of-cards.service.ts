@@ -157,8 +157,8 @@ export class OutOfCardsService {
 			console.debug(
 				'[ooc-auth] token not expired',
 				Date.now(),
-				token.expires_timestamp,
-				Date.now() - token.expires_timestamp,
+				token?.expires_timestamp,
+				Date.now() - token?.expires_timestamp,
 			);
 		}
 		await this.prefs.udpateOutOfCardsToken(token);
