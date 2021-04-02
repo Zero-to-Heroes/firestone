@@ -48,7 +48,6 @@ export class AchievementsNotificationService {
 			type: 'achievement-no-record',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: 0,
 			theClass: 'no-record',
 			clickToClose: true,
 		} as Message);

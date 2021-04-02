@@ -129,9 +129,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private async sendNotification(messageObject: Message): Promise<void> {
 		return new Promise<void>(async resolve => {
 			await this.waitForInit();
-			// const activeNotif = this.activeNotifications.find(
-			// 	notif => notif.notificationId === messageObject.notificationId,
-			// );
 			let notification;
 			try {
 				notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
@@ -139,47 +136,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				console.warn('could not get notif', this.elRef.nativeElement, e);
 			}
 
-			// if (activeNotif) {
-			// 	const previousClass = activeNotif.toast.theClass;
-			// 	// console.log('notification', notification, previousClass);
-			// 	if (previousClass === 'remove-on-update') {
-			// 		this.notificationService.remove(activeNotif.toast.id);
-			// 		// console.log('removing previous notif', activeNotif);
-			// 		await this.showNotification(messageObject);
-			// 		resolve();
-			// 		return;
-			// 	} else if (notification) {
-			// 		await this.updateNotification(messageObject.notificationId, messageObject.theClass, notification);
-			// 		resolve();
-			// 		return;
-			// 	}
-			// }
-			// console.log('showing notif');
 			await this.showNotification(messageObject);
 			resolve();
 			return;
 		});
 	}
-
-	// private async updateNotification(notificationId: string, newClass: string, notification) {
-	// 	// console.log('in confirm achievement', notificationId);
-	// 	const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
-	// 	const toast = activeNotif.toast;
-	// 	// console.log('active notif found', newClass, toast, activeNotif, notification);
-	// 	toast.theClass = newClass;
-	// 	notification.classList.add(newClass);
-	// 	// console.log('updated notif', notification);
-	// 	if (newClass === 'active') {
-	// 		notification.classList.remove('unclickable');
-	// 		setTimeout(() => {
-	// 			this.fadeNotificationOut(notificationId);
-	// 		}, 5000);
-	// 	}
-
-	// 	if (!(this.cdr as ViewRef)?.destroyed) {
-	// 		this.cdr.detectChanges();
-	// 	}
-	// }
 
 	private async showNotification(messageObject: Message) {
 		return new Promise<void>(async resolve => {
@@ -187,13 +148,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const htmlMessage: string = messageObject.content;
 			const cardId: string = messageObject.cardId;
 			const type: string = messageObject.type;
-			const additionalTimeout: number = messageObject.timeout || 0;
+			const timeout: number = messageObject.timeout || this.timeout;
 			await this.ow.restoreWindow(this.windowId);
 			this.ow.bringToFront(this.windowId);
 			const override: any = {
-				// Achievement apps are timed out manually
-				// timeOut: messageObject.app === 'achievement' ? 999999 : this.timeout + additionalTimeout,
-				timeOut: this.timeout + additionalTimeout,
+				timeOut: timeout,
 				clickToClose: messageObject.clickToClose === false ? false : true,
 			};
 
