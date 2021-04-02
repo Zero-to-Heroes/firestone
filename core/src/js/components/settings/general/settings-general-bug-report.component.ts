@@ -106,7 +106,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 
 			this.prefs.setContactEmail(this.email);
 
-			this.status = `Feedback sent. Thanks for reaching out! Stay up-to-date on <a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a> or <a href="https://discord.gg/v2a4uR7" target="_blank">Discord</a>`;
+			this.status = `Feedback sent. Thank you for reaching out! Stay up-to-date on <a href="https://twitter.com/ZerotoHeroes_HS" target="_blank">Twitter</a> or <a href="https://discord.gg/v2a4uR7" target="_blank">Discord</a>`;
 			this.buttonDisabled = false;
 			this.body = null;
 			// this.email = null;

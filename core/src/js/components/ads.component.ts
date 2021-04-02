@@ -27,7 +27,7 @@ declare let OwAd: any;
 				Support the dev and remove the ads
 			</div>
 			<div class="thank-you-link" *ngIf="!shouldDisplayAds">
-				Thanks for supporting us! You rock :)
+				Thank you for supporting us! You rock :)
 			</div>
 			<div class="no-ads-placeholder">
 				<i class="i-117X33 gold-theme logo">
