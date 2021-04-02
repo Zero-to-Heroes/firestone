@@ -15,7 +15,7 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.log('drawing from deck', cardId, gameEvent);
+		//console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
@@ -24,25 +24,25 @@ export class CardDrawParser implements EventParser {
 		const isCreatorPublic = isCardInfoPublic || publicCardCreators.includes(lastInfluencedByCardId);
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
+		//console.debug('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
-		// console.log('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
 		const cardWithCreator = card.update({
 			creatorCardId: isCardInfoPublic ? creatorCardId : undefined,
 			cardId: isCardInfoPublic ? card.cardId : undefined,
 			cardName: isCardInfoPublic ? card.cardName : undefined,
 			lastAffectedByCardId: isCreatorPublic ? lastInfluencedByCardId : undefined,
 		} as DeckCard);
-		// console.log('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
+		//console.debug('cardWithCreator', cardWithCreator, isCreatorPublic, publicCardCreators, lastInfluencedByCardId);
 		const previousDeck = deck.deck;
 
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId, deck.deckList.length === 0, true)[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
-		// console.log('newDeck', newDeck, isCardInfoPublic, previousDeck);
+		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
-		// console.log('added card to hand', newHand);
+		//console.debug('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,

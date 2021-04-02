@@ -22,7 +22,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 			[cardTooltipPosition]="_tooltipPosition"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
-			<div class="mana-cost">
+			<div class="mana-cost" [ngClass]="{ 'cost-reduction': manaCostReduction }">
 				<span>{{ manaCost === undefined ? '?' : manaCost }}</span>
 			</div>
 			<div class="missing-overlay" *ngIf="_isMissing"></div>
@@ -114,6 +114,7 @@ export class DeckCardComponent {
 	isDiscarded: boolean;
 	isGraveyard: boolean;
 	isTransformed: boolean;
+	manaCostReduction: boolean;
 	mouseOverRight = 0;
 
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
@@ -128,7 +129,8 @@ export class DeckCardComponent {
 	@Input('card') set card(card: VisualDeckCard) {
 		this.cardId = card.cardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg?v=3)`;
-		this.manaCost = card.manaCost;
+		this.manaCost = card.getEffectiveManaCost();
+		this.manaCostReduction = this.manaCost != null && this.manaCost < card.manaCost;
 		this.cardName = card.cardName;
 		this.numberOfCopies = card.totalQuantity;
 		this.rarity = card.rarity;
