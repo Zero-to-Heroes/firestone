@@ -161,6 +161,7 @@ export class OutOfCardsService {
 				Date.now() - token.expires_timestamp,
 			);
 		}
+		await this.prefs.udpateOutOfCardsToken(token);
 		return token;
 	}
 
