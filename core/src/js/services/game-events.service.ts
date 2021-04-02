@@ -144,9 +144,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		//	console.log('[debug] game event', gameEvent.Type, gameEvent);
-		//}
+		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		// 	console.log('[debug] game event', gameEvent.Type, gameEvent);
+		// }
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -512,6 +512,20 @@ export class GameEvents {
 								? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 								: null,
 					}),
+				);
+				break;
+			case 'SECRET_WILL_TRIGGER':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(
+						GameEvent.SECRET_WILL_TRIGGER,
+						gameEvent,
+						gameEvent.Value.AdditionalProps
+							? {
+									reactingTo: gameEvent.Value.AdditionalProps.InReactionTo,
+							  }
+							: null,
+					),
 				);
 				break;
 			case 'SECRET_TRIGGERED':

@@ -436,3 +436,10 @@ export const getPackDustValue = (pack: PackResult): number => {
 		.map(card => (card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity)))
 		.reduce((a, b) => a + b, 0);
 };
+
+export const COUNTERSPELLS = [
+	CardIds.Collectible.Mage.Counterspell,
+	CardIds.Collectible.Mage.CounterspellCore,
+	CardIds.Collectible.Mage.CounterspellVanilla,
+	CardIds.Collectible.Paladin.OhMyYogg,
+];

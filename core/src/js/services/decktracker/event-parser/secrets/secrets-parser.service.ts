@@ -28,11 +28,18 @@ export class SecretsParserService {
 	// BUT while the global trigger condition can be the same (attacking_hero), it's possible
 	// that some other conditions (like having space on board) are not met and thus secrets
 	// should not be ticked off
-	public async parseSecrets(gameState: GameState, gameEvent: GameEvent): Promise<GameState> {
+	public async parseSecrets(
+		gameState: GameState,
+		gameEvent: GameEvent,
+		secretWillTrigger: {
+			cardId: string;
+			reactingTo: string;
+		},
+	): Promise<GameState> {
 		if (this.isSecretInPlayer(gameState)) {
 			for (const parser of this.secretParsers) {
 				if (parser.applies(gameEvent, gameState)) {
-					gameState = await parser.parse(gameState, gameEvent);
+					gameState = await parser.parse(gameState, gameEvent, secretWillTrigger);
 				}
 			}
 		}

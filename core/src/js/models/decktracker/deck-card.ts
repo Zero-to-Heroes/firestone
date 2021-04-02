@@ -46,7 +46,7 @@ export class DeckCard {
 	}
 
 	public update(newCard: DeckCard): DeckCard {
-		if (newCard.cardId && !newCard.cardName) {
+		if (newCard?.cardId && !newCard?.cardName) {
 			console.warn('updating deck card without name', newCard, new Error().stack);
 		}
 		return Object.assign(new DeckCard(), this, newCard);

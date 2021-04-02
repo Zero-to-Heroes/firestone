@@ -16,6 +16,10 @@ export class DeckstringOverrideParser implements EventParser {
 	async parse(
 		currentState: GameState,
 		gameEvent: DeckstringOverrideEvent,
+		secretWillTrigger?: {
+			cardId: string;
+			reactingTo: string;
+		},
 		playerOrOpponent: 'player' | 'opponent' = 'opponent',
 	): Promise<GameState> {
 		const deckName = gameEvent.deckName;
