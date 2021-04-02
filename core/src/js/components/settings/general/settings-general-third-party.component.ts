@@ -21,7 +21,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		`../../../../css/component/settings/general/settings-general-third-party.component.scss`,
 	],
 	template: `
-		<div class="general-third-party">
+		<div class="general-third-party" scrollable>
 			<div class="intro">
 				We believe that your data belongs to you, and that you should be able to synchronize it to other third
 				party websites and help them do whatever they do best with it. We don't get paid for this, but we do get
