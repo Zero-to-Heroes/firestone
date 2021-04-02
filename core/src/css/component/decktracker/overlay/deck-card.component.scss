@@ -199,6 +199,12 @@
 			span {
 				color: #07081f;
 			}
+			// For now don't change the color, as it looks bad :)
+			// &.cost-reduction {
+			// 	span {
+			// 		color: #61ff47;
+			// 	}
+			// }
 		}
 		&.rare .mana-cost {
 			background: #357ee3;

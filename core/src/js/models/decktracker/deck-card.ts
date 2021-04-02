@@ -1,3 +1,4 @@
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { CardMetaInfo } from './card-meta-info';
 
 export class DeckCard {
@@ -5,6 +6,12 @@ export class DeckCard {
 	readonly entityId: number;
 	readonly cardName: string;
 	readonly manaCost: number;
+	// So that when only the type of the card is known (like after Deck of Lunacy)
+	// we can still apply type-specific effects on it
+	readonly cardType: string;
+	// Some cards change the cost of a card, this field will reflect it
+	// For now still only implementing a few effects, like Incanter's Flow
+	readonly actualManaCost: number;
 	readonly rarity: string;
 	readonly creatorCardId?: string;
 	readonly lastAffectedByCardId?: string;
@@ -25,6 +32,7 @@ export class DeckCard {
 	readonly metaInfo: CardMetaInfo = new CardMetaInfo();
 	readonly inInitialDeck: boolean;
 	readonly temporaryCard?: boolean;
+	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
 	public static create(base: DeckCard = {} as DeckCard) {
 		if (base.cardId && !base.cardName) {
@@ -46,5 +54,9 @@ export class DeckCard {
 
 	public isFiller(): boolean {
 		return !this.cardId && !this.entityId && !this.creatorCardId && !this.cardName;
+	}
+
+	public getEffectiveManaCost(): number {
+		return this.actualManaCost ?? this.manaCost;
 	}
 }

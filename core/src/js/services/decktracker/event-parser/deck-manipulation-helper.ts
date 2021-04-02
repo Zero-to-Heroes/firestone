@@ -19,9 +19,21 @@ export class DeckManipulationHelper {
 		entityId: number,
 		removeFillerCard = false,
 		normalizeUpgradedCards = false,
+		debug = false,
 	): readonly [readonly DeckCard[], DeckCard] {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
-		const debug = false; // entityId === 2098;
+		if (debug) {
+			console.debug(
+				'removing',
+				cardId,
+				normalizedCardId,
+				entityId,
+				removeFillerCard,
+				normalizeUpgradedCards,
+				zone,
+			);
+		}
+
 		// We have the entityId, so we just remove it
 		if (zone.some(card => card.entityId === entityId)) {
 			if (debug) {
@@ -35,8 +47,9 @@ export class DeckManipulationHelper {
 				zone.find((card: DeckCard) => card.entityId === entityId),
 			];
 		}
+
 		if (!normalizedCardId) {
-			// If there are some "fillter" cards (ie cards that exist only so that the deck has the right amount
+			// If there are some "filler" cards (ie cards that exist only so that the deck has the right amount
 			// of cards), we remove one
 			if (zone.some(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
 				let hasRemovedOnce = false;
@@ -74,6 +87,7 @@ export class DeckManipulationHelper {
 			}
 			return [zone, null];
 		}
+
 		if (debug) {
 			console.debug(
 				'trying to remove a card from zone without using the entityId',
@@ -111,13 +125,48 @@ export class DeckManipulationHelper {
 			}
 			result.push(card);
 		}
-		if (!removedCard && removeFillerCard) {
+
+		if (debug) {
+			console.debug('found card to remove?', removedCard, result);
+		}
+
+		if (!removedCard) {
+			// First remove cards that are not exactly fillers, but unknown cards that we can match based
+			// on some characteristic of the card
+			const refCard = normalizedCardId ? this.allCards.getCard(normalizedCardId) : null;
 			if (debug) {
-				console.debug(
-					'could not find card to remove with entity and card ids, removing filler card?',
-					zone.filter(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId),
-				);
+				console.debug('trying to remove special cards', refCard, normalizedCardId);
 			}
+			if (refCard) {
+				const candidates = zone
+					.filter(card => card.cardMatchCondition)
+					.filter(card => card.cardMatchCondition(refCard));
+				if (debug) {
+					console.debug('found candidates to remove', candidates);
+				}
+
+				if (candidates?.length) {
+					let hasRemovedOnce = false;
+					const result = zone.filter(card => !card.cardMatchCondition || !card.cardMatchCondition(refCard));
+					let removedCard = undefined;
+					for (const card of candidates) {
+						// We don't want to remove a card if it has a different entityId
+						if (!hasRemovedOnce) {
+							hasRemovedOnce = true;
+							removedCard = card;
+							continue;
+						}
+						result.push(card);
+					}
+					if (debug) {
+						console.debug('returning', result, removedCard);
+					}
+					return [result, removedCard];
+				}
+			}
+		}
+
+		if (!removedCard && removeFillerCard) {
 			if (zone.some(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
 				if (debug) {
 					console.debug(
