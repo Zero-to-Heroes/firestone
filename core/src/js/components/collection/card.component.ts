@@ -64,6 +64,7 @@ export class CardComponent implements AfterViewInit {
 		this.ownedPremium = (this._card as SetCard).ownedPremium ?? 0 + (this._card as SetCard).ownedDiamond ?? 0;
 		this.showPremiumCount = this.ownedPremium > 0;
 		this.missing = this._card.ownedNonPremium + this._card.ownedPremium + this._card.ownedDiamond === 0;
+		this.updateImage();
 	}
 
 	@Input() set collectionCard(card: CollectionReferenceCard) {
