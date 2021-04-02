@@ -442,7 +442,6 @@ export class TwitchAuthService {
 			notificationId: 'expired-token-notif-' + new Date().getTime(),
 			content: content,
 			type: 'expired-token-notif',
-			timeout: 5000,
 		} as Message);
 	}
 

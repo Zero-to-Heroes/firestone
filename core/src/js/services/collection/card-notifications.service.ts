@@ -65,7 +65,6 @@ export class CardNotificationsService {
 				</div>`,
 			notificationId: `cards-${Date.now()}-${dbCard.id}`,
 			cardId: dbCard.id,
-			timeout: 0,
 		});
 	}
 
@@ -98,7 +97,6 @@ export class CardNotificationsService {
                             </svg>
                         </button>
                     </div>`,
-				timeout: 0,
 				notificationId: `dust-${Date.now()}-${dust}-${numberOfCards}`,
 			});
 		}
