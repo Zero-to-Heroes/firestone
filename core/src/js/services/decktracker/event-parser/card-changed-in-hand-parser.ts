@@ -28,6 +28,7 @@ export class CardChangedInHandParser implements EventParser {
 					entityId: entityId,
 					cardName: isPlayer ? cardData.name : cardInHand.cardName,
 					manaCost: isPlayer && cardData ? cardData.cost : undefined,
+					actualManaCost: isPlayer && cardData ? cardInHand.actualManaCost ?? cardData.cost : undefined,
 					rarity: isPlayer && cardData && cardData.rarity ? cardData.rarity.toLowerCase() : cardInHand.rarity,
 			  } as DeckCard)
 			: null;

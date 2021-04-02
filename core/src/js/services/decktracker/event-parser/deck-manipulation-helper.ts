@@ -133,21 +133,21 @@ export class DeckManipulationHelper {
 		if (!removedCard) {
 			// First remove cards that are not exactly fillers, but unknown cards that we can match based
 			// on some characteristic of the card
-			const refCard = normalizedCardId ? this.allCards.getCard(normalizedCardId) : null;
+			const drawnCard = normalizedCardId ? this.allCards.getCard(normalizedCardId) : null;
 			if (debug) {
-				console.debug('trying to remove special cards', refCard, normalizedCardId);
+				console.debug('trying to remove special cards', drawnCard, normalizedCardId);
 			}
-			if (refCard) {
+			if (drawnCard) {
 				const candidates = zone
 					.filter(card => card.cardMatchCondition)
-					.filter(card => card.cardMatchCondition(refCard));
+					.filter(card => card.cardMatchCondition(drawnCard));
 				if (debug) {
 					console.debug('found candidates to remove', candidates);
 				}
 
 				if (candidates?.length) {
 					let hasRemovedOnce = false;
-					const result = zone.filter(card => !card.cardMatchCondition || !card.cardMatchCondition(refCard));
+					const result = zone.filter(card => !card.cardMatchCondition || !card.cardMatchCondition(drawnCard));
 					let removedCard = undefined;
 					for (const card of candidates) {
 						// We don't want to remove a card if it has a different entityId
