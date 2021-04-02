@@ -93,6 +93,7 @@ export class Preferences {
 	readonly decktrackerNoDeckMode: boolean = false;
 	readonly overlayOpacityInPercent: number = 100;
 	readonly overlayWidthInPx: number = 227; // No UI
+	readonly overlayShowCostReduction: boolean = true;
 
 	readonly opponentOverlayGroupByZone: boolean = true;
 	readonly opponentOverlayCardsGoToBottom: boolean = true;

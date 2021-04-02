@@ -74,6 +74,7 @@ declare let amplitude;
 							[deckState]="deck"
 							[displayMode]="displayMode"
 							[colorManaCost]="colorManaCost"
+							[showUpdatedCost]="showUpdatedCost"
 							[showGlobalEffectsZone]="showGlobalEffectsZone"
 							[showGiftsSeparately]="showGiftsSeparately"
 							[cardsGoToBottom]="cardsGoToBottom"
@@ -127,6 +128,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	// showTracker: boolean;
 	// highlightCardsInHand: boolean;
 	colorManaCost: boolean;
+	showUpdatedCost: boolean;
 	showGiftsSeparately: boolean;
 	cardsGoToBottom: boolean;
 	showGlobalEffectsZone: boolean;
@@ -278,6 +280,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.el.nativeElement.style.setProperty('--decktracker-scale', this.scale / 100);
 		this.el.nativeElement.style.setProperty('--decktracker-max-height', this.player === 'player' ? '90vh' : '70vh');
 		this.colorManaCost = preferences.overlayShowRarityColors;
+		this.showUpdatedCost = preferences.overlayShowCostReduction;
 		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
 		this.showGlobalEffectsZone = this.showGlobalEffectsExtractor(preferences);
