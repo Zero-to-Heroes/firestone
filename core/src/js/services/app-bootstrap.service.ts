@@ -237,7 +237,7 @@ export class AppBootstrapService {
 							<div class="title">
 								<span>Firestone ready to go</span>
 							</div>
-							<span class="text">Thanks for supporting us!</span>
+							<span class="text">Thank you for supporting us!</span>
 						</div>
 						<button class="i-30 close-button">
 							<svg class="svg-icon-fill">
