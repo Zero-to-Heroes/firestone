@@ -68,6 +68,11 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.refreshZone();
 	}
 
+	// @Input() set showCostReduction(value: boolean) {
+	// 	this._showCostReduction = value;
+	// 	this.refreshZone();
+	// }
+
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
 		this.refreshZone();
@@ -90,6 +95,7 @@ export class DeckZoneComponent implements AfterViewInit {
 	open = true;
 
 	private _showGiftsSeparately = true;
+	// private _showCostReduction = false;
 	private _zone: DeckZone;
 
 	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly prefs: PreferencesService) {}
@@ -175,18 +181,19 @@ export class DeckZoneComponent implements AfterViewInit {
 			? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
 			: card.cardId;
 		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithGift + '-graveyard' : keyWithGift;
+		const keyWithCost = keyWithGraveyard + '-' + card.getEffectiveManaCost();
 		if (!this._collection?.length) {
-			return keyWithGraveyard;
+			return keyWithCost;
 		}
 
 		// const cardInCollection = this._collection.find(c => c.id === card.cardId);
 		const quantityToAllocate = quantitiesLeftForCard[card.cardId];
 		quantitiesLeftForCard[card.cardId] = quantityToAllocate - 1;
 		if (quantityToAllocate > 0) {
-			return keyWithGraveyard;
+			return keyWithCost;
 		}
 
-		return keyWithGraveyard + '-missing';
+		return keyWithCost + '-missing';
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
