@@ -1,9 +1,8 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { CardIds, GameTag } from '@firestone-hs/reference-data';
+import { GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
-import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
@@ -138,6 +137,10 @@ export class GameStateService {
 	private overlayHandlers: OverlayHandler[] = [];
 
 	private currentReviewId: string;
+	private secretWillTrigger: {
+		cardId: string;
+		reactingTo: string;
+	};
 
 	private showDecktrackerFromGameMode: boolean;
 
@@ -320,8 +323,6 @@ export class GameStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
-		// console.debug('process matc hevent', gameEvent);
-		const allowRequeue = !(gameEvent as any).preventRequeue;
 		this.overlayHandlers.forEach(handler =>
 			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
 		);
@@ -332,76 +333,25 @@ export class GameStateService {
 			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
+		} else if (gameEvent.type === GameEvent.SECRET_WILL_TRIGGER) {
+			this.secretWillTrigger = {
+				cardId: gameEvent.cardId,
+				reactingTo: gameEvent.additionalData.reactingTo,
+			};
+			console.log('[game-state] secret will trigger in reaction to', this.secretWillTrigger);
 		}
 
-		// Delay all "card played" and "secret played" events to give Counterspell a chance to apply first
-		// Only do so when a secret has been played to avoid impacting the overall experience
-		// To test - Counterspell played first, then Spellbender
-		// play spell on a minion, that is countered. Spellbender does not trigger, but shouldn't be grayed out
-		let requeueingEventForSecrets = false;
-		if (
-			allowRequeue &&
-			(this.state.playerDeck.secrets.length > 0 || this.state.opponentDeck.secrets.length > 0) &&
-			[GameEvent.CARD_PLAYED || GameEvent.SECRET_PLAYED || GameEvent.QUEST_PLAYED].indexOf(gameEvent.type) !== -1
-		) {
-			const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-			const isPlayer = controllerId === localPlayer.PlayerId;
-			const card = this.allCards.getCard(cardId);
-			// Only spells are used to delay secret guess
-			if (!card || card.type?.toUpperCase() === 'SPELL') {
-				// Consider the opposing secrets
-				if (
-					(isPlayer && this.hasPossibleCounterspell(this.state.opponentDeck.secrets)) ||
-					(!isPlayer && this.hasPossibleCounterspell(this.state.playerDeck.secrets))
-				) {
-					console.log(
-						'[game-state] delaying secret elimination to account for a possible Counterspell',
-						cardId,
-						card,
-						isPlayer,
-						this.state.playerDeck.secrets.length,
-						this.state.opponentDeck.secrets.length,
-					);
-					setTimeout(
-						() =>
-							this.processingQueue.enqueue(
-								Object.assign(new GameEvent(), gameEvent, { preventRequeue: true }),
-							),
-						7500,
-					);
-					requeueingEventForSecrets = true;
+		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent, this.secretWillTrigger);
+		const prefs = await this.prefs.getPreferences();
+		for (const parser of this.eventParsers) {
+			try {
+				if (parser.applies(gameEvent, this.state, prefs)) {
+					this.state = await parser.parse(this.state, gameEvent, this.secretWillTrigger);
 				}
+			} catch (e) {
+				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
 			}
 		}
-
-		// console.log('\tready to apply secrets parser');
-		if (!requeueingEventForSecrets) {
-			this.state = await this.secretsParser.parseSecrets(this.state, gameEvent);
-		}
-		// console.log('\thas applied secrets parser');
-
-		// We have to always use this.state, otherwise there could be race conditions
-		// with subscribers
-		// let newState: GameState;
-		if (allowRequeue) {
-			const prefs = await this.prefs.getPreferences();
-			for (const parser of this.eventParsers) {
-				try {
-					if (parser.applies(gameEvent, this.state, prefs)) {
-						this.state = await parser.parse(this.state, gameEvent);
-					}
-				} catch (e) {
-					console.error(
-						'[game-state] Exception while applying parser',
-						parser.event(),
-						e.message,
-						e.stack,
-						e,
-					);
-				}
-			}
-		}
-		// console.log('\thas applied other parsers');
 		try {
 			if (this.state) {
 				// Add information that is not linked to events, like the number of turns the
@@ -425,13 +375,9 @@ export class GameStateService {
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
 		}
+
 		if (this.state) {
-			this.updateOverlays(
-				this.state,
-				false,
-				false, //[GameEvent.MATCH_METADATA, GameEvent.LOCAL_PLAYER].indexOf(gameEvent.type) !== -1,
-				shouldUpdateOverlays,
-			);
+			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
 			const emittedEvent = {
 				event: {
 					name: gameEvent.type,
@@ -440,15 +386,17 @@ export class GameStateService {
 			};
 			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 		}
-	}
 
-	private hasPossibleCounterspell(secrets: readonly BoardSecret[]) {
-		return (
-			secrets.length > 0 &&
-			secrets.some(secret =>
-				secret.allPossibleOptions.some(option => option.cardId === CardIds.Collectible.Mage.Counterspell),
-			)
-		);
+		// We have processed the event for which the secret would trigger
+		// TODO: how to handle reconnects, where dev mode is active?
+		if (
+			this.secretWillTrigger?.reactingTo &&
+			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&
+			this.secretWillTrigger.reactingTo === gameEvent.cardId
+		) {
+			console.debug('[game-state] resetting secretWillTrigger', gameEvent, this.secretWillTrigger);
+			this.secretWillTrigger = null;
+		}
 	}
 
 	// TODO: this should move elsewhere

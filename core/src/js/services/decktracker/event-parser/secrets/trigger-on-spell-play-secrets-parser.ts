@@ -4,6 +4,7 @@ import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
+import { COUNTERSPELLS } from '../../../hs-utils';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
@@ -23,7 +24,10 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Rogue.DirtyTricks,
 	];
 
-	private counterSpellTriggered: boolean;
+	private secretWillTrigger: {
+		cardId: string;
+		reactingTo: string;
+	};
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -38,7 +42,14 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		);
 	}
 
-	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+	async parse(
+		currentState: GameState,
+		gameEvent: GameEvent,
+		secretWillTrigger?: {
+			cardId: string;
+			reactingTo: string;
+		},
+	): Promise<GameState> {
 		// console.warn('parsing event', gameEvent.type);
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		if (!cardId) {
@@ -46,15 +57,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 			return currentState;
 		}
 
-		if (gameEvent.type === GameEvent.SECRET_TRIGGERED) {
-			this.counterSpellTriggered = [
-				CardIds.Collectible.Mage.Counterspell,
-				CardIds.Collectible.Mage.CounterspellCore,
-				CardIds.Collectible.Mage.CounterspellVanilla,
-			].includes(cardId);
-			// console.warn('counterspell triggered', this.counterSpellTriggered);
-			return currentState;
-		}
+		this.secretWillTrigger = secretWillTrigger;
 
 		const isSpellPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const spellCard = this.allCards.getCard(cardId);
@@ -63,8 +66,10 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		}
 
 		// If a counterspell has been triggered, the other secrets won't trigger
-		if (this.counterSpellTriggered) {
-			this.counterSpellTriggered = false;
+		if (
+			COUNTERSPELLS.includes(this.secretWillTrigger?.cardId) &&
+			gameEvent.cardId === this.secretWillTrigger?.cardId
+		) {
 			return currentState;
 		}
 

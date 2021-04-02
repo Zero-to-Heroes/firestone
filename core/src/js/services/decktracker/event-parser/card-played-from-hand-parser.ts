@@ -4,7 +4,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { globalEffectCards } from '../../hs-utils';
+import { COUNTERSPELLS, globalEffectCards } from '../../hs-utils';
 import { modifyDeckForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
@@ -16,7 +16,14 @@ export class CardPlayedFromHandParser implements EventParser {
 		return state && gameEvent.type === GameEvent.CARD_PLAYED;
 	}
 
-	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+	async parse(
+		currentState: GameState,
+		gameEvent: GameEvent,
+		secretWillTrigger?: {
+			cardId: string;
+			reactingTo: string;
+		},
+	): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
@@ -72,8 +79,11 @@ export class CardPlayedFromHandParser implements EventParser {
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
 
+		const isCardCountered =
+			secretWillTrigger?.reactingTo === cardId && COUNTERSPELLS.includes(secretWillTrigger?.cardId);
+
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		if (globalEffectCards.includes(card?.cardId)) {
+		if (!isCardCountered && globalEffectCards.includes(card?.cardId)) {
 			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, cardWithZone);
 		}
 
@@ -90,8 +100,10 @@ export class CardPlayedFromHandParser implements EventParser {
 			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (refCard?.type === 'Spell' ? 1 : 0),
 			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (isElemental ? 1 : 0),
 		} as DeckState);
-
-		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards);
+		//console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
+		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
+			? newPlayerDeck
+			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards);
 		// console.log('[secret-turn-end] updated deck', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,

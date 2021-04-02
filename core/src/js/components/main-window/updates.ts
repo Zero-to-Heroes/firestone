@@ -117,6 +117,10 @@ export const updates: readonly Update[] = [
 								text: `Now properly shows the opponent's name in their side of the tracker, instead of UNKNOWN HUMAIN PLAYER.`,
 							},
 							{
+								type: 'bug',
+								text: `Oh My Yogg! should now be properly handled by the Secrets helper, and spells countered by it should not appear as global effects anymore.`,
+							},
+							{
 								type: 'ui',
 								text: `Add an icon for Wild / Classic decks in the deck stats.`,
 							},
