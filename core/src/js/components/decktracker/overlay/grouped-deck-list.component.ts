@@ -19,6 +19,7 @@ import { SetCard } from '../../../models/set';
 				[zone]="zone"
 				[tooltipPosition]="_tooltipPosition"
 				[colorManaCost]="colorManaCost"
+				[showUpdatedCost]="showUpdatedCost"
 				[showGiftsSeparately]="showGiftsSeparately"
 				[side]="side"
 				[collection]="collection"
@@ -29,6 +30,7 @@ import { SetCard } from '../../../models/set';
 })
 export class GroupedDeckListComponent {
 	@Input() colorManaCost: boolean;
+	@Input() showUpdatedCost: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() side: 'player' | 'opponent';
 	@Input() collection: readonly SetCard[];

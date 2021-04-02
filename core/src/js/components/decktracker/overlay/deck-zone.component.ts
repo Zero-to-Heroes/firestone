@@ -48,6 +48,7 @@ import { groupByFunction } from '../../../services/utils';
 						[card]="card"
 						[tooltipPosition]="_tooltipPosition"
 						[colorManaCost]="colorManaCost"
+						[showUpdatedCost]="_showUpdatedCost"
 					></deck-card>
 				</li>
 			</ul>
@@ -63,15 +64,15 @@ export class DeckZoneComponent implements AfterViewInit {
 		this._tooltipPosition = value;
 	}
 
+	@Input() set showUpdatedCost(value: boolean) {
+		this._showUpdatedCost = value;
+		this.refreshZone();
+	}
+
 	@Input() set showGiftsSeparately(value: boolean) {
 		this._showGiftsSeparately = value;
 		this.refreshZone();
 	}
-
-	// @Input() set showCostReduction(value: boolean) {
-	// 	this._showCostReduction = value;
-	// 	this.refreshZone();
-	// }
 
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
@@ -87,6 +88,7 @@ export class DeckZoneComponent implements AfterViewInit {
 
 	_tooltipPosition: CardTooltipPositionType;
 	_collection: readonly SetCard[];
+	_showUpdatedCost = true;
 	className: string;
 	zoneName: string;
 	showWarning: boolean;
@@ -95,7 +97,6 @@ export class DeckZoneComponent implements AfterViewInit {
 	open = true;
 
 	private _showGiftsSeparately = true;
-	// private _showCostReduction = false;
 	private _zone: DeckZone;
 
 	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly prefs: PreferencesService) {}
@@ -160,7 +161,9 @@ export class DeckZoneComponent implements AfterViewInit {
 			// console.log('sorting', this._zone.sortingFunction);
 			this.cards = [...this.cards].sort(this._zone.sortingFunction);
 		}
-		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildQuantitiesLeftForCard(cards: readonly VisualDeckCard[]) {
@@ -197,10 +200,10 @@ export class DeckZoneComponent implements AfterViewInit {
 	}
 
 	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
-		if (a.manaCost < b.manaCost) {
+		if (this.getCost(a) < this.getCost(b)) {
 			return -1;
 		}
-		if (a.manaCost > b.manaCost) {
+		if (this.getCost(a) > this.getCost(b)) {
 			return 1;
 		}
 		if (a.cardName < b.cardName) {
@@ -216,6 +219,10 @@ export class DeckZoneComponent implements AfterViewInit {
 			return 1;
 		}
 		return 0;
+	}
+
+	private getCost(card: VisualDeckCard): number {
+		return this._showUpdatedCost ? card.getEffectiveManaCost() : card.manaCost;
 	}
 
 	private sortByIcon(a: VisualDeckCard, b: VisualDeckCard): number {

@@ -96,6 +96,36 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckCardComponent {
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		// console.log('[deck-card] setting tooltip position', value);
+		this._tooltipPosition = value;
+		this.cdr.detectChanges();
+	}
+
+	@Input() set showUpdatedCost(value: boolean) {
+		this._showUpdatedCost = value;
+		this.updateInfos();
+	}
+
+	@Input() set card(card: VisualDeckCard) {
+		this._card = card;
+		this.updateInfos();
+	}
+
+	@Input() set colorManaCost(value: boolean) {
+		this._colorManaCost = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set colorClassCards(value: boolean) {
+		this._colorClassCards = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	_tooltipPosition: CardTooltipPositionType;
 	cardId: string;
 	cardImage: string;
@@ -120,36 +150,37 @@ export class DeckCardComponent {
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly cards: AllCardsService) {}
 
-	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[deck-card] setting tooltip position', value);
-		this._tooltipPosition = value;
-		this.cdr.detectChanges();
-	}
+	private _showUpdatedCost: boolean;
+	private _card: VisualDeckCard;
 
-	@Input('card') set card(card: VisualDeckCard) {
-		this.cardId = card.cardId;
-		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg?v=3)`;
-		this.manaCost = card.getEffectiveManaCost();
-		this.manaCostReduction = this.manaCost != null && this.manaCost < card.manaCost;
-		this.cardName = card.cardName;
-		this.numberOfCopies = card.totalQuantity;
-		this.rarity = card.rarity;
-		this.creatorCardIds = card.creatorCardIds;
+	private updateInfos() {
+		if (!this._card) {
+			return;
+		}
+
+		this.cardId = this._card.cardId;
+		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=3)`;
+		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
+		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
+		this.cardName = this._card.cardName;
+		this.numberOfCopies = this._card.totalQuantity;
+		this.rarity = this._card.rarity;
+		this.creatorCardIds = this._card.creatorCardIds;
 		this.giftTooltip = null;
 		this.updateGiftTooltip();
-		this.highlight = card.highlight;
+		this.highlight = this._card.highlight;
 		// console.log('setting card', this.highlight, card.cardName, card);
-		this.isBurned = card.zone === 'BURNED';
-		this.isDiscarded = card.zone === 'DISCARD';
-		this.isGraveyard = card.zone === 'GRAVEYARD';
-		this.isTransformed = card.zone === 'TRANSFORMED_INTO_OTHER';
-		this._isMissing = card.isMissing;
+		this.isBurned = this._card.zone === 'BURNED';
+		this.isDiscarded = this._card.zone === 'DISCARD';
+		this.isGraveyard = this._card.zone === 'GRAVEYARD';
+		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';
+		this._isMissing = this._card.isMissing;
 
-		this.cardClass = card.cardClass ? card.cardClass.toLowerCase() : null;
+		this.cardClass = this._card.cardClass ? this._card.cardClass.toLowerCase() : null;
 		// console.log('setting card highlight', this.cardId, this.highlight, card);
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {
-			console.error('invalid number of copies', card);
+			console.error('invalid number of copies', this._card);
 		}
 		// Preload
 		if (this.cardId) {
@@ -181,17 +212,9 @@ export class DeckCardComponent {
 			this.mouseOverRight += 25;
 		}
 		this.mouseOverRight = Math.min(100, this.mouseOverRight);
-		this.cdr.detectChanges();
-	}
-
-	@Input() set colorManaCost(value: boolean) {
-		this._colorManaCost = value;
-		this.cdr.detectChanges();
-	}
-
-	@Input() set colorClassCards(value: boolean) {
-		this._colorClassCards = value;
-		this.cdr.detectChanges();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private updateGiftTooltip() {

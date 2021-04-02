@@ -64,6 +64,11 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, cards that have been created are displayed in their own lines (one line for each different creator)"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayShowCostReduction"
+						label="Update cost in deck"
+						tooltip="When active, the mana cost of cards in the deck whose cost has been modified reflects the new cost value."
+					></preference-toggle>
+					<preference-toggle
 						field="decktrackerCloseOnGameEnd"
 						label="Close tracker on game end"
 						tooltip="Automatically close the tracker when the game ends. If disabled, the tracker needs to be closed manually"
