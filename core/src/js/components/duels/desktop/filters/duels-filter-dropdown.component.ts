@@ -83,7 +83,7 @@ export class DuelsFilterDropdownComponent implements AfterViewInit {
 	}
 
 	select(option: IOption) {
-		console.log('selecting', option);
+		// console.log('selecting', option);
 		if (this.selectHandler) {
 			this.selectHandler(this.stateUpdater, option);
 		}
