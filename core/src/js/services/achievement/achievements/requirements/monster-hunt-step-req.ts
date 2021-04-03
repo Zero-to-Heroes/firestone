@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class MonsterHuntStepReq implements Requirement {
-	private isCorrectStep = true;
+	private isCorrectStep = false;
 	private assignedStep: boolean;
 
 	constructor(private readonly targetStep: number) {}
@@ -15,16 +15,13 @@ export class MonsterHuntStepReq implements Requirement {
 		return new MonsterHuntStepReq(parseInt(rawReq.values[0]));
 	}
 
-	// Default to true because no event is sent in the first round of a match
-	// The scenario ID + the fact that achievements only complete once should be enough
-	// to work around this limitation
 	reset(): void {
-		this.isCorrectStep = true;
+		this.isCorrectStep = false;
 		this.assignedStep = false;
 	}
 
 	afterAchievementCompletionReset(): void {
-		this.isCorrectStep = true;
+		this.isCorrectStep = false;
 		this.assignedStep = false;
 	}
 
