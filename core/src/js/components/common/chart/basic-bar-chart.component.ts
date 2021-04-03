@@ -33,7 +33,7 @@ export class BasicBarChartComponent {
 	bars: readonly Bar[] = [];
 
 	private _data: SimpleBarChartData;
-	private _tooltipTitle: string = 'Title';
+	private _tooltipTitle = 'Title';
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
