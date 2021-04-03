@@ -119,15 +119,17 @@ export class GroupedDeckListComponent {
 				.filter(creator => creator);
 			for (let i = 0; i < cardsInDeck; i++) {
 				// console.log('pushing');
-				base.push({
-					cardId: groupedFromDecklist.get(cardId)[0].cardId,
-					cardName: groupedFromDecklist.get(cardId)[0].cardName,
-					manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
-					rarity: groupedFromDecklist.get(cardId)[0].rarity,
-					// highlight: isAtLeastOneCardInHand ? 'in-hand' : 'normal',
-					highlight: 'normal',
-					creatorCardIds: creatorCardIds,
-				} as VisualDeckCard);
+				base.push(
+					VisualDeckCard.create({
+						cardId: groupedFromDecklist.get(cardId)[0].cardId,
+						cardName: groupedFromDecklist.get(cardId)[0].cardName,
+						manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
+						rarity: groupedFromDecklist.get(cardId)[0].rarity,
+						// highlight: isAtLeastOneCardInHand ? 'in-hand' : 'normal',
+						highlight: 'normal',
+						creatorCardIds: creatorCardIds,
+					} as VisualDeckCard),
+				);
 				// console.log('base is now', base);
 			}
 			// for (let i = 0; i < cardsInHand.length; i++) {
@@ -144,13 +146,15 @@ export class GroupedDeckListComponent {
 			// }
 			if (cardsInDeck === 0) {
 				// console.log('pushing dim version');
-				base.push({
-					cardId: groupedFromDecklist.get(cardId)[0].cardId,
-					cardName: groupedFromDecklist.get(cardId)[0].cardName,
-					manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
-					rarity: groupedFromDecklist.get(cardId)[0].rarity,
-					highlight: this._darkenUsedCards ? 'dim' : 'normal',
-				} as VisualDeckCard);
+				base.push(
+					VisualDeckCard.create({
+						cardId: groupedFromDecklist.get(cardId)[0].cardId,
+						cardName: groupedFromDecklist.get(cardId)[0].cardName,
+						manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
+						rarity: groupedFromDecklist.get(cardId)[0].rarity,
+						highlight: this._darkenUsedCards ? 'dim' : 'normal',
+					} as VisualDeckCard),
+				);
 				// console.log('base is now', base);
 			}
 		}
@@ -167,14 +171,16 @@ export class GroupedDeckListComponent {
 			// console.log('cardId from not in deck', cardId, cardsInDeck, creatorCardIds);
 			for (let i = 0; i < cardsInDeck; i++) {
 				// console.log('pushing');
-				base.push({
-					cardId: groupedFromDeck.get(cardId)[i].cardId,
-					cardName: groupedFromDeck.get(cardId)[i].cardName,
-					manaCost: groupedFromDeck.get(cardId)[i].manaCost,
-					rarity: groupedFromDeck.get(cardId)[i].rarity,
-					highlight: !isInBaseDeck && this._darkenUsedCards && isInOtherZone ? 'dim' : 'normal',
-					creatorCardIds: creatorCardIds,
-				} as VisualDeckCard);
+				base.push(
+					VisualDeckCard.create({
+						cardId: groupedFromDeck.get(cardId)[i].cardId,
+						cardName: groupedFromDeck.get(cardId)[i].cardName,
+						manaCost: groupedFromDeck.get(cardId)[i].manaCost,
+						rarity: groupedFromDeck.get(cardId)[i].rarity,
+						highlight: !isInBaseDeck && this._darkenUsedCards && isInOtherZone ? 'dim' : 'normal',
+						creatorCardIds: creatorCardIds,
+					} as VisualDeckCard),
+				);
 				// console.log('base is now', base);
 			}
 			// for (let i = 0; i < cardsInHand; i++) {
