@@ -25,25 +25,30 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 				<div class="name" [helpTooltip]="playerClass + ' - ' + name">{{ name }}</div>
 				<img [src]="icon" class="portrait" [cardTooltip]="cardId" />
 				<div class="stats">
-					<simple-bar-chart
+					<basic-bar-chart
 						*ngIf="globalWinDistribution?.data?.length > 0"
 						class="win-distribution"
 						[data]="globalWinDistribution"
 						[id]="'duels-hero-vignette' + _stat.cardId"
 						tooltipTitle="Win distribution"
-					></simple-bar-chart>
+					></basic-bar-chart>
+					<!-- <simple-bar-chart
+						*ngIf="globalWinDistribution?.data?.length > 0"
+						class="win-distribution"
+						[data]="globalWinDistribution"
+						[id]="'duels-hero-vignette' + _stat.cardId"
+						tooltipTitle="Win distribution"
+					></simple-bar-chart> -->
 					<div class="item winrate">
 						<div class="label">Global winrate</div>
 						<div class="values">
 							<div class="value player">{{ buildPercents(globalWinrate) }}</div>
-							<!-- <duels-global-value [value]="buildPercents(globalWinrate)"></duels-global-value> -->
 						</div>
 					</div>
 					<div class="item winrate">
 						<div class="label">Your winrate</div>
 						<div class="values">
 							<div class="value player">{{ buildPercents(playerWinrate) }}</div>
-							<!-- <duels-global-value [value]="buildPercents(globalWinrate)"></duels-global-value> -->
 						</div>
 					</div>
 					<div class="stats">
