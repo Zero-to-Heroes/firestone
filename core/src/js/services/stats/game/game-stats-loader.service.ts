@@ -36,10 +36,14 @@ export class GameStatsLoaderService {
 			userName: user.username,
 			uploaderToken: `overwolf-${user.userId}`,
 		};
+		// const input = {
+		// 	userId: 'OW_b874780e-9fba-49e2-82ff-b3530b0b7d7a',
+		// 	uploaderToken: `overwolf-OW_b874780e-9fba-49e2-82ff-b3530b0b7d7a`,
+		// };
 		console.log('[game-stats-loader] retrieving stats', user);
 		const data = await this.api.callPostApiWithRetries(GAME_STATS_ENDPOINT, input, retriesLeft);
 
-		const endpointResult: readonly GameStat[] = (data as any).results;
+		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
 		this.gameStats = Object.assign(new GameStats(), {
 			stats: endpointResult
 				.map(stat => ({
