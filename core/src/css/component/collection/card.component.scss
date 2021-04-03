@@ -115,13 +115,12 @@
 			opacity: 1;
 			transform: scale3d(1.035, 1.035, 1.035);
 		}
+		.count {
+			top: -2px;
+		}
 	}
 
 	&.high-res {
 		margin-bottom: -40px;
-
-		.count {
-			top: -32px;
-		}
 	}
 }
