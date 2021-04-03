@@ -19,9 +19,9 @@ export class NavigationBackProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		// console.log('going back', history.currentIndexInHistory, history);
 		const newState =
-			history.currentIndexInHistory > 0
+			(history.currentIndexInHistory > 0
 				? history.stateHistory[history.currentIndexInHistory - 1].state
-				: NavigationBackProcessor.buildParentState(navigationState, currentState);
+				: NavigationBackProcessor.buildParentState(navigationState, currentState)) ?? navigationState;
 		// console.log('new nag state', newState, history, currentState, navigationState);
 		if (!newState?.isVisible) {
 			if (history.currentIndexInHistory !== 1) {
