@@ -92,7 +92,7 @@ import { PreferencesService } from '../../services/preferences.service';
 					[style.width.px]="cardWidth"
 					[style.height.px]="cardHeight"
 				>
-					<card-view [card]="card" [highRes]="false">/</card-view>
+					<card-view [card]="card" [highRes]="false" [showCounts]="true">/</card-view>
 				</li>
 				<div class="loading" *ngIf="loading">Loading more cards...</div>
 			</infinite-scroll>
