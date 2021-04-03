@@ -767,6 +767,7 @@ export class DuelsStateBuilderService {
 							  playerTotalMatches,
 				} as DuelsHeroPlayerStat;
 			})
+			.filter(stat => stat.globalTotalMatches > 10)
 			.sort(this.getStatSortFunction(prefs));
 
 		const grouped = groupByFunction((stat: DuelsHeroPlayerStat) => stat.cardId)(allStats);
