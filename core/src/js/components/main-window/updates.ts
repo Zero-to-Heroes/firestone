@@ -65,15 +65,19 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
-					// {
-					// 	category: 'achievements',
-					// 	details: [
-					// 		{
-					// 			type: 'feature',
-					// 			text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
-					// 		},
-					// 	],
-					// },
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where full run completion achievements would be awarded after clearing the first round of Dungeon Run or Rumble Run.`,
+							},
+							// {
+							// 	type: 'feature',
+							// 	text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
+							// },
+						],
+					},
 					{
 						category: 'collection',
 						details: [
@@ -158,6 +162,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Personal runs are now grouped by date.`,
+							},
+							{
+								type: 'content',
+								text: `The app now won't show stats for treasures with not enough data points.`,
+							},
+							{
+								type: 'misc',
+								text: `The Heroes stat page should now load faster.`,
 							},
 						],
 					},
