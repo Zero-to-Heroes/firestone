@@ -158,6 +158,7 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		if (!this.deck) {
 			return;
 		}
+
 		this.deckDecklist = this.deck.initialDeckList || this.deck.runs[0].initialDeckList;
 		this.currentDeck = 'initial';
 		this.deckName = this.deck.deckName;
@@ -174,6 +175,8 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 
 	private getDeck(): DuelsDeckSummary {
 		if (this._navigation.selectedPersonalDeckstring) {
+			this.isPersonalDeck = true;
+			this.run = null;
 			return this._state.duels.playerStats.personalDeckStats.find(
 				deck => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
 			);
