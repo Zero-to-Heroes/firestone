@@ -25,7 +25,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<div *ngIf="stats?.length" class="duels-hero-stats" scrollable>
 			<duels-hero-stat-vignette
-				*ngFor="let stat of stats; trackBy: trackByFn"
+				*ngFor="let stat of stats"
 				[stat]="stat.stat"
 				[ngClass]="{ 'hidden': !stat.visible }"
 			></duels-hero-stat-vignette>
@@ -81,9 +81,9 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	trackByFn(stat: DuelsHeroPlayerStatContainer) {
-		return stat?.stat?.cardId;
-	}
+	// trackByFn(stat: DuelsHeroPlayerStatContainer) {
+	// 	return stat?.stat?.cardId;
+	// }
 
 	private async updateValues(searchStringUpdated = false) {
 		if (!this._playerStats || !this._statType) {
