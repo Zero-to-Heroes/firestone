@@ -170,10 +170,7 @@ export class DuelsDesktopComponent implements AfterViewInit {
 	}
 
 	buildCategories(): readonly DuelsCategory[] {
-		if (!this.state?.duels?.categories) {
-			return [];
-		}
-		return this.state.duels.categories;
+		return this.state?.duels?.categories ?? [];
 	}
 
 	selectCategory(categoryId: DuelsCategoryType) {
