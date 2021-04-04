@@ -22,9 +22,15 @@ export class BgsMatchStartParser implements EventParser {
 			return currentState;
 		} else {
 			const heroesAchievementCategory = event.mainWindowState.achievements.findCategory(
-				'hearthstone_game_section_49',
+				'hearthstone_game_sub_13',
 			);
-			const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory.retrieveAllAchievements();
+
+			if (!heroesAchievementCategory) {
+				console.error('missing achievements category for BG', 'hearthstone_game_sub_13');
+			}
+
+			const heroAchievements: readonly VisualAchievement[] =
+				heroesAchievementCategory?.retrieveAllAchievements() ?? [];
 			const reviewId = await this.gameState.getCurrentReviewId();
 			const newGame: BgsGame = BgsGame.create({
 				reviewId: reviewId,
