@@ -140,7 +140,7 @@ export class OutOfCardsService {
 						</button>
 					</div>`,
 				notificationId: `ooc-collection-synchronized`,
-				timeout: 1000,
+				timeout: 2000,
 			});
 		}
 	}
