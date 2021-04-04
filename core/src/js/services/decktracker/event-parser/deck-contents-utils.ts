@@ -11,6 +11,8 @@ export const modifyDeckForSpecialCards = (
 	allCards: AllCardsService,
 ): DeckState => {
 	switch (cardId) {
+		case CardIds.Collectible.Druid.CelestialAlignment:
+			return handleCelestialAlignment(deckState, allCards);
 		case CardIds.Collectible.Druid.Embiggen:
 			return handleEmbiggen(deckState, allCards);
 		case CardIds.Collectible.Mage.DeckOfLunacy:
@@ -32,6 +34,21 @@ export const modifyDeckForSpecialCards = (
 		default:
 			return deckState;
 	}
+};
+
+const handleCelestialAlignment = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+	const withDeck = updateCost(
+		(card, refCard) => true,
+		card => 1,
+		deckState,
+		allCards,
+	);
+	return updateCostInHand(
+		(card, refCard) => true,
+		card => 1,
+		withDeck,
+		allCards,
+	);
 };
 
 const handleEmbiggen = (deckState: DeckState, allCards: AllCardsService): DeckState => {
@@ -95,7 +112,7 @@ const handleDeckOfLunacy = (deckState: DeckState, allCards: AllCardsService): De
 		card =>
 			card.update({
 				cardId: undefined,
-				cardName: `Unknown ${card.getEffectiveManaCost() + 3} mana spell`,
+				cardName: `Unknown ${Math.min(10, card.getEffectiveManaCost() + 3)} mana spell`,
 				creatorCardId: CardIds.Collectible.Mage.DeckOfLunacy,
 				rarity: 'unknown',
 				cardType: 'Spell',
@@ -164,6 +181,27 @@ const updateCost = (
 	});
 	return deckState.update({
 		deck: newDeck,
+	} as DeckState);
+};
+
+const updateCostInHand = (
+	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
+	costUpdator: (card: DeckCard) => number,
+	deckState: DeckState,
+	allCards: AllCardsService,
+): DeckState => {
+	const currentHand = deckState.hand;
+	const newHand: readonly DeckCard[] = currentHand.map(card => {
+		const refCard = card.cardId ? allCards.getCard(card.cardId) : null;
+		if (!cardSelector(card, refCard)) {
+			return card;
+		}
+		return card.update({
+			actualManaCost: costUpdator(card),
+		} as DeckCard);
+	});
+	return deckState.update({
+		hand: newHand,
 	} as DeckState);
 };
 
