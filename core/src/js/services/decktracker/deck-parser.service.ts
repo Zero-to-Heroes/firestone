@@ -54,7 +54,9 @@ export class DeckParserService {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				console.log('[deck-parser] resetting deck after game end');
-				this.reset(this.currentGameType === GameType.GT_VS_AI);
+				const shouldStorePreviousDeck =
+					this.currentGameType === GameType.GT_VS_AI && PRACTICE_ALL.includes(this.currentScenarioId);
+				this.reset(shouldStorePreviousDeck);
 				this.currentGameType = undefined;
 				this.currentScenarioId = undefined;
 			} else if (event.type === GameEvent.MATCH_METADATA) {
@@ -424,6 +426,7 @@ export class DeckParserService {
 	// By doing this we make sure we don't get a leftover deckstring caused by
 	// a game mode that doesn't interact with the Decks.log
 	public reset(shouldStorePreviousDeck: boolean) {
+		// Keeping the previous deck is useful for modes where you can just restart, eg practice
 		if (shouldStorePreviousDeck && this.currentDeck?.deck) {
 			this.previousDeck = this.currentDeck;
 		}
