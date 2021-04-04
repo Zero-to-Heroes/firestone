@@ -52,6 +52,7 @@ export class ApiRunner {
 				callback(result);
 			},
 			error => {
+				console.error('Could not execute POST call', url, input, error);
 				setTimeout(
 					() => this.callPostApiWithRetriesInternal(url, input, callback, retriesLeft - 1, options),
 					2000,
