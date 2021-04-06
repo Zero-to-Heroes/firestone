@@ -12,7 +12,7 @@ import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
 
-const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=3';
+const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=4';
 const CARD_PACKS_URL = 'https://api.firestoneapp.com/retrieveUserPackStats/packStats';
 
 @Injectable()
