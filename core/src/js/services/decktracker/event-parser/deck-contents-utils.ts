@@ -114,6 +114,7 @@ const handleDeckOfLunacy = (deckState: DeckState, allCards: AllCardsService): De
 				cardId: undefined,
 				cardName: `Unknown ${Math.min(10, card.getEffectiveManaCost() + 3)} mana spell`,
 				creatorCardId: CardIds.Collectible.Mage.DeckOfLunacy,
+				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
 				rarity: 'unknown',
 				cardType: 'Spell',
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
