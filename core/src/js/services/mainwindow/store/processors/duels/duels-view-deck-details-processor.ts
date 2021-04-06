@@ -44,7 +44,6 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 			?.map(grouped => grouped.decks)
 			?.reduce((a, b) => a.concat(b), [])
 			?.find(deck => deck.id === deckId);
-		console.log('found deck', deck, currentState);
 		if (!deck) {
 			return null;
 		}
