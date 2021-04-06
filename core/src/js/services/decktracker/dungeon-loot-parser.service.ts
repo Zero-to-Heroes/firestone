@@ -53,11 +53,6 @@ export class DungeonLootParserService {
 		private prefs: PreferencesService,
 		private api: ApiRunner,
 	) {
-		// window['hophop'] = async () => {
-		// 	this.debug = true;
-		// 	this.retrieveLootInfo();
-		// 	this.debug = false;
-		// };
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
 			const newGameStats: GameStats = event.data[0];
 			this.setLastDuelsMatch(newGameStats?.stats);
@@ -125,11 +120,19 @@ export class DungeonLootParserService {
 		}
 
 		if (stats[0].gameMode === 'duels' || stats[0].gameMode === 'paid-duels') {
-			if (!this.isLastMatchInRun(stats[0].additionalResult, stats[0].result)) {
+			this.log(
+				'correct game mode, trying to see if it is the last match in run',
+				stats[0].additionalResult,
+				stats[0].result,
+			);
+			if (this.isMatchInRun(stats[0].additionalResult, stats[0].result)) {
 				this.log('setting last duels', stats[0]);
 				this.lastDuelsMatch = stats[0];
 				this.currentDuelsRunId = this.lastDuelsMatch.currentDuelsRunId;
 				this.log('set currentDuelsRunId', this.currentDuelsRunId);
+			} else {
+				this.log('last match is not in run, resetting last duels run info');
+				this.reset();
 			}
 		}
 	}
@@ -219,6 +222,7 @@ export class DungeonLootParserService {
 		if (this.isNewRun(this.duelsInfo)) {
 			// Start a new run
 			this.currentDuelsRunId = uuid();
+			this.reset();
 			this.log('starting a new run', this.duelsInfo);
 		}
 		if (!this.currentDuelsRunId) {
@@ -280,6 +284,7 @@ export class DungeonLootParserService {
 					this.duelsInfo.PlayerClass,
 					CardClass[this.duelsInfo.PlayerClass],
 					this.lastDuelsMatch.playerCardId,
+					this.lastDuelsMatch.playerClass,
 					duelsInfo,
 					this.lastDuelsMatch,
 				);
@@ -390,19 +395,31 @@ export class DungeonLootParserService {
 			.find(card => isSignatureTreasure(card?.id, this.allCards))?.id;
 	}
 
-	private isLastMatchInRun(additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean {
+	private isMatchInRun(additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean {
 		if (!additionalResult) {
+			this.log('isLastMatchInRun', 'no additional result', additionalResult, result);
 			return false;
 		}
+
 		const [wins, losses] = additionalResult.split('-').map(info => parseInt(info));
+		this.log('isLastMatchInRun', 'wins, losses', wins, losses);
 		if (wins === 11 && result === 'won') {
-			this.log('last duels match was the last of the run, not forwarding run id', additionalResult, result);
+			this.log('last duels match was the last win of the run, not forwarding run id', additionalResult, result);
 			return false;
 		}
 		if (losses === 2 && result === 'lost') {
+			this.log('last duels match was the last loss of the run, not forwarding run id', additionalResult, result);
 			return false;
 		}
 		return true;
+	}
+
+	private reset() {
+		this.currentDuelsWins = 0;
+		this.currentDuelsLosses = 0;
+		this.lastDuelsMatch = undefined;
+		this.currentDuelsHeroPowerCardDbfId = undefined;
+		this.currentDuelsSignatureTreasureCardId = undefined;
 	}
 
 	private logDebug(...args) {
