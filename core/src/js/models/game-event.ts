@@ -32,7 +32,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly GAME_END = 'GAME_END';
 	public static readonly CARD_PLAYED = 'CARD_PLAYED';
 	public static readonly DISCARD_CARD = 'DISCARD_CARD';
-	public static readonly MINION_DIED = 'MINION_DIED';
+	public static readonly MINIONS_DIED = 'MINIONS_DIED';
 	public static readonly RECRUIT_CARD = 'RECRUIT_CARD';
 	public static readonly MINION_BACK_ON_BOARD = 'MINION_BACK_ON_BOARD';
 	public static readonly FIRST_PLAYER = 'FIRST_PLAYER';
