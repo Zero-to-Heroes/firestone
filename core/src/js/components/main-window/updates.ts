@@ -125,6 +125,10 @@ export const updates: readonly Update[] = [
 								text: `Oh My Yogg! should now be properly handled by the Secrets helper, and spells countered by it should not appear as global effects anymore.`,
 							},
 							{
+								type: 'bug',
+								text: `The secrets helper no longer greys out Avenge if all minions die at the same time.`,
+							},
+							{
 								type: 'ui',
 								text: `Add an icon for Wild / Classic decks in the deck stats.`,
 							},
