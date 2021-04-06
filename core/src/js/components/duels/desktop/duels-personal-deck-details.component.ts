@@ -185,7 +185,11 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 			const deckStat = this._state.duels.playerStats.deckStats
 				.map(grouped => grouped.decks)
 				.reduce((a, b) => a.concat(b), [])
-				.find(deck => deck.id === this._navigation.selectedDeckId);
+				.find(deck => deck?.id === this._navigation.selectedDeckId);
+			if (!deckStat) {
+				console.error('[duels-personal-deck-details] could not find deckstat', this._navigation.selectedDeckId);
+				return null;
+			}
 			const additionalStat = (this._state.duels.additionalDeckDetails ?? []).find(
 				stat => stat.id === deckStat.id,
 			);
