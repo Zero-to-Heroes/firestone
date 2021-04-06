@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
+import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
 import { MemoryUpdate } from '../models/memory/memory-update';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
@@ -337,9 +338,19 @@ export class GameEvents {
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DISCARD_CARD, gameEvent));
 				break;
-			case 'MINION_DIED':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_DIED, gameEvent));
+			case 'MINIONS_DIED':
+				//console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new MinionsDiedEvent(), {
+						type: GameEvent.MINIONS_DIED,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
+						gameState: gameEvent.Value.GameState,
+						additionalData: {
+							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
+						},
+					} as MinionsDiedEvent),
+				);
 				break;
 			case 'RECRUIT_CARD':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
