@@ -5,11 +5,11 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Card } from '../../models/card';
 import { GameEvent } from '../../models/game-event';
 import { ApiRunner } from '../api-runner';
-import { CollectionManager } from '../collection/collection-manager.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OwNotificationsService } from '../notifications.service';
 import { OverwolfService } from '../overwolf.service';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 
 const COLLECTION_UPLOAD = `https://outof.cards/api/hearthstone/collection/import/`;
@@ -26,7 +26,7 @@ export class OutOfCardsService {
 		private api: ApiRunner,
 		// These are not needed for generating tokens
 		@Optional() private allCards: AllCardsService,
-		@Optional() private collectionManager: CollectionManager,
+		@Optional() private memory: MemoryInspectionService,
 		@Optional() private events: Events,
 		@Optional() private ow: OverwolfService,
 		@Optional() private gameEvents: GameEventsEmitterService,
@@ -109,7 +109,12 @@ export class OutOfCardsService {
 		}
 
 		console.log('[ooc-auth] starting collection sync');
-		const collection = await this.collectionManager.getCollection();
+		// Read the memory, as if we can't access it we're not really interested in uploading a new version
+		const collection = await this.memory.getCollection();
+		if (!collection?.length) {
+			console.log('[ooc-auth] collection from memory is empty, not synchronizing it');
+			return;
+		}
 		const oocCollection: OocCollection = this.transformCollection(collection);
 		console.debug('[ooc-auth] transformed collection for upload', oocCollection);
 		const result = await this.api.callPostApi(COLLECTION_UPLOAD, oocCollection, {
@@ -182,7 +187,7 @@ export class OutOfCardsService {
 		return tokenWithExpiry;
 	}
 
-	private transformCollection(cards: Card[]): OocCollection {
+	private transformCollection(cards: readonly Card[]): OocCollection {
 		const collection = {};
 		for (const card of cards ?? []) {
 			const cardRef = this.allCards.getCard(card.id);
