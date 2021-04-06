@@ -28,7 +28,7 @@ declare let amplitude: any;
 					[hero]="hero"
 					[globalStats]="globalStats"
 					[patchNumber]="patchNumber"
-					[achievements]="hero.achievements"
+					[achievements]="hero?.achievements"
 					[style.width.%]="getOverviewWidth()"
 				></bgs-hero-overview>
 			</div>

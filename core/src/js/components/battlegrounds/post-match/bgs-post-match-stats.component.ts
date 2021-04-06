@@ -151,7 +151,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		}
 		const numberOfTabsToShow = value.numberOfDisplayedTabs ?? 1;
 		this.selectedTabs = tabs.slice(0, numberOfTabsToShow);
-		console.debug('showing tabs', tabs, numberOfTabsToShow, this.selectedTabs, value);
 		this.addMinionStats();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

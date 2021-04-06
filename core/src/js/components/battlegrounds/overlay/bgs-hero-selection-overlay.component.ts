@@ -33,7 +33,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 			<bgs-hero-overview
 				*ngFor="let hero of heroOverviews || []; trackBy: trackByHeroFn"
 				[hero]="hero"
-				[achievements]="hero.achievements"
+				[achievements]="hero?.achievements"
 			></bgs-hero-overview>
 		</div>
 	`,
