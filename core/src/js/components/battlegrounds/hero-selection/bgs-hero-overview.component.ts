@@ -53,7 +53,7 @@ declare let amplitude: any;
 			</div>
 			<bgs-hero-tribes class="tribes-overview" [hero]="_hero"></bgs-hero-tribes>
 		</div>
-		<div class="hero-overview empty" *ngIf="!_hero">
+		<div class="hero-overview empty" *ngIf="!_hero && !hideEmptyState">
 			<i class="placeholder">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#ad_placeholder" />
@@ -66,6 +66,7 @@ declare let amplitude: any;
 export class BgsHeroOverviewComponent {
 	@Input() patchNumber: PatchInfo;
 	@Input() globalStats: BgsStats;
+	@Input() hideEmptyState: boolean;
 
 	_hero: BgsHeroStat;
 	player: BgsPlayer;
