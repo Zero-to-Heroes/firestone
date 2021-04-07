@@ -49,6 +49,9 @@ export class PackHistoryItemComponent implements AfterViewInit {
 			month: '2-digit',
 			year: '2-digit',
 		});
+		if (!this.setName) {
+			console.warn('missing entry', pack, boosterId);
+		}
 	}
 
 	setIcon: string;
