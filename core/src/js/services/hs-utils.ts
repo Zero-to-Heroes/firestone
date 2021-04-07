@@ -306,6 +306,7 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.MAMMOTH_BUNDLE:
 		case BoosterType.FIRST_PURCHASE:
 		case BoosterType.YEAR_OF_DRAGON:
+		case BoosterType.YEAR_OF_PHOENIX:
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
@@ -425,6 +426,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'First Signup';
 		case BoosterType.FIRST_PURCHASE:
 			return 'First Purchase';
+		case BoosterType.YEAR_OF_PHOENIX:
+			return 'Year of the Phoenix';
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;

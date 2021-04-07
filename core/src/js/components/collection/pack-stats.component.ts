@@ -42,9 +42,7 @@ import { PreferencesService } from '../../services/preferences.service';
 					>
 						<img
 							class="icon"
-							[src]="
-								'https://static.zerotoheroes.com/hearthstone/cardPacks/' + pack.packType + '.webp?v=2'
-							"
+							[src]="'https://static.zerotoheroes.com/hearthstone/cardPacks/' + pack.packType + '.webp'"
 						/>
 					</div>
 					<div class="value">{{ pack.totalObtained }}</div>

@@ -41,7 +41,7 @@ export class PackHistoryItemComponent implements AfterViewInit {
 			return;
 		}
 		const boosterId = pack.boosterId ?? getDefaultBoosterIdForSetId(pack.setId);
-		this.setIcon = `https://static.zerotoheroes.com/hearthstone/cardPacks/${boosterId}.webp?v=2`;
+		this.setIcon = `https://static.zerotoheroes.com/hearthstone/cardPacks/${boosterId}.webp`;
 		this.setName = boosterIdToBoosterName(boosterId);
 		this.dustValue = getPackDustValue(pack);
 		this.creationDate = new Date(pack.creationDate).toLocaleDateString('en-GB', {
