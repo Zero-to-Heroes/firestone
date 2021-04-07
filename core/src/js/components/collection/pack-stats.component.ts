@@ -105,7 +105,8 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 					name: boosterIdToBoosterName(boosterId),
 				};
 			})
-			.filter(info => info);
+			.filter(info => info)
+			.reverse();
 		this._packStats = value?.packStats ?? [];
 
 		const orderedPacks = [...this._packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
