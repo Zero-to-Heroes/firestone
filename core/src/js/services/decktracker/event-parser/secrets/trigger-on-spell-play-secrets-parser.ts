@@ -37,8 +37,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 			gameEvent.gameState &&
 			(gameEvent.type === GameEvent.CARD_PLAYED ||
 				gameEvent.type === GameEvent.SECRET_PLAYED ||
-				gameEvent.type === GameEvent.QUEST_PLAYED ||
-				gameEvent.type === GameEvent.SECRET_TRIGGERED)
+				gameEvent.type === GameEvent.QUEST_PLAYED)
 		);
 	}
 
