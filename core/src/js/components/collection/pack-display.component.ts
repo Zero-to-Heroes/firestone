@@ -37,7 +37,7 @@ import { FeatureFlags } from '../../services/feature-flags';
 						src="{{
 							'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' +
 								card.cardId +
-								'.webm?v=2'
+								'.webm?v=3'
 						}}"
 						type="video/webm"
 					/>
