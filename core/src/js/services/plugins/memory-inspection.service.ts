@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
@@ -143,7 +144,7 @@ export class MemoryInspectionService {
 		return this.getInGameAchievementsProgressInfoOperation.call(numberOfRetries, forceReset);
 	}
 
-	public async getCurrentSceneFromMindVision(): Promise<number> {
+	public async getCurrentSceneFromMindVision(): Promise<SceneMode> {
 		return this.getCurrentSceneOperation.call();
 	}
 

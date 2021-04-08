@@ -70,71 +70,14 @@ export class DeckParserService {
 					this.currentDeck,
 				);
 			}
-			// TODO: this should move elsewhere
-			// else if (event.type === GameEvent.SCENE_CHANGED) {
-			// 	// Doing that because the first time we access the deck selection screen the memory reading can be weird
-			// 	// So we reset the memory reading once the game has been fully loaded
-			// 	if (!this.deckSanityDone) {
-			// 		const scene = event.additionalData.scene;
-			// 		if (
-			// 			[
-			// 				'scene_tournament',
-			// 				'scene_friendly',
-			// 				'scene_adventure',
-			// 				'unknown_18',
-			// 				'scene_pvp_dungeon_run',
-			// 				'scene_bacon',
-			// 				'scene_arena',
-			// 			].includes(scene)
-			// 		) {
-			// 			console.log('[memory-service] resetting mindvision from GEP once fully in game');
-			// 			this.deckSanityDone = true;
-			// 			this.memory.reset();
-			// 		}
-			// 	}
-			// } else if (event.type === GameEvent.SCENE_CHANGED_MINDVISION) {
-			// 	// Doing that because the first time we access the deck selection screen the memory reading can be weird
-			// 	// So we reset the memory reading once the game has been fully loaded
-			// 	if (!this.deckSanityDone) {
-			// 		const scene: SceneMode = event.additionalData.scene;
-			// 		if (
-			// 			[
-			// 				SceneMode.TOURNAMENT,
-			// 				SceneMode.FRIENDLY,
-			// 				SceneMode.ADVENTURE,
-			// 				SceneMode.PVP_DUNGEON_RUN,
-			// 				SceneMode.BACON,
-			// 				SceneMode.PACKOPENING,
-			// 				SceneMode.COLLECTIONMANAGER,
-			// 				SceneMode.GAME_MODE,
-			// 			].includes(scene)
-			// 		) {
-			// 			console.log('[memory-service] resetting mindvision once fully in game');
-			// 			this.deckSanityDone = true;
-			// 			this.memory.reset();
-			// 		}
-			// 	}
-			// }
 		});
-		// window['memory'] = this.memory;
-		// window['currentScene'] = async () => {
-		// 	console.log(
-		// 		'[deck-parser] scene',
-		// 		await this.memory.getCurrentScene(),
-		// 		await this.memory.getCurrentSceneFromMindVision(),
-		// 	);
-		// };
-		// window['deckFromMemory'] = async () => {
-		// 	console.log('[deck-parser] deckFromMemory', await this.memory.getActiveDeck(1));
-		// };
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		// console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
+		console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
-			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY ||
-			(await this.memory.getCurrentSceneFromMindVision()) === SceneMode.BACON
+			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 		) {
 			return;
 		}
@@ -145,40 +88,22 @@ export class DeckParserService {
 			console.log('[deck-pareser] reading deck from memory');
 			const [deckFromMemory, currentScene] = await Promise.all([
 				this.memory.getActiveDeck(1),
-				this.memory.getCurrentScene(),
+				this.memory.getCurrentSceneFromMindVision(),
 			]);
+			if (currentScene === SceneMode.BACON) {
+				return;
+			}
+
 			console.log('[deck-parser] deck from memory', deckFromMemory, currentScene);
 			// Don't refresh the deck when leaving the match
 			// However scene_gameplay is also the current scene when selecting a friendly deck?
-			let currentSceneFromMindVision: number;
-			if (currentScene === 'scene_gameplay') {
-				// Double check, as there is today an issue with the events from the GEP when in friendly matches
-				currentSceneFromMindVision = await this.memory.getCurrentSceneFromMindVision();
-				// console.log('[deck-parser] current scene from mindvision', currentSceneFromMindVision);
-				// 4 is GAMEPLAY. Will use a proper enum later on if the bug on the GEP is not fixed
-				if (currentSceneFromMindVision == 4) {
-					return;
-				}
-				console.log(
-					'[deck-parser] mismatch between MindVision and GEP',
-					currentScene,
-					currentSceneFromMindVision,
-					currentSceneFromMindVision == 4,
-				);
+			if (currentScene === SceneMode.GAMEPLAY) {
+				return;
 			}
 
-			console.log(
-				'[deck-parser] getting active deck from going into queue',
-				currentScene,
-				currentSceneFromMindVision,
-			);
+			console.log('[deck-parser] getting active deck from going into queue', currentScene);
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
-			const activeDeck =
-				currentScene === 'unknown_18' ||
-				currentScene === 'scene_pvp_dungeon_run' ||
-				currentSceneFromMindVision === 18
-					? await this.getDuelsInfo()
-					: deckFromMemory;
+			const activeDeck = currentScene === SceneMode.PVP_DUNGEON_RUN ? await this.getDuelsInfo() : deckFromMemory;
 			console.log('[deck-parser] active deck after queue', activeDeck, currentScene);
 			if (!activeDeck) {
 				console.warn('[deck-parser] could not read any deck from memory');
@@ -197,7 +122,6 @@ export class DeckParserService {
 					this.currentScenarioId,
 				);
 				this.updateDeckFromMemory(activeDeck);
-				// this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 				this.currentDeck.scenarioId = this.currentScenarioId;
 			}
 		}
