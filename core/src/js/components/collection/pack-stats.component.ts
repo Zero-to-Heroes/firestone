@@ -80,14 +80,13 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		}
 		this._packs = Object.values(BoosterType)
 			.map((boosterId: BoosterType) => {
-				// console.debug('considering', boosterId, isNaN(boosterId));
 				if (isNaN(boosterId)) {
 					return null;
 				}
 				if (
 					[
 						BoosterType.INVALID,
-						BoosterType.KOBOLDS_CATACOMBS,
+						BoosterType.SIGNUP_INCENTIVE,
 						BoosterType.FIRST_PURCHASE,
 						BoosterType.FIRST_PURCHASE_OLD,
 						BoosterType.MAMMOTH_BUNDLE,
