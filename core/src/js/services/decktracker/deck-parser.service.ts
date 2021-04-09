@@ -17,6 +17,8 @@ import { DuelsInfo } from '../../models/duels-info';
 import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
+import { MemoryUpdate } from '../../models/memory/memory-update';
+import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -25,7 +27,7 @@ import { DeckHandlerService } from './deck-handler.service';
 
 @Injectable()
 export class DeckParserService {
-	private readonly goingIntoQueueRegex = new RegExp('D \\d*:\\d*:\\d*.\\d* BeginEffect blur \\d => 1');
+	private readonly goingIntoQueueRegex = /D \d*:\d*:\d*.\d* BeginEffect blur \d => 1/g;
 
 	private readonly deckContentsRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Deck Contents Received(.*)');
 	private readonly deckEditOverRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Finished Editing Deck(.*)');
@@ -39,6 +41,7 @@ export class DeckParserService {
 	private lastDeckTimestamp;
 	private currentBlock: string;
 
+	private selectedDeckId: number;
 	private currentGameType: GameType;
 	private currentScenarioId: number;
 
@@ -46,6 +49,7 @@ export class DeckParserService {
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
+		private events: Events,
 		private memory: MemoryInspectionService,
 		private allCards: AllCardsService,
 		private ow: OverwolfService,
@@ -71,26 +75,42 @@ export class DeckParserService {
 				);
 			}
 		});
+		this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
+			const changes: MemoryUpdate = data.data[0];
+			if (changes.SelectedDeckId) {
+				//console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
+				this.selectedDeckId = changes.SelectedDeckId;
+			} else {
+				this.selectedDeckId = null;
+			}
+		});
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		console.log('[deck-parser] will detect active deck from queue?', logLine, this.currentGameType);
+		// console.log(
+		// 	'[deck-parser] will detect active deck from queue?',
+		// 	logLine,
+		// 	this.currentGameType,
+		// 	this.selectedDeckId,
+		// );
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
 			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 		) {
+			console.debug('BG game, returning');
 			return;
 		}
 
 		if (this.goingIntoQueueRegex.exec(logLine)) {
 			// We get this as soon as possible, since once the player has moved out from the
 			// dekc selection screen the info becomes unavailable
-			console.log('[deck-pareser] reading deck from memory');
+			console.log('[deck-parser] reading deck from memory');
 			const [deckFromMemory, currentScene] = await Promise.all([
-				this.memory.getActiveDeck(1),
+				this.memory.getActiveDeck(this.selectedDeckId, 1),
 				this.memory.getCurrentSceneFromMindVision(),
 			]);
 			if (currentScene === SceneMode.BACON) {
+				console.debug('BACON scene, returning');
 				return;
 			}
 
@@ -163,7 +183,7 @@ export class DeckParserService {
 		}
 		if (this.memory) {
 			console.log('[deck-parser] ready to get active deck');
-			const activeDeck = await this.memory.getActiveDeck(2);
+			const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2);
 			console.log('[deck-parser] active deck from memory', activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
@@ -299,12 +319,12 @@ export class DeckParserService {
 			Date.now() - this.lastDeckTimestamp < 1000 &&
 			this.currentBlock !== 'DECK_SELECTED'
 		) {
-			console.log(
-				'[deck-parser] Doesnt look like a deck selection, exiting block',
-				this.currentBlock,
-				this.lastDeckTimestamp,
-				Date.now(),
-			);
+			// console.log(
+			// 	'[deck-parser] Doesnt look like a deck selection, exiting block',
+			// 	this.currentBlock,
+			// 	this.lastDeckTimestamp,
+			// 	Date.now(),
+			// );
 			// Don't reset the deck here, as it can override a deck built from memory inspection
 			// this.reset();
 			return;

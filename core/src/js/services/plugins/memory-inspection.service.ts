@@ -109,8 +109,8 @@ export class MemoryInspectionService {
 		return this.getBattlegroundsMatchOperation.call(numberOfRetries);
 	}
 
-	public async getActiveDeck(numberOfRetries?: number): Promise<DeckInfoFromMemory> {
-		return this.getActiveDeckOperation.call(numberOfRetries);
+	public async getActiveDeck(selectedDeckId: number, numberOfRetries: number): Promise<DeckInfoFromMemory> {
+		return this.getActiveDeckOperation.call(numberOfRetries, false, selectedDeckId);
 	}
 
 	public async getArenaInfo(): Promise<ArenaInfo> {

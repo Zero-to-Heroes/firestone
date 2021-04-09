@@ -11,7 +11,7 @@ export class MindVisionOperationFacade<T> {
 	constructor(
 		private ow: OverwolfService,
 		private serviceName: string,
-		private mindVisionOperation: (forceReset?: boolean) => Promise<any>,
+		private mindVisionOperation: (forceReset?: boolean, input?: any) => Promise<any>,
 		private emptyCheck: (input: any) => boolean,
 		private transformer: (output: any) => T,
 		private numberOfRetries = 3,
@@ -67,7 +67,7 @@ export class MindVisionOperationFacade<T> {
 		});
 	}
 
-	public async call(numberOfRetries?: number, forceReset = false, timeoutMs = 30000): Promise<T> {
+	public async call(numberOfRetries?: number, forceReset = false, input: any = null, timeoutMs = 30000): Promise<T> {
 		if (!(await this.ow.inGame())) {
 			return null;
 		}
@@ -86,6 +86,7 @@ export class MindVisionOperationFacade<T> {
 							(returnValue: T, left: number) => {
 								callback(returnValue, left);
 							},
+							input,
 							left,
 							forceReset,
 						),
@@ -100,7 +101,12 @@ export class MindVisionOperationFacade<T> {
 		]);
 	}
 
-	private async callInternal(callback: (result: T, left: number) => void, retriesLeft: number, forceReset = false) {
+	private async callInternal(
+		callback: (result: T, left: number) => void,
+		input: any,
+		retriesLeft: number,
+		forceReset = false,
+	) {
 		if (!forceReset && retriesLeft <= 0) {
 			// There are cases where not retrieving the info it totally valid,
 			// like trying to get the BattlegroundsInfo right after logging in
@@ -114,16 +120,16 @@ export class MindVisionOperationFacade<T> {
 			return;
 		}
 		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
-		const resultFromMemory = await this.mindVisionOperation(forceReset);
+		const resultFromMemory = await this.mindVisionOperation(forceReset, input);
 		// this.log('result from memory', resultFromMemory);
 		if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
 			this.log('calling with a force reset');
-			setTimeout(() => this.callInternal(callback, retriesLeft - 1, true));
+			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1, true));
 			return;
 		}
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
 			// this.log('result from memory is empty, retying');
-			setTimeout(() => this.callInternal(callback, retriesLeft - 1), this.delay);
+			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1), this.delay);
 			return;
 		}
 		// this.log('retrieved info from memory');

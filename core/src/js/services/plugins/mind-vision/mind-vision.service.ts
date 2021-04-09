@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
 import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/input';
 import { ArenaInfo } from '../../../models/arena-info';
 import { BoostersInfo } from '../../../models/memory/boosters-info';
@@ -68,44 +67,24 @@ export class MindVisionService {
 			}
 
 			console.log('[mind-vision] adding updates listener');
-			this.memoryUpdateListener = (changes: string | 'reset') => {
+			this.memoryUpdateListener = async (changes: string | 'reset') => {
 				console.log('[mind-vision] memory update', changes);
+				const changesToBroadcast = JSON.parse(changes);
 				// Happens when the plugin is reset, we need to resubscribe
-				if (changes === 'reset') {
+				if (changesToBroadcast === 'reset') {
 					console.log('[mind-vision] resetting memory update?', this.retriesLeft);
 					if (this.retriesLeft >= 0) {
 						this.retriesLeft--;
 						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
 						this.memoryUpdateListener = null;
-						this.listenForUpdates();
+						await this.resetListening();
+						await this.listenForUpdates();
 					} else {
 						console.error('[mind-vision] stopping after 5 resets');
 					}
 					return;
 				}
-				// Retry only a few times in a row
-				const changesToBroadcast = JSON.parse(changes);
-				// I don't think we go into this branch anymore, which was caused by an incorrect serialization
-				// Keeping it just in case for now
-				if (changesToBroadcast.CurrentScene === SceneMode.INVALID) {
-					console.warn('[mind-vision] INVALID scene should not be raised', changes);
-					delete changesToBroadcast.CurrentScene;
-					// TODO: here we should reset if we get an invalid scene + no other valid state
-					// For now we only have two pieces of info so that's it
-					if (
-						!changesToBroadcast.DisplayingAchievementToast &&
-						!changesToBroadcast.OpenedPack &&
-						!changesToBroadcast.NewCards?.length
-					) {
-						console.warn('[mind-vision] calling reset after invalid scene');
-						this.retriesLeft--;
-						plugin.onMemoryUpdate.removeListener(this.memoryUpdateListener);
-						this.memoryUpdateListener = null;
-						this.listenForUpdates();
-					}
-				} else {
-					this.retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
-				}
+				this.retriesLeft = MindVisionService.MAX_RETRIES_FOR_MEMORY_LISTENING;
 				this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
 			};
 			plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
@@ -234,11 +213,11 @@ export class MindVisionService {
 		});
 	}
 
-	public async getActiveDeck(): Promise<any> {
+	public async getActiveDeck(selectedDeckId: number): Promise<any> {
 		return new Promise<any[]>(async resolve => {
 			const plugin = await this.get();
 			try {
-				plugin.getActiveDeck(activeDeck => {
+				plugin.getActiveDeck(selectedDeckId, activeDeck => {
 					resolve(activeDeck ? JSON.parse(activeDeck) : null);
 				});
 			} catch (e) {
@@ -360,6 +339,22 @@ export class MindVisionService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not reset', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async resetListening(): Promise<void> {
+		console.log('[mind-vision] calling resetListening');
+		return new Promise<void>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.resetListening(result => {
+					console.log('[mind-vision] resetListening done');
+					resolve();
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not resetListening', e);
 				resolve(null);
 			}
 		});
