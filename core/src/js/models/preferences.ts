@@ -119,6 +119,17 @@ export class Preferences {
 	readonly playerGalakrondCounterWidgetPosition: { left: number; top: number };
 	readonly opponentGalakrondCounter: boolean = true;
 	readonly opponentGalakrondCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerWatchpostCounter: boolean = true;
+	readonly playerWatchpostCounterWidgetPosition: { left: number; top: number };
+	readonly opponentWatchpostCounter: boolean = true;
+	readonly opponentWatchpostCounterWidgetPosition: { left: number; top: number };
+	// These are turned off by default because you can quite easily see the info from the tracker
+	readonly playerLibramCounter: boolean = false;
+	readonly playerLibramCounterWidgetPosition: { left: number; top: number };
+	readonly opponentLibramCounter: boolean = false;
+	readonly opponentLibramCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerPogoCounter: boolean = true;
 	readonly playerPogoCounterWidgetPosition: { left: number; top: number };
 	readonly opponentPogoCounter: boolean = true;

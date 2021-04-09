@@ -24,8 +24,10 @@ import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
+import { LibramCounterDefinition } from './definitions/libram-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
 import { SpellCounterDefinition } from './definitions/spell-counter';
+import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 
 declare let amplitude;
@@ -159,6 +161,10 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				return SpellCounterDefinition.create(gameState, side);
 			case 'elemental':
 				return ElementalCounterDefinition.create(gameState, side);
+			case 'watchpost':
+				return WatchpostCounterDefinition.create(gameState, side);
+			case 'libram':
+				return LibramCounterDefinition.create(gameState, side);
 			default:
 				console.error('unexpected activeCounter for non-bgs', activeCounter);
 		}

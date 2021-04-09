@@ -36,6 +36,10 @@ export class OverwolfService {
 	// public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
 	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
 	public static COUNTER_OPPONENT_GALAKROND_WINDOW = 'CounterOpponentGalakrond';
+	public static COUNTER_PLAYER_LIBRAM_WINDOW = 'CounterPlayerLibram';
+	public static COUNTER_OPPONENT_LIBRAM_WINDOW = 'CounterOpponentLibram';
+	public static COUNTER_PLAYER_WATCHPOST_WINDOW = 'CounterPlayerWatchpost';
+	public static COUNTER_OPPONENT_WATCHPOST_WINDOW = 'CounterOpponentWatchpost';
 	public static COUNTER_PLAYER_POGO_WINDOW = 'CounterPlayerPogo';
 	public static COUNTER_PLAYER_JADE_WINDOW = 'CounterPlayerJadeGolem';
 	public static COUNTER_OPPONENT_POGO_WINDOW = 'CounterOpponentPogo';

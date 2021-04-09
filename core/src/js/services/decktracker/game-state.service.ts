@@ -98,15 +98,19 @@ import { CthunOpponentCounterOverlayHandler } from './overlays/counter-opponent-
 import { FatigueOpponentCounterOverlayHandler } from './overlays/counter-opponent-fatigue-handler';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
 import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-opponent-jade-golem-handler';
+import { LibramOpponentCounterOverlayHandler } from './overlays/counter-opponent-libram-handler';
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
+import { WatchpostOpponentCounterOverlayHandler } from './overlays/counter-opponent-watchpost-handler';
 import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
 import { CthunPlayerCounterOverlayHandler } from './overlays/counter-player-cthun-handler';
 import { ElementalPlayerCounterOverlayHandler } from './overlays/counter-player-elemental-handler';
 import { FatiguePlayerCounterOverlayHandler } from './overlays/counter-player-fatigue-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
 import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
+import { LibramPlayerCounterOverlayHandler } from './overlays/counter-player-libram-handler';
 import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
 import { SpellsPlayerCounterOverlayHandler } from './overlays/counter-player-spells-handler';
+import { WatchpostPlayerCounterOverlayHandler } from './overlays/counter-player-watchpost-handler';
 import { OpponentDeckOverlayHandler } from './overlays/opponent-deck-overlay-handler';
 import { OpponentHandOverlayHandler } from './overlays/opponent-hand-overlay-handler';
 import { OverlayHandler } from './overlays/overlay-handler';
@@ -517,6 +521,10 @@ export class GameStateService {
 			new AttackOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new JadeGolemPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new JadeGolemOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new WatchpostPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new WatchpostOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new LibramPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new LibramOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new CthunPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new CthunOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new FatiguePlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),

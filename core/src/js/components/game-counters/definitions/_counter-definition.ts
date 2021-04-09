@@ -16,4 +16,6 @@ export type CounterType =
 	| 'cthun'
 	| 'fatigue'
 	| 'spells'
-	| 'elemental';
+	| 'elemental'
+	| 'watchpost'
+	| 'libram';

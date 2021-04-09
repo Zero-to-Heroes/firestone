@@ -71,6 +71,8 @@ export class DeckState {
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
 	readonly spellsPlayedThisMatch: number = 0;
+	readonly watchpostsPlayedThisMatch: number = 0;
+	readonly libramsPlayedThisMatch: number = 0;
 	readonly elementalsPlayedThisTurn: number = 0;
 	readonly elementalsPlayedLastTurn: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
@@ -149,6 +151,40 @@ export class DeckState {
 					allCards &&
 					allCards.getCard(card.cardId)?.referencedTags &&
 					allCards.getCard(card.cardId)?.referencedTags.includes('JADE_GOLEM'),
+			);
+	}
+
+	public containsWatchpost(allCards?: AllCardsService, lookAtWatchpostsPlayed: boolean = false): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		return allCardsInDeck
+			.filter(card => card.cardId)
+			.some(
+				card =>
+					card.cardId === CardIds.Collectible.Neutral.KargalBattlescar ||
+					(lookAtWatchpostsPlayed &&
+						allCards &&
+						allCards.getCard(card.cardId)?.name &&
+						allCards
+							.getCard(card.cardId)
+							?.name.toLowerCase()
+							.includes('watch post')),
+			);
+	}
+
+	public containsLibram(allCards?: AllCardsService, lookAtLibramsPlayed: boolean = false): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		return allCardsInDeck
+			.filter(card => card.cardId)
+			.some(
+				card =>
+					card.cardId === CardIds.Collectible.Paladin.LadyLiadrin ||
+					(lookAtLibramsPlayed &&
+						allCards &&
+						allCards.getCard(card.cardId)?.name &&
+						allCards
+							.getCard(card.cardId)
+							?.name.toLowerCase()
+							.startsWith('libram')),
 			);
 	}
 

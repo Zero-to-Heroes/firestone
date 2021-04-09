@@ -1,4 +1,5 @@
 import { Race } from '@firestone-hs/reference-data';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -98,6 +99,8 @@ export class CardPlayedFromHandParser implements EventParser {
 			cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
 			globalEffects: newGlobalEffects,
 			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (refCard?.type === 'Spell' ? 1 : 0),
+			watchpostsPlayedThisMatch: deck.watchpostsPlayedThisMatch + (this.isWatchpost(refCard) ? 1 : 0),
+			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (this.isLibram(refCard) ? 1 : 0),
 			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (isElemental ? 1 : 0),
 		} as DeckState);
 		//console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
@@ -108,6 +111,14 @@ export class CardPlayedFromHandParser implements EventParser {
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 		});
+	}
+
+	private isWatchpost(refCard: ReferenceCard) {
+		return refCard?.name?.includes('Watch Post');
+	}
+
+	private isLibram(refCard: ReferenceCard) {
+		return refCard?.name?.startsWith('Libram');
 	}
 
 	event(): string {

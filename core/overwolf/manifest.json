@@ -264,6 +264,48 @@
 				"start_position": { "top": 500, "left": 600 },
 				"in_game_only": true
 			},
+
+			"CounterPlayerLibram": {
+				"file": "Files/counter_player_libram.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterOpponentLibram": {
+				"file": "Files/counter_opponent_libram.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterPlayerWatchpost": {
+				"file": "Files/counter_player_watchpost.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterOpponentWatchpost": {
+				"file": "Files/counter_opponent_watchpost.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+
 			"CounterPlayerGalakrond": {
 				"file": "Files/counter_player_galakrond.html",
 				"transparent": true,

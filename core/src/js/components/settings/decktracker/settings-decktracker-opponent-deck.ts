@@ -145,6 +145,16 @@ import { Knob } from '../preference-slider.component';
 						label="Attack on board"
 						tooltip="Show the total attack of minions on their board + their hero"
 					></preference-toggle>
+					<preference-toggle
+						field="opponentWatchpostCounter"
+						label="Watch Posts"
+						tooltip="Show the total number of watch posts they played this match. Shows up only if relevant cards are found in the deck or hand"
+					></preference-toggle>
+					<preference-toggle
+						field="opponentLibramCounter"
+						label="Librams"
+						tooltip="Show the total number of librams they played this match. Shows up only if relevant cards are found in the deck or hand"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>
