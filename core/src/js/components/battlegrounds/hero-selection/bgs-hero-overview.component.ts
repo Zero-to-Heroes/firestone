@@ -97,6 +97,10 @@ export class BgsHeroOverviewComponent {
 
 	@Input() set achievements(value: readonly VisualAchievement[]) {
 		this.achievementsToDisplay = [];
+		if (!value) {
+			return;
+		}
+
 		setTimeout(() => {
 			this.achievementsToDisplay = value
 				.map(ach => ach.completionSteps)

@@ -48,10 +48,10 @@ export class TotalDamageDealtReq extends AbstractRequirement {
 	}
 
 	private handleEvent(gameEvent: DamageGameEvent) {
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
-		const damageSourceController = gameEvent.additionalData.sourceControllerId;
+		const localPlayerId = gameEvent.localPlayer?.PlayerId;
+		const damageSourceController = gameEvent.additionalData?.sourceControllerId;
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
-		if (localPlayerId === damageSourceController) {
+		if (localPlayerId && localPlayerId === damageSourceController) {
 			if (!this.sourceCardId || this.sourceCardId === gameEvent.additionalData.sourceCardId) {
 				const damageDealt = Object.values(gameEvent.additionalData.targets)
 					.map(target => target.Damage)

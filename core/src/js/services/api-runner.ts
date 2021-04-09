@@ -35,7 +35,7 @@ export class ApiRunner {
 		},
 	) {
 		if (retriesLeft <= 0) {
-			console.error('Could not execute POST call', url, input);
+			console.error('Could not execute POST call after retries', url, input);
 			callback(null);
 			return;
 		}

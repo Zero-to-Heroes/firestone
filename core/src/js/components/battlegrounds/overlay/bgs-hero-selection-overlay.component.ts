@@ -66,7 +66,6 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
-			console.debug('received new state', newState);
 			if (!newState) {
 				return;
 			}

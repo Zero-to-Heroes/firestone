@@ -180,10 +180,18 @@ export class AchievementsMonitor {
 		if (!previousAchievements?.length) {
 			return currentAchievements ?? [];
 		}
+
 		if (!currentAchievements?.length) {
 			return previousAchievements ?? [];
 		}
-		const allKeys = [...previousAchievements.map(a => a.id), ...currentAchievements.map(a => a.id)];
+
+		const allKeys = [...previousAchievements.map(a => a.id), ...currentAchievements.map(a => a.id)].filter(
+			id => id,
+		);
+		if (!allKeys?.length) {
+			return [];
+		}
+
 		const uniqueKeys = [...new Set(allKeys)];
 		return uniqueKeys
 			.map(achievementId => {

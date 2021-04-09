@@ -66,7 +66,7 @@ export class CollectionManager {
 			userId: user.userId,
 			userName: user.username,
 		};
-		const data: any = await this.api.callPostApiWithRetries<any>(CARD_PACKS_URL, input, 3);
+		const data: any = (await this.api.callPostApiWithRetries<any>(CARD_PACKS_URL, input, 3)) ?? [];
 		//console.debug('loaded pack stats', data);
 		return (
 			data.results

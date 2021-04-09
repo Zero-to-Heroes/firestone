@@ -271,7 +271,6 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.FROZEN_THRONE:
 			return 'icecrown';
 		case BoosterType.KOBOLDS_AND_CATACOMBS:
-		case BoosterType.KOBOLDS_CATACOMBS:
 			return 'lootapalooza';
 		case BoosterType.WITCHWOOD:
 			return 'gilneas';
@@ -378,7 +377,6 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 		case BoosterType.FROZEN_THRONE:
 			return 'Knights of the Frozen Throne';
 		case BoosterType.KOBOLDS_AND_CATACOMBS:
-		case BoosterType.KOBOLDS_CATACOMBS:
 			return 'Kobolds and Catacombs';
 		case BoosterType.WITCHWOOD:
 			return 'The Witchwood';

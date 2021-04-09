@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
+import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
@@ -277,8 +277,10 @@ export class BattlegroundsStoreService {
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
 				// Sometimes the battle result arrives before the simulation is completed
 				if (
+					this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId &&
 					this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId !==
-					gameEvent.additionalData.opponent
+						gameEvent.additionalData.opponent &&
+					gameEvent.additionalData.opponent != CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2
 				) {
 					console.error(
 						'no-format',
