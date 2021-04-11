@@ -373,7 +373,7 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 		case BoosterType.FIRST_PURCHASE_OLD:
 			return 'Whispers of the Old Gods';
 		case BoosterType.MEAN_STREETS:
-			return 'Main Streets of Gadgetzan';
+			return 'Mean Streets of Gadgetzan';
 		case BoosterType.UNGORO:
 			return "Return to Un'Goro";
 		case BoosterType.FROZEN_THRONE:
