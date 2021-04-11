@@ -75,11 +75,7 @@ export class AchievementsLoaderService {
 			achievementFiles.map(fileName => this.loadAchievements(fileName)),
 		);
 		const result = achievementsFromRemote.reduce((a, b) => a.concat(b), []);
-		console.log(
-			'[achievements-loader] returning full achievements',
-			result && result.length,
-			result.find(ach => ach.id === 'battlegrounds_lock_all_1500'),
-		);
+		console.log('[achievements-loader] returning full achievements', result && result.length);
 		return result;
 	}
 
