@@ -304,7 +304,7 @@ export const getAchievementsForHero = (
 	}
 
 	const searchName = `as ${heroName}`;
-	return heroAchievements.filter(ach => ach.text.includes(searchName));
+	return heroAchievements.filter(ach => ach.text.replace(/,/g, '').includes(searchName));
 };
 
 // Because inconsistencies
@@ -318,6 +318,8 @@ const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 			return 'Brann';
 		case CardIds.NonCollectible.Neutral.ArannaStarseekerTavernBrawl1:
 			return 'Aranna';
+		case CardIds.NonCollectible.Neutral.AFKayTavernBrawl:
+			return 'A.F.Kay'; // No whitespace
 		default:
 			return hero?.name?.replace(/,/g, '');
 	}
