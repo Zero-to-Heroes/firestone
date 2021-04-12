@@ -33,6 +33,7 @@ import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/get-in
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { GetMemoryChangesOperation } from './mind-vision/get-memory-changes-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
+import { GetWhizbangDeckOperation } from './mind-vision/get-whizbang-deck-operation';
 import { IsMaybeOnDuelsRewardsScreenOperation } from './mind-vision/is-maybe-on-duels-rewards-screen-operation';
 import { MindVisionService } from './mind-vision/mind-vision.service';
 
@@ -53,6 +54,7 @@ export class MemoryInspectionService {
 	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
 	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
+	private getWhizbangDeckOperation = new GetWhizbangDeckOperation(this.mindVision, this.ow);
 	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
 	private getDuelsInfoOperation = new GetDuelsInfoOperation(this.mindVision, this.ow);
 	private getDuelsRewardsInfoOperation = new GetDuelsRewardsInfoOperation(this.mindVision, this.ow);
@@ -111,6 +113,10 @@ export class MemoryInspectionService {
 
 	public async getActiveDeck(selectedDeckId: number, numberOfRetries: number): Promise<DeckInfoFromMemory> {
 		return this.getActiveDeckOperation.call(numberOfRetries, false, selectedDeckId);
+	}
+
+	public async getWhizbangDeck(deckId: number): Promise<DeckInfoFromMemory> {
+		return this.getWhizbangDeckOperation.call(2, false, deckId);
 	}
 
 	public async getArenaInfo(): Promise<ArenaInfo> {

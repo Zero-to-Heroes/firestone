@@ -114,6 +114,7 @@ export class GameEvent implements GameStateEvent {
 
 	public static readonly ACHIEVEMENT_PROGRESS = 'ACHIEVEMENT_PROGRESS';
 	public static readonly DECKSTRING_OVERRIDE = 'DECKSTRING_OVERRIDE';
+	public static readonly WHIZBANG_DECK_ID = 'WHIZBANG_DECK_ID';
 
 	public static readonly RECONNECT_START = 'RECONNECT_START';
 	public static readonly RECONNECT_OVER = 'RECONNECT_OVER';

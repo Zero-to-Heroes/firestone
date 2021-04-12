@@ -90,6 +90,7 @@ import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { WeaponDestroyedParser } from './event-parser/weapon-destroyed-parser';
 import { WeaponEquippedParser } from './event-parser/weapon-equipped-parser';
+import { WhizbangDeckParser } from './event-parser/whizbang-deck-id-parser';
 import { ConstructedAchievementsProgressionEvent } from './event/constructed-achievements-progression-event';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ConstructedWindowHandler } from './overlays/constructed-window-handler';
@@ -541,6 +542,7 @@ export class GameStateService {
 	private buildEventParsers(): readonly EventParser[] {
 		const parsers: EventParser[] = [
 			new GameStartParser(this.deckParser, this.prefs, this.allCards),
+			new WhizbangDeckParser(this.deckParser),
 			new MatchMetadataParser(this.deckParser, this.prefs, this.allCards),
 			new MulliganOverParser(),
 			new MainStepReadyParser(),

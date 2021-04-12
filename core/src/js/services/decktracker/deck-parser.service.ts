@@ -204,6 +204,24 @@ export class DeckParserService {
 		return this.currentDeck;
 	}
 
+	public async getWhizbangDeck(deckId: number) {
+		console.warn('Whizbang decks not supported yet');
+		// TODO: do it like HDT: parse all the template decks offline, store them as a JSON inside the app,
+		// so that parsing them is really quick
+		// Since we have a kind of race condition between the metadata parser and whizbang parser, this will
+		// be probably pretty handy
+		return;
+		// return this.getTemplateDeck(deckId);
+		// console.log('[deck-parser] ready to get whizbang deck');
+		// const activeDeck = await this.memory.getWhizbangDeck(deckId);
+		// console.log('[deck-parser] whizbang deck from memory', activeDeck);
+		// if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
+		// 	console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+		// 	this.updateDeckFromMemory(activeDeck);
+		// }
+		// return this.currentDeck;
+	}
+
 	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory) {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
 		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);

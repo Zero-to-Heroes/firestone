@@ -227,6 +227,20 @@ export class MindVisionService {
 		});
 	}
 
+	public async getWhizbangDeck(deckId: number): Promise<any> {
+		return new Promise<any[]>(async resolve => {
+			const plugin = await this.get();
+			try {
+				plugin.getWhizbangDeck(deckId, deck => {
+					resolve(deck ? JSON.parse(deck) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getWhizbangDeck', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
 		return new Promise<RewardsTrackInfo>(async resolve => {
 			const plugin = await this.get();
