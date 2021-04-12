@@ -154,7 +154,7 @@ export class DeckState {
 			);
 	}
 
-	public containsWatchpost(allCards?: AllCardsService, lookAtWatchpostsPlayed: boolean = false): boolean {
+	public containsWatchpost(allCards?: AllCardsService, lookAtWatchpostsPlayed = false): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
 			.filter(card => card.cardId)
@@ -171,7 +171,7 @@ export class DeckState {
 			);
 	}
 
-	public containsLibram(allCards?: AllCardsService, lookAtLibramsPlayed: boolean = false): boolean {
+	public containsLibram(allCards?: AllCardsService, lookAtLibramsPlayed = false): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
 			.filter(card => card.cardId)

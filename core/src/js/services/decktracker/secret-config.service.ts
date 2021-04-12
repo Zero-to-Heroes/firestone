@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { formatFormat, GameFormat, GameType, ScenarioId } from '@firestone-hs/reference-data';
 import { Metadata } from '../../models/decktracker/metadata';
 
-const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=9';
+const SECRET_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/secrets_config.json?v=10';
 
 @Injectable()
 export class SecretConfigService {

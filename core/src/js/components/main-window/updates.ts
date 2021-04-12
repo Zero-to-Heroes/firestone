@@ -29,13 +29,16 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.7.0',
+		version: '7.7.9',
 		sections: [
 			{
 				type: 'intro',
 				header: 'Message from the dev',
 				text: `
-					Getting the app fully ready for the core set and Forged in the Barrens expansion was a bit more chaotic than planned, but things should be stable now. This updates is thus a big one, with all the things that I've been delaying until the dust settled from the latest patch. I hope you'll enjoy it :)
+					I'd like to welcome everyone who got to try Firestone because of the lifetime packs received feature. I'm glad to have you here :)
+					<br/>
+					<br/>
+					This updates mostly brings small-ish Quality of Life improvements. I'll probably have another couples of small update following over the next months to fix / improve existing features, so if you have any feedback or ideas, please don't hesitate to send them to me!
 					<br/>
 					<br/>
 					Take care,
@@ -43,64 +46,11 @@ export const updates: readonly Update[] = [
 					Seb.
 				`,
 			},
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Show missing achievements for heroes on hero selection screen.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `The tracker now updates the cards in the list after some global cards are played, like Deck of Lunacy. For now, the effects that are supported are cost changes, and card transform (like Prince Liam). Minions buff and other similar effects are not handled yet.`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where full run completion achievements would be awarded after clearing the first round of Dungeon Run or Rumble Run.`,
-							},
-							// {
-							// 	type: 'feature',
-							// 	text: `(ALPHA) A second-screen window can be activated for non-BG matches that shows you the current progress on each achievements, and highlighting the achievements that have progressed during the current match.`,
-							// },
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now synchronize your collection to Out of Cards via the Settings > General tab.`,
-							},
-							{
-								type: 'feature',
-								text: `Show collected coins.`,
-							},
-							{
-								type: 'feature',
-								text: `Show all-time packs received. This also includes the info from before you had Firestone.`,
-							},
-							{
-								type: 'feature',
-								text: `Show the best packs that you opened while Firestone was running. It also shows the best pack for each set when viewing the stats for that set.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -108,29 +58,34 @@ export const updates: readonly Update[] = [
 					{
 						category: 'decktracker',
 						details: [
-							// {
-							// 	type: 'ui',
-							// 	text: `(ALPHA) Add archetype id below the deck name when viewing deck details.`,
-							// },
 							{
-								type: 'bug',
-								text: `The secrets helper should now stay where you last dragged it between games.`,
+								type: 'feature',
+								text: `Add a Watch Post counter (enabled by default). If enabled, it appears as soon as the opponent plays a Watch Post, or if you have Kargal Battlescar somewhere in your deck / hand.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a Libram counter (disabled by default). If enabled, it appears as soon as the opponent plays a Libram, or if you have Lady Liadrin somewhere in your deck / hand.`,
+							},
+							{
+								type: 'content',
+								text: `Add more info for cards in the opponent's hand: Efficient Octo-bot buff is now shown, Kazzakus' Golem is now flagged.`,
 							},
 							{
 								type: 'bug',
-								text: `Now properly shows the opponent's name in their side of the tracker, instead of UNKNOWN HUMAIN PLAYER.`,
+								text: `Fix an issue where the global effect cards would show a ? instead of the actual cost of the card for the opponent.`,
 							},
 							{
 								type: 'bug',
-								text: `Oh My Yogg! should now be properly handled by the Secrets helper, and spells countered by it should not appear as global effects anymore.`,
+								text: `Fix an issue where drawing an upgraded ranked spell would not remove the corresponding rank 1 copy from the decklist.`,
 							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
 							{
 								type: 'bug',
-								text: `The secrets helper no longer greys out Avenge if all minions die at the same time.`,
-							},
-							{
-								type: 'ui',
-								text: `Add an icon for Wild / Classic decks in the deck stats.`,
+								text: `Fix an issue where toggling opponents on/off on the HP graph would show/hide the wrong line.`,
 							},
 						],
 					},
@@ -139,50 +94,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add an option to show animated card backs instead of static images.`,
+								text: `You can now type "extra" in the search bar to see all cards that you have extra copies of (counting normal / golden / diamond copies). A proper explanation of all the keywords you can use in this field will be coming soon.`,
 							},
 							{
-								type: 'feature',
-								text: `Show the pack history when in the Packs tab.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `(ALPHA) Add option to show multiple graphs at the same time in live stats and replays stats.`,
+								type: 'bug',
+								text: `Add missing Kobolds and Catacombs pack in the packs overview, and remove the Signup Incentive pack.`,
 							},
 							{
 								type: 'ui',
-								text: `Show the current run's info on top of the community info on the various graphs to make it more legible.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'ui',
-								text: `Personal runs are now grouped by date.`,
-							},
-							{
-								type: 'content',
-								text: `The app now won't show stats for treasures with not enough data points.`,
-							},
-							{
-								type: 'misc',
-								text: `The Heroes stat page should now load faster.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'feature',
-								text: `You can now filter ranked replays to include only Standard, Wild or Classic matches.`,
+								text: `Show the total number of packs you received directly in the header. No need to count them manually when sharing to your friends anymore :)`,
 							},
 						],
 					},
