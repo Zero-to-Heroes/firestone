@@ -41,38 +41,6 @@
 			align-items: center;
 			justify-content: center;
 
-			// &.position-1 {
-			// 	--legend-icon-border-color: var(--color-common-2);
-			// }
-
-			// &.position-2 {
-			// 	--legend-icon-border-color: #ff8a48;
-			// }
-
-			// &.position-3 {
-			// 	--legend-icon-border-color: #42d8a2;
-			// }
-
-			// &.position-4 {
-			// 	--legend-icon-border-color: #55d6ff;
-			// }
-
-			// &.position-5 {
-			// 	--legend-icon-border-color: #4376d8;
-			// }
-
-			// &.position-6 {
-			// 	--legend-icon-border-color: #b346e7;
-			// }
-
-			// &.position-7 {
-			// 	--legend-icon-border-color: #f44ccf;
-			// }
-
-			// &.position-8 {
-			// 	--legend-icon-border-color: #f44c60;
-			// }
-
 			&.player {
 				border-color: var(--legend-icon-border-color);
 				background: var(--legend-icon-border-color);
@@ -122,38 +90,6 @@
 			svg {
 				fill: transparent;
 				--icon-color-secondary: var(--legend-icon-border-color);
-			}
-
-			&.position-1 {
-				--legend-icon-border-color: var(--color-common-2);
-			}
-
-			&.position-2 {
-				--legend-icon-border-color: #ff8a48;
-			}
-
-			&.position-3 {
-				--legend-icon-border-color: #42d8a2;
-			}
-
-			&.position-4 {
-				--legend-icon-border-color: #55d6ff;
-			}
-
-			&.position-5 {
-				--legend-icon-border-color: #4376d8;
-			}
-
-			&.position-6 {
-				--legend-icon-border-color: #b346e7;
-			}
-
-			&.position-7 {
-				--legend-icon-border-color: #f44ccf;
-			}
-
-			&.position-8 {
-				--legend-icon-border-color: #f44c60;
 			}
 		}
 	}

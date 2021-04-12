@@ -51,6 +51,8 @@ declare let amplitude: any;
 					<label
 						for="player-toggled-{{ player.position }}"
 						class="position-{{ player.position }}"
+						bindCssVariable="legend-icon-border-color"
+						[bindCssVariableValue]="player.color"
 						(click)="togglePlayer(player.cardId)"
 					>
 						<p class="position-item">#{{ player.position }}</p>
