@@ -55,6 +55,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private refreshTimer;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private refreshesLeft = 5;
 
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
 
@@ -143,11 +144,14 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 						// We accept to refresh the ads every 7 minutes, to make it possible to have a video ad
 						// impression
 						if (!this.refreshTimer) {
-							this.refreshTimer = setTimeout(() => {
-								console.log('[ads] refreshing ad after 7 minutes timeout');
-								this.refreshTimer = null;
-								this.refreshAds();
-							}, 7 * 60 * 1000);
+							if (this.refreshesLeft > 0) {
+								this.refreshTimer = setTimeout(() => {
+									console.log('[ads] refreshing ad after 7 minutes timeout');
+									this.refreshTimer = null;
+									this.refreshesLeft--;
+									this.refreshAds();
+								}, 7 * 60 * 1000);
+							}
 						}
 					};
 					this.adRef.addEventListener('display_ad_loaded', this.displayImpressionListener);
