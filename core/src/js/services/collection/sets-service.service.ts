@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { Card } from '../../models/card';
 import { ReferenceSet } from '../../models/collection/reference-set';
 import { Set, SetCard } from '../../models/set';
 import { CARDS_VERSION } from '../hs-utils';
@@ -66,9 +67,16 @@ export class SetsService {
 		}
 	}
 
-	public searchCards(searchString: string): SetCard[] {
+	public searchCards(searchString: string, collection: readonly Card[]): SetCard[] {
 		if (!searchString) {
 			return [];
+		}
+
+		searchString = searchString.trim();
+
+		// Shortcut
+		if (searchString.includes('extra')) {
+			searchString = searchString.replace('extra', 'cards:extra -set:legacy -set:vanilla -set:core -rarity:free');
 		}
 
 		const filterFunctions = [];
@@ -77,6 +85,7 @@ export class SetsService {
 		let nameSearch = searchString;
 		let collectibleOnly = true;
 		for (const fragment of fragments) {
+			console.debug('processing fragment', fragment);
 			if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
 				const textToFind = searchString.split('text:')[1];
 				filterFunctions.push(
@@ -93,6 +102,36 @@ export class SetsService {
 			if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'all') {
 				collectibleOnly = false;
 				nameSearch = nameSearch.replace(/cards:all\s?/, '');
+			}
+
+			if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'extra') {
+				filterFunctions.push((card: ReferenceCard) => {
+					const collectionCard = collection.find(c => c.id === card.id);
+					if (!collectionCard) {
+						return false;
+					}
+					const maxCollectible = card.rarity === 'Legendary' ? 1 : 2;
+					return (
+						(collectionCard.count ?? 0) +
+							(collectionCard.premiumCount ?? 0) +
+							(collectionCard.diamondCount ?? 0) >
+						maxCollectible
+					);
+				});
+			}
+
+			if (fragment.indexOf('-set:') !== -1 && fragment.split('-set:')[1]) {
+				const excludedSetId = fragment.split('-set:')[1].toLowerCase();
+				filterFunctions.push((card: ReferenceCard) => !card.set || card.set.toLowerCase() !== excludedSetId);
+			}
+
+			if (fragment.indexOf('-rarity:') !== -1 && fragment.split('-rarity:')[1]) {
+				const rarity = fragment.split('-rarity:')[1].toLowerCase();
+				filterFunctions.push((card: ReferenceCard) => !card.rarity || card.rarity.toLowerCase() !== rarity);
+				console.debug('added -rarity function', filterFunctions, rarity);
+			} else if (fragment.indexOf('rarity:') !== -1 && fragment.split('rarity:')[1]) {
+				const rarity = fragment.split('rarity:')[1].toLowerCase();
+				filterFunctions.push((card: ReferenceCard) => card.rarity && card.rarity.toLowerCase() === rarity);
 			}
 		}
 		nameSearch = nameSearch.trim().toLowerCase();
