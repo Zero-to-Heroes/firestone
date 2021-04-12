@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CardIds, getBaseCardId } from '@firestone-hs/reference-data';
+import { getBaseCardId } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { CardMetaInfo } from '../../../models/decktracker/card-meta-info';
@@ -415,50 +415,6 @@ export class DeckManipulationHelper {
 		if (!shouldNormalize) {
 			return cardId;
 		}
-		switch (cardId) {
-			case CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondTheApocalypseToken:
-			case CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondAzerothsEndToken:
-				return CardIds.Collectible.Shaman.GalakrondTheTempest;
-			case CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondTheApocalypseToken:
-			case CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondAzerothsEndToken:
-				return CardIds.Collectible.Warlock.GalakrondTheWretched;
-			case CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondTheApocalypseToken:
-			case CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondAzerothsEndToken:
-				return CardIds.Collectible.Priest.GalakrondTheUnspeakable;
-			case CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondTheApocalypseToken:
-			case CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondAzerothsEndToken:
-				return CardIds.Collectible.Rogue.GalakrondTheNightmare;
-			case CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondTheApocalypseToken:
-			case CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken:
-				return CardIds.Collectible.Warrior.GalakrondTheUnbreakable;
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken1:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken2:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken3:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken4:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken5:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken6:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken7:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken8:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken9:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken10:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken11:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken12:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken13:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken14:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken15:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken16:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken17:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken18:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken19:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken20:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken21:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken22:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken23:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken24:
-			case CardIds.NonCollectible.Neutral.TransferStudent_TransferStudentToken25:
-				return CardIds.Collectible.Neutral.TransferStudent;
-			default:
-				return cardId;
-		}
+		return getBaseCardId(cardId);
 	}
 }
