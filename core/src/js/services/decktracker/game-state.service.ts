@@ -16,6 +16,7 @@ import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
+import { uuid } from '../utils';
 import { AiDeckService } from './ai-deck-service.service';
 import { DeckCardService } from './deck-card.service';
 import { DeckHandlerService } from './deck-handler.service';
@@ -241,7 +242,13 @@ export class GameStateService {
 	private registerGameEvents() {
 		this.gameEvents.onGameStart.subscribe(event => {
 			console.log('[game-state] game start event received, resetting currentReviewId');
-			this.currentReviewId = undefined;
+			this.currentReviewId = uuid();
+			console.log('[game-state] built currentReviewId', this.currentReviewId);
+			const info = {
+				type: 'new-empty-review',
+				reviewId: this.currentReviewId,
+			};
+			this.events.broadcast(Events.REVIEW_INITIALIZED, info);
 		});
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);

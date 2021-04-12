@@ -4,7 +4,6 @@ import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-form
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 
 export class GameForUpload {
-	id: string;
 	reviewId: string;
 	currentDuelsRunId: string;
 	title: string;
@@ -44,7 +43,7 @@ export class GameForUpload {
 	// sense for Firestone anymore
 	static createEmptyGame(id: string): GameForUpload {
 		const game = new GameForUpload();
-		game.id = id;
+		game.reviewId = id;
 		return game;
 	}
 }

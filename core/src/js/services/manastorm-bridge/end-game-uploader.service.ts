@@ -36,7 +36,6 @@ export class EndGameUploaderService {
 	public async upload(
 		gameEvent: GameEvent,
 		currentReviewId: string,
-		currentGameId: string,
 		deckstring: any,
 		deckName: string,
 		buildNumber: number,
@@ -47,7 +46,6 @@ export class EndGameUploaderService {
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,
 			currentReviewId,
-			currentGameId,
 			deckstring,
 			deckName,
 			buildNumber,
@@ -60,7 +58,6 @@ export class EndGameUploaderService {
 	private async initializeGame(
 		gameEvent: GameEvent,
 		currentReviewId: string,
-		currentGameId: string,
 		deckstring: any,
 		deckName: string,
 		buildNumber: number,
@@ -72,17 +69,9 @@ export class EndGameUploaderService {
 		if (!replayXml) {
 			console.warn('[manastorm-bridge]', currentReviewId, 'could not convert replay');
 		}
-		console.log(
-			'[manastorm-bridge]',
-			currentReviewId,
-			'Creating new game',
-			currentGameId,
-			'with replay length',
-			replayXml.length,
-		);
-		const game: GameForUpload = GameForUpload.createEmptyGame(currentGameId);
+		console.log('[manastorm-bridge]', currentReviewId, 'Creating new game', 'with replay length', replayXml.length);
+		const game: GameForUpload = GameForUpload.createEmptyGame(currentReviewId);
 		console.log('[manastorm-bridge]', currentReviewId, 'Created new game');
-		game.reviewId = currentReviewId;
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
 		console.log('[manastorm-bridge]', currentReviewId, 'parsed format', gameResult.FormatType, game.gameFormat);
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
