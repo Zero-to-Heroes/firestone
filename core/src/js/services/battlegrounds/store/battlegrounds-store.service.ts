@@ -173,6 +173,7 @@ export class BattlegroundsStoreService {
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
+			const prefs = await this.prefs.getPreferences();
 			this.eventsThisTurn.push(gameEvent.type);
 			if (gameEvent.type === GameEvent.RECONNECT_START) {
 				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(true));
@@ -290,12 +291,16 @@ export class BattlegroundsStoreService {
 						this.state.currentGame.battleInfo,
 						this.state.currentGame.battleResult,
 					);
-				} else if (!this.state.currentGame.battleResult || !this.state.currentGame.battleInfo) {
+				} else if (
+					!this.state.currentGame.battleResult ||
+					(prefs.bgsEnableSimulation && !this.state.currentGame.battleInfo)
+				) {
 					console.error(
 						'no-format',
 						'[bgs-simulation] Received battle result with an incomplete battle info',
 						this.state.currentGame.battleInfo,
 						this.state.currentGame.battleResult,
+						prefs.bgsEnableSimulation,
 					);
 				}
 				this.battlegroundsUpdater.next(
