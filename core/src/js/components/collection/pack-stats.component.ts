@@ -21,7 +21,7 @@ import { PreferencesService } from '../../services/preferences.service';
 	styleUrls: [`../../../css/global/scrollbar.scss`, `../../../css/component/collection/pack-stats.component.scss`],
 	template: `
 		<div class="pack-stats" scrollable>
-			<div class="header">All-time packs</div>
+			<div class="header">All-time packs ({{ totalPacks }})</div>
 			<div class="packs-container">
 				<div
 					class="pack-stat"
@@ -106,6 +106,7 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 			})
 			.filter(info => info)
 			.reverse();
+		this.totalPacks = this._packs.map(pack => pack.totalObtained).reduce((a, b) => a + b, 0);
 		this._packStats = value?.packStats ?? [];
 
 		const orderedPacks = [...this._packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
@@ -120,6 +121,7 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 	_packs: readonly InternalPackInfo[] = [];
 	_packStats: readonly PackResult[];
 	_navigation: NavigationCollection;
+	totalPacks: number;
 	bestPacks: readonly PackResult[] = [];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
