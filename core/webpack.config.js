@@ -197,6 +197,9 @@ module.exports = function(env, argv) {
 								mangle: false,
 								keep_classnames: true,
 								keep_fnames: true,
+								compress: {
+									pure_funcs: ['console.debug'],
+								},
 							},
 						}),
 					],
