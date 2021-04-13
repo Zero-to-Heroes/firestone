@@ -57,8 +57,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.DieInsectsTavernBrawl2;
 		case 'TB_BaconShop_HERO_12':
 			return 'TB_BaconShop_HP_041';
-		case 'TB_BaconShop_HERO_14':
-			return 'TB_BaconShop_HP_037a';
+		case CardIds.NonCollectible.Neutral.QueenWagtoggleTavernBrawl:
+			return CardIds.NonCollectible.Neutral.WaxWarbandTavernBrawl;
 		case 'TB_BaconShop_HERO_15':
 			return 'TB_BaconShop_HP_010';
 		case 'TB_BaconShop_HERO_16':
@@ -141,8 +141,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_068';
 		case 'TB_BaconShop_HERO_64':
 			return 'TB_BaconShop_HP_074';
-		case 'TB_BaconShop_HERO_67':
-			return 'TB_BaconShop_HP_075';
+		case CardIds.NonCollectible.Neutral.CaptainHooktuskTavernBrawl:
+			return CardIds.NonCollectible.Neutral.TrashForTreasureTavernBrawl;
 		case 'TB_BaconShop_HERO_68':
 			return 'TB_BaconShop_HP_076';
 		case 'TB_BaconShop_HERO_70':
