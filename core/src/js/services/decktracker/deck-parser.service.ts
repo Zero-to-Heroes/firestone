@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
 	Board,
+	CardClass,
 	CardIds,
 	GameFormat,
 	GameType,
@@ -18,12 +19,16 @@ import { GameEvent } from '../../models/game-event';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
+import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { getDefaultHeroDbfIdForClass } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
 import { DeckHandlerService } from './deck-handler.service';
+
+const DECK_TEMPLATES_URL = `https://static.zerotoheroes.com/hearthstone/data/deck-templates.json?v=2`;
 
 @Injectable()
 export class DeckParserService {
@@ -45,7 +50,7 @@ export class DeckParserService {
 	private currentGameType: GameType;
 	private currentScenarioId: number;
 
-	private deckSanityDone: boolean;
+	private deckTemplates: readonly DeckInfoFromMemory[];
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -54,7 +59,12 @@ export class DeckParserService {
 		private allCards: AllCardsService,
 		private ow: OverwolfService,
 		private handler: DeckHandlerService,
+		private api: ApiRunner,
 	) {
+		this.init();
+	}
+
+	private async init() {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				console.log('[deck-parser] resetting deck after game end');
@@ -84,6 +94,17 @@ export class DeckParserService {
 				this.selectedDeckId = null;
 			}
 		});
+		const templatesFromRemote: readonly any[] = await this.api.callGetApiWithRetries(DECK_TEMPLATES_URL);
+		this.deckTemplates = (templatesFromRemote ?? [])
+			.filter(template => template.DeckList?.length)
+			.map(
+				template =>
+					({
+						...template,
+						DeckList: template.DeckList.map(dbfId => +dbfId),
+					} as DeckInfoFromMemory),
+			);
+		console.debug('[deck-parser] loaded deck templates', this.deckTemplates?.length);
 	}
 
 	public async queueingIntoMatch(logLine: string) {
@@ -205,25 +226,22 @@ export class DeckParserService {
 	}
 
 	public async getWhizbangDeck(deckId: number) {
-		console.warn('Whizbang decks not supported yet');
-		// TODO: do it like HDT: parse all the template decks offline, store them as a JSON inside the app,
-		// so that parsing them is really quick
-		// Since we have a kind of race condition between the metadata parser and whizbang parser, this will
-		// be probably pretty handy
-		return;
-		// return this.getTemplateDeck(deckId);
-		// console.log('[deck-parser] ready to get whizbang deck');
-		// const activeDeck = await this.memory.getWhizbangDeck(deckId);
-		// console.log('[deck-parser] whizbang deck from memory', activeDeck);
-		// if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-		// 	console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
-		// 	this.updateDeckFromMemory(activeDeck);
-		// }
-		// return this.currentDeck;
+		const deck = this.deckTemplates.find(deck => deck.DeckId === deckId);
+		//console.debug('[deck-parser] found templtae deck', deckId, deck, this.deckTemplates);
+		if (deck && deck.DeckList && deck.DeckList.length > 0) {
+			console.log('[deck-parser] updating active deck', deck, this.currentDeck);
+			this.updateDeckFromMemory(deck);
+		}
+		return this.currentDeck;
 	}
 
 	private updateDeckFromMemory(deckFromMemory: DeckInfoFromMemory) {
 		console.log('[deck-parser] updating deck from memory', deckFromMemory);
+		if (!deckFromMemory) {
+			console.error('[deck-parser] no deck to update');
+			return;
+		}
+
 		const decklist: readonly number[] = this.normalizeWithDbfIds(deckFromMemory.DeckList);
 		console.log('[deck-parser] normalized decklist with dbf ids', decklist, deckFromMemory.HeroCardId);
 		this.currentDeck.deck = {
@@ -232,8 +250,11 @@ export class DeckParserService {
 			// Add a default to avoid an exception, for cases like Dungeon Runs or whenever you have an exotic hero
 			heroes: deckFromMemory.HeroCardId
 				? [this.normalizeHero(this.allCards.getCard(deckFromMemory.HeroCardId)?.dbfId) || 7]
+				: deckFromMemory.HeroClass
+				? [getDefaultHeroDbfIdForClass(CardClass[deckFromMemory.HeroClass]) || 7]
 				: [7],
 		};
+		this.currentDeck.name = deckFromMemory.Name ?? this.currentDeck.name;
 		console.log('[deck-parser] building deckstring', this.currentDeck.deck);
 		const deckString = encode(this.currentDeck.deck);
 		console.log('[deck-parser] built deckstring', deckString);
@@ -530,13 +551,13 @@ export class DeckParserService {
 
 	private normalizeHero(heroDbfId: number, heroCardId?: string): number {
 		let card: ReferenceCard;
-		// console.log('normalizing hero', heroDbfId, heroCardId);
+		// console.debug('normalizing hero', heroDbfId, heroCardId);
 		if (heroDbfId) {
 			card = this.allCards.getCardFromDbfId(+heroDbfId);
 		}
-		// console.log('found card for hero', card);
+		// console.debug('found card for hero', card);
 		if (!card || !card.id) {
-			// console.log('fallbacking to heroCardId', heroCardId);
+			// console.debug('fallbacking to heroCardId', heroCardId);
 			card = this.allCards.getCard(heroCardId);
 			if (!card || !card.id) {
 				return heroDbfId;
@@ -544,41 +565,6 @@ export class DeckParserService {
 		}
 
 		const playerClass: string = this.allCards.getCard(card.id)?.playerClass;
-		switch (playerClass) {
-			case 'DemonHunter':
-			case 'Demonhunter':
-				return 56550;
-			case 'Druid':
-				return 274;
-			case 'Hunter':
-				return 31;
-			case 'Mage':
-				return 637;
-			case 'Paladin':
-				return 671;
-			case 'Priest':
-				return 813;
-			case 'Rogue':
-				return 930;
-			case 'Shaman':
-				return 1066;
-			case 'Warlock':
-				return 893;
-			case 'Warrior':
-				return 7;
-			default:
-				console.warn('Could not normalize hero card id', heroDbfId, heroCardId, playerClass, card);
-				return 7;
-		}
-		// // This is the case for the non-standard heroes
-		// if (isCharLowerCase(card.id.charAt(card.id.length - 1))) {
-		// 	const canonicalHeroId = card.id.slice(0, -1);
-		// 	// console.log('trying to find canonical hero card', card, canonicalHeroId);
-		// 	const canonicalCard = this.allCards.getCard(canonicalHeroId);
-		// 	if (canonicalCard) {
-		// 		return canonicalCard.dbfId;
-		// 	}
-		// }
-		// return heroDbfId;
+		return getDefaultHeroDbfIdForClass(playerClass);
 	}
 }

@@ -77,9 +77,10 @@ export class MatchMetadataParser implements EventParser {
 		const deckList: readonly DeckCard[] = await this.deckParser.postProcessDeck(
 			this.deckParser.buildDeck(currentDeck),
 		);
+		const hero: HeroCard = this.buildHero(currentDeck);
+
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
 		const opponentDeck: readonly DeckCard[] = this.deckParser.buildEmptyDeckList(deckList.length);
-		const hero: HeroCard = this.buildHero(currentDeck);
 
 		return Object.assign(new GameState(), currentState, {
 			metadata: metaData,
