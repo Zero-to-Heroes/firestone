@@ -41,15 +41,16 @@ export class ReplaysStateBuilderService {
 		// console.log('filtering replays', replayState, stats, type, value);
 		const prefs = await this.prefs.getPreferences();
 		const allFilters: readonly FilterValue[] = this.buildReplayFilters(prefs);
+		// console.debug('allFilters', allFilters);
 		let updatedFilters = replayState.filters;
 		for (const filter of allFilters) {
-			updatedFilters = this.updateFilters(replayState.filters, filter.type, filter.value);
+			updatedFilters = this.updateFilters(updatedFilters, filter.type, filter.value);
 		}
-		// console.log('updated filters', updatedFilters);
+		// console.debug('updated filters', updatedFilters);
 		const filteredStats: readonly GameStat[] = this.filterStats(stats, updatedFilters);
-		// console.log('filtereallReplaysdStats', allReplays);
+		// console.debug('filteredStats', filteredStats);
 		const groupedReplays: readonly GroupedReplays[] = this.groupReplays(filteredStats, replayState.groupByCriteria);
-		// console.log('groupedReplays', groupedReplays);
+		// console.debug('groupedReplays', groupedReplays);
 		return Object.assign(new ReplaysState(), replayState, {
 			allReplays: filteredStats,
 			groupedReplays: groupedReplays,
