@@ -73,8 +73,22 @@
 		height: 35px;
 	}
 
-	.login-info {
+	.push-down {
 		margin-top: auto;
+		pointer-events: none;
+		height: 1px;
+	}
+
+	.go-premium {
+		width: 65px;
+		height: 60px;
+
+		.text {
+			width: 150px;
+		}
+	}
+
+	.login-info {
 		margin-bottom: 20px;
 
 		.avatar {

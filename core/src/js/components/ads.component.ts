@@ -16,7 +16,7 @@ import { OverwolfService } from '../services/overwolf.service';
 
 declare let adsReady: any;
 declare let OwAd: any;
-// declare let amplitude: any;
+declare let amplitude: any;
 
 @Component({
 	selector: 'ads',
@@ -91,6 +91,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	showSubscription() {
+		amplitude.getInstance().logEvent('subscription-click', { 'page': 'banner' });
 		this.ow.openStore();
 	}
 

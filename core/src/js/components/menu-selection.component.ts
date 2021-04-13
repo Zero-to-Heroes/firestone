@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
+import { AdService } from '../services/ad.service';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
@@ -75,6 +76,16 @@ declare let amplitude;
 					<div class="menu-header">Collection</div>
 				</div>
 			</li>
+
+			<li class="push-down"></li>
+			<li class="go-premium" (click)="goPremium()" *ngIf="showGoPremium">
+				<div class="icon" inlineSVG="assets/svg/whatsnew/go_premium.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Support the dev and remove the ads</div>
+				</div>
+			</li>
+			<li class="main-menu-separator" *ngIf="showGoPremium"></li>
 			<li class="login-info" (click)="login()">
 				<img class="avatar" [src]="avatarUrl" />
 				<div class="text">
@@ -105,14 +116,19 @@ export class MenuSelectionComponent implements AfterViewInit {
 	}
 
 	_currentUser: CurrentUser;
+	showGoPremium: boolean;
 	avatarUrl = 'assets/images/social-share-login.png';
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
+	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef, private adService: AdService) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.showGoPremium = await this.adService.shouldDisplayAds();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	selectModule(module: CurrentAppType) {
@@ -121,5 +137,10 @@ export class MenuSelectionComponent implements AfterViewInit {
 
 	login() {
 		this.ow.openLoginDialog();
+	}
+
+	goPremium() {
+		amplitude.getInstance().logEvent('subscription-click', { 'page': 'left-menu' });
+		this.ow.openStore();
 	}
 }
