@@ -45,17 +45,16 @@ export class CardsMonitorService {
 		// We do this to force the population of the initial memory for cards
 		this.triggerMemoryDetection(null, false);
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
-			const changes: MemoryUpdate = data.data[0];
-			console.log('[pack-parser] detected memory changes', changes);
-			if (changes.OpenedPack) {
-				this.triggerMemoryDetection(changes);
-			}
-		});
+		// this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
+		// 	const changes: MemoryUpdate = data.data[0];
+		// 	console.log('[pack-parser] detected memory changes', changes);
+		// 	if (changes.OpenedPack) {
+		// 		this.triggerMemoryDetection(changes);
+		// 	}
+		// });
 	}
 
 	/**
-	 * @deprecated
 	 * The game doesn't log cards received in the Achievements.log anymore.
 	 * We might be able to use the Net.log, but it needs to be added to the OW 
 	 * config first.
@@ -68,16 +67,16 @@ export class CardsMonitorService {
 		}
 	 */
 	public receiveLogLine(data: string) {
+		// console.debug('[pack-parser] received log line', data);
 		if (!data?.length) {
 			return;
 		}
 
-		if (!data.includes('NotifyOfCardGained')) {
+		if (!data.includes('Handling card collection modification')) {
 			return;
 		}
 
 		// To give time to log lines to appear
-		// console.debug('receive log line', data);
 		if (this.pendingTimeout) {
 			clearTimeout(this.pendingTimeout);
 		}
@@ -85,10 +84,10 @@ export class CardsMonitorService {
 	}
 
 	private async triggerMemoryDetection(changesInput?: MemoryUpdate, process = true, retriesLeft = 10) {
-		// console.debug('triggerging memory detection');
+		console.debug('[pack-parser] triggerging memory detection');
 		const memoryChanges = await this.memoryService.getMemoryChanges();
 		const changes: MemoryUpdate = changesInput ?? memoryChanges;
-		console.log('memoryChanges detection', changesInput, memoryChanges, changes);
+		console.log('[pack-parser] memoryChanges detection', changesInput, memoryChanges, changes);
 		if (!process) {
 			return;
 		}

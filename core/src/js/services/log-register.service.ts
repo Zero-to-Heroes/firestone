@@ -33,13 +33,13 @@ export class LogRegisterService {
 
 	private init(): void {
 		console.log('[log-register] initiating log registerservice');
-		// new LogListenerService(this.ow)
-		// 	.configure('Achievements.log', data => this.cardsMonitor.receiveLogLine(data))
-		// 	.subscribe(status => {
-		// 		console.log('[log-register] status for achievements', status);
-		// 		this.events.broadcast(status, 'Achiements.log');
-		// 	})
-		// 	.start();
+		new LogListenerService(this.ow)
+			.configure('Net.log', data => this.cardsMonitor.receiveLogLine(data))
+			.subscribe(status => {
+				console.log('[log-register] status for achievements', status);
+				this.events.broadcast(status, 'Achiements.log');
+			})
+			.start();
 		new LogListenerService(this.ow)
 			.configure(
 				'Power.log',
