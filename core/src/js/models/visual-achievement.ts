@@ -20,14 +20,18 @@ export class VisualAchievement {
 		if (value.id !== this.id && this.completionSteps.map(step => step.id).indexOf(value.id) === -1) {
 			return this;
 		}
-		// console.log('[visual-achievement] updating achievement', this, value);
+		// console.debug('[ach] [visual-achievement] updating achievement', this, value);
 		const completionStepsWithNewCompletions = this.updateCompletionSteps(value);
+		// console.debug(
+		// 	'[ach] [visual-achievement] completionStepsWithNewCompletions',
+		// 	completionStepsWithNewCompletions,
+		// );
 		const [completionSteps, text] = AchievementsRepository.buildCompletionSteps(
 			completionStepsWithNewCompletions,
 			value,
 			this.text,
 		);
-		// console.log('[visual-achievement] completionSteps', completionSteps, text);
+		// console.debug('[ach] [visual-achievement] completionSteps', completionSteps, text);
 		return Object.assign(new VisualAchievement(), this, {
 			completionSteps: completionSteps, //this.updateCompletionSteps(value),
 			text: text,
@@ -58,7 +62,8 @@ export class VisualAchievement {
 			}
 			// console.log('[visual-achievement] updating completion step', step, value);
 			return Object.assign(step, {
-				numberOfCompletions: value.numberOfCompletions,
+				numberOfCompletions: value.numberOfCompletions || step.numberOfCompletions,
+				progress: value.progress || step.progress,
 			} as CompletionStep);
 		});
 	}
@@ -70,6 +75,8 @@ export interface CompletionStep {
 	readonly icon: string;
 	readonly completedText: string;
 	readonly priority: number;
+	// For HS exclusive achievements?
+	readonly progress?: number;
 
 	text(showTimes?: boolean): string;
 }

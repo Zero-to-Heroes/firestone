@@ -13,10 +13,10 @@ export class AchievementsState {
 		return Object.assign(new AchievementsState(), this, base);
 	}
 
-	public updateAchievement(newAchievement: Achievement): AchievementsState {
+	public updateAchievement(newAchievement: Achievement, categoryId?: string): AchievementsState {
 		return Object.assign(new AchievementsState(), this, {
 			categories: this.categories.map(cat =>
-				cat.updateAchievement(newAchievement),
+				categoryId && cat.id !== categoryId ? cat : cat.updateAchievement(newAchievement),
 			) as readonly VisualAchievementCategory[],
 		} as AchievementsState);
 	}

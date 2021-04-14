@@ -17,6 +17,12 @@ export class Achievement {
 	readonly points: number;
 	readonly numberOfCompletions: number = 0;
 	readonly linkedAchievementIds: readonly string[] = [];
+	// For HS exclusive achievements?
+	readonly progress?: number;
+
+	public static create(base: Achievement): Achievement {
+		return Object.assign(new Achievement(), base);
+	}
 
 	public update(value: Achievement): Achievement {
 		return Object.assign(new Achievement(), this, value);

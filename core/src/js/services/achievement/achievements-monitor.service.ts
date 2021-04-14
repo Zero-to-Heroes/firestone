@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
 import { AchievementProgress, AchievementsProgress } from '../../models/achievement/achievement-progress';
 import { HsRawAchievement } from '../../models/achievement/hs-raw-achievement';
@@ -9,6 +9,8 @@ import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
+import { AchievementsUpdatedEvent } from '../mainwindow/store/events/achievements/achievements-updated-event';
+import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -32,6 +34,7 @@ export class AchievementsMonitor {
 	private previousAchievements: readonly HsAchievementInfo[];
 
 	private achievementsProgressInterval;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -66,6 +69,9 @@ export class AchievementsMonitor {
 				}, 500);
 			}
 		});
+		// If we start the detection too early, the first pass will be done against
+		// an uninitialized achievements state, and thus discarded
+		this.events.on(Events.STORE_READY).subscribe(event => this.startGlobalAchievementsProgressDetection());
 		this.init();
 	}
 
@@ -87,6 +93,9 @@ export class AchievementsMonitor {
 					this.assignPreviousAchievements();
 				}
 			}
+		});
+		setTimeout(() => {
+			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
 	}
 
@@ -197,7 +206,7 @@ export class AchievementsMonitor {
 			.map(achievementId => {
 				const previousAchievement = previousAchievements.find(a => a.id === achievementId);
 				const currentAchievement = currentAchievements.find(a => a.id === achievementId);
-				const progress = currentAchievement?.progress ?? 0 - previousAchievement?.progress ?? 0;
+				const progress = (currentAchievement?.progress ?? 0) - (previousAchievement?.progress ?? 0);
 				if (progress <= 0) {
 					return null;
 				}
@@ -350,6 +359,29 @@ export class AchievementsMonitor {
 			achievements: achievementInfos,
 		};
 		this.events.broadcast(Events.ACHIEVEMENT_PROGRESSION, achievementsInfo);
+	}
+
+	// There is some duplication here with the in-game live detection.
+	// However, the purpose is different, so for now I won't explore merging them together (unless it proves
+	// to be a performance issue)
+	// Keeping them separate also means that I can add options to turn the updates off if users
+	// find it too resource-intensive
+	private previousState: readonly HsAchievementInfo[] = [];
+	private async startGlobalAchievementsProgressDetection() {
+		// TODO: addd pref
+		setInterval(async () => {
+			const inGame = await this.ow.inGame();
+			if (!inGame) {
+				return;
+			}
+
+			const currentState = await this.achievementsManager.getAchievements(true);
+			const diff = this.achievementsDiff(this.previousState, currentState);
+			if (diff?.length) {
+				this.stateUpdater.next(new AchievementsUpdatedEvent(diff));
+			}
+			this.previousState = currentState;
+		}, 15 * 1000);
 	}
 }
 

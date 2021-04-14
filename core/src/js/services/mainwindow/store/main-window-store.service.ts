@@ -32,6 +32,7 @@ import { UserService } from '../../user.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementsInitEvent } from './events/achievements/achievements-init-event';
+import { AchievementsUpdatedEvent } from './events/achievements/achievements-updated-event';
 import { ChangeAchievementsActiveFilterEvent } from './events/achievements/change-achievements-active-filter-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
@@ -120,6 +121,7 @@ import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
 import { AchievementsInitProcessor } from './processors/achievements/achievements-init-processor';
+import { AchievementsUpdatedProcessor } from './processors/achievements/achievements-updated-processor';
 import { ChangeAchievementsActiveFilterProcessor } from './processors/achievements/change-achievements-active-filter-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
@@ -489,6 +491,9 @@ export class MainWindowStoreService {
 
 			ShowAchievementDetailsEvent.eventName(),
 			new ShowAchievementDetailsProcessor(),
+
+			AchievementsUpdatedEvent.eventName(),
+			new AchievementsUpdatedProcessor(),
 
 			AchievementCompletedEvent.eventName(),
 			new AchievementCompletedProcessor(

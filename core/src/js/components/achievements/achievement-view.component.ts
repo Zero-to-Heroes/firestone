@@ -12,7 +12,7 @@ import { GlobalStatKey } from '@firestone-hs/build-global-stats/dist/model/globa
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-import { VisualAchievement } from '../../models/visual-achievement';
+import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -63,13 +63,13 @@ export class AchievementViewComponent implements AfterViewInit {
 		this._achievement = achievement;
 		this.completionDate = undefined;
 		this.achievementStatus = this._achievement.achievementStatus();
-		this.achievementText = this.buildAchievementText(this._achievement.text);
+		this.updateInfo();
 	}
 
 	@Input() set globalStats(value: GlobalStats) {
 		// console.log('setting global stats in achievemen-view', value);
 		this._globalStats = value;
-		this.achievementText = this.buildAchievementText(this._achievement.text);
+		this.updateInfo();
 	}
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
@@ -78,26 +78,37 @@ export class AchievementViewComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	private buildAchievementText(initialText: string): string {
-		// console.log('building achievement text', initialText, this._globalStats);
-		if (!initialText) {
-			return initialText;
+	private updateInfo() {
+		if (!this._achievement) {
+			return;
 		}
-		// No placeholder
-		const match = this.placeholderRegex.exec(initialText);
-		if (!match) {
-			// console.log('no match, returning initial text');
-			return initialText;
+
+		this.achievementText = this.buildAchievementText(
+			this._achievement.text,
+			this._achievement.getFirstMissingStep(),
+		);
+	}
+
+	private buildAchievementText(initialText: string, firstMissingStep: CompletionStep): string {
+		const textToConsider = firstMissingStep?.completedText ?? initialText;
+		if (!textToConsider) {
+			return textToConsider;
 		}
-		// console.log('match', match);
-		const key: GlobalStatKey = match[2] as GlobalStatKey;
-		const context: StatContext = match[3] as StatContext;
-		const stat =
-			this._globalStats && this._globalStats.stats
-				? this._globalStats.stats.find(stat => stat.statKey === key && stat.statContext === context)
-				: null;
-		const value = stat ? stat.value : 0;
-		// console.log('value', value, initialText.replace(match[1], '' + value));
-		return initialText.replace(match[1], '' + value);
+
+		const match = this.placeholderRegex.exec(textToConsider);
+		let result = textToConsider;
+		if (match) {
+			const key: GlobalStatKey = match[2] as GlobalStatKey;
+			const context: StatContext = match[3] as StatContext;
+			const stat =
+				this._globalStats && this._globalStats.stats
+					? this._globalStats.stats.find(stat => stat.statKey === key && stat.statContext === context)
+					: null;
+			const value = stat ? stat.value : 0;
+			result = textToConsider.replace(match[1], '' + value);
+		}
+
+		const showProgress: boolean = (firstMissingStep?.progress ?? 0) > 0;
+		return showProgress ? `${result} (${firstMissingStep.progress} already done)` : result;
 	}
 }

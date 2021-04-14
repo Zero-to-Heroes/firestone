@@ -195,6 +195,7 @@ export class AchievementsRepository {
 			}
 			invertedCompletionSteps.push({
 				id: `${achv.id}`,
+				progress: achv.progress,
 				numberOfCompletions: areProgressionSteps ? completions : achv.numberOfCompletions,
 				icon: achv.icon,
 				completedText: achv.completedText,
