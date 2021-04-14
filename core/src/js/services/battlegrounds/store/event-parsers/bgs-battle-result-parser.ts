@@ -1,13 +1,10 @@
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
-import { CardIds } from '@firestone-hs/reference-data';
-import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
-import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { captureEvent } from '@sentry/browser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { Events } from '../../../events.service';
 import { OverwolfService } from '../../../overwolf.service';
-import { normalizeHeroCardId } from '../../bgs-utils';
+import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -66,55 +63,6 @@ export class BgsBattleResultParser implements EventParser {
 		} as BattlegroundsState);
 	}
 
-	private isSupportedScenario(battleInfo: BgsBattleInfo): boolean {
-		return (
-			this.isSupportedScenarioForPlayer(battleInfo.playerBoard) &&
-			this.isSupportedScenarioForPlayer(battleInfo.opponentBoard)
-		);
-	}
-
-	private isSupportedScenarioForPlayer(boardInfo: BgsBoardInfo): boolean {
-		try {
-			if (this.hasScallywag(boardInfo) && (this.hasBaron(boardInfo) || this.hasKhadgar(boardInfo))) {
-				console.warn('[bgs-simulation] Unsupported Scallywag exodia, not reporting an error');
-				return false;
-			}
-			return true;
-		} catch (e) {
-			console.error('[bgs-simularion] Error when parsing board', e);
-			return true;
-		}
-	}
-
-	private hasScallywag(boardInfo: BgsBoardInfo) {
-		return (
-			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.Scallywag) ||
-			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.ScallywagTavernBrawl)
-		);
-	}
-
-	private hasBaron(boardInfo: BgsBoardInfo) {
-		return (
-			this.hasMinionOnBoard(boardInfo, CardIds.Collectible.Neutral.BaronRivendare) ||
-			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.BaronRivendareTavernBrawl)
-		);
-	}
-
-	private hasKhadgar(boardInfo: BgsBoardInfo) {
-		return (
-			this.hasMinionOnBoard(boardInfo, CardIds.Collectible.Mage.Khadgar) ||
-			this.hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Mage.KhadgarTavernBrawl)
-		);
-	}
-
-	private hasMinionOnBoard(boardInfo: BgsBoardInfo, cardId: string): boolean {
-		if (!boardInfo?.board?.length) {
-			return false;
-		}
-
-		return boardInfo.board.find(entity => entity.cardId === cardId) != null;
-	}
-
 	private async report(status: string, currentState: BattlegroundsState) {
 		const user = await this.ow.getCurrentUser();
 		console.warn(
@@ -125,7 +73,7 @@ export class BgsBattleResultParser implements EventParser {
 			currentState.currentGame.battleInfo,
 			currentState.currentGame.battleResult,
 		);
-		if (this.isSupportedScenario(currentState.currentGame.battleInfo)) {
+		if (isSupportedScenario(currentState.currentGame.battleInfo)) {
 			captureEvent({
 				message: 'Impossible battle ' + status,
 				extra: {

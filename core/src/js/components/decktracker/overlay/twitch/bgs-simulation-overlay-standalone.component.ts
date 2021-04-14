@@ -32,6 +32,7 @@ declare let amplitude: any;
 				<bgs-battle-status
 					[nextBattle]="nextBattle"
 					[battleSimulationStatus]="battleSimulationStatus"
+					[simulationMessage]="simulationMessage"
 					[showReplayLink]="true"
 				></bgs-battle-status>
 			</div>
@@ -42,6 +43,7 @@ declare let amplitude: any;
 export class BgsSimulationOverlayStandaloneComponent {
 	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
+	simulationMessage: string;
 
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
@@ -49,6 +51,7 @@ export class BgsSimulationOverlayStandaloneComponent {
 	@Input() set bgsState(value: TwitchBgsCurrentBattle) {
 		this.nextBattle = value?.battleInfo;
 		this.battleSimulationStatus = value?.status;
+		this.simulationMessage = undefined; // value?.;
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

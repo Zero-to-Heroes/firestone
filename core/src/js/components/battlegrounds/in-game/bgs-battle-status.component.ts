@@ -14,7 +14,10 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="battle-simulation">
-			<div class="probas">
+			<div class="message" *ngIf="_simulationMessage">
+				{{ _simulationMessage }}
+			</div>
+			<div class="probas" *ngIf="!_simulationMessage">
 				<div class="title">Your chance of:</div>
 				<div class="proba-items">
 					<div class="win item">
@@ -82,7 +85,7 @@ declare let amplitude: any;
 					</div>
 				</div>
 			</div>
-			<div class="damage-container">
+			<div class="damage-container" *ngIf="!_simulationMessage">
 				<div class="title">Dmg</div>
 				<div class="damage dealt" helpTooltip="Average damage dealt">
 					<div class="damage-icon">
@@ -108,6 +111,7 @@ declare let amplitude: any;
 export class BgsBattleStatusComponent {
 	@Input() showReplayLink: boolean;
 
+	_simulationMessage;
 	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
 	battleSimulationResultLose: string;
@@ -131,6 +135,22 @@ export class BgsBattleStatusComponent {
 		}
 		this._previousStatus = value;
 		this.updateInfo();
+	}
+
+	@Input() set simulationMessage(value: 'not-supported' | undefined) {
+		// console.debug('setting simulation message', value);
+		switch (value) {
+			case 'not-supported':
+				this._simulationMessage = `This composition is not supported`;
+				break;
+			default:
+				this._simulationMessage = undefined;
+				break;
+		}
+		// console.debug('set simulation message', this._simulationMessage);
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	@Input() set nextBattle(value: SimulationResult) {
@@ -182,6 +202,9 @@ export class BgsBattleStatusComponent {
 		} else {
 			// console.log('no value in nextbattle', this._previousBattle, this._previousStatus);
 		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	constructor(

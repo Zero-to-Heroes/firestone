@@ -15,6 +15,7 @@ export class BgsGame {
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 	readonly battleInfo: BgsBattleInfo;
 	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
+	readonly battleInfoMesage: 'not-supported' | undefined;
 	readonly battleResult: SimulationResult;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly replayXml: string;

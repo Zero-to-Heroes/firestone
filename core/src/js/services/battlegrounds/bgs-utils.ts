@@ -1,6 +1,8 @@
 import { CardIds, Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
+import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { VisualAchievement } from '../../models/visual-achievement';
 
 export const getTribeIcon = (tribe: string | Race): string => {
@@ -323,4 +325,52 @@ const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 		default:
 			return hero?.name?.replace(/,/g, '');
 	}
+};
+
+export const isSupportedScenario = (battleInfo: BgsBattleInfo): boolean => {
+	return (
+		isSupportedScenarioForPlayer(battleInfo.playerBoard) && isSupportedScenarioForPlayer(battleInfo.opponentBoard)
+	);
+};
+
+const isSupportedScenarioForPlayer = (boardInfo: BgsBoardInfo): boolean => {
+	try {
+		if (hasScallywag(boardInfo) && (hasBaron(boardInfo) || hasKhadgar(boardInfo))) {
+			console.warn('[bgs-simulation] Unsupported Scallywag exodia, not reporting an error');
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.error('[bgs-simularion] Error when parsing board', e);
+		return true;
+	}
+};
+
+const hasScallywag = (boardInfo: BgsBoardInfo) => {
+	return (
+		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.Scallywag) ||
+		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.ScallywagTavernBrawl)
+	);
+};
+
+const hasBaron = (boardInfo: BgsBoardInfo) => {
+	return (
+		hasMinionOnBoard(boardInfo, CardIds.Collectible.Neutral.BaronRivendare) ||
+		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.BaronRivendareTavernBrawl)
+	);
+};
+
+const hasKhadgar = (boardInfo: BgsBoardInfo) => {
+	return (
+		hasMinionOnBoard(boardInfo, CardIds.Collectible.Mage.Khadgar) ||
+		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Mage.KhadgarTavernBrawl)
+	);
+};
+
+const hasMinionOnBoard = (boardInfo: BgsBoardInfo, cardId: string): boolean => {
+	if (!boardInfo?.board?.length) {
+		return false;
+	}
+
+	return boardInfo.board.find(entity => entity.cardId === cardId) != null;
 };

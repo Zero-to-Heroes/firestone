@@ -10,7 +10,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
-import { normalizeHeroCardId } from '../../bgs-utils';
+import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsPlayerBoardEvent, PlayerBoard } from '../events/bgs-player-board-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -37,6 +37,7 @@ export class BgsPlayerBoardParser implements EventParser {
 					battleInfo: undefined,
 					battleInfoStatus: 'empty',
 					battleResult: undefined,
+					battleInfoMesage: undefined,
 				} as BgsGame),
 			} as BattlegroundsState);
 		}
@@ -65,6 +66,8 @@ export class BgsPlayerBoardParser implements EventParser {
 			players: newPlayers,
 			battleInfo: battleInfo,
 			battleInfoStatus: showSimulation ? 'waiting-for-result' : 'empty',
+			battleInfoMesage: isSupportedScenario(battleInfo) ? undefined : 'not-supported',
+			// battleInfoMesage: undefined,
 		} as BgsGame);
 		const result = currentState.update({
 			currentGame: newGame,

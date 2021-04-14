@@ -20,6 +20,10 @@ export class BgsRecruitStartParser implements EventParser {
 			battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
 			battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
 			battleInfoStatus: shouldHideResultsOnRecruit || !currentState.currentGame.battleResult ? 'empty' : 'done',
+			battleInfoMesage:
+				shouldHideResultsOnRecruit || !currentState.currentGame.battleResult
+					? undefined
+					: currentState.currentGame.battleInfoMesage,
 		} as BgsGame);
 		return currentState.update({
 			currentGame: newGame,

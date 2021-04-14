@@ -40,6 +40,7 @@ declare let amplitude: any;
 			<bgs-battle-status
 				[nextBattle]="nextBattle"
 				[battleSimulationStatus]="battleSimulationStatus"
+				[simulationMessage]="simulationMessage"
 				[showReplayLink]="showSimulationSample"
 			></bgs-battle-status>
 		</div>
@@ -49,6 +50,7 @@ declare let amplitude: any;
 export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
+	simulationMessage: string;
 	showSimulationSample: boolean;
 
 	private windowId: string;
@@ -67,6 +69,8 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 			try {
 				this.nextBattle = newState?.currentGame?.battleResult;
 				this.battleSimulationStatus = newState?.currentGame?.battleInfoStatus;
+				this.simulationMessage = newState?.currentGame?.battleInfoMesage;
+				// console.debug('simultion message in listener', this.simulationMessage);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

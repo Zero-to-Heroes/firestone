@@ -42,6 +42,7 @@ declare let amplitude: any;
 					[enableSimulation]="enableSimulation"
 					[nextBattle]="nextBattle"
 					[battleSimulationStatus]="battleSimulationStatus"
+					[simulationMessage]="simulationMessage"
 				></bgs-opponent-overview-big>
 				<div class="other-opponents">
 					<div class="subtitle">Other opponents</div>
@@ -77,6 +78,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	currentTurn: number;
 	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
+	simulationMessage: string;
 	nextOpponentCardId: string;
 	mmr: number;
 	lastOpponentCardId: string;
@@ -146,6 +148,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		this.nextOpponentCardId = this._panel.opponentOverview.cardId;
 		this.nextBattle = this._game.battleResult;
 		this.battleSimulationStatus = this._game.battleInfoStatus;
+		this.simulationMessage = this._game.battleInfoMesage;
 		this.faceOffs = this._game.faceOffs;
 		this.lastOpponentCardId = this._game.lastOpponentCardId;
 		this.opponents = this._game.players

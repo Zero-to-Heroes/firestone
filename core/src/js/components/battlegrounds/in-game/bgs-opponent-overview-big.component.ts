@@ -41,6 +41,7 @@ declare let amplitude: any;
 						*ngIf="enableSimulation"
 						[nextBattle]="nextBattle"
 						[battleSimulationStatus]="battleSimulationStatus"
+						[simulationMessage]="simulationMessage"
 						[showReplayLink]="true"
 					></bgs-battle-status>
 				</div>
@@ -71,6 +72,7 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() currentTurn: number;
 	@Input() nextBattle: SimulationResult;
 	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
+	@Input() simulationMessage: string;
 	@Input() maxBoardHeight = 1;
 	@Input() tavernTitle = 'Tavern upgrades';
 	@Input() showTavernsIfEmpty = true;
