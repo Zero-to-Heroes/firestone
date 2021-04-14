@@ -5,14 +5,13 @@ import { NavigationState } from '../../models/mainwindow/navigation/navigation-s
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { VisualAchievement } from '../../models/visual-achievement';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 
 @Component({
 	selector: 'achievements',
 	styleUrls: [
 		`../../../css/component/app-section.component.scss`,
-		`../../../css/component/achievements/achievements.component.scss`,
 		`../../../css/global/components-global.scss`,
+		`../../../css/component/achievements/achievements.component.scss`,
 	],
 	template: `
 		<div class="app-section achievements">
@@ -31,7 +30,6 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 							[socialShareUserInfo]="socialShareUserInfo"
 							[achievementsList]="getDisplayedAchievements()"
 							[selectedAchievementId]="navigation.navigationAchievements.selectedAchievementId"
-							[category]="getCategory()"
 							[activeFilter]="navigation.navigationAchievements.achievementActiveFilter"
 							[globalStats]="globalStats"
 						>
@@ -40,6 +38,7 @@ import { VisualAchievementCategory } from '../../models/visual-achievement-categ
 				</with-loading>
 			</section>
 			<section class="secondary">
+				<achievements-filter></achievements-filter>
 				<achievement-history [achievementHistory]="state.achievementHistory"></achievement-history>
 			</section>
 		</div>
@@ -64,28 +63,17 @@ export class AchievementsComponent {
 		return currentCategory.categories;
 	}
 
-	getCategory(): VisualAchievementCategory {
-		if (!this.navigation.navigationAchievements.selectedCategoryId) {
-			return null;
-		}
-		const currentCategory: VisualAchievementCategory = this.state.findCategory(
-			this.navigation.navigationAchievements.selectedCategoryId,
-		);
-		return currentCategory;
-	}
+	// getCategory(): VisualAchievementCategory {
+	// 	if (!this.navigation.navigationAchievements.selectedCategoryId) {
+	// 		return null;
+	// 	}
+	// 	const currentCategory: VisualAchievementCategory = this.state.findCategory(
+	// 		this.navigation.navigationAchievements.selectedCategoryId,
+	// 	);
+	// 	return currentCategory;
+	// }
 
 	getDisplayedAchievements(): readonly VisualAchievement[] {
-		if (
-			!this.navigation?.navigationAchievements?.displayedAchievementsList ||
-			!this.navigation?.navigationAchievements?.achievementsList ||
-			!this.state?.categories
-		) {
-			return [];
-		}
-
-		return this.state.categories
-			.map(cat => cat.retrieveAllAchievements())
-			.reduce((a, b) => a.concat(b), [])
-			.filter(ach => this.navigation.navigationAchievements.displayedAchievementsList.indexOf(ach.id) !== -1);
+		return this.state.findAchievements(this.navigation.navigationAchievements.displayedAchievementsList);
 	}
 }

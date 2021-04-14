@@ -20,6 +20,7 @@ import { UpdateCardSearchResultsEvent } from '../../services/mainwindow/store/ev
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
+declare let amplitude;
 @Component({
 	selector: 'card-search',
 	styleUrls: [`../../../css/component/collection/card-search.component.scss`, `../../../css/global/scrollbar.scss`],
@@ -106,6 +107,10 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 		if (!this._searchString || this._searchString.length < 2) {
 			return;
 		}
+		amplitude.getInstance().logEvent('search', {
+			'page': 'cards',
+			'searchString': this._searchString,
+		});
 		this.stateUpdater.next(new UpdateCardSearchResultsEvent(this._searchString));
 	}
 

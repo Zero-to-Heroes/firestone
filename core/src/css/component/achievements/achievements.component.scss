@@ -53,11 +53,23 @@
 	}
 }
 
-achievement-history {
-	flex-grow: 1;
-	flex-shrink: 1;
+.secondary.secondary.secondary.secondary.secondary {
 	position: relative;
-	display: flex;
+	top: 9px;
+	height: calc(100% - 17px);
+	min-height: 0;
+
+	achievement-history {
+		flex-grow: 1;
+		flex-shrink: 1;
+		position: relative;
+		display: flex;
+		max-height: calc(100% - 42px);
+	}
+
+	achievements-filter {
+		margin-bottom: 10px;
+	}
 }
 
 loading-state {

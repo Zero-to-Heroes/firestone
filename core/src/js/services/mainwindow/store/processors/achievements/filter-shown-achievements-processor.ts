@@ -15,27 +15,69 @@ export class FilterShownAchievementsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const searchString = (event.searchString || '').toLowerCase();
-		amplitude.getInstance().logEvent('search', {
-			'page': 'achievements',
-			'searchString': searchString,
-		});
-		console.log('[filter-shown-achievements] filtering shown achievements', searchString);
-		const allAchievements: readonly VisualAchievement[] =
-			currentState.achievements.findAchievements(navigationState.navigationAchievements.achievementsList) || [];
-		const displayedAchievementsList: readonly string[] = allAchievements
-			.filter(
-				achv =>
-					achv.name.toLowerCase().indexOf(searchString) !== -1 ||
-					achv.text.toLowerCase().indexOf(searchString) !== -1,
-			)
-			.map(ach => ach.id);
-		const newState = navigationState.navigationAchievements.update({
-			displayedAchievementsList: displayedAchievementsList,
-		} as NavigationAchievements);
+
+		if (searchString?.length && searchString.length < 3) {
+			return [currentState, navigationState];
+		}
+
+		if (searchString?.length) {
+			amplitude.getInstance().logEvent('search', {
+				'page': 'achievements',
+				'searchString': searchString,
+			});
+		}
+		console.log(
+			'[filter-shown-achievements] filtering shown achievements in',
+			searchString,
+			navigationState.navigationAchievements.currentView,
+			navigationState.navigationAchievements.selectedCategoryId,
+		);
+
+		const selectedCategory = currentState.achievements.findCategory(
+			navigationState.navigationAchievements.selectedCategoryId,
+		);
+		//console.debug('selectedCategory', selectedCategory);
+
+		const allAchievements: readonly VisualAchievement[] = selectedCategory
+			? selectedCategory.retrieveAllAchievements()
+			: currentState.achievements.retrieveAllAchievements();
+		const displayedAchievementsList: readonly string[] =
+			searchString?.length && searchString.length > 2
+				? allAchievements
+						.filter(
+							achv =>
+								achv.name.toLowerCase().indexOf(searchString) !== -1 ||
+								achv.text.toLowerCase().indexOf(searchString) !== -1,
+						)
+						.map(ach => ach.id)
+				: (selectedCategory?.achievements ?? []).map(ach => ach.id);
+		const newState =
+			searchString?.length && searchString.length > 2
+				? navigationState.navigationAchievements.update({
+						currentView: 'list',
+						viewBeforeSearch:
+							navigationState.navigationAchievements.currentView !== 'list'
+								? navigationState.navigationAchievements.currentView
+								: navigationState.navigationAchievements.viewBeforeSearch ??
+								  navigationState.navigationAchievements.currentView,
+						textBeforeSearch:
+							navigationState.navigationAchievements.textBeforeSearch ?? navigationState.text,
+						displayedAchievementsList: displayedAchievementsList,
+				  } as NavigationAchievements)
+				: navigationState.navigationAchievements.update({
+						currentView: navigationState.navigationAchievements.viewBeforeSearch ?? 'categories',
+						displayedAchievementsList: displayedAchievementsList,
+				  } as NavigationAchievements);
+		const categoryName = selectedCategory?.name ?? 'all achievements';
+		const text =
+			searchString?.length && searchString.length > 2
+				? `Searching for "${searchString}" in ${categoryName}`
+				: navigationState.navigationAchievements.textBeforeSearch;
 		return [
 			null,
 			navigationState.update({
 				navigationAchievements: newState,
+				text: text,
 			} as NavigationState),
 		];
 	}

@@ -22,7 +22,7 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 			menuDisplayType: 'breadcrumbs',
 			selectedCategoryId: category.id,
 			selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
-			achievementsList: category.achievements.map(ach => ach.id) as readonly string[],
+			// achievementsList: category.achievements.map(ach => ach.id) as readonly string[],
 			displayedAchievementsList: category.achievements.map(ach => ach.id) as readonly string[],
 			sharingAchievement: undefined,
 		} as NavigationAchievements);

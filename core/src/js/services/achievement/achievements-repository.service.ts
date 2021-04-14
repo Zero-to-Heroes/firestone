@@ -2,7 +2,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
-import { FilterOption } from '../../models/filter-option';
 import { IndexedVisualAchievement } from '../../models/indexed-visual-achievement';
 import { CompletionStep, VisualAchievement } from '../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
@@ -155,8 +154,6 @@ export class AchievementsRepository {
 				(category.categories?.map(cat =>
 					this.buildCategory(cat, achievements),
 				) as readonly VisualAchievementCategory[]) || [],
-			// TODO: make that configurable via data
-			filterOptions: this.filterOptions(),
 		} as VisualAchievementCategory);
 	}
 
@@ -214,39 +211,6 @@ export class AchievementsRepository {
 
 	private isAchievementVisualRoot(achievement: Achievement): boolean {
 		return achievement.root;
-	}
-
-	protected filterOptions(): readonly FilterOption[] {
-		return [
-			{
-				value: 'ALL_ACHIEVEMENTS',
-				label: 'All achievements',
-				filterFunction: a => true,
-				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: 'Holy Moly, you are epic!',
-				emptyStateText: '100% of achievements in this category complete.',
-			},
-			{
-				value: 'ONLY_MISSING',
-				label: 'Incomplete achievements',
-				filterFunction: (a: VisualAchievement) => {
-					return a.completionSteps.some(step => step.numberOfCompletions === 0);
-				},
-				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
-				emptyStateTitle: 'Tons of achievements are awaiting you!',
-				emptyStateText: 'Find them listed here once completed.',
-			},
-			{
-				value: 'ONLY_COMPLETED',
-				label: 'Completed achievements',
-				filterFunction: (a: VisualAchievement) => {
-					return a.completionSteps.every(step => step.numberOfCompletions > 0);
-				},
-				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: 'Tons of achievements are awaiting you!',
-				emptyStateText: 'Find them listed here once completed.',
-			},
-		];
 	}
 
 	private waitForInit(): Promise<void> {

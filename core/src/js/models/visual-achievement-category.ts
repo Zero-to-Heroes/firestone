@@ -1,5 +1,4 @@
 import { Achievement } from './achievement';
-import { FilterOption } from './filter-option';
 import { VisualAchievement } from './visual-achievement';
 
 export class VisualAchievementCategory {
@@ -8,7 +7,7 @@ export class VisualAchievementCategory {
 	readonly icon: string;
 	readonly categories: readonly VisualAchievementCategory[] = [];
 	readonly achievements: readonly VisualAchievement[] = [];
-	readonly filterOptions: readonly FilterOption[] = [];
+	// readonly filterOptions: readonly FilterOption[] = [];
 
 	public static create(value: VisualAchievementCategory): VisualAchievementCategory {
 		return Object.assign(new VisualAchievementCategory(), value);

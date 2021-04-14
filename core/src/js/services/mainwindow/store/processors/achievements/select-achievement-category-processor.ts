@@ -18,9 +18,9 @@ export class SelectAchievementCategoryProcessor implements Processor {
 			currentView: shouldDisplayAchievements ? 'list' : 'categories',
 			menuDisplayType: 'breadcrumbs',
 			selectedCategoryId: category.id,
-			achievementsList: shouldDisplayAchievements
-				? (category.achievements.map(ach => ach.id) as readonly string[])
-				: [],
+			// achievementsList: shouldDisplayAchievements
+			// 	? (category.achievements.map(ach => ach.id) as readonly string[])
+			// 	: [],
 			displayedAchievementsList: shouldDisplayAchievements
 				? (category.achievements.map(ach => ach.id) as readonly string[])
 				: [],

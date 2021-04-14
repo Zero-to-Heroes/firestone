@@ -12,9 +12,9 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { IOption } from 'ng-select';
+import { FilterOption } from '../../models/filter-option';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { VisualAchievement } from '../../models/visual-achievement';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { ChangeAchievementsActiveFilterEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-active-filter-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -28,7 +28,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="achievements-container" scrollable>
-			<div class="show-filter">
+			<div class="show-filter" *ngIf="totalAchievements > 0">
 				<ng-select
 					class="filter"
 					[options]="filterOptions"
@@ -48,7 +48,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 						</i>
 					</ng-template>
 				</ng-select>
-				<achievements-filter></achievements-filter>
 				<achievement-progress-bar [achieved]="achieved" [total]="totalAchievements"> </achievement-progress-bar>
 			</div>
 			<ul class="achievements-list" *ngIf="activeAchievements && activeAchievements.length > 0">
@@ -77,13 +76,17 @@ export class AchievementsListComponent implements AfterViewInit {
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	@Input() globalStats: GlobalStats;
 	_activeFilter: string;
-	_category: VisualAchievementCategory;
+	// _category: VisualAchievementCategory;
 	_selectedAchievementId: string;
 	totalAchievements: number;
 	achieved: number;
 
 	activeAchievements: VisualAchievement[];
-	filterOptions: IOption[];
+	filters = this.buildFilterOptions();
+	filterOptions: IOption[] = this.filters.map(option => ({
+		label: option.label,
+		value: option.value,
+	}));
 	emptyStateSvgTemplate: SafeHtml;
 	emptyStateIcon: string;
 	emptyStateTitle: string;
@@ -120,27 +123,21 @@ export class AchievementsListComponent implements AfterViewInit {
 		});
 	}
 
-	@Input() set category(value: VisualAchievementCategory) {
-		this._category = value;
-		if (value) {
-			this.filterOptions = this._category.filterOptions.map(option => ({
-				label: option.label,
-				value: option.value,
-			}));
+	// @Input() set category(value: VisualAchievementCategory) {
+	// 	// this._category = value;
+	// 	if (value) {
+	// 		// this.filterOptions = this._category.filterOptions.map(option => ({
+	// 		// 	label: option.label,
+	// 		// 	value: option.value,
+	// 		// }));
 
-			const aggregatedAchievements = value.retrieveAllAchievements();
-			const flatCompletions = aggregatedAchievements
-				.map(achievement => achievement.completionSteps)
-				.reduce((a, b) => a.concat(b), []);
-			this.totalAchievements = flatCompletions.length;
-			this.achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
-			// console.log('[achievements-list] set active filter', this.activeFilter);
-			this.updateShownAchievements();
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	// 		// console.log('[achievements-list] set active filter', this.activeFilter);
+	// 		this.updateShownAchievements();
+	// 	}
+	// 	if (!(this.cdr as ViewRef)?.destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
 
 	@Input() set activeFilter(value: string) {
 		// console.log('setting active filter', value);
@@ -148,13 +145,13 @@ export class AchievementsListComponent implements AfterViewInit {
 		this.updateShownAchievements();
 	}
 
-	@Input('achievementsList') set achievementsList(achievementsList: VisualAchievement[]) {
-		// console.log('[achievements-list] setting achievementsList ', achievementsList);
+	@Input() set achievementsList(achievementsList: VisualAchievement[]) {
+		//console.debug('[achievements-list] setting achievementsList ', achievementsList);
 		this.achievements = achievementsList || [];
 		this.updateShownAchievements();
 	}
 
-	@Input('selectedAchievementId') set selectedAchievementId(selectedAchievementId: string) {
+	@Input() set selectedAchievementId(selectedAchievementId: string) {
 		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
 			// console.log(
 			// 	'[achievements-list] setting selectedAchievementId',
@@ -193,11 +190,18 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	private updateShownAchievements() {
 		// console.log('[achievements-list] updating shown achievements', this.achievements, this._achievementSet);
-		if (!this.achievements || !this._category) {
+		if (!this.achievements) {
 			return;
 		}
+
+		const flatCompletions = this.achievements
+			.map(achievement => achievement.completionSteps)
+			.reduce((a, b) => a.concat(b), []);
+		this.totalAchievements = flatCompletions.length;
+		this.achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
+
 		this.updateActiveFilter();
-		const filterOption = this._category.filterOptions.filter(option => option.value === this._activeFilter)[0];
+		const filterOption = this.filters.filter(option => option.value === this._activeFilter)[0];
 		const filterFunction: (VisualAchievement) => boolean = filterOption?.filterFunction || (achievement => true);
 		this.emptyStateIcon = filterOption?.emptyStateIcon;
 		this.emptyStateTitle = filterOption?.emptyStateTitle;
@@ -219,5 +223,38 @@ export class AchievementsListComponent implements AfterViewInit {
 			this.filterFromPrefs ||
 			(this.filterOptions && this.filterOptions.length > 0 ? this.filterOptions[0].value : null);
 		// console.log('updated active filter', this._activeFilter, this.filterFromPrefs, this.filterOptions);
+	}
+
+	protected buildFilterOptions(): readonly FilterOption[] {
+		return [
+			{
+				value: 'ALL_ACHIEVEMENTS',
+				label: 'All achievements',
+				filterFunction: a => true,
+				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
+				emptyStateTitle: 'Holy Moly, you are epic!',
+				emptyStateText: '100% of achievements in this category complete.',
+			},
+			{
+				value: 'ONLY_MISSING',
+				label: 'Incomplete achievements',
+				filterFunction: (a: VisualAchievement) => {
+					return a.completionSteps.some(step => step.numberOfCompletions === 0);
+				},
+				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
+				emptyStateTitle: 'Tons of achievements are awaiting you!',
+				emptyStateText: 'Find them listed here once completed.',
+			},
+			{
+				value: 'ONLY_COMPLETED',
+				label: 'Completed achievements',
+				filterFunction: (a: VisualAchievement) => {
+					return a.completionSteps.every(step => step.numberOfCompletions > 0);
+				},
+				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
+				emptyStateTitle: 'Tons of achievements are awaiting you!',
+				emptyStateText: 'Find them listed here once completed.',
+			},
+		];
 	}
 }

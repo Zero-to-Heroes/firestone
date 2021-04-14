@@ -48,7 +48,7 @@ export class AchievementsFilterComponent implements AfterViewInit, OnDestroy {
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.subscription = this.searchForm.valueChanges
-			.pipe(debounceTime(200))
+			.pipe(debounceTime(400))
 			.pipe(distinctUntilChanged())
 			.subscribe(data => {
 				// console.log('value changed?', data);

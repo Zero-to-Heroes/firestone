@@ -47,9 +47,14 @@ export class AchievementsState {
 	}
 
 	public findAchievements(ids: readonly string[]): readonly VisualAchievement[] {
-		return this.categories
-			.map(cat => cat.retrieveAllAchievements())
-			.reduce((a, b) => a.concat(b), [])
-			.filter(achv => ids.indexOf(achv.id) !== -1);
+		if (!ids?.length) {
+			return [];
+		}
+
+		return this.retrieveAllAchievements().filter(achv => ids.indexOf(achv.id) !== -1);
+	}
+
+	public retrieveAllAchievements(): readonly VisualAchievement[] {
+		return [...this.categories.map(cat => cat.retrieveAllAchievements()).reduce((a, b) => a.concat(b), [])];
 	}
 }

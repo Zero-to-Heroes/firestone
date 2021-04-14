@@ -25,9 +25,9 @@ export class ShowAchievementDetailsProcessor implements Processor {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
 			selectedCategoryId: categoryHierarchy[categoryHierarchy.length - 1].id,
-			achievementsList: categoryHierarchy[categoryHierarchy.length - 1].achievements.map(
-				ach => ach.id,
-			) as readonly string[],
+			// achievementsList: categoryHierarchy[categoryHierarchy.length - 1].achievements.map(
+			// 	ach => ach.id,
+			// ) as readonly string[],
 			displayedAchievementsList: categoryHierarchy[categoryHierarchy.length - 1].achievements.map(
 				ach => ach.id,
 			) as readonly string[],
