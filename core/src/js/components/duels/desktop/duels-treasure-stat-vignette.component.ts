@@ -21,7 +21,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	template: `
 		<div class="duels-treasure-stat-vignette">
 			<div class="box-side">
-				<div class="name" [helpTooltip]="name">{{ name }}</div>
+				<div class="name-container">
+					<div class="name" [helpTooltip]="name">{{ name }}</div>
+					<div class="info" [helpTooltip]="numberOfGamesTooltip">
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#info" />
+						</svg>
+					</div>
+				</div>
 				<img [src]="icon" class="portrait" [cardTooltip]="cardId" />
 				<div class="stats">
 					<div class="stats">
@@ -71,6 +78,7 @@ export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 		this.globalPickRate = value.globalPickRate;
 		this.globalWinrate = value.globalWinrate;
 		this.globalOfferingRate = value.globalOfferingRate;
+		this.numberOfGamesTooltip = `${value.globalTotalMatches.toLocaleString()} matches recorded`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -85,6 +93,7 @@ export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 	globalWinrate: number;
 	globalOfferingRate: number;
 	playerPickRate: number;
+	numberOfGamesTooltip: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

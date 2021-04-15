@@ -16,13 +16,20 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 @Component({
 	selector: 'duels-hero-stat-vignette',
 	styleUrls: [
-		`../../../../css/component/duels/desktop/duels-hero-stat-vignette.component.scss`,
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/duels/desktop/duels-hero-stat-vignette.component.scss`,
 	],
 	template: `
 		<div class="duels-hero-stat-vignette" [ngClass]="{ 'unused': playerGamesPlayed === 0 }">
 			<div class="box-side">
-				<div class="name" [helpTooltip]="playerClass + ' - ' + name">{{ name }}</div>
+				<div class="name-container">
+					<div class="name" [helpTooltip]="playerClass + ' - ' + name">{{ name }}</div>
+					<div class="info" [helpTooltip]="numberOfGamesTooltip">
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#info" />
+						</svg>
+					</div>
+				</div>
 				<img [src]="icon" class="portrait" [cardTooltip]="cardId" />
 				<div class="stats">
 					<basic-bar-chart
@@ -86,6 +93,9 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 				value: Math.max(input.value, 0.5),
 			})),
 		} as SimpleBarChartData;
+		this.numberOfGamesTooltip = `${value.globalTotalMatches.toLocaleString()} matches recorded (${this.buildPercents(
+			value.globalPopularity,
+		)}% popularity)`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -100,6 +110,7 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 	globalWinrate: number;
 	playerGamesPlayed: number;
 	globalWinDistribution: SimpleBarChartData;
+	numberOfGamesTooltip: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
