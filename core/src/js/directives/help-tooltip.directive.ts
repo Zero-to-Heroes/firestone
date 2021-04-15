@@ -198,7 +198,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			return;
 		}
 		// console.log('onmouseleave');
-		if (this.overlayRef) {
+		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -212,7 +212,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		// console.log('onmouseleave');
-		if (this.overlayRef) {
+		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -227,7 +227,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@HostListener('window:mousewheel')
 	onMouseWheel() {
 		// console.log('onmouseleave');
-		if (this.overlayRef) {
+		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
