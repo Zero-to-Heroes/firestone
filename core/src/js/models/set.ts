@@ -12,7 +12,7 @@ export class Set {
 		public readonly name: string,
 		public readonly launchDate: Date,
 		public readonly standard?: boolean,
-		allCards?: SetCard[],
+		allCards?: readonly SetCard[],
 		pityTimer?: PityTimer,
 		ownedLimitCollectibleCards?: number,
 		ownedLimitCollectiblePremiumCards?: number,
@@ -21,6 +21,22 @@ export class Set {
 		this.pityTimer = pityTimer;
 		this.ownedLimitCollectibleCards = ownedLimitCollectibleCards || 0;
 		this.ownedLimitCollectiblePremiumCards = ownedLimitCollectiblePremiumCards || 0;
+	}
+
+	public update(base: Set): Set {
+		return Object.assign(
+			new Set(
+				this.id,
+				this.name,
+				this.launchDate,
+				this.standard,
+				this.allCards,
+				this.pityTimer,
+				this.ownedLimitCollectibleCards,
+				this.ownedLimitCollectiblePremiumCards,
+			),
+			base,
+		);
 	}
 
 	public getCard(cardId: string): SetCard {

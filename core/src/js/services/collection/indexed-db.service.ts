@@ -5,7 +5,6 @@ import { CardBack } from '../../models/card-back';
 import { CardHistory } from '../../models/card-history';
 import { Coin } from '../../models/coin';
 import { PackInfo } from '../../models/collection/pack-info';
-import { PityTimer } from '../../models/pity-timer';
 
 @Injectable()
 export class IndexedDbService {
@@ -173,50 +172,6 @@ export class IndexedDbService {
 		} catch (e) {
 			console.error('[collection] [storage] error while saving history', e.message, e.name, e);
 			return history;
-		}
-	}
-
-	// public async saveNewPack(newPack: PackHistory): Promise<PackHistory> {
-	// 	await this.waitForDbInit();
-	// 	try {
-	// 		console.log('[collection] [storage] saving pack history', newPack);
-	// 		const history = await this.db.add('pack-history', newPack);
-	// 		return history;
-	// 	} catch (e) {
-	// 		console.error('[collection] [storage] error while saving new pack', e.message, e.name, e);
-	// 		return newPack;
-	// 	}
-	// }
-
-	public async getPityTimer(setId: any): Promise<PityTimer> {
-		await this.waitForDbInit();
-		try {
-			const pityTimer = await this.db.getByKey('pity-timer', setId);
-			return pityTimer;
-		} catch (e) {
-			console.error('[collection] [storage] could not get pity timer', e.message, e.name, e);
-		}
-	}
-
-	public async getAllPityTimers(): Promise<PityTimer[]> {
-		await this.waitForDbInit();
-		try {
-			const pityTimers = await this.db.getAll('pity-timer', null);
-			return pityTimers;
-		} catch (e) {
-			console.error('[collection] [storage] could not get pity timers', e.message, e.name, e);
-			return [];
-		}
-	}
-
-	public async savePityTimer(pityTimer: PityTimer): Promise<PityTimer> {
-		await this.waitForDbInit();
-		try {
-			await this.db.update('pity-timer', pityTimer);
-			return pityTimer;
-		} catch (e) {
-			console.error('[collection] [storage] could not update pity timer', e.message, e.name, pityTimer, e);
-			return pityTimer;
 		}
 	}
 

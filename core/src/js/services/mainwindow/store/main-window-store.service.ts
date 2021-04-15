@@ -13,7 +13,6 @@ import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
-import { PackHistoryService } from '../../collection/pack-history.service';
 import { SetsService } from '../../collection/sets-service.service';
 import { DecksStateBuilderService } from '../../decktracker/main/decks-state-builder.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
@@ -245,7 +244,6 @@ export class MainWindowStoreService {
 		private ow: OverwolfService,
 		private memoryReading: MemoryInspectionService,
 		private events: Events,
-		private pityTimer: PackHistoryService,
 		private notifs: OwNotificationsService,
 		private userService: UserService,
 		private decktrackerStateLoader: DecktrackerStateLoaderService,
@@ -459,16 +457,10 @@ export class MainWindowStoreService {
 			new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),
 
 			NewPackEvent.eventName(),
-			new NewPackProcessor(this.collectionDb, this.cards),
+			new NewPackProcessor(this.collectionManager, this.cards),
 
 			NewCardEvent.eventName(),
-			new NewCardProcessor(
-				this.collectionDb,
-				this.collectionManager,
-				this.cardHistoryStorage,
-				this.pityTimer,
-				this.sets,
-			),
+			new NewCardProcessor(this.collectionDb, this.collectionManager, this.cardHistoryStorage),
 
 			// Achievements
 			AchievementsInitEvent.eventName(),

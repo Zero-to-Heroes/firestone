@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Set } from '../../models/set';
+import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { Events } from '../../services/events.service';
 import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -172,6 +173,18 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class SetComponent implements AfterViewInit {
 	private readonly MOUSE_OVER_DELAY = 300;
 
+	@Input() set cardSet(set: Set) {
+		this._cardSet = set;
+		this.released = set.allCards && set.allCards.length > 0;
+		if (['Classic', 'Core', 'Legacy', 'Demon Hunter Initiate'].indexOf(set.name) > -1) {
+			this._displayName = true;
+		}
+		this.epicTimer = set.pityTimer?.packsUntilGuaranteedEpic ?? CollectionManager.EPIC_PITY_TIMER;
+		this.epicFill = ((10 - this.epicTimer) / 10) * 100;
+		this.legendaryTimer = set.pityTimer?.packsUntilGuaranteedLegendary ?? CollectionManager.LEGENDARY_PITY_TIMER;
+		this.legendaryFill = ((40 - this.legendaryTimer) / 40) * 100;
+	}
+
 	_cardSet: Set;
 	_displayName = false;
 	released = true;
@@ -195,19 +208,6 @@ export class SetComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	@Input('cardSet') set cardSet(set: Set) {
-		this._cardSet = set;
-		this.released = set.allCards && set.allCards.length > 0;
-		// console.log('setting set', set, set.name);
-		if (['Classic', 'Core', 'Legacy', 'Demon Hunter Initiate'].indexOf(set.name) > -1) {
-			this._displayName = true;
-		}
-		this.epicTimer = set.pityTimer.packsUntilGuaranteedEpic;
-		this.epicFill = ((10 - this.epicTimer) / 10) * 100;
-		this.legendaryTimer = set.pityTimer.packsUntilGuaranteedLegendary;
-		this.legendaryFill = ((40 - this.legendaryTimer) / 40) * 100;
 	}
 
 	isSimpleComplete() {

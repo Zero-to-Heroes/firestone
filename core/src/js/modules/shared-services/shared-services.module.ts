@@ -10,7 +10,6 @@ import { AchievementsLocalDbService as AchievementsDb } from '../../services/ach
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { IndexedDbService } from '../../services/collection/indexed-db.service';
-import { PackHistoryService } from '../../services/collection/pack-history.service';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { DebugService } from '../../services/debug.service';
 import { DeckHandlerService } from '../../services/decktracker/deck-handler.service';
@@ -60,7 +59,6 @@ export class SharedServicesModule {
 				CardHistoryStorageService,
 				CollectionManager,
 				IndexedDbService,
-				PackHistoryService,
 				MindVisionService,
 				OwUtilsService,
 			],

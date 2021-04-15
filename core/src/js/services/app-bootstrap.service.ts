@@ -13,7 +13,6 @@ import { RealTimeStatsService } from './battlegrounds/store/real-time-stats/real
 import { CardsMonitorService } from './collection/cards-monitor.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
-import { PackHistoryService } from './collection/pack-history.service';
 import { PackMonitor } from './collection/pack-monitor.service';
 import { PackStatsService } from './collection/pack-stats.service';
 import { DebugService } from './debug.service';
@@ -65,7 +64,6 @@ export class AppBootstrapService {
 		private achievementsDb: AchievementsDb,
 		private achievementsLoader: AchievementsLoaderService,
 		private packMonitor: PackMonitor,
-		private packHistory: PackHistoryService,
 		private achievementsMonitor: AchievementsMonitor,
 		private init_AchievementsNotifications: AchievementsNotificationService,
 		private packStatsService: PackStatsService,
