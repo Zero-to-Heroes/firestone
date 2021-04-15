@@ -124,6 +124,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Priest.DeadRinger,
 	CardIds.Collectible.Priest.GhuunTheBloodGod,
 	CardIds.NonCollectible.Priest.Insight_InsightToken,
+	CardIds.Collectible.Priest.ThriveInTheShadowsCore,
 	CardIds.Collectible.Rogue.CavernShinyfinder,
 	CardIds.Collectible.Rogue.CursedCastaway,
 	CardIds.Collectible.Rogue.ElvenMinstrel,
