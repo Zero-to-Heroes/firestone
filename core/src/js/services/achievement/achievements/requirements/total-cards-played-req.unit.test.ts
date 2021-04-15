@@ -41,7 +41,7 @@ describe('total-cards-played-req', () => {
 				const req = new TotalCardsPlayedReq(2, 'AT_LEAST', 'SECRET', cards);
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.CARD_PLAYED,
-					cardId: CardIds.Collectible.Mage.Fireball,
+					cardId: CardIds.Collectible.Mage.FireballLegacy,
 					controllerId: 1,
 					localPlayer: { PlayerId: 1 },
 				} as GameEvent);
@@ -74,7 +74,7 @@ describe('total-cards-played-req', () => {
 				const req = new TotalCardsPlayedReq(2, 'AT_MOST', 'SPELL', cards);
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.CARD_PLAYED,
-					cardId: CardIds.Collectible.Mage.Fireball,
+					cardId: CardIds.Collectible.Mage.FireballLegacy,
 					controllerId: 1,
 					localPlayer: { PlayerId: 1 },
 				} as GameEvent);
@@ -103,7 +103,7 @@ describe('total-cards-played-req', () => {
 				const req = new TotalCardsPlayedReq(3, 'AT_MOST', 'SPELL', cards);
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.CARD_PLAYED,
-					cardId: CardIds.Collectible.Mage.Fireball,
+					cardId: CardIds.Collectible.Mage.FireballLegacy,
 					controllerId: 1,
 					localPlayer: { PlayerId: 1 },
 				} as GameEvent);
@@ -134,7 +134,7 @@ describe('total-cards-played-req', () => {
 				const req = new TotalCardsPlayedReq(2, 'AT_MOST', 'SPELL', cards);
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.CARD_PLAYED,
-					cardId: CardIds.Collectible.Mage.Fireball,
+					cardId: CardIds.Collectible.Mage.FireballLegacy,
 					controllerId: 2,
 					localPlayer: { PlayerId: 1 },
 				} as GameEvent);

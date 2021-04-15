@@ -161,7 +161,8 @@ export const publicCardCreators = [
 	CardIds.Collectible.Warrior.RingmasterWhatley,
 	CardIds.Collectible.Warrior.VarianWrynn,
 	CardIds.Collectible.Neutral.BrightEyedScout, // tested
-	CardIds.Collectible.Neutral.CaptainsParrot,
+	CardIds.Collectible.Neutral.CaptainsParrotLegacy,
+	CardIds.Collectible.Neutral.CaptainsParrotVanilla,
 	CardIds.Collectible.Neutral.ClawMachine,
 	CardIds.Collectible.Neutral.CountessAshmore, // tested
 	CardIds.Collectible.Neutral.Guidance,
