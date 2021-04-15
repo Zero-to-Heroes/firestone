@@ -40,6 +40,8 @@ export class Preferences {
 
 	readonly showXpRecapAtGameEnd: boolean = false;
 
+	readonly collectionUseOverlay: boolean;
+
 	readonly collectionEnableNotifications: boolean = true;
 	readonly showDust: boolean = true;
 	readonly showCommon: boolean = true;
@@ -49,8 +51,7 @@ export class Preferences {
 	readonly collectionCardScale: number = 100;
 	readonly collectionSetShowGoldenStats: boolean = false;
 	readonly collectionUseAnimatedCardBacks: boolean = false;
-
-	readonly collectionUseOverlay: boolean;
+	readonly collectionShowOnlyBuyablePacks: boolean = false;
 
 	readonly desktopDeckFilters: DeckFilters;
 	readonly desktopDeckShowHiddenDecks: boolean = false;

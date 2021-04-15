@@ -18,10 +18,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 @Component({
 	selector: 'card-history',
 	styleUrls: [
-		`../../../css/component/collection/card-history.component.scss`,
 		`../../../css/global/scrollbar.scss`,
 		`../../../css/global/forms.scss`,
 		`../../../css/global/toggle.scss`,
+		`../../../css/component/collection/card-history.component.scss`,
 	],
 	template: `
 		<div class="card-history">

@@ -5,24 +5,33 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	ViewRef,
 } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
-import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
+import { Preferences } from '../../models/preferences';
 import { boosterIdToBoosterName, getPackDustValue } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'pack-stats',
 	styleUrls: [`../../../css/global/scrollbar.scss`, `../../../css/component/collection/pack-stats.component.scss`],
 	template: `
 		<div class="pack-stats" scrollable>
-			<div class="header">All-time packs ({{ totalPacks }})</div>
-			<div class="packs-container">
+			<div class="header">
+				All-time packs ({{ totalPacks }})
+				<preference-toggle
+					class="show-buyable-packs"
+					[ngClass]="{ 'active': showOnlyBuyablePacks }"
+					field="collectionShowOnlyBuyablePacks"
+					label="Only show main packs"
+					helpTooltip="Show only the packs that can be bought in the shop, hiding all promotional / reward packs"
+				></preference-toggle>
+			</div>
+			<div class="packs-container" [ngClass]="{ 'empty': !_packs?.length }">
 				<div
 					class="pack-stat"
 					*ngFor="let pack of _packs; trackBy: trackByPackFn"
@@ -78,68 +87,121 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		if (value.packs === this._packs && value.packStats === this._packStats) {
 			return;
 		}
-		this._packs = Object.values(BoosterType)
-			.map((boosterId: BoosterType) => {
-				if (isNaN(boosterId)) {
-					return null;
-				}
-				if (
-					[
-						BoosterType.INVALID,
-						BoosterType.SIGNUP_INCENTIVE,
-						BoosterType.FIRST_PURCHASE,
-						BoosterType.FIRST_PURCHASE_OLD,
-						BoosterType.MAMMOTH_BUNDLE,
-						BoosterType.WAILING_CAVERNS,
-					].includes(boosterId)
-				) {
-					return null;
-				}
-				const pack = (value?.packs ?? []).find(p => p.packType === boosterId);
-				// console.debug('finding pack for', boosterId, pack);
-				return {
-					packType: boosterId,
-					totalObtained: pack?.totalObtained ?? 0,
-					unopened: 0,
-					name: boosterIdToBoosterName(boosterId),
-				};
-			})
-			.filter(info => info)
-			.reverse();
-		this.totalPacks = this._packs.map(pack => pack.totalObtained).reduce((a, b) => a + b, 0);
+
 		this._packStats = value?.packStats ?? [];
-
-		const orderedPacks = [...this._packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
-		// console.debug('best poacks', orderedPacks);
-		this.bestPacks = orderedPacks.slice(0, 5);
+		this._inputPacks = value.packs ?? [];
+		this.updateInfos();
 	}
 
-	@Input() set navigation(value: NavigationCollection) {
-		this._navigation = value;
+	@Input() set prefs(value: Preferences) {
+		if (!value || this.showOnlyBuyablePacks === value.collectionShowOnlyBuyablePacks) {
+			return;
+		}
+
+		this.showOnlyBuyablePacks = value.collectionShowOnlyBuyablePacks;
+		console.debug('updated buyable packs', this.showOnlyBuyablePacks);
+		this.updateInfos();
 	}
 
+	// @Input() set navigation(value: NavigationCollection) {
+	// 	// this._navigation = value;
+	// }
+
+	_inputPacks: readonly PackInfo[];
 	_packs: readonly InternalPackInfo[] = [];
 	_packStats: readonly PackResult[];
-	_navigation: NavigationCollection;
+	// _navigation: NavigationCollection;
 	totalPacks: number;
 	bestPacks: readonly PackResult[] = [];
 
+	showOnlyBuyablePacks: boolean;
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
+	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
 
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	trackByPackFn(item: InternalPackInfo) {
+	trackByPackFn(index: number, item: InternalPackInfo) {
 		return item.packType;
 	}
+
+	// toggleShowOnlyBuyablePacks = (value: boolean) => {
+	// 	if (value === this.showOnlyBuyablePacks) {
+	// 		return;
+	// 	}
+
+	// 	this.showOnlyBuyablePacks = value;
+	// 	this.updateInfos();
+	// };
+
+	private updateInfos() {
+		if (!this._packs || !this._packStats) {
+			return;
+		}
+
+		const orderedPacks = [...this._packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
+		// console.debug('best poacks', orderedPacks);
+		this.bestPacks = orderedPacks.slice(0, 5);
+
+		this._packs = [];
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+		setTimeout(() => {
+			this._packs = Object.values(BoosterType)
+				.filter((boosterId: BoosterType) => !isNaN(boosterId))
+				.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
+				.filter(
+					(boosterId: BoosterType) =>
+						!this.showOnlyBuyablePacks || !NON_BUYABLE_BOOSTER_IDS.includes(boosterId),
+				)
+				.map((boosterId: BoosterType) => ({
+					packType: boosterId,
+					totalObtained: this._inputPacks.find(p => p.packType === boosterId)?.totalObtained ?? 0,
+					unopened: 0,
+					name: boosterIdToBoosterName(boosterId),
+				}))
+				.filter(info => info)
+				.reverse();
+			this.totalPacks = this._packs.map(pack => pack.totalObtained).reduce((a, b) => a + b, 0);
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 200);
+	}
 }
+
+const EXCLUDED_BOOSTER_IDS = [
+	BoosterType.INVALID,
+	BoosterType.SIGNUP_INCENTIVE,
+	BoosterType.FIRST_PURCHASE,
+	BoosterType.FIRST_PURCHASE_OLD,
+	BoosterType.MAMMOTH_BUNDLE,
+	BoosterType.WAILING_CAVERNS,
+];
+
+const NON_BUYABLE_BOOSTER_IDS = [
+	BoosterType.INVALID,
+	BoosterType.FIRST_PURCHASE_OLD,
+	BoosterType.FIRST_PURCHASE,
+	BoosterType.SIGNUP_INCENTIVE,
+	BoosterType.GOLDEN_CLASSIC_PACK,
+	BoosterType.GOLDEN_SCHOLOMANCE,
+	BoosterType.GOLDEN_DARKMOON_FAIRE,
+	BoosterType.GOLDEN_THE_BARRENS,
+	BoosterType.MAMMOTH_BUNDLE,
+	BoosterType.YEAR_OF_DRAGON,
+	BoosterType.YEAR_OF_PHOENIX,
+	BoosterType.STANDARD_HUNTER,
+	BoosterType.STANDARD_MAGE,
+	BoosterType.STANDARD_PALADIN,
+	BoosterType.STANDARD_PRIEST,
+	BoosterType.STANDARD_ROGUE,
+	BoosterType.STANDARD_WARRIOR,
+];
 
 interface InternalPackInfo extends PackInfo {
 	readonly name: string;

@@ -19,9 +19,33 @@
 	.header {
 		font-size: 16px;
 		margin-bottom: 15px;
+		display: flex;
+		align-items: center;
 
 		&.best-packs-header {
 			margin-top: 15px;
+		}
+
+		.show-buyable-packs {
+			opacity: 0.5;
+			height: 30px;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			position: relative;
+			top: 0;
+			right: 0;
+			align-self: auto;
+			margin-left: auto;
+			margin-right: 35px;
+
+			::ng-deep .preference-toggle.preference-toggle.preference-toggle {
+				margin-top: 0;
+			}
+
+			&.active {
+				opacity: 1;
+			}
 		}
 	}
 
@@ -33,6 +57,12 @@
 		min-height: 0;
 		overflow: auto;
 		flex-shrink: 0;
+		opacity: 1;
+		transition: opacity 0.2s ease-in-out;
+
+		&.empty {
+			opacity: 0;
+		}
 
 		.pack-stat {
 			margin-right: 15px;

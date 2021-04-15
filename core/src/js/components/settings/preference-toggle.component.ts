@@ -46,6 +46,7 @@ export class PreferenceToggleComponent {
 	@Input() messageWhenToggleValue: string;
 	@Input() valueToDisplayMessageOn: string | boolean | number;
 	@Input() toggleFunction: (newValue: boolean) => void;
+	@Input() callbackOnLoad: (newValue: boolean) => void;
 
 	value: boolean;
 	toggled = false;
@@ -77,6 +78,9 @@ export class PreferenceToggleComponent {
 		const prefs = await this.prefs.getPreferences();
 		this.value = prefs[this.field];
 		this.toggled = false;
+		if (this.callbackOnLoad) {
+			this.callbackOnLoad(this.value);
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

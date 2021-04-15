@@ -78,6 +78,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 						<pack-stats
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'packs'"
 							[state]="dataState"
+							[prefs]="prefs"
 						>
 						</pack-stats>
 					</div>
