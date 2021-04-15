@@ -209,7 +209,7 @@ export class Preferences {
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';
 	readonly duelsActiveStatTypeFilter: DuelsStatTypeFilterType = 'hero';
 	readonly duelsActiveTreasureSortFilter: DuelsTreasureSortFilterType = 'global-winrate';
-	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure';
+	readonly duelsActiveTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType = 'treasure-1';
 	readonly duelsActiveTimeFilter: DuelsTimeFilterType = 'last-patch';
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
 	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';

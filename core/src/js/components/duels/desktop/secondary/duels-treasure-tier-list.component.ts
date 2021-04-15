@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsTreasureStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../../models/duels/duels-state';
-import { isPassive } from '../../../../services/duels/duels-utils';
+import { duelsTreasureRank, isPassive } from '../../../../services/duels/duels-utils';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
@@ -99,10 +99,30 @@ export class DuelsTreasureTierListComponent implements AfterViewInit {
 
 	private buildStats(): readonly DuelsTreasureStat[] {
 		switch (this._state.activeTreasureStatTypeFilter) {
-			case 'treasure':
-				return this._state.playerStats.treasureStats.filter(stat => !isPassive(stat.cardId, this.allCards));
-			case 'passive':
-				return this._state.playerStats.treasureStats.filter(stat => isPassive(stat.cardId, this.allCards));
+			case 'treasure-1':
+				return this._state.playerStats.treasureStats.filter(
+					stat => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
+				);
+			case 'treasure-2':
+				return this._state.playerStats.treasureStats.filter(
+					stat => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
+				);
+			case 'treasure-3':
+				return this._state.playerStats.treasureStats.filter(
+					stat => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
+				);
+			case 'passive-1':
+				return this._state.playerStats.treasureStats.filter(
+					stat => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
+				);
+			case 'passive-2':
+				return this._state.playerStats.treasureStats.filter(
+					stat => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
+				);
+			case 'passive-3':
+				return this._state.playerStats.treasureStats.filter(
+					stat => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
+				);
 		}
 	}
 }

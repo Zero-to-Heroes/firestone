@@ -5,7 +5,7 @@ import { DuelsPlayerStats, DuelsTreasureStat } from '../../../models/duels/duels
 import { DuelsState } from '../../../models/duels/duels-state';
 import { DuelsTreasureStatTypeFilterType } from '../../../models/duels/duels-treasure-stat-type-filter.type';
 import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
-import { isPassive } from '../../../services/duels/duels-utils';
+import { duelsTreasureRank, isPassive } from '../../../services/duels/duels-utils';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -103,10 +103,30 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 
 	private getStats(): readonly DuelsTreasureStat[] {
 		switch (this._statType) {
-			case 'treasure':
-				return this._playerStats.treasureStats.filter(stat => !isPassive(stat.cardId, this.allCards));
-			case 'passive':
-				return this._playerStats.treasureStats.filter(stat => isPassive(stat.cardId, this.allCards));
+			case 'treasure-1':
+				return this._playerStats.treasureStats.filter(
+					stat => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
+				);
+			case 'treasure-2':
+				return this._playerStats.treasureStats.filter(
+					stat => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
+				);
+			case 'treasure-3':
+				return this._playerStats.treasureStats.filter(
+					stat => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
+				);
+			case 'passive-1':
+				return this._playerStats.treasureStats.filter(
+					stat => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
+				);
+			case 'passive-2':
+				return this._playerStats.treasureStats.filter(
+					stat => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
+				);
+			case 'passive-3':
+				return this._playerStats.treasureStats.filter(
+					stat => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
+				);
 		}
 	}
 }

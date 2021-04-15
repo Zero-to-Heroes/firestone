@@ -76,20 +76,24 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						<duels-treasure-stats
 							*ngxCacheIf="
 								navigation.navigationDuels.selectedCategoryId === 'duels-treasures' &&
-								state.duels?.activeTreasureStatTypeFilter === 'treasure'
+								['treasure-1', 'treasure-2', 'treasure-3'].includes(
+									state.duels?.activeTreasureStatTypeFilter
+								)
 							"
 							[state]="state.duels"
-							[statType]="'treasure'"
+							[statType]="state.duels?.activeTreasureStatTypeFilter"
 							[navigation]="navigation.navigationDuels"
 						>
 						</duels-treasure-stats>
 						<duels-treasure-stats
 							*ngxCacheIf="
 								navigation.navigationDuels.selectedCategoryId === 'duels-treasures' &&
-								state.duels?.activeTreasureStatTypeFilter === 'passive'
+								['passive-1', 'passive-2', 'passive-3'].includes(
+									state.duels?.activeTreasureStatTypeFilter
+								)
 							"
 							[state]="state.duels"
-							[statType]="'passive'"
+							[statType]="state.duels?.activeTreasureStatTypeFilter"
 							[navigation]="navigation.navigationDuels"
 						>
 						</duels-treasure-stats>

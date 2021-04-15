@@ -1,4 +1,4 @@
-import { DuelsTreasurePassiveTypeFilterType } from '../../../../../models/duels/duels-treasure-passive-type-filter.type';
+import { DuelsTreasureStatTypeFilterType } from '../../../../../models/duels/duels-treasure-stat-type-filter.type';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class DuelsTreasurePassiveTypeFilterSelectedEvent implements MainWindowStoreEvent {
@@ -6,7 +6,7 @@ export class DuelsTreasurePassiveTypeFilterSelectedEvent implements MainWindowSt
 		return 'DuelsTreasurePassiveTypeFilterSelectedEvent';
 	}
 
-	constructor(public readonly value: DuelsTreasurePassiveTypeFilterType) {}
+	constructor(public readonly value: DuelsTreasureStatTypeFilterType) {}
 
 	public eventName(): string {
 		return 'DuelsTreasurePassiveTypeFilterSelectedEvent';

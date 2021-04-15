@@ -1,4 +1,4 @@
-import { CardIds } from '@firestone-hs/reference-data';
+import { allDuelsTreasureCardIds, CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 
 const PASSIVES = [];
@@ -71,6 +71,78 @@ export const isSignatureTreasure = (cardId: string, allCards: AllCardsService): 
 
 export const isPassive = (cardId: string, allCards: AllCardsService): boolean => {
 	return PASSIVES.includes(cardId) || allCards.getCard(cardId)?.mechanics?.includes('DUNGEON_PASSIVE_BUFF');
+};
+
+// https://hearthstone.fandom.com/wiki/Duels#Current_season
+export const duelsTreasureRank = (cardId: string): number => {
+	if (!cardId) {
+		return 0;
+	}
+
+	if (!allDuelsTreasureCardIds.includes(cardId)) {
+		console.error('Incorrect config for duels card IDs?', cardId);
+	}
+	switch (cardId) {
+		// Passives
+		case CardIds.NonCollectible.Neutral.AvengingArmaments2:
+		case CardIds.NonCollectible.Neutral.BattleTotem1:
+		case CardIds.NonCollectible.Neutral.BookOfWonders:
+		case CardIds.NonCollectible.Neutral.Caltrops:
+		case CardIds.NonCollectible.Neutral.CorruptedFelstone:
+		case CardIds.NonCollectible.Neutral.DisksOfLegend:
+		case CardIds.NonCollectible.Neutral.DoubleTime:
+		case CardIds.NonCollectible.Neutral.DragonboneRitualTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.EerieStone:
+		case CardIds.NonCollectible.Neutral.EmeraldGogglesTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.EnduranceTraining:
+		case CardIds.NonCollectible.Neutral.FlameWaves:
+		case CardIds.NonCollectible.Neutral.FromTheSwampTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.HagathasEmbrace:
+		case CardIds.NonCollectible.Neutral.KhadgarsScryingOrb:
+		case CardIds.NonCollectible.Neutral.MummyMagic:
+		case CardIds.NonCollectible.Neutral.OrbOfRevelation2:
+		case CardIds.NonCollectible.Neutral.RallyTheTroops2:
+		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
+		case CardIds.NonCollectible.Neutral.SpecialDelivery:
+		case CardIds.NonCollectible.Neutral.SpreadingSaplings:
+		case CardIds.NonCollectible.Neutral.StarvingTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.TotemOfTheDead1:
+			return 2;
+		// Passives Ultra Rare
+		case CardIds.NonCollectible.Neutral.BandOfBees:
+		case CardIds.NonCollectible.Neutral.CapturedFlag:
+		case CardIds.NonCollectible.Neutral.ElixirOfVigor:
+		case CardIds.NonCollectible.Neutral.ManastormTavernBrawl1:
+		case CardIds.NonCollectible.Neutral.RobeOfTheMagi:
+		case CardIds.NonCollectible.Neutral.Stargazing:
+			return 3;
+		// Actives
+		case CardIds.NonCollectible.Neutral.ArchmageStaffTavernBrawl:
+		case CardIds.NonCollectible.Neutral.BookOfTheDeadTavernBrawl:
+		case CardIds.NonCollectible.Neutral.GrimmerPatron:
+		case CardIds.NonCollectible.Neutral.HyperblasterTavernBrawl:
+		case CardIds.NonCollectible.Neutral.AncientReflectionsTavernBrawl:
+		case CardIds.NonCollectible.Neutral.BagOfStuffingTavernBrawl:
+		case CardIds.NonCollectible.Neutral.BladeOfTheBurningSun:
+		case CardIds.NonCollectible.Neutral.GnomishArmyKnife:
+		case CardIds.NonCollectible.Neutral.BananaSplitTavernBrawl:
+		case CardIds.NonCollectible.Neutral.CanopicJarsTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.PhaorisBladeTavernBrawl:
+		case CardIds.NonCollectible.Neutral.StaffOfScales:
+		case CardIds.NonCollectible.Neutral.WandOfDisintegrationTavernBrawl:
+		case CardIds.NonCollectible.Neutral.LocuuuustsTavernBrawl2:
+			return 2;
+		// Actives Ultra Rare
+		case CardIds.NonCollectible.Neutral.ChaosTheoryTavernBrawl:
+		case CardIds.NonCollectible.Neutral.OverpoweredTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.DreamgroveRing:
+		case CardIds.NonCollectible.Neutral.EmbersOfRagnarosTavernBrawl:
+		case CardIds.NonCollectible.Neutral.WaxRager:
+		case CardIds.NonCollectible.Neutral.WishTavernBrawl:
+			return 3;
+		default:
+			return 1;
+	}
 };
 
 export const getDuelsHeroCardId = (playerClass: string): string => {
