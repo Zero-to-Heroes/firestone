@@ -7,9 +7,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="share-info">
 			<textarea
+				*ngIf="loggedIn"
 				[ngModel]="textValue"
 				(ngModelChange)="handleInputChange($event)"
-				*ngIf="loggedIn"
+				(mousedown)="preventDrag($event)"
 				placeholder="Please add a small text"
 			></textarea>
 			<div class="login-message" *ngIf="!loggedIn">
@@ -30,5 +31,10 @@ export class ShareInfoComponent {
 	handleInputChange(newTextValue: string) {
 		this.textValue = newTextValue;
 		this.onValidChange.next(this.textValue && this.textValue.length > 0);
+	}
+
+	// Prevent the window from being dragged around if user drags within the textarea
+	preventDrag(event: MouseEvent) {
+		event.stopPropagation();
 	}
 }
