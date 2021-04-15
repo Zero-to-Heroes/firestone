@@ -57,6 +57,8 @@ const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuels
 
 @Injectable()
 export class DuelsStateBuilderService {
+	public static STATS_THRESHOLD = 100;
+
 	private mainWindowStateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -739,6 +741,10 @@ export class DuelsStateBuilderService {
 				stat =>
 					prefs.duelsActiveTopDecksClassFilter === 'all' ||
 					prefs.duelsActiveTopDecksClassFilter === stat.heroClass.toLowerCase(),
+			)
+			.filter(
+				stat =>
+					!prefs.duelsHideStatsBelowThreshold || stat.totalMatches > DuelsStateBuilderService.STATS_THRESHOLD,
 			)
 			.map(stat => {
 				const playerTotalMatches = runs

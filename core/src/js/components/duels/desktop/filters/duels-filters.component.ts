@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
+import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { DuelsToggleShowHiddenPersonalDecksEvent } from '../../../../services/mainwindow/store/events/duels/duels-toggle-show-hidden-personal-decks-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -46,11 +47,21 @@ import { DuelsTreasureSortOption } from './duels-treasure-sort-option';
 				label="Show archived"
 				[toggleFunction]="toggleShowHiddenDecks"
 			></preference-toggle>
+			<preference-toggle
+				class="hide-below-threshold-link"
+				*ngIf="showHideBelowThresholdLink"
+				field="duelsHideStatsBelowThreshold"
+				label="Hide low data"
+				[helpTooltip]="'Hide stats with fewer than ' + threshold + 'data points'"
+				[toggleFunction]="toggleShowHiddenDecks"
+			></preference-toggle>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsFiltersComponent implements AfterViewInit {
+	threshold = DuelsStateBuilderService.STATS_THRESHOLD;
+
 	@Input() set state(value: MainWindowState) {
 		this._state = value;
 		this.doSetValues();
@@ -65,6 +76,7 @@ export class DuelsFiltersComponent implements AfterViewInit {
 	_navigation: NavigationState;
 
 	showHiddenDecksLink: boolean;
+	showHideBelowThresholdLink: boolean;
 	options: readonly InternalOption[];
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -112,6 +124,11 @@ export class DuelsFiltersComponent implements AfterViewInit {
 			this._navigation &&
 			this._navigation.currentApp == 'duels' &&
 			this._navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks';
+		this.showHideBelowThresholdLink =
+			this._state &&
+			this._navigation &&
+			this._navigation.currentApp == 'duels' &&
+			['duels-stats', 'duels-treasures'].includes(this._navigation.navigationDuels.selectedCategoryId);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

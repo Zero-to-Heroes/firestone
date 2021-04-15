@@ -18,6 +18,7 @@
 	}
 }
 
+.hide-below-threshold-link,
 .show-hidden-decks-link {
 	align-self: flex-end;
 	flex-grow: 1;
@@ -46,5 +47,23 @@
 
 	&:hover {
 		opacity: 0.8;
+	}
+}
+
+.hide-below-threshold-link {
+	opacity: 0.5;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	position: relative;
+	top: 0;
+	right: 0;
+	align-self: auto;
+	margin-left: auto;
+	margin-right: 35px;
+
+	::ng-deep .preference-toggle.preference-toggle.preference-toggle {
+		margin-top: 0;
 	}
 }

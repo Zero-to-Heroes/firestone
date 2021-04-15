@@ -216,6 +216,7 @@ export class Preferences {
 	readonly duelsPersonalDeckNames: { [deckstring: string]: string } = {};
 	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];
 	readonly duelsPersonalDeckShowHiddenDecks: boolean;
+	readonly duelsHideStatsBelowThreshold: boolean;
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
