@@ -5,7 +5,6 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
 } from '@angular/core';
 import { BoosterType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
@@ -99,13 +98,8 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		}
 
 		this.showOnlyBuyablePacks = value.collectionShowOnlyBuyablePacks;
-		console.debug('updated buyable packs', this.showOnlyBuyablePacks);
 		this.updateInfos();
 	}
-
-	// @Input() set navigation(value: NavigationCollection) {
-	// 	// this._navigation = value;
-	// }
 
 	_inputPacks: readonly PackInfo[];
 	_packs: readonly InternalPackInfo[] = [];
@@ -128,15 +122,6 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		return item.packType;
 	}
 
-	// toggleShowOnlyBuyablePacks = (value: boolean) => {
-	// 	if (value === this.showOnlyBuyablePacks) {
-	// 		return;
-	// 	}
-
-	// 	this.showOnlyBuyablePacks = value;
-	// 	this.updateInfos();
-	// };
-
 	private updateInfos() {
 		if (!this._packs || !this._packStats) {
 			return;
@@ -146,31 +131,21 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		// console.debug('best poacks', orderedPacks);
 		this.bestPacks = orderedPacks.slice(0, 5);
 
-		this._packs = [];
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-		setTimeout(() => {
-			this._packs = Object.values(BoosterType)
-				.filter((boosterId: BoosterType) => !isNaN(boosterId))
-				.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
-				.filter(
-					(boosterId: BoosterType) =>
-						!this.showOnlyBuyablePacks || !NON_BUYABLE_BOOSTER_IDS.includes(boosterId),
-				)
-				.map((boosterId: BoosterType) => ({
-					packType: boosterId,
-					totalObtained: this._inputPacks.find(p => p.packType === boosterId)?.totalObtained ?? 0,
-					unopened: 0,
-					name: boosterIdToBoosterName(boosterId),
-				}))
-				.filter(info => info)
-				.reverse();
-			this.totalPacks = this._packs.map(pack => pack.totalObtained).reduce((a, b) => a + b, 0);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		}, 200);
+		this._packs = Object.values(BoosterType)
+			.filter((boosterId: BoosterType) => !isNaN(boosterId))
+			.filter((boosterId: BoosterType) => !EXCLUDED_BOOSTER_IDS.includes(boosterId))
+			.filter(
+				(boosterId: BoosterType) => !this.showOnlyBuyablePacks || !NON_BUYABLE_BOOSTER_IDS.includes(boosterId),
+			)
+			.map((boosterId: BoosterType) => ({
+				packType: boosterId,
+				totalObtained: this._inputPacks.find(p => p.packType === boosterId)?.totalObtained ?? 0,
+				unopened: 0,
+				name: boosterIdToBoosterName(boosterId),
+			}))
+			.filter(info => info)
+			.reverse();
+		this.totalPacks = this._packs.map(pack => pack.totalObtained).reduce((a, b) => a + b, 0);
 	}
 }
 

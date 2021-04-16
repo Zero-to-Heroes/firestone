@@ -139,9 +139,6 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	ngOnDestroy() {
 		if (this.overlayRef) {
 			this.overlayRef?.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
 		}
 	}
 
@@ -150,7 +147,6 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		if (!this._text) {
 			return;
 		}
-		//console.debug('onmouseenter');
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
 

@@ -147,9 +147,9 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	ngOnDestroy() {
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			// if (!(this.cdr as ViewRef)?.destroyed) {
+			// 	this.cdr.detectChanges();
+			// }
 		}
 	}
 

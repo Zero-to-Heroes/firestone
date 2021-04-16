@@ -100,9 +100,9 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		if (this.overlayRef) {
 			this.positionStrategy.detach();
 			// this.overlayRef.dispose();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			// if (!(this.cdr as ViewRef)?.destroyed) {
+			// 	this.cdr.detectChanges();
+			// }
 		}
 	}
 

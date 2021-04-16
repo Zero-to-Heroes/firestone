@@ -90,9 +90,9 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 		this.tooltipRef = null;
 		if (this.overlayRef) {
 			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
+			// if (!(this.cdr as ViewRef)?.destroyed) {
+			// 	this.cdr.detectChanges();
+			// }
 		}
 	}
 
