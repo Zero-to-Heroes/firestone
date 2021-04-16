@@ -67,17 +67,35 @@
 	border: none;
 	pointer-events: none;
 
+	.before-main-divider {
+		width: calc(100% - 420px);
+		flex-shrink: 0;
+	}
+
+	social-shares {
+		pointer-events: all;
+
+		.social-shares {
+			height: 100%;
+			align-items: center;
+
+			.social-share {
+				width: 25px;
+				height: 25px;
+				margin-bottom: 0;
+			}
+		}
+	}
+
 	hotkey {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
 		flex-grow: 1;
-		margin-right: 35px;
 		align-items: flex-start;
 		position: relative;
 		top: 5px;
 		flex-grow: 0;
-		margin-left: auto;
 		pointer-events: all;
 
 		.key {
@@ -94,6 +112,7 @@
 		height: 30px;
 		display: flex;
 		pointer-events: all;
+		margin-left: auto;
 	}
 }
 

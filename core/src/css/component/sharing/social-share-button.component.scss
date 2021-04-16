@@ -8,10 +8,10 @@
 	margin-left: 5px;
 	--icon-color: var(--color-2);
 	--icon-secondary-color: var(--color-7);
-	opacity: 0.8;
+	opacity: 1;
 
 	&:hover:not(.disabled) {
-		opacity: 1;
+		--icon-color: var(--color-1);
 	}
 
 	&.disabled {

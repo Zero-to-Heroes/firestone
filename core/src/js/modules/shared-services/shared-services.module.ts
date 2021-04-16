@@ -15,6 +15,7 @@ import { DebugService } from '../../services/debug.service';
 import { DeckHandlerService } from '../../services/decktracker/deck-handler.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
+import { HotkeyService } from '../../services/hotkey.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -61,6 +62,7 @@ export class SharedServicesModule {
 				IndexedDbService,
 				MindVisionService,
 				OwUtilsService,
+				HotkeyService,
 			],
 		};
 	}

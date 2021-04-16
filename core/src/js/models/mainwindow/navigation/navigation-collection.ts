@@ -16,4 +16,8 @@ export class NavigationCollection {
 	public update(base: NavigationCollection): NavigationCollection {
 		return Object.assign(new NavigationCollection(), this, base);
 	}
+
+	public getPageName(): string {
+		return this.currentView;
+	}
 }

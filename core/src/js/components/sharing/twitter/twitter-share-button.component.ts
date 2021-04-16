@@ -16,7 +16,7 @@ declare let amplitude;
 	template: `
 		<div
 			class="social-share {{ _network }}"
-			helpTooltip="Share current window on {{ networkTitle }}"
+			helpTooltip="Share current screen on {{ networkTitle }}"
 			[inlineSVG]="networkSvg"
 			(mousedown)="startSharing()"
 		></div>

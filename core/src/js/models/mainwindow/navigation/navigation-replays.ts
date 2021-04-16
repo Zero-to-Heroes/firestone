@@ -12,6 +12,10 @@ export class NavigationReplays {
 	public update(base: NavigationReplays): NavigationReplays {
 		return Object.assign(new NavigationReplays(), this, base);
 	}
+
+	public getPageName(): string {
+		return this.selectedTab;
+	}
 }
 
 export type ReplaysTab = 'replay' | 'match-stats';

@@ -8,4 +8,8 @@ export class NavigationDecktracker {
 	public update(base: NavigationDecktracker): NavigationDecktracker {
 		return Object.assign(new NavigationDecktracker(), this, base);
 	}
+
+	public getPageName(): string {
+		return this.currentView;
+	}
 }

@@ -8,15 +8,20 @@ declare let amplitude;
 	styleUrls: [`../../../css/component/sharing/social-shares.component.scss`],
 	template: `
 		<div class="social-shares">
-			<clipboard-share-button [onSocialClick]="onSocialClick"></clipboard-share-button>
-			<twitter-share-button [onSocialClick]="onSocialClick"></twitter-share-button>
-			<reddit-share-button [onSocialClick]="onSocialClick" *ngIf="enableRedditShare"></reddit-share-button>
+			<clipboard-share-button [onSocialClick]="onSocialClick" [page]="page"></clipboard-share-button>
+			<twitter-share-button [onSocialClick]="onSocialClick" [page]="page"></twitter-share-button>
+			<reddit-share-button
+				[onSocialClick]="onSocialClick"
+				[page]="page"
+				*ngIf="enableRedditShare"
+			></reddit-share-button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SocialSharesComponent {
 	@Input() onSocialClick: (copyToCliboard: boolean) => Promise<[string, any]>;
+	@Input() page: string = 'bgs-post-match-stats';
 
 	enableRedditShare = FeatureFlags.ENABLE_REDDIT_SHARE;
 	enableClipboardShare = FeatureFlags.ENABLE_CLIPBOARD_SHARE;

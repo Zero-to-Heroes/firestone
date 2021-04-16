@@ -25,7 +25,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				[selectedTabs]="selectedTabs"
 				[selectTabHandler]="selectTabHandler"
 				[changeTabsNumberHandler]="changeTabsNumberHandler"
-				parentWindow="Firestone - MainWindow"
+				[showSocialShares]="false"
 				emptyTitle="Nothing here"
 				emptySubtitle="We couldn't retrieve the stats"
 				[loadingTitle]="null"

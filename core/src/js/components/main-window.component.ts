@@ -16,8 +16,10 @@ import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../models/preferences';
 import { DebugService } from '../services/debug.service';
+import { HotkeyService } from '../services/hotkey.service';
 import { CARDS_VERSION } from '../services/hs-utils';
 import { OverwolfService } from '../services/overwolf.service';
+import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { PreferencesService } from '../services/preferences.service';
 
 declare let amplitude: any;
@@ -43,7 +45,13 @@ declare let amplitude: any;
 				</div>
 				<div class="main">
 					<section class="menu-bar">
-						<hotkey></hotkey>
+						<div class="before-main-divider"></div>
+						<social-shares
+							class="social-shares"
+							[onSocialClick]="takeScreenshotFunction"
+							[page]="navigationState?.getPageName()"
+						></social-shares>
+						<!-- <hotkey></hotkey> -->
 						<div class="controls">
 							<control-bug></control-bug>
 							<control-settings
@@ -56,6 +64,8 @@ declare let amplitude: any;
 							<control-maximize [windowId]="windowId"></control-maximize>
 							<control-close
 								[windowId]="windowId"
+								[helpTooltip]="hotkeyText"
+								helpTooltipPosition="bottom-left"
 								[isMainWindow]="true"
 								[closeAll]="true"
 							></control-close>
@@ -136,6 +146,9 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	prefs: Preferences;
 	_showAds = true;
 
+	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
+	hotkeyText: string;
+
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
 	private navigationStateChangedListener: (message: any) => void;
@@ -150,6 +163,8 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
+		private readonly owUtils: OwUtilsService,
+		private readonly hotkeyService: HotkeyService,
 		private readonly cards: AllCardsService,
 		private readonly preferencesService: PreferencesService,
 	) {
@@ -236,8 +251,13 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		await this.handlePreferences();
 
 		this.hotkey = await this.ow.getHotKey('collection');
+		this.hotkeyText = await this.hotkeyService.getHotkeyCombination('collection');
 		console.log('assigned hotkey', this.hotkey);
 		this.hotkeyPressedHandler = this.ow.getMainWindow().mainWindowHotkeyPressed;
+		// Only needed for the hotkey
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('window:keydown', ['$event'])
@@ -313,6 +333,11 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		}
 
 		return true;
+	}
+
+	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
+		// console.log('taking screenshot from bgs-post-match');
+		return (copyToCliboard: boolean) => this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
 	}
 
 	private async handlePreferences(preferences: Preferences = null) {

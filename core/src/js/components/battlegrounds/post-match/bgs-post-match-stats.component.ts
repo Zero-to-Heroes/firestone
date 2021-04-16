@@ -44,7 +44,11 @@ declare let amplitude: any;
 				<span class="subtitle">{{ emptySubtitle }} </span>
 			</div>
 			<div class="content" *ngIf="_panel?.player || mainPlayerCardId">
-				<social-shares class="social-shares" [onSocialClick]="takeScreenshotFunction"></social-shares>
+				<social-shares
+					*ngIf="showSocialShares"
+					class="social-shares"
+					[onSocialClick]="takeScreenshotFunction"
+				></social-shares>
 				<bgs-player-capsule [player]="_panel?.player" [rating]="mmr || inputMmr" class="opponent-overview">
 					<div class="main-info">
 						<bgs-board
@@ -107,6 +111,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	@Input() loadingSvg = 'ftue/battlegrounds';
 	@Input() showHints = true;
 	@Input() hideDefaultLoadingSubtitle: boolean;
+	@Input() showSocialShares = true;
 
 	@Input() emptyTitle = 'Nothing here yet';
 	@Input() emptySubtitle = 'Finish the run to get some stats!';

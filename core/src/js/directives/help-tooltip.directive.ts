@@ -23,19 +23,19 @@ import { OverwolfService } from '../services/overwolf.service';
 export class HelpTooltipDirective implements OnInit, OnDestroy {
 	_text = '';
 
-	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' = 'bottom';
+	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' | 'top' | 'bottom-left' = 'bottom';
 
 	@Input('helpTooltip') set text(value: string) {
 		if (value === this._text) {
-			console.log('same value, returning', value);
+			console.debug('same value, returning', value);
 			return;
 		}
 		this._text = value;
-		//console.log('updating text in tooltip', value);
+		//console.debug('updating text in tooltip', value);
 		if (!this._text && this.overlayRef) {
 			this.overlayRef?.detach();
 		} else if (this.tooltipRef) {
-			//console.log('existing tooltip', value);
+			//console.debug('existing tooltip', value);
 			this.tooltipRef.instance.text = this._text;
 		}
 	}
@@ -59,7 +59,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		const target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
-		//console.log('targeting tooltip help element', this.position, target);
+		//console.debug('targeting tooltip help element', this.position, target);
 
 		const positionArrays: ConnectedPosition[] =
 			this.position === 'bottom'
@@ -99,6 +99,15 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 							originY: 'top',
 							overlayX: 'center',
 							overlayY: 'bottom',
+						},
+				  ]
+				: this.position === 'bottom-left'
+				? [
+						{
+							originX: 'end',
+							originY: 'bottom',
+							overlayX: 'end',
+							overlayY: 'top',
 						},
 				  ]
 				: [
@@ -141,7 +150,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		if (!this._text) {
 			return;
 		}
-		//console.log('onmouseenter');
+		//console.debug('onmouseenter');
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
 
@@ -155,7 +164,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 		// Pass content to tooltip component instance
 		this.tooltipRef.instance.text = this._text;
-		// console.log('setting tooltip text', this._text, tooltipRef);
+		// console.debug('setting tooltip text', this._text, tooltipRef);
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -197,7 +206,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		if (this.stayOpenOnClick) {
 			return;
 		}
-		// console.log('onmouseleave');
+		// console.debug('click');
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -211,7 +220,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		// console.log('onmouseleave');
+		// console.debug('onmouseleave');
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -226,7 +235,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	// Hide tooltip if a scroll wheel is detected anywhere
 	@HostListener('window:mousewheel')
 	onMouseWheel() {
-		// console.log('onmouseleave');
+		// console.debug('onmouseleave');
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {

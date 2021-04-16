@@ -25,6 +25,7 @@ export class SocialShareButtonComponent implements AfterViewInit {
 	networkSvg: string;
 
 	@Input() onSocialClick: (copyToCliboard: boolean) => Promise<[string, any]>;
+	@Input() page: string = 'bgs-post-match-stats';
 
 	protected set network(value: string) {
 		this._network = value;
@@ -55,7 +56,7 @@ export class SocialShareButtonComponent implements AfterViewInit {
 	async startSharing(copyToCliboard = false) {
 		setTimeout(async () => {
 			amplitude.getInstance().logEvent('share', {
-				'page': 'bgs-post-match-stats',
+				'page': this.page,
 				'network': this._network,
 			});
 			const [screenshotLocation, base64Image] = await this.onSocialClick(copyToCliboard);

@@ -13,4 +13,8 @@ export class NavigationDuels {
 	public update(base: NavigationDuels): NavigationDuels {
 		return Object.assign(new NavigationDuels(), this, base);
 	}
+
+	public getPageName(): string {
+		return this.selectedCategoryId;
+	}
 }

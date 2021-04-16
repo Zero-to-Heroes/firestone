@@ -19,4 +19,8 @@ export class NavigationAchievements {
 	public update(base: NavigationAchievements): NavigationAchievements {
 		return Object.assign(new NavigationAchievements(), this, base);
 	}
+
+	public getPageName(): string {
+		return this.currentView;
+	}
 }

@@ -16,4 +16,8 @@ export class NavigationBattlegrounds {
 	public update(base: NavigationBattlegrounds): NavigationBattlegrounds {
 		return Object.assign(new NavigationBattlegrounds(), this, base);
 	}
+
+	public getPageName(): string {
+		return this.currentView;
+	}
 }
