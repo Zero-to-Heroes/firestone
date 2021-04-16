@@ -88,11 +88,20 @@ export class DeckParserService {
 		this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
 			const changes: MemoryUpdate = data.data[0];
 			if (changes.SelectedDeckId) {
-				//console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
+				console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
 				this.selectedDeckId = changes.SelectedDeckId;
-			} else {
+			}
+			// Resetting the selectedDeckId if empty means that if a memory update reset occurs while on
+			// the deck selection screen, or simply that another memory update event occurs (which
+			// will have a null selected deck)
+			// Only reset when moving away from the scene where selecting a deck is possible
+			else if (changes.CurrentScene && changes.CurrentScene !== SceneMode.GAMEPLAY) {
+				console.log('[deck-parser] resetting', changes.CurrentScene);
 				this.selectedDeckId = null;
 			}
+			// else {
+			// 	this.selectedDeckId = null;
+			// }
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApiWithRetries(DECK_TEMPLATES_URL);
 		this.deckTemplates = (templatesFromRemote ?? [])
@@ -205,7 +214,7 @@ export class DeckParserService {
 		if (this.memory) {
 			console.log('[deck-parser] ready to get active deck');
 			const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2);
-			console.log('[deck-parser] active deck from memory', activeDeck);
+			console.log('[deck-parser] active deck from memory', this.selectedDeckId, activeDeck);
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 				this.updateDeckFromMemory(activeDeck);
