@@ -473,6 +473,8 @@ export class GameEvents {
 						// Not always present?
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
 						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
+						buffingEntityCardId: gameEvent.Value.AdditionalProps.BuffingEntityCardId,
+						buffCardId: gameEvent.Value.AdditionalProps.BuffCardId,
 					}),
 				);
 				break;

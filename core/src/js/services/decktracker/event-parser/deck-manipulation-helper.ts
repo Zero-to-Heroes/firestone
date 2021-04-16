@@ -200,7 +200,13 @@ export class DeckManipulationHelper {
 		return [result, removedCard];
 	}
 
-	public addSingleCardToZone(zone: readonly DeckCard[], cardTemplate: DeckCard, debug = false): readonly DeckCard[] {
+	// When the buffs are sent alongside teh receive_card_in_hand event, we keep them
+	public addSingleCardToZone(
+		zone: readonly DeckCard[],
+		cardTemplate: DeckCard,
+		keepBuffs = false,
+		debug = false,
+	): readonly DeckCard[] {
 		// Safeguard to not add twice the same card to the zone
 		// This is useful in case of cards stolen, where the power.log moves the card to SETASIDE, then changes the controller
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
@@ -217,8 +223,8 @@ export class DeckManipulationHelper {
 		}
 		const newCard = DeckCard.create({
 			...cardTemplate,
-			buffingEntityCardIds: undefined,
-			buffCardIds: undefined,
+			buffingEntityCardIds: keepBuffs ? cardTemplate.buffingEntityCardIds : undefined,
+			buffCardIds: keepBuffs ? cardTemplate.buffCardIds : undefined,
 			metaInfo: new CardMetaInfo(),
 		} as DeckCard);
 		if (debug) {

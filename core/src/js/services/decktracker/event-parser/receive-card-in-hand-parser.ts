@@ -21,11 +21,16 @@ export class ReceiveCardInHandParser implements EventParser {
 			console.warn('[ReceiveCardInHandParser] missing local player from event', gameEvent);
 			return currentState;
 		}
-		// console.log('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
+
+		//console.debug('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
+		// Some buffs are deduced from the creator card information, instead of being explicitly set
+		// by the game
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
+		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
+		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isCardInfoPublic =
 			isPlayer ||
 			cardsRevealedWhenDrawn.includes(cardId) ||
@@ -44,22 +49,13 @@ export class ReceiveCardInHandParser implements EventParser {
 						cardName: undefined,
 						lastAffectedByCardId: undefined,
 				  } as DeckCard);
-		// console.log(
-		// 	'[receive-card-in-hand] trying to get card from zone',
-		// 	deck.board,
-		// 	entityId,
-		// 	boardCard,
-		// 	otherCard,
-		// 	otherCardWithObfuscation,
-		// 	cardId,
-		// );
 		const newBoard = boardCard
 			? this.helper.removeSingleCardFromZone(deck.board, null, entityId, deck.deckList.length === 0)[0]
 			: deck.board;
 		const newOther = otherCardWithObfuscation
 			? this.helper.removeSingleCardFromZone(deck.otherZone, null, entityId)[0]
 			: deck.otherZone;
-		// console.log('[receive-card-in-hand] new board', newBoard, newOther);
+		//console.debug('[receive-card-in-hand] new board', newBoard, newOther);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
@@ -73,10 +69,24 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
-		// console.log('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
+		//console.debug('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
+		const otherCardWithBuffs =
+			buffingEntityCardId != null || buffCardId != null
+				? cardWithDefault.update({
+						buffingEntityCardIds: [
+							...(cardWithDefault.buffingEntityCardIds || []),
+							buffingEntityCardId,
+						] as readonly string[],
+						buffCardIds: [...(cardWithDefault.buffCardIds || []), buffCardId] as readonly string[],
+				  } as DeckCard)
+				: cardWithDefault;
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithDefault);
-		// console.log('[receive-card-in-hand] new hand', newHand);
+		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
+			previousHand,
+			otherCardWithBuffs,
+			buffingEntityCardId != null || buffCardId != null,
+		);
+		//console.debug('[receive-card-in-hand] new hand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
