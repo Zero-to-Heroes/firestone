@@ -152,6 +152,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.VaporizeVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 		}
 		if (!isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
