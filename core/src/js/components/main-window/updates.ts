@@ -29,28 +29,38 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.7.9',
+		version: '7.8.0',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Message from the dev',
-				text: `
-					I'd like to welcome everyone who got to try Firestone because of the lifetime packs received feature. I'm glad to have you here :)
-					<br/>
-					<br/>
-					This updates mostly brings small-ish Quality of Life improvements. I'll probably have another couples of small update following over the next months to fix / improve existing features, so if you have any feedback or ideas, please don't hesitate to send them to me!
-					<br/>
-					<br/>
-					Take care,
-					<br/>
-					Seb.
-				`,
-			},
 			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [],
+			// 	type: 'intro',
+			// 	header: 'Message from the dev',
+			// 	text: `
+			// 		I'd like to welcome everyone who got to try Firestone because of the lifetime packs received feature. I'm glad to have you here :)
+			// 		<br/>
+			// 		<br/>
+			// 		This updates mostly brings small-ish Quality of Life improvements. I'll probably have another couples of small update following over the next months to fix / improve existing features, so if you have any feedback or ideas, please don't hesitate to send them to me!
+			// 		<br/>
+			// 		<br/>
+			// 		Take care,
+			// 		<br/>
+			// 		Seb.
+			// 	`,
 			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Pity timers are now synchronized across computers (they still need you to open your packs with Firestone running).`,
+							}
+						]
+					}
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -60,32 +70,45 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a Watch Post counter (enabled by default). If enabled, it appears as soon as the opponent plays a Watch Post, or if you have Kargal Battlescar somewhere in your deck / hand.`,
+								text: `Add support for Whizbang decks.`,
 							},
 							{
-								type: 'feature',
-								text: `Add a Libram counter (disabled by default). If enabled, it appears as soon as the opponent plays a Libram, or if you have Lady Liadrin somewhere in your deck / hand.`,
+								type: 'bug',
+								text: `Fix an issue where global effect cards (like Incanter's Flow) were not applied to the deck when played by Trick Totem.`,
 							},
 							{
 								type: 'content',
-								text: `Add more info for cards in the opponent's hand: Efficient Octo-bot buff is now shown, Kazzakus' Golem is now flagged.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the global effect cards would show a ? instead of the actual cost of the card for the opponent.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where drawing an upgraded ranked spell would not remove the corresponding rank 1 copy from the decklist.`,
+								text: `Flag more cards created by the opponent's hand (Knight of Anointment, Warsong Wrangler, Taelan Fordring, Northwatch Commander, Tamsin Roane, Thrive in the Shadows).`,
 							},
 						],
 					},
 					{
-						category: 'battlegrounds',
+						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where toggling opponents on/off on the HP graph would show/hide the wrong line.`,
+								type: 'feature',
+								text: `Add social share / screenshot buttons to the menu bar, so they are available on all pages easily.`,
+							},
+							{
+								type: 'ui',
+								text: `Add a link to go premium on the left menu.`,
+							},
+							{
+								type: 'misc',
+								text: `Fix a perf issue that would sometimes occur when using the mousewheel to scroll through the packs list.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `The active and passive treasures are now grouped by pool, as it doesn't make a lot of sense to compare treasures between pools. There is also a specific filter to only see the Ultra Rare treasures separately.`,
+							},
+							{
+								type: 'feature',
+								text: `Show the number of matches used to compute the stats, and add a toggle to hide the ones with few data points.`,
 							},
 						],
 					},
@@ -94,15 +117,42 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `You can now type "extra" in the search bar to see all cards that you have extra copies of (counting normal / golden / diamond copies). A proper explanation of all the keywords you can use in this field will be coming soon.`,
+								text: `Add a toggle to show only the main card packs in the Card Packs screen.`,
 							},
+							{
+								type: 'feature',
+								text: `Add notification when receiving single cards (like in season rewards), and single card rewards now appear in the card history.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a global search.`,
+							},
+							{
+								type: 'feature',
+								text: `Show the current progress when browsing the HS native achievements.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add an "unsupported composition" message when the simulator encounters a board state which it knows it can't simulate properly (for now, it's Scallywag + Khadgar /Baron).`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
 							{
 								type: 'bug',
-								text: `Add missing Kobolds and Catacombs pack in the packs overview, and remove the Signup Incentive pack.`,
-							},
-							{
-								type: 'ui',
-								text: `Show the total number of packs you received directly in the header. No need to count them manually when sharing to your friends anymore :)`,
+								text: `Fix an issue where the "decklist" filter was not working.`,
 							},
 						],
 					},
