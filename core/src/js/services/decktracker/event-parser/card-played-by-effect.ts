@@ -27,19 +27,18 @@ export class CardPlayedByEffectParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		
+
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
 		const isOnBoard = refCard && refCard.type === 'Minion';
-		const cardWithZone =
-			DeckCard.create({
-				entityId: entityId,
-				cardId: cardId,
-				cardName: refCard?.name,
-				manaCost: refCard?.cost,
-				rarity: refCard?.rarity?.toLowerCase(),
-				zone: isOnBoard ? 'PLAY' : null,
-			} as DeckCard);
+		const cardWithZone = DeckCard.create({
+			entityId: entityId,
+			cardId: cardId,
+			cardName: refCard?.name,
+			manaCost: refCard?.cost,
+			rarity: refCard?.rarity?.toLowerCase(),
+			zone: isOnBoard ? 'PLAY' : null,
+		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);
 		const newBoard: readonly DeckCard[] = isOnBoard
 			? this.helper.addSingleCardToZone(deck.board, cardWithZone)

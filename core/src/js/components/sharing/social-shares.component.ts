@@ -21,7 +21,7 @@ declare let amplitude;
 })
 export class SocialSharesComponent {
 	@Input() onSocialClick: (copyToCliboard: boolean) => Promise<[string, any]>;
-	@Input() page: string = 'bgs-post-match-stats';
+	@Input() page = 'bgs-post-match-stats';
 
 	enableRedditShare = FeatureFlags.ENABLE_REDDIT_SHARE;
 	enableClipboardShare = FeatureFlags.ENABLE_CLIPBOARD_SHARE;

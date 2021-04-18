@@ -25,7 +25,7 @@ export class SocialShareButtonComponent implements AfterViewInit {
 	networkSvg: string;
 
 	@Input() onSocialClick: (copyToCliboard: boolean) => Promise<[string, any]>;
-	@Input() page: string = 'bgs-post-match-stats';
+	@Input() page = 'bgs-post-match-stats';
 
 	protected set network(value: string) {
 		this._network = value;
