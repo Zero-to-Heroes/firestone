@@ -84,28 +84,28 @@ export const duelsTreasureRank = (cardId: string): number => {
 	}
 	switch (cardId) {
 		// Passives
-		case CardIds.NonCollectible.Neutral.AvengingArmaments2:
+		case CardIds.NonCollectible.Neutral.AvengingArmaments1:
 		case CardIds.NonCollectible.Neutral.BattleTotem1:
 		case CardIds.NonCollectible.Neutral.BookOfWonders:
 		case CardIds.NonCollectible.Neutral.Caltrops:
 		case CardIds.NonCollectible.Neutral.CorruptedFelstone:
 		case CardIds.NonCollectible.Neutral.DisksOfLegend:
 		case CardIds.NonCollectible.Neutral.DoubleTime:
-		case CardIds.NonCollectible.Neutral.DragonboneRitualTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.DragonboneRitualTavernBrawl1:
 		case CardIds.NonCollectible.Neutral.EerieStone:
-		case CardIds.NonCollectible.Neutral.EmeraldGogglesTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.EmeraldGogglesTavernBrawl1:
 		case CardIds.NonCollectible.Neutral.EnduranceTraining:
 		case CardIds.NonCollectible.Neutral.FlameWaves:
-		case CardIds.NonCollectible.Neutral.FromTheSwampTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.FromTheSwampTavernBrawl1:
 		case CardIds.NonCollectible.Neutral.HagathasEmbrace:
 		case CardIds.NonCollectible.Neutral.KhadgarsScryingOrb:
 		case CardIds.NonCollectible.Neutral.MummyMagic:
-		case CardIds.NonCollectible.Neutral.OrbOfRevelation2:
-		case CardIds.NonCollectible.Neutral.RallyTheTroops2:
+		case CardIds.NonCollectible.Neutral.OrbOfRevelation1:
+		case CardIds.NonCollectible.Neutral.RallyTheTroops1:
 		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
 		case CardIds.NonCollectible.Neutral.SpecialDelivery:
 		case CardIds.NonCollectible.Neutral.SpreadingSaplings:
-		case CardIds.NonCollectible.Neutral.StarvingTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.StarvingTavernBrawl1:
 		case CardIds.NonCollectible.Neutral.TotemOfTheDead1:
 			return 2;
 		// Passives Ultra Rare
@@ -126,15 +126,15 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.BladeOfTheBurningSun:
 		case CardIds.NonCollectible.Neutral.GnomishArmyKnife:
 		case CardIds.NonCollectible.Neutral.BananaSplitTavernBrawl:
-		case CardIds.NonCollectible.Neutral.CanopicJarsTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.CanopicJarsTavernBrawl1:
 		case CardIds.NonCollectible.Neutral.PhaorisBladeTavernBrawl:
 		case CardIds.NonCollectible.Neutral.StaffOfScales:
 		case CardIds.NonCollectible.Neutral.WandOfDisintegrationTavernBrawl:
-		case CardIds.NonCollectible.Neutral.LocuuuustsTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.LocuuuustsTavernBrawl1:
 			return 2;
 		// Actives Ultra Rare
 		case CardIds.NonCollectible.Neutral.ChaosTheoryTavernBrawl:
-		case CardIds.NonCollectible.Neutral.OverpoweredTavernBrawl2:
+		case CardIds.NonCollectible.Neutral.OverpoweredTavernBrawl1:
 		case CardIds.NonCollectible.Neutral.DreamgroveRing:
 		case CardIds.NonCollectible.Neutral.EmbersOfRagnarosTavernBrawl:
 		case CardIds.NonCollectible.Neutral.WaxRager:
