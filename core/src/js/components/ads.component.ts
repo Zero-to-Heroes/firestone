@@ -7,7 +7,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { AdService } from '../services/ad.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
@@ -151,7 +151,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 									this.refreshTimer = null;
 									this.refreshesLeft--;
 									this.refreshAds();
-								}, 7 * 60 * 1000);
+								}, 6 * 60 * 1000);
 							}
 						}
 					};
