@@ -107,6 +107,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Hunter.ScavengersIngenuity, // tested
 	CardIds.Collectible.Hunter.TolvirWarden, // tested
 	CardIds.Collectible.Hunter.Ursatron, // tested
+	CardIds.Collectible.Hunter.WarsongWrangler,
 	CardIds.Collectible.Mage.AncientMysteries, // tested
 	CardIds.Collectible.Mage.Arcanologist, // tested
 	CardIds.Collectible.Mage.ArchmageArugal, // tested
@@ -117,6 +118,8 @@ export const publicCardCreators = [
 	CardIds.Collectible.Paladin.CallToAdventure, // tested
 	CardIds.Collectible.Paladin.Crystology,
 	CardIds.Collectible.Paladin.HowlingCommander,
+	CardIds.Collectible.Paladin.KnightOfAnointment,
+	CardIds.Collectible.Paladin.NorthwatchCommander,
 	CardIds.Collectible.Paladin.PrismaticLens,
 	CardIds.Collectible.Paladin.SalhetsPride, // tested
 	CardIds.Collectible.Paladin.SmallTimeRecruits,
@@ -178,6 +181,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Neutral.Sandbinder,
 	CardIds.Collectible.Neutral.SouthseaScoundrel,
 	CardIds.Collectible.Neutral.Subject9, // tested
+	CardIds.Collectible.Neutral.TaelanFordringCore,
 	CardIds.Collectible.Neutral.TentacledMenace, // tested
 	CardIds.Collectible.Neutral.TheCurator, // tested
 	CardIds.Collectible.Neutral.UtgardeGrapplesniper, // tested
