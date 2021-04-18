@@ -32,6 +32,7 @@ import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-p
 import { CardCreatorChangedParser } from './event-parser/card-creator-changed-parser';
 import { CardDrawParser } from './event-parser/card-draw-parser';
 import { CardOnBoardAtGameStart } from './event-parser/card-on-board-at-game-start-parser';
+import { CardPlayedByEffectParser } from './event-parser/card-played-by-effect';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 import { CardRemovedFromBoardParser } from './event-parser/card-removed-from-board-parser';
@@ -564,6 +565,7 @@ export class GameStateService {
 			new CardChangedInHandParser(this.helper, this.allCards),
 			new CardChangedInDeckParser(this.helper, this.allCards),
 			new CardPlayedFromHandParser(this.helper, this.allCards),
+			new CardPlayedByEffectParser(this.helper, this.allCards),
 			new MinionSummonedFromHandParser(this.helper, this.allCards),
 			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
 			new EndOfEchoInHandParser(this.helper),

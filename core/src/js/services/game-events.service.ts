@@ -323,6 +323,19 @@ export class GameEvents {
 					: {};
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent, props));
 				break;
+			case 'CARD_PLAYED_BY_EFFECT':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(
+						GameEvent.CARD_PLAYED_BY_EFFECT,
+						gameEvent,
+						gameEvent.Value.AdditionalProps
+							? {
+									creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							  }
+							: {},
+					),
+				);
+				break;
 			case 'MINION_SUMMONED_FROM_HAND':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				const summonFromHandAdditionProps = gameEvent.Value.AdditionalProps
