@@ -31,6 +31,8 @@ export const modifyDeckForSpecialCards = (
 			return handleFrizzKindleroost(deckState, allCards);
 		case CardIds.Collectible.Neutral.HemetJungleHunter:
 			return handleHemet(deckState, allCards);
+		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
+			return handleScepterOfSummoning(deckState, allCards);
 		default:
 			return deckState;
 	}
@@ -82,6 +84,15 @@ const handleLunasPocketGalaxy = (deckState: DeckState, allCards: AllCardsService
 	return updateCost(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		card => 1,
+		deckState,
+		allCards,
+	);
+};
+
+const handleScepterOfSummoning = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+	return updateCost(
+		(card, refCard) => (refCard?.type === 'Minion' || card?.cardType === 'Minion') && card?.actualManaCost >= 5,
+		card => 5,
 		deckState,
 		allCards,
 	);
