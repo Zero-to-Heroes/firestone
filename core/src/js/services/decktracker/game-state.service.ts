@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
+import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
@@ -420,6 +421,13 @@ export class GameStateService {
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
 		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
+		const newBoard: readonly DeckCard[] = deck.board.map(card => {
+			const entity = playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId);
+			return DeckCard.create({
+				...card,
+				dormant: this.hasTag(entity, GameTag.DORMANT),
+			} as DeckCard);
+		});
 		const totalAttackOnBoard = deck.board
 			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
 			.filter(entity => entity)
@@ -448,6 +456,7 @@ export class GameStateService {
 		// );
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
+					board: newBoard,
 					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
 					totalAttackOnBoard: {
 						board: totalAttackOnBoard,

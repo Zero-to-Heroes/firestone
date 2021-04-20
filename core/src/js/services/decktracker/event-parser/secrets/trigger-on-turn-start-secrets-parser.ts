@@ -39,7 +39,10 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		}
 
 		// Only triggers if board has between 2 and 6 minions
-		if (deckWithSecretToCheck.board.length < 2 || deckWithSecretToCheck.board.length === 7) {
+		if (
+			deckWithSecretToCheck.board.filter(entity => !entity.dormant).length < 2 ||
+			deckWithSecretToCheck.board.length === 7
+		) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.OpenTheCages);
 		}
 

@@ -15,6 +15,7 @@ export class DeckCard {
 	readonly rarity: string;
 	readonly creatorCardId?: string;
 	readonly lastAffectedByCardId?: string;
+	readonly dormant?: boolean;
 	readonly buffingEntityCardIds?: readonly string[];
 	readonly buffCardIds?: readonly string[];
 	// readonly totalQuantity: number;
