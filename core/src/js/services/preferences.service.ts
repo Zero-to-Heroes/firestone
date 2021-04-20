@@ -15,14 +15,18 @@ import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
-import { Preferences } from '../models/preferences';
+import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
+import { ApiRunner } from './api-runner';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { OverwolfService } from './overwolf.service';
 import { capitalizeFirstLetter } from './utils';
 
 declare let amplitude;
+
+const PREF_UPDATE_URL = 'https://api.firestoneapp.com/userPrefs/post/preferences/{proxy+}';
+const PREF_RETRIEVE_URL = 'https://api.firestoneapp.com/userPrefs/get/preferences/{proxy+}';
 
 @Injectable()
 export class PreferencesService {
@@ -33,7 +37,11 @@ export class PreferencesService {
 
 	private preferencesEventBus = new EventEmitter<any>();
 
-	constructor(private indexedDb: GenericIndexedDbService, private ow: OverwolfService) {
+	constructor(
+		private indexedDb: GenericIndexedDbService,
+		private ow: OverwolfService,
+		private readonly api: ApiRunner,
+	) {
 		// It will create one per window that uses the service, but we don't really care
 		// We just have to always use the one from the MainWindow
 		window['preferencesEventBus'] = this.preferencesEventBus;
@@ -351,7 +359,7 @@ export class PreferencesService {
 		return newPrefs;
 	}
 
-	private async savePreferences(userPrefs: Preferences, eventName: string = null) {
+	public async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		await this.indexedDb.saveUserPreferences(userPrefs);
 		// console.log('broadcasting new prefs', userPrefs);
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
@@ -359,6 +367,33 @@ export class PreferencesService {
 			name: eventName,
 			preferences: userPrefs,
 		});
+		const currentUser = await this.ow.getCurrentUser();
+		const prefsWithDate: Preferences = {
+			...userPrefs,
+			lastUpdateDate: new Date(),
+		};
+		const prefsToSync = new Preferences();
+		for (const prop in prefsWithDate) {
+			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSync, prop);
+			if (meta) {
+				prefsToSync[prop] = prefsWithDate[prop];
+			}
+		}
+		this.api.callPostApiWithRetries(PREF_UPDATE_URL, {
+			userId: currentUser.userId,
+			userName: currentUser.username,
+			prefs: prefsToSync,
+		});
+	}
+
+	public async loadRemotePrefs(): Promise<Preferences | undefined> {
+		const currentUser = await this.ow.getCurrentUser();
+		const result: any = await this.api.callPostApiWithRetries(PREF_RETRIEVE_URL, {
+			userId: currentUser.userId,
+			userName: currentUser.username,
+		});
+		// console.debug('result from remote', result);
+		return result;
 	}
 
 	private buildCounterPropertyName(activeCounter: string, side: string): string {

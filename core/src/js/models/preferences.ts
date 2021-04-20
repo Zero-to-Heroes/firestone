@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
 import { BgsStatsFilterId } from './battlegrounds/post-match/bgs-stats-filter-id.type';
 import { DuelsClassFilterType } from './duels/duels-class-filter.type';
@@ -16,7 +17,10 @@ import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { Ftue } from './preferences/ftue';
 
+export const FORCE_LOCAL_PROP = 'forceLocalProp';
+
 export class Preferences {
+	readonly lastUpdateDate: Date;
 	readonly id: number = 1;
 
 	readonly launchAppOnGameStart: boolean = true;
@@ -66,12 +70,15 @@ export class Preferences {
 	readonly decktrackerShowFriendly: boolean = true;
 	readonly decktrackerShowCasual: boolean = true;
 	readonly decktrackerCloseOnGameEnd: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerPosition: { left: number; top: number };
 
 	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly dectrackerShowOpponentBuffInHand: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly decktrackerOpponentHandScale: number = 100;
 
 	readonly guessOpponentArchetype: boolean = true;
@@ -92,7 +99,9 @@ export class Preferences {
 	readonly overlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly overlaySortByManaInOtherZone: boolean = false;
 	readonly decktrackerNoDeckMode: boolean = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly overlayOpacityInPercent: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly overlayWidthInPx: number = 227; // No UI
 	readonly overlayShowCostReduction: boolean = true;
 
@@ -103,60 +112,87 @@ export class Preferences {
 	readonly opponentOverlaySortByManaInOtherZone: boolean = false;
 	readonly opponentOverlayDarkenUsedCards: boolean = true;
 	readonly opponentTracker: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentOverlayWidthInPx: number = 227;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentOverlayOpacityInPercent: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentOverlayScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentOverlayPosition: { left: number; top: number };
 	readonly opponentLoadAiDecklist: boolean = true;
 
 	readonly secretsHelper: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly secretsHelperOpacity: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly secretsHelperScale: number = 80;
 	readonly secretsHelperCardsGoToBottom: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly secretsHelperPosition: { left: number; top: number };
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly secretsHelperWidgetPosition: { left: number; top: number };
 
 	readonly playerGalakrondCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerGalakrondCounterWidgetPosition: { left: number; top: number };
 	readonly opponentGalakrondCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentGalakrondCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerWatchpostCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerWatchpostCounterWidgetPosition: { left: number; top: number };
 	readonly opponentWatchpostCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentWatchpostCounterWidgetPosition: { left: number; top: number };
 	// These are turned off by default because you can quite easily see the info from the tracker
 	readonly playerLibramCounter: boolean = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerLibramCounterWidgetPosition: { left: number; top: number };
 	readonly opponentLibramCounter: boolean = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentLibramCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerPogoCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerPogoCounterWidgetPosition: { left: number; top: number };
 	readonly opponentPogoCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentPogoCounterWidgetPosition: { left: number; top: number };
 	readonly playerJadeGolemCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerJadeGolemCounterWidgetPosition: { left: number; top: number };
 	readonly opponentJadeGolemCounterCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentJadeGolemWidgetPosition: { left: number; top: number };
 	readonly playerAttackCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerAttackCounterWidgetPosition: { left: number; top: number };
 	readonly opponentAttackCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
 	readonly playerCthunCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerCthunCounterWidgetPosition: { left: number; top: number };
 	readonly opponentCthunCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentCthunCounterWidgetPosition: { left: number; top: number };
 	readonly playerFatigueCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerFatigueCounterWidgetPosition: { left: number; top: number };
 	readonly opponentFatigueCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
 	readonly playerSpellCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerSpellCounterWidgetPosition: { left: number; top: number };
 	readonly playerElementalCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElementalCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerBgsPogoCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
 
 	readonly replaysShowNotification: boolean = false;
@@ -177,13 +213,18 @@ export class Preferences {
 	readonly bgsShowSimResultsOnlyOnRecruit = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;
 	readonly bgsSimulatorNumberOfSims = 5000;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsSimulationWidgetPosition: { left: number; top: number };
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsBannedTribesWidgetPosition: { left: number; top: number };
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsBannedTribeScale = 101.6;
 	readonly bgsBannedTribesShowVertically: boolean;
 	readonly bgsEnableOpponentBoardMouseOver: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsOpponentBoardScale = 101.6;
 	readonly bgsEnableMinionListOverlay: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsMinionsListPosition: { left: number; top: number };
 	readonly bgsEnableMinionListMouseOver: boolean = true;
 	readonly bgsShowTribesHighlight: boolean = true;
@@ -191,6 +232,7 @@ export class Preferences {
 	readonly bgsShowHeroSelectionScreen: boolean = true;
 	readonly bgsShowOverlayButton: boolean = true;
 	readonly bgsOpponentOverlayAtTop: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly bgsOverlayButtonPosition: { left: number; top: number };
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';

@@ -7,6 +7,7 @@ import { AchievementsRepository } from '../../services/achievement/achievements-
 import { ChallengeBuilderService } from '../../services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../services/achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from '../../services/achievement/indexed-db.service';
+import { ApiRunner } from '../../services/api-runner';
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { IndexedDbService } from '../../services/collection/indexed-db.service';
@@ -63,6 +64,7 @@ export class SharedServicesModule {
 				MindVisionService,
 				OwUtilsService,
 				HotkeyService,
+				ApiRunner,
 			],
 		};
 	}

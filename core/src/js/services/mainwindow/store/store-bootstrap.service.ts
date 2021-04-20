@@ -6,6 +6,7 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
+import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
@@ -74,6 +75,7 @@ export class StoreBootstrapService {
 				globalStats,
 				bgsBestUserStats,
 				collectionState,
+				prefsFromRemote,
 			],
 			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats],
@@ -86,6 +88,7 @@ export class StoreBootstrapService {
 				this.globalStats.getGlobalStats(),
 				this.bestBgsStats.getBgsBestUserStats(),
 				this.collectionBootstrap.initCollectionState(),
+				this.prefs.loadRemotePrefs(),
 			]),
 			Promise.all([
 				this.gameStatsLoader.retrieveStats(),
@@ -96,6 +99,9 @@ export class StoreBootstrapService {
 		]);
 		console.log('loaded info');
 
+		console.debug('remote prefs', prefsFromRemote);
+
+		const mergedPrefs = this.mergePrefs(prefs, prefsFromRemote);
 		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);
 
 		const patchConfig = await this.patchConfig.getConf();
@@ -122,7 +128,7 @@ export class StoreBootstrapService {
 			new DecktrackerState(),
 			newStatsState,
 			currentRankedMetaPatch,
-			prefs,
+			mergedPrefs,
 		);
 		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
 			new ReplaysState(),
@@ -132,7 +138,9 @@ export class StoreBootstrapService {
 
 		// Update prefs to remove hidden deck codes that are not in an active deck anymore
 		const allDeckCodes = newStatsState.gameStats.stats.map(match => match.playerDecklist);
-		const validHiddenCodes = prefs.desktopDeckHiddenDeckCodes.filter(deckCode => allDeckCodes.includes(deckCode));
+		const validHiddenCodes = mergedPrefs.desktopDeckHiddenDeckCodes.filter(deckCode =>
+			allDeckCodes.includes(deckCode),
+		);
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
 
 		const newAchievementState = Object.assign(new AchievementsState(), {
@@ -169,7 +177,7 @@ export class StoreBootstrapService {
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,
-			showFtue: !prefs.ftue.hasSeenGlobalFtue,
+			showFtue: !mergedPrefs.ftue.hasSeenGlobalFtue,
 			replays: replayState,
 			binder: collectionState,
 			achievements: newAchievementState,
@@ -181,6 +189,22 @@ export class StoreBootstrapService {
 			globalStats: globalStats,
 		} as MainWindowState);
 		this.stateUpdater.next(new StoreInitEvent(initialWindowState, true));
+	}
+
+	private mergePrefs(prefs: Preferences, prefsFromRemote: Preferences): Preferences {
+		const merged: Preferences = {
+			...(prefsFromRemote ?? prefs),
+		} as Preferences;
+
+		const obj = new Preferences();
+		for (const prop in merged) {
+			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, obj, prop);
+			if (meta) {
+				merged[prop] = prefs[prop];
+			}
+		}
+		console.debug('merged', merged);
+		return merged;
 	}
 
 	private async initializeSocialShareUserInfo(): Promise<SocialShareUserInfo> {
