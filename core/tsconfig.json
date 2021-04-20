@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "es2015",
+		"target": "ES2019",
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
@@ -15,7 +15,7 @@
 		"resolveJsonModule": true,
 		"inlineSources": true,
 		"sourceRoot": "/",
-		"lib": ["dom", "es2015"],
+		"lib": ["dom", "ES2019"],
 		"baseUrl": ".",
 		"typeRoots": ["node_modules/@types", "@overwolf/types"],
 		"types": ["node", "jest"]
