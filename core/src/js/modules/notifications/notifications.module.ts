@@ -33,8 +33,13 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot(), 
-		SharedServicesModule.forRoot(),],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		SimpleNotificationsModule.forRoot(),
+		SharedServicesModule.forRoot(),
+	],
 	declarations: [NotificationsComponent],
 	bootstrap: [NotificationsComponent],
 	providers: [DebugService, OverwolfService, PreferencesService, GenericIndexedDbService],

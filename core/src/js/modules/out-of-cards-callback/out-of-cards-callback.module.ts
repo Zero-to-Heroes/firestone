@@ -13,8 +13,7 @@ import { SharedServicesModule } from '../shared-services/shared-services.module'
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, 
-		SharedServicesModule.forRoot(),],
+	imports: [BrowserModule, HttpClientModule, SharedServicesModule.forRoot()],
 	declarations: [OutOfCardsCallbackComponent],
 	bootstrap: [OutOfCardsCallbackComponent],
 	providers: [

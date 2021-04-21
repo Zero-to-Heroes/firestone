@@ -56,9 +56,9 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Pity timers are now synchronized across computers (they still need you to open your packs with Firestone running).`,
-							}
-						]
-					}
+							},
+						],
+					},
 				],
 			},
 			{

@@ -7,7 +7,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { AdService } from '../services/ad.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';

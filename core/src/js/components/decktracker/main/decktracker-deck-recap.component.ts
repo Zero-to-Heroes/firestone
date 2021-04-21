@@ -5,7 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';

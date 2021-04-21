@@ -7,7 +7,7 @@ import { SelectModule } from 'ng-select';
 import {
 	PerfectScrollbarConfigInterface,
 	PerfectScrollbarModule,
-	PERFECT_SCROLLBAR_CONFIG
+	PERFECT_SCROLLBAR_CONFIG,
 } from 'ngx-perfect-scrollbar';
 import { DeckTrackerCardsRecapComponent } from '../../components/decktracker/overlay/decktracker-cards-recap.component';
 import { DeckTrackerControlBarComponent } from '../../components/decktracker/overlay/decktracker-control-bar.component';

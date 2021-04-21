@@ -11,7 +11,7 @@ import { ChartsModule } from 'ng2-charts';
 import {
 	PerfectScrollbarConfigInterface,
 	PerfectScrollbarModule,
-	PERFECT_SCROLLBAR_CONFIG
+	PERFECT_SCROLLBAR_CONFIG,
 } from 'ngx-perfect-scrollbar';
 import { AdsComponent } from '../../components/ads.component';
 import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
