@@ -11,7 +11,8 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 	],
 	template: `
 		<div class="decktracker-replays-recap">
-			<div class="title">Last {{ _numberOfReplays }} replays</div>
+			<div class="title" *ngIf="_numberOfReplays > 0">Last {{ _numberOfReplays }} replays</div>
+			<div class="title" *ngIf="!_numberOfReplays">No replays</div>
 			<ul class="list" scrollable>
 				<li *ngFor="let replay of replays">
 					<replay-info [replay]="replay" [showStatsLabel]="null" [showReplayLabel]="null"></replay-info>

@@ -37,7 +37,6 @@ export class DecksStateBuilderService {
 		if (!stats || !stats.gameStats) {
 			return [];
 		}
-		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		const validReplays = this.buildValidReplays(stats, filters, prefs, patch);
 		// console.log('filtering done', prefs, validDecks, stats);
 		const groupByDeckstring = groupBy('playerDecklist');
@@ -46,7 +45,7 @@ export class DecksStateBuilderService {
 		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
 		const deckstrings = Object.keys(statsByDeck);
 		const decks: readonly DeckSummary[] = deckstrings
-			.map(deckstring => this.buildDeckSummary(deckstring, statsByDeck[deckstring], hiddenDeckCodes))
+			.map(deckstring => this.buildDeckSummary(deckstring, statsByDeck[deckstring], prefs))
 			.sort(this.getSortFunction(filters.sort));
 
 		return decks;
@@ -167,11 +166,16 @@ export class DecksStateBuilderService {
 		}
 	}
 
-	private buildDeckSummary(
-		deckstring: string,
-		stats: readonly GameStat[],
-		hiddenDeckCodes: readonly string[],
-	): DeckSummary {
+	private buildDeckSummary(deckstring: string, stats: readonly GameStat[], prefs: Preferences): DeckSummary {
+		const statsWithReset = stats.filter(
+			stat =>
+				!prefs?.desktopDeckStatsReset ||
+				!prefs.desktopDeckStatsReset[stat.playerDecklist]?.length ||
+				prefs.desktopDeckStatsReset[stat.playerDecklist][
+					prefs.desktopDeckStatsReset[stat.playerDecklist].length - 1
+				] < stat.creationTimestamp,
+		);
+		// console.debug(statsWithReset);
 		const deckName =
 			stats.filter(stat => stat.playerDeckName).length > 0
 				? stats.filter(stat => stat.playerDeckName)[0].playerDeckName
@@ -188,12 +192,14 @@ export class DecksStateBuilderService {
 			stats.filter(stat => stat.playerClass).length > 0
 				? stats.filter(stat => stat.playerClass)[0].playerClass
 				: undefined;
-		const totalGames = stats.length;
-		const totalWins = stats.filter(stat => stat.result === 'won').length;
-		const lastUsed = stats.filter(stat => stat.creationTimestamp)
-			? stats.filter(stat => stat.creationTimestamp)[0].creationTimestamp
+		const totalGames = statsWithReset.length;
+		const totalWins = statsWithReset.filter(stat => stat.result === 'won').length;
+		const lastUsed = statsWithReset.filter(stat => stat.creationTimestamp)?.length
+			? statsWithReset.filter(stat => stat.creationTimestamp)[0]?.creationTimestamp
+			: stats.filter(stat => stat.creationTimestamp)?.length
+			? stats.filter(stat => stat.creationTimestamp)[0]?.creationTimestamp
 			: undefined;
-		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(stats);
+		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(statsWithReset);
 		return Object.assign(new DeckSummary(), {
 			class: deckClass,
 			deckName: deckName,
@@ -202,11 +208,11 @@ export class DecksStateBuilderService {
 			lastUsedTimestamp: lastUsed,
 			skin: deckSkin,
 			totalGames: totalGames,
-			winRatePercentage: (100.0 * totalWins) / totalGames,
-			hidden: hiddenDeckCodes.includes(deckstring),
+			winRatePercentage: totalGames > 0 ? (100.0 * totalWins) / totalGames : null,
+			hidden: prefs.desktopDeckHiddenDeckCodes.includes(deckstring),
 			matchupStats: matchupStats,
 			format: this.buildFormat(stats),
-			replays: stats,
+			replays: statsWithReset,
 		} as DeckSummary);
 	}
 

@@ -27,7 +27,7 @@ import { capitalizeEachWord } from '../../../services/utils';
 			</div>
 			<div class="stats">
 				<div class="text total-games">{{ totalGames }} games</div>
-				<div class="text win-rate">{{ winRatePercentage }}% win rate</div>
+				<div class="text win-rate" *ngIf="winRatePercentage != null">{{ winRatePercentage }}% win rate</div>
 				<div class="last-used">Last used: {{ lastUsed }}</div>
 			</div>
 			<button
@@ -57,11 +57,14 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this.format = value.format;
 		this.deckNameTooltip = `${this.deckName} (${capitalizeEachWord(this.format)})`;
 		this.totalGames = value.totalGames;
-		this.winRatePercentage = parseFloat('' + value.winRatePercentage).toLocaleString('en-US', {
-			minimumIntegerDigits: 1,
-			maximumFractionDigits: 2,
-		});
-		this.lastUsed = this.buildLastUsedDate(value.lastUsedTimestamp);
+		this.winRatePercentage =
+			value.winRatePercentage != null
+				? parseFloat('' + value.winRatePercentage).toLocaleString('en-US', {
+						minimumIntegerDigits: 1,
+						maximumFractionDigits: 2,
+				  })
+				: null;
+		this.lastUsed = value.lastUsedTimestamp ? this.buildLastUsedDate(value.lastUsedTimestamp) : 'N/A';
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.skin}.jpg`;
 		this.hidden = value.hidden;
 		this.decoration = this.buildDecoration(value.format);

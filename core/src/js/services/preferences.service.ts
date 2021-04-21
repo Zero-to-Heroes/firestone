@@ -52,7 +52,11 @@ export class PreferencesService {
 	}
 
 	public async reset() {
-		const newPrefs: Preferences = new Preferences();
+		const currentPrefs = await this.getPreferences();
+		const newPrefs: Preferences = Object.assign(new Preferences(), {
+			desktopDeckHiddenDeckCodes: currentPrefs.desktopDeckHiddenDeckCodes,
+			desktopDeckStatsReset: currentPrefs.desktopDeckStatsReset,
+		} as Preferences);
 		await this.savePreferences(newPrefs);
 	}
 
@@ -81,8 +85,8 @@ export class PreferencesService {
 	public async setGlobalFtueDone() {
 		const prefs = await this.getPreferences();
 		const ftue: Ftue = { ...prefs.ftue, hasSeenGlobalFtue: true };
-		// console.log('setting pref', field, pref);
 		const newPrefs: Preferences = { ...prefs, ftue: ftue };
+		console.debug('setting ftue done', newPrefs);
 		await this.savePreferences(newPrefs);
 	}
 
@@ -345,6 +349,17 @@ export class PreferencesService {
 		return newPrefs;
 	}
 
+	public async setDeckResetDates(deckstring: string, newResetDates: readonly number[]) {
+		const prefs = await this.getPreferences();
+		const newReset = {
+			...prefs.desktopDeckStatsReset,
+			[deckstring]: newResetDates,
+		};
+		const newPrefs: Preferences = { ...prefs, desktopDeckStatsReset: newReset };
+		this.savePreferences(newPrefs);
+		return newPrefs;
+	}
+
 	public async setDesktopDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckHiddenDeckCodes: value };
@@ -375,7 +390,7 @@ export class PreferencesService {
 		const prefsToSync = new Preferences();
 		for (const prop in prefsWithDate) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSync, prop);
-			if (meta) {
+			if (!meta) {
 				prefsToSync[prop] = prefsWithDate[prop];
 			}
 		}

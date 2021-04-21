@@ -5,7 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -143,10 +143,13 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 		this.deckName = this.deck.deckName;
 		this.deckArchetype = this.deck.deckArchetype;
 		this.deckstring = this.deck.deckstring;
-		this.winRatePercentage = parseFloat('' + this.deck.winRatePercentage).toLocaleString('en-US', {
-			minimumIntegerDigits: 1,
-			maximumFractionDigits: 1,
-		});
+		this.winRatePercentage =
+			this.deck.winRatePercentage != null
+				? parseFloat('' + this.deck.winRatePercentage).toLocaleString('en-US', {
+						minimumIntegerDigits: 1,
+						maximumFractionDigits: 1,
+				  })
+				: '-';
 		this.games = this.deck.totalGames;
 		this.bestAgainsts = null;
 
