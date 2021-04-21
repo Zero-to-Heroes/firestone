@@ -8,9 +8,15 @@ export interface EventParser {
 	parse(
 		currentState: GameState,
 		gameEvent: GameEvent | GameStateEvent,
-		secretWillTrigger?: {
-			cardId: string;
-			reactingTo: string;
+		additionalInfo?: {
+			secretWillTrigger?: {
+				cardId: string;
+				reactingTo: string;
+			};
+			minionsWillDie?: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
 		},
 	): Promise<GameState>;
 	event(): string;

@@ -365,6 +365,20 @@ export class GameEvents {
 					} as MinionsDiedEvent),
 				);
 				break;
+			case 'MINIONS_WILL_DIE':
+				//console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new MinionsDiedEvent(), {
+						type: GameEvent.MINIONS_WILL_DIE,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
+						gameState: gameEvent.Value.GameState,
+						additionalData: {
+							deadMinions: gameEvent.Value.AdditionalProps.DeadMinions,
+						},
+					} as MinionsDiedEvent),
+				);
+				break;
 			case 'RECRUIT_CARD':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
@@ -790,6 +804,7 @@ export class GameEvents {
 						gameState: gameEvent.Value.GameState,
 						additionalData: {
 							sourceCardId: gameEvent.Value.SourceCardId,
+							sourceEntityId: gameEvent.Value.SourceEntityId,
 							sourceControllerId: gameEvent.Value.SourceControllerId,
 							targets: gameEvent.Value.Targets,
 						},

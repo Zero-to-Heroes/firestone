@@ -22,7 +22,20 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		return state && gameEvent.gameState && gameEvent.type === GameEvent.DAMAGE;
 	}
 
-	async parse(currentState: GameState, gameEvent: DamageGameEvent): Promise<GameState> {
+	async parse(
+		currentState: GameState,
+		gameEvent: DamageGameEvent,
+		additionalInfo?: {
+			secretWillTrigger?: {
+				cardId: string;
+				reactingTo: string;
+			};
+			minionsWillDie?: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
+		},
+	): Promise<GameState> {
 		//console.debug('[secrets-parser] considering event', gameEvent);
 		const [, , localPlayer] = gameEvent.parse();
 		//const sourceControllerId = gameEvent.additionalData.sourceControllerId;
@@ -47,6 +60,11 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			if (sourceCard?.type !== 'Minion') {
 				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
 			} else {
+				const dealingEntityId = gameEvent.additionalData.sourceEntityId;
+				// If the minion dealing damage dies in the process, we can't rule out Reckoning
+				if (additionalInfo?.minionsWillDie?.map(minion => minion.entityId)?.includes(dealingEntityId)) {
+					secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
+				}
 				const maxDamage = Math.max(
 					...Object.values(gameEvent.additionalData.targets).map(target => target.Damage),
 				);

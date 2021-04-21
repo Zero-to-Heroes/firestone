@@ -20,9 +20,15 @@ export class CardPlayedFromHandParser implements EventParser {
 	async parse(
 		currentState: GameState,
 		gameEvent: GameEvent,
-		secretWillTrigger?: {
-			cardId: string;
-			reactingTo: string;
+		additionalInfo?: {
+			secretWillTrigger?: {
+				cardId: string;
+				reactingTo: string;
+			};
+			minionsWillDie?: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
 		},
 	): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
@@ -84,7 +90,8 @@ export class CardPlayedFromHandParser implements EventParser {
 			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
 
 		const isCardCountered =
-			secretWillTrigger?.reactingTo === cardId && COUNTERSPELLS.includes(secretWillTrigger?.cardId);
+			additionalInfo?.secretWillTrigger?.reactingTo === cardId &&
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(card?.cardId)) {

@@ -8,6 +8,7 @@ import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
+import { MinionsDiedEvent } from '../../models/mainwindow/game-events/minions-died-event';
 import { Preferences } from '../../models/preferences';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
@@ -149,6 +150,10 @@ export class GameStateService {
 		cardId: string;
 		reactingTo: string;
 	};
+	private minionsWillDie: readonly {
+		entityId: number;
+		cardId: string;
+	}[] = [];
 
 	private showDecktrackerFromGameMode: boolean;
 
@@ -353,14 +358,29 @@ export class GameStateService {
 				reactingTo: gameEvent.additionalData.reactingTo,
 			};
 			console.log('[game-state] secret will trigger in reaction to', this.secretWillTrigger);
+		} else if (gameEvent.type === GameEvent.MINIONS_WILL_DIE) {
+			this.minionsWillDie = [
+				...this.minionsWillDie,
+				...gameEvent.additionalData.deadMinions?.map(minion => ({
+					entityId: minion.EntityId,
+					cardId: minion.CardId,
+				})),
+			];
+			console.log('[game-state] minions will die', this.minionsWillDie);
 		}
 
-		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent, this.secretWillTrigger);
+		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent, {
+			secretWillTrigger: this.secretWillTrigger,
+			minionsWillDie: this.minionsWillDie,
+		});
 		const prefs = await this.prefs.getPreferences();
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state, prefs)) {
-					this.state = await parser.parse(this.state, gameEvent, this.secretWillTrigger);
+					this.state = await parser.parse(this.state, gameEvent, {
+						secretWillTrigger: this.secretWillTrigger,
+						minionsWillDie: this.minionsWillDie,
+					});
 				}
 			} catch (e) {
 				console.error('[game-state] Exception while applying parser', parser.event(), e.message, e.stack, e);
@@ -410,6 +430,12 @@ export class GameStateService {
 		) {
 			console.debug('[game-state] resetting secretWillTrigger', gameEvent, this.secretWillTrigger);
 			this.secretWillTrigger = null;
+		}
+		if (this.minionsWillDie?.length && gameEvent.type === GameEvent.MINIONS_DIED) {
+			const gEvent = gameEvent as MinionsDiedEvent;
+			this.minionsWillDie = this.minionsWillDie.filter(
+				minion => !gEvent.additionalData.deadMinions.map(m => m.EntityId).includes(minion.entityId),
+			);
 		}
 	}
 

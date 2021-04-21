@@ -2,6 +2,7 @@ import { GameEvent } from '../../game-event';
 
 export class DamageGameEvent extends GameEvent {
 	readonly additionalData: {
+		sourceEntityId: number;
 		sourceCardId: string;
 		sourceControllerId: number;
 		targets: {

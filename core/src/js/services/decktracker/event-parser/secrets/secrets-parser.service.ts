@@ -31,15 +31,21 @@ export class SecretsParserService {
 	public async parseSecrets(
 		gameState: GameState,
 		gameEvent: GameEvent,
-		secretWillTrigger: {
-			cardId: string;
-			reactingTo: string;
+		additionalInfo: {
+			secretWillTrigger: {
+				cardId: string;
+				reactingTo: string;
+			};
+			minionsWillDie: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
 		},
 	): Promise<GameState> {
 		if (this.isSecretInPlayer(gameState)) {
 			for (const parser of this.secretParsers) {
 				if (parser.applies(gameEvent, gameState)) {
-					gameState = await parser.parse(gameState, gameEvent, secretWillTrigger);
+					gameState = await parser.parse(gameState, gameEvent, additionalInfo);
 				}
 			}
 		}

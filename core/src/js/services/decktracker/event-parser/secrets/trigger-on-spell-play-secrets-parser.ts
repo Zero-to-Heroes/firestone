@@ -44,9 +44,15 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 	async parse(
 		currentState: GameState,
 		gameEvent: GameEvent,
-		secretWillTrigger?: {
-			cardId: string;
-			reactingTo: string;
+		additionalInfo?: {
+			secretWillTrigger: {
+				cardId: string;
+				reactingTo: string;
+			};
+			minionsWillDie: readonly {
+				cardId: string;
+				entityId: number;
+			}[];
 		},
 	): Promise<GameState> {
 		// console.warn('parsing event', gameEvent.type);
@@ -56,7 +62,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 			return currentState;
 		}
 
-		this.secretWillTrigger = secretWillTrigger;
+		this.secretWillTrigger = additionalInfo?.secretWillTrigger;
 
 		const isSpellPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const spellCard = this.allCards.getCard(cardId);
