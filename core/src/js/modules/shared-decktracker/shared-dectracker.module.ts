@@ -7,7 +7,7 @@ import { SelectModule } from 'ng-select';
 import {
 	PerfectScrollbarConfigInterface,
 	PerfectScrollbarModule,
-	PERFECT_SCROLLBAR_CONFIG,
+	PERFECT_SCROLLBAR_CONFIG
 } from 'ngx-perfect-scrollbar';
 import { DeckTrackerCardsRecapComponent } from '../../components/decktracker/overlay/decktracker-cards-recap.component';
 import { DeckTrackerControlBarComponent } from '../../components/decktracker/overlay/decktracker-control-bar.component';
@@ -19,6 +19,7 @@ import { DeckTrackerTitleBarComponent } from '../../components/decktracker/overl
 import { DecktrackerWidgetIconComponent } from '../../components/decktracker/overlay/decktracker-widget-icon';
 import { DeckTrackerWinrateRecapComponent } from '../../components/decktracker/overlay/decktracker-winrate-recap.component';
 import { SecretsHelperListComponent } from '../../components/secrets-helper/secrets-helper-list.component';
+import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
 console.log('version is', process.env.APP_VERSION);
@@ -38,6 +39,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		FormsModule,
 		ReactiveFormsModule,
 		PerfectScrollbarModule,
+		SharedServicesModule.forRoot(),
 	],
 	declarations: [
 		DeckTrackerOverlayRootComponent,

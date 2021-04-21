@@ -51,6 +51,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
+import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
 init({
@@ -74,7 +75,8 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule, SharedModule],
+	imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule, SharedModule, 
+		SharedServicesModule.forRoot(),],
 	declarations: [
 		SettingsComponent,
 		SettingsAppSelectionComponent,

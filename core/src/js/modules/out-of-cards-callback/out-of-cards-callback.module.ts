@@ -8,11 +8,13 @@ import { GenericIndexedDbService } from '../../services/generic-indexed-db.servi
 import { OutOfCardsService } from '../../services/mainwindow/out-of-cards.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { SharedServicesModule } from '../shared-services/shared-services.module';
 
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule],
+	imports: [BrowserModule, HttpClientModule, 
+		SharedServicesModule.forRoot(),],
 	declarations: [OutOfCardsCallbackComponent],
 	bootstrap: [OutOfCardsCallbackComponent],
 	providers: [

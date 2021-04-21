@@ -16,6 +16,7 @@ import { GenericIndexedDbService } from '../../services/generic-indexed-db.servi
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
+import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
 init({
@@ -49,6 +50,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		FormsModule,
 		ReactiveFormsModule,
 		SharedDeckTrackerModule,
+		SharedServicesModule.forRoot(),
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 		InlineSVGModule.forRoot(),
 	],

@@ -10,6 +10,7 @@ import { DebugService } from '../../services/debug.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { SharedServicesModule } from '../shared-services/shared-services.module';
 
 init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@o92856.ingest.sentry.io/1338840',
@@ -32,7 +33,8 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot()],
+	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SimpleNotificationsModule.forRoot(), 
+		SharedServicesModule.forRoot(),],
 	declarations: [NotificationsComponent],
 	bootstrap: [NotificationsComponent],
 	providers: [DebugService, OverwolfService, PreferencesService, GenericIndexedDbService],

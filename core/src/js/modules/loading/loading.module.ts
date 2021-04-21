@@ -12,6 +12,7 @@ import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { SharedServicesModule } from '../shared-services/shared-services.module';
 import { SharedModule } from '../shared/shared.module';
 
 init({
@@ -40,6 +41,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		HttpClientModule,
 		BrowserAnimationsModule,
 		SharedModule,
+		SharedServicesModule.forRoot(),
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [LoadingComponent],
