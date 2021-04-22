@@ -47,7 +47,7 @@ export class DeckTrackerOverlayPlayerComponent {
 	trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;
 	showDeckWinrateExtractor = (prefs: Preferences) => prefs.overlayShowDeckWinrate;
 	showMatchupWinrateExtractor = (prefs: Preferences) => prefs.overlayShowMatchupWinrate;
-	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 250;
+	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
 	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
 
 	constructor(private prefs: PreferencesService) {}
