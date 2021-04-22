@@ -7,7 +7,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { AdService } from '../services/ad.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
@@ -17,6 +17,9 @@ import { OverwolfService } from '../services/overwolf.service';
 declare let adsReady: any;
 declare let OwAd: any;
 declare let amplitude: any;
+
+const REFRESH_IN_MINUTES = 6;
+const REFRESH_CAP = 5;
 
 @Component({
 	selector: 'ads',
@@ -43,9 +46,21 @@ declare let amplitude: any;
 })
 export class AdsComponent implements AfterViewInit, OnDestroy {
 	@Input() parentComponent: string;
+
+	@Input() set adRefershToken(value: any) {
+		if (!value || this.forceRefreshToken === value || this.refreshesLeft === REFRESH_CAP) {
+			return;
+		}
+		console.log('[ads] forcing refresh', value, this.forceRefreshToken, this.refreshesLeft);
+		this.forceRefreshToken = value;
+		this.refreshesLeft = REFRESH_CAP;
+		this.refreshAds();
+	}
+
 	shouldDisplayAds = true;
 
 	private windowId: string;
+	private forceRefreshToken: any;
 
 	private adRef;
 	private adInit = false;
@@ -55,7 +70,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	private refreshTimer;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private refreshesLeft = 5;
+	private refreshesLeft = REFRESH_CAP;
 
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService) {}
 
@@ -147,11 +162,11 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 						if (!this.refreshTimer) {
 							if (this.refreshesLeft > 0) {
 								this.refreshTimer = setTimeout(() => {
-									console.log('[ads] refreshing ad after 7 minutes timeout');
+									console.log(`[ads] refreshing ad after ${REFRESH_IN_MINUTES} minutes timeout`);
 									this.refreshTimer = null;
 									this.refreshesLeft--;
 									this.refreshAds();
-								}, 6 * 60 * 1000);
+								}, REFRESH_IN_MINUTES * 60 * 1000);
 							}
 						}
 					};

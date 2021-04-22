@@ -7,7 +7,7 @@ import {
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -31,7 +31,7 @@ declare let amplitude: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper [activeTheme]="'battlegrounds'" [allowResize]="true">
-			<ads [parentComponent]="'battlegrounds'" *ngIf="showAds"></ads>
+			<ads [parentComponent]="'battlegrounds'" [adRefershToken]="adRefershToken" *ngIf="showAds"></ads>
 			<battlegrounds-content [state]="state" *ngIf="cardsLoaded"> </battlegrounds-content>
 		</window-wrapper>
 	`,
@@ -43,6 +43,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	state: BattlegroundsState;
 	cardsLoaded = false;
 	showAds = true;
+	adRefershToken: string;
 
 	private hotkeyPressedHandler: EventEmitter<boolean>;
 	// private messageReceivedListener: (message: any) => void;
@@ -83,6 +84,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			try {
 				// console.log('received state a', this.state);
 				this.state = { ...newState } as BattlegroundsState;
+				this.adRefershToken = this.state?.currentGame?.reviewId;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
