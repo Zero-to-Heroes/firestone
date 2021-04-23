@@ -29,13 +29,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.8.0',
+		version: '7.8.2',
 		sections: [
 			// {
 			// 	type: 'intro',
 			// 	header: 'Message from the dev',
 			// 	text: `
-			// 		I'd like to welcome everyone who got to try Firestone because of the lifetime packs received feature. I'm glad to have you here :)
+			// 		You may have 
 			// 		<br/>
 			// 		<br/>
 			// 		This updates mostly brings small-ish Quality of Life improvements. I'll probably have another couples of small update following over the next months to fix / improve existing features, so if you have any feedback or ideas, please don't hesitate to send them to me!
@@ -51,11 +51,37 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the Reckoning secret would be grayed out in the secret helper if the minion dealing damage died.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Open the Cages secret would be grayed out in the secret helper even if one of the mininos was dormant.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the Shadow Clone secret would be grayed out in the secret helper if attacking with the hero.`,
+							},
+						],
+					},
+					{
 						category: 'collection',
 						details: [
 							{
 								type: 'feature',
 								text: `Pity timers are now synchronized across computers (they still need you to open your packs with Firestone running).`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'content',
+								text: `The 12-wins decks section now shows runs with 10+ wins, so that there is more information available.`,
 							},
 						],
 					},
@@ -73,12 +99,20 @@ export const updates: readonly Update[] = [
 								text: `Add support for Whizbang decks.`,
 							},
 							{
+								type: 'feature',
+								text: `(BETA) Add a button to reset the stats of a deck. This is still in beta, so let me know if it works for you :)`,
+							},
+							{
 								type: 'bug',
 								text: `Fix an issue where global effect cards (like Incanter's Flow) were not applied to the deck when played by Trick Totem.`,
 							},
 							{
 								type: 'content',
 								text: `Flag more cards created by the opponent's hand (Knight of Anointment, Warsong Wrangler, Taelan Fordring, Northwatch Commander, Tamsin Roane, Thrive in the Shadows).`,
+							},
+							{
+								type: 'content',
+								text: `Scepter of Summoning effect now updates the cost of minions in the decklist in Duels / Dungeon Runs.`,
 							},
 						],
 					},
@@ -88,6 +122,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add social share / screenshot buttons to the menu bar, so they are available on all pages easily.`,
+							},
+							{
+								type: 'feature',
+								text: `Preferences are now synced across devices.`,
 							},
 							{
 								type: 'ui',
@@ -109,6 +147,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Show the number of matches used to compute the stats, and add a toggle to hide the ones with few data points.`,
+							},
+							{
+								type: 'bug',
+								text: `Add missing time filter in the 12-wins decks section.`,
 							},
 						],
 					},
