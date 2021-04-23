@@ -5,7 +5,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
@@ -137,11 +137,11 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		this.currentTurn = this._game.currentTurn;
 		const nextOpponent = this._game.players.find(player => player.cardId === this._panel.opponentOverview.cardId);
 		if (!nextOpponent) {
-			console.log(
-				'no next opponent yet',
-				this._game.players.map(player => player.cardId),
-				this._panel.opponentOverview.cardId,
-			);
+			// console.log(
+			// 	'no next opponent yet',
+			// 	this._game.players.map(player => player.cardId),
+			// 	this._panel.opponentOverview.cardId,
+			// );
 			return;
 		}
 		this.players = this._game.players;
