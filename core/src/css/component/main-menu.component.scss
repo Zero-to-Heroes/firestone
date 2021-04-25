@@ -80,9 +80,9 @@
 	}
 
 	.go-premium {
-		width: 65px;
-		height: 60px;
-
+		.icon {
+			zoom: 2;
+		}
 		.text {
 			width: 150px;
 		}
