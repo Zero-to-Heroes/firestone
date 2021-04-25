@@ -11,7 +11,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, from, Observable, Subscription } from 'rxjs';
+import { concatMap, delayWhen, filter, map, pluck, tap, withLatestFrom } from 'rxjs/operators';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
@@ -56,8 +57,10 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	};
 
 	private windowId: string;
+	private windowId$: Observable<string>;
 	private activeNotifications: ActiveNotification[] = [];
 	private notificationsEmitterBus: BehaviorSubject<Message>;
+	private notifications$: Observable<Message>;
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;
 
@@ -77,7 +80,38 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private elRef: ElementRef,
 		private prefs: PreferencesService,
-	) {}
+	) {
+		this.notifications$ = this.ow.getMainWindow().notificationsEmitterBus;
+		this.windowId$ = from(this.ow.getCurrentWindow()).pipe(pluck('id'));
+
+		this.notifications$
+			.pipe(
+				delayWhen(() => this.windowId$),
+				withLatestFrom(this.windowId$),
+				filter(([message, windowId]) => !!message),
+				tap(([message, windowId]) => {
+					console.log(
+						'Observable received message from bus in notification window',
+						message.notificationId,
+						message,
+					);
+					console.log('window id', windowId);
+				}),
+				delayWhen(([message, windowId]) => from(this.ow.restoreWindow(windowId))),
+				delayWhen(([message, windowId]) => from(this.ow.bringToFront(windowId))),
+				map(([message, windowId]) => {
+					const toast = this.getToastNotification(message);
+					toast.theClass = message.theClass;
+					return { message, toast };
+				}),
+				concatMap(({ message, toast }) =>
+					toast.click.pipe(
+						tap((clickEvent: MouseEvent) => this.handleToastClick(clickEvent, message, toast.id)),
+					),
+				),
+			)
+			.subscribe();
+	}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
@@ -91,15 +125,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-		setTimeout(() => {
-			this.notificationsEmitterBus = this.ow.getMainWindow().notificationsEmitterBus;
-			this.notificationsEmitterBus.subscribe((message: Message) => {
-				if (message) {
-					console.log('received message from bus in notification window', message.notificationId, message);
-					this.processingQueue.enqueue(message);
-				}
-			});
-		});
 		this.resize();
 	}
 
@@ -134,6 +159,88 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			resolve();
 			return;
 		});
+	}
+
+	private getToastNotification(message: Message): Notification {
+		const override: any = {
+			timeOut: message.timeout || this.timeout,
+			clickToClose: message.clickToClose === false ? false : true,
+		};
+		return this.notificationService.html(message.content, NotificationType.Success, override);
+	}
+
+	private handleToastClick(event: MouseEvent, messageObject: Message, toastId: string): void {
+		console.log('registered click on toast', messageObject);
+		let currentElement: any = event.srcElement;
+		while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
+			currentElement = currentElement.parentElement;
+		}
+
+		// console.log('currentElemetn', currentElement);
+		// Clicked on close, don't show the card
+		if (currentElement && currentElement.className && currentElement.className.indexOf('close') !== -1) {
+			// amplitude
+			// 	.getInstance()
+			// 	.logEvent('notification', { 'event': 'close', 'app': messageObject.app, 'type': type });
+			// Force close if it's not configured to auto close
+			if (messageObject.clickToClose === false) {
+				this.notificationService.remove(toastId);
+			}
+			console.log('closing notif');
+			// this.notificationService.remove(toast.id);
+			return;
+		}
+
+		// Clicked on settings, don't show the card and don't close
+		if (currentElement && currentElement.className && currentElement.className.indexOf('open-settings') !== -1) {
+			amplitude.getInstance().logEvent('notification', {
+				'event': 'show-settings',
+				'app': messageObject.app,
+				'type': messageObject.type,
+			});
+			event.preventDefault();
+			event.stopPropagation();
+			this.showSettings();
+			return;
+		}
+
+		while (currentElement && !currentElement.classList.contains('unclickable') && currentElement.parentElement) {
+			currentElement = currentElement.parentElement;
+		}
+
+		if (currentElement && currentElement.classList.contains('unclickable')) {
+			amplitude.getInstance().logEvent('notification', {
+				'event': 'unclickable',
+				'app': messageObject.app,
+				'type': messageObject.type,
+			});
+			currentElement.classList.add('shake');
+			setTimeout(() => {
+				currentElement.classList.remove('shake');
+			}, 500);
+			event.preventDefault();
+			event.stopPropagation();
+			console.log('unclickable');
+			return;
+		}
+		amplitude
+			.getInstance()
+			.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': messageObject.type });
+		if (messageObject.eventToSendOnClick) {
+			console.log('event to send on click', messageObject.eventToSendOnClick);
+			const eventToSend = messageObject.eventToSendOnClick();
+			this.stateUpdater.next(eventToSend);
+		}
+		if (messageObject.cardId) {
+			// console.log('wxith card id', cardId);
+			const isAchievement = messageObject.app === 'achievement';
+			if (isAchievement) {
+				this.stateUpdater.next(new ShowAchievementDetailsEvent(messageObject.cardId));
+				this.fadeNotificationOut(messageObject.notificationId);
+			} else {
+				this.stateUpdater.next(new ShowCardDetailsEvent(messageObject.cardId));
+			}
+		}
 	}
 
 	private async showNotification(messageObject: Message) {
