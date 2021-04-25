@@ -11,12 +11,11 @@ export class ElementalPlayerCounterOverlayHandler extends AbstractOverlayHandler
 			OverwolfService.COUNTER_PLAYER_ELEMENTAL_WINDOW,
 			prefs => prefs.playerElementalCounter,
 			state =>
-				(this.containsCards(state?.playerDeck?.hand, [CardIds.Collectible.Mage.ManaCyclone]) ||
-					this.containsCards(state?.playerDeck?.hand, [
-						CardIds.Collectible.Mage.GrandFinale,
-						CardIds.Collectible.Neutral.Ozruk,
-					])) &&
-				!state.isBattlegrounds(),
+				this.containsCards(state?.playerDeck?.hand, [
+					CardIds.Collectible.Mage.ManaCyclone,
+					CardIds.Collectible.Mage.GrandFinale,
+					CardIds.Collectible.Neutral.Ozruk,
+				]) && !state.isBattlegrounds(),
 			ow,
 			prefs,
 			allCards,
