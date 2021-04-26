@@ -7,7 +7,7 @@ import {
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';

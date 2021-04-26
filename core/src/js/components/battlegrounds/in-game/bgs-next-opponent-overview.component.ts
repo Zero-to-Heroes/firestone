@@ -5,7 +5,7 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
