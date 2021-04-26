@@ -211,14 +211,12 @@ export class DeckManipulationHelper {
 		// This is useful in case of cards stolen, where the power.log moves the card to SETASIDE, then changes the controller
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
 		if (cardTemplate.entityId != null && zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
-			if (debug) {
-				console.debug(
-					'card already added to zone',
-					zone,
-					cardTemplate,
-					zone.filter(card => card.entityId === cardTemplate.entityId),
-				);
-			}
+			// console.debug(
+			// 	'card already added to zone',
+			// 	zone,
+			// 	cardTemplate,
+			// 	zone.filter(card => card.entityId === cardTemplate.entityId),
+			// );
 			return zone;
 		}
 		const newCard = DeckCard.create({
@@ -227,9 +225,7 @@ export class DeckManipulationHelper {
 			buffCardIds: keepBuffs ? cardTemplate.buffCardIds : undefined,
 			metaInfo: new CardMetaInfo(),
 		} as DeckCard);
-		if (debug) {
-			console.debug('adding card to zone', [...zone, newCard], cardTemplate);
-		}
+		// console.debug('adding card to zone', [...zone, newCard], cardTemplate);
 		return [...zone, newCard];
 	}
 

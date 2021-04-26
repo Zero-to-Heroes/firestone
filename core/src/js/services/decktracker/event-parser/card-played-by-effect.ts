@@ -21,7 +21,8 @@ export class CardPlayedByEffectParser implements EventParser {
 		additionalInfo?: {
 			secretWillTrigger?: {
 				cardId: string;
-				reactingTo: string;
+				reactingToCardId: string;
+				reactingToEntityId: number;
 			};
 			minionsWillDie?: readonly {
 				cardId: string;
@@ -54,7 +55,10 @@ export class CardPlayedByEffectParser implements EventParser {
 			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
 
 		const isCardCountered =
-			additionalInfo?.secretWillTrigger?.reactingTo === cardId &&
+			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
+				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
+				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
+					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;

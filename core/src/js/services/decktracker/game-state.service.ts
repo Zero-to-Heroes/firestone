@@ -148,7 +148,8 @@ export class GameStateService {
 	private currentReviewId: string;
 	private secretWillTrigger: {
 		cardId: string;
-		reactingTo: string;
+		reactingToCardId: string;
+		reactingToEntityId: number;
 	};
 	private minionsWillDie: readonly {
 		entityId: number;
@@ -355,7 +356,8 @@ export class GameStateService {
 		} else if (gameEvent.type === GameEvent.SECRET_WILL_TRIGGER) {
 			this.secretWillTrigger = {
 				cardId: gameEvent.cardId,
-				reactingTo: gameEvent.additionalData.reactingTo,
+				reactingToCardId: gameEvent.additionalData.reactingToCardId,
+				reactingToEntityId: gameEvent.additionalData.reactingToEntityId,
 			};
 			console.log('[game-state] secret will trigger in reaction to', this.secretWillTrigger);
 		} else if (gameEvent.type === GameEvent.MINIONS_WILL_DIE) {
@@ -424,11 +426,13 @@ export class GameStateService {
 		// We have processed the event for which the secret would trigger
 		// TODO: how to handle reconnects, where dev mode is active?
 		if (
-			this.secretWillTrigger?.reactingTo &&
 			gameEvent.type !== GameEvent.SECRET_WILL_TRIGGER &&
-			this.secretWillTrigger.reactingTo === gameEvent.cardId
+			((this.secretWillTrigger?.reactingToCardId &&
+				this.secretWillTrigger.reactingToCardId === gameEvent.cardId) ||
+				(this.secretWillTrigger?.reactingToEntityId &&
+					this.secretWillTrigger.reactingToEntityId === gameEvent.entityId))
 		) {
-			console.debug('[game-state] resetting secretWillTrigger', gameEvent, this.secretWillTrigger);
+			console.log('[game-state] resetting secretWillTrigger', gameEvent.type, this.secretWillTrigger);
 			this.secretWillTrigger = null;
 		}
 		if (this.minionsWillDie?.length && gameEvent.type === GameEvent.MINIONS_DIED) {

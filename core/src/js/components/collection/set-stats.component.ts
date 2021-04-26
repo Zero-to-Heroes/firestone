@@ -5,7 +5,7 @@ import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { FeatureFlags } from '../../services/feature-flags';
-import { boosterIdToSetId, dustFor, dustForPremium, getPackDustValue } from '../../services/hs-utils';
+import { boosterIdToSetId, dustToCraftFor, dustToCraftForPremium, getPackDustValue } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
@@ -35,6 +35,7 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 					[text]="stat.text"
 					[current]="stat.current"
 					[total]="stat.total"
+					[helpTooltip]="stat.tooltip"
 				></set-stat-cell>
 				<pie-chart [data]="pieChartData"></pie-chart>
 				<set-stat-cell
@@ -206,15 +207,18 @@ export class SetStatsComponent implements AfterViewInit {
 	}
 
 	private buildStats(): readonly Stat[] {
+		const currentDust = this._set.allCards
+			.map(card => dustToCraftFor(card.rarity) * card.getNumberCollected())
+			.reduce((a, b) => a + b, 0);
+		const totalDust = this._set.allCards
+			.map(card => dustToCraftFor(card.rarity) * card.getMaxCollectible())
+			.reduce((a, b) => a + b, 0);
 		return [
 			{
 				text: 'Dust',
-				current: this._set.allCards
-					.map(card => dustFor(card.rarity) * card.getNumberCollected())
-					.reduce((a, b) => a + b, 0),
-				total: this._set.allCards
-					.map(card => dustFor(card.rarity) * card.getMaxCollectible())
-					.reduce((a, b) => a + b, 0),
+				current: currentDust,
+				total: totalDust,
+				tooltip: `You need ${totalDust - currentDust} to complete the set`,
 			},
 			{
 				text: 'Common',
@@ -240,15 +244,18 @@ export class SetStatsComponent implements AfterViewInit {
 	}
 
 	private buildGoldenStats(): readonly Stat[] {
+		const currentDust = this._set.allCards
+			.map(card => dustToCraftForPremium(card.rarity) * card.getNumberCollectedPremium())
+			.reduce((a, b) => a + b, 0);
+		const totalDust = this._set.allCards
+			.map(card => dustToCraftForPremium(card.rarity) * card.getMaxCollectible())
+			.reduce((a, b) => a + b, 0);
 		return [
 			{
 				text: 'Golden Dust',
-				current: this._set.allCards
-					.map(card => dustForPremium(card.rarity) * card.getNumberCollectedPremium())
-					.reduce((a, b) => a + b, 0),
-				total: this._set.allCards
-					.map(card => dustForPremium(card.rarity) * card.getMaxCollectible())
-					.reduce((a, b) => a + b, 0),
+				current: currentDust,
+				total: totalDust,
+				tooltip: `You need ${totalDust - currentDust} to complete the set`,
 			},
 			{
 				text: 'Golden Common',
@@ -292,4 +299,5 @@ interface Stat {
 	readonly text: string;
 	readonly current: number;
 	readonly total: number;
+	readonly tooltip?: string;
 }

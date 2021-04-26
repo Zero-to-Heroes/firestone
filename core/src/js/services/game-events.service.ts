@@ -146,7 +146,7 @@ export class GameEvents {
 
 	public async dispatchGameEvent(gameEvent) {
 		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		// 	console.log('[debug] game event', gameEvent.Type, gameEvent);
+		// 	console.debug('[debug] game event', gameEvent.Type, gameEvent);
 		// }
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
@@ -319,6 +319,7 @@ export class GameEvents {
 							targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
 							targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+							transientCard: gameEvent.Value.AdditionalProps.TransientCard,
 					  }
 					: {};
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent, props));
@@ -562,7 +563,8 @@ export class GameEvents {
 						gameEvent,
 						gameEvent.Value.AdditionalProps
 							? {
-									reactingTo: gameEvent.Value.AdditionalProps.InReactionTo,
+									reactingToCardId: gameEvent.Value.AdditionalProps.InReactionToCardId,
+									reactingToEntityId: gameEvent.Value.AdditionalProps.InReactionToEntityId,
 							  }
 							: null,
 					),

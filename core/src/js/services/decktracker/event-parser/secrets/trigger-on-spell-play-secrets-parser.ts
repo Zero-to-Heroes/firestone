@@ -26,7 +26,8 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 
 	private secretWillTrigger: {
 		cardId: string;
-		reactingTo: string;
+		reactingToCardId: string;
+		reactingToEntityId: number;
 	};
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -47,7 +48,8 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		additionalInfo?: {
 			secretWillTrigger: {
 				cardId: string;
-				reactingTo: string;
+				reactingToCardId: string;
+				reactingToEntityId: number;
 			};
 			minionsWillDie: readonly {
 				cardId: string;

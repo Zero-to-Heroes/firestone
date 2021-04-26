@@ -1,4 +1,4 @@
-import { Race } from '@firestone-hs/reference-data';
+import { CardIds, Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
@@ -23,7 +23,8 @@ export class CardPlayedFromHandParser implements EventParser {
 		additionalInfo?: {
 			secretWillTrigger?: {
 				cardId: string;
-				reactingTo: string;
+				reactingToCardId: string;
+				reactingToEntityId: number;
 			};
 			minionsWillDie?: readonly {
 				cardId: string;
@@ -36,29 +37,29 @@ export class CardPlayedFromHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
-		//console.debug('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
+		// console.debug('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
 
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(
 			deck.hand,
 			cardId,
 			entityId,
-			deck.deckList.length === 0,
+			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		// console.log('removed card from hand', removedCard, currentState, gameEvent);
+		// console.debug('removed card from hand', removedCard, currentState, gameEvent);
 		let newDeck =
 			removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
-		//console.debug('removed card from hand', removedCard, deck.deck, newDeck);
+		// console.debug('removed card from hand', removedCard, deck.deck, newDeck);
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
-		if (removedCard == null && cardId) {
+		if (removedCard == null && cardId && !gameEvent.additionalData.transientCard) {
 			const [newDeckAfterReveal, removedCardFromDeck] = this.helper.removeSingleCardFromZone(
 				newDeck,
 				cardId,
 				entityId,
 				deck.deckList.length === 0,
 			);
-			// console.log('after removing from deck', newDeckAfterReveal, removedCardFromDeck, newDeck);
+			// console.debug('after removing from deck', newDeckAfterReveal, removedCardFromDeck, newDeck);
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;
 			}
@@ -81,22 +82,36 @@ export class CardPlayedFromHandParser implements EventParser {
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: isOnBoard ? 'PLAY' : null,
 			} as DeckCard);
-		//console.debug('card with zone', cardWithZone, refCard, cardId);
-		const newBoard: readonly DeckCard[] = isOnBoard
-			? this.helper.addSingleCardToZone(deck.board, cardWithZone)
-			: deck.board;
-		const newOtherZone: readonly DeckCard[] = isOnBoard
-			? deck.otherZone
-			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
 
 		const isCardCountered =
-			additionalInfo?.secretWillTrigger?.reactingTo === cardId &&
+			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
+				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
+				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
+					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId);
+		// console.debug('is card countered', isCardCountered, additionalInfo, gameEvent);
+
+		// console.debug('card with zone', cardWithZone, refCard, cardId);
+		const newBoard: readonly DeckCard[] =
+			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardWithZone) : deck.board;
+		// console.debug('new board', newBoard, isOnBoard && !isCardCountered);
+		const newOtherZone: readonly DeckCard[] = isOnBoard
+			? deck.otherZone
+			: this.helper.addSingleCardToZone(
+					deck.otherZone,
+					isCardCountered &&
+						additionalInfo?.secretWillTrigger?.cardId === CardIds.Collectible.Paladin.OhMyYogg
+						? // Since Yogg transforms the card
+						  cardWithZone.update({
+								entityId: undefined,
+						  } as DeckCard)
+						: cardWithZone,
+			  );
+		// console.debug('new other', newOtherZone, isOnBoard);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(card?.cardId)) {
 			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, cardWithZone);
-			//console.debug('includes global effect', cardWithZone, deck.globalEffects, newGlobalEffects);
 		}
 
 		const isElemental =
@@ -107,12 +122,15 @@ export class CardPlayedFromHandParser implements EventParser {
 			board: newBoard,
 			deck: newDeck,
 			otherZone: newOtherZone,
-			cardsPlayedThisTurn: [...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[],
+			cardsPlayedThisTurn: isCardCountered
+				? deck.cardsPlayedThisTurn
+				: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
 			globalEffects: newGlobalEffects,
-			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (refCard?.type === 'Spell' ? 1 : 0),
-			watchpostsPlayedThisMatch: deck.watchpostsPlayedThisMatch + (this.isWatchpost(refCard) ? 1 : 0),
-			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (this.isLibram(refCard) ? 1 : 0),
-			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (isElemental ? 1 : 0),
+			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (!isCardCountered && refCard?.type === 'Spell' ? 1 : 0),
+			watchpostsPlayedThisMatch:
+				deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
+			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
+			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 		} as DeckState);
 		//console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered

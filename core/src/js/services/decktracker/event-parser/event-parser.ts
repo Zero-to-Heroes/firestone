@@ -11,7 +11,8 @@ export interface EventParser {
 		additionalInfo?: {
 			secretWillTrigger?: {
 				cardId: string;
-				reactingTo: string;
+				reactingToCardId: string;
+				reactingToEntityId: number;
 			};
 			minionsWillDie?: readonly {
 				cardId: string;
