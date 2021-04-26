@@ -218,7 +218,7 @@ export class SetStatsComponent implements AfterViewInit {
 				text: 'Dust',
 				current: currentDust,
 				total: totalDust,
-				tooltip: `You need ${totalDust - currentDust} to complete the set`,
+				tooltip: `You need ${(totalDust - currentDust).toLocaleString()} dust to complete the set`,
 			},
 			{
 				text: 'Common',
@@ -255,7 +255,7 @@ export class SetStatsComponent implements AfterViewInit {
 				text: 'Golden Dust',
 				current: currentDust,
 				total: totalDust,
-				tooltip: `You need ${totalDust - currentDust} to complete the set`,
+				tooltip: `You need ${(totalDust - currentDust).toLocaleString()} dust to complete the golden set`,
 			},
 			{
 				text: 'Golden Common',

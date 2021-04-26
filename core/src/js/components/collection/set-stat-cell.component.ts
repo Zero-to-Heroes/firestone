@@ -13,9 +13,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		<div class="set-stat-cell">
 			<div class="text">{{ text }}</div>
 			<div class="value" [ngClass]="{ 'completed': current === total }">
-				<div class="item">{{ current }}</div>
+				<div class="item" *ngIf="current">{{ current.toLocaleString() }}</div>
 				<div class="item" *ngIf="total">/</div>
-				<div class="item" *ngIf="total">{{ total }}</div>
+				<div class="item" *ngIf="total">{{ total.toLocaleString() }}</div>
 			</div>
 		</div>
 	`,

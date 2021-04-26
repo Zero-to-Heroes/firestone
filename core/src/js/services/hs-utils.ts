@@ -261,6 +261,23 @@ export const dustForPremium = (rarity: string): number => {
 	return 4 * dustFor(rarity?.toLowerCase());
 };
 
+export const dustToCraftFor = (rarity: string): number => {
+	switch (rarity?.toLowerCase()) {
+		case 'legendary':
+			return 1600;
+		case 'epic':
+			return 400;
+		case 'rare':
+			return 100;
+		default:
+			return 40;
+	}
+};
+
+export const dustToCraftForPremium = (rarity: string): number => {
+	return 4 * dustToCraftFor(rarity?.toLowerCase());
+};
+
 export const boosterIdToSetId = (boosterId: BoosterType): string => {
 	switch (boosterId) {
 		case BoosterType.CLASSIC:
