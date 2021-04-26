@@ -95,7 +95,7 @@ export class ReplayUploadService {
 					game: game,
 				};
 				this.events.broadcast(Events.REVIEW_FINALIZED, info);
-				this.ow.setExtensionInfo(JSON.stringify(info));
+				// this.ow.setExtensionInfo(JSON.stringify(info));
 			}
 		});
 	}
