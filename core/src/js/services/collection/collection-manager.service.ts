@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { Card } from '../../models/card';
@@ -14,10 +13,10 @@ import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
 import { IndexedDbService } from './indexed-db.service';
+import { PackStatsService } from './pack-stats.service';
 import { SetsService } from './sets-service.service';
 
 const CARD_BACKS_URL = 'https://static.zerotoheroes.com/hearthstone/data/card-backs.json?v=4';
-const CARD_PACKS_URL = 'https://api.firestoneapp.com/retrieveUserPackStats/packStats';
 
 @Injectable()
 export class CollectionManager {
@@ -33,6 +32,7 @@ export class CollectionManager {
 		private readonly api: ApiRunner,
 		private readonly allCards: AllCardsService,
 		private readonly setsService: SetsService,
+		private readonly packStatsService: PackStatsService,
 	) {
 		this.init();
 	}
@@ -69,30 +69,7 @@ export class CollectionManager {
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {
-		const user = await this.ow.getCurrentUser();
-		const input = {
-			userId: user.userId,
-			userName: user.username,
-		};
-		const data: any = (await this.api.callPostApiWithRetries<any>(CARD_PACKS_URL, input, 3)) ?? [];
-		//console.debug('loaded pack stats', data);
-		return (
-			data.results
-				// Because of how pack logging used to work, when you received the 5 galakrond cards,
-				// the app flagged that as a new pack
-				.filter(pack => !this.isPackAllGalakronds(pack))
-		);
-	}
-
-	private isPackAllGalakronds(pack: PackResult): boolean {
-		return (
-			pack.setId === 'dragons' &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Priest.GalakrondTheUnspeakable) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Shaman.GalakrondTheTempest) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Warlock.GalakrondTheWretched) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Warrior.GalakrondTheUnbreakable) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Rogue.GalakrondTheNightmare)
-		);
+		return this.packStatsService.getPackStats();
 	}
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
