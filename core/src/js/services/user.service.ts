@@ -1,18 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
+import { ApiRunner } from './api-runner';
 import { CurrentUserEvent } from './mainwindow/store/events/current-user-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
 
-const USER_MAPPING_URL = 'https://08fe814cde.execute-api.us-west-2.amazonaws.com/Prod/userMapping';
+// const USER_MAPPING_URL = 'https://08fe814cde.execute-api.us-west-2.amazonaws.com/Prod/userMapping';
+const USER_MAPPING_UPDATE_URL = 'https://api.firestoneapp.com/usermapping/save/usermapping/{proxy+}';
 
 @Injectable()
 export class UserService {
 	private currentUser: CurrentUser;
 	private store: MainWindowStoreService;
 
-	constructor(private readonly ow: OverwolfService, private http: HttpClient) {}
+	constructor(private readonly ow: OverwolfService, private readonly api: ApiRunner) {}
 
 	public async getCurrentUser(): Promise<CurrentUser> {
 		await this.waitForInit();
@@ -47,22 +48,9 @@ export class UserService {
 		}
 
 		this.currentUser = await this.ow.getCurrentUser();
-		return new Promise<void>(resolve => {
-			this.http
-				.post(USER_MAPPING_URL, {
-					userId: this.currentUser.userId,
-					userName: this.currentUser.username,
-				})
-				.subscribe(
-					result => {
-						// Do nothing
-						resolve();
-					},
-					error => {
-						console.error('Could not upload user mapping', error);
-						resolve();
-					},
-				);
+		return this.api.callPostApi(USER_MAPPING_UPDATE_URL, {
+			userId: this.currentUser.userId,
+			userName: this.currentUser.username,
 		});
 	}
 
