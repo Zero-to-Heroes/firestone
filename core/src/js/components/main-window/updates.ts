@@ -35,7 +35,7 @@ export const updates: readonly Update[] = [
 			// 	type: 'intro',
 			// 	header: 'Message from the dev',
 			// 	text: `
-			// 		You may have 
+			// 		You may have
 			// 		<br/>
 			// 		<br/>
 			// 		This updates mostly brings small-ish Quality of Life improvements. I'll probably have another couples of small update following over the next months to fix / improve existing features, so if you have any feedback or ideas, please don't hesitate to send them to me!
@@ -65,6 +65,14 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the Shadow Clone secret would be grayed out in the secret helper if attacking with the hero.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the secret helper would show after a secret was countered by Oh My Yogg and transformed into a non-secret card.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where cards resulting of the transformation by Oh My Yogg would not appear in the decklist, and their effects would not be applied on the deck (eg the discount for Incanter's Flow would not appear).`,
+							},
 						],
 					},
 					{
@@ -79,6 +87,10 @@ export const updates: readonly Update[] = [
 					{
 						category: 'duels',
 						details: [
+							{
+								type: 'bug',
+								text: `Fix a few bugs related to dual class signature treasures. Please note that for a few days the stat for one of the class will have a low sample size of matches.`,
+							},
 							{
 								type: 'content',
 								text: `The 12-wins decks section now shows runs with 10+ wins, so that there is more information available.`,
@@ -100,7 +112,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `(BETA) Add a button to reset the stats of a deck. This is still in beta, so let me know if it works for you :)`,
+								text: `Add a button to reset the stats of a deck. This is still in beta, so let me know if it works for you :)`,
 							},
 							{
 								type: 'bug',
@@ -164,6 +176,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Add notification when receiving single cards (like in season rewards), and single card rewards now appear in the card history.`,
+							},
+							{
+								type: 'content',
+								text: `The dust total shown when looking at set details now gives you the amount of dust you need to craft the set (it used to show the dust you would get by disenchanting the cards).`,
 							},
 						],
 					},
