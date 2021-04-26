@@ -10,8 +10,8 @@ import { UserService } from '../user.service';
 import { AchievementsManager } from './achievements-manager.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
 
-const ACHIEVEMENTS_POST_URL = 'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
-const ACHIEVEMENTS_RETRIEVE_URL = 'https://mtpdm7a1e5.execute-api.us-west-2.amazonaws.com/Prod/completedAchievements';
+const ACHIEVEMENTS_UPDATE_URL = 'https://api.firestoneapp.com/achievements/save/achievements/{proxy+}';
+const ACHIEVEMENTS_RETRIEVE_URL = 'https://api.firestoneapp.com/achievements/get/achievements/{proxy+}';
 const RAW_HS_ACHIEVEMENTS_RETRIEVE_URL = 'https://static.zerotoheroes.com/hearthstone/jsoncards/hs-achievements.json';
 
 @Injectable()
@@ -106,7 +106,7 @@ export class RemoteAchievementsService {
 			'cardId': achievement.displayCardId,
 			'numberOfCompletions': achievement.numberOfCompletions,
 		};
-		this.api.callPostApiWithRetries(ACHIEVEMENTS_POST_URL, statEvent, retriesLeft);
+		this.api.callPostApiWithRetries(ACHIEVEMENTS_UPDATE_URL, statEvent, retriesLeft);
 	}
 
 	public async loadHsRawAchievements(): Promise<readonly HsRawAchievement[]> {
