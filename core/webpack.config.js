@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const webpack = require('@artonge/webpack');
-// const ngcWebpack = require("ngc-webpack");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
-const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
 const DefinePlugin = require('webpack').DefinePlugin;
 const BannerPlugin = require('webpack').BannerPlugin;
-// const SentryWebpackPlugin = require('@sentry/webpack-plugin');
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+// const AngularCompilerPlugin = require('@artonge/webpack').AngularCompilerPlugin;
+const AngularCompilerPlugin = require('@ngtools/webpack').AngularCompilerPlugin;
 
 var path = require('path');
 
@@ -26,25 +22,25 @@ const entry = {
 	// Keep polyfills at the top so that it's imported first in the HTML
 	polyfills: './src/polyfills.ts',
 	background: './src/js/modules/background/main.ts',
-	collection: './src/js/modules/collection/main.ts',
-	loading: './src/js/modules/loading/main.ts',
-	notifications: './src/js/modules/notifications/main.ts',
-	decktracker: './src/js/modules/decktracker/main.ts',
-	decktrackeropponent: './src/js/modules/decktracker-opponent/main.ts',
-	secretshelper: './src/js/modules/secrets-helper/main.ts',
-	gamecounters: './src/js/modules/game-counters/main.ts',
-	opponentHand: './src/js/modules/opponent-hand/main.ts',
-	settings: './src/js/modules/settings/main.ts',
-	twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
-	outofcardscallback: './src/js/modules/out-of-cards-callback/main.ts',
-	constructed: './src/js/modules/constructed/main.ts',
-	battlegrounds: './src/js/modules/battlegrounds/main.ts',
-	battlegroundsmouseover: './src/js/modules/battlegrounds-mouse-over/main.ts',
-	battlegroundsminionstiers: './src/js/modules/battlegrounds-minions-tiers/main.ts',
-	bgsbattlesimulation: './src/js/modules/bgs-battle-simulation/main.ts',
-	bgsbannedtribes: './src/js/modules/bgs-banned-tribes/main.ts',
-	bgsheroselectionoverlay: './src/js/modules/bgs-hero-selection-overlay/main.ts',
-	battlegroundsoverlaybutton: './src/js/modules/battlegrounds-overlay-button/main.ts',
+	collection: './src/js/modules/background/main.ts',
+	loading: './src/js/modules/background/main.ts',
+	notifications: './src/js/modules/background/main.ts',
+	settings: './src/js/modules/background/main.ts',
+	battlegrounds: './src/js/modules/background/main.ts',
+	battlegroundsmouseover: './src/js/modules/background/main.ts',
+	battlegroundsminionstiers: './src/js/modules/background/main.ts',
+	decktracker: './src/js/modules/background/main.ts',
+	decktrackeropponent: './src/js/modules/background/main.ts',
+	secretshelper: './src/js/modules/background/main.ts',
+	gamecounters: './src/js/modules/background/main.ts',
+	opponentHand: './src/js/modules/background/main.ts',
+	twitchauthcallback: './src/js/modules/background/main.ts',
+	outofcardscallback: './src/js/modules/background/main.ts',
+	constructed: './src/js/modules/background/main.ts',
+	bgsbattlesimulation: './src/js/modules/background/main.ts',
+	bgsbannedtribes: './src/js/modules/background/main.ts',
+	bgsheroselectionoverlay: './src/js/modules/background/main.ts',
+	battlegroundsoverlaybutton: './src/js/modules/background/main.ts',
 	'bgsbattlesimulation.worker': './src/js/workers/bgs-simulation.worker.ts',
 	'bgspostmatchstats.worker': './src/js/workers/bgs-post-match-stats.worker.ts',
 };
@@ -59,28 +55,7 @@ module.exports = function(env, argv) {
 
 		new AngularCompilerPlugin({
 			tsConfigPath: './tsconfig.json',
-			entryModules: [
-				'./src/js/modules/background/background.module#AppModule',
-				'./src/js/modules/collection/collection.module#CollectionModule',
-				'./src/js/modules/loading/loading.module#LoadingModule',
-				'./src/js/modules/notifications/notifications.module#NotificationsModule',
-				'./src/js/modules/decktracker/decktracker.module#DeckTrackerModule',
-				'./src/js/modules/decktracker-opponent/decktracker-opponent.module#DeckTrackerOpponentModule',
-				'./src/js/modules/secrets-helper/secrets-helper.module#SecretsHelperModule',
-				'./src/js/modules/opponent-hand/opponent-hand-overlay.module#OpponentHandOverlayModule',
-				'./src/js/modules/settings/settings.module#SettingsModule',
-				'./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule',
-				'./src/js/modules/out-of-cards-callback/out-of-cards-callback.module#OutOfCardsCallbackModule',
-				'./src/js/modules/constructed/constructed.module#ConstructedModule',
-				'./src/js/modules/battlegrounds/battlegrounds.module#BattlegroundsModule',
-				'./src/js/modules/battlegrounds-mouse-over/battlegrounds-mouse-over.module#BattlegroundsMouseOverOverlayModule',
-				'./src/js/modules/battlegrounds-minions-tiers/battlegrounds-minions-tiers.module#BattlegroundsMinionsTiersOverlayModule',
-				'./src/js/modules/bgs-battle-simulation/bgs-battle-simulation.module#BgsBattleSimulationModule',
-				'./src/js/modules/game-counters/game-counters.module#GameCountersModule',
-				'./src/js/modules/bgs-banned-tribes/bgs-banned-tribes.module#BgsBannedTribesModule',
-				'./src/js/modules/bgs-hero-selection-overlay/bgs-hero-selection-overlay.module#BgsHeroSelectionOverlayModule',
-				'./src/js/modules/battlegrounds-overlay-button/battlegrounds-overlay-button.module#BattlegroundsOverlayButtonModule',
-			],
+			entryModule: './src/js/modules/background/background.module#AppModule',
 			sourceMap: true,
 		}),
 
@@ -268,7 +243,7 @@ module.exports = function(env, argv) {
 				{
 					test: /\.ts$/,
 					exclude: [/node_modules/, /test/, /\.worker.ts$/],
-					use: ['@artonge/webpack', 'ts-loader'],
+					use: ['@ngtools/webpack', 'ts-loader'],
 				},
 				{
 					test: /\.worker.ts$/,

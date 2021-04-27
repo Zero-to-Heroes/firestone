@@ -12,8 +12,6 @@ import {
 import { DeckTrackerCardsRecapComponent } from '../../components/decktracker/overlay/decktracker-cards-recap.component';
 import { DeckTrackerControlBarComponent } from '../../components/decktracker/overlay/decktracker-control-bar.component';
 import { DeckTrackerDeckNameComponent } from '../../components/decktracker/overlay/decktracker-deck-name.component';
-import { DeckTrackerOverlayOpponentComponent } from '../../components/decktracker/overlay/decktracker-overlay-opponent.component';
-import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/overlay/decktracker-overlay-player.component';
 import { DeckTrackerOverlayRootComponent } from '../../components/decktracker/overlay/decktracker-overlay-root.component';
 import { DeckTrackerTitleBarComponent } from '../../components/decktracker/overlay/decktracker-title-bar';
 import { DecktrackerWidgetIconComponent } from '../../components/decktracker/overlay/decktracker-widget-icon';
@@ -43,8 +41,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	],
 	declarations: [
 		DeckTrackerOverlayRootComponent,
-		DeckTrackerOverlayPlayerComponent,
-		DeckTrackerOverlayOpponentComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerControlBarComponent,
 		DeckTrackerTitleBarComponent,
@@ -55,8 +51,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	],
 	exports: [
 		DeckTrackerOverlayRootComponent,
-		DeckTrackerOverlayPlayerComponent,
-		DeckTrackerOverlayOpponentComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerControlBarComponent,
 		DeckTrackerTitleBarComponent,

@@ -22,7 +22,8 @@
 	},
 	"angularCompilerOptions": {
 		"skipTemplateCodegen": false,
-		"strictMetadataEmit": false
+		"strictMetadataEmit": false,
+		"enableIvy": false
 	},
 	"exclude": ["node_modules", "**/*.log"]
 }

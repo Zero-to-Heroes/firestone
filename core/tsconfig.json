@@ -23,7 +23,8 @@
 	"angularCompilerOptions": {
 		"skipTemplateCodegen": false,
 		"strictMetadataEmit": false,
-		"disableTypeScriptVersionCheck": true
+		"disableTypeScriptVersionCheck": true,
+		"enableIvy": false
 	},
 	"exclude": ["node_modules", "**/*.log"]
 }
