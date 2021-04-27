@@ -100,7 +100,7 @@ import { Knob } from '../preference-slider.component';
 					<preference-toggle
 						field="bgsForceShowPostMatchStats"
 						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle }"
-						label="Show post-match stats"
+						label="Popup post-match stats"
 						tooltip="When active, the battlegrounds window will be restored after a match to show the post-match stats, even if it was minimized"
 					></preference-toggle>
 				</div>
