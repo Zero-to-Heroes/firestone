@@ -1,12 +1,11 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { DOCUMENT } from '@angular/common';
-import { HostListener, Inject, Injectable, OnDestroy } from '@angular/core';
+import { HostListener, Injectable, OnDestroy } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class CdkOverlayContainer extends OverlayContainer implements OnDestroy {
-	constructor(@Inject(DOCUMENT) _document: any) {
-		super(_document);
-	}
+	// constructor(@Inject(DOCUMENT) _document: any) {
+	// 	super(_document, Platform.);
+	// }
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
