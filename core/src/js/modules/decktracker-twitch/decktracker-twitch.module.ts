@@ -7,7 +7,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AllCardsService } from '@firestone-hs/reference-data';
 import { init } from '@sentry/browser';
 import { AngularResizedEventModule } from 'angular-resize-event';
-import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsSimulationOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/bgs-simulation-overlay-standalone.component';
 import { DeckTrackerOverlayContainerComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
@@ -41,7 +40,6 @@ console.log('version is', process.env.APP_VERSION);
 		SharedDeckTrackerModule,
 		DragDropModule,
 		AngularResizedEventModule,
-		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [
 		DeckTrackerOverlayStandaloneComponent,

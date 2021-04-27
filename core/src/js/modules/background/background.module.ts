@@ -10,7 +10,6 @@ import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg';
-import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
 import { AchievementCategoryComponent } from '../../components/achievements/achievement-category.component';
@@ -351,7 +350,6 @@ const components = [
 		HttpClientModule,
 		BrowserAnimationsModule,
 		SharedServicesModule.forRoot(),
-		LZStringModule,
 		InlineSVGModule.forRoot(),
 		SelectModule,
 		FormsModule,
@@ -651,7 +649,6 @@ const components = [
 		RewardMonitorService,
 
 		TemporaryResolutionOverrideService,
-		LZStringService,
 		LogsUploaderService,
 		S3FileUploadService,
 		OwNotificationsService,
