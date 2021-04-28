@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.8.2',
+		version: '7.8.5',
 		sections: [
 			// {
 			// 	type: 'intro',
