@@ -40,7 +40,7 @@ export class AchievementsNotificationService {
 			`Achievement saved! Click to recap`
 		).replace('to get started', '');
 		console.log('[achievements-notification] sending new achievement completed notification', achievement.id);
-		this.notificationService.emitNewNotification({
+		this.notificationService.addNotification({
 			notificationId: achievement.id + uuid(),
 			content: this.buildNotificationTemplate(achievement, recapText),
 			type: 'achievement-no-record',
