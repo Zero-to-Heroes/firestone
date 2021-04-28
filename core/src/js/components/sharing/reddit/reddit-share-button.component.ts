@@ -1,6 +1,13 @@
 import { Overlay, OverlayPositionBuilder } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	HostListener,
+	ViewRef,
+} from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 import { RedditShareModalComponent } from './reddit-share-modal.component';
@@ -18,8 +25,8 @@ declare let amplitude;
 			class="social-share {{ _network }}"
 			helpTooltip="Share current screen on {{ networkTitle }}"
 			[inlineSVG]="networkSvg"
-			(mousedown)="startSharing()"
 		></div>
+		<div class="label" *ngIf="showLabel">Reddit</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -33,6 +40,11 @@ export class RedditShareButtonComponent extends SocialShareButtonComponent {
 	) {
 		super(ow, overlay, elementRef, overlayPositionBuilder, cdr);
 		this.network = 'reddit';
+	}
+
+	@HostListener('mousedown')
+	onClick() {
+		this.startSharing();
 	}
 
 	protected async doShare(screenshotLocation: string, base64Image: string) {

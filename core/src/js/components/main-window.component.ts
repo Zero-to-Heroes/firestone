@@ -46,13 +46,12 @@ declare let amplitude: any;
 				<div class="main">
 					<section class="menu-bar">
 						<div class="before-main-divider"></div>
-						<social-shares
-							class="social-shares"
-							[onSocialClick]="takeScreenshotFunction"
-							[page]="navigationState?.getPageName()"
-						></social-shares>
-						<!-- <hotkey></hotkey> -->
+						<hotkey></hotkey>
 						<div class="controls">
+							<control-share
+								[onSocialClick]="takeScreenshotFunction"
+								[page]="navigationState?.getPageName()"
+							></control-share>
 							<control-bug></control-bug>
 							<control-settings
 								[windowId]="windowId"
@@ -337,7 +336,10 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 
 	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
 		// console.log('taking screenshot from bgs-post-match');
-		return (copyToCliboard: boolean) => this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
+		return (copyToCliboard: boolean) => {
+			console.log('taking screenshot');
+			return this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
+		};
 	}
 
 	private async handlePreferences(preferences: Preferences = null) {

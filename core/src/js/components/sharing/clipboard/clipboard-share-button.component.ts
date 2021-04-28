@@ -1,5 +1,12 @@
 import { Overlay, OverlayPositionBuilder } from '@angular/cdk/overlay';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	HostListener,
+	ViewRef,
+} from '@angular/core';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
@@ -19,8 +26,8 @@ declare let amplitude;
 			[helpTooltip]="tooltip"
 			[stayOpenOnClick]="false"
 			[inlineSVG]="networkSvg"
-			(mousedown)="startSharing(true)"
 		></div>
+		<div class="label" *ngIf="showLabel">Screenshot</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,6 +45,11 @@ export class ClipboardShareButtonComponent extends SocialShareButtonComponent {
 		super(ow, overlay, elementRef, overlayPositionBuilder, cdr);
 		this.network = 'clipboard';
 		this.tooltip = 'Copy current screen to clipboard';
+	}
+
+	@HostListener('mousedown')
+	onClick() {
+		this.startSharing(true);
 	}
 
 	protected async doShare(screenshotLocation: string, base64Image: string) {
