@@ -16,7 +16,7 @@ const RAW_HS_ACHIEVEMENTS_RETRIEVE_URL = 'https://static.zerotoheroes.com/hearth
 
 @Injectable()
 export class RemoteAchievementsService {
-	private completedAchievementsFromRemote: readonly CompletedAchievement[] = [];
+	// private completedAchievementsFromRemote: readonly CompletedAchievement[] = [];
 
 	constructor(
 		private api: ApiRunner,
@@ -54,7 +54,7 @@ export class RemoteAchievementsService {
 
 		// Update local cache
 		const completedAchievementsFromRemote = achievementsFromRemote.map(ach => CompletedAchievement.create(ach));
-		this.completedAchievementsFromRemote = completedAchievementsFromRemote;
+		// this.completedAchievementsFromRemote = completedAchievementsFromRemote;
 		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
 			CompletedAchievement.create({
 				id: `hearthstone_game_${ach.id}`,
@@ -75,6 +75,7 @@ export class RemoteAchievementsService {
 			return [];
 		}
 
+		const existingAchievements = this.indexedDb.getAll();
 		const achievementsFromMemory = await this.manager.getAchievements();
 		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
 			CompletedAchievement.create({
@@ -82,10 +83,25 @@ export class RemoteAchievementsService {
 				numberOfCompletions: ach.completed ? 1 : 0,
 			} as CompletedAchievement),
 		);
-		const achievements = [...this.completedAchievementsFromRemote, ...completedAchievementsFromMemory];
-		this.indexedDb.setAll(achievements);
-		console.log('[remote-achievements] re-updated local cache', achievements?.length);
-		return achievements;
+
+		// Since when doing a reload we don't refresh the achievements from remote, we
+		// need to merge the reloaded achievements with the existing cache
+		const uniqueIds = [
+			...new Set(...existingAchievements.map(a => a.id), ...completedAchievementsFromMemory.map(a => a.id)),
+		];
+		const refreshedAchievements = uniqueIds.map(id => {
+			const newFromMemory = completedAchievementsFromMemory.find(a => a.id === id);
+			return newFromMemory ?? this.indexedDb.getAchievement(id);
+		});
+		this.indexedDb.setAll(refreshedAchievements);
+		console.log(
+			'[remote-achievements] re-updated local cache',
+			refreshedAchievements?.length,
+			// this.completedAchievementsFromRemote?.length,
+			completedAchievementsFromMemory?.length,
+			existingAchievements?.length,
+		);
+		return refreshedAchievements;
 	}
 
 	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 5): Promise<void> {
