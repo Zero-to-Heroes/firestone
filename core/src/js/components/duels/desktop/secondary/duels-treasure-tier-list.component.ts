@@ -123,6 +123,8 @@ export class DuelsTreasureTierListComponent implements AfterViewInit {
 				return this._state.playerStats.treasureStats.filter(
 					stat => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
 				);
+			default:
+				return [];
 		}
 	}
 }

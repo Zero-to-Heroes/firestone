@@ -88,7 +88,7 @@ export class CardsMonitorService {
 		const memoryChanges = await this.memoryService.getMemoryChanges();
 		const changes: MemoryUpdate = changesInput ?? memoryChanges;
 		console.log('[pack-parser] memoryChanges detection', changesInput, memoryChanges, changes);
-		if (!process) {
+		if (!process || !changes) {
 			return;
 		}
 

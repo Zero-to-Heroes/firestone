@@ -213,7 +213,7 @@ export class AchievementsMonitor {
 				return {
 					id: achievementId,
 					progress: progress,
-					completed: currentAchievement.completed || previousAchievement.completed,
+					completed: currentAchievement?.completed || previousAchievement?.completed,
 				};
 			})
 			.filter(a => a);
