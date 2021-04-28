@@ -77,6 +77,7 @@ export class RemoteAchievementsService {
 
 		const existingAchievements = this.indexedDb.getAll();
 		const achievementsFromMemory = await this.manager.getAchievements();
+		console.log('[remote-achievements] laoded from memory', achievementsFromMemory?.length);
 		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
 			CompletedAchievement.create({
 				id: `hearthstone_game_${ach.id}`,
@@ -89,6 +90,7 @@ export class RemoteAchievementsService {
 		const uniqueIds = [
 			...new Set(...existingAchievements.map(a => a.id), ...completedAchievementsFromMemory.map(a => a.id)),
 		];
+		console.log('[remote-achievements] unique Ids', uniqueIds?.length);
 		const refreshedAchievements = uniqueIds.map(id => {
 			const newFromMemory = completedAchievementsFromMemory.find(a => a.id === id);
 			return newFromMemory ?? this.indexedDb.getAchievement(id);
