@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map, tap, withLatestFrom } from 'rxjs/operators';
 import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from './overwolf.service';
 import { PreferencesService } from './preferences.service';
@@ -17,7 +18,17 @@ export class OwNotificationsService {
 	constructor(private readonly ow: OverwolfService, private readonly prefs: PreferencesService) {
 		// Give it time to boot
 		setTimeout(() => this.detectNotificationsWindow(), 5000);
-		window['notificationsEmitterBus'] = this.stateEmitter;
+
+		window['notificationsEmitterBus'] = this.stateEmitter.pipe(
+			withLatestFrom(this.prefs.getPreferences()),
+			filter(([message, preferences]) => preferences.setAllNotifications),
+			map(([message]) => message),
+			tap(message => console.log('notification service', message))
+		)
+	}
+
+	public addNotification(htmlMessage: Message): void {
+		this.stateEmitter.next(htmlMessage);
 	}
 
 	// This directly share JS objects, without stringifying them, so it lets us do some
