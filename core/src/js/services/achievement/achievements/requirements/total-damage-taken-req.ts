@@ -36,8 +36,8 @@ export class TotalDamageTakenReq implements Requirement {
 	}
 
 	private handleDamageEvent(gameEvent: DamageGameEvent) {
-		const localPlayerCardId = gameEvent.localPlayer.CardID;
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
+		const localPlayerCardId = gameEvent.localPlayer?.CardID;
+		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const damageForLocalPlayer = Object.values(gameEvent.additionalData.targets).find(
 			target => target.TargetCardId === localPlayerCardId,
 		);
@@ -48,7 +48,7 @@ export class TotalDamageTakenReq implements Requirement {
 	}
 
 	private handleFatigueDamageEvent(gameEvent: GameEvent) {
-		const localPlayerId = gameEvent.localPlayer.Id;
+		const localPlayerId = gameEvent.localPlayer?.Id;
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
 		if (gameEvent.additionalData.entityId === localPlayerId) {
 			this.totalDamageTaken += gameEvent.additionalData.fatigueDamage;

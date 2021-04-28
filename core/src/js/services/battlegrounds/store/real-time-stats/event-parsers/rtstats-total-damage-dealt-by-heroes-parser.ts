@@ -18,7 +18,7 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 		gameEvent: DamageGameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
+		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const damageSourceController = gameEvent.additionalData.sourceControllerId;
 		if (localPlayerId !== damageSourceController) {
 			return currentState;

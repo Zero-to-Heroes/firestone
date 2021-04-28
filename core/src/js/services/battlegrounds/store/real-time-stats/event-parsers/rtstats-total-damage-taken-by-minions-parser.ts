@@ -15,7 +15,7 @@ export class RTStatsTotalDamageTakenByMinionsParser implements EventParser {
 		gameEvent: DamageGameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
+		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const targets = Object.values(gameEvent.additionalData.targets)
 			.filter(target => target.TargetControllerId === localPlayerId)
 			.filter(target => this.allCards.getCard(target.TargetCardId)?.type === 'Minion');
