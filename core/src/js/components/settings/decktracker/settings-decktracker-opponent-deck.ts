@@ -105,14 +105,14 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, a popup with all possible secrets will appear whenever the opponent plays a secret."
 					></preference-toggle>
 				</div>
-				<div class="subtitle">Archetype guessing</div>
+				<!-- <div class="subtitle">Archetype guessing</div>
 				<div class="subgroup">
 					<preference-toggle
 						field="guessOpponentArchetype"
 						label="Enable archetype guess"
 						tooltip="When active, a new window will appear at the beginning of each match, and will try to guess your opponent's archetype based on the cards they play."
 					></preference-toggle>
-				</div>
+				</div> -->
 				<div class="subtitle">Counters</div>
 				<div class="subgroup">
 					<preference-toggle
