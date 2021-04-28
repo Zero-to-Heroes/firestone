@@ -111,9 +111,13 @@ export class CardsMonitorService {
 				cardId: card.CardId,
 				// No diamond card in pack, so we can leave it like this for now
 				cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
-				isNew: card.Premium ? cardInCollection.premiumCount === 0 : cardInCollection.count === 0,
+				isNew:
+					!cardInCollection ||
+					(card.Premium ? cardInCollection.premiumCount === 0 : cardInCollection.count === 0),
 				// TODO: handle the case where two copies of the same card are in the same pack
-				isSecondCopy: card.Premium ? cardInCollection.premiumCount === 1 : cardInCollection.count === 1,
+				isSecondCopy:
+					cardInCollection &&
+					(card.Premium ? cardInCollection.premiumCount === 1 : cardInCollection.count === 1),
 			};
 		});
 		const setId = this.cards.getCard(packCards[0].cardId).set.toLowerCase();

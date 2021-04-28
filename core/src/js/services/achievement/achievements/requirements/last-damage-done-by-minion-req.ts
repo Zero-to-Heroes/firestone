@@ -34,8 +34,8 @@ export class LastDamageDoneByMinionReq implements Requirement {
 	}
 
 	private handleDamageEvent(gameEvent: DamageGameEvent) {
-		const opponentPlayerCardId = gameEvent.opponentPlayer.CardID;
-		const opponentPlayerId = gameEvent.opponentPlayer.PlayerId;
+		const opponentPlayerCardId = gameEvent.opponentPlayer?.CardID;
+		const opponentPlayerId = gameEvent.opponentPlayer?.PlayerId;
 		const damageForOpponentPlayer = Object.values(gameEvent.additionalData.targets).find(
 			target => target.TargetCardId === opponentPlayerCardId,
 		);

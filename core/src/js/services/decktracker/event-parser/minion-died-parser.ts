@@ -22,7 +22,7 @@ export class MinionDiedParser implements EventParser {
 			// console.debug('handling dead minion', deadMinion);
 			const cardId = deadMinion.CardId;
 			const entityId = deadMinion.EntityId;
-			const isPlayer = deadMinion.ControllerId === localPlayer.PlayerId;
+			const isPlayer = deadMinion.ControllerId === localPlayer?.PlayerId;
 			const deck = isPlayer ? result.playerDeck : result.opponentDeck;
 			const card = this.helper.findCardInZone(deck.board, cardId, entityId);
 			const cardWithZone = card.update({

@@ -107,8 +107,11 @@ export class DuelsDeckStatsComponent {
 			const deckStat = this._state.playerStats.deckStats
 				.map(grouped => grouped.decks)
 				.reduce((a, b) => a.concat(b), [])
+				.filter(deck => deck)
 				.find(deck => deck.id === this._navigation.selectedDeckId);
-			const additionalStat = (this._state.additionalDeckDetails ?? []).find(stat => stat.id === deckStat.id);
+			const additionalStat = (this._state.additionalDeckDetails ?? [])
+				.filter(stat => stat)
+				.find(stat => stat.id === deckStat.id);
 			const run = {
 				creationTimestamp: undefined,
 				id: deckStat.runId,
