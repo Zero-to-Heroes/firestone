@@ -45,6 +45,13 @@ export class PreferencesService {
 		// It will create one per window that uses the service, but we don't really care
 		// We just have to always use the one from the MainWindow
 		window['preferencesEventBus'] = this.preferencesEventBus;
+
+		// Only update when leaving the game, to avoid sending hundreds of requests
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if (this.ow.exitGame(res)) {
+				await this.updateRemotePreferences();
+			}
+		});
 	}
 
 	public getPreferences(): Promise<Preferences> {
@@ -382,6 +389,10 @@ export class PreferencesService {
 			name: eventName,
 			preferences: userPrefs,
 		});
+	}
+
+	private async updateRemotePreferences() {
+		const userPrefs = await this.getPreferences();
 		const currentUser = await this.ow.getCurrentUser();
 		const prefsWithDate: Preferences = {
 			...userPrefs,
