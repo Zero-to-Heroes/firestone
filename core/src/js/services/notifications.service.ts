@@ -41,28 +41,6 @@ export class OwNotificationsService {
 		this.stateEmitter.next(htmlMessage);
 	}
 
-	/** @deprecated */
-	public async html(htmlMessage: Message) {
-		if (!(await this.prefs.getPreferences()).setAllNotifications) {
-			console.log('not showing any notification');
-			return;
-		}
-		// console.log('[notifications-service] trying to send notification to component');
-		if (!this.windowId) {
-			if (this.retriesLeft <= 0) {
-				throw new Error('NotificationsWindow was not identified at app start');
-			} else {
-				this.retriesLeft--;
-				setTimeout(() => {
-					this.html(htmlMessage);
-				}, 500);
-				return;
-			}
-		}
-		const strMessage = JSON.stringify(htmlMessage);
-		this.ow.sendMessage(this.windowId, '' + this.messageId++, strMessage);
-	}
-
 	private async detectNotificationsWindow() {
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.NOTIFICATIONS_WINDOW);
 		const windowId = window.id;

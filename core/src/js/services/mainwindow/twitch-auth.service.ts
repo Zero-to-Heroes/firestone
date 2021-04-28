@@ -438,7 +438,7 @@ export class TwitchAuthService {
 					</svg>
 				</button>
 			</div>`;
-		this.notificationService.html({
+		this.notificationService.emitNewNotification({
 			notificationId: 'expired-token-notif-' + new Date().getTime(),
 			content: content,
 			type: 'expired-token-notif',

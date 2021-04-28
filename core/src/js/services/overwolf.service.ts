@@ -133,6 +133,7 @@ export class OverwolfService {
 		overwolf.games.events.onNewEvents.addListener(callback);
 	}
 
+	/** @deprecated Use event bus communication instead */
 	public addMessageReceivedListener(callback: (message: any) => void): (message: any) => void {
 		overwolf.windows.onMessageReceived.addListener(callback);
 		return callback;
