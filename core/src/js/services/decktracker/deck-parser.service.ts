@@ -11,7 +11,7 @@ import {
 } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { decode, encode } from 'deckstrings';
+import { DeckDefinition, decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { Metadata } from '../../models/decktracker/metadata';
 import { DuelsInfo } from '../../models/duels-info';
@@ -40,7 +40,7 @@ export class DeckParserService {
 	private readonly deckNameRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ### (.*)');
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
 
-	public currentDeck: any = {};
+	public currentDeck: DeckInfo = {} as DeckInfo;
 	private previousDeck: any = {};
 
 	private lastDeckTimestamp;
@@ -236,9 +236,9 @@ export class DeckParserService {
 
 	public async getWhizbangDeck(deckId: number) {
 		const deck = this.deckTemplates.find(deck => deck.DeckId === deckId);
-		//console.debug('[deck-parser] found templtae deck', deckId, deck, this.deckTemplates);
+		console.debug('[deck-parser] found template deck', deckId, deck, this.deckTemplates);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
-			console.log('[deck-parser] updating active deck', deck, this.currentDeck);
+			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
 			this.updateDeckFromMemory(deck);
 		}
 		return this.currentDeck;
@@ -385,16 +385,18 @@ export class DeckParserService {
 			this.currentDeck = {
 				name: match[1],
 				scenarioId: this.currentScenarioId,
-			};
+			} as DeckInfo;
 			console.log('[deck-parser] deck init', this.currentDeck);
 			return;
 		}
 		match = this.deckstringRegex.exec(data);
 		if (match) {
 			console.log('[deck-parser] parsing deckstring', match);
-			this.currentDeck = this.currentDeck || {
-				scenarioId: this.currentScenarioId,
-			};
+			this.currentDeck =
+				this.currentDeck ||
+				({
+					scenarioId: this.currentScenarioId,
+				} as DeckInfo);
 			this.currentDeck.deckstring = this.normalizeDeckstring(match[1]);
 			console.log('[deck-parser] current deck', this.currentDeck);
 			this.decodeDeckString();
@@ -422,7 +424,7 @@ export class DeckParserService {
 		if (shouldStorePreviousDeck && this.currentDeck?.deck) {
 			this.previousDeck = this.currentDeck;
 		}
-		this.currentDeck = {};
+		this.currentDeck = {} as DeckInfo;
 		console.log('[deck-parser] resetting deck', shouldStorePreviousDeck, this.currentDeck, this.previousDeck);
 	}
 
@@ -576,4 +578,11 @@ export class DeckParserService {
 		const playerClass: string = this.allCards.getCard(card.id)?.playerClass;
 		return getDefaultHeroDbfIdForClass(playerClass);
 	}
+}
+
+export interface DeckInfo {
+	scenarioId: number;
+	name: string;
+	deckstring: string;
+	deck: DeckDefinition;
 }

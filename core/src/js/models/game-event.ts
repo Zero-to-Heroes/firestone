@@ -1,3 +1,4 @@
+import { DeckInfo } from '../services/decktracker/deck-parser.service';
 import { GameStateEvent } from './decktracker/game-state-event';
 import { Rank } from './player-info';
 
@@ -163,7 +164,7 @@ export interface GameEventPlayer {
 	// wildRank: number;
 	// wildLegendRank: number;
 	cardBackId: number;
-	deck: { deckstring: string; deck };
+	deck: DeckInfo;
 }
 
 export interface GameState {

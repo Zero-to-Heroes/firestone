@@ -1,10 +1,13 @@
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { DeckHandlerService } from '../deck-handler.service';
 import { DeckParserService } from '../deck-parser.service';
+import { DeckstringOverrideEvent } from '../event/deckstring-override-event';
+import { DeckstringOverrideParser } from './deckstring-override-parser';
 import { EventParser } from './event-parser';
 
 export class WhizbangDeckParser implements EventParser {
-	constructor(private readonly deckParser: DeckParserService) {}
+	constructor(private readonly deckParser: DeckParserService, private readonly deckHandler: DeckHandlerService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.WHIZBANG_DECK_ID;
@@ -12,14 +15,17 @@ export class WhizbangDeckParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const deckId = gameEvent.additionalData.deckId;
-		console.debug('parsing whizbang deck', deckId);
+		console.log('parsing whizbang deck', deckId);
 
 		const deck = await this.deckParser.getWhizbangDeck(deckId);
-		console.debug('got whizbang deck', deck);
-
-		// This updates the current deck in the deck parser, which will then be picked up by the
-		// metadata parser
-		return currentState;
+		console.log('got whizbang deck', deck);
+		const stateAfterPlayerDeckUpdate = await new DeckstringOverrideParser(this.deckHandler).parse(
+			currentState,
+			new DeckstringOverrideEvent(deck.name, deck.deckstring),
+			null,
+			'player',
+		);
+		return stateAfterPlayerDeckUpdate;
 	}
 
 	event(): string {

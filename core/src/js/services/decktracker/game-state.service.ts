@@ -589,7 +589,7 @@ export class GameStateService {
 	private buildEventParsers(): readonly EventParser[] {
 		const parsers: EventParser[] = [
 			new GameStartParser(this.deckParser, this.prefs, this.allCards),
-			new WhizbangDeckParser(this.deckParser),
+			new WhizbangDeckParser(this.deckParser, this.deckHandler),
 			new MatchMetadataParser(this.deckParser, this.prefs, this.allCards),
 			new MulliganOverParser(),
 			new MainStepReadyParser(),
