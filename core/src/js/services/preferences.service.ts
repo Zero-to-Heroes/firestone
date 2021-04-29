@@ -405,7 +405,7 @@ export class PreferencesService {
 				prefsToSync[prop] = prefsWithDate[prop];
 			}
 		}
-		this.api.callPostApiWithRetries(PREF_UPDATE_URL, {
+		this.api.callPostApi(PREF_UPDATE_URL, {
 			userId: currentUser.userId,
 			userName: currentUser.username,
 			prefs: prefsToSync,
@@ -414,7 +414,7 @@ export class PreferencesService {
 
 	public async loadRemotePrefs(): Promise<Preferences | undefined> {
 		const currentUser = await this.ow.getCurrentUser();
-		const result: any = await this.api.callPostApiWithRetries(PREF_RETRIEVE_URL, {
+		const result: any = await this.api.callPostApi(PREF_RETRIEVE_URL, {
 			userId: currentUser.userId,
 			userName: currentUser.username,
 		});

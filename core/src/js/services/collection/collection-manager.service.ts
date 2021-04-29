@@ -74,8 +74,7 @@ export class CollectionManager {
 
 	public async getCardBacks(): Promise<readonly CardBack[]> {
 		console.log('[collection-manager] getting reference card backs');
-		this.referenceCardBacks =
-			this.referenceCardBacks ?? (await this.api.callGetApiWithRetries(CARD_BACKS_URL)) ?? [];
+		this.referenceCardBacks = this.referenceCardBacks ?? (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
 		console.log('[collection-manager] getting card backs', this.referenceCardBacks?.length);
 		const cardBacks = await this.memoryReading.getCardBacks();
 		console.log('[collection-manager] retrieved card backs from MindVision', cardBacks?.length);

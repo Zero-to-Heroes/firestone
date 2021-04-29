@@ -26,7 +26,7 @@ export class PackStatsService {
 			userId: user.userId,
 			userName: user.username,
 		};
-		const data: any = (await this.api.callPostApiWithRetries<any>(PACKS_RETRIEVE_URL, input, 3)) ?? [];
+		const data: any = (await this.api.callPostApi<any>(PACKS_RETRIEVE_URL, input)) ?? [];
 		return (
 			data.results
 				// Because of how pack logging used to work, when you received the 5 galakrond cards,

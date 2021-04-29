@@ -56,7 +56,7 @@ export class BgsRunStatsService {
 	}
 
 	public async retrieveReviewPostMatchStats(reviewId: string): Promise<void> {
-		const results = await this.apiRunner.callPostApiWithRetries<readonly BgsPostMatchStatsForReview[]>(
+		const results = await this.apiRunner.callPostApi<readonly BgsPostMatchStatsForReview[]>(
 			`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
 			{
 				reviewId: reviewId,
@@ -83,7 +83,7 @@ export class BgsRunStatsService {
 			heroCardId: heroCardId,
 			limitResults: numberOfStats,
 		};
-		const results = await this.apiRunner.callPostApiWithRetries<readonly BgsPostMatchStatsForReview[]>(
+		const results = await this.apiRunner.callPostApi<readonly BgsPostMatchStatsForReview[]>(
 			`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
 			input,
 		);

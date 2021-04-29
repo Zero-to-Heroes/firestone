@@ -106,7 +106,7 @@ export class RemoteAchievementsService {
 		return refreshedAchievements;
 	}
 
-	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 5): Promise<void> {
+	public async publishRemoteAchievement(achievement: Achievement): Promise<void> {
 		const [currentUser, reviewId] = await Promise.all([
 			this.userService.getCurrentUser(),
 			this.gameService.getCurrentReviewId(),
@@ -124,15 +124,15 @@ export class RemoteAchievementsService {
 			'cardId': achievement.displayCardId,
 			'numberOfCompletions': achievement.numberOfCompletions,
 		};
-		this.api.callPostApiWithRetries(ACHIEVEMENTS_UPDATE_URL, statEvent, retriesLeft);
+		this.api.callPostApi(ACHIEVEMENTS_UPDATE_URL, statEvent);
 	}
 
 	public async loadHsRawAchievements(): Promise<readonly HsRawAchievement[]> {
-		const raw: any = await this.api.callGetApiWithRetries(RAW_HS_ACHIEVEMENTS_RETRIEVE_URL);
+		const raw: any = await this.api.callGetApi(RAW_HS_ACHIEVEMENTS_RETRIEVE_URL);
 		return raw?.achievements || [];
 	}
 
 	private async loadRemoteAchievements(userInfo): Promise<readonly CompletedAchievement[]> {
-		return ((await this.api.callPostApiWithRetries(ACHIEVEMENTS_RETRIEVE_URL, userInfo)) as any)?.results || [];
+		return ((await this.api.callPostApi(ACHIEVEMENTS_RETRIEVE_URL, userInfo)) as any)?.results || [];
 	}
 }

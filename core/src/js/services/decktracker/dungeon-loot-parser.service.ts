@@ -195,7 +195,7 @@ export class DungeonLootParserService {
 			appVersion: process.env.APP_VERSION,
 		} as Input;
 		this.log('sending rewards info', this.rewardsInput);
-		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, this.rewardsInput, 3);
+		this.api.callPostApi(DUNGEON_LOOT_INFO_URL, this.rewardsInput);
 		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(this.rewardsInput));
 	}
 
@@ -371,7 +371,7 @@ export class DungeonLootParserService {
 			appVersion: process.env.APP_VERSION,
 		};
 		this.log('sending loot into', input);
-		this.api.callPostApiWithRetries(DUNGEON_LOOT_INFO_URL, input);
+		this.api.callPostApi(DUNGEON_LOOT_INFO_URL, input);
 		this.stateUpdater.next(new DungeonLootInfoUpdatedEvent(input));
 	}
 

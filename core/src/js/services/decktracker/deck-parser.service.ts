@@ -103,7 +103,7 @@ export class DeckParserService {
 			// 	this.selectedDeckId = null;
 			// }
 		});
-		const templatesFromRemote: readonly any[] = await this.api.callGetApiWithRetries(DECK_TEMPLATES_URL);
+		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
 		this.deckTemplates = (templatesFromRemote ?? [])
 			.filter(template => template.DeckList?.length)
 			.map(

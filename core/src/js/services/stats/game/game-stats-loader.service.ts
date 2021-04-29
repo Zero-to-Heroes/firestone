@@ -18,18 +18,18 @@ export class GameStatsLoaderService {
 	constructor(private api: ApiRunner, private ow: OverwolfService, private deckParser: DeckParserService) {}
 
 	public async retrieveArchetypesConfig(): Promise<readonly ArchetypeConfig[]> {
-		const config = await this.api.callGetApiWithRetries<readonly ArchetypeConfig[]>(ARCHETYPE_CONFIG_ENDPOINT);
+		const config = await this.api.callGetApi<readonly ArchetypeConfig[]>(ARCHETYPE_CONFIG_ENDPOINT);
 		console.log('[game-stats-loader] retrieving archetype config');
 		return config;
 	}
 
 	public async retrieveArchetypesStats(): Promise<ArchetypeStats> {
-		const stats = await this.api.callGetApiWithRetries<ArchetypeStats>(ARCHETYPE_STATS_ENDPOINT);
+		const stats = await this.api.callGetApi<ArchetypeStats>(ARCHETYPE_STATS_ENDPOINT);
 		console.log('[game-stats-loader] retrieving archetype stats');
 		return stats;
 	}
 
-	public async retrieveStats(retriesLeft = 5): Promise<GameStats> {
+	public async retrieveStats(): Promise<GameStats> {
 		const user = await this.ow.getCurrentUser();
 		const input = {
 			userId: user.userId,
@@ -41,7 +41,7 @@ export class GameStatsLoaderService {
 		// 	uploaderToken: `overwolf-OW_b874780e-9fba-49e2-82ff-b3530b0b7d7a`,
 		// };
 		console.log('[game-stats-loader] retrieving stats', user);
-		const data = await this.api.callPostApiWithRetries(GAME_STATS_ENDPOINT, input, retriesLeft);
+		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
 
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
 		this.gameStats = Object.assign(new GameStats(), {

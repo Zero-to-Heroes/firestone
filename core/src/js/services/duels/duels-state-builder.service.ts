@@ -78,7 +78,7 @@ export class DuelsStateBuilderService {
 	}
 
 	private async loadTopDeckRunDetails(runId: string, deckId: number) {
-		const results: any = await this.api.callGetApiWithRetries(`${DUELS_RUN_DETAILS_URL}/${runId}?v=3`);
+		const results: any = await this.api.callGetApi(`${DUELS_RUN_DETAILS_URL}/${runId}?v=3`);
 		// console.log('[duels-state-builder] laoded run details', results);
 		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
 		this.mainWindowStateUpdater.next(
@@ -96,7 +96,7 @@ export class DuelsStateBuilderService {
 			userId: user.userId,
 			userName: user.username,
 		};
-		const results: any = await this.api.callPostApiWithRetries(DUELS_RUN_INFO_URL, input);
+		const results: any = await this.api.callPostApi(DUELS_RUN_INFO_URL, input);
 		const stepResults: readonly DuelsRunInfo[] =
 			results?.results.map(
 				info =>
@@ -113,7 +113,7 @@ export class DuelsStateBuilderService {
 	}
 
 	public async loadGlobalStats(): Promise<DuelsGlobalStats> {
-		const result: DuelsGlobalStats = await this.api.callGetApiWithRetries(DUELS_GLOBAL_STATS_URL);
+		const result: DuelsGlobalStats = await this.api.callGetApi(DUELS_GLOBAL_STATS_URL);
 		console.log('[duels-state-builder] loaded global stats');
 		return result;
 	}
@@ -264,12 +264,12 @@ export class DuelsStateBuilderService {
 			(stat: SignatureTreasureStat) => stat.signatureTreasureCardId,
 			prefs,
 		);
-		console.debug(
-			'built signature treasures stats',
-			signatureTreasureStats,
-			periodStats.signatureTreasureStats,
-			globalStats,
-		);
+		// console.debug(
+		// 	'built signature treasures stats',
+		// 	signatureTreasureStats,
+		// 	periodStats.signatureTreasureStats,
+		// 	globalStats,
+		// );
 		const treasureStats: readonly DuelsTreasureStat[] = this.buildTreasureStats(
 			runs,
 			periodStats.treasureStats,
