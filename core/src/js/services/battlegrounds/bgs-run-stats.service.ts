@@ -3,7 +3,6 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/compute-bgs-run-stats/dist/model/input';
 import { buildNewStats } from '@firestone-hs/compute-bgs-run-stats/dist/stats-builder';
-import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';
@@ -24,8 +23,13 @@ import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 import { RealTimeStatsState } from './store/real-time-stats/real-time-stats';
 
-const BGS_UPLOAD_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const BGS_RETRIEVE_RUN_STATS_ENDPOINT = ' https://pbd6q0rx4h.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+// const BGS_UPLOAD_RUN_STATS_ENDPOINT = 'https://6x37md7760.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+// const BGS_RETRIEVE_RUN_STATS_ENDPOINT = ' https://pbd6q0rx4h.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
+
+const POST_MATCH_STATS_UPDATE_URL =
+	'https://api.firestoneapp.com/userBgsPostMatchStats/save/userBgsPostMatchStats/{proxy+}';
+const POST_MATCH_STATS_RETRIEVE_URL =
+	'https://api.firestoneapp.com/userBgsPostMatchStats/get/userBgsPostMatchStats/{proxy+}';
 
 @Injectable()
 export class BgsRunStatsService {
@@ -57,7 +61,7 @@ export class BgsRunStatsService {
 
 	public async retrieveReviewPostMatchStats(reviewId: string): Promise<void> {
 		const results = await this.apiRunner.callPostApi<readonly BgsPostMatchStatsForReview[]>(
-			`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
+			`${POST_MATCH_STATS_RETRIEVE_URL}`,
 			{
 				reviewId: reviewId,
 			},
@@ -84,7 +88,7 @@ export class BgsRunStatsService {
 			limitResults: numberOfStats,
 		};
 		const results = await this.apiRunner.callPostApi<readonly BgsPostMatchStatsForReview[]>(
-			`${BGS_RETRIEVE_RUN_STATS_ENDPOINT}`,
+			`${POST_MATCH_STATS_RETRIEVE_URL}`,
 			input,
 		);
 		console.log('[bgs-run-stats] last run stats', results);
@@ -125,14 +129,15 @@ export class BgsRunStatsService {
 		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
 	}
 
-	private async buildStatsRemotely(input: BgsComputeRunStatsInput): Promise<IBgsPostMatchStats> {
+	private async buildStatsRemotely(input: BgsComputeRunStatsInput): Promise<void> {
 		console.log('[bgs-run-stats] preparing to build stats remotely', input.reviewId);
 		// Because it takes some time for the review to be processed, and we don't want to
 		// use a lambda simply to wait, as it costs money :)
 		await sleep(5000);
 		console.log('[bgs-run-stats] contacting remote endpoint', input.reviewId);
 		try {
-			return (await this.http.post(BGS_UPLOAD_RUN_STATS_ENDPOINT, input).toPromise()) as IBgsPostMatchStats;
+			await this.apiRunner.callPostApi(POST_MATCH_STATS_UPDATE_URL, input);
+			return;
 		} catch (e) {
 			console.error('[bgs-run-stats] issue while posting post-match stats', input.reviewId, e);
 		}
