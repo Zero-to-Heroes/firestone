@@ -119,7 +119,12 @@ export class PackMonitor {
 
 	private detectRevealedCard(i: number) {
 		// card has been revealed already
-		if (this.unrevealedCards[i].revealed || !this.unrevealedCards[i]) {
+		if (
+			(this.unrevealedCards?.length ?? 0) <= i ||
+			!this.unrevealedCards[i] ||
+			this.unrevealedCards[i].revealed ||
+			!this.unrevealedCards[i]
+		) {
 			return;
 		}
 
