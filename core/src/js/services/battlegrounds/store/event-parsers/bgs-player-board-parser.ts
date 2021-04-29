@@ -23,6 +23,12 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsPlayerBoardEvent): Promise<BattlegroundsState> {
+		console.log(
+			'[bgs-simulation] received player boards',
+			event.playerBoard?.board?.length,
+			event.opponentBoard?.board?.length,
+		);
+		// console.debug('[bgs-simulation] received player boards', event);
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
 			console.error(
 				'no-format',
@@ -44,7 +50,9 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		const player: BgsPlayer = this.updatePlayer(currentState, event.playerBoard);
 		const opponent: BgsPlayer = this.updatePlayer(currentState, event.opponentBoard);
+		// console.debug('[bgs-simulation] players', player, opponent, currentState, event);
 		if (!player || !opponent) {
+			console.warn('[bgs-simulation] missing player or opponent, returning');
 			return currentState;
 		}
 
@@ -59,6 +67,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			opponentBoard: bgsOpponent,
 			options: null,
 		};
+		// console.debug('[bgs-simulation] battleInfo', battleInfo);
 
 		const prefs = await this.prefs.getPreferences();
 		const showSimulation = !prefs.bgsShowSimResultsOnlyOnRecruit;

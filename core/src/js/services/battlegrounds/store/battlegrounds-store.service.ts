@@ -295,13 +295,27 @@ export class BattlegroundsStoreService {
 					!this.state.currentGame.battleResult ||
 					(prefs.bgsEnableSimulation && !this.state.currentGame.battleInfo)
 				) {
-					console.error(
-						'no-format',
-						'[bgs-simulation] Received battle result with an incomplete battle info',
-						this.state.currentGame.battleInfo,
-						this.state.currentGame.battleResult,
-						prefs.bgsEnableSimulation,
-					);
+					// When no one has a board (or rather, when no player ever attacks during the battle),
+					// the PLAYER_BOARD event is not sent, and so battle result is never set
+					// Ties in battle are the only situation where this can happen, so I'm for now downgrading
+					// the severity when the result is a tie
+					if (gameEvent.additionalData.result === 'tied') {
+						console.warn(
+							'no-format',
+							'[bgs-simulation] Received battle result with an incomplete battle info',
+							this.state.currentGame.battleInfo,
+							this.state.currentGame.battleResult,
+							prefs.bgsEnableSimulation,
+						);
+					} else {
+						console.error(
+							'no-format',
+							'[bgs-simulation] Received battle result with an incomplete battle info',
+							this.state.currentGame.battleInfo,
+							this.state.currentGame.battleResult,
+							prefs.bgsEnableSimulation,
+						);
+					}
 				}
 				this.battlegroundsUpdater.next(
 					new BgsBattleResultEvent(
