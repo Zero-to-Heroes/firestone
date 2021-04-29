@@ -109,6 +109,10 @@ export class DuelsDeckStatsComponent {
 				.reduce((a, b) => a.concat(b), [])
 				.filter(deck => deck)
 				.find(deck => deck.id === this._navigation.selectedDeckId);
+			if (!deckStat) {
+				console.warn('[duels-deck@ could not find deckstat', this._navigation.selectedDeckId);
+				return null;
+			}
 			const additionalStat = (this._state.additionalDeckDetails ?? [])
 				.filter(stat => stat)
 				.find(stat => stat.id === deckStat.id);
