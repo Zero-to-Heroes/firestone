@@ -135,7 +135,6 @@ export class AppBootstrapService {
 				// This can happen when we're in another game, so we exit the app for good
 				// console.log('[bootstrap] left game, showing replay tab', res);
 				if (this.ow.inAnotherGame(res)) {
-					// console.log('in another game, hiding app', res);
 					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW);
 					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
 					this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
@@ -291,6 +290,7 @@ export class AppBootstrapService {
 
 	private async handleExitGame() {
 		const prefs = await this.prefs.getPreferences();
+		await this.prefs.updateRemotePreferences();
 		if (prefs.showSessionRecapOnExit) {
 			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
 		} else {
