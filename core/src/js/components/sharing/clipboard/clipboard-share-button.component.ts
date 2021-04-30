@@ -27,7 +27,7 @@ declare let amplitude;
 			[stayOpenOnClick]="false"
 			[inlineSVG]="networkSvg"
 		></div>
-		<div class="label" *ngIf="showLabel">Screenshot</div>
+		<div class="label" *ngIf="showLabel">Clipboard</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
