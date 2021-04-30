@@ -277,44 +277,47 @@ export class BattlegroundsStoreService {
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
 				// Sometimes the battle result arrives before the simulation is completed
-				if (
-					this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId &&
-					this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId !==
-						gameEvent.additionalData.opponent &&
-					gameEvent.additionalData.opponent != CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2
-				) {
-					console.error(
-						'no-format',
-						'[bgs-simulation] Received battle result with an incompatible battle sim',
-						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId,
-						gameEvent.additionalData.opponent,
-						this.state.currentGame.battleInfo,
-						this.state.currentGame.battleResult,
-					);
-				} else if (
-					!this.state.currentGame.battleResult ||
-					(prefs.bgsEnableSimulation && !this.state.currentGame.battleInfo)
-				) {
-					// When no one has a board (or rather, when no player ever attacks during the battle),
-					// the PLAYER_BOARD event is not sent, and so battle result is never set
-					// Ties in battle are the only situation where this can happen, so I'm for now downgrading
-					// the severity when the result is a tie
-					if (gameEvent.additionalData.result === 'tied') {
-						console.warn(
-							'no-format',
-							'[bgs-simulation] Received battle result with an incomplete battle info',
-							this.state.currentGame.battleInfo,
-							this.state.currentGame.battleResult,
-							prefs.bgsEnableSimulation,
-						);
-					} else {
+				if (prefs.bgsEnableSimulation) {
+					if (
+						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId &&
+						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId !==
+							gameEvent.additionalData.opponent &&
+						gameEvent.additionalData.opponent != CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2
+					) {
 						console.error(
 							'no-format',
-							'[bgs-simulation] Received battle result with an incomplete battle info',
+							'[bgs-simulation] Received battle result with an incompatible battle sim',
+							this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId,
+							gameEvent.additionalData.opponent,
 							this.state.currentGame.battleInfo,
 							this.state.currentGame.battleResult,
-							prefs.bgsEnableSimulation,
 						);
+					} else if (!this.state.currentGame.battleResult || !this.state.currentGame.battleInfo) {
+						// When no one has a board (or rather, when no player ever attacks during the battle),
+						// the PLAYER_BOARD event is not sent, and so battle result is never set
+						// Ties in battle are the only situation where this can happen, so I'm for now downgrading
+						// the severity when the result is a tie
+						if (gameEvent.additionalData.result === 'tied') {
+							console.warn(
+								'no-format',
+								'[bgs-simulation] Received battle result with an incomplete battle info',
+								this.state.currentGame.battleInfo,
+								this.state.currentGame.battleResult,
+								prefs.bgsEnableSimulation,
+							);
+						} else {
+							console.error(
+								'no-format',
+								'[bgs-simulation] Received battle result with an incomplete battle info',
+								this.state.currentGame.currentTurn,
+								this.state.currentGame.battleInfo?.playerBoard?.board?.length,
+								this.state.currentGame.battleInfo?.opponentBoard?.board?.length,
+								this.state.currentGame.battleInfo,
+								this.state.currentGame.battleResult,
+								prefs.bgsEnableSimulation,
+								gameEvent.additionalData.result,
+							);
+						}
 					}
 				}
 				this.battlegroundsUpdater.next(
