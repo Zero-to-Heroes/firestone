@@ -75,7 +75,7 @@ export class ChallengeBuilderService {
 
 	public buildChallenge(raw: RawAchievement): Challenge {
 		// The case for the HS achievements, which are not computed by Firestone
-		if (!raw.requirements) {
+		if (!raw?.requirements) {
 			return null;
 		}
 		const requirements: readonly Requirement[] = this.buildRequirements(raw.requirements);
