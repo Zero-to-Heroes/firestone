@@ -30,7 +30,7 @@ export class CardBackToDeckParser implements EventParser {
 		// When we have a deckstring / decklist, we show all the possible remaining options in the
 		// decklist. This means that when a filler card goes back, it's one of these initial cards
 		// that goes back, and so we don't add them once again
-		const shouldKeepDeckAsIs = deck.deckstring && card.inInitialDeck && !card.cardId;
+		const shouldKeepDeckAsIs = deck.deckstring && card?.inInitialDeck && !card?.cardId;
 		// console.log('shouldKeepDeckAsIs', shouldKeepDeckAsIs, deck.deckstring, card.isFiller(), deck, card);
 		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
 		// put back in the deck, then drawn again. If we don't reset the lastInfluencedBy, we
@@ -60,23 +60,26 @@ export class CardBackToDeckParser implements EventParser {
 	}
 
 	private findCard(initialZone: string, deckState: DeckState, cardId: string, entityId: number): DeckCard {
+		let result = null;
 		if (initialZone === 'HAND') {
-			return this.helper.findCardInZone(deckState.hand, cardId, entityId);
+			result = this.helper.findCardInZone(deckState.hand, cardId, entityId);
 		} else if (initialZone === 'PLAY') {
-			return this.helper.findCardInZone(deckState.board, cardId, entityId);
-		}
-		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
-			return this.helper.findCardInZone(deckState.otherZone, cardId, entityId);
+			result = this.helper.findCardInZone(deckState.board, cardId, entityId);
+		} else if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
+			result = this.helper.findCardInZone(deckState.otherZone, cardId, entityId);
 		}
 		// console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
-		const dbCard = this.allCards.getCard(cardId) || ({} as ReferenceCard);
-		return DeckCard.create({
-			cardId: cardId,
-			entityId: entityId,
-			cardName: dbCard.name,
-			manaCost: dbCard.cost,
-			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
-		} as DeckCard);
+		const dbCard = (cardId && this.allCards.getCard(cardId)) || ({} as ReferenceCard);
+		return (
+			result ??
+			DeckCard.create({
+				cardId: cardId,
+				entityId: entityId,
+				cardName: dbCard.name,
+				manaCost: dbCard.cost,
+				rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
+			} as DeckCard)
+		);
 	}
 
 	private buildNewHand(
@@ -84,7 +87,7 @@ export class CardBackToDeckParser implements EventParser {
 		previousHand: readonly DeckCard[],
 		movedCard: DeckCard,
 	): readonly DeckCard[] {
-		if (initialZone !== 'HAND') {
+		if (initialZone !== 'HAND' || !movedCard) {
 			return previousHand;
 		}
 		return this.helper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId)[0];
@@ -95,7 +98,7 @@ export class CardBackToDeckParser implements EventParser {
 		previousOther: readonly DeckCard[],
 		movedCard: DeckCard,
 	): readonly DeckCard[] {
-		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
+		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1 || !movedCard) {
 			return this.helper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId)[0];
 		}
 		return previousOther;
@@ -106,7 +109,7 @@ export class CardBackToDeckParser implements EventParser {
 		previousBOard: readonly DeckCard[],
 		movedCard: DeckCard,
 	): readonly DeckCard[] {
-		if (initialZone !== 'PLAY') {
+		if (initialZone !== 'PLAY' || !movedCard) {
 			return previousBOard;
 		}
 		return this.helper.removeSingleCardFromZone(previousBOard, movedCard.cardId, movedCard.entityId)[0];
