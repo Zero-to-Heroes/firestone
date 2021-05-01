@@ -375,7 +375,7 @@ export class AchievementsMonitor {
 				return;
 			}
 
-			const currentState = await this.achievementsManager.getAchievements(true);
+			const currentState = await this.achievementsManager.getAchievements(true, false);
 			const diff = this.achievementsDiff(this.previousState, currentState);
 			if (diff?.length) {
 				this.stateUpdater.next(new AchievementsUpdatedEvent(diff));

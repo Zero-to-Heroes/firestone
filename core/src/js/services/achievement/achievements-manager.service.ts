@@ -13,21 +13,26 @@ export class AchievementsManager {
 		private readonly events: Events,
 	) {}
 
-	public async getAchievements(forceMemory = false): Promise<readonly HsAchievementInfo[]> {
-		// console.log('[achievements-manager] getting achievements');
+	public async getAchievements(forceMemory = false, shouldLog = true): Promise<readonly HsAchievementInfo[]> {
+		shouldLog && console.log('[achievements-manager] getting achievements');
 		const achievements = await this.memoryReading.getAchievementsInfo();
-		// console.log('[achievements-manager] retrieved achievements from memory', achievements?.achievements?.length);
+		shouldLog &&
+			console.log(
+				'[achievements-manager] retrieved achievements from memory',
+				achievements?.achievements?.length,
+			);
 		if (!achievements?.achievements?.length) {
 			if (!forceMemory) {
-				// console.log('[achievements-manager] retrieving achievements from db');
+				shouldLog && console.log('[achievements-manager] retrieving achievements from db');
 				const fromDb = await this.db.retrieveInGameAchievements();
-				// console.log('[achievements-manager] retrieved achievements from db', fromDb?.achievements?.length);
+				shouldLog &&
+					console.log('[achievements-manager] retrieved achievements from db', fromDb?.achievements?.length);
 				return fromDb?.achievements || [];
 			} else {
 				return [];
 			}
 		} else {
-			// console.log('[achievements-manager] updating achievements in db');
+			shouldLog && console.log('[achievements-manager] updating achievements in db');
 			const savedCollection = await this.db.saveInGameAchievements(achievements);
 			return savedCollection?.achievements || [];
 		}

@@ -77,20 +77,33 @@ export class RemoteAchievementsService {
 
 		const existingAchievements = this.indexedDb.getAll();
 		const achievementsFromMemory = await this.manager.getAchievements();
-		console.log('[remote-achievements] laoded from memory', achievementsFromMemory?.length);
 		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
 			CompletedAchievement.create({
 				id: `hearthstone_game_${ach.id}`,
 				numberOfCompletions: ach.completed ? 1 : 0,
 			} as CompletedAchievement),
 		);
+		console.log(
+			'[remote-achievements] laoded from memory',
+			existingAchievements?.length,
+			achievementsFromMemory?.length,
+		);
 
+		const existingAchievementIds = existingAchievements.map(a => a.id);
+		const achievementsFromMemoryIds = completedAchievementsFromMemory.map(a => a.id);
+		console.log(
+			'[remote-achievements] mapping ids',
+			existingAchievementIds?.length,
+			achievementsFromMemoryIds?.length,
+			existingAchievementIds,
+			achievementsFromMemoryIds,
+		);
+		const allIds = [...existingAchievementIds, ...achievementsFromMemoryIds];
+		console.log('[remote-achievements] all ids', allIds?.length, allIds);
 		// Since when doing a reload we don't refresh the achievements from remote, we
 		// need to merge the reloaded achievements with the existing cache
-		const uniqueIds = [
-			...new Set(...existingAchievements.map(a => a.id), ...completedAchievementsFromMemory.map(a => a.id)),
-		];
-		console.log('[remote-achievements] unique Ids', uniqueIds?.length);
+		const uniqueIds = [...new Set(allIds)];
+		console.log('[remote-achievements] unique Ids', uniqueIds?.length, uniqueIds);
 		const refreshedAchievements = uniqueIds.map(id => {
 			const newFromMemory = completedAchievementsFromMemory.find(a => a.id === id);
 			return newFromMemory ?? this.indexedDb.getAchievement(id);
