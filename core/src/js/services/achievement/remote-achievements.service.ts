@@ -103,6 +103,13 @@ export class RemoteAchievementsService {
 		// Since when doing a reload we don't refresh the achievements from remote, we
 		// need to merge the reloaded achievements with the existing cache
 		const uniqueIds = [...new Set(allIds)];
+		if (uniqueIds.length < achievementsFromMemory?.length) {
+			console.error(
+				'[remote-achievements] error while building unique Ids',
+				uniqueIds.length,
+				achievementsFromMemory?.length,
+			);
+		}
 		console.log('[remote-achievements] unique Ids', uniqueIds?.length, uniqueIds);
 		const refreshedAchievements = uniqueIds.map(id => {
 			const newFromMemory = completedAchievementsFromMemory.find(a => a.id === id);
