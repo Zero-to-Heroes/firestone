@@ -52,7 +52,7 @@ import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_REWARDS_INFO_URL = 'https://1ntio3mhgd.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=10';
+const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=11';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
