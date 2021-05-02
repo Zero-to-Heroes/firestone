@@ -277,6 +277,7 @@ export class DungeonLootParserService {
 				return true;
 			}
 			if (
+				!this.lastDuelsMatch.playerClass ||
 				CardClass[this.duelsInfo.PlayerClass]?.toLowerCase() !== this.lastDuelsMatch.playerClass.toLowerCase()
 			) {
 				this.log(

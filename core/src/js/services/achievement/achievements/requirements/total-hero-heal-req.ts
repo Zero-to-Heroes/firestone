@@ -36,8 +36,8 @@ export class TotalHeroHealReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		const localPlayerCardId = gameEvent.localPlayer.CardID;
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
+		const localPlayerCardId = gameEvent.localPlayer?.CardID;
+		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const healingForLocalPlayer = gameEvent.additionalData.targets[localPlayerCardId];
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
 		if (healingForLocalPlayer && healingForLocalPlayer.TargetControllerId === localPlayerId) {

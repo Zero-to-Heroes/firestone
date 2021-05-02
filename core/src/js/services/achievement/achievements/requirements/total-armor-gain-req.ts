@@ -36,7 +36,7 @@ export class TotalArmorGainReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
+		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const controllerId = gameEvent.controllerId;
 		// We only count the armor gained here, not the real armor the hero has
 		if (localPlayerId === controllerId && gameEvent.additionalData.armorChange > 0) {

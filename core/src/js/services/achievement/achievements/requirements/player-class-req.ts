@@ -1,7 +1,7 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 
 export class PlayerClassReq implements Requirement {
 	private isCorrectPlayerClass: boolean;
@@ -35,8 +35,8 @@ export class PlayerClassReq implements Requirement {
 
 	private handleEvent(gameEvent: GameEvent) {
 		const localPlayer = gameEvent.localPlayer;
-		if (localPlayer.CardID) {
-			const card = this.cards.getCard(localPlayer.CardID);
+		if (localPlayer?.CardID) {
+			const card = this.cards.getCard(localPlayer?.CardID);
 			const playerClass = card && card.playerClass ? card.playerClass.toLowerCase() : null;
 			this.isCorrectPlayerClass = playerClass === this.playerClass;
 		}

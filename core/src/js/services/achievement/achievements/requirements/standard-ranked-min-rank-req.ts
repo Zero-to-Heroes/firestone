@@ -67,6 +67,5 @@ export class StandardRankedMinLeagueReq implements Requirement {
 			//console.log('isMinLeague', true, this.targetRank);
 			this.isMinLeague = true;
 		}
-		// console.log('[debug] [ranked-min] player', this.isMinLeague, gameEvent.localPlayer.standard);
 	}
 }

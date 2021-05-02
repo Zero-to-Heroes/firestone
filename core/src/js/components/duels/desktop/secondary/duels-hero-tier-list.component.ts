@@ -47,6 +47,9 @@ export class DuelsHeroTierListComponent implements AfterViewInit {
 			return;
 		}
 		const stats = this.buildStats();
+		if (!stats) {
+			return;
+		}
 
 		this.tiers = [
 			{

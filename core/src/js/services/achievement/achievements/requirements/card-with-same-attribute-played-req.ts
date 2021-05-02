@@ -68,9 +68,8 @@ export class CardWithSameAttributePlayedReq implements Requirement {
 			return;
 		}
 
-		// console.log('handling card played event', cardId, controllerId, localPlayer.PlayerId);
 		if (
-			controllerId === localPlayer.PlayerId &&
+			controllerId === localPlayer?.PlayerId &&
 			CardType[card.type.toUpperCase()] === this.cardType &&
 			!this.hasEcho(card)
 		) {

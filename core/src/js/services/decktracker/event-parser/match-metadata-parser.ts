@@ -125,8 +125,8 @@ export class MatchMetadataParser implements EventParser {
 			})
 			.map(heroCard =>
 				Object.assign(new HeroCard(), {
-					cardId: heroCard.id,
-					name: heroCard.name,
+					cardId: heroCard?.id,
+					name: heroCard?.name,
 				} as HeroCard),
 			)[0];
 	}

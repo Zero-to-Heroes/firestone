@@ -38,7 +38,7 @@ export class DeathrattleTriggeredReq extends AbstractRequirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		if (gameEvent.controllerId == gameEvent.localPlayer.PlayerId && this.targetCardId === gameEvent.cardId) {
+		if (gameEvent.controllerId == gameEvent.localPlayer?.PlayerId && this.targetCardId === gameEvent.cardId) {
 			this.hasTriggered = true;
 		}
 	}

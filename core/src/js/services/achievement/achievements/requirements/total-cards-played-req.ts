@@ -68,7 +68,7 @@ export class TotalCardsPlayedReq implements Requirement {
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const card = this.cards.getCard(cardId);
-		if (controllerId === localPlayer.PlayerId && this.getCardType(card) === this.cardType) {
+		if (controllerId === localPlayer?.PlayerId && this.getCardType(card) === this.cardType) {
 			this.playCounts++;
 		}
 	}

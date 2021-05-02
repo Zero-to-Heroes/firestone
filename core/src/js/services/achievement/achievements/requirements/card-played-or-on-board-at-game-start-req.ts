@@ -42,7 +42,7 @@ export class CardPlayedOrOnBoardAtGameStartReq implements Requirement {
 		const cardId = gameEvent.cardId;
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
-		if (cardId === this.cardId && controllerId === localPlayer.PlayerId) {
+		if (cardId === this.cardId && controllerId === localPlayer?.PlayerId) {
 			this.isCardPlayed = true;
 		}
 	}

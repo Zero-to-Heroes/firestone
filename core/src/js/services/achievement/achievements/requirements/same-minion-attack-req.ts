@@ -53,7 +53,7 @@ export class SameMinionAttackReq implements Requirement {
 		const card = this.cards.getCard(cardId);
 		// console.log('handling attack event', gameEvent, card);
 		if (
-			controllerId === localPlayer.PlayerId &&
+			controllerId === localPlayer?.PlayerId &&
 			card.type &&
 			CardType[card.type.toUpperCase()] === CardType.MINION
 		) {

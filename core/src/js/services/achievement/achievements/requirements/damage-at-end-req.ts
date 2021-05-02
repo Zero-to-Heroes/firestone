@@ -33,7 +33,7 @@ export class DamageAtEndReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		const localPlayerDamage = gameEvent.additionalData.report.LocalPlayer.DamageTaken;
+		const localPlayerDamage = gameEvent.additionalData.report.LocalPlayer?.DamageTaken;
 		if (localPlayerDamage === this.targetDamage) {
 			this.hasCorrectDamageAtEnd = true;
 		}

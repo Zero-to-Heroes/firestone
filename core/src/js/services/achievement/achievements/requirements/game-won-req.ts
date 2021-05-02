@@ -34,7 +34,7 @@ export class GameWonReq implements Requirement {
 	private detectGameResultEvent(gameEvent: GameEvent) {
 		const winner = gameEvent.additionalData.winner;
 		const localPlayer = gameEvent.localPlayer;
-		if (localPlayer.Id === winner.Id) {
+		if (winner && localPlayer?.Id === winner.Id) {
 			this.isWon = true;
 		}
 		// console.log('[debug] [won] gameresult', this.isWon, gameEvent);

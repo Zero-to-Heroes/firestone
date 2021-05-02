@@ -38,7 +38,7 @@ export class SecretTriggeredReq extends AbstractRequirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		if (gameEvent.controllerId == gameEvent.localPlayer.PlayerId && this.targetSecret === gameEvent.cardId) {
+		if (gameEvent.controllerId == gameEvent.localPlayer?.PlayerId && this.targetSecret === gameEvent.cardId) {
 			this.hasTriggered = true;
 		}
 	}

@@ -47,7 +47,7 @@ export class DeckbuildingRarityReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		const deck = gameEvent.localPlayer.deck ? gameEvent.localPlayer.deck.deck : null;
+		const deck = gameEvent.localPlayer?.deck ? gameEvent.localPlayer.deck.deck : null;
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
 			const numberOfMatchingCards: number = cards.filter(

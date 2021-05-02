@@ -37,7 +37,7 @@ export class ResummonRecurringVillainRew implements Requirement {
 
 	private handleEvent(gameEvent: GameEvent) {
 		if (
-			gameEvent.controllerId == gameEvent.localPlayer.PlayerId &&
+			gameEvent.controllerId == gameEvent.localPlayer?.PlayerId &&
 			gameEvent.cardId === 'DAL_749' &&
 			gameEvent.additionalData.creatorCardId === 'DAL_749'
 		) {

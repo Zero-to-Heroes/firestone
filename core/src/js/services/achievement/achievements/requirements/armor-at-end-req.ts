@@ -33,7 +33,7 @@ export class ArmorAtEndReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		if (gameEvent.additionalData.report.LocalPlayer.ArmorLeft === this.targetArmor) {
+		if (gameEvent.additionalData.report.LocalPlayer?.ArmorLeft === this.targetArmor) {
 			this.hasCorrectArmorAtEnd = true;
 		}
 	}

@@ -31,7 +31,7 @@ export class PackStatsService {
 			data.results
 				// Because of how pack logging used to work, when you received the 5 galakrond cards,
 				// the app flagged that as a new pack
-				.filter(pack => !this.isPackAllGalakronds(pack))
+				?.filter(pack => !this.isPackAllGalakronds(pack)) ?? []
 		);
 	}
 

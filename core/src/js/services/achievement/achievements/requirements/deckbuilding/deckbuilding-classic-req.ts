@@ -31,7 +31,7 @@ export class DeckbuildingClassicReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		const deck = gameEvent.localPlayer.deck ? gameEvent.localPlayer.deck.deck : null;
+		const deck = gameEvent.localPlayer?.deck ? gameEvent.localPlayer.deck.deck : null;
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const dbfIds = deck.cards.map(pair => pair[0]);
 			const cards: any[] = this.cards.getCardsFromDbfIds(dbfIds);

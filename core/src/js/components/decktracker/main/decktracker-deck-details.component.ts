@@ -100,6 +100,6 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.deck = this._state.decktracker.decks.find(
 			deck => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
-		console.log('updating deck', this.deck);
+		// console.debug('updating deck', this.deck);
 	}
 }

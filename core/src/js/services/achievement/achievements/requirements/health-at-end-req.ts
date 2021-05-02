@@ -37,8 +37,8 @@ export class HealthAtEndReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		const localPlayerMaxHealth = gameEvent.additionalData.report.LocalPlayer.TotalHealth;
-		const localPlayerDamage = gameEvent.additionalData.report.LocalPlayer.DamageTaken;
+		const localPlayerMaxHealth = gameEvent.additionalData.report.LocalPlayer?.TotalHealth;
+		const localPlayerDamage = gameEvent.additionalData.report.LocalPlayer?.DamageTaken;
 		const healthDelta = localPlayerMaxHealth - localPlayerDamage;
 
 		if (this.qualifier === '' && healthDelta === this.targetHealth) {

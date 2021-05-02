@@ -39,7 +39,7 @@ export class BattlegroundsTriplePlayReq implements Requirement {
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
 		const isPremium = gameEvent.additionalData.isPremium;
-		if (this.cardIds.indexOf(cardId) !== -1 && controllerId === localPlayer.PlayerId && isPremium) {
+		if (this.cardIds.indexOf(cardId) !== -1 && controllerId === localPlayer?.PlayerId && isPremium) {
 			this.isCardDrawn = true;
 		}
 	}
