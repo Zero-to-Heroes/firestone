@@ -16,6 +16,10 @@ export class ShowReplayProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
+		if (!selectedInfo) {
+			console.warn('Could not find selected info for replay', event.reviewId);
+			return [currentState, navigationState];
+		}
 
 		// Figure out if we have already loaded the stats, or if we need a refresh
 		if (navigationState.navigationReplays.selectedReplay?.replayInfo?.reviewId === event.reviewId) {

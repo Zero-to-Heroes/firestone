@@ -133,8 +133,11 @@ export class CardsMonitorService {
 			const cardId = data[0].cardId;
 			const type = data[0].cardType;
 			const cardInCollection = collection.find(c => c.id === cardId);
-			const existingCount =
-				data[0].cardType === 'GOLDEN' ? cardInCollection.premiumCount : cardInCollection.count;
+			const existingCount = !cardInCollection
+				? 0
+				: data[0].cardType === 'GOLDEN'
+				? cardInCollection.premiumCount
+				: cardInCollection.count;
 			// console.debug('handling', data, existingCount, cardId, type, cardInCollection);
 			for (let i = existingCount; i < existingCount + data.length; i++) {
 				this.handleNotification(cardId, type, i + 1, false);

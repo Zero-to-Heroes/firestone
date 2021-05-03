@@ -195,13 +195,13 @@ export class RewardMonitorService {
 						  (RewardMonitorService.XP_PER_LEVEL.get(xpChange.PreviousLevel, 1500) - xpChange.PreviousXp) +
 						  this.getXpForIntermediaryLevels(xpChange.PreviousLevel, xpChange.CurrentLevel);
 				const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
-				const xpModifier = 1 + (rewardTrackInfo.XpBonusPercent ?? 0) / 100;
+				const xpModifier = 1 + (rewardTrackInfo?.XpBonusPercent ?? 0) / 100;
 				const rawXpGained = xpGained / xpModifier;
 				if (prefs.showXpRecapAtGameEnd) {
 					this.xpForGameInfo = {
 						xpGainedWithoutBonus: rawXpGained,
 						realXpGained: xpGained,
-						bonusXp: rewardTrackInfo.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
+						bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
 						levelsGained: levelsGained,
 						currentXp: xpChange.CurrentXp,
 						xpNeeded: RewardMonitorService.XP_PER_LEVEL.get(xpChange.CurrentLevel, 1500),

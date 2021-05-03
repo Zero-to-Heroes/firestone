@@ -127,12 +127,14 @@ export class AchievementsRepository {
 	): Promise<readonly VisualAchievementCategory[]> {
 		const categoryConfiguration: AchievementConfiguration = await this.loadConfiguration();
 
-		return categoryConfiguration.categories.map(category => this.buildCategory(category, achievements));
+		return categoryConfiguration.categories
+			.filter(cat => cat)
+			.map(category => this.buildCategory(category, achievements));
 	}
 
 	private async loadConfiguration(): Promise<AchievementConfiguration> {
 		const config: any = await this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/_configuration.json?v=9`);
-		const fileNames: readonly string[] = config.categories;
+		const fileNames: readonly string[] = config?.categories ?? [];
 		const categories: readonly AchievementCategoryConfiguration[] = (await Promise.all(
 			fileNames.map(fileName => this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=15`)),
 		)) as any;
@@ -151,9 +153,9 @@ export class AchievementsRepository {
 			icon: category.icon,
 			achievements: this.buildAchievements(category.achievementTypes, achievements),
 			categories:
-				(category.categories?.map(cat =>
-					this.buildCategory(cat, achievements),
-				) as readonly VisualAchievementCategory[]) || [],
+				(category.categories
+					?.filter(cat => cat)
+					?.map(cat => this.buildCategory(cat, achievements)) as readonly VisualAchievementCategory[]) || [],
 		} as VisualAchievementCategory);
 	}
 

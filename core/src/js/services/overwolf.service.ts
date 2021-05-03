@@ -462,7 +462,7 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			overwolf.settings.hotkeys.get((res: any) => {
 				const game: any[] = res.games[HEARTHSTONE_GAME_ID];
-				const hotkey = game.find((key: any) => key.name === hotkeyName);
+				const hotkey = game?.find((key: any) => key.name === hotkeyName);
 				resolve(hotkey);
 			});
 		});

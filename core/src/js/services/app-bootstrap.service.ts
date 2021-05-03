@@ -291,7 +291,7 @@ export class AppBootstrapService {
 	private async handleExitGame() {
 		const prefs = await this.prefs.getPreferences();
 		await this.prefs.updateRemotePreferences();
-		if (prefs.showSessionRecapOnExit) {
+		if (prefs.showSessionRecapOnExit && this.stateUpdater) {
 			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
 		} else {
 			this.ow.closeWindow(OverwolfService.MAIN_WINDOW);

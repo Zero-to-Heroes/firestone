@@ -141,10 +141,10 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 					this.decklist = null;
 					return;
 				}
-				const runMatches: readonly GameStat[] = this.currentRun.steps
+				const runMatches: readonly GameStat[] = (this.currentRun.steps ?? [])
 					.filter(step => (step as GameStat).playerDecklist)
 					.map(step => step as GameStat);
-				this.decklist = runMatches[runMatches.length - 1].playerDecklist;
+				this.decklist = runMatches.length > 0 ? runMatches[runMatches.length - 1].playerDecklist : null;
 				return;
 		}
 	}

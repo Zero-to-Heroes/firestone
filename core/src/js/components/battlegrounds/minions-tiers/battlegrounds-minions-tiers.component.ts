@@ -118,8 +118,9 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			await this.allCards.initializeCardsDb(CARDS_VERSION);
 
 			if (
-				!this.cardsInGame?.length ||
-				!arraysEqual(this.previousAvailableRaces, newState.currentGame.availableRaces)
+				newState?.currentGame?.availableRaces?.length > 0 &&
+				(!this.cardsInGame?.length ||
+					!arraysEqual(this.previousAvailableRaces, newState.currentGame.availableRaces))
 			) {
 				await this.updateAvailableCards(newState);
 				this.previousAvailableRaces = newState.currentGame.availableRaces;

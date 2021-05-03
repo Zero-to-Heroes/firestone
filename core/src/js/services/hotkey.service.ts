@@ -6,7 +6,7 @@ export class HotkeyService {
 	constructor(private readonly ow: OverwolfService) {}
 
 	public async getHotkeyCombination(hotkeyName: string): Promise<string> {
-		const hotkey = (await this.ow.getHotKey(hotkeyName)).binding || 'Unassigned';
+		const hotkey = (await this.ow.getHotKey(hotkeyName))?.binding || 'Unassigned';
 		const hotkeyText = hotkey === 'Unassigned' ? 'No hotkey assigned' : this.splitHotkey(hotkey);
 		return hotkeyText;
 	}

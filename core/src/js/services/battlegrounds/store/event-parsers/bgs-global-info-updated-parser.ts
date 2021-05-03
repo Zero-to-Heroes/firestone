@@ -66,7 +66,9 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			players: newPlayers,
 			bannedRaces: bannedRaces && bannedRaces.length > 0 ? bannedRaces : currentState.currentGame.bannedRaces,
 			availableRaces:
-				availableRaces && availableRaces.length > 0 ? availableRaces : currentState.currentGame.availableRaces,
+				availableRaces && availableRaces.length > 0
+					? availableRaces
+					: currentState?.currentGame?.availableRaces ?? [],
 		} as BgsGame);
 		// console.log('[bgs-info] updated new game', newGame);
 		return currentState.update({

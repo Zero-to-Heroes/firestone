@@ -13,6 +13,10 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const hierarchy = currentState.achievements.findAchievementHierarchy(event.achievementId);
+		if (!hierarchy[0]?.length) {
+			console.warn('Could not get achievement hierarchy', event.achievementId);
+			return [currentState, navigationState];
+		}
 		const category = hierarchy[0][hierarchy[0].length - 1];
 		const newSelectedAchievement: VisualAchievement = category.achievements.find(ach =>
 			ach.completionSteps.some(step => step.id === event.achievementId),

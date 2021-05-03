@@ -31,7 +31,7 @@ export class DeckHandlerService {
 		const card = !isNaN(dbfId) ? this.allCards.getCardFromDbfId(dbfId) : this.allCards.getCard(pair[0]);
 		const result: DeckCard[] = [];
 		if (!card) {
-			console.error('Could not build deck card', dbfId, isNaN(dbfId), dbfId !== -1, pair);
+			console.warn('Could not build deck card', dbfId, isNaN(dbfId), dbfId !== -1, pair);
 			return result;
 		}
 		// Don't include passive buffs in the decklist
