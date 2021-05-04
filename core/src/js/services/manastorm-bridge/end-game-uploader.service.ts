@@ -81,9 +81,23 @@ export class EndGameUploaderService {
 		// being removed from memory by the player clicking away
 		let playerRank;
 		let newPlayerRank;
+		// Get the memory info first, because parsing the XML can take some time and make the
+		// info in memory stale / unavailable
+		console.log('[manastorm-bridge]', currentReviewId, 'reading memory info');
+		const battlegroundsInfo =
+			game.gameMode === 'battlegrounds' ? await this.memoryInspection.getBattlegroundsEndGame(5) : null;
+		const duelsInfo =
+			game.gameMode === 'duels' || game.gameMode === 'paid-duels'
+				? await this.memoryInspection.getDuelsInfo()
+				: null;
+		const arenaInfo = game.gameMode === 'arena' ? await this.memoryInspection.getArenaInfo() : null;
+		const playerInfo = await this.playersInfo.getPlayerInfo();
+		const opponentInfo = await this.playersInfo.getOpponentInfo();
+		console.log('[manastorm-bridge]', currentReviewId, 'read memory info');
+
 		const replay = parseHsReplayString(replayXml);
 		if (game.gameMode === 'battlegrounds') {
-			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
+			// const battlegroundsInfo = await this.memoryInspection.getBattlegroundsEndGame(5);
 			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
 			newPlayerRank = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
 			const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(
@@ -95,7 +109,7 @@ export class EndGameUploaderService {
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode, game);
-			const duelsInfo = await this.memoryInspection.getDuelsInfo();
+			// const duelsInfo = await this.memoryInspection.getDuelsInfo();
 			if (duelsInfo) {
 				console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo);
 				playerRank = game.gameMode === 'duels' ? duelsInfo.Rating : duelsInfo.PaidRating;
@@ -116,11 +130,11 @@ export class EndGameUploaderService {
 				}
 			}
 		} else if (game.gameMode === 'arena') {
-			const arenaInfo = await this.memoryInspection.getArenaInfo();
+			// const arenaInfo = await this.memoryInspection.getArenaInfo();
 			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
 		} else if (game.gameFormat !== 'unknown') {
-			const playerInfo = await this.playersInfo.getPlayerInfo();
+			// const playerInfo = await this.playersInfo.getPlayerInfo();
 			if (playerInfo && game.gameFormat === 'standard') {
 				if (playerInfo.standard?.legendRank > 0) {
 					playerRank = `legend-${playerInfo.standard.legendRank}`;
@@ -169,7 +183,7 @@ export class EndGameUploaderService {
 		if (game.gameMode === 'battlegrounds' || game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			// Do nothing
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
-			const opponentInfo = await this.playersInfo.getOpponentInfo();
+			// const opponentInfo = await this.playersInfo.getOpponentInfo();
 			if (opponentInfo && game.gameFormat === 'standard') {
 				if (opponentInfo.standard?.legendRank > 0) {
 					opponentRank = `legend-${opponentInfo.standard.legendRank}`;
