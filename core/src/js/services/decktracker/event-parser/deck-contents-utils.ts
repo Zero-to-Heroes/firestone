@@ -56,7 +56,7 @@ const handleCelestialAlignment = (deckState: DeckState, allCards: AllCardsServic
 const handleEmbiggen = (deckState: DeckState, allCards: AllCardsService): DeckState => {
 	return updateCost(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
-		card => card.getEffectiveManaCost() + 1,
+		card => Math.min(10, card.getEffectiveManaCost() + 1),
 		deckState,
 		allCards,
 	);
