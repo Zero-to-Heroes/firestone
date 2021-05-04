@@ -233,9 +233,14 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		}
 
 		this.cardsInGame = getAllCardsInGame(state.currentGame.availableRaces, this.allCards);
+		// console.debug('cardsInGame', this.cardsInGame, state.currentGame.availableRaces);
 	}
 
 	private buildTiers(): readonly Tier[] {
+		if (!this.cardsInGame) {
+			return [];
+		}
+
 		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
 			(card: ReferenceCard) => '' + card.techLevel,
 		)(this.cardsInGame);
