@@ -66,25 +66,25 @@ export class BgsPlayer implements IBgsPlayer {
 	}
 
 	public buildBgsEntities(logEntities: readonly any[]): BoardEntity[] {
-		return logEntities.map(entity => this.buildBgsEntity(entity));
+		return logEntities.map((entity) => this.buildBgsEntity(entity));
 	}
 
 	private buildBgsEntity(logEntity): BoardEntity {
 		return {
 			cardId: logEntity.CardId,
-			attack: logEntity.Tags.find(tag => tag.Name === GameTag.ATK)?.Value || 0,
-			divineShield: (logEntity.Tags.find(tag => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value === 1,
+			attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
+			divineShield: (logEntity.Tags.find((tag) => tag.Name === GameTag.DIVINE_SHIELD) || {})?.Value === 1,
 			enchantments: this.buildEnchantments(logEntity.Enchantments),
 			entityId: logEntity.Entity,
-			health: logEntity.Tags.find(tag => tag.Name === GameTag.HEALTH)?.Value,
-			poisonous: logEntity.Tags.find(tag => tag.Name === GameTag.POISONOUS)?.Value === 1,
-			reborn: logEntity.Tags.find(tag => tag.Name === GameTag.REBORN)?.Value === 1,
-			taunt: logEntity.Tags.find(tag => tag.Name === GameTag.TAUNT)?.Value === 1,
+			health: logEntity.Tags.find((tag) => tag.Name === GameTag.HEALTH)?.Value,
+			poisonous: logEntity.Tags.find((tag) => tag.Name === GameTag.POISONOUS)?.Value === 1,
+			reborn: logEntity.Tags.find((tag) => tag.Name === GameTag.REBORN)?.Value === 1,
+			taunt: logEntity.Tags.find((tag) => tag.Name === GameTag.TAUNT)?.Value === 1,
 			cleave: undefined, // For now I'm not aware of any tag for this, so it's hard-coded in the simulator
-			windfury: logEntity.Tags.find(tag => tag.Name === GameTag.WINDFURY)?.Value === 1,
+			windfury: logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 1,
 			megaWindfury:
-				logEntity.Tags.find(tag => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||
-				logEntity.Tags.find(tag => tag.Name === GameTag.WINDFURY)?.Value === 3,
+				logEntity.Tags.find((tag) => tag.Name === GameTag.MEGA_WINDFURY)?.Value === 1 ||
+				logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 3,
 			friendly: true,
 			frenzyApplied: false,
 		};
@@ -93,7 +93,7 @@ export class BgsPlayer implements IBgsPlayer {
 	private buildEnchantments(
 		enchantments: { EntityId: number; CardId: string }[],
 	): { cardId: string; originEntityId: number }[] {
-		return enchantments.map(enchant => ({
+		return enchantments.map((enchant) => ({
 			originEntityId: enchant.EntityId,
 			cardId: enchant.CardId,
 		}));

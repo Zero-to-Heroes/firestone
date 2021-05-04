@@ -54,10 +54,10 @@ export class WinStreakReq implements Requirement {
 		}
 		const stats = (gameEvent.additionalData.gameStats as GameStats).stats;
 		const standardRanked = stats
-			.filter(stat => !this.gameFormat || stat.gameFormat === this.gameFormat)
-			.filter(stat => !this.gameMode || stat.gameMode === this.gameMode);
+			.filter((stat) => !this.gameFormat || stat.gameFormat === this.gameFormat)
+			.filter((stat) => !this.gameMode || stat.gameMode === this.gameMode);
 		// The most recent event is first
-		const i = standardRanked.findIndex(stat => stat.result !== 'won');
+		const i = standardRanked.findIndex((stat) => stat.result !== 'won');
 		this.currentWinStreak = i === -1 ? standardRanked.length : i;
 	}
 }

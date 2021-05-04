@@ -75,7 +75,7 @@ export class TwitterShareModalComponent implements AfterViewInit {
 	) {}
 
 	ngAfterViewInit() {
-		this.ow.addTwitterLoginStateChangedListener(async info => {
+		this.ow.addTwitterLoginStateChangedListener(async (info) => {
 			this._socialUserInfo = await this.ow.getTwitterUserInfo();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

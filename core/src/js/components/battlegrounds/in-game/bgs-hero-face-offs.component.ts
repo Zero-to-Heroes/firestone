@@ -43,7 +43,7 @@ export class BgsHeroFaceOffsComponent {
 
 	@Input() set players(value: readonly BgsPlayer[]) {
 		this.opponents = value
-			.filter(player => !player.isMainPlayer)
+			.filter((player) => !player.isMainPlayer)
 			.sort((a, b) => {
 				if (a.leaderboardPlace < b.leaderboardPlace) {
 					return -1;

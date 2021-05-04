@@ -34,7 +34,7 @@ export class OwnedFilterComponent implements AfterViewInit {
 	cardsOwnedActiveFilter = this.FILTER_ALL;
 
 	ngAfterViewInit() {
-		this.onOptionSelected.next(this.cardsOwnedSelectOptions.find(option => option.value === this.FILTER_ALL));
+		this.onOptionSelected.next(this.cardsOwnedSelectOptions.find((option) => option.value === this.FILTER_ALL));
 	}
 
 	selectCardsOwnedFilter(option: IOption) {

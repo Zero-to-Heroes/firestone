@@ -138,7 +138,7 @@ export class DevService {
 			console.log('iterations over');
 			// window['startDeckCycle'](logName, deckString);
 		};
-		window['decodeDeck'] = deckstring => {
+		window['decodeDeck'] = (deckstring) => {
 			console.log(decode(deckstring));
 		};
 		window['buildDeck'] = async (decklist, hero) => {
@@ -146,20 +146,20 @@ export class DevService {
 			console.log(cards);
 			const allCards = this.cards.getAllCards();
 			const cardArray = cards
-				.map(card => {
+				.map((card) => {
 					const [name, count] = card.split('#');
 					const result: [readonly ReferenceCard[], number] = [
-						allCards.filter(card => card.id === name).length > 0
-							? allCards.filter(card => card.id === name)
+						allCards.filter((card) => card.id === name).length > 0
+							? allCards.filter((card) => card.id === name)
 							: allCards
-									.filter(card => card.name === name)
-									.filter(card => ['Battlegrounds', 'Wild_event'].indexOf(card.set) === -1)
-									.filter(card => !card.id.startsWith('FB_Champs'))
-									.filter(card => !card.id.startsWith('TB_'))
-									.filter(card => card.type !== 'Hero')
-									.filter(card => card.id.indexOf('o') === -1) // Don't include ???
-									.filter(card => card.id.indexOf('t') === -1) // Don't include tokens
-									.filter(card => card.id.indexOf('e') === -1), // Don't include enchantments
+									.filter((card) => card.name === name)
+									.filter((card) => ['Battlegrounds', 'Wild_event'].indexOf(card.set) === -1)
+									.filter((card) => !card.id.startsWith('FB_Champs'))
+									.filter((card) => !card.id.startsWith('TB_'))
+									.filter((card) => card.type !== 'Hero')
+									.filter((card) => card.id.indexOf('o') === -1) // Don't include ???
+									.filter((card) => card.id.indexOf('t') === -1) // Don't include tokens
+									.filter((card) => card.id.indexOf('e') === -1), // Don't include enchantments
 						count,
 					];
 					if (result[0].length !== 1) {
@@ -168,7 +168,7 @@ export class DevService {
 					}
 					return result;
 				})
-				.map(cards => {
+				.map((cards) => {
 					return [cards[0][0].dbfId, parseInt(cards[1] || 1)];
 				});
 			console.log(cardArray);
@@ -181,9 +181,9 @@ export class DevService {
 			console.log(deckstring);
 			console.log(decode(deckstring));
 		};
-		window['grantAchievement'] = async id => {
+		window['grantAchievement'] = async (id) => {
 			const challenges = await this.achievementLoader.getChallengeModules();
-			const challenge = challenges.find(chal => chal.achievementId === id);
+			const challenge = challenges.find((chal) => chal.achievementId === id);
 			this.achievementsMonitor['sendUnlockEvent'](challenge);
 		};
 		// window['addReplayInfos'] = async () => {
@@ -310,7 +310,7 @@ export class DevService {
 	// }
 
 	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {
-		return cards.map(card =>
+		return cards.map((card) =>
 			card.update({
 				inInitialDeck: true,
 			} as DeckCard),
@@ -319,5 +319,5 @@ export class DevService {
 }
 
 function sleep(ms) {
-	return new Promise(resolve => setTimeout(resolve, ms));
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }

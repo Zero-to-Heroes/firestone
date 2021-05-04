@@ -17,9 +17,9 @@ export class RTStatsBgsFreezeParser implements EventParser {
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const freezeThisTurn =
-			currentState.freezesOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
+			currentState.freezesOverTurn.find((info) => info.turn === currentState.currentTurn)?.value ?? 0;
 		const newFreeze: readonly NumericTurnInfo[] = [
-			...currentState.freezesOverTurn.filter(info => info.turn !== currentState.currentTurn),
+			...currentState.freezesOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
 				value: freezeThisTurn + 1,

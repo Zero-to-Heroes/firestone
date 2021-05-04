@@ -32,7 +32,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 
 		const deadEnemyMinions = gameEvent.additionalData.deadMinions.filter(
-			deadMinion => deadMinion.ControllerId !== activePlayerId,
+			(deadMinion) => deadMinion.ControllerId !== activePlayerId,
 		);
 		//console.debug('deadEnemyMinions', deadEnemyMinions, gameEvent);
 		if (!deadEnemyMinions?.length) {
@@ -62,7 +62,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		// TODO: Redemption will not trigger if deathrattles fill up the board
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnFriendlyMinionDeath.filter(
-			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
+			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];

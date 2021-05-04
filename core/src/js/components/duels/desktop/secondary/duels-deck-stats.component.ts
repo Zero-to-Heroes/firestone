@@ -90,32 +90,32 @@ export class DuelsDeckStatsComponent {
 
 	private buildWinrate(deck: DuelsDeckSummary): number {
 		const games = deck.runs
-			.map(run => run.steps)
+			.map((run) => run.steps)
 			.reduce((a, b) => a.concat(b), [])
-			.filter(step => (step as GameStat)?.opponentCardId)
-			.map(step => step as GameStat);
-		return (100 * games.filter(game => game.result === 'won').length) / games.length;
+			.filter((step) => (step as GameStat)?.opponentCardId)
+			.map((step) => step as GameStat);
+		return (100 * games.filter((game) => game.result === 'won').length) / games.length;
 	}
 
 	private getDeck(): DuelsDeckSummary {
 		if (this._navigation.selectedPersonalDeckstring) {
 			return this._state.playerStats.personalDeckStats.find(
-				deck => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
+				(deck) => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
 			);
 		}
 		if (this._navigation.selectedDeckId) {
 			const deckStat = this._state.playerStats.deckStats
-				.map(grouped => grouped.decks)
+				.map((grouped) => grouped.decks)
 				.reduce((a, b) => a.concat(b), [])
-				.filter(deck => deck)
-				.find(deck => deck.id === this._navigation.selectedDeckId);
+				.filter((deck) => deck)
+				.find((deck) => deck.id === this._navigation.selectedDeckId);
 			if (!deckStat) {
 				console.warn('[duels-deck@ could not find deckstat', this._navigation.selectedDeckId);
 				return null;
 			}
 			const additionalStat = (this._state.additionalDeckDetails ?? [])
-				.filter(stat => stat)
-				.find(stat => stat.id === deckStat.id);
+				.filter((stat) => stat)
+				.find((stat) => stat.id === deckStat.id);
 			const run = {
 				creationTimestamp: undefined,
 				id: deckStat.runId,

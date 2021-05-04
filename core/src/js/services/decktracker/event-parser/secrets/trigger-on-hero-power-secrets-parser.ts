@@ -25,7 +25,7 @@ export class TriggerOnHeroPowerSecretsParser implements EventParser {
 
 		const toExclude = [];
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
-			secret => toExclude.indexOf(secret) === -1,
+			(secret) => toExclude.indexOf(secret) === -1,
 		);
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {

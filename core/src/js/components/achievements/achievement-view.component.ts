@@ -102,7 +102,7 @@ export class AchievementViewComponent implements AfterViewInit {
 			const context: StatContext = match[3] as StatContext;
 			const stat =
 				this._globalStats && this._globalStats.stats
-					? this._globalStats.stats.find(stat => stat.statKey === key && stat.statContext === context)
+					? this._globalStats.stats.find((stat) => stat.statKey === key && stat.statContext === context)
 					: null;
 			const value = stat ? stat.value : 0;
 			result = textToConsider.replace(match[1], '' + value);

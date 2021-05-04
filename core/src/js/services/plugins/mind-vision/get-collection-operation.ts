@@ -14,16 +14,16 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 			() => mindVision.getCollection(),
 			(memoryCollection: any[]) =>
 				memoryCollection.length === 0 ||
-				memoryCollection.every(entry => entry.Count + entry.PremiumCount === 0),
+				memoryCollection.every((entry) => entry.Count + entry.PremiumCount === 0),
 			//  ||
 			// // If there are no classic cards, we consider that the collection has not
 			// // been fetched from memory yet
 			// memoryCollection
 			// 	.filter(entry => this.getBasicCards().indexOf(entry.CardId) !== -1)
 			// 	.every(entry => entry.Count + entry.PremiumCount + entry.DiamondCount === 0),
-			memoryCollection =>
+			(memoryCollection) =>
 				memoryCollection.map(
-					memoryCard =>
+					(memoryCard) =>
 						({
 							id: memoryCard.CardId,
 							count: memoryCard.Count,
@@ -40,7 +40,7 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 		if (this.basicCards) {
 			return this.basicCards;
 		}
-		const basicCards = this.allCards.getSet('core').allCards.map(card => card.id);
+		const basicCards = this.allCards.getSet('core').allCards.map((card) => card.id);
 		this.basicCards = basicCards;
 		return this.basicCards;
 	}

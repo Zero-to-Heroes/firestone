@@ -34,9 +34,9 @@ export class BgsPlayerBoardParser implements EventParser {
 				'no-format',
 				'Too many entities on the board',
 				event.playerBoard?.heroCardId,
-				event.playerBoard?.board?.map(entity => entity.CardId),
+				event.playerBoard?.board?.map((entity) => entity.CardId),
 				event.opponentBoard?.heroCardId,
-				event.opponentBoard?.board?.map(entity => entity.CardId),
+				event.opponentBoard?.board?.map((entity) => entity.CardId),
 			);
 			return currentState.update({
 				currentGame: currentState.currentGame.update({
@@ -57,8 +57,8 @@ export class BgsPlayerBoardParser implements EventParser {
 		}
 
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
-			.map(p => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(player.cardId) ? player : p))
-			.map(p => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(opponent.cardId) ? opponent : p));
+			.map((p) => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(player.cardId) ? player : p))
+			.map((p) => (normalizeHeroCardId(p.cardId) === normalizeHeroCardId(opponent.cardId) ? opponent : p));
 
 		const bgsPlayer: BgsBoardInfo = this.buildBgsBoardInfo(player, event.playerBoard);
 		const bgsOpponent: BgsBoardInfo = this.buildBgsBoardInfo(opponent, event.opponentBoard);
@@ -94,7 +94,7 @@ export class BgsPlayerBoardParser implements EventParser {
 	private buildBgsBoardInfo(player: BgsPlayer, playerBoard: PlayerBoard): BgsBoardInfo {
 		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board);
 		let tavernTier =
-			playerBoard.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
+			playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
 			player.getCurrentTavernTier();
 		if (!tavernTier) {
 			console.warn('[bgs-simulation] no tavern tier', event);
@@ -114,7 +114,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 	private updatePlayer(currentState: BattlegroundsState, playerBoard: PlayerBoard): BgsPlayer {
 		const playerToUpdate = currentState.currentGame.players.find(
-			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(playerBoard.heroCardId),
+			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(playerBoard.heroCardId),
 		);
 		if (!playerToUpdate) {
 			console.error(
@@ -122,7 +122,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				currentState.currentGame.reviewId,
 				playerBoard.heroCardId,
 				normalizeHeroCardId(playerBoard.heroCardId),
-				currentState.currentGame.players.map(player => normalizeHeroCardId(player.cardId)),
+				currentState.currentGame.players.map((player) => normalizeHeroCardId(player.cardId)),
 			);
 			return null;
 		}
@@ -130,9 +130,9 @@ export class BgsPlayerBoardParser implements EventParser {
 			'found player board to update',
 			playerToUpdate.cardId,
 			'with new board',
-			playerBoard.board.map(entity => entity.CardId),
+			playerBoard.board.map((entity) => entity.CardId),
 			'from old board',
-			playerToUpdate.getLastKnownBoardState()?.map(entity => entity.cardID),
+			playerToUpdate.getLastKnownBoardState()?.map((entity) => entity.cardID),
 		);
 		const newHistory: readonly BgsBoard[] = [
 			...(playerToUpdate.boardHistory || []),
@@ -147,13 +147,13 @@ export class BgsPlayerBoardParser implements EventParser {
 		console.log(
 			'update board for player',
 			newPlayer.cardId,
-			newPlayer.getLastKnownBoardState()?.map(entity => entity.cardID),
+			newPlayer.getLastKnownBoardState()?.map((entity) => entity.cardID),
 		);
 		return newPlayer;
 	}
 
 	public static buildEntities(logEntities: readonly any[]): readonly Entity[] {
-		return logEntities.map(entity => BgsPlayerBoardParser.buildEntity(entity));
+		return logEntities.map((entity) => BgsPlayerBoardParser.buildEntity(entity));
 	}
 
 	private static buildEntity(logEntity): Entity {
@@ -165,6 +165,6 @@ export class BgsPlayerBoardParser implements EventParser {
 	}
 
 	private static buildTags(tags: { Name: number; Value: number }[]): Map<string, number> {
-		return Map(tags.map(tag => [GameTag[tag.Name], tag.Value]));
+		return Map(tags.map((tag) => [GameTag[tag.Name], tag.Value]));
 	}
 }

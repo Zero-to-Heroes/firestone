@@ -85,7 +85,7 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 		await this.handleDisplayPreferences();
@@ -123,7 +123,7 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 		}
 
 		this.total = this._heroPortraits.length;
-		this.unlocked = this._heroPortraits.filter(item => item.numberOwned > 0).length;
+		this.unlocked = this._heroPortraits.filter((item) => item.numberOwned > 0).length;
 
 		this.shownHeroPortraits = this._heroPortraits.filter(this.filterCardsOwned());
 		if (!(this.cdr as ViewRef)?.destroyed) {

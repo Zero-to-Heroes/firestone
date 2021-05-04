@@ -98,7 +98,7 @@ export class LeaderboardEmptyCardComponent {
 			{
 				turn: lastBoard.turn,
 				board: lastBoard.board.map(
-					entity =>
+					(entity) =>
 						({
 							id: entity.id,
 							cardID: entity.cardID,

@@ -62,7 +62,7 @@ export class SameMinionAttackReq implements Requirement {
 			// console.log('attack count is', entityId, this.attackCounts);
 			this.hasMinionAttacked = Object.keys(this.attackCounts).some(
 				// TODO: only support "AT_LEAST", implicitely, for now
-				entityId => this.attackCounts[entityId] >= this.targetQuantity,
+				(entityId) => this.attackCounts[entityId] >= this.targetQuantity,
 			);
 			// console.log('hasMinionAttacked', this.hasMinionAttacked);
 		}

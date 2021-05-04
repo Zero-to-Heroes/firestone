@@ -10,7 +10,7 @@ export class RealTimeNotificationService {
 	constructor(private http: HttpClient) {}
 
 	public async getStatus(): Promise<string[]> {
-		return new Promise<string[]>(resolve => {
+		return new Promise<string[]>((resolve) => {
 			console.log('getting status');
 			this.http.get(this.URL).subscribe((res: any) => {
 				if (res.ok) {

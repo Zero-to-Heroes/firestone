@@ -141,7 +141,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		// this.tiers = this.buildTiers();
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.setDisplayPreferences(event.preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -173,7 +173,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		this.ow.dragMove(this.windowId, async result => {
+		this.ow.dragMove(this.windowId, async (result) => {
 			await this.updateTooltipPosition();
 			const window = await this.ow.getCurrentWindow();
 			if (!window) {
@@ -239,7 +239,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
 			(card: ReferenceCard) => '' + card.techLevel,
 		)(this.cardsInGame);
-		return Object.keys(groupedByTier).map(tierLevel => ({
+		return Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
 		}));

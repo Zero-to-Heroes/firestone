@@ -204,7 +204,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		// TODO: extract that to its own component
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
-		singleEls.forEach(singleEl => {
+		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#arrow"/>
@@ -214,7 +214,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		});
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 
@@ -301,7 +301,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private updateShownCards() {
-		this._activeCards = (this._cardList || []).map(card =>
+		this._activeCards = (this._cardList || []).map((card) =>
 			this.shouldBeShown(card)
 				? card
 				: Object.assign(new SetCard(), card, {
@@ -310,7 +310,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		);
 		// console.debug('active cards', this._activeCards);
 
-		this.gradualLoadActiveCards(this._activeCards.filter(card => card.displayed));
+		this.gradualLoadActiveCards(this._activeCards.filter((card) => card.displayed));
 	}
 
 	private shouldBeShown(card: SetCard): boolean {

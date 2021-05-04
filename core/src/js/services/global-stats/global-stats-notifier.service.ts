@@ -26,7 +26,7 @@ export class GlobalStatsNotifierService {
 	}
 
 	private async listenForEndGame() {
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			console.log('[global-stats] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review') {

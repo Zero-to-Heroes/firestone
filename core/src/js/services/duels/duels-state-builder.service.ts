@@ -70,7 +70,7 @@ export class DuelsStateBuilderService {
 	) {
 		this.events
 			.on(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS)
-			.subscribe(data => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
+			.subscribe((data) => this.loadTopDeckRunDetails(data.data[0], data.data[1]));
 
 		setTimeout(() => {
 			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -99,7 +99,7 @@ export class DuelsStateBuilderService {
 		const results: any = await this.api.callPostApi(DUELS_RUN_INFO_URL, input);
 		const stepResults: readonly DuelsRunInfo[] =
 			results?.results.map(
-				info =>
+				(info) =>
 					({
 						...info,
 						option1Contents: info.option1Contents?.split(','),
@@ -180,24 +180,26 @@ export class DuelsStateBuilderService {
 	): Promise<DuelsState> {
 		const prefs = await this.prefs.getPreferences();
 		const duelMatches = matchStats?.stats
-			?.filter(match => match.gameMode === 'duels' || match.gameMode === 'paid-duels')
-			.filter(match => match.currentDuelsRunId);
+			?.filter((match) => match.gameMode === 'duels' || match.gameMode === 'paid-duels')
+			.filter((match) => match.currentDuelsRunId);
 		const groupByRunId = groupByFunction((match: GameStat) => match.currentDuelsRunId);
 		const matchesByRun = groupByRunId(duelMatches);
 		const runIds = Object.keys(matchesByRun);
 		const runs: readonly DuelsRun[] = runIds
-			.map(runId =>
+			.map((runId) =>
 				this.buildRun(
 					runId,
 					matchesByRun[runId],
-					currentState.duelsRunInfos.filter(runInfo => runInfo.runId === runId),
-					currentState.duelsRewardsInfo.filter(runInfo => runInfo.runId === runId),
+					currentState.duelsRunInfos.filter((runInfo) => runInfo.runId === runId),
+					currentState.duelsRewardsInfo.filter((runInfo) => runInfo.runId === runId),
 				),
 			)
-			.filter(run => run)
-			.filter(run => this.isCorrectGameMode(run, prefs))
-			.filter(run => this.isCorrectPlayerClass(run, prefs))
-			.filter(run => this.isCorrectTime(run, prefs, currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch))
+			.filter((run) => run)
+			.filter((run) => this.isCorrectGameMode(run, prefs))
+			.filter((run) => this.isCorrectPlayerClass(run, prefs))
+			.filter((run) =>
+				this.isCorrectTime(run, prefs, currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch),
+			)
 			.sort(this.getSortFunction());
 		console.log('[duels-state-builder] built runs', runs?.length);
 
@@ -320,16 +322,16 @@ export class DuelsStateBuilderService {
 	}
 
 	private buildDeckStatInfo(runs: readonly DuelsRun[]): DuelsDeckStatInfo {
-		const totalMatchesPlayed = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		const totalMatchesPlayed = runs.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0);
 		return {
 			totalRunsPlayed: runs.length,
 			totalMatchesPlayed: totalMatchesPlayed,
-			winrate: (100 * runs.map(run => run.wins).reduce((a, b) => a + b, 0)) / totalMatchesPlayed,
-			averageWinsPerRun: runs.map(run => run.wins).reduce((a, b) => a + b, 0) / runs.length,
+			winrate: (100 * runs.map((run) => run.wins).reduce((a, b) => a + b, 0)) / totalMatchesPlayed,
+			averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
 			winsDistribution: this.buildWinDistributionForRun(runs),
 			netRating: runs
-				.filter(run => run.ratingAtEnd != null && run.ratingAtStart != null)
-				.map(run => +run.ratingAtEnd - +run.ratingAtStart)
+				.filter((run) => run.ratingAtEnd != null && run.ratingAtStart != null)
+				.map((run) => +run.ratingAtEnd - +run.ratingAtStart)
 				.reduce((a, b) => a + b, 0),
 		} as DuelsDeckStatInfo;
 	}
@@ -339,7 +341,7 @@ export class DuelsStateBuilderService {
 		for (let i = 0; i <= 12; i++) {
 			result.push({
 				winNumber: i,
-				value: runs.filter(run => run.wins === i).length,
+				value: runs.filter((run) => run.wins === i).length,
 			});
 		}
 		return result;
@@ -348,16 +350,16 @@ export class DuelsStateBuilderService {
 	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
 		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 			(run: DuelsRun) => run.initialDeckList,
-		)(runs.filter(run => run.initialDeckList));
+		)(runs.filter((run) => run.initialDeckList));
 		const decks: readonly DuelsDeckSummary[] = Object.keys(groupedByDecklist)
-			.filter(deckstring => deckstring)
-			.map(deckstring => {
+			.filter((deckstring) => deckstring)
+			.map((deckstring) => {
 				// console.log('[debug] building deck', deckstring, '' + deckstring, deckstring == null);
 				const groupedByType: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
 					(run: DuelsRun) => run.type,
 				)(groupedByDecklist[deckstring]);
 
-				const decksForTypes: readonly DuelsDeckSummaryForType[] = Object.keys(groupedByType).map(type => {
+				const decksForTypes: readonly DuelsDeckSummaryForType[] = Object.keys(groupedByType).map((type) => {
 					return {
 						type: type,
 						...this.buildMainPersonalDecktats(groupedByType[type]),
@@ -365,7 +367,9 @@ export class DuelsStateBuilderService {
 				});
 				const heroCardId = groupedByDecklist[deckstring][0].heroCardId;
 
-				const runsForGameMode = groupedByDecklist[deckstring].filter(run => this.isCorrectGameMode(run, prefs));
+				const runsForGameMode = groupedByDecklist[deckstring].filter((run) =>
+					this.isCorrectGameMode(run, prefs),
+				);
 				const mainStats = this.buildMainPersonalDecktats(runsForGameMode);
 				const playerClass = this.allCards.getCard(heroCardId)?.playerClass?.toLowerCase();
 				const deckName =
@@ -384,7 +388,7 @@ export class DuelsStateBuilderService {
 				} as DuelsDeckSummary;
 			})
 			.filter(
-				stat =>
+				(stat) =>
 					prefs.duelsPersonalDeckShowHiddenDecks ||
 					!prefs.duelsPersonalDeckHiddenDeckCodes.includes(stat.initialDeckList),
 			);
@@ -421,11 +425,13 @@ export class DuelsStateBuilderService {
 			// console.log('returngin tryue', prefs.duelsActiveTimeFilter);
 			return true;
 		}
-		if (!run.steps || run.steps.filter(step => (step as GameStat).buildNumber).length === 0) {
+		if (!run.steps || run.steps.filter((step) => (step as GameStat).buildNumber).length === 0) {
 			// console.log('no matchg stat', run.steps, prefs.duelsActiveTimeFilter);
 			return false;
 		}
-		const firstMatch = run.steps.filter(step => (step as GameStat).buildNumber).map(step => step as GameStat)[0];
+		const firstMatch = run.steps
+			.filter((step) => (step as GameStat).buildNumber)
+			.map((step) => step as GameStat)[0];
 		const firstMatchTimestamp = firstMatch.creationTimestamp;
 		// console.log(
 		// 	'checking all filters',
@@ -460,7 +466,7 @@ export class DuelsStateBuilderService {
 	} {
 		const groupedByHeroPower = groupByFunction((run: DuelsRun) => run.heroPowerCardId)(runs);
 		const heroPowerStats: readonly HeroPowerDuelsDeckStatInfo[] = Object.keys(groupedByHeroPower).map(
-			heroPowerCardId => ({
+			(heroPowerCardId) => ({
 				...this.buildDeckStatInfo(groupedByHeroPower[heroPowerCardId]),
 				heroPowerCardId: heroPowerCardId,
 			}),
@@ -469,16 +475,16 @@ export class DuelsStateBuilderService {
 		const groupedBySignatureTreasure = groupByFunction((run: DuelsRun) => run.signatureTreasureCardId)(runs);
 		const signatureTreasureStats: readonly SignatureTreasureDuelsDeckStatInfo[] = Object.keys(
 			groupedBySignatureTreasure,
-		).map(signatureTreasureCardId => ({
+		).map((signatureTreasureCardId) => ({
 			...this.buildDeckStatInfo(groupedBySignatureTreasure[signatureTreasureCardId]),
 			signatureTreasureCardId: signatureTreasureCardId,
 		}));
 
 		const extractTreasuresForRun = (run: DuelsRun) => {
 			return run.steps
-				.filter(step => (step as DuelsRunInfo).bundleType === 'treasure')
-				.map(step => step as DuelsRunInfo)
-				.map(step =>
+				.filter((step) => (step as DuelsRunInfo).bundleType === 'treasure')
+				.map((step) => step as DuelsRunInfo)
+				.map((step) =>
 					step.chosenOptionIndex === 1
 						? step.option1
 						: step.chosenOptionIndex === 2
@@ -487,13 +493,13 @@ export class DuelsStateBuilderService {
 						? step.option3
 						: null,
 				)
-				.filter(treasure => treasure);
+				.filter((treasure) => treasure);
 		};
 		const allTreasures: readonly string[] = [
-			...new Set(runs.map(run => extractTreasuresForRun(run)).reduce((a, b) => a.concat(b), [])),
+			...new Set(runs.map((run) => extractTreasuresForRun(run)).reduce((a, b) => a.concat(b), [])),
 		];
-		const treasureStats: readonly TreasureDuelsDeckStatInfo[] = allTreasures.map(treasureId => {
-			const runsWithTreasure: readonly DuelsRun[] = runs.filter(run =>
+		const treasureStats: readonly TreasureDuelsDeckStatInfo[] = allTreasures.map((treasureId) => {
+			const runsWithTreasure: readonly DuelsRun[] = runs.filter((run) =>
 				extractTreasuresForRun(run).includes(treasureId),
 			);
 			return {
@@ -504,9 +510,9 @@ export class DuelsStateBuilderService {
 
 		const extractLootsForRun = (run: DuelsRun) => {
 			return run.steps
-				.filter(step => (step as DuelsRunInfo).bundleType === 'loot')
-				.map(step => step as DuelsRunInfo)
-				.map(step =>
+				.filter((step) => (step as DuelsRunInfo).bundleType === 'loot')
+				.map((step) => step as DuelsRunInfo)
+				.map((step) =>
 					step.chosenOptionIndex === 1
 						? step.option1Contents
 						: step.chosenOptionIndex === 2
@@ -516,13 +522,13 @@ export class DuelsStateBuilderService {
 						: null,
 				)
 				.reduce((a, b) => a.concat(b), [])
-				.filter(cardId => cardId);
+				.filter((cardId) => cardId);
 		};
 		const allCardLooted: readonly string[] = [
-			...new Set(runs.map(run => extractLootsForRun(run)).reduce((a, b) => a.concat(b), [])),
+			...new Set(runs.map((run) => extractLootsForRun(run)).reduce((a, b) => a.concat(b), [])),
 		];
-		const lootStats: readonly LootDuelsDeckStatInfo[] = allCardLooted.map(cardId => {
-			const runsWithTheLoot: readonly DuelsRun[] = runs.filter(run => extractLootsForRun(run).includes(cardId));
+		const lootStats: readonly LootDuelsDeckStatInfo[] = allCardLooted.map((cardId) => {
+			const runsWithTheLoot: readonly DuelsRun[] = runs.filter((run) => extractLootsForRun(run).includes(cardId));
 			return {
 				...this.buildDeckStatInfo(runsWithTheLoot),
 				cardId: cardId,
@@ -545,7 +551,7 @@ export class DuelsStateBuilderService {
 		prefs: Preferences,
 	): readonly DuelsGroupedDecks[] {
 		const decks = deckStats
-			.map(stat => {
+			.map((stat) => {
 				const deck = decode(stat.decklist);
 				const dustCost = this.buildDustCost(deck, collectionState);
 				return {
@@ -554,7 +560,7 @@ export class DuelsStateBuilderService {
 					dustCost: dustCost,
 				} as DuelsDeckStat;
 			})
-			.filter(stat => this.filterTopDeck(stat, prefs))
+			.filter((stat) => this.filterTopDeck(stat, prefs))
 			.sort((a, b) => new Date(b.periodStart).getTime() - new Date(a.periodStart).getTime());
 		console.log('[duels-state-builder] decks', decks?.length);
 		const groupedDecks: readonly DuelsGroupedDecks[] = [...this.groupDecks(decks, prefs)];
@@ -594,7 +600,7 @@ export class DuelsStateBuilderService {
 		};
 		const groupByDate = groupByFunction(groupingFunction);
 		const decksByDate = groupByDate(decks);
-		return Object.keys(decksByDate).map(date => this.buildGroupedDecks(date, decksByDate[date]));
+		return Object.keys(decksByDate).map((date) => this.buildGroupedDecks(date, decksByDate[date]));
 	}
 
 	private buildGroupedDecks(date: string, decks: readonly DuelsDeckStat[]): DuelsGroupedDecks {
@@ -606,10 +612,10 @@ export class DuelsStateBuilderService {
 
 	private buildDustCost(deck: DeckDefinition, collectionState: BinderState): number {
 		return deck.cards
-			.map(cards => cards[0])
-			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
-			.filter(card => card)
-			.map(card => {
+			.map((cards) => cards[0])
+			.map((cardDbfId) => this.allCards.getCardFromDbfId(+cardDbfId))
+			.filter((card) => card)
+			.map((card) => {
 				const out = collectionState.getCard(card.id);
 				if (!out) {
 					console.warn('[duels-state-builder] Could not find card for', card.id, deck);
@@ -617,9 +623,9 @@ export class DuelsStateBuilderService {
 				return out;
 				// ?? new SetCard(card.id, card.name, card.playerClass, card.rarity, card.cost, 0, 0, 0);
 			})
-			.filter(card => card)
-			.filter(card => card.getNumberCollected() === 0)
-			.map(card => card.getRegularDustCost())
+			.filter((card) => card)
+			.filter((card) => card.getNumberCollected() === 0)
+			.map((card) => card.getRegularDustCost())
 			.reduce((a, b) => a + b, 0);
 	}
 
@@ -628,14 +634,14 @@ export class DuelsStateBuilderService {
 		treasureStats: readonly TreasureStat[],
 		prefs: Preferences,
 	): readonly DuelsTreasureStat[] {
-		const treasuresForClass = treasureStats.filter(stat => this.playerClassFilter(stat, prefs));
+		const treasuresForClass = treasureStats.filter((stat) => this.playerClassFilter(stat, prefs));
 		// console.log('[debug] filtering treasures', treasureStats, prefs, treasuresForClass);
 		const groupedByTreasures = groupByFunction((stat: TreasureStat) => stat.cardId)(treasuresForClass);
 		const treasureIds = Object.keys(groupedByTreasures);
-		const totalTreasureOfferings = treasuresForClass.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
+		const totalTreasureOfferings = treasuresForClass.map((stat) => stat.totalOffered).reduce((a, b) => a + b, 0);
 		return (
 			treasureIds
-				.map(treasureId => {
+				.map((treasureId) => {
 					const statsForTreasure: readonly TreasureStat[] = groupedByTreasures[treasureId];
 					return this.buildTreasureStat(treasureId, statsForTreasure, runs, totalTreasureOfferings);
 				})
@@ -654,31 +660,33 @@ export class DuelsStateBuilderService {
 	): DuelsTreasureStat {
 		const groupedByClass = groupByFunction((stat: TreasureStat) => stat.playerClass)(statsForTreasure);
 		const totalTreasureOfferingsForTreasure = statsForTreasure
-			.map(stat => stat.totalOffered)
+			.map((stat) => stat.totalOffered)
 			.reduce((a, b) => a + b, 0);
-		const statsForClass: readonly DuelsTreasureStatForClass[] = Object.keys(groupedByClass).map(playerClass => {
+		const statsForClass: readonly DuelsTreasureStatForClass[] = Object.keys(groupedByClass).map((playerClass) => {
 			const classStats: readonly TreasureStat[] = groupedByClass[playerClass];
 			return this.buildTreasureForClass(treasureId, playerClass, classStats, totalTreasureOfferingsForTreasure);
 		});
-		const globalTotalOffered = statsForClass.map(stat => stat.globalTotalOffered).reduce((a, b) => a + b, 0);
-		const globalTotalPicked = statsForClass.map(stat => stat.globalTotalPicked).reduce((a, b) => a + b, 0);
-		const globalTotalMatches = statsForClass.map(stat => stat.globalTotalMatches).reduce((a, b) => a + b, 0);
-		const globalTotalWins = statsForClass.map(stat => stat.globalTotalWins).reduce((a, b) => a + b, 0);
-		const globalTotalLosses = statsForClass.map(stat => stat.globalTotalLosses).reduce((a, b) => a + b, 0);
-		const globalTotalTies = statsForClass.map(stat => stat.globalTotalTies).reduce((a, b) => a + b, 0);
+		const globalTotalOffered = statsForClass.map((stat) => stat.globalTotalOffered).reduce((a, b) => a + b, 0);
+		const globalTotalPicked = statsForClass.map((stat) => stat.globalTotalPicked).reduce((a, b) => a + b, 0);
+		const globalTotalMatches = statsForClass.map((stat) => stat.globalTotalMatches).reduce((a, b) => a + b, 0);
+		const globalTotalWins = statsForClass.map((stat) => stat.globalTotalWins).reduce((a, b) => a + b, 0);
+		const globalTotalLosses = statsForClass.map((stat) => stat.globalTotalLosses).reduce((a, b) => a + b, 0);
+		const globalTotalTies = statsForClass.map((stat) => stat.globalTotalTies).reduce((a, b) => a + b, 0);
 
 		const treasureOfferings = runs
-			.map(run => run.steps)
+			.map((run) => run.steps)
 			.reduce((a, b) => a.concat(b), [])
-			.filter(step => (step as DuelsRunInfo).bundleType === 'treasure')
-			.map(step => step as DuelsRunInfo)
-			.filter(step => step.option1 === treasureId || step.option2 === treasureId || step.option3 === treasureId);
+			.filter((step) => (step as DuelsRunInfo).bundleType === 'treasure')
+			.map((step) => step as DuelsRunInfo)
+			.filter(
+				(step) => step.option1 === treasureId || step.option2 === treasureId || step.option3 === treasureId,
+			);
 		const playerPickRate =
 			treasureOfferings.length === 0
 				? null
 				: (100 *
 						treasureOfferings.filter(
-							step =>
+							(step) =>
 								(step.chosenOptionIndex === 1 && step.option1 === treasureId) ||
 								(step.chosenOptionIndex === 2 && step.option2 === treasureId) ||
 								(step.chosenOptionIndex === 3 && step.option3 === treasureId),
@@ -709,12 +717,12 @@ export class DuelsStateBuilderService {
 		classStats: readonly TreasureStat[],
 		totalTreasureOfferingsForTreasure: number,
 	): DuelsTreasureStatForClass {
-		const globalTotalOffered = classStats.map(stat => stat.totalOffered).reduce((a, b) => a + b, 0);
-		const globalTotalPicked = classStats.map(stat => stat.totalPicked).reduce((a, b) => a + b, 0);
-		const globalTotalMatches = classStats.map(stat => stat.matchesPlayed).reduce((a, b) => a + b, 0);
-		const globalTotalWins = classStats.map(stat => stat.totalWins).reduce((a, b) => a + b, 0);
-		const globalTotalLosses = classStats.map(stat => stat.totalLosses).reduce((a, b) => a + b, 0);
-		const globalTotalTies = classStats.map(stat => stat.totalTies).reduce((a, b) => a + b, 0);
+		const globalTotalOffered = classStats.map((stat) => stat.totalOffered).reduce((a, b) => a + b, 0);
+		const globalTotalPicked = classStats.map((stat) => stat.totalPicked).reduce((a, b) => a + b, 0);
+		const globalTotalMatches = classStats.map((stat) => stat.matchesPlayed).reduce((a, b) => a + b, 0);
+		const globalTotalWins = classStats.map((stat) => stat.totalWins).reduce((a, b) => a + b, 0);
+		const globalTotalLosses = classStats.map((stat) => stat.totalLosses).reduce((a, b) => a + b, 0);
+		const globalTotalTies = classStats.map((stat) => stat.totalTies).reduce((a, b) => a + b, 0);
 
 		return {
 			cardId: treasureId,
@@ -739,23 +747,23 @@ export class DuelsStateBuilderService {
 		idExtractor: (stat: HeroStat | HeroPowerStat | SignatureTreasureStat) => string,
 		prefs: Preferences,
 	): readonly DuelsHeroPlayerStat[] {
-		const totalMatchesForPlayer = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
-		const totalStats = stats.map(stat => stat.totalMatches).reduce((a, b) => a + b, 0);
+		const totalMatchesForPlayer = runs.map((run) => run.wins + run.losses).reduce((a, b) => a + b, 0);
+		const totalStats = stats.map((stat) => stat.totalMatches).reduce((a, b) => a + b, 0);
 
 		const allStats = stats
 			.filter(
-				stat =>
+				(stat) =>
 					prefs.duelsActiveTopDecksClassFilter === 'all' ||
 					prefs.duelsActiveTopDecksClassFilter === stat.heroClass.toLowerCase(),
 			)
 			.filter(
-				stat =>
+				(stat) =>
 					!prefs.duelsHideStatsBelowThreshold || stat.totalMatches > DuelsStateBuilderService.STATS_THRESHOLD,
 			)
-			.map(stat => {
+			.map((stat) => {
 				const playerTotalMatches = runs
-					.filter(run => runIdExtractor(run) === idExtractor(stat))
-					.map(run => run.wins + run.losses)
+					.filter((run) => runIdExtractor(run) === idExtractor(stat))
+					.map((run) => run.wins + run.losses)
 					.reduce((a, b) => a + b, 0);
 				return {
 					cardId: idExtractor(stat),
@@ -773,32 +781,32 @@ export class DuelsStateBuilderService {
 							? 0
 							: (100 *
 									runs
-										.filter(run => runIdExtractor(run) === idExtractor(stat))
-										.map(run => run.wins)
+										.filter((run) => runIdExtractor(run) === idExtractor(stat))
+										.map((run) => run.wins)
 										.reduce((a, b) => a + b, 0)) /
 							  playerTotalMatches,
 				} as DuelsHeroPlayerStat;
 			})
-			.filter(stat => stat.globalTotalMatches > 10)
+			.filter((stat) => stat.globalTotalMatches > 10)
 			.sort(this.getStatSortFunction(prefs));
 
 		const grouped = groupByFunction((stat: DuelsHeroPlayerStat) => stat.cardId)(allStats);
 		// TODO: group by cardId, because of signature treasures
 		return Object.values(grouped).map((stats: readonly DuelsHeroPlayerStat[]) => {
 			const refStat = stats[0];
-			const totalMatches = sumOnArray(stats, stat => stat.globalTotalMatches);
-			const playerTotalMatches = sumOnArray(stats, stat => stat.playerTotalMatches);
+			const totalMatches = sumOnArray(stats, (stat) => stat.globalTotalMatches);
+			const playerTotalMatches = sumOnArray(stats, (stat) => stat.playerTotalMatches);
 			return {
 				cardId: refStat.cardId,
 				heroClass: refStat.heroClass,
 				periodStart: refStat.periodStart,
 				globalTotalMatches: totalMatches,
-				globalPopularity: sumOnArray(stats, stat => stat.globalPopularity),
+				globalPopularity: sumOnArray(stats, (stat) => stat.globalPopularity),
 				globalWinrate:
 					totalMatches === 0
 						? 0
-						: sumOnArray(stats, stat => stat.globalWinrate * stat.globalTotalMatches) / totalMatches,
-				globalWinDistribution: this.mergeWinDistributions(...stats.map(stat => stat.globalWinDistribution)),
+						: sumOnArray(stats, (stat) => stat.globalWinrate * stat.globalTotalMatches) / totalMatches,
+				globalWinDistribution: this.mergeWinDistributions(...stats.map((stat) => stat.globalWinDistribution)),
 				playerTotalMatches: playerTotalMatches,
 				playerPopularity: totalMatchesForPlayer === 0 ? 0 : playerTotalMatches / totalMatchesForPlayer,
 				playerWinrate:
@@ -806,8 +814,8 @@ export class DuelsStateBuilderService {
 						? 0
 						: (100 *
 								runs
-									.filter(run => runIdExtractor(run) === refStat.cardId)
-									.map(run => run.wins)
+									.filter((run) => runIdExtractor(run) === refStat.cardId)
+									.map((run) => run.wins)
 									.reduce((a, b) => a + b, 0)) /
 						  playerTotalMatches,
 			};
@@ -824,7 +832,7 @@ export class DuelsStateBuilderService {
 		const total = Object.values(winDistribution).reduce((a, b) => a + b, 0);
 		return Object.keys(winDistribution)
 			.sort((a, b) => +a - +b)
-			.map(winNumber => ({
+			.map((winNumber) => ({
 				winNumber: +winNumber,
 				value: winDistribution[winNumber] / total,
 			}));
@@ -833,16 +841,17 @@ export class DuelsStateBuilderService {
 	private mergeWinDistributions(
 		...winDistributions: (readonly { winNumber: number; value: number }[])[]
 	): readonly { winNumber: number; value: number }[] {
-		const totalGames: number = sumOnArray(winDistributions, dists => sumOnArray(dists, dist => dist.value));
+		const totalGames: number = sumOnArray(winDistributions, (dists) => sumOnArray(dists, (dist) => dist.value));
 		const wins = [
 			...new Set(
-				winDistributions.map(dists => dists.map(dist => dist.winNumber)).reduce((a, b) => a.concat(b), []),
+				winDistributions.map((dists) => dists.map((dist) => dist.winNumber)).reduce((a, b) => a.concat(b), []),
 			),
 		].sort((a, b) => a - b);
-		return wins.map(winNumber => ({
+		return wins.map((winNumber) => ({
 			winNumber: +winNumber,
 			value:
-				(100 * sumOnArray(winDistributions, dists => dists.find(dist => dist.winNumber === winNumber).value)) /
+				(100 *
+					sumOnArray(winDistributions, (dists) => dists.find((dist) => dist.winNumber === winNumber).value)) /
 				totalGames,
 		}));
 	}
@@ -917,7 +926,7 @@ export class DuelsStateBuilderService {
 
 	private getFirstMatchForRun(sortedMatches: readonly GameStat[]): GameStat {
 		const firstMatch = sortedMatches[0];
-		const [wins, losses] = firstMatch.additionalResult?.split('-')?.map(info => parseInt(info)) ?? [null, null];
+		const [wins, losses] = firstMatch.additionalResult?.split('-')?.map((info) => parseInt(info)) ?? [null, null];
 		if (wins !== 0 || losses !== 0) {
 			return null;
 		}
@@ -948,7 +957,7 @@ export class DuelsStateBuilderService {
 		if (!lastMatch.additionalResult || lastMatch.additionalResult.indexOf('-') === -1) {
 			return [null, null];
 		}
-		const [wins, losses] = lastMatch.additionalResult.split('-').map(info => parseInt(info));
+		const [wins, losses] = lastMatch.additionalResult.split('-').map((info) => parseInt(info));
 		// console.log('wins, losses', wins, losses, lastMatch.additionalResult.split('-'), lastMatch);
 		return lastMatch.result === 'won' ? [wins + 1, losses] : [wins, losses + 1];
 	}
@@ -957,14 +966,14 @@ export class DuelsStateBuilderService {
 		if (!steps || steps.length === 0) {
 			return null;
 		}
-		return steps.find(step => step.bundleType === 'signature-treasure')?.option1;
+		return steps.find((step) => step.bundleType === 'signature-treasure')?.option1;
 	}
 
 	private extractHeroPowerCardId(steps: readonly DuelsRunInfo[]): string {
 		if (!steps || steps.length === 0) {
 			return null;
 		}
-		return steps.find(step => step.bundleType === 'hero-power')?.option1;
+		return steps.find((step) => step.bundleType === 'hero-power')?.option1;
 	}
 
 	private extractHeroCardId(sortedMatches: readonly GameStat[]): string {

@@ -63,7 +63,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		}
 		this.twitch = (window as any).Twitch.ext;
 		// this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
-		this.twitch.onAuthorized(auth => {
+		this.twitch.onAuthorized((auth) => {
 			console.log('on authorized', auth);
 			this.token = auth.token;
 			console.log('set token', this.token);
@@ -104,7 +104,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 				console.log('successfully retrieved initial state', result);
 				this.processEvent(result);
 			},
-			error => {
+			(error) => {
 				console.log('could not retrieve initial state, waiting for EBS update');
 			},
 		);

@@ -135,7 +135,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 			return;
 		}
 		this.currentTurn = this._game.currentTurn;
-		const nextOpponent = this._game.players.find(player => player.cardId === this._panel.opponentOverview.cardId);
+		const nextOpponent = this._game.players.find((player) => player.cardId === this._panel.opponentOverview.cardId);
 		if (!nextOpponent) {
 			// console.log(
 			// 	'no next opponent yet',
@@ -152,7 +152,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		this.faceOffs = this._game.faceOffs;
 		this.lastOpponentCardId = this._game.lastOpponentCardId;
 		this.opponents = this._game.players
-			.filter(player => !player.isMainPlayer)
+			.filter((player) => !player.isMainPlayer)
 			.sort((a, b) => {
 				if (a.leaderboardPlace < b.leaderboardPlace) {
 					return -1;

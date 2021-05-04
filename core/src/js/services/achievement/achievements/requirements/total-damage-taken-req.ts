@@ -39,7 +39,7 @@ export class TotalDamageTakenReq implements Requirement {
 		const localPlayerCardId = gameEvent.localPlayer?.CardID;
 		const localPlayerId = gameEvent.localPlayer?.PlayerId;
 		const damageForLocalPlayer = Object.values(gameEvent.additionalData.targets).find(
-			target => target.TargetCardId === localPlayerCardId,
+			(target) => target.TargetCardId === localPlayerCardId,
 		);
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
 		if (damageForLocalPlayer && damageForLocalPlayer.TargetControllerId === localPlayerId) {

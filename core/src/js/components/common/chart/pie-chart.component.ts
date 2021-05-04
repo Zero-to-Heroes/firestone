@@ -64,11 +64,11 @@ export class PieChartComponent {
 			return;
 		}
 
-		this.chartData = this._inputData.map(data => data.data);
-		this.chartLabels = this._inputData.map(data => data.label);
+		this.chartData = this._inputData.map((data) => data.data);
+		this.chartLabels = this._inputData.map((data) => data.label);
 		this.chartColors = [
 			{
-				backgroundColor: this._inputData.map(data => data.color),
+				backgroundColor: this._inputData.map((data) => data.color),
 				borderColor: 'transparent',
 			},
 		];
@@ -114,9 +114,9 @@ export class PieChartComponent {
 			plugins: {
 				datalabels: {
 					// Don't show the "missing" labels
-					display: ctx => ctx.dataIndex % 2 === 0,
+					display: (ctx) => ctx.dataIndex % 2 === 0,
 					formatter: (value, ctx) => (value ? this._inputData[ctx.dataIndex].label : null),
-					color: ctx => this._inputData[ctx.dataIndex].color as any,
+					color: (ctx) => this._inputData[ctx.dataIndex].color as any,
 					anchor: 'end',
 					align: 'end',
 					clip: false,

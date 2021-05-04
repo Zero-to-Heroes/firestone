@@ -21,7 +21,7 @@ export class SecretDestroyedParser implements EventParser {
 		// console.log('destroying secrets', deck, isPlayer, currentState, gameEvent);
 		// console.log('current secrets', deck.secrets, entityId);
 
-		const newSecrets: readonly BoardSecret[] = deck.secrets.filter(secret => secret.entityId !== entityId);
+		const newSecrets: readonly BoardSecret[] = deck.secrets.filter((secret) => secret.entityId !== entityId);
 
 		const newPlayerDeck = deck.update({
 			secrets: newSecrets,

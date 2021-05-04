@@ -9,8 +9,8 @@ export class GetActiveDeckOperation extends MindVisionOperationFacade<DeckInfoFr
 			ow,
 			'getActiveDeck',
 			(forceReset?: boolean, selectedDeckId?: number) => mindVision.getActiveDeck(selectedDeckId),
-			deck => !deck,
-			deck => deck,
+			(deck) => !deck,
+			(deck) => deck,
 			5,
 			2000,
 		);

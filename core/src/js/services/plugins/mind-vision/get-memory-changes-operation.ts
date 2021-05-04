@@ -9,8 +9,8 @@ export class GetMemoryChangesOperation extends MindVisionOperationFacade<MemoryU
 			ow,
 			'getMemoryChanges',
 			() => mindVision.getMemoryChanges(),
-			info => false,
-			info => info,
+			(info) => false,
+			(info) => info,
 			2,
 			200,
 		);

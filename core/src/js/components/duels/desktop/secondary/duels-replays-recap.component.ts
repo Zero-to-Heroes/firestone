@@ -44,12 +44,12 @@ export class DuelsReplaysRecapComponent {
 		}
 
 		this.replays = this._state.duels.playerStats.personalDeckStats
-			.map(deck => deck.runs)
+			.map((deck) => deck.runs)
 			.reduce((a, b) => a.concat(b), [])
-			.map(run => run.steps)
+			.map((run) => run.steps)
 			.reduce((a, b) => a.concat(b), [])
-			.filter(step => (step as GameStat).opponentCardId)
-			.map(step => step as GameStat)
+			.filter((step) => (step as GameStat).opponentCardId)
+			.map((step) => step as GameStat)
 			.sort((a: GameStat, b: GameStat) => {
 				if (a.creationTimestamp <= b.creationTimestamp) {
 					return 1;

@@ -102,7 +102,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 			this.preferencesSubscription =
 				preferencesEventBus &&
-				preferencesEventBus.subscribe(event => {
+				preferencesEventBus.subscribe((event) => {
 					this.refreshScroll();
 				});
 		}

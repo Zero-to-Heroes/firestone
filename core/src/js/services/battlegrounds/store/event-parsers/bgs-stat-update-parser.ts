@@ -18,7 +18,7 @@ export class BgsStatUpdateParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsStatUpdateEvent): Promise<BattlegroundsState> {
 		//console.log('[debug] state before update', currentState);
-		const bgsMatchStats = event.newGameStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
+		const bgsMatchStats = event.newGameStats?.stats?.filter((stat) => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
 			return currentState;
 		}
@@ -27,7 +27,9 @@ export class BgsStatUpdateParser implements EventParser {
 		const currentBattlegroundsMetaPatch =
 			currentState.globalStats?.currentBattlegroundsMetaPatch ||
 			(await this.patchesService.getConf()).currentBattlegroundsMetaPatch;
-		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat => stat.buildNumber >= currentBattlegroundsMetaPatch);
+		const bgsStatsForCurrentPatch = bgsMatchStats.filter(
+			(stat) => stat.buildNumber >= currentBattlegroundsMetaPatch,
+		);
 		console.log(
 			'[bgs-stat-update] bgsStatsForCurrentPatch',
 			bgsStatsForCurrentPatch.length,
@@ -59,22 +61,22 @@ export class BgsStatUpdateParser implements EventParser {
 		cards: AllCardsService,
 	) {
 		const heroStats =
-			globalStats?.heroStats?.map(heroStat => {
-				const playerGamesPlayed = bgsStatsForCurrentPatch.filter(stat => stat.playerCardId === heroStat.id)
+			globalStats?.heroStats?.map((heroStat) => {
+				const playerGamesPlayed = bgsStatsForCurrentPatch.filter((stat) => stat.playerCardId === heroStat.id)
 					.length;
 				const playerPopularity = (100 * playerGamesPlayed) / bgsStatsForCurrentPatch.length;
 				const gamesWithMmr = bgsStatsForCurrentPatch
-					.filter(stat => stat.playerCardId === heroStat.id)
-					.filter(stat => stat.newPlayerRank != null && stat.playerRank != null)
-					.filter(stat =>
+					.filter((stat) => stat.playerCardId === heroStat.id)
+					.filter((stat) => stat.newPlayerRank != null && stat.playerRank != null)
+					.filter((stat) =>
 						BgsStatUpdateParser.isValidMmrDelta(parseInt(stat.newPlayerRank) - parseInt(stat.playerRank)),
 					) // Safeguard against season reset
-					.filter(stat => !isNaN(parseInt(stat.newPlayerRank) - parseInt(stat.playerRank)));
+					.filter((stat) => !isNaN(parseInt(stat.newPlayerRank) - parseInt(stat.playerRank)));
 				const gamesWithPositiveMmr = gamesWithMmr.filter(
-					stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank) > 0,
+					(stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank) > 0,
 				);
 				const gamesWithNegativeMmr = gamesWithMmr.filter(
-					stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank) < 0,
+					(stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank) < 0,
 				);
 				return BgsHeroStat.create({
 					...heroStat,
@@ -88,44 +90,44 @@ export class BgsStatUpdateParser implements EventParser {
 						playerGamesPlayed === 0
 							? 0
 							: bgsStatsForCurrentPatch
-									.filter(stat => stat.playerCardId === heroStat.id)
-									.map(stat => parseInt(stat.additionalResult))
+									.filter((stat) => stat.playerCardId === heroStat.id)
+									.map((stat) => parseInt(stat.additionalResult))
 									.reduce((a, b) => a + b, 0) / playerGamesPlayed,
 					playerAverageMmr:
 						gamesWithMmr.length === 0
 							? 0
 							: gamesWithMmr
-									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
+									.map((stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithMmr.length,
 					playerAverageMmrGain:
 						gamesWithPositiveMmr.length === 0
 							? 0
 							: gamesWithPositiveMmr
-									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
+									.map((stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithPositiveMmr.length,
 					playerAverageMmrLoss:
 						gamesWithNegativeMmr.length === 0
 							? 0
 							: gamesWithNegativeMmr
-									.map(stat => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
+									.map((stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithNegativeMmr.length,
 					playerTop4:
 						playerGamesPlayed === 0
 							? 0
 							: (100 *
 									bgsStatsForCurrentPatch
-										.filter(stat => stat.playerCardId === heroStat.id)
-										.map(stat => parseInt(stat.additionalResult))
-										.filter(position => position <= 4).length) /
+										.filter((stat) => stat.playerCardId === heroStat.id)
+										.map((stat) => parseInt(stat.additionalResult))
+										.filter((position) => position <= 4).length) /
 							  playerGamesPlayed,
 					playerTop1:
 						playerGamesPlayed === 0
 							? 0
 							: (100 *
 									bgsStatsForCurrentPatch
-										.filter(stat => stat.playerCardId === heroStat.id)
-										.map(stat => parseInt(stat.additionalResult))
-										.filter(position => position == 1).length) /
+										.filter((stat) => stat.playerCardId === heroStat.id)
+										.map((stat) => parseInt(stat.additionalResult))
+										.filter((position) => position == 1).length) /
 							  playerGamesPlayed,
 				} as BgsHeroStat);
 			}) ||

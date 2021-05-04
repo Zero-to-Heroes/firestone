@@ -76,7 +76,7 @@ export class ReplaysStateBuilderService {
 		type: ReplaysFilterCategoryType,
 		value: string,
 	): readonly ReplaysFilter[] {
-		return filters.map(filter =>
+		return filters.map((filter) =>
 			filter.type === type
 				? Object.assign(
 						filter.update({
@@ -88,11 +88,11 @@ export class ReplaysStateBuilderService {
 	}
 
 	private filterStats(stats: StatsState, filters: readonly ReplaysFilter[]): readonly GameStat[] {
-		return stats.gameStats.stats.filter(stat => this.isValidStat(stat, filters));
+		return stats.gameStats.stats.filter((stat) => this.isValidStat(stat, filters));
 	}
 
 	private isValidStat(stat: GameStat, filters: readonly ReplaysFilter[]): boolean {
-		return filters.every(filter => filter.allows(stat));
+		return filters.every((filter) => filter.allows(stat));
 	}
 
 	private groupReplays(allReplays: readonly GameStat[], groupByCriteria: string): readonly GroupedReplays[] {
@@ -107,7 +107,7 @@ export class ReplaysStateBuilderService {
 		const groupByDate = groupByFunction(groupingFunction);
 		const replaysByDate = groupByDate(allReplays);
 		// console.log('[replays-state-builder] loaded replays by date');
-		return Object.keys(replaysByDate).map(date => this.buildGroupedReplays(date, replaysByDate[date]));
+		return Object.keys(replaysByDate).map((date) => this.buildGroupedReplays(date, replaysByDate[date]));
 	}
 
 	private buildGroupedReplays(date: string, replays: readonly GameStat[]): GroupedReplays {

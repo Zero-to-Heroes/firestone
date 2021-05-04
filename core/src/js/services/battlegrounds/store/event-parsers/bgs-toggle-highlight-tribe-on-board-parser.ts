@@ -14,7 +14,7 @@ export class BgsToggleHighlightTribeOnBoardParser implements EventParser {
 		event: BgsToggleHighlightTribeOnBoardEvent,
 	): Promise<BattlegroundsState> {
 		const highlightedTribes: readonly Race[] = currentState.highlightedTribes.includes(event.tribe)
-			? currentState.highlightedTribes.filter(tribe => tribe !== event.tribe)
+			? currentState.highlightedTribes.filter((tribe) => tribe !== event.tribe)
 			: [...currentState.highlightedTribes, event.tribe];
 		return currentState.update({
 			highlightedTribes: highlightedTribes,

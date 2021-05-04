@@ -134,7 +134,7 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 	ngAfterViewInit() {
 		this.loadDefaultValues();
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
+		this.displaySubscription = displayEventBus.asObservable().subscribe((shouldDisplay) => {
 			// console.log('should display', shouldDisplay);
 			this.sliderEnabled = shouldDisplay;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -143,7 +143,7 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		});
 
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
 			const preferences: Preferences = event.preferences;
 			this.overlayGroupByZone = preferences.overlayGroupByZone;
 			this.opponentTracker = preferences.opponentTracker;

@@ -76,7 +76,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 		this.subscription = this.valueChanged
 			.pipe(
 				distinctUntilChanged(),
-				map(model => {
+				map((model) => {
 					this.value = model;
 					this.updateValueElements();
 					if (!(this.cdr as ViewRef)?.destroyed) {
@@ -84,7 +84,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 					}
 				}),
 				debounceTime(20),
-				map(model => {
+				map((model) => {
 					// console.log('changing slider value', this.value, this.progress);
 					this.prefs.setValue(this.field, this.value);
 				}),
@@ -159,7 +159,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 		const width = this.el.nativeElement.querySelector('input').getBoundingClientRect().width - 8;
 		// console.log('updating left', width, this.el.nativeElement.getBoundingClientRect(), this.progress);
 		this.left =
-			this.knobs && this.knobs.some(knob => knob.percentageValue === 0)
+			this.knobs && this.knobs.some((knob) => knob.percentageValue === 0)
 				? Math.min(10, Math.max(2, (this.progress / 100) * width))
 				: 0;
 		this.right = ((100 - this.progress) * width) / 100 + this.hackRightOffset;

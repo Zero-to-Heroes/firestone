@@ -26,7 +26,7 @@ export class ApiRunner {
 					console.log('retrieved POST call', url, input);
 					resolve(result);
 				},
-				error => {
+				(error) => {
 					console.error('Could not execute POST call', url, input, error);
 					resolve(null);
 				},
@@ -41,7 +41,7 @@ export class ApiRunner {
 					console.log('retrieved GET call', url);
 					resolve(result);
 				},
-				error => {
+				(error) => {
 					// Some users have a VPN / ISP config that prevents them from accessing our static
 					// data, so there's nothing we can do unless they contact us directly
 					if (!url.includes('.json')) {

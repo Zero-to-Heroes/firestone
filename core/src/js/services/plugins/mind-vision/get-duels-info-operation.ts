@@ -10,8 +10,8 @@ export class GetDuelsInfoOperation extends MindVisionOperationFacade<DuelsInfo> 
 			ow,
 			'getDuelsInfo',
 			(forceReset?: boolean) => mindVision.getDuelsInfo(forceReset),
-			info => false,
-			info =>
+			(info) => false,
+			(info) =>
 				({
 					...info,
 					FormatType: GameFormat.FT_WILD,

@@ -107,7 +107,7 @@ export class BgsBattleSimulationService {
 	}
 
 	private async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult> {
-		return new Promise<SimulationResult>(resolve => {
+		return new Promise<SimulationResult>((resolve) => {
 			const worker = new Worker();
 			worker.onmessage = (ev: MessageEvent) => {
 				worker.terminate();

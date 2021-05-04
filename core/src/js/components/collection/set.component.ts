@@ -225,7 +225,7 @@ export class SetComponent implements AfterViewInit {
 	}
 
 	getOwnedLimitCollectibleCards(): number {
-		return this._cardSet.allCards.map(card => card.getNumberCollectedPremium()).reduce((c1, c2) => c1 + c2, 0);
+		return this._cardSet.allCards.map((card) => card.getNumberCollectedPremium()).reduce((c1, c2) => c1 + c2, 0);
 	}
 
 	browseSet() {

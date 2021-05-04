@@ -176,8 +176,8 @@ export class BgsPostMatchStatsRecapComponent {
 		const isNewRecord =
 			this?._stats?.newBestUserStats &&
 			this?._game?.reviewId &&
-			this?._stats?.newBestUserStats.find(stat => stat.statName === statName) != null &&
-			this?._stats?.newBestUserStats.find(stat => stat.statName === statName).reviewId === this._game.reviewId;
+			this?._stats?.newBestUserStats.find((stat) => stat.statName === statName) != null &&
+			this?._stats?.newBestUserStats.find((stat) => stat.statName === statName).reviewId === this._game.reviewId;
 		// console.log('isNewRecord', statName, isNewRecord, this._stats);
 		return isNewRecord;
 	}
@@ -189,51 +189,51 @@ export class BgsPostMatchStatsRecapComponent {
 			this.reset();
 			return;
 		}
-		this.wins = this._game?.faceOffs?.filter(faceOff => faceOff.result === 'won')?.length || 0;
-		this.losses = this._game?.faceOffs?.filter(faceOff => faceOff.result === 'lost')?.length || 0;
-		this.ties = this._game?.faceOffs?.filter(faceOff => faceOff.result === 'tied')?.length || 0;
+		this.wins = this._game?.faceOffs?.filter((faceOff) => faceOff.result === 'won')?.length || 0;
+		this.losses = this._game?.faceOffs?.filter((faceOff) => faceOff.result === 'lost')?.length || 0;
+		this.ties = this._game?.faceOffs?.filter((faceOff) => faceOff.result === 'tied')?.length || 0;
 
 		this.winStreak = this._stats.player.highestWinStreak;
 		this.totalMinionsDamageDealt = Object.keys(this._stats.stats.totalMinionsDamageDealt)
-			.filter(cardId => cardId !== this._stats.player.cardId)
-			.map(cardId => this._stats.stats.totalMinionsDamageDealt[cardId])
+			.filter((cardId) => cardId !== this._stats.player.cardId)
+			.map((cardId) => this._stats.stats.totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
 		this.totalMinionsDamageTaken = Object.keys(this._stats.stats.totalMinionsDamageTaken)
-			.filter(cardId => cardId !== this._stats.player.cardId)
-			.map(cardId => this._stats.stats.totalMinionsDamageTaken[cardId])
+			.filter((cardId) => cardId !== this._stats.player.cardId)
+			.map((cardId) => this._stats.stats.totalMinionsDamageTaken[cardId])
 			.reduce((a, b) => a + b, 0);
 		if (this._stats.stats.damageToEnemyHeroOverTurn) {
 			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
-				.filter(info => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
-				.map(info => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
+				.filter((info) => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+				.map((info) => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
 			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero, this.maxSingleTurnHeroDamageDealt);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
 		}
 		this.triples = this._stats.stats.tripleTimings?.length;
 		//console.log('triples2', this.triples, this._stats);
 		// console.error('should reactivated coins wasted');
-		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
-		this.freezes = this._stats.stats.freezesOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
+		this.freezes = this._stats.stats.freezesOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
 		this.minionsBought = this._stats.stats.minionsBoughtOverTurn
-			.map(value => value.value)
+			.map((value) => value.value)
 			.reduce((a, b) => a + b, 0);
-		this.minionsSold = this._stats.stats.minionsSoldOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		this.minionsSold = this._stats.stats.minionsSoldOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
 		this.heroPowers = this._stats.stats.mainPlayerHeroPowersOverTurn
-			.map(value => value.value)
+			.map((value) => value.value)
 			.reduce((a, b) => a + b, 0);
-		this.maxBoardStats = Math.max(0, Math.max(...this._stats.stats.totalStatsOverTurn.map(stat => stat.value)));
+		this.maxBoardStats = Math.max(0, Math.max(...this._stats.stats.totalStatsOverTurn.map((stat) => stat.value)));
 		// Hack for Toki, to avoid counting the hero power as a refresh (even though it technically
 		// is a refresh)
-		const rerolls = this._stats.stats.rerollsOverTurn.map(value => value.value).reduce((a, b) => a + b, 0);
+		const rerolls = this._stats.stats.rerollsOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
 		this.rerolls =
 			this._stats.player.cardId === CardIds.NonCollectible.Neutral.InfiniteTokiTavernBrawl
 				? rerolls - this.heroPowers
 				: rerolls;
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;
 		this.heroesKilled = this._stats.stats.totalEnemyHeroesKilled;
-		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter(value => value.value === true)
+		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter((value) => value.value === true)
 			.length;
-		const battlesGoingSecond = this._stats.stats.wentFirstInBattleOverTurn.filter(value => value.value === false)
+		const battlesGoingSecond = this._stats.stats.wentFirstInBattleOverTurn.filter((value) => value.value === false)
 			.length;
 		this.percentageOfBattlesGoingFirst =
 			this._stats.stats.wentFirstInBattleOverTurn.length === 0

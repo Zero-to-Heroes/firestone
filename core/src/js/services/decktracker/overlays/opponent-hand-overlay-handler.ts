@@ -7,8 +7,8 @@ export class OpponentHandOverlayHandler extends AbstractOverlayHandler {
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW,
-			prefs => prefs.dectrackerShowOpponentGuess || prefs.dectrackerShowOpponentTurnDraw,
-			state => !state.isBattlegrounds(),
+			(prefs) => prefs.dectrackerShowOpponentGuess || prefs.dectrackerShowOpponentTurnDraw,
+			(state) => !state.isBattlegrounds(),
 			ow,
 			prefs,
 			allCards,

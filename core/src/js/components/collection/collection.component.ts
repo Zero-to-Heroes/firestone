@@ -125,8 +125,8 @@ export class CollectionComponent {
 
 	@Input() set state(state: BinderState) {
 		this.dataState = state;
-		this.standardSets = state.allSets.filter(set => set.standard);
-		this.wildSets = state.allSets.filter(set => !set.standard);
+		this.standardSets = state.allSets.filter((set) => set.standard);
+		this.wildSets = state.allSets.filter((set) => !set.standard);
 		// console.log('set state in collection', this._state);
 		this.updateValues();
 	}
@@ -156,25 +156,25 @@ export class CollectionComponent {
 		}
 
 		this.selectedSet = this.dataState.allSets.find(
-			set => set.id === this._navigation.navigationCollection?.selectedSetId,
+			(set) => set.id === this._navigation.navigationCollection?.selectedSetId,
 		);
 		this.selectedCard = this._navigation.navigationCollection?.selectedCardId
 			? this.dataState.allSets
-					.map(set => set.allCards)
+					.map((set) => set.allCards)
 					.reduce((a, b) => a.concat(b), [])
-					.find(card => card.id === this._navigation.navigationCollection?.selectedCardId) ??
+					.find((card) => card.id === this._navigation.navigationCollection?.selectedCardId) ??
 			  // This is the case when it's not a collectible card for instance
 			  this.allCards.getCard(this._navigation.navigationCollection?.selectedCardId)
 			: null;
 		this.selectedCardBack = this.dataState.cardBacks.find(
-			cardBack => cardBack.id === this._navigation.navigationCollection?.selectedCardBackId,
+			(cardBack) => cardBack.id === this._navigation.navigationCollection?.selectedCardBackId,
 		);
 		this.searchResults =
 			this._navigation.navigationCollection.searchResults?.length > 0
 				? this.dataState.allSets
-						.map(set => set.allCards)
+						.map((set) => set.allCards)
 						.reduce((a, b) => a.concat(b), [])
-						.filter(card => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
+						.filter((card) => this._navigation.navigationCollection.searchResults.indexOf(card.id) !== -1)
 				: null;
 		this.heroPortraits = this.buildHeroPortraits();
 		this.coins = this.buildCoins();
@@ -183,14 +183,14 @@ export class CollectionComponent {
 	private buildHeroPortraits(): readonly CollectionReferenceCard[] {
 		const allPortraits: readonly ReferenceCard[] = this.allCards
 			.getCards()
-			.filter(card => card.set === 'Hero_skins')
-			.filter(card => card.collectible);
-		const portraitCardIds = allPortraits.map(card => card.id);
+			.filter((card) => card.set === 'Hero_skins')
+			.filter((card) => card.collectible);
+		const portraitCardIds = allPortraits.map((card) => card.id);
 		const ownedPortraits = this.dataState.collection
-			.filter(card => (card.count ?? 0) + (card.premiumCount ?? 0) > 0)
-			.map(card => card.id)
-			.filter(cardId => portraitCardIds.includes(cardId));
-		return allPortraits.map(card =>
+			.filter((card) => (card.count ?? 0) + (card.premiumCount ?? 0) > 0)
+			.map((card) => card.id)
+			.filter((cardId) => portraitCardIds.includes(cardId));
+		return allPortraits.map((card) =>
 			ownedPortraits.includes(card.id)
 				? ({
 						...card,
@@ -202,7 +202,7 @@ export class CollectionComponent {
 
 	private buildCoins(): readonly CollectionReferenceCard[] {
 		return this.dataState.coins
-			.map(coin => {
+			.map((coin) => {
 				const refCoin = this.allCards.getCard(coin.cardId);
 				return {
 					...refCoin,

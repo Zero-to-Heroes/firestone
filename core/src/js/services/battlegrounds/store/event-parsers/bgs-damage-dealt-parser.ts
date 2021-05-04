@@ -13,7 +13,7 @@ export class BgsDamageDealtParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsDamageDealtEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.players.find(
-			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
+			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
 		if (!playerToUpdate) {
 			return currentState;
@@ -21,7 +21,7 @@ export class BgsDamageDealtParser implements EventParser {
 		const newPlayer = playerToUpdate.update({
 			damageTaken: event.damage,
 		} as BgsPlayer);
-		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map(player =>
+		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
 			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);

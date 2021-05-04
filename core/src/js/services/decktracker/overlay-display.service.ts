@@ -29,11 +29,11 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private init() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.pipe(debounceTime(200)).subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.pipe(debounceTime(200)).subscribe((event) => {
 			this.handleDisplayPreferences(this.gameState, event.preferences);
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async event => {
+		const subscriber = new Subscriber<any>(async (event) => {
 			if (event) {
 				this.gameState = event.state;
 				await this.processEvent(event.event);

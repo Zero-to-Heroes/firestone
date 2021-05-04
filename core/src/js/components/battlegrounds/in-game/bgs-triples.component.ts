@@ -65,11 +65,11 @@ export class BgsTriplesComponent {
 		if (!this.allTriples || this._boardTurn == null) {
 			return;
 		}
-		const triplesSinceLastBoard = this.allTriples.filter(triple => triple.turn >= this._boardTurn);
+		const triplesSinceLastBoard = this.allTriples.filter((triple) => triple.turn >= this._boardTurn);
 		const groupedByTier = groupByFunction((triple: BgsTriple) => '' + triple.tierOfTripledMinion)(
 			triplesSinceLastBoard,
 		);
-		this.tierTriples = Object.keys(groupedByTier).map(minionTier => ({
+		this.tierTriples = Object.keys(groupedByTier).map((minionTier) => ({
 			minionTier: parseInt(minionTier),
 			quantity: groupedByTier[minionTier].length as number,
 		}));

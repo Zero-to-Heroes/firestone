@@ -21,7 +21,7 @@ export class GameStatsUpdaterService {
 	}
 
 	private init() {
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async data => {
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (data) => {
 			const info: ManastormInfo = data.data[0];
 			const newGameStat: GameStat = this.buildGameStat(info.reviewId, info.game);
 			console.log('built new game stat', newGameStat);

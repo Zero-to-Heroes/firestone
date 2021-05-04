@@ -14,8 +14,8 @@ export class BattlegroundsGlobalCategory {
 
 	public hasSubCategory(categoryId: string): boolean {
 		const allCategories = this.categories
-			.map(category => BattlegroundsAppState.extractCategory(category))
+			.map((category) => BattlegroundsAppState.extractCategory(category))
 			.reduce((a, b) => a.concat(b), []);
-		return allCategories.some(cat => cat.id === categoryId);
+		return allCategories.some((cat) => cat.id === categoryId);
 	}
 }

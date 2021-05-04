@@ -45,7 +45,7 @@ export class DecksStateBuilderService {
 		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
 		const deckstrings = Object.keys(statsByDeck);
 		const decks: readonly DeckSummary[] = deckstrings
-			.map(deckstring => this.buildDeckSummary(deckstring, statsByDeck[deckstring], prefs))
+			.map((deckstring) => this.buildDeckSummary(deckstring, statsByDeck[deckstring], prefs))
 			.sort(this.getSortFunction(filters.sort));
 
 		return decks;
@@ -59,9 +59,9 @@ export class DecksStateBuilderService {
 	): readonly GameStat[] {
 		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		const replaysForDate = stats.gameStats.stats
-			.filter(stat => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
-			.filter(stat => stat.gameMode === filters.gameMode)
-			.filter(stat => this.isValidDate(stat, filters.time, patch));
+			.filter((stat) => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
+			.filter((stat) => stat.gameMode === filters.gameMode)
+			.filter((stat) => this.isValidDate(stat, filters.time, patch));
 		// Make sure that if the current filter is "season-start", the first game starts in Bronze
 		let indexOfFirstGame = replaysForDate.length;
 		// console.log('replaysForDate', replaysForDate);
@@ -76,10 +76,10 @@ export class DecksStateBuilderService {
 		}
 		return replaysForDate
 			.slice(0, indexOfFirstGame)
-			.filter(stat => this.isValidRank(stat, filters.rank))
-			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined')
+			.filter((stat) => this.isValidRank(stat, filters.rank))
+			.filter((stat) => stat.playerDecklist && stat.playerDecklist !== 'undefined')
 			.filter(
-				stat => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
+				(stat) => !prefs || prefs.desktopDeckShowHiddenDecks || !hiddenDeckCodes.includes(stat.playerDecklist),
 			);
 	}
 
@@ -168,7 +168,7 @@ export class DecksStateBuilderService {
 
 	private buildDeckSummary(deckstring: string, stats: readonly GameStat[], prefs: Preferences): DeckSummary {
 		const statsWithReset = stats.filter(
-			stat =>
+			(stat) =>
 				!prefs?.desktopDeckStatsReset ||
 				!prefs.desktopDeckStatsReset[stat.playerDecklist]?.length ||
 				prefs.desktopDeckStatsReset[stat.playerDecklist][
@@ -177,27 +177,27 @@ export class DecksStateBuilderService {
 		);
 		// console.debug(statsWithReset);
 		const deckName =
-			stats.filter(stat => stat.playerDeckName).length > 0
-				? stats.filter(stat => stat.playerDeckName)[0].playerDeckName
+			stats.filter((stat) => stat.playerDeckName).length > 0
+				? stats.filter((stat) => stat.playerDeckName)[0].playerDeckName
 				: undefined;
 		const deckArchetype =
-			stats.filter(stat => stat.playerArchetypeId).length > 0
-				? stats.filter(stat => stat.playerArchetypeId)[0].playerArchetypeId
+			stats.filter((stat) => stat.playerArchetypeId).length > 0
+				? stats.filter((stat) => stat.playerArchetypeId)[0].playerArchetypeId
 				: undefined;
 		const deckSkin =
-			stats.filter(stat => stat.playerCardId).length > 0
-				? stats.filter(stat => stat.playerCardId)[0].playerCardId
+			stats.filter((stat) => stat.playerCardId).length > 0
+				? stats.filter((stat) => stat.playerCardId)[0].playerCardId
 				: undefined;
 		const deckClass =
-			stats.filter(stat => stat.playerClass).length > 0
-				? stats.filter(stat => stat.playerClass)[0].playerClass
+			stats.filter((stat) => stat.playerClass).length > 0
+				? stats.filter((stat) => stat.playerClass)[0].playerClass
 				: undefined;
 		const totalGames = statsWithReset.length;
-		const totalWins = statsWithReset.filter(stat => stat.result === 'won').length;
-		const lastUsed = statsWithReset.filter(stat => stat.creationTimestamp)?.length
-			? statsWithReset.filter(stat => stat.creationTimestamp)[0]?.creationTimestamp
-			: stats.filter(stat => stat.creationTimestamp)?.length
-			? stats.filter(stat => stat.creationTimestamp)[0]?.creationTimestamp
+		const totalWins = statsWithReset.filter((stat) => stat.result === 'won').length;
+		const lastUsed = statsWithReset.filter((stat) => stat.creationTimestamp)?.length
+			? statsWithReset.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
+			: stats.filter((stat) => stat.creationTimestamp)?.length
+			? stats.filter((stat) => stat.creationTimestamp)[0]?.creationTimestamp
 			: undefined;
 		const matchupStats: readonly MatchupStat[] = this.buildMatchupStats(statsWithReset);
 		return Object.assign(new DeckSummary(), {
@@ -217,7 +217,7 @@ export class DecksStateBuilderService {
 	}
 
 	private buildFormat(stats: readonly GameStat[]): StatGameFormatType {
-		const uniqueFormats: readonly StatGameFormatType[] = [...new Set(stats.map(stat => stat.gameFormat))];
+		const uniqueFormats: readonly StatGameFormatType[] = [...new Set(stats.map((stat) => stat.gameFormat))];
 		if (uniqueFormats.includes('wild')) {
 			return 'wild';
 		}
@@ -228,24 +228,24 @@ export class DecksStateBuilderService {
 	}
 
 	private buildMatchupStats(stats: readonly GameStat[]): readonly MatchupStat[] {
-		return ALL_CLASSES.map(opponentClass => {
-			const games = stats.filter(stat => stat.opponentClass?.toLowerCase() === opponentClass);
+		return ALL_CLASSES.map((opponentClass) => {
+			const games = stats.filter((stat) => stat.opponentClass?.toLowerCase() === opponentClass);
 			return {
 				opponentClass: opponentClass,
 				totalGames: games.length,
-				totalWins: games.filter(game => game.result === 'won').length,
-				totalGamesFirst: games.filter(game => game.coinPlay === 'play').length,
-				totalGamesCoin: games.filter(game => game.coinPlay === 'coin').length,
-				totalWinsFirst: games.filter(game => game.coinPlay === 'play').filter(game => game.result === 'won')
+				totalWins: games.filter((game) => game.result === 'won').length,
+				totalGamesFirst: games.filter((game) => game.coinPlay === 'play').length,
+				totalGamesCoin: games.filter((game) => game.coinPlay === 'coin').length,
+				totalWinsFirst: games.filter((game) => game.coinPlay === 'play').filter((game) => game.result === 'won')
 					.length,
-				totalWinsCoin: games.filter(game => game.coinPlay === 'coin').filter(game => game.result === 'won')
+				totalWinsCoin: games.filter((game) => game.coinPlay === 'coin').filter((game) => game.result === 'won')
 					.length,
 			} as MatchupStat;
 		});
 	}
 }
 
-const groupBy = key => array =>
+const groupBy = (key) => (array) =>
 	array.reduce((objectsByKeyValue, obj) => {
 		const value = obj[key];
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);

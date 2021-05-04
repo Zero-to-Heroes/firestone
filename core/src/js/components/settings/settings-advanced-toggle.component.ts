@@ -42,7 +42,7 @@ export class SettingsAdvancedToggleComponent implements AfterViewInit, OnDestroy
 	ngAfterViewInit() {
 		this.loadDefaultValues();
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
 			const preferences: Preferences = event.preferences;
 			this.advancedModeToggledOn = preferences.advancedModeToggledOn;
 			if (!(this.cdr as ViewRef)?.destroyed) {

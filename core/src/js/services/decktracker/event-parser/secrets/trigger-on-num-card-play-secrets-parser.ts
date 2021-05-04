@@ -39,7 +39,7 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 			toExclude.push(CardIds.Collectible.Paladin.HiddenWisdom);
 		}
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
-			secret => toExclude.indexOf(secret) === -1,
+			(secret) => toExclude.indexOf(secret) === -1,
 		);
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {

@@ -2,7 +2,7 @@ import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { capitalizeEachWord } from './utils';
 
-export const CARDS_VERSION = '79904';
+export const CARDS_VERSION = '81706';
 
 export const classes = [
 	'demonhunter',
@@ -460,7 +460,7 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 
 export const getPackDustValue = (pack: PackResult): number => {
 	return pack.cards
-		.map(card => (card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity)))
+		.map((card) => (card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity)))
 		.reduce((a, b) => a + b, 0);
 };
 

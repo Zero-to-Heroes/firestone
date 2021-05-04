@@ -45,12 +45,12 @@ export class FilterShownAchievementsProcessor implements Processor {
 			searchString?.length && searchString.length > 2
 				? allAchievements
 						.filter(
-							achv =>
+							(achv) =>
 								achv.name.toLowerCase().indexOf(searchString) !== -1 ||
 								achv.text.toLowerCase().indexOf(searchString) !== -1,
 						)
-						.map(ach => ach.id)
-				: (selectedCategory?.achievements ?? []).map(ach => ach.id);
+						.map((ach) => ach.id)
+				: (selectedCategory?.achievements ?? []).map((ach) => ach.id);
 		const newState =
 			searchString?.length && searchString.length > 2
 				? navigationState.navigationAchievements.update({

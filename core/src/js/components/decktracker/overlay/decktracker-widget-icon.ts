@@ -66,7 +66,7 @@ export class DecktrackerWidgetIconComponent implements AfterViewInit {
 		this.draggingTimeout = setTimeout(() => {
 			this.isDragging = true;
 		}, 500);
-		this.ow.dragMove(this.windowId, async result => {
+		this.ow.dragMove(this.windowId, async (result) => {
 			clearTimeout(this.draggingTimeout);
 			this.isDragging = false;
 			const window = await this.ow.getCurrentWindow();

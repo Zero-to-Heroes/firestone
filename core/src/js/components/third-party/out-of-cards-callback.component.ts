@@ -6,9 +6,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 @Component({
 	selector: 'out-of-cards-callback',
 	styleUrls: [],
-	template: `
-		<div class="root"></div>
-	`,
+	template: ` <div class="root"></div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OutOfCardsCallbackComponent implements AfterViewInit {

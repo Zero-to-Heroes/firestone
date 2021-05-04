@@ -9,8 +9,8 @@ export class GetWhizbangDeckOperation extends MindVisionOperationFacade<DeckInfo
 			ow,
 			'getWhizbangDeck',
 			(forceReset?: boolean, deckId?: number) => mindVision.getWhizbangDeck(deckId),
-			deck => !deck,
-			deck => deck,
+			(deck) => !deck,
+			(deck) => deck,
 			5,
 			2000,
 		);

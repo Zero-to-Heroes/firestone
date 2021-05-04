@@ -45,7 +45,7 @@ export class ShowCardDetailsProcessor implements Processor {
 	}
 
 	private pickCard(selectedSet: Set, cardId: string): SetCard {
-		let card = selectedSet.allCards.find(card => card.id === cardId);
+		let card = selectedSet.allCards.find((card) => card.id === cardId);
 		if (!card) {
 			const rawCard = this.cards.getCard(cardId);
 			card = new SetCard(cardId, rawCard.name, rawCard.playerClass, rawCard.rarity, rawCard.cost, 0, 0);
@@ -54,12 +54,12 @@ export class ShowCardDetailsProcessor implements Processor {
 	}
 
 	private pickSet(allSets: readonly Set[], cardId: string): Set {
-		let set = allSets.find(set => set.allCards.some(card => card.id === cardId));
+		let set = allSets.find((set) => set.allCards.some((card) => card.id === cardId));
 		// Happens when cardId is not collectible
 		if (!set) {
 			const card = this.cards.getCard(cardId);
 			const setId = card.set.toLowerCase();
-			set = allSets.find(set => set.id === setId);
+			set = allSets.find((set) => set.id === setId);
 		}
 		return set;
 	}

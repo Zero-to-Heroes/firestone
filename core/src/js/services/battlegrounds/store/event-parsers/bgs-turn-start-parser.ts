@@ -19,7 +19,7 @@ export class BgsTurnStartParser implements EventParser {
 
 		const newCurrentTurn = Math.ceil(event.turnNumber / 2);
 		const newNextOpponentStage: BgsInGameStage = this.rebuildInGameStage(currentState, newCurrentTurn);
-		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
+		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === newNextOpponentStage.id ? newNextOpponentStage : stage,
 		);
 		console.log('updating turn', newCurrentTurn);
@@ -34,14 +34,14 @@ export class BgsTurnStartParser implements EventParser {
 	}
 
 	private rebuildInGameStage(currentState: BattlegroundsState, newCurrentTurn: number): BgsInGameStage {
-		const stageToRebuild = currentState.stages.find(stage => stage.id === 'in-game');
+		const stageToRebuild = currentState.stages.find((stage) => stage.id === 'in-game');
 		const panelToRebuild: BgsNextOpponentOverviewPanel = (stageToRebuild.panels.find(
-			panel => panel.id === 'bgs-next-opponent-overview',
+			(panel) => panel.id === 'bgs-next-opponent-overview',
 		) as BgsNextOpponentOverviewPanel).update({
 			name: `Turn ${newCurrentTurn} - Next opponent`,
 		} as BgsNextOpponentOverviewPanel);
 
-		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>
+		const panels: readonly BgsPanel[] = stageToRebuild.panels.map((panel) =>
 			panel.id === 'bgs-next-opponent-overview' ? panelToRebuild : panel,
 		);
 		return BgsInGameStage.create({

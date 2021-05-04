@@ -87,7 +87,7 @@ export class PackHistoryComponent implements AfterViewInit {
 			return;
 		}
 
-		const fullStats = (this._state.packStats ?? []).filter(stat => stat.boosterId != null || stat.setId != 'hof');
+		const fullStats = (this._state.packStats ?? []).filter((stat) => stat.boosterId != null || stat.setId != 'hof');
 		this.totalHistoryLength = fullStats.length;
 		this.packHistory = fullStats.slice(0, this.displayedHistorySize);
 		if (!(this.cdr as ViewRef)?.destroyed) {

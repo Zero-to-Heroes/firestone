@@ -70,7 +70,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 				// Firefox supports "clipboard", while chrome is "clipboard-write"
 				name: 'clipboard-write',
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.warn('could not receive permission', err);
 			});
 		console.log('copyPermission', copyPermission);

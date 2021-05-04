@@ -35,7 +35,7 @@ export class BgsInitService {
 		private readonly patchesService: PatchesConfigService,
 		private readonly prefs: PreferencesService,
 	) {
-		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
+		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			const newGameStats: GameStats = event.data[0];
 			console.log('[bgs-init] match stats updated');
 			this.bgsStateUpdater?.next(new BgsStatUpdateEvent(newGameStats));
@@ -52,20 +52,20 @@ export class BgsInitService {
 		console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
 		const patchConfig = await this.patchesService.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find(patch => patch.number === patchConfig.currentBattlegroundsMetaPatch)
+			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
 			: null;
 
 		const statsWithPatch = bgsGlobalStats?.update({
 			currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
 		} as BgsStats);
 
-		const bgsMatchStats = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
+		const bgsMatchStats = matchStats?.stats?.filter((stat) => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
 			console.log('[bgs-init] no bgs match stats');
 			this.bgsStateUpdater.next(new BgsInitEvent([], statsWithPatch));
 			return statsWithPatch;
 		}
-		const bgsStatsForCurrentPatch = bgsMatchStats.filter(stat =>
+		const bgsStatsForCurrentPatch = bgsMatchStats.filter((stat) =>
 			currentBattlegroundsMetaPatch ? stat.buildNumber >= currentBattlegroundsMetaPatch.number : true,
 		);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
@@ -111,8 +111,8 @@ export class BgsInitService {
 	private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
 		// console.log('building stats', bgsGlobalStats);
 		const heroDetailCategories: readonly BattlegroundsCategory[] = bgsGlobalStats?.heroStats
-			.filter(heroStat => heroStat.id !== 'average')
-			.map(heroStat =>
+			.filter((heroStat) => heroStat.id !== 'average')
+			.map((heroStat) =>
 				BattlegroundsPersonalStatsHeroDetailsCategory.create({
 					id: 'bgs-category-personal-hero-details-' + heroStat.id,
 					name: this.cards.getCard(heroStat.id)?.name,

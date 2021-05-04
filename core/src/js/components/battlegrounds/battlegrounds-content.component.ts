@@ -101,8 +101,8 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 
 	@Input() set state(value: BattlegroundsState) {
 		this._state = value;
-		this.currentStage = value?.stages?.find(stage => stage.id === value.currentStageId);
-		this.currentPanel = this.currentStage?.panels?.find(panel => panel.id === value.currentPanelId);
+		this.currentStage = value?.stages?.find((stage) => stage.id === value.currentStageId);
+		this.currentPanel = this.currentStage?.panels?.find((panel) => panel.id === value.currentPanelId);
 
 		// console.log('sett state in -content', value, this.currentStage, this.currentPanel);
 	}
@@ -121,7 +121,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		// console.log('after view init in bgs content');
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 		this.closeHandler = () => this.battlegroundsUpdater.next(new BgsCloseWindowEvent());

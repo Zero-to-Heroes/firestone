@@ -56,15 +56,15 @@ export class MatchMetadataParser implements EventParser {
 			!deckstringToUse || !store?.decktracker?.decks
 				? []
 				: store.decktracker.decks
-						?.find(deck => deck.deckstring === deckstringToUse)
-						?.replays?.filter(stat => stat.gameMode === 'ranked')
-						?.filter(stat => stat.gameFormat === convertedFormat) || [];
+						?.find((deck) => deck.deckstring === deckstringToUse)
+						?.replays?.filter((stat) => stat.gameMode === 'ranked')
+						?.filter((stat) => stat.gameFormat === convertedFormat) || [];
 		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
 		console.log('[match-metadata-parser] match metadata', convertedFormat, format, deckstringToUse);
 		let matchupStatsRecap = currentState.matchupStatsRecap;
 		if (currentState?.opponentDeck?.hero?.playerClass) {
 			const statsAgainstOpponent = currentState.deckStats.filter(
-				stat => stat.opponentClass === currentState?.opponentDeck?.hero.playerClass,
+				(stat) => stat.opponentClass === currentState?.opponentDeck?.hero.playerClass,
 			);
 			matchupStatsRecap = StatsRecap.from(
 				statsAgainstOpponent,
@@ -111,8 +111,8 @@ export class MatchMetadataParser implements EventParser {
 			return null;
 		}
 		return currentDeck.deck.heroes
-			.map(hero => this.allCards.getCardFromDbfId(+hero))
-			.map(heroCard => {
+			.map((hero) => this.allCards.getCardFromDbfId(+hero))
+			.map((heroCard) => {
 				if (!heroCard) {
 					console.error(
 						'could not map empty hero card',
@@ -123,7 +123,7 @@ export class MatchMetadataParser implements EventParser {
 				}
 				return heroCard;
 			})
-			.map(heroCard =>
+			.map((heroCard) =>
 				Object.assign(new HeroCard(), {
 					cardId: heroCard?.id,
 					name: heroCard?.name,

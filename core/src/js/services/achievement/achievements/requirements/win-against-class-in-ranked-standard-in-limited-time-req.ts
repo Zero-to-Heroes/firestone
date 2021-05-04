@@ -54,11 +54,11 @@ export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirem
 		// Add a bit of slack
 		const referenceDate = Date.now() - (this.periodOfTimeInHours + 0.5) * 60 * 60 * 1000;
 		const filtered = stats
-			.filter(stat => stat.gameFormat === 'standard')
-			.filter(stat => stat.gameMode === 'ranked')
-			.filter(stat => stat.creationTimestamp > referenceDate)
-			.filter(stat => stat.opponentClass === this.opponentClass)
-			.filter(stat => stat.result === 'won');
+			.filter((stat) => stat.gameFormat === 'standard')
+			.filter((stat) => stat.gameMode === 'ranked')
+			.filter((stat) => stat.creationTimestamp > referenceDate)
+			.filter((stat) => stat.opponentClass === this.opponentClass)
+			.filter((stat) => stat.result === 'won');
 		this.currentWinsAgainstClass = filtered.length;
 	}
 }

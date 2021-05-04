@@ -47,10 +47,10 @@ export class BgsRunStatsService {
 		private readonly userService: UserService,
 		private readonly memoryService: MemoryInspectionService,
 	) {
-		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async event => {
+		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async (event) => {
 			this.computeRunStats(event.data[0], event.data[1], event.data[2], event.data[3]);
 		});
-		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async event => {
+		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async (event) => {
 			this.computeHeroDetailsForBg(event.data[0]);
 		});
 		setTimeout(() => {
@@ -109,7 +109,7 @@ export class BgsRunStatsService {
 			heroCardId: currentGame.getMainPlayer()?.cardId,
 			userId: user.userId,
 			userName: user.username,
-			battleResultHistory: currentGame.battleResultHistory.map(history => ({
+			battleResultHistory: currentGame.battleResultHistory.map((history) => ({
 				...history,
 				simulationResult: { ...history.simulationResult, outcomeSamples: undefined },
 			})),
@@ -164,10 +164,7 @@ export class BgsRunStatsService {
 				reviewId: input.reviewId,
 				userId: input.userName || input.userId,
 			} as any) as BgsComputeRunStatsInput,
-			`${new Date()
-				.toISOString()
-				.slice(0, 19)
-				.replace('T', ' ')}.${new Date().getMilliseconds()}`,
+			`${new Date().toISOString().slice(0, 19).replace('T', ' ')}.${new Date().getMilliseconds()}`,
 		);
 		const finalStats = this.mergeStats(existingBestStats, newBestStats);
 		//console.log('built new best stats', newBestStats, finalStats);
@@ -176,18 +173,18 @@ export class BgsRunStatsService {
 	}
 
 	private mergeStats(existingBestStats: readonly BgsBestStat[], newBestStats: readonly BgsBestStat[]) {
-		const statsToKeep = existingBestStats.filter(existing => !this.isStatIncluded(existing, newBestStats));
+		const statsToKeep = existingBestStats.filter((existing) => !this.isStatIncluded(existing, newBestStats));
 		//console.log('statsToKeep', newBestStats, statsToKeep);
 		return [...newBestStats, ...statsToKeep];
 	}
 
 	private isStatIncluded(toFind: BgsBestStat, list: readonly BgsBestStat[]) {
-		return list.find(existing => existing.statName === toFind.statName) != null;
+		return list.find((existing) => existing.statName === toFind.statName) != null;
 	}
 
 	private async getNewRating(previousRating: number): Promise<number> {
-		return new Promise<number>(resolve => {
-			this.getNewRatingInternal(previousRating, newRating => resolve(newRating));
+		return new Promise<number>((resolve) => {
+			this.getNewRatingInternal(previousRating, (newRating) => resolve(newRating));
 		});
 	}
 

@@ -114,9 +114,9 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 		// Restrict the size of the data to avoid showing the outliers for the final turns
 		const length = Math.min(value.length, 15);
 		this.lineChartData = [
-			{ data: value.map(stat => stat.totalStats).slice(0, length), label: 'Warband stats delta' },
+			{ data: value.map((stat) => stat.totalStats).slice(0, length), label: 'Warband stats delta' },
 		];
-		this.lineChartLabels = value.map(stat => '' + stat.turn).slice(0, length);
+		this.lineChartLabels = value.map((stat) => '' + stat.turn).slice(0, length);
 	}
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}

@@ -11,7 +11,7 @@ export class GetCoinsOperation extends MindVisionOperationFacade<readonly CoinIn
 			'getCoins',
 			() => mindVision.getCoins(),
 			(coins: any[]) => coins.length === 0,
-			coins => coins,
+			(coins) => coins,
 			20,
 			5000,
 		);

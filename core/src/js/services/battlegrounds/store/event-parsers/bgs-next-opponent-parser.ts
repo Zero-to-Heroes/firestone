@@ -17,7 +17,7 @@ export class BgsNextOpponentParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
 		// console.log('parsing next opponent', event);
 		const newNextOpponentStage: BgsInGameStage = this.buildInGameStage(event.cardId, currentState);
-		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
+		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === newNextOpponentStage.id ? newNextOpponentStage : stage,
 		);
 		return currentState.update({
@@ -27,10 +27,10 @@ export class BgsNextOpponentParser implements EventParser {
 
 	private buildInGameStage(cardId: string, currentState: BattlegroundsState): BgsInGameStage {
 		const stageToRebuild =
-			currentState.stages.find(stage => stage.id === 'in-game') || this.createNewStage(currentState);
+			currentState.stages.find((stage) => stage.id === 'in-game') || this.createNewStage(currentState);
 		const panelToRebuild = this.createNewPanel(currentState, cardId);
 
-		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>
+		const panels: readonly BgsPanel[] = stageToRebuild.panels.map((panel) =>
 			panel.id === 'bgs-next-opponent-overview' ? panelToRebuild : panel,
 		);
 		return BgsInGameStage.create({

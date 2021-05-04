@@ -240,9 +240,9 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 		}
 
 		const replays = (this._state.decktracker.decks
-			.map(deck => deck.replays)
+			.map((deck) => deck.replays)
 			.reduce((a, b) => a.concat(b), []) as GameStat[])
-			.filter(replay => replay.playerRank)
+			.filter((replay) => replay.playerRank)
 			// .filter(replay => !replay.playerRank.includes('legend'))
 			.sort((a: GameStat, b: GameStat) => {
 				if (a.creationTimestamp <= b.creationTimestamp) {
@@ -258,14 +258,14 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 		// map each replay on a scale from -50 (Bronze 10) to 1 (Diamond 1) and 0 being Legend
 		// Legend rank evolution will be shown on a separate graph
 		const allLegendRanks = replays
-			.filter(replay => replay.gameFormat === 'standard')
-			.filter(replay => replay.playerRank.includes('legend'))
-			.map(replay => parseInt(replay.playerRank.split('legend-')[1]));
+			.filter((replay) => replay.gameFormat === 'standard')
+			.filter((replay) => replay.playerRank.includes('legend'))
+			.map((replay) => parseInt(replay.playerRank.split('legend-')[1]));
 		// The lowest Legend Rank will be 0, and the best will be +lowestLegendRank
 		const lowestLegendRank = Math.max(...allLegendRanks);
 		const standard = replays
-			.filter(replay => replay.gameFormat === 'standard')
-			.map(replay => {
+			.filter((replay) => replay.gameFormat === 'standard')
+			.map((replay) => {
 				const result = this.convertPlayerRank(replay.playerRank, lowestLegendRank);
 				// console.log('converted', replay.playerRank, 'to', result, lowestLegendRank);
 				return result;
@@ -295,7 +295,7 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 		];
 		// console.log('lineChartData', this.lineChartData);
 		this.lineChartLabels = Array.from(Array(this.lineChartData[0].data.length), (_, i) => i + 1).map(
-			matchIndex => '' + matchIndex,
+			(matchIndex) => '' + matchIndex,
 		);
 
 		if (!this.chartHeight) {
@@ -371,7 +371,7 @@ export class DecktrackerPersonalStatsRankingComponent implements AfterViewInit {
 		if (inputRank.includes('legend')) {
 			return 50 * inflationFactor + lowestLegendRank - parseInt(inputRank.split('legend-')[1]);
 		}
-		const [leagueId, rankInLeague] = inputRank.split('-').map(info => parseInt(info));
+		const [leagueId, rankInLeague] = inputRank.split('-').map((info) => parseInt(info));
 		return inflationFactor * (50 + -10 * (leagueId - 1) - rankInLeague);
 	}
 

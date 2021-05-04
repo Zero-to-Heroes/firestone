@@ -41,7 +41,7 @@ export class DeckbuildingTypeReq implements Requirement {
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
 			const numberOfMatchingCards: number = cards.filter(
-				card => card.type && card.type.toUpperCase().indexOf(this.type) !== -1,
+				(card) => card.type && card.type.toUpperCase().indexOf(this.type) !== -1,
 			).length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetTypeQuantity;

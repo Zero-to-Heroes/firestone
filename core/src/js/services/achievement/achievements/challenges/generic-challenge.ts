@@ -25,7 +25,7 @@ export class GenericChallenge implements Challenge {
 		if (this.resetEvents.indexOf(gameEvent.type) !== -1) {
 			this.resetState();
 		}
-		this.requirements.forEach(req => {
+		this.requirements.forEach((req) => {
 			try {
 				if (req.individualResetEvents && req.individualResetEvents.indexOf(gameEvent.type) !== -1) {
 					req.reset();
@@ -47,7 +47,7 @@ export class GenericChallenge implements Challenge {
 
 	public resetState(): void {
 		this.callback = undefined;
-		this.requirements.forEach(req => req.reset());
+		this.requirements.forEach((req) => req.reset());
 	}
 
 	public getRecordingDuration(): number {
@@ -64,7 +64,7 @@ export class GenericChallenge implements Challenge {
 
 	protected testCompletion() {
 		// console.log('[debug] testing for completion', this.requirements);
-		const allRequirementsCompleted = this.requirements.every(req => req.isCompleted());
+		const allRequirementsCompleted = this.requirements.every((req) => req.isCompleted());
 		if (this.callback && allRequirementsCompleted) {
 			this.resetStateAfterComplete();
 			this.callback();
@@ -72,6 +72,6 @@ export class GenericChallenge implements Challenge {
 	}
 
 	private resetStateAfterComplete() {
-		this.requirements.forEach(req => req.afterAchievementCompletionReset());
+		this.requirements.forEach((req) => req.afterAchievementCompletionReset());
 	}
 }

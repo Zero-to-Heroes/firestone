@@ -68,10 +68,10 @@ export class BgsInitParser implements EventParser {
 
 	private static buildPostMatchStage(currentState: BattlegroundsState, prefs: Preferences): BgsPostMatchStage {
 		const stageToRebuild =
-			currentState.stages.find(stage => stage.id === 'post-match') || this.createNewStage(currentState);
+			currentState.stages.find((stage) => stage.id === 'post-match') || this.createNewStage(currentState);
 		const panelToRebuild = BgsInitParser.createNewPanel(currentState, prefs);
 
-		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>
+		const panels: readonly BgsPanel[] = stageToRebuild.panels.map((panel) =>
 			panel.id === 'bgs-post-match-stats' ? panelToRebuild : panel,
 		);
 		return BgsPostMatchStage.create({

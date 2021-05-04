@@ -142,7 +142,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		this.highlighted =
 			this._group.highlightedTribes?.length && this._group.highlightedTribes.includes(this._group.tribe);
 		this.minions = this._group.minions
-			.map(minion => {
+			.map((minion) => {
 				const card = this.allCards.getCard(minion.id);
 				return {
 					cardId: minion.id,

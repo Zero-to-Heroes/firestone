@@ -73,7 +73,7 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 		await this.handleDisplayPreferences();
@@ -93,7 +93,7 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('mousedown')
 	dragMove() {
-		this.ow.dragMove(this.windowId, async result => {
+		this.ow.dragMove(this.windowId, async (result) => {
 			const window = await this.ow.getCurrentWindow();
 			if (!window) {
 				return;
@@ -104,9 +104,9 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 
 	private buildBannedTribes(gameState: BattlegroundsState) {
 		this.bannedTribes = gameState?.currentGame?.bannedRaces || [];
-		const tribeNames = this.bannedTribes.map(tribe => this.getTribeName(tribe)).join(', ');
+		const tribeNames = this.bannedTribes.map((tribe) => this.getTribeName(tribe)).join(', ');
 		const exceptionCards = this.bannedTribes
-			.map(tribe => this.getExceptions(tribe))
+			.map((tribe) => this.getExceptions(tribe))
 			.reduce((a, b) => a.concat(b), []);
 		const exceptions =
 			exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
@@ -129,6 +129,8 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 			case Race.PIRATE:
 				return [];
 			case Race.ELEMENTAL:
+				return [];
+			case Race.QUILBOAR:
 				return [];
 		}
 		return [];

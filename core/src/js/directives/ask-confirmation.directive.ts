@@ -118,8 +118,8 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		this.confirmationText && (tooltipRef.instance.confirmationText = this.confirmationText);
 		this.validButtonText && (tooltipRef.instance.validButtonText = this.validButtonText);
 		this.cancelButtonText && (tooltipRef.instance.cancelButtonText = this.cancelButtonText);
-		tooltipRef.instance.onConfirm.subscribe(event => this.confirm());
-		tooltipRef.instance.onCancel.subscribe(event => this.cancel());
+		tooltipRef.instance.onConfirm.subscribe((event) => this.confirm());
+		tooltipRef.instance.onCancel.subscribe((event) => this.cancel());
 
 		this.events.broadcast(Events.SHOW_MODAL);
 		this.positionStrategy.apply();

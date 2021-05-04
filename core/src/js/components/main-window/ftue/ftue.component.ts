@@ -102,7 +102,7 @@ export class FtueComponent implements AfterViewInit {
 	];
 
 	@Input() set selectedModule(value: CurrentAppType) {
-		const indexes = this.ftueSteps.map(step => step.id);
+		const indexes = this.ftueSteps.map((step) => step.id);
 		this.currentIndex = indexes.indexOf(value);
 		this.isHome = this.currentIndex < 0;
 		// console.log('currentIndex', value, this.currentIndex, indexes, this.ftueSteps, this.isHome);

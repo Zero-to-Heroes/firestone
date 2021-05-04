@@ -83,7 +83,7 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	activeAchievements: VisualAchievement[];
 	filters = this.buildFilterOptions();
-	filterOptions: IOption[] = this.filters.map(option => ({
+	filterOptions: IOption[] = this.filters.map((option) => ({
 		label: option.label,
 		value: option.value,
 	}));
@@ -108,7 +108,7 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
-		singleEls.forEach(singleEl => {
+		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#arrow"/>
@@ -195,14 +195,14 @@ export class AchievementsListComponent implements AfterViewInit {
 		}
 
 		const flatCompletions = this.achievements
-			.map(achievement => achievement.completionSteps)
+			.map((achievement) => achievement.completionSteps)
 			.reduce((a, b) => a.concat(b), []);
 		this.totalAchievements = flatCompletions.length;
-		this.achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
+		this.achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
 
 		this.updateActiveFilter();
-		const filterOption = this.filters.filter(option => option.value === this._activeFilter)[0];
-		const filterFunction: (VisualAchievement) => boolean = filterOption?.filterFunction || (achievement => true);
+		const filterOption = this.filters.filter((option) => option.value === this._activeFilter)[0];
+		const filterFunction: (VisualAchievement) => boolean = filterOption?.filterFunction || ((achievement) => true);
 		this.emptyStateIcon = filterOption?.emptyStateIcon;
 		this.emptyStateTitle = filterOption?.emptyStateTitle;
 		this.emptyStateText = filterOption?.emptyStateText;
@@ -230,7 +230,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			{
 				value: 'ALL_ACHIEVEMENTS',
 				label: 'All achievements',
-				filterFunction: a => true,
+				filterFunction: (a) => true,
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
 				emptyStateTitle: 'Holy Moly, you are epic!',
 				emptyStateText: '100% of achievements in this category complete.',
@@ -239,7 +239,7 @@ export class AchievementsListComponent implements AfterViewInit {
 				value: 'ONLY_MISSING',
 				label: 'Incomplete achievements',
 				filterFunction: (a: VisualAchievement) => {
-					return a.completionSteps.some(step => step.numberOfCompletions === 0);
+					return a.completionSteps.some((step) => step.numberOfCompletions === 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
 				emptyStateTitle: 'Tons of achievements are awaiting you!',
@@ -249,7 +249,7 @@ export class AchievementsListComponent implements AfterViewInit {
 				value: 'ONLY_COMPLETED',
 				label: 'Completed achievements',
 				filterFunction: (a: VisualAchievement) => {
-					return a.completionSteps.every(step => step.numberOfCompletions > 0);
+					return a.completionSteps.every((step) => step.numberOfCompletions > 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
 				emptyStateTitle: 'Tons of achievements are awaiting you!',

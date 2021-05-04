@@ -24,7 +24,7 @@ export class DynamicZoneHelperService {
 		// In case some dynamic zones are used, we need to build a dynamic "other" zone that
 		// will include all the cards not in the other dynamic zones
 		if (dynamicZones.length > 0) {
-			const cardsNotInOtherZone = dynamicZones.map(zone => zone.cards).reduce((a, b) => a.concat(b), []);
+			const cardsNotInOtherZone = dynamicZones.map((zone) => zone.cards).reduce((a, b) => a.concat(b), []);
 			let newOtherZoneCards = [...deckState.otherZone];
 			for (const card of cardsNotInOtherZone) {
 				newOtherZoneCards = [
@@ -45,7 +45,7 @@ export class DynamicZoneHelperService {
 	}
 
 	private buildDiscardZone(deckState: DeckState): DynamicZone {
-		const discardedCards = deckState.otherZone.filter(card => card.zone === 'DISCARD');
+		const discardedCards = deckState.otherZone.filter((card) => card.zone === 'DISCARD');
 		return Object.assign(new DynamicZone(), {
 			id: 'discard-zone',
 			name: 'Discard',

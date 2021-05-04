@@ -13,7 +13,7 @@ export class GenericIndexedDbService {
 
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
 		await this.waitForDbInit();
-		return new Promise<Preferences>(resolve => {
+		return new Promise<Preferences>((resolve) => {
 			try {
 				this.db.update('user-preferences', preferences).then((preferences: Preferences) => {
 					resolve(preferences);
@@ -27,7 +27,7 @@ export class GenericIndexedDbService {
 
 	public async getUserPreferences(): Promise<Preferences> {
 		await this.waitForDbInit();
-		return new Promise<Preferences>(resolve => {
+		return new Promise<Preferences>((resolve) => {
 			try {
 				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
 					resolve(Object.assign(new Preferences(), preferences[0] || {}));
@@ -40,7 +40,7 @@ export class GenericIndexedDbService {
 	}
 
 	private waitForDbInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const dbWait = () => {
 				if (this.dbInit) {
 					resolve();
@@ -57,7 +57,7 @@ export class GenericIndexedDbService {
 		console.log('[storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-generic-db', 1);
 		this.db
-			.openDatabase(1, evt => {
+			.openDatabase(1, (evt) => {
 				console.log('[storage] upgrading db', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[storage] upgrade to version 1');
@@ -73,7 +73,7 @@ export class GenericIndexedDbService {
 					console.log('[storage] openDatabase successful', this.db.dbWrapper.dbName);
 					this.dbInit = true;
 				},
-				error => {
+				(error) => {
 					console.error('[storage] error in openDatabase', error);
 				},
 			);

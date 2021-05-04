@@ -75,7 +75,7 @@ export class BgsHeroSelectionOverviewComponent {
 
 		this.globalStats = this._panel.globalStats;
 		this.patchNumber = this._panel.patchNumber;
-		const allOverviews = this._panel.heroOverview.filter(overview => overview.id !== 'average');
+		const allOverviews = this._panel.heroOverview.filter((overview) => overview.id !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
 		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(allOverviews));
 		if (!this._panel?.heroOptionCardIds || !groupedByTier) {
@@ -85,37 +85,37 @@ export class BgsHeroSelectionOverviewComponent {
 			{
 				tier: 'S' as BgsHeroTier,
 				heroes: groupedByTier
-					.find(heroes => heroes.find(hero => hero.tier === 'S'))
+					.find((heroes) => heroes.find((hero) => hero.tier === 'S'))
 					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'A' as BgsHeroTier,
 				heroes: groupedByTier
-					.find(heroes => heroes.find(hero => hero.tier === 'A'))
+					.find((heroes) => heroes.find((hero) => hero.tier === 'A'))
 					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'B' as BgsHeroTier,
 				heroes: groupedByTier
-					.find(heroes => heroes.find(hero => hero.tier === 'B'))
+					.find((heroes) => heroes.find((hero) => hero.tier === 'B'))
 					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'C' as BgsHeroTier,
 				heroes: groupedByTier
-					.find(heroes => heroes.find(hero => hero.tier === 'C'))
+					.find((heroes) => heroes.find((hero) => hero.tier === 'C'))
 					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 			{
 				tier: 'D' as BgsHeroTier,
 				heroes: groupedByTier
-					.find(heroes => heroes.find(hero => hero.tier === 'D'))
+					.find((heroes) => heroes.find((hero) => hero.tier === 'D'))
 					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
-		].filter(tier => tier.heroes);
+		].filter((tier) => tier.heroes);
 		// console.log('setting hero overviews', this._panel);
-		this.heroOverviews = this._panel.heroOptionCardIds.map(cardId => {
-			const existingStat = this._panel.heroOverview.find(overview => overview.id === cardId);
+		this.heroOverviews = this._panel.heroOptionCardIds.map((cardId) => {
+			const existingStat = this._panel.heroOverview.find((overview) => overview.id === cardId);
 			const statWithDefault =
 				existingStat ||
 				BgsHeroStat.create({
@@ -155,7 +155,7 @@ export class BgsHeroSelectionOverviewComponent {
 	}
 
 	isAvailableHero(hero: BgsHeroStat): boolean {
-		return this.heroOverviews.map(h => h.id).indexOf(hero.id) !== -1;
+		return this.heroOverviews.map((h) => h.id).indexOf(hero.id) !== -1;
 	}
 
 	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }) {

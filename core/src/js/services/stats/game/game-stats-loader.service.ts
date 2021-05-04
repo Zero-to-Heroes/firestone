@@ -34,11 +34,9 @@ export class GameStatsLoaderService {
 		const input = {
 			userId: user.userId,
 			userName: user.username,
-			uploaderToken: `overwolf-${user.userId}`,
 		};
 		// const input = {
-		// 	userId: 'OW_b874780e-9fba-49e2-82ff-b3530b0b7d7a',
-		// 	uploaderToken: `overwolf-OW_b874780e-9fba-49e2-82ff-b3530b0b7d7a`,
+		// 	userId: 'OW_8b6af718-0e60-4ea9-8a88-71a0bf5df8a9',
 		// };
 		console.log('[game-stats-loader] retrieving stats', user);
 		const data = await this.api.callPostApi(GAME_STATS_ENDPOINT, input);
@@ -46,14 +44,14 @@ export class GameStatsLoaderService {
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
 		this.gameStats = Object.assign(new GameStats(), {
 			stats: endpointResult
-				.map(stat => ({
+				.map((stat) => ({
 					...stat,
 					playerDecklist: this.deckParser.normalizeDeckstring(stat.playerDecklist, stat.playerCardId),
 					// Because old stats are corrupted
 					currentDuelsRunId:
 						stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.currentDuelsRunId,
 				}))
-				.map(stat => Object.assign(new GameStat(), stat)) as readonly GameStat[],
+				.map((stat) => Object.assign(new GameStat(), stat)) as readonly GameStat[],
 		} as GameStats);
 		console.log(
 			'[game-stats-loader] Retrieved game stats for user',

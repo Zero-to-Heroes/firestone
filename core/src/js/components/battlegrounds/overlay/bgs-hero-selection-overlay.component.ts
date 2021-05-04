@@ -70,15 +70,15 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 				return;
 			}
 
-			const heroSelectionStage = newState?.stages?.find(stage => stage.id === 'hero-selection');
+			const heroSelectionStage = newState?.stages?.find((stage) => stage.id === 'hero-selection');
 			this._panel = heroSelectionStage?.panels?.find(
-				panel => panel.id === 'bgs-hero-selection-overview',
+				(panel) => panel.id === 'bgs-hero-selection-overview',
 			) as BgsHeroSelectionOverview;
 			this.updateInfos();
 		});
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.setDisplayPreferences(event.preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -113,8 +113,8 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 			return;
 		}
 
-		this.heroOverviews = this._panel.heroOptionCardIds.map(cardId => {
-			const existingStat = this._panel.heroOverview.find(overview => overview.id === cardId);
+		this.heroOverviews = this._panel.heroOptionCardIds.map((cardId) => {
+			const existingStat = this._panel.heroOverview.find((overview) => overview.id === cardId);
 			const statWithDefault =
 				existingStat ||
 				BgsHeroStat.create({

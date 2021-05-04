@@ -29,7 +29,7 @@ export class RTStatsResourcesWastedPerTurnParser implements EventParser {
 			gameEvent.type === GameEvent.RESOURCES_USED_THIS_TURN ? resources : currentState.resourcesUsedThisTurn;
 		const resourcesWastedThisTurn = resourcesThisTurn - resourcesUsedThisTurn;
 		const resourcesWastedPerTurn: readonly NumericTurnInfo[] = [
-			...currentState.coinsWastedOverTurn.filter(info => info.turn !== currentState.currentTurn),
+			...currentState.coinsWastedOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
 				value: resourcesWastedThisTurn,

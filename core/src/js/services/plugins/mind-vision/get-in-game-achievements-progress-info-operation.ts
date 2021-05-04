@@ -13,7 +13,7 @@ export class GetInGameAchievementsProgressInfoOperation extends MindVisionOperat
 			(info: InternalHsAchievementsInfo) => !info?.Achievements?.length,
 			(info: InternalHsAchievementsInfo) =>
 				({
-					achievements: info.Achievements.map(ach => ({
+					achievements: info.Achievements.map((ach) => ({
 						id: ach.AchievementId,
 						progress: ach.Progress,
 						completed: undefined,

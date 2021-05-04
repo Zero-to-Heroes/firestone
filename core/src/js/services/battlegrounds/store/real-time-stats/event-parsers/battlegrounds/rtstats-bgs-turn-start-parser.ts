@@ -24,7 +24,7 @@ export class RTStatBgsTurnStartParser implements EventParser {
 				continue;
 			}
 			const newStats: readonly NumericTurnInfo[] = [
-				...existingStats.filter(stat => stat.turn !== newCurrentTurn),
+				...existingStats.filter((stat) => stat.turn !== newCurrentTurn),
 				{
 					turn: newCurrentTurn,
 					value: existingStats[existingStats.length - 1].value,

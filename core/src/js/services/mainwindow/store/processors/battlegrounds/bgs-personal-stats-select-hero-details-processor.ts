@@ -26,7 +26,7 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 		// 	lastHeroPostMatchStats: null,
 		// } as BattlegroundsAppState);
 
-		const globalCategory = currentState.battlegrounds.globalCategories.find(globalCategory =>
+		const globalCategory = currentState.battlegrounds.globalCategories.find((globalCategory) =>
 			globalCategory.hasSubCategory(category.id),
 		);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({

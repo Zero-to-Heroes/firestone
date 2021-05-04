@@ -19,8 +19,10 @@ export class SecretConfigService {
 			return null;
 		}
 		const mode: string = this.getMode(metadata);
-		const config = this.secretConfigs.find(conf => conf.mode === mode);
-		const result = config.secrets.filter(secret => secret.playerClass === playerClass).map(secret => secret.cardId);
+		const config = this.secretConfigs.find((conf) => conf.mode === mode);
+		const result = config.secrets
+			.filter((secret) => secret.playerClass === playerClass)
+			.map((secret) => secret.cardId);
 		// console.log('[secrets-config] getting valid secrets', metadata, playerClass, mode, config, result);
 		return result;
 	}
@@ -31,13 +33,13 @@ export class SecretConfigService {
 	}
 
 	private async getSecretsConfig(): Promise<readonly SecretsConfig[]> {
-		return new Promise<readonly SecretsConfig[]>(resolve => {
+		return new Promise<readonly SecretsConfig[]>((resolve) => {
 			this.http.get(`${SECRET_CONFIG_URL}`).subscribe(
 				(result: any[]) => {
 					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
-				error => {
+				(error) => {
 					console.error('[secrets-config] could not retrieve secrets-config from CDN', error);
 					resolve([]);
 				},

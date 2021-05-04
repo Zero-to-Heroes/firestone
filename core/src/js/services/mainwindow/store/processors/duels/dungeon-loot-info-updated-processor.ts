@@ -37,7 +37,7 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 		}
 
 		return rewards.Rewards.map(
-			reward =>
+			(reward) =>
 				({
 					rewardAmount: reward.Amount,
 					rewardBoosterId: reward.BoosterId,
@@ -52,7 +52,7 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 			this.buildSignatureTreasureInfo(dungeonLootInfo, existingInfos),
 			this.buildLootInfo(dungeonLootInfo),
 			this.buildTreasureInfo(dungeonLootInfo),
-		].filter(info => info);
+		].filter((info) => info);
 	}
 
 	private buildTreasureInfo(dungeonLootInfo: Input): DuelsRunInfo {
@@ -87,7 +87,7 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	}
 
 	private buildHeroPowerInfo(dungeonLootInfo: Input, existingInfos: readonly DuelsRunInfo[]): DuelsRunInfo {
-		if (!dungeonLootInfo.startingHeroPower || existingInfos.find(info => info.bundleType === 'hero-power')) {
+		if (!dungeonLootInfo.startingHeroPower || existingInfos.find((info) => info.bundleType === 'hero-power')) {
 			return null;
 		}
 		return {
@@ -101,7 +101,7 @@ export class DungeonLootInfoUpdatedProcessor implements Processor {
 	private buildSignatureTreasureInfo(dungeonLootInfo: Input, existingInfos: readonly DuelsRunInfo[]): DuelsRunInfo {
 		if (
 			!dungeonLootInfo.signatureTreasure ||
-			existingInfos.find(info => info.bundleType === 'signature-treasure')
+			existingInfos.find((info) => info.bundleType === 'signature-treasure')
 		) {
 			return null;
 		}

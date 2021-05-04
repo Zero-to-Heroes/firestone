@@ -24,9 +24,9 @@ export class RTStatBgsMinionsSoldParser implements EventParser {
 		}
 
 		const soldThisTurn =
-			currentState.minionsSoldOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
+			currentState.minionsSoldOverTurn.find((info) => info.turn === currentState.currentTurn)?.value ?? 0;
 		const newSold: readonly NumericTurnInfo[] = [
-			...currentState.minionsSoldOverTurn.filter(info => info.turn !== currentState.currentTurn),
+			...currentState.minionsSoldOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
 				value: soldThisTurn + 1,

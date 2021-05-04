@@ -34,8 +34,8 @@ export class LogRegisterService {
 	private init(): void {
 		console.log('[log-register] initiating log registerservice');
 		new LogListenerService(this.ow)
-			.configure('Net.log', data => this.cardsMonitor.receiveLogLine(data))
-			.subscribe(status => {
+			.configure('Net.log', (data) => this.cardsMonitor.receiveLogLine(data))
+			.subscribe((status) => {
 				console.log('[log-register] status for achievements', status);
 				this.events.broadcast(status, 'Achiements.log');
 			})
@@ -43,26 +43,26 @@ export class LogRegisterService {
 		new LogListenerService(this.ow)
 			.configure(
 				'Power.log',
-				data => this.gameEvents.receiveLogLine(data),
-				existingLine => this.gameEvents.receiveExistingLogLine(existingLine),
+				(data) => this.gameEvents.receiveLogLine(data),
+				(existingLine) => this.gameEvents.receiveExistingLogLine(existingLine),
 			)
-			.subscribe(status => {
+			.subscribe((status) => {
 				console.log('[log-register] status for power.log', status);
 				// this.events.broadcast(status, "Power.log");
 			})
 			.start();
 		new LogListenerService(this.ow)
-			.configure('Decks.log', data => this.decksService.parseActiveDeck(data))
-			.subscribe(status => {
+			.configure('Decks.log', (data) => this.decksService.parseActiveDeck(data))
+			.subscribe((status) => {
 				console.log('[log-register] status for decks', status);
 			})
 			.start();
 		new LogListenerService(this.ow)
-			.configure('FullScreenFX.log', data => {
+			.configure('FullScreenFX.log', (data) => {
 				this.decksService.queueingIntoMatch(data);
 				this.dungeonLootParser.handleBlur(data);
 			})
-			.subscribe(status => {
+			.subscribe((status) => {
 				console.log('[log-register] status for FullScreenFX', status);
 			})
 			.start();

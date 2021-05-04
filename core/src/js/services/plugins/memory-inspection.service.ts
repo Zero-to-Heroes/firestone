@@ -163,7 +163,7 @@ export class MemoryInspectionService {
 	}
 
 	public async getCurrentScene(): Promise<string> {
-		return new Promise<string>(async resolve => {
+		return new Promise<string>(async (resolve) => {
 			const gameInfo = await this.ow.getGameEventsInfo();
 			// console.log('gameInfo', gameInfo);
 			resolve(gameInfo?.res?.game_info?.scene_state);
@@ -205,15 +205,15 @@ export class MemoryInspectionService {
 		}
 
 		// general events errors
-		this.ow.addGameEventsErrorListener(info => console.log('[memory service] Error: ', info));
+		this.ow.addGameEventsErrorListener((info) => console.log('[memory service] Error: ', info));
 
 		// "static" data changed
 		// This will also be triggered the first time we register
 		// for events and will contain all the current information
-		this.ow.addGameEventInfoUpdates2Listener(info => this.handleInfoUpdate(info));
+		this.ow.addGameEventInfoUpdates2Listener((info) => this.handleInfoUpdate(info));
 
 		// an event triggerd
-		this.ow.addGameEventsListener(info => console.log('[memory service] EVENT FIRED: ', info));
+		this.ow.addGameEventsListener((info) => console.log('[memory service] EVENT FIRED: ', info));
 		this.listenersRegistered = true;
 		console.log('[memory-service] added events listeners');
 	}
@@ -229,7 +229,7 @@ export class MemoryInspectionService {
 	}
 
 	private async init() {
-		this.ow.addGameInfoUpdatedListener(res => {
+		this.ow.addGameInfoUpdatedListener((res) => {
 			if (this.ow.gameLaunched(res)) {
 				this.registerEvents();
 				setTimeout(() => this.setFeatures(), 1000);

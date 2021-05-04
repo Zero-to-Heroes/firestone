@@ -125,7 +125,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		const isDefenderDivineShield =
 			gameEvent.additionalData.defenderTags &&
 			gameEvent.additionalData.defenderTags.find(
-				tag => (tag.Name as number) === GameTag.DIVINE_SHIELD && (tag.Value as number) === 1,
+				(tag) => (tag.Name as number) === GameTag.DIVINE_SHIELD && (tag.Value as number) === 1,
 			);
 		// console.log('attacker minion?', isAttackerMinion, 'defender minion?', isDefenderMinion, gameEvent);
 		const enemyBoard = (isPlayerTheAttackedParty ? currentState.opponentDeck : currentState.playerDeck).board;
@@ -195,7 +195,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			gameEvent.gameState.Opponent.Hero,
 			...gameEvent.gameState.Opponent.Board,
 		];
-		const otherTargets = allEntities.filter(entity => [attackerId, defenderId].indexOf(entity.entityId) === -1);
+		const otherTargets = allEntities.filter((entity) => [attackerId, defenderId].indexOf(entity.entityId) === -1);
 		// console.log('other targets', otherTargets, allEntities, attackerId, defenderId);
 		// Misdirection only triggers if there is another entity on the board that can be attacked
 		if (otherTargets.length === 0) {
@@ -204,13 +204,13 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
-			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
+			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
 			// console.log('marking as invalid', secret, secrets);
-			secrets = secrets.map(boardSecret => {
+			secrets = secrets.map((boardSecret) => {
 				if (isSecretToBeConsidered(deckWithSecretToCheck, boardSecret)) {
 					return this.helper.removeSecretOptionFromSecret(boardSecret, secret);
 				}

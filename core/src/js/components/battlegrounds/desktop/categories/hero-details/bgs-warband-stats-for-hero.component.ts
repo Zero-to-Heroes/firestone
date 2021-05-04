@@ -60,15 +60,15 @@ export class BgsWarbandStatsForHeroComponent {
 			// 	totalStats: number;
 			// }[] = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === 'average')?.warbandStats;
 			const warbandStats: readonly NumericTurnInfo[] = this._state.battlegrounds.stats.heroStats
-				.find(stat => stat.id === this._category.heroId)
+				.find((stat) => stat.id === this._category.heroId)
 				?.warbandStats?.map(
-					stat =>
+					(stat) =>
 						({
 							turn: stat.turn,
 							value: stat.totalStats,
 						} as NumericTurnInfo),
 				)
-				.filter(stat => stat);
+				.filter((stat) => stat);
 			return warbandStats;
 		};
 
@@ -78,18 +78,18 @@ export class BgsWarbandStatsForHeroComponent {
 			}
 
 			const heroStatsOverTurn: (readonly NumericTurnInfo[])[] = this._state.battlegrounds.lastHeroPostMatchStats
-				.map(postMatch => postMatch.stats.totalStatsOverTurn)
-				.filter(stats => stats && stats.length) as (readonly NumericTurnInfo[])[];
-			const maxTurn = Math.max(...heroStatsOverTurn.map(stats => stats[stats.length - 1].turn));
+				.map((postMatch) => postMatch.stats.totalStatsOverTurn)
+				.filter((stats) => stats && stats.length) as (readonly NumericTurnInfo[])[];
+			const maxTurn = Math.max(...heroStatsOverTurn.map((stats) => stats[stats.length - 1].turn));
 			if (maxTurn <= 0) {
 				return [];
 			}
 			const heroStats: readonly NumericTurnInfo[] = [...Array(maxTurn).keys()]
-				.map(turn => {
+				.map((turn) => {
 					const statsForTurn = heroStatsOverTurn
-						.map(stats => (stats.length > turn ? stats[turn] : null))
-						.filter(stat => stat)
-						.map(stat => stat.value);
+						.map((stats) => (stats.length > turn ? stats[turn] : null))
+						.filter((stat) => stat)
+						.map((stat) => stat.value);
 					return statsForTurn.length > 0
 						? {
 								turn: turn,
@@ -97,7 +97,7 @@ export class BgsWarbandStatsForHeroComponent {
 						  }
 						: null;
 				})
-				.filter(info => info);
+				.filter((info) => info);
 			return heroStats;
 		};
 	}

@@ -8,9 +8,7 @@ import { PreferencesService } from '../services/preferences.service';
 @Component({
 	selector: 'app-root',
 	styleUrls: [`../../css/component/app.component.scss`],
-	template: `
-		<div></div>
-	`,
+	template: ` <div></div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
@@ -45,7 +43,7 @@ export class AppComponent {
 			}
 		} else {
 			console.log('not starting app, waiting for manual launch');
-			this.ow.addAppLaunchTriggeredListener(result => {
+			this.ow.addAppLaunchTriggeredListener((result) => {
 				console.log('starting app');
 				this.injector.get(AppBootstrapService).init();
 			});

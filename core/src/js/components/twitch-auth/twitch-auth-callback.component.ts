@@ -5,11 +5,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 @Component({
 	selector: 'twitch-auth-callback',
 	styleUrls: [],
-	template: `
-		<div class="root">
-			Successfully logged in to Twitch, you can now close this window
-		</div>
-	`,
+	template: ` <div class="root">Successfully logged in to Twitch, you can now close this window</div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TwitchAuthCallbackComponent implements AfterViewInit {
@@ -28,7 +24,7 @@ export class TwitchAuthCallbackComponent implements AfterViewInit {
 		const hashAsObject: any = hash
 			.substring(1)
 			.split('&')
-			.map(v => v.split('='))
+			.map((v) => v.split('='))
 			.reduce((pre, [key, value]) => ({ ...pre, [key]: value }), {});
 		console.log('hash is', hashAsObject);
 		// const accessToken = hashAsObject.access_token;

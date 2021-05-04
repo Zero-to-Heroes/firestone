@@ -71,7 +71,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 			// console.log('selecting app', selectedApp, selectedMenu);
 			this.selectApp(selectedApp, selectedMenu);
 		});
-		this.messageReceivedListener = this.ow.addMessageReceivedListener(async message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();
 				const newX = message.content.x - window.width / 2;

@@ -54,7 +54,7 @@ export class DeckbuildingCardNameReq implements Requirement {
 		const deck = gameEvent.localPlayer?.deck ? gameEvent.localPlayer.deck.deck : null;
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
-			const numberOfMatchingCards: number = cards.filter(card => this.cardMatches(card)).length;
+			const numberOfMatchingCards: number = cards.filter((card) => this.cardMatches(card)).length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetCardQuantity;
 			} else if (this.qualifier === 'AT_MOST') {
@@ -69,7 +69,7 @@ export class DeckbuildingCardNameReq implements Requirement {
 
 	private cardMatches(card: ReferenceCard): boolean {
 		if (this.textQualifier === 'STARTS_WITH') {
-			return this.text.some(text => card.name && card.name.toLowerCase().startsWith(text.toLowerCase()));
+			return this.text.some((text) => card.name && card.name.toLowerCase().startsWith(text.toLowerCase()));
 		}
 		console.error('No support for textQualifier', this.textQualifier);
 		return false;

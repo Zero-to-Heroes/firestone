@@ -4,9 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
 	selector: 'help-tooltip',
 	styleUrls: [`../../../css/component/tooltip/help-tooltip.component.scss`],
-	template: `
-		<div class="help-tooltip" [innerHTML]="_text"></div>
-	`,
+	template: ` <div class="help-tooltip" [innerHTML]="_text"></div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HelpTooltipComponent {

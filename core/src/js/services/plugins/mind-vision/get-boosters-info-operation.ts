@@ -13,7 +13,7 @@ export class GetBoostersInfoOperation extends MindVisionOperationFacade<readonly
 			(boostersInfo: BoostersInfo) => !boostersInfo?.Boosters?.length,
 			(boostersInfo: BoostersInfo) => {
 				return boostersInfo.Boosters.map(
-					booster =>
+					(booster) =>
 						({
 							packType: booster.BoosterId,
 							totalObtained: booster.EverGrantedCount,

@@ -199,13 +199,13 @@ export class BgsChartHpComponent {
 
 					let innerHtml = '<div class="title">';
 
-					titleLines.forEach(function(title) {
+					titleLines.forEach(function (title) {
 						innerHtml += '<span>' + title + '</span>';
 					});
 					innerHtml += '</div>';
 					innerHtml += '<div class="body">';
 
-					bodyLines.forEach(function(body, i) {
+					bodyLines.forEach(function (body, i) {
 						innerHtml += '<span class="line">' + body + '</span>';
 					});
 					innerHtml += '</div>';
@@ -250,16 +250,18 @@ export class BgsChartHpComponent {
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
 					const sortWeight = (legendItem): number => {
 						const cardId = legendItem.cardId;
-						const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
-						const playerItem = item.find(it => it.datasetIndex === datasetIndex);
+						const datasetIndex = data.datasets.map((dataset) => (dataset as any).cardId).indexOf(cardId);
+						const playerItem = item.find((it) => it.datasetIndex === datasetIndex);
 						return +playerItem?.value;
 					};
 					return [...this.legend]
 						.sort((a, b) => sortWeight(b) - sortWeight(a))
-						.map(legendItem => {
+						.map((legendItem) => {
 							const cardId = legendItem.cardId;
-							const datasetIndex = data.datasets.map(dataset => (dataset as any).cardId).indexOf(cardId);
-							const playerItem = item.find(it => it.datasetIndex === datasetIndex);
+							const datasetIndex = data.datasets
+								.map((dataset) => (dataset as any).cardId)
+								.indexOf(cardId);
+							const playerItem = item.find((it) => it.datasetIndex === datasetIndex);
 							if (!playerItem) {
 								return `<div></div>`;
 							}
@@ -309,10 +311,10 @@ export class BgsChartHpComponent {
 	) {}
 
 	togglePlayer(playerCardId: string) {
-		this.legend = this.legend.map(playerInfo =>
+		this.legend = this.legend.map((playerInfo) =>
 			playerInfo.cardId === playerCardId ? { ...playerInfo, shown: !playerInfo.shown } : playerInfo,
 		);
-		this.lineChartData = this.lineChartData.map(data =>
+		this.lineChartData = this.lineChartData.map((data) =>
 			(data as any).cardId === playerCardId ? { ...data, hidden: !data.hidden } : data,
 		);
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -376,15 +378,15 @@ export class BgsChartHpComponent {
 
 		// It's just a way to arbitrarily always assign the same color to a player
 		const sortedPlayerCardIds = [...playerOrder].sort();
-		const players = playerOrder.map(cardId => ({
+		const players = playerOrder.map((cardId) => ({
 			cardId: cardId,
 			color: this.playerColors[sortedPlayerCardIds.indexOf(cardId)],
 			position: playerOrder.indexOf(cardId) + 1,
 			isPlayer: cardId === this._mainPlayerCardId,
-			hpOverTurn: hpOverTurn[cardId]?.filter(turnInfo => turnInfo).map(turnInfo => turnInfo.value) || [],
+			hpOverTurn: hpOverTurn[cardId]?.filter((turnInfo) => turnInfo).map((turnInfo) => turnInfo.value) || [],
 		}));
 
-		this.legend = players.map(player => ({
+		this.legend = players.map((player) => ({
 			cardId: player.cardId,
 			icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${player.cardId}.png?v=3`,
 			position: player.position,
@@ -392,7 +394,7 @@ export class BgsChartHpComponent {
 			shown: true,
 			color: player.color,
 		}));
-		const newChartData: ChartDataSets[] = players.map(player => ({
+		const newChartData: ChartDataSets[] = players.map((player) => ({
 			data: player.hpOverTurn,
 			cardId: player.cardId,
 			label: player.cardId,
@@ -407,7 +409,7 @@ export class BgsChartHpComponent {
 		}
 
 		this.lineChartData = newChartData;
-		this.lineChartColors = players.map(player => ({
+		this.lineChartColors = players.map((player) => ({
 			backgroundColor: 'transparent',
 			borderColor: player.color,
 			pointBackgroundColor: 'transparent',
@@ -423,10 +425,10 @@ export class BgsChartHpComponent {
 
 	private buildPlayerOrder(): readonly string[] {
 		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn)
-			.filter(playerCardId => playerCardId !== CardIds.NonCollectible.Neutral.BaconphheroTavernBrawl)
-			.map(playerCardId => ({
+			.filter((playerCardId) => playerCardId !== CardIds.NonCollectible.Neutral.BaconphheroTavernBrawl)
+			.map((playerCardId) => ({
 				playerCardId: playerCardId,
-				turnDeath: this._stats.hpOverTurn[playerCardId].find(turnInfo => turnInfo.value <= 0)?.turn ?? 99,
+				turnDeath: this._stats.hpOverTurn[playerCardId].find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
 				lastKnownHp:
 					this._stats.hpOverTurn[playerCardId][this._stats.hpOverTurn[playerCardId].length - 1]?.value ?? 99,
 			}));
@@ -440,20 +442,20 @@ export class BgsChartHpComponent {
 				}
 				return b.lastKnownHp - a.lastKnownHp;
 			})
-			.map(playerInfo => playerInfo.playerCardId);
+			.map((playerInfo) => playerInfo.playerCardId);
 		// Legacy issue - the heroes that were offered during the hero selection phase are
 		// also proposed there
 		if (playerOrder.length > 8) {
 			const candidatesToRemove = turnAtWhichEachPlayerDies
-				.filter(info => info.turnDeath === 99)
-				.filter(info =>
+				.filter((info) => info.turnDeath === 99)
+				.filter((info) =>
 					info.playerCardId === CardIds.NonCollectible.Neutral.PatchwerkTavernBrawl2
 						? info.lastKnownHp === 55
 						: info.lastKnownHp === 40,
 				)
-				.filter(info => info.playerCardId !== this._mainPlayerCardId);
+				.filter((info) => info.playerCardId !== this._mainPlayerCardId);
 			playerOrder = playerOrder.filter(
-				playerCardId => !candidatesToRemove.map(info => info.playerCardId).includes(playerCardId),
+				(playerCardId) => !candidatesToRemove.map((info) => info.playerCardId).includes(playerCardId),
 			);
 		}
 		return playerOrder;
@@ -483,10 +485,10 @@ export class BgsChartHpComponent {
 		}
 		const max: number = Math.max(
 			...Object.values(value)
-				.filter(turnInfos => turnInfos)
-				.map(turnInfos => turnInfos.map(turnInfo => turnInfo.turn))
+				.filter((turnInfos) => turnInfos)
+				.map((turnInfos) => turnInfos.map((turnInfo) => turnInfo.turn))
 				.reduce((a, b) => a.concat(b), [])
-				.filter(turn => turn != null),
+				.filter((turn) => turn != null),
 		);
 		const turns: string[] = [];
 		for (let i = 0; i <= max; i++) {

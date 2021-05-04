@@ -53,7 +53,7 @@ export class DeckbuildingRarityReq implements Requirement {
 			const numberOfMatchingCards: number = cards.filter(
 				// We still want to use lower case rarities outside, until we can migrate
 				// evreything to lower case
-				card => card.rarity && card.rarity?.toLowerCase() === this.rarity?.toLowerCase(),
+				(card) => card.rarity && card.rarity?.toLowerCase() === this.rarity?.toLowerCase(),
 			).length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfCards;

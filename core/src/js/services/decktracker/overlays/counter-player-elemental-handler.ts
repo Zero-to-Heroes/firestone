@@ -9,8 +9,8 @@ export class ElementalPlayerCounterOverlayHandler extends AbstractOverlayHandler
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.COUNTER_PLAYER_ELEMENTAL_WINDOW,
-			prefs => prefs.playerElementalCounter,
-			state =>
+			(prefs) => prefs.playerElementalCounter,
+			(state) =>
 				this.containsCards(state?.playerDeck?.hand, [
 					CardIds.Collectible.Mage.ManaCyclone,
 					CardIds.Collectible.Mage.GrandFinale,
@@ -23,6 +23,6 @@ export class ElementalPlayerCounterOverlayHandler extends AbstractOverlayHandler
 	}
 
 	private containsCards(zone: readonly DeckCard[], cardIds: string[]): boolean {
-		return (zone || []).some(card => cardIds.includes(card.cardId));
+		return (zone || []).some((card) => cardIds.includes(card.cardId));
 	}
 }

@@ -105,9 +105,7 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 				</div>
 			</div>
-			<div class="title">
-				Overlay configuration
-			</div>
+			<div class="title">Overlay configuration</div>
 			<div class="settings-group">
 				<preference-toggle
 					field="bgsShowBannedTribesOverlay"
@@ -175,9 +173,7 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 			</div>
 
-			<div class="title">
-				Local simulator configuration
-			</div>
+			<div class="title">Local simulator configuration</div>
 			<div class="settings-group">
 				<div
 					class="text"
@@ -200,9 +196,7 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</div>
 
-			<div class="title">
-				Banned tribes
-			</div>
+			<div class="title">Banned tribes</div>
 			<div class="settings-group" [ngClass]="{ 'disabled': !showBannedTribes || !bgsFullToggle }">
 				<preference-toggle
 					class="banned-tribes-vertical"
@@ -211,9 +205,7 @@ import { Knob } from '../preference-slider.component';
 					label="Show in column"
 					tooltip="When active, banned tribes are shown in a column instead of a row"
 				></preference-toggle>
-				<div class="text">
-					Icon size
-				</div>
+				<div class="text">Icon size</div>
 				<preference-slider
 					class="banned-tribes-size-slider"
 					field="bgsBannedTribeScale"
@@ -228,9 +220,7 @@ import { Knob } from '../preference-slider.component';
 				</preference-slider>
 			</div>
 
-			<div class="title">
-				Opponent board
-			</div>
+			<div class="title">Opponent board</div>
 			<div class="settings-group" [ngClass]="{ 'disabled': !showBannedTribes || !bgsFullToggle }">
 				<preference-toggle
 					class="opponent-board-top"
@@ -239,9 +229,7 @@ import { Knob } from '../preference-slider.component';
 					label="Show at top of the screen"
 					tooltip="Toggle to show the opponent board at the top or bottom of the screen"
 				></preference-toggle>
-				<div class="text">
-					Icon size
-				</div>
+				<div class="text">Icon size</div>
 				<preference-slider
 					class="opponent-board-size-slider"
 					field="bgsOpponentBoardScale"
@@ -311,7 +299,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	ngAfterViewInit() {
 		this.loadDefaultValues();
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
 			const preferences: Preferences = event.preferences;
 			this.useLocalSimulator = preferences.bgsUseLocalSimulator;
 			this.enableSimulation = preferences.bgsEnableSimulation;

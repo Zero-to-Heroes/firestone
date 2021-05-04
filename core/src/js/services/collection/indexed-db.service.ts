@@ -22,8 +22,8 @@ export class IndexedDbService {
 			id: 1,
 			cards: collection,
 		};
-		return new Promise<Card[]>(resolve => {
-			this.saveCollectionInternal(dbCollection, result => resolve(result));
+		return new Promise<Card[]>((resolve) => {
+			this.saveCollectionInternal(dbCollection, (result) => resolve(result));
 		});
 	}
 
@@ -49,8 +49,8 @@ export class IndexedDbService {
 			id: 2,
 			cardBacks: cardBacks,
 		};
-		return new Promise<readonly CardBack[]>(resolve => {
-			this.saveCardBacksInternal(dbCollection, result => resolve(result));
+		return new Promise<readonly CardBack[]>((resolve) => {
+			this.saveCardBacksInternal(dbCollection, (result) => resolve(result));
 		});
 	}
 
@@ -76,8 +76,8 @@ export class IndexedDbService {
 			id: 3,
 			packInfos: packInfos,
 		};
-		return new Promise<readonly PackInfo[]>(resolve => {
-			this.savePackInfosInternal(dbCollection, result => resolve(result));
+		return new Promise<readonly PackInfo[]>((resolve) => {
+			this.savePackInfosInternal(dbCollection, (result) => resolve(result));
 		});
 	}
 
@@ -103,8 +103,8 @@ export class IndexedDbService {
 			id: 4,
 			coins: coins,
 		};
-		return new Promise<readonly Coin[]>(resolve => {
-			this.saveCoinsInternal(dbCollection, result => resolve(result));
+		return new Promise<readonly Coin[]>((resolve) => {
+			this.saveCoinsInternal(dbCollection, (result) => resolve(result));
 		});
 	}
 
@@ -128,7 +128,7 @@ export class IndexedDbService {
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
-			return collection?.length > 0 ? collection.find(info => info.id === 1)?.cards ?? [] : [];
+			return collection?.length > 0 ? collection.find((info) => info.id === 1)?.cards ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get collection', e.message, e.name, e);
 		}
@@ -138,7 +138,7 @@ export class IndexedDbService {
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
-			return collection?.length > 0 ? collection.find(info => info.id === 2)?.cardBacks ?? [] : [];
+			return collection?.length > 0 ? collection.find((info) => info.id === 2)?.cardBacks ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get cardBacks', e.message, e.name, e);
 		}
@@ -148,7 +148,7 @@ export class IndexedDbService {
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
-			return collection?.length > 0 ? collection.find(info => info.id === 3)?.packInfos ?? [] : [];
+			return collection?.length > 0 ? collection.find((info) => info.id === 3)?.packInfos ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get pack infos', e.message, e.name, e);
 		}
@@ -158,7 +158,7 @@ export class IndexedDbService {
 		await this.waitForDbInit();
 		try {
 			const collection = await this.db.getAll('collection', null);
-			return collection?.length > 0 ? collection.find(info => info.id === 4)?.coins ?? [] : [];
+			return collection?.length > 0 ? collection.find((info) => info.id === 4)?.coins ?? [] : [];
 		} catch (e) {
 			console.error('[collection] [storage] could not get coins', e.message, e.name, e);
 		}
@@ -177,7 +177,7 @@ export class IndexedDbService {
 
 	public async countHistory(): Promise<number> {
 		await this.waitForDbInit();
-		return new Promise<number>(resolve => {
+		return new Promise<number>((resolve) => {
 			const transaction = this.db.dbWrapper.createTransaction({
 				storeName: 'card-history',
 				dbMode: 'readonly',
@@ -191,11 +191,11 @@ export class IndexedDbService {
 			const objectStore: IDBObjectStore = transaction.objectStore('card-history');
 			const request = objectStore.count();
 
-			request.onerror = function(e) {
+			request.onerror = function (e) {
 				console.error('[collection] [storage] counld not count', e);
 			};
 
-			request.onsuccess = function(evt: any) {
+			request.onsuccess = function (evt: any) {
 				// console.log('could count', evt);
 				resolve(evt.target.result);
 			};
@@ -204,23 +204,23 @@ export class IndexedDbService {
 
 	public async getAll(limit: number): Promise<CardHistory[]> {
 		await this.waitForDbInit();
-		return new Promise<CardHistory[]>(resolve => {
+		return new Promise<CardHistory[]>((resolve) => {
 			if (limit === 0) {
 				this.db.getAll('card-history', null, { indexName: 'creationTimestamp', order: 'desc' }).then(
-					histories => {
+					(histories) => {
 						resolve(histories);
 					},
-					error => {
+					(error) => {
 						console.error('[collection] [storage] could not get all card history', error);
 					},
 				);
 				return;
 			}
 			this.getAllWithLimit('card-history', limit, { indexName: 'creationTimestamp', order: 'desc' }).then(
-				histories => {
+				(histories) => {
 					resolve(histories);
 				},
-				error => {
+				(error) => {
 					console.error('[collection] [storage] could not get all card history with limit', error, limit);
 				},
 			);
@@ -231,7 +231,7 @@ export class IndexedDbService {
 		console.log('[collection] [storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-collection-db', 10);
 		this.db
-			.openDatabase(10, evt => {
+			.openDatabase(10, (evt) => {
 				console.log('[collection] [storage] upgrading db', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[collection] [storage] upgrade to version 1');
@@ -268,7 +268,7 @@ export class IndexedDbService {
 					console.log('[collection] [storage] openDatabase successful', this.db.dbWrapper.dbName);
 					this.dbInit = true;
 				},
-				error => {
+				(error) => {
 					console.error('[collection] [storage] error in openDatabase', error);
 					setTimeout(() => {
 						this.init();
@@ -278,7 +278,7 @@ export class IndexedDbService {
 	}
 
 	private waitForDbInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const dbWait = () => {
 				if (this.dbInit) {
 					resolve();
@@ -316,11 +316,11 @@ export class IndexedDbService {
 				request = objectStore.openCursor(null);
 			}
 
-			request.onerror = function(e) {
+			request.onerror = function (e) {
 				reject(e);
 			};
 
-			request.onsuccess = function(evt: Event) {
+			request.onsuccess = function (evt: Event) {
 				const cursor = (evt.target as IDBOpenDBRequest).result;
 				if (cursor && result.length < limit) {
 					result.push((cursor as any).value);

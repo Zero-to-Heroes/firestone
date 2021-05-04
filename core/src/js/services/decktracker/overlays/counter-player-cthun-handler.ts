@@ -7,8 +7,8 @@ export class CthunPlayerCounterOverlayHandler extends AbstractOverlayHandler {
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.COUNTER_PLAYER_CTHUN_WINDOW,
-			prefs => prefs.playerCthunCounter,
-			state => state?.playerDeck?.containsCthun(allCards) && !state.isBattlegrounds(),
+			(prefs) => prefs.playerCthunCounter,
+			(state) => state?.playerDeck?.containsCthun(allCards) && !state.isBattlegrounds(),
 			ow,
 			prefs,
 			allCards,

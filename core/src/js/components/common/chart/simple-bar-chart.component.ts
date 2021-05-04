@@ -110,7 +110,7 @@ export class SimpleBarChartComponent {
 			callbacks: {
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
 					// console.log('beforeBody', item, data);
-					return data.datasets?.map(dataset => dataset?.label || '') || [];
+					return data.datasets?.map((dataset) => dataset?.label || '') || [];
 				},
 			},
 			custom: (tooltip: ChartTooltipModel) => {
@@ -225,10 +225,10 @@ export class SimpleBarChartComponent {
 	private async setStats(value: SimpleBarChartData) {
 		// Timeout is needed so that the CSS variable has been computed
 		setTimeout(() => {
-			this.chartLabels = value.data.map(data => data.label);
+			this.chartLabels = value.data.map((data) => data.label);
 			this.chartData = [
 				{
-					data: value.data.map(data => data.value),
+					data: value.data.map((data) => data.value),
 					label: 'Win distribution',
 				},
 			];

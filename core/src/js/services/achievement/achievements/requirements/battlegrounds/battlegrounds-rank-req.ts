@@ -75,8 +75,8 @@ export class BattlegroundsRankReq implements Requirement {
 	}
 
 	private async getRank() {
-		return new Promise<BattlegroundsInfo>(resolve => {
-			this.getRankInternal(info => resolve(info));
+		return new Promise<BattlegroundsInfo>((resolve) => {
+			this.getRankInternal((info) => resolve(info));
 		});
 	}
 

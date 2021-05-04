@@ -62,7 +62,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
 		// console.log('updating filter visuals', singleEls, this);
-		singleEls.forEach(singleEl => {
+		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#arrow"/>

@@ -11,7 +11,7 @@ export class AdService {
 			console.warn('not display in dev');
 			return false;
 		}
-		return new Promise<boolean>(async resolve => {
+		return new Promise<boolean>(async (resolve) => {
 			// Use OW's subscription mechanism
 			const [showAds, user] = await Promise.all([this.ow.shouldShowAds(), this.ow.getCurrentUser()]);
 			console.log('should show ads', showAds);

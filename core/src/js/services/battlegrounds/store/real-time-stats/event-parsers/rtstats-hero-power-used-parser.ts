@@ -20,9 +20,10 @@ export class RTStatHeroPowerUsedParser implements EventParser {
 		}
 
 		const existingUse =
-			currentState.mainPlayerHeroPowersOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
+			currentState.mainPlayerHeroPowersOverTurn.find((info) => info.turn === currentState.currentTurn)?.value ??
+			0;
 		const newPowers: readonly NumericTurnInfo[] = [
-			...currentState.mainPlayerHeroPowersOverTurn.filter(info => info.turn !== currentState.currentTurn),
+			...currentState.mainPlayerHeroPowersOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
 				value: existingUse + 1,

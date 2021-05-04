@@ -15,9 +15,7 @@ declare let amplitude: any;
 		<div class="stats">
 			<div class="title">Stats</div>
 			<div class="entry">
-				<div class="label" helpTooltip="Average final position">
-					Avg position:
-				</div>
+				<div class="label" helpTooltip="Average final position">Avg position:</div>
 				<div
 					class="global-value"
 					[helpTooltip]="
@@ -34,9 +32,7 @@ declare let amplitude: any;
 				</div>
 			</div>
 			<div class="entry">
-				<div class="label" helpTooltip="Percentage of times ending in top 4">
-					Top 4:
-				</div>
+				<div class="label" helpTooltip="Percentage of times ending in top 4">Top 4:</div>
 				<div
 					class="global-value"
 					[helpTooltip]="
@@ -53,9 +49,7 @@ declare let amplitude: any;
 				</div>
 			</div>
 			<div class="entry">
-				<div class="label" helpTooltip="Percentage of times winning the run">
-					Top 1:
-				</div>
+				<div class="label" helpTooltip="Percentage of times winning the run">Top 1:</div>
 				<div
 					class="global-value"
 					[helpTooltip]="
@@ -72,9 +66,7 @@ declare let amplitude: any;
 				</div>
 			</div>
 			<div class="entry">
-				<div class="label" helpTooltip="Percentage of times this hero is played">
-					Popularity:
-				</div>
+				<div class="label" helpTooltip="Percentage of times this hero is played">Popularity:</div>
 				<div
 					class="global-value"
 					[helpTooltip]="

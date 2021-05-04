@@ -13,12 +13,12 @@ export class GlobalStatsService {
 	constructor(private readonly http: HttpClient, private readonly ow: OverwolfService) {}
 
 	public async getGlobalStats(): Promise<GlobalStats> {
-		return new Promise<GlobalStats>(async resolve => {
+		return new Promise<GlobalStats>(async (resolve) => {
 			const user = await this.ow.getCurrentUser();
 			if (!user.userId || !user.username) {
 				console.log('[global-stats] user not logged in', user);
 			}
-			this.getGlobalStatsInternal(user, stats => resolve(stats), 5);
+			this.getGlobalStatsInternal(user, (stats) => resolve(stats), 5);
 		});
 	}
 
@@ -61,7 +61,7 @@ export class GlobalStatsService {
 				this.cachedStats = stats;
 				callback(stats);
 			},
-			error => {
+			(error) => {
 				setTimeout(() => this.getGlobalStatsInternal(currentUser, callback, retriesLeft - 1), 1000);
 			},
 		);
@@ -78,7 +78,9 @@ export class GlobalStatsService {
 		}
 		const sorted1 = [...stats1.stats].sort((a, b) => a.id - b.id);
 		const sorted2 = [...stats2.stats].sort((a, b) => a.id - b.id);
-		if (JSON.stringify(sorted1.map(stat => stat.statKey)) !== JSON.stringify(sorted2.map(stat => stat.statKey))) {
+		if (
+			JSON.stringify(sorted1.map((stat) => stat.statKey)) !== JSON.stringify(sorted2.map((stat) => stat.statKey))
+		) {
 			console.log('[global-stats] stats dont have the same keys, so not equal');
 			return false;
 		}

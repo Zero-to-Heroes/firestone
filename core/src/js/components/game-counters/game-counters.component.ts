@@ -90,7 +90,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('mousedown')
 	dragMove() {
-		this.ow.dragMove(this.windowId, async result => {
+		this.ow.dragMove(this.windowId, async (result) => {
 			const window = await this.ow.getCurrentWindow();
 			if (!window) {
 				return;
@@ -102,7 +102,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		if (!this.activeCounter.includes('bgs')) {
 			const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-			const subscriber = new Subscriber<any>(async event => {
+			const subscriber = new Subscriber<any>(async (event) => {
 				// Ideally this should not be necessary, but it looks like that doing things in the beforeunload
 				// handler is not always enough
 				if (event.event.name === GameEvent.GAME_END) {
@@ -123,7 +123,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 			this.stateSubscription = deckEventBus.subscribe(subscriber);
 		} else {
 			const deckEventBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-			const subscriber = new Subscriber<any>(async newState => {
+			const subscriber = new Subscriber<any>(async (newState) => {
 				if (!newState) {
 					return;
 				}

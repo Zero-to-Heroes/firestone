@@ -8,9 +8,9 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 		super(
 			ow,
 			'getBattlegroundsInfoEndGame',
-			forceReset => mindVision.getBattlegroundsInfo(forceReset),
-			battlegroundsInfo => battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1,
-			battlegroundsInfo =>
+			(forceReset) => mindVision.getBattlegroundsInfo(forceReset),
+			(battlegroundsInfo) => battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1,
+			(battlegroundsInfo) =>
 				Object.assign(new BattlegroundsInfo(), {
 					rating: battlegroundsInfo.Rating,
 					newRating: battlegroundsInfo.NewRating,
@@ -20,7 +20,7 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 			2000,
 			// Some users randomly have missing info, so trying to force resets more ofteo to see
 			// if it improves anything
-			battlegroundsInfo =>
+			(battlegroundsInfo) =>
 				!battlegroundsInfo || battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1,
 		);
 	}

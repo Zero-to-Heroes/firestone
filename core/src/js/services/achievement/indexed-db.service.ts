@@ -22,8 +22,8 @@ export class AchievementsLocalDbService {
 			id: 1,
 			info: info,
 		};
-		return new Promise<HsAchievementsInfo>(resolve => {
-			this.saveInGameAchievementsInternal(dbInfo, result => resolve(result));
+		return new Promise<HsAchievementsInfo>((resolve) => {
+			this.saveInGameAchievementsInternal(dbInfo, (result) => resolve(result));
 		});
 	}
 
@@ -63,7 +63,7 @@ export class AchievementsLocalDbService {
 			return [];
 		}
 		this.achievementsCache = {};
-		achievements.forEach(achievement => this.save(achievement));
+		achievements.forEach((achievement) => this.save(achievement));
 		return this.getAll();
 	}
 
@@ -106,7 +106,7 @@ export class AchievementsLocalDbService {
 		console.log('[achievements] [storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-achievements-db', 4);
 		this.db
-			.openDatabase(4, evt => {
+			.openDatabase(4, (evt) => {
 				console.log('[achievements] [storage] opendb successful', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[achievements] [storage] creating achievements store');
@@ -133,14 +133,14 @@ export class AchievementsLocalDbService {
 					console.log('[achievements] [storage] openDatabase successful', this.db.dbWrapper.dbName);
 					this.dbInit = true;
 				},
-				e => {
+				(e) => {
 					console.log('[achievements] [storage] error in openDatabase', e.message, e.name, e);
 				},
 			);
 	}
 
 	private waitForDbInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const dbWait = () => {
 				if (this.dbInit) {
 					resolve();

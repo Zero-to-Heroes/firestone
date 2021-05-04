@@ -17,7 +17,7 @@ export class GameStateMetaInfoService {
 	// If the card goes back to deck / board, we want to reset the counter, as it doesn't
 	// provide any meaningful info anymore
 	private cleanZone(zone: readonly DeckCard[]): readonly DeckCard[] {
-		return zone.map(card =>
+		return zone.map((card) =>
 			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined ? card : this.cleanCard(card),
 		);
 	}
@@ -32,7 +32,7 @@ export class GameStateMetaInfoService {
 	}
 
 	private updateZone(zone: readonly DeckCard[], currentTurn: number | 'mulligan'): readonly DeckCard[] {
-		return zone.map(card =>
+		return zone.map((card) =>
 			card.metaInfo.turnAtWhichCardEnteredCurrentZone === undefined ? this.updateCard(card, currentTurn) : card,
 		);
 	}

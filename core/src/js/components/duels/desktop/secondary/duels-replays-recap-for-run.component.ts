@@ -62,13 +62,13 @@ export class DuelsReplaysRecapForRunComponent {
 
 		// console.log('getting replays for run', runId, this._state, this._navigation);
 		this.replays = this._state.duels.playerStats.personalDeckStats
-			.map(deck => deck.runs)
+			.map((deck) => deck.runs)
 			.reduce((a, b) => a.concat(b), [])
-			.filter(run => run.id === runId)
-			.map(run => run.steps)
+			.filter((run) => run.id === runId)
+			.map((run) => run.steps)
 			.reduce((a, b) => a.concat(b), [])
-			.filter(step => (step as GameStat).opponentCardId)
-			.map(step => step as GameStat)
+			.filter((step) => (step as GameStat).opponentCardId)
+			.map((step) => step as GameStat)
 			.sort((a: GameStat, b: GameStat) => {
 				if (a.creationTimestamp <= b.creationTimestamp) {
 					return 1;

@@ -35,7 +35,7 @@ export class DeckManipulationHelper {
 		}
 
 		// We have the entityId, so we just remove it
-		if (zone.some(card => card.entityId === entityId)) {
+		if (zone.some((card) => card.entityId === entityId)) {
 			if (debug) {
 				console.debug(
 					'removing',
@@ -43,7 +43,7 @@ export class DeckManipulationHelper {
 				);
 			}
 			return [
-				zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card),
+				zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter((card) => card),
 				zone.find((card: DeckCard) => card.entityId === entityId),
 			];
 		}
@@ -51,7 +51,7 @@ export class DeckManipulationHelper {
 		if (!normalizedCardId) {
 			// If there are some "filler" cards (ie cards that exist only so that the deck has the right amount
 			// of cards), we remove one
-			if (zone.some(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
+			if (zone.some((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
 				let hasRemovedOnce = false;
 				const result = [];
 				let removedCard = undefined;
@@ -59,7 +59,7 @@ export class DeckManipulationHelper {
 					console.debug(
 						'removing filler card',
 						zone,
-						zone.filter(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId),
+						zone.filter((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId),
 					);
 				}
 				for (const card of zone) {
@@ -105,10 +105,10 @@ export class DeckManipulationHelper {
 		// on the card. We only do so if a) we find a card that matches our input card id and b) all such cards
 		// have a valid entityId (typically the case with Soul Fragments)
 		const shouldIgnoreEntityId =
-			zone.some(card => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId) &&
+			zone.some((card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId) &&
 			zone
-				.filter(card => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId)
-				.every(card => card.entityId);
+				.filter((card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId)
+				.every((card) => card.entityId);
 		for (const card of zone) {
 			// console.log('considering', normalizedCardId, card.cardId, card);
 			// We don't want to remove a card if it has a different entityId
@@ -139,15 +139,17 @@ export class DeckManipulationHelper {
 			}
 			if (drawnCard) {
 				const candidates = zone
-					.filter(card => card.cardMatchCondition)
-					.filter(card => card.cardMatchCondition(drawnCard));
+					.filter((card) => card.cardMatchCondition)
+					.filter((card) => card.cardMatchCondition(drawnCard));
 				if (debug) {
 					console.debug('found candidates to remove', candidates);
 				}
 
 				if (candidates?.length) {
 					let hasRemovedOnce = false;
-					const result = zone.filter(card => !card.cardMatchCondition || !card.cardMatchCondition(drawnCard));
+					const result = zone.filter(
+						(card) => !card.cardMatchCondition || !card.cardMatchCondition(drawnCard),
+					);
 					let removedCard = undefined;
 					for (const card of candidates) {
 						// We don't want to remove a card if it has a different entityId
@@ -167,11 +169,11 @@ export class DeckManipulationHelper {
 		}
 
 		if (!removedCard && removeFillerCard) {
-			if (zone.some(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
+			if (zone.some((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
 				if (debug) {
 					console.debug(
 						'could not find card to remove with entity and card ids, removing filler card',
-						zone.filter(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId),
+						zone.filter((card) => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId),
 					);
 				}
 				let hasRemovedOnce = false;
@@ -210,7 +212,10 @@ export class DeckManipulationHelper {
 		// Safeguard to not add twice the same card to the zone
 		// This is useful in case of cards stolen, where the power.log moves the card to SETASIDE, then changes the controller
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
-		if (cardTemplate.entityId != null && zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
+		if (
+			cardTemplate.entityId != null &&
+			zone.filter((card) => card.entityId === cardTemplate.entityId).length > 0
+		) {
 			// console.debug(
 			// 	'card already added to zone',
 			// 	zone,
@@ -233,7 +238,7 @@ export class DeckManipulationHelper {
 		if (!cardId) {
 			return zone;
 		}
-		return zone.map(card =>
+		return zone.map((card) =>
 			card.entityId !== entityId
 				? card
 				: card.update({
@@ -252,11 +257,11 @@ export class DeckManipulationHelper {
 		const normalizedCardId = this.normalizeCardId(cardId, normalizeUpgradedCards);
 		// Explicit search by entity id
 		if (entityId) {
-			const found = zone.find(card => card.entityId === entityId);
+			const found = zone.find((card) => card.entityId === entityId);
 			if (!found) {
 				// Card hasn't been found, so we provide a default return
 				if (cardId) {
-					const idByCardId = zone.find(card => {
+					const idByCardId = zone.find((card) => {
 						const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 						return refCardId === normalizedCardId && !card.entityId;
 					});
@@ -309,7 +314,7 @@ export class DeckManipulationHelper {
 		// Search by cardId only
 		if (cardId) {
 			// console.log('trying to get a card without providing an entityId', cardId, zone);
-			const found = zone.find(card => {
+			const found = zone.find((card) => {
 				const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 				return refCardId === normalizedCardId && !card.entityId;
 			});
@@ -354,7 +359,7 @@ export class DeckManipulationHelper {
 	}
 
 	public replaceCardInZone(zone: readonly DeckCard[], newCard: DeckCard): readonly DeckCard[] {
-		const cardIndex = zone.map(card => card.entityId).indexOf(newCard.entityId);
+		const cardIndex = zone.map((card) => card.entityId).indexOf(newCard.entityId);
 		const newZone = [...zone];
 		newZone[cardIndex] = newCard;
 		return newZone;
@@ -379,7 +384,7 @@ export class DeckManipulationHelper {
 
 	public removeSecretOption(deck: DeckState, secretCardId: string): DeckState {
 		return deck.update({
-			secrets: deck.secrets.map(secret =>
+			secrets: deck.secrets.map((secret) =>
 				this.removeSecretOptionFromSecret(secret, secretCardId),
 			) as readonly BoardSecret[],
 		} as DeckState);
@@ -389,7 +394,7 @@ export class DeckManipulationHelper {
 		secrets: readonly BoardSecret[],
 		secretCardId: string,
 	): readonly BoardSecret[] {
-		return secrets.map(secret => this.removeSecretOptionFromSecret(secret, secretCardId));
+		return secrets.map((secret) => this.removeSecretOptionFromSecret(secret, secretCardId));
 	}
 
 	public findEntityInGameState(gameState: EventGameState, entityId: number): EntityGameState {
@@ -401,11 +406,11 @@ export class DeckManipulationHelper {
 			...(opponentState.Board || []),
 			...(opponentState.Hand || []),
 		];
-		return allEntities.find(entity => entity.entityId === entityId);
+		return allEntities.find((entity) => entity.entityId === entityId);
 	}
 
 	public removeSecretOptionFromSecret(secret: BoardSecret, secretCardId: string): BoardSecret {
-		const newOptions: readonly SecretOption[] = secret.allPossibleOptions.map(option =>
+		const newOptions: readonly SecretOption[] = secret.allPossibleOptions.map((option) =>
 			option.cardId === secretCardId ? option.update({ isValidOption: false } as SecretOption) : option,
 		);
 		return secret.update({

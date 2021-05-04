@@ -91,7 +91,7 @@ export class GroupedDeckListComponent {
 		const knownDeck = this._deckState.deck;
 		const hand = this._deckState.hand;
 		const board = this._deckState.board;
-		const other = this._deckState.otherZone.filter(card => card.zone !== 'SETASIDE');
+		const other = this._deckState.otherZone.filter((card) => card.zone !== 'SETASIDE');
 		const deckList = this._deckState.deckList || [];
 		const deck =
 			deckList.length > 0
@@ -103,7 +103,7 @@ export class GroupedDeckListComponent {
 		const groupedFromDecklist: Map<string, DeckCard[]> = this.groupBy(deckList, (card: DeckCard) => card.cardId);
 		const groupedFromDeck: Map<string, DeckCard[]> = this.groupBy(deck, (card: DeckCard) => card.cardId);
 		const groupedFromNotInBaseDeck: Map<string, DeckCard[]> = this.groupBy(
-			deck.filter(card => !deckList.find(c => c.cardId === card.cardId)),
+			deck.filter((card) => !deckList.find((c) => c.cardId === card.cardId)),
 			(card: DeckCard) => card.cardId,
 		);
 		const base = [];
@@ -115,8 +115,8 @@ export class GroupedDeckListComponent {
 			// console.log('at least one in hand?', isAtLeastOneCardInHand, cardId, hand);
 			// console.log('cardId from in declikst', cardId, cardsInDeck, creatorCardIds, groupedFromDeck.get(cardId));
 			const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
-				.map(card => card.creatorCardId)
-				.filter(creator => creator);
+				.map((card) => card.creatorCardId)
+				.filter((creator) => creator);
 			for (let i = 0; i < cardsInDeck; i++) {
 				// console.log('pushing');
 				base.push(
@@ -163,11 +163,11 @@ export class GroupedDeckListComponent {
 			const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
 			// const isAtLeastOneCardInHand = (hand || []).filter(card => card.cardId === cardId).length > 0;
 			const isInOtherZone =
-				[...(board || []), ...(other || [])].filter(card => card.cardId === cardId).length > 0;
-			const isInBaseDeck = (knownDeck || []).filter(card => card.cardId === cardId).length > 0;
+				[...(board || []), ...(other || [])].filter((card) => card.cardId === cardId).length > 0;
+			const isInBaseDeck = (knownDeck || []).filter((card) => card.cardId === cardId).length > 0;
 			const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
-				.map(card => card.creatorCardId)
-				.filter(creator => creator);
+				.map((card) => card.creatorCardId)
+				.filter((creator) => creator);
 			// console.log('cardId from not in deck', cardId, cardsInDeck, creatorCardIds);
 			for (let i = 0; i < cardsInDeck; i++) {
 				// console.log('pushing');
@@ -229,7 +229,7 @@ export class GroupedDeckListComponent {
 
 	private groupBy(list, keyGetter): Map<string, DeckCard[]> {
 		const map = new Map();
-		list.forEach(item => {
+		list.forEach((item) => {
 			const key = keyGetter(item);
 			const collection = map.get(key);
 			if (!collection) {

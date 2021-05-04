@@ -63,11 +63,11 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			} else {
 				const dealingEntityId = gameEvent.additionalData.sourceEntityId;
 				// If the minion dealing damage dies in the process, we can't rule out Reckoning
-				if (additionalInfo?.minionsWillDie?.map(minion => minion.entityId)?.includes(dealingEntityId)) {
+				if (additionalInfo?.minionsWillDie?.map((minion) => minion.entityId)?.includes(dealingEntityId)) {
 					secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
 				}
 				const maxDamage = Math.max(
-					...Object.values(gameEvent.additionalData.targets).map(target => target.Damage),
+					...Object.values(gameEvent.additionalData.targets).map((target) => target.Damage),
 				);
 				//console.debug('[secrets-parser] source is minion with damage', maxDamage);
 				if (maxDamage < 3) {
@@ -81,7 +81,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			: gameEvent.gameState.Player.Hero.entityId;
 		const heroTarget = gameEvent.additionalData.targets
 			? Object.values(gameEvent.additionalData.targets).find(
-					target => target.TargetEntityId === enemyHeroEntityId,
+					(target) => target.TargetEntityId === enemyHeroEntityId,
 			  )
 			: null;
 		if (!heroTarget) {
@@ -91,7 +91,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnDamage.filter(
-			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
+			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];

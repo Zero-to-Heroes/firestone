@@ -29,11 +29,11 @@ export class ShowAchievementDetailsProcessor implements Processor {
 			// 	ach => ach.id,
 			// ) as readonly string[],
 			displayedAchievementsList: categoryHierarchy[categoryHierarchy.length - 1].achievements.map(
-				ach => ach.id,
+				(ach) => ach.id,
 			) as readonly string[],
 			selectedAchievementId: achievement,
 		} as NavigationAchievements);
-		const text = categoryHierarchy.map(cat => cat.name).join(' ');
+		const text = categoryHierarchy.map((cat) => cat.name).join(' ');
 		return [
 			null,
 			navigationState.update({

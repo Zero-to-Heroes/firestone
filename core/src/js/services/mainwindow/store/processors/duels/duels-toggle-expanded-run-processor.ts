@@ -12,7 +12,7 @@ export class DuelsToggleExpandedRunProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const expandedRunIds: readonly string[] = navigationState.navigationDuels.expandedRunIds.includes(event.runId)
-			? navigationState.navigationDuels.expandedRunIds.filter(runId => runId !== event.runId)
+			? navigationState.navigationDuels.expandedRunIds.filter((runId) => runId !== event.runId)
 			: [...navigationState.navigationDuels.expandedRunIds, event.runId];
 		return [
 			null,

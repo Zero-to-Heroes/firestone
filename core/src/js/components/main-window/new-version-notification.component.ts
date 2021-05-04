@@ -70,9 +70,7 @@ import { Update, updates, UpdateSectionItem, UpdateSectionItemDetails } from './
 							</i>
 							<p>Don't show again</p>
 						</label>
-						<div class="secondary">
-							| You can change that in the settings
-						</div>
+						<div class="secondary">| You can change that in the settings</div>
 					</div>
 
 					<button class="confirm" (mousedown)="confirm()">

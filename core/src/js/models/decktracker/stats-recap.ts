@@ -15,8 +15,8 @@ export class StatsRecap {
 		}
 		const copy = [...deckStats];
 		const earliest = copy.sort((a, b) => a.creationTimestamp - b.creationTimestamp)[0];
-		const wins = copy.filter(stat => stat.result === 'won').length;
-		const losses = copy.filter(stat => stat.result === 'lost').length;
+		const wins = copy.filter((stat) => stat.result === 'won').length;
+		const losses = copy.filter((stat) => stat.result === 'lost').length;
 		return Object.assign(new StatsRecap(), {
 			dateFrom: new Date(earliest.creationTimestamp),
 			totalWins: wins,

@@ -82,9 +82,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 						</button>
 					</div>
 					<div class="logged-in" *ngIf="oocLoginUrl && oocLoggedIn">
-						<div class="user-name">
-							You're logged in
-						</div>
+						<div class="user-name">You're logged in</div>
 						<button (mousedown)="oocDisconnect()">
 							<span>Disconnect</span>
 						</button>
@@ -113,7 +111,7 @@ export class SettingsGeneralThirdPartyComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(async event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe(async (event) => {
 			console.log('updated prefs', event);
 			await this.loadDefaultValues();
 		});

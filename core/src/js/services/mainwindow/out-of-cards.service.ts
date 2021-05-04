@@ -43,7 +43,7 @@ export class OutOfCardsService {
 
 	private async initCollectionRefreshListeners() {
 		if (this.events) {
-			this.events.on(Events.NEW_PACK).subscribe(event => this.queueCollectionRefresh(REFRESH_DEBOUNCE_MS));
+			this.events.on(Events.NEW_PACK).subscribe((event) => this.queueCollectionRefresh(REFRESH_DEBOUNCE_MS));
 		}
 
 		if (this.gameEvents) {

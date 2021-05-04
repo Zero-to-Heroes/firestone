@@ -133,7 +133,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 		}
 
 		this.deck = this._state.decktracker.decks.find(
-			deck => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
+			(deck) => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
 		if (!this.deck) {
 			return;
@@ -155,11 +155,11 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 
 		setTimeout(() => {
 			this.bestAgainsts = [...this.deck.matchupStats]
-				.filter(matchup => matchup.totalWins > 0)
+				.filter((matchup) => matchup.totalWins > 0)
 				.sort((a, b) => b.totalWins / b.totalGames - a.totalWins / a.totalGames)
 				.slice(0, 3)
 				.map(
-					matchUp =>
+					(matchUp) =>
 						({
 							icon: `assets/images/deck/classes/${matchUp.opponentClass.toLowerCase()}.png`,
 							playerClass: formatClass(matchUp.opponentClass),

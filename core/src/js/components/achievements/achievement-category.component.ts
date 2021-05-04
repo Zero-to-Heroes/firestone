@@ -57,10 +57,10 @@ export class AchievementCategoryComponent {
 			this.displayName = value.name;
 			const aggregatedAchievements = value.retrieveAllAchievements();
 			const flatCompletions = aggregatedAchievements
-				.map(achievement => achievement.completionSteps)
+				.map((achievement) => achievement.completionSteps)
 				.reduce((a, b) => a.concat(b), []);
 			this.totalAchievements = flatCompletions.length;
-			this.achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
+			this.achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
 			this.empty = this.achieved === 0;
 			this.complete = this.totalAchievements === this.achieved && !this.empty;
 		}

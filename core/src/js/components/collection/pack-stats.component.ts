@@ -139,13 +139,13 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 			)
 			.map((boosterId: BoosterType) => ({
 				packType: boosterId,
-				totalObtained: this._inputPacks.find(p => p.packType === boosterId)?.totalObtained ?? 0,
+				totalObtained: this._inputPacks.find((p) => p.packType === boosterId)?.totalObtained ?? 0,
 				unopened: 0,
 				name: boosterIdToBoosterName(boosterId),
 			}))
-			.filter(info => info)
+			.filter((info) => info)
 			.reverse();
-		this.totalPacks = this._packs.map(pack => pack.totalObtained).reduce((a, b) => a + b, 0);
+		this.totalPacks = this._packs.map((pack) => pack.totalObtained).reduce((a, b) => a + b, 0);
 	}
 }
 

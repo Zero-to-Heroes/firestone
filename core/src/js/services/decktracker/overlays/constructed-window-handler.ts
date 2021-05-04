@@ -16,10 +16,10 @@ export class ConstructedWindowHandler extends AbstractOverlayHandler {
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.CONSTRUCTED_WINDOW,
-			prefs =>
+			(prefs) =>
 				FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW &&
 				(prefs.achievementsLiveTracking || prefs.guessOpponentArchetype),
-			state => !this.closedByUser && !state.isBattlegrounds() && state.metadata?.gameType != null,
+			(state) => !this.closedByUser && !state.isBattlegrounds() && state.metadata?.gameType != null,
 			ow,
 			prefs,
 			allCards,

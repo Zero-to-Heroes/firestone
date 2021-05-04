@@ -112,7 +112,7 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 	ngAfterViewInit() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		console.log('registered prefs event bus', preferencesEventBus);
-		this.preferencesSubscription = preferencesEventBus.subscribe(async event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe(async (event) => {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 				await this.loadDefaultValues();

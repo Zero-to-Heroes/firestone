@@ -106,7 +106,7 @@ export class StoreBootstrapService {
 
 		const patchConfig = await this.patchConfig.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find(patch => patch.number === patchConfig.currentBattlegroundsMetaPatch)
+			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
 			: null;
 		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(bgsGlobalStats);
 		const bgsAppStateWithStats = await this.bgsBuilder.updateStats(
@@ -122,7 +122,7 @@ export class StoreBootstrapService {
 			bestBgsUserStats: bgsBestUserStats,
 		} as StatsState);
 		const currentRankedMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find(patch => patch.number === patchConfig.currentConstructedMetaPatch)
+			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
 			: null;
 		const decktracker = this.decktrackerStateLoader.buildState(
 			new DecktrackerState(),
@@ -137,8 +137,8 @@ export class StoreBootstrapService {
 		);
 
 		// Update prefs to remove hidden deck codes that are not in an active deck anymore
-		const allDeckCodes = newStatsState.gameStats.stats.map(match => match.playerDecklist);
-		const validHiddenCodes = mergedPrefs.desktopDeckHiddenDeckCodes.filter(deckCode =>
+		const allDeckCodes = newStatsState.gameStats.stats.map((match) => match.playerDecklist);
+		const validHiddenCodes = mergedPrefs.desktopDeckHiddenDeckCodes.filter((deckCode) =>
 			allDeckCodes.includes(deckCode),
 		);
 		await this.prefs.setDesktopDeckHiddenDeckCodes(validHiddenCodes);
@@ -150,7 +150,9 @@ export class StoreBootstrapService {
 		} as AchievementsState);
 
 		this.dungeonLoot.setLastDuelsMatch(
-			newStatsState.gameStats?.stats?.filter(stat => stat.gameMode === 'duels' || stat.gameMode === 'paid-duels'),
+			newStatsState.gameStats?.stats?.filter(
+				(stat) => stat.gameMode === 'duels' || stat.gameMode === 'paid-duels',
+			),
 		);
 		// const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
 		// const lastRunId =
@@ -165,7 +167,7 @@ export class StoreBootstrapService {
 		// }
 
 		const currentDuelsMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find(patch => patch.number === patchConfig.currentDuelsMetaPatch)
+			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
 			: null;
 		const duelsStats: DuelsState = this.duels.initState(duelsGlobalStats, duelsRunInfo, duelsRewardsInfo);
 		const newDuelsState = await this.duels.updateState(

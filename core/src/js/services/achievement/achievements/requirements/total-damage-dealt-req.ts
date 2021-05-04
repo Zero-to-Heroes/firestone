@@ -21,7 +21,7 @@ export class TotalDamageDealtReq extends AbstractRequirement {
 		}
 		const sourceCardId = rawReq.values.length === 3 ? rawReq.values[2] : undefined;
 		return AbstractRequirement.initialize(
-			rawReq => new TotalDamageDealtReq(parseInt(rawReq.values[0]), rawReq.values[1], sourceCardId),
+			(rawReq) => new TotalDamageDealtReq(parseInt(rawReq.values[0]), rawReq.values[1], sourceCardId),
 			rawReq,
 		);
 	}
@@ -54,7 +54,7 @@ export class TotalDamageDealtReq extends AbstractRequirement {
 		if (localPlayerId && localPlayerId === damageSourceController) {
 			if (!this.sourceCardId || this.sourceCardId === gameEvent.additionalData.sourceCardId) {
 				const damageDealt = Object.values(gameEvent.additionalData.targets)
-					.map(target => target.Damage)
+					.map((target) => target.Damage)
 					.reduce((sum, current) => sum + current, 0);
 				this.totalDamageDealt += damageDealt;
 			}

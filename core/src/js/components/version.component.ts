@@ -4,9 +4,7 @@ import { OverwolfService } from '../services/overwolf.service';
 @Component({
 	selector: 'version',
 	styleUrls: [`../../css/component/version.component.scss`],
-	template: `
-		<div class="version-info">v.{{ version }}</div>
-	`,
+	template: ` <div class="version-info">v.{{ version }}</div> `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VersionComponent implements AfterViewInit {

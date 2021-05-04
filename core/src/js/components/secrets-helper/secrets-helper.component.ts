@@ -100,7 +100,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async event => {
+		const subscriber = new Subscriber<any>(async (event) => {
 			this.shouldShow = event?.state != null;
 			// this.gameState = event ? event.state : undefined;
 			this.active = (event.state as GameState)?.opponentDeck?.secretHelperActive;
@@ -114,7 +114,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		this.deckSubscription = deckEventBus.subscribe(subscriber);
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
@@ -150,7 +150,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		this.ow.dragMove(this.windowId, async result => {
+		this.ow.dragMove(this.windowId, async (result) => {
 			// console.log('drag finished, updating position');
 			await this.updateTooltipPosition();
 			const window = await this.ow.getCurrentWindow();

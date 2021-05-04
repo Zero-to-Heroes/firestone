@@ -19,7 +19,7 @@ export class ReplaysNotificationService {
 	) {
 		this.events
 			.on(Events.GAME_STATS_UPDATED)
-			.subscribe(data => this.showNewMatchEndNotification(Object.assign(new GameStats(), data.data[0])));
+			.subscribe((data) => this.showNewMatchEndNotification(Object.assign(new GameStats(), data.data[0])));
 		console.log('[replays-notification] listening for achievement completion events');
 	}
 

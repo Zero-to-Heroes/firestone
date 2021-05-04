@@ -107,11 +107,11 @@ export class CollectionManager {
 		} else {
 			const refCoins = this.allCards
 				.getCards()
-				.filter(card => card.name === 'The Coin')
-				.filter(card => card.type === 'Spell');
-			const coins: readonly Coin[] = refCoins.map(coin => ({
+				.filter((card) => card.name === 'The Coin')
+				.filter((card) => card.type === 'Spell');
+			const coins: readonly Coin[] = refCoins.map((coin) => ({
 				cardId: coin.id,
-				owned: memoryCoins.find(c => c.CoinId === coin.dbfId) != null,
+				owned: memoryCoins.find((c) => c.CoinId === coin.dbfId) != null,
 				cardDbfId: coin.dbfId,
 			}));
 			console.log('[collection-manager] updating coins in db', coins);
@@ -124,8 +124,8 @@ export class CollectionManager {
 		referenceCardBacks: readonly CardBack[],
 		ownedCardBacks: readonly CardBack[],
 	): readonly CardBack[] {
-		return referenceCardBacks.map(cardBack => {
-			const owned = ownedCardBacks.find(cb => cb.id === cardBack.id);
+		return referenceCardBacks.map((cardBack) => {
+			const owned = ownedCardBacks.find((cb) => cb.id === cardBack.id);
 			return owned?.owned
 				? ({
 						...cardBack,
@@ -156,8 +156,8 @@ export class CollectionManager {
 	): Promise<readonly Set[]> {
 		return this.setsService
 			.getAllSets()
-			.map(set => ({ set: set, pityTimer: pityTimers.filter(timer => timer.setId === set.id)[0] }))
-			.map(set => this.mergeSet(collection, set.set, set.pityTimer));
+			.map((set) => ({ set: set, pityTimer: pityTimers.filter((timer) => timer.setId === set.id)[0] }))
+			.map((set) => this.mergeSet(collection, set.set, set.pityTimer));
 	}
 
 	private mergeSet(collection: readonly Card[], set: Set, pityTimer: PityTimer): Set {
@@ -203,7 +203,7 @@ export class CollectionManager {
 		const groupedBySet: { [setId: string]: readonly PackResult[] } = groupByFunction(
 			(pack: PackResult) => pack.setId,
 		)(packStats);
-		return Object.keys(groupedBySet).map(setId => {
+		return Object.keys(groupedBySet).map((setId) => {
 			const packsForSet: readonly PackResult[] = [...groupedBySet[setId]].sort(
 				(a, b) => b.creationDate - a.creationDate,
 			);
@@ -220,7 +220,7 @@ export class CollectionManager {
 	private buildPityTimer(packsForSet: readonly PackResult[], type: 'legendary' | 'epic') {
 		let result = type === 'epic' ? CollectionManager.EPIC_PITY_TIMER : CollectionManager.LEGENDARY_PITY_TIMER;
 		for (let i = 0; i < packsForSet.length; i++) {
-			if (packsForSet[i].cards.some(card => card.cardRarity === type)) {
+			if (packsForSet[i].cards.some((card) => card.cardRarity === type)) {
 				break;
 			}
 			result--;

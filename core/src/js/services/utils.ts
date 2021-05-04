@@ -1,6 +1,6 @@
 import { PatchInfo } from '../models/patches';
 
-export const groupByFunction = (keyExtractor: (obj: object | string) => string) => array =>
+export const groupByFunction = (keyExtractor: (obj: object | string) => string) => (array) =>
 	array.reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
@@ -8,15 +8,15 @@ export const groupByFunction = (keyExtractor: (obj: object | string) => string) 
 	}, {});
 
 export const uuid = () => {
-	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
 		const r = (Math.random() * 16) | 0,
 			v = c == 'x' ? r : (r & 0x3) | 0x8;
 		return v.toString(16);
 	});
 };
 
-export const sleep = ms => {
-	return new Promise(resolve => setTimeout(resolve, ms));
+export const sleep = (ms) => {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 export const isWindowClosed = (state: string): boolean => {
@@ -32,7 +32,7 @@ export const capitalizeFirstLetter = (input: string): string => {
 };
 
 export const capitalizeEachWord = (input: string): string => {
-	return !input ? null : input.replace(/\w\S*/g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+	return !input ? null : input.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 };
 
 export const isCharLowerCase = (character: string): boolean => {
@@ -46,7 +46,7 @@ export const isVersionBefore = (appVersion: string, reference: string): boolean 
 };
 
 const buildAppValue = (appVersion: string): number => {
-	const [major, minor, patch] = appVersion.split('.').map(info => parseInt(info));
+	const [major, minor, patch] = appVersion.split('.').map((info) => parseInt(info));
 	return 1000 * major + 100 * minor + patch;
 };
 
@@ -64,7 +64,7 @@ export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]
 };
 
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
-	return array.map(item => prop(item)).reduce((a, b) => a + b, 0);
+	return array.map((item) => prop(item)).reduce((a, b) => a + b, 0);
 };
 
 export const formatDate = (theDate: Date): string => {
@@ -75,10 +75,7 @@ export const formatPatch = (input: PatchInfo): string => {
 	if (!input) {
 		return '';
 	}
-	return `Patch ${input.version}.${input.number} released on ${input.date
-		.split('-')
-		.reverse()
-		.join('-')}`;
+	return `Patch ${input.version}.${input.number} released on ${input.date.split('-').reverse().join('-')}`;
 };
 
 export const removeFromArray = <T>(array: T[], element: T) => {
@@ -91,7 +88,7 @@ export const removeFromArray = <T>(array: T[], element: T) => {
 // For ng2-charts
 export const thisAsThat = (callBack: Function) => {
 	const self = this;
-	return function() {
+	return function () {
 		return callBack.apply(self, [this].concat(Array.prototype.slice.call(arguments)));
 	};
 };

@@ -243,7 +243,7 @@ export class DuelsRunComponent implements AfterViewInit {
 			return null;
 		}
 		const result = info[`option${info.chosenOptionIndex}Contents`];
-		if (result && result.length === 3 && result.every(item => item === '0')) {
+		if (result && result.length === 3 && result.every((item) => item === '0')) {
 			return null;
 		}
 		return result;

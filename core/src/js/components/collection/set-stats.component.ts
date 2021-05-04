@@ -107,9 +107,9 @@ export class SetStatsComponent implements AfterViewInit {
 		this.stats = this._showGoldenStats ? this.buildGoldenStats() : this.buildStats();
 		this.pieChartData = this._showGoldenStats ? this.buildGoldenPieChartData() : this.buildPieChartData();
 		this.packsReceived =
-			this._packs.find(pack => boosterIdToSetId(pack.packType) === this._set.id)?.totalObtained ?? 0;
+			this._packs.find((pack) => boosterIdToSetId(pack.packType) === this._set.id)?.totalObtained ?? 0;
 		const orderedPacks = [...this._packStats]
-			.filter(pack => pack.setId === this._set.id)
+			.filter((pack) => pack.setId === this._set.id)
 			.sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
 		this.bestKnownPack = orderedPacks.length ? orderedPacks[0] : null;
 		this.bestKnownPackDust = this.bestKnownPack ? getPackDustValue(this.bestKnownPack) : 0;
@@ -208,10 +208,10 @@ export class SetStatsComponent implements AfterViewInit {
 
 	private buildStats(): readonly Stat[] {
 		const currentDust = this._set.allCards
-			.map(card => dustToCraftFor(card.rarity) * card.getNumberCollected())
+			.map((card) => dustToCraftFor(card.rarity) * card.getNumberCollected())
 			.reduce((a, b) => a + b, 0);
 		const totalDust = this._set.allCards
-			.map(card => dustToCraftFor(card.rarity) * card.getMaxCollectible())
+			.map((card) => dustToCraftFor(card.rarity) * card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);
 		return [
 			{
@@ -245,10 +245,10 @@ export class SetStatsComponent implements AfterViewInit {
 
 	private buildGoldenStats(): readonly Stat[] {
 		const currentDust = this._set.allCards
-			.map(card => dustToCraftForPremium(card.rarity) * card.getNumberCollectedPremium())
+			.map((card) => dustToCraftForPremium(card.rarity) * card.getNumberCollectedPremium())
 			.reduce((a, b) => a + b, 0);
 		const totalDust = this._set.allCards
-			.map(card => dustToCraftForPremium(card.rarity) * card.getMaxCollectible())
+			.map((card) => dustToCraftForPremium(card.rarity) * card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);
 		return [
 			{
@@ -282,15 +282,15 @@ export class SetStatsComponent implements AfterViewInit {
 
 	private getOwned(rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
 		return this._set.allCards
-			.filter(card => card.rarity === rarity)
-			.map(card => (golden ? card.getNumberCollectedPremium() : card.getNumberCollected()))
+			.filter((card) => card.rarity === rarity)
+			.map((card) => (golden ? card.getNumberCollectedPremium() : card.getNumberCollected()))
 			.reduce((a, b) => a + b, 0);
 	}
 
 	private getTotal(rarity: 'common' | 'rare' | 'epic' | 'legendary', golden = false): number {
 		return this._set.allCards
-			.filter(card => card.rarity === rarity)
-			.map(card => card.getMaxCollectible())
+			.filter((card) => card.rarity === rarity)
+			.map((card) => card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);
 	}
 }

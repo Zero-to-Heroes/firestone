@@ -17,7 +17,7 @@ export class VisualAchievement {
 	}
 
 	public update(value: Achievement): VisualAchievement {
-		if (value.id !== this.id && this.completionSteps.map(step => step.id).indexOf(value.id) === -1) {
+		if (value.id !== this.id && this.completionSteps.map((step) => step.id).indexOf(value.id) === -1) {
 			return this;
 		}
 		// console.debug('[ach] [visual-achievement] updating achievement', this, value);
@@ -39,24 +39,24 @@ export class VisualAchievement {
 	}
 
 	public isFullyCompleted(): boolean {
-		return this.completionSteps.every(step => step.numberOfCompletions > 0);
+		return this.completionSteps.every((step) => step.numberOfCompletions > 0);
 	}
 
 	public achievementStatus(): AchievementStatus {
-		if (this.completionSteps.every(step => step.numberOfCompletions > 0)) {
+		if (this.completionSteps.every((step) => step.numberOfCompletions > 0)) {
 			return 'completed';
-		} else if (this.completionSteps.some(step => step.numberOfCompletions > 0)) {
+		} else if (this.completionSteps.some((step) => step.numberOfCompletions > 0)) {
 			return 'partially-completed';
 		}
 		return 'missing';
 	}
 
 	public getFirstMissingStep(): CompletionStep {
-		return this.completionSteps.find(step => !step.numberOfCompletions);
+		return this.completionSteps.find((step) => !step.numberOfCompletions);
 	}
 
 	private updateCompletionSteps(value: Achievement): readonly CompletionStep[] {
-		return this.completionSteps.map(step => {
+		return this.completionSteps.map((step) => {
 			if (step.id !== value.id) {
 				return step;
 			}

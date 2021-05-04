@@ -20,7 +20,7 @@ export class BgsBattleResultParser implements EventParser {
 		if (!currentState.currentGame.getMainPlayer()) {
 			console.error(
 				'[bgs-simulation] Could not find main player in battle result parser',
-				currentState.currentGame.players.map(player => player.cardId),
+				currentState.currentGame.players.map((player) => player.cardId),
 			);
 			return currentState;
 		}

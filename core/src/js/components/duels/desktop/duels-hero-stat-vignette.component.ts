@@ -87,7 +87,7 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		this.globalWinrate = value.globalWinrate;
 		this.playerGamesPlayed = value.playerTotalMatches || 0;
 		this.globalWinDistribution = {
-			data: value.globalWinDistribution.map(input => ({
+			data: value.globalWinDistribution.map((input) => ({
 				label: '' + input.winNumber,
 				// To never show an empty bar
 				value: Math.max(input.value, 0.5),

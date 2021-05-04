@@ -16,7 +16,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsTavernUpgradeEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.players.find(
-			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
+			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2) {
@@ -25,7 +25,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 					currentState.currentGame.reviewId,
 					event.heroCardId,
 					normalizeHeroCardId(event.heroCardId),
-					currentState.currentGame.players.map(player => player.cardId),
+					currentState.currentGame.players.map((player) => player.cardId),
 				);
 			}
 			return currentState;
@@ -40,7 +40,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 		];
 		// If the upgrade happens after a triple has been done on the same turn, it's very likely that they
 		// dioscovered the triple once the upgrade occured, so we adjust the tavern tier
-		const newTripleHistory: readonly BgsTriple[] = playerToUpdate.tripleHistory.map(triple => {
+		const newTripleHistory: readonly BgsTriple[] = playerToUpdate.tripleHistory.map((triple) => {
 			if (triple.turn === turn) {
 				return {
 					tierOfTripledMinion: triple.tierOfTripledMinion + 1,
@@ -55,7 +55,7 @@ export class BgsTavernUpgradeParser implements EventParser {
 			tavernUpgradeHistory: newHistory,
 			tripleHistory: newTripleHistory,
 		} as BgsPlayer);
-		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map(player =>
+		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players.map((player) =>
 			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
 		);
 		const newGame = currentState.currentGame.update({ players: newPlayers } as BgsGame);

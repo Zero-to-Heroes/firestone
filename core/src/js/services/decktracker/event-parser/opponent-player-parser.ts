@@ -40,7 +40,7 @@ export class OpponentPlayerParser implements EventParser {
 		if (currentState.metadata.formatType && currentState.deckStats) {
 			const convertedFormat = formatFormat(currentState.metadata.formatType);
 			const statsAgainstOpponent = currentState.deckStats.filter(
-				stat => stat.opponentClass === newHero.playerClass,
+				(stat) => stat.opponentClass === newHero.playerClass,
 			);
 			matchupStatsRecap = StatsRecap.from(statsAgainstOpponent, convertedFormat, newHero.playerClass);
 		}
@@ -115,7 +115,7 @@ export class OpponentPlayerParser implements EventParser {
 	}
 
 	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {
-		return cards.map(card =>
+		return cards.map((card) =>
 			card.update({
 				inInitialDeck: true,
 			} as DeckCard),

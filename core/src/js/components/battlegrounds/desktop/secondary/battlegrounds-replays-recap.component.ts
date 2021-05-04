@@ -86,9 +86,9 @@ export class BattlegroundsReplaysRecapComponent implements AfterViewInit {
 
 		console.log('filtering replays', this._heroCardId);
 		this.replays = this._state.replays.allReplays
-			.filter(replay => replay.gameMode === 'battlegrounds')
-			.filter(replay => replay.playerRank != null)
-			.filter(replay => !this._heroCardId || this._heroCardId === replay.playerCardId)
+			.filter((replay) => replay.gameMode === 'battlegrounds')
+			.filter((replay) => replay.playerRank != null)
+			.filter((replay) => !this._heroCardId || this._heroCardId === replay.playerCardId)
 			.slice(0, this._numberOfReplays);
 	}
 }

@@ -29,9 +29,7 @@ import { normalizeCardId } from './post-match/card-utils';
 			Board as seen
 			{{ currentTurn - boardTurn === 0 ? 'just now' : currentTurn - boardTurn + ' turns ago' }}
 		</div>
-		<div class="board-turn" *ngIf="!customTitle && _entities && finalBoard">
-			Your final board
-		</div>
+		<div class="board-turn" *ngIf="!customTitle && _entities && finalBoard">Your final board</div>
 		<div
 			class="board-turn empty"
 			*ngIf="!customTitle && !finalBoard && (!_entities || !boardTurn || !isNumber(currentTurn - boardTurn))"
@@ -110,7 +108,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	@Input('entities') set entities(value: readonly Entity[]) {
 		this.inputEntities = value || [];
 		// console.log('input entities', this.inputEntities);
-		this._entities = this.inputEntities.map(entity => Entity.create({ ...entity } as Entity));
+		this._entities = this.inputEntities.map((entity) => Entity.create({ ...entity } as Entity));
 		// console.log('setting entities', this._entities);
 		this.previousBoardWidth = undefined;
 		if (this.debug) {
@@ -158,7 +156,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		});
 		if (this.ow.isOwEnabled()) {
 			const windowId = (await this.ow.getCurrentWindow()).id;
-			this.stateChangedListener = this.ow.addStateChangedListener(windowId, message => {
+			this.stateChangedListener = this.ow.addStateChangedListener(windowId, (message) => {
 				// console.log('state changed', message);
 				if (isWindowHidden(message.window_previous_state_ex) && !isWindowHidden(message.window_state_ex)) {
 					if (this.debug) {
@@ -185,18 +183,18 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 	showTooltipWarning(entity: Entity): boolean {
 		return (
 			this._entities
-				?.map(e => normalizeCardId(e.cardID, this.allCards))
-				?.filter(cardId => cardId === normalizeCardId(entity.cardID, this.allCards)).length > 1
+				?.map((e) => normalizeCardId(e.cardID, this.allCards))
+				?.filter((cardId) => cardId === normalizeCardId(entity.cardID, this.allCards)).length > 1
 		);
 	}
 
 	getDamageDealt(entity: Entity): number {
-		return this._minionStats?.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+		return this._minionStats?.find((stat) => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
 			?.damageDealt;
 	}
 
 	getDamageTaken(entity: Entity): number {
-		return this._minionStats?.find(stat => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
+		return this._minionStats?.find((stat) => stat.cardId === normalizeCardId(entity.cardID, this.allCards))
 			?.damageTaken;
 	}
 

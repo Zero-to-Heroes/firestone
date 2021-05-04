@@ -105,8 +105,8 @@ export class CardsMonitorService {
 		const boosterId = pack.BoosterId;
 		// Get the collection as it was before opening cards
 		const collection = await this.collectionManager.getCollection(true);
-		const packCards: readonly InternalCardInfo[] = pack.Cards.map(card => {
-			const cardInCollection = collection.find(c => c.id === card.CardId);
+		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
+			const cardInCollection = collection.find((c) => c.id === card.CardId);
 			return {
 				cardId: card.CardId,
 				// No diamond card in pack, so we can leave it like this for now
@@ -132,7 +132,7 @@ export class CardsMonitorService {
 		for (const data of Object.values(groupedBy)) {
 			const cardId = data[0].cardId;
 			const type = data[0].cardType;
-			const cardInCollection = collection.find(c => c.id === cardId);
+			const cardInCollection = collection.find((c) => c.id === cardId);
 			const existingCount = !cardInCollection
 				? 0
 				: data[0].cardType === 'GOLDEN'
@@ -160,7 +160,7 @@ export class CardsMonitorService {
 		for (const data of Object.values(groupedBy)) {
 			const cardId = data[0].CardId;
 			const type = data[0].Premium ? 'GOLDEN' : 'NORMAL';
-			const cardInCollection = collection.find(c => c.id === cardId);
+			const cardInCollection = collection.find((c) => c.id === cardId);
 			const existingCount = data[0].Premium ? cardInCollection.premiumCount : cardInCollection.count;
 			// console.debug('handling', data, existingCount, cardId, type, cardInCollection);
 			for (let i = existingCount; i < existingCount + data.length; i++) {

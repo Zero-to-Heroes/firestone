@@ -9,8 +9,8 @@ export class GetBattlegroundsInfoOperation extends MindVisionOperationFacade<Bat
 			ow,
 			'getBattlegroundsInfo',
 			() => mindVision.getBattlegroundsInfo(),
-			battlegroundsInfo => battlegroundsInfo.Rating == -1,
-			battlegroundsInfo =>
+			(battlegroundsInfo) => battlegroundsInfo.Rating == -1,
+			(battlegroundsInfo) =>
 				Object.assign(new BattlegroundsInfo(), {
 					rating: battlegroundsInfo.Rating,
 					game: battlegroundsInfo.Game,

@@ -12,7 +12,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const deck = currentState.duels.playerStats.personalDeckStats.find(
-			stat => stat.initialDeckList === event.deckstring,
+			(stat) => stat.initialDeckList === event.deckstring,
 		);
 		const expandedRunIds: readonly string[] = [deck.runs[0].id];
 		return [
@@ -34,7 +34,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 
 	private getDeckName(currentState: MainWindowState, deckstring: string): string {
 		const deck = currentState?.duels?.playerStats?.personalDeckStats?.find(
-			deck => deck.initialDeckList === deckstring,
+			(deck) => deck.initialDeckList === deckstring,
 		);
 		// console.log('found deck', deck, currentState);
 		return deck?.deckName;

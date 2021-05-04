@@ -132,7 +132,7 @@ export class GameStateService {
 	// Keep a single queue to avoid race conditions between the two queues (since they
 	// modify the same state)
 	private processingQueue = new ProcessingQueue<GameEvent | GameStateEvent>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		50,
 		'game-state',
 	);
@@ -185,7 +185,7 @@ export class GameStateService {
 			return;
 		}
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		preferencesEventBus.subscribe(async event => {
+		preferencesEventBus.subscribe(async (event) => {
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 				console.log('rebuilding event emitters');
 				this.buildEventEmitters();
@@ -200,7 +200,7 @@ export class GameStateService {
 		setTimeout(() => {
 			const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow()
 				.decktrackerDisplayEventBus;
-			decktrackerDisplayEventBus.subscribe(event => {
+			decktrackerDisplayEventBus.subscribe((event) => {
 				if (this.showDecktrackerFromGameMode === event) {
 					return;
 				}
@@ -211,7 +211,7 @@ export class GameStateService {
 		this.handleDisplayPreferences();
 		setTimeout(() => {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-			preferencesEventBus.subscribe(event => {
+			preferencesEventBus.subscribe((event) => {
 				if (event) {
 					this.handleDisplayPreferences(event.preferences);
 				}
@@ -231,7 +231,7 @@ export class GameStateService {
 
 	// TODO: this should move elsewhere
 	public async getCurrentReviewId(): Promise<string> {
-		return new Promise<string>(resolve => this.getCurrentReviewIdInternal(reviewId => resolve(reviewId)));
+		return new Promise<string>((resolve) => this.getCurrentReviewIdInternal((reviewId) => resolve(reviewId)));
 	}
 
 	private async getCurrentReviewIdInternal(callback, retriesLeft = 15) {
@@ -248,7 +248,7 @@ export class GameStateService {
 	}
 
 	private registerGameEvents() {
-		this.gameEvents.onGameStart.subscribe(event => {
+		this.gameEvents.onGameStart.subscribe((event) => {
 			console.log('[game-state] game start event received, resetting currentReviewId');
 			this.currentReviewId = uuid();
 			console.log('[game-state] built currentReviewId', this.currentReviewId);
@@ -261,10 +261,10 @@ export class GameStateService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			console.log('[game-state] Received review finalized event, doing nothing');
 		});
-		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
+		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
 			console.log('[game-state] Received new review id event');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
@@ -273,7 +273,7 @@ export class GameStateService {
 		});
 		this.events
 			.on(Events.ACHIEVEMENT_PROGRESSION)
-			.subscribe(event =>
+			.subscribe((event) =>
 				this.processingQueue.enqueue(new ConstructedAchievementsProgressionEvent(event.data[0])),
 			);
 		// Reset the deck if it exists
@@ -283,11 +283,11 @@ export class GameStateService {
 
 	private async processQueue(eventQueue: readonly (GameEvent | GameStateEvent)[]) {
 		try {
-			const stateUpdateEvents = eventQueue.filter(event => event.type === GameEvent.GAME_STATE_UPDATE);
+			const stateUpdateEvents = eventQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
 			const eventsToProcess = [
-				...eventQueue.filter(event => event.type !== GameEvent.GAME_STATE_UPDATE),
+				...eventQueue.filter((event) => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
-			].filter(event => event);
+			].filter((event) => event);
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				// console.debug('event to process', eventsToProcess[i]);
 				if (eventsToProcess[i] instanceof GameEvent) {
@@ -312,7 +312,7 @@ export class GameStateService {
 			} as GameState);
 		}
 
-		this.overlayHandlers.forEach(handler =>
+		this.overlayHandlers.forEach((handler) =>
 			handler.processEvent(event, this.state, this.showDecktrackerFromGameMode),
 		);
 
@@ -339,11 +339,11 @@ export class GameStateService {
 			},
 			state: this.state,
 		};
-		this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+		this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 	}
 
 	private async processEvent(gameEvent: GameEvent, shouldUpdateOverlays = true) {
-		this.overlayHandlers.forEach(handler =>
+		this.overlayHandlers.forEach((handler) =>
 			handler.processEvent(gameEvent, this.state, this.showDecktrackerFromGameMode),
 		);
 
@@ -363,7 +363,7 @@ export class GameStateService {
 		} else if (gameEvent.type === GameEvent.MINIONS_WILL_DIE) {
 			this.minionsWillDie = [
 				...this.minionsWillDie,
-				...gameEvent.additionalData.deadMinions?.map(minion => ({
+				...gameEvent.additionalData.deadMinions?.map((minion) => ({
 					entityId: minion.EntityId,
 					cardId: minion.CardId,
 				})),
@@ -420,7 +420,7 @@ export class GameStateService {
 				},
 				state: this.state,
 			};
-			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+			this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 		}
 
 		// We have processed the event for which the secret would trigger
@@ -438,7 +438,7 @@ export class GameStateService {
 		if (this.minionsWillDie?.length && gameEvent.type === GameEvent.MINIONS_DIED) {
 			const gEvent = gameEvent as MinionsDiedEvent;
 			this.minionsWillDie = this.minionsWillDie.filter(
-				minion => !gEvent.additionalData.deadMinions.map(m => m.EntityId).includes(minion.entityId),
+				(minion) => !gEvent.additionalData.deadMinions.map((m) => m.EntityId).includes(minion.entityId),
 			);
 		}
 	}
@@ -451,18 +451,18 @@ export class GameStateService {
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
 		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
-		const newBoard: readonly DeckCard[] = deck.board.map(card => {
-			const entity = playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId);
+		const newBoard: readonly DeckCard[] = deck.board.map((card) => {
+			const entity = playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId);
 			return DeckCard.create({
 				...card,
 				dormant: this.hasTag(entity, GameTag.DORMANT),
 			} as DeckCard);
 		});
 		const totalAttackOnBoard = deck.board
-			.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
-			.filter(entity => entity)
-			.filter(entity => this.canAttack(entity, deck.isActivePlayer))
-			.map(entity => this.windfuryMultiplier(entity) * (entity.attack > 0 ? entity.attack : 0))
+			.map((card) => playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId))
+			.filter((entity) => entity)
+			.filter((entity) => this.canAttack(entity, deck.isActivePlayer))
+			.map((entity) => this.windfuryMultiplier(entity) * (entity.attack > 0 ? entity.attack : 0))
 			.reduce((a, b) => a + b, 0);
 		// console.log(
 		// 	'total attack on board',
@@ -520,7 +520,7 @@ export class GameStateService {
 			return;
 		}
 		await Promise.all(
-			this.overlayHandlers.map(handler =>
+			this.overlayHandlers.map((handler) =>
 				handler.updateOverlay(
 					state,
 					this.showDecktrackerFromGameMode,
@@ -533,14 +533,14 @@ export class GameStateService {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
-		this.overlayHandlers.forEach(handler => handler.handleDisplayPreferences(preferences));
+		this.overlayHandlers.forEach((handler) => handler.handleDisplayPreferences(preferences));
 		// this.showOpponentTracker = preferences.opponentTracker;
 		// console.log('update opp hand prefs', this.showOpponentHand, preferences);
 		this.updateOverlays(this.state);
 	}
 
 	private async buildEventEmitters() {
-		const result = [event => this.deckEventBus.next(event)];
+		const result = [(event) => this.deckEventBus.next(event)];
 		const prefs = await this.prefs.getPreferences();
 		console.log('is logged in to Twitch?', prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
@@ -549,7 +549,7 @@ export class GameStateService {
 				this.prefs.setTwitchAccessToken(undefined);
 				await this.twitch.sendExpiredTwitchTokenNotification();
 			} else {
-				result.push(event => this.twitch.emitDeckEvent(event));
+				result.push((event) => this.twitch.emitDeckEvent(event));
 			}
 		}
 		this.eventEmitters = result;
@@ -695,7 +695,7 @@ export class GameStateService {
 		if (!entity?.tags) {
 			return false;
 		}
-		const matches = entity.tags.some(t => t.Name === tag && t.Value === value);
+		const matches = entity.tags.some((t) => t.Name === tag && t.Value === value);
 		return matches;
 	}
 }

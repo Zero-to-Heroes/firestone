@@ -57,7 +57,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
 		const windowName = (await this.ow.getCurrentWindow()).name;
-		this.stateChangedListener = this.ow.addStateChangedListener(windowName, message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
 			// console.log('received message', message);
 			if (message.window_state_ex === 'maximized') {
 				this.maximized = true;

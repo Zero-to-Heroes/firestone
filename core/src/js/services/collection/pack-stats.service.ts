@@ -17,7 +17,7 @@ export class PackStatsService {
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 	) {
-		this.events.on(Events.NEW_PACK).subscribe(event => this.publishPackStat(event));
+		this.events.on(Events.NEW_PACK).subscribe((event) => this.publishPackStat(event));
 	}
 
 	public async getPackStats(): Promise<readonly PackResult[]> {
@@ -31,7 +31,7 @@ export class PackStatsService {
 			data.results
 				// Because of how pack logging used to work, when you received the 5 galakrond cards,
 				// the app flagged that as a new pack
-				?.filter(pack => !this.isPackAllGalakronds(pack)) ?? []
+				?.filter((pack) => !this.isPackAllGalakronds(pack)) ?? []
 		);
 	}
 
@@ -60,11 +60,11 @@ export class PackStatsService {
 	private isPackAllGalakronds(pack: PackResult): boolean {
 		return (
 			pack.setId === 'dragons' &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Priest.GalakrondTheUnspeakable) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Shaman.GalakrondTheTempest) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Warlock.GalakrondTheWretched) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Warrior.GalakrondTheUnbreakable) &&
-			pack.cards.map(card => card.cardId).includes(CardIds.Collectible.Rogue.GalakrondTheNightmare)
+			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Priest.GalakrondTheUnspeakable) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Shaman.GalakrondTheTempest) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Warlock.GalakrondTheWretched) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Warrior.GalakrondTheUnbreakable) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Rogue.GalakrondTheNightmare)
 		);
 	}
 }

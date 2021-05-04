@@ -95,7 +95,7 @@ export class DuelsFiltersComponent implements AfterViewInit {
 	}
 
 	anyVisible() {
-		return this.options.some(option => option.option.visibleHandler(this._navigation, this._state));
+		return this.options.some((option) => option.option.visibleHandler(this._navigation, this._state));
 	}
 
 	toggleShowHiddenDecks = (newValue: boolean) => {

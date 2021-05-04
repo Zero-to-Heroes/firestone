@@ -16,18 +16,18 @@ export class AchievementUpdateHelper {
 
 		return (
 			history
-				.filter(history => history.numberOfCompletions === 1)
-				.map(history => {
-					const matchingAchievement = achievements.find(ach => ach.id === history.achievementId);
+				.filter((history) => history.numberOfCompletions === 1)
+				.map((history) => {
+					const matchingAchievement = achievements.find((ach) => ach.id === history.achievementId);
 					// This can happen with older history items
 					if (!matchingAchievement) {
 						return null;
 					}
 					return Object.assign(new AchievementHistory(), history, {
-						displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
+						displayName: achievements.find((ach) => ach.id === history.achievementId).displayName,
 					} as AchievementHistory);
 				})
-				.filter(history => history)
+				.filter((history) => history)
 				// We want to have the most recent at the top
 				.reverse()
 		);

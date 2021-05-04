@@ -226,7 +226,7 @@ export class MainWindowStoreService {
 	private processors: Map<string, Processor>;
 
 	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		50,
 		'main-window-store',
 	);

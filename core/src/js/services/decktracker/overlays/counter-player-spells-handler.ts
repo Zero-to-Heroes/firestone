@@ -7,8 +7,8 @@ export class SpellsPlayerCounterOverlayHandler extends AbstractOverlayHandler {
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.COUNTER_PLAYER_SPELL_WINDOW,
-			prefs => prefs.playerSpellCounter,
-			state => state?.playerDeck?.containsSpellCounterMinion() && !state.isBattlegrounds(),
+			(prefs) => prefs.playerSpellCounter,
+			(state) => state?.playerDeck?.containsSpellCounterMinion() && !state.isBattlegrounds(),
 			ow,
 			prefs,
 			allCards,

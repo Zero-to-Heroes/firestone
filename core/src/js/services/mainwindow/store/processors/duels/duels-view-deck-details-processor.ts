@@ -16,10 +16,10 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const deck = currentState.duels.playerStats.deckStats
-			.map(grouped => grouped.decks)
+			.map((grouped) => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])
-			.find(deck => deck.id === event.deckId);
-		if (!currentState.duels.additionalDeckDetails.map(stat => stat.runId).includes(deck?.runId)) {
+			.find((deck) => deck.id === event.deckId);
+		if (!currentState.duels.additionalDeckDetails.map((stat) => stat.runId).includes(deck?.runId)) {
 			this.events.broadcast(Events.DUELS_LOAD_TOP_DECK_RUN_DETAILS, deck?.runId, event.deckId);
 		}
 		return [
@@ -41,9 +41,9 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 
 	private getDeckName(currentState: MainWindowState, deckId: number): string {
 		const deck = currentState?.duels?.playerStats?.deckStats
-			?.map(grouped => grouped.decks)
+			?.map((grouped) => grouped.decks)
 			?.reduce((a, b) => a.concat(b), [])
-			?.find(deck => deck.id === deckId);
+			?.find((deck) => deck.id === deckId);
 		if (!deck) {
 			return null;
 		}

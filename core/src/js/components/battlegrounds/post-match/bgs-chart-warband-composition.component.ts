@@ -254,8 +254,8 @@ export class BgsChartWarbandCompositionComponent {
 			}
 		}
 		return history
-			.filter(history => history.turn > 0)
-			.map(history => ({
+			.filter((history) => history.turn > 0)
+			.map((history) => ({
 				name: history.turn,
 				series: [
 					this.buildSeries('Beast', 'beast', history),
@@ -282,19 +282,21 @@ export class BgsChartWarbandCompositionComponent {
 
 	private getTribe(tribe: string, board: readonly Entity[]): number {
 		// Don't use === because tribe can be null / undefined
-		return board?.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe)?.length ?? 0;
+		return (
+			board?.filter((entity) => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe)?.length ?? 0
+		);
 	}
 
 	private getMinions(tribe: string, turn: number, model?): readonly ParserEntity[] {
 		return (
 			this._stats?.boardHistory
-				?.find(history => history.turn === turn)
-				?.board?.map(entity =>
+				?.find((history) => history.turn === turn)
+				?.board?.map((entity) =>
 					entity.tags?.merge
 						? ParserEntity.create(entity as ParserEntity)
 						: ParserEntity.fromJS(entity as any),
 				)
-				?.filter(entity => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe) || []
+				?.filter((entity) => this.allCards.getCard(entity.cardID)?.race?.toLowerCase() == tribe) || []
 		);
 	}
 }

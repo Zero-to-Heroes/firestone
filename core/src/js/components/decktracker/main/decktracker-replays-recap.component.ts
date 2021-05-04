@@ -52,9 +52,9 @@ export class DecktrackerReplaysRecapComponent {
 		}
 
 		this.replays = (this._state.decktracker.decks
-			.map(deck => deck.replays)
+			.map((deck) => deck.replays)
 			.reduce((a, b) => a.concat(b), []) as GameStat[])
-			.filter(stat =>
+			.filter((stat) =>
 				this._navigation.navigationDecktracker.selectedDeckstring
 					? stat.playerDecklist === this._navigation.navigationDecktracker.selectedDeckstring
 					: true,

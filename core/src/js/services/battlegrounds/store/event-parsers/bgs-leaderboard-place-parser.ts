@@ -12,7 +12,7 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsLeaderboardPlaceEvent): Promise<BattlegroundsState> {
 		const playerToUpdate = currentState.currentGame.players.find(
-			player => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
+			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
 		// console.log('updating leaderboard place for', playerToUpdate, event, currentState);
 		if (!playerToUpdate) {

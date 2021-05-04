@@ -50,7 +50,7 @@ export class AchievementsFilterComponent implements AfterViewInit, OnDestroy {
 		this.subscription = this.searchForm.valueChanges
 			.pipe(debounceTime(400))
 			.pipe(distinctUntilChanged())
-			.subscribe(data => {
+			.subscribe((data) => {
 				// console.log('value changed?', data);
 				this.onSearchStringChange();
 			});

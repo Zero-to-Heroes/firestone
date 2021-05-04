@@ -42,9 +42,7 @@ declare let amplitude: any;
 					[collection]="cardsInDecklists"
 				>
 				</deck-list>
-				<div class="no-cards-played" *ngIf="!playedCards?.length">
-					Opponent has not played any cards yet
-				</div>
+				<div class="no-cards-played" *ngIf="!playedCards?.length">Opponent has not played any cards yet</div>
 			</div>
 			<div class="archetype-guess">
 				<div class="header">Archetype Guess</div>
@@ -121,7 +119,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 			return;
 		}
 
-		const cardsFromInitialDeck = this._state.opponentDeck.cardsPlayedFromInitialDeck.map(card => card.cardId);
+		const cardsFromInitialDeck = this._state.opponentDeck.cardsPlayedFromInitialDeck.map((card) => card.cardId);
 		if (arraysEqual(this.playedCards, cardsFromInitialDeck)) {
 			return;
 		}
@@ -135,13 +133,13 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 			this.archetypes = this.buildArchetypes(this._state, this.playedCards);
 			this.buildMissingCards(this.archetypes[0].decklist, this.playedCards);
 
-			const cardsMissingInEachDecklist = this.archetypes.map(arch => [...arch.cardsPlayedNotInList]);
+			const cardsMissingInEachDecklist = this.archetypes.map((arch) => [...arch.cardsPlayedNotInList]);
 			// Loop twice, as there are max 2 copies of a card in a deck
 			const cardsMissingInAllDecklists: string[] = [];
 			for (let i = 0; i < 2; i++) {
 				const uniqueIds = [...new Set(cardsMissingInEachDecklist.reduce((a, b) => a.concat(b), []))];
 				for (const cardId of uniqueIds) {
-					if (cardsMissingInEachDecklist.every(decklist => decklist.includes(cardId))) {
+					if (cardsMissingInEachDecklist.every((decklist) => decklist.includes(cardId))) {
 						cardsMissingInAllDecklists.push(cardId);
 					}
 					for (const decklist of cardsMissingInEachDecklist) {
@@ -163,10 +161,10 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 
 	private buildArchetypes(state: GameState, playedCards: readonly string[]): readonly Archetype[] {
 		const format = formatFormat(state.metadata.formatType);
-		const configForFormat = state.archetypesConfig.filter(conf => conf.gameFormat === format);
+		const configForFormat = state.archetypesConfig.filter((conf) => conf.gameFormat === format);
 		// TODO: use prefs to filter on the right time period
 		const stats: readonly ArchetypeResults[] = state.archetypesStats.lastPatch.filter(
-			stat => stat.gameFormat === format,
+			(stat) => stat.gameFormat === format,
 		);
 		const opponentClass = state.opponentDeck.hero?.playerClass;
 
@@ -177,7 +175,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 			format,
 		);
 		console.log('scores', archetypeScores);
-		const topScores = archetypeScores.slice(0, 3).filter(score => score.points > 0);
+		const topScores = archetypeScores.slice(0, 3).filter((score) => score.points > 0);
 		console.log('top scores', topScores);
 
 		return this.consolidateArchetypes(topScores, configForFormat, playedCards, stats);
@@ -195,11 +193,11 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 
 		const maxScore = topScores[0].points;
 		const relativeScores: ArchetypeScore[] = topScores
-			.map(score => ({
+			.map((score) => ({
 				archetypeId: score.archetypeId,
 				points: score.points / maxScore,
 			}))
-			.filter(score => score.points >= 0.3);
+			.filter((score) => score.points >= 0.3);
 		console.log('relativeScores', relativeScores);
 		// A single archetype, propose 3 decklists
 		if (relativeScores.length === 1) {
@@ -232,7 +230,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 	): readonly Archetype[] {
 		const archetype = this.findArchetype(stats, archetypeScore.archetypeId);
 		const configForArchetype: readonly ArchetypeConfig[] = config.filter(
-			conf => conf.class + '_' + conf.archetype === archetypeScore.archetypeId,
+			(conf) => conf.class + '_' + conf.archetype === archetypeScore.archetypeId,
 		);
 		// console.log('archetype', archetypeScore, archetype, configForArchetype, stats);
 		if (!archetype) {
@@ -243,12 +241,12 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 
 		const relevantLists = this.buildRelevantLists(archetype, configForArchetype, playedCards);
 
-		const totalMatches = relevantLists.map(list => list.wins + list.losses).reduce((a, b) => a + b, 0);
+		const totalMatches = relevantLists.map((list) => list.wins + list.losses).reduce((a, b) => a + b, 0);
 		const decklists = relevantLists.sort((a, b) => b.wins + b.losses - (a.wins + a.losses)).slice(0, 3);
 		// console.log('decklists', decklists);
 
 		return decklists.map(
-			decklist =>
+			(decklist) =>
 				({
 					name: archetypeScore.archetypeId,
 					archetypeProbability: 100 * archetypeScore.points,
@@ -278,7 +276,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		configForArchetype: readonly ArchetypeConfig[],
 		playedCards: readonly string[],
 	): InternalDeckList[] {
-		const fullLists = [...archetype.decklists].filter(decklist => this.hasAllPlayedCards(decklist, playedCards));
+		const fullLists = [...archetype.decklists].filter((decklist) => this.hasAllPlayedCards(decklist, playedCards));
 		// console.log('fullLists', fullLists);
 		if (fullLists?.length) {
 			return fullLists;
@@ -287,12 +285,12 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		// We could not find any list that contains all the played cards, so we fallback to some
 		// lists that match approximately
 		return [...archetype.decklists]
-			.map(decklist => ({
+			.map((decklist) => ({
 				decklist: decklist,
 				score: this.buildScore(decklist, configForArchetype, playedCards),
 			}))
 			.sort((a, b) => b.score - a.score)
-			.map(item => {
+			.map((item) => {
 				return {
 					...item.decklist,
 					score: item.score,
@@ -308,14 +306,14 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		playedCards: readonly string[],
 	): number {
 		return playedCards
-			.map(cardId => configForArchetype.find(conf => conf.cardId === cardId))
-			.filter(conf => conf)
-			.map(conf => conf.points)
+			.map((cardId) => configForArchetype.find((conf) => conf.cardId === cardId))
+			.filter((conf) => conf)
+			.map((conf) => conf.points)
 			.reduce((a, b) => a + b, 0);
 	}
 
 	private findArchetype(stats: readonly ArchetypeResults[], archetypeId: string): ArchetypeResults {
-		return stats.find(archetype => archetype.archetypeId === archetypeId);
+		return stats.find((archetype) => archetype.archetypeId === archetypeId);
 	}
 
 	private buildMissingCards(decklist: DeckList, playedCards: readonly string[]): readonly string[] {

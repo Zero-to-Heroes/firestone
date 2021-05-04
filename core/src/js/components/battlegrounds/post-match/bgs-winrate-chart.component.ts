@@ -72,15 +72,15 @@ export class BgsWinrateChartComponent {
 			}
 
 			const result = this._globalStats.heroStats
-				.find(stat => stat.id === this._player.cardId)
-				?.combatWinrate?.filter(stat => stat.turn > 0)
-				.map(stat => {
+				.find((stat) => stat.id === this._player.cardId)
+				?.combatWinrate?.filter((stat) => stat.turn > 0)
+				.map((stat) => {
 					return {
 						turn: stat.turn,
 						value: stat.winrate,
 					} as NumericTurnInfo;
 				})
-				.filter(stat => stat);
+				.filter((stat) => stat);
 			return result;
 		};
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
@@ -88,7 +88,7 @@ export class BgsWinrateChartComponent {
 				return [];
 			}
 			const result = this._stats.battleResultHistory.map(
-				turnInfo =>
+				(turnInfo) =>
 					({
 						turn: turnInfo.turn,
 						value: turnInfo.simulationResult?.wonPercent || 0,

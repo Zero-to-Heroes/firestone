@@ -16,7 +16,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.DECKTRACKER_WINDOW,
-			prefs => true,
+			(prefs) => true,
 			(state, prefs, showDecktrackerFromGameMode) =>
 				!this.closedByUser && !state.isBattlegrounds() && showDecktrackerFromGameMode,
 			ow,

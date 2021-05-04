@@ -50,7 +50,7 @@ export class ConstructedComponent implements AfterViewInit {
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async event => {
+		const subscriber = new Subscriber<any>(async (event) => {
 			// console.log('received', event);
 			this.state = event.state as GameState;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -87,7 +87,7 @@ export class ConstructedComponent implements AfterViewInit {
 		// console.log('gameInfo', gameInfo);
 		const mainMonitor = gameInfo?.monitorHandle?.value ?? -1;
 		if (mainMonitor !== -1) {
-			const secondMonitor = monitorsList.displays.filter(monitor => monitor.handle.value !== mainMonitor)[0];
+			const secondMonitor = monitorsList.displays.filter((monitor) => monitor.handle.value !== mainMonitor)[0];
 			console.log('changing window position', this.windowId, secondMonitor.x, secondMonitor.y);
 			this.ow.changeWindowPosition(this.windowId, secondMonitor.x + 100, secondMonitor.y + 100);
 		}

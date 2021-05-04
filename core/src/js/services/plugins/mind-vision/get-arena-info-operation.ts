@@ -9,8 +9,8 @@ export class GetArenaInfoOperation extends MindVisionOperationFacade<any> {
 			ow,
 			'getArenaInfo',
 			() => mindVision.getArenaInfo(),
-			arenaInfo => arenaInfo.Wins == null || arenaInfo.Wins < 0,
-			arenaInfo =>
+			(arenaInfo) => arenaInfo.Wins == null || arenaInfo.Wins < 0,
+			(arenaInfo) =>
 				Object.assign(new ArenaInfo(), {
 					wins: arenaInfo.Wins,
 					losses: arenaInfo.Losses,

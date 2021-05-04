@@ -16,7 +16,7 @@ export class AchievementsNotificationService {
 		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
 	) {
-		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.handleAchievementCompleted(data.data[0]));
+		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.handleAchievementCompleted(data.data[0]));
 		console.log('[achievements-notification] listening for achievement completion events');
 	}
 

@@ -39,7 +39,7 @@ import { RealTimeStatsState } from './real-time-stats';
 export class RealTimeStatsService {
 	private state: RealTimeStatsState = new RealTimeStatsState();
 	private processingQueue = new ProcessingQueue<GameEvent>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		50,
 		'bgs-real-time-stats-queue',
 	);
@@ -63,11 +63,11 @@ export class RealTimeStatsService {
 
 	private async processQueue(eventQueue: readonly GameEvent[]) {
 		try {
-			const stateUpdateEvents = eventQueue.filter(event => event.type === GameEvent.GAME_STATE_UPDATE);
+			const stateUpdateEvents = eventQueue.filter((event) => event.type === GameEvent.GAME_STATE_UPDATE);
 			const eventsToProcess = [
-				...eventQueue.filter(event => event.type !== GameEvent.GAME_STATE_UPDATE),
+				...eventQueue.filter((event) => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
-			].filter(event => event);
+			].filter((event) => event);
 			// console.log('will processed', eventsToProcess.length, 'events');
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				await this.processEvent(eventsToProcess[i]);
@@ -93,7 +93,7 @@ export class RealTimeStatsService {
 		if (newState !== this.state) {
 			this.state = newState;
 			// this.debug('state', this.state);
-			this.listeners.forEach(listener => listener(this.state));
+			this.listeners.forEach((listener) => listener(this.state));
 		}
 	}
 
@@ -102,7 +102,7 @@ export class RealTimeStatsService {
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		this.events.on(Events.BATTLE_SIMULATION_HISTORY_UPDATED).subscribe(data => {
+		this.events.on(Events.BATTLE_SIMULATION_HISTORY_UPDATED).subscribe((data) => {
 			this.processingQueue.enqueue(
 				Object.assign(new GameEvent(), {
 					type: Events.BATTLE_SIMULATION_HISTORY_UPDATED,

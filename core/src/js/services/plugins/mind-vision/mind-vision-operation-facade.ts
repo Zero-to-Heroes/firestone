@@ -3,7 +3,7 @@ import { ProcessingQueue } from '../../processing-queue.service';
 
 export class MindVisionOperationFacade<T> {
 	private processingQueue = new ProcessingQueue<InternalCall<T>>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		1000,
 		this.serviceName,
 	);
@@ -22,7 +22,7 @@ export class MindVisionOperationFacade<T> {
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
 		// this.log('processing queue', eventQueue);
 		// Since it's a queue of functions that build promises, we can't simply await the result
-		return new Promise<readonly InternalCall<T>[]>(resolve => {
+		return new Promise<readonly InternalCall<T>[]>((resolve) => {
 			try {
 				const firstEvent = eventQueue[0];
 				// The idea here is that once we have the result for one event, we resolve all
@@ -73,7 +73,7 @@ export class MindVisionOperationFacade<T> {
 		}
 		// this.debug('race');
 		return Promise.race([
-			new Promise<T>(resolve => {
+			new Promise<T>((resolve) => {
 				this.processingQueue.enqueue({
 					retriesLeft: numberOfRetries ?? this.numberOfRetries,
 					// When processing the full queue in one go, we can use this to notify
@@ -92,7 +92,7 @@ export class MindVisionOperationFacade<T> {
 						),
 				});
 			}),
-			new Promise<T>(resolve => {
+			new Promise<T>((resolve) => {
 				// Add a timeout, since no memory call should take too long to complete
 				setTimeout(() => {
 					resolve(null);

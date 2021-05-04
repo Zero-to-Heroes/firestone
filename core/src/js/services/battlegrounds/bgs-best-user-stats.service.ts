@@ -13,12 +13,12 @@ export class BgsBestUserStatsService {
 	}
 
 	public async getBgsBestUserStats(): Promise<readonly BgsBestStat[]> {
-		return new Promise<readonly BgsBestStat[]>(async resolve => {
+		return new Promise<readonly BgsBestStat[]>(async (resolve) => {
 			const user = await this.ow.getCurrentUser();
 			if (!user.userId || !user.username) {
 				console.warn('[bgs-best-stats] user not logged in', user);
 			}
-			this.getBgsBestUserStatsInternal(user, stats => resolve(stats), 5);
+			this.getBgsBestUserStatsInternal(user, (stats) => resolve(stats), 5);
 		});
 	}
 
@@ -33,7 +33,7 @@ export class BgsBestUserStatsService {
 				console.log('[bgs-best-stats] received stats');
 				callback(data);
 			},
-			error => {
+			(error) => {
 				setTimeout(() => this.getBgsBestUserStatsInternal(currentUser, callback, retriesLeft - 1), 2000);
 			},
 		);

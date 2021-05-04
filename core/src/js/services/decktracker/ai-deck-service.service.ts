@@ -19,29 +19,29 @@ export class AiDeckService {
 		// console.log('getting ai deck', this.aiDecks, opponentCardId, scenarioId);
 		const deck =
 			this.aiDecks.find(
-				deck =>
+				(deck) =>
 					deck.opponentCardId === opponentCardId &&
 					deck.scenarioIds &&
 					deck.scenarioIds.indexOf(scenarioId) !== -1,
-			) || this.aiDecks.find(deck => deck.opponentCardId === opponentCardId && deck.scenarioIds == null);
+			) || this.aiDecks.find((deck) => deck.opponentCardId === opponentCardId && deck.scenarioIds == null);
 		return deck;
 	}
 
 	private async init() {
 		const deckNames: readonly string[] = await this.getDeckNames();
-		const decksArray = await Promise.all(deckNames.map(fileName => this.loadAiDecks(fileName)));
+		const decksArray = await Promise.all(deckNames.map((fileName) => this.loadAiDecks(fileName)));
 		this.aiDecks = decksArray.reduce((a, b) => a.concat(b), []);
 		console.log('[ai-decks] loaded ai decks', this.aiDecks && this.aiDecks.length);
 	}
 
 	private async getDeckNames(): Promise<readonly string[]> {
-		return new Promise<readonly string[]>(resolve => {
+		return new Promise<readonly string[]>((resolve) => {
 			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json?v=5`).subscribe(
 				(result: any[]) => {
 					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
-				error => {
+				(error) => {
 					console.error('[ai-decks] could not retrieve ai decks from CDN', error);
 					resolve([]);
 				},
@@ -50,13 +50,13 @@ export class AiDeckService {
 	}
 
 	private async loadAiDecks(fileName: string): Promise<readonly AiDeck[]> {
-		return new Promise<readonly AiDeck[]>(resolve => {
+		return new Promise<readonly AiDeck[]>((resolve) => {
 			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json?v=5`).subscribe(
 				(result: any[]) => {
 					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
-				error => {
+				(error) => {
 					console.error('[ai-decks] could not retrieve ai decks from CDN', fileName, error);
 					resolve([]);
 				},

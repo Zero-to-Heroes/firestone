@@ -43,7 +43,7 @@ export class SettingsAchievementsStorageComponent implements AfterViewInit, OnDe
 		this.loadStorageInfo();
 		const prefs = await this.prefs.getPreferences();
 		const window = this.ow.getSettingsWindowName(prefs);
-		this.stateChangedListener = this.ow.addStateChangedListener(window, message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(window, (message) => {
 			this.loadStorageInfo();
 		});
 	}

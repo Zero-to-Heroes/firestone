@@ -14,9 +14,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	],
 	template: `
 		<div class="duels-hero-tier-list">
-			<div class="title" helpTooltip="The tiers are computed for your current filters">
-				Tier List
-			</div>
+			<div class="title" helpTooltip="The tiers are computed for your current filters">Tier List</div>
 			<duels-tier class="duels-tier" *ngFor="let tier of tiers" [tier]="tier"></duels-tier>
 		</div>
 	`,
@@ -82,7 +80,7 @@ export class DuelsHeroTierListComponent implements AfterViewInit {
 				tooltip: 'Defnitely avoid',
 				items: this.filterItems(stats, 0, 45),
 			},
-		].filter(tier => tier.items?.length);
+		].filter((tier) => tier.items?.length);
 	}
 
 	private filterItems(
@@ -91,9 +89,9 @@ export class DuelsHeroTierListComponent implements AfterViewInit {
 		upper: number,
 	): readonly DuelsTierItem[] {
 		return stats
-			.filter(stat => stat.globalWinrate)
-			.filter(stat => stat.globalWinrate >= threshold && stat.globalWinrate < upper)
-			.map(stat => ({
+			.filter((stat) => stat.globalWinrate)
+			.filter((stat) => stat.globalWinrate >= threshold && stat.globalWinrate < upper)
+			.map((stat) => ({
 				cardId: stat.cardId,
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${stat.cardId}.jpg`,
 			}));

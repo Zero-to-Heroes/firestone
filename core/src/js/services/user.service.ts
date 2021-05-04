@@ -55,7 +55,7 @@ export class UserService {
 	}
 
 	private waitForInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const dbWait = () => {
 				if (this.currentUser) {
 					resolve();

@@ -58,7 +58,7 @@ export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit 
 		if (!this._state?.stats?.heroStats || !this._category) {
 			return;
 		}
-		this.stats = this._state.stats.heroStats.filter(stat => stat.id !== 'average');
+		this.stats = this._state.stats.heroStats.filter((stat) => stat.id !== 'average');
 		// console.log('stats', this.stats);
 	}
 

@@ -13,7 +13,7 @@ export class ReplaysState {
 	readonly isLoading: boolean = true;
 
 	public getFilter(type: ReplaysFilterCategoryType) {
-		return this.filters.find(filter => filter.type === type);
+		return this.filters.find((filter) => filter.type === type);
 	}
 
 	public static buildFilters(decks: readonly DeckSummary[]): readonly ReplaysFilter[] {
@@ -90,7 +90,7 @@ export class ReplaysState {
 						label: 'All decks',
 					} as IOption,
 					...decks.map(
-						deck =>
+						(deck) =>
 							({
 								label: deck.deckName,
 								value: deck.deckstring,

@@ -9,8 +9,8 @@ export class GetDuelsRewardsInfoOperation extends MindVisionOperationFacade<Duel
 			ow,
 			'getDuelsRewardsInfo',
 			() => mindVision.getDuelsRewardsInfo(true),
-			rewardsTrackInfo => false,
-			rewardsTrackInfo => {
+			(rewardsTrackInfo) => false,
+			(rewardsTrackInfo) => {
 				return {
 					...rewardsTrackInfo,
 				};

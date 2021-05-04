@@ -81,20 +81,11 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		const positions: ConnectedPosition[] = this.buildPositions();
 
 		if (this._position === 'global-top-center') {
-			this.positionStrategy = this.overlayPositionBuilder
-				.global()
-				.centerHorizontally()
-				.top();
+			this.positionStrategy = this.overlayPositionBuilder.global().centerHorizontally().top();
 		} else if (this._position === 'global-top-left') {
-			this.positionStrategy = this.overlayPositionBuilder
-				.global()
-				.left()
-				.top();
+			this.positionStrategy = this.overlayPositionBuilder.global().left().top();
 		} else if (this._position === 'global-bottom-left') {
-			this.positionStrategy = this.overlayPositionBuilder
-				.global()
-				.left()
-				.bottom();
+			this.positionStrategy = this.overlayPositionBuilder.global().left().bottom();
 		} else {
 			this.positionStrategy = this.overlayPositionBuilder
 				// Create position attached to the elementRef

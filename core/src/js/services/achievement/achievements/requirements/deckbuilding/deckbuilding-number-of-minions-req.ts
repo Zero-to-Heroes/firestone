@@ -39,7 +39,7 @@ export class DeckbuildingNumberOfMinionsReq implements Requirement {
 		const deck = gameEvent.localPlayer?.deck ? gameEvent.localPlayer.deck.deck : null;
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
-			const numberOfMatchingCards: number = cards.filter(card => card?.type === 'Minion').length;
+			const numberOfMatchingCards: number = cards.filter((card) => card?.type === 'Minion').length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfMinions;
 			} else if (this.qualifier === 'AT_MOST') {

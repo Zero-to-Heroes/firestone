@@ -52,8 +52,8 @@ export class BgsHeroFaceOffComponent {
 
 	@Input() set faceOffs(value: readonly BgsFaceOff[]) {
 		// console.log('setting face offs', this.name, value?.length, value);
-		this.wins = value?.filter(faceOff => faceOff.result === 'won').length || 0;
-		this.losses = value?.filter(faceOff => faceOff.result === 'lost').length || 0;
-		this.ties = value?.filter(faceOff => faceOff.result === 'tied').length || 0;
+		this.wins = value?.filter((faceOff) => faceOff.result === 'won').length || 0;
+		this.losses = value?.filter((faceOff) => faceOff.result === 'lost').length || 0;
+		this.ties = value?.filter((faceOff) => faceOff.result === 'tied').length || 0;
 	}
 }

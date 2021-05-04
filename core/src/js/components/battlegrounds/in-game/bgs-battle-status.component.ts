@@ -21,9 +21,7 @@ declare let amplitude: any;
 				<div class="title">Your chance of:</div>
 				<div class="proba-items">
 					<div class="win item">
-						<div class="label" helpTooltip="Your chances of winning the current battle">
-							Win
-						</div>
+						<div class="label" helpTooltip="Your chances of winning the current battle">Win</div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultWin || '--' }}</div>
 							<div
@@ -42,9 +40,7 @@ declare let amplitude: any;
 						</div>
 					</div>
 					<div class="tie item">
-						<div class="label" helpTooltip="Your chances of tying the current battle">
-							Tie
-						</div>
+						<div class="label" helpTooltip="Your chances of tying the current battle">Tie</div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultTie || '--' }}</div>
 							<div
@@ -63,9 +59,7 @@ declare let amplitude: any;
 						</div>
 					</div>
 					<div class="lose item">
-						<div class="label" helpTooltip="Your chances of losing the current battle">
-							Loss
-						</div>
+						<div class="label" helpTooltip="Your chances of losing the current battle">Loss</div>
 						<div class="value-container">
 							<div class="value">{{ battleSimulationResultLose || '--' }}</div>
 							<div

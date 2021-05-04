@@ -34,19 +34,19 @@ export class SetsService {
 	}
 
 	public getSetIds(): string[] {
-		return sets.map(set => set.id);
+		return sets.map((set) => set.id);
 	}
 
 	public getStandardSets(): Set[] {
 		return this.getSets(
-			sets.filter(set => standardSets.includes(set.id)),
+			sets.filter((set) => standardSets.includes(set.id)),
 			true,
 		);
 	}
 
 	public getWildSets(): Set[] {
 		return this.getSets(
-			sets.filter(set => !standardSets.includes(set.id)),
+			sets.filter((set) => !standardSets.includes(set.id)),
 			false,
 		);
 	}
@@ -89,13 +89,13 @@ export class SetsService {
 			if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
 				const textToFind = searchString.split('text:')[1];
 				filterFunctions.push(
-					card => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1,
+					(card) => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1,
 				);
 			}
 			if (fragment.indexOf('name:') !== -1 && fragment.split('name:')[1]) {
 				const textToFind = searchString.split('name:')[1];
 				filterFunctions.push(
-					card => card.name && card.name.toLowerCase().indexOf(textToFind.toLowerCase()) === -1,
+					(card) => card.name && card.name.toLowerCase().indexOf(textToFind.toLowerCase()) === -1,
 				);
 			}
 			// Include non-collectible
@@ -106,7 +106,7 @@ export class SetsService {
 
 			if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'extra') {
 				filterFunctions.push((card: ReferenceCard) => {
-					const collectionCard = collection.find(c => c.id === card.id);
+					const collectionCard = collection.find((c) => c.id === card.id);
 					if (!collectionCard) {
 						return false;
 					}
@@ -137,19 +137,19 @@ export class SetsService {
 		nameSearch = nameSearch.trim().toLowerCase();
 		// Default filtering based on name
 		if (filterFunctions.length === 0) {
-			filterFunctions.push(card => card.name && card.name.toLowerCase().indexOf(nameSearch) !== -1);
+			filterFunctions.push((card) => card.name && card.name.toLowerCase().indexOf(nameSearch) !== -1);
 		}
 
 		const basicFiltered = collectibleOnly
 			? this.allCards
 					.getCards()
-					.filter(card => card.collectible)
-					.filter(card => card.set !== 'Hero_skins')
-					.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
+					.filter((card) => card.collectible)
+					.filter((card) => card.set !== 'Hero_skins')
+					.filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
 			: this.allCards.getCards();
 		return filterFunctions
 			.reduce((data, filterFunction) => data.filter(filterFunction), basicFiltered)
-			.map(card => {
+			.map((card) => {
 				let cardName = card.name;
 				if (card.type === 'Hero') {
 					cardName += ' (Hero)';
@@ -177,7 +177,7 @@ export class SetsService {
 		}
 
 		setId = setId.toLowerCase();
-		return sets.find(set => set.id === setId)?.name ?? '';
+		return sets.find((set) => set.id === setId)?.name ?? '';
 	}
 
 	public getSetFromCardId(cardId: string): Set {
@@ -203,8 +203,8 @@ export class SetsService {
 	}
 
 	private getSets(references: readonly ReferenceSet[], isStandard: boolean): Set[] {
-		const referenceSets: Set[] = references.map(set => new Set(set.id, set.name, set.launchDate, isStandard));
-		return referenceSets.map(set => {
+		const referenceSets: Set[] = references.map((set) => new Set(set.id, set.name, set.launchDate, isStandard));
+		return referenceSets.map((set) => {
 			const setCards = this.getCollectibleSetCards(set.id);
 			return new Set(set.id, set.name, set.launchDate, set.standard, setCards);
 		});
@@ -213,10 +213,10 @@ export class SetsService {
 	private getCollectibleSetCards(setId: string): SetCard[] {
 		return this.allCards
 			.getCards()
-			.filter(card => card.collectible)
-			.filter(card => card.set)
-			.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
-			.filter(card => setId === card.set?.toLowerCase())
-			.map(card => new SetCard(card.id, card.name, card.playerClass, card.rarity?.toLowerCase(), card.cost));
+			.filter((card) => card.collectible)
+			.filter((card) => card.set)
+			.filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
+			.filter((card) => setId === card.set?.toLowerCase())
+			.map((card) => new SetCard(card.id, card.name, card.playerClass, card.rarity?.toLowerCase(), card.cost));
 	}
 }

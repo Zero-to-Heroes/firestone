@@ -22,11 +22,11 @@ export class SelectAchievementCategoryProcessor implements Processor {
 			// 	? (category.achievements.map(ach => ach.id) as readonly string[])
 			// 	: [],
 			displayedAchievementsList: shouldDisplayAchievements
-				? (category.achievements.map(ach => ach.id) as readonly string[])
+				? (category.achievements.map((ach) => ach.id) as readonly string[])
 				: [],
 			selectedAchievementId: undefined,
 		} as NavigationAchievements);
-		const text = hierarchy.map(cat => cat.name).join(' ');
+		const text = hierarchy.map((cat) => cat.name).join(' ');
 		return [
 			null,
 			navigationState.update({

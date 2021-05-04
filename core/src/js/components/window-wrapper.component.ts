@@ -76,7 +76,7 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		const window = await this.ow.getCurrentWindow();
 		// console.log('window', window, window.name);
-		this.stateChangedListener = this.ow.addStateChangedListener(window.name, message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(window.name, (message) => {
 			// console.log('received messageeee', message);
 			if (message.window_state_ex === 'maximized') {
 				// console.log('maximized');
@@ -92,7 +92,7 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 				}
 			}
 		});
-		this.events.on(Events.SHOW_SCREEN_CAPTURE_EFFECT).subscribe(event => {
+		this.events.on(Events.SHOW_SCREEN_CAPTURE_EFFECT).subscribe((event) => {
 			this.screenCaptureOn = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

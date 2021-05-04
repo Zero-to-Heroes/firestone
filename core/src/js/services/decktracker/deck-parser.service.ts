@@ -62,6 +62,9 @@ export class DeckParserService {
 		private api: ApiRunner,
 	) {
 		this.init();
+		window['readLog'] = async () => {
+			await this.readDeckFromLogFile();
+		};
 	}
 
 	private async init() {
@@ -85,7 +88,7 @@ export class DeckParserService {
 				);
 			}
 		});
-		this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
+		this.events.on(Events.MEMORY_UPDATE).subscribe((data) => {
 			const changes: MemoryUpdate = data.data[0];
 			if (changes.SelectedDeckId) {
 				console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
@@ -105,12 +108,12 @@ export class DeckParserService {
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
 		this.deckTemplates = (templatesFromRemote ?? [])
-			.filter(template => template.DeckList?.length)
+			.filter((template) => template.DeckList?.length)
 			.map(
-				template =>
+				(template) =>
 					({
 						...template,
-						DeckList: template.DeckList.map(dbfId => +dbfId),
+						DeckList: template.DeckList.map((dbfId) => +dbfId),
 					} as DeckInfoFromMemory),
 			);
 		console.debug('[deck-parser] loaded deck templates', this.deckTemplates?.length);
@@ -235,7 +238,7 @@ export class DeckParserService {
 	}
 
 	public async getWhizbangDeck(deckId: number) {
-		const deck = this.deckTemplates.find(deck => deck.DeckId === deckId);
+		const deck = this.deckTemplates.find((deck) => deck.DeckId === deckId);
 		console.debug('[deck-parser] found template deck', deckId, deck, this.deckTemplates);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
 			console.log('[deck-parser] updating active deck 2', deck, this.currentDeck);
@@ -272,7 +275,7 @@ export class DeckParserService {
 	}
 
 	private normalizeWithDbfIds(decklist: readonly (number | string)[]): readonly number[] {
-		return decklist.map(cardId => {
+		return decklist.map((cardId) => {
 			const isDbfId = !isNaN(+cardId);
 			const card = isDbfId ? this.allCards.getCardFromDbfId(+cardId) : this.allCards.getCard(cardId as string);
 			if (!card?.dbfId) {
@@ -286,21 +289,21 @@ export class DeckParserService {
 		return [...PRACTICE_ALL, ScenarioId.ARENA, ScenarioId.RANKED, ScenarioId.DUELS].includes(scenarioId);
 	}
 
-	private async readDeckFromLogFile(): Promise<void> {
+	private async readDeckFromLogFile(fileName = 'Decks.log'): Promise<void> {
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!this.ow.gameRunning(gameInfo)) {
 			return;
 		}
-		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Decks.log';
+		const logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + fileName;
 		const logsContents = await this.ow.getFileContents(logsLocation);
 		if (!logsContents) {
 			return;
 		}
 		const lines = logsContents
 			.split('\n')
-			.filter(line => line && line.length > 0)
-			.map(line => line.trim());
-		// console.log('[deck-parser] reading deck contents', lines);
+			.filter((line) => line && line.length > 0)
+			.map((line) => line.trim());
+		console.debug('[deck-parser] reading deck contents', lines);
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
 			const isLastSectionDeckSelectLine =
@@ -309,6 +312,7 @@ export class DeckParserService {
 				lines[lines.length - 4].indexOf('Duels Deck') !== -1 ||
 				lines[lines.length - 3].indexOf('Duels Deck') !== -1;
 			if (!isLastSectionDeckSelectLine) {
+				console.log('[deck-parser] not a deck selection', [...lines].reverse().slice(0, 4).join(','));
 				return;
 			}
 			// deck name
@@ -329,9 +333,9 @@ export class DeckParserService {
 
 	private explodeDecklist(initialDecklist: readonly number[]): any[] {
 		console.log('[deck-parser] decklist with dbfids', initialDecklist);
-		const groupedById = groupByFunction(cardId => '' + cardId)(initialDecklist);
+		const groupedById = groupByFunction((cardId) => '' + cardId)(initialDecklist);
 		// console.log('[deck-parser] groupedById', groupedById);
-		const result = Object.keys(groupedById).map(id => [+id, groupedById[id].length]);
+		const result = Object.keys(groupedById).map((id) => [+id, groupedById[id].length]);
 		console.log('[deck-parser] exploding decklist result', result);
 		return result;
 	}
@@ -438,7 +442,7 @@ export class DeckParserService {
 		return (
 			currentDeck.deck.cards
 				// [dbfid, count] pair
-				.map(pair => this.buildDeckCards(pair))
+				.map((pair) => this.buildDeckCards(pair))
 				.reduce((a, b) => a.concat(b), [])
 				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
 		);
@@ -458,7 +462,7 @@ export class DeckParserService {
 		}
 		// console.log('postprocessing', deck);
 		const matchInfo = await this.memory.getMatchInfo();
-		return deck.map(decKCard => this.postProcessDeckCard(decKCard, matchInfo));
+		return deck.map((decKCard) => this.postProcessDeckCard(decKCard, matchInfo));
 	}
 
 	private postProcessDeckCard(deckCard: DeckCard, matchInfo: MatchInfo): DeckCard {
@@ -548,7 +552,7 @@ export class DeckParserService {
 			// console.log('normalizing deckstring', deckstring, heroCardId);
 			const deck = decode(deckstring);
 			// console.log('deck from deckstring', deckstring, deck);
-			deck.heroes = deck.heroes?.map(heroDbfId => this.normalizeHero(heroDbfId, heroCardId));
+			deck.heroes = deck.heroes?.map((heroDbfId) => this.normalizeHero(heroDbfId, heroCardId));
 			const newDeckstring = encode(deck);
 			// console.log('normalized deck', newDeckstring, deck);
 			return newDeckstring;

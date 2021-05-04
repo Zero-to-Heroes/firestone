@@ -69,7 +69,7 @@ export class BattlegroundsOverlayButtonComponent implements AfterViewInit {
 	@HostListener('mousedown')
 	dragMove() {
 		this.mouseDownStart = Date.now();
-		this.ow.dragMove(this.windowId, async result => {
+		this.ow.dragMove(this.windowId, async (result) => {
 			const window = await this.ow.getCurrentWindow();
 			if (!window) {
 				return;

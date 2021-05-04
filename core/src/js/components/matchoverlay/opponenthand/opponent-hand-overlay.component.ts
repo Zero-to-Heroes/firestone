@@ -62,7 +62,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async event => {
+		const subscriber = new Subscriber<any>(async (event) => {
 			// Can happen because we now have a BehaviorSubject
 			if (event == null) {
 				return;
@@ -78,7 +78,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.deckSubscription = deckEventBus.subscribe(subscriber);
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.setDisplayPreferences(event.preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

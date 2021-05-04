@@ -42,8 +42,8 @@ export class BasicBarChartComponent {
 			return;
 		}
 
-		const max: number = Math.max(...this._data.data.map(data => data.value));
-		this.bars = this._data.data.map(data => ({
+		const max: number = Math.max(...this._data.data.map((data) => data.value));
+		this.bars = this._data.data.map((data) => ({
 			height: (100 * data.value) / max,
 			tooltip: `
 				<div class="body">

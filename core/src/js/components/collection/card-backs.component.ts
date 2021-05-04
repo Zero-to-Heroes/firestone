@@ -84,7 +84,7 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 		await this.handleDisplayPreferences();
@@ -123,9 +123,9 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 		}
 
 		this.total = this._cardBacks.length;
-		this.unlocked = this._cardBacks.filter(item => item.owned).length;
+		this.unlocked = this._cardBacks.filter((item) => item.owned).length;
 
-		this.shownCardBacks = this._cardBacks.filter(this.filterCardsOwned()).map(cardBack => ({
+		this.shownCardBacks = this._cardBacks.filter(this.filterCardsOwned()).map((cardBack) => ({
 			...cardBack,
 			image: `https://static.zerotoheroes.com/hearthstone/cardBacks/${cardBack.id}.png`,
 			animatedImage: `https://static.zerotoheroes.com/hearthstone/cardBacks/animated/${cardBack.id}.webm`,

@@ -58,15 +58,15 @@ export class BgsWinrateStatsForHeroComponent {
 			}
 
 			return this._state.battlegrounds.stats.heroStats
-				.find(stat => stat.id === this._category.heroId)
-				?.combatWinrate?.filter(stat => stat.turn > 0)
-				?.map(stat => {
+				.find((stat) => stat.id === this._category.heroId)
+				?.combatWinrate?.filter((stat) => stat.turn > 0)
+				?.map((stat) => {
 					return {
 						turn: stat.turn,
 						value: stat.winrate,
 					} as NumericTurnInfo;
 				})
-				.filter(stat => stat);
+				.filter((stat) => stat);
 		};
 
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
@@ -75,22 +75,22 @@ export class BgsWinrateStatsForHeroComponent {
 			}
 
 			const heroStatsOverTurn: (readonly BattleResultHistory[])[] = this._state.battlegrounds.lastHeroPostMatchStats
-				.map(postMatch => postMatch.stats.battleResultHistory)
-				.filter(stats => stats && stats.length) as (readonly BattleResultHistory[])[];
+				.map((postMatch) => postMatch.stats.battleResultHistory)
+				.filter((stats) => stats && stats.length) as (readonly BattleResultHistory[])[];
 			// console.log('heroStatsOverTurn', heroStatsOverTurn);
-			const maxTurn = Math.max(...heroStatsOverTurn.map(stats => stats[stats.length - 1].turn));
+			const maxTurn = Math.max(...heroStatsOverTurn.map((stats) => stats[stats.length - 1].turn));
 			if (maxTurn <= 0) {
 				return [];
 			}
 
 			const result = [...Array(maxTurn).keys()]
-				.filter(turn => turn > 0)
-				.map(turn => {
+				.filter((turn) => turn > 0)
+				.map((turn) => {
 					const statsForTurn = heroStatsOverTurn
-						.map(stats => stats.find(stat => stat.turn === turn))
-						.filter(stat => stat)
-						.filter(stat => stat.simulationResult.wonPercent != null)
-						.map(stat => stat.simulationResult.wonPercent);
+						.map((stats) => stats.find((stat) => stat.turn === turn))
+						.filter((stat) => stat)
+						.filter((stat) => stat.simulationResult.wonPercent != null)
+						.map((stat) => stat.simulationResult.wonPercent);
 					// console.log('statsForTurn', turn, statsForTurn);
 					return {
 						turn: turn,

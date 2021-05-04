@@ -211,10 +211,10 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			return;
 		}
 		const normalizedIds = [
-			...new Set(this.boardMinions.map(entity => normalizeCardId(entity.cardID, this.allCards))),
+			...new Set(this.boardMinions.map((entity) => normalizeCardId(entity.cardID, this.allCards))),
 		];
 		this.minionStats = normalizedIds.map(
-			cardId =>
+			(cardId) =>
 				({
 					cardId: cardId,
 					damageDealt: this.extractDamage(cardId, this._panel.stats?.totalMinionsDamageDealt),
@@ -231,8 +231,8 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 			return 0;
 		}
 		return Object.keys(totalMinionsDamageDealt)
-			.filter(cardId => normalizeCardId(cardId, this.allCards) === normalizedCardId)
-			.map(cardId => totalMinionsDamageDealt[cardId])
+			.filter((cardId) => normalizeCardId(cardId, this.allCards) === normalizedCardId)
+			.map((cardId) => totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
 	}
 

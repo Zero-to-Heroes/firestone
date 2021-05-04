@@ -113,7 +113,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 			return;
 		}
 
-		this.heroStat = this._state?.battlegrounds?.stats?.heroStats?.find(stat => stat.id === this._category.heroId);
+		this.heroStat = this._state?.battlegrounds?.stats?.heroStats?.find((stat) => stat.id === this._category.heroId);
 		if (!this.heroStat) {
 			// console.log('not updating hero stat');
 			return;

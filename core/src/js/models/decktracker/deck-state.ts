@@ -109,9 +109,9 @@ export class DeckState {
 
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
-			.filter(card => card.cardId)
+			.filter((card) => card.cardId)
 			.some(
-				card =>
+				(card) =>
 					DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
 					card.cardId === CardIds.Collectible.Neutral.KronxDragonhoof ||
 					(allCards &&
@@ -127,10 +127,10 @@ export class DeckState {
 
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
-			.filter(card => card.cardId)
-			.filter(card => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId))
+			.filter((card) => card.cardId)
+			.filter((card) => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId))
 			.some(
-				card =>
+				(card) =>
 					card.cardId === CardIds.Collectible.Neutral.Cthun ||
 					(allCards &&
 						allCards.getCard(card.cardId)?.text &&
@@ -145,9 +145,9 @@ export class DeckState {
 
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
-			.filter(card => card.cardId)
+			.filter((card) => card.cardId)
 			.some(
-				card =>
+				(card) =>
 					allCards &&
 					allCards.getCard(card.cardId)?.referencedTags &&
 					allCards.getCard(card.cardId)?.referencedTags.includes('JADE_GOLEM'),
@@ -157,34 +157,28 @@ export class DeckState {
 	public containsWatchpost(allCards?: AllCardsService, lookAtWatchpostsPlayed = false): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
-			.filter(card => card.cardId)
+			.filter((card) => card.cardId)
 			.some(
-				card =>
+				(card) =>
 					card.cardId === CardIds.Collectible.Neutral.KargalBattlescar ||
 					(lookAtWatchpostsPlayed &&
 						allCards &&
 						allCards.getCard(card.cardId)?.name &&
-						allCards
-							.getCard(card.cardId)
-							?.name.toLowerCase()
-							.includes('watch post')),
+						allCards.getCard(card.cardId)?.name.toLowerCase().includes('watch post')),
 			);
 	}
 
 	public containsLibram(allCards?: AllCardsService, lookAtLibramsPlayed = false): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
-			.filter(card => card.cardId)
+			.filter((card) => card.cardId)
 			.some(
-				card =>
+				(card) =>
 					card.cardId === CardIds.Collectible.Paladin.LadyLiadrin ||
 					(lookAtLibramsPlayed &&
 						allCards &&
 						allCards.getCard(card.cardId)?.name &&
-						allCards
-							.getCard(card.cardId)
-							?.name.toLowerCase()
-							.startsWith('libram')),
+						allCards.getCard(card.cardId)?.name.toLowerCase().startsWith('libram')),
 			);
 	}
 
@@ -195,15 +189,15 @@ export class DeckState {
 
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
-			.filter(card => card.cardId)
-			.some(card => DeckState.POGO_CARD_IDS.indexOf(card.cardId) !== -1);
+			.filter((card) => card.cardId)
+			.some((card) => DeckState.POGO_CARD_IDS.indexOf(card.cardId) !== -1);
 	}
 
 	public containsSpellCounterMinion(): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		const result = allCardsInDeck
-			.filter(card => card.cardId)
-			.some(card => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId));
+			.filter((card) => card.cardId)
+			.some((card) => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId));
 		// console.log('spell counter', 'has', result, allCardsInDeck, DeckState.SPELL_COUNTER_CARD_IDS);
 		return result;
 	}

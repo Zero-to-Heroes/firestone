@@ -67,7 +67,7 @@ export class ReplaysFilterComponent {
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
-		singleEls.forEach(singleEl => {
+		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#arrow"/>
@@ -102,7 +102,7 @@ export class ReplaysFilterComponent {
 		this.activeFilter = filter.selectedOption;
 		const placeholder =
 			this.filterOptions && this.filterOptions.length > 0 && this.activeFilter
-				? this.filterOptions.find(option => option.value === this.activeFilter)?.label
+				? this.filterOptions.find((option) => option.value === this.activeFilter)?.label
 				: null;
 		this.placeholder = placeholder ?? filter.placeholder;
 		if (!(this.cdr as ViewRef)?.destroyed) {

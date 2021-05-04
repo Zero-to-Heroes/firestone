@@ -34,7 +34,7 @@ export class BgsGameEndParser implements EventParser {
 			currentState,
 			prefs,
 		);
-		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
+		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : stage,
 		);
 		return currentState.update({
@@ -59,10 +59,10 @@ export class BgsGameEndParser implements EventParser {
 		prefs: Preferences,
 	): BgsPostMatchStage {
 		const stageToRebuild =
-			currentState.stages.find(stage => stage.id === 'post-match') || this.createNewStage(currentState);
+			currentState.stages.find((stage) => stage.id === 'post-match') || this.createNewStage(currentState);
 		const panelToRebuild = this.createNewPanel(currentState, postMatchStats, newBestUserStats, prefs);
 
-		const panels: readonly BgsPanel[] = stageToRebuild.panels.map(panel =>
+		const panels: readonly BgsPanel[] = stageToRebuild.panels.map((panel) =>
 			panel.id === 'bgs-post-match-stats' ? panelToRebuild : panel,
 		);
 		return BgsPostMatchStage.create({

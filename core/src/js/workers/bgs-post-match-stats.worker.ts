@@ -9,7 +9,7 @@ import {
 // const ctx: Worker = self as any;
 
 // Respond to message from parent thread
-self.onmessage = async ev => {
+self.onmessage = async (ev) => {
 	let input = ev.data;
 	console.log('received message in worker');
 

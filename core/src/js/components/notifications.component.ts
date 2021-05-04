@@ -65,7 +65,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private settingsEventBus: EventEmitter<[string, string]>;
 
 	private processingQueue = new ProcessingQueue<Message>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		200,
 		'notifications',
 	);
@@ -81,11 +81,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
-		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
 			const messageObject: Message = JSON.parse(message.content);
 			this.processingQueue.enqueue(messageObject);
 		});
-		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
+		this.gameInfoListener = this.ow.addGameInfoUpdatedListener((message) => {
 			this.resize();
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
@@ -121,13 +121,13 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	destroyed(event) {
 		console.log('notif destroyed', event.id);
-		const deletedNotifications = this.activeNotifications.filter(notif => notif.toast.id === event.id);
-		deletedNotifications.forEach(notif => notif.subscription.unsubscribe());
-		this.activeNotifications = this.activeNotifications.filter(notif => notif.toast.id !== event.id);
+		const deletedNotifications = this.activeNotifications.filter((notif) => notif.toast.id === event.id);
+		deletedNotifications.forEach((notif) => notif.subscription.unsubscribe());
+		this.activeNotifications = this.activeNotifications.filter((notif) => notif.toast.id !== event.id);
 	}
 
 	private async sendNotification(messageObject: Message): Promise<void> {
-		return new Promise<void>(async resolve => {
+		return new Promise<void>(async (resolve) => {
 			await this.waitForInit();
 			let notification;
 			try {
@@ -143,7 +143,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async showNotification(messageObject: Message) {
-		return new Promise<void>(async resolve => {
+		return new Promise<void>(async (resolve) => {
 			// console.log('showing notification', messageObject.notificationId);
 			const htmlMessage: string = messageObject.content;
 			const cardId: string = messageObject.cardId;
@@ -269,7 +269,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private fadeNotificationOut(notificationId: string) {
-		const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
+		const activeNotif = this.activeNotifications.find((notif) => notif.notificationId === notificationId);
 		if (!activeNotif) {
 			console.log('activeNotif already removed', notificationId, this.activeNotifications);
 			return;
@@ -326,7 +326,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private waitForInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const theWait = () => {
 				// console.log('[notificationbs] waiting for init');
 				if (this.windowId) {

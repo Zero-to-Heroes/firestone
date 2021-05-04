@@ -125,10 +125,10 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 		}
 		const lastStats = this._state.battlegrounds.lastHeroPostMatchStats
 			? this._state.battlegrounds.lastHeroPostMatchStats
-					.filter(postMatch => postMatch?.stats?.boardHistory && postMatch?.stats?.boardHistory.length > 0)
+					.filter((postMatch) => postMatch?.stats?.boardHistory && postMatch?.stats?.boardHistory.length > 0)
 					.slice(0, 5)
 			: [];
-		const lastReviews: readonly string[] = lastStats.map(stat => stat.reviewId);
+		const lastReviews: readonly string[] = lastStats.map((stat) => stat.reviewId);
 		if (arraysEqual(lastReviews, this.lastReviews)) {
 			//console.log('showing the same data, not recomputing it', lastReviews, this.lastReviews);
 			this.loading = false;
@@ -140,16 +140,16 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 		//console.log('showing different data, recomputing it', lastReviews, this.lastReviews);
-		this.lastKnownBoards = lastStats.map(postMatch => {
+		this.lastKnownBoards = lastStats.map((postMatch) => {
 			const bgsBoard = postMatch?.stats?.boardHistory[postMatch?.stats?.boardHistory.length - 1];
-			const boardEntities = bgsBoard.board.map(boardEntity =>
+			const boardEntities = bgsBoard.board.map((boardEntity) =>
 				boardEntity instanceof Entity || boardEntity.tags instanceof Map
 					? Entity.create(new Entity(), boardEntity as EntityDefinition)
 					: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
 			) as readonly Entity[];
 
 			const review = this._state.stats.gameStats.stats.find(
-				matchStat => matchStat.reviewId === postMatch.reviewId,
+				(matchStat) => matchStat.reviewId === postMatch.reviewId,
 			);
 
 			const title =
@@ -158,10 +158,10 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 					: `Last board`;
 
 			const normalizedIds = [
-				...new Set(boardEntities.map(entity => normalizeCardId(entity.cardID, this.allCards))),
+				...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, this.allCards))),
 			];
 			const minionStats = normalizedIds.map(
-				cardId =>
+				(cardId) =>
 					({
 						cardId: cardId,
 						damageDealt: this.extractDamage(cardId, postMatch?.stats?.totalMinionsDamageDealt),
@@ -212,8 +212,8 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 
 	private extractDamage(normalizedCardId: string, totalMinionsDamageDealt: { [cardId: string]: number }): number {
 		return Object.keys(totalMinionsDamageDealt)
-			.filter(cardId => normalizeCardId(cardId, this.allCards) === normalizedCardId)
-			.map(cardId => totalMinionsDamageDealt[cardId])
+			.filter((cardId) => normalizeCardId(cardId, this.allCards) === normalizedCardId)
+			.map((cardId) => totalMinionsDamageDealt[cardId])
 			.reduce((a, b) => a + b, 0);
 	}
 }

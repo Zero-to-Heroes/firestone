@@ -36,19 +36,19 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 		}
 
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
-			.filter(target => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
-			.map(target => target.Damage)
+			.filter((target) => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+			.map((target) => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
 		if (damageDealt === 0) {
 			return currentState;
 		}
 
 		const existingDamageForTurn =
-			currentState.damageToEnemyHeroOverTurn.find(info => info.turn === currentState.currentTurn)?.value?.value ??
-			0;
+			currentState.damageToEnemyHeroOverTurn.find((info) => info.turn === currentState.currentTurn)?.value
+				?.value ?? 0;
 		const newDamageForTurn = existingDamageForTurn + damageDealt;
 		const newDamageOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [
-			...currentState.damageToEnemyHeroOverTurn.filter(info => info.turn !== currentState.currentTurn),
+			...currentState.damageToEnemyHeroOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
 				value: {

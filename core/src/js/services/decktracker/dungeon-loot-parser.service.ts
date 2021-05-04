@@ -53,7 +53,7 @@ export class DungeonLootParserService {
 		private prefs: PreferencesService,
 		private api: ApiRunner,
 	) {
-		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
+		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			const newGameStats: GameStats = event.data[0];
 			this.setLastDuelsMatch(newGameStats?.stats);
 		});
@@ -99,7 +99,7 @@ export class DungeonLootParserService {
 				}
 			}
 		});
-		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
+		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
 			this.log('Received new review id event', event);
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
@@ -266,7 +266,7 @@ export class DungeonLootParserService {
 		}
 
 		if (this.lastDuelsMatch?.additionalResult) {
-			const [wins, losses] = this.lastDuelsMatch.additionalResult.split('-').map(info => parseInt(info));
+			const [wins, losses] = this.lastDuelsMatch.additionalResult.split('-').map((info) => parseInt(info));
 			if (duelsInfo.Wins < wins || duelsInfo.Losses < losses) {
 				this.log(
 					'wins or losses less than previous info, starting new run',
@@ -341,7 +341,7 @@ export class DungeonLootParserService {
 
 		const user = await this.ow.getCurrentUser();
 		const treasures: readonly string[] = this.duelsInfo.TreasureOption
-			? this.duelsInfo.TreasureOption.map(option => this.allCards.getCardFromDbfId(+option)?.id || '' + option)
+			? this.duelsInfo.TreasureOption.map((option) => this.allCards.getCardFromDbfId(+option)?.id || '' + option)
 			: [];
 		const signatureTreasure: string = this.findSignatureTreasure(this.duelsInfo.DeckList);
 		const input: Input = {
@@ -355,10 +355,10 @@ export class DungeonLootParserService {
 				'' + this.duelsInfo.StartingHeroPower,
 			signatureTreasure: signatureTreasure,
 			lootBundles: this.duelsInfo.LootOptionBundles
-				? this.duelsInfo.LootOptionBundles.filter(bundle => bundle).map(bundle => ({
+				? this.duelsInfo.LootOptionBundles.filter((bundle) => bundle).map((bundle) => ({
 						bundleId: this.allCards.getCardFromDbfId(+bundle.BundleId)?.id || '' + bundle.BundleId,
 						elements: bundle.Elements.map(
-							dbfId => this.allCards.getCardFromDbfId(+dbfId)?.id || '' + dbfId,
+							(dbfId) => this.allCards.getCardFromDbfId(+dbfId)?.id || '' + dbfId,
 						),
 				  }))
 				: [],
@@ -392,8 +392,8 @@ export class DungeonLootParserService {
 
 	private findSignatureTreasure(deckList: readonly number[]): string {
 		return deckList
-			.map(cardDbfId => this.allCards.getCardFromDbfId(+cardDbfId))
-			.find(card => isSignatureTreasure(card?.id, this.allCards))?.id;
+			.map((cardDbfId) => this.allCards.getCardFromDbfId(+cardDbfId))
+			.find((card) => isSignatureTreasure(card?.id, this.allCards))?.id;
 	}
 
 	private isMatchInRun(additionalResult: string, result: 'won' | 'lost' | 'tied'): boolean {
@@ -402,7 +402,7 @@ export class DungeonLootParserService {
 			return false;
 		}
 
-		const [wins, losses] = additionalResult.split('-').map(info => parseInt(info));
+		const [wins, losses] = additionalResult.split('-').map((info) => parseInt(info));
 		this.log('isLastMatchInRun', 'wins, losses', wins, losses);
 		if (wins === 11 && result === 'won') {
 			this.log('last duels match was the last win of the run, not forwarding run id', additionalResult, result);

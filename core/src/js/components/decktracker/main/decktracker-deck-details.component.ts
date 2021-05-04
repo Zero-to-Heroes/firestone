@@ -31,9 +31,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 			>
 				<span>{{ resetText }}</span>
 			</button>
-			<div class="confirmation" *ngIf="showResetConfirmationText">
-				Your win/loss stats have been reset.
-			</div>
+			<div class="confirmation" *ngIf="showResetConfirmationText">Your win/loss stats have been reset.</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -89,7 +87,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 
 	private takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
 		// console.log('taking screenshot from deck details');
-		return copyToCliboard => this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
+		return (copyToCliboard) => this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
 	}
 
 	private updateValues() {
@@ -98,7 +96,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		}
 
 		this.deck = this._state.decktracker.decks.find(
-			deck => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
+			(deck) => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
 		// console.debug('updating deck', this.deck);
 	}

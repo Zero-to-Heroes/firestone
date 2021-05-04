@@ -33,12 +33,12 @@ export class BattlegroundsAppState {
 
 	public static findCategory(state: BattlegroundsAppState, categoryId: string) {
 		const allCategories = state.globalCategories
-			.filter(globalCategory => globalCategory.categories)
-			.map(globalCategory => globalCategory.categories)
+			.filter((globalCategory) => globalCategory.categories)
+			.map((globalCategory) => globalCategory.categories)
 			.reduce((a, b) => a.concat(b), [])
-			.map(category => BattlegroundsAppState.extractCategory(category))
+			.map((category) => BattlegroundsAppState.extractCategory(category))
 			.reduce((a, b) => a.concat(b), []);
-		return allCategories.find(cat => cat.id === categoryId);
+		return allCategories.find((cat) => cat.id === categoryId);
 	}
 
 	public static findParentCategory(state: BattlegroundsAppState, categoryId: string) {
@@ -56,7 +56,7 @@ export class BattlegroundsAppState {
 			if (cat.id === categoryId) {
 				return null;
 			}
-			if (cat.categories.some(subCat => subCat.id === categoryId)) {
+			if (cat.categories.some((subCat) => subCat.id === categoryId)) {
 				return cat;
 			}
 			const sub = BattlegroundsAppState.findParentCategoryInternal(cat.categories, categoryId);
@@ -74,7 +74,7 @@ export class BattlegroundsAppState {
 		return [
 			category,
 			...category.categories
-				.map(cat => BattlegroundsAppState.extractCategory(cat))
+				.map((cat) => BattlegroundsAppState.extractCategory(cat))
 				.reduce((a, b) => a.concat(b), []),
 		];
 	}

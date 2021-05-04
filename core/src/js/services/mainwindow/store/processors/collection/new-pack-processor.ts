@@ -27,7 +27,7 @@ export class NewPackProcessor implements Processor {
 				boosterId: event.boosterId,
 				setId: event.setId,
 				cards: event.packCards.map(
-					card =>
+					(card) =>
 						({
 							cardId: card.cardId,
 							cardType: card.cardType,
@@ -38,14 +38,14 @@ export class NewPackProcessor implements Processor {
 			...currentState.binder.packStats,
 		];
 
-		const setToUpdate = currentState.binder.allSets.find(set => set.id === event.setId);
+		const setToUpdate = currentState.binder.allSets.find((set) => set.id === event.setId);
 		const pityTimer: PityTimer = this.collectionManager
-			.buildPityTimers(newPackStats.filter(stat => stat.setId === event.setId))
-			.find(pityTimer => pityTimer.setId === event.setId);
+			.buildPityTimers(newPackStats.filter((stat) => stat.setId === event.setId))
+			.find((pityTimer) => pityTimer.setId === event.setId);
 		const updatedSet: Set = setToUpdate.update({
 			pityTimer: pityTimer,
 		} as Set);
-		const newSets: readonly Set[] = currentState.binder.allSets.map(set =>
+		const newSets: readonly Set[] = currentState.binder.allSets.map((set) =>
 			set.id === updatedSet.id ? updatedSet : set,
 		);
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {

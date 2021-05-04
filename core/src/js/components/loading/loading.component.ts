@@ -90,7 +90,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		this.cdr.detach();
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		this.positionWindow();
-		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
 			console.log('received', message);
 			if (message.id === 'ready') {
 				this.title = 'Your abilities are ready!';

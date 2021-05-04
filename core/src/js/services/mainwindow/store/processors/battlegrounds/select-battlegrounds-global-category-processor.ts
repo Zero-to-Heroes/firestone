@@ -13,7 +13,7 @@ export class SelectBattlegroundsGlobalCategoryProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const globalCategory: BattlegroundsGlobalCategory = currentState.battlegrounds.globalCategories.find(
-			cat => cat.id === event.globalCategoryId,
+			(cat) => cat.id === event.globalCategoryId,
 		);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'category',

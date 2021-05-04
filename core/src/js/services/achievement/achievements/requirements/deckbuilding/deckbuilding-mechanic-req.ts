@@ -45,7 +45,7 @@ export class DeckbuildingMechanicReq implements Requirement {
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
 			const numberOfMatchingCards: number = cards.filter(
-				card => card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1,
+				(card) => card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1,
 			).length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetLifestealMinions;

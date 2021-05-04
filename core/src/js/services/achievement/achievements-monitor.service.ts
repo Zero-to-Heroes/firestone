@@ -25,7 +25,7 @@ import { RemoteAchievementsService } from './remote-achievements.service';
 @Injectable()
 export class AchievementsMonitor {
 	private processingQueue = new ProcessingQueue<InternalEvent>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		1000,
 		'achievement-monitor',
 	);
@@ -61,7 +61,7 @@ export class AchievementsMonitor {
 			}
 		});
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 			const changes: MemoryUpdate = event.data[0];
 			if (changes.DisplayingAchievementToast) {
 				setTimeout(() => {
@@ -71,7 +71,7 @@ export class AchievementsMonitor {
 		});
 		// If we start the detection too early, the first pass will be done against
 		// an uninitialized achievements state, and thus discarded
-		this.events.on(Events.STORE_READY).subscribe(event => this.startGlobalAchievementsProgressDetection());
+		this.events.on(Events.STORE_READY).subscribe((event) => this.startGlobalAchievementsProgressDetection());
 		this.init();
 	}
 
@@ -116,7 +116,7 @@ export class AchievementsMonitor {
 				achievementQuotas: this.achievementQuotas,
 				previousAchievements: this.previousAchievements,
 				prorgressWithQuota: (achievementsProgress?.achievements || [])?.filter(
-					progress => progress.progress >= this.achievementQuotas[progress.id],
+					(progress) => progress.progress >= this.achievementQuotas[progress.id],
 				),
 			});
 		} else {
@@ -135,25 +135,25 @@ export class AchievementsMonitor {
 			);
 		}
 		const unlockedAchievements = computedProgress
-			?.filter(progress => progress.progress >= this.achievementQuotas[progress.id])
-			.map(progress => progress.id)
+			?.filter((progress) => progress.progress >= this.achievementQuotas[progress.id])
+			.map((progress) => progress.id)
 			.map(
-				id =>
+				(id) =>
 					// Only achievement with a current progress are in the game's memory, so the ones that are simply
 					// yes/no will always be missing
-					existingAchievements.find(ach => ach.id === id) || {
+					existingAchievements.find((ach) => ach.id === id) || {
 						id: id,
 						progress: 0,
 						completed: false,
 					},
 			)
 			.filter(
-				ach =>
+				(ach) =>
 					!ach.completed ||
 					// It looks like the game might be flagging the achievements as completed right away now
 					// Using a === false check doesn't work if the achievement was not part of the previous
 					// achievements, which is the case for BG top finishes
-					(this.previousAchievements && !this.previousAchievements.find(a => a.id === ach.id)?.completed),
+					(this.previousAchievements && !this.previousAchievements.find((a) => a.id === ach.id)?.completed),
 			);
 		console.log('[achievement-monitor] unlocked achievements', unlockedAchievements);
 		if (!unlockedAchievements.length) {
@@ -163,7 +163,7 @@ export class AchievementsMonitor {
 					existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
 					achievementsProgress, // This has the correct progress
 					(achievementsProgress?.achievements || [])?.filter(
-						progress => progress.progress >= this.achievementQuotas[progress.id],
+						(progress) => progress.progress >= this.achievementQuotas[progress.id],
 					),
 					unlockedAchievements,
 				);
@@ -175,10 +175,10 @@ export class AchievementsMonitor {
 			return;
 		}
 		const achievements = await Promise.all(
-			unlockedAchievements.map(ach => this.achievementLoader.getAchievement(`hearthstone_game_${ach.id}`)),
+			unlockedAchievements.map((ach) => this.achievementLoader.getAchievement(`hearthstone_game_${ach.id}`)),
 		);
 		console.log('[achievement-monitor] built achievements, emitting events', achievements);
-		await Promise.all(achievements.map(ach => this.sendUnlockEventFromAchievement(ach)));
+		await Promise.all(achievements.map((ach) => this.sendUnlockEventFromAchievement(ach)));
 		this.previousAchievements = existingAchievements;
 	}
 
@@ -194,8 +194,8 @@ export class AchievementsMonitor {
 			return previousAchievements ?? [];
 		}
 
-		const allKeys = [...previousAchievements.map(a => a.id), ...currentAchievements.map(a => a.id)].filter(
-			id => id,
+		const allKeys = [...previousAchievements.map((a) => a.id), ...currentAchievements.map((a) => a.id)].filter(
+			(id) => id,
 		);
 		if (!allKeys?.length) {
 			return [];
@@ -203,9 +203,9 @@ export class AchievementsMonitor {
 
 		const uniqueKeys = [...new Set(allKeys)];
 		return uniqueKeys
-			.map(achievementId => {
-				const previousAchievement = previousAchievements.find(a => a.id === achievementId);
-				const currentAchievement = currentAchievements.find(a => a.id === achievementId);
+			.map((achievementId) => {
+				const previousAchievement = previousAchievements.find((a) => a.id === achievementId);
+				const currentAchievement = currentAchievements.find((a) => a.id === achievementId);
 				const progress = (currentAchievement?.progress ?? 0) - (previousAchievement?.progress ?? 0);
 				if (progress <= 0) {
 					return null;
@@ -216,7 +216,7 @@ export class AchievementsMonitor {
 					completed: currentAchievement?.completed || previousAchievement?.completed,
 				};
 			})
-			.filter(a => a);
+			.filter((a) => a);
 	}
 
 	private async handleEvent(gameEvent: GameEvent) {
@@ -291,7 +291,7 @@ export class AchievementsMonitor {
 		// console.debug('[achievements-monitor] found a candidate', candidate);
 		// Is there a better candidate?
 		const betterCandidate: InternalEvent = eventQueue
-			.filter(event => event.achievement.type === candidate.achievement.type)
+			.filter((event) => event.achievement.type === candidate.achievement.type)
 			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
 		// console.debug(
 		// 	'[achievements-monitor] emitted achievement completed event',
@@ -302,7 +302,7 @@ export class AchievementsMonitor {
 		this.prepareAchievementCompletedEvent(betterCandidate.achievement);
 
 		// Now remove all the related events
-		return eventQueue.filter(event => event.achievement.type !== betterCandidate.achievement.type);
+		return eventQueue.filter((event) => event.achievement.type !== betterCandidate.achievement.type);
 	}
 
 	private async prepareAchievementCompletedEvent(achievement: Achievement) {
@@ -340,8 +340,8 @@ export class AchievementsMonitor {
 			return;
 		}
 
-		const achievementInfos: readonly AchievementProgress[] = achievementsProgress.achievements.map(ach => {
-			const ref = allAchievements.find(a => a.id === `hearthstone_game_${ach.id}`);
+		const achievementInfos: readonly AchievementProgress[] = achievementsProgress.achievements.map((ach) => {
+			const ref = allAchievements.find((a) => a.id === `hearthstone_game_${ach.id}`);
 			const quota = this.achievementQuotas[ach.id];
 			return {
 				id: ref.id,

@@ -23,7 +23,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 		}
 
 		const existingPlayer = currentState.currentGame.players.find(
-			player => normalizeHeroCardId(player.cardId) === normalizedCardId,
+			(player) => normalizeHeroCardId(player.cardId) === normalizedCardId,
 		);
 		const newPlayer =
 			existingPlayer != null
@@ -39,7 +39,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 		const newGame = currentState.currentGame.update({
 			players: [
 				...currentState.currentGame.players.filter(
-					player => normalizeHeroCardId(player.cardId) !== normalizedCardId,
+					(player) => normalizeHeroCardId(player.cardId) !== normalizedCardId,
 				),
 				newPlayer,
 			] as readonly BgsPlayer[],

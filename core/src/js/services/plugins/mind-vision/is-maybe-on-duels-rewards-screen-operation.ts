@@ -8,8 +8,8 @@ export class IsMaybeOnDuelsRewardsScreenOperation extends MindVisionOperationFac
 			ow,
 			'isMaybeOnDuelsRewardsScreenOperation',
 			() => mindVision.isMaybeOnDuelsRewardsScreen(),
-			info => false,
-			info => info,
+			(info) => false,
+			(info) => info,
 			1,
 			1500,
 		);

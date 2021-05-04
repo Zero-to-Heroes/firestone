@@ -114,7 +114,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 		});
 
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async event => {
+		const subscriber = new Subscriber<any>(async (event) => {
 			const state = event.state as GameState;
 			this.tavernBoard = state?.opponentDeck?.board;
 			this.updateMinions();
@@ -126,7 +126,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 		this.deckSubscription = deckEventBus.subscribe(subscriber);
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.setDisplayPreferences(event.preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

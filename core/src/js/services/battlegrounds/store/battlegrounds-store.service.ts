@@ -96,7 +96,7 @@ export class BattlegroundsStoreService {
 	private battlegroundsWindowsListener: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	private processingQueue = new ProcessingQueue<BattlegroundsStoreEvent>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		50,
 		'battlegrounds-queue',
 	);
@@ -137,7 +137,7 @@ export class BattlegroundsStoreService {
 			this.handleHotkeyPressed(true);
 		});
 
-		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async hotkeyResult => {
+		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
 			console.log('[bgs-store] hotkey pressed', hotkeyResult);
 			this.handleHotkeyPressed();
 		});
@@ -145,7 +145,7 @@ export class BattlegroundsStoreService {
 		this.handleDisplayPreferences();
 		setTimeout(() => {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-			preferencesEventBus.subscribe(event => {
+			preferencesEventBus.subscribe((event) => {
 				if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 					console.log('[bgs-store] rebuilding event emitters');
 					this.buildEventEmitters();
@@ -157,7 +157,7 @@ export class BattlegroundsStoreService {
 			});
 
 			const mainWindowStoreEmitter: BehaviorSubject<MainWindowState> = window['mainWindowStore'];
-			mainWindowStoreEmitter.subscribe(newState => {
+			mainWindowStoreEmitter.subscribe((newState) => {
 				this.mainWindowState = newState;
 				// console.log('[bgs-store] received new main state', this.mainWindowState);
 			});
@@ -167,7 +167,7 @@ export class BattlegroundsStoreService {
 	private async handleHotkeyPressed(force = false) {
 		//console.log('handling hotley', force, this.overlayHandlers, this);
 		if (this.overlayHandlers) {
-			await Promise.all(this.overlayHandlers.map(handler => handler.handleHotkeyPressed(this.state, force)));
+			await Promise.all(this.overlayHandlers.map((handler) => handler.handleHotkeyPressed(this.state, force)));
 		}
 	}
 
@@ -207,7 +207,7 @@ export class BattlegroundsStoreService {
 								...info,
 								game: {
 									...info.game,
-									Players: info.game.Players.map(player => ({
+									Players: info.game.Players.map((player) => ({
 										...player,
 										Damage: null,
 									})),
@@ -253,7 +253,7 @@ export class BattlegroundsStoreService {
 			) {
 				const targetValues = Object.values((gameEvent as DamageGameEvent).additionalData.targets);
 				const playerCardId = targetValues[0].TargetCardId;
-				const damage = targetValues.find(target => target.TargetCardId === playerCardId)?.Damage;
+				const damage = targetValues.find((target) => target.TargetCardId === playerCardId)?.Damage;
 				this.battlegroundsUpdater.next(new BgsDamageDealtEvent(playerCardId, damage));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.handleEventOnlyAfterTrigger(
@@ -354,7 +354,7 @@ export class BattlegroundsStoreService {
 			this.battlegroundsUpdater.next(new BgsRealTimeStatsUpdatedEvent(state));
 		});
 
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			console.log('[bgs-store] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review' && this.state && this.state.inGame && this.state.currentGame) {
@@ -381,8 +381,8 @@ export class BattlegroundsStoreService {
 	}
 
 	private processPendingEvents(gameEvent: BattlegroundsStoreEvent) {
-		const eventsToProcess = this.queuedEvents.filter(event => event.trigger === gameEvent.type);
-		this.queuedEvents = this.queuedEvents.filter(event => event.trigger !== gameEvent.type);
+		const eventsToProcess = this.queuedEvents.filter((event) => event.trigger === gameEvent.type);
+		this.queuedEvents = this.queuedEvents.filter((event) => event.trigger !== gameEvent.type);
 		for (const event of eventsToProcess) {
 			this.battlegroundsUpdater.next(event.event);
 		}
@@ -409,7 +409,7 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
-		await Promise.all(this.overlayHandlers.map(handler => handler.processEvent(gameEvent)));
+		await Promise.all(this.overlayHandlers.map((handler) => handler.processEvent(gameEvent)));
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
 			this.state = this.state.update({
 				forceOpen: false,
@@ -439,14 +439,14 @@ export class BattlegroundsStoreService {
 		}
 		if (newState !== this.state) {
 			this.state = newState;
-			this.eventEmitters.forEach(emitter => emitter(this.state));
+			this.eventEmitters.forEach((emitter) => emitter(this.state));
 			// console.log('emitted state', gameEvent.type, this.state);
 			this.updateOverlay();
 		}
 	}
 
 	private async buildEventEmitters() {
-		const result = [state => this.battlegroundsStoreEventBus.next(state)];
+		const result = [(state) => this.battlegroundsStoreEventBus.next(state)];
 		const prefs = await this.prefs.getPreferences();
 		console.log('[bgs-store] is logged in to Twitch?', prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
@@ -456,7 +456,7 @@ export class BattlegroundsStoreService {
 				// Don't send the notif, as it's already sent by game-state.service
 				// await this.twitch.sendExpiredTwitchTokenNotification();
 			} else {
-				result.push(state => this.twitch.emitBattlegroundsEvent(state));
+				result.push((state) => this.twitch.emitBattlegroundsEvent(state));
 			}
 		}
 		this.eventEmitters = result;
@@ -464,13 +464,13 @@ export class BattlegroundsStoreService {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
-		await Promise.all(this.overlayHandlers.map(handler => handler.handleDisplayPreferences(preferences)));
+		await Promise.all(this.overlayHandlers.map((handler) => handler.handleDisplayPreferences(preferences)));
 		this.updateOverlay();
 	}
 
 	private async updateOverlay() {
 		if (this.overlayHandlers?.length) {
-			await Promise.all(this.overlayHandlers.map(handler => handler.updateOverlay(this.state)));
+			await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(this.state)));
 		}
 		if (this.state.forceOpen) {
 			this.state = this.state.update({ forceOpen: false } as BattlegroundsState);

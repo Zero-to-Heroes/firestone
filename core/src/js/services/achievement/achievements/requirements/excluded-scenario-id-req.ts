@@ -11,7 +11,7 @@ export class ExcludedScenarioIdReq implements Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for ScenarioIdReq', rawReq);
 		}
-		return new ExcludedScenarioIdReq(rawReq.values.map(id => parseInt(id)));
+		return new ExcludedScenarioIdReq(rawReq.values.map((id) => parseInt(id)));
 	}
 
 	reset(): void {

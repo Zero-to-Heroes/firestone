@@ -113,7 +113,7 @@ export class DuelsRunsListComponent {
 	}
 
 	private *buildIterator(): IterableIterator<void> {
-		this.allRuns = this._state.runs.filter(run => !this._deckstring || run.initialDeckList === this._deckstring);
+		this.allRuns = this._state.runs.filter((run) => !this._deckstring || run.initialDeckList === this._deckstring);
 		const workingRuns = [...this.allRuns];
 		const step = 40;
 		while (workingRuns.length > 0) {
@@ -151,7 +151,7 @@ export class DuelsRunsListComponent {
 		};
 		const groupByDate = groupByFunction(groupingFunction);
 		const runsByDate = groupByDate(runs);
-		return Object.keys(runsByDate).map(date => ({
+		return Object.keys(runsByDate).map((date) => ({
 			header: date,
 			runs: runsByDate[date],
 		}));

@@ -34,7 +34,7 @@ export class BgsHeroSelectionParser implements EventParser {
 			currentState.globalStats,
 		);
 		// console.log('races for game', availableRaces, bannedRaces);
-		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
+		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === 'hero-selection' ? newHeroSelectionStage : stage,
 		);
 		return currentState.update({
@@ -68,7 +68,7 @@ export class BgsHeroSelectionParser implements EventParser {
 		stats: BgsStats,
 	): Promise<BgsHeroSelectionOverview> {
 		const heroOverview: readonly BgsHeroStat[] =
-			stats?.heroStats?.map(stat =>
+			stats?.heroStats?.map((stat) =>
 				BgsHeroStat.create({
 					id: stat.id,
 					heroPowerCardId: getHeroPower(stat.id),

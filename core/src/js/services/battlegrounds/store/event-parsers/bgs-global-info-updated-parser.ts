@@ -24,10 +24,10 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			return currentState;
 		}
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
-			.filter(player => player.cardId !== 'TB_BaconShop_HERO_PH')
-			.map(player => {
+			.filter((player) => player.cardId !== 'TB_BaconShop_HERO_PH')
+			.map((player) => {
 				const playerFromMemory = players.find(
-					mem => normalizeHeroCardId(mem.CardId) === normalizeHeroCardId(player.cardId),
+					(mem) => normalizeHeroCardId(mem.CardId) === normalizeHeroCardId(player.cardId),
 				);
 				if (!playerFromMemory) {
 					return player;
@@ -40,7 +40,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 					(playerFromMemory.WinStreak as number) || 0,
 				);
 				const turn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
-				const newCompositionHistory = player.compositionHistory.find(history => history.turn === turn)
+				const newCompositionHistory = player.compositionHistory.find((history) => history.turn === turn)
 					? player.compositionHistory
 					: ([
 							...player.compositionHistory,
@@ -81,10 +81,19 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 			console.warn('[bgs-info-updater] no tribe info read from memory');
 			return [undefined, undefined];
 		}
-		const allRaces = [Race.BEAST, Race.DEMON, Race.DRAGON, Race.MECH, Race.MURLOC, Race.PIRATE, Race.ELEMENTAL];
+		const allRaces = [
+			Race.BEAST,
+			Race.DEMON,
+			Race.DRAGON,
+			Race.MECH,
+			Race.MURLOC,
+			Race.PIRATE,
+			Race.ELEMENTAL,
+			Race.QUILBOAR,
+		];
 		return [
-			allRaces.filter(race => availableRaces.includes(race)),
-			allRaces.filter(race => !availableRaces.includes(race)),
+			allRaces.filter((race) => availableRaces.includes(race)),
+			allRaces.filter((race) => !availableRaces.includes(race)),
 		];
 	}
 }

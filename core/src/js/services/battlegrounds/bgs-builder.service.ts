@@ -19,7 +19,9 @@ export class BgsBuilderService {
 		matchStats: GameStats,
 		currentBattlegroundsMetaPatch: PatchInfo,
 	): Promise<BattlegroundsAppState> {
-		const bgsMatchStats: readonly GameStat[] = matchStats?.stats?.filter(stat => stat.gameMode === 'battlegrounds');
+		const bgsMatchStats: readonly GameStat[] = matchStats?.stats?.filter(
+			(stat) => stat.gameMode === 'battlegrounds',
+		);
 		const prefs = await this.prefs.getPreferences();
 		const activeBgsMatchStats = this.filterBgsMatchStats(
 			bgsMatchStats,
@@ -61,8 +63,8 @@ export class BgsBuilderService {
 		currentBattlegroundsMetaPatch: number,
 	): readonly GameStat[] {
 		return bgsMatchStats
-			.filter(stat => this.timeFilter(stat, prefs, currentBattlegroundsMetaPatch))
-			.filter(stat => this.rankFilter(stat, prefs));
+			.filter((stat) => this.timeFilter(stat, prefs, currentBattlegroundsMetaPatch))
+			.filter((stat) => this.rankFilter(stat, prefs));
 	}
 
 	private timeFilter(stat: GameStat, prefs: Preferences, currentBattlegroundsMetaPatch: number) {

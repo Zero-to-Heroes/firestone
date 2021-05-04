@@ -69,15 +69,15 @@ export class BgsChartWarbandStatsComponent {
 			}
 
 			const warbandStats: readonly NumericTurnInfo[] = this._globalStats.heroStats
-				.find(stat => stat.id === this._player.cardId)
+				.find((stat) => stat.id === this._player.cardId)
 				?.warbandStats?.map(
-					stat =>
+					(stat) =>
 						({
 							turn: stat.turn,
 							value: stat.totalStats,
 						} as NumericTurnInfo),
 				)
-				.filter(stat => stat);
+				.filter((stat) => stat);
 			return warbandStats;
 		};
 

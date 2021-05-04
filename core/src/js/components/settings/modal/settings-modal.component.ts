@@ -36,7 +36,7 @@ export class SettingsModalComponent implements OnInit, OnDestroy {
 	ngOnInit() {
 		this.eventsSubscription = this.events
 			.on(Events.SETTINGS_DISPLAY_MODAL)
-			.subscribe(data => this.handleNewModal(data));
+			.subscribe((data) => this.handleNewModal(data));
 	}
 
 	@HostListener('window:beforeunload')

@@ -53,9 +53,9 @@ export class RemoteAchievementsService {
 		}
 
 		// Update local cache
-		const completedAchievementsFromRemote = achievementsFromRemote.map(ach => CompletedAchievement.create(ach));
+		const completedAchievementsFromRemote = achievementsFromRemote.map((ach) => CompletedAchievement.create(ach));
 		// this.completedAchievementsFromRemote = completedAchievementsFromRemote;
-		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
+		const completedAchievementsFromMemory = achievementsFromMemory.map((ach) =>
 			CompletedAchievement.create({
 				id: `hearthstone_game_${ach.id}`,
 				numberOfCompletions: ach.completed ? 1 : 0,
@@ -77,7 +77,7 @@ export class RemoteAchievementsService {
 
 		const existingAchievements = this.indexedDb.getAll();
 		const achievementsFromMemory = await this.manager.getAchievements();
-		const completedAchievementsFromMemory = achievementsFromMemory.map(ach =>
+		const completedAchievementsFromMemory = achievementsFromMemory.map((ach) =>
 			CompletedAchievement.create({
 				id: `hearthstone_game_${ach.id}`,
 				numberOfCompletions: ach.completed ? 1 : 0,
@@ -89,8 +89,8 @@ export class RemoteAchievementsService {
 			achievementsFromMemory?.length,
 		);
 
-		const existingAchievementIds = existingAchievements.map(a => a.id);
-		const achievementsFromMemoryIds = completedAchievementsFromMemory.map(a => a.id);
+		const existingAchievementIds = existingAchievements.map((a) => a.id);
+		const achievementsFromMemoryIds = completedAchievementsFromMemory.map((a) => a.id);
 		console.log(
 			'[remote-achievements] mapping ids',
 			existingAchievementIds?.length,
@@ -111,8 +111,8 @@ export class RemoteAchievementsService {
 			);
 		}
 		console.log('[remote-achievements] unique Ids', uniqueIds?.length, uniqueIds);
-		const refreshedAchievements = uniqueIds.map(id => {
-			const newFromMemory = completedAchievementsFromMemory.find(a => a.id === id);
+		const refreshedAchievements = uniqueIds.map((id) => {
+			const newFromMemory = completedAchievementsFromMemory.find((a) => a.id === id);
 			return newFromMemory ?? this.indexedDb.getAchievement(id);
 		});
 		this.indexedDb.setAll(refreshedAchievements);

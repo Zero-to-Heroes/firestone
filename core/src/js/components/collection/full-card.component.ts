@@ -129,7 +129,7 @@ export class FullCardComponent implements AfterViewInit {
 			card.playerClass !== 'Neutral'
 				? card.playerClass
 				: card.classes?.length
-				? card.classes.map(playerClass => formatClass(playerClass)).join(', ')
+				? card.classes.map((playerClass) => formatClass(playerClass)).join(', ')
 				: 'All classes';
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
@@ -158,7 +158,7 @@ export class FullCardComponent implements AfterViewInit {
 			'card-id': this.card.id,
 		});
 		this.cancelPlayingSounds();
-		audioClip.audios.forEach(audio => {
+		audioClip.audios.forEach((audio) => {
 			console.log('playing', audioClip, audio, this.card.id, this.card.audio, this.card);
 			audio.play();
 		});
@@ -200,32 +200,32 @@ export class FullCardComponent implements AfterViewInit {
 				clips: this.buildAudioClips(card.audio, null),
 			},
 		];
-		return result.filter(cat => cat.clips.length > 0);
+		return result.filter((cat) => cat.clips.length > 0);
 	}
 
 	private buildAudioClips(audio, type: 'basic' | 'spell' | 'emote' | null, category?: string): readonly AudioClip[] {
 		return Object.keys(audio)
-			.filter(key =>
+			.filter((key) =>
 				type !== null
 					? key.toLowerCase().includes(type + '_')
 					: !key.toLowerCase().includes('basic_') &&
 					  !key.toLowerCase().includes('spell_') &&
 					  !key.toLowerCase().includes('emote_'),
 			)
-			.filter(key => !category || this.REGEXES.find(regex => regex.regex.test(key))?.category === category)
-			.map(key => {
+			.filter((key) => !category || this.REGEXES.find((regex) => regex.regex.test(key))?.category === category)
+			.map((key) => {
 				const files = [...audio[key]];
 				const audioClip: AudioClip = {
 					name: this.getSoundName(key),
 					files: files,
-					audios: files.map(file =>
+					audios: files.map((file) =>
 						this.createAudio(`https://static.zerotoheroes.com/hearthstone/audio/${file}?v=2`),
 					),
 				};
-				audioClip.audios.forEach(audio => audio.load());
+				audioClip.audios.forEach((audio) => audio.load());
 				return audioClip;
 			})
-			.filter(audio => audio.name);
+			.filter((audio) => audio.name);
 	}
 
 	private readonly REGEXES = [
@@ -453,14 +453,14 @@ export class FullCardComponent implements AfterViewInit {
 	}
 
 	private cancelPlayingSounds() {
-		this.previousClips.forEach(sound => {
-			sound.audios.forEach(audio => {
+		this.previousClips.forEach((sound) => {
+			sound.audios.forEach((audio) => {
 				audio.pause();
 				audio.currentTime = 0;
 			});
 		});
-		this.audioClips.forEach(sound => {
-			sound.audios.forEach(audio => {
+		this.audioClips.forEach((sound) => {
+			sound.audios.forEach((audio) => {
 				audio.pause();
 				audio.currentTime = 0;
 			});
@@ -474,10 +474,7 @@ export class FullCardComponent implements AfterViewInit {
 	}
 
 	private transformFlavor(flavor: string): string {
-		const result = flavor
-			.replace(/\n/g, '<br>')
-			.replace(/<i>/g, '')
-			.replace(/<\/i>/g, '');
+		const result = flavor.replace(/\n/g, '<br>').replace(/<i>/g, '').replace(/<\/i>/g, '');
 		console.debug('flvor', flavor, result);
 		return result;
 	}

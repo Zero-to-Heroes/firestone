@@ -82,7 +82,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 		});
 
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 
@@ -104,7 +104,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 
 	@HostListener('mousedown')
 	dragMove() {
-		this.ow.dragMove(this.windowId, async result => {
+		this.ow.dragMove(this.windowId, async (result) => {
 			const window = await this.ow.getCurrentWindow();
 			if (!window) {
 				return;

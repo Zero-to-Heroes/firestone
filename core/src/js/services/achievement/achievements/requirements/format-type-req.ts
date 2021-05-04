@@ -11,7 +11,7 @@ export class FormatTypeReq implements Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for FormatType', rawReq);
 		}
-		return new FormatTypeReq(rawReq.values.map(gameType => parseInt(gameType)));
+		return new FormatTypeReq(rawReq.values.map((gameType) => parseInt(gameType)));
 	}
 
 	reset(): void {

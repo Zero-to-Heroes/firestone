@@ -29,9 +29,7 @@ const REFRESH_CAP = 5;
 			<div class="subscription-link" *ngIf="shouldDisplayAds" (click)="showSubscription()">
 				Support the dev and remove the ads
 			</div>
-			<div class="thank-you-link" *ngIf="!shouldDisplayAds">
-				Thank you for supporting us! You rock :)
-			</div>
+			<div class="thank-you-link" *ngIf="!shouldDisplayAds">Thank you for supporting us! You rock :)</div>
 			<div class="no-ads-placeholder">
 				<i class="i-117X33 gold-theme logo">
 					<svg class="svg-icon-fill">
@@ -78,7 +76,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, (message) => {
 			// console.log('state changed', message);
 			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
 				console.log('[ads] removing ad', message.window_state);
@@ -149,13 +147,13 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 					console.log('[ads] first time init ads, creating OwAd');
 					this.adRef = new OwAd(document.getElementById('ad-div'));
 
-					this.impressionListener = async data => {
+					this.impressionListener = async (data) => {
 						// amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
 						console.log('[ads] impression');
 					};
 					this.adRef.addEventListener('impression', this.impressionListener);
 
-					this.displayImpressionListener = async data => {
+					this.displayImpressionListener = async (data) => {
 						console.log('[ads] display ad impression');
 						// We accept to refresh the ads every 7 minutes, to make it possible to have a video ad
 						// impression

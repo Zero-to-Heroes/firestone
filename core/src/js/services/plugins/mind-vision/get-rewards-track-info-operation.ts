@@ -9,8 +9,8 @@ export class GetRewardsTrackInfoOperation extends MindVisionOperationFacade<Rewa
 			ow,
 			'getRewardsTrackInfo',
 			() => mindVision.getRewardsTrackInfo(),
-			rewardsTrackInfo => false,
-			rewardsTrackInfo => {
+			(rewardsTrackInfo) => false,
+			(rewardsTrackInfo) => {
 				return {
 					...rewardsTrackInfo,
 				};

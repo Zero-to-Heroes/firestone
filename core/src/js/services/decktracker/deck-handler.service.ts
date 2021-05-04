@@ -16,7 +16,7 @@ export class DeckHandlerService {
 		return deck
 			? deck.cards
 					// [dbfid, count] pair
-					.map(pair => this.buildDeckCards(pair))
+					.map((pair) => this.buildDeckCards(pair))
 					.reduce((a, b) => a.concat(b), [])
 					.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
 			: [];

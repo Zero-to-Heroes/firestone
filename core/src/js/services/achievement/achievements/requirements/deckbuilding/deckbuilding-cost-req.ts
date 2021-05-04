@@ -52,7 +52,7 @@ export class DeckbuildingCostReq implements Requirement {
 		const deck = gameEvent.localPlayer?.deck ? gameEvent.localPlayer.deck.deck : null;
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
-			const numberOfMatchingCards: number = cards.filter(card => this.cardMatches(card)).length;
+			const numberOfMatchingCards: number = cards.filter((card) => this.cardMatches(card)).length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfCards;
 			} else if (this.qualifier === 'AT_MOST') {

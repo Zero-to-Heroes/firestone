@@ -124,11 +124,11 @@ export class GraphWithComparisonComponent {
 
 		const newChartData = [
 			{
-				data: filledYour?.map(stat => stat.value) || [],
+				data: filledYour?.map((stat) => stat.value) || [],
 				label: this.yourLabel,
 			} as any,
 			{
-				data: filledCommunity?.map(stat => stat.value) || [],
+				data: filledCommunity?.map((stat) => stat.value) || [],
 				label: this.communityLabel,
 			},
 		];
@@ -137,9 +137,9 @@ export class GraphWithComparisonComponent {
 		}
 
 		this.lineChartData = newChartData;
-		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter(turn => turn > 0).map(turn => '' + turn);
+		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter((turn) => turn > 0).map((turn) => '' + turn);
 		const maxValue = Math.max(
-			...this.lineChartData.map(data => data.data as number[]).reduce((a, b) => a.concat(b), []),
+			...this.lineChartData.map((data) => data.data as number[]).reduce((a, b) => a.concat(b), []),
 		);
 		this._maxYValue = this._maxYValue ? Math.max(this._maxYValue, maxValue) : undefined;
 		this.updateChartOptions();
@@ -158,14 +158,14 @@ export class GraphWithComparisonComponent {
 	}
 
 	private removeZero(input: readonly NumericTurnInfo[]): readonly NumericTurnInfo[] {
-		return input.filter(stat => stat.turn > 0);
+		return input.filter((stat) => stat.turn > 0);
 	}
 
 	private fillMissingData(input: readonly NumericTurnInfo[], lastTurn: number) {
 		const result = [];
 		for (let i = 1; i <= lastTurn; i++) {
 			result.push(
-				input.find(stat => stat.turn === i) || {
+				input.find((stat) => stat.turn === i) || {
 					turn: i,
 					value: null,
 				},
@@ -238,9 +238,9 @@ export class GraphWithComparisonComponent {
 	}
 
 	private getMaxTurn(input: readonly NumericTurnInfo[]) {
-		return input.filter(stat => stat.value).length === 0
+		return input.filter((stat) => stat.value).length === 0
 			? 0
-			: Math.max(...input.filter(stat => stat.value).map(stat => stat.turn));
+			: Math.max(...input.filter((stat) => stat.value).map((stat) => stat.turn));
 	}
 
 	private updateChartOptions() {
@@ -308,7 +308,7 @@ export class GraphWithComparisonComponent {
 				callbacks: {
 					beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
 						// console.log('beforeBody', item, data);
-						return data.datasets?.map(dataset => dataset?.label || '') || [];
+						return data.datasets?.map((dataset) => dataset?.label || '') || [];
 					},
 				},
 				custom: (tooltip: ChartTooltipModel) => {
@@ -338,11 +338,11 @@ export class GraphWithComparisonComponent {
 					}
 
 					// Set Text
-					const yourDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 1);
+					const yourDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 1);
 					if (tooltip.body) {
 						const communityLabel = tooltip.beforeBody[0];
 						const yourLabel = tooltip.beforeBody[1];
-						const communityDatapoint = tooltip.dataPoints.find(dataset => dataset.datasetIndex === 0);
+						const communityDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 0);
 						const playerSection =
 							yourDatapoint?.value != null
 								? `

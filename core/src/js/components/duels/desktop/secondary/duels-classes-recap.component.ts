@@ -96,7 +96,7 @@ export class DuelsClassesRecapComponent {
 		if (this.totalRuns === 0) {
 			return;
 		}
-		this.averageWinsPerRun = runs.map(run => run.wins).reduce((a, b) => a + b, 0) / this.totalRuns;
+		this.averageWinsPerRun = runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / this.totalRuns;
 
 		this.mostPlayedClasses = [];
 		this.bestWinrateClasses = [];
@@ -128,17 +128,15 @@ export class DuelsClassesRecapComponent {
 		const groupedByPlayedClass: { [playerClass: string]: readonly DuelsRun[] } = groupByFunction(
 			(run: DuelsRun) => this.allCards.getCard(run.heroCardId)?.playerClass,
 		)(runs);
-		const mostPlayedClasses = Object.values(groupedByPlayedClass)
-			.sort(sortFunction)
-			.slice(0, 3);
-		return mostPlayedClasses.map(runsForClass => {
+		const mostPlayedClasses = Object.values(groupedByPlayedClass).sort(sortFunction).slice(0, 3);
+		return mostPlayedClasses.map((runsForClass) => {
 			const matches = runsForClass
-				.map(run => run.steps)
+				.map((run) => run.steps)
 				.reduce((a, b) => a.concat(b), [])
-				.filter(step => (step as GameStat).buildNumber)
-				.map(step => step as GameStat); // Just filter out the non-match steps
+				.filter((step) => (step as GameStat).buildNumber)
+				.map((step) => step as GameStat); // Just filter out the non-match steps
 			const totalMatches = matches.length;
-			const wins = matches.filter(match => match.result === 'won').length;
+			const wins = matches.filter((match) => match.result === 'won').length;
 			const winrate = (100 * wins) / totalMatches;
 			const playerClass = formatClass(this.allCards.getCard(runsForClass[0].heroCardId)?.playerClass);
 			return {
@@ -161,16 +159,14 @@ export class DuelsClassesRecapComponent {
 			(game: GameStat) => game.opponentClass,
 		)(
 			runs
-				.map(run => run.steps)
+				.map((run) => run.steps)
 				.reduce((a, b) => a.concat(b), [])
-				.filter(step => (step as GameStat).buildNumber),
+				.filter((step) => (step as GameStat).buildNumber),
 		);
-		const mostFacedClasses = Object.values(groupedByFacedClass)
-			.sort(sortFunction)
-			.slice(0, 3);
-		return mostFacedClasses.map(gamesForClass => {
+		const mostFacedClasses = Object.values(groupedByFacedClass).sort(sortFunction).slice(0, 3);
+		return mostFacedClasses.map((gamesForClass) => {
 			const opponentClass = formatClass(gamesForClass[0].opponentClass);
-			const wins = gamesForClass.filter(match => match.result === 'won').length;
+			const wins = gamesForClass.filter((match) => match.result === 'won').length;
 			const winrate = (100 * wins) / gamesForClass.length;
 			return {
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${gamesForClass[0].opponentCardId}.jpg`,
@@ -185,16 +181,16 @@ export class DuelsClassesRecapComponent {
 
 	private buildWinrate(runs: readonly DuelsRun[]) {
 		const matches = runs
-			.map(run => run.steps)
+			.map((run) => run.steps)
 			.reduce((a, b) => a.concat(b), [])
-			.filter(step => (step as GameStat).buildNumber)
-			.map(step => step as GameStat); // Just filter out the non-match steps
+			.filter((step) => (step as GameStat).buildNumber)
+			.map((step) => step as GameStat); // Just filter out the non-match steps
 		return this.buildWinrateForMatches(matches);
 	}
 
 	private buildWinrateForMatches(matches: readonly GameStat[]) {
 		const totalMatches = matches.length;
-		const wins = matches.filter(match => match.result === 'won').length;
+		const wins = matches.filter((match) => match.result === 'won').length;
 		return (100 * wins) / totalMatches;
 	}
 }

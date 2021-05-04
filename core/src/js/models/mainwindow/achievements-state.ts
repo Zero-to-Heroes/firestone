@@ -15,14 +15,14 @@ export class AchievementsState {
 
 	public updateAchievement(newAchievement: Achievement, categoryId?: string): AchievementsState {
 		return Object.assign(new AchievementsState(), this, {
-			categories: this.categories.map(cat =>
+			categories: this.categories.map((cat) =>
 				categoryId && cat.id !== categoryId ? cat : cat.updateAchievement(newAchievement),
 			) as readonly VisualAchievementCategory[],
 		} as AchievementsState);
 	}
 
 	public findCategory(categoryId: string): VisualAchievementCategory {
-		return this.categories.map(cat => cat.findCategory(categoryId)).filter(cat => cat)[0];
+		return this.categories.map((cat) => cat.findCategory(categoryId)).filter((cat) => cat)[0];
 	}
 
 	public findAchievementHierarchy(achievementId: string): [VisualAchievementCategory[], VisualAchievement] {
@@ -31,8 +31,8 @@ export class AchievementsState {
 		}
 
 		return this.categories
-			.map(cat => cat.findAchievementHierarchy(achievementId))
-			.find(result => result.length === 2 && result[1]);
+			.map((cat) => cat.findAchievementHierarchy(achievementId))
+			.find((result) => result.length === 2 && result[1]);
 	}
 
 	public findCategoryHierarchy(categoryId: string): VisualAchievementCategory[] {
@@ -41,9 +41,9 @@ export class AchievementsState {
 		}
 
 		return this.categories
-			.map(cat => cat.findCategoryHierarchy(categoryId))
-			.filter(cat => cat)
-			.find(result => result.length > 0);
+			.map((cat) => cat.findCategoryHierarchy(categoryId))
+			.filter((cat) => cat)
+			.find((result) => result.length > 0);
 	}
 
 	public findAchievements(ids: readonly string[]): readonly VisualAchievement[] {
@@ -51,10 +51,10 @@ export class AchievementsState {
 			return [];
 		}
 
-		return this.retrieveAllAchievements().filter(achv => ids.indexOf(achv.id) !== -1);
+		return this.retrieveAllAchievements().filter((achv) => ids.indexOf(achv.id) !== -1);
 	}
 
 	public retrieveAllAchievements(): readonly VisualAchievement[] {
-		return [...this.categories.map(cat => cat.retrieveAllAchievements()).reduce((a, b) => a.concat(b), [])];
+		return [...this.categories.map((cat) => cat.retrieveAllAchievements()).reduce((a, b) => a.concat(b), [])];
 	}
 }

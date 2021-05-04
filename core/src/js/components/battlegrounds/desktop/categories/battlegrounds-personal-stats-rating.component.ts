@@ -194,7 +194,7 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		if (!this._state?.matchStats || !this._category) {
 			return;
 		}
-		const data = this._state.matchStats.filter(match => match.playerRank).reverse();
+		const data = this._state.matchStats.filter((match) => match.playerRank).reverse();
 		if (data.length === 0) {
 			this.lineChartData = null;
 			this.lineChartLabels = null;
@@ -239,12 +239,12 @@ export class BattlegroundsPersonalStatsRatingComponent implements AfterViewInit 
 		} else {
 			this.lineChartData = [
 				{
-					data: finalData.map(match => parseInt(match.playerRank)),
+					data: finalData.map((match) => parseInt(match.playerRank)),
 					label: 'Rating',
 				},
 			];
 			this.lineChartLabels = Array.from(Array(this.lineChartData[0].data.length), (_, i) => i + 1).map(
-				matchIndex => '' + matchIndex,
+				(matchIndex) => '' + matchIndex,
 			);
 		}
 

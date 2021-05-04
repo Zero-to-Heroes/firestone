@@ -13,6 +13,6 @@ export class HotkeyService {
 
 	private splitHotkey(hotkey: string): string {
 		const split = hotkey.split('+');
-		return `Show/Hide: ${split.map(splitItem => splitItem).join('+')}`;
+		return `Show/Hide: ${split.map((splitItem) => splitItem).join('+')}`;
 	}
 }

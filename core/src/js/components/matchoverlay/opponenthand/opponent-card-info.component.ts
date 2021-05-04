@@ -64,7 +64,7 @@ export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
 		await this.handleDisplayPreferences();

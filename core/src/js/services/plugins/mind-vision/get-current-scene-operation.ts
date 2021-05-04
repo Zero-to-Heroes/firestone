@@ -8,8 +8,8 @@ export class GetCurrentSceneOperation extends MindVisionOperationFacade<number> 
 			ow,
 			'getCurrentScene',
 			() => mindVision.getCurrentScene(),
-			info => false,
-			info => +info,
+			(info) => false,
+			(info) => +info,
 			3,
 			1500,
 		);

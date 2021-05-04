@@ -22,10 +22,10 @@ export class BinderState {
 	}
 
 	public getCard(cardId: string): SetCard {
-		return this.allSets.map(set => set.getCard(cardId)).find(card => card);
+		return this.allSets.map((set) => set.getCard(cardId)).find((card) => card);
 	}
 
 	public getAllCards(): readonly SetCard[] {
-		return this.allSets.map(set => set.allCards).reduce((a, b) => a.concat(b), []);
+		return this.allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []);
 	}
 }

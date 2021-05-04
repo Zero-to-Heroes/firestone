@@ -20,6 +20,6 @@ export class DamageGameEvent extends GameEvent {
 	};
 
 	public findTarget(cardId: string) {
-		return Object.values(this.additionalData.targets).find(target => target.TargetCardId === cardId);
+		return Object.values(this.additionalData.targets).find((target) => target.TargetCardId === cardId);
 	}
 }

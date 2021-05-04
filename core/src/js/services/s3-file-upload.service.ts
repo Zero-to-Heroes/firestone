@@ -60,7 +60,7 @@ export class S3FileUploadService {
 			Body: blob,
 		};
 		console.log('uploading blob to S3 with params', params);
-		return new Promise<string>(resolve => {
+		return new Promise<string>((resolve) => {
 			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 				// There Was An Error With Your S3 Config
 				if (err) {

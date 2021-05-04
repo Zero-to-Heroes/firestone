@@ -121,7 +121,7 @@ export class AppBootstrapService {
 		window['mainWindowHotkeyPressed'] = () => this.onHotkeyPress();
 		window['reloadWindows'] = () => this.reloadWindows();
 		if (!this.collectionHotkeyListener) {
-			this.collectionHotkeyListener = this.ow.addHotKeyPressedListener('collection', async hotkeyResult => {
+			this.collectionHotkeyListener = this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
 				// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
 				if (this.currentState !== 'READY') {
 					return;
@@ -145,7 +145,9 @@ export class AppBootstrapService {
 					// Because Firestone can stay open between two game sessions, and if
 					// the game was forced-closed, some achievements didn't have the opportunity
 					// to reset, so we're forcing it here
-					(await this.achievementsLoader.getChallengeModules()).forEach(challenge => challenge.resetState());
+					(await this.achievementsLoader.getChallengeModules()).forEach((challenge) =>
+						challenge.resetState(),
+					);
 					this.handleExitGame();
 				}
 			} else if (await this.ow.inGame()) {

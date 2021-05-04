@@ -14,13 +14,13 @@ export class DebugService {
 
 	private override(oldConsoleLogFunc: any, debugMode: boolean) {
 		if (debugMode) {
-			return function() {
+			return function () {
 				let argsString = '';
 				const shouldFormat = arguments.length > 0 && arguments[0] !== 'no-format';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
 					const argAsString =
-						JSON.stringify(arguments[i], function(key, value) {
+						JSON.stringify(arguments[i], function (key, value) {
 							if (typeof value === 'object' && value !== null) {
 								if (cache.indexOf(value) !== -1) {
 									// Circular reference found, discard key
@@ -42,7 +42,7 @@ export class DebugService {
 
 	private overrideError(oldConsoleLogFunc: any, oldWarnFunc: any, debugMode: boolean) {
 		if (debugMode) {
-			return function() {
+			return function () {
 				// Sampling of events
 				if (Math.random() < 0.001) {
 					amplitude.getInstance().logEvent('error-logged');
@@ -54,7 +54,7 @@ export class DebugService {
 					let cache = [];
 					argsString +=
 						(
-							JSON.stringify(arguments[i], function(key, value) {
+							JSON.stringify(arguments[i], function (key, value) {
 								if (typeof value === 'object' && value !== null) {
 									if (cache.indexOf(value) !== -1) {
 										// Circular reference found, discard key

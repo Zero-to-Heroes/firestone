@@ -55,7 +55,7 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnEnd.filter(
-			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
+			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];

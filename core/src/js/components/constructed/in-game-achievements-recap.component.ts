@@ -45,7 +45,7 @@ export class InGameAchievementsRecapComponent {
 		}
 
 		const nonCompletedAchievements = this._state.initialAchievementsProgress.achievements.filter(
-			initial => !initial.completed,
+			(initial) => !initial.completed,
 		);
 
 		// Now keep only the first non-completed step
@@ -58,8 +58,10 @@ export class InGameAchievementsRecapComponent {
 
 		// Don't show achievements that have been completed before the match starts
 		this.effectiveProgress = firstSteps
-			.map(initial => {
-				const current = this._state.currentAchievementsProgress.achievements.find(ach => ach.id === initial.id);
+			.map((initial) => {
+				const current = this._state.currentAchievementsProgress.achievements.find(
+					(ach) => ach.id === initial.id,
+				);
 				return {
 					id: initial.id,
 					name: initial.name,

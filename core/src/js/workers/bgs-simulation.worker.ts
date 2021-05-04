@@ -11,7 +11,7 @@ const cards = new AllCardsService();
 cards.initializeCardsDb();
 
 // Respond to message from parent thread
-ctx.onmessage = async ev => {
+ctx.onmessage = async (ev) => {
 	await cards.initializeCardsDb();
 
 	const battleInfo: BgsBattleInfo = ev.data;

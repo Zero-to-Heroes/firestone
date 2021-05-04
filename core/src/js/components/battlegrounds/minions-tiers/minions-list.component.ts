@@ -87,7 +87,7 @@ export class BattlegroundsMinionsListComponent {
 		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card))(this._cards);
 		this.groups = Object.keys(groupedByTribe)
 			.sort((a: string, b: string) => this.tribeValueForSort(a) - this.tribeValueForSort(b)) // Keep consistent ordering
-			.map(tribeString => ({
+			.map((tribeString) => ({
 				tribe: Race[tribeString],
 				minions: groupedByTribe[tribeString],
 				highlightedMinions: this._highlightedMinions || [],
@@ -111,10 +111,12 @@ export class BattlegroundsMinionsListComponent {
 				return 6;
 			case Race[Race.PIRATE]:
 				return 7;
-			case Race[Race.ALL]:
+			case Race[Race.QUILBOAR]:
 				return 8;
-			case Race[Race.BLANK]:
+			case Race[Race.ALL]:
 				return 9;
+			case Race[Race.BLANK]:
+				return 10;
 		}
 	}
 }

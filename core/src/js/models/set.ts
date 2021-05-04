@@ -40,7 +40,7 @@ export class Set {
 	}
 
 	public getCard(cardId: string): SetCard {
-		return this.allCards.find(card => card.id === cardId);
+		return this.allCards.find((card) => card.id === cardId);
 	}
 
 	numberOfLimitCollectibleCards(): number {
@@ -53,14 +53,14 @@ export class Set {
 
 	ownedForRarity(rarity: string): number {
 		return this.allCards
-			.filter(card => card.rarity?.toLowerCase() === rarity)
+			.filter((card) => card.rarity?.toLowerCase() === rarity)
 			.map((card: SetCard) => card.getNumberCollected())
 			.reduce((c1, c2) => c1 + c2, 0);
 	}
 
 	totalForRarity(rarity: string): number {
 		return this.allCards
-			.filter(card => card.rarity?.toLowerCase() === rarity)
+			.filter((card) => card.rarity?.toLowerCase() === rarity)
 			.map((card: SetCard) => card.getMaxCollectible())
 			.reduce((c1, c2) => c1 + c2, 0);
 	}

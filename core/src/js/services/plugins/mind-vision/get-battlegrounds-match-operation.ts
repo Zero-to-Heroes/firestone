@@ -9,15 +9,15 @@ export class GetBattlegroundsMatchOperation extends MindVisionOperationFacade<Ba
 			ow,
 			'getBattlegroundsMatchWithPlayers',
 			(forceReset?: boolean) => mindVision.getBattlegroundsInfo(forceReset),
-			battlegroundsInfo => false,
-			battlegroundsInfo =>
+			(battlegroundsInfo) => false,
+			(battlegroundsInfo) =>
 				Object.assign(new BattlegroundsInfo(), {
 					rating: battlegroundsInfo.Rating,
 					game: battlegroundsInfo.Game,
 				} as BattlegroundsInfo),
 			2,
 			1000,
-			battlegroundsInfo => !battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,
+			(battlegroundsInfo) => !battlegroundsInfo?.Game?.Players || battlegroundsInfo.Game.Players.length === 0,
 		);
 	}
 }

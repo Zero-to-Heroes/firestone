@@ -79,7 +79,7 @@ export class CardWithSameAttributePlayedReq implements Requirement {
 			// console.log('playCounts', this.playCounts, this.targetQuantity);
 			this.isCardPlayed = Object.keys(this.playCounts).some(
 				// TODO: only support "AT_LEAST", implicitely, for now
-				cardAttribute => this.playCounts[cardAttribute] >= this.targetQuantity,
+				(cardAttribute) => this.playCounts[cardAttribute] >= this.targetQuantity,
 			);
 		}
 	}

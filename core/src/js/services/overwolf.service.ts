@@ -93,7 +93,7 @@ export class OverwolfService {
 	}
 
 	public addStateChangedListener(targetWindowName: string, callback): (message: any) => void {
-		const listener = message => {
+		const listener = (message) => {
 			if (message.window_name !== targetWindowName && message.window_id !== targetWindowName) {
 				return;
 			}
@@ -144,8 +144,8 @@ export class OverwolfService {
 	}
 
 	public setWindowPassthrough(windowId: string): Promise<void> {
-		return new Promise<void>(resolve => {
-			overwolf.windows.setWindowStyle(windowId, overwolf.windows.enums.WindowStyle.InputPassThrough, data => {
+		return new Promise<void>((resolve) => {
+			overwolf.windows.setWindowStyle(windowId, overwolf.windows.enums.WindowStyle.InputPassThrough, (data) => {
 				resolve();
 			});
 		});
@@ -162,7 +162,7 @@ export class OverwolfService {
 
 	public addHotKeyPressedListener(hotkey: string, callback): any {
 		// overwolf.settings.registerHotKey(hotkey, callback);
-		overwolf.settings.hotkeys.onPressed.addListener(hotkeyPressed => {
+		overwolf.settings.hotkeys.onPressed.addListener((hotkeyPressed) => {
 			if (hotkeyPressed?.name === hotkey) {
 				callback();
 			}
@@ -170,7 +170,7 @@ export class OverwolfService {
 	}
 
 	public addHotkeyChangedListener(callback: (message: any) => void): (message: any) => void {
-		const listener = message => {
+		const listener = (message) => {
 			callback(message);
 		};
 		overwolf.settings.hotkeys.onChanged.addListener(listener);
@@ -210,7 +210,7 @@ export class OverwolfService {
 	}
 
 	public async getOpenWindows() {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.windows.getOpenWindows((res: any) => {
 				resolve(res);
 			});
@@ -218,7 +218,7 @@ export class OverwolfService {
 	}
 
 	public async getWindowState(windowName: string) {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.windows.getWindowState(windowName, (res: any) => {
 				resolve(res);
 			});
@@ -226,7 +226,7 @@ export class OverwolfService {
 	}
 
 	public async getWindowsStates() {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.windows.getWindowsStates((res: any) => {
 				resolve(res);
 			});
@@ -235,24 +235,24 @@ export class OverwolfService {
 
 	// Careful, this only returns the version, not the full manifest
 	public async getManifest(extensionId: string) {
-		return new Promise<string>(resolve => {
-			overwolf.extensions.getManifest(extensionId, result => {
+		return new Promise<string>((resolve) => {
+			overwolf.extensions.getManifest(extensionId, (result) => {
 				resolve(result.meta.version);
 			});
 		});
 	}
 
 	public async getSelectedMatch(): Promise<{ gameId: number; matchId: string; sessionId: string }> {
-		return new Promise<{ gameId: number; matchId: string; sessionId: string }>(resolve => {
-			overwolf.egs.getSelectedMatch(selectedMatchInfo => {
+		return new Promise<{ gameId: number; matchId: string; sessionId: string }>((resolve) => {
+			overwolf.egs.getSelectedMatch((selectedMatchInfo) => {
 				resolve(selectedMatchInfo);
 			});
 		});
 	}
 
 	public async getCurrentUser(): Promise<CurrentUser> {
-		return new Promise<CurrentUser>(resolve => {
-			overwolf.profile.getCurrentUser(user => {
+		return new Promise<CurrentUser>((resolve) => {
+			overwolf.profile.getCurrentUser((user) => {
 				resolve(user);
 			});
 		});
@@ -268,8 +268,8 @@ export class OverwolfService {
 
 	public async closeWindow(windowId: string) {
 		// console.debug('[overwolf-service] closing window', windowId, new Error().stack);
-		return new Promise<any>(resolve => {
-			overwolf.windows.close(windowId, result => {
+		return new Promise<any>((resolve) => {
+			overwolf.windows.close(windowId, (result) => {
 				resolve(result);
 			});
 		});
@@ -279,8 +279,8 @@ export class OverwolfService {
 	public async closeWindowFromName(windowName: string) {
 		// console.debug('[overwolf-service] closing window', windowName, new Error().stack);
 		const window = await this.obtainDeclaredWindow(windowName);
-		return new Promise<any>(resolve => {
-			overwolf.windows.close(window.id, result => {
+		return new Promise<any>((resolve) => {
+			overwolf.windows.close(window.id, (result) => {
 				resolve(result);
 			});
 		});
@@ -288,9 +288,9 @@ export class OverwolfService {
 
 	public async restoreWindow(windowId: string) {
 		// console.debug('[overwolf-service] restoring window', windowId, new Error().stack);
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			try {
-				overwolf.windows.restore(windowId, async result => {
+				overwolf.windows.restore(windowId, async (result) => {
 					resolve(result);
 				});
 			} catch (e) {
@@ -302,9 +302,9 @@ export class OverwolfService {
 	}
 
 	public async setTopmost(windowId: string) {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			try {
-				overwolf.windows.setTopmost(windowId, true, result => {
+				overwolf.windows.setTopmost(windowId, true, (result) => {
 					resolve(result);
 				});
 			} catch (e) {
@@ -315,10 +315,10 @@ export class OverwolfService {
 	}
 
 	public async bringToFront(windowId: string) {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 			try {
-				overwolf.windows.bringToFront(windowId, false, result => {
+				overwolf.windows.bringToFront(windowId, false, (result) => {
 					resolve(result);
 				});
 			} catch (e) {
@@ -329,9 +329,9 @@ export class OverwolfService {
 	}
 
 	public async sendToBack(windowId: string) {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			try {
-				overwolf.windows.sendToBack(windowId, false, result => {
+				overwolf.windows.sendToBack(windowId, false, (result) => {
 					resolve(result);
 				});
 			} catch (e) {
@@ -343,9 +343,9 @@ export class OverwolfService {
 
 	public async hideWindow(windowId: string) {
 		// console.debug('[overwolf-service] hiding window', windowId);
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			try {
-				overwolf.windows.hide(windowId, result => {
+				overwolf.windows.hide(windowId, (result) => {
 					resolve(result);
 				});
 			} catch (e) {
@@ -359,7 +359,7 @@ export class OverwolfService {
 	public async hideCollectionWindow(prefs: Preferences): Promise<void> {
 		const collectionWindow = await this.getCollectionWindow(prefs);
 		const settingsWindow = await this.getSettingsWindow(prefs);
-		return new Promise<void>(async resolve => {
+		return new Promise<void>(async (resolve) => {
 			await Promise.all([this.hideWindow(collectionWindow.id), this.hideWindow(settingsWindow.id)]);
 			resolve();
 		});
@@ -367,8 +367,8 @@ export class OverwolfService {
 
 	public minimizeWindow(windowId: string) {
 		// console.debug('[overwolf-service] minimizing window', windowId);
-		return new Promise<any>(resolve => {
-			overwolf.windows.minimize(windowId, result => {
+		return new Promise<any>((resolve) => {
+			overwolf.windows.minimize(windowId, (result) => {
 				resolve(result);
 			});
 		});
@@ -376,8 +376,8 @@ export class OverwolfService {
 
 	public maximizeWindow(windowId: string) {
 		// console.debug('[overwolf-service] maximizing window', windowId);
-		return new Promise<any>(resolve => {
-			overwolf.windows.maximize(windowId, result => {
+		return new Promise<any>((resolve) => {
+			overwolf.windows.maximize(windowId, (result) => {
 				resolve(result);
 			});
 		});
@@ -392,7 +392,7 @@ export class OverwolfService {
 	}
 
 	public async inGame(): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.games.getRunningGameInfo((res: any) => {
 				if (this.gameRunning(res)) {
 					resolve(true);
@@ -421,7 +421,7 @@ export class OverwolfService {
 	}
 
 	public async getRunningGameInfo() {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			try {
 				overwolf.games.getRunningGameInfo((res: any) => {
 					resolve(res);
@@ -435,7 +435,7 @@ export class OverwolfService {
 	}
 
 	public async getSessionInfo() {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.egs.getSessionInfo((res: any) => {
 				resolve(res);
 			});
@@ -443,7 +443,7 @@ export class OverwolfService {
 	}
 
 	public async getGameEventsInfo() {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.games.events.getInfo((info: any) => {
 				resolve(info);
 			});
@@ -451,15 +451,15 @@ export class OverwolfService {
 	}
 
 	public async setGameEventsRequiredFeatures(features) {
-		return new Promise<any>(resolve => {
-			overwolf.games.events.setRequiredFeatures(features, info => {
+		return new Promise<any>((resolve) => {
+			overwolf.games.events.setRequiredFeatures(features, (info) => {
 				resolve(info);
 			});
 		});
 	}
 
 	public async getHotKey(hotkeyName: string) {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.settings.hotkeys.get((res: any) => {
 				const game: any[] = res.games[HEARTHSTONE_GAME_ID];
 				const hotkey = game?.find((key: any) => key.name === hotkeyName);
@@ -469,7 +469,7 @@ export class OverwolfService {
 	}
 
 	public async setVideoCaptureSettings(resolution: string, fps: number): Promise<any> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.settings.setVideoCaptureSettings(resolution, fps, (res: any) => {
 				resolve(res);
 			});
@@ -477,7 +477,7 @@ export class OverwolfService {
 	}
 
 	public async getVideoCaptureSettings(): Promise<any> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.settings.getVideoCaptureSettings((res: any) => {
 				resolve(res);
 			});
@@ -485,7 +485,7 @@ export class OverwolfService {
 	}
 
 	public async setAudioCaptureSettings(captureSystemSound: boolean, captureMicrophoneSound: boolean): Promise<any> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.settings.setAudioCaptureSettings(captureSystemSound, captureMicrophoneSound, (res: any) => {
 				resolve(res);
 			});
@@ -493,7 +493,7 @@ export class OverwolfService {
 	}
 
 	public async getAudioCaptureSettings(): Promise<any> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.settings.getAudioCaptureSettings((res: any) => {
 				resolve(res);
 			});
@@ -502,7 +502,7 @@ export class OverwolfService {
 
 	public async sendMessageWithName(windowName: string, messageType: string, messageBody?: string): Promise<void> {
 		const window = await this.obtainDeclaredWindow(windowName);
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.windows.sendMessage(window.id, messageType, messageBody, () => {
 				resolve();
 			});
@@ -510,7 +510,7 @@ export class OverwolfService {
 	}
 
 	public async sendMessage(windowId: string, messageType: string, messageBody?: any): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.windows.sendMessage(windowId, messageType, messageBody, () => {
 				resolve();
 			});
@@ -530,7 +530,7 @@ export class OverwolfService {
 	}
 
 	public async getCurrentWindow(): Promise<any> {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			try {
 				overwolf.windows.getCurrentWindow((res: any) => {
 					resolve(res.window);
@@ -543,7 +543,7 @@ export class OverwolfService {
 	}
 
 	public async getAppVideoCaptureFolderSize(): Promise<any> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.media.getAppVideoCaptureFolderSize((res: any) => {
 				resolve(res);
 			});
@@ -551,7 +551,7 @@ export class OverwolfService {
 	}
 
 	public async getOverwolfVideosFolder(): Promise<any> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.settings.getOverwolfVideosFolder((res: any) => {
 				resolve(res);
 			});
@@ -559,7 +559,7 @@ export class OverwolfService {
 	}
 
 	public async openWindowsExplorer(path: string): Promise<any> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.utils.openWindowsExplorer(path, (res: any) => {
 				resolve(res);
 			});
@@ -568,7 +568,7 @@ export class OverwolfService {
 
 	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<void> {
 		// console.debug('[overwolf-service] changing window position', windowId, Math.round(newX), Math.round(newY));
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY));
 			resolve();
 		});
@@ -576,22 +576,22 @@ export class OverwolfService {
 
 	public async changeWindowSize(windowId: string, width: number, height: number): Promise<void> {
 		// console.debug('[overwolf-service] changing window size', windowId, Math.round(width), Math.round(height));
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height));
 			resolve();
 		});
 	}
 
 	public async turnOnReplays(settings): Promise<void> {
-		return new Promise<any>(resolve => {
-			overwolf.media.replays.turnOn(settings, result => {
+		return new Promise<any>((resolve) => {
+			overwolf.media.replays.turnOn(settings, (result) => {
 				resolve(result);
 			});
 		});
 	}
 
 	public async turnOffReplays(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.media.replays.turnOff((res: any) => {
 				resolve();
 			});
@@ -600,7 +600,7 @@ export class OverwolfService {
 
 	public async startReplayCapture(captureDuration: number): Promise<any> {
 		return new Promise<any>((resolve, reject) => {
-			overwolf.media.replays.startCapture(captureDuration, status => {
+			overwolf.media.replays.startCapture(captureDuration, (status) => {
 				if (status === 'error') {
 					console.warn('[overwolf-service] could not start capture', status);
 					reject(status);
@@ -612,15 +612,15 @@ export class OverwolfService {
 	}
 
 	public async stopReplayCapture(replayId: string): Promise<any> {
-		return new Promise<any>(resolve => {
-			overwolf.media.replays.stopCapture(replayId, result => {
+		return new Promise<any>((resolve) => {
+			overwolf.media.replays.stopCapture(replayId, (result) => {
 				resolve(result);
 			});
 		});
 	}
 
 	public async getReplayMediaState(): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.media.replays.getState((res: any) => {
 				resolve(res.isOn);
 			});
@@ -628,7 +628,7 @@ export class OverwolfService {
 	}
 
 	public async isGSEnabled(): Promise<any> {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.egs.isEnabled((egsEnabledResult: any) => {
 				resolve(egsEnabledResult);
 			});
@@ -636,7 +636,7 @@ export class OverwolfService {
 	}
 
 	public async requestGSDisplay(): Promise<any> {
-		return new Promise<any>(resolve => {
+		return new Promise<any>((resolve) => {
 			overwolf.egs.requestToDisplay((displayRequestResult: any) => {
 				resolve(displayRequestResult);
 			});
@@ -644,22 +644,22 @@ export class OverwolfService {
 	}
 
 	public async getExtensionInfo(extensionId: string): Promise<any> {
-		return new Promise<any>(resolve => {
-			overwolf.extensions.getInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb', callbackInfo => {
+		return new Promise<any>((resolve) => {
+			overwolf.extensions.getInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb', (callbackInfo) => {
 				resolve(callbackInfo);
 			});
 		});
 	}
 
 	public async setExtensionInfo(info): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.extensions.setInfo(info);
 			resolve();
 		});
 	}
 
 	public async registerInfo(id: string, eventsCallback): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.extensions.registerInfo(id, eventsCallback, () => {
 				resolve();
 			});
@@ -667,7 +667,7 @@ export class OverwolfService {
 	}
 
 	public async setShelfStatusReady(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			if (!overwolf || !overwolf.egs || !overwolf.egs.setStatus) {
 				setTimeout(() => {
 					this.setShelfStatusReady();
@@ -683,7 +683,7 @@ export class OverwolfService {
 	}
 
 	public async getActiveSubscriptionPlans(): Promise<ActiveSubscriptionPlan> {
-		return new Promise<ActiveSubscriptionPlan>(resolve => {
+		return new Promise<ActiveSubscriptionPlan>((resolve) => {
 			if (!overwolf.profile.subscriptions) {
 				resolve({} as ActiveSubscriptionPlan);
 				return;
@@ -695,7 +695,7 @@ export class OverwolfService {
 	}
 
 	public async shouldShowAds(): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			if (!overwolf.profile.subscriptions) {
 				resolve(true);
 				return;
@@ -710,7 +710,7 @@ export class OverwolfService {
 	private twitterUserInfo: TwitterUserInfo = null;
 
 	public addTwitterLoginStateChangedListener(callback) {
-		overwolf.social.twitter.onLoginStateChanged.addListener(async result => {
+		overwolf.social.twitter.onLoginStateChanged.addListener(async (result) => {
 			callback(result);
 			this.twitterUserInfo = await this.getTwitterUserInfo(true);
 		});
@@ -720,8 +720,8 @@ export class OverwolfService {
 		if (!forceRefresh && this.twitterUserInfo && this.twitterUserInfo.id) {
 			return this.twitterUserInfo;
 		}
-		return new Promise<TwitterUserInfo>(resolve => {
-			overwolf.social.twitter.getUserInfo(res => {
+		return new Promise<TwitterUserInfo>((resolve) => {
+			overwolf.social.twitter.getUserInfo((res) => {
 				if (res.status !== 'success' || !res.userInfo) {
 					const result: TwitterUserInfo = {
 						network: 'twitter',
@@ -748,7 +748,7 @@ export class OverwolfService {
 	}
 
 	public async twitterShare(filePathOnDisk: string, message: string): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			const shareParam = {
 				file: filePathOnDisk,
 				message: message,
@@ -764,8 +764,8 @@ export class OverwolfService {
 	}
 
 	public async twitterLogout() {
-		return new Promise<void>(resolve => {
-			overwolf.social.twitter.performLogout(info => {
+		return new Promise<void>((resolve) => {
+			overwolf.social.twitter.performLogout((info) => {
 				this.twitterUserInfo = null;
 				resolve(info);
 			});
@@ -775,7 +775,7 @@ export class OverwolfService {
 	private redditUserInfo: RedditUserInfo = null;
 
 	public addRedditLoginStateChangedListener(callback) {
-		overwolf.social.reddit.onLoginStateChanged.addListener(async result => {
+		overwolf.social.reddit.onLoginStateChanged.addListener(async (result) => {
 			callback(result);
 			this.redditUserInfo = await this.getRedditUserInfo(true);
 		});
@@ -785,8 +785,8 @@ export class OverwolfService {
 		if (!forceRefresh && this.redditUserInfo && this.redditUserInfo.id) {
 			return this.redditUserInfo;
 		}
-		return new Promise<RedditUserInfo>(resolve => {
-			overwolf.social.reddit.getUserInfo(res => {
+		return new Promise<RedditUserInfo>((resolve) => {
+			overwolf.social.reddit.getUserInfo((res) => {
 				if (res.status !== 'success' || !res.userInfo) {
 					const result: RedditUserInfo = {
 						network: 'reddit',
@@ -813,7 +813,7 @@ export class OverwolfService {
 	}
 
 	public async getSubredditFlairs(subreddit: string): Promise<readonly Flair[]> {
-		return new Promise<readonly Flair[]>(resolve => {
+		return new Promise<readonly Flair[]>((resolve) => {
 			overwolf.social.reddit.getSubredditFlairs(subreddit, (res, error) => {
 				resolve(res?.flairs);
 			});
@@ -826,7 +826,7 @@ export class OverwolfService {
 		subreddit: string,
 		flair?: string,
 	): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			const shareParam = {
 				file: filePathOnDisk,
 				title: message,
@@ -844,8 +844,8 @@ export class OverwolfService {
 	}
 
 	public async redditLogout() {
-		return new Promise<void>(resolve => {
-			overwolf.social.reddit.performLogout(info => {
+		return new Promise<void>((resolve) => {
+			overwolf.social.reddit.performLogout((info) => {
 				this.redditUserInfo = null;
 				resolve(info);
 			});
@@ -853,15 +853,15 @@ export class OverwolfService {
 	}
 
 	public async listFilesInAppDirectory(appName: string): Promise<any> {
-		return new Promise<any>(resolve => {
-			overwolf.io.dir(`${overwolf.io.paths.localAppData}/overwolf/Log/Apps/${appName}`, res => {
+		return new Promise<any>((resolve) => {
+			overwolf.io.dir(`${overwolf.io.paths.localAppData}/overwolf/Log/Apps/${appName}`, (res) => {
 				resolve(res);
 			});
 		});
 	}
 
 	public async fileExists(filePathOnDisk: string): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.io.fileExists(filePathOnDisk, (res, error) => {
 				resolve(res.found);
 			});
@@ -869,7 +869,7 @@ export class OverwolfService {
 	}
 
 	public async writeFileContents(filePathOnDisk: string, content: string): Promise<string> {
-		return new Promise<string>(resolve => {
+		return new Promise<string>((resolve) => {
 			overwolf.io.writeFileContents(filePathOnDisk, content, 'UTF8', false, (res, error) => {
 				resolve(res.success ? res.content : null);
 			});
@@ -877,7 +877,7 @@ export class OverwolfService {
 	}
 
 	public async getFileContents(filePathOnDisk: string): Promise<string> {
-		return new Promise<string>(resolve => {
+		return new Promise<string>((resolve) => {
 			overwolf.io.readTextFile(filePathOnDisk, { encoding: 'UTF8' }, (res, error) => {
 				resolve(res.success ? res.content : null);
 			});
@@ -885,7 +885,7 @@ export class OverwolfService {
 	}
 
 	public async deleteFile(filePathOnDisk: string): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			overwolf.io.writeFileContents(filePathOnDisk, '', 'UTF8', false, (res, error) => {
 				resolve(res.status === 'success');
 			});
@@ -899,7 +899,7 @@ export class OverwolfService {
 	}
 
 	public async getFromClipboard(): Promise<string> {
-		return new Promise<string>(resolve => {
+		return new Promise<string>((resolve) => {
 			overwolf.utils.getFromClipboard((res, error) => {
 				resolve(res);
 			});
@@ -907,15 +907,15 @@ export class OverwolfService {
 	}
 
 	public async placeOnClipboard(value: string): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			overwolf.utils.placeOnClipboard(value);
 			resolve();
 		});
 	}
 
 	public async getMonitorsList(): Promise<any> {
-		return new Promise<any>(resolve => {
-			overwolf.utils.getMonitorsList(res => {
+		return new Promise<any>((resolve) => {
+			overwolf.utils.getMonitorsList((res) => {
 				resolve(res);
 			});
 		});

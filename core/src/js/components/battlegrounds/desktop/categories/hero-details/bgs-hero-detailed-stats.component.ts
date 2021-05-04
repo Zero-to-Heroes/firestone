@@ -121,7 +121,7 @@ export class BgsHeroDetailedStatsComponent {
 			return;
 		}
 
-		const stat = this._state.battlegrounds.stats.heroStats?.find(stat => stat.id === this._heroId);
+		const stat = this._state.battlegrounds.stats.heroStats?.find((stat) => stat.id === this._heroId);
 		if (!stat) {
 			return;
 		}

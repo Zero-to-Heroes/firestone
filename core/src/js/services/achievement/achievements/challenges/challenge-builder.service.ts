@@ -83,7 +83,7 @@ export class ChallengeBuilderService {
 	}
 
 	private buildRequirements(rawReqs: readonly RawRequirement[]): readonly Requirement[] {
-		return rawReqs.map(rawReq => {
+		return rawReqs.map((rawReq) => {
 			const req = this.buildRequirement(rawReq);
 			req['rawReq'] = rawReq; // We use this when logging errors
 			return req;

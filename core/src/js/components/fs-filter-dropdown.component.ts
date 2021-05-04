@@ -98,7 +98,7 @@ export class FsFilterDropdownComponent {
 		// console.log('build options in fs-filter', this._options);
 		const placeholder =
 			this._options && this._options.length > 0 && this.filter
-				? this._options.find(option => option.value === this.filter)?.label
+				? this._options.find((option) => option.value === this.filter)?.label
 				: this.placeholder;
 		this.placeholder = placeholder ?? this.placeholder;
 		if (!(this.cdr as ViewRef)?.destroyed) {

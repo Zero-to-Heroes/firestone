@@ -33,7 +33,7 @@ export class TriggerShowMatchStatsProcessor implements Processor {
 
 		const prefs: Preferences = await this.prefs.getPreferences();
 		this.bgsRunStats.retrieveReviewPostMatchStats(event.reviewId);
-		const selectedInfo = currentState.replays.allReplays.find(replay => replay.reviewId === event.reviewId);
+		const selectedInfo = currentState.replays.allReplays.find((replay) => replay.reviewId === event.reviewId);
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({

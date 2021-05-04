@@ -50,8 +50,8 @@ export class DeckbuildingCardAttributeReq implements Requirement {
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
 			const numberOfMatchingCards: number = cards
-				.filter(card => card[this.targetAttribute] != null)
-				.filter(card =>
+				.filter((card) => card[this.targetAttribute] != null)
+				.filter((card) =>
 					this.attributeQualifier === 'AT_LEAST'
 						? parseInt(card[this.targetAttribute]) >= this.targetAttributeValue
 						: this.attributeQualifier === 'AT_MOST'

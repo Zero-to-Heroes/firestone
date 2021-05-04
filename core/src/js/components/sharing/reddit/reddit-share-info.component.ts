@@ -77,7 +77,7 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 		this.subscription = this.form.valueChanges
 			.pipe(debounceTime(400))
 			.pipe(distinctUntilChanged())
-			.subscribe(data => {
+			.subscribe((data) => {
 				console.log('value changed', data);
 				this.onSubredditChanged(data);
 			});
@@ -116,7 +116,7 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		this.flairs = flairs.map(flair => ({
+		this.flairs = flairs.map((flair) => ({
 			label: flair.text,
 			value: flair.id,
 		}));

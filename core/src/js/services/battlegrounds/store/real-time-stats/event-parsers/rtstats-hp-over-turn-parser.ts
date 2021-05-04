@@ -20,8 +20,8 @@ export class RTStatHpOverTurnParser implements EventParser {
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const targets = Object.values(gameEvent.additionalData.targets)
-			.filter(target => this.allCards.getCard(target.TargetCardId)?.type === 'Hero')
-			.map(target => ({
+			.filter((target) => this.allCards.getCard(target.TargetCardId)?.type === 'Hero')
+			.map((target) => ({
 				hero: normalizeHeroCardId(target.TargetCardId),
 				value: target.Damage,
 			}));
@@ -40,12 +40,12 @@ export class RTStatHpOverTurnParser implements EventParser {
 				continue;
 			}
 			const currentHps = hpOverTurn[target.hero] ?? [];
-			const currentInfo = currentHps.find(info => info.turn === currentState.currentTurn) ?? {
+			const currentInfo = currentHps.find((info) => info.turn === currentState.currentTurn) ?? {
 				turn: currentState.currentTurn,
 				value: defaultStartingHp(currentState.gameType, target.hero),
 			};
 			const newHps = [
-				...currentHps.filter(info => info.turn !== currentState.currentTurn),
+				...currentHps.filter((info) => info.turn !== currentState.currentTurn),
 				{
 					turn: currentState.currentTurn,
 					value: Math.max(0, currentInfo.value - target.value),

@@ -16,9 +16,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 				Beta features are features that are functional, but either lack extensive testing or lack a final
 				design. Use them to get a sneak peak of what's to come :)
 			</div>
-			<section class="toggle-label">
-				No beta feature available for now
-			</section>
+			<section class="toggle-label">No beta feature available for now</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

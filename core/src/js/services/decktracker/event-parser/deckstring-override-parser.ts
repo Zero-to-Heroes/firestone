@@ -44,20 +44,20 @@ export class DeckstringOverrideParser implements EventParser {
 		// These are the cards that we will have to put back in the deck after the decklist
 		// has been overridden
 		const deckInfo = initialDeck.deck;
-		const cardsNotInInitialDeck = deckInfo.filter(card => card.creatorCardId);
+		const cardsNotInInitialDeck = deckInfo.filter((card) => card.creatorCardId);
 
 		// Now we do the opposite: on all the other zones, we need to find out the cards
 		// that were part of the initial deck and are not in the "deck" zone anymore
 		const cardsMovedOutOfInitialDeck = [...initialDeck.board, ...initialDeck.hand, ...initialDeck.otherZone]
-			.filter(card => card.cardId)
-			.filter(card => !card.creatorCardId);
+			.filter((card) => card.cardId)
+			.filter((card) => !card.creatorCardId);
 
 		const cardsFromDeckstring = this.deckHandler.buildDeckList(deckstring);
 
 		// Now remove the from this list the cards that were moved out of the initial deck
 		const newDeckContents = [...cardsFromDeckstring];
 		for (const movedOut of cardsMovedOutOfInitialDeck) {
-			const index = newDeckContents.map(card => card.cardId).indexOf(movedOut.cardId);
+			const index = newDeckContents.map((card) => card.cardId).indexOf(movedOut.cardId);
 			if (index !== -1) {
 				newDeckContents.splice(index, 1);
 			}

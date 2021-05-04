@@ -33,7 +33,7 @@ export class DuelsClassFilterOption implements DuelsDropdownOption {
 	private buildTopDeckClassFilterOptions(): readonly TopDeckClassFilterOption[] {
 		const options: readonly DuelsClassFilterType[] = ['all', ...(classes as DuelsClassFilterType[])];
 		return options.map(
-			option =>
+			(option) =>
 				({
 					value: option,
 					label: option === 'all' ? 'All classes' : formatClass(option),

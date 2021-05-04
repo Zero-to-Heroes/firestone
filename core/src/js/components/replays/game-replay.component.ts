@@ -122,7 +122,7 @@ export class GameReplayComponent implements OnInit {
 	}
 
 	private waitForViewerInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const viewerWait = () => {
 				if (this.initDone) {
 					resolve();

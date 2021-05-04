@@ -11,7 +11,7 @@ export class GameTypeReq implements Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for GameTypeReq', rawReq);
 		}
-		return new GameTypeReq(rawReq.values.map(gameType => parseInt(gameType)));
+		return new GameTypeReq(rawReq.values.map((gameType) => parseInt(gameType)));
 	}
 
 	reset(): void {

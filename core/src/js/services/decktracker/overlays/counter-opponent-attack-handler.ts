@@ -7,8 +7,8 @@ export class AttackOpponentCounterOverlayHandler extends AbstractOverlayHandler 
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.COUNTER_OPPONENT_ATTACK_WINDOW,
-			prefs => prefs.opponentAttackCounter,
-			state => !state.isBattlegrounds(),
+			(prefs) => prefs.opponentAttackCounter,
+			(state) => !state.isBattlegrounds(),
 			ow,
 			prefs,
 			allCards,

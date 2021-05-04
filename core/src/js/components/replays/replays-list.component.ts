@@ -133,6 +133,6 @@ export class ReplaysListComponent {
 		if (!currentReplays || currentReplays.length === 0) {
 			return 0;
 		}
-		return currentReplays.map(grouped => grouped.replays).reduce((a, b) => a.concat(b), []).length;
+		return currentReplays.map((grouped) => grouped.replays).reduce((a, b) => a.concat(b), []).length;
 	}
 }

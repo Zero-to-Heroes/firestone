@@ -88,7 +88,7 @@ export class MindVisionService {
 				this.events.broadcast(Events.MEMORY_UPDATE, changesToBroadcast);
 			};
 			plugin.onMemoryUpdate.addListener(this.memoryUpdateListener);
-			plugin.listenForUpdates(result => {
+			plugin.listenForUpdates((result) => {
 				console.log('[mind-vision] listenForUpdates callback result: ', result);
 			});
 		} catch (e) {
@@ -100,7 +100,7 @@ export class MindVisionService {
 		return new Promise<MemoryUpdate>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.getMemoryChanges(info => {
+				plugin.getMemoryChanges((info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -114,7 +114,7 @@ export class MindVisionService {
 		return new Promise<any[]>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.getCollection(collection => {
+				plugin.getCollection((collection) => {
 					resolve(collection ? JSON.parse(collection) : null);
 				});
 			} catch (e) {
@@ -128,7 +128,7 @@ export class MindVisionService {
 		return new Promise<any[]>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.getCardBacks(cardBacks => {
+				plugin.getCardBacks((cardBacks) => {
 					resolve(cardBacks ? JSON.parse(cardBacks) : null);
 				});
 			} catch (e) {
@@ -142,7 +142,7 @@ export class MindVisionService {
 		return new Promise<CoinInfo[]>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.getCoins(cardBacks => {
+				plugin.getCoins((cardBacks) => {
 					resolve(cardBacks ? JSON.parse(cardBacks) : null);
 				});
 			} catch (e) {
@@ -153,10 +153,10 @@ export class MindVisionService {
 	}
 
 	public async getMatchInfo(): Promise<any> {
-		return new Promise<any[]>(async resolve => {
+		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getMatchInfo(matchInfo => {
+				plugin.getMatchInfo((matchInfo) => {
 					resolve(matchInfo ? JSON.parse(matchInfo) : null);
 				});
 			} catch (e) {
@@ -167,10 +167,10 @@ export class MindVisionService {
 	}
 
 	public async getDuelsInfo(forceReset = false): Promise<any> {
-		return new Promise<any[]>(async resolve => {
+		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getDuelsInfo(forceReset, info => {
+				plugin.getDuelsInfo(forceReset, (info) => {
 					// console.log('[mind-vision] retrieved duels info', info);
 					resolve(info ? JSON.parse(info) : null);
 				});
@@ -182,13 +182,13 @@ export class MindVisionService {
 	}
 
 	public async getBattlegroundsInfo(forceReset = false): Promise<{ Rating: number }> {
-		return new Promise<{ Rating: number }>(async resolve => {
+		return new Promise<{ Rating: number }>(async (resolve) => {
 			if (forceReset) {
 				// console.log('forcing reset of mindvision', forceReset);
 			}
 			const plugin = await this.get();
 			try {
-				plugin.getBattlegroundsInfo(forceReset, battlegroundsInfo => {
+				plugin.getBattlegroundsInfo(forceReset, (battlegroundsInfo) => {
 					// console.log('[mind-vision] retrieved getBattlegroundsInfo', battlegroundsInfo);
 					resolve(battlegroundsInfo ? JSON.parse(battlegroundsInfo) : null);
 				});
@@ -200,10 +200,10 @@ export class MindVisionService {
 	}
 
 	public async getArenaInfo(): Promise<ArenaInfo> {
-		return new Promise<ArenaInfo>(async resolve => {
+		return new Promise<ArenaInfo>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getArenaInfo(arenaInfo => {
+				plugin.getArenaInfo((arenaInfo) => {
 					resolve(arenaInfo ? JSON.parse(arenaInfo) : null);
 				});
 			} catch (e) {
@@ -214,10 +214,10 @@ export class MindVisionService {
 	}
 
 	public async getActiveDeck(selectedDeckId: number): Promise<any> {
-		return new Promise<any[]>(async resolve => {
+		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getActiveDeck(selectedDeckId, activeDeck => {
+				plugin.getActiveDeck(selectedDeckId, (activeDeck) => {
 					resolve(activeDeck ? JSON.parse(activeDeck) : null);
 				});
 			} catch (e) {
@@ -228,10 +228,10 @@ export class MindVisionService {
 	}
 
 	public async getWhizbangDeck(deckId: number): Promise<any> {
-		return new Promise<any[]>(async resolve => {
+		return new Promise<any[]>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getWhizbangDeck(deckId, deck => {
+				plugin.getWhizbangDeck(deckId, (deck) => {
 					resolve(deck ? JSON.parse(deck) : null);
 				});
 			} catch (e) {
@@ -242,10 +242,10 @@ export class MindVisionService {
 	}
 
 	public async getRewardsTrackInfo(): Promise<RewardsTrackInfo> {
-		return new Promise<RewardsTrackInfo>(async resolve => {
+		return new Promise<RewardsTrackInfo>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getRewardsTrackInfo(info => {
+				plugin.getRewardsTrackInfo((info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -256,10 +256,10 @@ export class MindVisionService {
 	}
 
 	public async getDuelsRewardsInfo(forceReset = false): Promise<DuelsRewardsInfo> {
-		return new Promise<DuelsRewardsInfo>(async resolve => {
+		return new Promise<DuelsRewardsInfo>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getDuelsRewardsInfo(forceReset, info => {
+				plugin.getDuelsRewardsInfo(forceReset, (info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -273,7 +273,7 @@ export class MindVisionService {
 		return new Promise<InternalHsAchievementsInfo>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.getAchievementsInfo(forceReset, info => {
+				plugin.getAchievementsInfo(forceReset, (info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -287,7 +287,7 @@ export class MindVisionService {
 		return new Promise<InternalHsAchievementsInfo>(async (resolve, reject) => {
 			const plugin = await this.get();
 			try {
-				plugin.getInGameAchievementsProgressInfo(forceReset, info => {
+				plugin.getInGameAchievementsProgressInfo(forceReset, (info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -298,10 +298,10 @@ export class MindVisionService {
 	}
 
 	public async getCurrentScene(): Promise<number> {
-		return new Promise<number>(async resolve => {
+		return new Promise<number>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getCurrentScene(scene => {
+				plugin.getCurrentScene((scene) => {
 					resolve(scene);
 				});
 			} catch (e) {
@@ -312,10 +312,10 @@ export class MindVisionService {
 	}
 
 	public async getBoostersInfo(): Promise<BoostersInfo> {
-		return new Promise<BoostersInfo>(async resolve => {
+		return new Promise<BoostersInfo>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.getBoostersInfo(info => {
+				plugin.getBoostersInfo((info) => {
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -326,10 +326,10 @@ export class MindVisionService {
 	}
 
 	public async isMaybeOnDuelsRewardsScreen(): Promise<boolean> {
-		return new Promise<boolean>(async resolve => {
+		return new Promise<boolean>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.isMaybeOnDuelsRewardsScreen(result => {
+				plugin.isMaybeOnDuelsRewardsScreen((result) => {
 					resolve(result);
 				});
 			} catch (e) {
@@ -344,10 +344,10 @@ export class MindVisionService {
 	// properly populated
 	public async reset(): Promise<void> {
 		console.log('[mind-vision] calling reset');
-		return new Promise<void>(async resolve => {
+		return new Promise<void>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.reset(result => {
+				plugin.reset((result) => {
 					console.log('[mind-vision] reset done');
 					resolve();
 				});
@@ -360,10 +360,10 @@ export class MindVisionService {
 
 	public async resetListening(): Promise<void> {
 		console.log('[mind-vision] calling resetListening');
-		return new Promise<void>(async resolve => {
+		return new Promise<void>(async (resolve) => {
 			const plugin = await this.get();
 			try {
-				plugin.resetListening(result => {
+				plugin.resetListening((result) => {
 					console.log('[mind-vision] resetListening done');
 					resolve();
 				});
@@ -408,7 +408,7 @@ export class MindVisionService {
 	}
 
 	private waitForInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const dbWait = () => {
 				if (this.initialized) {
 					resolve();

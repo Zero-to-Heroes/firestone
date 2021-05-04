@@ -20,20 +20,20 @@ export class BgsChangePostMatchStatsTabsNumberParser implements EventParser {
 		event: BgsChangePostMatchStatsTabsNumberEvent,
 	): Promise<BattlegroundsState> {
 		// console.debug('updating new stats', event, currentState);
-		const stage = currentState.stages.find(stage => stage.id === 'post-match') as BgsPostMatchStage;
+		const stage = currentState.stages.find((stage) => stage.id === 'post-match') as BgsPostMatchStage;
 		const panel: BgsPostMatchStatsPanel = stage.panels.find(
-			panel => panel.id === 'bgs-post-match-stats',
+			(panel) => panel.id === 'bgs-post-match-stats',
 		) as BgsPostMatchStatsPanel;
 		await this.prefs.updateBgsNumberOfDisplayedTabs(event.tabsNumber);
 		const newPanel = panel.update({
 			numberOfDisplayedTabs: event.tabsNumber,
 		} as BgsPostMatchStatsPanel);
 		const newStage = stage.update({
-			panels: stage.panels.map(panel =>
+			panels: stage.panels.map((panel) =>
 				panel.id === 'bgs-post-match-stats' ? newPanel : panel,
 			) as readonly BgsPanel[],
 		} as BgsPostMatchStage);
-		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
+		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === newStage.id ? newStage : stage,
 		);
 		return currentState.update({

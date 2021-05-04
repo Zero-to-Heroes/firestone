@@ -38,12 +38,12 @@ export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
 	private processingQueue = new ProcessingQueue<any>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		1000,
 		'twitch-emitter',
 	);
 	private bgsProcessingQueue = new ProcessingQueue<any>(
-		eventQueue => this.processBgsQueue(eventQueue),
+		(eventQueue) => this.processBgsQueue(eventQueue),
 		1000,
 		'twitch-bgs-emitter',
 	);
@@ -308,7 +308,7 @@ export class TwitchAuthService {
 					console.error('no-format', '[twitch] Message sent to Twitch is too large');
 				}
 			},
-			error => {
+			(error) => {
 				// if (!this.hasLoggedInfoOnce) {
 				// 	const compressedMessage = deflate(JSON.stringify(newEvent), { to: 'string' });
 				// 	const noFormat = !this.hasLoggedInfoOnce ? 'no-format' : '';
@@ -322,7 +322,7 @@ export class TwitchAuthService {
 	private buildLeaderboard(state: BattlegroundsState): readonly TwitchBgsPlayer[] {
 		return [...(state.currentGame?.players || [])]
 			.sort((a, b) => a.leaderboardPlace - b.leaderboardPlace)
-			.map(player => this.buildLeaderboardPlayer(player));
+			.map((player) => this.buildLeaderboardPlayer(player));
 	}
 
 	private buildLeaderboardPlayer(player: BgsPlayer): TwitchBgsPlayer {
@@ -346,7 +346,7 @@ export class TwitchAuthService {
 	private buildLastBoard(lastKnownBoardState: BgsBoard): TwitchBgsBoard {
 		return {
 			turn: lastKnownBoardState.turn,
-			board: lastKnownBoardState.board.map(entity =>
+			board: lastKnownBoardState.board.map((entity) =>
 				this.buildSerializableEntity(entity),
 			) as readonly TwitchBgsBoardEntity[],
 		};
@@ -356,7 +356,7 @@ export class TwitchAuthService {
 		return {
 			id: entity.id,
 			cardID: entity.cardID,
-			tags: entity.tags.filter(tag => this.isSerializableTag(tag)).toJS(),
+			tags: entity.tags.filter((tag) => this.isSerializableTag(tag)).toJS(),
 		};
 	}
 
@@ -457,10 +457,10 @@ export class TwitchAuthService {
 	}
 
 	public async validateToken(accessToken: string): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `OAuth ${accessToken}`);
 			this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders }).subscribe(
-				data => {
+				(data) => {
 					console.log('[twitch-auth] validating token', data);
 					resolve(true);
 				},
@@ -473,7 +473,7 @@ export class TwitchAuthService {
 	}
 
 	private async retrieveUserName(accessToken: string): Promise<boolean> {
-		return new Promise<boolean>(resolve => {
+		return new Promise<boolean>((resolve) => {
 			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${accessToken}`);
 			this.http.get(TWITCH_USER_URL, { headers: httpHeaders }).subscribe(
 				(data: any) => {

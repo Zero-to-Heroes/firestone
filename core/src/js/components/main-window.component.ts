@@ -173,7 +173,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.messageReceivedListener = this.ow.addMessageReceivedListener(async message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();
 				const newX = message.content.x - window.width / 2;
@@ -183,7 +183,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		});
 		const prefs = await this.preferencesService.getPreferences();
 		const windowName = await this.ow.getCollectionWindowName(prefs);
-		this.stateChangedListener = this.ow.addStateChangedListener(windowName, message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
 			// console.log('received collection window message', message, this.isMaximized);
 			// If hidden, restore window to as it was
 			if (message.window_previous_state_ex === 'hidden') {
@@ -244,7 +244,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			});
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handlePreferences(event.preferences);
 		});
 		await this.handlePreferences();

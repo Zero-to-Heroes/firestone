@@ -21,7 +21,7 @@ export class CollectionBootstrapService {
 		private readonly cards: SetsService,
 		private readonly ow: OverwolfService,
 	) {
-		this.events.on(Events.START_POPULATE_COLLECTION_STATE).subscribe(event => this.initCollectionState());
+		this.events.on(Events.START_POPULATE_COLLECTION_STATE).subscribe((event) => this.initCollectionState());
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});

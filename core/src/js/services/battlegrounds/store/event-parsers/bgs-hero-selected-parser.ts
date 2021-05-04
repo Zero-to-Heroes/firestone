@@ -57,7 +57,7 @@ export class BgsHeroSelectedParser implements EventParser {
 			  } as BgsPlayer);
 		const newGame = currentState.currentGame.update({
 			players: [
-				...currentState.currentGame.players.filter(player => !player.isMainPlayer),
+				...currentState.currentGame.players.filter((player) => !player.isMainPlayer),
 				newPlayer,
 			] as readonly BgsPlayer[],
 		} as BgsGame);
@@ -81,7 +81,7 @@ export class BgsHeroSelectedParser implements EventParser {
 		currentTurn: number,
 	): readonly BgsTavernUpgrade[] {
 		const hasAlreadyRegisteredUpgrade =
-			tavernLevel != null && tavernUpgradeHistory.find(info => info.tavernTier === tavernLevel) != null;
+			tavernLevel != null && tavernUpgradeHistory.find((info) => info.tavernTier === tavernLevel) != null;
 		return hasAlreadyRegisteredUpgrade
 			? tavernUpgradeHistory
 			: // We're not absolutely sure that the turn is the right now, however this is what makes the most sense

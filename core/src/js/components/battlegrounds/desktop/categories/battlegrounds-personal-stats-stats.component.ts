@@ -255,7 +255,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 	}
 
 	private getStat(statName: string): NumberValue {
-		const stat = this._state.stats.bestBgsUserStats?.find(stat => stat.statName === statName);
+		const stat = this._state.stats.bestBgsUserStats?.find((stat) => stat.statName === statName);
 		const result = {
 			value: stat?.value || 0,
 			hero: stat?.heroCardId,

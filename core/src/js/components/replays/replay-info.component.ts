@@ -164,7 +164,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 				};
 			}
 			if (value.lootCardIds?.length) {
-				this.loots = value.lootCardIds.map(loot => ({
+				this.loots = value.lootCardIds.map((loot) => ({
 					cardId: loot,
 					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot}.jpg`,
 				}));

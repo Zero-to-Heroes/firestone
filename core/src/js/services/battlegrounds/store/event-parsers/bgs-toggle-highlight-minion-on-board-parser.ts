@@ -13,7 +13,7 @@ export class BgsToggleHighlightMinionOnBoardParser implements EventParser {
 		event: BgsToggleHighlightMinionOnBoardEvent,
 	): Promise<BattlegroundsState> {
 		const highlightedMinions: readonly string[] = currentState.highlightedMinions.includes(event.cardId)
-			? currentState.highlightedMinions.filter(cardId => cardId !== event.cardId)
+			? currentState.highlightedMinions.filter((cardId) => cardId !== event.cardId)
 			: [...currentState.highlightedMinions, event.cardId];
 		return currentState.update({
 			highlightedMinions: highlightedMinions,

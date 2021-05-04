@@ -17,7 +17,7 @@ export class AchievementsLoaderService {
 
 	public async getAchievement(achievementId: string): Promise<Achievement> {
 		await this.waitForInit();
-		return this.achievements.find(achievement => achievement.id === achievementId);
+		return this.achievements.find((achievement) => achievement.id === achievementId);
 	}
 
 	public async getAchievementsById(achievementIds: readonly string[]): Promise<readonly Achievement[]> {
@@ -25,7 +25,7 @@ export class AchievementsLoaderService {
 			return [];
 		}
 		await this.waitForInit();
-		return this.achievements.filter(achievement => achievementIds.indexOf(achievement.id) !== -1);
+		return this.achievements.filter((achievement) => achievementIds.indexOf(achievement.id) !== -1);
 	}
 
 	public async getAchievements(): Promise<readonly Achievement[]> {
@@ -44,13 +44,13 @@ export class AchievementsLoaderService {
 		console.log('[achievements-loader] Initializing achievements');
 		const rawAchievements: readonly RawAchievement[] = await this.loadAll();
 		console.log('[achievements-loader] loaded all', rawAchievements.length);
-		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
+		return new Promise<[readonly Achievement[], readonly Challenge[]]>((resolve) => {
 			this.achievements = rawAchievements
-				.filter(raw => raw)
-				.map(rawAchievement => this.wrapRawAchievement(rawAchievement));
+				.filter((raw) => raw)
+				.map((rawAchievement) => this.wrapRawAchievement(rawAchievement));
 			this.challengeModules = rawAchievements
-				.map(rawAchievement => this.challengeBuilder.buildChallenge(rawAchievement))
-				.filter(challenge => challenge);
+				.map((rawAchievement) => this.challengeBuilder.buildChallenge(rawAchievement))
+				.filter((challenge) => challenge);
 			console.log('[achievements-loader] init over', this.achievements.length, this.challengeModules.length);
 			resolve([this.achievements, this.challengeModules]);
 		});
@@ -74,7 +74,7 @@ export class AchievementsLoaderService {
 			'thijs',
 		];
 		const achievementsFromRemote = await Promise.all(
-			achievementFiles.map(fileName => this.loadAchievements(fileName)),
+			achievementFiles.map((fileName) => this.loadAchievements(fileName)),
 		);
 		const result = achievementsFromRemote.reduce((a, b) => a.concat(b), []);
 		console.log('[achievements-loader] returning full achievements', result && result.length);
@@ -82,7 +82,7 @@ export class AchievementsLoaderService {
 	}
 
 	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
-		return this.api.callGetApi(`${ACHIEVEMENTS_URL}/${fileName}.json?v=14`);
+		return this.api.callGetApi(`${ACHIEVEMENTS_URL}/${fileName}.json?v=15`);
 	}
 
 	private wrapRawAchievement(raw: RawAchievement): Achievement {
@@ -93,7 +93,7 @@ export class AchievementsLoaderService {
 	}
 
 	private waitForInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const dbWait = () => {
 				if (this.achievements && this.challengeModules) {
 					resolve();

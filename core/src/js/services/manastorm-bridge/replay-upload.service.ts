@@ -48,8 +48,9 @@ export class ReplayUploadService {
 
 		const s3 = new S3();
 		const today = new Date();
-		const replayKey = `hearthstone/replay/${today.getFullYear()}/${today.getMonth() +
-			1}/${today.getDate()}/${uuid()}.xml.zip`;
+		const replayKey = `hearthstone/replay/${today.getFullYear()}/${
+			today.getMonth() + 1
+		}/${today.getDate()}/${uuid()}.xml.zip`;
 		const params = {
 			Bucket: BUCKET,
 			Key: fileKey,

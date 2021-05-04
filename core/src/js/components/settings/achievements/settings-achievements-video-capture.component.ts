@@ -129,10 +129,10 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 		private events: Events,
 	) {
 		this.updateDefaultValues();
-		this.videoCaptureSettingsChangedListener = this.ow.addVideoCaptureSettingsChangedListener(data =>
+		this.videoCaptureSettingsChangedListener = this.ow.addVideoCaptureSettingsChangedListener((data) =>
 			this.handleVideoSettingsChange(data),
 		);
-		this.formControlSubscription = this.settingsForm.controls['videoQuality'].valueChanges.subscribe(value =>
+		this.formControlSubscription = this.settingsForm.controls['videoQuality'].valueChanges.subscribe((value) =>
 			this.changeVideoCaptureSettings(value),
 		);
 	}

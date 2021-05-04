@@ -75,7 +75,7 @@ export class RedditShareModalComponent implements AfterViewInit {
 	) {}
 
 	ngAfterViewInit() {
-		this.ow.addRedditLoginStateChangedListener(async info => {
+		this.ow.addRedditLoginStateChangedListener(async (info) => {
 			this._socialUserInfo = await this.ow.getRedditUserInfo();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

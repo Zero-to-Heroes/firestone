@@ -15,7 +15,7 @@ export class TriggerSocialNetworkLoginToggleProcessor implements Processor {
 		if (event.network === 'twitter') {
 			const twitter = currentState.socialShareUserInfo.twitter;
 			if (twitter.id) {
-				overwolf.social.twitter.performLogout(result => console.log('logged out of twitter', result));
+				overwolf.social.twitter.performLogout((result) => console.log('logged out of twitter', result));
 			} else {
 				overwolf.social.twitter.performUserLogin();
 			}

@@ -12,7 +12,7 @@ export class SelectCollectionSetProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const selectedSet: Set = currentState.binder.allSets.find(set => set.id === event.setId);
+		const selectedSet: Set = currentState.binder.allSets.find((set) => set.id === event.setId);
 		const newCollection = navigationState.navigationCollection.update({
 			currentView: 'cards',
 			menuDisplayType: 'breadcrumbs',

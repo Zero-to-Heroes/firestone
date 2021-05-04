@@ -87,7 +87,7 @@ export class BgsHeroOverviewComponent {
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
-			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
+			.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
 		this.tier = value.tier;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -103,10 +103,10 @@ export class BgsHeroOverviewComponent {
 
 		setTimeout(() => {
 			this.achievementsToDisplay = value
-				.map(ach => ach.completionSteps)
+				.map((ach) => ach.completionSteps)
 				.reduce((a, b) => a.concat(b), [])
-				.filter(step => step)
-				.map(step => ({
+				.filter((step) => step)
+				.map((step) => ({
 					completed: !!step.numberOfCompletions,
 					text: `Achievement ${!!step.numberOfCompletions ? 'completed' : 'missing'}: ${step.completedText}`,
 				}))

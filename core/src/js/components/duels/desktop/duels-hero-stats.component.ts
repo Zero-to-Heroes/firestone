@@ -101,7 +101,7 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 
 		this.stats = this._searchString
 			? this.displayedStats.map(
-					stat =>
+					(stat) =>
 						({
 							stat: stat,
 							visible: this.allCards
@@ -110,7 +110,7 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 								?.includes(this._searchString.toLowerCase()),
 						} as DuelsHeroPlayerStatContainer),
 			  )
-			: this.displayedStats.map(stat => ({
+			: this.displayedStats.map((stat) => ({
 					stat: stat,
 					visible: true,
 			  }));

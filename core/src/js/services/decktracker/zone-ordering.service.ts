@@ -21,9 +21,9 @@ export class ZoneOrderingService {
 	}
 
 	private orderZone(zone: readonly DeckCard[], stateFromTracker: any[]): readonly DeckCard[] {
-		const trackerEntityIds = stateFromTracker.map(entity => entity.entityId);
+		const trackerEntityIds = stateFromTracker.map((entity) => entity.entityId);
 		// const trackerCardIds = stateFromTracker.map(entity => entity.cardId);
-		if (zone.some(card => !card.entityId)) {
+		if (zone.some((card) => !card.entityId)) {
 			console.error('Trying to order zone without entityId', zone);
 		}
 		// The tracker state is already correclty ordered

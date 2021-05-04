@@ -7,8 +7,8 @@ export class WatchpostOpponentCounterOverlayHandler extends AbstractOverlayHandl
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
 			OverwolfService.COUNTER_OPPONENT_WATCHPOST_WINDOW,
-			prefs => prefs.opponentWatchpostCounter,
-			state => state?.opponentDeck?.containsWatchpost(allCards, true) && !state.isBattlegrounds(),
+			(prefs) => prefs.opponentWatchpostCounter,
+			(state) => state?.opponentDeck?.containsWatchpost(allCards, true) && !state.isBattlegrounds(),
 			ow,
 			prefs,
 			allCards,

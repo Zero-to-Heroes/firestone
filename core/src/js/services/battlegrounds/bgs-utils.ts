@@ -36,6 +36,10 @@ export const getTribeIcon = (tribe: string | Race): string => {
 		case Race.ELEMENTAL:
 			referenceCardId = CardIds.NonCollectible.Neutral.LilRag;
 			break;
+		case 'Quilboar':
+		case Race.QUILBOAR:
+			referenceCardId = CardIds.NonCollectible.Neutral.Charlga;
+			break;
 		case 'All':
 		case Race.ALL:
 			referenceCardId = CardIds.NonCollectible.Neutral.Amalgadon;
@@ -177,6 +181,12 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.SproutItOutTavernBrawl;
 		case CardIds.NonCollectible.Neutral.OverlordSaurfang:
 			return CardIds.NonCollectible.Warrior.OverlordSaurfang_ForTheHorde2;
+		case CardIds.NonCollectible.Neutral.DeathSpeakerBlackthorn:
+			return CardIds.NonCollectible.Neutral.DeathSpeakerBlackthorn_Bloodbound;
+		case CardIds.NonCollectible.Neutral.Voljin:
+			return CardIds.NonCollectible.Neutral.Voljin_SpiritSwap1;
+		case CardIds.NonCollectible.Neutral.Xyrella:
+			return CardIds.NonCollectible.Priest.Xyrella_SeeTheLight;
 		case '':
 			return null; // new heroes
 	}
@@ -234,10 +244,10 @@ export const getAllCardsInGame = (
 ): readonly ReferenceCard[] => {
 	return allCards
 		.getCards()
-		.filter(card => card.techLevel)
-		.filter(card => card.set !== 'Vanilla')
-		.filter(card => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
-		.filter(card => !card.id.startsWith('TB_BaconUps')); // Ignore golden
+		.filter((card) => card.techLevel)
+		.filter((card) => card.set !== 'Vanilla')
+		.filter((card) => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
+		.filter((card) => !card.id.startsWith('TB_BaconUps')); // Ignore golden
 };
 
 const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
@@ -306,7 +316,7 @@ export const getAchievementsForHero = (
 	}
 
 	const searchName = `as ${heroName}`;
-	return heroAchievements.filter(ach => ach.text.replace(/,/g, '').includes(searchName));
+	return heroAchievements.filter((ach) => ach.text.replace(/,/g, '').includes(searchName));
 };
 
 // Because inconsistencies
@@ -372,5 +382,5 @@ const hasMinionOnBoard = (boardInfo: BgsBoardInfo, cardId: string): boolean => {
 		return false;
 	}
 
-	return boardInfo.board.find(entity => entity.cardId === cardId) != null;
+	return boardInfo.board.find((entity) => entity.cardId === cardId) != null;
 };

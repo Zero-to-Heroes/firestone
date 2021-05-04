@@ -20,14 +20,14 @@ export class BgsRealTimeStatsUpdatedParser implements EventParser {
 		event: BgsRealTimeStatsUpdatedEvent,
 	): Promise<BattlegroundsState> {
 		const postMatchStage: BgsPostMatchStage = currentState.stages.find(
-			stage => stage.id === 'post-match',
+			(stage) => stage.id === 'post-match',
 		) as BgsPostMatchStage;
-		const panels: readonly BgsPanel[] = postMatchStage.panels.map(panel =>
+		const panels: readonly BgsPanel[] = postMatchStage.panels.map((panel) =>
 			panel.id === 'bgs-post-match-stats'
 				? this.updatePostMatch(panel, currentState, event.realTimeStatsState)
 				: panel,
 		);
-		const stages: readonly BgsStage[] = currentState.stages.map(stage =>
+		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === postMatchStage.id
 				? postMatchStage.update({
 						panels: panels,

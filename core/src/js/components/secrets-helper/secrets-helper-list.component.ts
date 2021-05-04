@@ -75,7 +75,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 
 	ngAfterViewInit() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.refreshScroll();
 		});
 	}
@@ -123,14 +123,16 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 			setTimeout(() => this.updateCards(), 200);
 			return;
 		}
-		const allOptionsList = this._secrets.map(secret => secret.allPossibleOptions).reduce((a, b) => a.concat(b), []);
+		const allOptionsList = this._secrets
+			.map((secret) => secret.allPossibleOptions)
+			.reduce((a, b) => a.concat(b), []);
 		// console.log('allOptions', allOptionsList);
 		const optionsGroupedByCard = this.groupBy(allOptionsList, (secret: SecretOption) => secret.cardId);
 		// console.log('grouped', optionsGroupedByCard);
 		const reducedOptions: readonly DeckCard[] = [...optionsGroupedByCard.values()]
-			.filter(options => options && options.length > 0)
+			.filter((options) => options && options.length > 0)
 			.map((options, index) => {
-				const validOption = options.some(option => option.isValidOption);
+				const validOption = options.some((option) => option.isValidOption);
 				const refOption = options[0].update({
 					isValidOption: validOption,
 				} as SecretOption);
@@ -147,8 +149,8 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 				}
 				return a.index - b.index;
 			})
-			.map(refOption => refOption.data)
-			.map(refOption => {
+			.map((refOption) => refOption.data)
+			.map((refOption) => {
 				const dbCard = this.allCards.getCard(refOption.cardId);
 				return VisualDeckCard.create({
 					cardId: refOption.cardId,
@@ -181,7 +183,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 
 	private groupBy(list, keyGetter): Map<string, SecretOption[]> {
 		const map = new Map();
-		list.forEach(item => {
+		list.forEach((item) => {
 			const key = keyGetter(item);
 			const collection = map.get(key);
 			if (!collection) {

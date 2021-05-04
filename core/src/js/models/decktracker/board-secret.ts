@@ -10,7 +10,7 @@ export class BoardSecret {
 		return Object.assign(new BoardSecret(), {
 			entityId: entityId,
 			cardId: cardId,
-			allPossibleOptions: (options ?? []).map(option => SecretOption.create(option)) as readonly SecretOption[],
+			allPossibleOptions: (options ?? []).map((option) => SecretOption.create(option)) as readonly SecretOption[],
 		} as BoardSecret);
 	}
 

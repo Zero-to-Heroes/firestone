@@ -17,9 +17,9 @@ export class RTStatsBgsRerollsParser implements EventParser {
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
 		const rerollsThisTurn =
-			currentState.rerollsOverTurn.find(info => info.turn === currentState.currentTurn)?.value ?? 0;
+			currentState.rerollsOverTurn.find((info) => info.turn === currentState.currentTurn)?.value ?? 0;
 		const newRerolls: readonly NumericTurnInfo[] = [
-			...currentState.rerollsOverTurn.filter(info => info.turn !== currentState.currentTurn),
+			...currentState.rerollsOverTurn.filter((info) => info.turn !== currentState.currentTurn),
 			{
 				turn: currentState.currentTurn,
 				value: rerollsThisTurn + 1,

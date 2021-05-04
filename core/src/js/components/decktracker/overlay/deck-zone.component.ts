@@ -138,14 +138,14 @@ export class DeckZoneComponent implements AfterViewInit {
 		)(this._zone.cards);
 		// console.log('grouped', grouped);
 		this.cards = Object.keys(grouped)
-			.map(groupingKey => {
+			.map((groupingKey) => {
 				const cards = grouped[groupingKey];
 				const creatorCardIds: readonly string[] = [
 					...new Set(
 						cards
-							.map(card => card.creatorCardIds)
+							.map((card) => card.creatorCardIds)
 							.reduce((a, b) => a.concat(b), [])
-							.filter(creator => creator),
+							.filter((creator) => creator),
 					),
 				];
 				// console.log('creator card ids', creatorCardIds, cards);
@@ -173,7 +173,7 @@ export class DeckZoneComponent implements AfterViewInit {
 
 		const result = {};
 		for (const card of cards) {
-			const cardInCollection = this._collection.find(c => c.id === card.cardId);
+			const cardInCollection = this._collection.find((c) => c.id === card.cardId);
 			result[card.cardId] = cardInCollection?.getTotalOwned() ?? 0;
 		}
 		return result;

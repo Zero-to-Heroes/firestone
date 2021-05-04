@@ -142,8 +142,8 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 					return;
 				}
 				const runMatches: readonly GameStat[] = (this.currentRun.steps ?? [])
-					.filter(step => (step as GameStat).playerDecklist)
-					.map(step => step as GameStat);
+					.filter((step) => (step as GameStat).playerDecklist)
+					.map((step) => step as GameStat);
 				this.decklist = runMatches.length > 0 ? runMatches[runMatches.length - 1].playerDecklist : null;
 				return;
 		}
@@ -162,7 +162,7 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 		this.deckDecklist = this.deck.initialDeckList || this.deck.runs[0].initialDeckList;
 		this.currentDeck = 'initial';
 		this.deckName = this.deck.deckName;
-		this.collection = this._state.binder.allSets.map(set => set.allCards).reduce((a, b) => a.concat(b), []);
+		this.collection = this._state.binder.allSets.map((set) => set.allCards).reduce((a, b) => a.concat(b), []);
 
 		this.expandedRunIds = this._navigation.expandedRunIds;
 		this.currentRun = this.expandedRunIds?.length >= 1 ? this.deck.runs[0] : null;
@@ -178,20 +178,20 @@ export class DuelsPersonalDeckDetailsComponent implements AfterViewInit {
 			this.isPersonalDeck = true;
 			this.run = null;
 			return this._state.duels.playerStats.personalDeckStats.find(
-				deck => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
+				(deck) => deck.initialDeckList === this._navigation.selectedPersonalDeckstring,
 			);
 		}
 		if (this._navigation.selectedDeckId) {
 			const deckStat = this._state.duels.playerStats.deckStats
-				.map(grouped => grouped.decks)
+				.map((grouped) => grouped.decks)
 				.reduce((a, b) => a.concat(b), [])
-				.find(deck => deck?.id === this._navigation.selectedDeckId);
+				.find((deck) => deck?.id === this._navigation.selectedDeckId);
 			if (!deckStat) {
 				console.error('[duels-personal-deck-details] could not find deckstat', this._navigation.selectedDeckId);
 				return null;
 			}
 			const additionalStat = (this._state.duels.additionalDeckDetails ?? []).find(
-				stat => stat.id === deckStat.id,
+				(stat) => stat.id === deckStat.id,
 			);
 			this.isPersonalDeck = false;
 			this.run = {

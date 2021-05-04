@@ -36,18 +36,18 @@ export class BgsGame {
 	}
 
 	public updatePlayer(newPlayer: BgsPlayer): BgsGame {
-		const newPlayers: readonly BgsPlayer[] = this.players.map(player =>
+		const newPlayers: readonly BgsPlayer[] = this.players.map((player) =>
 			normalizeHeroCardId(player.cardId) === normalizeHeroCardId(newPlayer.cardId) ? newPlayer : player,
 		);
 		return this.update({ players: newPlayers } as BgsGame);
 	}
 
 	public getMainPlayer(): BgsPlayer {
-		const mainPlayer = this.players.find(player => player.isMainPlayer);
+		const mainPlayer = this.players.find((player) => player.isMainPlayer);
 		if (!mainPlayer) {
 			console.warn(
 				'could not find main player',
-				this.players.map(player => ({
+				this.players.map((player) => ({
 					cardId: player.cardId,
 					isMainPlayer: player.isMainPlayer,
 					name: player.name,
@@ -56,7 +56,7 @@ export class BgsGame {
 			if (this.players.length === 8) {
 				console.error(
 					'Could not find main player',
-					this.players.map(player => ({
+					this.players.map((player) => ({
 						cardId: player.cardId,
 						isMainPlayer: player.isMainPlayer,
 						name: player.name,

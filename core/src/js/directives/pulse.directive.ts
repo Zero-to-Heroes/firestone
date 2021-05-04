@@ -125,10 +125,7 @@ export class PulseDirective {
 	}
 
 	private buildRgbValueToUse(): string {
-		const hexValue = window
-			.getComputedStyle(this.el.nativeElement)
-			.getPropertyValue('--pulse-color')
-			.trim();
+		const hexValue = window.getComputedStyle(this.el.nativeElement).getPropertyValue('--pulse-color').trim();
 		const rgb = this.hexToRgb(hexValue);
 		if (rgb) {
 			return rgb.r + ', ' + rgb.g + ', ' + rgb.b;
@@ -139,7 +136,7 @@ export class PulseDirective {
 	private hexToRgb(hex) {
 		// Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
 		const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-		hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+		hex = hex.replace(shorthandRegex, function (m, r, g, b) {
 			return r + r + g + g + b + b;
 		});
 

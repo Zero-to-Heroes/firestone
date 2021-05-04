@@ -24,7 +24,7 @@ export class GameEvents {
 	// private hasSentToS3 = false;
 
 	private processingQueue = new ProcessingQueue<string>(
-		eventQueue => this.processQueue(eventQueue),
+		(eventQueue) => this.processQueue(eventQueue),
 		500,
 		'game-events',
 	);
@@ -58,7 +58,7 @@ export class GameEvents {
 				// 	setTimeout(() => this.uploadLogsAndSendException(first, second), Math.random() * 10000);
 				// }
 			});
-			this.plugin.onGameEvent.addListener(gameEvent => {
+			this.plugin.onGameEvent.addListener((gameEvent) => {
 				this.dispatchGameEvent(JSON.parse(gameEvent));
 			});
 			this.plugin.initRealtimeLogConversion(() => {
@@ -67,7 +67,7 @@ export class GameEvents {
 		}
 		// TODO: progressively deprecate this, as the GEP doesn't fire events as well as
 		// mind vision
-		this.events.on(Events.SCENE_CHANGED).subscribe(event =>
+		this.events.on(Events.SCENE_CHANGED).subscribe((event) =>
 			this.gameEventsEmitter.allEvents.next(
 				Object.assign(new GameEvent(), {
 					type: GameEvent.SCENE_CHANGED,
@@ -75,7 +75,7 @@ export class GameEvents {
 				} as GameEvent),
 			),
 		);
-		this.events.on(Events.MEMORY_UPDATE).subscribe(event => {
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 			const changes: MemoryUpdate = event.data[0];
 			if (changes.CurrentScene) {
 				try {
@@ -90,7 +90,7 @@ export class GameEvents {
 				}
 			}
 		});
-		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
+		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			this.gameEventsEmitter.allEvents.next(
 				Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_STATS_UPDATED,
@@ -98,7 +98,7 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
-		this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async event => {
+		this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async (event) => {
 			const prefs = await this.prefs.getPreferences();
 			// Don't send the global stats in this case
 			if (process.env.NODE_ENV !== 'production' && prefs.resetAchievementsOnAppStart) {
@@ -125,7 +125,7 @@ export class GameEvents {
 			await this.triggerCatchUp();
 			this.shouldTriggerCatchUp = false;
 		}
-		if (eventQueue.some(data => data.indexOf('CREATE_GAME') !== -1)) {
+		if (eventQueue.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
 		if (!this.spectating) {
@@ -136,7 +136,7 @@ export class GameEvents {
 	}
 
 	private async processLogs(eventQueue: readonly string[]): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			// console.log('calling real time processing', eventQueue);
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve();

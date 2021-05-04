@@ -164,7 +164,7 @@ export class RewardMonitorService {
 	}
 
 	public async getXpForGameInfo(): Promise<XpForGameInfo> {
-		return new Promise<XpForGameInfo>(async resolve => {
+		return new Promise<XpForGameInfo>(async (resolve) => {
 			let maxLoops = 30;
 			while (this.xpForGameInfo == null && maxLoops >= 0) {
 				await sleep(100);
@@ -179,7 +179,7 @@ export class RewardMonitorService {
 	}
 
 	private init() {
-		this.events.on(Events.MEMORY_UPDATE).subscribe(async data => {
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			const changes: MemoryUpdate = data.data[0];
 			if (changes?.XpChanges?.length) {
 				console.log('[rewards-monitor] received xp changes', changes.XpChanges);

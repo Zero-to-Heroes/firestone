@@ -133,7 +133,7 @@ export class DeckListByZoneComponent {
 			// console.log('zones', zones, otherZone);
 		}
 		// Otherwise, we add all the dynamic zones
-		this._deckState.dynamicZones.forEach(zone => {
+		this._deckState.dynamicZones.forEach((zone) => {
 			zones.push(this.buildDynamicZone(zone, null));
 		});
 		this.zones = zones as readonly DeckZone[];
@@ -146,7 +146,7 @@ export class DeckListByZoneComponent {
 		return {
 			id: zone.id,
 			name: zone.name,
-			cards: zone.cards.map(card =>
+			cards: zone.cards.map((card) =>
 				Object.assign(new VisualDeckCard(), card, {
 					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
 					lastAffectedByCardIds: (card.lastAffectedByCardId
@@ -170,7 +170,7 @@ export class DeckListByZoneComponent {
 	): DeckZone {
 		// console.log('building zone for', id, name, cards);
 		const cardsInZone = cards
-			.map(card =>
+			.map((card) =>
 				Object.assign(new VisualDeckCard(), card, {
 					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
 					lastAffectedByCardIds: (card.lastAffectedByCardId
@@ -179,7 +179,7 @@ export class DeckListByZoneComponent {
 					highlight: highlight,
 				} as VisualDeckCard),
 			)
-			.filter(card => !filterFunction || filterFunction(card));
+			.filter((card) => !filterFunction || filterFunction(card));
 		return {
 			id: id,
 			name: name,

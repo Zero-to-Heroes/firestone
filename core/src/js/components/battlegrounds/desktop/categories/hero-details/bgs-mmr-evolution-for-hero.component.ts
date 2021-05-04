@@ -193,9 +193,9 @@ export class BgsMmrEvolutionForHeroComponent implements AfterViewInit {
 			return;
 		}
 		const mmrDeltas = this._state.matchStats
-			.filter(match => match.playerCardId === this._category.heroId)
-			.filter(match => match.playerRank && match.newPlayerRank)
-			.map(match => parseInt(match.newPlayerRank) - parseInt(match.playerRank))
+			.filter((match) => match.playerCardId === this._category.heroId)
+			.filter((match) => match.playerRank && match.newPlayerRank)
+			.map((match) => parseInt(match.newPlayerRank) - parseInt(match.playerRank))
 			.reverse();
 		if (mmrDeltas.length === 0) {
 			this.lineChartData = null;
@@ -213,7 +213,7 @@ export class BgsMmrEvolutionForHeroComponent implements AfterViewInit {
 			},
 		];
 		this.lineChartLabels = Array.from(Array(finalResult.length), (_, i) => i + 1).map(
-			matchIndex => '' + matchIndex,
+			(matchIndex) => '' + matchIndex,
 		);
 
 		if (!this.chartHeight) {

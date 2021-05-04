@@ -38,9 +38,9 @@ export class DeckListComponent {
 
 	@Input() set cards(value: readonly string[]) {
 		const decklist: readonly DeckCard[] = value
-			.map(cardId => this.allCards.getCard(cardId))
-			.filter(card => card)
-			.map(card => {
+			.map((cardId) => this.allCards.getCard(cardId))
+			.filter((card) => card)
+			.map((card) => {
 				return DeckCard.create({
 					cardId: card.id,
 					cardName: card.name,

@@ -23,7 +23,7 @@ export class RTStatsBgsHeroSelectedParser implements EventParser {
 		const hpOverTurn = currentState.hpOverTurn;
 		const existingData = hpOverTurn[heroCardId] ?? [];
 		const newData = [
-			...existingData.filter(data => data.turn !== turn),
+			...existingData.filter((data) => data.turn !== turn),
 			{
 				turn: turn,
 				value:

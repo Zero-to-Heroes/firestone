@@ -11,9 +11,9 @@ export class GetCardBacksOperation extends MindVisionOperationFacade<readonly Ca
 			'getCardBacks',
 			() => mindVision.getCardBacks(),
 			(cardBacks: any[]) => cardBacks.length === 0,
-			cardBacks =>
+			(cardBacks) =>
 				cardBacks.map(
-					cardBack =>
+					(cardBack) =>
 						({
 							id: cardBack.CardBackId,
 							owned: true,

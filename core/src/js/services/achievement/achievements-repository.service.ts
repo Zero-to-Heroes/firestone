@@ -69,7 +69,7 @@ export class AchievementsRepository {
 		const mergedAchievements: readonly Achievement[] = !completedAchievements
 			? allAchievements
 			: allAchievements.map((ref: Achievement) => {
-					const completedAchievement = completedAchievements.filter(compl => compl.id === ref.id).pop();
+					const completedAchievement = completedAchievements.filter((compl) => compl.id === ref.id).pop();
 					const numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
 					return Object.assign(new Achievement(), ref, {
 						numberOfCompletions: numberOfCompletions,
@@ -77,9 +77,9 @@ export class AchievementsRepository {
 			  });
 		// console.log('[perf] getting full achievements');
 		const fullAchievements: VisualAchievement[] = mergedAchievements
-			.filter(achievement => this.isAchievementVisualRoot(achievement))
+			.filter((achievement) => this.isAchievementVisualRoot(achievement))
 			.map((achievement, index) => this.convertToVisual(achievement, index, mergedAchievements))
-			.map(obj => obj.achievement)
+			.map((obj) => obj.achievement)
 			.sort((a, b) => {
 				if (a.id < b.id) {
 					return -1;
@@ -99,7 +99,7 @@ export class AchievementsRepository {
 		allAchievements: readonly Achievement[],
 	): IndexedVisualAchievement {
 		const achievementForCompletionSteps: Achievement[] = allAchievements
-			.filter(achv => achv.type === achievement.type)
+			.filter((achv) => achv.type === achievement.type)
 			.sort((a, b) => a.priority - b.priority);
 		let text = achievement.text || achievement.emptyText;
 		const [completionSteps, textFromStep] = AchievementsRepository.buildCompletionSteps(
@@ -128,15 +128,15 @@ export class AchievementsRepository {
 		const categoryConfiguration: AchievementConfiguration = await this.loadConfiguration();
 
 		return categoryConfiguration.categories
-			.filter(cat => cat)
-			.map(category => this.buildCategory(category, achievements));
+			.filter((cat) => cat)
+			.map((category) => this.buildCategory(category, achievements));
 	}
 
 	private async loadConfiguration(): Promise<AchievementConfiguration> {
 		const config: any = await this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/_configuration.json?v=9`);
 		const fileNames: readonly string[] = config?.categories ?? [];
 		const categories: readonly AchievementCategoryConfiguration[] = (await Promise.all(
-			fileNames.map(fileName => this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=15`)),
+			fileNames.map((fileName) => this.api.callGetApi(`${CATEGORIES_CONFIG_URL}/${fileName}.json?v=15`)),
 		)) as any;
 		return {
 			categories: categories,
@@ -154,8 +154,9 @@ export class AchievementsRepository {
 			achievements: this.buildAchievements(category.achievementTypes, achievements),
 			categories:
 				(category.categories
-					?.filter(cat => cat)
-					?.map(cat => this.buildCategory(cat, achievements)) as readonly VisualAchievementCategory[]) || [],
+					?.filter((cat) => cat)
+					?.map((cat) => this.buildCategory(cat, achievements)) as readonly VisualAchievementCategory[]) ||
+				[],
 		} as VisualAchievementCategory);
 	}
 
@@ -166,7 +167,7 @@ export class AchievementsRepository {
 		if (!achievementTypes) {
 			return [];
 		}
-		return achievements.filter(ach => achievementTypes.includes(ach.type));
+		return achievements.filter((ach) => achievementTypes.includes(ach.type));
 	}
 
 	public static buildCompletionSteps(
@@ -176,7 +177,7 @@ export class AchievementsRepository {
 	): [readonly CompletionStep[], string] {
 		const areProgressionSteps =
 			achievementForCompletionSteps
-				.map(achv => achv.priority)
+				.map((achv) => achv.priority)
 				.filter((value, index, self) => self.indexOf(value) === index).length !== 1;
 		// console.log('[completion-steps] areProgressionSteps', areProgressionSteps);
 		const invertedCompletionSteps = [];
@@ -217,7 +218,7 @@ export class AchievementsRepository {
 	}
 
 	private waitForInit(): Promise<void> {
-		return new Promise<void>(resolve => {
+		return new Promise<void>((resolve) => {
 			const dbWait = () => {
 				if (this.categories) {
 					resolve();

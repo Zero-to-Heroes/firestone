@@ -69,7 +69,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnMinionPlay.filter(
-			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
+			(secret) => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
