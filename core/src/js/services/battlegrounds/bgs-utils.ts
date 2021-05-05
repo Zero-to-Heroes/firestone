@@ -290,6 +290,9 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.NonCollectible.Neutral.TheTideRazor:
 		case CardIds.NonCollectible.Neutral.TheTideRazorTavernBrawl:
 			return Race.PIRATE;
+		case CardIds.NonCollectible.Neutral.AgamagganTheGreatBoar:
+		case CardIds.NonCollectible.Neutral.AgamaggantheGreatBoar_AgamagganTheGreatBoar:
+			return Race.QUILBOAR;
 		default:
 			return getEffectiveTribeEnum(card);
 	}
