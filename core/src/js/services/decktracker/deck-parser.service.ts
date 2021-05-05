@@ -49,6 +49,7 @@ export class DeckParserService {
 	private selectedDeckId: number;
 	private currentGameType: GameType;
 	private currentScenarioId: number;
+	private currentNonGamePlayScene: SceneMode;
 
 	private deckTemplates: readonly DeckInfoFromMemory[];
 
@@ -102,9 +103,13 @@ export class DeckParserService {
 				console.log('[deck-parser] resetting', changes.CurrentScene);
 				this.selectedDeckId = null;
 			}
-			// else {
-			// 	this.selectedDeckId = null;
-			// }
+			if (changes.CurrentScene) {
+				console.log('[deck-parser] new scene', changes.CurrentScene);
+				this.currentNonGamePlayScene =
+					!changes.CurrentScene || changes.CurrentScene === SceneMode.GAMEPLAY
+						? this.currentNonGamePlayScene
+						: changes.CurrentScene;
+			}
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
 		this.deckTemplates = (templatesFromRemote ?? [])
@@ -117,6 +122,9 @@ export class DeckParserService {
 					} as DeckInfoFromMemory),
 			);
 		console.debug('[deck-parser] loaded deck templates', this.deckTemplates?.length);
+		this.currentNonGamePlayScene =
+			this.currentNonGamePlayScene ?? (await this.memory.getCurrentSceneFromMindVision());
+		console.log('[deck-parser] initial scene', this.currentNonGamePlayScene);
 	}
 
 	public async queueingIntoMatch(logLine: string) {
@@ -138,26 +146,24 @@ export class DeckParserService {
 			// We get this as soon as possible, since once the player has moved out from the
 			// dekc selection screen the info becomes unavailable
 			console.log('[deck-parser] reading deck from memory');
-			const [deckFromMemory, currentScene] = await Promise.all([
-				this.memory.getActiveDeck(this.selectedDeckId, 1),
-				this.memory.getCurrentSceneFromMindVision(),
-			]);
-			if (currentScene === SceneMode.BACON) {
+			const [deckFromMemory] = await Promise.all([this.memory.getActiveDeck(this.selectedDeckId, 1)]);
+			if (this.currentNonGamePlayScene === SceneMode.BACON) {
 				console.debug('BACON scene, returning');
 				return;
 			}
 
-			console.log('[deck-parser] deck from memory', deckFromMemory, currentScene);
+			console.log('[deck-parser] deck from memory', deckFromMemory, this.currentNonGamePlayScene);
 			// Don't refresh the deck when leaving the match
 			// However scene_gameplay is also the current scene when selecting a friendly deck?
-			if (currentScene === SceneMode.GAMEPLAY) {
+			if (!this.currentNonGamePlayScene || this.currentNonGamePlayScene === SceneMode.GAMEPLAY) {
 				return;
 			}
 
-			console.log('[deck-parser] getting active deck from going into queue', currentScene);
+			console.log('[deck-parser] getting active deck from going into queue', this.currentNonGamePlayScene);
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
-			const activeDeck = currentScene === SceneMode.PVP_DUNGEON_RUN ? await this.getDuelsInfo() : deckFromMemory;
-			console.log('[deck-parser] active deck after queue', activeDeck, currentScene);
+			const activeDeck =
+				this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? await this.getDuelsInfo() : deckFromMemory;
+			console.log('[deck-parser] active deck after queue', activeDeck, this.currentNonGamePlayScene);
 			if (!activeDeck) {
 				console.warn('[deck-parser] could not read any deck from memory');
 				return;
@@ -303,32 +309,43 @@ export class DeckParserService {
 			.split('\n')
 			.filter((line) => line && line.length > 0)
 			.map((line) => line.trim());
-		console.debug('[deck-parser] reading deck contents', lines);
+		// console.debug('[deck-parser] reading deck contents', lines);
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
 			const isLastSectionDeckSelectLine =
 				lines[lines.length - 4].indexOf('Finding Game With Hero:') !== -1 ||
 				lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
-				lines[lines.length - 4].indexOf('Duels Deck') !== -1 ||
-				lines[lines.length - 3].indexOf('Duels Deck') !== -1;
+				(await this.isDuelsDeck(lines[lines.length - 4])) ||
+				(await this.isDuelsDeck(lines[lines.length - 3]));
 			if (!isLastSectionDeckSelectLine) {
 				console.log('[deck-parser] not a deck selection', [...lines].reverse().slice(0, 4).join(','));
 				return;
 			}
 			// deck name
 			this.parseActiveDeck(
-				lines[lines.length - 4].indexOf('Duels Deck') !== -1
-					? lines[lines.length - 4]
-					: lines[lines.length - 3],
+				// lines[lines.length - 4].indexOf('Duels Deck') !== -1
+				(await this.isDuelsDeck(lines[lines.length - 4])) ? lines[lines.length - 4] : lines[lines.length - 3],
 			);
 			// deckstring
 			this.parseActiveDeck(
-				lines[lines.length - 4].indexOf('Duels Deck') !== -1
-					? lines[lines.length - 2]
-					: lines[lines.length - 1],
+				(await this.isDuelsDeck(lines[lines.length - 4])) ? lines[lines.length - 2] : lines[lines.length - 1],
 			);
 			console.log('[deck-parser] finished reading previous deck from logs');
 		}
+	}
+
+	private async isDuelsDeck(logLine: string): Promise<boolean> {
+		if (!logLine?.length) {
+			return false;
+		}
+		// The "Duels deck" name in fact only appears in English.
+		// But we at least check that we have a deck name...
+		if (!logLine.includes('###')) {
+			return false;
+		}
+		// ...and that we are on the Duels screen
+		console.debug('[deck-parser] current scene', this.currentNonGamePlayScene);
+		return this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN;
 	}
 
 	private explodeDecklist(initialDecklist: readonly number[]): any[] {
