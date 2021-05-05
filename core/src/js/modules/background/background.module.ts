@@ -270,6 +270,7 @@ import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { OutOfCardsService } from '../../services/mainwindow/out-of-cards.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { CollectionBootstrapService } from '../../services/mainwindow/store/collection-bootstrap.service';
+import { AchievementUpdateHelper } from '../../services/mainwindow/store/helper/achievement-update-helper';
 import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from '../../services/mainwindow/store/store-bootstrap.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
@@ -348,6 +349,7 @@ const components = [
 	OutOfCardsCallbackComponent,
 	SecretsHelperComponent,
 	TwitchAuthCallbackComponent,
+	SettingsComponent,
 ];
 
 @NgModule({
@@ -528,7 +530,6 @@ const components = [
 		FtueComponent,
 		NewVersionNotificationComponent,
 
-		SettingsComponent,
 		SettingsAppSelectionComponent,
 		SettingsAdvancedToggleComponent,
 
@@ -606,6 +607,7 @@ const components = [
 		AchievementsNotificationService,
 		RemoteAchievementsService,
 		AchievementsManager,
+		AchievementUpdateHelper,
 
 		DecktrackerStateLoaderService,
 		DecksStateBuilderService,

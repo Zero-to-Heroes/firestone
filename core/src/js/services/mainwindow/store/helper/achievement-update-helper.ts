@@ -1,7 +1,9 @@
+import { Injectable } from '@angular/core';
 import { AchievementHistory } from '../../../../models/achievement/achievement-history';
 import { AchievementHistoryStorageService } from '../../../achievement/achievement-history-storage.service';
 import { AchievementsLoaderService } from '../../../achievement/data/achievements-loader.service';
 
+@Injectable()
 export class AchievementUpdateHelper {
 	constructor(
 		private readonly achievementHistoryStorage: AchievementHistoryStorageService,

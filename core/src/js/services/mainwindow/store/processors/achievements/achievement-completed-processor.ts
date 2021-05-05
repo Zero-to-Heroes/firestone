@@ -3,17 +3,11 @@ import { AchievementsState } from '../../../../../models/mainwindow/achievements
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { AchievementHistoryStorageService } from '../../../../achievement/achievement-history-storage.service';
-import { AchievementsLoaderService } from '../../../../achievement/data/achievements-loader.service';
 import { AchievementCompletedEvent } from '../../events/achievements/achievement-completed-event';
-import { AchievementUpdateHelper } from '../../helper/achievement-update-helper';
 import { Processor } from '../processor';
 
 export class AchievementCompletedProcessor implements Processor {
-	constructor(
-		private historyStorage: AchievementHistoryStorageService,
-		private achievementLoader: AchievementsLoaderService,
-		private helper: AchievementUpdateHelper,
-	) {}
+	constructor(private historyStorage: AchievementHistoryStorageService) {}
 
 	public async process(
 		event: AchievementCompletedEvent,

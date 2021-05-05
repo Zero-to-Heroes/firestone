@@ -115,7 +115,6 @@ import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-soc
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StoreInitEvent } from './events/store-init-event';
-import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
@@ -394,10 +393,6 @@ export class MainWindowStoreService {
 	}
 
 	private buildProcessors(): Map<string, Processor> {
-		const achievementUpdateHelper = new AchievementUpdateHelper(
-			this.achievementHistoryStorage,
-			this.achievementsLoader,
-		);
 		return Map.of(
 			StoreInitEvent.eventName(),
 			new StoreInitProcessor(this.events, this.prefs),
@@ -486,11 +481,7 @@ export class MainWindowStoreService {
 			new AchievementsUpdatedProcessor(),
 
 			AchievementCompletedEvent.eventName(),
-			new AchievementCompletedProcessor(
-				this.achievementHistoryStorage,
-				this.achievementsLoader,
-				achievementUpdateHelper,
-			),
+			new AchievementCompletedProcessor(this.achievementHistoryStorage),
 
 			FilterShownAchievementsEvent.eventName(),
 			new FilterShownAchievementsProcessor(),
