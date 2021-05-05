@@ -17,7 +17,7 @@ export class GenericChallenge implements Challenge {
 		// console.log('[debug] built achievement', this.achievementId, this.resetEvents, this.requirements);
 	}
 
-	public detect(gameEvent: GameEvent, callback: Function) {
+	public detect(gameEvent: GameEvent, callback: () => void) {
 		// TODO: looks weird to do this for every event
 		if (!this.callback) {
 			this.callback = callback;

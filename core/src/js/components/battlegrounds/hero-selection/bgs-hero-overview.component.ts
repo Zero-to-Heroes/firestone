@@ -5,8 +5,6 @@ import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 import { PatchInfo } from '../../../models/patches';
 import { VisualAchievement } from '../../../models/visual-achievement';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-overview',
 	styleUrls: [

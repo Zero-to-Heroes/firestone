@@ -35,8 +35,6 @@ export class BattlegroundsHeroSelectedReq implements Requirement {
 
 	private detectCardPlayedEvent(gameEvent: GameEvent) {
 		const cardId = gameEvent.cardId;
-		const localPlayer = gameEvent.localPlayer;
-		// console.log('handling hero selected event', cardId, localPlayer, this.cardId, gameEvent, this);
 		if (cardId === this.cardId) {
 			this.isCardPlayed = true;
 			console.log('hero selected');

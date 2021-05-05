@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, ViewRef } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { formatClass } from '../../../services/hs-utils';
 
@@ -27,7 +35,7 @@ import { formatClass } from '../../../services/hs-utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerWinrateRecapComponent {
+export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 	text: string;
 	tooltip: string;
 	winrate: number;

@@ -12,7 +12,7 @@ export class RTStatHeroPowerUsedParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, controllerId, localPlayer] = gameEvent.parse();
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		if (!isPlayer) {

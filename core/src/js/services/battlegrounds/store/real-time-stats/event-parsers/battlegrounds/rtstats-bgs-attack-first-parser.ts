@@ -19,7 +19,7 @@ export class RTStatBgsAttackFirstParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, , localPlayer] = gameEvent.parse();
 		// Already computed the info for this turn
 		if (
 			currentState.wentFirstInBattleOverTurn.length > 0 &&

@@ -129,12 +129,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private async sendNotification(messageObject: Message): Promise<void> {
 		return new Promise<void>(async (resolve) => {
 			await this.waitForInit();
-			let notification;
-			try {
-				notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
-			} catch (e) {
-				console.warn('could not get notif', this.elRef.nativeElement, e);
-			}
 
 			await this.showNotification(messageObject);
 			resolve();

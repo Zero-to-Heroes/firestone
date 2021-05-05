@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { PatchInfo } from '../../../models/patches';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-stats',
 	styleUrls: [

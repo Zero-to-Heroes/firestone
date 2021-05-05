@@ -12,8 +12,6 @@ import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'menu-selection-decktracker',
 	styleUrls: [

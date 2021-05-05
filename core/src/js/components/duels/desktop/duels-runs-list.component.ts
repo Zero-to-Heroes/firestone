@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -38,7 +39,7 @@ import { groupByFunction } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsRunsListComponent {
+export class DuelsRunsListComponent implements AfterViewInit {
 	@Input() set state(value: DuelsState) {
 		if (value.loading) {
 			return;

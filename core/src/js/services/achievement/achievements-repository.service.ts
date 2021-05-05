@@ -52,7 +52,7 @@ export class AchievementsRepository {
 	}
 
 	private async init() {
-		const [[allAchievements, challenges], completedAchievements] = await Promise.all([
+		const [[allAchievements], completedAchievements] = await Promise.all([
 			this.achievementsLoader.initializeAchievements(),
 			this.remoteAchievements.loadAchievements(),
 		]);

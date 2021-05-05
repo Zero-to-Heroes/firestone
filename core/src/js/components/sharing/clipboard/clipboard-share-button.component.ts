@@ -11,8 +11,6 @@ import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 
-declare let amplitude;
-
 @Component({
 	selector: 'clipboard-share-button',
 	styleUrls: [

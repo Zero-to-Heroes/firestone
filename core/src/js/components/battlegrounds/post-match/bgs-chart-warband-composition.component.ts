@@ -14,8 +14,6 @@ import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { CARDS_VERSION } from '../../../services/hs-utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-chart-warband-composition',
 	styleUrls: [
@@ -104,7 +102,7 @@ declare let amplitude: any;
 })
 export class BgsChartWarbandCompositionComponent {
 	dimensions: number[];
-	chartData: object[];
+	chartData: any[];
 	colorScheme = {
 		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#43403d', '#DE5959', '#D9C3AB', '#D9C3AB'],
 	};
@@ -157,10 +155,6 @@ export class BgsChartWarbandCompositionComponent {
 		private readonly appRef: ApplicationRef,
 	) {
 		allCards.initializeCardsDb(CARDS_VERSION);
-	}
-
-	async ngAfterViewInit() {
-		// setTimeout(() => window.dispatchEvent(new Event('resize')));
 	}
 
 	onActivate(event) {
@@ -239,7 +233,7 @@ export class BgsChartWarbandCompositionComponent {
 		}, 200);
 	}
 
-	private buildChartData(value: BgsPostMatchStats): object[] {
+	private buildChartData(value: BgsPostMatchStats): any[] {
 		if (!value || !value.boardHistory) {
 			return null;
 		}

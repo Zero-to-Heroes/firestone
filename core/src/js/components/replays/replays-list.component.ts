@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -42,7 +43,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysListComponent {
+export class ReplaysListComponent implements AfterViewInit {
 	displayedReplays: readonly GroupedReplays[] = [];
 	_replays: readonly GroupedReplays[];
 	_state: ReplaysState;

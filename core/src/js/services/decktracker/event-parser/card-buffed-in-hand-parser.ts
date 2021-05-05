@@ -14,7 +14,7 @@ export class CardBuffedInHandParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
 		// console.log('buffing card in hand', cardId, controllerId, localPlayer, entityId, gameEvent);
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;

@@ -23,8 +23,6 @@ import { DeckstringOverrideEvent } from '../../services/decktracker/event/deckst
 import { OverwolfService } from '../../services/overwolf.service';
 import { arraysEqual, removeFromArray } from '../../services/utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'in-game-opponent-recap',
 	styleUrls: [

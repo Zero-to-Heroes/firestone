@@ -19,7 +19,7 @@ export class BgsCardPlayedParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsCardPlayedEvent): Promise<BattlegroundsState> {
 		const gameEvent: GameEvent = event.gameEvent;
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer] = gameEvent.parse();
 
 		if (!BgsCardPlayedParser.POGO_CARD_IDS.includes(cardId)) {
 			return currentState;

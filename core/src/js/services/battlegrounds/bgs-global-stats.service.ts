@@ -9,11 +9,7 @@ export class BgsGlobalStatsService {
 	constructor(private readonly api: ApiRunner) {}
 
 	public async loadGlobalStats(): Promise<BgsStats> {
-		const postEvent = {
-			useNewTable: true,
-		};
 		const result: any = await this.api.callGetApi(BGS_STATS_RETRIEVE_URL);
-		// console.log('result', result);
 		const globalStats = BgsStats.create({
 			heroStats: result.heroStats,
 		} as BgsStats);

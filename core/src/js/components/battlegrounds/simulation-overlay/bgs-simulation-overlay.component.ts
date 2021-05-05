@@ -16,8 +16,6 @@ import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-simulation-overlay',
 	styleUrls: [

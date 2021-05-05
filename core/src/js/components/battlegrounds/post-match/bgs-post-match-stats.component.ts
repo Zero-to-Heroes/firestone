@@ -23,8 +23,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { normalizeCardId } from './card-utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-post-match-stats',
 	styleUrls: [

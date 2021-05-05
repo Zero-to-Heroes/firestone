@@ -5,14 +5,18 @@ module.exports = {
 		sourceType: 'module',
 		project: './tsconfig.json',
 	},
+	plugins: ['@typescript-eslint/eslint-plugin'],
 	extends: [
 		'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-		'prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+		'plugin:@angular-eslint/recommended',
 		'plugin:prettier/recommended', // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+		// 'eslint-config-prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
 	],
 	rules: {
 		'no-multi-spaces': 2,
 		'prefer-rest-params': 0,
+		'no-unused-vars': 0,
+		'@typescript-eslint/explicit-module-boundary-types': 0,
 		'@typescript-eslint/explicit-function-return-type': 0, // Temporary, until code violations are fixed
 		'@typescript-eslint/no-explicit-any': 0, // Temporary, until code violations are fixed
 		'@typescript-eslint/no-parameter-properties': 0,
@@ -37,8 +41,9 @@ module.exports = {
 				'allow-arguments': true,
 			},
 		],
+		// '@typescript-eslint/no-unused-vars': 0,
 		'@typescript-eslint/no-unused-vars': [
-			1,
+			'warn',
 			{
 				'vars': 'all',
 				'args': 'none', // When implementing interfaces, I find it's easier to read if all parameters are always declared
@@ -46,7 +51,8 @@ module.exports = {
 			},
 		],
 		'@typescript-eslint/no-use-before-define': 0,
-		// Used at a single place, in utils.ts
-		'@typescript-eslint/no-this-alias': 0,
+		'@typescript-eslint/ban-ts-comment': 'off',
+		'@angular-eslint/no-input-rename': 'off',
+		'@angular-eslint/no-output-on-prefix': 'off',
 	},
 };

@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { getTribeIcon } from '../../services/battlegrounds/bgs-utils';
 
-declare let amplitude;
-
 @Component({
 	selector: 'bgs-banned-tribe',
 	styleUrls: [

@@ -12,7 +12,7 @@ export class RTStatsMinionsKilledParser implements EventParser {
 		gameEvent: MinionsDiedEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const [, , localPlayer, entityId] = gameEvent.parse();
+		const [, , localPlayer] = gameEvent.parse();
 
 		const deadEnemyMinions = gameEvent.additionalData.deadMinions.filter((deadMinion) => {
 			const isPlayer = deadMinion.ControllerId === localPlayer?.PlayerId;

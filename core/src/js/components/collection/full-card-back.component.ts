@@ -3,8 +3,6 @@ import { CardBack } from '../../models/card-back';
 import { Preferences } from '../../models/preferences';
 import { InternalCardBack } from './internal-card-back';
 
-declare let amplitude;
-
 @Component({
 	selector: 'full-card-back',
 	styleUrls: [

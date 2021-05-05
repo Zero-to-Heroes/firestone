@@ -30,8 +30,6 @@ import { SpellCounterDefinition } from './definitions/spell-counter';
 import { WatchpostCounterDefinition } from './definitions/watchpost-counter';
 import { CounterDefinition, CounterType } from './definitions/_counter-definition';
 
-declare let amplitude;
-
 @Component({
 	selector: 'game-counters',
 	styleUrls: [

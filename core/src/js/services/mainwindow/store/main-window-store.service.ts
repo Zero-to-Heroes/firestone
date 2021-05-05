@@ -115,7 +115,6 @@ import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-soc
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { StoreInitEvent } from './events/store-init-event';
-import { AchievementStateHelper } from './helper/achievement-state-helper';
 import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
@@ -207,8 +206,6 @@ import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-s
 import { StoreInitProcessor } from './processors/store-init-processor';
 import { StateHistory } from './state-history';
 import { StoreBootstrapService } from './store-bootstrap.service';
-
-declare let amplitude;
 
 const MAX_HISTORY_SIZE = 30;
 
@@ -397,7 +394,6 @@ export class MainWindowStoreService {
 	}
 
 	private buildProcessors(): Map<string, Processor> {
-		const achievementStateHelper = new AchievementStateHelper();
 		const achievementUpdateHelper = new AchievementUpdateHelper(
 			this.achievementHistoryStorage,
 			this.achievementsLoader,

@@ -21,7 +21,7 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, cardPlayedControllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, cardPlayedControllerId, localPlayer] = gameEvent.parse();
 		const isPlayerWhoPlayedCard = cardPlayedControllerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayerWhoPlayedCard ? currentState.opponentDeck : currentState.playerDeck;
 

@@ -145,7 +145,7 @@ export class GameEvent implements GameStateEvent {
 		} as GameEvent);
 	}
 
-	public parse(): [string, number, any, number] {
+	public parse(): [string, number, GameEventPlayer, number] {
 		return [this.cardId, this.controllerId, this.localPlayer, this.entityId];
 	}
 }

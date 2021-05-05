@@ -11,7 +11,7 @@ export class WeaponDestroyedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, controllerId, localPlayer] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const newPlayerDeck = deck.update({

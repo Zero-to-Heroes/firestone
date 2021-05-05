@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
 import { BgsPostMatchStatsPanel } from '../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { NavigationReplays } from '../../models/mainwindow/navigation/navigation-replays';
@@ -38,7 +38,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MatchDetailsComponent {
+export class MatchDetailsComponent implements AfterViewInit {
 	@Input() set state(value: ReplaysState) {
 		// Do nothing, not used for now
 	}

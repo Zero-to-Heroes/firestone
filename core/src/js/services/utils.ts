@@ -1,6 +1,6 @@
 import { PatchInfo } from '../models/patches';
 
-export const groupByFunction = (keyExtractor: (obj: object | string) => string) => (array) =>
+export const groupByFunction = (keyExtractor: (obj: any | string) => string) => (array) =>
 	array.reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
@@ -86,7 +86,9 @@ export const removeFromArray = <T>(array: T[], element: T) => {
 };
 
 // For ng2-charts
+/* eslint-disable @typescript-eslint/ban-types */
 export const thisAsThat = (callBack: Function) => {
+	// eslint-disable-next-line @typescript-eslint/no-this-alias
 	const self = this;
 	return function () {
 		return callBack.apply(self, [this].concat(Array.prototype.slice.call(arguments)));

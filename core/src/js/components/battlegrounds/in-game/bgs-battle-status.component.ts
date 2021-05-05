@@ -207,10 +207,6 @@ export class BgsBattleStatusComponent {
 		private readonly bgsSim: BgsBattleSimulationService,
 	) {}
 
-	ngAfterViewInit() {
-		// console.log('after battle status init');
-	}
-
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
 		console.log('viewing simulation result', category);
 		const simulationSample: GameSample = this.pickSimulationResult(category);

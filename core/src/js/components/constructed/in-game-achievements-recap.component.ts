@@ -4,8 +4,6 @@ import { ConstructedState } from '../../models/constructed/constructed-state';
 import { groupByFunction } from '../../services/utils';
 import { EffectiveProgress } from './effective-progress';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'in-game-achievements-recap',
 	styleUrls: [

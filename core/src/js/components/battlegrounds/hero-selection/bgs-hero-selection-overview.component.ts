@@ -8,8 +8,6 @@ import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
 import { groupByFunction } from '../../../services/utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-selection-overview',
 	styleUrls: [

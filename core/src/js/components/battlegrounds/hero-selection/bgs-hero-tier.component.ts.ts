@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-tier',
 	styleUrls: [

@@ -51,7 +51,6 @@ import { groupByFunction, sumOnArray } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_REWARDS_INFO_URL = 'https://1ntio3mhgd.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=12';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
@@ -828,7 +827,6 @@ export class DuelsStateBuilderService {
 		if (!winDistribution) {
 			return [];
 		}
-		const max = Math.max(...Object.values(winDistribution));
 		const total = Object.values(winDistribution).reduce((a, b) => a + b, 0);
 		return Object.keys(winDistribution)
 			.sort((a, b) => +a - +b)

@@ -9,7 +9,7 @@ export class FatigueParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, , localPlayer] = gameEvent.parse();
 		const isPlayer = gameEvent.additionalData.entityId === localPlayer.Id;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

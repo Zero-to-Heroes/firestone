@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { EffectiveProgress } from './effective-progress';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'in-game-achievement-recap',
 	styleUrls: [

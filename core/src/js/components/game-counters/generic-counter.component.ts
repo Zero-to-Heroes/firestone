@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-declare let amplitude;
-
 @Component({
 	selector: 'generic-counter',
 	styleUrls: [

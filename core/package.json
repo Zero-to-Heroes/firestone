@@ -76,6 +76,7 @@
 		"zone.js": "0.9.1"
 	},
 	"devDependencies": {
+		"@angular-eslint/eslint-plugin": "^4.2.0",
 		"@angular/compiler-cli": "11.2.11",
 		"@babel/preset-env": "^7.8.3",
 		"@calebmer/extract-text-webpack-plugin": "4.0.2",

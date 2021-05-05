@@ -20,7 +20,7 @@ export class PogoPlayedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, controllerId, localPlayer] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		// Don't show the opponent's pogo counter in battlegrounds
 		if (!isPlayer && currentState.isBattlegrounds()) {

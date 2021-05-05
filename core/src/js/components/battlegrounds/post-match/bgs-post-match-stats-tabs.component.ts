@@ -19,8 +19,6 @@ import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-post-match-stats-tabs',
 	styleUrls: [

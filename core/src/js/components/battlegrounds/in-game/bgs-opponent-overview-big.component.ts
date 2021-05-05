@@ -13,8 +13,6 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-opponent-overview-big',
 	styleUrls: [

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { Injectable } from '@angular/core';
 import { RedditUserInfo } from '../models/mainwindow/reddit-user-info';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';

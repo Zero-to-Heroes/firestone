@@ -6,8 +6,6 @@ import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
-declare let amplitude;
-
 @Injectable()
 export class AchievementsNotificationService {
 	constructor(

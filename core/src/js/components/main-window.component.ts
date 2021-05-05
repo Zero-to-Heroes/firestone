@@ -22,8 +22,6 @@ import { OverwolfService } from '../services/overwolf.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { PreferencesService } from '../services/preferences.service';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'main-window',
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],

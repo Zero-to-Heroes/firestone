@@ -12,8 +12,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 import { SocialShareButtonComponent } from '../social-share-button.component';
 import { TwitterShareModalComponent } from './twitter-share-modal.component';
 
-declare let amplitude;
-
 @Component({
 	selector: 'twitter-share-button',
 	styleUrls: [

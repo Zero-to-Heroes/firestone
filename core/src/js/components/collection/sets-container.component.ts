@@ -20,7 +20,7 @@ import { Set } from '../../models/set';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetsContainer {
+export class SetsContainerComponent {
 	@Input() _sets: Set[];
 	@Input() category: string;
 

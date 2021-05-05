@@ -37,13 +37,6 @@ describe('total-minions-summoned-req', () => {
 		});
 		test('is completed when no minion has been summoned', () => {
 			const req = new TotalMinionsSummonedReq(2, 'AT_MOST', cards);
-			const event = Object.assign(new GameEvent(), {
-				type: GameEvent.MINION_SUMMONED,
-				cardId: CardIds.Collectible.Mage.ManaWyrm,
-				controllerId: 1,
-				localPlayer: { PlayerId: 1 },
-			} as GameEvent);
-
 			expect(req.isCompleted()).toBe(true);
 		});
 		test('is not completed when too many minions have been summoned', () => {

@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FeatureFlags } from '../../services/feature-flags';
 
-declare let amplitude;
-
 @Component({
 	selector: 'social-shares',
 	styleUrls: [`../../../css/component/sharing/social-shares.component.scss`],

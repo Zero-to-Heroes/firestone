@@ -1,6 +1,14 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
-import { ApplicationRef, ComponentFactoryResolver, ErrorHandler, Injectable, NgModule, Type } from '@angular/core';
+import {
+	ApplicationRef,
+	ComponentFactoryResolver,
+	DoBootstrap,
+	ErrorHandler,
+	Injectable,
+	NgModule,
+	Type,
+} from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -93,7 +101,7 @@ import { RarityComponent } from '../../components/collection/rarity.component';
 import { SetStatCellComponent } from '../../components/collection/set-stat-cell.component';
 import { SetStatsComponent } from '../../components/collection/set-stats.component';
 import { SetComponent } from '../../components/collection/set.component';
-import { SetsContainer } from '../../components/collection/sets-container.component';
+import { SetsContainerComponent } from '../../components/collection/sets-container.component';
 import { SetsComponent } from '../../components/collection/sets.component';
 import { TheCoinsComponent } from '../../components/collection/the-coins.component';
 import { ConstructedContentComponent } from '../../components/constructed/constructed-content.component';
@@ -262,8 +270,6 @@ import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { OutOfCardsService } from '../../services/mainwindow/out-of-cards.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { CollectionBootstrapService } from '../../services/mainwindow/store/collection-bootstrap.service';
-import { AchievementStateHelper } from '../../services/mainwindow/store/helper/achievement-state-helper';
-import { AchievementUpdateHelper } from '../../services/mainwindow/store/helper/achievement-update-helper';
 import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
 import { StoreBootstrapService } from '../../services/mainwindow/store/store-bootstrap.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
@@ -416,7 +422,7 @@ const components = [
 		RarityComponent,
 		SetComponent,
 		SetsComponent,
-		SetsContainer,
+		SetsContainerComponent,
 		CardBacksComponent,
 		CardBackComponent,
 		FullCardBackComponent,
@@ -599,8 +605,6 @@ const components = [
 		AchievementsMonitor,
 		AchievementsNotificationService,
 		RemoteAchievementsService,
-		AchievementStateHelper,
-		AchievementUpdateHelper,
 		AchievementsManager,
 
 		DecktrackerStateLoaderService,
@@ -656,11 +660,11 @@ const components = [
 	],
 	// bootstrap: [],
 })
-export class AppModule {
+export class AppModule implements DoBootstrap {
 	constructor(private resolver: ComponentFactoryResolver) {}
 
 	ngDoBootstrap(appRef: ApplicationRef) {
-		components.forEach((componentDef: Type<{}>) => {
+		components.forEach((componentDef: Type<any>) => {
 			const factory = this.resolver.resolveComponentFactory(componentDef);
 			if (document.querySelector(factory.selector)) {
 				appRef.bootstrap(factory);

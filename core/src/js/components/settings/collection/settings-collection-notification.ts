@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -63,7 +64,7 @@ import { Knob } from '../preference-slider.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsCollectionNotificationComponent implements AfterViewInit {
+export class SettingsCollectionNotificationComponent implements AfterViewInit, OnDestroy {
 	enableNotifications: boolean;
 	cardSizeKnobs: readonly Knob[] = [
 		{

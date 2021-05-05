@@ -20,7 +20,7 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, , localPlayer] = gameEvent.parse();
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		// Can happen at the very start of the game
 		if (!localPlayer) {

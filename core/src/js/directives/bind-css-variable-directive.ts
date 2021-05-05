@@ -1,7 +1,7 @@
-import { Directive, ElementRef, Input } from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 
 @Directive({ selector: '[bindCssVariable]' })
-export class BindCssVariableDirective {
+export class BindCssVariableDirective implements OnChanges {
 	@Input('bindCssVariable') variable: string;
 	@Input('bindCssVariableValue') value: string;
 

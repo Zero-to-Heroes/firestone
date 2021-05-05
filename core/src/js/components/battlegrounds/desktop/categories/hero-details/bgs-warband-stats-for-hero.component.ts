@@ -3,8 +3,6 @@ import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-warband-stats-for-hero',
 	styleUrls: [

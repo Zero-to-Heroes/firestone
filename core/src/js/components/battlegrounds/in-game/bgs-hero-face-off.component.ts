@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-face-off',
 	styleUrls: [

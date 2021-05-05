@@ -34,10 +34,10 @@ export class CardStolenParser implements EventParser {
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.hand, cardId, entityId)
 			: [stolenFromDeck.hand, undefined];
 		//console.log('\tnew stolen hand', stolenHand, removedCardFromHand);
-		const [stolenBoard, removedFromBoard] = cardInBoard
+		const [stolenBoard] = cardInBoard
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.board, cardId, entityId)
 			: [stolenFromDeck.board, undefined];
-		const [stolenDeck, removedFromDeck] = cardInDeck
+		const [stolenDeck] = cardInDeck
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)
 			: [stolenFromDeck.deck, undefined];
 		const stolenSecrets = stolenFromDeck.secrets.filter((entity) => entity.entityId !== entityId);

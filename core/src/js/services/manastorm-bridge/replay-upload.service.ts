@@ -9,7 +9,6 @@ import { uuid } from '../utils';
 import { GameForUpload } from './game-for-upload';
 import { ManastormInfo } from './manastorm-info';
 
-const REVIEW_INIT_ENDPOINT = 'https://husxs4v58a.execute-api.us-west-2.amazonaws.com/prod';
 const BUCKET = 'com.zerotoheroes.batch';
 
 @Injectable()

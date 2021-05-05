@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnDestroy } from '@angular/core';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -28,7 +28,7 @@ import { SetCard } from '../../../models/set';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupedDeckListComponent {
+export class GroupedDeckListComponent implements OnDestroy {
 	@Input() colorManaCost: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGiftsSeparately: boolean;

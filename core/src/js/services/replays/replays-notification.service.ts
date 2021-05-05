@@ -7,8 +7,6 @@ import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { RewardMonitorService, XpForGameInfo } from '../rewards/rewards-monitor';
 
-declare let amplitude;
-
 @Injectable()
 export class ReplaysNotificationService {
 	constructor(

@@ -13,8 +13,6 @@ import { Color, Label } from 'ng2-charts';
 import { NumericTurnInfo } from '../../models/battlegrounds/post-match/numeric-turn-info';
 import { areEqualDataSets } from './post-match/chart-utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'graph-with-comparison',
 	styleUrls: [

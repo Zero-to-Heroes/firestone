@@ -1,5 +1,4 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -7,12 +6,10 @@ import {
 	EventEmitter,
 	Input,
 	Output,
-	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { Preferences } from '../../models/preferences';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { formatClass } from '../../services/hs-utils';
@@ -80,7 +77,8 @@ declare let amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FullCardComponent implements AfterViewInit {
+export class FullCardComponent {
+	// eslint-disable-next-line @angular-eslint/no-output-native
 	@Output() close = new EventEmitter();
 
 	class: string;
@@ -145,13 +143,6 @@ export class FullCardComponent implements AfterViewInit {
 		private readonly sanitizer: DomSanitizer,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
-
-	async ngAfterViewInit() {
-		const prefs: Preferences = await this.prefs.getPreferences();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
 
 	playSound(audioClip) {
 		amplitude.getInstance().logEvent('sound', {

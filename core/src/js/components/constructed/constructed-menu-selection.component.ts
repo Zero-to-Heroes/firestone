@@ -12,8 +12,6 @@ import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { ConstructedChangeTabEvent } from '../../services/decktracker/event/constructed-change-tab-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'menu-selection-constructed',
 	styleUrls: [

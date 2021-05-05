@@ -31,7 +31,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer] = gameEvent.parse();
 		const isMinionPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const dbCard = this.allCards.getCard(cardId);
 		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()) {

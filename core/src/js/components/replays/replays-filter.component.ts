@@ -1,4 +1,5 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -42,7 +43,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReplaysFilterComponent {
+export class ReplaysFilterComponent implements AfterViewInit {
 	filterOptions: readonly IOption[];
 	activeFilter: string;
 	placeholder: string;

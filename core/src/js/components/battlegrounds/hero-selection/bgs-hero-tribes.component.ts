@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-tribes',
 	styleUrls: [

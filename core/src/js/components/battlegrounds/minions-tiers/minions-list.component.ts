@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
@@ -36,7 +44,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsMinionsListComponent {
+export class BattlegroundsMinionsListComponent implements AfterViewInit {
 	@Input() set tooltipPosition(value: string) {
 		this._tooltipPosition = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {

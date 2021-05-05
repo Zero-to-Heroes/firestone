@@ -58,7 +58,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		},
 	): Promise<GameState> {
 		// console.warn('parsing event', gameEvent.type);
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer] = gameEvent.parse();
 		if (!cardId) {
 			console.warn('[trigger-on-spell-play] no card Id', gameEvent.parse());
 			return currentState;

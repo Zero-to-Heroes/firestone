@@ -21,8 +21,6 @@ import { CARDS_VERSION } from '../../services/hs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'secrets-helper',
 	styleUrls: [

@@ -12,8 +12,6 @@ import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/even
 import { FeatureFlags } from '../../services/feature-flags';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'menu-selection-bgs',
 	styleUrls: [

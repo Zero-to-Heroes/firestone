@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { SimpleBarChartData } from './simple-bar-chart-data';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'basic-bar-chart',
 	styleUrls: [

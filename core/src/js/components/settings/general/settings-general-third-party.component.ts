@@ -5,6 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	HostListener,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
@@ -99,7 +100,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsGeneralThirdPartyComponent implements AfterViewInit {
+export class SettingsGeneralThirdPartyComponent implements AfterViewInit, OnDestroy {
 	oocLoggedIn: boolean;
 	oocLoginUrl = `https://outof.cards/oauth/authorize/?client_id=oqEn7ONIAOmugFTjFQGe1lFSujGxf3erhNDDTvkC&response_type=code&scope=hearthcollection&redirect_uri=https://www.firestoneapp.com/ooc-login.html`;
 

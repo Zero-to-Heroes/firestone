@@ -66,7 +66,7 @@ export class LogsUploaderService {
 			user: currentUser ? currentUser.username || currentUser.userId || currentUser.machineId : undefined,
 			appLogsKey: appLogs,
 		};
-		const result = await this.http.post(BUG_ENDPOINT, submission).toPromise();
+		await this.http.post(BUG_ENDPOINT, submission).toPromise();
 		console.log('sent automated bug report');
 	}
 }

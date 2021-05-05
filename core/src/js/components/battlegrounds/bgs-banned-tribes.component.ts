@@ -18,8 +18,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { capitalizeFirstLetter } from '../../services/utils';
 
-declare let amplitude;
-
 @Component({
 	selector: 'bgs-banned-tribes',
 	styleUrls: [

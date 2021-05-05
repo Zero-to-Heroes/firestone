@@ -19,8 +19,6 @@ import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/even
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'battlegrounds-content',
 	styleUrls: [

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
@@ -22,7 +22,7 @@ import { PreferencesService } from '../../services/preferences.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // TODO: merge this with the settings control button?
-export class ControlBugComponent {
+export class ControlBugComponent implements AfterViewInit {
 	private settingsEventBus: EventEmitter<[string, string]>;
 
 	constructor(private ow: OverwolfService, private prefs: PreferencesService) {}

@@ -92,7 +92,7 @@ export class PackMonitor {
 		}
 	}
 
-	private async cardClicked(data, callback: Function) {
+	private async cardClicked(data, callback: (number) => void) {
 		const result = await this.ow.getRunningGameInfo();
 		const x = (1.0 * data.x) / result.logicalWidth;
 		const y = (1.0 * data.y) / result.logicalHeight;

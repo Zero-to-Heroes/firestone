@@ -18,8 +18,6 @@ import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-overlay-hero-overview',
 	styleUrls: [

@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
 import { ConstructedCloseWindowEvent } from '../../services/decktracker/event/constructed-close-window-event';
 import { OverwolfService } from '../../services/overwolf.service';
-
-declare let amplitude: any;
 
 @Component({
 	selector: 'constructed-content',
@@ -66,7 +64,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedContentComponent {
+export class ConstructedContentComponent implements AfterViewInit {
 	@Input() set state(value: GameState) {
 		this._state = value;
 		this.updateInfo();

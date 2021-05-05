@@ -12,8 +12,6 @@ import {
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-warband-stats',
 	styleUrls: [

@@ -4,6 +4,7 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
@@ -13,8 +14,6 @@ import { GameState } from '../../models/decktracker/game-state';
 import { CARDS_VERSION } from '../../services/hs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
-
-declare let amplitude: any;
 
 @Component({
 	selector: 'constructed',
@@ -31,7 +30,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConstructedComponent implements AfterViewInit {
+export class ConstructedComponent implements AfterViewInit, OnDestroy {
 	state: GameState;
 
 	windowId: string;

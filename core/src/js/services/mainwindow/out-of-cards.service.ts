@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
@@ -202,6 +201,7 @@ export class OutOfCardsService {
 	}
 }
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export interface OutOfCardsToken {
 	access_token: string;
 	refresh_token: string;

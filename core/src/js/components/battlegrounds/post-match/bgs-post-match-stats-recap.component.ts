@@ -4,8 +4,6 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-post-match-stats-recap',
 	styleUrls: [

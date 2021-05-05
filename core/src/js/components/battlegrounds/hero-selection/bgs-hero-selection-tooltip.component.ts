@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-selection-tooltip',
 	styleUrls: [

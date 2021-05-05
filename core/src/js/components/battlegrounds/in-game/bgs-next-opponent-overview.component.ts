@@ -15,8 +15,6 @@ import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-g
 import { AdService } from '../../../services/ad.service';
 import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-next-opponent-overview',
 	styleUrls: [
@@ -109,10 +107,6 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly ads: AdService) {
 		this.init();
-	}
-
-	ngAfterViewInit() {
-		// console.log('after view init in next-opponent(view');
 	}
 
 	@HostListener('window:beforeunload')

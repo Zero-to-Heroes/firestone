@@ -17,7 +17,7 @@ export class ReplaysFilter {
 		// To force call to static factory
 	}
 
-	update(value: ReplaysFilter): object {
+	update(value: ReplaysFilter): ReplaysFilter {
 		return Object.assign(new ReplaysFilter(), this, value);
 	}
 

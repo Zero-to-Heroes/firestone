@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'twitch-bgs-hero-overview',
 	styleUrls: [

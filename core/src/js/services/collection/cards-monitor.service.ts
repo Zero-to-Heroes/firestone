@@ -16,8 +16,6 @@ import { groupByFunction } from '../utils';
 import { CardNotificationsService } from './card-notifications.service';
 import { CollectionManager } from './collection-manager.service';
 
-declare let amplitude: any;
-
 // Only works when cards are logged in the Achievements.log
 @Injectable()
 export class CardsMonitorService {

@@ -64,7 +64,6 @@ export class DeckTrackerTwitchTitleBarComponent {
 			return;
 		}
 		console.log('navigator.userAgent', navigator.userAgent);
-		const sUsrAg = navigator.userAgent;
 		const copyPermission = await (navigator as any).permissions
 			.query({
 				// Firefox supports "clipboard", while chrome is "clipboard-write"

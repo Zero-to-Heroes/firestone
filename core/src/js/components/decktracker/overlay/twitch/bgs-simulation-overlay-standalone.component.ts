@@ -10,8 +10,6 @@ import {
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-simulation-overlay-standalone',
 	styleUrls: [

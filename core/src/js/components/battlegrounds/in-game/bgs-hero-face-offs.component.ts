@@ -3,8 +3,6 @@ import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bg
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { groupByFunction } from '../../../services/utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-hero-face-offs',
 	styleUrls: [

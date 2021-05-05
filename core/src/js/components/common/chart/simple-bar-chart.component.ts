@@ -13,8 +13,6 @@ import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem, ChartTooltipM
 import { Color, Label } from 'ng2-charts';
 import { SimpleBarChartData } from './simple-bar-chart-data';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'simple-bar-chart',
 	styleUrls: [

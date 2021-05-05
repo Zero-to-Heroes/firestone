@@ -22,7 +22,7 @@ export class DuelsRestorePersonalDeckSummaryProcessor implements Processor {
 		const newHiddenDecks = (currentPrefs.duelsPersonalDeckHiddenDeckCodes ?? []).filter(
 			(deckCode) => deckCode !== event.deckstring,
 		);
-		const newPrefs = await this.prefs.setDuelsPersonalDeckHiddenDeckCodes(newHiddenDecks);
+		await this.prefs.setDuelsPersonalDeckHiddenDeckCodes(newHiddenDecks);
 		const newState: DuelsState = await this.duelsStateBuilder.updateState(
 			currentState.duels,
 			currentState.stats.gameStats,

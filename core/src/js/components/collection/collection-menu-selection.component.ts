@@ -11,8 +11,6 @@ import { CollectionSelectCurrentTabEvent } from '../../services/mainwindow/store
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'collection-menu-selection',
 	styleUrls: [

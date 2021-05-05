@@ -13,8 +13,6 @@ import { Color, Label } from 'ng2-charts';
 import { sleep } from '../../../services/utils';
 import { InputPieChartData } from './input-pie-chart-data';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'pie-chart',
 	styleUrls: [

@@ -102,7 +102,7 @@ export class SettingsGeneralBugReportComponent implements AfterViewInit {
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-			const result = await this.http.post(FEEDBACK_ENDPOINT_POST, submission).toPromise();
+			await this.http.post(FEEDBACK_ENDPOINT_POST, submission).toPromise();
 
 			this.prefs.setContactEmail(this.email);
 

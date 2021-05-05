@@ -8,19 +8,19 @@ export class LogListenerService {
 	public subject = new Subject();
 
 	private logFile: string;
-	private callback: Function;
+	private callback: (input: string) => void;
 
 	private monitoring: boolean;
 	private fileInitiallyPresent: boolean;
 	private logsLocation: string;
-	private existingLineHandler: Function;
+	private existingLineHandler: (input: string) => void;
 
 	constructor(private ow: OverwolfService) {}
 
 	public configure(
 		logFile: string,
-		newLineHandler: Function,
-		existingLineHandler: Function = null,
+		newLineHandler: (input: string) => void,
+		existingLineHandler: (input: string) => void = null,
 	): LogListenerService {
 		this.logFile = logFile;
 		this.callback = newLineHandler;

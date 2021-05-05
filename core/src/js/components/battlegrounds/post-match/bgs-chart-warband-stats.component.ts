@@ -4,8 +4,6 @@ import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-chart-warband-stats',
 	styleUrls: [

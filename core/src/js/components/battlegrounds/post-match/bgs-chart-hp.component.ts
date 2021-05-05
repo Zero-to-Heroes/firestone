@@ -18,8 +18,6 @@ import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeri
 import { thisAsThat } from '../../../services/utils';
 import { areEqualDataSets } from './chart-utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-chart-hp',
 	styleUrls: [

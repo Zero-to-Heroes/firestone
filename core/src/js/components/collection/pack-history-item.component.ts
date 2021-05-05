@@ -13,8 +13,6 @@ import { boosterIdToBoosterName, getDefaultBoosterIdForSetId, getPackDustValue }
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare let amplitude;
-
 @Component({
 	selector: 'pack-history-item',
 	styleUrls: [`../../../css/component/collection/pack-history-item.component.scss`],

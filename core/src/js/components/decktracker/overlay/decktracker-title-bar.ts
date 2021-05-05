@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 
@@ -26,7 +26,7 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerTitleBarComponent {
+export class DeckTrackerTitleBarComponent implements OnDestroy {
 	@Input() deck: DeckState;
 	@Input() showTitleBar: boolean;
 	@Input() showDeckWinrate: boolean;

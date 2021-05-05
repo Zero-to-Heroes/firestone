@@ -20,7 +20,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
+		// const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		// Because of how reconnects work, we don't know whether the card is an enchantment just
 		// from the logs

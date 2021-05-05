@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { groupByFunction } from '../../../services/utils';
 
-declare let amplitude: any;
-
 @Component({
 	selector: 'bgs-triples',
 	styleUrls: [

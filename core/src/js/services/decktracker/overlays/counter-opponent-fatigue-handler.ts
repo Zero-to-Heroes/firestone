@@ -3,8 +3,6 @@ import { OverwolfService } from '../../overwolf.service';
 import { PreferencesService } from '../../preferences.service';
 import { AbstractOverlayHandler } from './_abstract-overlay-handler';
 
-const windowName = OverwolfService.COUNTER_OPPONENT_FATIGUE_WINDOW;
-
 export class FatigueOpponentCounterOverlayHandler extends AbstractOverlayHandler {
 	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
 		super(
