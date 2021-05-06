@@ -5,6 +5,7 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
+import { BattleInfoMessage } from './battle-info-message.type';
 import { BgsPlayer } from './bgs-player';
 
 export class BgsGame {
@@ -15,7 +16,7 @@ export class BgsGame {
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 	readonly battleInfo: BgsBattleInfo;
 	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
-	readonly battleInfoMesage: 'not-supported' | undefined;
+	readonly battleInfoMesage: BattleInfoMessage;
 	readonly battleResult: SimulationResult;
 	readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly replayXml: string;

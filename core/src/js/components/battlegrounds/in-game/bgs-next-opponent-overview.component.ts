@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-message.type';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
@@ -76,7 +77,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	currentTurn: number;
 	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
-	simulationMessage: string;
+	simulationMessage: BattleInfoMessage;
 	nextOpponentCardId: string;
 	mmr: number;
 	lastOpponentCardId: string;

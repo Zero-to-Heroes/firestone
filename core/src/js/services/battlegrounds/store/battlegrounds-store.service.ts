@@ -3,6 +3,7 @@ import { CardIds, GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DamageGameEvent } from '../../../models/mainwindow/game-events/damage-game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -90,6 +91,7 @@ import { RealTimeStatsService } from './real-time-stats/real-time-stats.service'
 export class BattlegroundsStoreService {
 	private mainWindowState: MainWindowState;
 	private state: BattlegroundsState = new BattlegroundsState();
+	private deckState: GameState;
 	private eventParsers: readonly EventParser[] = [];
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent> = new EventEmitter<BattlegroundsStoreEvent>();
 	private battlegroundsStoreEventBus = new BehaviorSubject<BattlegroundsState>(null);
@@ -118,7 +120,7 @@ export class BattlegroundsStoreService {
 		private twitch: TwitchAuthService,
 		private patchesService: PatchesConfigService,
 		private realTimeStats: RealTimeStatsService,
-		private gameState: GameStateService,
+		private gameStateService: GameStateService,
 		private init_BgsRunStatsService: BgsRunStatsService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
@@ -160,6 +162,12 @@ export class BattlegroundsStoreService {
 			mainWindowStoreEmitter.subscribe((newState) => {
 				this.mainWindowState = newState;
 				// console.log('[bgs-store] received new main state', this.mainWindowState);
+			});
+
+			const deckEventBus: BehaviorSubject<any> = window['deckEventBus'];
+			deckEventBus.subscribe((event) => {
+				// console.debug('received state in BG', event);
+				this.deckState = event?.state as GameState;
 			});
 		});
 	}
@@ -431,7 +439,7 @@ export class BattlegroundsStoreService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, newState)) {
-					newState = await parser.parse(newState, gameEvent);
+					newState = await parser.parse(newState, gameEvent, this.deckState);
 				}
 			} catch (e) {
 				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e.message, e);
@@ -491,7 +499,7 @@ export class BattlegroundsStoreService {
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
-			new BgsMatchStartParser(this.prefs, this.gameState),
+			new BgsMatchStartParser(this.prefs, this.gameStateService),
 			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.ow),

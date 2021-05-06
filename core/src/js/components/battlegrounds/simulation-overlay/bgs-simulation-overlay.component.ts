@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-message.type';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../../models/preferences';
 import { FeatureFlags } from '../../../services/feature-flags';
@@ -48,7 +49,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	nextBattle: SimulationResult;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
-	simulationMessage: string;
+	simulationMessage: BattleInfoMessage;
 	showSimulationSample: boolean;
 
 	private windowId: string;

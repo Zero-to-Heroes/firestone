@@ -3,6 +3,9 @@ import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
+import { BoardSecret } from '../../models/decktracker/board-secret';
+import { GameState } from '../../models/decktracker/game-state';
 import { VisualAchievement } from '../../models/visual-achievement';
 
 export const getTribeIcon = (tribe: string | Race): string => {
@@ -340,22 +343,52 @@ const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 	}
 };
 
-export const isSupportedScenario = (battleInfo: BgsBattleInfo): boolean => {
-	return (
-		isSupportedScenarioForPlayer(battleInfo.playerBoard) && isSupportedScenarioForPlayer(battleInfo.opponentBoard)
-	);
+export const isSupportedScenario = (
+	battleInfo: BgsBattleInfo,
+	gameState: GameState,
+): {
+	isSupported: boolean;
+	reason?: BattleInfoMessage;
+} => {
+	//console.debug('is uspportd?', battleInfo, gameState);
+	const playerSupport = isSupportedScenarioForPlayer(battleInfo.playerBoard, gameState?.playerDeck?.secrets);
+	const oppSupport = isSupportedScenarioForPlayer(battleInfo.opponentBoard, gameState?.opponentDeck?.secrets);
+	return {
+		isSupported: playerSupport.isSupported && oppSupport.isSupported,
+		reason: playerSupport.reason ?? oppSupport.reason,
+	};
 };
 
-const isSupportedScenarioForPlayer = (boardInfo: BgsBoardInfo): boolean => {
+const isSupportedScenarioForPlayer = (
+	boardInfo: BgsBoardInfo,
+	secrets: readonly BoardSecret[],
+): {
+	isSupported: boolean;
+	reason?: BattleInfoMessage;
+} => {
 	try {
 		if (hasScallywag(boardInfo) && (hasBaron(boardInfo) || hasKhadgar(boardInfo))) {
 			console.warn('[bgs-simulation] Unsupported Scallywag exodia, not reporting an error');
-			return false;
+			return {
+				isSupported: false,
+				reason: 'scallywag',
+			};
+		} else if (secrets?.length > 0) {
+			//console.debug('not supported');
+			return {
+				isSupported: false,
+				reason: 'secret',
+			};
 		}
-		return true;
+		return {
+			isSupported: true,
+		};
 	} catch (e) {
 		console.error('[bgs-simularion] Error when parsing board', e);
-		return true;
+		return {
+			isSupported: false,
+			reason: 'error',
+		};
 	}
 };
 

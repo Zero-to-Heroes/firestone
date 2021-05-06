@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-message.type';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -14,7 +15,7 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="battle-simulation">
-			<div class="message" *ngIf="_simulationMessage">
+			<div class="message" *ngIf="_simulationMessage" [helpTooltip]="_simulationMessageTooltip">
 				{{ _simulationMessage }}
 			</div>
 			<div class="probas" *ngIf="!_simulationMessage">
@@ -105,7 +106,8 @@ declare let amplitude: any;
 export class BgsBattleStatusComponent {
 	@Input() showReplayLink: boolean;
 
-	_simulationMessage;
+	_simulationMessage: string;
+	_simulationMessageTooltip: string;
 	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
 	battleSimulationResultLose: string;
@@ -131,11 +133,20 @@ export class BgsBattleStatusComponent {
 		this.updateInfo();
 	}
 
-	@Input() set simulationMessage(value: 'not-supported' | undefined) {
-		// console.debug('setting simulation message', value);
+	@Input() set simulationMessage(value: BattleInfoMessage) {
+		console.debug('setting simulation message', value);
 		switch (value) {
-			case 'not-supported':
+			case 'scallywag':
 				this._simulationMessage = `This composition is not supported`;
+				this._simulationMessageTooltip = 'Scallywag + Baron / Khadgar';
+				break;
+			case 'secret':
+				this._simulationMessage = `This composition is not supported yet`;
+				this._simulationMessageTooltip = 'Secrets are not supported yet';
+				break;
+			case 'error':
+				this._simulationMessage = `An unknown error occured`;
+				this._simulationMessageTooltip = 'A bug report has automatically been sent out to the devs';
 				break;
 			default:
 				this._simulationMessage = undefined;

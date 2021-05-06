@@ -2,6 +2,7 @@ import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bg
 import { captureEvent } from '@sentry/browser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
+import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../events.service';
 import { OverwolfService } from '../../../overwolf.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
@@ -16,7 +17,11 @@ export class BgsBattleResultParser implements EventParser {
 		return state && state.currentGame && gameEvent.type === 'BgsBattleResultEvent';
 	}
 
-	public async parse(currentState: BattlegroundsState, event: BgsBattleResultEvent): Promise<BattlegroundsState> {
+	public async parse(
+		currentState: BattlegroundsState,
+		event: BgsBattleResultEvent,
+		gameState: GameState,
+	): Promise<BattlegroundsState> {
 		if (!currentState.currentGame.getMainPlayer()) {
 			console.error(
 				'[bgs-simulation] Could not find main player in battle result parser',
@@ -35,13 +40,13 @@ export class BgsBattleResultParser implements EventParser {
 		// First validate that we are reporting a valid battle. Another error is raised if that's not the case
 		if (currentState.currentGame.battleInfo?.opponentBoard?.player?.cardId === event.opponentCardId) {
 			if (currentState.currentGame.battleResult?.won === 0 && event.result === 'won') {
-				this.report('victory', currentState);
+				this.report('victory', currentState, gameState);
 			}
 			if (currentState.currentGame.battleResult?.lost === 0 && event.result === 'lost') {
-				this.report('loss', currentState);
+				this.report('loss', currentState, gameState);
 			}
 			if (currentState.currentGame.battleResult?.tied === 0 && event.result === 'tied') {
-				this.report('tie', currentState);
+				this.report('tie', currentState, gameState);
 			}
 		} else {
 			console.warn(
@@ -63,7 +68,7 @@ export class BgsBattleResultParser implements EventParser {
 		} as BattlegroundsState);
 	}
 
-	private async report(status: string, currentState: BattlegroundsState) {
+	private async report(status: string, currentState: BattlegroundsState, gameState: GameState) {
 		const user = await this.ow.getCurrentUser();
 		console.warn(
 			'no-format',
@@ -73,7 +78,7 @@ export class BgsBattleResultParser implements EventParser {
 			currentState.currentGame.battleInfo,
 			currentState.currentGame.battleResult,
 		);
-		if (isSupportedScenario(currentState.currentGame.battleInfo)) {
+		if (isSupportedScenario(currentState.currentGame.battleInfo, gameState).isSupported) {
 			captureEvent({
 				message: 'Impossible battle ' + status,
 				extra: {
