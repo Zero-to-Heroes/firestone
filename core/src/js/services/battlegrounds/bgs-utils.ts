@@ -336,6 +336,8 @@ const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 			return 'Brann';
 		case CardIds.NonCollectible.Neutral.ArannaStarseekerTavernBrawl1:
 			return 'Aranna';
+		case CardIds.NonCollectible.Neutral.RagnarosTheFirelordTavernBrawlBATTLEGROUNDS:
+			return 'Ragnaros';
 		case CardIds.NonCollectible.Neutral.AFKayTavernBrawl:
 			return 'A.F.Kay'; // No whitespace
 		default:
