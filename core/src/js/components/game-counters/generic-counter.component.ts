@@ -5,12 +5,12 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	styleUrls: [
 		'../../../css/global/components-global.scss',
 		`../../../css/global/cdk-overlay.scss`,
+		`../../../css/themes/decktracker-theme.scss`,
 		'../../../css/component/game-counters/counters-common.scss',
 		'../../../css/component/game-counters/generic-counter.component.scss',
 		'../../../css/component/game-counters/jade-counter.component.scss',
 		'../../../css/component/game-counters/attack-counter.component.scss',
 		'../../../css/component/game-counters/pogo-counter.component.scss',
-		`../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
 		<div *ngIf="standardCounter" class="counter generic-counter {{ counterClass }}" [helpTooltip]="helpTooltipText">
