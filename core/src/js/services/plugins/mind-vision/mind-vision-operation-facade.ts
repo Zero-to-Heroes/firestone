@@ -16,7 +16,7 @@ export class MindVisionOperationFacade<T> {
 		private transformer: (output: any) => T,
 		private numberOfRetries = 3,
 		private delay = 3000,
-		private resetMindvisionIfEmpty: (info: any) => boolean = null,
+		private resetMindvisionIfEmpty: (info: any, retriesLeft?: number) => boolean = null,
 	) {}
 
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
@@ -122,7 +122,7 @@ export class MindVisionOperationFacade<T> {
 		// this.log('performing oiperation', this.mindVisionOperation, retriesLeft);
 		const resultFromMemory = await this.mindVisionOperation(forceReset, input);
 		// this.log('result from memory', resultFromMemory);
-		if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
+		if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory, retriesLeft)) {
 			this.log('result empty, calling with a force reset', resultFromMemory);
 			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1, true));
 			return;

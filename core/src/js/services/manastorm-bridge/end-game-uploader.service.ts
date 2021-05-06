@@ -287,18 +287,21 @@ export class EndGameUploaderService {
 
 	private async getBattlegroundsEndGame(currentReviewId: string): Promise<BattlegroundsInfo> {
 		// First try without resets
-		const result = await this.memoryInspection.getBattlegroundsInfo(3);
-		if (!result.rating || !result.newRating) {
-			console.log('[manastorm-bridge]', currentReviewId, 'could not get BG rank without reset', result);
-			const resultWithResets = await this.memoryInspection.getBattlegroundsEndGame(2);
-			console.log('[manastorm-bridge]', currentReviewId, 'rank with reset?', resultWithResets);
-			if (!resultWithResets.rating || !resultWithResets.newRating) {
-				console.log('[manastorm-bridge]', currentReviewId, 'no luck in getting BG ranks', resultWithResets);
-				return result;
-			}
-			console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', resultWithResets);
-			return resultWithResets;
-		}
+		// Apparently, there is an issue getting the info if the user clicks away too quickly
+		// on the endgame popup
+		// So I'll just crank up the speed by a lot, and add a lot of retries
+		const result = await this.memoryInspection.getBattlegroundsEndGame(5);
+		// if (!result?.rating || !result?.newRating) {
+		// 	console.log('[manastorm-bridge]', currentReviewId, 'could not get BG rank without reset', result);
+		// 	const resultWithResets = await this.memoryInspection.getBattlegroundsEndGame(2);
+		// 	console.log('[manastorm-bridge]', currentReviewId, 'rank with reset?', resultWithResets);
+		// 	if (!resultWithResets?.rating || !resultWithResets?.newRating) {
+		// 		console.log('[manastorm-bridge]', currentReviewId, 'no luck in getting BG ranks', resultWithResets);
+		// 		return result;
+		// 	}
+		// 	console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', resultWithResets);
+		// 	return resultWithResets;
+		// }
 		console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', result);
 		return result;
 	}
