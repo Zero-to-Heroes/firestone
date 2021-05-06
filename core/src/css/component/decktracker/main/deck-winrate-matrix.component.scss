@@ -69,6 +69,55 @@ deck-matchup-info {
 	}
 }
 
-.percentage-toggle ::ng-deep .settings-p.settings-p.settings-p {
-	width: 100px;
+.controls {
+	display: flex;
+	margin-top: 10px;
+
+	.percentage-toggle ::ng-deep .settings-p.settings-p.settings-p {
+		width: 100px;
+	}
+
+	.reset-container {
+		color: #d9c3ab;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+		// Position it at the bottom right of the winrate chart
+		// margin-top: -60px;
+		margin-bottom: 20px;
+		// padding-right: 20px;
+		margin-left: auto;
+		// margin-right: 240px;
+
+		button {
+			border: 1px solid #d9c3ab;
+			padding: 15px;
+			width: 140px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+
+			span {
+				color: #d9c3ab;
+			}
+
+			div {
+				display: flex;
+			}
+
+			&:hover {
+				background: #ffb948;
+				border: none;
+
+				span {
+					color: #2f0d0d;
+				}
+			}
+		}
+
+		.confirmation {
+			margin-top: 5px;
+			font-size: 12px;
+		}
+	}
 }

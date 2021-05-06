@@ -13,7 +13,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	template: `
 		<div class="deck-matchup-info">
 			<div class="cell class">
-				<img class="icon" [src]="icon" [helpTooltip]="className" />
+				<img class="icon" [src]="icon" [helpTooltip]="className" *ngIf="icon" />
+				<div class="class-name" *ngIf="!icon">{{ className }}</div>
 			</div>
 			<div class="cell total-games">{{ games }}</div>
 			<div class="cell winrate" *ngIf="_showMatchupAsPercentages">{{ buildValue(winrate) }}</div>
@@ -94,7 +95,8 @@ export class DeckMatchupInfoComponent implements AfterViewInit {
 			return;
 		}
 
-		this.icon = `assets/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
+		const isTotalRow = this._matchup.opponentClass.toLowerCase() === 'total';
+		this.icon = isTotalRow ? null : `assets/images/deck/classes/${this._matchup.opponentClass.toLowerCase()}.png`;
 		this.className = formatClass(this._matchup.opponentClass);
 		this.games = this._matchup.totalGames;
 		this.wins = this._matchup.totalWins;

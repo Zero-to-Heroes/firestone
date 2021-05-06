@@ -3,7 +3,6 @@ import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../../models/preferences';
-import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
@@ -24,15 +23,6 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 			<deck-winrate-matrix [deck]="deck" [showMatchupAsPercentagesValue]="showMatchupAsPercentages">
 			</deck-winrate-matrix>
 		</div>
-		<div class="reset-container">
-			<button
-				(mousedown)="reset()"
-				helpTooltip="Reset the win/loss stats of the current deck. The previous matches will still appear in the replays tab."
-			>
-				<span>{{ resetText }}</span>
-			</button>
-			<div class="confirmation" *ngIf="showResetConfirmationText">Your win/loss stats have been reset.</div>
-		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -52,14 +42,8 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	resetText = 'Reset stats';
-	confirmationShown = false;
-	showResetConfirmationText = false;
-
 	showMatchupAsPercentages = true;
 	deck: DeckSummary;
-
-	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 
 	private _state: MainWindowState;
 	private _navigation: NavigationState;
@@ -70,24 +54,6 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	async reset() {
-		if (!this.confirmationShown) {
-			this.confirmationShown = true;
-			this.resetText = 'Are you sure?';
-			return;
-		}
-
-		this.resetText = 'Reset stats';
-		this.confirmationShown = false;
-		this.showResetConfirmationText = true;
-		this.stateUpdater.next(new DecktrackerResetDeckStatsEvent(this.deck.deckstring));
-	}
-
-	private takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
-		// console.log('taking screenshot from deck details');
-		return (copyToCliboard) => this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
 	}
 
 	private updateValues() {
