@@ -128,17 +128,17 @@ export class DeckParserService {
 	}
 
 	public async queueingIntoMatch(logLine: string) {
-		console.log(
-			'[deck-parser] will detect active deck from queue?',
-			logLine,
-			this.currentGameType,
-			this.selectedDeckId,
-		);
+		// console.log(
+		// 	'[deck-parser] will detect active deck from queue?',
+		// 	logLine,
+		// 	this.currentGameType,
+		// 	this.selectedDeckId,
+		// );
 		if (
 			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
 			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 		) {
-			console.debug('BG game, returning');
+			// console.debug('BG game, returning');
 			return;
 		}
 
