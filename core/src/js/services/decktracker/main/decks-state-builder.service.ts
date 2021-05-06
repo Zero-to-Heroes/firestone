@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { GameFormat } from '@firestone-hs/reference-data';
+import { DeckDefinition, decode } from 'deckstrings';
 import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
@@ -211,20 +213,22 @@ export class DecksStateBuilderService {
 			winRatePercentage: totalGames > 0 ? (100.0 * totalWins) / totalGames : null,
 			hidden: prefs.desktopDeckHiddenDeckCodes.includes(deckstring),
 			matchupStats: matchupStats,
-			format: this.buildFormat(stats),
+			format: this.buildFormat(deckstring),
 			replays: statsWithReset,
 		} as DeckSummary);
 	}
 
-	private buildFormat(stats: readonly GameStat[]): StatGameFormatType {
-		const uniqueFormats: readonly StatGameFormatType[] = [...new Set(stats.map((stat) => stat.gameFormat))];
-		if (uniqueFormats.includes('wild')) {
-			return 'wild';
+	private buildFormat(deckstring: string): StatGameFormatType {
+		const deckInfo: DeckDefinition = decode(deckstring);
+		switch (deckInfo.format) {
+			case GameFormat.FT_CLASSIC:
+				return 'classic';
+			case GameFormat.FT_WILD:
+				return 'wild';
+			case GameFormat.FT_CLASSIC:
+			default:
+				return 'standard';
 		}
-		if (uniqueFormats.includes('classic')) {
-			return 'classic';
-		}
-		return 'standard';
 	}
 
 	private buildMatchupStats(stats: readonly GameStat[]): readonly MatchupStat[] {
