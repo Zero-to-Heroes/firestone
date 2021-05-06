@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.8.5',
+		version: '7.8.19',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -55,32 +55,16 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the Reckoning secret would be grayed out in the secret helper if the minion dealing damage died.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Open the Cages secret would be grayed out in the secret helper even if one of the mininos was dormant.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the Shadow Clone secret would be grayed out in the secret helper if attacking with the hero.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the secret helper would show after a secret was countered by Oh My Yogg and transformed into a non-secret card.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where cards resulting of the transformation by Oh My Yogg would not appear in the decklist, and their effects would not be applied on the deck (eg the discount for Incanter's Flow would not appear).`,
+								text: `Fix an issue where Avenge would be ruled out if the only other minion on board was dormant.`,
 							},
 						],
 					},
 					{
-						category: 'collection',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Pity timers are now synchronized across computers (they still need you to open your packs with Firestone running).`,
+								type: 'bug',
+								text: `Fix an issue where the simulator would incorrectly handle Murloc Warleader's and Southsea Captain's auras.`,
 							},
 						],
 					},
@@ -89,11 +73,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a few bugs related to dual class signature treasures. Please note that for a few days the stat for one of the class will have a low sample size of matches.`,
-							},
-							{
-								type: 'content',
-								text: `The 12-wins decks section now shows runs with 10+ wins, so that there is more information available.`,
+								text: `Fix an issue where the initial deck of a run would not be properly detected on non-English HS clients.`,
 							},
 						],
 					},
@@ -108,44 +88,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add support for Whizbang decks.`,
-							},
-							{
-								type: 'feature',
-								text: `Add a button to reset the stats of a deck. This is still in beta, so let me know if it works for you :)`,
+								text: `Add a Total row in the deck's stat matrix.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where global effect cards (like Incanter's Flow) were not applied to the deck when played by Trick Totem.`,
+								text: `Fix an issue where the decklist would be lost after restarting a fight in some solo adventures.`,
 							},
 							{
-								type: 'content',
-								text: `Flag more cards created by the opponent's hand (Knight of Anointment, Warsong Wrangler, Taelan Fordring, Northwatch Commander, Tamsin Roane, Thrive in the Shadows).`,
+								type: 'bug',
+								text: `Fix an issue where some standard decks would be incorrectly classified as Wild if you played a game in Wild.`,
 							},
 							{
-								type: 'content',
-								text: `Scepter of Summoning effect now updates the cost of minions in the decklist in Duels / Dungeon Runs.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Add social share / screenshot buttons to the menu bar, so they are available on all pages easily.`,
-							},
-							{
-								type: 'feature',
-								text: `Preferences are now synced across devices.`,
+								type: 'bug',
+								text: `Fix an issue where the confirmation popup when closing the decklist would not have any text.`,
 							},
 							{
 								type: 'ui',
-								text: `Add a link to go premium on the left menu.`,
-							},
-							{
-								type: 'misc',
-								text: `Fix a perf issue that would sometimes occur when using the mousewheel to scroll through the packs list.`,
+								text: `Zoom in on the images used for counters so that white spaces stop showing at the sides.`,
 							},
 						],
 					},
@@ -154,15 +113,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `The active and passive treasures are now grouped by pool, as it doesn't make a lot of sense to compare treasures between pools. There is also a specific filter to only see the Ultra Rare treasures separately.`,
-							},
-							{
-								type: 'feature',
-								text: `Show the number of matches used to compute the stats, and add a toggle to hide the ones with few data points.`,
-							},
-							{
-								type: 'bug',
-								text: `Add missing time filter in the 12-wins decks section.`,
+								text: `Show cards/treasure picks when viewing a personal deck.`,
 							},
 						],
 					},
@@ -170,29 +121,12 @@ export const updates: readonly Update[] = [
 						category: 'collection',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a toggle to show only the main card packs in the Card Packs screen.`,
+								type: 'bug',
+								text: `Fix some sounds being incorrectly labelled for the hero portraits.`,
 							},
 							{
-								type: 'feature',
-								text: `Add notification when receiving single cards (like in season rewards), and single card rewards now appear in the card history.`,
-							},
-							{
-								type: 'content',
-								text: `The dust total shown when looking at set details now gives you the amount of dust you need to craft the set (it used to show the dust you would get by disenchanting the cards).`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a global search.`,
-							},
-							{
-								type: 'feature',
-								text: `Show the current progress when browsing the HS native achievements.`,
+								type: 'ui',
+								text: `Group hero portraits by class.`,
 							},
 						],
 					},
@@ -200,17 +134,12 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Add an "unsupported composition" message when the simulator encounters a board state which it knows it can't simulate properly (for now, it's Scallywag + Khadgar /Baron).`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
 								type: 'bug',
-								text: `Fix an issue where the "decklist" filter was not working.`,
+								text: `Fix an issue where the completed achievements would not show up for Ragnaros at the hero selection stage.`,
+							},
+							{
+								type: 'ui',
+								text: `Show up an "unsupported composition" when at least one secret is in play, to properly reflect the fact that the simulator doesn't handle them yet.`,
 							},
 						],
 					},
