@@ -104,11 +104,11 @@ export class DeckParserService {
 			// will have a null selected deck)
 			// Only reset when moving away from the scene where selecting a deck is possible
 			else if (changes.CurrentScene && changes.CurrentScene !== SceneMode.GAMEPLAY) {
-				console.log('[deck-parser] resetting', changes.CurrentScene);
+				// console.log('[deck-parser] resetting', changes.CurrentScene);
 				this.selectedDeckId = null;
 			}
 			if (changes.CurrentScene) {
-				console.log('[deck-parser] new scene', changes.CurrentScene);
+				// console.log('[deck-parser] new scene', changes.CurrentScene);
 				this.currentNonGamePlayScene =
 					!changes.CurrentScene || changes.CurrentScene === SceneMode.GAMEPLAY
 						? this.currentNonGamePlayScene
