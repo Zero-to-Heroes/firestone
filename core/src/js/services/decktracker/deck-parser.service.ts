@@ -7,6 +7,7 @@ import {
 	GameType,
 	PRACTICE_ALL,
 	ScenarioId,
+	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
 } from '@firestone-hs/reference-data';
 import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
@@ -73,7 +74,10 @@ export class DeckParserService {
 			if (event.type === GameEvent.GAME_END) {
 				console.log('[deck-parser] resetting deck after game end');
 				const shouldStorePreviousDeck =
-					this.currentGameType === GameType.GT_VS_AI && PRACTICE_ALL.includes(this.currentScenarioId);
+					this.currentGameType === GameType.GT_VS_AI &&
+					// We actually don't want to reset in any scenario where
+					// the user can restart
+					!SCENARIO_WITHOUT_RESTART.includes(this.currentScenarioId);
 				this.reset(shouldStorePreviousDeck);
 				this.currentGameType = undefined;
 				this.currentScenarioId = undefined;
