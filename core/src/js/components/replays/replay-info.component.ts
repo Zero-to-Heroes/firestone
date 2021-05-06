@@ -34,7 +34,7 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
-				<div class="group loot" *ngIf="displayLoot && loots?.length">
+				<div class="group loot" *ngIf="_displayLoot && loots?.length">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/loot.svg"
@@ -43,7 +43,25 @@ import { capitalizeEachWord } from '../../services/utils';
 					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
 				</div>
 
-				<div class="group treasure" *ngIf="displayLoot && treasure">
+				<div class="group short-loot" *ngIf="!_displayLoot && _displayShortLoot && loots?.length">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/loot.svg"
+						helpTooltip="Cards added to deck after this round "
+					></div>
+					<img *ngFor="let loot of loots" class="pick" [src]="loot.icon" [cardTooltip]="loot.cardId" />
+				</div>
+
+				<div class="group treasure" *ngIf="_displayLoot && treasure">
+					<div
+						class="icon"
+						inlineSVG="assets/svg/treasure.svg"
+						helpTooltip="Treasure added to deck after this round"
+					></div>
+					<img class="pick" [src]="treasure.icon" [cardTooltip]="treasure.cardId" />
+				</div>
+
+				<div class="group short-treasure" *ngIf="!_displayLoot && _displayShortLoot && treasure">
 					<div
 						class="icon"
 						inlineSVG="assets/svg/treasure.svg"
@@ -172,7 +190,16 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 	}
 
-	@Input() displayLoot = true;
+	@Input() set displayLoot(value: boolean) {
+		this._displayLoot = value;
+	}
+
+	@Input() set displayShortLoot(value: boolean) {
+		this._displayShortLoot = value;
+	}
+
+	_displayLoot: boolean;
+	_displayShortLoot: boolean;
 
 	constructor(
 		private readonly ow: OverwolfService,

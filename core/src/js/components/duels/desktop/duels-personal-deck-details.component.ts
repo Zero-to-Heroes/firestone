@@ -69,6 +69,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[navigation]="_navigation"
 					[deckstring]="deckDecklist"
 					[displayLoot]="false"
+					[displayShortLoot]="true"
 				></duels-runs-list>
 			</div>
 			<div class="stats" scrollable *ngIf="!isPersonalDeck">

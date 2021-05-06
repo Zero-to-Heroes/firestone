@@ -179,7 +179,9 @@
 }
 
 .loot,
-.treasure {
+.treasure,
+.short-loot,
+.short-treasure {
 	margin-right: 10px;
 	border-right: none;
 
@@ -190,6 +192,20 @@
 
 	.pick {
 		margin-right: 5px;
+	}
+}
+
+.short-loot,
+.short-treasure {
+	margin-right: 0;
+	.pick {
+		display: none;
+	}
+
+	&:hover {
+		.pick {
+			display: flex;
+		}
 	}
 }
 

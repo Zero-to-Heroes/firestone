@@ -27,7 +27,8 @@ import { groupByFunction } from '../../../services/utils';
 						<duels-run
 							*ngFor="let run of groupedRun.runs; trackBy: trackByRun"
 							[run]="run"
-							[displayLoot]="displayLoot"
+							[displayLoot]="_displayLoot"
+							[displayShortLoot]="_displayShortLoot"
 							[isExpanded]="isExpanded(run.id)"
 						></duels-run>
 					</ul>
@@ -64,8 +65,16 @@ export class DuelsRunsListComponent implements AfterViewInit {
 		this.handleProgressiveDisplay();
 	}
 
-	@Input() displayLoot = true;
+	@Input() set displayLoot(value: boolean) {
+		this._displayLoot = value;
+	}
 
+	@Input() set displayShortLoot(value: boolean) {
+		this._displayShortLoot = value;
+	}
+
+	_displayLoot: boolean;
+	_displayShortLoot: boolean;
 	displayedGroupedRuns: readonly GroupedRun[] = [];
 	allRuns: readonly DuelsRun[] = [];
 	_state: DuelsState;
