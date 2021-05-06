@@ -150,7 +150,7 @@ export class FullCardComponent {
 		});
 		this.cancelPlayingSounds();
 		audioClip.audios.forEach((audio) => {
-			console.log('playing', audioClip, audio, this.card.id, this.card.audio, this.card);
+			// console.log('playing', audioClip, audio, this.card.id, this.card.audio, this.card);
 			audio.play();
 		});
 	}
@@ -219,196 +219,202 @@ export class FullCardComponent {
 			.filter((audio) => audio.name);
 	}
 
+	// The order is important, as the first match is always returned
 	private readonly REGEXES = [
 		{
-			regex: /GAMEPLAY_EMOTE_.*GREETINGS/g,
-			value: 'Greetings',
-			category: 'emote',
-		},
-		{
-			regex: /GAMEPLAY_EMOTE_.*GREETINGS_RESPONSE/g,
+			regex: /.*GREETINGS_RESPONSE.*/g,
 			value: 'Greetings Response',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*WELL_PLAYED/g,
+			regex: /.*WELL_PLAYED.*/g,
 			value: 'Well played',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*OOPS/g,
+			regex: /.*OOPS.*/g,
 			value: 'Oops',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*THREATEN/g,
+			regex: /.*THREATEN.*/g,
 			value: 'Threaten',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*THANKS/g,
+			regex: /.*THANKS.*/g,
 			value: 'Thanks',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*SORRY/g,
+			regex: /.*SORRY.*/g,
 			value: 'Sorry',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*CONCEDE/g,
+			regex: /.*CONCEDE.*/g,
 			value: 'Concede',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*START/g,
+			regex: /.*START.*/g,
 			value: 'Start',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*TIMER/g,
+			regex: /.*TIMER.*/g,
 			value: 'Timer',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*THINK1/g,
+			regex: /.*THINK1.*/g,
 			value: 'Think 1',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*THINK2/g,
+			regex: /.*THINK2.*/g,
 			value: 'Think 2',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*THINK3/g,
+			regex: /.*THINK3.*/g,
 			value: 'Think 3',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*LOW_CARDS/g,
+			regex: /.*LOW_CARDS.*/g,
 			value: 'Low Cards',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*NO_CARDS/g,
+			regex: /.*NO_CARDS.*/g,
 			value: 'No Cards',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*WON/g,
+			regex: /.*WON.*/g,
 			value: 'Won',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*MIRROR_START/g,
+			regex: /.*MIRROR_START.*/g,
 			value: 'Mirror Start',
 			category: 'emote',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_NEED_WEAPON/g,
+			regex: /.*ERROR_NEED_WEAPON.*/g,
 			value: 'Error Need Weapon',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_NEED_MANA/g,
+			regex: /.*ERROR_NEED_MANA.*/g,
 			value: 'Error Need Mana',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_MINION_ATTACKED/g,
+			regex: /.*ERROR_MINION_ATTACKED.*/g,
 			value: 'Error Minion Attacked',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_I_ATTACKED/g,
+			regex: /.*ERROR_I_ATTACKED.*/g,
 			value: 'Error I Attacked',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_JUST_PLAYED/g,
+			regex: /.*ERROR_JUST_PLAYED.*/g,
 			value: 'Error Just Played',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_HAND_FULL/g,
+			regex: /.*ERROR_HAND_FULL.*/g,
 			value: 'Error Hand Full',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_FULL_MINIONS/g,
+			regex: /.*ERROR_FULL_MINIONS.*/g,
 			value: 'Error Full Minions',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_STEALTH/g,
+			regex: /.*ERROR_STEALTH.*/g,
 			value: 'Error Stealth',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_PLAY/g,
+			regex: /.*ERROR_PLAY.*/g,
 			value: 'Error Play',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_TARGET/g,
+			regex: /.*ERROR_TARGET.*/g,
 			value: 'Error Target',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_TAUNT/g,
+			regex: /.*ERROR_TAUNT.*/g,
 			value: 'Error Taunt',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*ERROR_GENERIC/g,
+			regex: /.*ERROR_GENERIC.*/g,
 			value: 'Error Generic',
 			category: 'error',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*EVENT_LUNAR_NEW_YEAR/g,
+			regex: /.*EVENT_LUNAR_NEW_YEAR.*/g,
 			value: 'Lunar New Year',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*WINTERVEIL_GREETINGS/g,
+			regex: /.*WINTERVEIL_GREETINGS.*/g,
 			value: 'Winterveil Greetings',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*HAPPY_NEW_YEAR_20/g,
+			regex: /.*HAPPY_NEW_YEAR_20.*/g,
 			value: 'Happy New Year 20',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*FIRE_FESTIVAL/g,
+			regex: /.*FIRE_FESTIVAL.*/g,
 			value: 'Fire Festival',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*PIRATE_DAY/g,
+			regex: /.*PIRATE_DAY.*/g,
 			value: 'Pirate Day',
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*HALLOWS_END/g,
+			regex: /.*HALLOWS_END.*/g,
 			value: "Hallow's End",
 			category: 'event',
 		},
 		{
-			regex: /GAMEPLAY_EMOTE_.*NOBLEGARDEN/g,
+			regex: /.*NOBLEGARDEN.*/g,
 			value: 'Noblegarden',
 			category: 'event',
+		},
+		{
+			regex: /.*GREETINGS.*/g,
+			value: 'Greetings',
+			category: 'emote',
 		},
 	];
 
 	private getSoundName(key: string): string {
+		if (!key) {
+			return null;
+		}
+
+		key = key.toUpperCase();
 		switch (key) {
-			case 'BASIC_play':
+			case 'BASIC_PLAY':
 				return 'Play';
-			case 'BASIC_death':
+			case 'BASIC_DEATH':
 				return 'Death';
-			case 'BASIC_attack':
+			case 'BASIC_ATTACK':
 				return 'Attack';
 		}
 		for (const regex of this.REGEXES) {
@@ -422,22 +428,22 @@ export class FullCardComponent {
 		return key
 			? capitalizeEachWord(
 					key
-						.replace(/GAMEPLAY_EMOTE_/g, '')
-						.replace(/SPELL/g, '')
-						.replace(/Spell/g, '')
-						.replace(/spell/g, '')
+						.replace(/.*/g, '')
+						.replace(/SPELL.*/g, '')
+						.replace(/Spell.*/g, '')
+						.replace(/spell.*/g, '')
 						// Order is important here
-						.replace(/Hero(_\d*[a-z]?)?/g, '')
-						.replace(/HERO(_\d*[a-z]?)?/g, '')
-						.replace(/VO__Male/g, '')
-						.replace(/VO__Female/g, '')
-						.replace(/VO__(MALE)?/g, '')
-						.replace(/VO__(FEMALE)?/g, '')
-						.replace(/VO_/g, '')
-						.replace(/MALE_/g, '')
-						.replace(/Male_/g, '')
-						.replace(/Female_/g, '')
-						.replace(/_/g, ' ')
+						.replace(/Hero(_\d*[a-z]?)?.*/g, '')
+						.replace(/HERO(_\d*[a-z]?)?.*/g, '')
+						.replace(/VO__Male.*/g, '')
+						.replace(/VO__Female.*/g, '')
+						.replace(/VO__(MALE)?.*/g, '')
+						.replace(/VO__(FEMALE)?.*/g, '')
+						.replace(/VO_.*/g, '')
+						.replace(/MALE_.*/g, '')
+						.replace(/Male_.*/g, '')
+						.replace(/Female_.*/g, '')
+						.replace(/_.*/g, ' ')
 						.trim(),
 			  )
 			: '';
@@ -465,7 +471,10 @@ export class FullCardComponent {
 	}
 
 	private transformFlavor(flavor: string): string {
-		const result = flavor.replace(/\n/g, '<br>').replace(/<i>/g, '').replace(/<\/i>/g, '');
+		const result = flavor
+			.replace(/\n.*/g, '<br>')
+			.replace(/<i>.*/g, '')
+			.replace(/<\/i>.*/g, '');
 		console.debug('flvor', flavor, result);
 		return result;
 	}
