@@ -158,7 +158,7 @@ export class BgsRunStatsService {
 		});
 		const newBestStats = buildNewStats(
 			existingBestStats,
-			realTimeStatsState,
+			result,
 			({
 				mainPlayer: input.mainPlayer,
 				reviewId: input.reviewId,
