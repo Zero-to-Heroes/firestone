@@ -10,7 +10,8 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
+import { GameState } from '../models/decktracker/game-state';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
@@ -122,7 +123,7 @@ import { PreferencesService } from '../services/preferences.service';
 				</div>
 			</section>
 			<ftue *ngIf="dataState.showFtue" [selectedModule]="navigationState.currentApp"> </ftue>
-			<ads [parentComponent]="'main-window'" *ngIf="_showAds"></ads>
+			<ads [parentComponent]="'main-window'" [adRefershToken]="adRefershToken" *ngIf="_showAds"></ads>
 			<new-version-notification
 				class="new-version"
 				[forceOpen]="forceShowReleaseNotes"
@@ -142,6 +143,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	forceShowReleaseNotes: boolean;
 	prefs: Preferences;
 	_showAds = true;
+	adRefershToken: boolean;
 
 	takeScreenshotFunction: (copyToCliboard: boolean) => Promise<[string, any]> = this.takeScreenshot();
 	hotkeyText: string;
@@ -153,6 +155,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	private dataStoreSubscription: Subscription;
 	private navigationStoreSubscription: Subscription;
 	private preferencesSubscription: Subscription;
+	private deckSubscription: Subscription;
 	private hotkeyPressedHandler;
 	private hotkey;
 
@@ -241,10 +244,26 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				}
 			});
 		});
+
+		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
+		const subscriber = new Subscriber<any>(async (event) => {
+			if (!(event.state as GameState)) {
+				return;
+			}
+
+			this.adRefershToken = (event.state as GameState)?.gameStarted;
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+		subscriber['identifier'] = 'decktracker-overlay-root';
+		this.deckSubscription = deckEventBus.subscribe(subscriber);
+
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handlePreferences(event.preferences);
 		});
+
 		await this.handlePreferences();
 
 		this.hotkey = await this.ow.getHotKey('collection');
@@ -296,6 +315,8 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 		this.dataStoreSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
+		this.navigationStoreSubscription?.unsubscribe();
+		this.deckSubscription?.unsubscribe();
 	}
 
 	onHelp(event: MouseEvent) {

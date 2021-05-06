@@ -52,7 +52,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 		console.log('[ads] forcing refresh', value, this.forceRefreshToken, this.refreshesLeft);
 		this.forceRefreshToken = value;
 		this.refreshesLeft = REFRESH_CAP;
-		this.refreshAds();
+		this.tentativeAdRefresh();
 	}
 
 	shouldDisplayAds = true;
@@ -106,6 +106,13 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	showSubscription() {
 		amplitude.getInstance().logEvent('subscription-click', { 'page': 'banner' });
 		this.ow.openStore();
+	}
+
+	private async tentativeAdRefresh() {
+		const window = await this.ow.getCurrentWindow();
+		if (window.isVisible) {
+			this.refreshAds();
+		}
 	}
 
 	private async refreshAds() {
