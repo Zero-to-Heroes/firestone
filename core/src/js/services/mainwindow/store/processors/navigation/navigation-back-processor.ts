@@ -26,7 +26,7 @@ export class NavigationBackProcessor implements Processor {
 		if (!newState?.isVisible) {
 			if (history.currentIndexInHistory !== 1) {
 				// When the first event is the store init, this behavior is normal
-				console.error('[navigation-back] going back to an invisible state, auto-fixing the issue', newState);
+				console.warn('[navigation-back] going back to an invisible state, auto-fixing the issue', newState);
 			}
 			return [null, newState.update({ ...newState, isVisible: true } as NavigationState)];
 		}

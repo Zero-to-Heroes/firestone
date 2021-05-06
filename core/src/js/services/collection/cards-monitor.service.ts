@@ -118,7 +118,7 @@ export class CardsMonitorService {
 					(card.Premium ? cardInCollection.premiumCount === 1 : cardInCollection.count === 1),
 			};
 		});
-		const setId = this.cards.getCard(packCards[0].cardId).set.toLowerCase();
+		const setId = this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase();
 		console.log('[pack-parser] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
