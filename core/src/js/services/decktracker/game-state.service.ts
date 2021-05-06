@@ -14,7 +14,6 @@ import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
-import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
@@ -263,13 +262,6 @@ export class GameStateService {
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
 			console.log('[game-state] Received review finalized event, doing nothing');
-		});
-		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
-			console.log('[game-state] Received new review id event');
-			const info: ManastormInfo = event.data[0];
-			if (info && info.type === 'new-empty-review') {
-				this.currentReviewId = info.reviewId;
-			}
 		});
 		this.events
 			.on(Events.ACHIEVEMENT_PROGRESSION)
