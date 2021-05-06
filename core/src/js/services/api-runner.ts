@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 
 @Injectable()
 export class ApiRunner {
-	constructor(private readonly http: HttpClient) {}
+	constructor(private readonly http: HttpClient, private readonly allCards: AllCardsService) {}
 
 	public async callPostApi<T>(
 		url: string,
@@ -27,7 +28,15 @@ export class ApiRunner {
 					resolve(result);
 				},
 				(error) => {
-					console.error('Could not execute POST call', url, input, error);
+					// Some users seem to have firewall / VPN / ISP issues where they can't
+					// contact our services. One thing we can use to track that is that
+					// the cards are never loaded.
+					// In that case, we don't log an error
+					if (this.allCards?.getCards().length) {
+						console.error('Could not execute POST call', url, input, error);
+					} else {
+						console.warn('Could not execute POST call', url, input, error);
+					}
 					resolve(null);
 				},
 			);
