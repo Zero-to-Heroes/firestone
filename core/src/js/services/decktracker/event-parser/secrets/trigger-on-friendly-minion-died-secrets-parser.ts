@@ -54,8 +54,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		}
 
 		// If it's the only minion on board, we trigger nothing
-		//console.debug('comparing length', deckWithSecretToCheck.board.length, deadEnemyMinions.length);
-		if (deckWithSecretToCheck.board.length === deadEnemyMinions.length) {
+		if (deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length === deadEnemyMinions.length) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.Avenge);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AvengeCore);
 		}
