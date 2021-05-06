@@ -6,13 +6,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 	selector: 'hero-portrait',
 	styleUrls: [`../../../css/component/collection/hero-portrait.component.scss`],
 	template: `
-		<div
-			class="hero-portrait"
-			[ngClass]="{ 'missing': !_heroPortrait.numberOwned }"
-			[helpTooltip]="playerClass"
-			[helpTooltipPosition]="'top'"
-			rotateOnMouseOver
-		>
+		<div class="hero-portrait" [ngClass]="{ 'missing': !_heroPortrait.numberOwned }" rotateOnMouseOver>
 			<div class="perspective-wrapper" rotateOnMouseOver>
 				<img [src]="image" />
 			</div>

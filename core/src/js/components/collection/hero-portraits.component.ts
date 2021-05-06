@@ -14,10 +14,12 @@ import { Subscription } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
 import { Preferences } from '../../models/preferences';
+import { formatClass } from '../../services/hs-utils';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { groupByFunction } from '../../services/utils';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -36,14 +38,22 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				<progress-bar class="progress-bar" [current]="unlocked" [total]="total"></progress-bar>
 			</div>
 			<ul class="cards-list" *ngIf="shownHeroPortraits?.length" scrollable>
-				<hero-portrait
-					class="hero-portrait"
-					*ngFor="let heroPortrait of shownHeroPortraits; let i = index; trackBy: trackByCardId"
-					[heroPortrait]="heroPortrait"
-					[style.width.px]="cardWidth"
-					(click)="showFullHeroPortrait(heroPortrait)"
+				<div
+					class="portraits-for-class"
+					*ngFor="let portraitGroup of shownHeroPortraits; let i = index; trackBy: trackByTitle"
 				>
-				</hero-portrait>
+					<div class="header">{{ portraitGroup.title }}</div>
+					<div class="portraits-container">
+						<hero-portrait
+							class="hero-portrait"
+							*ngFor="let heroPortrait of portraitGroup.portraits; let i = index; trackBy: trackByCardId"
+							[heroPortrait]="heroPortrait"
+							[style.width.px]="cardWidth"
+							(click)="showFullHeroPortrait(heroPortrait)"
+						>
+						</hero-portrait>
+					</div>
+				</div>
 			</ul>
 			<collection-empty-state *ngIf="!shownHeroPortraits?.length"> </collection-empty-state>
 		</div>
@@ -68,7 +78,7 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	_heroPortraits: readonly CollectionReferenceCard[];
-	shownHeroPortraits: readonly CollectionReferenceCard[];
+	shownHeroPortraits: readonly PortraitGroup[];
 	_navigation: NavigationCollection;
 	unlocked: number;
 	total: number;
@@ -125,7 +135,16 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 		this.total = this._heroPortraits.length;
 		this.unlocked = this._heroPortraits.filter((item) => item.numberOwned > 0).length;
 
-		this.shownHeroPortraits = this._heroPortraits.filter(this.filterCardsOwned());
+		const groupedByClass = groupByFunction((portrait: CollectionReferenceCard) =>
+			portrait.playerClass?.toLowerCase(),
+		)(this._heroPortraits.filter(this.filterCardsOwned()));
+
+		this.shownHeroPortraits = Object.keys(groupedByClass)
+			.sort()
+			.map((playerClass) => ({
+				title: formatClass(playerClass),
+				portraits: groupedByClass[playerClass],
+			}));
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -144,4 +163,9 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 				return (card: CollectionReferenceCard) => true;
 		}
 	}
+}
+
+interface PortraitGroup {
+	readonly title: string;
+	readonly portraits: readonly CollectionReferenceCard[];
 }
