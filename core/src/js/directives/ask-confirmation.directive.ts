@@ -114,18 +114,21 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		const tooltipRef: ComponentRef<ConfirmationComponent> = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
-		this.confirmationTitle && (tooltipRef.instance.confirmationTitle = this.confirmationTitle);
-		this.confirmationText && (tooltipRef.instance.confirmationText = this.confirmationText);
-		this.validButtonText && (tooltipRef.instance.validButtonText = this.validButtonText);
-		this.cancelButtonText && (tooltipRef.instance.cancelButtonText = this.cancelButtonText);
+		tooltipRef.instance.confirmationTitle = this.confirmationTitle ?? 'Are you sure?';
+		tooltipRef.instance.confirmationText =
+			this.confirmationText ?? 'This will close the tracker for the duration of the current match';
+		tooltipRef.instance.validButtonText = this.validButtonText ?? 'Exit';
+		tooltipRef.instance.cancelButtonText = this.cancelButtonText ?? 'Cancel';
 		tooltipRef.instance.onConfirm.subscribe((event) => this.confirm());
 		tooltipRef.instance.onCancel.subscribe((event) => this.cancel());
 
 		this.events.broadcast(Events.SHOW_MODAL);
 		this.positionStrategy.apply();
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		setTimeout(() => {
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	private confirm() {
