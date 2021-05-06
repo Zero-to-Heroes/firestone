@@ -51,7 +51,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {
 		if (this.closedByUser || !this.gameStarted) {
-			console.log(`[${this.name}] should not show`, this.closedByUser, this.gameStarted);
+			// console.log(`[${this.name}] should not show`, this.closedByUser, this.gameStarted);
 			return false;
 		}
 
@@ -62,7 +62,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		// We explicitely don't check for null, so that if the memory updates are broken
 		// we still somehow show the info
 		if (this.onGameScreen === false) {
-			console.log(`[${this.name}] not on game screen`, this.onGameScreen);
+			// console.log(`[${this.name}] not on game screen`, this.onGameScreen);
 			return false;
 		}
 
