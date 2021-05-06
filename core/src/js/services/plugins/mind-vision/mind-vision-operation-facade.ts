@@ -123,7 +123,7 @@ export class MindVisionOperationFacade<T> {
 		const resultFromMemory = await this.mindVisionOperation(forceReset, input);
 		// this.log('result from memory', resultFromMemory);
 		if (!forceReset && this.resetMindvisionIfEmpty && this.resetMindvisionIfEmpty(resultFromMemory)) {
-			this.log('calling with a force reset');
+			this.log('result empty, calling with a force reset', resultFromMemory);
 			setTimeout(() => this.callInternal(callback, input, retriesLeft - 1, true));
 			return;
 		}

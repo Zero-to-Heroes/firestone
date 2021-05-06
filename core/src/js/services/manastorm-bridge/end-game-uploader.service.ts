@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
@@ -84,8 +85,8 @@ export class EndGameUploaderService {
 		// Get the memory info first, because parsing the XML can take some time and make the
 		// info in memory stale / unavailable
 		console.log('[manastorm-bridge]', currentReviewId, 'reading memory info');
-		const battlegroundsInfo =
-			game.gameMode === 'battlegrounds' ? await this.memoryInspection.getBattlegroundsEndGame(5) : null;
+		const battlegroundsInfo: BattlegroundsInfo =
+			game.gameMode === 'battlegrounds' ? await this.getBattlegroundsEndGame(currentReviewId) : null;
 		const duelsInfo =
 			game.gameMode === 'duels' || game.gameMode === 'paid-duels'
 				? await this.memoryInspection.getDuelsInfo()
@@ -282,6 +283,24 @@ export class EndGameUploaderService {
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
 		return game;
+	}
+
+	private async getBattlegroundsEndGame(currentReviewId: string): Promise<BattlegroundsInfo> {
+		// First try without resets
+		const result = await this.memoryInspection.getBattlegroundsInfo(3);
+		if (!result.rating || !result.newRating) {
+			console.log('[manastorm-bridge]', currentReviewId, 'could not get BG rank without reset', result);
+			const resultWithResets = await this.memoryInspection.getBattlegroundsEndGame(2);
+			console.log('[manastorm-bridge]', currentReviewId, 'rank with reset?', resultWithResets);
+			if (!resultWithResets.rating || !resultWithResets.newRating) {
+				console.log('[manastorm-bridge]', currentReviewId, 'no luck in getting BG ranks', resultWithResets);
+				return result;
+			}
+			console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', resultWithResets);
+			return resultWithResets;
+		}
+		console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', result);
+		return result;
 	}
 
 	private async getDuelsNewPlayerRank(initialRank: number): Promise<number> {
