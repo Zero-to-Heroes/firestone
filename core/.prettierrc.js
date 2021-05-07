@@ -6,4 +6,5 @@ module.exports = {
 	useTabs: true,
 	printWidth: 120,
 	quoteProps: 'preserve', // Needed for angular templates, like ngClass
+	endOfLine: 'auto',
 };

@@ -10,7 +10,7 @@ module.exports = {
 		'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
 		'plugin:@angular-eslint/recommended',
 		'plugin:prettier/recommended', // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-		// 'eslint-config-prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+		'eslint-config-prettier', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
 	],
 	rules: {
 		'no-multi-spaces': 2,
@@ -54,5 +54,12 @@ module.exports = {
 		'@typescript-eslint/ban-ts-comment': 'off',
 		'@angular-eslint/no-input-rename': 'off',
 		'@angular-eslint/no-output-on-prefix': 'off',
+		'linebreak-style': 0,
+		'prettier/prettier': [
+			'error',
+			{
+				'endOfLine': 'auto',
+			},
+		],
 	},
 };
