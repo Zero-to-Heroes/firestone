@@ -58,6 +58,7 @@ export class GameStatsLoaderService {
 			this.gameStats.stats?.length,
 			this.gameStats.stats?.length && this.gameStats.stats[0],
 		);
+		// console.debug('[game-stats-loader] full game stats', this.gameStats);
 		return this.gameStats;
 	}
 }

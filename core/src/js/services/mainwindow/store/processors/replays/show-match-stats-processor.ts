@@ -49,6 +49,7 @@ export class ShowMatchStatsProcessor implements Processor {
 				selectedStats: null, // We use the navigation-level info, to avoid
 				tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],
 				numberOfDisplayedTabs: (await this.prefs.getPreferences()).bgsNumberOfDisplayedTabs,
+				availableTribes: selectedInfo.bgsAvailableTribes,
 			} as BgsPostMatchStatsPanel),
 		} as MatchDetail);
 		const newReplays = navigationState.navigationReplays.update({

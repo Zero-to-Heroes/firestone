@@ -1,5 +1,5 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GALAKROND_EVIL, GALAKROND_EXPLORER } from '@firestone-hs/reference-data';
+import { GALAKROND_EVIL, GALAKROND_EXPLORER, Race } from '@firestone-hs/reference-data';
 import { capitalizeEachWord } from '../../../services/utils';
 import { CoinPlayType } from '../replays/coin-play.type';
 import { MatchResultType } from '../replays/match-result.type';
@@ -33,6 +33,7 @@ export class GameStat {
 	readonly currentDuelsRunId: string;
 	readonly playerArchetypeId?: string;
 	readonly opponentArchetypeId?: string;
+	readonly bgsAvailableTribes: readonly Race[];
 
 	readonly postMatchStats?: BgsPostMatchStats;
 

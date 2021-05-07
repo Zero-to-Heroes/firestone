@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { Race } from '@firestone-hs/reference-data';
 import { AllCardsService, Entity as ParserEntity } from '@firestone-hs/replay-parser';
 import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
@@ -23,33 +24,37 @@ import { CARDS_VERSION } from '../../../services/hs-utils';
 	],
 	template: `
 		<div class="legend" *ngIf="chartData?.length">
-			<div class="item beast">
+			<div class="item beast" *ngIf="isTribe('beast')">
 				<div class="node"></div>
 				Beast
 			</div>
-			<div class="item mech">
+			<div class="item mech" *ngIf="isTribe('mech')">
 				<div class="node"></div>
 				Mech
 			</div>
-			<div class="item dragon">
+			<div class="item dragon" *ngIf="isTribe('dragon')">
 				<div class="node"></div>
 				Dragon
 			</div>
-			<div class="item demon">
+			<div class="item demon" *ngIf="isTribe('demon')">
 				<div class="node"></div>
 				Demon
 			</div>
-			<div class="item murloc">
+			<div class="item murloc" *ngIf="isTribe('murloc')">
 				<div class="node"></div>
 				Murloc
 			</div>
-			<div class="item pirate">
+			<div class="item pirate" *ngIf="isTribe('pirate')">
 				<div class="node"></div>
 				Pirate
 			</div>
-			<div class="item elemental">
+			<div class="item elemental" *ngIf="isTribe('elemental')">
 				<div class="node"></div>
 				Elemental
+			</div>
+			<div class="item quilboar" *ngIf="isTribe('quilboar')">
+				<div class="node"></div>
+				Quilboar
 			</div>
 			<div class="item blank">
 				<div class="node"></div>
@@ -104,12 +109,32 @@ export class BgsChartWarbandCompositionComponent {
 	dimensions: number[];
 	chartData: any[];
 	colorScheme = {
-		domain: ['#A2CCB0', '#404ED3', '#E9A943', '#A276AF', '#9FB6D7', '#43403d', '#DE5959', '#D9C3AB', '#D9C3AB'],
+		domain: [
+			'#A2CCB0',
+			'#404ED3',
+			'#E9A943',
+			'#A276AF',
+			'#9FB6D7',
+			'#43403d',
+			'#DE5959',
+			'#964B00',
+			'#D9C3AB',
+			'#D9C3AB',
+		],
 	};
 	barPadding: number;
 	loaded = false;
 
 	@Input() invalidLimit: number;
+
+	@Input() set availableTribes(value: readonly Race[]) {
+		if (value === this._availableTribes) {
+			return;
+		}
+
+		this._availableTribes = value;
+		this.updateValues();
+	}
 
 	@Input() set stats(value: BgsPostMatchStats) {
 		if (value === this._stats) {
@@ -120,7 +145,7 @@ export class BgsChartWarbandCompositionComponent {
 		}
 		// console.log('[warband-composition] setting value', value);
 		this._stats = value;
-		this.setStats(value);
+		this.updateValues();
 	}
 
 	@Input() set visible(value: boolean) {
@@ -144,6 +169,7 @@ export class BgsChartWarbandCompositionComponent {
 	}
 
 	private _stats: BgsPostMatchStats;
+	private _availableTribes: readonly Race[];
 	private boardHistory: readonly ParserEntity[];
 	private _visible: boolean;
 	private _dirty = true;
@@ -155,6 +181,15 @@ export class BgsChartWarbandCompositionComponent {
 		private readonly appRef: ApplicationRef,
 	) {
 		allCards.initializeCardsDb(CARDS_VERSION);
+	}
+
+	isTribe(tribe: string): boolean {
+		if (!this._availableTribes?.length) {
+			return true;
+		}
+
+		// console.debug('includes?', this._availableTribes, tribe, Race[tribe.toUpperCase()]);
+		return this._availableTribes.includes(Race[tribe.toUpperCase()]);
 	}
 
 	onActivate(event) {
@@ -209,12 +244,12 @@ export class BgsChartWarbandCompositionComponent {
 		return parseInt(text).toFixed(0);
 	}
 
-	private async setStats(value: BgsPostMatchStats) {
-		if (!value || !value.boardHistory) {
-			this.allCards.initializeCardsDb(CARDS_VERSION);
+	private async updateValues() {
+		if (!this._stats || !this._stats.boardHistory) {
 			return;
 		}
-		if (this.invalidLimit && value.boardHistory.length <= this.invalidLimit) {
+
+		if (this.invalidLimit && this._stats.boardHistory.length <= this.invalidLimit) {
 			this.chartData = [];
 			this.loaded = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -224,7 +259,7 @@ export class BgsChartWarbandCompositionComponent {
 		}
 
 		setTimeout(() => {
-			this.chartData = this.buildChartData(value);
+			this.chartData = this.buildChartData(this._stats);
 			// console.debug('chart data', this.chartData);
 			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -259,6 +294,7 @@ export class BgsChartWarbandCompositionComponent {
 					this.buildSeries('Murloc', 'murloc', history),
 					this.buildSeries('Pirate', 'pirate', history),
 					this.buildSeries('Elemental', 'elemental', history),
+					this.buildSeries('Quilboar', 'quilboar', history),
 					this.buildSeries('All', 'all', history),
 					this.buildSeries('No tribe', null, history),
 				],

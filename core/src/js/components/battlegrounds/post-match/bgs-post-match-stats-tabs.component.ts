@@ -67,6 +67,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 					class="stat"
 					*ngxCacheIf="selectedTab === 'warband-composition-by-turn'"
 					[stats]="_panel?.stats"
+					[availableTribes]="_panel?.availableTribes"
 					[visible]="selectedTab === 'warband-composition-by-turn'"
 					[invalidLimit]="1"
 				>
