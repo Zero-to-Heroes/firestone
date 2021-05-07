@@ -66,6 +66,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the simulator would incorrectly handle Murloc Warleader's and Southsea Captain's auras.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where sometimes the player's MMR would not be detected at the end of a match.`,
+							},
 						],
 					},
 					{
@@ -137,10 +141,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the completed achievements would not show up for Ragnaros at the hero selection stage.`,
 							},
-							{
-								type: 'ui',
-								text: `Show up an "unsupported composition" when at least one secret is in play, to properly reflect the fact that the simulator doesn't handle them yet.`,
-							},
+							// {
+							// 	type: 'ui',
+							// 	text: `Show up an "unsupported composition" when at least one secret is in play, to properly reflect the fact that the simulator doesn't handle them yet.`,
+							// },
 						],
 					},
 				],
