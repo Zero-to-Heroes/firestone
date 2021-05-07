@@ -352,13 +352,27 @@ export const isSupportedScenario = (
 	isSupported: boolean;
 	reason?: BattleInfoMessage;
 } => {
-	//console.debug('is uspportd?', battleInfo, gameState);
 	const playerSupport = isSupportedScenarioForPlayer(battleInfo.playerBoard, gameState?.playerDeck?.secrets);
 	const oppSupport = isSupportedScenarioForPlayer(battleInfo.opponentBoard, gameState?.opponentDeck?.secrets);
-	return {
+	const result = {
 		isSupported: playerSupport.isSupported && oppSupport.isSupported,
 		reason: playerSupport.reason ?? oppSupport.reason,
 	};
+	if (
+		battleInfo.playerBoard?.player?.heroPowerId === CardIds.NonCollectible.Neutral.PrestidigitationTavernBrawl ||
+		battleInfo.opponentBoard?.player?.heroPowerId === CardIds.NonCollectible.Neutral.PrestidigitationTavernBrawl
+	) {
+		console.log(
+			'[bgs-simulation] is supported?',
+			result,
+			playerSupport,
+			oppSupport,
+			gameState?.playerDeck?.secrets,
+			gameState?.opponentDeck?.secrets,
+			battleInfo,
+		);
+	}
+	return result;
 };
 
 const isSupportedScenarioForPlayer = (
