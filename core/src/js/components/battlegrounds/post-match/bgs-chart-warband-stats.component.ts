@@ -16,6 +16,7 @@ import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 			yourLabel="Current run"
 			[communityExtractor]="communityExtractor"
 			[yourExtractor]="yourExtractor"
+			[showDeltaWithPrevious]="true"
 			communityTooltip="Average total stats (attack + health) on board at the beginning of each turn's battle (7000+ MMR)"
 			yourTooltip="Your values for this run"
 		>

@@ -58,6 +58,7 @@ export class GraphWithComparisonComponent {
 	@Input() communityTooltip: string;
 	@Input() yourTooltip: string;
 	@Input() id: string;
+	@Input() showDeltaWithPrevious: boolean;
 
 	@Input() set maxYValue(value: number) {
 		this._maxYValue = value;
@@ -120,13 +121,26 @@ export class GraphWithComparisonComponent {
 		const filledCommunity = this.fillMissingData(community, lastTurn);
 		const filledYour = this.fillMissingData(your, lastTurn);
 
-		const newChartData = [
+		const yourData = filledYour?.map((stat) => stat.value) || [];
+		const communityData = filledCommunity?.map((stat) => stat.value) || [];
+		const newChartData: ChartDataSets[] = [
 			{
-				data: filledYour?.map((stat) => stat.value) || [],
+				data: yourData,
+				delta: yourData?.length
+					? [yourData[0], ...yourData.slice(1).map((n, i) => (yourData[i] == null ? null : n - yourData[i]))]
+					: [],
 				label: this.yourLabel,
 			} as any,
 			{
-				data: filledCommunity?.map((stat) => stat.value) || [],
+				data: communityData,
+				delta: communityData?.length
+					? [
+							communityData[0],
+							...communityData
+								.slice(1)
+								.map((n, i) => (communityData[i] == null ? null : n - communityData[i])),
+					  ]
+					: [],
 				label: this.communityLabel,
 			},
 		];
@@ -304,16 +318,20 @@ export class GraphWithComparisonComponent {
 				displayColors: false,
 				enabled: false,
 				callbacks: {
-					beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-						// console.log('beforeBody', item, data);
-						return data.datasets?.map((dataset) => dataset?.label || '') || [];
+					beforeBody: (items: ChartTooltipItem[], data: ChartData): string | string[] => {
+						return (
+							data.datasets?.map((dataset, index) => {
+								const item = items.find((i) => i.datasetIndex === index);
+								const delta: string = item?.index != null ? (dataset as any).delta[item.index] : '';
+								return (dataset?.label || '') + '|||' + delta;
+							}) ?? []
+						);
 					},
 				},
 				custom: (tooltip: ChartTooltipModel) => {
 					const tooltipId = 'chartjs-tooltip-stats-' + this.id;
 					const chartParent = this.chart.nativeElement.parentNode;
 					let tooltipEl = document.getElementById(tooltipId);
-					// console.log('tooltip', tooltip);
 
 					if (!tooltipEl) {
 						tooltipEl = document.createElement('div');
@@ -335,40 +353,36 @@ export class GraphWithComparisonComponent {
 						return;
 					}
 
-					// Set Text
-					const yourDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 1);
-					if (tooltip.body) {
-						const communityLabel = tooltip.beforeBody[0];
-						const yourLabel = tooltip.beforeBody[1];
-						const communityDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 0);
-						const playerSection =
-							yourDatapoint?.value != null
-								? `
-									<div class="section player">
-										<div class="subtitle">${yourLabel}</div>
-										<div class="value">Turn ${yourDatapoint?.label}</div>
-										<div class="value">${yourDatapoint?.value ? 'Stat ' + parseInt(yourDatapoint.value).toFixed(0) : 'No data'}</div>
-									</div>
-								`
-								: '';
-						const innerHtml = `
+					const yourDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 0);
+					const communityDatapoint = tooltip.dataPoints.find((dataset) => dataset.datasetIndex === 1);
+
+					const [yourLabel, yourDelta] = tooltip.beforeBody[0].split('|||');
+					const [communityLabel, communityDelta] = tooltip.beforeBody[1].split('|||');
+					const playerSection = yourDatapoint?.value
+						? this.buildSection(
+								'player',
+								yourLabel,
+								yourDelta != null ? parseInt(yourDelta) : null,
+								yourDatapoint,
+						  )
+						: '';
+					const communitySection = communityDatapoint?.value
+						? this.buildSection(
+								'average',
+								communityLabel,
+								communityDelta != null ? parseInt(communityDelta) : null,
+								communityDatapoint,
+						  )
+						: '';
+
+					const innerHtml = `
 							<div class="body">
 								${playerSection}
-								<div class="section average">
-									<div class="subtitle">${communityLabel}</div>
-									<div class="value">Turn ${communityDatapoint?.label}</div>
-									<div class="value">${
-										communityDatapoint?.value
-											? 'Stat ' + parseInt(communityDatapoint.value).toFixed(0)
-											: 'No data'
-									}</div>							
-								</div>
+								${communitySection}
 							</div>
 						`;
-
-						const tableRoot = tooltipEl.querySelector('.content');
-						tableRoot.innerHTML = innerHtml;
-					}
+					const tableRoot = tooltipEl.querySelector('.content');
+					tableRoot.innerHTML = innerHtml;
 
 					const tooltipWidth = tooltipEl.getBoundingClientRect().width;
 
@@ -403,5 +417,25 @@ export class GraphWithComparisonComponent {
 				},
 			},
 		};
+	}
+
+	private buildSection(
+		theClass: 'player' | 'average',
+		label: string,
+		delta: number,
+		datapoint: ChartTooltipItem,
+	): string {
+		return `
+			<div class="section ${theClass}">
+				<div class="subtitle">${label}</div>
+				<div class="value">Turn ${datapoint?.label}</div>
+				<div class="value">${datapoint?.value ? 'Stat ' + parseInt(datapoint.value).toFixed(0) : 'No data'}</div>
+				<div class="delta">${
+					this.showDeltaWithPrevious && delta != null
+						? (delta >= 0 ? '+' + delta.toFixed(0) : delta.toFixed(0)) + ' this turn'
+						: ''
+				}</div>
+			</div>
+		`;
 	}
 }
