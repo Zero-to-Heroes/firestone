@@ -66,10 +66,18 @@ export class BgsPlayer implements IBgsPlayer {
 	}
 
 	public buildBgsEntities(logEntities: readonly any[]): BoardEntity[] {
+		if (!logEntities?.length) {
+			return [];
+		}
+
 		return logEntities.map((entity) => this.buildBgsEntity(entity));
 	}
 
 	private buildBgsEntity(logEntity): BoardEntity {
+		if (!logEntity) {
+			return null;
+		}
+
 		return {
 			cardId: logEntity.CardId,
 			attack: logEntity.Tags.find((tag) => tag.Name === GameTag.ATK)?.Value || 0,
@@ -93,6 +101,10 @@ export class BgsPlayer implements IBgsPlayer {
 	private buildEnchantments(
 		enchantments: { EntityId: number; CardId: string }[],
 	): { cardId: string; originEntityId: number }[] {
+		if (!enchantments?.length) {
+			return [];
+		}
+
 		return enchantments.map((enchant) => ({
 			originEntityId: enchant.EntityId,
 			cardId: enchant.CardId,
