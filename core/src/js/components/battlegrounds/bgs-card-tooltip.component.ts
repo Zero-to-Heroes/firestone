@@ -8,7 +8,7 @@ import { Entity } from '@firestone-hs/replay-parser';
 	template: `
 		<div class="container" [ngClass]="{ 'hidden': !_visible }">
 			<img [src]="image" class="card" />
-			<card-stats [cardId]="cardId" [attack]="attack" [health]="health"> </card-stats>
+			<card-stats [cardId]="cardId" [attack]="attack" [health]="health" [autoFontResize]="false"> </card-stats>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
