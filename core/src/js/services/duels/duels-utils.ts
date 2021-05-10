@@ -127,7 +127,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.GnomishArmyKnife:
 		case CardIds.NonCollectible.Neutral.BananaSplitTavernBrawl:
 		case CardIds.NonCollectible.Neutral.CanopicJarsTavernBrawl1:
-		case CardIds.NonCollectible.Neutral.PhaorisBladeTavernBrawl:
+		case CardIds.NonCollectible.Neutral.PhaorisBladeULDUM:
 		case CardIds.NonCollectible.Neutral.StaffOfScales:
 		case CardIds.NonCollectible.Neutral.WandOfDisintegrationTavernBrawl:
 		case CardIds.NonCollectible.Neutral.LocuuuustsTavernBrawl1:
