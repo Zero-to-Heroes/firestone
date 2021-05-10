@@ -4,8 +4,6 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
-import { BoardSecret } from '../../models/decktracker/board-secret';
-import { GameState } from '../../models/decktracker/game-state';
 import { VisualAchievement } from '../../models/visual-achievement';
 
 export const getTribeIcon = (tribe: string | Race): string => {
@@ -347,13 +345,12 @@ const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 
 export const isSupportedScenario = (
 	battleInfo: BgsBattleInfo,
-	gameState: GameState,
 ): {
 	isSupported: boolean;
 	reason?: BattleInfoMessage;
 } => {
-	const playerSupport = isSupportedScenarioForPlayer(battleInfo.playerBoard, gameState?.playerDeck?.secrets);
-	const oppSupport = isSupportedScenarioForPlayer(battleInfo.opponentBoard, gameState?.opponentDeck?.secrets);
+	const playerSupport = isSupportedScenarioForPlayer(battleInfo.playerBoard);
+	const oppSupport = isSupportedScenarioForPlayer(battleInfo.opponentBoard);
 	const result = {
 		isSupported: playerSupport.isSupported && oppSupport.isSupported,
 		reason: playerSupport.reason ?? oppSupport.reason,
@@ -367,8 +364,8 @@ export const isSupportedScenario = (
 			result,
 			playerSupport,
 			oppSupport,
-			gameState?.playerDeck?.secrets,
-			gameState?.opponentDeck?.secrets,
+			battleInfo?.playerBoard?.secrets,
+			battleInfo?.opponentBoard?.secrets,
 			battleInfo,
 		);
 	}
@@ -377,7 +374,6 @@ export const isSupportedScenario = (
 
 const isSupportedScenarioForPlayer = (
 	boardInfo: BgsBoardInfo,
-	secrets: readonly BoardSecret[],
 ): {
 	isSupported: boolean;
 	reason?: BattleInfoMessage;
@@ -389,7 +385,7 @@ const isSupportedScenarioForPlayer = (
 				isSupported: false,
 				reason: 'scallywag',
 			};
-		} else if (secrets?.length > 0) {
+		} else if (boardInfo?.secrets?.length > 0) {
 			//console.debug('not supported');
 			return {
 				isSupported: false,

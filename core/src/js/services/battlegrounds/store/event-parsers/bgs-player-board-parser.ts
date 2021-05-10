@@ -3,12 +3,12 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
 import { Map } from 'immutable';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
-import { GameState } from '../../../../models/decktracker/game-state';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
@@ -23,17 +23,13 @@ export class BgsPlayerBoardParser implements EventParser {
 		return state && state.currentGame && gameEvent.type === 'BgsPlayerBoardEvent';
 	}
 
-	public async parse(
-		currentState: BattlegroundsState,
-		event: BgsPlayerBoardEvent,
-		gameState: GameState,
-	): Promise<BattlegroundsState> {
+	public async parse(currentState: BattlegroundsState, event: BgsPlayerBoardEvent): Promise<BattlegroundsState> {
 		console.log(
 			'[bgs-simulation] received player boards',
 			event.playerBoard?.board?.length,
 			event.opponentBoard?.board?.length,
-			gameState?.playerDeck?.secrets,
-			gameState?.opponentDeck?.secrets,
+			event.playerBoard?.secrets,
+			event.opponentBoard?.secrets,
 		);
 
 		// console.debug('[bgs-simulation] received player boards', event);
@@ -80,7 +76,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		//console.log('preparing support computation');
 		const prefs = await this.prefs.getPreferences();
 		const showSimulation = !prefs.bgsShowSimResultsOnlyOnRecruit;
-		const isSupported = isSupportedScenario(battleInfo, gameState);
+		const isSupported = isSupportedScenario(battleInfo);
 		//console.debug('supported?', isSupported, isSupported.reason, battleInfo, gameState);
 		const newGame = currentState.currentGame.update({
 			players: newPlayers,
@@ -104,6 +100,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 	private buildBgsBoardInfo(player: BgsPlayer, playerBoard: PlayerBoard): BgsBoardInfo {
 		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board);
+		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets);
 		let tavernTier =
 			playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
 			player.getCurrentTavernTier();
@@ -120,6 +117,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				heroPowerUsed: playerBoard.heroPowerUsed,
 			},
 			board: bgsBoard,
+			secrets: secrets,
 		};
 	}
 

@@ -946,6 +946,7 @@ export class GameEvents {
 							playerBoard: {
 								cardId: gameEvent.Value.PlayerBoard.CardId,
 								board: gameEvent.Value.PlayerBoard.Board, // as is
+								secrets: gameEvent.Value.PlayerBoard.Secrets, // as is
 								hero: gameEvent.Value.PlayerBoard.Hero, // as is
 								heroPowerCardId: gameEvent.Value.PlayerBoard.HeroPowerCardId,
 								heroPowerUsed: gameEvent.Value.PlayerBoard.HeroPowerUsed,
@@ -953,6 +954,7 @@ export class GameEvents {
 							opponentBoard: {
 								cardId: gameEvent.Value.OpponentBoard.CardId,
 								board: gameEvent.Value.OpponentBoard.Board, // as is
+								secrets: gameEvent.Value.OpponentBoard.Secrets, // as is
 								hero: gameEvent.Value.OpponentBoard.Hero, // as is
 								heroPowerCardId: gameEvent.Value.OpponentBoard.HeroPowerCardId,
 								heroPowerUsed: gameEvent.Value.OpponentBoard.HeroPowerUsed,

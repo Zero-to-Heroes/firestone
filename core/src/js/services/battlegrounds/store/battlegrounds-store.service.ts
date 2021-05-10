@@ -269,6 +269,7 @@ export class BattlegroundsStoreService {
 						{
 							heroCardId: gameEvent.additionalData.playerBoard.cardId,
 							board: gameEvent.additionalData.playerBoard.board,
+							secrets: gameEvent.additionalData.playerBoard.secrets,
 							hero: gameEvent.additionalData.playerBoard.hero,
 							heroPowerCardId: gameEvent.additionalData.playerBoard.heroPowerCardId,
 							heroPowerUsed: gameEvent.additionalData.playerBoard.heroPowerUsed,
@@ -276,6 +277,7 @@ export class BattlegroundsStoreService {
 						{
 							heroCardId: gameEvent.additionalData.opponentBoard.cardId,
 							board: gameEvent.additionalData.opponentBoard.board,
+							secrets: gameEvent.additionalData.opponentBoard.secrets,
 							hero: gameEvent.additionalData.opponentBoard.hero,
 							heroPowerCardId: gameEvent.additionalData.opponentBoard.heroPowerCardId,
 							heroPowerUsed: gameEvent.additionalData.opponentBoard.heroPowerUsed,

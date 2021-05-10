@@ -78,7 +78,7 @@ export class BgsBattleResultParser implements EventParser {
 			currentState.currentGame.battleInfo,
 			currentState.currentGame.battleResult,
 		);
-		if (isSupportedScenario(currentState.currentGame.battleInfo, gameState).isSupported) {
+		if (isSupportedScenario(currentState.currentGame.battleInfo).isSupported) {
 			captureEvent({
 				message: 'Impossible battle ' + status,
 				extra: {

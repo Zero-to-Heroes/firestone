@@ -7,6 +7,8 @@ export interface EventParser {
 	parse(
 		currentState: BattlegroundsState,
 		gameEvent: BattlegroundsStoreEvent,
+		// Try to avoid relying on it as much as possible, because it can create race conditions
+		// with the game state service
 		gameState?: GameState,
 	): Promise<BattlegroundsState>;
 }
