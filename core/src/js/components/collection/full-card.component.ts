@@ -49,7 +49,7 @@ declare let amplitude;
 						<span class="sub-title">Set:</span>
 						<span class="value">{{ set }}</span>
 					</div>
-					<div class="card-info rarity">
+					<div class="card-info rarity" *ngIf="rarityd">
 						<span class="sub-title">Rarity:</span>
 						<span class="value">{{ rarity }}</span>
 					</div>
@@ -101,6 +101,7 @@ export class FullCardComponent {
 			return;
 		}
 
+		console.debug('card', selectedCard);
 		this.previousClips = this.audioClips || [];
 		this.audioCategories = this.buildAudio(selectedCard);
 		this.audioClips = this.audioCategories
@@ -132,7 +133,10 @@ export class FullCardComponent {
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
 		this.rarity = card.rarity;
-		this.flavor = card.flavor ? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(card.flavor)) : null;
+		const flavorSource = card.flavor ?? card.text;
+		this.flavor = flavorSource?.length
+			? this.sanitizer.bypassSecurityTrustHtml(this.transformFlavor(flavorSource))
+			: null;
 	}
 
 	constructor(
@@ -186,12 +190,19 @@ export class FullCardComponent {
 				name: 'Errors',
 				clips: this.buildAudioClips(card.audio, 'emote', 'error'),
 			},
-			{
-				name: 'Other',
-				clips: this.buildAudioClips(card.audio, null),
-			},
 		];
-		return result.filter((cat) => cat.clips.length > 0);
+		const allMappedClips = result
+			.map((cat) => cat.clips)
+			.reduce((a, b) => a.concat(b), [])
+			.map((clip) => clip.originalKey);
+		const otherAudio = { ...card.audio };
+		allMappedClips.forEach((key) => delete otherAudio[key]);
+		const otherCategory = {
+			name: 'Other',
+			clips: this.buildAudioClips(otherAudio, null),
+		};
+
+		return [...result, otherCategory].filter((cat) => cat.clips.length > 0);
 	}
 
 	private buildAudioClips(audio, type: 'basic' | 'spell' | 'emote' | null, category?: string): readonly AudioClip[] {
@@ -208,6 +219,7 @@ export class FullCardComponent {
 				const files = [...audio[key]];
 				const audioClip: AudioClip = {
 					name: this.getSoundName(key),
+					originalKey: key,
 					files: files,
 					audios: files.map((file) =>
 						this.createAudio(`https://static.zerotoheroes.com/hearthstone/audio/${file}?v=2`),
@@ -424,26 +436,24 @@ export class FullCardComponent {
 				return regex.value;
 			}
 		}
-		// console.debug('transformling', key);
 		return key
 			? capitalizeEachWord(
 					key
-						.replace(/.*/g, '')
-						.replace(/SPELL.*/g, '')
-						.replace(/Spell.*/g, '')
-						.replace(/spell.*/g, '')
+						.replace(/SPELL/g, '')
+						.replace(/Spell/g, '')
+						.replace(/spell/g, '')
 						// Order is important here
-						.replace(/Hero(_\d*[a-z]?)?.*/g, '')
-						.replace(/HERO(_\d*[a-z]?)?.*/g, '')
-						.replace(/VO__Male.*/g, '')
-						.replace(/VO__Female.*/g, '')
-						.replace(/VO__(MALE)?.*/g, '')
-						.replace(/VO__(FEMALE)?.*/g, '')
-						.replace(/VO_.*/g, '')
-						.replace(/MALE_.*/g, '')
-						.replace(/Male_.*/g, '')
-						.replace(/Female_.*/g, '')
-						.replace(/_.*/g, ' ')
+						.replace(/Hero(_\d*[a-z]?)?/g, '')
+						.replace(/HERO(_\d*[a-z]?)?/g, '')
+						.replace(/VO__Male/g, '')
+						.replace(/VO__Female/g, '')
+						.replace(/VO__(MALE)?/g, '')
+						.replace(/VO__(FEMALE)?/g, '')
+						.replace(/VO_/g, '')
+						.replace(/MALE_/g, '')
+						.replace(/Male_/g, '')
+						.replace(/Female_/g, '')
+						.replace(/_/g, ' ')
 						.trim(),
 			  )
 			: '';
@@ -471,10 +481,7 @@ export class FullCardComponent {
 	}
 
 	private transformFlavor(flavor: string): string {
-		const result = flavor
-			.replace(/\n.*/g, '<br>')
-			.replace(/<i>.*/g, '')
-			.replace(/<\/i>.*/g, '');
+		const result = flavor.replace(/\n/g, '<br>').replace(/<i>/g, '').replace(/<\/i>/g, '').replace(/<br>/g, ' ');
 		console.debug('flvor', flavor, result);
 		return result;
 	}
@@ -487,6 +494,7 @@ interface AudioClipCategory {
 
 interface AudioClip {
 	name: string;
+	originalKey: string;
 	files: string[];
 	audios: HTMLAudioElement[];
 }

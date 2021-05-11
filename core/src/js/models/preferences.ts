@@ -55,6 +55,7 @@ export class Preferences {
 	readonly collectionCardScale: number = 100;
 	readonly collectionSetShowGoldenStats: boolean = false;
 	readonly collectionUseAnimatedCardBacks: boolean = false;
+	readonly collectionShowUncollectiblePortraits: boolean = false;
 	readonly collectionShowOnlyBuyablePacks: boolean = false;
 
 	readonly desktopDeckFilters: DeckFilters;

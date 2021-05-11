@@ -68,6 +68,7 @@ import { CollectionReferenceCard } from './collection-reference-card';
 						<hero-portraits
 							*ngxCacheIf="_navigation.navigationCollection.currentView === 'hero-portraits'"
 							[heroPortraits]="heroPortraits"
+							[prefs]="prefs"
 						>
 						</hero-portraits>
 						<the-coins
@@ -196,7 +197,10 @@ export class CollectionComponent {
 						...card,
 						numberOwned: 1,
 				  } as CollectionReferenceCard)
-				: card,
+				: ({
+						...card,
+						numberOwned: 0,
+				  } as CollectionReferenceCard),
 		) as CollectionReferenceCard[];
 	}
 

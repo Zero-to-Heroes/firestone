@@ -8,6 +8,8 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { Subscription } from 'rxjs';
@@ -18,7 +20,6 @@ import { formatClass } from '../../services/hs-utils';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
-import { PreferencesService } from '../../services/preferences.service';
 import { groupByFunction } from '../../services/utils';
 import { CollectionReferenceCard } from './collection-reference-card';
 
@@ -35,7 +36,14 @@ import { CollectionReferenceCard } from './collection-reference-card';
 					class="owned-filter"
 					(onOptionSelected)="selectCardsOwnedFilter($event)"
 				></collection-owned-filter>
-				<progress-bar class="progress-bar" [current]="unlocked" [total]="total"></progress-bar>
+				<preference-toggle
+					class="show-uncollectible-portraits"
+					[ngClass]="{ 'active': showUncollectiblePortraits }"
+					field="collectionShowUncollectiblePortraits"
+					label="Show non-collectible"
+					helpTooltip="Show non-collectible heroes, such as adventure bosses"
+				></preference-toggle>
+				<progress-bar class="progress-bar" *ngIf="total" [current]="unlocked" [total]="total"></progress-bar>
 			</div>
 			<ul class="cards-list" *ngIf="shownHeroPortraits?.length" scrollable>
 				<div
@@ -77,28 +85,40 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 		this.updateInfo();
 	}
 
+	@Input() set prefs(value: Preferences) {
+		if (!value) {
+			return;
+		}
+
+		this.showUncollectiblePortraits = value.collectionShowUncollectiblePortraits;
+		this.handleDisplayPreferences(value);
+		this.updateInfo();
+	}
+
+	showUncollectiblePortraits: boolean;
 	_heroPortraits: readonly CollectionReferenceCard[];
 	shownHeroPortraits: readonly PortraitGroup[];
 	_navigation: NavigationCollection;
 	unlocked: number;
 	total: number;
 
+	private allPortraits: readonly ReferenceCard[];
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private preferencesSubscription: Subscription;
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
 		private readonly cdr: ChangeDetectorRef,
+		private readonly allCards: AllCardsService,
 	) {}
 
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.handleDisplayPreferences(event.preferences);
-		});
-		await this.handleDisplayPreferences();
+		// const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		// this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
+		// 	this.handleDisplayPreferences(event.preferences);
+		// });
+		// await this.handleDisplayPreferences();
 	}
 
 	ngOnDestroy() {
@@ -118,8 +138,8 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 		return card.id;
 	}
 
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
+	private async handleDisplayPreferences(preferences: Preferences) {
+		preferences = preferences;
 		const cardScale = preferences.collectionCardScale / 100;
 		this.cardWidth = cardScale * this.DEFAULT_CARD_WIDTH;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -132,19 +152,42 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		this.total = this._heroPortraits.length;
-		this.unlocked = this._heroPortraits.filter((item) => item.numberOwned > 0).length;
+		if (!this.showUncollectiblePortraits) {
+			this.total = this._heroPortraits.length;
+			this.unlocked = this._heroPortraits.filter((item) => item.numberOwned > 0).length;
 
-		const groupedByClass = groupByFunction((portrait: CollectionReferenceCard) =>
-			portrait.playerClass?.toLowerCase(),
-		)(this._heroPortraits.filter(this.filterCardsOwned()));
+			const groupedByClass = groupByFunction((portrait: CollectionReferenceCard) =>
+				portrait.playerClass?.toLowerCase(),
+			)(this._heroPortraits.filter(this.filterCardsOwned()));
 
-		this.shownHeroPortraits = Object.keys(groupedByClass)
-			.sort()
-			.map((playerClass) => ({
-				title: formatClass(playerClass),
-				portraits: groupedByClass[playerClass],
-			}));
+			this.shownHeroPortraits = Object.keys(groupedByClass)
+				.sort()
+				.map((playerClass) => ({
+					title: formatClass(playerClass),
+					portraits: groupedByClass[playerClass],
+				}));
+		} else {
+			this.total = undefined;
+			this.unlocked = undefined;
+			this.allPortraits =
+				this.allPortraits ??
+				this.allCards
+					.getCards()
+					.filter((card) => card.type === 'Hero')
+					.filter((card) => card.audio && Object.keys(card.audio).length > 0)
+					.filter((card) => !card.collectible);
+
+			const groupedByClass = groupByFunction((portrait: ReferenceCard) => portrait.playerClass?.toLowerCase())(
+				this.allPortraits,
+			);
+
+			this.shownHeroPortraits = Object.keys(groupedByClass)
+				.sort()
+				.map((playerClass) => ({
+					title: formatClass(playerClass),
+					portraits: groupedByClass[playerClass],
+				}));
+		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -167,5 +210,5 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 
 interface PortraitGroup {
 	readonly title: string;
-	readonly portraits: readonly CollectionReferenceCard[];
+	readonly portraits: readonly (ReferenceCard | CollectionReferenceCard)[];
 }
