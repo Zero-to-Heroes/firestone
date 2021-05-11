@@ -5,7 +5,14 @@ import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
 import { FeatureFlags } from '../../services/feature-flags';
-import { boosterIdToSetId, dustToCraftFor, dustToCraftForPremium, getPackDustValue } from '../../services/hs-utils';
+import {
+	boosterIdToSetId,
+	dustFor,
+	dustForPremium,
+	dustToCraftFor,
+	dustToCraftForPremium,
+	getPackDustValue,
+} from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { InputPieChartData } from '../common/chart/input-pie-chart-data';
@@ -213,12 +220,21 @@ export class SetStatsComponent implements AfterViewInit {
 		const totalDust = this._set.allCards
 			.map((card) => dustToCraftFor(card.rarity) * card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);
+		const duplicateDust = this._set.allCards
+			.map((card) => dustFor(card.rarity) * Math.max(0, card.ownedNonPremium - card.getMaxCollectible()))
+			.reduce((a, b) => a + b, 0);
 		return [
 			{
 				text: 'Dust',
 				current: currentDust,
 				total: totalDust,
 				tooltip: `You need ${(totalDust - currentDust).toLocaleString()} dust to complete the set`,
+			},
+			{
+				text: 'Duplicate dust',
+				current: duplicateDust,
+				total: undefined,
+				tooltip: `You can gain ${duplicateDust.toLocaleString()} dust by disenchanting non-golden duplicate cards`,
 			},
 			{
 				text: 'Common',
@@ -250,12 +266,21 @@ export class SetStatsComponent implements AfterViewInit {
 		const totalDust = this._set.allCards
 			.map((card) => dustToCraftForPremium(card.rarity) * card.getMaxCollectible())
 			.reduce((a, b) => a + b, 0);
+		const duplicateDust = this._set.allCards
+			.map((card) => dustForPremium(card.rarity) * Math.max(0, card.ownedPremium - card.getMaxCollectible()))
+			.reduce((a, b) => a + b, 0);
 		return [
 			{
 				text: 'Golden Dust',
 				current: currentDust,
 				total: totalDust,
 				tooltip: `You need ${(totalDust - currentDust).toLocaleString()} dust to complete the golden set`,
+			},
+			{
+				text: 'Golden Dupe dust',
+				current: duplicateDust,
+				total: undefined,
+				tooltip: `You can gain ${duplicateDust.toLocaleString()} dust by disenchanting golden duplicate cards`,
 			},
 			{
 				text: 'Golden Common',
