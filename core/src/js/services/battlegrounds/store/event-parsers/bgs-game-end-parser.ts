@@ -37,6 +37,7 @@ export class BgsGameEndParser implements EventParser {
 		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : stage,
 		);
+		const shouldHideResultsOnRecruit = prefs.bgsHideSimResultsOnRecruit && !prefs.bgsShowSimResultsOnlyOnRecruit;
 		return currentState.update({
 			stages: stages,
 			currentStageId: 'post-match',
@@ -48,6 +49,14 @@ export class BgsGameEndParser implements EventParser {
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				reviewId: event.reviewId,
+				battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
+				battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
+				battleInfoStatus:
+					shouldHideResultsOnRecruit || !currentState.currentGame.battleResult ? 'empty' : 'done',
+				battleInfoMesage:
+					shouldHideResultsOnRecruit || !currentState.currentGame.battleResult
+						? undefined
+						: currentState.currentGame.battleInfoMesage,
 			} as BgsGame),
 		} as BattlegroundsState);
 	}
