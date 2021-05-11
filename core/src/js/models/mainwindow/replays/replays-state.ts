@@ -1,5 +1,6 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { IOption } from 'ng-select';
+import { classes, formatClass } from '../../../services/hs-utils';
 import { DeckSummary } from '../decktracker/deck-summary';
 import { GameStat } from '../stats/game-stat';
 import { GroupedReplays } from './grouped-replays';
@@ -117,6 +118,26 @@ export class ReplaysState {
 								({
 									label: card.name,
 									value: card.id,
+								} as IOption),
+						)
+						.sort((a, b) => collator.compare(a.label, b.label)),
+				] as readonly IOption[],
+				selectedOption: null,
+			} as ReplaysFilter),
+			ReplaysFilter.create({
+				type: 'player-class',
+				placeholder: 'All classes',
+				options: [
+					{
+						value: null,
+						label: 'All classes',
+					} as IOption,
+					...classes
+						.map(
+							(playerClass) =>
+								({
+									label: formatClass(playerClass),
+									value: playerClass,
 								} as IOption),
 						)
 						.sort((a, b) => collator.compare(a.label, b.label)),

@@ -33,6 +33,8 @@ export class ReplaysFilter {
 				return stat.playerDecklist === this.selectedOption;
 			case 'bg-hero':
 				return stat.playerCardId === this.selectedOption;
+			case 'player-class':
+				return stat.playerClass === this.selectedOption;
 			default:
 				return true;
 		}

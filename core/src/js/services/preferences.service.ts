@@ -108,6 +108,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateReplayFilterPlayerClass(type: ReplaysFilterCategoryType, value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, replaysFilterPlayerClass: value };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async setDontShowNewVersionNotif(value: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontShowNewVersionNotif: value };

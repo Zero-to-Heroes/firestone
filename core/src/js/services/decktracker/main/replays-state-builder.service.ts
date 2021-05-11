@@ -73,6 +73,10 @@ export class ReplaysStateBuilderService {
 				type: 'bg-hero',
 				value: prefs.replaysFilterBgHero,
 			},
+			{
+				type: 'player-class',
+				value: prefs.replaysFilterPlayerClass,
+			},
 		];
 	}
 

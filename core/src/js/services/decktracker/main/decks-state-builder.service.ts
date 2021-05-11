@@ -13,19 +13,7 @@ import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-f
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
-
-const ALL_CLASSES = [
-	'demonhunter',
-	'druid',
-	'hunter',
-	'mage',
-	'paladin',
-	'priest',
-	'rogue',
-	'shaman',
-	'warlock',
-	'warrior',
-];
+import { classes } from '../../hs-utils';
 
 @Injectable()
 export class DecksStateBuilderService {
@@ -232,7 +220,7 @@ export class DecksStateBuilderService {
 	}
 
 	private buildMatchupStats(stats: readonly GameStat[]): readonly MatchupStat[] {
-		return ALL_CLASSES.map((opponentClass) => {
+		return classes.map((opponentClass) => {
 			const games = stats.filter((stat) => stat.opponentClass?.toLowerCase() === opponentClass);
 			return {
 				opponentClass: opponentClass,

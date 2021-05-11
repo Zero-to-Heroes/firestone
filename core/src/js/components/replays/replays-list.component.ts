@@ -30,6 +30,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 					[filterCategory]="'bg-hero'"
 					*ngIf="!shouldHideBgHeroFilter"
 				></replays-filter>
+				<replays-filter
+					[state]="_state"
+					[filterCategory]="'player-class'"
+					*ngIf="!shouldHidePlayerClassFilter"
+				></replays-filter>
 			</div>
 			<infinite-scroll class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let replay of displayedReplays">
@@ -60,6 +65,7 @@ export class ReplaysListComponent implements AfterViewInit {
 
 	shouldHideDeckstringFilter: boolean;
 	shouldHideBgHeroFilter: boolean;
+	shouldHidePlayerClassFilter: boolean;
 
 	private replaysIterator: IterableIterator<void>;
 
@@ -75,6 +81,9 @@ export class ReplaysListComponent implements AfterViewInit {
 			this._state.getFilter('gameMode').selectedOption,
 		);
 		this.shouldHideBgHeroFilter = !['battlegrounds'].includes(this._state.getFilter('gameMode').selectedOption);
+		this.shouldHidePlayerClassFilter = [null, 'battlegrounds', 'practice'].includes(
+			this._state.getFilter('gameMode').selectedOption,
+		);
 		this.displayedReplays = [];
 		this._replays = value.groupedReplays || [];
 		this.handleProgressiveDisplay();
