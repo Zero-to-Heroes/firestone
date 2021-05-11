@@ -20,7 +20,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="replays-container">
 			<div class="filters">
 				<replays-filter [state]="_state" [filterCategory]="'gameMode'"></replays-filter>
-				<replays-filter [state]="_state" [filterCategory]="'deckstring'"></replays-filter>
+				<replays-filter
+					[state]="_state"
+					[filterCategory]="'deckstring'"
+					*ngIf="!shouldHideDeckstringFilter"
+				></replays-filter>
 			</div>
 			<infinite-scroll class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let replay of displayedReplays">
@@ -49,6 +53,8 @@ export class ReplaysListComponent implements AfterViewInit {
 	_state: ReplaysState;
 	isLoading: boolean;
 
+	shouldHideDeckstringFilter: boolean;
+
 	private replaysIterator: IterableIterator<void>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -59,12 +65,16 @@ export class ReplaysListComponent implements AfterViewInit {
 			return;
 		}
 		this._state = value;
+		this.shouldHideDeckstringFilter = ![
+			null,
+			'ranked',
+			'ranked-standard',
+			'ranked-wild',
+			'ranked-classic',
+		].includes(this._state.getFilter('gameMode').selectedOption);
 		this.displayedReplays = [];
 		this._replays = value.groupedReplays || [];
 		this.handleProgressiveDisplay();
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
 	}
 
 	constructor(
