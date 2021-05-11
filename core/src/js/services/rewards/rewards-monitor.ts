@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Map } from 'immutable';
 import { MemoryUpdate } from '../../models/memory/memory-update';
-import { Preferences } from '../../models/preferences';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OwNotificationsService } from '../notifications.service';
@@ -185,7 +184,7 @@ export class RewardMonitorService {
 				console.log('[rewards-monitor] received xp changes', changes.XpChanges);
 				// Not sure what the other items are about
 				const xpChange = changes.XpChanges[0];
-				const prefs: Preferences = await this.prefs.getPreferences();
+				// const prefs: Preferences = await this.prefs.getPreferences();
 				const levelsGained = xpChange.CurrentLevel - xpChange.PreviousLevel;
 				const xpGained =
 					levelsGained === 0
@@ -197,17 +196,17 @@ export class RewardMonitorService {
 				const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
 				const xpModifier = 1 + (rewardTrackInfo?.XpBonusPercent ?? 0) / 100;
 				const rawXpGained = xpGained / xpModifier;
-				if (prefs.showXpRecapAtGameEnd) {
-					this.xpForGameInfo = {
-						xpGainedWithoutBonus: rawXpGained,
-						realXpGained: xpGained,
-						bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
-						levelsGained: levelsGained,
-						currentXp: xpChange.CurrentXp,
-						xpNeeded: RewardMonitorService.XP_PER_LEVEL.get(xpChange.CurrentLevel, 1500),
-					};
-					console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
-				}
+				// if (prefs.showXpRecapAtGameEnd) {
+				this.xpForGameInfo = {
+					xpGainedWithoutBonus: rawXpGained,
+					realXpGained: xpGained,
+					bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
+					levelsGained: levelsGained,
+					currentXp: xpChange.CurrentXp,
+					xpNeeded: RewardMonitorService.XP_PER_LEVEL.get(xpChange.CurrentLevel, 1500),
+				};
+				console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
+				// }
 			}
 		});
 	}
