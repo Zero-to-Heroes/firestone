@@ -6,7 +6,6 @@ import { GameStateService } from '../decktracker/game-state.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
-import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { EndGameUploaderService } from './end-game-uploader.service';
 import { ReplayUploadService } from './replay-upload.service';
 
@@ -28,30 +27,14 @@ export class EndGameListenerService {
 		private gameState: GameStateService,
 		private replayUpload: ReplayUploadService,
 		private ow: OverwolfService,
-		private rewards: RewardMonitorService,
 	) {
 		this.init();
 	}
 
 	private init(): void {
 		console.log('[manastorm-bridge] stgarting end-game-listener init');
-		// this.events.on(Events.NEW_GAME_ID).subscribe(async event => {
-		// 	console.log('[manastorm-bridge] Received new game id event', event);
-		// 	this.currentGameId = event.data[0];
-		// });
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			switch (gameEvent.type) {
-				// case GameEvent.GAME_START:
-				// 	console.log('[manastorm-bridge] Creating empty review');
-				// 	const currentReviewId = uuid();
-				// 	console.log('[manastorm-bridge] built currentReviewId', currentReviewId);
-				// 	const info = {
-				// 		type: 'new-empty-review',
-				// 		reviewId: currentReviewId,
-				// 	};
-				// 	this.events.broadcast(Events.REVIEW_INITIALIZED, info);
-				// 	this.ow.setExtensionInfo(JSON.stringify(info));
-				// 	break;
 				case GameEvent.LOCAL_PLAYER:
 					this.listenToDeckUpdate();
 					break;
@@ -62,10 +45,14 @@ export class EndGameListenerService {
 					break;
 				case GameEvent.GAME_END:
 					console.log('[manastorm-bridge] end game, uploading?');
-					const [reviewId, xpGained] = await Promise.all([
-						this.gameState.getCurrentReviewId(),
-						this.rewards.getXpGained(),
-					]);
+					// Keep the await / long processes here to a minimum, since
+					// we want to start reading all the important memory bits as soon
+					// as possible
+					const reviewId = await this.gameState.getCurrentReviewId();
+					// const [reviewId, xpGained] = await Promise.all([
+					// 	this.gameState.getCurrentReviewId(),
+					// 	this.rewards.getXpGained(),
+					// ]);
 					this.events.broadcast(Events.GAME_END, reviewId);
 
 					await this.endGameUploader.upload(
@@ -75,7 +62,6 @@ export class EndGameListenerService {
 						this.currentDeckname,
 						this.currentBuildNumber,
 						this.currentScenarioId,
-						xpGained,
 					);
 					if (this.deckTimeout) {
 						clearTimeout(this.deckTimeout);

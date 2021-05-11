@@ -7,6 +7,7 @@ import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.ser
 import { LogsUploaderService } from '../logs-uploader.service';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { RewardMonitorService } from '../rewards/rewards-monitor';
 import { sleep } from '../utils';
 import { GameForUpload } from './game-for-upload';
 import { GameParserService } from './game-parser.service';
@@ -32,6 +33,7 @@ export class EndGameUploaderService {
 		private memoryInspection: MemoryInspectionService,
 		private dungeonLootParser: DungeonLootParserService,
 		private logService: LogsUploaderService,
+		private rewards: RewardMonitorService,
 	) {}
 
 	public async upload(
@@ -41,7 +43,6 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
-		xpGained: number,
 	): Promise<void> {
 		console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
@@ -51,7 +52,6 @@ export class EndGameUploaderService {
 			deckName,
 			buildNumber,
 			scenarioId,
-			xpGained,
 		);
 		await this.replayUploadService.uploadGame(game);
 	}
@@ -63,7 +63,6 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
-		xpGained: number,
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
@@ -85,15 +84,24 @@ export class EndGameUploaderService {
 		// Get the memory info first, because parsing the XML can take some time and make the
 		// info in memory stale / unavailable
 		console.log('[manastorm-bridge]', currentReviewId, 'reading memory info');
-		const battlegroundsInfo: BattlegroundsInfo =
-			game.gameMode === 'battlegrounds' ? await this.getBattlegroundsEndGame(currentReviewId) : null;
-		const duelsInfo =
-			game.gameMode === 'duels' || game.gameMode === 'paid-duels'
-				? await this.memoryInspection.getDuelsInfo()
-				: null;
-		const arenaInfo = game.gameMode === 'arena' ? await this.memoryInspection.getArenaInfo() : null;
-		const playerInfo = await this.playersInfo.getPlayerInfo();
-		const opponentInfo = await this.playersInfo.getOpponentInfo();
+		const [battlegroundsInfo, duelsInfo, arenaInfo, playerInfo, opponentInfo, xpGained] = await Promise.all([
+			game.gameMode === 'battlegrounds' ? this.getBattlegroundsEndGame(currentReviewId) : null,
+			game.gameMode === 'duels' || game.gameMode === 'paid-duels' ? this.memoryInspection.getDuelsInfo() : null,
+			game.gameMode === 'arena' ? this.memoryInspection.getArenaInfo() : null,
+			this.playersInfo.getPlayerInfo(),
+			this.playersInfo.getOpponentInfo(),
+			this.rewards.getXpGained(),
+		]);
+		// const battlegroundsInfo: BattlegroundsInfo =
+		// 	game.gameMode === 'battlegrounds' ? await this.getBattlegroundsEndGame(currentReviewId) : null;
+		// const duelsInfo =
+		// 	game.gameMode === 'duels' || game.gameMode === 'paid-duels'
+		// 		? await this.memoryInspection.getDuelsInfo()
+		// 		: null;
+		// const arenaInfo = game.gameMode === 'arena' ? await this.memoryInspection.getArenaInfo() : null;
+		// const playerInfo = await this.playersInfo.getPlayerInfo();
+		// const opponentInfo = await this.playersInfo.getOpponentInfo();
+		// const xpGained = await this.rewards.getXpGained();
 		console.log('[manastorm-bridge]', currentReviewId, 'read memory info');
 
 		const replay = parseHsReplayString(replayXml);
