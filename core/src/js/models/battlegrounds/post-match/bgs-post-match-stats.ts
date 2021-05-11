@@ -13,36 +13,36 @@ import { BooleanTurnInfo } from './boolean-turn-info';
 import { NumericTurnInfo } from './numeric-turn-info';
 
 export class BgsPostMatchStats implements IBgsPostMatchStats {
-	readonly tavernTimings: readonly BgsTavernUpgrade[];
-	readonly tripleTimings: readonly BgsTriple[];
+	readonly tavernTimings: readonly BgsTavernUpgrade[] = [];
+	readonly tripleTimings: readonly BgsTriple[] = [];
 	readonly rerolls: number;
 	readonly highestWinStreak: number;
 
 	readonly replayLink: string;
 
-	readonly boardHistory: readonly BgsBoard[];
-	readonly compositionsOverTurn: readonly BgsComposition[];
-	readonly rerollsOverTurn: readonly NumericTurnInfo[];
-	readonly freezesOverTurn: readonly NumericTurnInfo[];
-	readonly coinsWastedOverTurn: readonly NumericTurnInfo[];
-	readonly mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[];
-	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
-	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] };
-	readonly totalStatsOverTurn: readonly NumericTurnInfo[];
-	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[];
-	readonly damageToEnemyHeroOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[];
+	readonly boardHistory: readonly BgsBoard[] = [];
+	readonly compositionsOverTurn: readonly BgsComposition[] = [];
+	readonly rerollsOverTurn: readonly NumericTurnInfo[] = [];
+	readonly freezesOverTurn: readonly NumericTurnInfo[] = [];
+	readonly coinsWastedOverTurn: readonly NumericTurnInfo[] = [];
+	readonly mainPlayerHeroPowersOverTurn: readonly NumericTurnInfo[] = [];
+	readonly hpOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
+	readonly leaderboardPositionOverTurn: { [playerCardId: string]: readonly NumericTurnInfo[] } = {};
+	readonly totalStatsOverTurn: readonly NumericTurnInfo[] = [];
+	readonly wentFirstInBattleOverTurn: readonly BooleanTurnInfo[] = [];
+	readonly damageToEnemyHeroOverTurn: readonly ComplexTurnInfo<ValueHeroInfo>[] = [];
 
-	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[];
-	readonly minionsSoldOverTurn: readonly NumericTurnInfo[];
+	readonly minionsBoughtOverTurn: readonly NumericTurnInfo[] = [];
+	readonly minionsSoldOverTurn: readonly NumericTurnInfo[] = [];
 
-	readonly totalMinionsDamageDealt: { [cardId: string]: number };
-	readonly totalMinionsDamageTaken: { [cardId: string]: number };
+	readonly totalMinionsDamageDealt: { [cardId: string]: number } = {};
+	readonly totalMinionsDamageTaken: { [cardId: string]: number } = {};
 
 	readonly totalEnemyMinionsKilled: number;
 	readonly totalEnemyHeroesKilled: number;
 	readonly luckFactor: number;
-	readonly battleResultHistory: readonly BattleResultHistory[];
-	readonly faceOffs: readonly BgsFaceOff[];
+	readonly battleResultHistory: readonly BattleResultHistory[] = [];
+	readonly faceOffs: readonly BgsFaceOff[] = [];
 
 	public static create(base: BgsPostMatchStats): BgsPostMatchStats {
 		return Object.assign(new BgsPostMatchStats(), base);
