@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { GroupedReplays } from '../../../models/mainwindow/replays/grouped-replays';
 import { ReplaysFilter } from '../../../models/mainwindow/replays/replays-filter';
@@ -13,7 +14,7 @@ import { groupByFunction } from '../../utils';
 
 @Injectable()
 export class ReplaysStateBuilderService {
-	constructor(private readonly prefs: PreferencesService) {}
+	constructor(private readonly prefs: PreferencesService, private readonly allCards: AllCardsService) {}
 
 	public async buildState(
 		replayState: ReplaysState,
@@ -30,7 +31,7 @@ export class ReplaysStateBuilderService {
 			allReplays: allReplays,
 			groupedReplays: groupedReplays,
 			isLoading: false,
-			filters: ReplaysState.buildFilters(decks),
+			filters: ReplaysState.buildFilters(decks, this.allCards),
 		} as ReplaysState);
 		const stateWithFilters = await this.filterReplays(state, stats);
 		return stateWithFilters;
@@ -67,6 +68,10 @@ export class ReplaysStateBuilderService {
 			{
 				type: 'gameMode',
 				value: prefs.replaysFilterGameMode,
+			},
+			{
+				type: 'bg-hero',
+				value: prefs.replaysFilterBgHero,
 			},
 		];
 	}

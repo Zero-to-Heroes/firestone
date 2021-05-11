@@ -1,1 +1,1 @@
-export type ReplaysFilterCategoryType = 'gameMode' | 'deckstring';
+export type ReplaysFilterCategoryType = 'gameMode' | 'deckstring' | 'bg-hero';

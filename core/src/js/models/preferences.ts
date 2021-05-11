@@ -200,6 +200,7 @@ export class Preferences {
 	readonly replaysShowNotification: boolean = false;
 	readonly replaysFilterDeckstring: string;
 	readonly replaysFilterGameMode: string;
+	readonly replaysFilterBgHero: string;
 
 	readonly bgsFullToggle = true;
 	readonly bgsEnableApp = true;

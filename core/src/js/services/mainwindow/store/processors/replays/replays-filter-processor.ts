@@ -22,6 +22,9 @@ export class ReplaysFilterProcessor implements Processor {
 			case 'gameMode':
 				await this.prefs.updateReplayFilterGameMode(event.type, event.selectedValue);
 				break;
+			case 'bg-hero':
+				await this.prefs.updateReplayFilterBgHero(event.type, event.selectedValue);
+				break;
 		}
 		const newState: ReplaysState = await this.builder.filterReplays(currentState.replays, currentState.stats);
 		return [

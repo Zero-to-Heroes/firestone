@@ -1,3 +1,4 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { IOption } from 'ng-select';
 import { DeckSummary } from '../decktracker/deck-summary';
 import { GameStat } from '../stats/game-stat';
@@ -16,7 +17,8 @@ export class ReplaysState {
 		return this.filters.find((filter) => filter.type === type);
 	}
 
-	public static buildFilters(decks: readonly DeckSummary[]): readonly ReplaysFilter[] {
+	public static buildFilters(decks: readonly DeckSummary[], allCards: AllCardsService): readonly ReplaysFilter[] {
+		const collator = new Intl.Collator('en-US');
 		return [
 			ReplaysFilter.create({
 				type: 'gameMode',
@@ -96,6 +98,28 @@ export class ReplaysState {
 								value: deck.deckstring,
 							} as IOption),
 					),
+				] as readonly IOption[],
+				selectedOption: null,
+			} as ReplaysFilter),
+			ReplaysFilter.create({
+				type: 'bg-hero',
+				placeholder: 'All heroes',
+				options: [
+					{
+						value: null,
+						label: 'All heroes',
+					} as IOption,
+					...allCards
+						.getCards()
+						.filter((card) => card.battlegroundsHero)
+						.map(
+							(card) =>
+								({
+									label: card.name,
+									value: card.id,
+								} as IOption),
+						)
+						.sort((a, b) => collator.compare(a.label, b.label)),
 				] as readonly IOption[],
 				selectedOption: null,
 			} as ReplaysFilter),

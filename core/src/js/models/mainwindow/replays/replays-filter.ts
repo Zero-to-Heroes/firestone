@@ -31,6 +31,8 @@ export class ReplaysFilter {
 				return this.allowsGameMode(stat.gameMode, stat.gameFormat, this.selectedOption);
 			case 'deckstring':
 				return stat.playerDecklist === this.selectedOption;
+			case 'bg-hero':
+				return stat.playerCardId === this.selectedOption;
 			default:
 				return true;
 		}
