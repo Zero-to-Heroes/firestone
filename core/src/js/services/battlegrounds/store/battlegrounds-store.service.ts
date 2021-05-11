@@ -12,6 +12,7 @@ import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { FeatureFlags } from '../../feature-flags';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
+import { GameEvents } from '../../game-events.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../../overwolf.service';
@@ -122,6 +123,7 @@ export class BattlegroundsStoreService {
 		private realTimeStats: RealTimeStatsService,
 		private gameStateService: GameStateService,
 		private init_BgsRunStatsService: BgsRunStatsService,
+		private readonly gameEventsService: GameEvents,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -291,7 +293,11 @@ export class BattlegroundsStoreService {
 				// ignore it (while it's true that properly supporting it in reco cases would
 				// be good, there might be too many changes required to achieve this at a reasonable
 				// cost)
-				if (!this.state.reconnectOngoing && prefs.bgsEnableSimulation) {
+				if (
+					!this.state.reconnectOngoing &&
+					!this.gameEventsService.isCatchingUpLogLines() &&
+					prefs.bgsEnableSimulation
+				) {
 					if (
 						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId &&
 						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId !==
@@ -500,15 +506,15 @@ export class BattlegroundsStoreService {
 			new BgsHeroSelectionParser(this.memory, this.patchesService),
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsNextOpponentParser(),
-			new BgsTavernUpgradeParser(),
-			new BgsPlayerBoardParser(this.simulation, this.prefs),
+			new BgsTavernUpgradeParser(this.gameEventsService),
+			new BgsPlayerBoardParser(this.simulation, this.prefs, this.gameEventsService),
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
 			new BgsMatchStartParser(this.prefs, this.gameStateService),
 			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
-			new BgsBattleResultParser(this.events, this.ow),
+			new BgsBattleResultParser(this.events, this.ow, this.gameEventsService),
 			// new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(this.prefs),
 			new BgsPostMatchStatsFilterChangeParser(this.prefs),

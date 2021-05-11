@@ -1108,6 +1108,10 @@ export class GameEvents {
 	// private triggerTimeout;
 	private shouldTriggerCatchUp: boolean;
 
+	public isCatchingUpLogLines(): boolean {
+		return this.shouldTriggerCatchUp;
+	}
+
 	// Handles reading a log file mid-game, i.e. this data is already
 	// present in the log file when we're trying to read it
 	public receiveExistingLogLine(existingLine: string) {

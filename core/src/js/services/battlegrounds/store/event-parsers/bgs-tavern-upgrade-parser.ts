@@ -4,12 +4,15 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../../models/battlegrounds/in-game/bgs-triple';
+import { GameEvents } from '../../../game-events.service';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsTavernUpgradeEvent } from '../events/bgs-tavern-upgrade-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTavernUpgradeParser implements EventParser {
+	constructor(private readonly gameEventsService: GameEvents) {}
+
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsTavernUpgradeEvent';
 	}
@@ -20,13 +23,15 @@ export class BgsTavernUpgradeParser implements EventParser {
 		);
 		if (!playerToUpdate) {
 			if (event.heroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2) {
-				console.error(
-					'No player found to update the history',
-					currentState.currentGame.reviewId,
-					event.heroCardId,
-					normalizeHeroCardId(event.heroCardId),
-					currentState.currentGame.players.map((player) => player.cardId),
-				);
+				if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
+					console.error(
+						'No player found to update the history',
+						currentState.currentGame.reviewId,
+						event.heroCardId,
+						normalizeHeroCardId(event.heroCardId),
+						currentState.currentGame.players.map((player) => player.cardId),
+					);
+				}
 			}
 			return currentState;
 		}

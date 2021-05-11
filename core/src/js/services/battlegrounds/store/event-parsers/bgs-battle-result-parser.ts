@@ -4,6 +4,7 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../events.service';
+import { GameEvents } from '../../../game-events.service';
 import { OverwolfService } from '../../../overwolf.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsBattleResultEvent } from '../events/bgs-battle-result-event';
@@ -11,7 +12,11 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsBattleResultParser implements EventParser {
-	constructor(private readonly events: Events, private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly events: Events,
+		private readonly ow: OverwolfService,
+		private readonly gameEventsService: GameEvents,
+	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsBattleResultEvent';
@@ -23,10 +28,12 @@ export class BgsBattleResultParser implements EventParser {
 		gameState: GameState,
 	): Promise<BattlegroundsState> {
 		if (!currentState.currentGame.getMainPlayer()) {
-			console.error(
-				'[bgs-simulation] Could not find main player in battle result parser',
-				currentState.currentGame.players.map((player) => player.cardId),
-			);
+			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
+				console.error(
+					'[bgs-simulation] Could not find main player in battle result parser',
+					currentState.currentGame.players.map((player) => player.cardId),
+				);
+			}
 			return currentState;
 		}
 		const faceOff: BgsFaceOff = BgsFaceOff.create({

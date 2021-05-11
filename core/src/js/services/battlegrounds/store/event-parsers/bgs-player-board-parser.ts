@@ -9,6 +9,7 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
+import { GameEvents } from '../../../game-events.service';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
@@ -17,7 +18,11 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsPlayerBoardParser implements EventParser {
-	constructor(private readonly simulation: BgsBattleSimulationService, private readonly prefs: PreferencesService) {}
+	constructor(
+		private readonly simulation: BgsBattleSimulationService,
+		private readonly prefs: PreferencesService,
+		private readonly gameEventsService: GameEvents,
+	) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsPlayerBoardEvent';
@@ -126,13 +131,15 @@ export class BgsPlayerBoardParser implements EventParser {
 			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(playerBoard.heroCardId),
 		);
 		if (!playerToUpdate) {
-			console.error(
-				'Could not idenfity player for whom to update board history',
-				currentState.currentGame.reviewId,
-				playerBoard.heroCardId,
-				normalizeHeroCardId(playerBoard.heroCardId),
-				currentState.currentGame.players.map((player) => normalizeHeroCardId(player.cardId)),
-			);
+			if (!currentState.reconnectOngoing && !this.gameEventsService.isCatchingUpLogLines()) {
+				console.error(
+					'Could not idenfity player for whom to update board history',
+					currentState.currentGame.reviewId,
+					playerBoard.heroCardId,
+					normalizeHeroCardId(playerBoard.heroCardId),
+					currentState.currentGame.players.map((player) => normalizeHeroCardId(player.cardId)),
+				);
+			}
 			return null;
 		}
 		console.log(
