@@ -287,7 +287,11 @@ export class BattlegroundsStoreService {
 				);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_BATTLE_RESULT) {
 				// Sometimes the battle result arrives before the simulation is completed
-				if (prefs.bgsEnableSimulation) {
+				// This can typically happen in reconnection scenarios, and in this case we
+				// ignore it (while it's true that properly supporting it in reco cases would
+				// be good, there might be too many changes required to achieve this at a reasonable
+				// cost)
+				if (!this.state.reconnectOngoing && prefs.bgsEnableSimulation) {
 					if (
 						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId &&
 						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId !==
