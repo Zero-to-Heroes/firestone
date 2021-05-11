@@ -117,7 +117,7 @@ export class BgsChartWarbandCompositionComponent {
 			'#9FB6D7',
 			'#43403d',
 			'#DE5959',
-			'#964B00',
+			'#c56700',
 			'#D9C3AB',
 			'#D9C3AB',
 		],
