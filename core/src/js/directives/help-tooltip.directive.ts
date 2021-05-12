@@ -42,6 +42,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@Input() bindTooltipToGameWindow = false;
 	@Input() stayOpenOnClick = false;
+	@Input() helpTooltipVisibleBeforeHover = false;
 
 	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
@@ -132,6 +133,9 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
+		}
+		if (this.helpTooltipVisibleBeforeHover) {
+			this.onMouseEnter();
 		}
 	}
 

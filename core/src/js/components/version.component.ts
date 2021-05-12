@@ -4,11 +4,44 @@ import { OverwolfService } from '../services/overwolf.service';
 @Component({
 	selector: 'version',
 	styleUrls: [`../../css/component/version.component.scss`],
-	template: ` <div class="version-info">v.{{ version }}</div> `,
+	template: `
+		<div class="version-info">v.{{ version }}</div>
+		<!-- <div
+			class="update check"
+			*ngIf="updateStatus === null"
+			inlineSVG="assets/svg/restore.svg"
+			helpTooltip="Check for updates"
+			(click)="checkForUpdates()"
+		></div> -->
+		<div
+			class="update available"
+			*ngIf="updateStatus === 'update-available'"
+			inlineSVG="assets/svg/restore.svg"
+			helpTooltip="New version available! Click to update."
+			[helpTooltipVisibleBeforeHover]="true"
+			(click)="updateApp()"
+		></div>
+		<div
+			class="update error"
+			*ngIf="updateStatus === 'update-error'"
+			inlineSVG="assets/svg/restore.svg"
+			helpTooltip="An error occurred while updating the app. Please restart Overwolf to force the update."
+			[helpTooltipVisibleBeforeHover]="true"
+		></div>
+		<div
+			class="update restart"
+			*ngIf="updateStatus === 'restart-needed'"
+			inlineSVG="assets/svg/restore.svg"
+			helpTooltip="New version ready, click to restart the app. We recommend that you do it while not in a match."
+			[helpTooltipVisibleBeforeHover]="true"
+			(click)="restartApp()"
+		></div>
+	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VersionComponent implements AfterViewInit {
 	version: string;
+	updateStatus: null | 'update-available' | 'restart-needed' | 'update-error' = null;
 
 	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
@@ -18,5 +51,29 @@ export class VersionComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+		setInterval(() => this.checkForUpdates(), 5 * 60 * 1000);
+		this.checkForUpdates();
+	}
+
+	async checkForUpdates() {
+		const isUpdate = await this.ow.checkForExtensionUpdate();
+		this.updateStatus = isUpdate ? 'update-available' : null;
+		console.debug('isUpdate', isUpdate, this.updateStatus);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	async updateApp() {
+		const updateDone = await this.ow.updateExtension();
+		this.updateStatus = updateDone ? 'restart-needed' : 'update-error';
+		console.debug('updateDone', updateDone, this.updateStatus);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	async restartApp() {
+		this.ow.relaunchApp();
 	}
 }

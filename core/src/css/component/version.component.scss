@@ -1,11 +1,33 @@
 @import '../global/fonts';
 
-.version-info {
-	@extend %patch-number;
+:host() {
+	display: flex;
 	position: absolute;
 	bottom: 5px;
-	left: 15px;
+	left: 10px;
 	z-index: 1;
+	@extend %patch-number;
 	font-size: 10px;
 	color: #d9c3ab;
+	align-items: center;
+	justify-content: center;
+}
+
+.version-info {
+	// position: absolute;
+	// bottom: 5px;
+	// left: 15px;
+	// z-index: 1;
+	// font-size: 10px;
+	// color: #d9c3ab;
+}
+
+.update {
+	width: 17px;
+	height: 17px;
+	--icon-color: var(--default-text-color);
+
+	&:hover {
+		--icon-color: var(--default-title-color);
+	}
 }

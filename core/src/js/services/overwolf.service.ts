@@ -924,6 +924,26 @@ export class OverwolfService {
 		overwolf.io.listenOnFile(id, path, options, callback);
 	}
 
+	public checkForExtensionUpdate(): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			overwolf.extensions.checkForExtensionUpdate((res: CheckForUpdateResult) => {
+				resolve(res.updateVersion != null);
+			});
+		});
+	}
+
+	public updateExtension(): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			overwolf.extensions.updateExtension((res: UpdateExtensionResult) => {
+				resolve(!res.error);
+			});
+		});
+	}
+
+	public relaunchApp() {
+		overwolf.extensions.relaunch();
+	}
+
 	public gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {
 			return false;
@@ -978,4 +998,21 @@ export interface Flair {
 	readonly text: string;
 	readonly mod_only: boolean;
 	readonly allowable_content: string;
+}
+
+interface CheckForUpdateResult {
+	readonly success: boolean;
+	readonly error: string;
+	readonly state: ExtensionUpdateState;
+	readonly updateVersion: string;
+}
+
+type ExtensionUpdateState = 'UpToDate' | 'UpdateAvailable' | 'PendingRestart';
+
+interface UpdateExtensionResult {
+	readonly success: boolean;
+	readonly error: string;
+	readonly state: string;
+	readonly info: string;
+	readonly version: string;
 }
