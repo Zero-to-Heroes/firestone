@@ -62,6 +62,7 @@ import { GalakrondInvokedParser } from './event-parser/galakrond-invoked-parser'
 import { GameEndParser } from './event-parser/game-end-parser';
 import { GameRunningParser } from './event-parser/game-running-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
+import { GlobalMinionEffectParser } from './event-parser/global-minion-effect-parser';
 import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
 import { JadeGolemParser } from './event-parser/jade-golem-parser';
 import { LocalPlayerParser } from './event-parser/local-player-parser';
@@ -643,6 +644,7 @@ export class GameStateService {
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
 			new CthunRevealedParser(this.helper, this.allCards),
+			new GlobalMinionEffectParser(this.helper, this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards),
 			new ReconnectOverParser(this.deckHandler),

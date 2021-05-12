@@ -48,7 +48,8 @@ export const globalEffectCards = [
 	CardIds.Collectible.Priest.ArchbishopBenedictus,
 	CardIds.Collectible.Priest.DarkInquisitorXanesh,
 	CardIds.Collectible.Priest.LadyInWhite,
-	CardIds.Collectible.Shaman.GrandTotemEysor, // TODO: count the number of times the effect triggered, not the card played
+	// We handle the effects triggered instead of the card played
+	// CardIds.Collectible.Shaman.GrandTotemEysor,
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
 	CardIds.Collectible.Warlock.DeckOfChaos,
 	CardIds.Collectible.Warlock.NeeruFireblade,
@@ -58,6 +59,19 @@ export const globalEffectCards = [
 	CardIds.NonCollectible.Paladin.LordaeronAttendant,
 	CardIds.NonCollectible.Rogue.TheCavernsBelow_CrystalCoreTokenUNGORO,
 ];
+
+export const globalEffectTriggers = [
+	{
+		// There are actually several effects that are triggered (one for hand, deck and board)
+		// We use only the deck one, as it's the one that is most likely to always be there
+		// We could also create a brand new event on the parser side, but I'd rather first
+		// see how other minions/effects will be handled in the future
+		effectPrefab: 'DMF_GrandTotemAmikwe_Battlecry_DeckBoosh_Super.prefab',
+		cardId: CardIds.Collectible.Shaman.GrandTotemEysor,
+	},
+];
+
+export const globalEffectTriggersEffects = globalEffectTriggers.map((effect) => effect.effectPrefab);
 
 export const cardsRevealedWhenDrawn = [
 	CardIds.NonCollectible.Druid.YseraUnleashed_DreamPortalToken,
