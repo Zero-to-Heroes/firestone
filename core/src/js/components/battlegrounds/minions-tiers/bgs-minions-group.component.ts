@@ -50,7 +50,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				<li
 					class="minion"
 					*ngFor="let minion of minions"
-					[cardTooltip]="minion.cardId"
+					[cardTooltip]="minion.displayedCardIds"
 					[cardTooltipBgs]="true"
 					[cardTooltipPosition]="_tooltipPosition"
 				>
@@ -129,7 +129,6 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		if (!this._showTribesHighlight) {
 			return;
 		}
-		console.log('highlitghting tribe', this._group.tribe);
 		this.battlegroundsUpdater.next(new BgsToggleHighlightTribeOnBoardEvent(this._group.tribe));
 	}
 
@@ -146,6 +145,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 				const card = this.allCards.getCard(minion.id);
 				return {
 					cardId: minion.id,
+					displayedCardIds: this.buildAllCardIds(minion.id),
 					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
 					name: card.name,
 					highlighted: this._group.highlightedMinions.includes(minion.id),
@@ -169,6 +169,20 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 			});
 	}
 
+	private buildAllCardIds(id: string): string {
+		const premiumId = this.allCards.getCard(id).battlegroundsPremiumDbfId;
+		if (!premiumId) {
+			return id;
+		}
+
+		const premiumCard = this.allCards.getCardFromDbfId(premiumId);
+		if (!premiumCard) {
+			return id;
+		}
+
+		return [id, `${premiumCard.id}_bgs_premium`].join(',');
+	}
+
 	private buildTitle(tribe: Race): string {
 		switch (tribe) {
 			case Race.BLANK:
@@ -181,6 +195,7 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 
 interface Minion {
 	readonly cardId: string;
+	readonly displayedCardIds: string;
 	readonly image: string;
 	readonly name: string;
 	readonly highlighted: boolean;

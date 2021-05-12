@@ -74,7 +74,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit, OnDestroy {
-	private static readonly WINDOW_WIDTH = 1000;
+	private static readonly WINDOW_WIDTH = 1300;
 
 	windowId: string;
 

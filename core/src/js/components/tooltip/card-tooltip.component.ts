@@ -8,25 +8,30 @@ import { groupByFunction } from '../../services/utils';
 	selector: 'card-tooltip',
 	styleUrls: [`../../../css/component/tooltip/card-tooltip.component.scss`],
 	template: `
-		<div class="card-tooltip {{ _additionalClass }}">
-			<div *ngIf="createdBy" class="created-by">Created by</div>
-			<img *ngIf="image && _cardType === 'NORMAL'" [src]="image" (onload)="refresh()" class="tooltip-image" />
-			<video *ngIf="_cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
+		<div class="card-tooltip {{ card.additionalClass }}" *ngFor="let card of cards">
+			<div *ngIf="card.createdBy" class="created-by">Created by</div>
+			<img
+				*ngIf="card.image && card.cardType === 'NORMAL'"
+				[src]="card.image"
+				(onload)="refresh()"
+				class="tooltip-image"
+			/>
+			<video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
 				<source
 					src="{{
-						'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' + _cardId + '.webm?v=2'
+						'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' + card.cardId + '.webm?v=2'
 					}}"
 					type="video/webm"
 				/>
 			</video>
-			<div *ngIf="_text" class="text">{{ _text }}</div>
-			<div class="buffs" *ngIf="buffs && _displayBuffs" [ngClass]="{ 'only-buffs': !image }">
+			<!-- <div *ngIf="card.text" class="text">{{ card.text }}</div> -->
+			<div class="buffs" *ngIf="card.buffs && _displayBuffs" [ngClass]="{ 'only-buffs': !card.image }">
 				<div class="background">
 					<div class="body"></div>
 					<div class="bottom"></div>
 				</div>
 				<div class="content">
-					<buff-info *ngFor="let buff of buffs" [buff]="buff"></buff-info>
+					<buff-info *ngFor="let buff of card.buffs" [buff]="buff"></buff-info>
 				</div>
 			</div>
 		</div>
@@ -34,18 +39,20 @@ import { groupByFunction } from '../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardTooltipComponent {
-	image: string;
-	_text: string;
+	cards: readonly InternalCard[];
 	_displayBuffs: boolean;
-	createdBy: boolean;
-	_additionalClass: string;
-	buffs: readonly { bufferCardId: string; buffCardId: string; count: number }[];
-	_cardId: string;
-	_cardType: 'NORMAL' | 'GOLDEN' = 'NORMAL';
-	isBgs: boolean;
+
+	// private image: string;
+	// private _text: string;
+	private _cardIds: string[];
+	private isBgs: boolean;
+	private _additionalClass: string;
+	private createdBy: boolean;
+	private buffs: readonly { bufferCardId: string; buffCardId: string; count: number }[];
+	private _cardType: 'NORMAL' | 'GOLDEN' = 'NORMAL';
 
 	@Input() set cardId(value: string) {
-		this._cardId = value;
+		this._cardIds = value?.length ? value.split(',') : [];
 		this.updateInfos();
 	}
 
@@ -64,25 +71,18 @@ export class CardTooltipComponent {
 		if (!value) {
 			return;
 		}
-		const createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
-		if (createdBy) {
-			this.createdBy = true;
-		} else {
-			this.createdBy = false;
-		}
-		if (!value.buffCardIds || value.buffCardIds.length === 0) {
-			this.buffs = undefined;
-		} else {
-			this.buffs = Object.values(groupByFunction((buffCardId: string) => buffCardId)(value.buffCardIds)).map(
-				(buff: string[]) => ({
-					buffCardId: buff[0],
-					bufferCardId: buff[0].slice(0, buff[0].length - 1),
-					count: buff.length,
-				}),
-			);
-			// console.log('buffs are', this.buffs);
-		}
-		this._cardId = value.cardId || value.creatorCardId || value.lastAffectedByCardId;
+		this.buffs =
+			!value.buffCardIds || value.buffCardIds.length === 0
+				? undefined
+				: Object.values(groupByFunction((buffCardId: string) => buffCardId)(value.buffCardIds)).map(
+						(buff: string[]) => ({
+							buffCardId: buff[0],
+							bufferCardId: buff[0].slice(0, buff[0].length - 1),
+							count: buff.length,
+						}),
+				  );
+		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
+		this._cardIds = [value.cardId || value.creatorCardId || value.lastAffectedByCardId];
 		this.updateInfos();
 	}
 
@@ -98,10 +98,10 @@ export class CardTooltipComponent {
 	}
 
 	@Input() set text(value: string) {
-		this._text = value;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// this._text = value;
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	constructor(private cdr: ChangeDetectorRef, @Optional() private prefs: PreferencesService) {}
@@ -113,24 +113,40 @@ export class CardTooltipComponent {
 	}
 
 	private async updateInfos() {
-		if (!this._cardId) {
-			this.image = undefined;
-		} else {
-			const prefs: Preferences = this.prefs ? await this.prefs.getPreferences() : null;
-			const highRes = prefs?.collectionUseHighResImages;
-			// if (!(this.cdr as ViewRef)?.destroyed) {
-			// 	this.cdr.detectChanges();
-			// }
-			const imagePath = highRes ? '512' : 'compressed';
-			const withBgs = this.isBgs
-				? `compressed/battlegrounds/${this._cardId}_bgs.png`
-				: `${imagePath}/${this._cardId}.png`;
-			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}?v=3`;
-			// console.log('image is', this.image);
-		}
-		// console.log('setting tooltip', value, this.image);
+		const prefs: Preferences = this.prefs ? await this.prefs.getPreferences() : null;
+		this.cards = this._cardIds
+			.filter((cardId) => cardId)
+			.reverse()
+			.map((cardId) => {
+				const highRes = prefs?.collectionUseHighResImages;
+				const imagePath = highRes ? '512' : 'compressed';
+				const withBgs = this.isBgs
+					? cardId.includes('premium')
+						? `compressed/battlegrounds/${cardId}.png`
+						: `compressed/battlegrounds/${cardId}_bgs.png`
+					: `${imagePath}/${cardId}.png`;
+				const image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}?v=3`;
+				return {
+					cardId: cardId,
+					image: image,
+					cardType: this._cardType,
+					createdBy: this.createdBy,
+					buffs: this.buffs,
+					additionalClass: this._additionalClass,
+				};
+			});
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
+}
+
+interface InternalCard {
+	readonly cardId: string;
+	readonly image: string;
+	readonly cardType: 'NORMAL' | 'GOLDEN';
+
+	readonly createdBy?: boolean;
+	readonly buffs?: readonly { bufferCardId: string; buffCardId: string; count: number }[];
+	readonly additionalClass?: string;
 }
