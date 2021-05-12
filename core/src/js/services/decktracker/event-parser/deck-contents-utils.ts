@@ -33,6 +33,8 @@ export const modifyDeckForSpecialCards = (
 			return handleHemet(deckState, allCards);
 		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
 			return handleScepterOfSummoning(deckState, allCards);
+		case CardIds.Collectible.Warrior.ExploreUngoro:
+			return handleExploreUngoro(deckState, allCards);
 		default:
 			return deckState;
 	}
@@ -111,6 +113,24 @@ const handleWyrmrestPurifier = (deckState: DeckState, allCards: AllCardsService)
 				manaCost: undefined,
 				actualManaCost: undefined,
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
+			} as DeckCard),
+		deckState,
+		allCards,
+	);
+};
+
+const handleExploreUngoro = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+	const refCard = allCards.getCard(CardIds.NonCollectible.Warrior.ExploreUnGoro_ChooseYourPathToken);
+	return updateCard(
+		(card, refCard) => true,
+		(card) =>
+			card.update({
+				cardId: refCard.id,
+				cardName: refCard.name,
+				creatorCardId: CardIds.Collectible.Warrior.ExploreUngoro,
+				manaCost: refCard.cost,
+				rarity: refCard.rarity,
+				cardType: refCard.type,
 			} as DeckCard),
 		deckState,
 		allCards,
