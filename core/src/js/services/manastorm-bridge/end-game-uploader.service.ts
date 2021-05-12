@@ -298,7 +298,7 @@ export class EndGameUploaderService {
 		// Apparently, there is an issue getting the info if the user clicks away too quickly
 		// on the endgame popup
 		// So I'll just crank up the speed by a lot, and add a lot of retries
-		const result = await this.memoryInspection.getBattlegroundsEndGame(5);
+		const result = await this.memoryInspection.getBattlegroundsEndGame();
 		// if (!result?.rating || !result?.newRating) {
 		// 	console.log('[manastorm-bridge]', currentReviewId, 'could not get BG rank without reset', result);
 		// 	const resultWithResets = await this.memoryInspection.getBattlegroundsEndGame(2);

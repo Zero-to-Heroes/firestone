@@ -181,28 +181,4 @@ export class BgsRunStatsService {
 	private isStatIncluded(toFind: BgsBestStat, list: readonly BgsBestStat[]) {
 		return list.find((existing) => existing.statName === toFind.statName) != null;
 	}
-
-	private async getNewRating(previousRating: number): Promise<number> {
-		return new Promise<number>((resolve) => {
-			this.getNewRatingInternal(previousRating, (newRating) => resolve(newRating));
-		});
-	}
-
-	private async getNewRatingInternal(previousRating: number, callback, retriesLeft = 10) {
-		if (retriesLeft <= 0) {
-			// This actually happens quite a lot, as you can't get the new rating before
-			// moving on to the next screen?
-			// Check BaconEndGameScreen
-			console.warn('[bgs-run-stats] Could not get new rating', previousRating);
-			callback(previousRating);
-			return;
-		}
-		const battlegroundsInfo = await this.memoryService.getBattlegroundsEndGame();
-		const newRating = battlegroundsInfo ? battlegroundsInfo.newRating : undefined;
-		if (newRating === previousRating) {
-			setTimeout(() => this.getNewRatingInternal(previousRating, callback, retriesLeft - 1), 500);
-			return;
-		}
-		callback(newRating);
-	}
 }

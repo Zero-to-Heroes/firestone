@@ -18,11 +18,6 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 				} as BattlegroundsInfo),
 			40,
 			250,
-			// Some users randomly have missing info, so trying to force resets more ofteo to see
-			// if it improves anything
-			(battlegroundsInfo, retriesLeft) =>
-				retriesLeft <= 2 &&
-				(!battlegroundsInfo || battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1),
 		);
 	}
 }
