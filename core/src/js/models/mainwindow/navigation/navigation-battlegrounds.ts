@@ -4,13 +4,13 @@ import { BgsHeroStatsFilterId } from '../battlegrounds/categories/bgs-hero-stats
 export class NavigationBattlegrounds {
 	readonly currentView: CurrentView = 'category';
 	readonly menuDisplayType: string = 'menu';
-	readonly selectedGlobalCategoryId: 'bgs-global-category-personal-stats' | 'bgs-global-category-meta-stats';
 	readonly selectedCategoryId:
 		| 'bgs-category-personal-heroes'
 		| 'bgs-category-personal-hero-details'
 		| 'bgs-category-personal-rating'
 		| 'bgs-category-personal-stats'
-		| 'bgs-category-personal-ai';
+		| 'bgs-category-perfect-games';
+	// | 'bgs-category-personal-ai';
 	readonly selectedPersonalHeroStatsTab: BgsHeroStatsFilterId = 'winrate-stats';
 
 	public update(base: NavigationBattlegrounds): NavigationBattlegrounds {

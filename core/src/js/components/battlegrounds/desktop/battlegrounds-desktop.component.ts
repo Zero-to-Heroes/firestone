@@ -90,11 +90,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	}
 
 	buildCategories(): readonly BattlegroundsCategory[] {
-		return (
-			this.state.battlegrounds.globalCategories.find(
-				(cat) => cat.id === this.navigation.navigationBattlegrounds.selectedGlobalCategoryId,
-			)?.categories || []
-		);
+		return this.state.battlegrounds.categories ?? [];
 	}
 
 	buildCategory(): BattlegroundsCategory {

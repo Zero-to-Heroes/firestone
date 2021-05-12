@@ -43,8 +43,6 @@ import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegr
 import { BattlegroundsCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-category.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
 import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/desktop/battlegrounds-filters.component';
-import { BattlegroundsGlobalCategoriesComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-categories.component';
-import { BattlegroundsGlobalCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-global-category.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
 import { BattlegroundsPersonalStatsRatingComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component';
@@ -474,8 +472,6 @@ const components = [
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsFiltersComponent,
-		BattlegroundsGlobalCategoriesComponent,
-		BattlegroundsGlobalCategoryComponent,
 		BattlegroundsCategoriesComponent,
 		BattlegroundsCategoryComponent,
 		BattlegroundsCategoryDetailsComponent,

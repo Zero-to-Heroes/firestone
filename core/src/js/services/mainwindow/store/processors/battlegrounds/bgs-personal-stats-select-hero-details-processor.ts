@@ -22,23 +22,12 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 			currentState.battlegrounds,
 			'bgs-category-personal-hero-details-' + event.heroCardId,
 		) as BattlegroundsPersonalStatsHeroDetailsCategory;
-		// const newBattlegrounds = currentState.battlegrounds.update({
-		// 	lastHeroPostMatchStats: null,
-		// } as BattlegroundsAppState);
-
-		const globalCategory = currentState.battlegrounds.globalCategories.find((globalCategory) =>
-			globalCategory.hasSubCategory(category.id),
-		);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
-			selectedGlobalCategoryId: globalCategory.id,
 			selectedCategoryId: category.id,
 		} as NavigationBattlegrounds);
 		return [
-			// currentState.update({
-			// 	battlegrounds: newBattlegrounds,
-			// } as MainWindowState),
 			null,
 			navigationState.update({
 				isVisible: true,

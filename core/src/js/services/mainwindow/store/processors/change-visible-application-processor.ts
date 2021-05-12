@@ -51,7 +51,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			event.module === 'battlegrounds'
 				? navigationState.navigationBattlegrounds.update({
 						currentView: 'list',
-						selectedGlobalCategoryId: 'bgs-global-category-personal-stats',
 						selectedCategoryId: 'bgs-category-personal-heroes',
 						menuDisplayType: 'menu',
 				  } as NavigationBattlegrounds)

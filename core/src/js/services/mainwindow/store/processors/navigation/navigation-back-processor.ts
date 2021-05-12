@@ -1,6 +1,5 @@
 import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BattlegroundsGlobalCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-global-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
@@ -111,18 +110,11 @@ export class NavigationBackProcessor implements Processor {
 					currentCategory?.id,
 					navigationState.navigationBattlegrounds.selectedCategoryId,
 				);
-				const parentCategory:
-					| BattlegroundsCategory
-					| BattlegroundsGlobalCategory = BattlegroundsAppState.findParentCategory(
-					dataState.battlegrounds,
-					currentCategory?.id,
-				);
-				console.log('parentCategory', parentCategory, parentCategory?.id);
 				return navigationState.update({
 					navigationBattlegrounds: navigationState.navigationBattlegrounds.update({
 						menuDisplayType: 'menu',
 						currentView: 'list',
-						selectedCategoryId: parentCategory?.id,
+						selectedCategoryId: currentCategory?.id,
 					} as NavigationBattlegrounds),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in

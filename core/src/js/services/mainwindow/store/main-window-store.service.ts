@@ -45,7 +45,6 @@ import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-
 import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
-import { SelectBattlegroundsGlobalCategoryEvent } from './events/battlegrounds/select-battlegrounds-global-category-event';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
@@ -133,7 +132,6 @@ import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/b
 import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
-import { SelectBattlegroundsGlobalCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-global-category-processor';
 import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
@@ -580,9 +578,6 @@ export class MainWindowStoreService {
 			new ToggleShowHiddenDecksProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			// Battlegrounds
-			SelectBattlegroundsGlobalCategoryEvent.eventName(),
-			new SelectBattlegroundsGlobalCategoryProcessor(),
-
 			SelectBattlegroundsCategoryEvent.eventName(),
 			new SelectBattlegroundsCategoryProcessor(),
 

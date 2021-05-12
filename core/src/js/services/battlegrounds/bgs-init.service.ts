@@ -4,7 +4,6 @@ import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BattlegroundsGlobalCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-global-category';
 import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
 import { BattlegroundsPersonalRatingCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
 import { BattlegroundsPersonalStatsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
@@ -82,30 +81,16 @@ export class BgsInitService {
 	}
 
 	public async initBattlegoundsAppState(bgsGlobalStats: BgsStats): Promise<BattlegroundsAppState> {
-		const globalCategories: readonly BattlegroundsGlobalCategory[] = [
-			this.buildPersonalStatsGlobalCategory(bgsGlobalStats),
-			this.buildMetaStatsGlobalCategory(),
-		];
-		return BattlegroundsAppState.create({
-			globalCategories: globalCategories,
-			globalStats: bgsGlobalStats,
-			loading: false,
-		} as BattlegroundsAppState);
-	}
-
-	private buildPersonalStatsGlobalCategory(bgsGlobalStats: BgsStats): BattlegroundsGlobalCategory {
 		const categories: readonly BattlegroundsCategory[] = [
 			this.buildPersonalHeroesCategory(bgsGlobalStats),
 			this.buildPersonalRatingCategory(),
 			this.buildPersonalStatsCategory(),
-			// this.buildPersonalAICategory(),
 		];
-		return BattlegroundsGlobalCategory.create({
-			id: 'bgs-global-category-personal-stats',
-			name: 'Personal stats',
-			enabled: true,
+		return BattlegroundsAppState.create({
 			categories: categories,
-		} as BattlegroundsGlobalCategory);
+			globalStats: bgsGlobalStats,
+			loading: false,
+		} as BattlegroundsAppState);
 	}
 
 	private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
@@ -141,24 +126,5 @@ export class BgsInitService {
 		return BattlegroundsPersonalStatsCategory.create({
 			enabled: true,
 		} as BattlegroundsPersonalStatsCategory);
-	}
-
-	private buildPersonalAICategory(): BattlegroundsCategory {
-		return BattlegroundsCategory.create({
-			id: 'bgs-category-personal-ai',
-			name: 'AI Insights',
-			enabled: false,
-			disabledTooltip:
-				'AI insights are still in development. They will likely be a perk for subscribers, but nothing is decided yet. Thanks for your patience!',
-		} as BattlegroundsCategory);
-	}
-
-	private buildMetaStatsGlobalCategory(): BattlegroundsGlobalCategory {
-		return BattlegroundsGlobalCategory.create({
-			id: 'bgs-global-category-meta-stats',
-			name: 'Meta',
-			enabled: false,
-			disabledTooltip: 'Meta stats will likely arrive towards the end of the year. Thanks for your patience!',
-		} as BattlegroundsGlobalCategory);
 	}
 }

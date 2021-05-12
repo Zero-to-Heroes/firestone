@@ -12,14 +12,12 @@ export class SelectBattlegroundsCategoryProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const globalCategory = currentState.battlegrounds.globalCategories.find((globalCategory) =>
-			globalCategory.categories.some((category) => category.id === event.categoryId),
+		const category: BattlegroundsCategory = currentState.battlegrounds.categories.find(
+			(cat) => cat.id === event.categoryId,
 		);
-		const category: BattlegroundsCategory = globalCategory.categories.find((cat) => cat.id === event.categoryId);
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'list',
 			menuDisplayType: 'menu',
-			selectedGlobalCategoryId: globalCategory.id,
 			selectedCategoryId: category.id,
 		} as NavigationBattlegrounds);
 		// console.log(
