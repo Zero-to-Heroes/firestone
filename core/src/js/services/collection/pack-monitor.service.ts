@@ -1,6 +1,6 @@
+import { SPACE } from '@angular/cdk/keycodes'
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { Key } from 'ts-keycode-enum';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { Events } from '../../services/events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -36,15 +36,15 @@ export class PackMonitor {
 					event:
 						card.isNew || card.isSecondCopy
 							? async () =>
-									this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType)
+								this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType)
 							: async () => {
-									const dust =
-										card.cardType === 'GOLDEN'
-											? dustForPremium(dbCard.rarity)
-											: dustFor(dbCard.rarity);
-									this.totalDustInPack += dust;
-									this.totalDuplicateCards++;
-							  },
+								const dust =
+									card.cardType === 'GOLDEN'
+										? dustForPremium(dbCard.rarity)
+										: dustFor(dbCard.rarity);
+								this.totalDustInPack += dust;
+								this.totalDuplicateCards++;
+							},
 					revealed: false,
 					eventTriggered: false,
 				} as CardWithEvents;
@@ -77,7 +77,7 @@ export class PackMonitor {
 			setTimeout(() => this.handleKeyUp(data), 50);
 			return;
 		}
-		if (this.unrevealedCards.length > 0 && data.onGame && parseInt(data.key) === Key.Space) {
+		if (this.unrevealedCards.length > 0 && data.onGame && parseInt(data.key) === SPACE) {
 			this.handlingKeyUp = true;
 			this.spacePressed++;
 			setTimeout(() => (this.handlingKeyUp = false), 50);

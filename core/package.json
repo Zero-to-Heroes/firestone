@@ -72,7 +72,6 @@
 		"saxes": "^4.0.2",
 		"transit-immutable-js": "^0.8.0",
 		"transit-js": "^0.8.861",
-		"ts-keycode-enum": "1.0.6",
 		"zone.js": "0.9.1"
 	},
 	"devDependencies": {
