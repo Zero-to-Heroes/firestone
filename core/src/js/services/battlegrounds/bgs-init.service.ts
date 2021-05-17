@@ -4,12 +4,15 @@ import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
+import { BattlegroundsPerfectGamesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-perfect-games-category';
 import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
 import { BattlegroundsPersonalRatingCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
 import { BattlegroundsPersonalStatsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
+import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
@@ -20,6 +23,8 @@ import { BgsStatUpdateParser } from './store/event-parsers/bgs-stat-update-parse
 import { BgsInitEvent } from './store/events/bgs-init-event';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
+
+const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json?v=3';
 
 @Injectable()
 export class BgsInitService {
@@ -32,6 +37,7 @@ export class BgsInitService {
 		private readonly ow: OverwolfService,
 		private readonly cards: AllCardsService,
 		private readonly patchesService: PatchesConfigService,
+		private readonly api: ApiRunner,
 		private readonly prefs: PreferencesService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
@@ -80,15 +86,35 @@ export class BgsInitService {
 		return statsWithPatch;
 	}
 
-	public async initBattlegoundsAppState(bgsGlobalStats: BgsStats): Promise<BattlegroundsAppState> {
+	public async loadPerfectGames(): Promise<readonly GameStat[]> {
+		const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
+		//console.debug('[bgs-init] perfect games', result);
+		return result
+			.map((res) =>
+				GameStat.create({
+					...res,
+					gameFormat: 'wild',
+					gameMode: 'battlegrounds',
+					additionalResult: '1',
+				} as GameStat),
+			)
+			.filter((stat) => stat.playerRank);
+	}
+
+	public async initBattlegoundsAppState(
+		bgsGlobalStats: BgsStats,
+		perfectGames: readonly GameStat[],
+	): Promise<BattlegroundsAppState> {
 		const categories: readonly BattlegroundsCategory[] = [
 			this.buildPersonalHeroesCategory(bgsGlobalStats),
 			this.buildPersonalRatingCategory(),
 			this.buildPersonalStatsCategory(),
+			this.buildPerfectGamesCategory(),
 		];
 		return BattlegroundsAppState.create({
 			categories: categories,
 			globalStats: bgsGlobalStats,
+			perfectGames: perfectGames,
 			loading: false,
 		} as BattlegroundsAppState);
 	}
@@ -120,6 +146,12 @@ export class BgsInitService {
 		return BattlegroundsPersonalRatingCategory.create({
 			enabled: true,
 		} as BattlegroundsPersonalRatingCategory);
+	}
+
+	private buildPerfectGamesCategory(): BattlegroundsCategory {
+		return BattlegroundsPerfectGamesCategory.create({
+			enabled: true,
+		} as BattlegroundsPerfectGamesCategory);
 	}
 
 	private buildPersonalStatsCategory(): BattlegroundsCategory {

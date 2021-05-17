@@ -73,10 +73,10 @@ export class StoreBootstrapService {
 				achievementTopCategories,
 				achievementHistory,
 				globalStats,
-				bgsBestUserStats,
 				collectionState,
 				prefsFromRemote,
 			],
+			[bgsBestUserStats, bgsPerfectGames],
 			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats],
 		] = await Promise.all([
@@ -86,10 +86,10 @@ export class StoreBootstrapService {
 				this.achievementsRepository.getTopLevelCategories(),
 				this.achievementsHelper.buildAchievementHistory(),
 				this.globalStats.getGlobalStats(),
-				this.bestBgsStats.getBgsBestUserStats(),
 				this.collectionBootstrap.initCollectionState(),
 				this.prefs.loadRemotePrefs(),
 			]),
+			Promise.all([this.bestBgsStats.getBgsBestUserStats(), this.bgsInit.loadPerfectGames()]),
 			Promise.all([
 				this.gameStatsLoader.retrieveStats(),
 				this.gameStatsLoader.retrieveArchetypesConfig(),
@@ -108,7 +108,7 @@ export class StoreBootstrapService {
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
 			: null;
-		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(bgsGlobalStats);
+		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(bgsGlobalStats, bgsPerfectGames);
 		const bgsAppStateWithStats = await this.bgsBuilder.updateStats(
 			battlegroundsAppState,
 			matchStats,

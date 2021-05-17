@@ -15,7 +15,7 @@ export class ShowReplayProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const selectedInfo = currentState.replays.allReplays.find((replay) => replay.reviewId === event.reviewId);
+		const selectedInfo = currentState.findReplay(event.reviewId);
 		if (!selectedInfo) {
 			console.warn('Could not find selected info for replay', event.reviewId);
 			return [currentState, navigationState];

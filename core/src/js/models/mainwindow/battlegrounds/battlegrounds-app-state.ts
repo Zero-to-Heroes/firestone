@@ -13,6 +13,7 @@ export class BattlegroundsAppState {
 	// The global stats coming from the DB (so without the player info)
 	readonly globalStats: BgsStats;
 	readonly matchStats: readonly GameStat[];
+	readonly perfectGames: readonly GameStat[];
 	// The stats used by the app (so a mix a globalStats + matchStats + filters)
 	readonly stats: BgsStats;
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
@@ -32,5 +33,11 @@ export class BattlegroundsAppState {
 
 	public static findCategory(state: BattlegroundsAppState, categoryId: string) {
 		return state.categories?.find((cat) => cat.id === categoryId);
+	}
+
+	public findReplay(reviewId: string): GameStat {
+		return [...(this.perfectGames ?? []), ...(this.matchStats ?? [])].find(
+			(replay) => replay.reviewId === reviewId,
+		);
 	}
 }

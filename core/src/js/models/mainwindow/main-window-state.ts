@@ -7,6 +7,7 @@ import { BinderState } from './binder-state';
 import { DecktrackerState } from './decktracker/decktracker-state';
 import { ReplaysState } from './replays/replays-state';
 import { SocialShareUserInfo } from './social-share-user-info';
+import { GameStat } from './stats/game-stat';
 import { StatsState } from './stats/stats-state';
 
 export class MainWindowState {
@@ -25,5 +26,14 @@ export class MainWindowState {
 
 	public update(base: MainWindowState): MainWindowState {
 		return Object.assign(new MainWindowState(), this, base);
+	}
+
+	public findReplay(reviewId: string): GameStat {
+		const result = this.replays.allReplays.find((replay) => replay.reviewId === reviewId);
+		if (result) {
+			return result;
+		}
+
+		return this.battlegrounds.findReplay(reviewId);
 	}
 }

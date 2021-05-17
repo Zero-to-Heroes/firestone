@@ -20,7 +20,7 @@ export class ShowMatchStatsProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const matchStats = event.stats;
-		const selectedInfo = currentState.replays.allReplays.find((replay) => replay.reviewId === event.reviewId);
+		const selectedInfo = currentState.findReplay(event.reviewId);
 		const playerCardId = selectedInfo.playerCardId;
 		const mappedBoardInfo = matchStats
 			? matchStats.boardHistory.map(
