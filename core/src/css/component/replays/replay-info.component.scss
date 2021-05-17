@@ -284,4 +284,23 @@
 		width: 55px;
 		display: flex;
 	}
+
+	.tribes {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		.tribe {
+			width: 30px;
+			height: 30px;
+			margin-top: -5px;
+			margin-right: 0px;
+
+			.icon {
+				clip-path: ellipse(35% 35% at 50% 50%);
+				width: 120%;
+				height: 120%;
+			}
+		}
+	}
 }

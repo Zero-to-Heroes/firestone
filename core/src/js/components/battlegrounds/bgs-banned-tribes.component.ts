@@ -14,9 +14,9 @@ import { Race } from '@firestone-hs/reference-data';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../models/preferences';
+import { getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
-import { capitalizeFirstLetter } from '../../services/utils';
 
 @Component({
 	selector: 'bgs-banned-tribes',
@@ -102,7 +102,7 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 
 	private buildBannedTribes(gameState: BattlegroundsState) {
 		this.bannedTribes = gameState?.currentGame?.bannedRaces || [];
-		const tribeNames = this.bannedTribes.map((tribe) => this.getTribeName(tribe)).join(', ');
+		const tribeNames = this.bannedTribes.map((tribe) => getTribeName(tribe)).join(', ');
 		const exceptionCards = this.bannedTribes
 			.map((tribe) => this.getExceptions(tribe))
 			.reduce((a, b) => a.concat(b), []);
@@ -132,10 +132,6 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 				return [];
 		}
 		return [];
-	}
-
-	private getTribeName(value: Race): string {
-		return capitalizeFirstLetter(Race[value].toLowerCase());
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {

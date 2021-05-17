@@ -4,6 +4,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
+import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
@@ -79,6 +80,12 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div class="result">{{ result }}</div>
 				</div>
 
+				<div class="group tribes" *ngIf="availableTribes?.length">
+					<div class="tribe" *ngFor="let tribe of availableTribes">
+						<img class="icon" [src]="tribe.icon" [helpTooltip]="tribe.tooltip" />
+					</div>
+				</div>
+
 				<div
 					class="group mmr"
 					[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
@@ -142,6 +149,8 @@ export class ReplayInfoComponent implements AfterViewInit {
 	hasMatchStats: boolean;
 	deltaMmr: number;
 
+	availableTribes: readonly InternalTribe[];
+
 	treasure: InternalLoot;
 	loots: InternalLoot[];
 
@@ -174,6 +183,14 @@ export class ReplayInfoComponent implements AfterViewInit {
 			} else if (!isNaN(deltaMmr)) {
 				this.deltaMmr = deltaMmr;
 			}
+			this.availableTribes = [...value.bgsAvailableTribes]
+				.sort((a, b) => a - b)
+				.map((race) => ({
+					cardId: getReferenceTribeCardId(race),
+					icon: getTribeIcon(race),
+					tooltip: getTribeName(race),
+				}));
+			// console.debug('availableTribes', this.availableTribes);
 		}
 
 		const isDuelsInfo = (value: any): value is RunStep =>
@@ -316,4 +333,10 @@ export class ReplayInfoComponent implements AfterViewInit {
 interface InternalLoot {
 	icon: string;
 	cardId: string;
+}
+
+interface InternalTribe {
+	cardId: string;
+	icon: string;
+	tooltip: string;
 }

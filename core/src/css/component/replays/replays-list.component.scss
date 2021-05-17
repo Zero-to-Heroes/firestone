@@ -30,6 +30,12 @@
 	flex-grow: 1;
 	padding-right: 10px;
 	min-height: 0;
+
+	::ng-deep replay-info {
+		.tribes {
+			display: none;
+		}
+	}
 }
 
 .filters {

@@ -5,8 +5,16 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
 import { VisualAchievement } from '../../models/visual-achievement';
+import { capitalizeFirstLetter } from '../utils';
+
+export const getTribeName = (tribe: Race): string => capitalizeFirstLetter(Race[tribe].toLowerCase());
 
 export const getTribeIcon = (tribe: string | Race): string => {
+	const referenceCardId = getReferenceTribeCardId(tribe);
+	return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+};
+
+export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	let referenceCardId: string;
 	switch (tribe) {
 		case 'Mech':
@@ -49,7 +57,7 @@ export const getTribeIcon = (tribe: string | Race): string => {
 			referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
 			break;
 	}
-	return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+	return referenceCardId;
 };
 
 export const getHeroPower = (heroCardId: string): string => {
