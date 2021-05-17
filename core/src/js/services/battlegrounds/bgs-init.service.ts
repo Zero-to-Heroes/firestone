@@ -96,6 +96,7 @@ export class BgsInitService {
 					gameFormat: 'wild',
 					gameMode: 'battlegrounds',
 					additionalResult: '1',
+					bgsPerfectGame: true,
 				} as GameStat),
 			)
 			.filter((stat) => stat.playerRank);

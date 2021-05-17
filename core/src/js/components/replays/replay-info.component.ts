@@ -161,7 +161,11 @@ export class ReplayInfoComponent implements AfterViewInit {
 		const isBg = value.gameMode === 'battlegrounds';
 		this.hasMatchStats = isBg;
 		this.opponentName = isBg ? null : this.sanitizeName(value.opponentName);
-		this.visualResult = isBg ? (parseInt(value.additionalResult) <= 4 ? 'won' : 'lost') : value.result;
+		this.visualResult = isBg
+			? value.bgsPerfectGame || parseInt(value.additionalResult) <= 4
+				? 'won'
+				: 'lost'
+			: value.result;
 		if (isBg) {
 			const deltaMmr = parseInt(value.newPlayerRank) - parseInt(value.playerRank);
 			// This is most likely a season reset
@@ -260,6 +264,9 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	private buildMatchResultText(info: GameStat): string {
 		if (info.gameMode === 'battlegrounds' && info.additionalResult) {
+			if (info.bgsPerfectGame) {
+				return 'Perfect!';
+			}
 			// prettier-ignore
 			switch (parseInt(info.additionalResult)) {
 				case 1: return '1st';

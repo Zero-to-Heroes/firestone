@@ -34,6 +34,7 @@ export class GameStat {
 	readonly playerArchetypeId?: string;
 	readonly opponentArchetypeId?: string;
 	readonly bgsAvailableTribes: readonly Race[];
+	readonly bgsPerfectGame: boolean;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 
