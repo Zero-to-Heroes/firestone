@@ -242,6 +242,7 @@ export class Preferences {
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
+	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';
 	readonly bgsSelectedTabs2: readonly BgsStatsFilterId[] = [
 		'hp-by-turn',

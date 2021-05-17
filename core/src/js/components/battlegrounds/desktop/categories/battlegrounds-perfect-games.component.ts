@@ -7,6 +7,8 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { BattlegroundsAppState } from '../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
+import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
@@ -72,7 +74,7 @@ export class BattlegroundsPerfectGamesComponent implements AfterViewInit {
 	}
 
 	private *buildIterator(): IterableIterator<void> {
-		this.allReplays = this._state.battlegrounds.perfectGames ?? [];
+		this.allReplays = this.applyFilters(this._state.battlegrounds.perfectGames ?? [], this._state.battlegrounds);
 		const workingReplays = [...this.allReplays];
 		const step = 40;
 		while (workingReplays.length > 0) {
@@ -95,6 +97,39 @@ export class BattlegroundsPerfectGamesComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 		return;
+	}
+
+	private applyFilters(replays: readonly GameStat[], state: BattlegroundsAppState): readonly GameStat[] {
+		return replays
+			.filter((replay) => this.rankFilter(replay, state.activeRankFilter))
+			.filter((replay) => this.heroFilter(replay, state.activeHeroFilter));
+	}
+
+	private rankFilter(stat: GameStat, rankFilter: BgsRankFilterType) {
+		if (!rankFilter) {
+			return true;
+		}
+
+		switch (rankFilter) {
+			case 'all':
+				return true;
+			default:
+				return stat.playerRank && parseInt(stat.playerRank) >= parseInt(rankFilter);
+		}
+	}
+
+	private heroFilter(stat: GameStat, heroFilter: string) {
+		if (!heroFilter) {
+			return true;
+		}
+
+		switch (heroFilter) {
+			case 'all':
+			case null:
+				return true;
+			default:
+				return stat.playerCardId === heroFilter;
+		}
 	}
 
 	private groupReplays(replays: readonly GameStat[]): readonly GroupedReplays[] {

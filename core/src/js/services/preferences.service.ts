@@ -285,6 +285,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateBgsHeroFilter(value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsActiveHeroFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateBgsMmrGroupFilter(value: MmrGroupFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveMmrGroupFilter: value };

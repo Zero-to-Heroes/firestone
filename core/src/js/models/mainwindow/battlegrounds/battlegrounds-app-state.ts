@@ -20,6 +20,7 @@ export class BattlegroundsAppState {
 
 	readonly activeTimeFilter: BgsActiveTimeFilterType;
 	readonly activeHeroSortFilter: BgsHeroSortFilterType;
+	readonly activeHeroFilter: string = 'all';
 	readonly activeRankFilter: BgsRankFilterType;
 	readonly activeGroupMmrFilter: MmrGroupFilterType;
 

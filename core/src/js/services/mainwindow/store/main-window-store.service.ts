@@ -37,6 +37,7 @@ import { ChangeVisibleAchievementEvent } from './events/achievements/change-visi
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
+import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { BgsMmrGroupFilterSelectedEvent } from './events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from './events/battlegrounds/bgs-personal-stats-select-hero-details-event';
@@ -124,6 +125,7 @@ import { ChangeVisibleAchievementProcessor } from './processors/achievements/cha
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
+import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
 import { BgsMmrGroupFilterSelectedProcessor } from './processors/battlegrounds/bgs-mmr-group-filter-selected-processor';
 import { BgsPersonalStatsSelectHeroDetailsProcessor } from './processors/battlegrounds/bgs-personal-stats-select-hero-details-processor';
@@ -589,6 +591,9 @@ export class MainWindowStoreService {
 
 			BgsHeroSortFilterSelectedEvent.eventName(),
 			new BgsHeroSortFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+
+			BgsHeroFilterSelectedEvent.eventName(),
+			new BgsHeroFilterSelectedProcessor(this.bgsBuilder, this.prefs),
 
 			BgsMmrGroupFilterSelectedEvent.eventName(),
 			new BgsMmrGroupFilterSelectedProcessor(this.bgsBuilder, this.prefs),
