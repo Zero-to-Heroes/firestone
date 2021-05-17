@@ -8,7 +8,7 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 		super(
 			ow,
 			'getBattlegroundsInfoEndGame',
-			(forceReset) => mindVision.getBattlegroundsInfo(forceReset),
+			(forceReset) => mindVision.getBattlegroundsInfo(),
 			(battlegroundsInfo) => battlegroundsInfo.Rating == -1 || battlegroundsInfo.NewRating == -1,
 			(battlegroundsInfo) =>
 				Object.assign(new BattlegroundsInfo(), {
@@ -16,8 +16,8 @@ export class GetBattlegroundsEndGameOperation extends MindVisionOperationFacade<
 					newRating: battlegroundsInfo.NewRating,
 					game: battlegroundsInfo.Game,
 				} as BattlegroundsInfo),
-			40,
-			250,
+			50,
+			150,
 		);
 	}
 }
