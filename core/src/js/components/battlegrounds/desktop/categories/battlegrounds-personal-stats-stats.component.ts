@@ -133,7 +133,19 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 				[heroIcon]="percentageOfBattlesGoingFirst.hero"
 				[reviewId]="percentageOfBattlesGoingFirst.reviewId"
 			></stat-cell>
-			<div class="entry cell battle-luck">
+			<stat-cell
+				label="Battle luck"
+				[value]="battleLuck.value?.toFixed(1) + '%'"
+				[heroIcon]="battleLuck.hero"
+				[reviewId]="battleLuck.reviewId"
+			></stat-cell>
+			<stat-cell
+				label="Negative Battle luck"
+				[value]="negativeBattleLuck.value?.toFixed(1) + '%'"
+				[heroIcon]="negativeBattleLuck.hero"
+				[reviewId]="negativeBattleLuck.reviewId"
+			></stat-cell>
+			<!-- <div class="entry cell battle-luck">
 				<div class="record-icon">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#new_record" />
@@ -150,8 +162,8 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					>
 				</div>
 				<div class="value">{{ battleLuck.value?.toFixed(1) }}%</div>
-			</div>
-			<div class="entry cell battle-luck">
+			</div> -->
+			<!-- <div class="entry cell battle-luck">
 				<div class="record-icon">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#new_record" />
@@ -168,7 +180,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					>
 				</div>
 				<div class="value">{{ negativeBattleLuck.value?.toFixed(1) }}%</div>
-			</div>
+			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -228,7 +240,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 		if (!this._state || !this._category) {
 			return;
 		}
-		// console.log('top stats', this._state.stats.bestBgsUserStats);
+		console.debug('top stats', this._state.stats.bestBgsUserStats);
 		this.totalMinionsDamageDealt = this.getStat('totalDamageDealtToMinions');
 		this.totalMinionsDamageTaken = this.getStat('totalDamageTakenByMinions');
 		this.totalHeroDamageDealt = this.getStat('totalDamageDealtToHeroes');
