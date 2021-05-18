@@ -11,7 +11,7 @@ import { ChartOptions } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Color, Label } from 'ng2-charts';
 import { sleep } from '../../../services/utils';
-import { InputPieChartData } from './input-pie-chart-data';
+import { InputPieChartData, InputPieChartOptions } from './input-pie-chart-data';
 
 @Component({
 	selector: 'pie-chart',
@@ -21,7 +21,9 @@ import { InputPieChartData } from './input-pie-chart-data';
 	],
 	template: `
 		<div class="container-1">
-			<div style="display: block; position: relative; height: 100%; width: 100%;">
+			<div
+				style="display: flex; align-items: center; justify-content: center; position: relative; height: 100%; width: 100%;"
+			>
 				<canvas
 					*ngIf="chartData?.length && chartOptions"
 					#chart
@@ -47,12 +49,18 @@ export class PieChartComponent {
 		this.updateValues();
 	}
 
+	@Input() set options(value: InputPieChartOptions) {
+		this._options = value;
+		this.updateValues();
+	}
+
 	chartData: readonly number[] = [];
 	chartLabels: readonly Label[];
 	chartOptions: ChartOptions;
 	chartColors: Color[];
 	chartPlugins = [ChartDataLabels];
 
+	private _options: InputPieChartOptions;
 	private _inputData: readonly InputPieChartData[];
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
@@ -85,16 +93,16 @@ export class PieChartComponent {
 	private async buildChartOptions(): Promise<ChartOptions> {
 		const tooltipBackgroundColor = await this.getCssPropetyValue('--color-5');
 		const fontColor = await this.getCssPropetyValue('--default-text-color');
-		return {
+		const result: ChartOptions = {
 			responsive: true,
-			// maintainAspectRatio: true,
-			// aspectRatio: 1,
+			maintainAspectRatio: true,
+			aspectRatio: this._options?.aspectRatio ?? 2,
 			layout: {
 				padding: {
-					top: 20,
-					bottom: 20,
-					left: 50,
-					right: 80,
+					top: this._options?.padding?.top ?? 20,
+					bottom: this._options?.padding?.bottom ?? 20,
+					left: this._options?.padding?.left ?? 50,
+					right: this._options?.padding?.right ?? 80,
 				},
 			},
 			tooltips: {
@@ -112,7 +120,7 @@ export class PieChartComponent {
 			plugins: {
 				datalabels: {
 					// Don't show the "missing" labels
-					display: (ctx) => ctx.dataIndex % 2 === 0,
+					display: (ctx) => (this._options?.showAllLabels ? true : ctx.dataIndex % 2 === 0),
 					formatter: (value, ctx) => (value ? this._inputData[ctx.dataIndex].label : null),
 					color: (ctx) => this._inputData[ctx.dataIndex].color as any,
 					anchor: 'end',
@@ -121,6 +129,8 @@ export class PieChartComponent {
 				},
 			},
 		};
+		console.log('building options', this._options, result);
+		return result;
 	}
 
 	private async getCssPropetyValue(prop: string): Promise<string> {

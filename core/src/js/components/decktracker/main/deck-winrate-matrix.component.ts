@@ -9,9 +9,11 @@ import {
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
+import { classes, colorForClass, formatClass } from '../../../services/hs-utils';
 import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
 
 @Component({
 	selector: 'deck-winrate-matrix',
@@ -20,8 +22,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/deck-winrate-matrix.component.scss`,
 	],
 	template: `
+		<div class="opponents-popularity">
+			<div class="title">Opponent class breakdown</div>
+			<pie-chart class="opponents-popularity-chart" [data]="pieChartData" [options]="pieChartOptions"></pie-chart>
+		</div>
 		<div class="deck-winrate-matrix">
-			<div class="header">
+			<div class="header ">
 				<div class="cell class"></div>
 				<div class="cell total-games">Total matches</div>
 				<div class="cell winrate">{{ _showMatchupAsPercentagesValue ? 'Win%' : 'Wins' }}</div>
@@ -71,6 +77,8 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	_deck: DeckSummary;
 	_showMatchupAsPercentagesValue = true;
 	matchups: readonly MatchupStat[];
+	pieChartData: readonly InputPieChartData[];
+	pieChartOptions: InputPieChartOptions;
 
 	resetText = 'Reset stats';
 	confirmationShown = false;
@@ -103,9 +111,34 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		}
 		const totalRow: MatchupStat = this.buildTotalRow(this._deck.matchupStats);
 		this.matchups = [...this._deck.matchupStats, totalRow];
+		this.pieChartData = this.buildPieChartData();
+		this.pieChartOptions = this.buildPieChartOptions();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private buildPieChartOptions(): InputPieChartOptions {
+		return {
+			padding: {
+				top: 50,
+				bottom: 50,
+				left: 0,
+				right: 0,
+			},
+			showAllLabels: true,
+			aspectRatio: 1,
+		};
+	}
+
+	private buildPieChartData(): readonly InputPieChartData[] {
+		return classes.map((className) => {
+			return {
+				label: formatClass(className),
+				data: this.matchups.find((matchup) => matchup.opponentClass === className)?.totalGames ?? 0,
+				color: `${colorForClass(className)}`,
+			};
+		});
 	}
 
 	private buildTotalRow(matchupStats: readonly MatchupStat[]): MatchupStat {

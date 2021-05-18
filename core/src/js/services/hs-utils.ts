@@ -25,6 +25,31 @@ export const formatClass = (playerClass: string): string => {
 	return capitalizeEachWord(update);
 };
 
+export const colorForClass = (playerClass: string): string => {
+	switch (playerClass) {
+		case 'demonhunter':
+			return '#147b63';
+		case 'druid':
+			return '#99542b';
+		case 'hunter':
+			return '#255d21';
+		case 'mage':
+			return '#5b94b2';
+		case 'paladin':
+			return '#c68c1d';
+		case 'priest':
+			return '#fff';
+		case 'rogue':
+			return '#3b3b41';
+		case 'shaman':
+			return '#162874';
+		case 'warrior':
+			return '#801b11';
+		case 'warlock':
+			return '#54355f';
+	}
+};
+
 export const globalEffectCards = [
 	CardIds.Collectible.Druid.Embiggen,
 	CardIds.Collectible.Druid.CelestialAlignment,

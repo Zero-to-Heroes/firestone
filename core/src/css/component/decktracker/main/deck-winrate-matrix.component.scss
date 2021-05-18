@@ -1,6 +1,28 @@
 :host() {
 	flex-grow: 1;
 	display: flex;
+	justify-content: space-around;
+	--winrate-matrix-min-width: 430px;
+}
+
+.opponents-popularity {
+	width: calc(100% - var(--winrate-matrix-min-width));
+	max-width: 500px;
+	display: flex;
+	flex-direction: column;
+	font-family: Open Sans;
+
+	.title {
+		color: var(--default-title-color);
+		font-size: 20px;
+		text-align: center;
+		position: relative;
+		top: 50px;
+	}
+
+	.opponents-popularity-chart {
+		width: 100%;
+	}
 }
 
 .deck-winrate-matrix {
@@ -10,30 +32,33 @@
 	font-weight: normal;
 	font-size: 13px;
 	flex-grow: 1;
-}
+	max-width: 500px;
+	min-width: var(--winrate-matrix-min-width);
 
-.header {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 40px;
-}
-.cell {
-	min-width: 80px;
-	width: 80px;
-	flex-grow: 0;
-	flex-shrink: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-
-	&.class {
-		flex-grow: 1;
+	.header {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 40px;
 	}
 
-	&.total-games {
-		min-width: 90px;
-		width: 90px;
+	.cell {
+		min-width: 80px;
+		width: 80px;
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&.class {
+			flex-grow: 1;
+		}
+
+		&.total-games {
+			min-width: 90px;
+			width: 90px;
+		}
 	}
 }
 
@@ -119,5 +144,11 @@ deck-matchup-info {
 			margin-top: 5px;
 			font-size: 12px;
 		}
+	}
+}
+
+@media (max-width: 1500px) {
+	.opponents-popularity {
+		display: none;
 	}
 }

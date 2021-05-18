@@ -8,6 +8,7 @@
 	flex-grow: 1;
 	padding-right: 10px;
 	margin-top: 10px;
+	--decklist-width: 210px;
 
 	.deck-list-container {
 		order: 2;
@@ -15,7 +16,7 @@
 		margin-right: 20px;
 		display: flex;
 		flex-direction: column;
-		width: 210px;
+		width: var(--decklist-width);
 
 		.copy-deckcode {
 			margin-bottom: 10px;
@@ -34,5 +35,6 @@
 	deck-winrate-matrix {
 		margin-top: -10px;
 		margin-right: auto;
+		max-width: calc(100% - var(--decklist-width));
 	}
 }
