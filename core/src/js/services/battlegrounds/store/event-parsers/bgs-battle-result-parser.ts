@@ -77,15 +77,17 @@ export class BgsBattleResultParser implements EventParser {
 
 	private async report(status: string, currentState: BattlegroundsState, gameState: GameState) {
 		const user = await this.ow.getCurrentUser();
+		const isSupported = isSupportedScenario(currentState.currentGame.battleInfo).isSupported;
 		console.warn(
 			'no-format',
 			'[bgs-simulation] Impossible battle ' + status,
 			currentState.currentGame.reviewId,
 			currentState.currentGame.currentTurn,
+			isSupported,
 			currentState.currentGame.battleInfo,
 			currentState.currentGame.battleResult,
 		);
-		if (isSupportedScenario(currentState.currentGame.battleInfo).isSupported) {
+		if (isSupported) {
 			captureEvent({
 				message: 'Impossible battle ' + status,
 				extra: {
