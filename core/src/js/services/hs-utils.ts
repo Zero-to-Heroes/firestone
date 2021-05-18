@@ -42,6 +42,7 @@ export const globalEffectCards = [
 	CardIds.Collectible.Paladin.AldorAttendant,
 	CardIds.Collectible.Paladin.AldorTruthseeker,
 	CardIds.NonCollectible.Paladin.HumbleBlessings,
+	CardIds.Collectible.Paladin.InvigoratingSermon,
 	CardIds.Collectible.Paladin.LothraxionTheRedeemed,
 	CardIds.NonCollectible.Paladin.MenAtArms,
 	CardIds.NonCollectible.Paladin.RadiantLightspawn2,
