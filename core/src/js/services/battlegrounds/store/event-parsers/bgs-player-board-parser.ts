@@ -86,6 +86,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		const newGame = currentState.currentGame.update({
 			players: newPlayers,
 			battleInfo: battleInfo,
+			battleResult: undefined,
 			battleInfoStatus: showSimulation ? 'waiting-for-result' : 'empty',
 			battleInfoMesage: isSupported.reason,
 			// battleInfoMesage: undefined,
