@@ -58,7 +58,6 @@ export class VersionComponent implements AfterViewInit {
 	async checkForUpdates() {
 		const isUpdate = await this.ow.checkForExtensionUpdate();
 		this.updateStatus = isUpdate ? 'update-available' : null;
-		console.debug('isUpdate', isUpdate, this.updateStatus);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -67,7 +66,6 @@ export class VersionComponent implements AfterViewInit {
 	async updateApp() {
 		const updateDone = await this.ow.updateExtension();
 		this.updateStatus = updateDone ? 'restart-needed' : 'update-error';
-		console.debug('updateDone', updateDone, this.updateStatus);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
