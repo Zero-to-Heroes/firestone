@@ -8,7 +8,7 @@ import { BgsRankFilterType } from './bgs-rank-filter.type';
 import { MmrGroupFilterType } from './mmr-group-filter-type';
 
 export class BattlegroundsAppState {
-	readonly categories: readonly BattlegroundsCategory[];
+	readonly categories: readonly BattlegroundsCategory[] = [];
 	readonly loading: boolean = true;
 	// The global stats coming from the DB (so without the player info)
 	readonly globalStats: BgsStats;
@@ -32,8 +32,15 @@ export class BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), this, base);
 	}
 
-	public static findCategory(state: BattlegroundsAppState, categoryId: string) {
-		return state.categories?.find((cat) => cat.id === categoryId);
+	public findCategory(categoryId: string) {
+		const result = this.categories?.find((cat) => cat.id === categoryId);
+		if (result) {
+			return result;
+		}
+		return this.categories
+			.map((cat) => cat.categories)
+			.reduce((a, b) => a.concat(b), [])
+			.find((cat) => cat.findCategory(categoryId));
 	}
 
 	public findReplay(reviewId: string): GameStat {

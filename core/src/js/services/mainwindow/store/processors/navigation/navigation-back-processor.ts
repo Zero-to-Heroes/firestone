@@ -1,4 +1,3 @@
-import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
@@ -100,8 +99,7 @@ export class NavigationBackProcessor implements Processor {
 				// console.log('going back', navigationState.navigationBattlegrounds.currentView);
 				return null;
 			case 'list':
-				const currentCategory: BattlegroundsCategory = BattlegroundsAppState.findCategory(
-					dataState.battlegrounds,
+				const currentCategory: BattlegroundsCategory = dataState.battlegrounds?.findCategory(
 					navigationState.navigationBattlegrounds.selectedCategoryId,
 				);
 				console.log(

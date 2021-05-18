@@ -10,9 +10,25 @@ export class BattlegroundsCategory {
 	readonly icon: string;
 	readonly enabled: boolean;
 	readonly disabledTooltip?: string;
-	readonly categories: readonly BattlegroundsCategory[];
+	readonly categories: readonly BattlegroundsCategory[] = [];
 
 	public static create(base: BattlegroundsCategory): BattlegroundsCategory {
 		return Object.assign(new BattlegroundsCategory(), base);
+	}
+
+	public findCategory(categoryId: string) {
+		if (this.id === categoryId) {
+			return this;
+		}
+
+		const result = this.categories?.find((cat) => cat.id === categoryId);
+		if (result) {
+			return result;
+		}
+
+		return this.categories
+			.map((cat) => cat.categories)
+			.reduce((a, b) => a.concat(b), [])
+			.find((cat) => cat.findCategory(categoryId));
 	}
 }
