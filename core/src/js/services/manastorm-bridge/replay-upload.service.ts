@@ -77,7 +77,9 @@ export class ReplayUploadService {
 				'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
 				'duels-run-id': game.currentDuelsRunId,
 				'additional-result': game.additionalResult,
-				'normalized-xp-gained': '' + game.xpGained,
+				'normalized-xp-gained': '' + game.xpForGame?.xpGainedWithoutBonus,
+				'real-xp-gamed': '' + game.xpForGame?.realXpGained,
+				'level-after-match': game.xpForGame ? game.xpForGame.currentLevel + '-' + game.xpForGame.currentXp : '',
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);

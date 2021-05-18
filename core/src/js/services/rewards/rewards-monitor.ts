@@ -2,10 +2,7 @@ import { Injectable } from '@angular/core';
 import { Map } from 'immutable';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { OwNotificationsService } from '../notifications.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { PreferencesService } from '../preferences.service';
 import { sleep } from '../utils';
 
 @Injectable()
@@ -144,23 +141,17 @@ export class RewardMonitorService {
 	]);
 
 	// private infoAtGameStart: RewardsTrackInfo;
-	private xpGainedForGame: number;
+	// private xpGainedForGame: number;
 	private xpForGameInfo: XpForGameInfo;
 
-	constructor(
-		private readonly gameEvents: GameEventsEmitterService,
-		private readonly events: Events,
-		private readonly memory: MemoryInspectionService,
-		private readonly prefs: PreferencesService,
-		private readonly notificationService: OwNotificationsService,
-	) {
+	constructor(private readonly events: Events, private readonly memory: MemoryInspectionService) {
 		this.init();
 	}
 
-	public async getXpGained(): Promise<number> {
-		const xpForGame = await this.getXpForGameInfo();
-		return xpForGame?.xpGainedWithoutBonus;
-	}
+	// public async getXpGained(): Promise<number> {
+	// 	const xpForGame = await this.getXpForGameInfo();
+	// 	return xpForGame?.xpGainedWithoutBonus;
+	// }
 
 	public async getXpForGameInfo(): Promise<XpForGameInfo> {
 		return new Promise<XpForGameInfo>(async (resolve) => {
@@ -182,7 +173,9 @@ export class RewardMonitorService {
 			const changes: MemoryUpdate = data.data[0];
 			if (changes?.XpChanges?.length) {
 				console.log('[rewards-monitor] received xp changes', changes.XpChanges);
-				// Not sure what the other items are about
+				// If there are multiple causes for XP changes, like game end + quest, we
+				// receive several items.
+				// The first item seems to always be about the current match itself
 				const xpChange = changes.XpChanges[0];
 				// const prefs: Preferences = await this.prefs.getPreferences();
 				const levelsGained = xpChange.CurrentLevel - xpChange.PreviousLevel;
@@ -198,14 +191,17 @@ export class RewardMonitorService {
 				const rawXpGained = xpGained / xpModifier;
 				// if (prefs.showXpRecapAtGameEnd) {
 				this.xpForGameInfo = {
+					previousXp: xpChange.PreviousXp,
+					previousLevel: xpChange.PreviousLevel,
+					currentXp: xpChange.CurrentXp,
+					currentLevel: xpChange.CurrentLevel,
 					xpGainedWithoutBonus: rawXpGained,
 					realXpGained: xpGained,
-					bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
 					levelsGained: levelsGained,
-					currentXp: xpChange.CurrentXp,
+					bonusXp: rewardTrackInfo?.XpBonusPercent ? Math.round(xpGained - rawXpGained) : 0,
 					xpNeeded: RewardMonitorService.XP_PER_LEVEL.get(xpChange.CurrentLevel, 1500),
 				};
-				console.log('[rewards-monitor] showing xp gained notification', levelsGained, xpGained);
+				console.log('[rewards-monitor] built xp for game', levelsGained, xpGained, this.xpForGameInfo);
 				// }
 			}
 		});
@@ -226,10 +222,13 @@ export class RewardMonitorService {
 }
 
 export interface XpForGameInfo {
+	readonly previousXp: number;
+	readonly previousLevel: number;
+	readonly currentXp: number;
+	readonly currentLevel: number;
 	readonly xpGainedWithoutBonus: number;
 	readonly realXpGained: number;
-	readonly bonusXp: number;
 	readonly levelsGained: number;
-	readonly currentXp: number;
+	readonly bonusXp: number;
 	readonly xpNeeded: number;
 }

@@ -84,24 +84,14 @@ export class EndGameUploaderService {
 		// Get the memory info first, because parsing the XML can take some time and make the
 		// info in memory stale / unavailable
 		console.log('[manastorm-bridge]', currentReviewId, 'reading memory info');
-		const [battlegroundsInfo, duelsInfo, arenaInfo, playerInfo, opponentInfo, xpGained] = await Promise.all([
+		const [battlegroundsInfo, duelsInfo, arenaInfo, playerInfo, opponentInfo, xpForGame] = await Promise.all([
 			game.gameMode === 'battlegrounds' ? this.getBattlegroundsEndGame(currentReviewId) : null,
 			game.gameMode === 'duels' || game.gameMode === 'paid-duels' ? this.memoryInspection.getDuelsInfo() : null,
 			game.gameMode === 'arena' ? this.memoryInspection.getArenaInfo() : null,
 			this.playersInfo.getPlayerInfo(),
 			this.playersInfo.getOpponentInfo(),
-			this.rewards.getXpGained(),
+			this.rewards.getXpForGameInfo(),
 		]);
-		// const battlegroundsInfo: BattlegroundsInfo =
-		// 	game.gameMode === 'battlegrounds' ? await this.getBattlegroundsEndGame(currentReviewId) : null;
-		// const duelsInfo =
-		// 	game.gameMode === 'duels' || game.gameMode === 'paid-duels'
-		// 		? await this.memoryInspection.getDuelsInfo()
-		// 		: null;
-		// const arenaInfo = game.gameMode === 'arena' ? await this.memoryInspection.getArenaInfo() : null;
-		// const playerInfo = await this.playersInfo.getPlayerInfo();
-		// const opponentInfo = await this.playersInfo.getOpponentInfo();
-		// const xpGained = await this.rewards.getXpGained();
 		console.log('[manastorm-bridge]', currentReviewId, 'read memory info');
 
 		const replay = parseHsReplayString(replayXml);
@@ -231,7 +221,7 @@ export class EndGameUploaderService {
 		game.reviewId = currentReviewId;
 		game.buildNumber = buildNumber;
 		game.scenarioId = scenarioId;
-		game.xpGained = xpGained;
+		game.xpForGame = xpForGame;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {
 			console.log('[manastorm-bridge]', currentReviewId, 'adding deckstring', deckstring, game.gameMode);
 			game.deckstring = deckstring;
@@ -294,22 +284,7 @@ export class EndGameUploaderService {
 	}
 
 	private async getBattlegroundsEndGame(currentReviewId: string): Promise<BattlegroundsInfo> {
-		// First try without resets
-		// Apparently, there is an issue getting the info if the user clicks away too quickly
-		// on the endgame popup
-		// So I'll just crank up the speed by a lot, and add a lot of retries
 		const result = await this.memoryInspection.getBattlegroundsEndGame();
-		// if (!result?.rating || !result?.newRating) {
-		// 	console.log('[manastorm-bridge]', currentReviewId, 'could not get BG rank without reset', result);
-		// 	const resultWithResets = await this.memoryInspection.getBattlegroundsEndGame(2);
-		// 	console.log('[manastorm-bridge]', currentReviewId, 'rank with reset?', resultWithResets);
-		// 	if (!resultWithResets?.rating || !resultWithResets?.newRating) {
-		// 		console.log('[manastorm-bridge]', currentReviewId, 'no luck in getting BG ranks', resultWithResets);
-		// 		return result;
-		// 	}
-		// 	console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', resultWithResets);
-		// 	return resultWithResets;
-		// }
 		console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', result);
 		return result;
 	}
