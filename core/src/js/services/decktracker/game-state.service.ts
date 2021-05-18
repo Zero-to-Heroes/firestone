@@ -444,39 +444,25 @@ export class GameStateService {
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
 		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
-		const newBoard: readonly DeckCard[] = deck.board.map((card) => {
+		const newBoard: readonly DeckCard[] = stateWithMetaInfos.board.map((card) => {
 			const entity = playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId);
 			return DeckCard.create({
 				...card,
 				dormant: this.hasTag(entity, GameTag.DORMANT),
 			} as DeckCard);
 		});
-		const totalAttackOnBoard = deck.board
+		const totalAttackOnBoard = stateWithMetaInfos.board
 			.map((card) => playerFromTracker?.Board?.find((entity) => entity.entityId === card.entityId))
 			.filter((entity) => entity)
-			.filter((entity) => this.canAttack(entity, deck.isActivePlayer))
+			.filter((entity) => this.canAttack(entity, stateWithMetaInfos.isActivePlayer))
 			.map((entity) => this.windfuryMultiplier(entity) * (entity.attack > 0 ? entity.attack : 0))
 			.reduce((a, b) => a + b, 0);
-		// console.log(
-		// 	'total attack on board',
-		// 	playerFromTracker?.Board,
-		// 	deck,
-		// 	deck.board
-		// 		.map(card => playerFromTracker?.Board?.find(entity => entity.entityId === card.entityId))
-		// 		.filter(entity => entity && entity.attack > 0)
-		// 		.filter(entity => !this.hasTag(entity, GameTag.DORMANT)),
-		// );
 		const heroAttack =
 			this.windfuryMultiplier(playerFromTracker?.Hero) *
-			(this.canAttack(playerFromTracker?.Hero, deck.isActivePlayer)
+			(this.canAttack(playerFromTracker?.Hero, stateWithMetaInfos.isActivePlayer)
 				? Math.max(playerFromTracker?.Hero?.attack, 0) +
-				  (deck.isActivePlayer ? 0 : Math.max(playerFromTracker?.Weapon?.attack, 0))
+				  (stateWithMetaInfos.isActivePlayer ? 0 : Math.max(playerFromTracker?.Weapon?.attack, 0))
 				: 0);
-		// console.log(
-		// 	'heroAttack',
-		// 	playerFromTracker?.Hero,
-		// 	this.canAttack(playerFromTracker?.Hero, deck.isActivePlayer),
-		// );
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
 					board: newBoard,
