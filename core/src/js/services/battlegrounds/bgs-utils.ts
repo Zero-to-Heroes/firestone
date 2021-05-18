@@ -1,5 +1,4 @@
-import { CardIds, Race } from '@firestone-hs/reference-data';
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';

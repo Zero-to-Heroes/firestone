@@ -1,4 +1,4 @@
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';

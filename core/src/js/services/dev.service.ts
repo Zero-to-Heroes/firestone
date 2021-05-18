@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { decode, encode } from 'deckstrings';
 import { Achievement } from '../models/achievement';
 import { DeckCard } from '../models/decktracker/deck-card';

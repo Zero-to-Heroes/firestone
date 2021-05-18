@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { formatClass } from '../../services/hs-utils';
 import { CollectionReferenceCard } from './collection-reference-card';
 

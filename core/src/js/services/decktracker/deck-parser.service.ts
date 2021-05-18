@@ -6,11 +6,11 @@ import {
 	GameFormat,
 	GameType,
 	PRACTICE_ALL,
+	ReferenceCard,
 	ScenarioId,
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
 } from '@firestone-hs/reference-data';
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckDefinition, decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';

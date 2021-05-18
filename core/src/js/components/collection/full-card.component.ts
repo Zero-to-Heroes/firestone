@@ -8,7 +8,7 @@ import {
 	Output,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';

@@ -1,5 +1,5 @@
 import { DeckStat } from '@firestone-hs/duels-global-stats/dist/stat';
-import { ReferencePlayerClass } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-player-class';
+import { ReferencePlayerClass } from '@firestone-hs/reference-data';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { GameStat } from '../mainwindow/stats/game-stat';
 import { DuelsGroupedDecks } from './duels-grouped-decks';

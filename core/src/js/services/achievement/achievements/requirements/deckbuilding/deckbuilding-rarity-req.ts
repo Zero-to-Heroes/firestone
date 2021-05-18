@@ -1,4 +1,4 @@
-import { RarityTYpe } from '@firestone-hs/reference-data/lib/models/reference-cards/rarity.type';
+import { RarityTYpe } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';

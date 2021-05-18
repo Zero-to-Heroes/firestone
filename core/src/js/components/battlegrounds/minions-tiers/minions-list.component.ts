@@ -7,8 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { Race } from '@firestone-hs/reference-data';
-import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
 import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
