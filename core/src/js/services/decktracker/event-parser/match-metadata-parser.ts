@@ -41,9 +41,10 @@ export class MatchMetadataParser implements EventParser {
 			scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
 		} as Metadata;
 		// We don't always have a deckstring here, eg when we read the deck from memory
-		const currentDeck = noDeckMode
-			? undefined
-			: await this.deckParser.getCurrentDeck(metaData.gameType === GameType.GT_VS_AI, metaData);
+		// We always read the decklist, whatever the prefs are, so that we trigger the side effects
+		// (yes, that's probably bad design here, especially seeing the bugs I tend to have on this area)
+		const readDeck = await this.deckParser.getCurrentDeck(metaData.gameType === GameType.GT_VS_AI, metaData);
+		const currentDeck = noDeckMode ? undefined : readDeck;
 		const deckstringToUse = currentState.playerDeck?.deckstring || currentDeck?.deckstring;
 		console.log(
 			'[match-metadata-parser] init game with deck',
