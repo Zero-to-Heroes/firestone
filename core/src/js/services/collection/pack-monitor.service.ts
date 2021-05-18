@@ -1,4 +1,4 @@
-import { SPACE } from '@angular/cdk/keycodes'
+import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
@@ -36,15 +36,15 @@ export class PackMonitor {
 					event:
 						card.isNew || card.isSecondCopy
 							? async () =>
-								this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType)
+									this.notifications.createNewCardToast(card.cardId, card.isSecondCopy, card.cardType)
 							: async () => {
-								const dust =
-									card.cardType === 'GOLDEN'
-										? dustForPremium(dbCard.rarity)
-										: dustFor(dbCard.rarity);
-								this.totalDustInPack += dust;
-								this.totalDuplicateCards++;
-							},
+									const dust =
+										card.cardType === 'GOLDEN'
+											? dustForPremium(dbCard.rarity)
+											: dustFor(dbCard.rarity);
+									this.totalDustInPack += dust;
+									this.totalDuplicateCards++;
+							  },
 					revealed: false,
 					eventTriggered: false,
 				} as CardWithEvents;

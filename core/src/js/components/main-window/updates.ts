@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.8.19',
+		version: '7.9.09',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -51,33 +51,33 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where Avenge would be ruled out if the only other minion on board was dormant.`,
-							},
-						],
-					},
-					{
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the simulator would incorrectly handle Murloc Warleader's and Southsea Captain's auras.`,
+								type: 'feature',
+								text: `Add a tab to show recent perfect games from the community. You can filter them by hero and by rank.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where sometimes the player's MMR would not be detected at the end of a match.`,
+								text: `Fix some simulation issues when the Fish of N'Zoth is involved.`,
 							},
 						],
 					},
 					{
-						category: 'duels',
+						category: 'replays',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the initial deck of a run would not be properly detected on non-English HS clients.`,
+								type: 'feature',
+								text: `Add filters by hero (BG) and class (constructed / arena / duels).`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a tab with all the voicelines from non-collectible heroes.`,
 							},
 						],
 					},
@@ -92,32 +92,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add a Total row in the deck's stat matrix.`,
+								text: `Playing Explore Un'Goro now properly replaces all your cards in the decklist.`,
 							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the decklist would be lost after restarting a fight in some solo adventures.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where some standard decks would be incorrectly classified as Wild if you played a game in Wild.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the confirmation popup when closing the decklist would not have any text.`,
-							},
-							{
-								type: 'ui',
-								text: `Zoom in on the images used for counters so that white spaces stop showing at the sides.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
 							{
 								type: 'feature',
-								text: `Show cards/treasure picks when viewing a personal deck.`,
+								text: `The counter for Grand Totem Eys'or now increments every time the totem's effect is triggered.`,
 							},
 						],
 					},
@@ -125,12 +104,17 @@ export const updates: readonly Update[] = [
 						category: 'collection',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix some sounds being incorrectly labelled for the hero portraits.`,
+								type: 'feature',
+								text: `Add information of how much dust you have from duplicates for each set.`,
 							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
 							{
 								type: 'ui',
-								text: `Group hero portraits by class.`,
+								text: `Now show "Perfect!" instead of "1st" in the replays list when winning with your full health remaining.`,
 							},
 						],
 					},
@@ -138,13 +122,30 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the completed achievements would not show up for Ragnaros at the hero selection stage.`,
+								type: 'feature',
+								text: `Hovering on a minion in the minions list now also shows its golden version.`,
 							},
-							// {
-							// 	type: 'ui',
-							// 	text: `Show up an "unsupported composition" when at least one secret is in play, to properly reflect the fact that the simulator doesn't handle them yet.`,
-							// },
+							{
+								type: 'bug',
+								text: `Fix an issue where the battle luck would not have any hero or replay information in the Records Broken tab.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the last battle's chances would not be accessible after the run ends if the chances were set to show only in the tavern.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where a minion's stats would sometimes not be visible in the live stats tooltip.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Add a button to force an app update when a new version is available.`,
+							},
 						],
 					},
 				],
