@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.9.09',
+		version: '7.9.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -73,6 +73,15 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add ladder stats.`,
+							},
+						],
+					},
+					{
 						category: 'collection',
 						details: [
 							{
@@ -96,7 +105,15 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `Add a few more stats to the deck details page, including a pie chart of the opponent's class breakdown (visible only when the window is wide enough).`,
+							},
+							{
+								type: 'feature',
 								text: `The counter for Grand Totem Eys'or now increments every time the totem's effect is triggered.`,
+							},
+							{
+								type: 'feature',
+								text: `Add Invigorating Sermon to the list of global effects.`,
 							},
 						],
 					},
