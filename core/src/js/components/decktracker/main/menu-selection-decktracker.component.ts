@@ -23,6 +23,9 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<li [ngClass]="{ 'selected': selectedTab === 'decks' }" (mousedown)="selectStage('decks')">
 				<span>Decks</span>
 			</li>
+			<li [ngClass]="{ 'selected': selectedTab === 'ladder-stats' }" (mousedown)="selectStage('ladder-stats')">
+				<span>Stats</span>
+			</li>
 			<li
 				[ngClass]="{ 'selected': selectedTab === 'ranking' }"
 				(mousedown)="selectStage('ranking')"

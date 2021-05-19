@@ -191,7 +191,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 			state &&
 			navigation &&
 			navigation.currentApp == 'decktracker' &&
-			navigation.navigationDecktracker.currentView !== 'deck-details'
+			!['deck-details', 'ladder-stats'].includes(navigation.navigationDecktracker.currentView)
 		);
 	};
 
@@ -252,7 +252,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		this.timeFilterOptions = [
 			{
 				value: 'all-time',
-				label: 'All time',
+				label: 'Past 100 days',
 			} as TimeFilterOption,
 			{
 				value: 'season-start',

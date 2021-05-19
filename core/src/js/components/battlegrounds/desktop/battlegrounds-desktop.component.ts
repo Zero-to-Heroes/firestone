@@ -1,5 +1,4 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -94,8 +93,7 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 	}
 
 	buildCategory(): BattlegroundsCategory {
-		this.category = BattlegroundsAppState.findCategory(
-			this.state.battlegrounds,
+		this.category = this.state.battlegrounds.findCategory(
 			this.navigation.navigationBattlegrounds.selectedCategoryId,
 		);
 		return this.category;

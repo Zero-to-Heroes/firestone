@@ -119,6 +119,7 @@ import { DecktrackerDeckRecapComponent } from '../../components/decktracker/main
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
 import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
+import { DecktrackerLadderStatsComponent } from '../../components/decktracker/main/decktracker-ladder-stats.component';
 import { DecktrackerPersonalStatsRankingComponent } from '../../components/decktracker/main/decktracker-personal-stats-ranking.component';
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
@@ -460,6 +461,7 @@ const components = [
 		DeckManaCurveBarComponent,
 		DecktrackerReplaysRecapComponent,
 		DecktrackerPersonalStatsRankingComponent,
+		DecktrackerLadderStatsComponent,
 		MenuSelectionDecktrackerComponent,
 
 		ReplaysComponent,

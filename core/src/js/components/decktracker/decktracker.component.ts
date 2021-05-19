@@ -32,6 +32,10 @@ import { Preferences } from '../../models/preferences';
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
 							[decks]="_state?.decktracker?.decks"
 						></decktracker-decks>
+						<decktracker-ladder-stats
+							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'ladder-stats'"
+							[state]="_state"
+						></decktracker-ladder-stats>
 						<decktracker-deck-details
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'deck-details'"
 							[state]="_state"
@@ -81,6 +85,7 @@ export class DecktrackerComponent {
 	showReplaysRecap(): boolean {
 		return (
 			this.navigation.navigationDecktracker.currentView === 'decks' ||
+			this.navigation.navigationDecktracker.currentView === 'ladder-stats' ||
 			(this.navigation.navigationDecktracker.currentView === 'deck-details' && !this.showAds)
 		);
 	}

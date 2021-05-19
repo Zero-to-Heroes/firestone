@@ -129,7 +129,6 @@ export class PieChartComponent {
 				},
 			},
 		};
-		console.log('building options', this._options, result);
 		return result;
 	}
 
