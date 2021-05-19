@@ -14,12 +14,13 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	],
 	template: `
 		<div class="decktracker-ladder-stats">
-			<ul class="global-stats">
+			<decktracker-stats-for-replays [replays]="replays"></decktracker-stats-for-replays>
+			<!-- <ul class="global-stats">
 				<li class="global-stat" *ngFor="let stat of stats">
 					<div class="label">{{ stat.label }}</div>
 					<div class="value">{{ stat.value }}</div>
 				</li>
-			</ul>
+			</ul> -->
 			<div class="graphs">
 				<div class="graph player-popularity">
 					<div class="title">Player class breakdown</div>
@@ -53,7 +54,8 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 		this.updateInfos();
 	}
 
-	stats: readonly InternalStat[];
+	replays: readonly GameStat[];
+	// stats: readonly InternalStat[];
 	playerPieChartData: readonly InputPieChartData[];
 	opponentPieChartData: readonly InputPieChartData[];
 	pieChartOptions: InputPieChartOptions;
@@ -71,62 +73,9 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 			return;
 		}
 
-		const replays = this._state.decktracker.decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []);
-		const replaysFirst = replays.filter((replay) => replay.coinPlay === 'play');
-		const replaysCoin = replays.filter((replay) => replay.coinPlay === 'coin');
-		const replaysWon = replays.filter((replay) => replay.result === 'won');
-		const turnsToWin =
-			replaysWon
-				.filter((replay) => replay.gameDurationTurns)
-				.map((replay) => replay.gameDurationTurns)
-				.reduce((a, b) => a + b, 0) / replaysWon.filter((replay) => replay.gameDurationTurns).length;
-		const replaysLost = replays.filter((replay) => replay.result === 'lost');
-		const turnsToLose =
-			replaysLost
-				.filter((replay) => replay.gameDurationTurns)
-				.map((replay) => replay.gameDurationTurns)
-				.reduce((a, b) => a + b, 0) / replaysLost.filter((replay) => replay.gameDurationTurns).length;
-
-		this.stats = [
-			{
-				label: 'Total games played',
-				value: `${replays.length.toLocaleString()}`,
-			},
-			{
-				label: 'Total time played',
-				value: `${this.toAppropriateDurationFromSeconds(
-					replays.map((replay) => replay.gameDurationSeconds).reduce((a, b) => a + b, 0),
-				)}`,
-			},
-			{
-				label: 'Turns to win',
-				value: `${turnsToWin.toFixed(1)}`,
-			},
-			{
-				label: 'Turns to lose',
-				value: `${turnsToLose.toFixed(1)}`,
-			},
-			{
-				label: 'Winrate',
-				value: `${((100 * replaysWon.length) / replays.length).toFixed(1)}%`,
-			},
-			{
-				label: 'Winrate (first)',
-				value: `${(
-					(100 * replaysFirst.filter((replay) => replay.result === 'won').length) /
-					replaysFirst.length
-				).toFixed(1)}%`,
-			},
-			{
-				label: 'Winrate (coin)',
-				value: `${(
-					(100 * replaysCoin.filter((replay) => replay.result === 'won').length) /
-					replaysCoin.length
-				).toFixed(1)}%`,
-			},
-		];
-		this.playerPieChartData = this.buildPlayerPieChartData(replays);
-		this.opponentPieChartData = this.buildOpponentPieChartData(replays);
+		this.replays = this._state.decktracker.decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []);
+		this.playerPieChartData = this.buildPlayerPieChartData(this.replays);
+		this.opponentPieChartData = this.buildOpponentPieChartData(this.replays);
 		this.pieChartOptions = this.buildPieChartOptions();
 	}
 
@@ -162,24 +111,4 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 			};
 		});
 	}
-
-	private toAppropriateDurationFromSeconds(durationInSeconds: number): string {
-		if (durationInSeconds < 60) {
-			return `${durationInSeconds} s`;
-		} else if (durationInSeconds < 3600) {
-			return `${Math.round(durationInSeconds / 60)} min`;
-			// } else if (durationInSeconds < 3600 * 24) {
-		} else {
-			const hours = Math.floor(durationInSeconds / 3600);
-			const min = Math.floor((durationInSeconds - 3600 * hours) / 60);
-			const minText = min > 0 ? `${min.toLocaleString().padStart(2, '0')} min` : '';
-			return `${hours.toLocaleString()} hours ${minText}`;
-		}
-		return '';
-	}
-}
-
-interface InternalStat {
-	readonly label: string;
-	readonly value: string;
 }

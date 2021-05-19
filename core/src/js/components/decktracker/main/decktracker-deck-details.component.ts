@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input 
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { Preferences } from '../../../models/preferences';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -15,6 +16,7 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 	],
 	template: `
 		<div class="decktracker-deck-details">
+			<decktracker-stats-for-replays class="global-stats" [replays]="replays"></decktracker-stats-for-replays>
 			<div class="deck-list-container">
 				<copy-deckstring class="copy-deckcode" [deckstring]="deck?.deckstring" copyText="Copy deck code">
 				</copy-deckstring>
@@ -44,6 +46,7 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 
 	showMatchupAsPercentages = true;
 	deck: DeckSummary;
+	replays: readonly GameStat[];
 
 	private _state: MainWindowState;
 	private _navigation: NavigationState;
@@ -64,6 +67,6 @@ export class DecktrackerDeckDetailsComponent implements AfterViewInit {
 		this.deck = this._state.decktracker.decks.find(
 			(deck) => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
-		// console.debug('updating deck', this.deck);
+		this.replays = this.deck?.replays ?? [];
 	}
 }

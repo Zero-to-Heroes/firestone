@@ -12,36 +12,6 @@
 	flex-grow: 1;
 	max-width: 100%;
 
-	.global-stats {
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		padding-top: 15px;
-		flex-wrap: wrap;
-	}
-
-	.global-stat {
-		border: 1px solid var(--color-common-2);
-		background: rgba(255, 255, 255, 0.08);
-		padding: 10px;
-		display: flex;
-		flex-direction: column;
-		width: 155px;
-		align-items: center;
-		justify-content: center;
-		margin-right: 15px;
-		margin-bottom: 20px;
-
-		.label {
-			color: var(--default-text-color);
-			margin-bottom: 5px;
-		}
-
-		.value {
-			color: var(--default-title-color);
-		}
-	}
-
 	.graphs {
 		display: flex;
 		align-items: center;

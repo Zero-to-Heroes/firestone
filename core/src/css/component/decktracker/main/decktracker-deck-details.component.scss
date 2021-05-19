@@ -9,6 +9,17 @@
 	padding-right: 10px;
 	margin-top: 10px;
 	--decklist-width: 210px;
+	flex-wrap: wrap;
+
+	.global-stats {
+		width: 100%;
+		flex-shrink: 0;
+
+		::ng-deep .winrate,
+		::ng-deep .games {
+			display: none;
+		}
+	}
 
 	.deck-list-container {
 		order: 2;
