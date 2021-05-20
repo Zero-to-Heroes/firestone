@@ -93,7 +93,7 @@ export class ReplayUploadService {
 				const info: ManastormInfo = {
 					type: 'new-review',
 					reviewId: reviewId,
-					replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,
+					replayUrl: `https://replays.firestoneapp.com/?reviewId=${reviewId}`,
 					game: game,
 				};
 				this.events.broadcast(Events.REVIEW_FINALIZED, info);
