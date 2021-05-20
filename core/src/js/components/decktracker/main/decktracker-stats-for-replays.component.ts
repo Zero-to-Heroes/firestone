@@ -59,6 +59,10 @@ export class DecktrackerStatsForReplaysComponent implements AfterViewInit {
 				.filter((replay) => replay.gameDurationTurns)
 				.map((replay) => replay.gameDurationTurns)
 				.reduce((a, b) => a + b, 0) / replaysLost.filter((replay) => replay.gameDurationTurns).length;
+		const winrate = (100 * replaysWon.length) / this._replays.length;
+		const winrateFirst =
+			(100 * replaysFirst.filter((replay) => replay.result === 'won').length) / replaysFirst.length;
+		const winrateCoin = (100 * replaysCoin.filter((replay) => replay.result === 'won').length) / replaysCoin.length;
 
 		this.stats = [
 			{
@@ -74,31 +78,25 @@ export class DecktrackerStatsForReplaysComponent implements AfterViewInit {
 			},
 			{
 				label: 'Turns to win',
-				value: `${turnsToWin.toFixed(1)}`,
+				value: `${isNaN(turnsToWin) ? '-' : turnsToWin.toFixed(1)}`,
 			},
 			{
 				label: 'Turns to lose',
-				value: `${turnsToLose.toFixed(1)}`,
+				value: `${isNaN(turnsToLose) ? '-' : turnsToLose.toFixed(1)}`,
 			},
 			{
 				label: 'Winrate',
-				value: `${((100 * replaysWon.length) / this._replays.length).toFixed(1)}%`,
+				value: `${isNaN(winrate) ? '-' : winrate.toFixed(1)}%`,
 				class: 'winrate ',
 			},
 			{
 				label: 'Winrate (first)',
-				value: `${(
-					(100 * replaysFirst.filter((replay) => replay.result === 'won').length) /
-					replaysFirst.length
-				).toFixed(1)}%`,
+				value: `${isNaN(winrateFirst) ? '-' : winrateFirst.toFixed(1)}%`,
 				class: 'winrate ',
 			},
 			{
 				label: 'Winrate (coin)',
-				value: `${(
-					(100 * replaysCoin.filter((replay) => replay.result === 'won').length) /
-					replaysCoin.length
-				).toFixed(1)}%`,
+				value: `${isNaN(winrateCoin) ? '-' : winrateCoin.toFixed(1)}%`,
 				class: 'winrate ',
 			},
 		];
