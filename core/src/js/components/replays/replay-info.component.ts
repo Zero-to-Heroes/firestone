@@ -183,7 +183,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 			} else if (!isNaN(deltaMmr)) {
 				this.deltaMmr = deltaMmr;
 			}
-			this.availableTribes = [...value.bgsAvailableTribes]
+			this.availableTribes = [...(value.bgsAvailableTribes ?? [])]
 				.sort((a, b) => a - b)
 				.map((race) => ({
 					cardId: getReferenceTribeCardId(race),
