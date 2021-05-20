@@ -107,6 +107,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.SpreadingSaplings:
 		case CardIds.NonCollectible.Neutral.StarvingTavernBrawl1:
 		case CardIds.NonCollectible.Neutral.TotemOfTheDead1:
+		case CardIds.NonCollectible.Neutral.UnlockedPotential:
 			return 2;
 		// Passives Ultra Rare
 		case CardIds.NonCollectible.Neutral.BandOfBees:
