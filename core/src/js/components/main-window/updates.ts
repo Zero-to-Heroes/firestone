@@ -77,7 +77,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Add ladder stats.`,
+								text: `Add Ladder stats.`,
 							},
 						],
 					},
@@ -124,6 +124,10 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `Add information of how much dust you have from duplicates for each set.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue with the Darkmoon Faire pity timer would sometimes not reset after cards from the Darkmoon Races mini set would be pulled from a pack.`,
+							},
 						],
 					},
 					{
@@ -153,6 +157,14 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where a minion's stats would sometimes not be visible in the live stats tooltip.`,
+							},
+							{
+								type: 'bug',
+								text: `Add basic support in the simulator for Scallywag + Baron/Khadgar. There are still some limitations, namely in the way Khadgar sometimes summons multiple pirates before the "attack immediately" triggers.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the live hero dealt damage stats would not be computed properly.`,
 							},
 						],
 					},
