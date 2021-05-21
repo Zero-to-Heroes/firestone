@@ -492,6 +492,10 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'First Purchase';
 		case BoosterType.YEAR_OF_PHOENIX:
 			return 'Year of the Phoenix';
+		case BoosterType.STANDARD_BUNDLE:
+			return 'Standard Bundle';
+		case BoosterType.GOLDEN_STANDARD_BUNDLE:
+			return 'Golden Standard Bundle';
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
