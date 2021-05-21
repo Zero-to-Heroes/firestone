@@ -63,6 +63,7 @@ export class Preferences {
 	readonly desktopDeckHiddenDeckCodes: readonly string[] = [];
 	readonly desktopDeckShowMatchupAsPercentages: boolean = true;
 	readonly desktopDeckStatsReset: { [deckstring: string]: readonly number[] } = {};
+	readonly desktopDeckDeletes: { [deckstring: string]: readonly number[] } = {};
 
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowDuels: boolean = true;

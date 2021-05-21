@@ -67,6 +67,7 @@ import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode
 import { ChangeDeckRankFilterEvent } from './events/decktracker/change-deck-rank-filter-event';
 import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
+import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from './events/decktracker/decktracker-reset-deck-stats-event';
 import { HideDeckSummaryEvent } from './events/decktracker/hide-deck-summary-event';
 import { RestoreDeckSummaryEvent } from './events/decktracker/restore-deck-summary-event';
@@ -155,6 +156,7 @@ import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-d
 import { ChangeDeckRankFilterProcessor } from './processors/decktracker/change-deck-rank-filter-processor';
 import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
+import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
 import { DecktrackerResetDeckStatsProcessor } from './processors/decktracker/decktracker-reset-deck-stats-processor';
 import { HideDeckSummaryProcessor } from './processors/decktracker/hide-deck-summary-processor';
 import { RestoreDeckSummaryProcessor } from './processors/decktracker/restore-deck-summary-processor';
@@ -572,6 +574,9 @@ export class MainWindowStoreService {
 
 			DecktrackerResetDeckStatsEvent.eventName(),
 			new DecktrackerResetDeckStatsProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
+
+			DecktrackerDeleteDeckEvent.eventName(),
+			new DecktrackerDeleteDeckProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
 
 			RestoreDeckSummaryEvent.eventName(),
 			new RestoreDeckSummaryProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),

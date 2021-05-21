@@ -48,13 +48,12 @@
 	--toggle-color-border: var(--color-1);
 	--toggle-color-knob: var(--color-1);
 
-	--confirmation-text-color: #dfb3d3;
 	--confirmation-background-color: #5f0b47;
-	--on-confirmation-button-background-color: rgba(255, 255, 255, 0.08);
-	--confirmation-ok-button-color: #1f2142;
-	--confirmation-ok-button-background-color: #767faf;
-	--on-confirmation-ok-button-background-color: #dfb3d3;
 	--confirmation-backdrop-color: #190505;
+
+	--confirmation-text-color: var(--color-1);
+	--on-confirmation-text-color: var(--color-5);
+	--on-confirmation-button-background-color: var(--color-1);
 
 	--variable-title-font-size: 13px;
 	--variable-title-font-size-big: 20px;

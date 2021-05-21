@@ -378,6 +378,17 @@ export class PreferencesService {
 		return newPrefs;
 	}
 
+	public async setDeckDeleteDates(deckstring: string, newDeleteDates: readonly number[]) {
+		const prefs = await this.getPreferences();
+		const newDelete = {
+			...prefs.desktopDeckStatsReset,
+			[deckstring]: newDeleteDates,
+		};
+		const newPrefs: Preferences = { ...prefs, desktopDeckDeletes: newDelete };
+		this.savePreferences(newPrefs);
+		return newPrefs;
+	}
+
 	public async setDesktopDeckHiddenDeckCodes(value: string[]): Promise<Preferences> {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, desktopDeckHiddenDeckCodes: value };

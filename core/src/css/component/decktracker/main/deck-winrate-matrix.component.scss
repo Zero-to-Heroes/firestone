@@ -102,7 +102,8 @@ deck-matchup-info {
 		width: 100px;
 	}
 
-	.reset-container {
+	.reset-container,
+	.delete-container {
 		color: #d9c3ab;
 		display: flex;
 		flex-direction: column;
@@ -143,6 +144,29 @@ deck-matchup-info {
 		.confirmation {
 			margin-top: 5px;
 			font-size: 12px;
+		}
+	}
+
+	.delete-container {
+		color: #d73524;
+
+		button {
+			border-color: #d73524;
+
+			span {
+				color: #d73524;
+			}
+		}
+
+		button {
+			&:hover {
+				background: #d73524;
+				border-color: #d73524;
+
+				span {
+					color: white;
+				}
+			}
 		}
 	}
 }

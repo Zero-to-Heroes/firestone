@@ -154,6 +154,9 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 		this.bestAgainsts = null;
 
 		setTimeout(() => {
+			if (!this.deck) {
+				return;
+			}
 			this.bestAgainsts = [...this.deck.matchupStats]
 				.filter((matchup) => matchup.totalWins > 0)
 				.sort((a, b) => b.totalWins / b.totalGames - a.totalWins / a.totalGames)

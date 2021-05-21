@@ -47,8 +47,17 @@ export class DecksStateBuilderService {
 		prefs: Preferences,
 		patch: PatchInfo,
 	): readonly GameStat[] {
-		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		const replaysForDate = stats.gameStats.stats
+			// We have to also filter the info here, as otherwise we need to do a full state reset
+			// after the user presses the delete button
+			.filter(
+				(stat) =>
+					!prefs?.desktopDeckDeletes ||
+					!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
+					prefs.desktopDeckDeletes[stat.playerDecklist][
+						prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
+					] < stat.creationTimestamp,
+			)
 			.filter((stat) => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
 			.filter((stat) => stat.gameMode === filters.gameMode)
 			.filter((stat) => this.isValidDate(stat, filters.time, patch));
@@ -64,6 +73,7 @@ export class DecksStateBuilderService {
 				}
 			}
 		}
+		const hiddenDeckCodes = prefs?.desktopDeckHiddenDeckCodes ?? [];
 		return replaysForDate
 			.slice(0, indexOfFirstGame)
 			.filter((stat) => this.isValidRank(stat, filters.rank))

@@ -10,6 +10,7 @@ import {
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
 import { classes, colorForClass, formatClass } from '../../../services/hs-utils';
+import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -58,6 +59,18 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 						Your win/loss stats have been reset.
 					</div>
 				</div>
+				<div class="delete-container">
+					<button
+						confirmationTooltip
+						[askConfirmation]="true"
+						validButtonText="Delete"
+						confirmationText="This will permanently delete the deck from all your stats and can't be undone."
+						(onConfirm)="deleteDeck()"
+						helpTooltip="Delete your deck. This can't be undone. If you just want to hide it, consider archiving it instead."
+					>
+						<span>{{ deleteText }}</span>
+					</button>
+				</div>
 			</div>
 		</div>
 	`,
@@ -81,6 +94,7 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	pieChartOptions: InputPieChartOptions;
 
 	resetText = 'Reset stats';
+	deleteText = 'Delete deck';
 	confirmationShown = false;
 	showResetConfirmationText = false;
 
@@ -103,6 +117,11 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 		this.confirmationShown = false;
 		this.showResetConfirmationText = true;
 		this.stateUpdater.next(new DecktrackerResetDeckStatsEvent(this.deck.deckstring));
+	}
+
+	deleteDeck() {
+		console.log('deleting deck', this._deck.deckstring);
+		this.stateUpdater.next(new DecktrackerDeleteDeckEvent(this._deck.deckstring));
 	}
 
 	private updateValues() {

@@ -33,28 +33,30 @@
 		button {
 			width: 80px;
 			height: 30px;
+			border: 1px solid var(--confirmation-text-color);
+			background: transparent;
+			color: var(--confirmation-text-color);
 
-			&.cancel {
-				border: 1px solid var(--confirmation-text-color);
-				background: transparent;
-				color: var(--confirmation-text-color);
-
-				&:hover {
-					background: var(--on-confirmation-button-background-color);
-				}
+			&:hover {
+				background: var(--on-confirmation-button-background-color);
+				color: var(--on-confirmation-text-color);
 			}
 
-			&.ok {
-				border: 1px solid var(--confirmation-ok-button-background-color);
-				background: var(--confirmation-ok-button-background-color);
-				color: var(--confirmation-ok-button-color);
+			// &.cancel {
 
-				&:hover {
-					border-color: var(--on-confirmation-ok-button-background-color);
-					background: var(--on-confirmation-ok-button-background-color);
-					// color: var(--on-confirmation-ok-button-color);
-				}
-			}
+			// }
+
+			// &.ok {
+			// 	border: 1px solid var(--confirmation-ok-button-background-color);
+			// 	background: var(--confirmation-ok-button-background-color);
+			// 	color: var(--confirmation-ok-button-color);
+
+			// 	&:hover {
+			// 		border-color: var(--on-confirmation-ok-button-background-color);
+			// 		background: var(--on-confirmation-ok-button-background-color);
+			// 		color: var(--on-confirmation-ok-button-text-color);
+			// 	}
+			// }
 		}
 	}
 }
