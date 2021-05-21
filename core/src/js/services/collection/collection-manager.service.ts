@@ -200,8 +200,8 @@ export class CollectionManager {
 	}
 
 	public buildPityTimers(packStats: readonly PackResult[]): readonly PityTimer[] {
-		const groupedBySet: { [setId: string]: readonly PackResult[] } = groupByFunction(
-			(pack: PackResult) => pack.setId,
+		const groupedBySet: { [setId: string]: readonly PackResult[] } = groupByFunction((pack: PackResult) =>
+			this.setsService.normalizeSetId(pack.setId),
 		)(packStats);
 		return Object.keys(groupedBySet).map((setId) => {
 			const packsForSet: readonly PackResult[] = [...groupedBySet[setId]].sort(

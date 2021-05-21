@@ -210,6 +210,15 @@ export class SetsService {
 		});
 	}
 
+	// Used for pity timers mostly
+	public normalizeSetId(setId: string): string {
+		switch (setId) {
+			case 'darkmoon_races':
+				return 'darkmoon_faire';
+		}
+		return setId;
+	}
+
 	private getCollectibleSetCards(setId: string): SetCard[] {
 		return this.allCards
 			.getCards()
