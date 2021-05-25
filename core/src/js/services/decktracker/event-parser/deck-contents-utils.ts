@@ -22,6 +22,12 @@ export const modifyDeckForSpecialCards = (
 			return handleLunasPocketGalaxy(deckState, allCards);
 		case CardIds.Collectible.Paladin.PrinceLiam:
 			return handlePrinceLiam(deckState, allCards);
+		case CardIds.Collectible.Paladin.AldorAttendant:
+		case CardIds.NonCollectible.Paladin.LordaeronAttendant:
+			return handleLibram(deckState, allCards, 1);
+		case CardIds.Collectible.Paladin.AldorTruthseeker:
+		case CardIds.NonCollectible.Paladin.RadiantLightspawn2:
+			return handleLibram(deckState, allCards, 2);
 		case CardIds.Collectible.Warlock.DeckOfChaos:
 			return handleDeckOfChaos(deckState, allCards);
 		case CardIds.Collectible.Neutral.WyrmrestPurifier:
@@ -58,6 +64,15 @@ const handleEmbiggen = (deckState: DeckState, allCards: AllCardsService): DeckSt
 	return updateCost(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card) => Math.min(10, card.getEffectiveManaCost() + 1),
+		deckState,
+		allCards,
+	);
+};
+
+const handleLibram = (deckState: DeckState, allCards: AllCardsService, costReduction: number): DeckState => {
+	return updateCost(
+		(card, refCard) => refCard?.name?.includes('Libram of'),
+		(card) => Math.max(0, card.getEffectiveManaCost() - costReduction),
 		deckState,
 		allCards,
 	);
