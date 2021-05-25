@@ -28,11 +28,13 @@ export const isWindowHidden = (state: string): boolean => {
 };
 
 export const capitalizeFirstLetter = (input: string): string => {
-	return input.charAt(0).toUpperCase() + input.slice(1);
+	const lowerInput = input.toLowerCase();
+	return lowerInput.charAt(0).toUpperCase() + lowerInput.slice(1);
 };
 
 export const capitalizeEachWord = (input: string): string => {
-	return !input ? null : input.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+	const lowerInput = input?.toLowerCase();
+	return !lowerInput ? null : lowerInput.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1));
 };
 
 export const isCharLowerCase = (character: string): boolean => {
