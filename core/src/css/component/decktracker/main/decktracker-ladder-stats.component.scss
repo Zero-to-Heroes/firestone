@@ -11,6 +11,10 @@
 	flex-direction: column;
 	flex-grow: 1;
 	max-width: 100%;
+	position: relative;
+	left: -10px;
+	// So taht the graphs are properly centered
+	width: calc(100% + 10px);
 
 	.graphs {
 		display: flex;
