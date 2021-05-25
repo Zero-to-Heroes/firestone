@@ -11,6 +11,7 @@ import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/even
 import { OverwolfService } from '../../services/overwolf.service';
 import { capitalizeEachWord } from '../../services/utils';
 
+declare let amplitude;
 @Component({
 	selector: 'replay-info',
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/replay-info.component.scss`],
@@ -80,9 +81,9 @@ import { capitalizeEachWord } from '../../services/utils';
 					<div class="result">{{ result }}</div>
 				</div>
 
-				<div class="group tribes" *ngIf="availableTribes?.length">
+				<div class="group tribes" *ngIf="availableTribes?.length" [helpTooltip]="tribesTooltip">
 					<div class="tribe" *ngFor="let tribe of availableTribes">
-						<img class="icon" [src]="tribe.icon" [helpTooltip]="tribe.tooltip" />
+						<img class="icon" [src]="tribe.icon" />
 					</div>
 				</div>
 
@@ -150,10 +151,12 @@ export class ReplayInfoComponent implements AfterViewInit {
 	deltaMmr: number;
 
 	availableTribes: readonly InternalTribe[];
+	tribesTooltip: string;
 
 	treasure: InternalLoot;
 	loots: InternalLoot[];
 
+	private bgsPerfectGame: boolean;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set replay(value: GameStat | RunStep) {
@@ -190,7 +193,10 @@ export class ReplayInfoComponent implements AfterViewInit {
 					icon: getTribeIcon(race),
 					tooltip: getTribeName(race),
 				}));
-			// console.debug('availableTribes', this.availableTribes);
+			this.tribesTooltip = `Tribes available in this run: ${this.availableTribes
+				.map((tribe) => tribe.tooltip)
+				.join(', ')}`;
+			this.bgsPerfectGame = this.result === 'Perfect!';
 		}
 
 		const isDuelsInfo = (value: any): value is RunStep =>
@@ -233,6 +239,9 @@ export class ReplayInfoComponent implements AfterViewInit {
 	}
 
 	showReplay() {
+		if (this.bgsPerfectGame) {
+			amplitude.getInstance().logEvent('load-bgs-perfect-game');
+		}
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
 	}
 
