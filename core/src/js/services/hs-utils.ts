@@ -16,6 +16,18 @@ export const classes = [
 	'warrior',
 	'warlock',
 ];
+export const classesForPieChart = [
+	'rogue',
+	'druid',
+	'hunter',
+	'demonhunter',
+	'paladin',
+	'warrior',
+	'warlock',
+	'shaman',
+	'mage',
+	'priest',
+];
 
 export const formatClass = (playerClass: string): string => {
 	let update = playerClass?.toLowerCase();
@@ -28,25 +40,25 @@ export const formatClass = (playerClass: string): string => {
 export const colorForClass = (playerClass: string): string => {
 	switch (playerClass) {
 		case 'demonhunter':
-			return '#147b63';
+			return '#8ECD64';
 		case 'druid':
-			return '#99542b';
+			return '#965F45';
 		case 'hunter':
-			return '#255d21';
+			return '#0A5945';
 		case 'mage':
-			return '#5b94b2';
+			return '#24A4C7';
 		case 'paladin':
-			return '#c68c1d';
+			return '#E3A81F';
 		case 'priest':
-			return '#fff';
+			return '#8C98A7';
 		case 'rogue':
-			return '#3b3b41';
+			return '#5E6069';
 		case 'shaman':
-			return '#162874';
+			return '#542A8A';
 		case 'warrior':
-			return '#801b11';
+			return '#CB3222';
 		case 'warlock':
-			return '#54355f';
+			return '#8A2A6A';
 	}
 };
 

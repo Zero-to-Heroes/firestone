@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { classes, colorForClass, formatClass } from '../../../services/hs-utils';
+import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { InputPieChartData, InputPieChartOptions } from '../../common/chart/input-pie-chart-data';
@@ -93,7 +93,7 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 	}
 
 	private buildPlayerPieChartData(replays: readonly GameStat[]): readonly InputPieChartData[] {
-		return classes.map((className) => {
+		return classesForPieChart.map((className) => {
 			return {
 				label: formatClass(className),
 				data: replays.filter((replay) => replay.playerClass === className)?.length ?? 0,
@@ -103,7 +103,7 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 	}
 
 	private buildOpponentPieChartData(replays: readonly GameStat[]): readonly InputPieChartData[] {
-		return classes.map((className) => {
+		return classesForPieChart.map((className) => {
 			return {
 				label: formatClass(className),
 				data: replays.filter((replay) => replay.opponentClass === className)?.length ?? 0,

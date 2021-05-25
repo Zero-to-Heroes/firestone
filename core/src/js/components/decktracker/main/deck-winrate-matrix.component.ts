@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MatchupStat } from '../../../models/mainwindow/stats/matchup-stat';
-import { classes, colorForClass, formatClass } from '../../../services/hs-utils';
+import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { DecktrackerDeleteDeckEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-delete-deck-event';
 import { DecktrackerResetDeckStatsEvent } from '../../../services/mainwindow/store/events/decktracker/decktracker-reset-deck-stats-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -151,7 +151,7 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	private buildPieChartData(): readonly InputPieChartData[] {
-		return classes.map((className) => {
+		return classesForPieChart.map((className) => {
 			return {
 				label: formatClass(className),
 				data: this.matchups.find((matchup) => matchup.opponentClass === className)?.totalGames ?? 0,
