@@ -13,4 +13,5 @@ export interface InputPieChartOptions {
 	};
 	readonly showAllLabels: boolean;
 	readonly aspectRatio: number;
+	readonly tooltipFontSize?: number;
 }

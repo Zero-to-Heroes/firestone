@@ -142,11 +142,12 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 			padding: {
 				top: 50,
 				bottom: 50,
-				left: 0,
-				right: 0,
+				left: 50,
+				right: 100,
 			},
 			showAllLabels: true,
 			aspectRatio: 1,
+			tooltipFontSize: 16,
 		};
 	}
 

@@ -82,13 +82,14 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 	private buildPieChartOptions(): InputPieChartOptions {
 		return {
 			padding: {
-				top: 50,
+				top: 0,
 				bottom: 50,
-				left: 0,
-				right: 0,
+				left: 90,
+				right: 80,
 			},
 			showAllLabels: true,
 			aspectRatio: 1,
+			tooltipFontSize: 16,
 		};
 	}
 

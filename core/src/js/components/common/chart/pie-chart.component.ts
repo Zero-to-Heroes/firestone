@@ -116,6 +116,7 @@ export class PieChartComponent {
 				displayColors: true,
 				xPadding: 5,
 				yPadding: 5,
+				bodyFontSize: 14,
 			},
 			plugins: {
 				datalabels: {
@@ -126,6 +127,10 @@ export class PieChartComponent {
 					anchor: 'end',
 					align: 'end',
 					clip: false,
+					font: {
+						family: 'Open Sans',
+						size: this._options?.tooltipFontSize ?? 13,
+					},
 				},
 			},
 		};
