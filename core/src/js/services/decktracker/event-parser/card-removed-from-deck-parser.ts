@@ -29,6 +29,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
+			milled: true,
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);

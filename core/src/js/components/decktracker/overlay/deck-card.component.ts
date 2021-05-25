@@ -170,7 +170,7 @@ export class DeckCardComponent {
 		this.updateGiftTooltip();
 		this.highlight = this._card.highlight;
 		// console.log('setting card', this.highlight, card.cardName, card);
-		this.isBurned = this._card.zone === 'BURNED';
+		this.isBurned = this._card.zone === 'BURNED' || this._card.milled;
 		this.isDiscarded = this._card.zone === 'DISCARD';
 		this.isGraveyard = this._card.zone === 'GRAVEYARD';
 		this.isTransformed = this._card.zone === 'TRANSFORMED_INTO_OTHER';

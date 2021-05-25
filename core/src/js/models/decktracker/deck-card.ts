@@ -33,6 +33,9 @@ export class DeckCard {
 	readonly metaInfo: CardMetaInfo = new CardMetaInfo();
 	readonly inInitialDeck: boolean;
 	readonly temporaryCard?: boolean;
+	// Not sure exactly what the best way is to show the milled cards. As far as HS is concerned, the
+	// "milled" status doesn't exist, so we need a special flag
+	readonly milled?: boolean;
 	readonly cardMatchCondition?: (card: ReferenceCard) => boolean;
 
 	public static create(base: DeckCard = {} as DeckCard) {
