@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.9.1',
+		version: '7.9.3',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -101,6 +101,10 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
+								text: `Add the ability to permanently delete a constructed deck.`,
+							},
+							{
+								type: 'feature',
 								text: `Playing Explore Un'Goro now properly replaces all your cards in the decklist.`,
 							},
 							{
@@ -115,6 +119,14 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `Add Invigorating Sermon to the list of global effects.`,
 							},
+							{
+								type: 'feature',
+								text: `Add a "burned" icon for cards milled by Tickatus.`,
+							},
+							{
+								type: 'feature',
+								text: `Update the cost of Librams in the deck after a reduction card has been played.`,
+							},
 						],
 					},
 					{
@@ -128,6 +140,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue with the Darkmoon Faire pity timer would sometimes not reset after cards from the Darkmoon Races mini set would be pulled from a pack.`,
 							},
+							{
+								type: 'content',
+								text: `Add support for standard bundle packs in packs history.`,
+							},
 						],
 					},
 					{
@@ -136,6 +152,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Now show "Perfect!" instead of "1st" in the replays list when winning with your full health remaining.`,
+							},
+							{
+								type: 'ui',
+								text: `Tone down the green highlights around cards in Battlegrounds.`,
 							},
 						],
 					},
