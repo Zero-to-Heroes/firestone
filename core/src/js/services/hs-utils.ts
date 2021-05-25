@@ -494,6 +494,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Standard Priest';
 		case BoosterType.STANDARD_ROGUE:
 			return 'Standard Rogue';
+		case BoosterType.STANDARD_SHAMAN:
+			return 'Standard Shaman';
 		case BoosterType.MAMMOTH_BUNDLE:
 			return 'Year of the Mammoth';
 		case BoosterType.YEAR_OF_DRAGON:
