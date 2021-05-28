@@ -63,7 +63,7 @@ export class AchievementsLocalDbService {
 			return [];
 		}
 		this.achievementsCache = {};
-		achievements.forEach((achievement) => this.save(achievement));
+		[...achievements].forEach((achievement) => this.save(achievement));
 		return this.getAll();
 	}
 

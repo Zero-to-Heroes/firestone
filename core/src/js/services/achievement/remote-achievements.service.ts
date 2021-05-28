@@ -63,7 +63,7 @@ export class RemoteAchievementsService {
 		);
 		const achievements = [...completedAchievementsFromRemote, ...completedAchievementsFromMemory];
 		this.indexedDb.setAll(achievements);
-		console.log('[remote-achievements] updated local cache', achievements?.length);
+		console.log('[remote-achievements] updated local cache', achievements?.length, this.indexedDb.getAll()?.length);
 		return achievements;
 	}
 

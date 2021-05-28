@@ -31,11 +31,8 @@ export class AchievementsRepository {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
 				const allAchievements: readonly Achievement[] = await this.achievementsLoader.getAchievements();
+				console.log('[achievements-repository] reloading achievements', res);
 				const completedAchievements: readonly CompletedAchievement[] = await this.remoteAchievements.reloadFromMemory();
-				// const [allAchievements, completedAchievements] = await Promise.all([
-				// 	this.achievementsLoader.getAchievements(),
-				// 	this.remoteAchievements.reloadFromMemory(),
-				// ]);
 				const mergedAchievements = this.mergeAchievements(allAchievements, completedAchievements);
 				this.categories = await this.buildCategories(mergedAchievements);
 				this.storeUpdater.next(new AchievementsInitEvent(this.categories));
