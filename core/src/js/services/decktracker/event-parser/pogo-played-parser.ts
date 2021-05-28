@@ -6,9 +6,9 @@ import { EventParser } from './event-parser';
 
 export class PogoPlayedParser implements EventParser {
 	private static POGO_CARD_IDS = [
-		CardIds.Collectible.Rogue.PogoHopper,
-		CardIds.NonCollectible.Rogue.PogoHopper,
-		CardIds.NonCollectible.Rogue.PogoHopperTavernBrawl,
+		CardIds.Collectible.Rogue.PogoHopper1,
+		CardIds.NonCollectible.Rogue.PogoHopper2,
+		CardIds.NonCollectible.Rogue.PogoHopperBattlegrounds,
 	];
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

@@ -9,26 +9,26 @@ import { DynamicZone } from './view/dynamic-zone';
 export class DeckState {
 	private static readonly GALAKROND_CARD_IDS = [
 		CardIds.Collectible.Priest.GalakrondTheUnspeakable,
-		CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Priest.GalakrondtheUnspeakable_GalakrondAzerothsEndToken,
+		CardIds.NonCollectible.Priest.GalakrondTheUnspeakable_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Priest.GalakrondTheUnspeakable_GalakrondAzerothsEndToken,
 		CardIds.Collectible.Rogue.GalakrondTheNightmare,
-		CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Rogue.GalakrondtheNightmare_GalakrondAzerothsEndToken,
+		CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondAzerothsEndToken,
 		CardIds.Collectible.Shaman.GalakrondTheTempest,
-		CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Shaman.GalakrondtheTempest_GalakrondAzerothsEndToken,
+		CardIds.NonCollectible.Shaman.GalakrondTheTempest_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Shaman.GalakrondTheTempest_GalakrondAzerothsEndToken,
 		CardIds.Collectible.Warlock.GalakrondTheWretched,
-		CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Warlock.GalakrondtheWretched_GalakrondAzerothsEndToken,
+		CardIds.NonCollectible.Warlock.GalakrondTheWretched_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Warlock.GalakrondTheWretched_GalakrondAzerothsEndToken,
 		CardIds.Collectible.Warrior.GalakrondTheUnbreakable,
-		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Warrior.GalakrondtheUnbreakable_GalakrondAzerothsEndToken,
+		CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
+		CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
 	];
 
 	private static readonly POGO_CARD_IDS = [
-		CardIds.Collectible.Rogue.PogoHopper,
-		CardIds.NonCollectible.Rogue.PogoHopper,
-		CardIds.NonCollectible.Rogue.PogoHopperTavernBrawl,
+		CardIds.Collectible.Rogue.PogoHopper1,
+		CardIds.NonCollectible.Rogue.PogoHopper2,
+		CardIds.NonCollectible.Rogue.PogoHopperBattlegrounds,
 	];
 
 	private static readonly SPELL_COUNTER_CARD_IDS = [
@@ -38,11 +38,11 @@ export class DeckState {
 
 	private static readonly NEW_CTHUN_CARD_IDS = [
 		CardIds.Collectible.Neutral.CthunTheShattered,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_BodyOfCthunToken,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_CthunsBodyToken,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_EyeOfCthunToken,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_HeartOfCthunToken,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_MawOfCthunToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_BodyOfCthunToken,
+		CardIds.NonCollectible.Neutral.BodyOfCthun_CthunsBodyToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_EyeOfCthunToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_HeartOfCthunToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_MawOfCthunToken,
 		CardIds.Collectible.Mage.MaskOfCthun,
 	];
 
@@ -131,7 +131,7 @@ export class DeckState {
 			.filter((card) => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId))
 			.some(
 				(card) =>
-					card.cardId === CardIds.Collectible.Neutral.Cthun ||
+					card.cardId === CardIds.Collectible.Neutral.Cthun2 ||
 					(allCards &&
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf("C'Thun") !== -1),
@@ -160,7 +160,7 @@ export class DeckState {
 			.filter((card) => card.cardId)
 			.some(
 				(card) =>
-					card.cardId === CardIds.Collectible.Neutral.KargalBattlescar ||
+					card.cardId === CardIds.Collectible.Neutral.KargalBattlescar1 ||
 					(lookAtWatchpostsPlayed &&
 						allCards &&
 						allCards.getCard(card.cardId)?.name &&

@@ -36,7 +36,7 @@ export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
 		}
 
 		const damageDealt = Object.values(gameEvent.additionalData.targets)
-			.filter((target) => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+			.filter((target) => target.TargetCardId !== CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds)
 			.map((target) => target.Damage)
 			.reduce((sum, current) => sum + current, 0);
 		if (damageDealt === 0) {

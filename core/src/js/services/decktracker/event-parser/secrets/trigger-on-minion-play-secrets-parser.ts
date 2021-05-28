@@ -10,15 +10,15 @@ import { EventParser } from '../event-parser';
 export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnMinionPlay = [
 		CardIds.Collectible.Hunter.HiddenCache,
-		CardIds.Collectible.Hunter.Snipe,
+		CardIds.Collectible.Hunter.SnipeLegacy,
 		CardIds.Collectible.Hunter.SnipeVanilla,
 		CardIds.Collectible.Mage.PotionOfPolymorph,
-		CardIds.Collectible.Mage.MirrorEntity,
+		CardIds.Collectible.Mage.MirrorEntityLegacy,
 		CardIds.Collectible.Mage.MirrorEntityCore,
 		CardIds.Collectible.Mage.MirrorEntityVanilla,
 		CardIds.Collectible.Mage.FrozenClone,
 		CardIds.Collectible.Mage.ExplosiveRunes,
-		CardIds.Collectible.Paladin.Repentance,
+		CardIds.Collectible.Paladin.RepentanceLegacy,
 		CardIds.Collectible.Paladin.RepentanceVanilla,
 		CardIds.Collectible.Paladin.SacredTrial,
 		CardIds.Collectible.Rogue.Ambush,
@@ -50,7 +50,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntity);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntityLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntityCore);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntityVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Ambush);

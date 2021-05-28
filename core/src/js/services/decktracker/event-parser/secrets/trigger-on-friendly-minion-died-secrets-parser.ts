@@ -10,12 +10,12 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 	private secretsTriggeringOnFriendlyMinionDeath = [
-		CardIds.Collectible.Mage.Effigy,
+		CardIds.Collectible.Mage.Effigy1,
 		CardIds.Collectible.Mage.Duplicate,
 		CardIds.Collectible.Paladin.GetawayKodo,
-		CardIds.Collectible.Paladin.Redemption,
+		CardIds.Collectible.Paladin.RedemptionLegacy,
 		CardIds.Collectible.Paladin.RedemptionVanilla,
-		CardIds.Collectible.Paladin.Avenge,
+		CardIds.Collectible.Paladin.Avenge1,
 		CardIds.Collectible.Paladin.AvengeCore,
 		CardIds.Collectible.Rogue.CheatDeath,
 	];
@@ -55,7 +55,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 
 		// If it's the only minion on board, we trigger nothing
 		if (deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length === deadEnemyMinions.length) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.Avenge);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.Avenge1);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AvengeCore);
 		}
 		// TODO: Redemption will not trigger if deathrattles fill up the board

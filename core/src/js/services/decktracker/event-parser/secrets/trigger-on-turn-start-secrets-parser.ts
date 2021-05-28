@@ -9,7 +9,7 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnStartSecretsParser implements EventParser {
 	private secretsTriggeringOnTurnStart = [
-		CardIds.Collectible.Paladin.CompetitiveSpirit,
+		CardIds.Collectible.Paladin.CompetitiveSpirit1,
 		CardIds.Collectible.Hunter.OpenTheCages,
 	];
 
@@ -35,7 +35,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
 			// console.log('[turn-start] board empty', deckWithSecretToCheck, isPlayerActive, gameEvent);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.CompetitiveSpirit);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.CompetitiveSpirit1);
 		}
 
 		// Only triggers if board has between 2 and 6 minions

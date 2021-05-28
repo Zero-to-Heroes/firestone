@@ -23,10 +23,10 @@ export const modifyDeckForSpecialCards = (
 		case CardIds.Collectible.Paladin.PrinceLiam:
 			return handlePrinceLiam(deckState, allCards);
 		case CardIds.Collectible.Paladin.AldorAttendant:
-		case CardIds.NonCollectible.Paladin.LordaeronAttendant:
+		case CardIds.NonCollectible.Paladin.LordaeronAttendantToken:
 			return handleLibram(deckState, allCards, 1);
 		case CardIds.Collectible.Paladin.AldorTruthseeker:
-		case CardIds.NonCollectible.Paladin.RadiantLightspawn2:
+		case CardIds.NonCollectible.Paladin.RadiantLightspawn:
 			return handleLibram(deckState, allCards, 2);
 		case CardIds.Collectible.Warlock.DeckOfChaos:
 			return handleDeckOfChaos(deckState, allCards);
@@ -134,7 +134,7 @@ const handleWyrmrestPurifier = (deckState: DeckState, allCards: AllCardsService)
 };
 
 const handleExploreUngoro = (deckState: DeckState, allCards: AllCardsService): DeckState => {
-	const refCard = allCards.getCard(CardIds.NonCollectible.Warrior.ExploreUnGoro_ChooseYourPathToken);
+	const refCard = allCards.getCard(CardIds.NonCollectible.Warrior.ExploreUngoro_ChooseYourPathToken);
 	return updateCard(
 		(card, refCard) => true,
 		(card) =>

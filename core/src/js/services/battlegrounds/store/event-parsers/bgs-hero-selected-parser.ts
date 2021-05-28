@@ -21,7 +21,7 @@ export class BgsHeroSelectedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsHeroSelectedEvent): Promise<BattlegroundsState> {
 		const existingMainPlayer = currentState.reconnectOngoing ? currentState.currentGame.getMainPlayer() : null;
 		const normalizedCardId = normalizeHeroCardId(event.cardId);
-		if (normalizedCardId === CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2) {
+		if (normalizedCardId === CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds) {
 			console.error('selecting KelThuzad in hero selection???');
 			return currentState;
 		}

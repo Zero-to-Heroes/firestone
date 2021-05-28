@@ -202,7 +202,7 @@ export class BgsPostMatchStatsRecapComponent {
 			.reduce((a, b) => a + b, 0);
 		if (this._stats.stats.damageToEnemyHeroOverTurn) {
 			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
-				.filter((info) => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2)
+				.filter((info) => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds)
 				.map((info) => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
 			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero, this.maxSingleTurnHeroDamageDealt);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
@@ -224,7 +224,7 @@ export class BgsPostMatchStatsRecapComponent {
 		// is a refresh)
 		const rerolls = this._stats.stats.rerollsOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
 		this.rerolls =
-			this._stats.player.cardId === CardIds.NonCollectible.Neutral.InfiniteTokiTavernBrawl
+			this._stats.player.cardId === CardIds.NonCollectible.Neutral.InfiniteTokiBattlegrounds
 				? rerolls - this.heroPowers
 				: rerolls;
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;

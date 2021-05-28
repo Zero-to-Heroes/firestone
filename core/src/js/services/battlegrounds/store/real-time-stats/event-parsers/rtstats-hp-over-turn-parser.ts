@@ -33,8 +33,8 @@ export class RTStatHpOverTurnParser implements EventParser {
 		for (const target of targets) {
 			if (
 				[
-					CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2,
-					CardIds.NonCollectible.Neutral.BaconphheroTavernBrawl,
+					CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds,
+					CardIds.NonCollectible.Neutral.BaconphheroHeroicBattlegrounds,
 				].includes(target.hero)
 			) {
 				continue;

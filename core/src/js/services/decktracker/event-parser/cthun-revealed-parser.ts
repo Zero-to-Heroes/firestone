@@ -9,10 +9,10 @@ import { EventParser } from './event-parser';
 
 export class CthunRevealedParser implements EventParser {
 	private readonly CTHUN_PIECES = [
-		CardIds.NonCollectible.Neutral.CThuntheShattered_BodyOfCthunToken,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_EyeOfCthunToken,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_HeartOfCthunToken,
-		CardIds.NonCollectible.Neutral.CThuntheShattered_MawOfCthunToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_BodyOfCthunToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_EyeOfCthunToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_HeartOfCthunToken,
+		CardIds.NonCollectible.Neutral.CthunTheShattered_MawOfCthunToken,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}

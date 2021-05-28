@@ -4,61 +4,61 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 const PASSIVES = [];
 
 const SIGNATURE_TREASURES = [
-	CardIds.NonCollectible.Demonhunter.BladeOfQuickening,
-	CardIds.NonCollectible.Demonhunter.BindingChains1,
-	CardIds.NonCollectible.Demonhunter.GiftOfTheLegion,
-	CardIds.NonCollectible.Demonhunter.MoargOutcast,
-	CardIds.NonCollectible.Demonhunter.SummoningRitual2,
-	CardIds.NonCollectible.Druid.AwakenedAncient,
-	CardIds.NonCollectible.Druid.HerdingHorn,
-	CardIds.NonCollectible.Druid.MarvelousMycelium,
-	CardIds.NonCollectible.Druid.Moonbeast,
-	CardIds.NonCollectible.Druid.WardensInsight,
-	CardIds.NonCollectible.Druid.ZukaraTheWild,
-	CardIds.NonCollectible.Hunter.Bonecrusher,
-	CardIds.NonCollectible.Hunter.CarrotOnAStick,
-	CardIds.NonCollectible.Hunter.Deathstrider,
-	CardIds.NonCollectible.Hunter.SlatesSyringe,
-	CardIds.NonCollectible.Hunter.StalkingPride,
-	CardIds.NonCollectible.Hunter.TraktamerAelessa,
-	CardIds.NonCollectible.Mage.BritzBlazebucket,
-	CardIds.NonCollectible.Mage.ElementalLearning,
-	CardIds.NonCollectible.Mage.Embercaster,
-	CardIds.NonCollectible.Mage.InfiniteArcane,
-	CardIds.NonCollectible.Mage.WandOfDueling,
-	CardIds.NonCollectible.Mage.YoggTasticTasties,
-	CardIds.NonCollectible.Paladin.Drocomurchanicas,
-	CardIds.NonCollectible.Paladin.FavoredRacer,
-	CardIds.NonCollectible.Paladin.HumbleBlessings,
-	CardIds.NonCollectible.Paladin.MenAtArms,
-	CardIds.NonCollectible.Paladin.RoyalGreatsword,
-	CardIds.NonCollectible.Paladin.SuLeadfoot,
-	CardIds.NonCollectible.Priest.DropletOfInsanity,
-	CardIds.NonCollectible.Priest.FracturedSpirits,
-	CardIds.NonCollectible.Priest.HeraldOfTheScaledOnes,
-	CardIds.NonCollectible.Priest.JorasThuldoom,
-	CardIds.NonCollectible.Priest.ScionOfTheDeep,
-	CardIds.NonCollectible.Priest.ShadowWordVoid,
-	CardIds.NonCollectible.Rogue.AceInTheHole,
-	CardIds.NonCollectible.Rogue.AcquiredAllies,
-	CardIds.NonCollectible.Rogue.DeadlyWeapons101,
-	CardIds.NonCollectible.Rogue.GreenTortollanShell,
-	CardIds.NonCollectible.Rogue.NerubianPeddler,
-	CardIds.NonCollectible.Shaman.ChaosStorm1,
-	CardIds.NonCollectible.Shaman.FluctuatingTotem,
-	CardIds.NonCollectible.Shaman.InvokeTheVoid,
-	CardIds.NonCollectible.Shaman.PayloadTotemSpecialist,
-	CardIds.NonCollectible.Shaman.TempestsFury,
-	CardIds.NonCollectible.Warlock.Demonology101,
-	CardIds.NonCollectible.Warlock.Demonizer,
-	CardIds.NonCollectible.Warlock.GiftOfTheOldGods,
-	CardIds.NonCollectible.Warlock.ImpishAid,
-	CardIds.NonCollectible.Warlock.KillmoxTheBanishedOne,
-	CardIds.NonCollectible.Warrior.AutoArmaments,
-	CardIds.NonCollectible.Warrior.BrewsterTheBrutal,
-	CardIds.NonCollectible.Warrior.CollectorsIre,
-	CardIds.NonCollectible.Warrior.ScrapmetalDemolitionist,
-	CardIds.NonCollectible.Warrior.SpikedArms,
+	CardIds.NonCollectible.Demonhunter.BladeOfQuickeningTavernBrawlToken,
+	CardIds.NonCollectible.Demonhunter.BindingChainsTavernBrawlToken,
+	CardIds.NonCollectible.Demonhunter.GiftOfTheLegionTavernBrawl,
+	CardIds.NonCollectible.Demonhunter.MoargOutcastTavernBrawlToken,
+	CardIds.NonCollectible.Demonhunter.SummoningRitualTavernBrawlToken,
+	CardIds.NonCollectible.Druid.AwakenedAncientTavernBrawl,
+	CardIds.NonCollectible.Druid.HerdingHornTavernBrawlToken,
+	CardIds.NonCollectible.Druid.MarvelousMyceliumTavernBrawlToken,
+	CardIds.NonCollectible.Druid.MoonbeastTavernBrawlToken,
+	CardIds.NonCollectible.Druid.WardensInsightTavernBrawlToken,
+	CardIds.NonCollectible.Druid.ZukaraTheWildTavernBrawl,
+	CardIds.NonCollectible.Hunter.BonecrusherTavernBrawlToken,
+	CardIds.NonCollectible.Hunter.CarrotOnAStickTavernBrawl,
+	CardIds.NonCollectible.Hunter.DeathstriderTavernBrawl,
+	CardIds.NonCollectible.Hunter.SlatesSyringeTavernBrawl,
+	CardIds.NonCollectible.Hunter.StalkingPrideTavernBrawlToken,
+	CardIds.NonCollectible.Hunter.TraktamerAelessaTavernBrawl,
+	CardIds.NonCollectible.Mage.BritzBlazebucketTavernBrawl,
+	CardIds.NonCollectible.Mage.ElementalLearningTavernBrawl,
+	CardIds.NonCollectible.Mage.EmbercasterTavernBrawl,
+	CardIds.NonCollectible.Mage.InfiniteArcaneTavernBrawlToken,
+	CardIds.NonCollectible.Mage.WandOfDuelingTavernBrawlToken,
+	CardIds.NonCollectible.Mage.YoggTasticTastiesTavernBrawl,
+	CardIds.NonCollectible.Paladin.DrocomurchanicasTavernBrawlToken,
+	CardIds.NonCollectible.Paladin.FavoredRacerTavernBrawl,
+	CardIds.NonCollectible.Paladin.HumbleBlessingsTavernBrawl,
+	CardIds.NonCollectible.Paladin.MenAtArmsTavernBrawlToken,
+	CardIds.NonCollectible.Paladin.RoyalGreatswordTavernBrawlToken,
+	CardIds.NonCollectible.Paladin.SuLeadfootTavernBrawl,
+	CardIds.NonCollectible.Priest.DropletOfInsanityTavernBrawlToken,
+	CardIds.NonCollectible.Priest.FracturedSpiritsTavernBrawlToken,
+	CardIds.NonCollectible.Priest.HeraldOfTheScaledOnesTavernBrawl,
+	CardIds.NonCollectible.Priest.JorasThuldoomTavernBrawl,
+	CardIds.NonCollectible.Priest.ScionOfTheDeepTavernBrawlToken,
+	CardIds.NonCollectible.Priest.ShadowWordVoidTavernBrawl,
+	CardIds.NonCollectible.Rogue.AceInTheHoleTavernBrawlToken,
+	CardIds.NonCollectible.Rogue.AcquiredAlliesTavernBrawlToken,
+	CardIds.NonCollectible.Rogue.DeadlyWeapons101TavernBrawlToken,
+	CardIds.NonCollectible.Rogue.GreenTortollanShellTavernBrawl,
+	CardIds.NonCollectible.Rogue.NerubianPeddlerTavernBrawlToken,
+	CardIds.NonCollectible.Shaman.ChaosStormTavernBrawl,
+	CardIds.NonCollectible.Shaman.FluctuatingTotemTavernBrawlToken,
+	CardIds.NonCollectible.Shaman.InvokeTheVoidTavernBrawlToken,
+	CardIds.NonCollectible.Shaman.PayloadTotemSpecialistTavernBrawl,
+	CardIds.NonCollectible.Shaman.TempestsFuryTavernBrawlToken,
+	CardIds.NonCollectible.Warlock.Demonology101TavernBrawlToken,
+	CardIds.NonCollectible.Warlock.DemonizerTavernBrawlToken,
+	CardIds.NonCollectible.Warlock.GiftOfTheOldGodsTavernBrawlToken,
+	CardIds.NonCollectible.Warlock.ImpishAidTavernBrawl,
+	CardIds.NonCollectible.Warlock.KillmoxTheBanishedOneTavernBrawlToken,
+	CardIds.NonCollectible.Warrior.AutoArmamentsTavernBrawlToken,
+	CardIds.NonCollectible.Warrior.BrewsterTheBrutalTavernBrawlToken,
+	CardIds.NonCollectible.Warrior.CollectorsIreTavernBrawlToken,
+	CardIds.NonCollectible.Warrior.ScrapmetalDemolitionistTavernBrawl,
+	CardIds.NonCollectible.Warrior.SpikedArmsTavernBrawlToken,
 ];
 
 export const isSignatureTreasure = (cardId: string, allCards: AllCardsService): boolean => {
@@ -84,28 +84,28 @@ export const duelsTreasureRank = (cardId: string): number => {
 	}
 	switch (cardId) {
 		// Passives
-		case CardIds.NonCollectible.Neutral.AvengingArmaments1:
+		case CardIds.NonCollectible.Neutral.AvengingArmamentsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.BattleTotem1:
 		case CardIds.NonCollectible.Neutral.BookOfWonders:
 		case CardIds.NonCollectible.Neutral.Caltrops:
-		case CardIds.NonCollectible.Neutral.CorruptedFelstone:
+		case CardIds.NonCollectible.Neutral.CorruptedFelstoneTavernBrawl:
 		case CardIds.NonCollectible.Neutral.DisksOfLegend:
 		case CardIds.NonCollectible.Neutral.DoubleTime:
-		case CardIds.NonCollectible.Neutral.DragonboneRitualTavernBrawl1:
-		case CardIds.NonCollectible.Neutral.EerieStone:
-		case CardIds.NonCollectible.Neutral.EmeraldGogglesTavernBrawl1:
-		case CardIds.NonCollectible.Neutral.EnduranceTraining:
-		case CardIds.NonCollectible.Neutral.FlameWaves:
-		case CardIds.NonCollectible.Neutral.FromTheSwampTavernBrawl1:
+		case CardIds.NonCollectible.Neutral.DragonboneRitualTavernBrawl:
+		case CardIds.NonCollectible.Neutral.EerieStoneTavernBrawl:
+		case CardIds.NonCollectible.Neutral.EmeraldGogglesTavernBrawl:
+		case CardIds.NonCollectible.Neutral.EnduranceTrainingTavernBrawl:
+		case CardIds.NonCollectible.Neutral.FlameWavesTavernBrawl:
+		case CardIds.NonCollectible.Neutral.FromTheSwampTavernBrawl:
 		case CardIds.NonCollectible.Neutral.HagathasEmbrace:
 		case CardIds.NonCollectible.Neutral.KhadgarsScryingOrb:
 		case CardIds.NonCollectible.Neutral.MummyMagic:
-		case CardIds.NonCollectible.Neutral.OrbOfRevelation1:
-		case CardIds.NonCollectible.Neutral.RallyTheTroops1:
+		case CardIds.NonCollectible.Neutral.OrbOfRevelationTavernBrawl:
+		case CardIds.NonCollectible.Neutral.RallyTheTroopsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
-		case CardIds.NonCollectible.Neutral.SpecialDelivery:
-		case CardIds.NonCollectible.Neutral.SpreadingSaplings:
-		case CardIds.NonCollectible.Neutral.StarvingTavernBrawl1:
+		case CardIds.NonCollectible.Neutral.SpecialDeliveryTavernBrawl:
+		case CardIds.NonCollectible.Neutral.SpreadingSaplingsTavernBrawl:
+		case CardIds.NonCollectible.Neutral.StarvingTavernBrawl:
 		case CardIds.NonCollectible.Neutral.TotemOfTheDead1:
 		case CardIds.NonCollectible.Neutral.UnlockedPotential:
 			return 2;
@@ -113,7 +113,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.BandOfBees:
 		case CardIds.NonCollectible.Neutral.CapturedFlag:
 		case CardIds.NonCollectible.Neutral.ElixirOfVigor:
-		case CardIds.NonCollectible.Neutral.ManastormTavernBrawl1:
+		case CardIds.NonCollectible.Neutral.ManastormTavernBrawl:
 		case CardIds.NonCollectible.Neutral.RobeOfTheMagi:
 		case CardIds.NonCollectible.Neutral.Stargazing:
 			return 3;
@@ -127,15 +127,15 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.BladeOfTheBurningSun:
 		case CardIds.NonCollectible.Neutral.GnomishArmyKnife:
 		case CardIds.NonCollectible.Neutral.BananaSplitTavernBrawl:
-		case CardIds.NonCollectible.Neutral.CanopicJarsTavernBrawl1:
-		case CardIds.NonCollectible.Neutral.PhaorisBladeULDUM:
+		case CardIds.NonCollectible.Neutral.CanopicJarsTavernBrawl:
+		case CardIds.NonCollectible.Neutral.PhaorisBlade:
 		case CardIds.NonCollectible.Neutral.StaffOfScales:
 		case CardIds.NonCollectible.Neutral.WandOfDisintegrationTavernBrawl:
-		case CardIds.NonCollectible.Neutral.LocuuuustsTavernBrawl1:
+		case CardIds.NonCollectible.Neutral.LocuuuustsTavernBrawl:
 			return 2;
 		// Actives Ultra Rare
 		case CardIds.NonCollectible.Neutral.ChaosTheoryTavernBrawl:
-		case CardIds.NonCollectible.Neutral.OverpoweredTavernBrawl1:
+		case CardIds.NonCollectible.Neutral.OverpoweredTavernBrawl:
 		case CardIds.NonCollectible.Neutral.DreamgroveRing:
 		case CardIds.NonCollectible.Neutral.EmbersOfRagnarosTavernBrawl:
 		case CardIds.NonCollectible.Neutral.WaxRager:
@@ -149,24 +149,24 @@ export const duelsTreasureRank = (cardId: string): number => {
 export const getDuelsHeroCardId = (playerClass: string): string => {
 	switch (playerClass) {
 		case 'demonhunter':
-			return CardIds.NonCollectible.Demonhunter.StarStudentStelina;
+			return CardIds.NonCollectible.Demonhunter.StarStudentStelinaTavernBrawl;
 		case 'druid':
-			return CardIds.NonCollectible.Druid.ForestWardenOmu;
+			return CardIds.NonCollectible.Druid.ForestWardenOmuTavernBrawl;
 		case 'hunter':
-			return CardIds.NonCollectible.Hunter.ProfessorSlate;
+			return CardIds.NonCollectible.Hunter.ProfessorSlateTavernBrawl;
 		case 'mage':
-			return CardIds.NonCollectible.Mage.MozakiMasterDuelist;
+			return CardIds.NonCollectible.Mage.MozakiMasterDuelistTavernBrawl;
 		case 'paladin':
-			return CardIds.NonCollectible.Paladin.TuralyonTheTenured;
+			return CardIds.NonCollectible.Paladin.TuralyonTheTenuredTavernBrawl;
 		case 'priest':
-			return CardIds.NonCollectible.Priest.MindrenderIllucia;
+			return CardIds.NonCollectible.Priest.MindrenderIlluciaTavernBrawl;
 		case 'rogue':
-			return CardIds.NonCollectible.Rogue.InfiltratorLilian;
+			return CardIds.NonCollectible.Rogue.InfiltratorLilianTavernBrawl;
 		case 'shaman':
-			return CardIds.NonCollectible.Shaman.InstructorFireheart;
+			return CardIds.NonCollectible.Shaman.InstructorFireheartTavernBrawlToken;
 		case 'warrior':
-			return CardIds.NonCollectible.Warrior.Rattlegore;
+			return CardIds.NonCollectible.Warrior.RattlegoreTavernBrawl;
 		case 'warlock':
-			return CardIds.NonCollectible.Warlock.ArchwitchWillow;
+			return CardIds.NonCollectible.Warlock.ArchwitchWillowTavernBrawl;
 	}
 };

@@ -12,11 +12,11 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [
 		CardIds.Collectible.Hunter.CatTrick,
 		CardIds.Collectible.Hunter.PressurePlate,
-		CardIds.Collectible.Mage.Counterspell,
+		CardIds.Collectible.Mage.CounterspellLegacy,
 		CardIds.Collectible.Mage.CounterspellCore,
 		CardIds.Collectible.Mage.CounterspellVanilla,
 		CardIds.Collectible.Mage.NetherwindPortal,
-		CardIds.Collectible.Mage.Spellbender,
+		CardIds.Collectible.Mage.SpellbenderLegacy,
 		CardIds.Collectible.Mage.SpellbenderVanilla,
 		CardIds.Collectible.Mage.ManaBind,
 		CardIds.Collectible.Paladin.NeverSurrender,
@@ -86,7 +86,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 
 		const targetCardId = gameEvent.additionalData.targetCardId;
 		if (!targetCardId) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Spellbender);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SpellbenderLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SpellbenderVanilla);
 		} else {
 			const targetCard = this.allCards.getCard(targetCardId);

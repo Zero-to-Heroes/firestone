@@ -10,7 +10,7 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnDamageSecretsParser implements EventParser {
 	private secretsTriggeringOnDamage = [
-		CardIds.Collectible.Paladin.EyeForAnEye,
+		CardIds.Collectible.Paladin.EyeForAnEyeLegacy,
 		CardIds.Collectible.Paladin.EyeForAnEyeVanilla,
 		CardIds.Collectible.Paladin.ReckoningCore,
 		CardIds.Collectible.Rogue.Evasion,
@@ -85,7 +85,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			  )
 			: null;
 		if (!heroTarget) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEye);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEyeLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEyeVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Evasion);
 		}

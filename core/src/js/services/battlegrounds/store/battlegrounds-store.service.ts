@@ -302,7 +302,7 @@ export class BattlegroundsStoreService {
 						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId &&
 						this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId !==
 							gameEvent.additionalData.opponent &&
-						gameEvent.additionalData.opponent != CardIds.NonCollectible.Neutral.KelthuzadTavernBrawl2
+						gameEvent.additionalData.opponent != CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds
 					) {
 						console.error(
 							'no-format',

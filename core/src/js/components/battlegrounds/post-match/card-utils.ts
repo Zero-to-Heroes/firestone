@@ -20,18 +20,18 @@ export const normalizeCardId = (cardId: string, allCards: AllCardsService) => {
 			}
 		}
 		if (normalCards.length !== 1) {
-			if (cardId === CardIds.NonCollectible.Hunter.SavannahHighmane_HyenaTokenTavernBrawl) {
+			if (cardId === CardIds.NonCollectible.Hunter.SavannahHighmane_HyenaTokenBattlegrounds) {
 				normalCards = normalCards.filter(
-					(card) => card.id === CardIds.NonCollectible.Hunter.SavannahHighmane_HyenaToken,
+					(card) => card.id === CardIds.NonCollectible.Hunter.SavannahHighmane_HyenaLegacyToken,
 				);
-			} else if (cardId === CardIds.NonCollectible.Hunter.RatPack_RatTokenTavernBrawl) {
+			} else if (cardId === CardIds.NonCollectible.Hunter.RatPack_RatTokenBattlegrounds) {
 				normalCards = normalCards.filter((card) => card.id === CardIds.NonCollectible.Hunter.RatPack_RatToken);
-			} else if (cardId === CardIds.NonCollectible.Warlock.ImpGangBoss_ImpTokenTavernBrawl) {
+			} else if (cardId === CardIds.NonCollectible.Warlock.ImpGangBoss_ImpTokenBattlegrounds) {
 				normalCards = normalCards.filter(
 					(card) => card.id === CardIds.NonCollectible.Warlock.ImpGangBoss_ImpToken,
 				);
-			} else if (cardId === CardIds.NonCollectible.Mage.KhadgarTavernBrawl) {
-				normalCards = normalCards.filter((card) => card.id === CardIds.Collectible.Mage.Khadgar);
+			} else if (cardId === CardIds.NonCollectible.Mage.KhadgarBattlegrounds) {
+				normalCards = normalCards.filter((card) => card.id === CardIds.Collectible.Mage.Khadgar1);
 			} else {
 				console.warn('too many matches', cardId, normalCards);
 			}

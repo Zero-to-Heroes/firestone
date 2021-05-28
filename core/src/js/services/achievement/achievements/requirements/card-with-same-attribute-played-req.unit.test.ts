@@ -42,7 +42,7 @@ describe('card-with-same-attribute-played-req', () => {
 					const req = new CardWithSameAttributePlayedReq(2, 'AT_LEAST', 'NAME', 'SPELL', cards);
 					const event = Object.assign(new GameEvent(), {
 						type: GameEvent.CARD_PLAYED,
-						cardId: CardIds.Collectible.Mage.ManaWyrm,
+						cardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
 					} as GameEvent);

@@ -11,30 +11,30 @@ import { EventParser } from '../event-parser';
 export class TriggerOnAttackSecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [
 		CardIds.Collectible.Hunter.BearTrap,
-		CardIds.Collectible.Hunter.Misdirection,
+		CardIds.Collectible.Hunter.MisdirectionLegacy,
 		CardIds.Collectible.Hunter.MisdirectionVanilla,
-		CardIds.Collectible.Hunter.SnakeTrap,
+		CardIds.Collectible.Hunter.SnakeTrapLegacy,
 		CardIds.Collectible.Hunter.SnakeTrapCore,
 		CardIds.Collectible.Hunter.SnakeTrapVanilla,
 		CardIds.Collectible.Hunter.PackTactics,
-		CardIds.Collectible.Hunter.ExplosiveTrap,
+		CardIds.Collectible.Hunter.ExplosiveTrapLegacy,
 		CardIds.Collectible.Hunter.ExplosiveTrapCore,
 		CardIds.Collectible.Hunter.ExplosiveTrapVanilla,
-		CardIds.Collectible.Hunter.FreezingTrap,
+		CardIds.Collectible.Hunter.FreezingTrapLegacy,
 		CardIds.Collectible.Hunter.FreezingTrapCore,
 		CardIds.Collectible.Hunter.FreezingTrapVanilla,
-		CardIds.Collectible.Hunter.VenomstrikeTrap,
+		CardIds.Collectible.Hunter.VenomstrikeTrap1,
 		CardIds.Collectible.Hunter.WanderingMonster,
 		CardIds.Collectible.Mage.FlameWard,
-		CardIds.Collectible.Mage.IceBarrier,
+		CardIds.Collectible.Mage.IceBarrierLegacy,
 		CardIds.Collectible.Mage.IceBarrierCore,
 		CardIds.Collectible.Mage.IceBarrierVanilla,
 		CardIds.Collectible.Mage.OasisAlly,
-		CardIds.Collectible.Mage.SplittingImage,
-		CardIds.Collectible.Mage.Vaporize,
+		CardIds.Collectible.Mage.SplittingImage1,
+		CardIds.Collectible.Mage.VaporizeLegacy,
 		CardIds.Collectible.Mage.VaporizeVanilla,
-		CardIds.Collectible.Paladin.AutodefenseMatrix,
-		CardIds.Collectible.Paladin.NobleSacrifice,
+		CardIds.Collectible.Paladin.AutodefenseMatrix1,
+		CardIds.Collectible.Paladin.NobleSacrificeCore,
 		CardIds.Collectible.Paladin.NobleSacrificeCore,
 		CardIds.Collectible.Paladin.NobleSacrificeVanilla,
 		CardIds.Collectible.Rogue.Bamboozle,
@@ -133,36 +133,36 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		const secretsWeCantRuleOut = [];
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrapCore);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PackTactics);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage1);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.OasisAlly);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrifice);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrificeLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrificeCore);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrificeVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 		}
 		if (!isAttackerMinion) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.FreezingTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.FreezingTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.FreezingTrapCore);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.FreezingTrapVanilla);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.VaporizeLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.VaporizeVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 		}
 		if (!isDefenderMinion) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrapCore);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PackTactics);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap1);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage1);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.OasisAlly);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix1);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Bamboozle);
 			if (enemyBoard.length === 1) {
 				secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
@@ -170,22 +170,22 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		}
 		if (isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.Misdirection);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.MisdirectionLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.MisdirectionVanilla);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.ExplosiveTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.ExplosiveTrapLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.ExplosiveTrapCore);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.ExplosiveTrapVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.WanderingMonster);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.IceBarrier);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.IceBarrierLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.IceBarrierCore);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.IceBarrierVanilla);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.VaporizeLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.VaporizeVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 			if (isDefenderDivineShield) {
-				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
+				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix1);
 			}
 		}
 		// console.log('considering secret', isDefenderMinion, isDefenderDivineShield, gameEvent);
@@ -199,7 +199,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		// console.log('other targets', otherTargets, allEntities, attackerId, defenderId);
 		// Misdirection only triggers if there is another entity on the board that can be attacked
 		if (otherTargets.length === 0) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.Misdirection);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.MisdirectionLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.MisdirectionVanilla);
 		}
 
