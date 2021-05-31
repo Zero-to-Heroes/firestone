@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+	ARENAS,
 	Board,
 	CardClass,
 	CardIds,
@@ -296,7 +297,7 @@ export class DeckParserService {
 	}
 
 	private isDeckLogged(scenarioId: number): boolean {
-		return [...PRACTICE_ALL, ScenarioId.ARENA, ScenarioId.RANKED, ScenarioId.DUELS].includes(scenarioId);
+		return [...PRACTICE_ALL, ARENAS, ScenarioId.STANDARD_1_VS_1_GAME, ScenarioId.WIZARD_DUELS].includes(scenarioId);
 	}
 
 	private async readDeckFromLogFile(fileName = 'Decks.log'): Promise<void> {
@@ -513,7 +514,7 @@ export class DeckParserService {
 				return 'SCH_199t3';
 			case Board.STRANGLETHORN:
 				return 'SCH_199t4';
-			case Board.NAXXRAMUS:
+			case Board.NAXXRAMAS:
 				return 'SCH_199t5';
 			case Board.GOBLINS_VS_GNOMES:
 				return 'SCH_199t6';
@@ -525,39 +526,39 @@ export class DeckParserService {
 				return 'SCH_199t9';
 			case Board.EXCAVATION_SITE:
 				return 'SCH_199t24';
-			case Board.WHISPERS_OF_THE_OLD_GODS:
+			case Board.STORMWIND_OLD_GODS:
 				return 'SCH_199t10';
 			case Board.KARAZHAN:
 				return 'SCH_199t11';
-			case Board.GADGETZAN:
+			case Board.MEAN_STREETS_OF_GADGETZAN:
 				return 'SCH_199t12';
 			case Board.UNGORO:
 				return 'SCH_199t13';
-			case Board.ICECROWN_CITADEL:
+			case Board.FROZEN_THRONE:
 				return 'SCH_199t14';
-			case Board.THE_CATACOMBS:
+			case Board.KOBOLDS_AND_CATACOMBS:
 				return 'SCH_199t15';
 			case Board.THE_WITCHWOOD:
 				return 'SCH_199t16';
-			case Board.THE_BOOMSDAY_PROJECT:
+			case Board.BOOMSDAY:
 				return 'SCH_199t17';
-			case Board.GURUBASHI_ARENA:
+			case Board.RASTAKHANS_RUMBLE:
 				return 'SCH_199t18';
 			case Board.DALARAN:
 				return 'SCH_199t19';
-			case Board.ULDUM_TOMB:
+			case Board.SAVIORS_OF_ULDUM:
 				return 'SCH_199t20';
-			case Board.ULDUM_CITY:
+			case Board.SAVIORS_OF_ULDUM_ALT:
 				return 'SCH_199t25';
-			case Board.DRAGONBLIGHT:
+			case Board.DRAGONS:
 				return 'SCH_199t21';
-			case Board.OUTLAND:
+			case Board.ASHES_OF_OUTLANDS:
 				return 'SCH_199t22';
 			case Board.SCHOLOMANCE:
 				return 'SCH_199t23';
 			case Board.DARKMOON_FAIRE:
 				return 'SCH_199t26';
-			case Board.THE_BARRENS:
+			case Board.BARRENS:
 				return 'SCH_199t27';
 			default:
 				return cardId;
