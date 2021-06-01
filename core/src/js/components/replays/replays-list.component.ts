@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
+import { Preferences } from '../../models/preferences';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -35,10 +36,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 					[filterCategory]="'player-class'"
 					*ngIf="!shouldHidePlayerClassFilter"
 				></replays-filter>
+				<replays-icon-toggle class="icon-toggle" [prefs]="_prefs"></replays-icon-toggle>
 			</div>
 			<infinite-scroll class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let replay of displayedReplays">
-					<grouped-replays [groupedReplays]="replay"></grouped-replays>
+					<grouped-replays [groupedReplays]="replay" [prefs]="_prefs"></grouped-replays>
 				</li>
 				<div class="loading" *ngIf="isLoading">Loading more replays...</div>
 			</infinite-scroll>
@@ -58,19 +60,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplaysListComponent implements AfterViewInit {
-	displayedReplays: readonly GroupedReplays[] = [];
-	_replays: readonly GroupedReplays[];
-	_state: ReplaysState;
-	isLoading: boolean;
-
-	shouldHideDeckstringFilter: boolean;
-	shouldHideBgHeroFilter: boolean;
-	shouldHidePlayerClassFilter: boolean;
-
-	private replaysIterator: IterableIterator<void>;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
 	@Input() set state(value: ReplaysState) {
 		// console.log('[replays-list] setting state', value);
 		if (value.isLoading) {
@@ -88,6 +77,27 @@ export class ReplaysListComponent implements AfterViewInit {
 		this._replays = value.groupedReplays || [];
 		this.handleProgressiveDisplay();
 	}
+
+	@Input() set prefs(value: Preferences) {
+		if (!value || value === this.prefs) {
+			return;
+		}
+		this._prefs = value;
+	}
+
+	displayedReplays: readonly GroupedReplays[] = [];
+	_replays: readonly GroupedReplays[];
+	_state: ReplaysState;
+	_prefs: Preferences;
+	isLoading: boolean;
+
+	shouldHideDeckstringFilter: boolean;
+	shouldHideBgHeroFilter: boolean;
+	shouldHidePlayerClassFilter: boolean;
+
+	private replaysIterator: IterableIterator<void>;
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private readonly ow: OverwolfService,

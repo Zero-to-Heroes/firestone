@@ -1,6 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { Preferences } from '../../models/preferences';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -18,6 +19,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 						<replays-list
 							[state]="state.replays"
+							[prefs]="prefs"
 							*ngxCacheIf="navigation.navigationReplays.currentView === 'list'"
 						></replays-list>
 						<match-details
@@ -60,6 +62,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class ReplaysComponent implements AfterViewInit {
 	@Input() navigation: NavigationState;
 	@Input() state: MainWindowState;
+	@Input() prefs: Preferences;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 

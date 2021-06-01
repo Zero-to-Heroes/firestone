@@ -181,6 +181,7 @@ import { MatchDetailsComponent } from '../../components/replays/match-details.co
 import { RankImageComponent } from '../../components/replays/rank-image.component';
 import { ReplayInfoComponent } from '../../components/replays/replay-info.component';
 import { ReplaysFilterComponent } from '../../components/replays/replays-filter.component';
+import { ReplayIconToggleComponent } from '../../components/replays/replays-icon-toggle.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
 import { ReplaysComponent } from '../../components/replays/replays.component';
 import { SecretsHelperControlBarComponent } from '../../components/secrets-helper/secrets-helper-control-bar.component';
@@ -474,6 +475,7 @@ const components = [
 		MatchDetailsComponent,
 		GameReplayComponent,
 		RankImageComponent,
+		ReplayIconToggleComponent,
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsFiltersComponent,

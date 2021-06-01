@@ -72,12 +72,7 @@ export class PreferencesService {
 
 	public async setValue(field: string, pref: boolean | number): Promise<Preferences> {
 		const prefs = await this.getPreferences();
-		// console.log('setting pref', field, pref);
 		const newPrefs: Preferences = { ...prefs, [field]: pref };
-		amplitude.getInstance().logEvent('preference-update', {
-			'field': field,
-			'value': pref,
-		});
 		await this.savePreferences(newPrefs);
 		return newPrefs;
 	}
@@ -86,7 +81,6 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const ftue: Ftue = { ...prefs.ftue, hasSeenGlobalFtue: true };
 		const newPrefs: Preferences = { ...prefs, ftue: ftue };
-		console.debug('setting ftue done', newPrefs);
 		await this.savePreferences(newPrefs);
 	}
 

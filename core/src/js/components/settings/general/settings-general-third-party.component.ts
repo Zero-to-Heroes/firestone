@@ -113,7 +113,7 @@ export class SettingsGeneralThirdPartyComponent implements AfterViewInit, OnDest
 	ngAfterViewInit() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(async (event) => {
-			console.log('updated prefs', event);
+			// console.log('updated prefs', event);
 			await this.loadDefaultValues();
 		});
 		this.cdr.detach();

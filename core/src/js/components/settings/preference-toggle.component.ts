@@ -1,5 +1,18 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
+import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
+import { uuid } from '../../services/utils';
 
 @Component({
 	selector: 'preference-toggle',
@@ -11,8 +24,15 @@ import { PreferencesService } from '../../services/preferences.service';
 	],
 	template: `
 		<div class="preference-toggle">
-			<input hidden type="checkbox" [checked]="value" name="" id="a-01-{{ field }}" (change)="toggleValue()" />
-			<label class="toggle" for="a-01-{{ field }}" [ngClass]="{ 'enabled': value }">
+			<input
+				hidden
+				type="checkbox"
+				[checked]="value"
+				name=""
+				id="a-01-{{ uniqueId }}-{{ field }}"
+				(change)="toggleValue()"
+			/>
+			<label class="toggle" for="a-01-{{ uniqueId }}-{{ field }}" [ngClass]="{ 'enabled': value }">
 				<p class="settings-p">
 					{{ label }}
 					<i class="info" *ngIf="tooltip">
@@ -39,7 +59,7 @@ import { PreferencesService } from '../../services/preferences.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PreferenceToggleComponent {
+export class PreferenceToggleComponent implements AfterViewInit, OnDestroy {
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
@@ -50,15 +70,37 @@ export class PreferenceToggleComponent {
 
 	value: boolean;
 	toggled = false;
+	uniqueId: string;
 
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef) {
+	private preferencesSubscription: Subscription;
+
+	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
 		this.loadDefaultValues();
+		this.uniqueId = uuid();
+	}
+
+	ngAfterViewInit() {
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
+			if (this.value === event.preferences[this.field]) {
+				return;
+			}
+			this.value = event.preferences[this.field];
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		this.preferencesSubscription?.unsubscribe();
 	}
 
 	async toggleValue() {
-		this.value = !this.value;
+		// this.value = !this.value;
 		this.toggled = true;
-		await this.prefs.setValue(this.field, this.value);
+		await this.prefs.setValue(this.field, !this.value);
 		if (this.toggleFunction) {
 			// console.log('calling toggle function', this.toggleFunction);
 			this.toggleFunction(this.value);

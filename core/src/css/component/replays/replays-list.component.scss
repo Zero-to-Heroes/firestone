@@ -46,6 +46,22 @@
 	align-items: center;
 	padding-bottom: 15px;
 	transition: margin 0.4s ease-in-out;
+	position: relative;
+
+	::ng-deep replays-filter ng-select.filter.filter.filter {
+		width: 163px;
+	}
+
+	.icon-toggle {
+		margin-left: auto;
+		margin-right: 25px;
+	}
+
+	// .icon-toggle {
+	// 	position: absolute;
+	// 	bottom: -15px;
+	// 	right: 25px;
+	// }
 }
 
 .loading {

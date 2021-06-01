@@ -78,6 +78,7 @@ import { PreferencesService } from '../services/preferences.service';
 							class="main-section"
 							[state]="dataState"
 							[navigation]="navigationState"
+							[prefs]="prefs"
 							*ngxCacheIf="navigationState.currentApp === 'replays'"
 						></replays>
 						<achievements

@@ -1,9 +1,11 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
+import { Preferences } from '../../models/preferences';
 import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../services/battlegrounds/bgs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
@@ -133,7 +135,103 @@ export class ReplayInfoComponent implements AfterViewInit {
 	@Input() showReplayLabel = 'Watch';
 	@Input() displayCoin = true;
 
+	@Input() set prefs(value: Preferences) {
+		if (!value || value === this.prefs) {
+			return;
+		}
+		this._prefs = value;
+		// console.debug('udpated prefs', this._prefs);
+		this.updateInfo();
+	}
+
+	@Input() set replay(value: GameStat | RunStep) {
+		this.replayInfo = value;
+		this.updateInfo();
+	}
+
+	private updateInfo() {
+		if (!this.replayInfo) {
+			return;
+		}
+
+		this.gameMode = this.replayInfo.gameMode;
+		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(
+			this.replayInfo,
+			true,
+			this._prefs,
+		);
+		[this.opponentClassImage, this.opponentClassTooltip] = this.buildPlayerClassImage(
+			this.replayInfo,
+			false,
+			this._prefs,
+		);
+		// this.matchResultIconSvg = this.buildMatchResultIconSvg(this.replayInfo);
+		this.result = this.buildMatchResultText(this.replayInfo);
+		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(this.replayInfo);
+		this.reviewId = this.replayInfo.reviewId;
+
+		const isBg = this.replayInfo.gameMode === 'battlegrounds';
+		this.hasMatchStats = isBg;
+		this.opponentName = isBg ? null : this.sanitizeName(this.replayInfo.opponentName);
+		this.visualResult = isBg
+			? this.replayInfo.bgsPerfectGame || parseInt(this.replayInfo.additionalResult) <= 4
+				? 'won'
+				: 'lost'
+			: this.replayInfo.result;
+		if (isBg) {
+			const deltaMmr = parseInt(this.replayInfo.newPlayerRank) - parseInt(this.replayInfo.playerRank);
+			// This is most likely a season reset
+			if (deltaMmr < -500) {
+				this.deltaMmr = parseInt(this.replayInfo.newPlayerRank);
+			} else if (!isNaN(deltaMmr)) {
+				this.deltaMmr = deltaMmr;
+			}
+			this.availableTribes = [...(this.replayInfo.bgsAvailableTribes ?? [])]
+				.sort((a, b) => a - b)
+				.map((race) => ({
+					cardId: getReferenceTribeCardId(race),
+					icon: getTribeIcon(race),
+					tooltip: getTribeName(race),
+				}));
+			this.tribesTooltip = `Tribes available in this run: ${this.availableTribes
+				.map((tribe) => tribe.tooltip)
+				.join(', ')}`;
+			this.bgsPerfectGame = this.result === 'Perfect!';
+		}
+
+		const isDuelsInfo = (value: any): value is RunStep =>
+			(this.replayInfo as RunStep).treasureCardId !== undefined ||
+			(this.replayInfo as RunStep).lootCardIds !== undefined;
+		if (isDuelsInfo(this.replayInfo)) {
+			if (this.replayInfo.treasureCardId) {
+				this.treasure = {
+					cardId: this.replayInfo.treasureCardId,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.replayInfo.treasureCardId}.jpg`,
+				};
+			}
+			if (this.replayInfo.lootCardIds?.length) {
+				this.loots = this.replayInfo.lootCardIds.map((loot) => ({
+					cardId: loot,
+					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot}.jpg`,
+				}));
+			}
+		}
+	}
+
+	@Input() set displayLoot(value: boolean) {
+		this._displayLoot = value;
+	}
+
+	@Input() set displayShortLoot(value: boolean) {
+		this._displayShortLoot = value;
+	}
+
 	replayInfo: GameStat;
+	_prefs: Preferences;
+
+	_displayLoot: boolean;
+	_displayShortLoot: boolean;
+
 	visualResult: string;
 	gameMode: StatGameModeType;
 	// deckName: string;
@@ -158,75 +256,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	private bgsPerfectGame: boolean;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	@Input() set replay(value: GameStat | RunStep) {
-		this.replayInfo = value;
-		this.gameMode = value.gameMode;
-		// this.deckName = value.playerDeckName || value.playerName;
-		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(value, true);
-		[this.opponentClassImage, this.opponentClassTooltip] = this.buildPlayerClassImage(value, false);
-		// this.matchResultIconSvg = this.buildMatchResultIconSvg(value);
-		this.result = this.buildMatchResultText(value);
-		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(value);
-		this.reviewId = value.reviewId;
-
-		const isBg = value.gameMode === 'battlegrounds';
-		this.hasMatchStats = isBg;
-		this.opponentName = isBg ? null : this.sanitizeName(value.opponentName);
-		this.visualResult = isBg
-			? value.bgsPerfectGame || parseInt(value.additionalResult) <= 4
-				? 'won'
-				: 'lost'
-			: value.result;
-		if (isBg) {
-			const deltaMmr = parseInt(value.newPlayerRank) - parseInt(value.playerRank);
-			// This is most likely a season reset
-			if (deltaMmr < -500) {
-				this.deltaMmr = parseInt(value.newPlayerRank);
-			} else if (!isNaN(deltaMmr)) {
-				this.deltaMmr = deltaMmr;
-			}
-			this.availableTribes = [...(value.bgsAvailableTribes ?? [])]
-				.sort((a, b) => a - b)
-				.map((race) => ({
-					cardId: getReferenceTribeCardId(race),
-					icon: getTribeIcon(race),
-					tooltip: getTribeName(race),
-				}));
-			this.tribesTooltip = `Tribes available in this run: ${this.availableTribes
-				.map((tribe) => tribe.tooltip)
-				.join(', ')}`;
-			this.bgsPerfectGame = this.result === 'Perfect!';
-		}
-
-		const isDuelsInfo = (value: any): value is RunStep =>
-			(value as RunStep).treasureCardId !== undefined || (value as RunStep).lootCardIds !== undefined;
-		if (isDuelsInfo(value)) {
-			if (value.treasureCardId) {
-				this.treasure = {
-					cardId: value.treasureCardId,
-					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.treasureCardId}.jpg`,
-				};
-			}
-			if (value.lootCardIds?.length) {
-				this.loots = value.lootCardIds.map((loot) => ({
-					cardId: loot,
-					icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${loot}.jpg`,
-				}));
-			}
-		}
-	}
-
-	@Input() set displayLoot(value: boolean) {
-		this._displayLoot = value;
-	}
-
-	@Input() set displayShortLoot(value: boolean) {
-		this._displayShortLoot = value;
-	}
-
-	_displayLoot: boolean;
-	_displayShortLoot: boolean;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -253,7 +282,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		return capitalizeEachWord(input);
 	}
 
-	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {
+	private buildPlayerClassImage(info: GameStat, isPlayer: boolean, prefs: Preferences): [string, string] {
 		if (info.gameMode === 'battlegrounds') {
 			if (!isPlayer) {
 				return [null, null];
@@ -265,15 +294,19 @@ export class ReplayInfoComponent implements AfterViewInit {
 				return [`https://static.zerotoheroes.com/hearthstone/cardart/256x/TB_BaconShop_HERO_PH.jpg`, null];
 			}
 		}
-		const name = isPlayer
-			? this.allCards.getCard(info.playerCardId).name
-			: this.allCards.getCard(info.opponentCardId).name;
+		const heroCard: ReferenceCard = isPlayer
+			? this.allCards.getCard(info.playerCardId)
+			: this.allCards.getCard(info.opponentCardId);
+		const name = heroCard.name;
 		const deckName = info.playerDeckName ? ` with ${info.playerDeckName}` : '';
-		const tooltip = name + deckName;
-		const image = isPlayer
-			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerCardId}.jpg`
-			: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.opponentCardId}.jpg`;
-		return [image, tooltip];
+		const tooltip = isPlayer ? name + deckName : null;
+		if (prefs?.replaysShowClassIcon) {
+			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass.toLowerCase()}.png`;
+			return [image, tooltip];
+		} else {
+			const image = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCard.id}.jpg`;
+			return [image, tooltip];
+		}
 	}
 
 	private buildMatchResultIconSvg(info: GameStat): SafeHtml {

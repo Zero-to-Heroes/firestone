@@ -60,6 +60,7 @@ import { Preferences } from '../../models/preferences';
 					*ngxCacheIf="showReplaysRecap()"
 					[state]="_state"
 					[navigation]="navigation"
+					[prefs]="prefs"
 				></decktracker-replays-recap>
 			</section>
 		</div>
