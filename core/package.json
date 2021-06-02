@@ -32,7 +32,7 @@
 		"@angular/platform-browser-dynamic": "^11.2.11",
 		"@firestone-hs/build-global-stats": "^1.0.4",
 		"@firestone-hs/categorize-deck": "^1.0.4",
-		"@firestone-hs/coliseum-components": "0.0.15",
+		"@firestone-hs/coliseum-components": "0.0.16",
 		"@firestone-hs/compute-bgs-run-stats": "^1.0.14",
 		"@firestone-hs/cron-build-ranked-archetypes": "^1.0.1",
 		"@firestone-hs/duels-global-stats": "^1.0.3",
