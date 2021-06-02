@@ -24,7 +24,7 @@ import { BgsInitEvent } from './store/events/bgs-init-event';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
-const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json?v=4';
+const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs-perfect-games.json?v=5';
 
 @Injectable()
 export class BgsInitService {
@@ -88,7 +88,7 @@ export class BgsInitService {
 
 	public async loadPerfectGames(): Promise<readonly GameStat[]> {
 		const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
-		//console.debug('[bgs-init] perfect games', result);
+		console.debug('[bgs-init] perfect games', result);
 		return result
 			.map((res) =>
 				GameStat.create({

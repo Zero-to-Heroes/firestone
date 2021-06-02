@@ -208,6 +208,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:resize')
 	async onResize() {
+		console.debug('maxBoardHeight', this.maxBoardHeight);
 		// Manual sizing
 		if (this.maxBoardHeight === -1) {
 			this.boardReady = true;

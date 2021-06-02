@@ -1,7 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AllCardsService, Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
@@ -12,6 +13,7 @@ import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/
 import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { capitalizeEachWord } from '../../services/utils';
+import { normalizeCardId } from '../battlegrounds/post-match/card-utils';
 
 declare let amplitude;
 @Component({
@@ -89,6 +91,19 @@ declare let amplitude;
 					</div>
 				</div>
 
+				<div class="group warband" *ngIf="finalWarband">
+					<bgs-board
+						[entities]="finalWarband.entities"
+						[customTitle]="null"
+						[minionStats]="finalWarband.minionStats"
+						[finalBoard]="true"
+						[useFullWidth]="true"
+						[hideDamageHeader]="true"
+						[debug]="false"
+						[maxBoardHeight]="-1"
+					></bgs-board>
+				</div>
+
 				<div
 					class="group mmr"
 					[ngClass]="{ 'positive': deltaMmr > 0, 'negative': deltaMmr < 0 }"
@@ -149,6 +164,8 @@ export class ReplayInfoComponent implements AfterViewInit {
 		this.updateInfo();
 	}
 
+	finalWarband: KnownBoard;
+
 	private updateInfo() {
 		if (!this.replayInfo) {
 			return;
@@ -197,6 +214,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 				.map((tribe) => tribe.tooltip)
 				.join(', ')}`;
 			this.bgsPerfectGame = this.result === 'Perfect!';
+			this.finalWarband = this.buildFinalWarband();
 		}
 
 		const isDuelsInfo = (value: any): value is RunStep =>
@@ -370,6 +388,42 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 		return name.split('#')[0];
 	}
+
+	private buildFinalWarband(): KnownBoard {
+		const postMatch = this.replayInfo.postMatchStats;
+		const bgsBoard = postMatch?.boardHistory[postMatch?.boardHistory.length - 1];
+		if (!bgsBoard) {
+			return null;
+		}
+
+		console.debug('building from board', bgsBoard);
+		const boardEntities = bgsBoard.board.map((boardEntity) =>
+			boardEntity instanceof Entity || boardEntity.tags instanceof Map
+				? Entity.create(new Entity(), boardEntity as EntityDefinition)
+				: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
+		) as readonly Entity[];
+		const normalizedIds = [
+			...new Set(boardEntities.map((entity) => normalizeCardId(entity.cardID, this.allCards))),
+		];
+		const minionStats = normalizedIds.map(
+			(cardId) =>
+				({
+					cardId: cardId,
+				} as MinionStat),
+		);
+
+		return {
+			entities: boardEntities,
+			minionStats: minionStats,
+		} as KnownBoard;
+	}
+
+	private extractDamage(normalizedCardId: string, totalMinionsDamageDealt: { [cardId: string]: number }): number {
+		return Object.keys(totalMinionsDamageDealt)
+			.filter((cardId) => normalizeCardId(cardId, this.allCards) === normalizedCardId)
+			.map((cardId) => totalMinionsDamageDealt[cardId])
+			.reduce((a, b) => a + b, 0);
+	}
 }
 
 interface InternalLoot {
@@ -381,4 +435,11 @@ interface InternalTribe {
 	cardId: string;
 	icon: string;
 	tooltip: string;
+}
+
+interface KnownBoard {
+	readonly entities: readonly Entity[];
+	// readonly title: string;
+	readonly minionStats: readonly MinionStat[];
+	// readonly date: string;
 }
