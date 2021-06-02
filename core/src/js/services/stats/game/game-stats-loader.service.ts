@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
 import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
+import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { ApiRunner } from '../../api-runner';
 import { DeckParserService } from '../../decktracker/deck-parser.service';
 import { OverwolfService } from '../../overwolf.service';
 import { PreferencesService } from '../../preferences.service';
+import { decode } from '../../utils';
 
 const GAME_STATS_ENDPOINT = 'https://api.firestoneapp.com/retrieveUserMatchStats/matchStats';
 const ARCHETYPE_CONFIG_ENDPOINT = 'https://static.zerotoheroes.com/api/decks-config.json';
@@ -50,13 +52,23 @@ export class GameStatsLoaderService {
 
 		const endpointResult: readonly GameStat[] = (data as any)?.results ?? [];
 		const stats: readonly GameStat[] = endpointResult
-			.map((stat) => ({
-				...stat,
-				playerDecklist: this.deckParser.normalizeDeckstring(stat.playerDecklist, stat.playerCardId),
-				// Because old stats are corrupted
-				currentDuelsRunId:
-					stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.currentDuelsRunId,
-			}))
+			.map((stat) => {
+				const decoded = (stat as any).finalComp ? decode((stat as any).finalComp) : null;
+				const postMatchStats: BgsPostMatchStats =
+					decoded == null
+						? null
+						: ({
+								boardHistory: [decoded],
+						  } as any);
+				return {
+					...stat,
+					playerDecklist: this.deckParser.normalizeDeckstring(stat.playerDecklist, stat.playerCardId),
+					// Because old stats are corrupted
+					currentDuelsRunId:
+						stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.currentDuelsRunId,
+					postMatchStats: postMatchStats,
+				};
+			})
 			.map((stat) => Object.assign(new GameStat(), stat))
 			// Here we remove all the stats right at the source, so that we're sure that deleted decks don't
 			// appear anywhere

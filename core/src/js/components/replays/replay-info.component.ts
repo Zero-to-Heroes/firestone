@@ -155,7 +155,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 			return;
 		}
 		this._prefs = value;
-		// console.debug('udpated prefs', this._prefs);
 		this.updateInfo();
 	}
 

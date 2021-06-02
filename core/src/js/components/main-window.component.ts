@@ -174,7 +174,8 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
-		this.windowId = (await this.ow.getCurrentWindow()).id;
+		const currentWindow = await this.ow.getCurrentWindow();
+		this.windowId = currentWindow.id;
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(async (message) => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();

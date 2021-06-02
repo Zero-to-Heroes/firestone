@@ -47,7 +47,7 @@ export class VersionComponent implements AfterViewInit {
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
-		this.version = await this.ow.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
+		this.version = await this.ow.getAppVersion('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

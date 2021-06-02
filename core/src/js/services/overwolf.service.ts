@@ -232,8 +232,14 @@ export class OverwolfService {
 		});
 	}
 
-	// Careful, this only returns the version, not the full manifest
-	public async getManifest(extensionId: string) {
+	public async getManifest(): Promise<Manifest> {
+		return new Promise<Manifest>((resolve) => {
+			overwolf.extensions.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob', (result) => {
+				resolve(result);
+			});
+		});
+	}
+	public async getAppVersion(extensionId: string) {
 		return new Promise<string>((resolve) => {
 			overwolf.extensions.getManifest(extensionId, (result) => {
 				resolve(result.meta.version);
@@ -1015,4 +1021,18 @@ interface UpdateExtensionResult {
 	readonly state: string;
 	readonly info: string;
 	readonly version: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Manifest {
+	data: {
+		windows: {
+			[windowName: string]: {
+				min_size: {
+					width: number;
+					height: number;
+				};
+			};
+		};
+	};
 }

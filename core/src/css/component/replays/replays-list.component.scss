@@ -32,8 +32,12 @@
 	min-height: 0;
 
 	::ng-deep replay-info {
-		.tribes {
-			display: none;
+		.replay-info {
+			&.battlegrounds {
+				.tribes {
+					display: none;
+				}
+			}
 		}
 	}
 }

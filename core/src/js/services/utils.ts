@@ -1,3 +1,4 @@
+import { inflate } from 'pako';
 import { PatchInfo } from '../models/patches';
 
 export const groupByFunction = (keyExtractor: (obj: any | string) => string) => (array) =>
@@ -95,4 +96,10 @@ export const thisAsThat = (callBack: Function) => {
 	return function () {
 		return callBack.apply(self, [this].concat(Array.prototype.slice.call(arguments)));
 	};
+};
+
+export const decode = (input: string): string => {
+	const fromBase64 = Buffer.from(input, 'base64').toString();
+	const inflated = inflate(fromBase64, { to: 'string' });
+	return JSON.parse(inflated);
 };

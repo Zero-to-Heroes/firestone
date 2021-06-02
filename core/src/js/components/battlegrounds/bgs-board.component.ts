@@ -109,7 +109,6 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		this.inputEntities = value || [];
 		// console.log('input entities', this.inputEntities);
 		this._entities = this.inputEntities.map((entity) => Entity.create({ ...entity } as Entity));
-		// console.log('setting entities', this._entities);
 		this.previousBoardWidth = undefined;
 		if (this.debug) {
 			this.boardReady = false;
@@ -208,7 +207,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:resize')
 	async onResize() {
-		console.debug('maxBoardHeight', this.maxBoardHeight);
+		// console.debug('maxBoardHeight', this.maxBoardHeight);
 		// Manual sizing
 		if (this.maxBoardHeight === -1) {
 			this.boardReady = true;
