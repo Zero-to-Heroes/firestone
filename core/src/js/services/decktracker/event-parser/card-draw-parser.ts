@@ -20,7 +20,10 @@ export class CardDrawParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
 
-		const isCardInfoPublic = isPlayer || cardsRevealedWhenDrawn.includes(cardId);
+		const isCardInfoPublic =
+			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
+			// Southsea Scoundrel) are flagged
+			isPlayer || cardsRevealedWhenDrawn.includes(cardId) || publicCardCreators.includes(lastInfluencedByCardId);
 		const isCreatorPublic = isCardInfoPublic || publicCardCreators.includes(lastInfluencedByCardId);
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);

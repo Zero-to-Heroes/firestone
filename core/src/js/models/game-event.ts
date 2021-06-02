@@ -146,7 +146,9 @@ export class GameEvent implements GameStateEvent {
 	}
 
 	public parse(): [string, number, GameEventPlayer, number] {
-		return [this.cardId, this.controllerId, this.localPlayer, this.entityId];
+		// cardId being "null" needs to be a conscious choice, as it triggers specific
+		// processes when looking for the card in the other zones
+		return [this.cardId ?? '', this.controllerId, this.localPlayer, this.entityId];
 	}
 }
 
