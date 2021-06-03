@@ -30,7 +30,7 @@ export class GameStat {
 	readonly reviewId: string;
 	readonly gameDurationSeconds: number;
 	readonly gameDurationTurns: number;
-	readonly currentDuelsRunId: string;
+	readonly runId: string;
 	readonly playerArchetypeId?: string;
 	readonly opponentArchetypeId?: string;
 	readonly bgsAvailableTribes: readonly Race[];

@@ -180,8 +180,8 @@ export class DuelsStateBuilderService {
 		const prefs = await this.prefs.getPreferences();
 		const duelMatches = matchStats?.stats
 			?.filter((match) => match.gameMode === 'duels' || match.gameMode === 'paid-duels')
-			.filter((match) => match.currentDuelsRunId);
-		const groupByRunId = groupByFunction((match: GameStat) => match.currentDuelsRunId);
+			.filter((match) => match.runId);
+		const groupByRunId = groupByFunction((match: GameStat) => match.runId);
 		const matchesByRun = groupByRunId(duelMatches);
 		const runIds = Object.keys(matchesByRun);
 		const runs: readonly DuelsRun[] = runIds

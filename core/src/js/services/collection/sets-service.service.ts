@@ -215,6 +215,8 @@ export class SetsService {
 		switch (setId) {
 			case 'darkmoon_races':
 				return 'darkmoon_faire';
+			case 'wailing_caverns':
+				return 'the_barrens';
 		}
 		return setId;
 	}

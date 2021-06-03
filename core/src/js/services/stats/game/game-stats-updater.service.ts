@@ -56,7 +56,7 @@ export class GameStatsUpdaterService {
 			scenarioId: game.scenarioId,
 			gameDurationSeconds: durationInSeconds,
 			gameDurationTurns: durationInTurns,
-			currentDuelsRunId: game.currentDuelsRunId,
+			runId: game.runId,
 			// xpGained: game.xpGained,
 		} as GameStat);
 	}

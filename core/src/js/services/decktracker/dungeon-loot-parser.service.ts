@@ -128,7 +128,7 @@ export class DungeonLootParserService {
 			if (this.isMatchInRun(stats[0].additionalResult, stats[0].result)) {
 				this.log('setting last duels', stats[0]);
 				this.lastDuelsMatch = stats[0];
-				this.currentDuelsRunId = this.lastDuelsMatch.currentDuelsRunId;
+				this.currentDuelsRunId = this.lastDuelsMatch.runId;
 				this.log('set currentDuelsRunId', this.currentDuelsRunId);
 			} else {
 				this.log('last match is not in run, resetting last duels run info');

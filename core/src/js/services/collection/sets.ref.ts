@@ -1,6 +1,7 @@
 import { ReferenceSet } from '../../models/collection/reference-set';
 
 export const standardSets: readonly string[] = [
+	'wailing_caverns',
 	'the_barrens',
 	'darkmoon_races',
 	'darkmoon_faire',
@@ -10,6 +11,11 @@ export const standardSets: readonly string[] = [
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'wailing_caverns',
+		name: 'Wailing Caverns',
+		launchDate: new Date('2021-06-03'),
+	},
 	{
 		id: 'the_barrens',
 		name: 'Forged in the Barrens',

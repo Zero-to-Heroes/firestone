@@ -16,6 +16,7 @@ import { IndexedDbService } from './collection/indexed-db.service';
 import { PackMonitor } from './collection/pack-monitor.service';
 import { PackStatsService } from './collection/pack-stats.service';
 import { DebugService } from './debug.service';
+import { ArenaRunParserService } from './decktracker/arena-run-parser.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DungeonLootParserService } from './decktracker/dungeon-loot-parser.service';
 import { GameStateService } from './decktracker/game-state.service';
@@ -71,6 +72,7 @@ export class AppBootstrapService {
 		private collectionManager: CollectionManager,
 		private deckParserService: DeckParserService,
 		private init_dungeonLootParserService: DungeonLootParserService,
+		private init_arenaRunService: ArenaRunParserService,
 		private gameStateService: GameStateService,
 		private prefs: PreferencesService,
 		private notifs: OwNotificationsService,

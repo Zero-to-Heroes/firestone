@@ -6,7 +6,7 @@ import { XpForGameInfo } from '../rewards/rewards-monitor';
 
 export class GameForUpload {
 	reviewId: string;
-	currentDuelsRunId: string;
+	runId: string;
 	title: string;
 
 	spectating: boolean;

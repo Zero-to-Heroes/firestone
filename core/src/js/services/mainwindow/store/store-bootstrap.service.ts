@@ -11,6 +11,7 @@ import { AchievementsRepository } from '../../achievement/achievements-repositor
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
+import { ArenaRunParserService } from '../../decktracker/arena-run-parser.service';
 import { DungeonLootParserService } from '../../decktracker/dungeon-loot-parser.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
@@ -49,6 +50,7 @@ export class StoreBootstrapService {
 		private readonly patchConfig: PatchesConfigService,
 		private readonly duels: DuelsStateBuilderService,
 		private readonly dungeonLoot: DungeonLootParserService,
+		private readonly arenaService: ArenaRunParserService,
 	) {
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -154,17 +156,9 @@ export class StoreBootstrapService {
 				(stat) => stat.gameMode === 'duels' || stat.gameMode === 'paid-duels',
 			),
 		);
-		// const lastGameWithDuelsRunId = newStatsState.gameStats.stats.filter(match => match.currentDuelsRunId);
-		// const lastRunId =
-		// 	lastGameWithDuelsRunId &&
-		// 	lastGameWithDuelsRunId.length > 0 &&
-		// 	!this.isLastMatchInRun(lastGameWithDuelsRunId[0].additionalResult, lastGameWithDuelsRunId[0].result)
-		// 		? lastGameWithDuelsRunId[0].currentDuelsRunId
-		// 		: null;
-		// if (lastRunId) {
-		// 	console.log('setting current duels run id', lastRunId);
-		// 	await this.prefs.setDuelsRunId(lastRunId);
-		// }
+		this.arenaService.setLastArenaMatch(
+			newStatsState.gameStats?.stats?.filter((stat) => stat.gameMode === 'arena'),
+		);
 
 		const currentDuelsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)

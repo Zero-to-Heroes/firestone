@@ -55,7 +55,7 @@ export class DuelsReplaysRecapForRunComponent {
 			return;
 		}
 
-		const runId = this._navigation?.navigationReplays?.selectedReplay?.replayInfo?.currentDuelsRunId;
+		const runId = this._navigation?.navigationReplays?.selectedReplay?.replayInfo?.runId;
 		if (!runId) {
 			return;
 		}

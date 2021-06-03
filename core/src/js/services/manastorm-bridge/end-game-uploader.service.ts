@@ -3,6 +3,7 @@ import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/pub
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
+import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
 import { LogsUploaderService } from '../logs-uploader.service';
 import { PlayersInfoService } from '../players-info.service';
@@ -32,6 +33,7 @@ export class EndGameUploaderService {
 		private playersInfo: PlayersInfoService,
 		private memoryInspection: MemoryInspectionService,
 		private dungeonLootParser: DungeonLootParserService,
+		private arenaService: ArenaRunParserService,
 		private logService: LogsUploaderService,
 		private rewards: RewardMonitorService,
 	) {}
@@ -130,7 +132,9 @@ export class EndGameUploaderService {
 			}
 		} else if (game.gameMode === 'arena') {
 			// const arenaInfo = await this.memoryInspection.getArenaInfo();
+			// TODO: move away from player rank for arena to match what is done in duels
 			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
+			game.additionalResult = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank for arena', playerRank);
 		} else if (game.gameFormat !== 'unknown') {
 			// const playerInfo = await this.playersInfo.getPlayerInfo();
@@ -243,10 +247,10 @@ export class EndGameUploaderService {
 		this.gameParserService.extractDuration(replay, game);
 		console.log('[manastorm-bridge]', currentReviewId, 'extracted duration');
 
-		game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
 		if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
-			console.log('[manastorm-bridge]', currentReviewId, 'added duels run id', game.currentDuelsRunId);
-			if (!game.currentDuelsRunId) {
+			game.runId = this.dungeonLootParser.currentDuelsRunId;
+			console.log('[manastorm-bridge]', currentReviewId, 'added duels run id', game.runId);
+			if (!game.runId) {
 				console.log(
 					'[manastorm-bridge]',
 					currentReviewId,
@@ -255,28 +259,30 @@ export class EndGameUploaderService {
 				while (this.dungeonLootParser.busyRetrievingInfo) {
 					await sleep(200);
 				}
-				game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+				game.runId = this.dungeonLootParser.currentDuelsRunId;
 				console.log(
 					'[manastorm-bridge]',
 					currentReviewId,
 					'dungeon loot info retrieved, continuing',
-					game.currentDuelsRunId,
+					game.runId,
 				);
 			}
-			if (!game.currentDuelsRunId) {
+			if (!game.runId) {
 				console.warn(
 					'[manastorm-bridge]',
 					currentReviewId,
 					'currentDuelsRunId is missing',
-					game.currentDuelsRunId,
+					game.runId,
 					game.gameMode,
 					this.dungeonLootParser.currentDuelsRunId,
 				);
-				game.currentDuelsRunId = this.dungeonLootParser.currentDuelsRunId;
+				game.runId = this.dungeonLootParser.currentDuelsRunId;
 				// So that we have time to collect more logs, especially the ones linked to replay upload
 				setTimeout(() => this.logService.reportSpecificBug('duels-empty-run-id'), 5000);
 			}
 			// this.dungeonLootParser.resetDuelsRunId();
+		} else if (game.gameMode === 'arena') {
+			game.runId = this.arenaService.currentArenaRunId;
 		}
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');

@@ -246,6 +246,7 @@ import { CardsMonitorService } from '../../services/collection/cards-monitor.ser
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
 import { PackStatsService } from '../../services/collection/pack-stats.service';
 import { AiDeckService } from '../../services/decktracker/ai-deck-service.service';
+import { ArenaRunParserService } from '../../services/decktracker/arena-run-parser.service';
 import { DeckCardService } from '../../services/decktracker/deck-card.service';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { DungeonLootParserService } from '../../services/decktracker/dungeon-loot-parser.service';
@@ -645,6 +646,7 @@ const components = [
 		DeckCardService,
 		DeckParserService,
 		DungeonLootParserService,
+		ArenaRunParserService,
 		GameStateService,
 		DynamicZoneHelperService,
 		ZoneOrderingService,
