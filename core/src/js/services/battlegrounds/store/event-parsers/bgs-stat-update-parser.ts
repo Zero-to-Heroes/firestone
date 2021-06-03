@@ -17,7 +17,7 @@ export class BgsStatUpdateParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsStatUpdateEvent): Promise<BattlegroundsState> {
-		//console.log('[debug] state before update', currentState);
+		// console.debug('[bgs-stat-update] state before update', currentState, event);
 		const bgsMatchStats = event.newGameStats?.stats?.filter((stat) => stat.gameMode === 'battlegrounds');
 		if (!bgsMatchStats || bgsMatchStats.length === 0) {
 			return currentState;

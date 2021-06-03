@@ -43,6 +43,10 @@ export class GameStat {
 		return Object.assign(new GameStat(), base);
 	}
 
+	public update(base: GameStat): GameStat {
+		return Object.assign(new GameStat(), this, base);
+	}
+
 	public isDuels(): boolean {
 		return this.gameMode === 'duels' || this.gameMode === 'paid-duels';
 	}

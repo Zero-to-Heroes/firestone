@@ -4,6 +4,7 @@ import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BgsPostMatchStatsComputedEvent implements MainWindowStoreEvent {
 	constructor(
+		public readonly reviewId: string,
 		public readonly postMatchStats: BgsPostMatchStats,
 		public readonly newBestStats: readonly BgsBestStat[],
 	) {}

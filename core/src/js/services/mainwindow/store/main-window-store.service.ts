@@ -604,7 +604,7 @@ export class MainWindowStoreService {
 			new BgsMmrGroupFilterSelectedProcessor(this.bgsBuilder, this.prefs),
 
 			BgsPostMatchStatsComputedEvent.eventName(),
-			new BgsPostMatchStatsComputedProcessor(),
+			new BgsPostMatchStatsComputedProcessor(this.replaysStateBuilder),
 
 			BgsPersonalStatsSelectHeroDetailsEvent.eventName(),
 			new BgsPersonalStatsSelectHeroDetailsProcessor(this.events, this.cards),

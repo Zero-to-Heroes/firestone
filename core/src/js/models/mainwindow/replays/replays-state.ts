@@ -8,11 +8,17 @@ import { ReplaysFilter } from './replays-filter';
 import { ReplaysFilterCategoryType } from './replays-filter-category.type';
 
 export class ReplaysState {
+	// TODO: Maybe this should be done in the UI only, and keep the store to only
+	// store the data itself, and not anything related to its presentation?
 	readonly allReplays: readonly GameStat[];
 	readonly groupedReplays: readonly GroupedReplays[];
 	readonly groupByCriteria: 'creation-date' = 'creation-date';
 	readonly filters: readonly ReplaysFilter[];
 	readonly isLoading: boolean = true;
+
+	public update(base: ReplaysState): ReplaysState {
+		return Object.assign(new ReplaysState(), this, base);
+	}
 
 	public getFilter(type: ReplaysFilterCategoryType) {
 		return this.filters.find((filter) => filter.type === type);

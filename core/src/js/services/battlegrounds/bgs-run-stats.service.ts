@@ -126,7 +126,7 @@ export class BgsRunStatsService {
 		// archive the data. However, this is non-blocking
 		this.buildStatsRemotely(input);
 		this.bgsStateUpdater.next(new BgsGameEndEvent(postMatchStats, newBestValues, reviewId));
-		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(postMatchStats, newBestValues));
+		this.stateUpdater.next(new BgsPostMatchStatsComputedEvent(reviewId, postMatchStats, newBestValues));
 	}
 
 	private async buildStatsRemotely(input: BgsComputeRunStatsInput): Promise<void> {
