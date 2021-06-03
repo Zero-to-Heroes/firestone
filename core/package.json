@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "7.9.6",
+	"version": "7.9.8",
 	"scripts": {
 		"lint": "node --max_old_space_size=8000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=8000 ./node_modules/jest/bin/jest.js --colors",
@@ -37,12 +37,12 @@
 		"@firestone-hs/cron-build-ranked-archetypes": "^1.0.1",
 		"@firestone-hs/duels-global-stats": "^1.0.3",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.76",
-		"@firestone-hs/reference-data": "^0.1.129",
+		"@firestone-hs/reference-data": "^0.1.131",
 		"@firestone-hs/replay-parser": "^1.1.40",
 		"@firestone-hs/retrieve-pack-stats": "^1.0.2",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.67",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.68",
 		"@sentry/browser": "^6.2.5",
 		"@sentry/integrations": "^6.2.5",
 		"@swimlane/ngx-charts": "^14.0.0",
