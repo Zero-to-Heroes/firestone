@@ -195,6 +195,10 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.Voljin_SpiritSwap1;
 		case CardIds.NonCollectible.Neutral.Xyrella2:
 			return CardIds.NonCollectible.Priest.Xyrella_SeeTheLight;
+		case CardIds.NonCollectible.Neutral.MutanusTheDevourer2:
+			return CardIds.NonCollectible.Neutral.MutanusTheDevourer_Devour;
+		case CardIds.NonCollectible.Druid.GuffRunetotem2:
+			return CardIds.NonCollectible.Druid.GuffRunetotem_NaturalBalance;
 		case '':
 			return null; // new heroes
 	}

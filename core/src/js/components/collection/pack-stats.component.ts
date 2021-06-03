@@ -170,6 +170,7 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.MAMMOTH_BUNDLE,
 	BoosterType.YEAR_OF_DRAGON,
 	BoosterType.YEAR_OF_PHOENIX,
+	BoosterType.STANDARD_DEMONHUNTER,
 	BoosterType.STANDARD_HUNTER,
 	BoosterType.STANDARD_MAGE,
 	BoosterType.STANDARD_PALADIN,
@@ -177,6 +178,10 @@ const NON_BUYABLE_BOOSTER_IDS = [
 	BoosterType.STANDARD_ROGUE,
 	BoosterType.STANDARD_SHAMAN,
 	BoosterType.STANDARD_WARRIOR,
+	BoosterType.STANDARD_WARLOCK,
+	BoosterType.STANDARD_BUNDLE,
+	BoosterType.GOLDEN_STANDARD_BUNDLE,
+	BoosterType.WILD_PACK,
 ];
 
 interface InternalPackInfo extends PackInfo {

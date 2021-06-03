@@ -37,6 +37,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.Collectible.Paladin.NobleSacrificeCore,
 		CardIds.Collectible.Paladin.NobleSacrificeCore,
 		CardIds.Collectible.Paladin.NobleSacrificeVanilla,
+		CardIds.Collectible.Paladin.JudgmentOfJustice,
 		CardIds.Collectible.Rogue.Bamboozle,
 		CardIds.Collectible.Rogue.ShadowClone,
 		CardIds.Collectible.Rogue.SuddenBetrayal,
@@ -151,6 +152,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.VaporizeLegacy);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.VaporizeVanilla);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.JudgmentOfJustice);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.ShadowClone);
 		}

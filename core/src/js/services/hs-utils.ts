@@ -2,7 +2,7 @@ import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { capitalizeEachWord } from './utils';
 
-export const CARDS_VERSION = '81706-1';
+export const CARDS_VERSION = '84593';
 
 export const classes = [
 	'demonhunter',
@@ -150,7 +150,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Druid.PredatoryInstincts,
 	CardIds.Collectible.Druid.GuessTheWeight,
 	CardIds.Collectible.Hunter.ArcaneFletcher,
-	CardIds.Collectible.Hunter.BarakKodobane,
+	CardIds.Collectible.Hunter.BarakKodobane1,
 	CardIds.Collectible.Hunter.CallPet,
 	CardIds.Collectible.Hunter.DivingGryphon,
 	CardIds.Collectible.Hunter.KingsElekk,
@@ -381,11 +381,17 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.STANDARD_WARRIOR:
 		case BoosterType.STANDARD_PRIEST:
 		case BoosterType.STANDARD_ROGUE:
+		case BoosterType.STANDARD_SHAMAN:
+		case BoosterType.STANDARD_WARLOCK:
+		case BoosterType.STANDARD_DEMONHUNTER:
 		case BoosterType.SIGNUP_INCENTIVE:
 		case BoosterType.MAMMOTH_BUNDLE:
 		case BoosterType.FIRST_PURCHASE:
 		case BoosterType.YEAR_OF_DRAGON:
 		case BoosterType.YEAR_OF_PHOENIX:
+		case BoosterType.STANDARD_BUNDLE:
+		case BoosterType.GOLDEN_STANDARD_BUNDLE:
+		case BoosterType.WILD_PACK:
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
@@ -430,6 +436,7 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'darkmoon_races':
 			return BoosterType.DARKMOON_FAIRE;
 		case 'the_barrens':
+		case 'wailing_caverns':
 			return BoosterType.THE_BARRENS;
 		default:
 			console.warn('no default booster type for set id', setId);
@@ -484,6 +491,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Forged in the Barrens';
 		case BoosterType.GOLDEN_THE_BARRENS:
 			return 'Golden Forged in the Barrens';
+		case BoosterType.STANDARD_DEMONHUNTER:
+			return 'Standard Demon Hunter';
 		case BoosterType.STANDARD_HUNTER:
 			return 'Standard Hunter';
 		case BoosterType.STANDARD_MAGE:
@@ -498,6 +507,10 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Standard Rogue';
 		case BoosterType.STANDARD_SHAMAN:
 			return 'Standard Shaman';
+		case BoosterType.STANDARD_WARLOCK:
+			return 'Standard Warlock';
+		case BoosterType.STANDARD_WARRIOR:
+			return 'Standard Warrior';
 		case BoosterType.MAMMOTH_BUNDLE:
 			return 'Year of the Mammoth';
 		case BoosterType.YEAR_OF_DRAGON:
@@ -509,9 +522,11 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 		case BoosterType.YEAR_OF_PHOENIX:
 			return 'Year of the Phoenix';
 		case BoosterType.STANDARD_BUNDLE:
-			return 'Standard Bundle';
+			return 'Standard Pack';
 		case BoosterType.GOLDEN_STANDARD_BUNDLE:
-			return 'Golden Standard Bundle';
+			return 'Golden Standard Pack';
+		case BoosterType.WILD_PACK:
+			return 'Wild Pack';
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
