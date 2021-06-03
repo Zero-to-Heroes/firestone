@@ -88,6 +88,12 @@ export class SetsComponent {
 
 	private sortSets(): (a: Set, b: Set) => number {
 		return (a: Set, b: Set) => {
+			if (a.id === 'core' || a.id === 'legacy') {
+				return 1;
+			}
+			if (b.id === 'core' || a.id === 'legacy') {
+				return -1;
+			}
 			if (!a.launchDate) {
 				return -1;
 			}
