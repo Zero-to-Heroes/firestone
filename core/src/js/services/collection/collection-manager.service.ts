@@ -9,6 +9,7 @@ import { CoinInfo } from '../../models/memory/coin-info';
 import { PityTimer } from '../../models/pity-timer';
 import { Set, SetCard } from '../../models/set';
 import { ApiRunner } from '../api-runner';
+import { boosterIdToSetId } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { groupByFunction } from '../utils';
@@ -76,7 +77,9 @@ export class CollectionManager {
 		console.log('[collection-manager] getting reference card backs');
 		this.referenceCardBacks = this.referenceCardBacks ?? (await this.api.callGetApi(CARD_BACKS_URL)) ?? [];
 		console.log('[collection-manager] getting card backs', this.referenceCardBacks?.length);
+		console.debug('[collection-manager] card backs', this.referenceCardBacks);
 		const cardBacks = await this.memoryReading.getCardBacks();
+		console.debug('[collection-manager] card backs from memory', cardBacks);
 		console.log('[collection-manager] retrieved card backs from MindVision', cardBacks?.length);
 		if (!cardBacks || cardBacks.length === 0) {
 			console.log('[collection-manager] retrieving card backs from db');
@@ -201,20 +204,25 @@ export class CollectionManager {
 
 	public buildPityTimers(packStats: readonly PackResult[]): readonly PityTimer[] {
 		const groupedBySet: { [setId: string]: readonly PackResult[] } = groupByFunction((pack: PackResult) =>
-			this.setsService.normalizeSetId(pack.setId),
+			pack.boosterId
+				? // Doing this should automatically remove the multi-set boosters
+				  boosterIdToSetId(pack.boosterId)
+				: this.setsService.normalizeSetId(pack.setId),
 		)(packStats);
-		return Object.keys(groupedBySet).map((setId) => {
-			const packsForSet: readonly PackResult[] = [...groupedBySet[setId]].sort(
-				(a, b) => b.creationDate - a.creationDate,
-			);
-			const legendaryPityTimer = this.buildPityTimer(packsForSet, 'legendary');
-			const epicPityTimer = this.buildPityTimer(packsForSet, 'epic');
-			return {
-				setId: setId,
-				packsUntilGuaranteedLegendary: legendaryPityTimer,
-				packsUntilGuaranteedEpic: epicPityTimer,
-			};
-		});
+		return Object.keys(groupedBySet)
+			.filter((setId) => setId)
+			.map((setId) => {
+				const packsForSet: readonly PackResult[] = [...groupedBySet[setId]].sort(
+					(a, b) => b.creationDate - a.creationDate,
+				);
+				const legendaryPityTimer = this.buildPityTimer(packsForSet, 'legendary');
+				const epicPityTimer = this.buildPityTimer(packsForSet, 'epic');
+				return {
+					setId: setId,
+					packsUntilGuaranteedLegendary: legendaryPityTimer,
+					packsUntilGuaranteedEpic: epicPityTimer,
+				};
+			});
 	}
 
 	private buildPityTimer(packsForSet: readonly PackResult[], type: 'legendary' | 'epic') {
@@ -231,6 +239,7 @@ export class CollectionManager {
 	private init() {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if ((res.gameChanged || res.runningChanged) && (await this.ow.inGame())) {
+				console.debug('[collection-manager] game started, re-fetching info from memory');
 				await Promise.all([this.getCollection(), this.getCardBacks(), this.getPacks()]);
 			}
 		});

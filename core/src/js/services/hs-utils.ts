@@ -384,16 +384,16 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.STANDARD_SHAMAN:
 		case BoosterType.STANDARD_WARLOCK:
 		case BoosterType.STANDARD_DEMONHUNTER:
-		case BoosterType.SIGNUP_INCENTIVE:
-		case BoosterType.MAMMOTH_BUNDLE:
-		case BoosterType.FIRST_PURCHASE:
-		case BoosterType.YEAR_OF_DRAGON:
-		case BoosterType.YEAR_OF_PHOENIX:
 		case BoosterType.STANDARD_BUNDLE:
 		case BoosterType.GOLDEN_STANDARD_BUNDLE:
+		case BoosterType.MAMMOTH_BUNDLE:
+		case BoosterType.YEAR_OF_DRAGON:
+		case BoosterType.YEAR_OF_PHOENIX:
 		case BoosterType.WILD_PACK:
+		case BoosterType.SIGNUP_INCENTIVE:
+		case BoosterType.FIRST_PURCHASE:
 		default:
-			console.warn('unsupported booster type', boosterId);
+			// console.warn('unsupported booster type', boosterId);
 			return null;
 	}
 };
