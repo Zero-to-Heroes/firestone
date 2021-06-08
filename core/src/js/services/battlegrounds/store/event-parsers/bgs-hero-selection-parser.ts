@@ -93,6 +93,7 @@ export class BgsHeroSelectionParser implements EventParser {
 					tribesStat: stat.tribesStat,
 					warbandStats: stat.warbandStats,
 					combatWinrate: stat.combatWinrate,
+					lastPlayedTimestamp: stat.lastPlayedTimestamp,
 				}),
 			) || [];
 		console.log('created hero overview');

@@ -110,6 +110,10 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			value: 'games-played',
 			label: 'Games played',
 		} as HeroSortFilterOption,
+		{
+			value: 'last-played',
+			label: 'Last played',
+		} as HeroSortFilterOption,
 	] as readonly HeroSortFilterOption[];
 	activeHeroSortFilter: BgsHeroSortFilterType;
 	heroSortFilterVisible: boolean;

@@ -62,9 +62,9 @@ export class BgsStatUpdateParser implements EventParser {
 	) {
 		const heroStats =
 			globalStats?.heroStats?.map((heroStat) => {
-				const playerGamesPlayed = bgsStatsForCurrentPatch.filter((stat) => stat.playerCardId === heroStat.id)
-					.length;
-				const playerPopularity = (100 * playerGamesPlayed) / bgsStatsForCurrentPatch.length;
+				const playerGamesPlayed = bgsStatsForCurrentPatch.filter((stat) => stat.playerCardId === heroStat.id);
+				const totalPlayerGamesPlayed = playerGamesPlayed.length;
+				const playerPopularity = (100 * totalPlayerGamesPlayed) / bgsStatsForCurrentPatch.length;
 				const gamesWithMmr = bgsStatsForCurrentPatch
 					.filter((stat) => stat.playerCardId === heroStat.id)
 					.filter((stat) => stat.newPlayerRank != null && stat.playerRank != null)
@@ -84,15 +84,15 @@ export class BgsStatUpdateParser implements EventParser {
 					top1: heroStat.top1 || 0,
 					name: heroStat.id !== 'average' ? cards.getCard(heroStat.id)?.name : heroStat.id,
 					heroPowerCardId: getHeroPower(heroStat.id),
-					playerGamesPlayed: playerGamesPlayed,
+					playerGamesPlayed: totalPlayerGamesPlayed,
 					playerPopularity: playerPopularity,
 					playerAveragePosition:
-						playerGamesPlayed === 0
+						totalPlayerGamesPlayed === 0
 							? 0
 							: bgsStatsForCurrentPatch
 									.filter((stat) => stat.playerCardId === heroStat.id)
 									.map((stat) => parseInt(stat.additionalResult))
-									.reduce((a, b) => a + b, 0) / playerGamesPlayed,
+									.reduce((a, b) => a + b, 0) / totalPlayerGamesPlayed,
 					playerAverageMmr:
 						gamesWithMmr.length === 0
 							? 0
@@ -112,23 +112,24 @@ export class BgsStatUpdateParser implements EventParser {
 									.map((stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithNegativeMmr.length,
 					playerTop4:
-						playerGamesPlayed === 0
+						totalPlayerGamesPlayed === 0
 							? 0
 							: (100 *
 									bgsStatsForCurrentPatch
 										.filter((stat) => stat.playerCardId === heroStat.id)
 										.map((stat) => parseInt(stat.additionalResult))
 										.filter((position) => position <= 4).length) /
-							  playerGamesPlayed,
+							  totalPlayerGamesPlayed,
 					playerTop1:
-						playerGamesPlayed === 0
+						totalPlayerGamesPlayed === 0
 							? 0
 							: (100 *
 									bgsStatsForCurrentPatch
 										.filter((stat) => stat.playerCardId === heroStat.id)
 										.map((stat) => parseInt(stat.additionalResult))
 										.filter((position) => position == 1).length) /
-							  playerGamesPlayed,
+							  totalPlayerGamesPlayed,
+					lastPlayedTimestamp: totalPlayerGamesPlayed === 0 ? null : playerGamesPlayed[0].creationTimestamp,
 				} as BgsHeroStat);
 			}) ||
 			[] ||

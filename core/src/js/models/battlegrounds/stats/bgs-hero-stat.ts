@@ -16,6 +16,7 @@ export class BgsHeroStat {
 	readonly playerTop4: number;
 	// readonly playerTop4Percentage: number;
 	readonly playerTop1: number;
+	readonly lastPlayedTimestamp: number;
 	// readonly playerTop1Percentage: number;
 	readonly tribesStat: readonly { tribe: string; percent: number }[];
 	readonly warbandStats: readonly { turn: number; totalStats: number }[];

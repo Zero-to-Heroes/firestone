@@ -116,6 +116,8 @@ export class BgsBuilderService {
 					}
 					return b.playerAverageMmr - a.playerAverageMmr;
 				};
+			case 'last-played':
+				return (a, b) => b.lastPlayedTimestamp - a.lastPlayedTimestamp;
 			case 'average-position':
 			default:
 				return (a, b) => {
