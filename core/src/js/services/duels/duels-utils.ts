@@ -85,7 +85,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 	switch (cardId) {
 		// Passives
 		case CardIds.NonCollectible.Neutral.AvengingArmamentsTavernBrawl:
-		case CardIds.NonCollectible.Neutral.BattleTotem1:
+		case CardIds.NonCollectible.Neutral.BattleTotem2:
 		case CardIds.NonCollectible.Neutral.BookOfWonders:
 		case CardIds.NonCollectible.Neutral.Caltrops:
 		case CardIds.NonCollectible.Neutral.CorruptedFelstoneTavernBrawl:
@@ -106,7 +106,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.SpecialDeliveryTavernBrawl:
 		case CardIds.NonCollectible.Neutral.SpreadingSaplingsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.StarvingTavernBrawl:
-		case CardIds.NonCollectible.Neutral.TotemOfTheDead1:
+		case CardIds.NonCollectible.Neutral.TotemOfTheDead2:
 		case CardIds.NonCollectible.Neutral.UnlockedPotential:
 			return 2;
 		// Passives Ultra Rare
