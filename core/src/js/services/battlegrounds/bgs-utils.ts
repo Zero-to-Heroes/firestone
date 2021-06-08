@@ -259,7 +259,7 @@ export const getAllCardsInGame = (
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
 		.filter((card) => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
-		.filter((card) => !card.id.startsWith('TB_BaconUps')); // Ignore golden
+		.filter((card) => !card.battlegroundsNormalDbfId); // Ignore golden
 };
 
 const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
