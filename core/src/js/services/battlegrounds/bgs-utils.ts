@@ -6,7 +6,7 @@ import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-messag
 import { VisualAchievement } from '../../models/visual-achievement';
 import { capitalizeFirstLetter } from '../utils';
 
-export const getTribeName = (tribe: Race): string => capitalizeFirstLetter(Race[tribe].toLowerCase());
+export const getTribeName = (tribe: Race): string => capitalizeFirstLetter(Race[tribe]?.toLowerCase());
 
 export const getTribeIcon = (tribe: string | Race): string => {
 	const referenceCardId = getReferenceTribeCardId(tribe);
