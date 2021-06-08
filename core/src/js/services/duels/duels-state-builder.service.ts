@@ -51,7 +51,7 @@ import { groupByFunction, sumOnArray } from '../utils';
 import { getDuelsHeroCardId } from './duels-utils';
 
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
-const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.json?v=15';
+const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.gz.json?v=15';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
 
 @Injectable()
@@ -231,7 +231,7 @@ export class DuelsStateBuilderService {
 		}
 		// const totalMatches = runs.map(run => run.wins + run.losses).reduce((a, b) => a + b, 0);
 		// Fallback until everything is properly deployed
-		const gameModeStats = this.getGameModeStats(globalStats, prefs) || globalStats.both;
+		const gameModeStats = globalStats.paidDuels; // this.getGameModeStats(globalStats, prefs) || globalStats.both;
 		const periodStats = this.getPeriodStats(gameModeStats, prefs);
 		// console.debug('periodStats', prefs.duelsActiveTimeFilter, periodStats);
 		if (!periodStats) {
@@ -294,17 +294,17 @@ export class DuelsStateBuilderService {
 		} as DuelsPlayerStats;
 	}
 
-	private getGameModeStats(globalStats: DuelsGlobalStats, prefs: Preferences): DuelsGlobalStatsForGameMode {
-		switch (prefs.duelsActiveGameModeFilter) {
-			case 'duels':
-				return globalStats.duels;
-			case 'paid-duels':
-				return globalStats.paidDuels;
-			case 'all':
-			default:
-				return globalStats.both;
-		}
-	}
+	// private getGameModeStats(globalStats: DuelsGlobalStats, prefs: Preferences): DuelsGlobalStatsForGameMode {
+	// 	switch (prefs.duelsActiveGameModeFilter) {
+	// 		case 'duels':
+	// 			return globalStats.duels;
+	// 		case 'paid-duels':
+	// 			return globalStats.paidDuels;
+	// 		case 'all':
+	// 		default:
+	// 			return globalStats.both;
+	// 	}
+	// }
 
 	private getPeriodStats(stats: DuelsGlobalStatsForGameMode, prefs: Preferences): DuelsGlobalStatsForPeriod {
 		switch (prefs.duelsActiveTimeFilter) {

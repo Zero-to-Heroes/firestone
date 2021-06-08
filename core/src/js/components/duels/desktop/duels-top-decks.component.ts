@@ -56,13 +56,15 @@ export class DuelsTopDecksComponent {
 	private *buildIterator(): IterableIterator<void> {
 		this.allDecks = this._state.playerStats.deckStats;
 		const workingRuns = [...this.allDecks];
-		const step = 40;
+		// One item is a full list of grouped replays for the day
+		// So we don't want to be too aggressive with full runs
+		const step = 1;
+		const minShownReplays = 30;
 		while (workingRuns.length > 0) {
-			// console.log('working runs', workingRuns.length);
 			const currentRuns = [];
 			while (
 				workingRuns.length > 0 &&
-				(currentRuns.length === 0 || this.getTotalRunsLength(currentRuns) < step)
+				(currentRuns.length === 0 || this.getTotalRunsLength(currentRuns) < minShownReplays)
 			) {
 				currentRuns.push(...workingRuns.splice(0, 1));
 			}
@@ -80,7 +82,7 @@ export class DuelsTopDecksComponent {
 		return;
 	}
 
-	private getTotalRunsLength(currentReplays: readonly DuelsGroupedDecks[]): number {
-		return currentReplays ? currentReplays.length : 0;
+	private getTotalRunsLength(groups: readonly DuelsGroupedDecks[]): number {
+		return groups ? groups.map((group) => group.decks).reduce((a, b) => a.concat(b), []).length : 0;
 	}
 }

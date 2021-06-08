@@ -13,10 +13,13 @@ export class DuelsGameModeSortFilterOption implements DuelsDropdownOption {
 			{
 				value: 'all',
 				label: 'All modes',
+				tooltip:
+					'Community stats are only available for Heroic. Your own stats will show both Casual and Heroic.',
 			} as GameModeFilterOption,
 			{
 				value: 'duels',
 				label: `Casual`,
+				tooltip: 'Community stats are only available for Heroic. Your own stats will only show Casual.',
 			} as GameModeFilterOption,
 			{
 				value: 'paid-duels',
@@ -47,4 +50,5 @@ export class DuelsGameModeSortFilterOption implements DuelsDropdownOption {
 
 interface GameModeFilterOption extends IOption {
 	value: DuelsGameModeFilterType;
+	tooltip?: string;
 }
