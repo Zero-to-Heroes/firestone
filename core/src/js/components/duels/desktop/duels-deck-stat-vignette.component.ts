@@ -26,6 +26,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<div class="left-info">
 				<div class="group mode">
 					<img class="game-mode" [src]="gameModeImage" [helpTooltip]="gameModeTooltip" />
+					<div class="rank-text" *ngIf="rankText">{{ rankText }}</div>
 				</div>
 
 				<div class="group result" *ngIf="wins != null">
@@ -104,6 +105,7 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 				? 'assets/images/deck/ranks/casual_duels.png'
 				: 'assets/images/deck/ranks/heroic_duels.png';
 		this.gameModeTooltip = this._stat.gameMode === 'duels' ? 'Duels' : 'Heroic Duels';
+		this.rankText = `${value.rating}`;
 
 		this.wins = this._stat.wins;
 		this.losses = this._stat.losses;
@@ -139,6 +141,7 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 	gameMode: 'duels' | 'paid-duels';
 	gameModeImage: string;
 	gameModeTooltip: string;
+	rankText: string;
 
 	wins: number;
 	losses: number;

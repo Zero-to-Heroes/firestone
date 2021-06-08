@@ -73,6 +73,19 @@
 		position: relative;
 		top: 0px;
 	}
+
+	.rank-text {
+		position: absolute;
+		bottom: 3px;
+		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
+		color: white;
+		font-size: 14px;
+		width: 100%;
+		text-align: center;
+		padding-right: 3px;
+		font-family: Passion One;
+		pointer-events: none;
+	}
 }
 
 .separator {
