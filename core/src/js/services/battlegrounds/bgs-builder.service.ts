@@ -58,7 +58,7 @@ export class BgsBuilderService {
 		} as BattlegroundsAppState);
 	}
 
-	private filterBgsMatchStats(
+	public filterBgsMatchStats(
 		bgsMatchStats: readonly GameStat[],
 		prefs: Preferences,
 		currentBattlegroundsMetaPatch: number,

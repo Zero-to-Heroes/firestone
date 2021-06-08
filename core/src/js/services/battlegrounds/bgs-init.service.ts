@@ -18,6 +18,7 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { OverwolfService } from '../overwolf.service';
 import { PatchesConfigService } from '../patches-config.service';
 import { PreferencesService } from '../preferences.service';
+import { BgsBuilderService } from './bgs-builder.service';
 import { BgsGlobalStatsService } from './bgs-global-stats.service';
 import { BgsStatUpdateParser } from './store/event-parsers/bgs-stat-update-parser';
 import { BgsInitEvent } from './store/events/bgs-init-event';
@@ -39,6 +40,7 @@ export class BgsInitService {
 		private readonly patchesService: PatchesConfigService,
 		private readonly api: ApiRunner,
 		private readonly prefs: PreferencesService,
+		private readonly bgsBuilder: BgsBuilderService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			const newGameStats: GameStats = event.data[0];
@@ -53,7 +55,10 @@ export class BgsInitService {
 
 	public async init(matchStats: GameStats): Promise<BgsStats> {
 		console.log('[bgs-init] bgs init starting');
-		const [bgsGlobalStats] = await Promise.all([this.bgsGlobalStats.loadGlobalStats()]);
+		const [bgsGlobalStats, prefs] = await Promise.all([
+			this.bgsGlobalStats.loadGlobalStats(),
+			this.prefs.getPreferences(),
+		]);
 		console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
 		const patchConfig = await this.patchesService.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
@@ -70,8 +75,10 @@ export class BgsInitService {
 			this.bgsStateUpdater.next(new BgsInitEvent([], statsWithPatch));
 			return statsWithPatch;
 		}
-		const bgsStatsForCurrentPatch = bgsMatchStats.filter((stat) =>
-			currentBattlegroundsMetaPatch ? stat.buildNumber >= currentBattlegroundsMetaPatch.number : true,
+		const bgsStatsForCurrentPatch = this.bgsBuilder.filterBgsMatchStats(
+			bgsMatchStats,
+			prefs,
+			currentBattlegroundsMetaPatch.number,
 		);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
 			statsWithPatch,
