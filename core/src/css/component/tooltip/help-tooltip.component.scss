@@ -8,17 +8,32 @@
 .help-tooltip {
 	text-align: center;
 	cursor: default;
-	padding-left: 15px;
-	padding-right: 15px;
-	padding-top: 5px;
-	padding-bottom: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
 	@extend %achievements-tooltip;
-	background-color: var(--tooltip-background-color);
 	color: var(--tooltip-color);
 	margin: 10px;
-	max-width: 200px;
+	position: relative;
+
+	.text {
+		max-width: 200px;
+		background-color: var(--tooltip-background-color);
+		padding-left: 15px;
+		padding-right: 15px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+}
+
+.tooltip-arrow {
+	width: 16px;
+	height: 9px;
+	position: absolute;
+	--icon-color: var(--tooltip-background-color);
+	fill: var(--tooltip-background-color);
 }

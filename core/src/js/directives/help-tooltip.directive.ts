@@ -48,6 +48,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
 	private tooltipRef: ComponentRef<HelpTooltipComponent>;
+	private target: ElementRef;
 
 	constructor(
 		private readonly overlayPositionBuilder: OverlayPositionBuilder,
@@ -59,7 +60,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	) {}
 
 	ngOnInit() {
-		const target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
+		this.target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
 		//console.debug('targeting tooltip help element', this.position, target);
 
 		const positionArrays: ConnectedPosition[] =
@@ -121,7 +122,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 				  ];
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef
-			.flexibleConnectedTo(target)
+			.flexibleConnectedTo(this.target)
 			.withFlexibleDimensions(false)
 			.withPush(false)
 			.withViewportMargin(10)
@@ -164,6 +165,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 		// Pass content to tooltip component instance
 		this.tooltipRef.instance.text = this._text;
+		this.tooltipRef.instance.setTarget(this.target);
 		// console.debug('setting tooltip text', this._text, tooltipRef);
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {
