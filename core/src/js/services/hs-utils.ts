@@ -196,6 +196,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Shaman.Bogshaper,
 	CardIds.Collectible.Shaman.CagematchCustodian,
 	CardIds.Collectible.Shaman.ElementaryReaction,
+	CardIds.Collectible.Shaman.PrimalDungeoneer,
 	CardIds.Collectible.Shaman.FarSightLegacy,
 	CardIds.Collectible.Shaman.FarSightVanilla,
 	CardIds.Collectible.Shaman.IceFishing,
