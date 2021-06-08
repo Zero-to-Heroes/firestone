@@ -36,7 +36,8 @@
 	flex-shrink: 0;
 	position: relative;
 
-	&.player-images {
+	&.player-images,
+	&.passives {
 		padding-left: 0px;
 		padding-right: 10px;
 	}
@@ -79,7 +80,8 @@
 	margin-right: 3px;
 }
 
-.player-images {
+.player-images,
+.passives {
 	img {
 		width: 30px;
 		height: 30px;

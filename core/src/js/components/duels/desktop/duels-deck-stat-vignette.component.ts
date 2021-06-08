@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
+import { isPassive } from '../../../services/duels/duels-utils';
 import { DuelsViewDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-deck-details-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -15,8 +16,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 @Component({
 	selector: 'duels-deck-stat-vignette',
 	styleUrls: [
-		`../../../../css/component/duels/desktop/duels-deck-stat-vignette.component.scss`,
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/duels/desktop/duels-deck-stat-vignette.component.scss`,
 	],
 	template: `
 		<div class="duels-deck-stat">
@@ -53,6 +54,15 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						[src]="signatureTreasureImage"
 						[cardTooltip]="signatureTreasureCardId"
 						*ngIf="signatureTreasureImage"
+					/>
+				</div>
+
+				<div class="group passives">
+					<img
+						*ngFor="let passive of passives"
+						class="passive"
+						[src]="passive.image"
+						[cardTooltip]="passive.cardId"
 					/>
 				</div>
 
@@ -123,6 +133,7 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 
 		this.deckstring = value.decklist;
 		this.dustCost = value.dustCost;
+		this.passives = this.buildPassives(value);
 	}
 
 	gameMode: 'duels' | 'paid-duels';
@@ -147,6 +158,8 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 	deckstring: string;
 	dustCost: number;
 
+	passives: readonly InternalPassive[];
+
 	private _stat: DuelsDeckStat;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -163,4 +176,18 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 	viewDetails() {
 		this.stateUpdater.next(new DuelsViewDeckDetailsEvent(this._stat.id));
 	}
+
+	buildPassives(deck: DuelsDeckStat): readonly InternalPassive[] {
+		return deck.treasuresCardIds
+			.filter((cardId) => isPassive(cardId, this.allCards))
+			.map((passiveCardId) => ({
+				cardId: passiveCardId,
+				image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${passiveCardId}.jpg`,
+			}));
+	}
+}
+
+interface InternalPassive {
+	image: string;
+	cardId: string;
 }
