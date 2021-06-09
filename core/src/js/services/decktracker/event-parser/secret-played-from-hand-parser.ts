@@ -13,7 +13,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly secretConfig: SecretConfigService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.SECRET_PLAYED;
+		return state && (gameEvent.type === GameEvent.SECRET_PLAYED || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY);
 	}
 
 	async parse(
@@ -73,10 +73,13 @@ export class SecretPlayedFromHandParser implements EventParser {
 							this.secretConfig.getValidSecrets(currentState.metadata, secretClass),
 						),
 				  ] as readonly BoardSecret[]),
-			cardsPlayedThisTurn: isCardCountered
-				? deck.cardsPlayedThisTurn
-				: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
-			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (!isCardCountered ? 1 : 0),
+			cardsPlayedThisTurn:
+				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
+					? deck.cardsPlayedThisTurn
+					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
+			spellsPlayedThisMatch:
+				deck.spellsPlayedThisMatch +
+				(!isCardCountered && gameEvent.type !== GameEvent.SECRET_PUT_IN_PLAY ? 1 : 0),
 		} as DeckState);
 		// console.log('[secret-turn-end] updated deck after secret played', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {

@@ -145,9 +145,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		// 	console.debug('[debug] game event', gameEvent.Type, gameEvent);
-		// }
+		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		//	console.debug('[debug] game event', gameEvent.Type, gameEvent);
+		//}
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -529,6 +529,17 @@ export class GameEvents {
 			case 'SECRET_PLAYED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent, {
+						playerClass:
+							// Should always be the case, except in some older tests
+							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.PlayerClass
+								? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
+								: null,
+					}),
+				);
+				break;
+			case 'SECRET_PUT_IN_PLAY':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SECRET_PUT_IN_PLAY, gameEvent, {
 						playerClass:
 							// Should always be the case, except in some older tests
 							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.PlayerClass
