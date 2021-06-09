@@ -67,7 +67,6 @@ export class CardTooltipComponent {
 	}
 
 	@Input() set cardTooltipCard(value: DeckCard) {
-		// console.log('setting card in tooltip', value);
 		if (!value) {
 			return;
 		}
@@ -114,24 +113,31 @@ export class CardTooltipComponent {
 
 	private async updateInfos() {
 		const prefs: Preferences = this.prefs ? await this.prefs.getPreferences() : null;
+		// There can be multiple cardIds, in the case of normal + golden card tooltip for instance
 		this.cards = this._cardIds
-			.filter((cardId) => cardId)
+			// Empty card IDs are necessary when showing buff only
+			// .filter((cardId) => cardId)
 			.reverse()
 			.map((cardId) => {
 				const highRes = prefs?.collectionUseHighResImages;
-				const imagePath = highRes ? '512' : 'compressed';
-				const withBgs = this.isBgs
-					? cardId.includes('premium')
-						? `compressed/battlegrounds/${cardId}.png`
-						: `compressed/battlegrounds/${cardId}_bgs.png`
-					: `${imagePath}/${cardId}.png`;
-				const image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}?v=3`;
+				let image = null;
+				if (cardId) {
+					const imagePath = highRes ? '512' : 'compressed';
+					const withBgs = this.isBgs
+						? cardId.includes('premium')
+							? `compressed/battlegrounds/${cardId}.png`
+							: `compressed/battlegrounds/${cardId}_bgs.png`
+						: `${imagePath}/${cardId}.png`;
+					image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${withBgs}?v=3`;
+				}
 				return {
 					cardId: cardId,
 					image: image,
+					// For now there are no cases where we have multiple card IDs, and different buffs for
+					// each one. If the case arises, we'll have to handle this differently
+					buffs: this.buffs,
 					cardType: this._cardType,
 					createdBy: this.createdBy,
-					buffs: this.buffs,
 					additionalClass: this._additionalClass,
 				};
 			});
