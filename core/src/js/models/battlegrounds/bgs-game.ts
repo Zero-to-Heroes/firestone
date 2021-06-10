@@ -83,30 +83,13 @@ export class BgsGame {
 		} as BgsGame);
 	}
 
-	// Not all players finish their turns at the same time.
+	// Not all players finish their battles at the same time. So you might still be in battle, but
+	// another player might have already gone back to the tavern and levelled up for instance
 	public getCurrentTurnAdjustedForAsyncPlay(): number {
-		if (this.battleInfo) {
+		console.debug('getting current turn adjusted', this.currentTurn, this.phase, this);
+		if (this.phase === 'combat') {
 			return this.currentTurn + 1;
 		}
 		return this.currentTurn;
 	}
-
-	// public addBattleBoardInfo(bgsInfo: BgsBoardInfo): BgsGame {
-	// 	const battleInfo: any = this.battleInfo || {};
-	// 	//console.log('will set battle info', bgsInfo, battleInfo);
-	// 	if (!battleInfo.playerBoard) {
-	// 		battleInfo.playerBoard = bgsInfo;
-	// 		// this.battleInfoStatus = 'waiting-for-result';
-	// 	} else if (!battleInfo.opponentBoard) {
-	// 		battleInfo.opponentBoard = bgsInfo;
-	// 	} else {
-	// 		console.warn('trying to set bgsinfo in full data', bgsInfo);
-	// 		return this;
-	// 	}
-	// 	console.log('[bgs-game] setting battle info', battleInfo.opponentBoard?.player?.cardId);
-	// 	return Object.assign(new BgsGame(), this, {
-	// 		battleInfo: battleInfo,
-	// 		battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',
-	// 	} as BgsGame);
-	// }
 }
