@@ -200,7 +200,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		return [
 			{
 				value: 'all-time',
-				label: 'All time',
+				label: 'Past 100 days',
 			} as TimeFilterOption,
 			{
 				value: 'past-30',
