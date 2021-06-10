@@ -395,7 +395,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 			return null;
 		}
 
-		console.debug('building from board', bgsBoard);
+		// console.debug('building from board', bgsBoard);
 		const boardEntities = bgsBoard.board.map((boardEntity) =>
 			boardEntity instanceof Entity || boardEntity.tags instanceof Map
 				? Entity.create(new Entity(), boardEntity as EntityDefinition)
@@ -417,12 +417,12 @@ export class ReplayInfoComponent implements AfterViewInit {
 		} as KnownBoard;
 	}
 
-	private extractDamage(normalizedCardId: string, totalMinionsDamageDealt: { [cardId: string]: number }): number {
-		return Object.keys(totalMinionsDamageDealt)
-			.filter((cardId) => normalizeCardId(cardId, this.allCards) === normalizedCardId)
-			.map((cardId) => totalMinionsDamageDealt[cardId])
-			.reduce((a, b) => a + b, 0);
-	}
+	// private extractDamage(normalizedCardId: string, totalMinionsDamageDealt: { [cardId: string]: number }): number {
+	// 	return Object.keys(totalMinionsDamageDealt)
+	// 		.filter((cardId) => normalizeCardId(cardId, this.allCards) === normalizedCardId)
+	// 		.map((cardId) => totalMinionsDamageDealt[cardId])
+	// 		.reduce((a, b) => a + b, 0);
+	// }
 }
 
 interface InternalLoot {
