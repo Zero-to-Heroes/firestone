@@ -143,9 +143,13 @@ export const forcedHiddenCardCreators = [
 ];
 
 export const forceHideInfoWhenDrawnInfluencers = [
-	CardIds.Collectible.Rogue.SecretPassage,
+	// Doesn't trigger Mankrik's Wife, so it probably behaves like Secret Passage
+	CardIds.Collectible.Hunter.TrackingCore,
+	CardIds.Collectible.Hunter.TrackingLegacy,
+	CardIds.Collectible.Hunter.TrackingVanilla,
 	// From what I've tested, Glide / Plot Twist seem to behave properly (cast when drawn
 	// effects apply)
+	CardIds.Collectible.Rogue.SecretPassage,
 ];
 
 export const publicCardCreators = [
@@ -168,6 +172,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Hunter.WarsongWrangler,
 	CardIds.Collectible.Mage.AncientMysteries,
 	CardIds.Collectible.Mage.Arcanologist,
+	CardIds.Collectible.Mage.ArcanologistCore,
 	CardIds.Collectible.Mage.ArchmageArugal,
 	CardIds.Collectible.Mage.BookOfSpecters,
 	CardIds.Collectible.Mage.ElementalAllies,
@@ -222,6 +227,7 @@ export const publicCardCreators = [
 	CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
 	CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
 	CardIds.Collectible.Warrior.StageDive,
+	CardIds.NonCollectible.Warrior.StageDive_StageDive,
 	CardIds.Collectible.Warrior.TownCrier1,
 	CardIds.Collectible.Warrior.RingmasterWhatley,
 	CardIds.Collectible.Warrior.VarianWrynn1,
