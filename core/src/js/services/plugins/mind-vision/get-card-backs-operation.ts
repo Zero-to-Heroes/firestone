@@ -10,15 +10,20 @@ export class GetCardBacksOperation extends MindVisionOperationFacade<readonly Ca
 			ow,
 			'getCardBacks',
 			() => mindVision.getCardBacks(),
-			(cardBacks: any[]) => cardBacks.length === 0,
-			(cardBacks) =>
-				cardBacks.map(
+			(cardBacks: any[]) =>
+				// Classic is ID = 0
+				cardBacks.length === 0 || cardBacks.filter((cardBack) => cardBack.CardBackId === 0).length > 1,
+			(cardBacks) => {
+				const result = cardBacks.map(
 					(cardBack) =>
 						({
 							id: cardBack.CardBackId,
 							owned: true,
 						} as CardBack),
-				),
+				);
+				console.debug('mapping card back results', result, cardBacks);
+				return result;
+			},
 			20,
 			5000,
 		);
