@@ -2,7 +2,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { cardsRevealedWhenDrawn, publicCardCreators } from '../../hs-utils';
+import { cardsRevealedWhenDrawn, forceHideInfoWhenDrawnInfluencers, publicCardCreators } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -20,10 +20,20 @@ export class CardDrawParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
 
+		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
+			gameEvent.additionalData?.lastInfluencedByCardId,
+		);
 		const isCardInfoPublic =
 			// Also includes a publicCardCreator so that cards drawn from deck when we know what they are (eg
 			// Southsea Scoundrel) are flagged
-			isPlayer || cardsRevealedWhenDrawn.includes(cardId) || publicCardCreators.includes(lastInfluencedByCardId);
+			// Hide the info when card is drawn by Secret Passage? The scenario is:
+			// 1. Add a card revealed when drawn to your deck
+			// 2. Cast Secret Passage: the card is added to your hand, but the "cast when drawn" effect doesn't trigger
+			// (no idea why it behaves like that)
+			// 3. As a result, the card info is considered public, and we show it
+			isPlayer ||
+			(!isCardDrawnBySecretPassage &&
+				(cardsRevealedWhenDrawn.includes(cardId) || publicCardCreators.includes(lastInfluencedByCardId)));
 		const isCreatorPublic = isCardInfoPublic || publicCardCreators.includes(lastInfluencedByCardId);
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);

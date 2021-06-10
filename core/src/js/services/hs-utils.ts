@@ -142,6 +142,12 @@ export const forcedHiddenCardCreators = [
 	CardIds.NonCollectible.Neutral.MaskOfMimicryTavernBrawl,
 ];
 
+export const forceHideInfoWhenDrawnInfluencers = [
+	CardIds.Collectible.Rogue.SecretPassage,
+	// From what I've tested, Glide / Plot Twist seem to behave properly (cast when drawn
+	// effects apply)
+];
+
 export const publicCardCreators = [
 	CardIds.Collectible.Demonhunter.VengefulSpirit2,
 	CardIds.Collectible.Druid.FungalFortunes,
