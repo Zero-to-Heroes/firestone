@@ -17,29 +17,31 @@ export class CardStolenParser implements EventParser {
 		// Ideally ,this should just use the entity tags for the zone instead of
 		// relying on finding the card somewhere
 		const [cardId, , , entityId] = gameEvent.parse();
-		//console.log('Handling stolen card event', cardId, gameEvent, currentState);
+		// console.debug('Handling stolen card event', cardId, gameEvent, currentState);
 		const isPlayerStolenFrom = gameEvent.additionalData.newControllerId === gameEvent.opponentPlayer.PlayerId;
 
 		const stolenFromDeck = isPlayerStolenFrom ? currentState.playerDeck : currentState.opponentDeck;
 
 		const cardInHand = this.helper.findCardInZone(stolenFromDeck.hand, null, entityId);
-		// console.log('\tcard in hand', cardInHand, stolenFromDeck.hand);
+		// console.debug('\tcard in hand', cardInHand, stolenFromDeck.hand);
 		const cardInBoard = this.helper.findCardInZone(stolenFromDeck.board, null, entityId);
-		// console.log('\tcard in board', cardInBoard, stolenFromDeck.board);
+		// console.debug('\tcard in board', cardInBoard, stolenFromDeck.board);
 		const cardInDeck = this.helper.findCardInZone(stolenFromDeck.deck, null, entityId);
-		// console.log('\tcard in deck', cardInDeck, stolenFromDeck.deck);
+		// console.debug('\tcard in deck', cardInDeck, stolenFromDeck.deck);
 		const secret = stolenFromDeck.secrets.find((entity) => entity.entityId === entityId);
 
 		const [stolenHand, removedCardFromHand] = cardInHand
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.hand, cardId, entityId)
 			: [stolenFromDeck.hand, undefined];
-		//console.log('\tnew stolen hand', stolenHand, removedCardFromHand);
+		// console.debug('\tnew stolen hand', stolenHand, removedCardFromHand);
 		const [stolenBoard] = cardInBoard
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.board, cardId, entityId)
 			: [stolenFromDeck.board, undefined];
+		// console.debug('\tnew stolen board', stolenBoard);
 		const [stolenDeck] = cardInDeck
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)
 			: [stolenFromDeck.deck, undefined];
+		// console.debug('\tnew stolenDeck', stolenDeck);
 		const stolenSecrets = stolenFromDeck.secrets.filter((entity) => entity.entityId !== entityId);
 
 		// See card-played-from-hand
@@ -52,7 +54,7 @@ export class CardStolenParser implements EventParser {
 			!removedCardFromHand.cardId
 		) {
 			const result = this.helper.removeSingleCardFromZone(stolenDeck, cardId, entityId);
-			// const removedFromDeck = result[1];
+			// console.debug('\tknown opponent decklist, doing stuff', stolenDeck);
 			newDeck = result[0];
 		}
 		const newStolenDeck = Object.assign(new DeckState(), stolenFromDeck, {
@@ -74,7 +76,7 @@ export class CardStolenParser implements EventParser {
 					} as DeckCard),
 			  )
 			: stealingToDeck.hand;
-		//console.log('\tnew stoling hand', stealingHand);
+		// console.debug('\tnew stealing hand', stealingHand);
 		const stealingBoard = cardInBoard
 			? this.helper.addSingleCardToZone(
 					stealingToDeck.board,
@@ -93,9 +95,10 @@ export class CardStolenParser implements EventParser {
 					} as DeckCard),
 			  )
 			: stealingToDeck.deck;
+		// console.debug('\tnew stealing deck', stealingHand);
 		const stealingSecrets = secret ? [...stealingToDeck.secrets, secret] : stealingToDeck.secrets;
-		// console.log('new stealing deck', stealingDeck, cardInDeck);
-		// console.log('new stolen from deck', stolenFromDeck);
+		// console.debug('new stealing deck', stealingDeck, cardInDeck);
+		// console.debug('new stolen from deck', stolenFromDeck);
 		const newStealingDeck = Object.assign(new DeckState(), stealingToDeck, {
 			hand: stealingHand,
 			board: stealingBoard,

@@ -68,6 +68,7 @@ import { JadeGolemParser } from './event-parser/jade-golem-parser';
 import { LocalPlayerParser } from './event-parser/local-player-parser';
 import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
+import { MindrenderIlluciaParser } from './event-parser/mindrender-illucia-parser';
 import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-parser';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { MinionGoDormantParser } from './event-parser/minion-go-dormant-parser';
@@ -630,6 +631,7 @@ export class GameStateService {
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
 			new CthunRevealedParser(this.helper, this.allCards),
+			new MindrenderIlluciaParser(this.helper, this.allCards),
 			new GlobalMinionEffectParser(this.helper, this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards),

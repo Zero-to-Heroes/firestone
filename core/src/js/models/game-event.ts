@@ -94,6 +94,8 @@ export class GameEvent implements GameStateEvent {
 	public static readonly MINION_GO_DORMANT = 'MINION_GO_DORMANT';
 	public static readonly JADE_GOLEM = 'JADE_GOLEM';
 	public static readonly CTHUN = 'CTHUN';
+	public static readonly MINDRENDER_ILLUCIA_START = 'MINDRENDER_ILLUCIA_START';
+	public static readonly MINDRENDER_ILLUCIA_END = 'MINDRENDER_ILLUCIA_END';
 
 	public static readonly GAME_STATE_UPDATE = 'GAME_STATE_UPDATE';
 	public static readonly ENTITY_UPDATE = 'ENTITY_UPDATE';

@@ -450,6 +450,12 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'MINDRENDER_ILLUCIA_START':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINDRENDER_ILLUCIA_START, gameEvent));
+				break;
+			case 'MINDRENDER_ILLUCIA_END':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINDRENDER_ILLUCIA_END, gameEvent));
+				break;
 			case 'HERO_POWER_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.HERO_POWER_CHANGED, gameEvent, {
