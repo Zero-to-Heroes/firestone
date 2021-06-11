@@ -10,9 +10,9 @@ export class GetCardBacksOperation extends MindVisionOperationFacade<readonly Ca
 			ow,
 			'getCardBacks',
 			() => mindVision.getCardBacks(),
-			(cardBacks: any[]) =>
-				// Classic is ID = 0
-				cardBacks.length === 0 || cardBacks.filter((cardBack) => cardBack.CardBackId === 0).length > 1,
+			// Classic is ID = 0
+			//|| cardBacks.filter((cardBack) => cardBack.CardBackId === 0).length > 1,
+			(cardBacks: any[]) => cardBacks.length === 0,
 			(cardBacks) => {
 				const result = cardBacks.map(
 					(cardBack) =>
