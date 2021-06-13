@@ -99,6 +99,7 @@ export class GameEvent implements GameStateEvent {
 
 	public static readonly GAME_STATE_UPDATE = 'GAME_STATE_UPDATE';
 	public static readonly ENTITY_UPDATE = 'ENTITY_UPDATE';
+	public static readonly COPIED_FROM_ENTITY_ID = 'COPIED_FROM_ENTITY_ID';
 
 	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
 	public static readonly BATTLEGROUNDS_HERO_SELECTION = 'BATTLEGROUNDS_HERO_SELECTION';

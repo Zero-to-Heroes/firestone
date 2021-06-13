@@ -234,6 +234,20 @@ export class DeckManipulationHelper {
 		return [...zone, newCard];
 	}
 
+	public updateCardInDeck(deck: DeckState, card: DeckCard): DeckState {
+		if (!card?.entityId) {
+			console.warn('missing entityId for card update', card);
+			return deck;
+		}
+
+		return deck.update({
+			hand: this.updateCardInZone(deck.hand, card.entityId, card.cardId),
+			board: this.updateCardInZone(deck.board, card.entityId, card.cardId),
+			deck: this.updateCardInZone(deck.deck, card.entityId, card.cardId),
+			otherZone: this.updateCardInZone(deck.otherZone, card.entityId, card.cardId),
+		} as DeckState);
+	}
+
 	public updateCardInZone(zone: readonly DeckCard[], entityId: number, cardId: string): readonly DeckCard[] {
 		if (!cardId) {
 			return zone;

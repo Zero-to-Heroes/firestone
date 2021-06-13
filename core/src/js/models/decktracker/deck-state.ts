@@ -101,6 +101,12 @@ export class DeckState {
 		return Object.assign(new DeckState(), this, value);
 	}
 
+	public findCard(entityId: number): DeckCard {
+		return [...this.hand, ...this.deck, ...this.board, ...this.otherZone].find(
+			(card) => card.entityId === entityId,
+		);
+	}
+
 	// TODO: Probably not the place for these methods
 	public containsGalakrond(allCards?: AllCardsService): boolean {
 		if (this.galakrondInvokesCount > 0) {

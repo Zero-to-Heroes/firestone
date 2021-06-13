@@ -44,6 +44,7 @@ import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { ConstructedAchievementsProgressionParser } from './event-parser/constructed/constructed-achievements-progression-parser';
 import { ConstructedChangeTabParser } from './event-parser/constructed/constructed-change-tab-parser';
 import { ListCardsPlayedFromInitialDeckParser } from './event-parser/constructed/list-cards-played-from-initial-deck-parser';
+import { CopiedFromEntityIdParser } from './event-parser/copied-from-entity-id-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { CreateCardInGraveyardParser } from './event-parser/create-card-in-graveyard-parser';
 import { CthunParser } from './event-parser/cthun-parser';
@@ -633,6 +634,7 @@ export class GameStateService {
 			new CthunRevealedParser(this.helper, this.allCards),
 			new MindrenderIlluciaParser(this.helper, this.allCards),
 			new GlobalMinionEffectParser(this.helper, this.allCards),
+			new CopiedFromEntityIdParser(this.helper, this.allCards),
 
 			new CreateCardInGraveyardParser(this.helper, this.allCards),
 			new ReconnectOverParser(this.deckHandler),

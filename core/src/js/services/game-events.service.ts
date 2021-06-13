@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
+import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
 import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
 import { MemoryUpdate } from '../models/memory/memory-update';
@@ -794,6 +795,14 @@ export class GameEvents {
 							targets: gameEvent.Value.Targets,
 						},
 					} as DamageGameEvent),
+				);
+				break;
+			case 'COPIED_FROM_ENTITY_ID':
+				this.gameEventsEmitter.allEvents.next(
+					CopiedFromEntityIdGameEvent.build(GameEvent.COPIED_FROM_ENTITY_ID, gameEvent, {
+						copiedCardControllerId: gameEvent.Value.AdditionalProps.CopiedCardControllerId,
+						copiedCardEntityId: gameEvent.Value.AdditionalProps.CopiedCardEntityId,
+					}),
 				);
 				break;
 			case 'HEALING':
