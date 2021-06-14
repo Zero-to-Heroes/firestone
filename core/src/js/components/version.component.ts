@@ -19,6 +19,7 @@ import { OverwolfService } from '../services/overwolf.service';
 			inlineSVG="assets/svg/restore.svg"
 			helpTooltip="New version available! Click to update."
 			[helpTooltipVisibleBeforeHover]="true"
+			[helpTooltipShowArrow]="true"
 			(click)="updateApp()"
 		></div>
 		<div
@@ -27,6 +28,7 @@ import { OverwolfService } from '../services/overwolf.service';
 			inlineSVG="assets/svg/restore.svg"
 			helpTooltip="An error occurred while updating the app. Please restart Overwolf to force the update."
 			[helpTooltipVisibleBeforeHover]="true"
+			[helpTooltipShowArrow]="true"
 		></div>
 		<div
 			class="update restart"
@@ -34,6 +36,7 @@ import { OverwolfService } from '../services/overwolf.service';
 			inlineSVG="assets/svg/restore.svg"
 			helpTooltip="New version ready, click to restart the app. We recommend that you do it while not in a match."
 			[helpTooltipVisibleBeforeHover]="true"
+			[helpTooltipShowArrow]="true"
 			(click)="restartApp()"
 		></div>
 	`,

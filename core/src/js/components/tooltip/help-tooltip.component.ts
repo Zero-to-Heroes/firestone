@@ -14,6 +14,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 				[style.top.px]="arrowTop"
 				[style.left.px]="arrowLeft"
 				[style.transform]="arrowTransform"
+				*ngIf="_showArrow"
 			>
 				<polygon points="0,9 8,0 16,9" />
 			</svg>
@@ -22,7 +23,21 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HelpTooltipComponent {
+	@Input() set text(value: string) {
+		this._text = this.sanitizer.bypassSecurityTrustHtml(`<div>${value}</div>`);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+	@Input() set showArrow(value: boolean) {
+		this._showArrow = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	_text: SafeHtml;
+	_showArrow = false;
 
 	arrowTop: number;
 	arrowLeft: number;
@@ -34,14 +49,11 @@ export class HelpTooltipComponent {
 
 	constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer, private elRef: ElementRef) {}
 
-	@Input() set text(value: string) {
-		this._text = this.sanitizer.bypassSecurityTrustHtml(`<div>${value}</div>`);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
 	public setTarget(target: ElementRef) {
+		if (!this._showArrow) {
+			return;
+		}
+
 		setTimeout(() => {
 			this.arrowElement = this.elRef.nativeElement.querySelector('.tooltip-arrow');
 			this.element = this.elRef.nativeElement.querySelector('.help-tooltip');
