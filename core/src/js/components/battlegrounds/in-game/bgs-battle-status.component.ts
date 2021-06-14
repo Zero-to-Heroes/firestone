@@ -99,6 +99,17 @@ declare let amplitude: any;
 					<div class="damage-value">{{ damageLost || '--' }}</div>
 				</div>
 			</div>
+			<div class="damage-container lethal" *ngIf="!_simulationMessage">
+				<div class="title">Lethal</div>
+				<div class="damage dealt" helpTooltip="% chance to kill the enemy hero">
+					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
+					<div class="damage-value">{{ wonLethalChance || '--' }}</div>
+				</div>
+				<div class="damage received" helpTooltip="% chance to die this battle">
+					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
+					<div class="damage-value">{{ lostLethalChance || '--' }}</div>
+				</div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,11 +128,13 @@ export class BgsBattleStatusComponent {
 	temporaryBattleTooltip: string;
 	damageWon: string;
 	damageLost: string;
+	wonLethalChance: string;
+	lostLethalChance: string;
 
 	processingSimulationSample: boolean;
 
 	private _previousStatus: string;
-	private _previousBattle;
+	private _previousBattle: SimulationResult;
 	private tempInterval;
 
 	@Input() set battleSimulationStatus(value: 'empty' | 'waiting-for-result' | 'done') {
@@ -182,6 +195,8 @@ export class BgsBattleStatusComponent {
 			this.loseSimulationSample = [];
 			this.damageWon = null;
 			this.damageLost = null;
+			this.wonLethalChance = null;
+			this.lostLethalChance = null;
 		} else if (this._previousStatus === 'waiting-for-result') {
 			// console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
@@ -204,6 +219,8 @@ export class BgsBattleStatusComponent {
 			this.loseSimulationSample = this._previousBattle.outcomeSamples.lost;
 			this.damageWon = this._previousBattle.averageDamageWon?.toFixed(1);
 			this.damageLost = this._previousBattle.averageDamageLost?.toFixed(1);
+			this.wonLethalChance = this._previousBattle.wonLethalPercent?.toFixed(1) + '%';
+			this.lostLethalChance = this._previousBattle.lostLethalPercent?.toFixed(1) + '%';
 		} else {
 			// console.log('no value in nextbattle', this._previousBattle, this._previousStatus);
 		}

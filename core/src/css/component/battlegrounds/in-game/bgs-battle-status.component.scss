@@ -52,6 +52,27 @@
 				}
 			}
 		}
+
+		&.lethal {
+			padding-left: 0;
+
+			.damage {
+				.damage-icon {
+					width: 15px;
+					height: 15px;
+
+					::ng-deep svg {
+						width: 15px;
+						height: 15px;
+					}
+				}
+				&.received {
+					.damage-icon {
+						transform: none;
+					}
+				}
+			}
+		}
 	}
 
 	.probas .title,

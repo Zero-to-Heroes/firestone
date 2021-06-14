@@ -1,5 +1,5 @@
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag } from '@firestone-hs/reference-data';
+import { GameTag, GameType } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
@@ -10,6 +10,7 @@ import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { GameEvents } from '../../../game-events.service';
+import { defaultStartingHp } from '../../../hs-utils';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
@@ -108,17 +109,23 @@ export class BgsPlayerBoardParser implements EventParser {
 		const bgsBoard: BoardEntity[] = player.buildBgsEntities(playerBoard.board);
 		const secrets: BoardSecret[] = player.buildBgsEntities(playerBoard.secrets);
 		let tavernTier =
-			playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
+			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value ||
 			player.getCurrentTavernTier();
 		if (!tavernTier) {
 			console.warn('[bgs-simulation] no tavern tier', event);
 			tavernTier = 1;
 		}
 
+		const health =
+			playerBoard.hero.Tags?.find((tag) => tag.Name === GameTag.HEALTH)?.Value ??
+			defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerBoard.hero.CardId);
+		const damage = playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.DAMAGE)?.Value ?? 0;
+		console.debug('set hp left for', playerBoard.hero.CardId, health - damage, health, damage, playerBoard);
 		return {
 			player: {
 				tavernTier: tavernTier,
-				cardId: playerBoard.hero?.CardId, // In case it's the ghost, the hero power is not active
+				hpLeft: health - damage,
+				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
 			},
