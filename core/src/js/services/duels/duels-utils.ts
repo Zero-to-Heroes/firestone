@@ -90,7 +90,6 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.Caltrops:
 		case CardIds.NonCollectible.Neutral.CorruptedFelstoneTavernBrawl:
 		case CardIds.NonCollectible.Neutral.DisksOfLegend:
-		case CardIds.NonCollectible.Neutral.DoubleTime:
 		case CardIds.NonCollectible.Neutral.DragonboneRitualTavernBrawl:
 		case CardIds.NonCollectible.Neutral.EerieStoneTavernBrawl:
 		case CardIds.NonCollectible.Neutral.EmeraldGogglesTavernBrawl:
@@ -100,8 +99,6 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.HagathasEmbrace:
 		case CardIds.NonCollectible.Neutral.KhadgarsScryingOrb:
 		case CardIds.NonCollectible.Neutral.MummyMagic:
-		case CardIds.NonCollectible.Neutral.OrbOfRevelationTavernBrawl:
-		case CardIds.NonCollectible.Neutral.RallyTheTroopsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
 		case CardIds.NonCollectible.Neutral.SpecialDeliveryTavernBrawl:
 		case CardIds.NonCollectible.Neutral.SpreadingSaplingsTavernBrawl:
@@ -112,8 +109,11 @@ export const duelsTreasureRank = (cardId: string): number => {
 		// Passives Ultra Rare
 		case CardIds.NonCollectible.Neutral.BandOfBees:
 		case CardIds.NonCollectible.Neutral.CapturedFlag:
+		case CardIds.NonCollectible.Neutral.DoubleTime:
 		case CardIds.NonCollectible.Neutral.ElixirOfVigor:
 		case CardIds.NonCollectible.Neutral.ManastormTavernBrawl:
+		case CardIds.NonCollectible.Neutral.OrbOfRevelationTavernBrawl:
+		case CardIds.NonCollectible.Neutral.RallyTheTroopsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.RobeOfTheMagi:
 		case CardIds.NonCollectible.Neutral.Stargazing:
 			return 3;
