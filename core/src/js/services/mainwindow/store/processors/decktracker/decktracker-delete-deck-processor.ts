@@ -23,8 +23,11 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
 		const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[event.deckstring] ?? [];
+		console.log('[deck-delete] deletedDeckDates', event.deckstring, currentPrefs.desktopDeckDeletes);
 		const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
+		console.log('[deck-delete] newDeleteDates', newDeleteDates);
 		const newPrefs = await this.prefs.setDeckDeleteDates(event.deckstring, newDeleteDates);
+		console.log('[deck-delete] newPrefs', newPrefs.desktopDeckDeletes);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
 			decks: this.decksStateBuilder.buildState(
 				currentState.stats,
