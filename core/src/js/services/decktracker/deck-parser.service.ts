@@ -52,6 +52,7 @@ export class DeckParserService {
 	private currentGameType: GameType;
 	private currentScenarioId: number;
 	private currentNonGamePlayScene: SceneMode;
+	private currentScene: SceneMode;
 
 	private deckTemplates: readonly DeckInfoFromMemory[];
 
@@ -114,6 +115,7 @@ export class DeckParserService {
 					!changes.CurrentScene || changes.CurrentScene === SceneMode.GAMEPLAY
 						? this.currentNonGamePlayScene
 						: changes.CurrentScene;
+				this.currentScene = changes.CurrentScene;
 			}
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
@@ -139,15 +141,24 @@ export class DeckParserService {
 		// 	this.currentGameType,
 		// 	this.selectedDeckId,
 		// );
-		if (
-			this.currentGameType === GameType.GT_BATTLEGROUNDS ||
-			this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
-		) {
-			// console.debug('BG game, returning');
-			return;
-		}
 
 		if (this.goingIntoQueueRegex.exec(logLine)) {
+			if (
+				this.currentGameType === GameType.GT_BATTLEGROUNDS ||
+				this.currentGameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
+			) {
+				// console.debug('BG game, returning');
+				return;
+			}
+
+			// Don't retrieve the deck when leaving the gameplay mode
+			// Otherwise, we get the deck from memory, then cache it, and then next time we want to
+			// play with another deck we just use the cache and load the wrongly cached deck
+			if (this.currentScene === SceneMode.GAMEPLAY) {
+				console.log('[deck-parser] leaving game, not re-reading deck from memory');
+				return;
+			}
+
 			// We get this as soon as possible, since once the player has moved out from the
 			// dekc selection screen the info becomes unavailable
 			console.log('[deck-parser] reading deck from memory');
