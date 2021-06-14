@@ -29,6 +29,10 @@ export const isWindowHidden = (state: string): boolean => {
 };
 
 export const capitalizeFirstLetter = (input: string): string => {
+	if (!input) {
+		return null;
+	}
+
 	const lowerInput = input.toLowerCase();
 	return lowerInput.charAt(0).toUpperCase() + lowerInput.slice(1);
 };
