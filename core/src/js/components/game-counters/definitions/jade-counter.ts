@@ -17,7 +17,7 @@ export class JadeCounterDefinition implements CounterDefinition {
 		}
 
 		const golemSize = deck.jadeGolemSize || 0;
-		const cardId = CardIds.NonCollectible.Neutral['JadeGolem' + Math.max(golemSize, 1)];
+		const cardId = CardIds.NonCollectible.Neutral['JadeGolemToken' + Math.max(golemSize, 1)];
 		return {
 			type: 'jadeGolem',
 			value: golemSize,
