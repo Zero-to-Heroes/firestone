@@ -39,7 +39,7 @@ export class BuffInfoComponent {
 		this.count = value.count;
 		this.name = card.name;
 		this.iconUrl = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.bufferCardId}.jpg`;
-		this.text = card.text;
+		this.text = card.text?.replace(/<\/?[ib]>/g, '');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
