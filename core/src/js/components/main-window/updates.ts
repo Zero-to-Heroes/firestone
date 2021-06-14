@@ -53,6 +53,19 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the secret cast by Sparkjoy Cheat would cause the secret helper to grey out some options.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue where sometimes the deck used when battling a friend would use the previous match's decklist.`,
+							},
+						],
+					},
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Add lethal chances to battle simulator.`,
+							},
 						],
 					},
 					{
@@ -104,6 +117,18 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `Flag the card in hand that receives Aegwynn's buff.`,
+							},
+							{
+								type: 'feature',
+								text: `Reveal all enemy secrets in the secrets helper when playing Horde Operative.`,
+							},
+							{
+								type: 'feature',
+								text: `Add support for Mindrender Illucia (fixes a few bugs and properly flags the cards in hand upon their return).`,
+							},
+							{
+								type: 'feature',
 								text: `Flag as "created by" the cards drawn by Arcanologist (Core), Stage Drive (Corrupted) and Primal Dungeoneer.`,
 							},
 							{
@@ -137,7 +162,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix some treasures being incorrectly grouped into the Pool 1 (instead of Pool 2 where they belong).`,
+								text: `Fix some treasures being incorrectly grouped into the Pool 1 (instead of Pool 2 where they belong) and add a few more treasures to the Ultra Rare bucket.`,
 							},
 						],
 					},
@@ -147,6 +172,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where multi-set bundles (like the Standard Bundle) would count towards the pity timer of the set of the first card opened in the pack.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where setting the decklist filter then selecting the "All games" filter would still only show replays of game with the previously selected decklist.`,
 							},
 						],
 					},
