@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy } from '@angular/core';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
 
@@ -10,7 +11,11 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 	],
 	template: `
 		<div class="title-bar">
-			<decktracker-deck-name [deck]="deck" *ngIf="showTitleBar"></decktracker-deck-name>
+			<decktracker-deck-name
+				[deck]="deck"
+				[tooltipPosition]="_tooltipPosition"
+				*ngIf="showTitleBar"
+			></decktracker-deck-name>
 			<decktracker-cards-recap [deck]="deck" *ngIf="showTitleBar"></decktracker-cards-recap>
 			<decktracker-winrate-recap
 				*ngIf="showDeckWinrate"
@@ -33,6 +38,13 @@ export class DeckTrackerTitleBarComponent implements OnDestroy {
 	@Input() showMatchupWinrate: boolean;
 	@Input() deckWinrate: StatsRecap;
 	@Input() matchupWinrate: StatsRecap;
+
+	_tooltipPosition: CardTooltipPositionType;
+
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		// console.log('[decktracker-deck-list] setting tooltip position', value);
+		this._tooltipPosition = value;
+	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {

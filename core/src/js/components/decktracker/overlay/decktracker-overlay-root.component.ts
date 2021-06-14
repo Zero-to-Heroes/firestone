@@ -67,6 +67,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 							[showMatchupWinrate]="showMatchupWinrate"
 							[deckWinrate]="deckStatsRecap"
 							[matchupWinrate]="matchupStatsRecap"
+							[tooltipPosition]="tooltipPosition"
 						></decktracker-title-bar>
 						<decktracker-deck-list
 							[deckState]="deck"
@@ -376,7 +377,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		} else {
 			this.tooltipPosition = 'left';
 		}
-		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
+		// console.debug('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -1,7 +1,6 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import {
-	AfterViewInit,
 	ChangeDetectorRef,
 	ComponentRef,
 	Directive,
@@ -15,20 +14,32 @@ import {
 } from '@angular/core';
 import { ConfirmationComponent } from '../components/tooltip/confirmation.component';
 import { Events } from '../services/events.service';
+import { CardTooltipPositionType } from './card-tooltip-position.type';
 
 @Directive({
 	selector: '[confirmationTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
+export class AskConfirmationDirective implements OnDestroy {
 	@Input() askConfirmation: boolean;
 	@Input() confirmationTitle: string;
 	@Input() confirmationText: string;
 	@Input() validButtonText: string;
 	@Input() cancelButtonText: string;
+	@Input() showOk = true;
+
+	@Input() set confirmationPosition(value: CardTooltipPositionType) {
+		if (value === this._confirmationPosition || value === 'none') {
+			return;
+		}
+		// console.debug('update tooltip position in confirm directive', value);
+		this._confirmationPosition = value;
+		// this.updatePositionStrategy();
+	}
 
 	@Output() onConfirm: EventEmitter<boolean> = new EventEmitter<boolean>();
 
+	private _confirmationPosition: CardTooltipPositionType;
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -41,12 +52,15 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 		private events: Events,
 	) {}
 
+	// eslint-disable-next-line @angular-eslint/use-lifecycle-interface
+	// eslint-disable-next-line @angular-eslint/no-empty-lifecycle-method
 	ngAfterViewInit() {
-		this.updatePositionStrategy();
+		// 	// this.updatePositionStrategy();
 	}
 
 	@HostListener('click', ['$event'])
 	onClick() {
+		// console.debug('registered click', this.askConfirmation, this);
 		if (!this.askConfirmation) {
 			this.confirm();
 			return;
@@ -58,16 +72,11 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 	private updatePositionStrategy() {
 		if (this.positionStrategy) {
 			this.cancel();
-			// this.positionStrategy.detach();
-			// this.positionStrategy.dispose();
 			this.positionStrategy = null;
-		}
-		if (this.overlayRef) {
+		} else if (this.overlayRef) {
 			this.cancel();
-			// this.overlayRef.detach();
-			// this.overlayRef.dispose();
 		}
-		const positions: ConnectedPosition[] = [
+		let positions: ConnectedPosition[] = [
 			{
 				originX: 'end',
 				originY: 'bottom',
@@ -75,6 +84,17 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 				overlayY: 'top',
 			},
 		];
+		if (this._confirmationPosition === 'bottom-right' || this._confirmationPosition === 'right') {
+			positions = [
+				{
+					originX: 'end',
+					originY: 'bottom',
+					overlayX: 'start',
+					overlayY: 'top',
+				},
+			];
+		}
+		// console.debug('built position strategy', this._confirmationPosition, positions);
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef
 			.flexibleConnectedTo(this.elementRef)
@@ -90,9 +110,9 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 			backdropClass: 'confirmation-backdrop',
 		});
 		this.overlayRef.backdropClick().subscribe(() => this.cancel());
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef)?.destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	@HostListener('window:beforeunload')
@@ -107,6 +127,8 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 	}
 
 	showConfirmationPopup() {
+		this.updatePositionStrategy();
+
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(ConfirmationComponent);
 
@@ -119,6 +141,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 			this.confirmationText ?? 'This will close the tracker for the duration of the current match';
 		tooltipRef.instance.validButtonText = this.validButtonText ?? 'Exit';
 		tooltipRef.instance.cancelButtonText = this.cancelButtonText ?? 'Cancel';
+		tooltipRef.instance.showOk = this.showOk;
 		tooltipRef.instance.onConfirm.subscribe((event) => this.confirm());
 		tooltipRef.instance.onCancel.subscribe((event) => this.cancel());
 
@@ -139,7 +162,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 	}
 
 	private cancel() {
-		console.log('canceling');
+		// console.log('canceling', new Error().stack);
 		this.overlayRef.detach();
 		this.events.broadcast(Events.HIDE_MODAL);
 		// this.overlayRef.dispose();

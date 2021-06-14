@@ -9,6 +9,7 @@ import {
 	PerfectScrollbarModule,
 	PERFECT_SCROLLBAR_CONFIG,
 } from 'ngx-perfect-scrollbar';
+import { ImportDeckstringComponent } from '../../components/decktracker/import-deckstring.component';
 import { DeckTrackerCardsRecapComponent } from '../../components/decktracker/overlay/decktracker-cards-recap.component';
 import { DeckTrackerControlBarComponent } from '../../components/decktracker/overlay/decktracker-control-bar.component';
 import { DeckTrackerDeckNameComponent } from '../../components/decktracker/overlay/decktracker-deck-name.component';
@@ -48,6 +49,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		SecretsHelperListComponent,
 		DecktrackerWidgetIconComponent,
 		DeckTrackerWinrateRecapComponent,
+		ImportDeckstringComponent,
 	],
 	exports: [
 		DeckTrackerOverlayRootComponent,
@@ -57,6 +59,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerCardsRecapComponent,
 		SecretsHelperListComponent,
 		DeckTrackerWinrateRecapComponent,
+		ImportDeckstringComponent,
 	],
 	providers: [
 		{

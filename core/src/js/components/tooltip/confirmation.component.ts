@@ -18,7 +18,7 @@ import {
 				{{ _confirmationText }}
 			</div>
 			<div class="buttons">
-				<button class="ok" (click)="ok()">{{ _validButtonText }}</button>
+				<button class="ok" (click)="ok()" *ngIf="_showOk">{{ _validButtonText }}</button>
 				<button class="cancel" (click)="cancel()">{{ _cancelButtonText }}</button>
 			</div>
 			<button class="close-button" (click)="cancel()">
@@ -65,10 +65,18 @@ export class ConfirmationComponent {
 		}
 	}
 
+	@Input() set showOk(value: boolean) {
+		this._showOk = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	_confirmationTitle = 'Are you sure?';
 	_confirmationText = 'This will close the tracker for the duration of the current match';
 	_validButtonText = 'Exit';
 	_cancelButtonText = 'Cancel';
+	_showOk = true;
 
 	constructor(private cdr: ChangeDetectorRef) {}
 
