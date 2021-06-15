@@ -1,4 +1,6 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
+import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
 import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-game-stage';
@@ -20,8 +22,17 @@ export class BgsNextOpponentParser implements EventParser {
 		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
 			stage.id === newNextOpponentStage.id ? newNextOpponentStage : stage,
 		);
+
+		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
+			turn: currentState.currentGame.currentTurn,
+			playerCardId: currentState.currentGame.getMainPlayer().cardId,
+			opponentCardId: normalizeHeroCardId(event.cardId),
+		} as BgsFaceOffWithSimulation);
 		return currentState.update({
 			stages: stages,
+			currentGame: currentState.currentGame.update({
+				faceOffs: [...currentState.currentGame.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
+			} as BgsGame),
 		} as BattlegroundsState);
 	}
 

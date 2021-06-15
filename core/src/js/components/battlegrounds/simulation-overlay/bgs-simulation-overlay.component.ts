@@ -66,7 +66,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
-				this.nextBattle = newState?.currentGame?.battleResult;
+				this.nextBattle = newState?.currentGame?.lastBattleResult();
 				this.battleSimulationStatus = newState?.currentGame?.battleInfoStatus;
 				this.simulationMessage = newState?.currentGame?.battleInfoMesage;
 				// console.debug('simultion message in listener', this.simulationMessage);

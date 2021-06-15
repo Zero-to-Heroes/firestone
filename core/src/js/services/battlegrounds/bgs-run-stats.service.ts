@@ -109,12 +109,18 @@ export class BgsRunStatsService {
 			heroCardId: currentGame.getMainPlayer()?.cardId,
 			userId: user.userId,
 			userName: user.username,
-			battleResultHistory: currentGame.battleResultHistory.map((history) => ({
+			battleResultHistory: currentGame.buildBattleResultHistory().map((history) => ({
 				...history,
 				simulationResult: { ...history.simulationResult, outcomeSamples: undefined },
 			})),
 			mainPlayer: currentGame.getMainPlayer(),
-			faceOffs: currentGame.faceOffs,
+			faceOffs: currentGame.faceOffs.map((faceOff) => ({
+				damage: faceOff.damage,
+				opponentCardId: faceOff.opponentCardId,
+				playerCardId: faceOff.playerCardId,
+				result: faceOff.result,
+				turn: faceOff.turn,
+			})),
 			oldMmr: currentGame.mmrAtStart,
 			newMmr: isNaN(newMmr) ? null : newMmr,
 		};
@@ -130,7 +136,7 @@ export class BgsRunStatsService {
 	}
 
 	private async buildStatsRemotely(input: BgsComputeRunStatsInput): Promise<void> {
-		console.log('[bgs-run-stats] preparing to build stats remotely', input.reviewId);
+		console.log('[bgs-run-stats] preparing to build stats remotely', input.reviewId, input);
 		// Because it takes some time for the review to be processed, and we don't want to
 		// use a lambda simply to wait, as it costs money :)
 		await sleep(5000);

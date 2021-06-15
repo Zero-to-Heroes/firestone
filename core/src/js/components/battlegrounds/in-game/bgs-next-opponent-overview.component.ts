@@ -141,7 +141,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		}
 		this.players = this._game.players;
 		this.nextOpponentCardId = this._panel.opponentOverview.cardId;
-		this.nextBattle = this._game.battleResult;
+		this.nextBattle = this._game.lastBattleResult();
 		this.battleSimulationStatus = this._game.battleInfoStatus;
 		this.simulationMessage = this._game.battleInfoMesage;
 		this.faceOffs = this._game.faceOffs;

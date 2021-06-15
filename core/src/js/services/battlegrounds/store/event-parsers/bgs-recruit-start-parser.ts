@@ -18,11 +18,12 @@ export class BgsRecruitStartParser implements EventParser {
 		console.debug('changing phase to recruit');
 		const newGame = currentState.currentGame.update({
 			phase: 'recruit',
-			battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
-			battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
-			battleInfoStatus: shouldHideResultsOnRecruit || !currentState.currentGame.battleResult ? 'empty' : 'done',
+			// battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
+			// battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
+			battleInfoStatus:
+				shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult() ? 'empty' : 'done',
 			battleInfoMesage:
-				shouldHideResultsOnRecruit || !currentState.currentGame.battleResult
+				shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult()
 					? undefined
 					: currentState.currentGame.battleInfoMesage,
 		} as BgsGame);

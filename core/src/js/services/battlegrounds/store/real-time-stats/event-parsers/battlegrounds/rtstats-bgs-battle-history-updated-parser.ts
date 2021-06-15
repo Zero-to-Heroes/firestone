@@ -18,7 +18,7 @@ export class RTStatsBgsBattleHistoryUpdatedParser implements EventParser {
 		gameEvent: GameEvent,
 		currentState: RealTimeStatsState,
 	): RealTimeStatsState | PromiseLike<RealTimeStatsState> {
-		const history = (gameEvent.additionalData.game as BgsGame).battleResultHistory;
+		const history = (gameEvent.additionalData.game as BgsGame).buildBattleResultHistory();
 		const luckFactor = buildLuckFactor(history) ?? 0;
 		return currentState.update({
 			luckFactor: luckFactor,

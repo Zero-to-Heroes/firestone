@@ -6,6 +6,7 @@ import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity
 import { BoardSecret } from '@firestone-hs/simulate-bgs-battle/dist/board-secret';
 import { Map } from 'immutable';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
@@ -50,9 +51,9 @@ export class BgsPlayerBoardParser implements EventParser {
 			);
 			return currentState.update({
 				currentGame: currentState.currentGame.update({
-					battleInfo: undefined,
+					// battleInfo: undefined,
 					battleInfoStatus: 'empty',
-					battleResult: undefined,
+					// battleResult: undefined,
 					battleInfoMesage: undefined,
 				} as BgsGame),
 			} as BattlegroundsState);
@@ -77,6 +78,12 @@ export class BgsPlayerBoardParser implements EventParser {
 			opponentBoard: bgsOpponent,
 			options: null,
 		};
+		const stateAfterFaceOff = currentState.currentGame.updateLastFaceOff(
+			normalizeHeroCardId(event.opponentBoard.heroCardId),
+			{
+				battleInfo: battleInfo,
+			} as BgsFaceOffWithSimulation,
+		);
 		// console.debug('[bgs-simulation] battleInfo', battleInfo);
 
 		//console.log('preparing support computation');
@@ -84,10 +91,8 @@ export class BgsPlayerBoardParser implements EventParser {
 		const showSimulation = !prefs.bgsShowSimResultsOnlyOnRecruit;
 		const isSupported = isSupportedScenario(battleInfo);
 		//console.debug('supported?', isSupported, isSupported.reason, battleInfo, gameState);
-		const newGame = currentState.currentGame.update({
+		const newGame = stateAfterFaceOff.update({
 			players: newPlayers,
-			battleInfo: battleInfo,
-			battleResult: undefined,
 			battleInfoStatus: showSimulation ? 'waiting-for-result' : 'empty',
 			battleInfoMesage: isSupported.reason,
 			// battleInfoMesage: undefined,
@@ -96,12 +101,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			currentGame: newGame,
 		} as BattlegroundsState);
 
-		if (result.currentGame.battleInfo.opponentBoard) {
-			this.simulation.startBgsBattleSimulation(
-				result.currentGame.battleInfo,
-				result?.currentGame?.availableRaces ?? [],
-			);
-		}
+		this.simulation.startBgsBattleSimulation(battleInfo, result?.currentGame?.availableRaces ?? []);
 		return result;
 	}
 

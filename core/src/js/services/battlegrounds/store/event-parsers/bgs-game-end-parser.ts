@@ -49,12 +49,12 @@ export class BgsGameEndParser implements EventParser {
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				reviewId: event.reviewId,
-				battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
-				battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
+				// battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
+				// battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
 				battleInfoStatus:
-					shouldHideResultsOnRecruit || !currentState.currentGame.battleResult ? 'empty' : 'done',
+					shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult() ? 'empty' : 'done',
 				battleInfoMesage:
-					shouldHideResultsOnRecruit || !currentState.currentGame.battleResult
+					shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult()
 						? undefined
 						: currentState.currentGame.battleInfoMesage,
 			} as BgsGame),

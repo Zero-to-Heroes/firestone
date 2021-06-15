@@ -12,6 +12,7 @@ import { Preferences } from '../../models/preferences';
 import { CARDS_VERSION } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
+import { normalizeHeroCardId } from './bgs-utils';
 import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
@@ -68,7 +69,12 @@ export class BgsBattleSimulationService {
 			? await this.simulateLocalBattle(battleInfoInput, prefs)
 			: ((await this.http.post(BGS_BATTLE_SIMULATION_ENDPOINT, battleInfoInput).toPromise()) as SimulationResult);
 		console.log('[bgs-simulation] battle simulation result', result);
-		this.stateUpdater.next(new BattlegroundsBattleSimulationEvent(result));
+		this.stateUpdater.next(
+			new BattlegroundsBattleSimulationEvent(
+				result,
+				normalizeHeroCardId(battleInfoInput.opponentBoard.player.cardId),
+			),
+		);
 	}
 
 	public async getIdForSimulationSample(sample: GameSample): Promise<string> {
