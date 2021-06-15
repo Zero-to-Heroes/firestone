@@ -45,7 +45,9 @@
 	background-repeat: round;
 	background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
 		url('https://static.zerotoheroes.com/hearthstone/asset/firestone/images/backgrounds/battlegrounds.jpg');
-	background-size: contain;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	// background-size: contain;
 	display: flex;
 	flex-direction: column;
 	border-width: 1px;
