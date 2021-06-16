@@ -91,7 +91,7 @@ export const globalEffectCards = [
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
 	CardIds.Collectible.Warlock.DeckOfChaos,
 	CardIds.Collectible.Warlock.NeeruFireblade,
-	CardIds.Collectible.Warlock.RenounceDarkness1,
+	CardIds.Collectible.Warlock.RenounceDarkness,
 	CardIds.NonCollectible.Neutral.ReductomaraToken,
 	CardIds.NonCollectible.Neutral.UpgradedPackMule,
 	CardIds.NonCollectible.Paladin.LordaeronAttendantToken,
@@ -252,7 +252,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Neutral.Subject9,
 	CardIds.Collectible.Neutral.TaelanFordringCore,
 	CardIds.Collectible.Neutral.TentacledMenace,
-	CardIds.Collectible.Neutral.TheCurator1,
+	CardIds.Collectible.Neutral.TheCurator,
 	CardIds.Collectible.Neutral.UtgardeGrapplesniper,
 	CardIds.Collectible.Neutral.VenomousScorpid,
 	CardIds.Collectible.Neutral.WitchwoodPiper,
@@ -391,6 +391,7 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.GOLDEN_THE_BARRENS:
 			return 'the_barrens';
 		case BoosterType.STANDARD_HUNTER:
+		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
 		case BoosterType.STANDARD_PALADIN:
 		case BoosterType.STANDARD_WARRIOR:
@@ -508,14 +509,14 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Golden Forged in the Barrens';
 		case BoosterType.STANDARD_DEMONHUNTER:
 			return 'Standard Demon Hunter';
+		case BoosterType.STANDARD_DRUID:
+			return 'Standard Druid';
 		case BoosterType.STANDARD_HUNTER:
 			return 'Standard Hunter';
 		case BoosterType.STANDARD_MAGE:
 			return 'Standard Mage';
 		case BoosterType.STANDARD_PALADIN:
 			return 'Standard Paladin';
-		case BoosterType.STANDARD_WARRIOR:
-			return 'Standard Warrior';
 		case BoosterType.STANDARD_PRIEST:
 			return 'Standard Priest';
 		case BoosterType.STANDARD_ROGUE:

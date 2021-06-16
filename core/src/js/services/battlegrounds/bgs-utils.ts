@@ -191,7 +191,7 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Warrior.OverlordSaurfang_ForTheHorde;
 		case CardIds.NonCollectible.Neutral.DeathSpeakerBlackthorn2:
 			return CardIds.NonCollectible.Neutral.DeathSpeakerBlackthorn_Bloodbound;
-		case CardIds.NonCollectible.Neutral.Voljin3:
+		case CardIds.NonCollectible.Neutral.Voljin2:
 			return CardIds.NonCollectible.Neutral.Voljin_SpiritSwap1;
 		case CardIds.NonCollectible.Neutral.Xyrella2:
 			return CardIds.NonCollectible.Priest.Xyrella_SeeTheLight;
