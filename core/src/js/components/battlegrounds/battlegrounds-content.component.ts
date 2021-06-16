@@ -12,7 +12,6 @@ import {
 import { Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
-import { BgsStage } from '../../models/battlegrounds/bgs-stage';
 import { Preferences } from '../../models/preferences';
 import { BgsCloseWindowEvent } from '../../services/battlegrounds/store/events/bgs-close-window-event';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
@@ -36,7 +35,7 @@ import { PreferencesService } from '../../services/preferences.service';
 							</svg>
 						</i>
 						<menu-selection-bgs
-							[selectedStage]="currentStage?.id"
+							[selectedPanel]="currentPanel?.id"
 							[matchOver]="_state?.currentGame?.gameEnded"
 						></menu-selection-bgs>
 					</div>
@@ -89,7 +88,6 @@ import { PreferencesService } from '../../services/preferences.service';
 })
 export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	_state: BattlegroundsState;
-	currentStage: BgsStage;
 	currentPanel: BgsPanel;
 	enableSimulation: boolean;
 	showHeroSelectionAchievements: boolean;
@@ -99,8 +97,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 
 	@Input() set state(value: BattlegroundsState) {
 		this._state = value;
-		this.currentStage = value?.stages?.find((stage) => stage.id === value.currentStageId);
-		this.currentPanel = this.currentStage?.panels?.find((panel) => panel.id === value.currentPanelId);
+		this.currentPanel = this._state?.panels?.find((panel) => panel.id === value.currentPanelId);
 
 		// console.log('sett state in -content', value, this.currentStage, this.currentPanel);
 	}

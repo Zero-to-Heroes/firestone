@@ -3,9 +3,7 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
 import { BgsComposition } from '../../../../models/battlegrounds/in-game/bgs-composition';
-import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsGlobalInfoUpdatedEvent } from '../events/bgs-global-info-updated-event';
@@ -74,37 +72,30 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 					? availableRaces
 					: currentState?.currentGame?.availableRaces ?? [],
 		} as BgsGame);
-		const newPostMatchStage: BgsPostMatchStage = this.addTribeInfoToPostMatchStage(
+		const newPostMatchPanel: BgsPostMatchStatsPanel = this.addTribeInfoToPostMatchPanel(
 			currentState,
 			newGame.availableRaces,
 		);
-		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
-			stage.id === newPostMatchStage.id ? newPostMatchStage : stage,
+		const panels: readonly BgsPanel[] = currentState.panels.map((panel) =>
+			panel.id === newPostMatchPanel.id ? newPostMatchPanel : panel,
 		);
 		// console.log('[bgs-info] updated new game', newGame);
 		return currentState.update({
 			currentGame: newGame,
-			stages: stages,
+			panels: panels,
 		} as BattlegroundsState);
 	}
 
-	private addTribeInfoToPostMatchStage(
+	private addTribeInfoToPostMatchPanel(
 		currentState: BattlegroundsState,
 		availableTribes: readonly Race[],
-	): BgsPostMatchStage {
-		const stageToRebuild = currentState.stages.find((stage) => stage.id === 'post-match');
-		const panelToRebuild: BgsPostMatchStatsPanel = (stageToRebuild.panels.find(
+	): BgsPostMatchStatsPanel {
+		const panelToRebuild: BgsPostMatchStatsPanel = (currentState.panels.find(
 			(panel) => panel.id === 'bgs-post-match-stats',
 		) as BgsPostMatchStatsPanel).update({
 			availableTribes: availableTribes,
 		} as BgsPostMatchStatsPanel);
-
-		const panels: readonly BgsPanel[] = stageToRebuild.panels.map((panel) =>
-			panel.id === panelToRebuild.id ? panelToRebuild : panel,
-		);
-		return BgsPostMatchStage.create({
-			panels: panels,
-		} as BgsPostMatchStage);
+		return panelToRebuild;
 	}
 
 	public static buildRaces(availableRaces: readonly number[]): [readonly Race[], readonly Race[]] {

@@ -1,9 +1,8 @@
 import { Race } from '@firestone-hs/reference-data';
 import { VisualAchievement } from '../visual-achievement';
 import { BgsGame } from './bgs-game';
+import { BgsPanel } from './bgs-panel';
 import { BgsPanelId } from './bgs-panel-id.type';
-import { BgsStage } from './bgs-stage';
-import { BgsStageId } from './bgs-stage-id.type';
 import { BgsPostMatchStats } from './post-match/bgs-post-match-stats';
 import { BgsStats } from './stats/bgs-stats';
 
@@ -11,8 +10,7 @@ export class BattlegroundsState {
 	readonly inGame: boolean;
 	readonly reconnectOngoing: boolean;
 	readonly heroSelectionDone: boolean;
-	readonly stages: readonly BgsStage[] = [];
-	readonly currentStageId: BgsStageId;
+	readonly panels: readonly BgsPanel[] = [];
 	readonly currentPanelId: BgsPanelId;
 	readonly globalStats: BgsStats;
 	readonly currentGame: BgsGame;

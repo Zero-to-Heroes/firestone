@@ -1,8 +1,8 @@
-import { BgsStageId } from '../../../../models/battlegrounds/bgs-stage-id.type';
+import { BgsPanelId } from '../../../../models/battlegrounds/bgs-panel-id.type';
 import { BattlegroundsStoreEvent } from './_battlegrounds-store-event';
 
 export class BgsStageChangeEvent extends BattlegroundsStoreEvent {
-	constructor(public readonly stage: BgsStageId) {
+	constructor(public readonly panelId: BgsPanelId) {
 		super('BgsStageChangeEvent');
 	}
 }

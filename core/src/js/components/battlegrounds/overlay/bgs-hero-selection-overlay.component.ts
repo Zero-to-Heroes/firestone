@@ -11,7 +11,7 @@ import {
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
-import { BgsHeroSelectionOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
+import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { Preferences } from '../../../models/preferences';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -44,7 +44,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 	windowId: string;
 	heroOverviews: InternalBgsHeroStat[];
 
-	private _panel: BgsHeroSelectionOverview;
+	private _panel: BgsHeroSelectionOverviewPanel;
 	private _showAchievements: boolean;
 
 	private gameInfoUpdatedListener: (message: any) => void;
@@ -70,10 +70,9 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 				return;
 			}
 
-			const heroSelectionStage = newState?.stages?.find((stage) => stage.id === 'hero-selection');
-			this._panel = heroSelectionStage?.panels?.find(
+			this._panel = newState?.panels?.find(
 				(panel) => panel.id === 'bgs-hero-selection-overview',
-			) as BgsHeroSelectionOverview;
+			) as BgsHeroSelectionOverviewPanel;
 			this.updateInfos();
 		});
 

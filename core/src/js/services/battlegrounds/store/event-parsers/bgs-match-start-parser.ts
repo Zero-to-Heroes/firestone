@@ -41,7 +41,7 @@ export class BgsMatchStartParser implements EventParser {
 				inGame: true,
 				currentGame: newGame,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
-				stages: BgsInitParser.buildEmptyStages(currentState, prefs),
+				panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
 				heroAchievements: heroAchievements,
 				heroSelectionDone: false,
 			} as BattlegroundsState);

@@ -1,12 +1,10 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
+import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
-import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
-import { BgsHeroSelectionOverview } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
-import { BgsHeroSelectionStage } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-stage';
-import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-game-stage';
+import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
+import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
-import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { Preferences } from '../../../../models/preferences';
@@ -24,40 +22,27 @@ export class BgsInitParser implements EventParser {
 
 	public async parse(currentState: BattlegroundsState, event: BgsInitEvent): Promise<BattlegroundsState> {
 		const prefs = await this.prefs.getPreferences();
-		const emptyStages: readonly BgsStage[] = BgsInitParser.buildEmptyStages(currentState, prefs);
+		const emptyPanels: readonly BgsPanel[] = BgsInitParser.buildEmptyPanels(currentState, prefs);
 		return currentState.update({
 			globalStats: event.bgsGlobalStats,
-			stages: currentState.stages || emptyStages,
+			panels: currentState.panels || emptyPanels,
 		} as BattlegroundsState);
 	}
 
-	public static buildEmptyStages(currentState: BattlegroundsState, prefs: Preferences): readonly BgsStage[] {
+	public static buildEmptyPanels(currentState: BattlegroundsState, prefs: Preferences): readonly BgsPanel[] {
 		return [
-			BgsInitParser.buildHeroSelectionStage(),
-			BgsInitParser.buildInGameStage(),
-			BgsInitParser.buildPostMatchStage(currentState, prefs),
+			BgsInitParser.buildBgsHeroSelectionOverview(),
+			BgsInitParser.buildBgsNextOpponentOverviewPanel(),
+			BgsInitParser.buildPostMatchStatsPanel(currentState, prefs),
+			BgsInitParser.buildBgsBattlesPanel(),
 		];
 	}
 
-	private static buildHeroSelectionStage(): BgsHeroSelectionStage {
-		const panels: readonly BgsPanel[] = [BgsInitParser.buildBgsHeroSelectionOverview()];
-		return BgsHeroSelectionStage.create({
-			panels: panels,
-		} as BgsHeroSelectionStage);
-	}
-
-	private static buildBgsHeroSelectionOverview(): BgsHeroSelectionOverview {
+	private static buildBgsHeroSelectionOverview(): BgsHeroSelectionOverviewPanel {
 		const heroOverview: readonly BgsHeroStat[] = [];
-		return BgsHeroSelectionOverview.create({
+		return BgsHeroSelectionOverviewPanel.create({
 			heroOverview: heroOverview,
-		} as BgsHeroSelectionOverview);
-	}
-
-	private static buildInGameStage(): BgsInGameStage {
-		const panels: readonly BgsPanel[] = [BgsInitParser.buildBgsNextOpponentOverviewPanel()];
-		return BgsInGameStage.create({
-			panels: panels,
-		} as BgsInGameStage);
+		} as BgsHeroSelectionOverviewPanel);
 	}
 
 	private static buildBgsNextOpponentOverviewPanel(): BgsNextOpponentOverviewPanel {
@@ -66,26 +51,16 @@ export class BgsInitParser implements EventParser {
 		} as BgsNextOpponentOverviewPanel);
 	}
 
-	private static buildPostMatchStage(currentState: BattlegroundsState, prefs: Preferences): BgsPostMatchStage {
-		const stageToRebuild =
-			currentState.stages.find((stage) => stage.id === 'post-match') || this.createNewStage(currentState);
-		const panelToRebuild = BgsInitParser.createNewPanel(currentState, prefs);
-
-		const panels: readonly BgsPanel[] = stageToRebuild.panels.map((panel) =>
-			panel.id === 'bgs-post-match-stats' ? panelToRebuild : panel,
-		);
-		return BgsPostMatchStage.create({
-			panels: panels,
-		} as BgsPostMatchStage);
+	private static buildBgsBattlesPanel(): BgsBattlesPanel {
+		return BgsBattlesPanel.create({
+			faceOffs: [] as readonly BgsFaceOffWithSimulation[],
+		} as BgsBattlesPanel);
 	}
 
-	private static createNewStage(currentState: BattlegroundsState): BgsInGameStage {
-		return BgsPostMatchStage.create({
-			panels: [BgsPostMatchStatsPanel.create({} as BgsPostMatchStatsPanel)] as readonly BgsPanel[],
-		} as BgsPostMatchStage);
-	}
-
-	private static createNewPanel(currentState: BattlegroundsState, prefs: Preferences): BgsPostMatchStatsPanel {
+	private static buildPostMatchStatsPanel(
+		currentState: BattlegroundsState,
+		prefs: Preferences,
+	): BgsPostMatchStatsPanel {
 		const player: BgsPlayer = currentState.currentGame?.getMainPlayer();
 		return BgsPostMatchStatsPanel.create({
 			stats: null,

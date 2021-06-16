@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
-import { BgsStageId } from '../../models/battlegrounds/bgs-stage-id.type';
+import { BgsPanelId } from '../../models/battlegrounds/bgs-panel-id.type';
 import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/bgs-stage-change-event';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { FeatureFlags } from '../../services/feature-flags';
@@ -21,17 +21,26 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<ul class="menu-selection">
 			<li
-				[ngClass]="{ 'selected': selectedStage === 'hero-selection' }"
-				(mousedown)="selectStage('hero-selection')"
+				[ngClass]="{ 'selected': selectedPanel === 'bgs-hero-selection-overview' }"
+				(mousedown)="selectStage('bgs-hero-selection-overview')"
 			>
 				<span>Hero Selection</span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedStage === 'in-game' }" (mousedown)="selectStage('in-game')">
+			<li
+				[ngClass]="{ 'selected': selectedPanel === 'bgs-next-opponent-overview' }"
+				(mousedown)="selectStage('bgs-next-opponent-overview')"
+			>
 				<span>Opponent</span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedStage === 'post-match' }" (mousedown)="selectStage('post-match')">
+			<li
+				[ngClass]="{ 'selected': selectedPanel === 'bgs-post-match-stats' }"
+				(mousedown)="selectStage('bgs-post-match-stats')"
+			>
 				<span>{{ enableLiveStats && !matchOver ? 'Live stats' : 'Post-Match Stats' }}</span>
 			</li>
+			<!-- <li [ngClass]="{ 'selected': selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
+				<span>Battles</span>
+			</li> -->
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,7 +48,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class MenuSelectionBgsComponent implements AfterViewInit {
 	enableLiveStats = FeatureFlags.ENABLE_REAL_TIME_STATS;
 
-	@Input() selectedStage: string;
+	@Input() selectedPanel: BgsPanelId;
 	@Input() matchOver: boolean;
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
@@ -50,7 +59,7 @@ export class MenuSelectionBgsComponent implements AfterViewInit {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 	}
 
-	selectStage(stage: BgsStageId) {
-		this.battlegroundsUpdater.next(new BgsStageChangeEvent(stage));
+	selectStage(panelId: BgsPanelId) {
+		this.battlegroundsUpdater.next(new BgsStageChangeEvent(panelId));
 	}
 }

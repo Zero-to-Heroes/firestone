@@ -1,7 +1,5 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
-import { BgsPostMatchStage } from '../../../../models/battlegrounds/post-match/bgs-post-match-stage';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { PreferencesService } from '../../../preferences.service';
@@ -21,8 +19,7 @@ export class BgsPostMatchStatsFilterChangeParser implements EventParser {
 		event: BgsPostMatchStatsFilterChangeEvent,
 	): Promise<BattlegroundsState> {
 		console.debug('updating new stats', event, currentState);
-		const stage = currentState.stages.find((stage) => stage.id === 'post-match') as BgsPostMatchStage;
-		const panel: BgsPostMatchStatsPanel = stage.panels.find(
+		const panel: BgsPostMatchStatsPanel = currentState.panels.find(
 			(panel) => panel.id === 'bgs-post-match-stats',
 		) as BgsPostMatchStatsPanel;
 		const selectedStats: readonly BgsStatsFilterId[] = panel.selectedStats.map((tab, index) =>
@@ -34,16 +31,11 @@ export class BgsPostMatchStatsFilterChangeParser implements EventParser {
 		const newPanel = panel.update({
 			selectedStats: selectedStats,
 		} as BgsPostMatchStatsPanel);
-		const newStage = stage.update({
-			panels: stage.panels.map((panel) =>
-				panel.id === 'bgs-post-match-stats' ? newPanel : panel,
-			) as readonly BgsPanel[],
-		} as BgsPostMatchStage);
-		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
-			stage.id === newStage.id ? newStage : stage,
+		const panels: readonly BgsPanel[] = currentState.panels.map((panel) =>
+			panel.id === newPanel.id ? newPanel : panel,
 		);
 		return currentState.update({
-			stages: stages,
+			panels: panels,
 		} as BattlegroundsState);
 	}
 }

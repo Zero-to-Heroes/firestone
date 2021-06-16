@@ -1,8 +1,6 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
-import { BgsInGameStage } from '../../../../models/battlegrounds/in-game/bgs-in-game-stage';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsTurnStartEvent } from '../events/bgs-turn-start-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -14,38 +12,34 @@ export class BgsTurnStartParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsTurnStartEvent): Promise<BattlegroundsState> {
-		const newStageId = event.turnNumber === 1 ? 'in-game' : currentState.currentStageId;
 		const newPanelId = event.turnNumber === 1 ? 'bgs-next-opponent-overview' : currentState.currentPanelId;
 
 		const newCurrentTurn = Math.ceil(event.turnNumber / 2);
-		const newNextOpponentStage: BgsInGameStage = this.rebuildInGameStage(currentState, newCurrentTurn);
-		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
-			stage.id === newNextOpponentStage.id ? newNextOpponentStage : stage,
+		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.rebuildNextOpponentPanel(
+			currentState,
+			newCurrentTurn,
+		);
+		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
+			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
 		console.log('updating turn', newCurrentTurn);
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				currentTurn: newCurrentTurn,
 			} as BgsGame),
-			stages: stages,
-			currentStageId: newStageId,
+			panels: panels,
 			currentPanelId: newPanelId,
 		} as BattlegroundsState);
 	}
 
-	private rebuildInGameStage(currentState: BattlegroundsState, newCurrentTurn: number): BgsInGameStage {
-		const stageToRebuild = currentState.stages.find((stage) => stage.id === 'in-game');
-		const panelToRebuild: BgsNextOpponentOverviewPanel = (stageToRebuild.panels.find(
+	private rebuildNextOpponentPanel(
+		currentState: BattlegroundsState,
+		newCurrentTurn: number,
+	): BgsNextOpponentOverviewPanel {
+		return (currentState.panels.find(
 			(panel) => panel.id === 'bgs-next-opponent-overview',
 		) as BgsNextOpponentOverviewPanel).update({
 			name: `Turn ${newCurrentTurn} - Next opponent`,
 		} as BgsNextOpponentOverviewPanel);
-
-		const panels: readonly BgsPanel[] = stageToRebuild.panels.map((panel) =>
-			panel.id === 'bgs-next-opponent-overview' ? panelToRebuild : panel,
-		);
-		return BgsInGameStage.create({
-			panels: panels,
-		} as BgsInGameStage);
 	}
 }

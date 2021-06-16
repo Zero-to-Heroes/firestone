@@ -1,9 +1,7 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
-import { BgsStage } from '../../../../models/battlegrounds/bgs-stage';
-import { BgsHeroSelectionOverview } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
-import { BgsHeroSelectionStage } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-stage';
+import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
 import { PatchesConfigService } from '../../../patches-config.service';
@@ -28,19 +26,18 @@ export class BgsHeroSelectionParser implements EventParser {
 		//
 		const bgsInfo = await this.memoryService.getBattlegroundsInfo();
 		const [availableRaces, bannedRaces] = BgsGlobalInfoUpdatedParser.buildRaces(bgsInfo?.game?.AvailableRaces);
-		const newHeroSelectionStage: BgsHeroSelectionStage = await this.buildHeroSelectionStage(
+		const newHeroSelectionPanel: BgsHeroSelectionOverviewPanel = await this.buildHeroSelectionPanel(
 			currentState,
 			event.heroCardIds,
 			currentState.globalStats,
 		);
 		// console.log('races for game', availableRaces, bannedRaces);
-		const stages: readonly BgsStage[] = currentState.stages.map((stage) =>
-			stage.id === 'hero-selection' ? newHeroSelectionStage : stage,
+		const panels: readonly BgsPanel[] = currentState.panels.map((panel) =>
+			panel.id === 'bgs-hero-selection-overview' ? newHeroSelectionPanel : panel,
 		);
 		return currentState.update({
 			currentPanelId: 'bgs-hero-selection-overview',
-			currentStageId: 'hero-selection',
-			stages: stages,
+			panels: panels,
 			inGame: true,
 			currentGame: currentState.currentGame.update({
 				availableRaces: availableRaces,
@@ -49,24 +46,11 @@ export class BgsHeroSelectionParser implements EventParser {
 		} as BattlegroundsState);
 	}
 
-	private async buildHeroSelectionStage(
+	private async buildHeroSelectionPanel(
 		currentState: BattlegroundsState,
 		heroCardIds: readonly string[],
 		stats: BgsStats,
-	): Promise<BgsHeroSelectionStage> {
-		const panels: readonly BgsPanel[] = [
-			await this.buildBgsHeroSelectionOverview(currentState, heroCardIds, stats),
-		];
-		return BgsHeroSelectionStage.create({
-			panels: panels,
-		} as BgsHeroSelectionStage);
-	}
-
-	private async buildBgsHeroSelectionOverview(
-		currentState: BattlegroundsState,
-		heroCardIds: readonly string[],
-		stats: BgsStats,
-	): Promise<BgsHeroSelectionOverview> {
+	): Promise<BgsHeroSelectionOverviewPanel> {
 		const heroOverview: readonly BgsHeroStat[] =
 			stats?.heroStats?.map((stat) =>
 				BgsHeroStat.create({
@@ -97,7 +81,7 @@ export class BgsHeroSelectionParser implements EventParser {
 				}),
 			) || [];
 		console.log('created hero overview');
-		return BgsHeroSelectionOverview.create({
+		return BgsHeroSelectionOverviewPanel.create({
 			heroOverview: heroOverview,
 			heroOptionCardIds: heroCardIds,
 			globalStats: currentState.globalStats,
@@ -105,6 +89,6 @@ export class BgsHeroSelectionParser implements EventParser {
 			patchNumber:
 				stats?.currentBattlegroundsMetaPatch ||
 				(await this.patchConfig.getConf()).currentBattlegroundsMetaPatch,
-		} as BgsHeroSelectionOverview);
+		} as BgsHeroSelectionOverviewPanel);
 	}
 }
