@@ -103,11 +103,15 @@ declare let amplitude: any;
 				<div class="title">Lethal</div>
 				<div class="damage dealt" helpTooltip="% chance to kill the enemy hero">
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
-					<div class="damage-value">{{ wonLethalChance || '--' }}</div>
+					<div class="damage-value" [ngClass]="{ 'active': wonLethalChance }">
+						{{ wonLethalChance || '--' }}
+					</div>
 				</div>
 				<div class="damage received" helpTooltip="% chance to die this battle">
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
-					<div class="damage-value">{{ lostLethalChance || '--' }}</div>
+					<div class="damage-value" [ngClass]="{ 'active': lostLethalChance }">
+						{{ lostLethalChance || '--' }}
+					</div>
 				</div>
 			</div>
 		</div>
@@ -219,8 +223,14 @@ export class BgsBattleStatusComponent {
 			this.loseSimulationSample = this._previousBattle.outcomeSamples.lost;
 			this.damageWon = this._previousBattle.averageDamageWon?.toFixed(1);
 			this.damageLost = this._previousBattle.averageDamageLost?.toFixed(1);
-			this.wonLethalChance = this._previousBattle.wonLethalPercent?.toFixed(1) + '%';
-			this.lostLethalChance = this._previousBattle.lostLethalPercent?.toFixed(1) + '%';
+			// If we have no chance of winning / losing the battle, showcasing the lethal chance
+			// makes no sense
+			this.wonLethalChance = this._previousBattle.wonPercent
+				? this._previousBattle.wonLethalPercent?.toFixed(1) + '%'
+				: null;
+			this.lostLethalChance = this._previousBattle.lostPercent
+				? this._previousBattle.lostLethalPercent?.toFixed(1) + '%'
+				: null;
 		} else {
 			// console.log('no value in nextbattle', this._previousBattle, this._previousStatus);
 		}

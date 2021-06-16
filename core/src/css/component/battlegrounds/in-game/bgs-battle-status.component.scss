@@ -66,9 +66,18 @@
 						height: 15px;
 					}
 				}
+				&.dealt {
+					.damage-value.active {
+						color: #61ff47;
+					}
+				}
 				&.received {
 					.damage-icon {
 						transform: none;
+					}
+
+					.damage-value.active {
+						color: #ff4747;
 					}
 				}
 			}
