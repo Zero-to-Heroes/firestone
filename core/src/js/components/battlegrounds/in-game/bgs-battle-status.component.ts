@@ -151,7 +151,6 @@ export class BgsBattleStatusComponent {
 	private tempInterval;
 
 	@Input() set battleSimulationStatus(value: 'empty' | 'waiting-for-result' | 'done') {
-		// console.log('setting battle sim status', value, this._previousStatus);
 		if (value === this._previousStatus) {
 			return;
 		}
@@ -211,7 +210,6 @@ export class BgsBattleStatusComponent {
 			this.wonLethalChance = null;
 			this.lostLethalChance = null;
 		} else if (this._previousStatus === 'waiting-for-result') {
-			// console.log('result waiting', value);
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.battleSimulationResultWin = '__';
 			this.battleSimulationResultTie = '__';
@@ -248,12 +246,7 @@ export class BgsBattleStatusComponent {
 			this.lostLethalChance = this._previousBattle.lostPercent
 				? this._previousBattle.lostLethalPercent?.toFixed(1) + '%'
 				: null;
-		} else {
-			// console.log('no value in nextbattle', this._previousBattle, this._previousStatus);
 		}
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
 	}
 
 	constructor(

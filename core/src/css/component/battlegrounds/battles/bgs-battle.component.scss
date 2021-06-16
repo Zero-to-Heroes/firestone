@@ -1,0 +1,66 @@
+.bgs-battle {
+	display: flex;
+
+	.battle-boards {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.simulations {
+		display: flex;
+		flex-direction: column;
+		margin-left: 15px;
+		border-left: 1px solid var(--color-3);
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	.result {
+		display: flex;
+		align-items: center;
+
+		.label {
+			width: 30px;
+		}
+
+		bgs-battle-status {
+			::ng-deep {
+				.battle-simulation {
+					flex-direction: column;
+					align-items: center;
+				}
+				.probas,
+				.damage-container {
+					border: none;
+					padding: 0;
+					margin-bottom: 15px;
+				}
+				.damage-container {
+					display: none;
+				}
+			}
+		}
+	}
+
+	.controls {
+		display: flex;
+		justify-content: space-evenly;
+
+		.button {
+			width: 80px;
+			height: 30px;
+			border: 1px solid var(--confirmation-text-color);
+			background: transparent;
+			color: var(--confirmation-text-color);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: 'Open Sans', sans-serif;
+
+			&:hover {
+				background: var(--on-confirmation-button-background-color);
+				color: var(--on-confirmation-text-color);
+			}
+		}
+	}
+}

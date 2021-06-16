@@ -61,8 +61,9 @@ export class BgsGameEndParser implements EventParser {
 
 	private buildBattlesPanel(currentState: BattlegroundsState, prefs: Preferences): BgsBattlesPanel {
 		// TODO: add somewhere the info about whether the user is a premium subscriber
+		// Let's use the face-offs directly from the game state, instead of duplicating the info
 		return BgsBattlesPanel.create({
-			faceOffs: currentState.currentGame.faceOffs,
+			faceOffs: null, // currentState.currentGame.faceOffs,
 		} as BgsBattlesPanel);
 	}
 

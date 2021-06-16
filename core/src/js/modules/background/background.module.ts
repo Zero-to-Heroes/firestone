@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
 import {
@@ -35,6 +36,9 @@ import { AppComponent } from '../../components/app.component';
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
+import { BgsBattleSideComponent } from '../../components/battlegrounds/battles/bgs-battle-side.component';
+import { BgsBattleComponent } from '../../components/battlegrounds/battles/bgs-battle.component';
+import { BgsBattlesComponent } from '../../components/battlegrounds/battles/bgs-battles.component';
 import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
@@ -360,6 +364,7 @@ const components = [
 		BrowserModule,
 		HttpClientModule,
 		BrowserAnimationsModule,
+		DragDropModule,
 		SharedServicesModule.forRoot(),
 		InlineSVGModule.forRoot(),
 		SelectModule,
@@ -390,6 +395,9 @@ const components = [
 		BattlegroundsMinionsListComponent,
 		BattlegroundsMinionsGroupComponent,
 		BgsBannedTribeComponent,
+		BgsBattlesComponent,
+		BgsBattleComponent,
+		BgsBattleSideComponent,
 
 		ConstructedComponent,
 		ConstructedContentComponent,

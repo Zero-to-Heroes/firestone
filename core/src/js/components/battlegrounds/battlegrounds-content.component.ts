@@ -80,6 +80,12 @@ import { PreferencesService } from '../../services/preferences.service';
 						[game]="_state?.currentGame"
 					>
 					</bgs-post-match-stats>
+					<bgs-battles
+						*ngxCacheIf="currentPanel?.id === 'bgs-battles'"
+						[panel]="currentPanel"
+						[game]="_state?.currentGame"
+					>
+					</bgs-battles>
 				</ng-container>
 			</section>
 		</div>

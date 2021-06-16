@@ -38,9 +38,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 			>
 				<span>{{ enableLiveStats && !matchOver ? 'Live stats' : 'Post-Match Stats' }}</span>
 			</li>
-			<!-- <li [ngClass]="{ 'selected': selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
+			<li [ngClass]="{ 'selected': selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
 				<span>Battles</span>
-			</li> -->
+			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

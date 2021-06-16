@@ -1,0 +1,76 @@
+.bgs-battle-side {
+	display: flex;
+}
+
+.hero {
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	z-index: 9;
+	position: relative;
+	margin-right: 30px;
+
+	.portrait {
+		width: 60px;
+	}
+
+	::ng-deep bgs-hero-portrait {
+		.health .value {
+			font-size: 22px;
+			// top: 74%;
+		}
+	}
+
+	.tavern {
+		position: absolute;
+		right: -8%;
+		top: 20%;
+		width: 35%;
+	}
+}
+
+.board {
+	display: flex;
+
+	.minion-container {
+		margin-right: 5px;
+		display: flex;
+	}
+
+	.minion {
+		// Needed for drag and drop
+		display: flex;
+		::ng-deep .card-on-board {
+			width: 60px;
+			height: auto;
+		}
+	}
+
+	.cdk-drag-placeholder {
+		opacity: 0;
+	}
+}
+
+.cdk-drag-preview {
+	box-sizing: border-box;
+	border-radius: 4px;
+	box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+		0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drop-dragging .cdk-drag {
+	transition: transform 500ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-animating {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.minion:last-child {
+	border: none;
+}
+
+.board.cdk-drop-list-dragging .minion:not(.cdk-drag-placeholder) {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
