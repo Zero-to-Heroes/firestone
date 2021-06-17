@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.9.9',
+		version: '7.9.11',
 		sections: [
 			{
 				type: 'intro',
@@ -47,8 +47,25 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `PREMIUM: Add a way to resimulate past battles after changing the minion order. This is also the first feature that is fully available only for supporters (you can still re-simulate the early turns if you're not subscribed). You can read more about this <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds---Battle-Resimulation#premium-only" target="_blank">here</a>`,
+							},
+							{
+								type: 'feature',
+								text: `Add lethal chances to battle simulator.`,
+							},
+						],
+					},
+					{
 						category: 'decktracker',
 						details: [
+							{
+								type: 'feature',
+								text: `Add the ability to override the decklist in the tracker (useful in tournaments when you know your opponent's decklist).`,
+							},
 							{
 								type: 'bug',
 								text: `Fix an issue where the secret cast by Sparkjoy Cheat would cause the secret helper to grey out some options.`,
@@ -56,15 +73,6 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix an issue where sometimes the deck used when battling a friend would use the previous match's decklist.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add lethal chances to battle simulator.`,
 							},
 						],
 					},

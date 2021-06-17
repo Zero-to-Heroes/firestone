@@ -19,6 +19,19 @@
 	pointer-events: all;
 	color: #a89782;
 
+	::ng-deep a {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		color: #ffb948;
+		opacity: 0.8;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
 	.backdrop {
 		background: #190505;
 		opacity: 0.9;

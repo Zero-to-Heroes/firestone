@@ -46,7 +46,7 @@ import { Update, updates, UpdateSectionItem, UpdateSectionItemDetails } from './
 									<ul class="details">
 										<li *ngFor="let detail of update.details" class="detail {{ detail.type }}">
 											<span class="detail-type">{{ getDetailTitle(detail) }}</span
-											>: {{ detail.text }}
+											>: <span [innerHTML]="detail.text"></span>
 										</li>
 									</ul>
 								</div>
