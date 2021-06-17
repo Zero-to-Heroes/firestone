@@ -122,8 +122,11 @@ export class BgsBattleSideComponent {
 					[GameTag[GameTag.WINDFURY]]: minion.windfury || minion.megaWindfury ? 1 : 0,
 					[GameTag[GameTag.MEGA_WINDFURY]]: minion.megaWindfury ? 1 : 0,
 				},
-				// TODO: add the enchantments somehow?
-			}),
+				// This probably won't work with positioning auras, but I don't think there are many
+				// left (used to have Dire Wolf Alpha)
+				enchantments: minion.enchantments,
+			} as any),
 		);
+		//console.debug('built entities', this.entities, this._player.board);
 	}
 }

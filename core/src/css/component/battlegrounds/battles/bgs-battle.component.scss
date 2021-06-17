@@ -1,9 +1,45 @@
 .bgs-battle {
 	display: flex;
+	flex-direction: column;
+
+	.battle-content {
+		display: flex;
+	}
+
+	.turn-label {
+		display: flex;
+		font-size: 14px;
+		margin-bottom: 10px;
+		color: var(--default-title-color);
+
+		.turn {
+		}
+
+		.result {
+			&.won {
+				color: #61ff47;
+			}
+			&.lost {
+				color: #ff4747;
+			}
+
+			&:before {
+				content: '-';
+				color: var(--default-text-color);
+				margin-left: 5px;
+				margin-right: 5px;
+			}
+		}
+	}
 
 	.battle-boards {
 		display: flex;
 		flex-direction: column;
+		flex-grow: 1;
+	}
+
+	.versus {
+		padding-left: 25px;
 	}
 
 	.simulations {
@@ -13,6 +49,7 @@
 		border-left: 1px solid var(--color-3);
 		padding-left: 15px;
 		padding-right: 15px;
+		justify-content: space-between;
 	}
 
 	.result {
@@ -20,13 +57,12 @@
 		align-items: center;
 
 		.label {
-			width: 30px;
+			width: 50px;
 		}
 
 		bgs-battle-status {
 			::ng-deep {
 				.battle-simulation {
-					flex-direction: column;
 					align-items: center;
 				}
 				.probas,
@@ -47,7 +83,7 @@
 		justify-content: space-evenly;
 
 		.button {
-			width: 80px;
+			width: 100px;
 			height: 30px;
 			border: 1px solid var(--confirmation-text-color);
 			background: transparent;
@@ -60,6 +96,51 @@
 			&:hover {
 				background: var(--on-confirmation-button-background-color);
 				color: var(--on-confirmation-text-color);
+			}
+
+			&.simulate.disabled {
+				background: var(--default-title-color);
+				border: 1px solid var(--default-title-color);
+				color: var(--color-7);
+				font-weight: bold;
+				opacity: 0.8;
+
+				&:hover {
+					background: var(--default-title-color);
+					border: 1px solid var(--default-title-color);
+					color: var(--color-7);
+					opacity: 1;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 1370px) {
+	.bgs-battle {
+		.result {
+			bgs-battle-status {
+				::ng-deep {
+					.damage-container:not(.lethal) {
+						display: flex;
+						margin-left: 15px;
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 1480px) {
+	.bgs-battle {
+		.result {
+			bgs-battle-status {
+				::ng-deep {
+					.damage-container.lethal {
+						display: flex;
+						margin-left: 15px;
+					}
+				}
 			}
 		}
 	}

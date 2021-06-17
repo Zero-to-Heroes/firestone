@@ -75,10 +75,26 @@
 	flex-grow: 1;
 	flex-shrink: 1;
 	width: calc(100% - 410px);
-	padding-top: 20px;
 	position: relative;
 	top: 0px;
 	overflow: auto;
+
+	.explanations {
+		margin-bottom: 20px;
+
+		a {
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			color: #ffb948;
+			opacity: 0.8;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
 
 	bgs-battle {
 		padding: 20px;

@@ -31,6 +31,16 @@ import { AdService } from '../../../services/ad.service';
 				<span class="subtitle">Your first battle will show here after you face an opponent</span>
 			</div>
 			<div class="content" *ngIf="faceOffs?.length" scrollable>
+				<div class="explanations">
+					You can reorder your or your opponents minions and simualte the new battle to help you find the best
+					positioning (requires premium for battles after turn 5). You can read more about the feature and its
+					limitations
+					<a
+						href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds---Battle-Resimulation"
+						target="_blank"
+						>here</a
+					>.
+				</div>
 				<bgs-battle *ngFor="let faceOff of faceOffs" [faceOff]="faceOff"></bgs-battle>
 			</div>
 			<div class="left">
@@ -72,7 +82,6 @@ export class BgsBattlesComponent implements OnDestroy {
 		if (!this._panel || !this._game?.faceOffs?.length || this.faceOffs === this._game.faceOffs) {
 			return;
 		}
-
 		this.faceOffs = this._game.faceOffs;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
