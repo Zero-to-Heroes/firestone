@@ -159,7 +159,8 @@ export class BgsBattleComponent implements AfterViewInit {
 			},
 			options: {
 				...this._faceOff.battleInfo.options,
-				numberOfSimulations: 10000,
+				numberOfSimulations: 15000,
+				maxAcceptableDuration: 20000,
 			},
 		};
 		const prefs = await this.prefs.getPreferences();
