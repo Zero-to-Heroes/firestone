@@ -54,9 +54,7 @@ export class DecksStateBuilderService {
 				(stat) =>
 					!prefs?.desktopDeckDeletes ||
 					!prefs.desktopDeckDeletes[stat.playerDecklist]?.length ||
-					prefs.desktopDeckDeletes[stat.playerDecklist][
-						prefs.desktopDeckDeletes[stat.playerDecklist].length - 1
-					] < stat.creationTimestamp,
+					prefs.desktopDeckDeletes[stat.playerDecklist][0] < stat.creationTimestamp,
 			)
 			.filter((stat) => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
 			.filter((stat) => stat.gameMode === filters.gameMode)
@@ -171,9 +169,7 @@ export class DecksStateBuilderService {
 			(stat) =>
 				!prefs?.desktopDeckStatsReset ||
 				!prefs.desktopDeckStatsReset[stat.playerDecklist]?.length ||
-				prefs.desktopDeckStatsReset[stat.playerDecklist][
-					prefs.desktopDeckStatsReset[stat.playerDecklist].length - 1
-				] < stat.creationTimestamp,
+				prefs.desktopDeckStatsReset[stat.playerDecklist][0] < stat.creationTimestamp,
 		);
 		// console.debug(statsWithReset);
 		const deckName =

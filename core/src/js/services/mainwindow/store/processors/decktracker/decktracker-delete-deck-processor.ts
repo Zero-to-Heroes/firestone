@@ -22,12 +22,16 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		const currentPrefs = await this.prefs.getPreferences();
+		console.log(
+			'[deck-delete] deck before deletion',
+			currentState.decktracker.decks.find((deck) => deck.deckstring === event.deckstring),
+		);
 		const deletedDeckDates: readonly number[] = currentPrefs.desktopDeckDeletes[event.deckstring] ?? [];
-		console.log('[deck-delete] deletedDeckDates', event.deckstring, currentPrefs.desktopDeckDeletes);
+		console.log('[deck-delete] deletedDeckDates', event.deckstring, deletedDeckDates);
 		const newDeleteDates: readonly number[] = [Date.now(), ...deletedDeckDates];
 		console.log('[deck-delete] newDeleteDates', newDeleteDates);
 		const newPrefs = await this.prefs.setDeckDeleteDates(event.deckstring, newDeleteDates);
-		console.log('[deck-delete] newPrefs', newPrefs.desktopDeckDeletes);
+		console.log('[deck-delete] newPrefs', newPrefs.desktopDeckDeletes[event.deckstring]);
 		const newState: DecktrackerState = Object.assign(new DecktrackerState(), currentState.decktracker, {
 			decks: this.decksStateBuilder.buildState(
 				currentState.stats,
@@ -36,6 +40,10 @@ export class DecktrackerDeleteDeckProcessor implements Processor {
 				newPrefs,
 			),
 		} as DecktrackerState);
+		console.log(
+			'[deck-delete] deck after deletion',
+			newState.decks.find((deck) => deck.deckstring === event.deckstring),
+		);
 		const replays = await this.replaysBuilder.buildState(currentState.replays, currentState.stats, newState.decks);
 		return [
 			Object.assign(new MainWindowState(), currentState, {
