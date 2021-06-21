@@ -2,7 +2,9 @@ import { CardIds } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
+import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
+import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsTavernUpgrade } from '../../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { getHeroPower, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsHeroSelectedEvent } from '../events/bgs-hero-selected-event';
@@ -64,6 +66,13 @@ export class BgsHeroSelectedParser implements EventParser {
 		const updatedState = currentState.update({
 			currentGame: newGame,
 			heroSelectionDone: true,
+			panels: currentState.panels.map((panel) =>
+				panel.id === 'bgs-hero-selection-overview'
+					? (panel as BgsHeroSelectionOverviewPanel).update({
+							selectedHeroCardId: event.cardId,
+					  } as BgsHeroSelectionOverviewPanel)
+					: panel,
+			) as readonly BgsPanel[],
 		} as BattlegroundsState);
 		if (event.additionalData?.nextOpponentCardId) {
 			return new BgsNextOpponentParser().parse(

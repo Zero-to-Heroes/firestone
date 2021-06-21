@@ -331,7 +331,7 @@ export const getAchievementsForHero = (
 	}
 
 	const searchName = `as ${heroName}`;
-	return heroAchievements.filter((ach) => ach.text.replace(/,/g, '').includes(searchName));
+	return (heroAchievements ?? []).filter((ach) => ach.text.replace(/,/g, '').includes(searchName));
 };
 
 // Because inconsistencies

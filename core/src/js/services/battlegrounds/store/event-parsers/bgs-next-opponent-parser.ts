@@ -22,7 +22,7 @@ export class BgsNextOpponentParser implements EventParser {
 		);
 
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
-			turn: currentState.currentGame.currentTurn,
+			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			playerCardId: currentState.currentGame.getMainPlayer().cardId,
 			opponentCardId: normalizeHeroCardId(event.cardId),
 		} as BgsFaceOffWithSimulation);

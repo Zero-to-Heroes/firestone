@@ -10,11 +10,16 @@ export class BgsHeroSelectionOverviewPanel implements BgsPanel {
 	readonly icon: string;
 	readonly heroOverview: readonly BgsHeroStat[];
 	readonly heroOptionCardIds: readonly string[];
+	readonly selectedHeroCardId: string;
 	readonly patchNumber: number;
 	readonly globalStats: BgsStats;
 	readonly heroAchievements: readonly VisualAchievement[];
 
 	public static create(base: BgsHeroSelectionOverviewPanel): BgsHeroSelectionOverviewPanel {
 		return Object.assign(new BgsHeroSelectionOverviewPanel(), base);
+	}
+
+	public update(base: BgsHeroSelectionOverviewPanel): BgsHeroSelectionOverviewPanel {
+		return Object.assign(new BgsHeroSelectionOverviewPanel(), this, base);
 	}
 }

@@ -44,6 +44,7 @@ export class BgsMatchStartParser implements EventParser {
 				panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
 				heroAchievements: heroAchievements,
 				heroSelectionDone: false,
+				currentPanelId: 'bgs-hero-selection-overview',
 			} as BattlegroundsState);
 		}
 	}

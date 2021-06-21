@@ -76,7 +76,11 @@ export class BgsHeroSelectionOverviewComponent {
 		const allOverviews = this._panel.heroOverview.filter((overview) => overview.id !== 'average');
 		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
 		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(allOverviews));
-		if (!this._panel?.heroOptionCardIds || !groupedByTier) {
+		// When spectating a game, we don't have the initial options
+		const selectionOptions =
+			this._panel?.heroOptionCardIds ??
+			(this._panel.selectedHeroCardId ? [this._panel.selectedHeroCardId] : null);
+		if (!selectionOptions || !groupedByTier) {
 			return;
 		}
 		this.tiers = [
@@ -112,7 +116,7 @@ export class BgsHeroSelectionOverviewComponent {
 			},
 		].filter((tier) => tier.heroes);
 		// console.log('setting hero overviews', this._panel);
-		this.heroOverviews = this._panel.heroOptionCardIds.map((cardId) => {
+		this.heroOverviews = selectionOptions.map((cardId) => {
 			const existingStat = this._panel.heroOverview.find((overview) => overview.id === cardId);
 			const statWithDefault =
 				existingStat ||
