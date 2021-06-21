@@ -121,6 +121,10 @@ export class GameEvents {
 		});
 	}
 
+	public isSpectating() {
+		return this.spectating;
+	}
+
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
 		if (this.shouldTriggerCatchUp) {
 			await this.triggerCatchUp();
@@ -129,9 +133,9 @@ export class GameEvents {
 		if (eventQueue.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
-		if (!this.spectating) {
-			await this.processLogs(eventQueue);
-		}
+		// if (!this.spectating) {
+		await this.processLogs(eventQueue);
+		// }
 		// console.log('process queue', eventQueue);
 		return [];
 	}
@@ -1107,13 +1111,15 @@ export class GameEvents {
 		if (data.indexOf('End Spectator Mode') !== -1) {
 			console.log('end spectating', data);
 			this.spectating = false;
+			// We need to treat this as an "end game" event
+			this.processingQueue.enqueue(data);
 		}
 
-		if (this.spectating) {
-			// For now we're not interested in spectating events, but that will come out later
-			// console.log('spectating, doing nothing');
-			return;
-		}
+		// if (this.spectating) {
+		// 	// For now we're not interested in spectating events, but that will come out later
+		// 	// console.log('spectating, doing nothing');
+		// 	return;
+		// }
 
 		if (data.indexOf('CREATE_GAME') !== -1) {
 			console.log('[game-events] received CREATE_GAME log', data);
@@ -1150,11 +1156,11 @@ export class GameEvents {
 			console.log('[game-events] [existing] end spectating', existingLine);
 			this.spectating = false;
 		}
-		if (this.spectating) {
-			// For now we're not interested in spectating events, but that will come out later
-			// console.log('spectating, doing nothing');
-			return;
-		}
+		// if (this.spectating) {
+		// 	// For now we're not interested in spectating events, but that will come out later
+		// 	// console.log('spectating, doing nothing');
+		// 	return;
+		// }
 
 		// if (this.triggerTimeout) {
 		// 	clearTimeout(this.triggerTimeout);
@@ -1178,7 +1184,7 @@ export class GameEvents {
 		if (existingLine.indexOf('tag=PLAYSTATE value=WON') !== -1) {
 			console.log('[game-events] [existing] received tag=PLAYSTATE value=WON log', existingLine);
 		}
-		if (existingLine.indexOf('tag=STATE value=COMPLETE') !== -1) {
+		if (existingLine.indexOf('tag=STATE value=COMPLETE') !== -1 || existingLine.includes('End Spectator Mode')) {
 			// Complete game, we don't handle it
 			console.log('[game-events] [existing] complete game, trashing all logs');
 			this.existingLogLines = [];

@@ -5,6 +5,7 @@ import { DeckParserService } from '../decktracker/deck-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { GameEvents } from '../game-events.service';
 import { OverwolfService } from '../overwolf.service';
 import { EndGameUploaderService } from './end-game-uploader.service';
 import { ReplayUploadService } from './replay-upload.service';
@@ -21,6 +22,7 @@ export class EndGameListenerService {
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
+		private gameEventsService: GameEvents,
 		private events: Events,
 		private deckService: DeckParserService,
 		private endGameUploader: EndGameUploaderService,
@@ -53,6 +55,13 @@ export class EndGameListenerService {
 					// 	this.gameState.getCurrentReviewId(),
 					// 	this.rewards.getXpGained(),
 					// ]);
+					if (this.deckTimeout) {
+						clearTimeout(this.deckTimeout);
+					}
+					if (this.gameEventsService.isSpectating()) {
+						console.log('[manastorm-bridge] spectating, returning');
+						break;
+					}
 					this.events.broadcast(Events.GAME_END, reviewId);
 
 					await this.endGameUploader.upload(
@@ -63,9 +72,6 @@ export class EndGameListenerService {
 						this.currentBuildNumber,
 						this.currentScenarioId,
 					);
-					if (this.deckTimeout) {
-						clearTimeout(this.deckTimeout);
-					}
 			}
 		});
 	}
