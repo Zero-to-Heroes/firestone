@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.9.11',
+		version: '7.10.0',
 		sections: [
 			{
 				type: 'intro',
@@ -74,6 +74,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where sometimes the deck used when battling a friend would use the previous match's decklist.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix another issue when deleting some decks.`,
+							},
 						],
 					},
 					{
@@ -82,6 +86,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'content',
 								text: `The community stats now only show the stats for Heroic, whatever filter is selected. Your own stats still show either Casual, Heroic or both depending on the value of the filter. This has been done to drastically reduce the data size and make room for more interesting info.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'feature',
+								text: `Spectating others is finally supported, for all game modes. Please note that because of the information available when starting to spectate a friend, some things can't be shown, like the current decklist (but you can import one if you know the deck code), or more or less all the actions that happened before you started spectating them. So it's not a time machine that will let you see what happened in the past, but you'll get all the functionalities from that turn forward :)`,
 							},
 						],
 					},
