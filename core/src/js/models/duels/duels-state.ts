@@ -36,6 +36,7 @@ export class DuelsState {
 	readonly activeGameModeFilter: DuelsGameModeFilterType;
 	readonly activeTopDecksClassFilter: DuelsClassFilterType;
 	readonly activeTopDecksDustFilter: DuelsTopDecksDustFilterType;
+	readonly activeMmrFilter: string;
 
 	public static create(base: DuelsState): DuelsState {
 		return Object.assign(new DuelsState(), base);

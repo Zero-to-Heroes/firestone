@@ -263,6 +263,7 @@ export class Preferences {
 	readonly duelsActiveGameModeFilter: DuelsGameModeFilterType = 'all';
 	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
+	readonly duelsActiveMmrFilter: string = 'all';
 	readonly duelsPersonalDeckNames: { [deckstring: string]: string } = {};
 	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];
 	readonly duelsPersonalDeckShowHiddenDecks: boolean;

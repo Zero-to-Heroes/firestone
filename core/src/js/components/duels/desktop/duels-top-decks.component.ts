@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
+import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../models/duels/duels-state';
 
 @Component({
@@ -54,7 +55,9 @@ export class DuelsTopDecksComponent {
 	}
 
 	private *buildIterator(): IterableIterator<void> {
-		this.allDecks = this._state.playerStats.deckStats;
+		this.allDecks = this._state.playerStats.deckStats
+			.map((grouped) => this.applyFilters(grouped))
+			.filter((grouped) => grouped.decks.length > 0);
 		const workingRuns = [...this.allDecks];
 		// One item is a full list of grouped replays for the day
 		// So we don't want to be too aggressive with full runs
@@ -80,6 +83,17 @@ export class DuelsTopDecksComponent {
 			this.cdr.detectChanges();
 		}
 		return;
+	}
+
+	private applyFilters(grouped: DuelsGroupedDecks): DuelsGroupedDecks {
+		return {
+			...grouped,
+			decks: grouped.decks.filter((deck) => this.mmrFilter(deck, this._state.activeMmrFilter)),
+		};
+	}
+
+	private mmrFilter(deck: DuelsDeckStat, activeMmrFilter: string): boolean {
+		return !activeMmrFilter || activeMmrFilter === 'all' || deck.rating >= +activeMmrFilter;
 	}
 
 	private getTotalRunsLength(groups: readonly DuelsGroupedDecks[]): number {

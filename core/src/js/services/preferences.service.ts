@@ -339,6 +339,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateDuelsMmrFilter(value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsActiveMmrFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateDuelsDeckName(deckstring: string, newName: string) {
 		const prefs = await this.getPreferences();
 		const names = prefs.duelsPersonalDeckNames;

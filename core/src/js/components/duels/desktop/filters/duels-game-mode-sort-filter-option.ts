@@ -39,8 +39,7 @@ export class DuelsGameModeSortFilterOption implements DuelsDropdownOption {
 				navigation.navigationDuels.selectedCategoryId === 'duels-runs' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-treasures' ||
 				navigation.navigationDuels.selectedCategoryId === 'duels-personal-decks' ||
-				navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details' ||
-				navigation.navigationDuels.selectedCategoryId === 'duels-top-decks')
+				navigation.navigationDuels.selectedCategoryId === 'duels-personal-deck-details')
 		);
 	};
 	selectHandler = (stateUpdater: EventEmitter<MainWindowStoreEvent>, option: GameModeFilterOption) => {

@@ -216,6 +216,7 @@ export class DuelsStateBuilderService {
 			activeGameModeFilter: prefs.duelsActiveGameModeFilter,
 			activeTopDecksClassFilter: prefs.duelsActiveTopDecksClassFilter,
 			activeTopDecksDustFilter: prefs.duelsActiveTopDecksDustFilter,
+			activeMmrFilter: prefs.duelsActiveMmrFilter,
 			currentDuelsMetaPatch: currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch,
 		} as DuelsState);
 	}
@@ -587,6 +588,15 @@ export class DuelsStateBuilderService {
 				return stat.dustCost <= parseInt(prefs.duelsActiveTopDecksDustFilter);
 		}
 	}
+
+	// private rankFilter(stat: DuelsDeckStat, prefs: Preferences): boolean {
+	// 	switch (prefs.duelsActiveMmrFilter) {
+	// 		case 'all':
+	// 			return true;
+	// 		default:
+	// 			return stat.rating >= parseInt(prefs.duelsActiveMmrFilter);
+	// 	}
+	// }
 
 	private groupDecks(decks: readonly DuelsDeckStat[], prefs: Preferences): readonly DuelsGroupedDecks[] {
 		const groupingFunction = (deck: DuelsDeckStat) => {

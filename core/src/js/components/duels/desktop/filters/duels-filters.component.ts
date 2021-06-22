@@ -17,6 +17,7 @@ import { PreferencesService } from '../../../../services/preferences.service';
 import { DuelsDropdownOption } from './duels-dropdown-option';
 import { DuelsGameModeSortFilterOption } from './duels-game-mode-sort-filter-option';
 import { DuelsHeroFilterOption } from './duels-hero-filter-option';
+import { DuelsMmrFilterOption } from './duels-mmr-filter-option';
 import { DuelsStatTypeOption } from './duels-stat-type-option';
 import { DuelsTimeSortFilterOption } from './duels-time-sort-filter-option';
 import { DuelsClassFilterOption } from './duels-top-decks-class-filter-option';
@@ -115,6 +116,7 @@ export class DuelsFiltersComponent implements AfterViewInit {
 			{ class: 'time-sort-filter', option: new DuelsTimeSortFilterOption() } as InternalOption,
 			{ class: 'class-filter', option: new DuelsClassFilterOption() } as InternalOption,
 			{ class: 'top-decks-dust-filter', option: new DuelsTopDecksDustFilterOption() } as InternalOption,
+			{ class: 'mmr-filter', option: new DuelsMmrFilterOption() } as InternalOption,
 		];
 		const prefs = await this.prefs.getPreferences();
 		this.showHiddenDecksLink =

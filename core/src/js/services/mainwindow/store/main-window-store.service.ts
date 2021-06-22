@@ -78,6 +78,7 @@ import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode
 import { DuelsHeroSearchEvent } from './events/duels/duels-hero-search-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsHidePersonalDeckSummaryEvent } from './events/duels/duels-hide-personal-deck-summary-event';
+import { DuelsMmrFilterSelectedEvent } from './events/duels/duels-mmr-filter-selected-event';
 import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
 import { DuelsRestorePersonalDeckSummaryEvent } from './events/duels/duels-restore-personal-deck-summary-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
@@ -167,6 +168,7 @@ import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-g
 import { DuelsHeroSearchProcessor } from './processors/duels/duels-hero-search-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsHidePersonalDeckSummaryProcessor } from './processors/duels/duels-hide-personal-deck-summary-processor';
+import { DuelsMmrFilterSelectedProcessor } from './processors/duels/duels-mmr-filter-selected-processor';
 import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
 import { DuelsRestorePersonalDeckSummaryProcessor } from './processors/duels/duels-restore-personal-deck-summary-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
@@ -645,6 +647,9 @@ export class MainWindowStoreService {
 
 			DuelsTopDecksDustFilterSelectedEvent.eventName(),
 			new DuelsTopDecksDustFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsMmrFilterSelectedEvent.eventName(),
+			new DuelsMmrFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsPersonalDeckRenameEvent.eventName(),
 			new DuelsPersonalDeckRenameProcessor(this.duelsBuilder, this.prefs),
