@@ -212,8 +212,8 @@ export class AppBootstrapService {
 		}
 		this.loadingWindowShown = true;
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
-		const prefs = await this.prefs.getPreferences();
-		this.ow.hideCollectionWindow(prefs);
+		// const prefs = await this.prefs.getPreferences();
+		// this.ow.hideCollectionWindow(prefs);
 
 		const shouldShowAds = await this.ads.shouldDisplayAds();
 		// console.log('shouldshow ads?', shouldShowAds);

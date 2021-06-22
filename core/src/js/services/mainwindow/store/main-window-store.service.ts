@@ -273,11 +273,10 @@ export class MainWindowStoreService {
 
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.gameLaunched(res)) {
-				// console.log('[store] game launched, populating store', res);
 				// Do both so that it's hidden right away
-				const prefs = await this.prefs.getPreferences();
-				this.ow.hideCollectionWindow(prefs);
-				this.stateUpdater.next(new CloseMainWindowEvent());
+				// const prefs = await this.prefs.getPreferences();
+				// this.ow.hideCollectionWindow(prefs);
+				// this.stateUpdater.next(new CloseMainWindowEvent());
 				// Give a bit of time for memory info to be there?
 				setTimeout(() => {
 					this.populateStore(true);
