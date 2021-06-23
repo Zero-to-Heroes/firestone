@@ -68,11 +68,11 @@ import { Knob } from '../preference-slider.component';
 						label="Update cost in deck"
 						tooltip="When active, the mana cost of cards in the deck whose cost has been modified reflects the new cost value."
 					></preference-toggle>
-					<preference-toggle
+					<!-- <preference-toggle
 						field="overlayHighlightRelatedCards"
 						label="Highlight related cards"
 						tooltip="When active, related cards will be highlighted on your decklist when mousing over specific cards (for instance, mousing over Double Jump in your decklist will highlight all Outcast cards in your deck)"
-					></preference-toggle>
+					></preference-toggle> -->
 					<preference-toggle
 						field="decktrackerCloseOnGameEnd"
 						label="Close tracker on game end"
