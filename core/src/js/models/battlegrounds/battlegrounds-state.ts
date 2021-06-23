@@ -9,6 +9,7 @@ import { BgsStats } from './stats/bgs-stats';
 export class BattlegroundsState {
 	readonly inGame: boolean;
 	readonly reconnectOngoing: boolean;
+	readonly spectating: boolean;
 	readonly heroSelectionDone: boolean;
 	readonly panels: readonly BgsPanel[] = [];
 	readonly currentPanelId: BgsPanelId;

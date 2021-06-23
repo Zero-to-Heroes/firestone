@@ -27,6 +27,7 @@ export class DungeonLootParserService {
 	public currentDuelsRunId: string;
 	public busyRetrievingInfo: boolean;
 
+	private spectating: boolean;
 	private lastDuelsMatch: GameStat;
 	private currentDuelsHeroPowerCardDbfId: number;
 	private currentDuelsSignatureTreasureCardId: string;
@@ -40,7 +41,7 @@ export class DungeonLootParserService {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private rewardsTimeout;
-	private shouldTryToGetRewards: boolean;
+	// private shouldTryToGetRewards: boolean;
 
 	private debug: boolean;
 
@@ -58,7 +59,7 @@ export class DungeonLootParserService {
 			this.setLastDuelsMatch(newGameStats?.stats);
 		});
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
-			if (event.type === GameEvent.MATCH_METADATA) {
+			if (event.type === GameEvent.MATCH_METADATA && !event.additionalData.spectating && !this.spectating) {
 				this.duelsInfo = null;
 				this.currentGameType = event.additionalData.metaData.GameType;
 				this.log(
@@ -69,29 +70,14 @@ export class DungeonLootParserService {
 				if ([GameType.GT_PVPDR, GameType.GT_PVPDR_PAID].includes(this.currentGameType)) {
 					this.retrieveLootInfo();
 				}
-			} else if (event.type === GameEvent.SCENE_CHANGED) {
-				// const newScene = event.additionalData.scene;
-				// if (newScene === 'scene_pvp_dungeon_run') {
-				// 	this.shouldTryToGetRewards = true;
-				// 	if (this.rewardsTimeout) {
-				// 		clearTimeout(this.rewardsTimeout);
-				// 		this.rewardsTimeout = null;
-				// 	}
-				// 	this.tryAndGetRewards();
-				// } else {
-				// 	this.shouldTryToGetRewards = false;
-				// 	if (this.rewardsTimeout) {
-				// 		this.log('clearing rewards timeout');
-				// 		clearTimeout(this.rewardsTimeout);
-				// 		this.rewardsTimeout = null;
-				// 	}
-				// }
+			} else if (event.type === GameEvent.SPECTATING) {
+				this.spectating = event.additionalData.spectating;
 			}
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			// console.log('[bootstrap] updated game status', res);
 			if (this.ow.exitGame(res)) {
-				this.shouldTryToGetRewards = false;
+				// this.shouldTryToGetRewards = false;
 				if (this.rewardsTimeout) {
 					this.log('clearing rewards timeout');
 					clearTimeout(this.rewardsTimeout);
@@ -138,6 +124,10 @@ export class DungeonLootParserService {
 	}
 
 	public async handleBlur(logLine: string) {
+		if (this.spectating) {
+			this.log('spectating, not handling blur');
+			return;
+		}
 		// this.logDebug('handling blur', logLine);
 		if (!this.goingIntoQueueRegex.exec(logLine)) {
 			return;

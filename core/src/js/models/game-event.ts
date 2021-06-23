@@ -101,6 +101,8 @@ export class GameEvent implements GameStateEvent {
 	public static readonly ENTITY_UPDATE = 'ENTITY_UPDATE';
 	public static readonly COPIED_FROM_ENTITY_ID = 'COPIED_FROM_ENTITY_ID';
 
+	public static readonly SPECTATING = 'SPECTATING';
+
 	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
 	public static readonly BATTLEGROUNDS_HERO_SELECTION = 'BATTLEGROUNDS_HERO_SELECTION';
 	public static readonly BATTLEGROUNDS_HERO_SELECTED = 'BATTLEGROUNDS_HERO_SELECTED';

@@ -20,7 +20,7 @@ export class Events {
 
 	public static readonly NEW_GAME_ID = 'new-game-id';
 	public static readonly REVIEW_FINALIZED = 'review-finalized';
-	public static readonly GAME_END = 'events-game-end';
+	// public static readonly GAME_END = 'events-game-end';
 	public static readonly REVIEW_INITIALIZED = 'review-initialized';
 	public static readonly SCENE_CHANGED = 'scene-changed';
 	public static readonly PLAYER_INFO = 'player-info';

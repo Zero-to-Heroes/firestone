@@ -17,6 +17,7 @@ export class GameState {
 	readonly currentTurn: number | 'mulligan' = 'mulligan';
 	readonly gameStarted: boolean;
 	readonly gameEnded: boolean;
+	readonly spectating: boolean;
 
 	// When adding new stuff, don't forget to clean them in twitch-auth.service.ts
 	readonly deckStats: readonly GameStat[] = [];

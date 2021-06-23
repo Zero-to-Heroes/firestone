@@ -344,6 +344,11 @@ export class GameStateService {
 
 		if (gameEvent.type === GameEvent.GAME_START) {
 			this.updateOverlays(this.state, false, false, shouldUpdateOverlays);
+		} else if (gameEvent.type === GameEvent.SPECTATING) {
+			this.state = this.state.update({
+				// We can't "unspectate" a game
+				spectating: this.state.spectating || gameEvent.additionalData.spectating,
+			} as GameState);
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			this.updateOverlays(this.state, true, true, shouldUpdateOverlays);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {

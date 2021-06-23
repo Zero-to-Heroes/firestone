@@ -22,6 +22,7 @@ export class ArenaRunParserService {
 	public currentArenaRunId: string;
 	public busyRetrievingInfo: boolean;
 
+	private spectating: boolean;
 	private lastArenaMatch: GameStat;
 	private currentArenaWins: number;
 	private currentArenaLosses: number;
@@ -46,7 +47,7 @@ export class ArenaRunParserService {
 			this.setLastArenaMatch(newGameStats?.stats);
 		});
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
-			if (event.type === GameEvent.MATCH_METADATA) {
+			if (event.type === GameEvent.MATCH_METADATA && !event.additionalData.spectating && !this.spectating) {
 				this.currentGameType = event.additionalData.metaData.GameType;
 				this.log(
 					'retrieved match meta data',
@@ -56,6 +57,8 @@ export class ArenaRunParserService {
 				if ([GameType.GT_ARENA].includes(this.currentGameType)) {
 					this.handleArenaRunId();
 				}
+			} else if (event.type === GameEvent.SPECTATING) {
+				this.spectating = event.additionalData.spectating;
 			}
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async (event) => {
@@ -97,6 +100,11 @@ export class ArenaRunParserService {
 	}
 
 	public async handleBlur(logLine: string) {
+		if (this.spectating) {
+			this.log('spectating, not handling blur');
+			return;
+		}
+
 		// this.logDebug('handling blur', logLine);
 		if (!this.goingIntoQueueRegex.exec(logLine)) {
 			return;

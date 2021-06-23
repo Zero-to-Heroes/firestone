@@ -19,10 +19,7 @@ declare let amplitude;
 
 @Injectable()
 export class GameEvents {
-	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
-	private spectating: boolean;
 	private plugin;
-	// private hasSentToS3 = false;
 
 	private processingQueue = new ProcessingQueue<string>(
 		(eventQueue) => this.processQueue(eventQueue),
@@ -113,16 +110,12 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
-		this.ow?.addGameInfoUpdatedListener(async (res: any) => {
-			// console.log('[bootstrap] updated game status', res);
-			if (this.ow.exitGame(res)) {
-				this.spectating = false;
-			}
-		});
-	}
-
-	public isSpectating() {
-		return this.spectating;
+		// this.ow?.addGameInfoUpdatedListener(async (res: any) => {
+		// 	// console.log('[bootstrap] updated game status', res);
+		// 	if (this.ow.exitGame(res)) {
+		// 		this.setSpectating(false);
+		// 	}
+		// });
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
@@ -133,10 +126,7 @@ export class GameEvents {
 		if (eventQueue.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
-		// if (!this.spectating) {
 		await this.processLogs(eventQueue);
-		// }
-		// console.log('process queue', eventQueue);
 		return [];
 	}
 
@@ -150,15 +140,18 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		//if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-		//	console.debug('[debug] game event', gameEvent.Type, gameEvent);
-		//}
+		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		// 	console.debug('[debug] game event', gameEvent.Type, gameEvent);
+		// }
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
 				// this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
+					additionalData: {
+						spectating: gameEvent.Value.Spectating,
+					},
 				} as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.gameEventsEmitter.allEvents.next(event);
@@ -169,7 +162,8 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
-							metaData: gameEvent.Value,
+							metaData: gameEvent.Value.MetaData,
+							spectating: gameEvent.Value.Spectating,
 							stats: this.store.state?.stats,
 							state: this.store.state,
 						},
@@ -1051,6 +1045,7 @@ export class GameEvents {
 							game: gameEvent.Value.Game,
 							report: gameEvent.Value.GameStateReport,
 							replayXml: gameEvent.Value.ReplayXml,
+							spectating: gameEvent.Value.Spectating,
 						},
 					} as GameEvent),
 				);
@@ -1082,6 +1077,14 @@ export class GameEvents {
 					Object.assign(new GameEvent(), { type: GameEvent.RECONNECT_OVER }),
 				);
 				break;
+			case 'SPECTATING':
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.SPECTATING,
+						additionalData: { spectating: gameEvent.Value.Spectating },
+					} as GameEvent),
+				);
+				break;
 			default:
 				console.log('unsupported game event', gameEvent);
 		}
@@ -1095,10 +1098,7 @@ export class GameEvents {
 				this.existingLogLines?.length,
 				this.processingQueue.eventsPendingCount(),
 			);
-			this.spectating = false;
-			// if (this.triggerTimeout) {
-			// 	clearTimeout(this.triggerTimeout);
-			// }
+			// this.setSpectating(false);
 			this.existingLogLines = [];
 			this.processingQueue.clear();
 			return;
@@ -1106,20 +1106,14 @@ export class GameEvents {
 		// console.log('received log line', data);
 		if (data.indexOf('Begin Spectating') !== -1) {
 			console.log('begin spectating', data);
-			this.spectating = true;
+			// this.setSpectating(true);
 		}
 		if (data.indexOf('End Spectator Mode') !== -1) {
 			console.log('end spectating', data);
-			this.spectating = false;
+			// this.setSpectating(false);
 			// We need to treat this as an "end game" event
-			this.processingQueue.enqueue(data);
+			// this.processingQueue.enqueue(data);
 		}
-
-		// if (this.spectating) {
-		// 	// For now we're not interested in spectating events, but that will come out later
-		// 	// console.log('spectating, doing nothing');
-		// 	return;
-		// }
 
 		if (data.indexOf('CREATE_GAME') !== -1) {
 			console.log('[game-events] received CREATE_GAME log', data);
@@ -1150,29 +1144,19 @@ export class GameEvents {
 		// console.log('received existing', existingLine);
 		if (existingLine.indexOf('Begin Spectating') !== -1) {
 			console.log('[game-events] [existing] begin spectating', existingLine);
-			this.spectating = true;
+			// this.setSpectating(true);
 		}
 		if (existingLine.indexOf('End Spectator Mode') !== -1) {
 			console.log('[game-events] [existing] end spectating', existingLine);
-			this.spectating = false;
+			// this.setSpectating(false);
 		}
-		// if (this.spectating) {
-		// 	// For now we're not interested in spectating events, but that will come out later
-		// 	// console.log('spectating, doing nothing');
-		// 	return;
-		// }
-
-		// if (this.triggerTimeout) {
-		// 	clearTimeout(this.triggerTimeout);
-		// 	this.triggerTimeout = null;
-		// }
 
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
 			// There is no automatic reconnect when spectating, so we can always safely say
 			// that when we finish catching up with the actual contents of the file, we are
 			// not spectating
 			console.log('[game-events] [existing] end_of_existing_data');
-			this.spectating = false;
+			// this.setSpectating(false);
 			// this.triggerCatchUp();
 			return;
 		}
@@ -1217,11 +1201,7 @@ export class GameEvents {
 			this.existingLogLines = [];
 			return;
 		}
-		console.log(
-			'[game-events] [existing] caught up, enqueueing all events',
-			this.existingLogLines.length,
-			this.spectating,
-		);
+		console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
 		if (this.existingLogLines.length > 0) {
 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
 		}
@@ -1256,37 +1236,4 @@ export class GameEvents {
 			return dateWithMillis.getTime();
 		}
 	}
-
-	// private async uploadLogsAndSendException(first, second) {
-	// 	if (this.hasSentToS3) {
-	// 		return;
-	// 	}
-
-	// 	this.hasSentToS3 = true;
-	// 	try {
-	// 		const s3LogFileKey = await this.logService.uploadGameLogs();
-	// 		const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
-	// 		const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
-	// 		// console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
-	// 		const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
-	// 		const firstoneLogsKey = await this.logService.uploadAppLogs();
-	// 		captureEvent({
-	// 			message: 'Exception while running plugin: ' + first,
-	// 			extra: {
-	// 				first: first,
-	// 				firstProcessedLine:
-	// 					fullLogsFromPlugin.indexOf('\n') !== -1
-	// 						? fullLogsFromPlugin.split('\n')[0]
-	// 						: fullLogsFromPlugin,
-	// 				lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
-	// 				logFileKey: s3LogFileKey,
-	// 				pluginLogsFileKey: pluginLogsFileKey,
-	// 				firestoneLogs: firstoneLogsKey,
-	// 			},
-	// 		});
-	// 		// console.log('uploaded event to sentry');
-	// 	} catch (e) {
-	// 		console.error('Exception while uploading logs for troubleshooting', e);
-	// 	}
-	// }
 }

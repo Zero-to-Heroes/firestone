@@ -43,6 +43,7 @@ import { BgsRealTimeStatsUpdatedParser } from './event-parsers/bgs-real-time-sta
 import { BgsReconnectStatusParser } from './event-parsers/bgs-reconnect-status-parser';
 import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
 import { BgsResetHighlightsParser } from './event-parsers/bgs-reset-highlights-processor';
+import { BgsSpectatingParser } from './event-parsers/bgs-spectating-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
 import { BgsStatUpdateParser } from './event-parsers/bgs-stat-update-parser';
@@ -69,6 +70,7 @@ import { BgsPlayerBoardEvent } from './events/bgs-player-board-event';
 import { BgsRealTimeStatsUpdatedEvent } from './events/bgs-real-time-stats-updated-event';
 import { BgsReconnectStatusEvent } from './events/bgs-reconnect-status-event';
 import { BgsRecruitStartEvent } from './events/bgs-recruit-start-event';
+import { BgsSpectatingEvent } from './events/bgs-spectating-event';
 import { BgsStartComputingPostMatchStatsEvent } from './events/bgs-start-computing-post-match-stats-event';
 import { BgsTavernUpgradeEvent } from './events/bgs-tavern-upgrade-event';
 import { BgsToggleOverlayWindowEvent } from './events/bgs-toggle-overlay-window-event';
@@ -187,6 +189,8 @@ export class BattlegroundsStoreService {
 			this.eventsThisTurn.push(gameEvent.type);
 			if (gameEvent.type === GameEvent.RECONNECT_START) {
 				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(true));
+			} else if (gameEvent.type === GameEvent.SPECTATING) {
+				this.battlegroundsUpdater.next(new BgsSpectatingEvent(gameEvent.additionalData.spectating));
 			} else if (gameEvent.type === GameEvent.RECONNECT_OVER) {
 				this.battlegroundsUpdater.next(new BgsReconnectStatusEvent(false));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION) {
@@ -200,7 +204,9 @@ export class BattlegroundsStoreService {
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS ||
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 				) {
-					this.battlegroundsUpdater.next(new BgsMatchStartEvent(this.mainWindowState));
+					this.battlegroundsUpdater.next(
+						new BgsMatchStartEvent(this.mainWindowState, gameEvent.additionalData.spectating),
+					);
 					if (this.memoryInterval) {
 						clearInterval(this.memoryInterval);
 						this.memoryInterval = null;
@@ -246,7 +252,9 @@ export class BattlegroundsStoreService {
 					),
 				);
 			} else if (gameEvent.type === GameEvent.TURN_START) {
+				//console.debug('TURN_START', gameEvent);
 				this.processAllPendingEvents(gameEvent.additionalData.turnNumber);
+				//console.debug('TURN_START sending event', gameEvent);
 				this.battlegroundsUpdater.next(new BgsTurnStartEvent(gameEvent.additionalData.turnNumber));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_COMBAT_START) {
 				this.battlegroundsUpdater.next(new BgsCombatStartEvent());
@@ -298,47 +306,6 @@ export class BattlegroundsStoreService {
 					!this.gameEventsService.isCatchingUpLogLines() &&
 					prefs.bgsEnableSimulation
 				) {
-					// if (
-					// 	this.state.currentGame?.battleInfo?.opponentBoard?.player?.cardId &&
-					// 	this.state.currentGame?.battleInfo?.opponentBoard?.player?.cardId !==
-					// 		gameEvent.additionalData.opponent &&
-					// 	gameEvent.additionalData.opponent != CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds
-					// ) {
-					// 	console.error(
-					// 		'no-format',
-					// 		'[bgs-simulation] Received battle result with an incompatible battle sim',
-					// 		this.state.currentGame.battleInfo?.opponentBoard?.player?.cardId,
-					// 		gameEvent.additionalData.opponent,
-					// 		this.state.currentGame.battleInfo,
-					// 		this.state.currentGame.battleResult,
-					// 	);
-					// } else if (!this.state.currentGame?.battleResult || !this.state.currentGame?.battleInfo) {
-					// 	// When no one has a board (or rather, when no player ever attacks during the battle),
-					// 	// the PLAYER_BOARD event is not sent, and so battle result is never set
-					// 	// Ties in battle are the only situation where this can happen, so I'm for now downgrading
-					// 	// the severity when the result is a tie
-					// 	if (gameEvent.additionalData.result === 'tied') {
-					// 		console.warn(
-					// 			'no-format',
-					// 			'[bgs-simulation] Received battle result with an incomplete battle info',
-					// 			this.state.currentGame.battleInfo,
-					// 			this.state.currentGame.battleResult,
-					// 			prefs.bgsEnableSimulation,
-					// 		);
-					// 	} else {
-					// 		console.error(
-					// 			'no-format',
-					// 			'[bgs-simulation] Received battle result with an incomplete battle info',
-					// 			this.state.currentGame.currentTurn,
-					// 			this.state.currentGame.battleInfo?.playerBoard?.board?.length,
-					// 			this.state.currentGame.battleInfo?.opponentBoard?.board?.length,
-					// 			this.state.currentGame.battleInfo,
-					// 			this.state.currentGame.battleResult,
-					// 			prefs.bgsEnableSimulation,
-					// 			gameEvent.additionalData.result,
-					// 		);
-					// 	}
-					// }
 				}
 				this.battlegroundsUpdater.next(
 					new BgsBattleResultEvent(
@@ -351,7 +318,10 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsTripleCreatedEvent(gameEvent.cardId));
 			} else if (gameEvent.type === GameEvent.CARD_PLAYED) {
 				this.battlegroundsUpdater.next(new BgsCardPlayedEvent(gameEvent));
-			} else if (gameEvent.type === GameEvent.GAME_END) {
+			} else if (
+				gameEvent.type === GameEvent.GAME_END ||
+				(gameEvent.type === GameEvent.SPECTATING && !gameEvent.additionalData.spectating)
+			) {
 				// console.log('[bgs-store] Game ended', gameEvent);
 				if (this.memoryInterval) {
 					clearInterval(this.memoryInterval);
@@ -391,7 +361,7 @@ export class BattlegroundsStoreService {
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {
 		const gameEvent = eventQueue[0];
-		// console.log('[bgs-store] processing', gameEvent.type, gameEvent);
+		// console.debug('[bgs-store] processing', gameEvent.type, gameEvent);
 		try {
 			await this.processEvent(gameEvent);
 		} catch (e) {
@@ -429,7 +399,9 @@ export class BattlegroundsStoreService {
 	}
 
 	private async processEvent(gameEvent: BattlegroundsStoreEvent) {
+		//console.debug('will process event', gameEvent);
 		await Promise.all(this.overlayHandlers.map((handler) => handler.processEvent(gameEvent)));
+		//console.debug('handler done', gameEvent);
 		if (gameEvent.type === 'BgsCloseWindowEvent') {
 			this.state = this.state.update({
 				forceOpen: false,
@@ -451,7 +423,9 @@ export class BattlegroundsStoreService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, newState)) {
+					//console.debug('will apply parser', gameEvent, parser);
 					newState = await parser.parse(newState, gameEvent, this.deckState);
+					//console.debug('has applied parser', gameEvent, parser);
 				}
 			} catch (e) {
 				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e.message, e);
@@ -460,8 +434,10 @@ export class BattlegroundsStoreService {
 		if (newState !== this.state) {
 			this.state = newState;
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
-			// console.log('emitted state', gameEvent.type, this.state);
+			// console.debug('emitted state', gameEvent.type, this.state);
 			this.updateOverlay();
+		} else {
+			//console.debug('no new state', newState);
 		}
 	}
 
@@ -531,6 +507,7 @@ export class BattlegroundsStoreService {
 			new BgsToggleHighlightMinionOnBoardParser(),
 			new BgsResetHighlightsParser(),
 			new BgsReconnectStatusParser(),
+			new BgsSpectatingParser(),
 		];
 
 		if (FeatureFlags.ENABLE_REAL_TIME_STATS) {

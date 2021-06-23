@@ -44,6 +44,7 @@ export class DeckParserService {
 
 	public currentDeck: DeckInfo = {} as DeckInfo;
 	private previousDeck: any = {};
+	private spectating: boolean;
 
 	private lastDeckTimestamp;
 	private currentBlock: string;
@@ -73,7 +74,10 @@ export class DeckParserService {
 
 	private async init() {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
-			if (event.type === GameEvent.GAME_END) {
+			if (
+				event.type === GameEvent.GAME_END ||
+				(event.type === GameEvent.SPECTATING && !event.additionalData.spectating)
+			) {
 				console.log('[deck-parser] resetting deck after game end');
 				const shouldStorePreviousDeck =
 					this.currentGameType === GameType.GT_VS_AI &&
@@ -94,8 +98,19 @@ export class DeckParserService {
 					this.currentDeck,
 				);
 			}
+			if (event.type === GameEvent.SPECTATING) {
+				console.log('[deck-parser] spectating, resetting deck', event.additionalData);
+				this.reset(false);
+				this.currentGameType = undefined;
+				this.currentScenarioId = undefined;
+				this.spectating = event.additionalData.spectating;
+			}
 		});
 		this.events.on(Events.MEMORY_UPDATE).subscribe((data) => {
+			if (this.spectating) {
+				return;
+			}
+
 			const changes: MemoryUpdate = data.data[0];
 			if (changes.SelectedDeckId) {
 				console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
@@ -141,6 +156,10 @@ export class DeckParserService {
 		// 	this.currentGameType,
 		// 	this.selectedDeckId,
 		// );
+		if (this.spectating) {
+			console.log('[deck-parser] spectating, not handling queue into match');
+			return;
+		}
 
 		if (this.goingIntoQueueRegex.exec(logLine)) {
 			if (
@@ -215,6 +234,11 @@ export class DeckParserService {
 	}
 
 	public async getCurrentDeck(usePreviousDeckIfSameScenarioId: boolean, metadata: Metadata): Promise<any> {
+		if (this.spectating) {
+			console.log('[deck-parser] spectating, not returning any deck');
+			return null;
+		}
+
 		const shouldUseCachedDeck = metadata.gameType !== GameType.GT_VS_AI;
 		console.log(
 			'[deck-parser] getting current deck',
@@ -260,6 +284,11 @@ export class DeckParserService {
 	}
 
 	public async getWhizbangDeck(deckId: number) {
+		if (this.spectating) {
+			console.log('[deck-parser] spectating, not returning Whizbang deck');
+			return;
+		}
+
 		const deck = this.deckTemplates.find((deck) => deck.DeckId === deckId);
 		console.debug('[deck-parser] found template deck', deckId, deck, this.deckTemplates);
 		if (deck && deck.DeckList && deck.DeckList.length > 0) {
@@ -442,7 +471,7 @@ export class DeckParserService {
 		}
 	}
 
-	public decodeDeckString() {
+	private decodeDeckString() {
 		if (this.currentDeck) {
 			if (this.currentDeck.deckstring) {
 				const deck = decode(this.currentDeck.deckstring);

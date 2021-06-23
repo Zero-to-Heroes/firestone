@@ -47,6 +47,10 @@ export class EndGameListenerService {
 					break;
 				case GameEvent.GAME_END:
 					console.log('[manastorm-bridge] end game, uploading?');
+					if (gameEvent.additionalData.spectating) {
+						console.log('[manastorm-bridge] spectate game, not uploading');
+						return;
+					}
 					// Keep the await / long processes here to a minimum, since
 					// we want to start reading all the important memory bits as soon
 					// as possible
@@ -58,11 +62,7 @@ export class EndGameListenerService {
 					if (this.deckTimeout) {
 						clearTimeout(this.deckTimeout);
 					}
-					if (this.gameEventsService.isSpectating()) {
-						console.log('[manastorm-bridge] spectating, returning');
-						break;
-					}
-					this.events.broadcast(Events.GAME_END, reviewId);
+					// this.events.broadcast(Events.GAME_END, reviewId);
 
 					await this.endGameUploader.upload(
 						gameEvent,
