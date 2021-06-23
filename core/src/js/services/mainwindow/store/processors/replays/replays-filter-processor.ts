@@ -18,6 +18,7 @@ export class ReplaysFilterProcessor implements Processor {
 		switch (event.type) {
 			case 'deckstring':
 				await this.prefs.updateReplayFilterDeckstring(event.type, event.selectedValue);
+				await this.prefs.updateReplayFilterGameMode('gameMode', 'ranked');
 				break;
 			case 'gameMode':
 				await this.prefs.updateReplayFilterGameMode(event.type, event.selectedValue);
