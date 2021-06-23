@@ -1,7 +1,19 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
+import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { CardsHighlightService } from '../../../services/decktracker/card-highlight/cards-highlight.service';
+import { uuid } from '../../../services/utils';
 
 @Component({
 	selector: 'deck-card',
@@ -16,10 +28,13 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 			[ngClass]="{
 				'color-mana-cost': _colorManaCost,
 				'color-class-cards': _colorClassCards,
-				'missing': _isMissing
+				'missing': _isMissing,
+				'linked-card': isLinkedCardHighlight
 			}"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="_tooltipPosition"
+			(mouseenter)="onMouseEnter($event)"
+			(mouseleave)="onMouseLeave($event)"
 		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="mana-cost" [ngClass]="{ 'cost-reduction': manaCostReduction }">
@@ -90,12 +105,13 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				</div>
 			</div>
 			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
+			<div class="linked-card-overlay"></div>
 			<div class="mouse-over" [style.right.px]="mouseOverRight"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckCardComponent {
+export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		// console.log('[deck-card] setting tooltip position', value);
 		this._tooltipPosition = value;
@@ -126,6 +142,13 @@ export class DeckCardComponent {
 		}
 	}
 
+	@Input() set zone(zone: DeckZone) {
+		this._zone = zone;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	_tooltipPosition: CardTooltipPositionType;
 	cardId: string;
 	cardImage: string;
@@ -134,6 +157,7 @@ export class DeckCardComponent {
 	rarity: string;
 	numberOfCopies: number;
 	highlight: string;
+	isLinkedCardHighlight: boolean;
 	_colorManaCost: boolean;
 	_colorClassCards: boolean;
 	_isMissing: boolean;
@@ -147,17 +171,62 @@ export class DeckCardComponent {
 	manaCostReduction: boolean;
 	mouseOverRight = 0;
 
-	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly cards: AllCardsService) {}
-
 	private _showUpdatedCost: boolean;
 	private _card: VisualDeckCard;
+	private _referenceCard: ReferenceCard;
+	private _uniqueId: string;
+	private _zone: DeckZone;
 
-	private updateInfos() {
+	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly cards: AllCardsService,
+		private readonly cardsHighlightService: CardsHighlightService,
+	) {}
+
+	ngAfterViewInit() {
+		this._uniqueId = uuid();
+		this.cardsHighlightService.register(this._uniqueId, {
+			referenceCardProvider: () => this._referenceCard,
+			deckCardProvider: () => this._card,
+			zoneProvider: () => this._zone,
+			highlightCallback: () => this.doHighlight(),
+			unhighlightCallback: () => this.doUnhighlight(),
+		});
+	}
+
+	ngOnDestroy() {
+		this.cardsHighlightService.unregister(this._uniqueId);
+	}
+
+	doHighlight() {
+		this.isLinkedCardHighlight = true;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	doUnhighlight() {
+		this.isLinkedCardHighlight = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	onMouseEnter(event: MouseEvent) {
+		this.cardsHighlightService.onMouseEnter(this.cardId);
+	}
+
+	onMouseLeave(event: MouseEvent) {
+		this.cardsHighlightService.onMouseLeave(this.cardId);
+	}
+
+	private async updateInfos() {
 		if (!this._card) {
 			return;
 		}
 
+		await this.cards.initializeCardsDb();
 		this.cardId = this._card.cardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=3)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
@@ -188,6 +257,7 @@ export class DeckCardComponent {
 			const image = new Image();
 			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 			image.src = imageUrl;
+			this._referenceCard = this.cards.getCard(this.cardId);
 		}
 
 		if (this.numberOfCopies > 1) {

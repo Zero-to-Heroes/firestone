@@ -49,6 +49,7 @@ import { groupByFunction } from '../../../services/utils';
 						[tooltipPosition]="_tooltipPosition"
 						[colorManaCost]="colorManaCost"
 						[showUpdatedCost]="_showUpdatedCost"
+						[zone]="_zone"
 					></deck-card>
 				</li>
 			</ul>

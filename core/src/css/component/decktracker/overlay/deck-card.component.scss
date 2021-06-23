@@ -20,6 +20,23 @@
 		// animation: card-zoom 0.2s ease-in-out;
 	}
 
+	.linked-card-overlay {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		z-index: 1;
+		background: rgba(0, 128, 0, 0.4);
+	}
+
+	&.linked-card {
+		.linked-card-overlay {
+			display: flex;
+		}
+	}
+
 	.background-image {
 		position: absolute;
 		top: 1px; // Otherwise there is a little band of color showing when art is blank

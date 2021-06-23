@@ -12,6 +12,7 @@ import { CollectionManager } from '../../services/collection/collection-manager.
 import { IndexedDbService } from '../../services/collection/indexed-db.service';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { DebugService } from '../../services/debug.service';
+import { CardsHighlightService } from '../../services/decktracker/card-highlight/cards-highlight.service';
 import { DeckHandlerService } from '../../services/decktracker/deck-handler.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
@@ -64,6 +65,7 @@ export class SharedServicesModule {
 				OwUtilsService,
 				HotkeyService,
 				ApiRunner,
+				CardsHighlightService,
 			],
 		};
 	}
