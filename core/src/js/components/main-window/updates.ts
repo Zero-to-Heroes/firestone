@@ -31,17 +31,17 @@ export const updates: readonly Update[] = [
 	{
 		version: '7.10.0',
 		sections: [
-			{
-				type: 'intro',
-				header: 'Beta release - important',
-				text: `
-					This release has some moderate logging enabled to try and help me debug some issues that seem to arise randomly: Reckoning being greyed out inappropriately, and the tavern timing turn in BG being off by 1 in the future. <br/>
-					So if you encounter one of these issues, by all mean please open a bug report! :) <br/>
-					You might therefore face some lags (mostly in BG), but overall I think things should be fine. <br/>
-					<br/>
-					Have fun, and thanks again for all the help :)
-				`,
-			},
+			// {
+			// 	type: 'intro',
+			// 	header: 'Beta release - important',
+			// 	text: `
+			// 		This release has some moderate logging enabled to try and help me debug some issues that seem to arise randomly: Reckoning being greyed out inappropriately, and the tavern timing turn in BG being off by 1 in the future. <br/>
+			// 		So if you encounter one of these issues, by all mean please open a bug report! :) <br/>
+			// 		You might therefore face some lags (mostly in BG), but overall I think things should be fine. <br/>
+			// 		<br/>
+			// 		Have fun, and thanks again for all the help :)
+			// 	`,
+			// },
 			{
 				type: 'main',
 				header: 'Main updates',
@@ -51,7 +51,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `PREMIUM: Add a way to resimulate past battles after changing the minion order. This is also the first feature that is fully available only for supporters (you can still re-simulate the early turns if you're not subscribed). You can read more about this <a href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds---Battle-Resimulation#premium-only" target="_blank">here</a>`,
+								text: `Add a way to resimulate past battles after changing the minion order.`,
 							},
 							{
 								type: 'feature',
@@ -211,6 +211,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Tooltips now have an arrow linking them to the element being highlighted.`,
+							},
+							{
+								type: 'ui',
+								text: `Don't close Firestone when launching HS when it's already open on the desktop.`,
 							},
 						],
 					},
