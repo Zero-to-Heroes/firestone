@@ -35,9 +35,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 			[confirmationPosition]="_tooltipPosition"
 			(onConfirm)="confirmOverride()"
 		>
-			<svg class="svg-icon-fill">
-				<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
-			</svg>
+			<div class="icon" inlineSVG="assets/svg/import_deckstring.svg"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -159,6 +159,11 @@ export class AskConfirmationDirective implements OnDestroy {
 			this.overlayRef.detach();
 		}
 		this.onConfirm.next(true);
+		this.events.broadcast(Events.HIDE_MODAL);
+		// this.overlayRef.dispose();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private cancel() {

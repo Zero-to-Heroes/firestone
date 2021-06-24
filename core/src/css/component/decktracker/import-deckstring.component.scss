@@ -10,9 +10,8 @@
 	--icon-color: var(--color-6);
 	--icon-color-secondary: var(--color-1);
 
-	svg {
-		height: 16px;
-		width: 13px;
+	.icon {
+		margin-left: 5px;
 	}
 
 	&:hover {

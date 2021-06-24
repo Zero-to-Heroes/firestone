@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import {
 	PerfectScrollbarConfigInterface,
@@ -39,6 +40,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		ReactiveFormsModule,
 		PerfectScrollbarModule,
 		SharedServicesModule.forRoot(),
+		InlineSVGModule.forRoot(),
 	],
 	declarations: [
 		DeckTrackerOverlayRootComponent,
