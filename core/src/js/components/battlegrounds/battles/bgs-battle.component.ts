@@ -103,7 +103,7 @@ export class BgsBattleComponent implements AfterViewInit {
 	) {}
 
 	async ngAfterViewInit() {
-		this.isPremium = this.turnNumber <= 5 || !(await this.adService.shouldDisplayAds());
+		this.isPremium = true; //this.turnNumber <= 5 || !(await this.adService.shouldDisplayAds());
 		this.tooltip = this.isPremium
 			? 'Simulate the battle with the new boards'
 			: 'Click to subscribe and unlock this feature';

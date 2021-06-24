@@ -41,7 +41,7 @@ import { AdService } from '../../../services/ad.service';
 						>here</a
 					>.
 				</div>
-				<bgs-battle *ngFor="let faceOff of faceOffs" [faceOff]="faceOff"></bgs-battle>
+				<bgs-battle *ngFor="let faceOff of faceOffs.slice().reverse()" [faceOff]="faceOff"></bgs-battle>
 			</div>
 			<div class="left">
 				<!-- <div class="title">Wazzup?</div> -->
