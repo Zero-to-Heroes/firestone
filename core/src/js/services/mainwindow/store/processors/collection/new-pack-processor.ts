@@ -19,24 +19,23 @@ export class NewPackProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		const newPack: PackResult = {
+			id: 0,
+			creationDate: Date.now(),
+			boosterId: event.boosterId,
+			setId: event.setId,
+			cards: event.packCards.map(
+				(card) =>
+					({
+						cardId: card.cardId,
+						cardType: card.cardType,
+						cardRarity: this.allCards.getCard(card.cardId)?.rarity?.toLowerCase(),
+					} as CardPackResult),
+			),
+		};
+		console.log('[pack-history] handling new pack', newPack);
 		// Save the new pack info
-		const newPackStats: readonly PackResult[] = [
-			{
-				id: 0,
-				creationDate: Date.now(),
-				boosterId: event.boosterId,
-				setId: event.setId,
-				cards: event.packCards.map(
-					(card) =>
-						({
-							cardId: card.cardId,
-							cardType: card.cardType,
-							cardRarity: this.allCards.getCard(card.cardId)?.rarity?.toLowerCase(),
-						} as CardPackResult),
-				),
-			},
-			...currentState.binder.packStats,
-		];
+		const newPackStats: readonly PackResult[] = [newPack, ...currentState.binder.packStats];
 
 		const setToUpdate = currentState.binder.allSets.find((set) => set.id === event.setId);
 		const pityTimer: PityTimer = this.collectionManager
