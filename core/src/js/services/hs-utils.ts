@@ -13,8 +13,8 @@ export const classes = [
 	'priest',
 	'rogue',
 	'shaman',
-	'warrior',
 	'warlock',
+	'warrior',
 ];
 export const classesForPieChart = [
 	'rogue',
