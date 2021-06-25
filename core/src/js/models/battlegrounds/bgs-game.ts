@@ -68,16 +68,20 @@ export class BgsGame {
 			lastFaceOff?.opponentCardId !== opponentHeroCardId &&
 			opponentHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds
 		) {
+			// What might be happening here is that the simulation takes too long to complete, and the next
+			// face offf has already been boostrapped in the list
 			console.error(
-				'[face-off] trying to update incorrect face-off',
+				'[face-off] trying to update incorrect face-off with battle result',
 				opponentHeroCardId,
 				lastFaceOff?.opponentCardId,
 				lastFaceOff?.turn,
 				lastFaceOff?.result,
-				faceOff.turn,
-				faceOff.opponentCardId,
-				faceOff.result,
-				this.faceOffs.map((f) => `${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}`),
+				this.faceOffs.map(
+					(f) =>
+						`${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}, ${f.battleInfo != null}, ${
+							f.battleResult != null
+						}`,
+				),
 			);
 			return this;
 		}
