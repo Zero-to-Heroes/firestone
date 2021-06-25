@@ -70,9 +70,14 @@ export class BgsGame {
 		) {
 			console.error(
 				'[face-off] trying to update incorrect face-off',
-				lastFaceOff?.opponentCardId,
 				opponentHeroCardId,
-				this.faceOffs,
+				lastFaceOff?.opponentCardId,
+				lastFaceOff?.turn,
+				lastFaceOff?.result,
+				faceOff.turn,
+				faceOff.opponentCardId,
+				faceOff.result,
+				this.faceOffs.map((f) => `${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}`),
 			);
 			return this;
 		}
