@@ -150,7 +150,7 @@ export class GameEvents {
 				const event = Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_START,
 					additionalData: {
-						spectating: gameEvent.Value.Spectating,
+						spectating: gameEvent.Value?.Spectating,
 					},
 				} as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
@@ -163,7 +163,7 @@ export class GameEvents {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
 							metaData: gameEvent.Value?.MetaData ?? {},
-							spectating: gameEvent.Value.Spectating,
+							spectating: gameEvent.Value?.Spectating,
 							stats: this.store.state?.stats,
 							state: this.store.state,
 						},
