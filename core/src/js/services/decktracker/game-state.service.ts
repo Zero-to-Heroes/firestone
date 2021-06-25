@@ -238,12 +238,11 @@ export class GameStateService {
 
 	private async getCurrentReviewIdInternal(callback, retriesLeft = 15) {
 		if (retriesLeft <= 0) {
-			console.error('[game-state] Could not get current review id');
-			callback(null);
-			return;
+			console.error('[game-state] Review ID was never set, assigning new one');
+			this.currentReviewId = uuid();
 		}
 		if (!this.currentReviewId) {
-			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 2000);
+			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 1000);
 			return;
 		}
 		callback(this.currentReviewId);
