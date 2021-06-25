@@ -162,7 +162,7 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
-							metaData: gameEvent.Value.MetaData,
+							metaData: gameEvent.Value?.MetaData ?? {},
 							spectating: gameEvent.Value.Spectating,
 							stats: this.store.state?.stats,
 							state: this.store.state,
@@ -1081,7 +1081,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.SPECTATING,
-						additionalData: { spectating: gameEvent.Value.Spectating },
+						additionalData: { spectating: gameEvent.Value?.Spectating },
 					} as GameEvent),
 				);
 				break;
