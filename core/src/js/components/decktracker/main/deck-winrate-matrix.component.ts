@@ -107,6 +107,10 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	async reset() {
+		if (!this.deck) {
+			return;
+		}
+
 		if (!this.confirmationShown) {
 			this.confirmationShown = true;
 			this.resetText = 'Are you sure?';
