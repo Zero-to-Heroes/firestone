@@ -1,4 +1,5 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { ComponentType } from '@angular/cdk/portal';
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -9,9 +10,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, GameType } from '@firestone-hs/reference-data';
-import { Entity } from '@firestone-hs/replay-parser';
+import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { defaultStartingHp } from '../../../services/hs-utils';
+import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
 @Component({
 	selector: 'bgs-battle-side',
@@ -40,6 +42,10 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 					cdkDropListOrientation="horizontal"
 					[cdkDropListData]="i"
 					(cdkDropListDropped)="drop($event)"
+					cachedComponentTooltip
+					[componentType]="componentType"
+					[componentInput]="entity"
+					[componentTooltipPosition]="'right'"
 				>
 					<card-on-board
 						class="minion"
@@ -58,6 +64,8 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattleSideComponent {
+	componentType: ComponentType<any> = BgsCardTooltipComponent;
+
 	@Output() entitiesUpdated: EventEmitter<readonly Entity[]> = new EventEmitter<readonly Entity[]>();
 
 	@Input() set player(value: BgsBoardInfo) {
@@ -75,7 +83,7 @@ export class BgsBattleSideComponent {
 
 	entities: readonly Entity[];
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: AllCardsService) {}
 
 	trackByFn(index, item: Entity) {
 		return item.id;
@@ -102,9 +110,9 @@ export class BgsBattleSideComponent {
 			return;
 		}
 
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${this._player.player.cardId}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${this._player.player?.cardId}.png`;
 		this.health = this._player.player.hpLeft;
-		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player.cardId);
+		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;
 
 		this.entities = this._player.board.map((minion) =>

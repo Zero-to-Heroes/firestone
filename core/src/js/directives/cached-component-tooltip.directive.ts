@@ -56,7 +56,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 	}
 
 	private updatePositionStrategy() {
-		// console.log('updatePositionStrategy', this.viewInit, this._componentInput, this._componentType);
+		// console.debug('updatePositionStrategy', this.viewInit, this._componentInput, this._componentType);
 		if (!this.viewInit || !this._componentInput || !this._componentType) {
 			return;
 		}
@@ -79,6 +79,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
+		// console.debug('built overlay ref', this.overlayRef);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -96,7 +97,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		// console.log('mouseenter', this.overlayRef);
+		// console.debug('mouseenter', this.overlayRef);
 
 		if (!this.tooltipRef) {
 			// Create tooltip portal
@@ -127,15 +128,6 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	private buildPositions(): ConnectedPosition[] {
 		switch (this.position) {
-			case 'right':
-				return [
-					{
-						originX: 'end',
-						originY: 'center',
-						overlayX: 'start',
-						overlayY: 'center',
-					},
-				];
 			case 'left':
 				return [
 					{
@@ -143,6 +135,15 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 						originY: 'center',
 						overlayX: 'end',
 						overlayY: 'center',
+					},
+				];
+			case 'bottom':
+				return [
+					{
+						originX: 'center',
+						originY: 'bottom',
+						overlayX: 'center',
+						overlayY: 'top',
 					},
 				];
 			case 'top':
@@ -154,13 +155,14 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 						overlayY: 'bottom',
 					},
 				];
-			case 'bottom':
+			case 'right':
+			default:
 				return [
 					{
-						originX: 'center',
-						originY: 'bottom',
-						overlayX: 'center',
-						overlayY: 'top',
+						originX: 'end',
+						originY: 'center',
+						overlayX: 'start',
+						overlayY: 'center',
 					},
 				];
 		}
