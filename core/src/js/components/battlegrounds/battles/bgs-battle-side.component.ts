@@ -129,6 +129,7 @@ export class BgsBattleSideComponent {
 					[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,
 					[GameTag[GameTag.WINDFURY]]: minion.windfury || minion.megaWindfury ? 1 : 0,
 					[GameTag[GameTag.MEGA_WINDFURY]]: minion.megaWindfury ? 1 : 0,
+					[GameTag[GameTag.PREMIUM]]: this.allCards.getCard(minion.cardId)?.battlegroundsNormalDbfId ? 1 : 0,
 				},
 				// This probably won't work with positioning auras, but I don't think there are many
 				// left (used to have Dire Wolf Alpha)
