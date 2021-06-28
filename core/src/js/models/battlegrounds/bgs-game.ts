@@ -63,7 +63,37 @@ export class BgsGame {
 			return this;
 		}
 
-		const lastFaceOff = this.faceOffs[this.faceOffs.length - 1];
+		const matchingFaceOffs = this.faceOffs
+			.filter((f) => f.opponentCardId === opponentHeroCardId)
+			.filter((f) => {
+				if (faceOff.battleInfo) {
+					return !f.battleInfo;
+				}
+				if (faceOff.battleResult) {
+					return !f.battleResult;
+				}
+				if (faceOff.result) {
+					return !f.result;
+				}
+				return true;
+			})
+			.reverse();
+		if (!matchingFaceOffs.length) {
+			console.error(
+				'[face-off] no matching face-off',
+				opponentHeroCardId,
+				this.faceOffs.map(
+					(f) =>
+						`${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}, ${f.battleInfo != null}, ${
+							f.battleResult != null
+						}`,
+				),
+			);
+			return this;
+		}
+
+		const lastFaceOff = matchingFaceOffs[0];
+		// TODO: we can probably remove this error now
 		if (
 			lastFaceOff?.opponentCardId !== opponentHeroCardId &&
 			opponentHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds
