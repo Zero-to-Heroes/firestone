@@ -121,6 +121,10 @@ export class BgsPlayerBoardParser implements EventParser {
 			defaultStartingHp(GameType.GT_BATTLEGROUNDS, playerBoard.hero.CardId);
 		const damage = playerBoard.hero?.Tags?.find((tag) => tag.Name === GameTag.DAMAGE)?.Value ?? 0;
 		console.debug('set hp left for', playerBoard.hero.CardId, health - damage, health, damage, playerBoard);
+		const hpLeft = health - damage;
+		if (hpLeft <= 0 || isNaN(hpLeft)) {
+			console.warn('hp is 0', health, damage, playerBoard.hero.Tags, playerBoard.hero);
+		}
 		return {
 			player: {
 				tavernTier: tavernTier,

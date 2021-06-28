@@ -3,6 +3,7 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -173,7 +174,7 @@ export class BgsBattleComponent implements AfterViewInit {
 	}
 
 	private buildBoard(entities: readonly Entity[]): BoardEntity[] {
-		return entities.map((entity) => this.buildEntity(entity));
+		return (entities ?? []).map((entity) => this.buildEntity(entity));
 	}
 
 	private buildEntity(entity: Entity): BoardEntity {
@@ -196,8 +197,24 @@ export class BgsBattleComponent implements AfterViewInit {
 	}
 
 	private updateInfo() {
-		this.opponent = this._faceOff.battleInfo?.opponentBoard;
-		this.player = this._faceOff.battleInfo?.playerBoard;
+		this.opponent =
+			this._faceOff.battleInfo?.opponentBoard ??
+			({
+				player: {
+					cardId: this._faceOff.opponentCardId,
+					hpLeft: this._faceOff.opponentHpLeft,
+					tavernTier: this._faceOff.opponentTavern,
+				} as BgsPlayerEntity,
+			} as BgsBoardInfo);
+		this.player =
+			this._faceOff.battleInfo?.playerBoard ??
+			({
+				player: {
+					cardId: this._faceOff.playerCardId,
+					hpLeft: this._faceOff.playerHpLeft,
+					tavernTier: this._faceOff.playerTavern,
+				} as BgsPlayerEntity,
+			} as BgsBoardInfo);
 		this.actualBattle = this._faceOff.battleResult;
 		this.newBattle = this._faceOff.battleResult;
 		this.turnNumber = this._faceOff.turn;

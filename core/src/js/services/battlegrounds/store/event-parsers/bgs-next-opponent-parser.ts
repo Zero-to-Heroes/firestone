@@ -1,9 +1,11 @@
+import { GameType } from '@firestone-hs/reference-data';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsOpponentOverview } from '../../../../models/battlegrounds/in-game/bgs-opponent-overview';
+import { defaultStartingHp } from '../../../hs-utils';
 import { normalizeHeroCardId } from '../../bgs-utils';
 import { BgsNextOpponentEvent } from '../events/bgs-next-opponent-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -15,17 +17,35 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
-		// console.log('parsing next opponent', event);
+		// console.debug('parsing next opponent', event);
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(currentState, event.cardId);
 		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
 
+		const mainPlayer = currentState.currentGame.getMainPlayer();
+		const opponent = currentState.currentGame.players.find(
+			(player) => player.getNormalizedHeroCardId() === normalizeHeroCardId(event.cardId),
+		);
+		if (!mainPlayer || !opponent) {
+			return currentState;
+		}
+
+		// console.debug('face off players', mainPlayer, opponent, currentState);
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
-			playerCardId: currentState.currentGame.getMainPlayer()?.cardId,
-			opponentCardId: normalizeHeroCardId(event.cardId),
+			playerCardId: mainPlayer?.cardId,
+			playerHpLeft:
+				(mainPlayer?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, mainPlayer?.cardId)) -
+				(mainPlayer?.damageTaken ?? 0),
+			playerTavern: mainPlayer?.getCurrentTavernTier(),
+			opponentCardId: opponent?.getNormalizedHeroCardId(),
+			opponentHpLeft:
+				(opponent?.initialHealth ?? defaultStartingHp(GameType.GT_BATTLEGROUNDS, opponent?.cardId)) -
+				(opponent?.damageTaken ?? 0),
+			opponentTavern: opponent?.getCurrentTavernTier(),
 		} as BgsFaceOffWithSimulation);
+		// console.debug('created new face off', faceOff, currentState);
 		return currentState.update({
 			panels: panels,
 			currentGame: currentState.currentGame.update({

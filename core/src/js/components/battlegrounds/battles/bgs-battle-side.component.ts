@@ -115,7 +115,7 @@ export class BgsBattleSideComponent {
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;
 
-		this.entities = this._player.board.map((minion) =>
+		this.entities = (this._player.board ?? []).map((minion) =>
 			Entity.fromJS({
 				id: minion.entityId,
 				cardID: minion.cardId,

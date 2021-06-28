@@ -6,6 +6,10 @@ import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
 import { BgsGame } from './bgs-game';
 
 export class BgsFaceOffWithSimulation extends BgsFaceOff {
+	readonly playerHpLeft: number;
+	readonly playerTavern: number;
+	readonly opponentHpLeft: number;
+	readonly opponentTavern: number;
 	readonly battleInfo?: BgsBattleInfo;
 	readonly battleResult?: SimulationResult;
 

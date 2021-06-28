@@ -211,28 +211,24 @@ export class BattlegroundsStoreService {
 						clearInterval(this.memoryInterval);
 						this.memoryInterval = null;
 					}
-					// console.log('[battlegrounds-store] triggering setInterval', this.memoryInterval);
 					this.memoryInterval = setInterval(async () => {
 						// Here we want to get the players info, mostly
-						// console.log('[battlegrounds-store] getting battlegrounds info');
 						let info = await this.memory.getBattlegroundsMatchWithPlayers(2);
-						// console.log('[battlegrounds-store] bgs info', info);
 						if (info?.game?.Players && info.game.Players.length > 0) {
-							// console.log('[battlegrounds-store] removing damage info from memory players', info);
 							info = {
 								...info,
 								game: {
 									...info.game,
 									Players: info.game.Players.map((player) => ({
 										...player,
-										Damage: null,
+										// We set the damage to null because? Most likely this is to avoid info
+										// leaks
+										Damage: this.state?.currentGame?.phase === 'recruit' ? player.Damage : null,
 									})),
 								},
 							};
-							// console.log('[battlegrounds-store] removed damage info', info);
 						}
 						this.battlegroundsUpdater.next(new BgsGlobalInfoUpdatedEvent(info));
-						// console.log('BgsGlobalInfoUpdatedEvent emit done');
 					}, 3000);
 				} else {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
@@ -243,6 +239,7 @@ export class BattlegroundsStoreService {
 					GameEvent.TURN_START,
 				);
 				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
+				// console.debug('[bgs-store] info updated', info);
 				this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(
