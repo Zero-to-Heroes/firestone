@@ -17,7 +17,7 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
-		// console.debug('parsing next opponent', event);
+		console.debug('parsing next opponent', event);
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(currentState, event.cardId);
 		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
@@ -25,13 +25,14 @@ export class BgsNextOpponentParser implements EventParser {
 
 		const mainPlayer = currentState.currentGame.getMainPlayer();
 		const opponent = currentState.currentGame.players.find(
-			(player) => player.getNormalizedHeroCardId() === normalizeHeroCardId(event.cardId),
+			(player) => player.getNormalizedHeroCardId() === newNextOpponentPanel.opponentOverview?.cardId,
 		);
+		//console.debug('mainPlayer', mainPlayer, opponent);
 		if (!mainPlayer || !opponent) {
 			return currentState;
 		}
 
-		// console.debug('face off players', mainPlayer, opponent, currentState);
+		//console.debug('face off players', mainPlayer, opponent, currentState);
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			playerCardId: mainPlayer?.cardId,
@@ -45,7 +46,7 @@ export class BgsNextOpponentParser implements EventParser {
 				(opponent?.damageTaken ?? 0),
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		} as BgsFaceOffWithSimulation);
-		// console.debug('created new face off', faceOff, currentState);
+		//console.debug('created new face off', faceOff, currentState);
 		return currentState.update({
 			panels: panels,
 			currentGame: currentState.currentGame.update({
@@ -57,7 +58,12 @@ export class BgsNextOpponentParser implements EventParser {
 	private buildInGamePanel(currentState: BattlegroundsState, cardId: string): BgsNextOpponentOverviewPanel {
 		const opponentOverview: BgsOpponentOverview = BgsOpponentOverview.create({
 			// Just use the cardId, and let the UI reconstruct from the state to avoid duplicating the info
-			cardId: normalizeHeroCardId(cardId),
+			cardId:
+				normalizeHeroCardId(cardId) ??
+				// If there is no card ID, this means we face the same opponent as previously
+				currentState.panels
+					.filter((panel) => panel.id === 'bgs-next-opponent-overview')
+					.map((panel) => panel as BgsNextOpponentOverviewPanel)[0].opponentOverview?.cardId,
 		});
 		const currentTurn = currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay();
 		return BgsNextOpponentOverviewPanel.create({

@@ -926,12 +926,13 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_NEXT_OPPONENT':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value);
+				// console.debug(gameEvent.Type + ' event', gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
 						additionalData: {
 							nextOpponentCardId: gameEvent.Value.CardId,
+							isSameOpponent: gameEvent.Value.IsSameOpponent,
 						},
 					} as GameEvent),
 				);
@@ -962,7 +963,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_PLAYER_BOARD':
-				// console.log(gameEvent.Type + ' event', gameEvent);
+				console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_PLAYER_BOARD,

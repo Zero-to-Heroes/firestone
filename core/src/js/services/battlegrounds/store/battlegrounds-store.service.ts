@@ -234,12 +234,14 @@ export class BattlegroundsStoreService {
 					this.battlegroundsUpdater.next(new NoBgsMatchEvent());
 				}
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_NEXT_OPPONENT) {
+				//console.debug('ready to handle next opponent event', gameEvent);
 				this.handleEventOnlyAfterTrigger(
+					// cardID is null when repeating the same opponent
 					new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId),
 					GameEvent.TURN_START,
 				);
 				const info = await this.memory.getBattlegroundsMatchWithPlayers(2);
-				// console.debug('[bgs-store] info updated', info);
+				//console.debug('[bgs-store] info updated', info);
 				this.handleEventOnlyAfterTrigger(new BgsGlobalInfoUpdatedEvent(info), GameEvent.TURN_START);
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED) {
 				this.battlegroundsUpdater.next(
