@@ -28,17 +28,20 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		// Some buffs are deduced from the creator card information, instead of being explicitly set
 		// by the game
-		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
+		const lastInfluencedByCardId =
+			gameEvent.additionalData?.lastInfluencedByCardId ?? gameEvent.additionalData?.creatorCardId;
 		const buffingEntityCardId = gameEvent.additionalData.buffingEntityCardId;
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isCardInfoPublic =
 			isPlayer ||
 			cardsRevealedWhenDrawn.includes(cardId) ||
 			publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
+		// console.debug('cardInfOPublic?', isCardInfoPublic, isPlayer, lastInfluencedByCardId);
 
 		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
 		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
 		const otherCard = this.helper.findCardInZone(deck.otherZone, null, entityId);
+		// console.debug('other card', otherCard);
 		// If a C'Thun piece was set aside, we know its data when getting the card back to hand, so we want to hide it
 		const otherCardWithObfuscation =
 			isCardInfoPublic || !otherCard
@@ -49,6 +52,7 @@ export class ReceiveCardInHandParser implements EventParser {
 						cardName: undefined,
 						lastAffectedByCardId: undefined,
 				  } as DeckCard);
+		// console.debug('otherCardWithObfuscation', otherCardWithObfuscation);
 		const newBoard = boardCard
 			? this.helper.removeSingleCardFromZone(deck.board, null, entityId, deck.deckList.length === 0)[0]
 			: deck.board;
@@ -69,7 +73,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 				creatorCardId: creatorCardId,
 			} as DeckCard);
-		//console.debug('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
+		// console.debug('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
 		const otherCardWithBuffs =
 			buffingEntityCardId != null || buffCardId != null
 				? cardWithDefault.update({
@@ -84,7 +88,9 @@ export class ReceiveCardInHandParser implements EventParser {
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
 			otherCardWithBuffs,
-			buffingEntityCardId != null || buffCardId != null,
+			// We keep the buffs for Secret Passage. If this causes an info leak, it should be documented
+			// here
+			true,
 		);
 		//console.debug('[receive-card-in-hand] new hand', newHand);
 

@@ -203,6 +203,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Rogue.NecriumApothecary,
 	CardIds.Collectible.Rogue.RollTheBones,
 	CardIds.Collectible.Rogue.RaidingParty,
+	CardIds.NonCollectible.Rogue.SecretPassage_SecretEntranceEnchantment,
 	CardIds.Collectible.Rogue.Stowaway,
 	CardIds.Collectible.Rogue.Swindle,
 	CardIds.Collectible.Rogue.ThistleTea,
