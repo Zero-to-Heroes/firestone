@@ -15,15 +15,19 @@ export class BgsRecruitStartParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsRecruitStartEvent): Promise<BattlegroundsState> {
 		const prefs = await this.prefs.getPreferences();
 		const shouldHideResultsOnRecruit = prefs.bgsHideSimResultsOnRecruit && !prefs.bgsShowSimResultsOnlyOnRecruit;
-		console.debug('changing phase to recruit');
+		console.debug(
+			'changing phase to recruit',
+			shouldHideResultsOnRecruit,
+			currentState.currentGame.lastNonEmptyBattleResult(),
+		);
 		const newGame = currentState.currentGame.update({
 			phase: 'recruit',
-			// battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
-			// battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
+			// Because we want to be able to show the battle status on the tavern, even if a new face off has been
+			// initialised
 			battleInfoStatus:
-				shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult() ? 'empty' : 'done',
+				shouldHideResultsOnRecruit || !currentState.currentGame.lastNonEmptyBattleResult() ? 'empty' : 'done',
 			battleInfoMesage:
-				shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult()
+				shouldHideResultsOnRecruit || !currentState.currentGame.lastNonEmptyBattleResult()
 					? undefined
 					: currentState.currentGame.battleInfoMesage,
 		} as BgsGame);

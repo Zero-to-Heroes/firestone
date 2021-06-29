@@ -88,6 +88,7 @@ export class BgsGame {
 							f.battleResult != null
 						}`,
 				),
+				new Error().stack,
 			);
 			return this;
 		}
@@ -157,10 +158,21 @@ export class BgsGame {
 			simulationResult: faceOff.battleResult,
 		}));
 	}
+
 	public lastBattleResult(): SimulationResult {
 		if (!this.faceOffs?.length) {
 			return null;
 		}
 		return this.faceOffs[this.faceOffs.length - 1].battleResult;
+	}
+
+	public lastNonEmptyBattleResult(): SimulationResult {
+		if (!this.faceOffs?.length) {
+			return null;
+		}
+		return this.faceOffs
+			.filter((faceOff) => faceOff.battleResult)
+			.reverse()
+			.shift()?.battleResult;
 	}
 }
