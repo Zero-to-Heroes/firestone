@@ -18,12 +18,12 @@ export const livingSeed: (handler: Handler) => boolean = (handler: Handler): boo
 };
 
 export const fungalFortunes: (handler: Handler) => boolean = (handler: Handler): boolean => {
-	return handler.zoneProvider()?.id === 'deck' && handler.referenceCardProvider()?.type === CardType[CardType.MINION];
+	return handler.zoneProvider()?.id === 'deck' && hasType(handler, CardType.MINION);
 };
 
 export const guffRunetotem: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
-		handler.referenceCardProvider()?.type === CardType[CardType.SPELL] &&
+		hasType(handler, CardType.SPELL) &&
 		handler.referenceCardProvider()?.spellSchool === SpellSchool[SpellSchool.NATURE]
 	);
 };
@@ -31,7 +31,7 @@ export const guffRunetotem: (handler: Handler) => boolean = (handler: Handler): 
 export const knightOfAnointment: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
-		handler.referenceCardProvider()?.type === CardType[CardType.SPELL] &&
+		hasType(handler, CardType.SPELL) &&
 		handler.referenceCardProvider()?.spellSchool === SpellSchool[SpellSchool.HOLY]
 	);
 };
@@ -39,7 +39,7 @@ export const knightOfAnointment: (handler: Handler) => boolean = (handler: Handl
 export const guardianAnimals: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
-		handler.referenceCardProvider()?.type === CardType[CardType.MINION] &&
+		hasType(handler, CardType.MINION) &&
 		handler.deckCardProvider()?.getEffectiveManaCost() <= 5
 	);
 };
@@ -47,8 +47,7 @@ export const guardianAnimals: (handler: Handler) => boolean = (handler: Handler)
 export const barakKodobane: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
-		(handler.referenceCardProvider()?.type === CardType[CardType.MINION] ||
-			handler.referenceCardProvider()?.type === CardType[CardType.SPELL]) &&
+		(hasType(handler, CardType.MINION) || hasType(handler, CardType.SPELL)) &&
 		handler.deckCardProvider()?.getEffectiveManaCost() <= 3
 	);
 };
@@ -56,7 +55,7 @@ export const barakKodobane: (handler: Handler) => boolean = (handler: Handler): 
 export const jewelOfNzoth: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
 		handler.zoneProvider()?.id === 'other' &&
-		handler.referenceCardProvider()?.type === CardType[CardType.MINION] &&
+		hasType(handler, CardType.MINION) &&
 		handler.deckCardProvider()?.zone === 'GRAVEYARD' &&
 		hasDeathrattle(handler)
 	);
@@ -66,7 +65,7 @@ export const overlordSaurfang: (handler: Handler) => boolean = (handler: Handler
 	return (
 		handler.zoneProvider()?.id === 'other' &&
 		handler.deckCardProvider()?.zone === 'GRAVEYARD' &&
-		handler.referenceCardProvider()?.type === CardType[CardType.MINION] &&
+		hasType(handler, CardType.MINION) &&
 		hasFrenzy(handler)
 	);
 };
@@ -74,18 +73,14 @@ export const overlordSaurfang: (handler: Handler) => boolean = (handler: Handler
 export const rally: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
 		handler.zoneProvider()?.id === 'other' &&
-		handler.referenceCardProvider()?.type === CardType[CardType.MINION] &&
+		hasType(handler, CardType.MINION) &&
 		handler.deckCardProvider()?.zone === 'GRAVEYARD' &&
 		[1, 2, 3].includes(handler.deckCardProvider().manaCost)
 	);
 };
 
 export const arcanologist: (handler: Handler) => boolean = (handler: Handler): boolean => {
-	return (
-		handler.zoneProvider()?.id === 'deck' &&
-		handler.referenceCardProvider()?.type === CardType[CardType.SPELL] &&
-		isSecret(handler)
-	);
+	return handler.zoneProvider()?.id === 'deck' && hasType(handler, CardType.SPELL) && isSecret(handler);
 };
 
 export const darkInquisitorXanesh: (handler: Handler) => boolean = (handler: Handler): boolean => {
@@ -96,13 +91,13 @@ export const darkInquisitorXanesh: (handler: Handler) => boolean = (handler: Han
 };
 
 export const cagematchCustodian: (handler: Handler) => boolean = (handler: Handler): boolean => {
-	return handler.zoneProvider()?.id === 'deck' && handler.deckCardProvider()?.cardType === CardType[CardType.WEAPON];
+	return handler.zoneProvider()?.id === 'deck' && hasType(handler, CardType.WEAPON);
 };
 
 export const ringmasterWhatley: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
-		handler.deckCardProvider()?.cardType === CardType[CardType.MINION] &&
+		hasType(handler, CardType.MINION) &&
 		[Race[Race.DRAGON], Race[Race.MECH], Race[Race.PIRATE]].includes(handler.referenceCardProvider()?.race)
 	);
 };
@@ -116,6 +111,13 @@ export const arcaneLuminary: (handler: Handler) => boolean = (handler: Handler):
 
 export const redscaleDragontamer: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return handler.zoneProvider()?.id === 'deck' && handler.referenceCardProvider()?.race === Race[Race.DRAGON];
+};
+
+const hasType = (handler: Handler, type: CardType): boolean => {
+	return (
+		handler.deckCardProvider()?.cardType?.toLowerCase() === CardType[type].toLowerCase() ||
+		handler.referenceCardProvider()?.type?.toLowerCase() === CardType[type].toLowerCase()
+	);
 };
 
 const hasOutcast = (handler: Handler): boolean => {

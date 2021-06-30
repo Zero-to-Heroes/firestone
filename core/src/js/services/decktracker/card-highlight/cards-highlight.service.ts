@@ -39,7 +39,6 @@ export class CardsHighlightService {
 	}
 
 	async onMouseEnter(cardId: string) {
-		return;
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.overlayHighlightRelatedCards) {
 			return;
@@ -47,7 +46,24 @@ export class CardsHighlightService {
 
 		const selector: (handler: Handler) => boolean = this.buildSelector(cardId);
 		if (selector) {
+			// console.debug('applying selector', selector, 'to', this.handlers);
 			Object.values(this.handlers)
+				// .map((handler) => {
+				// 	// if (handler.referenceCardProvider().id === 'DMF_523') {
+				// 		// console.debug('applying', handler, 'to', cardId, selector(handler));
+				// 		// console.debug(
+				// 		// 	'selector pieces',
+				// 		// 	handler.zoneProvider(),
+				// 		// 	handler.referenceCardProvider()?.type,
+				// 		// 	handler.referenceCardProvider()?.race,
+				// 		// 	[Race[Race.DRAGON], Race[Race.MECH], Race[Race.PIRATE]],
+				// 		// 	[Race[Race.DRAGON], Race[Race.MECH], Race[Race.PIRATE]].includes(
+				// 		// 		handler.referenceCardProvider()?.race,
+				// 		// 	),
+				// 		// );
+				// 	// }
+				// 	return handler;
+				// })
 				.filter((handler) => selector(handler))
 				.forEach((handler) => handler.highlightCallback());
 		}
