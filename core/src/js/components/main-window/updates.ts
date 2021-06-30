@@ -33,7 +33,7 @@ export const updates: readonly Update[] = [
 		sections: [
 			// {
 			// 	type: 'intro',
-			// 	header: 'Beta release - important',
+			// 	header: 'Message from the dev',
 			// 	text: `
 			// 		This release has some moderate logging enabled to try and help me debug some issues that seem to arise randomly: Reckoning being greyed out inappropriately, and the tavern timing turn in BG being off by 1 in the future. <br/>
 			// 		So if you encounter one of these issues, by all mean please open a bug report! :) <br/>
@@ -47,54 +47,15 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a way to resimulate past battles after changing the minion order.`,
-							},
-							{
-								type: 'feature',
-								text: `Add lethal chances to battle simulator.`,
-							},
-						],
-					},
-					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `Add the ability to override the decklist in the tracker (useful in tournaments when you know your opponent's decklist).`,
+								text: `Mousing over a card in your decklist will now highlight related cards in your deck. For instance, mousing over a card that draws a Mech from your deck will highlight all the Mechs in your deck.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the secret cast by Sparkjoy Cheat would cause the secret helper to grey out some options.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where sometimes the deck used when battling a friend would use the previous match's decklist.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix another issue when deleting some decks.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'content',
-								text: `The community stats now only show the stats for Heroic, whatever filter is selected. Your own stats still show either Casual, Heroic or both depending on the value of the filter. This has been done to drastically reduce the data size and make room for more interesting info.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'feature',
-								text: `Spectating others is finally supported, for all game modes. Please note that because of the information available when starting to spectate a friend, some things can't be shown, like the current decklist (but you can import one if you know the deck code), or more or less all the actions that happened before you started spectating them. So it's not a time machine that will let you see what happened in the past, but you'll get all the functionalities from that turn forward :)`,
+								text: `Fix a bug where the deck would not be properly detected when playing a friend with the same deck several times in a row.`,
 							},
 						],
 					},
@@ -108,24 +69,28 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Add a "Last played" filter on the heroes list.`,
+								type: 'bug',
+								text: `Fix an issue where the simulator would sometimes not show up when fighting the ghost.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the tavern turn timing would sometimes be off by 1 in the future.`,
+								text: `Fix an issue where the simulation results would not show up in the tavern.`,
 							},
 							{
 								type: 'bug',
-								text: `Change the label of the "All time" filter to "Past 100 days", as the app only loads the last 100 games at startup (this can be changed if needed, let me know!).`,
+								text: `Fix an issue where no new Battle (in the Battles tab) would appear when facing the same opponent twice in a row.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the stats shown on the hero selection screen would not reflect the time filter set in the app.`,
+								text: `Fix an issue where the golden minions would not have a golden border in the Battles tab.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where some minions would appear twice on the minions list.`,
+								text: `Fix an issue where no tooltip would appear when mousing over minions on the Battles tab.`,
+							},
+							{
+								type: 'ui',
+								text: `Improve the initial state of the Battles (before we receive the board information).`,
 							},
 						],
 					},
@@ -134,87 +99,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Flag the exact card in hand created by Vanessa VanCleef.`,
-							},
-							{
-								type: 'feature',
-								text: `Flag the card in hand that receives Aegwynn's buff.`,
-							},
-							{
-								type: 'feature',
-								text: `Reveal all enemy secrets in the secrets helper when playing Horde Operative.`,
-							},
-							{
-								type: 'feature',
-								text: `Add support for Mindrender Illucia (fixes a few bugs and properly flags the cards in hand upon their return).`,
-							},
-							{
-								type: 'feature',
-								text: `Flag as "created by" the cards drawn by Arcanologist (Core), Stage Drive (Corrupted) and Primal Dungeoneer.`,
-							},
-							{
-								type: 'feature',
-								text: `Show buff in hand for cards drawn with Stealer of Souls on the board.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix potential info leaks when discovering a "cast when drawn" spell in your own deck (this for now impacts Shadow Visions, Tracking and Secret Passage).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a delay when removing the "turn drawn number" when Jandice is played.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a delay when removing the "turn drawn number" for the minion eaten by Mutanus.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `Show the passives looted in the run on the high-wins decks list.`,
-							},
-							{
-								type: 'feature',
-								text: `Add rank info on the high-wins decks list.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix some treasures being incorrectly grouped into the Pool 1 (instead of Pool 2 where they belong) and add a few more treasures to the Ultra Rare bucket.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where multi-set bundles (like the Standard Bundle) would count towards the pity timer of the set of the first card opened in the pack.`,
-							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where setting the decklist filter then selecting the "All games" filter would still only show replays of game with the previously selected decklist.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'ui',
-								text: `Tooltips now have an arrow linking them to the element being highlighted.`,
-							},
-							{
-								type: 'ui',
-								text: `Don't close Firestone when launching HS when it's already open on the desktop.`,
+								text: `Cards info are now kept after playing Secret Passage. This means that when the opponent gets their card backs, all the known information should be displayed once more.`,
 							},
 						],
 					},
