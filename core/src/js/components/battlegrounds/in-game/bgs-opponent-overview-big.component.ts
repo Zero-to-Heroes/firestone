@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
@@ -38,8 +38,6 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 					<bgs-battle-status
 						*ngIf="enableSimulation"
 						[nextBattle]="nextBattle"
-						[battleSimulationStatus]="battleSimulationStatus"
-						[simulationMessage]="simulationMessage"
 						[showReplayLink]="true"
 					></bgs-battle-status>
 				</div>
@@ -68,9 +66,7 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() debug: boolean;
 	@Input() enableSimulation: boolean;
 	@Input() currentTurn: number;
-	@Input() nextBattle: SimulationResult;
-	@Input() battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
-	@Input() simulationMessage: string;
+	@Input() nextBattle: BgsFaceOffWithSimulation;
 	@Input() maxBoardHeight = 1;
 	@Input() tavernTitle = 'Tavern upgrades';
 	@Input() showTavernsIfEmpty = true;

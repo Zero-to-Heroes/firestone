@@ -1,9 +1,8 @@
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { CardIds, Race } from '@firestone-hs/reference-data';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { Race } from '@firestone-hs/reference-data';
 import { normalizeHeroCardId } from '../../services/battlegrounds/bgs-utils';
 import { RealTimeStatsState } from '../../services/battlegrounds/store/real-time-stats/real-time-stats';
-import { BattleInfoMessage } from './battle-info-message.type';
+import { Preferences } from '../preferences';
 import { BgsFaceOffWithSimulation } from './bgs-face-off-with-simulation';
 import { BgsPlayer } from './bgs-player';
 
@@ -13,8 +12,6 @@ export class BgsGame {
 	readonly currentTurn: number = 1;
 	readonly phase: 'recruit' | 'combat';
 	readonly faceOffs: readonly BgsFaceOffWithSimulation[] = [];
-	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
-	readonly battleInfoMesage: BattleInfoMessage;
 	// readonly battleResultHistory: readonly BattleResultHistory[] = [];
 	readonly replayXml: string;
 	readonly mmrAtStart: number;
@@ -94,29 +91,6 @@ export class BgsGame {
 		}
 
 		const lastFaceOff = matchingFaceOffs[0];
-		// TODO: we can probably remove this error now
-		if (
-			lastFaceOff?.opponentCardId !== opponentHeroCardId &&
-			opponentHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds
-		) {
-			// What might be happening here is that the simulation takes too long to complete, and the next
-			// face offf has already been boostrapped in the list
-			console.error(
-				'[face-off] trying to update incorrect face-off with battle result',
-				opponentHeroCardId,
-				lastFaceOff?.opponentCardId,
-				lastFaceOff?.turn,
-				lastFaceOff?.result,
-				this.faceOffs.map(
-					(f) =>
-						`${f.playerCardId} vs ${f.opponentCardId}, t${f.turn}, ${f.result}, ${f.battleInfo != null}, ${
-							f.battleResult != null
-						}`,
-				),
-			);
-			return this;
-		}
-
 		const updatedFaceOff = Object.assign(new BgsFaceOffWithSimulation(), lastFaceOff, faceOff);
 		updatedFaceOff.checkIntegrity(this);
 		const updatedFaceOffs: readonly BgsFaceOffWithSimulation[] = [...this.faceOffs.slice(0, -1), updatedFaceOff];
@@ -159,20 +133,36 @@ export class BgsGame {
 		}));
 	}
 
-	public lastBattleResult(): SimulationResult {
+	public getRelevantFaceOff(prefs: Preferences): BgsFaceOffWithSimulation {
+		if (this.phase === 'combat') {
+			if (prefs?.bgsShowSimResultsOnlyOnRecruit) {
+				return null;
+			}
+			return this.lastFaceOff();
+		}
+
+		if (prefs?.bgsHideSimResultsOnRecruit) {
+			return null;
+		} else {
+			return this.lastNonEmptyFaceOff();
+		}
+	}
+
+	// Used for next opponent panel
+	public lastFaceOff(): BgsFaceOffWithSimulation {
 		if (!this.faceOffs?.length) {
 			return null;
 		}
-		return this.faceOffs[this.faceOffs.length - 1].battleResult;
+		return this.faceOffs[this.faceOffs.length - 1];
 	}
 
-	public lastNonEmptyBattleResult(): SimulationResult {
+	private lastNonEmptyFaceOff(): BgsFaceOffWithSimulation {
 		if (!this.faceOffs?.length) {
 			return null;
 		}
 		return this.faceOffs
 			.filter((faceOff) => faceOff.battleResult)
 			.reverse()
-			.shift()?.battleResult;
+			.shift();
 	}
 }

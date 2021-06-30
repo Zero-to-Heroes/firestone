@@ -18,18 +18,15 @@ export class BgsBattleSimulationParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BattlegroundsBattleSimulationEvent,
 	): Promise<BattlegroundsState> {
-		const prefs = await this.prefs.getPreferences();
-		const showSimulation = !prefs.bgsShowSimResultsOnlyOnRecruit;
 		const gameAfterFaceOff: BgsGame = currentState.currentGame.updateLastFaceOff(
 			normalizeHeroCardId(event.opponentHeroCardId),
 			{
 				battleResult: event.result,
+				battleInfoStatus: 'done',
 			} as BgsFaceOffWithSimulation,
 		);
 		return currentState.update({
-			currentGame: gameAfterFaceOff.update({
-				battleInfoStatus: showSimulation ? 'done' : 'empty',
-			} as BgsGame),
+			currentGame: gameAfterFaceOff,
 		} as BattlegroundsState);
 	}
 }

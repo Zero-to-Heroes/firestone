@@ -8,8 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BgsFaceOff } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/bgs-face-off';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
-import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-message.type';
+import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
@@ -40,8 +39,6 @@ import { normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 					[currentTurn]="currentTurn"
 					[enableSimulation]="enableSimulation"
 					[nextBattle]="nextBattle"
-					[battleSimulationStatus]="battleSimulationStatus"
-					[simulationMessage]="simulationMessage"
 				></bgs-opponent-overview-big>
 				<div class="other-opponents">
 					<div class="subtitle">Other opponents</div>
@@ -75,9 +72,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 	otherOpponents: readonly BgsPlayer[];
 	faceOffs: readonly BgsFaceOff[];
 	currentTurn: number;
-	nextBattle: SimulationResult;
-	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
-	simulationMessage: BattleInfoMessage;
+	nextBattle: BgsFaceOffWithSimulation;
 	nextOpponentCardId: string;
 	mmr: number;
 	lastOpponentCardId: string;
@@ -141,9 +136,7 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		}
 		this.players = this._game.players;
 		this.nextOpponentCardId = this._panel.opponentOverview.cardId;
-		this.nextBattle = this._game.lastBattleResult();
-		this.battleSimulationStatus = this._game.battleInfoStatus;
-		this.simulationMessage = this._game.battleInfoMesage;
+		this.nextBattle = this._game.lastFaceOff();
 		this.faceOffs = this._game.faceOffs;
 		this.lastOpponentCardId = this._game.lastOpponentCardId;
 		this.opponents = this._game.players

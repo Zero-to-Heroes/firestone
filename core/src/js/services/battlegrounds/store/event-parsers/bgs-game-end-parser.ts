@@ -36,7 +36,6 @@ export class BgsGameEndParser implements EventParser {
 		const panels: readonly BgsPanel[] = currentState.panels
 			.map((panel) => (panel.id === newPostMatchStatsStage.id ? newPostMatchStatsStage : panel))
 			.map((panel) => (panel.id === newBattlesPanel.id ? newBattlesPanel : panel));
-		const shouldHideResultsOnRecruit = prefs.bgsHideSimResultsOnRecruit && !prefs.bgsShowSimResultsOnlyOnRecruit;
 		return currentState.update({
 			panels: panels,
 			currentPanelId: 'bgs-post-match-stats',
@@ -47,14 +46,6 @@ export class BgsGameEndParser implements EventParser {
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				reviewId: event.reviewId,
-				// battleInfo: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleInfo,
-				// battleResult: shouldHideResultsOnRecruit ? undefined : currentState.currentGame.battleResult,
-				battleInfoStatus:
-					shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult() ? 'empty' : 'done',
-				battleInfoMesage:
-					shouldHideResultsOnRecruit || !currentState.currentGame.lastBattleResult()
-						? undefined
-						: currentState.currentGame.battleInfoMesage,
 			} as BgsGame),
 		} as BattlegroundsState);
 	}

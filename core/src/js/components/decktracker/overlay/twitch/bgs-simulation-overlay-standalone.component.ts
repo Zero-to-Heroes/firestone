@@ -7,7 +7,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 
 @Component({
@@ -27,19 +27,14 @@ import { TwitchBgsCurrentBattle } from './twitch-bgs-state';
 			(cdkDragReleased)="stopDragging()"
 		>
 			<div class="battlegrounds-theme simulation-overlay">
-				<bgs-battle-status
-					[nextBattle]="nextBattle"
-					[battleSimulationStatus]="battleSimulationStatus"
-					[simulationMessage]="simulationMessage"
-					[showReplayLink]="true"
-				></bgs-battle-status>
+				<bgs-battle-status [nextBattle]="nextBattle" [showReplayLink]="true"></bgs-battle-status>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulationOverlayStandaloneComponent {
-	nextBattle: SimulationResult;
+	nextBattle: BgsFaceOffWithSimulation;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: string;
 
@@ -47,9 +42,11 @@ export class BgsSimulationOverlayStandaloneComponent {
 	@Output() dragEnd = new EventEmitter<void>();
 
 	@Input() set bgsState(value: TwitchBgsCurrentBattle) {
-		this.nextBattle = value?.battleInfo;
-		this.battleSimulationStatus = value?.status;
-		this.simulationMessage = undefined; // value?.;
+		this.nextBattle = BgsFaceOffWithSimulation.create({
+			battleResult: value?.battleInfo,
+			battleInfoStatus: value?.status,
+			battleInfoMesage: null,
+		} as BgsFaceOffWithSimulation);
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}

@@ -5,7 +5,6 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { AdService } from '../../../services/ad.service';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
@@ -43,19 +42,11 @@ declare let amplitude;
 				<div class="simulations">
 					<div class="result actual">
 						<div class="label">Actual</div>
-						<bgs-battle-status
-							[showReplayLink]="true"
-							[battleSimulationStatus]="'done'"
-							[nextBattle]="actualBattle"
-						></bgs-battle-status>
+						<bgs-battle-status [showReplayLink]="true" [nextBattle]="actualBattle"></bgs-battle-status>
 					</div>
 					<div class="result new">
 						<div class="label">New</div>
-						<bgs-battle-status
-							[showReplayLink]="true"
-							[battleSimulationStatus]="newBattleStatus"
-							[nextBattle]="newBattle"
-						></bgs-battle-status>
+						<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
 					</div>
 					<div class="controls">
 						<div class="button reset" (click)="resetBoards()">Reset boards</div>
@@ -84,13 +75,12 @@ export class BgsBattleComponent implements AfterViewInit {
 	_faceOff: BgsFaceOffWithSimulation;
 	opponent: BgsBoardInfo;
 	player: BgsBoardInfo;
-	actualBattle: SimulationResult;
+	actualBattle: BgsFaceOffWithSimulation;
 	actualResult: string;
 	isPremium: boolean;
 	tooltip: string;
 
-	newBattle: SimulationResult;
-	newBattleStatus: 'empty' | 'waiting-for-result' | 'done' = 'done';
+	newBattle: BgsFaceOffWithSimulation;
 
 	private newOpponentEntities: readonly Entity[];
 	private newPlayerEntities: readonly Entity[];
@@ -123,10 +113,8 @@ export class BgsBattleComponent implements AfterViewInit {
 
 	resetBoards() {
 		this.newBattle = this.actualBattle;
-		this.newBattleStatus = 'done';
 		this.player = { ...this.player };
 		this.opponent = { ...this.opponent };
-		//console.debug('resetting boards', this.newBattle);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -140,8 +128,6 @@ export class BgsBattleComponent implements AfterViewInit {
 			return;
 		}
 		amplitude.getInstance().logEvent('battle-resim');
-
-		this.newBattleStatus = 'waiting-for-result';
 		this.newBattle = null;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -166,8 +152,11 @@ export class BgsBattleComponent implements AfterViewInit {
 		};
 		const prefs = await this.prefs.getPreferences();
 		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
-		this.newBattle = newSim;
-		this.newBattleStatus = 'done';
+		this.newBattle = BgsFaceOffWithSimulation.create({
+			battleInfoStatus: 'done',
+			battleResult: newSim,
+		} as BgsFaceOffWithSimulation);
+		// this.newBattleStatus = 'done';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -215,8 +204,8 @@ export class BgsBattleComponent implements AfterViewInit {
 					tavernTier: this._faceOff.playerTavern,
 				} as BgsPlayerEntity,
 			} as BgsBoardInfo);
-		this.actualBattle = this._faceOff.battleResult;
-		this.newBattle = this._faceOff.battleResult;
+		this.actualBattle = this._faceOff;
+		this.newBattle = this._faceOff;
 		this.turnNumber = this._faceOff.turn;
 		this.actualResult = this._faceOff.result;
 	}

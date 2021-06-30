@@ -50,12 +50,13 @@ export class BgsPlayerBoardParser implements EventParser {
 				event.opponentBoard?.board?.map((entity) => entity.CardId),
 			);
 			return currentState.update({
-				currentGame: currentState.currentGame.update({
-					// battleInfo: undefined,
-					battleInfoStatus: 'empty',
-					// battleResult: undefined,
-					battleInfoMesage: undefined,
-				} as BgsGame),
+				currentGame: currentState.currentGame.updateLastFaceOff(
+					normalizeHeroCardId(event.opponentBoard.heroCardId),
+					{
+						battleInfoStatus: 'empty',
+						battleInfoMesage: undefined,
+					} as BgsFaceOffWithSimulation,
+				),
 			} as BattlegroundsState);
 		}
 
@@ -78,24 +79,17 @@ export class BgsPlayerBoardParser implements EventParser {
 			opponentBoard: bgsOpponent,
 			options: null,
 		};
+		const isSupported = isSupportedScenario(battleInfo);
 		const stateAfterFaceOff = currentState.currentGame.updateLastFaceOff(
 			normalizeHeroCardId(event.opponentBoard.heroCardId),
 			{
 				battleInfo: battleInfo,
+				battleInfoStatus: 'waiting-for-result',
+				battleInfoMesage: isSupported.reason,
 			} as BgsFaceOffWithSimulation,
 		);
-		// console.debug('[bgs-simulation] battleInfo', battleInfo);
-
-		//console.log('preparing support computation');
-		const prefs = await this.prefs.getPreferences();
-		const showSimulation = !prefs.bgsShowSimResultsOnlyOnRecruit;
-		const isSupported = isSupportedScenario(battleInfo);
-		//console.debug('supported?', isSupported, isSupported.reason, battleInfo, gameState);
 		const newGame = stateAfterFaceOff.update({
 			players: newPlayers,
-			battleInfoStatus: showSimulation ? 'waiting-for-result' : 'empty',
-			battleInfoMesage: isSupported.reason,
-			// battleInfoMesage: undefined,
 		} as BgsGame);
 		const result = currentState.update({
 			currentGame: newGame,
@@ -130,6 +124,7 @@ export class BgsPlayerBoardParser implements EventParser {
 				tavernTier: tavernTier,
 				hpLeft: health - damage,
 				cardId: playerBoard.hero.CardId, // In case it's the ghost, the hero power is not active
+				nonGhostCardId: player.getNormalizedHeroCardId(),
 				heroPowerId: playerBoard.heroPowerCardId,
 				heroPowerUsed: playerBoard.heroPowerUsed,
 			},

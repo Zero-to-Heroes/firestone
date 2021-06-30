@@ -8,10 +8,10 @@ import {
 	OnInit,
 	ViewRef,
 } from '@angular/core';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-message.type';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { Preferences } from '../../../models/preferences';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -36,18 +36,13 @@ import { PreferencesService } from '../../../services/preferences.service';
 			</i>
 		</div> -->
 		<div class="app-container overlay-container-parent battlegrounds-theme simulation-overlay">
-			<bgs-battle-status
-				[nextBattle]="nextBattle"
-				[battleSimulationStatus]="battleSimulationStatus"
-				[simulationMessage]="simulationMessage"
-				[showReplayLink]="showSimulationSample"
-			></bgs-battle-status>
+			<bgs-battle-status [nextBattle]="nextBattle" [showReplayLink]="showSimulationSample"></bgs-battle-status>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
-	nextBattle: SimulationResult;
+	nextBattle: BgsFaceOffWithSimulation;
 	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	simulationMessage: BattleInfoMessage;
 	showSimulationSample: boolean;
@@ -55,6 +50,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	private windowId: string;
 	private storeSubscription: Subscription;
 	private preferencesSubscription: Subscription;
+	private preferences: Preferences;
 
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
@@ -66,9 +62,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
-				this.nextBattle = newState?.currentGame?.lastNonEmptyBattleResult();
-				this.battleSimulationStatus = newState?.currentGame?.battleInfoStatus;
-				this.simulationMessage = newState?.currentGame?.battleInfoMesage;
+				this.nextBattle = newState?.currentGame?.getRelevantFaceOff(this.preferences);
 				// console.debug('simultion message in listener', this.simulationMessage, newState);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
@@ -113,10 +107,10 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
+		this.preferences = preferences || (await this.prefs.getPreferences());
 		// console.log('updating prefs', preferences);
 		this.showSimulationSample =
-			preferences.bgsEnableSimulationSampleInOverlay && FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
+			this.preferences.bgsEnableSimulationSampleInOverlay && FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

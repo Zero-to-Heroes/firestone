@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Optional, ViewRef } from '@angular/core';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
-import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-message.type';
+import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -146,21 +145,24 @@ export class BgsBattleStatusComponent {
 
 	processingSimulationSample: boolean;
 
-	private _previousStatus: string;
-	private _previousBattle: SimulationResult;
+	private battle: BgsFaceOffWithSimulation;
 	private tempInterval;
 
-	@Input() set battleSimulationStatus(value: 'empty' | 'waiting-for-result' | 'done') {
-		if (value === this._previousStatus) {
+	@Input() set nextBattle(value: BgsFaceOffWithSimulation) {
+		if (value === this.battle) {
+			// console.log('not setting next battle', value, this._previousBattle);
 			return;
 		}
-		this._previousStatus = value;
+		this.battle = value;
 		this.updateInfo();
 	}
 
-	@Input() set simulationMessage(value: BattleInfoMessage) {
-		console.debug('setting simulation message', value);
-		switch (value) {
+	private updateInfo() {
+		if (this.tempInterval) {
+			clearInterval(this.tempInterval);
+		}
+
+		switch (this.battle?.battleInfoMesage) {
 			case 'scallywag':
 				this._simulationMessage = `This composition is not supported`;
 				this._simulationMessageTooltip = 'Scallywag + Baron / Khadgar';
@@ -177,26 +179,8 @@ export class BgsBattleStatusComponent {
 				this._simulationMessage = undefined;
 				break;
 		}
-		// console.debug('set simulation message', this._simulationMessage);
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
-	}
 
-	@Input() set nextBattle(value: SimulationResult) {
-		if (value === this._previousBattle) {
-			// console.log('not setting next battle', value, this._previousBattle);
-			return;
-		}
-		this._previousBattle = value;
-		this.updateInfo();
-	}
-
-	private updateInfo() {
-		if (this.tempInterval) {
-			clearInterval(this.tempInterval);
-		}
-		if (!this._previousStatus || this._previousStatus === 'empty') {
+		if (!this.battle?.battleInfoStatus || this.battle?.battleInfoStatus === 'empty') {
 			// console.log('result empty', value);
 			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
 			this.battleSimulationResultWin = '--';
@@ -209,11 +193,15 @@ export class BgsBattleStatusComponent {
 			this.damageLost = null;
 			this.wonLethalChance = null;
 			this.lostLethalChance = null;
-		} else if (this._previousStatus === 'waiting-for-result') {
+		} else if (this.battle?.battleInfoStatus === 'waiting-for-result') {
 			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
 			this.battleSimulationResultWin = '__';
 			this.battleSimulationResultTie = '__';
 			this.battleSimulationResultLose = '__';
+			this.damageWon = '__';
+			this.damageLost = '__';
+			this.battleSimulationWonLethalChance = null;
+			this.battleSimulationLostLethalChance = null;
 		} else {
 			// console.log('result done', value);
 			this.temporaryBattleTooltip =
@@ -221,30 +209,30 @@ export class BgsBattleStatusComponent {
 		}
 
 		// console.log('setting next battle', this._previousBattle, this._previousStatus);
-		if (this._previousBattle?.wonPercent != null && this._previousStatus !== 'empty') {
-			this.battleSimulationResultWin = this._previousBattle.wonPercent.toFixed(1) + '%';
-			this.battleSimulationResultTie = this._previousBattle.tiedPercent.toFixed(1) + '%';
-			this.battleSimulationResultLose = this._previousBattle.lostPercent.toFixed(1) + '%';
-			this.winSimulationSample = this._previousBattle.outcomeSamples.won;
-			this.tieSimulationSample = this._previousBattle.outcomeSamples.tied;
-			this.loseSimulationSample = this._previousBattle.outcomeSamples.lost;
-			this.damageWon = this._previousBattle.averageDamageWon?.toFixed(1);
-			this.damageLost = this._previousBattle.averageDamageLost?.toFixed(1);
+		if (this.battle?.battleResult?.wonPercent != null && this.battle?.battleInfoStatus !== 'empty') {
+			this.battleSimulationResultWin = this.battle.battleResult.wonPercent.toFixed(1) + '%';
+			this.battleSimulationResultTie = this.battle.battleResult.tiedPercent.toFixed(1) + '%';
+			this.battleSimulationResultLose = this.battle.battleResult.lostPercent.toFixed(1) + '%';
+			this.winSimulationSample = this.battle.battleResult.outcomeSamples?.won;
+			this.tieSimulationSample = this.battle.battleResult.outcomeSamples?.tied;
+			this.loseSimulationSample = this.battle.battleResult.outcomeSamples?.lost;
+			this.damageWon = this.battle.battleResult.averageDamageWon?.toFixed(1);
+			this.damageLost = this.battle.battleResult.averageDamageLost?.toFixed(1);
 			// If we have no chance of winning / losing the battle, showcasing the lethal chance
 			// makes no sense
-			this.battleSimulationWonLethalChance = this._previousBattle.wonLethalPercent;
-			this.battleSimulationLostLethalChance = this._previousBattle.lostLethalPercent;
-			console.debug(
-				'lethal chances',
-				this.battleSimulationWonLethalChance,
-				this.battleSimulationLostLethalChance,
-				this._previousBattle,
-			);
-			this.wonLethalChance = this._previousBattle.wonPercent
-				? this._previousBattle.wonLethalPercent?.toFixed(1) + '%'
+			this.battleSimulationWonLethalChance = this.battle.battleResult.wonLethalPercent;
+			this.battleSimulationLostLethalChance = this.battle.battleResult.lostLethalPercent;
+			// console.debug(
+			// 	'lethal chances',
+			// 	this.battleSimulationWonLethalChance,
+			// 	this.battleSimulationLostLethalChance,
+			// 	this.battle,
+			// );
+			this.wonLethalChance = this.battle.battleResult.wonPercent
+				? this.battle.battleResult.wonLethalPercent?.toFixed(1) + '%'
 				: null;
-			this.lostLethalChance = this._previousBattle.lostPercent
-				? this._previousBattle.lostLethalPercent?.toFixed(1) + '%'
+			this.lostLethalChance = this.battle.battleResult.lostPercent
+				? this.battle.battleResult.lostLethalPercent?.toFixed(1) + '%'
 				: null;
 		}
 	}
