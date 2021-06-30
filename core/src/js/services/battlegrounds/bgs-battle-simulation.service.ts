@@ -72,7 +72,7 @@ export class BgsBattleSimulationService {
 		this.stateUpdater.next(
 			new BattlegroundsBattleSimulationEvent(
 				result,
-				normalizeHeroCardId(battleInfoInput.opponentBoard.player.cardId),
+				normalizeHeroCardId(battleInfoInput.opponentBoard.player.nonGhostCardId),
 			),
 		);
 	}
