@@ -28,10 +28,11 @@ import { PreferencesService } from '../../../services/preferences.service';
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
+		`../../../../css/themes/battlegrounds-theme.scss`,
 		'../../../../css/component/battlegrounds/overlay/battlegrounds-mouse-over-overlay.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-mouse-over-overlay overlay-container-parent" *ngIf="inGame">
+		<div class="battlegrounds-mouse-over-overlay overlay-container-parent battlegrounds-theme" *ngIf="inGame">
 			<ul class="bgs-leaderboard">
 				<bgs-leaderboard-empty-card
 					class="opponent-overlay"
