@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.10.8',
+		version: '7.10.9',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -100,6 +100,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Cards info are now kept after playing Secret Passage. This means that when the opponent gets their card backs, all the known information should be displayed once more.`,
+							},
+							{
+								type: 'feature',
+								text: `Flag the exact cards drawn by Ysera.`,
+							},
+						],
+					},
+					{
+						category: 'collection',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where end-of-season card rewards would not appear in the card history.`,
 							},
 						],
 					},
