@@ -41,15 +41,7 @@ export class CardsMonitorService {
 		};
 
 		// We do this to force the population of the initial memory for cards
-		this.triggerMemoryDetection(null, false);
-
-		// this.events.on(Events.MEMORY_UPDATE).subscribe(data => {
-		// 	const changes: MemoryUpdate = data.data[0];
-		// 	console.log('[pack-parser] detected memory changes', changes);
-		// 	if (changes.OpenedPack) {
-		// 		this.triggerMemoryDetection(changes);
-		// 	}
-		// });
+		this.triggerMemoryDetection(false);
 	}
 
 	/**
@@ -65,7 +57,6 @@ export class CardsMonitorService {
 		}
 	 */
 	public receiveLogLine(data: string) {
-		// console.debug('[pack-parser] received log line', data);
 		if (!data?.length) {
 			return;
 		}
@@ -74,6 +65,7 @@ export class CardsMonitorService {
 			return;
 		}
 
+		console.debug('[cards-monitor] received log line', data);
 		// To give time to log lines to appear
 		if (this.pendingTimeout) {
 			clearTimeout(this.pendingTimeout);
@@ -81,11 +73,10 @@ export class CardsMonitorService {
 		this.pendingTimeout = setTimeout(() => this.triggerMemoryDetection(), 400);
 	}
 
-	private async triggerMemoryDetection(changesInput?: MemoryUpdate, process = true, retriesLeft = 10) {
-		console.debug('[pack-parser] triggerging memory detection');
-		const memoryChanges = await this.memoryService.getMemoryChanges();
-		const changes: MemoryUpdate = changesInput ?? memoryChanges;
-		console.log('[pack-parser] memoryChanges detection', changesInput, memoryChanges, changes);
+	private async triggerMemoryDetection(process = true) {
+		console.log('[cards-monitor] triggerging memory detection');
+		const changes: MemoryUpdate = await this.memoryService.getMemoryChanges();
+		console.log('[cards-monitor] memoryChanges detection', process && changes);
 		if (!process || !changes) {
 			return;
 		}
@@ -94,8 +85,8 @@ export class CardsMonitorService {
 			this.handleNewPack(changes.OpenedPack);
 		}
 		// Cards received outside of packs
-		else if (memoryChanges?.NewCards) {
-			this.handleNewCards(memoryChanges.NewCards, !changes.OpenedPack);
+		else if (changes?.NewCards) {
+			this.handleNewCards(changes.NewCards, !changes.OpenedPack);
 		}
 	}
 
@@ -119,7 +110,7 @@ export class CardsMonitorService {
 			};
 		});
 		const setId = this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase();
-		console.log('[pack-parser] notifying new pack opening', setId, boosterId, packCards);
+		console.log('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
 		this.stateUpdater.next(new NewPackEvent(setId, boosterId, packCards));
@@ -153,7 +144,7 @@ export class CardsMonitorService {
 		const groupedBy: { [key: string]: readonly CardPackInfo[] } = groupByFunction(
 			(card: CardPackInfo) => card.CardId + card.Premium,
 		)(newCards);
-		// console.debug('groupedBy', groupedBy, newCards);
+		console.log('[card-parser] groupedBy', groupedBy, newCards);
 		const collection = await this.collectionManager.getCollection(true);
 		for (const data of Object.values(groupedBy)) {
 			const cardId = data[0].CardId;

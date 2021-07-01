@@ -34,10 +34,20 @@ export class LogRegisterService {
 	private init(): void {
 		console.log('[log-register] initiating log registerservice');
 		new LogListenerService(this.ow)
-			.configure('Net.log', (data) => this.cardsMonitor.receiveLogLine(data))
+			.configure(
+				'Net.log',
+				(data) => this.cardsMonitor.receiveLogLine(data),
+				// Typically, the end-of-season rewards are logged as soon as the game fully
+				// boots, which is before the app finishes loading. So they are always "existing
+				// lines", which means we never do any processing
+				// Since the cardsMonitor processing is just about triggering a memory change,
+				// there should be no ill side-effect if it ever is triggered
+				// too often
+				(existingLine) => this.cardsMonitor.receiveLogLine(existingLine),
+			)
 			.subscribe((status) => {
-				console.log('[log-register] status for achievements', status);
-				this.events.broadcast(status, 'Achiements.log');
+				console.log('[log-register] status for Net.log', status);
+				this.events.broadcast(status, 'Net.log');
 			})
 			.start();
 		new LogListenerService(this.ow)
@@ -47,14 +57,14 @@ export class LogRegisterService {
 				(existingLine) => this.gameEvents.receiveExistingLogLine(existingLine),
 			)
 			.subscribe((status) => {
-				console.log('[log-register] status for power.log', status);
+				console.log('[log-register] status for Power.log', status);
 				// this.events.broadcast(status, "Power.log");
 			})
 			.start();
 		new LogListenerService(this.ow)
 			.configure('Decks.log', (data) => this.decksService.parseActiveDeck(data))
 			.subscribe((status) => {
-				console.log('[log-register] status for decks', status);
+				console.log('[log-register] status for Decks.log', status);
 			})
 			.start();
 		new LogListenerService(this.ow)
@@ -63,7 +73,7 @@ export class LogRegisterService {
 				this.dungeonLootParser.handleBlur(data);
 			})
 			.subscribe((status) => {
-				console.log('[log-register] status for FullScreenFX', status);
+				console.log('[log-register] status for FullScreenFX.log', status);
 			})
 			.start();
 	}
