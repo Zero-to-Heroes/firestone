@@ -199,6 +199,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.MutanusTheDevourer_Devour;
 		case CardIds.NonCollectible.Druid.GuffRunetotem2:
 			return CardIds.NonCollectible.Druid.GuffRunetotem_NaturalBalance;
+		case CardIds.NonCollectible.Neutral.KurtrusAshfallen:
+			return CardIds.NonCollectible.Neutral.KurtrusAshfallen_FinalShowdown;
 		case '':
 			return null; // new heroes
 	}

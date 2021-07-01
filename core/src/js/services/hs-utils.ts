@@ -2,7 +2,7 @@ import { BoosterType, CardIds, GameType } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
 import { capitalizeEachWord } from './utils';
 
-export const CARDS_VERSION = '86314-2';
+export const CARDS_VERSION = '86601';
 
 export const classes = [
 	'demonhunter',
@@ -391,6 +391,8 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.THE_BARRENS:
 		case BoosterType.GOLDEN_THE_BARRENS:
 			return 'the_barrens';
+		case BoosterType.STORMWIND:
+			return 'stormwind';
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
