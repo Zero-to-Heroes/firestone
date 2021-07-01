@@ -35,6 +35,8 @@ export class ReplaysFilter {
 				return stat.playerCardId === this.selectedOption;
 			case 'player-class':
 				return stat.playerClass === this.selectedOption;
+			case 'opponent-class':
+				return stat.opponentClass === this.selectedOption;
 			default:
 				return true;
 		}

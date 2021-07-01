@@ -132,11 +132,31 @@ export class ReplaysState {
 			} as ReplaysFilter),
 			ReplaysFilter.create({
 				type: 'player-class',
-				placeholder: 'All classes',
+				placeholder: 'All classes (player)',
 				options: [
 					{
 						value: null,
-						label: 'All classes',
+						label: 'All classes (player)',
+					} as IOption,
+					...classes
+						.map(
+							(playerClass) =>
+								({
+									label: formatClass(playerClass),
+									value: playerClass,
+								} as IOption),
+						)
+						.sort((a, b) => collator.compare(a.label, b.label)),
+				] as readonly IOption[],
+				selectedOption: null,
+			} as ReplaysFilter),
+			ReplaysFilter.create({
+				type: 'opponent-class',
+				placeholder: 'All classes (opponent)',
+				options: [
+					{
+						value: null,
+						label: 'All classes (opponent)',
 					} as IOption,
 					...classes
 						.map(

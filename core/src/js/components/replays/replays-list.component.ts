@@ -36,7 +36,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 					[filterCategory]="'player-class'"
 					*ngIf="!shouldHidePlayerClassFilter"
 				></replays-filter>
-				<replays-icon-toggle class="icon-toggle" [prefs]="_prefs"></replays-icon-toggle>
+				<replays-filter
+					[state]="_state"
+					[filterCategory]="'opponent-class'"
+					*ngIf="!shouldHidePlayerClassFilter"
+				></replays-filter>
+				<replays-icon-toggle
+					class="icon-toggle"
+					[ngClass]="{ 'absolute': !shouldHidePlayerClassFilter }"
+					[prefs]="_prefs"
+				></replays-icon-toggle>
 			</div>
 			<infinite-scroll class="replays-list" (scrolled)="onScroll()" scrollable>
 				<li *ngFor="let replay of displayedReplays">

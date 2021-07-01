@@ -249,7 +249,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		const subscriber = new Subscriber<any>(async (event) => {
-			if (!(event.state as GameState)) {
+			if (!(event?.state as GameState)) {
 				return;
 			}
 

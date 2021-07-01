@@ -29,6 +29,9 @@ export class ReplaysFilterProcessor implements Processor {
 			case 'player-class':
 				await this.prefs.updateReplayFilterPlayerClass(event.type, event.selectedValue);
 				break;
+			case 'opponent-class':
+				await this.prefs.updateReplayFilterOpponentClass(event.type, event.selectedValue);
+				break;
 		}
 		const newState: ReplaysState = await this.builder.filterReplays(currentState.replays, currentState.stats);
 		return [

@@ -77,6 +77,10 @@ export class ReplaysStateBuilderService {
 				type: 'player-class',
 				value: prefs.replaysFilterPlayerClass,
 			},
+			{
+				type: 'opponent-class',
+				value: prefs.replaysFilterOpponentClass,
+			},
 		];
 	}
 
