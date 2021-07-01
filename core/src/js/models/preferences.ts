@@ -104,6 +104,7 @@ export class Preferences {
 	readonly overlayShowGlobalEffects: boolean = true;
 	readonly overlayHideGeneratedCardsInOtherZone: boolean = false;
 	readonly overlaySortByManaInOtherZone: boolean = false;
+	readonly overlayDarkenUsedCards: boolean = true;
 	readonly decktrackerNoDeckMode: boolean = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly overlayOpacityInPercent: number = 100;

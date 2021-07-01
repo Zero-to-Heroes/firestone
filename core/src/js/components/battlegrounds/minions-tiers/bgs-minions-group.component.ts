@@ -5,6 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	Output,
 	ViewRef,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
@@ -53,6 +54,7 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 					[cardTooltip]="minion.displayedCardIds"
 					[cardTooltipBgs]="true"
 					[cardTooltipPosition]="_tooltipPosition"
+					(click)="clickMinion(minion)"
 				>
 					<img class="icon" [src]="minion.image" [cardTooltip]="minion.cardId" />
 					<div class="name">{{ minion.name }}</div>
@@ -80,6 +82,8 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
+	@Output() minionClick: EventEmitter<string> = new EventEmitter<string>();
+
 	@Input() set tooltipPosition(value: string) {
 		this._tooltipPosition = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -125,6 +129,10 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 		this.battlegroundsUpdater.next(new BgsToggleHighlightMinionOnBoardEvent(minion.cardId));
 	}
 
+	clickMinion(minion: Minion) {
+		this.minionClick.next(minion.cardId);
+	}
+
 	highlightTribe() {
 		if (!this._showTribesHighlight) {
 			return;
@@ -149,9 +157,16 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 					image: `https://static.zerotoheroes.com/hearthstone/cardart/tiles/${minion.id}.jpg`,
 					name: card.name,
 					highlighted: this._group.highlightedMinions.includes(minion.id),
+					techLevel: card.techLevel,
 				};
 			})
 			.sort((a, b) => {
+				if (a.techLevel < b.techLevel) {
+					return -1;
+				}
+				if (a.techLevel > b.techLevel) {
+					return 1;
+				}
 				if (a.name?.toLowerCase() < b.name?.toLowerCase()) {
 					return -1;
 				}

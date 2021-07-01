@@ -9,7 +9,8 @@ export class NavigationBattlegrounds {
 		| 'bgs-category-personal-hero-details'
 		| 'bgs-category-personal-rating'
 		| 'bgs-category-personal-stats'
-		| 'bgs-category-perfect-games';
+		| 'bgs-category-perfect-games'
+		| 'bgs-category-simulator';
 	// | 'bgs-category-personal-ai';
 	readonly selectedPersonalHeroStatsTab: BgsHeroStatsFilterId = 'winrate-stats';
 

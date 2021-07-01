@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	Output,
+	ViewRef,
+} from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -10,6 +19,7 @@ import { AdService } from '../../../services/ad.service';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { ChangeMinionRequest } from './bgs-battle-side.component';
 
 declare let amplitude;
 @Component({
@@ -21,7 +31,7 @@ declare let amplitude;
 	],
 	template: `
 		<div class="bgs-battle">
-			<div class="turn-label">
+			<div class="turn-label" *ngIf="turnNumber">
 				<div class="turn">Turn {{ turnNumber }}</div>
 				<div class="result {{ actualResult }}" *ngIf="actualResult">{{ actualResult }}</div>
 			</div>
@@ -30,17 +40,31 @@ declare let amplitude;
 					<bgs-battle-side
 						class="opponent"
 						[player]="opponent"
+						[clickToChange]="clickToChange"
+						[allowClickToAdd]="allowClickToAdd"
+						[closeOnMinion]="closeOnMinion"
 						(entitiesUpdated)="onOpponentEntitiesUpdated($event)"
+						(portraitChangeRequested)="onOpponentPortraitChangeRequested()"
+						(changeMinionRequested)="onOpponentMinionChangeRequested($event)"
+						(updateMinionRequested)="onOpponentMinionUpdateRequested($event)"
+						(removeMinionRequested)="onOpponentMinionRemoveRequested($event)"
 					></bgs-battle-side>
 					<div class="versus">Vs.</div>
 					<bgs-battle-side
 						class="player"
 						[player]="player"
+						[clickToChange]="clickToChange"
+						[allowClickToAdd]="allowClickToAdd"
+						[closeOnMinion]="closeOnMinion"
 						(entitiesUpdated)="onPlayerEntitiesUpdated($event)"
+						(portraitChangeRequested)="onPlayerPortraitChangeRequested()"
+						(changeMinionRequested)="onPlayerMinionChangeRequested($event)"
+						(updateMinionRequested)="onPlayerMinionUpdateRequested($event)"
+						(removeMinionRequested)="onPlayerMinionRemoveRequested($event)"
 					></bgs-battle-side>
 				</div>
 				<div class="simulations">
-					<div class="result actual">
+					<div class="result actual" *ngIf="!hideActualBattle">
 						<div class="label">Actual</div>
 						<bgs-battle-status [showReplayLink]="true" [nextBattle]="actualBattle"></bgs-battle-status>
 					</div>
@@ -66,10 +90,30 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattleComponent implements AfterViewInit {
+	@Output() opponentPortraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
+	@Output() playerPortraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
+
+	@Output()
+	opponentMinionChangeRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Output() playerMinionChangeRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+
+	@Output()
+	opponentMinionUpdateRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Output() playerMinionUpdateRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+
+	@Output()
+	opponentMinionRemoveRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Output() playerMinionRemoveRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		this._faceOff = value;
 		this.updateInfo();
 	}
+
+	@Input() hideActualBattle = false;
+	@Input() clickToChange = false;
+	@Input() allowClickToAdd = false;
+	@Input() closeOnMinion = false;
 
 	turnNumber: number;
 	_faceOff: BgsFaceOffWithSimulation;
@@ -109,6 +153,38 @@ export class BgsBattleComponent implements AfterViewInit {
 
 	onPlayerEntitiesUpdated(newEntities: readonly Entity[]) {
 		this.newPlayerEntities = newEntities;
+	}
+
+	onPlayerPortraitChangeRequested() {
+		this.playerPortraitChangeRequested.next();
+	}
+
+	onOpponentPortraitChangeRequested() {
+		this.opponentPortraitChangeRequested.next();
+	}
+
+	onPlayerMinionChangeRequested(event) {
+		this.playerMinionChangeRequested.next(event);
+	}
+
+	onOpponentMinionChangeRequested(event) {
+		this.opponentMinionChangeRequested.next(event);
+	}
+
+	onPlayerMinionUpdateRequested(event) {
+		this.playerMinionUpdateRequested.next(event);
+	}
+
+	onOpponentMinionUpdateRequested(event) {
+		this.opponentMinionUpdateRequested.next(event);
+	}
+
+	onPlayerMinionRemoveRequested(event) {
+		this.playerMinionRemoveRequested.next(event);
+	}
+
+	onOpponentMinionRemoveRequested(event) {
+		this.opponentMinionRemoveRequested.next(event);
 	}
 
 	resetBoards() {
@@ -186,6 +262,10 @@ export class BgsBattleComponent implements AfterViewInit {
 	}
 
 	private updateInfo() {
+		if (!this._faceOff) {
+			return;
+		}
+
 		this.opponent =
 			this._faceOff.battleInfo?.opponentBoard ??
 			({

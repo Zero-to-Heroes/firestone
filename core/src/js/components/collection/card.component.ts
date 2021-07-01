@@ -77,18 +77,27 @@ export class CardComponent implements AfterViewInit {
 		this.updateImage();
 	}
 
-	// @Input() set loadImage(value: boolean) {
-	// 	this._loadImage = value;
-	// 	this.updateImage();
-	// }
-
 	@Input() set highRes(value: boolean) {
 		this._highRes = value;
 		this.updateImage();
 	}
 
+	@Input() set bgs(value: boolean) {
+		this._bgs = value;
+		this.updateImage();
+	}
+
+	@Input() set premium(value: boolean) {
+		this._premium = value;
+		this.updateImage();
+	}
+
 	@Input() tooltips = true;
 	@Input() showCounts: boolean;
+
+	_highRes = false;
+	_bgs = false;
+	_premium = false;
 
 	showPlaceholder = true;
 	showNonPremiumCount: boolean;
@@ -98,7 +107,6 @@ export class CardComponent implements AfterViewInit {
 	image: string;
 	missing: boolean;
 	_card: SetCard | CollectionReferenceCard;
-	_highRes = false;
 	ownedPremium: number;
 	ownedNonPremium: number;
 
@@ -130,15 +138,18 @@ export class CardComponent implements AfterViewInit {
 	}
 
 	private updateImage() {
-		// if (!this._loadImage) {
-		// 	this.image = undefined;
-		// 	return;
-		// }
 		if (!this._imageLoaded) {
 			this.showPlaceholder = true;
 		}
 		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png?v=3`;
+		if (this._bgs) {
+			if (this._premium) {
+				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs_premium.png?v=3`;
+			} else {
+				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs.png?v=3`;
+			}
+		}
 		this.secondaryClass = this._highRes ? 'high-res' : '';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

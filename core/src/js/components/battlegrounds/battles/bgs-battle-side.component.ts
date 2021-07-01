@@ -20,6 +20,8 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 	styleUrls: [
 		`../../../../css/global/reset-styles.scss`,
 		`../../../../css/global/scrollbar.scss`,
+		`../../../../css/component/controls/controls.scss`,
+		`../../../../css/component/controls/control-close.component.scss`,
 		`../../../../css/component/battlegrounds/battles/bgs-battle-side.component.scss`,
 	],
 	template: `
@@ -27,9 +29,11 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 			<div class="hero">
 				<bgs-hero-portrait
 					class="portrait"
+					[ngClass]="{ 'click-to-change': clickToChange }"
 					[icon]="icon"
 					[health]="health"
 					[maxHealth]="maxHealth"
+					(click)="onPortraitClick()"
 				></bgs-hero-portrait>
 				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
 			</div>
@@ -46,6 +50,8 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					[componentType]="componentType"
 					[componentInput]="entity"
 					[componentTooltipPosition]="'right'"
+					(exClick)="clickMinion(entity, i)"
+					(exDoubleClick)="doubleClickMinion(entity, i)"
 				>
 					<card-on-board
 						class="minion"
@@ -57,6 +63,21 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 						(cdkDropListDropped)="drop($event)"
 					>
 					</card-on-board>
+					<button class="close" (click)="removeMinion(entity, i)" *ngIf="closeOnMinion">
+						<svg class="svg-icon-fill">
+							<use
+								xmlns:xlink="https://www.w3.org/1999/xlink"
+								xlink:href="assets/svg/sprite.svg#window-control_close"
+							></use>
+						</svg>
+					</button>
+				</div>
+				<div
+					class="click-to-add"
+					*ngIf="((entities && entities.length) || 0) < 7 && allowClickToAdd"
+					(click)="onClickToAdd()"
+				>
+					Click to add
 				</div>
 			</div>
 		</div>
@@ -67,12 +88,20 @@ export class BgsBattleSideComponent {
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
 	@Output() entitiesUpdated: EventEmitter<readonly Entity[]> = new EventEmitter<readonly Entity[]>();
+	@Output() portraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
+	@Output() changeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Output() updateMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Output() removeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
 
 	@Input() set player(value: BgsBoardInfo) {
 		this._player = value;
 		console.debug('setting player battle side', value);
 		this.updateInfo();
 	}
+
+	@Input() allowClickToAdd: boolean;
+	@Input() clickToChange = false;
+	@Input() closeOnMinion = false;
 
 	_player: BgsBoardInfo;
 
@@ -97,12 +126,53 @@ export class BgsBattleSideComponent {
 		const movedElement: Entity = event.item.data;
 		const movedElementNewIndex = event.container.data;
 		const entitiesWithoutMovedElement: Entity[] = this.entities.filter((entity) => entity.id !== movedElement.id);
+		console.debug('preparing to drop', this.entities, entitiesWithoutMovedElement);
 		entitiesWithoutMovedElement.splice(movedElementNewIndex, 0, movedElement);
 		this.entities = entitiesWithoutMovedElement;
+		console.debug(
+			'entities',
+			this.entities,
+			movedElement,
+			movedElementNewIndex,
+			entitiesWithoutMovedElement,
+			event,
+		);
 		this.entitiesUpdated.next(this.entities);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	onPortraitClick() {
+		this.portraitChangeRequested.next();
+	}
+
+	onClickToAdd() {
+		console.debug('adding', this.allowClickToAdd);
+		this.changeMinionRequested.next(null);
+	}
+
+	clickMinion(entity: Entity, index: number) {
+		this.changeMinionRequested.next({
+			entity: entity,
+			index: index,
+		});
+	}
+
+	doubleClickMinion(entity: Entity, index: number) {
+		console.debug('double clicked', entity);
+		this.updateMinionRequested.next({
+			entity: entity,
+			index: index,
+		});
+	}
+
+	removeMinion(entity: Entity, index: number) {
+		console.debug('clicked', entity);
+		this.removeMinionRequested.next({
+			entity: entity,
+			index: index,
+		});
 	}
 
 	private updateInfo() {
@@ -110,7 +180,7 @@ export class BgsBattleSideComponent {
 			return;
 		}
 
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${this._player.player?.cardId}.png`;
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${this._player.player?.cardId}.png?v=2`;
 		this.health = this._player.player.hpLeft;
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;
@@ -138,4 +208,9 @@ export class BgsBattleSideComponent {
 		);
 		//console.debug('built entities', this.entities, this._player.board);
 	}
+}
+
+export interface ChangeMinionRequest {
+	entity: Entity;
+	index: number;
 }

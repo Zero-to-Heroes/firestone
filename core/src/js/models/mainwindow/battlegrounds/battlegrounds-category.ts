@@ -5,6 +5,7 @@ export class BattlegroundsCategory {
 		| 'bgs-category-personal-rating'
 		| 'bgs-category-personal-stats'
 		| 'bgs-category-perfect-games'
+		| 'bgs-category-simulator'
 		| 'bgs-category-personal-ai';
 	readonly name: string;
 	readonly icon: string;

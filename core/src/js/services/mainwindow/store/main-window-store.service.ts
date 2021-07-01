@@ -50,6 +50,12 @@ import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filt
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
+import { BgsCustomSimulationChangeMinionRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-change-minion-request-event';
+import { BgsCustomSimulationCloseSidePanelEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-close-side-panel-event';
+import { BgsCustomSimulationMinionChosenEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-minion-chosen-event';
+import { BgsCustomSimulationMinionRemoveRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-event';
+import { BgsCustomSimulationUpdateMinionEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-event';
+import { BgsCustomSimulationUpdateMinionRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
@@ -143,6 +149,12 @@ import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-r
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
+import { BgsCustomSimulationChangeMinionRequestProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-change-minion-request-processor';
+import { BgsCustomSimulationCloseSidePanelProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-close-side-panel-processor';
+import { BgsCustomSimulationMinionChosenParser } from './processors/battlegrounds/simulator/bgs-custom-simulation-minion-chosen-parser';
+import { BgsCustomSimulationMinionRemoveRequestParser } from './processors/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-parser';
+import { BgsCustomSimulationUpdateMinionProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-processor';
+import { BgsCustomSimulationUpdateMinionRequestProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
@@ -621,6 +633,24 @@ export class MainWindowStoreService {
 
 			SelectBattlegroundsPersonalStatsHeroTabEvent.eventName(),
 			new SelectBattlegroundsPersonalStatsHeroProcessor(),
+
+			BgsCustomSimulationChangeMinionRequestEvent.eventName(),
+			new BgsCustomSimulationChangeMinionRequestProcessor(),
+
+			BgsCustomSimulationUpdateMinionRequestEvent.eventName(),
+			new BgsCustomSimulationUpdateMinionRequestProcessor(),
+
+			BgsCustomSimulationMinionChosenEvent.eventName(),
+			new BgsCustomSimulationMinionChosenParser(this.cards),
+
+			BgsCustomSimulationMinionRemoveRequestEvent.eventName(),
+			new BgsCustomSimulationMinionRemoveRequestParser(),
+
+			BgsCustomSimulationUpdateMinionEvent.eventName(),
+			new BgsCustomSimulationUpdateMinionProcessor(),
+
+			BgsCustomSimulationCloseSidePanelEvent.eventName(),
+			new BgsCustomSimulationCloseSidePanelProcessor(),
 
 			// Duels
 			DungeonLootInfoUpdatedEvent.eventName(),

@@ -49,6 +49,12 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, a new section appears at the top of the tracker that shows global effects on the game (for now, only Dungeon Run passives)"
 					></preference-toggle>
 					<preference-toggle
+						class="indented"
+						field="overlayOverlayDarkenUsedCards"
+						label="Darken used cards"
+						tooltip="When active, the cards that have been used are darkened."
+					></preference-toggle>
+					<preference-toggle
 						[ngClass]="{ 'disabled': !overlayGroupByZone }"
 						class="indented"
 						field="overlaySortByManaInOtherZone"

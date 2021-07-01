@@ -321,6 +321,31 @@ export const getEffectiveTribeEnum = (card: ReferenceCard): Race => {
 	return card.race ? Race[card.race.toUpperCase()] : Race.BLANK;
 };
 
+export const tribeValueForSort = (tribe: string): number => {
+	switch (tribe) {
+		case Race[Race.BEAST]:
+			return 1;
+		case Race[Race.DEMON]:
+			return 2;
+		case Race[Race.DRAGON]:
+			return 3;
+		case Race[Race.ELEMENTAL]:
+			return 4;
+		case Race[Race.MECH]:
+			return 5;
+		case Race[Race.MURLOC]:
+			return 6;
+		case Race[Race.PIRATE]:
+			return 7;
+		case Race[Race.QUILBOAR]:
+			return 8;
+		case Race[Race.ALL]:
+			return 9;
+		case Race[Race.BLANK]:
+			return 10;
+	}
+};
+
 export const getAchievementsForHero = (
 	heroCardId: string,
 	heroAchievements: readonly VisualAchievement[],

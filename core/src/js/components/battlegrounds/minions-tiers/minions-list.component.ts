@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { getEffectiveTribe } from '../../../services/battlegrounds/bgs-utils';
+import { getEffectiveTribe, tribeValueForSort } from '../../../services/battlegrounds/bgs-utils';
 import { BgsResetHighlightsEvent } from '../../../services/battlegrounds/store/events/bgs-reset-highlights-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -93,37 +93,12 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 
 		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card))(this._cards);
 		this.groups = Object.keys(groupedByTribe)
-			.sort((a: string, b: string) => this.tribeValueForSort(a) - this.tribeValueForSort(b)) // Keep consistent ordering
+			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
 			.map((tribeString) => ({
 				tribe: Race[tribeString],
 				minions: groupedByTribe[tribeString],
 				highlightedMinions: this._highlightedMinions || [],
 				highlightedTribes: this._highlightedTribes || [],
 			}));
-	}
-
-	private tribeValueForSort(tribe: string): number {
-		switch (tribe) {
-			case Race[Race.BEAST]:
-				return 1;
-			case Race[Race.DEMON]:
-				return 2;
-			case Race[Race.DRAGON]:
-				return 3;
-			case Race[Race.ELEMENTAL]:
-				return 4;
-			case Race[Race.MECH]:
-				return 5;
-			case Race[Race.MURLOC]:
-				return 6;
-			case Race[Race.PIRATE]:
-				return 7;
-			case Race[Race.QUILBOAR]:
-				return 8;
-			case Race[Race.ALL]:
-				return 9;
-			case Race[Race.BLANK]:
-				return 10;
-		}
 	}
 }

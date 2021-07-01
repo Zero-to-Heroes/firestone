@@ -39,7 +39,7 @@ export class DeckTrackerOverlayPlayerComponent {
 	scaleExtractor = (prefs: Preferences) => prefs.decktrackerScale;
 	cardsGoToBottomExtractor = (prefs: Preferences) => prefs.overlayCardsGoToBottom;
 	showGlobalEffectsExtractor = (prefs: Preferences) => prefs.overlayShowGlobalEffects;
-	darkenUsedCardsExtractor = (prefs: Preferences) => true;
+	darkenUsedCardsExtractor = (prefs: Preferences) => prefs.overlayDarkenUsedCards;
 	hideGeneratedCardsInOtherZoneExtractor = (prefs: Preferences) => prefs.overlayHideGeneratedCardsInOtherZone;
 	sortCardsByManaCostInOtherZoneExtractor = (prefs: Preferences) => prefs.overlaySortByManaInOtherZone;
 	deckExtractor = (state: GameState) => state.playerDeck;

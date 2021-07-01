@@ -68,6 +68,7 @@ import { InfiniteScrollComponent } from '../../components/infinite-scroll.compon
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { SecondaryDefaultComponent } from '../../components/main-window/secondary-default.component';
 import { ProgressBarComponent } from '../../components/progress-bar.component';
+import { CheckboxComponent } from '../../components/settings/checkbox.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { ClipboardShareButtonComponent } from '../../components/sharing/clipboard/clipboard-share-button.component';
 import { RedditShareButtonComponent } from '../../components/sharing/reddit/reddit-share-button.component';
@@ -93,6 +94,7 @@ import { BindCssVariableDirective } from '../../directives/bind-css-variable-dir
 import { CachedComponentTooltipDirective } from '../../directives/cached-component-tooltip.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { ComponentTooltipDirective } from '../../directives/component-tooltip.directive';
+import { DoubleClickDirective } from '../../directives/exclusive-double-click.directive';
 import { GrowOnClickDirective } from '../../directives/grow-on-click.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { NgxCacheIfDirective } from '../../directives/ngx-cache-if.directive';
@@ -157,11 +159,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		ScrollableDirective,
 		NgxCacheIfDirective,
 		RotateOnMouseOverDirective,
+		DoubleClickDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,
 
 		PreferenceToggleComponent,
+		CheckboxComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,
@@ -269,11 +273,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		ScrollableDirective,
 		NgxCacheIfDirective,
 		RotateOnMouseOverDirective,
+		DoubleClickDirective,
 
 		LoadingStateComponent,
 		WithLoadingComponent,
 
 		PreferenceToggleComponent,
+		CheckboxComponent,
 
 		InfiniteScrollComponent,
 		FilterComponent,

@@ -125,7 +125,9 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			navigation.navigationBattlegrounds &&
 			navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-heroes' &&
 			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
-			!['bgs-category-personal-stats'].includes(navigation.navigationBattlegrounds.selectedCategoryId)
+			!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(
+				navigation.navigationBattlegrounds.selectedCategoryId,
+			)
 		);
 	};
 
@@ -190,7 +192,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			navigation.currentApp == 'battlegrounds' &&
 			navigation.navigationBattlegrounds &&
 			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
-			!['bgs-category-personal-stats', 'bgs-category-perfect-games'].includes(
+			!['bgs-category-personal-stats', 'bgs-category-perfect-games', 'bgs-category-simulator'].includes(
 				navigation.navigationBattlegrounds.selectedCategoryId,
 			)
 		);
@@ -253,7 +255,9 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			navigation.currentApp == 'battlegrounds' &&
 			navigation.navigationBattlegrounds &&
 			!['categories', 'category'].includes(navigation.navigationBattlegrounds.currentView) &&
-			!['bgs-category-personal-stats'].includes(navigation.navigationBattlegrounds.selectedCategoryId)
+			!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(
+				navigation.navigationBattlegrounds.selectedCategoryId,
+			)
 		);
 	};
 

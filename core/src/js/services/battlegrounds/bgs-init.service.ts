@@ -9,6 +9,7 @@ import { BattlegroundsPersonalHeroesCategory } from '../../models/mainwindow/bat
 import { BattlegroundsPersonalRatingCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-rating-category';
 import { BattlegroundsPersonalStatsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { BattlegroundsSimulatorCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-simulator-category';
 import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
@@ -118,6 +119,7 @@ export class BgsInitService {
 			this.buildPersonalRatingCategory(),
 			this.buildPersonalStatsCategory(),
 			this.buildPerfectGamesCategory(),
+			this.buildSimulatorCategory(),
 		];
 		return BattlegroundsAppState.create({
 			categories: categories,
@@ -166,5 +168,11 @@ export class BgsInitService {
 		return BattlegroundsPersonalStatsCategory.create({
 			enabled: true,
 		} as BattlegroundsPersonalStatsCategory);
+	}
+
+	private buildSimulatorCategory(): BattlegroundsCategory {
+		return BattlegroundsSimulatorCategory.create({
+			enabled: true,
+		} as BattlegroundsSimulatorCategory);
 	}
 }

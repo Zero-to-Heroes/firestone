@@ -13,7 +13,7 @@ import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-re
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { groupByFunction } from '../../../../services/utils';
+import { arraysEqual, groupByFunction } from '../../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-perfect-games',
@@ -35,7 +35,7 @@ import { groupByFunction } from '../../../../services/utils';
 })
 export class BattlegroundsPerfectGamesComponent implements AfterViewInit {
 	@Input() set state(value: BattlegroundsAppState) {
-		if (value === this._state) {
+		if (value === this._state || this.areSimilar(value, this._state)) {
 			return;
 		}
 		this._state = value;
@@ -102,6 +102,19 @@ export class BattlegroundsPerfectGamesComponent implements AfterViewInit {
 		return replays
 			.filter((replay) => this.rankFilter(replay, state.activeRankFilter))
 			.filter((replay) => this.heroFilter(replay, state.activeHeroFilter));
+	}
+
+	private areSimilar(first: BattlegroundsAppState, second: BattlegroundsAppState): boolean {
+		if (!arraysEqual(first.perfectGames, second.perfectGames)) {
+			return false;
+		}
+		if (first.activeRankFilter !== second.activeRankFilter) {
+			return false;
+		}
+		if (first.activeHeroFilter !== second.activeHeroFilter) {
+			return false;
+		}
+		return true;
 	}
 
 	private rankFilter(stat: GameStat, rankFilter: BgsRankFilterType) {

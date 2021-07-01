@@ -6,6 +6,7 @@ import { BgsActiveTimeFilterType } from './bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from './bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from './bgs-rank-filter.type';
 import { MmrGroupFilterType } from './mmr-group-filter-type';
+import { BgsCustomSimulationState } from './simulator/bgs-custom-simulation-state';
 
 export class BattlegroundsAppState {
 	readonly categories: readonly BattlegroundsCategory[] = [];
@@ -17,6 +18,7 @@ export class BattlegroundsAppState {
 	// The stats used by the app (so a mix a globalStats + matchStats + filters)
 	readonly stats: BgsStats;
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
+	readonly customSimulationState: BgsCustomSimulationState = new BgsCustomSimulationState();
 
 	readonly activeTimeFilter: BgsActiveTimeFilterType;
 	readonly activeHeroSortFilter: BgsHeroSortFilterType;

@@ -13,6 +13,10 @@
 
 	.portrait {
 		width: 60px;
+
+		&.click-to-change ::ng-deep .hero-portrait .portrait {
+			cursor: pointer;
+		}
 	}
 
 	::ng-deep bgs-hero-portrait {
@@ -36,6 +40,15 @@
 	.minion-container {
 		margin-right: 5px;
 		display: flex;
+		position: relative;
+
+		.close {
+			width: 30px;
+			height: 30px;
+			position: absolute;
+			top: -6px;
+			left: calc(50% - 15px);
+		}
 	}
 
 	.minion {

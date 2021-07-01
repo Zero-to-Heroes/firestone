@@ -70,6 +70,10 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[numberOfReplays]="numberOfReplaysToShow()"
 					[heroCardId]="heroFilterForReplays()"
 				></battlegrounds-replays-recap>
+				<battlegrounds-simulator-details
+					*ngIf="shouldDisplaySimulatorDetails()"
+					[state]="state?.battlegrounds?.customSimulationState"
+				></battlegrounds-simulator-details>
 			</section>
 		</div>
 	`,
@@ -118,9 +122,14 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 		);
 	}
 
+	shouldDisplaySimulatorDetails(): boolean {
+		const category = this.buildCategory();
+		return category?.id === 'bgs-category-simulator';
+	}
+
 	shouldDisplayFiltersAtTop(): boolean {
 		const category = this.buildCategory();
-		return category?.id !== 'bgs-category-personal-heroes';
+		return category?.id !== 'bgs-category-personal-heroes' && category?.id !== 'bgs-category-simulator';
 	}
 
 	numberOfReplaysToShow(): number {

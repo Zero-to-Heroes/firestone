@@ -46,6 +46,11 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 				[navigation]="navigation.navigationBattlegrounds"
 			>
 			</battlegrounds-personal-stats-hero-details>
+			<battlegrounds-simulator
+				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-simulator'"
+				[state]="state?.battlegrounds"
+			>
+			</battlegrounds-simulator>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
