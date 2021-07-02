@@ -234,10 +234,20 @@ export class AchievementsMonitor {
 
 	private async sendUnlockEvent(challenge: Challenge) {
 		const achievement: Achievement = await this.achievementLoader.getAchievement(challenge.achievementId);
+		if (!achievement) {
+			console.warn('trying to send unlock event for empty achievement', challenge.achievementId);
+			return;
+		}
+
 		await this.sendUnlockEventFromAchievement(achievement);
 	}
 
 	private async sendUnlockEventFromAchievement(achievement: Achievement) {
+		if (!achievement) {
+			console.warn('trying to send unlock event for empty achievement');
+			return;
+		}
+
 		const autoGrantAchievements = await this.achievementLoader.getAchievementsById(
 			achievement.linkedAchievementIds,
 		);
