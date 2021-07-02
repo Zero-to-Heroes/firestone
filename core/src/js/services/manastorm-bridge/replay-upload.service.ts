@@ -75,6 +75,7 @@ export class ReplayUploadService {
 				'app-version': '' + process.env.APP_VERSION,
 				'available-races': game.availableTribes ? JSON.stringify(game.availableTribes) : undefined,
 				'banned-races': game.bannedTribes ? JSON.stringify(game.bannedTribes) : undefined,
+				'bgs-has-prizes': JSON.stringify(!!game.hasBgsPrizes),
 				'duels-run-id': game.runId,
 				'run-id': game.runId,
 				'additional-result': game.additionalResult,

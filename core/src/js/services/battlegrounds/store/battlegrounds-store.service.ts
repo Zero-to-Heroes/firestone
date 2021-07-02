@@ -28,6 +28,7 @@ import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
 import { BgsChangePostMatchStatsTabsNumberParser } from './event-parsers/bgs-change-post-match-stats-tabs-number-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
+import { BgsGameSettingsParser } from './event-parsers/bgs-game-settings-parser';
 import { BgsGlobalInfoUpdatedParser } from './event-parsers/bgs-global-info-updated-parser';
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
@@ -58,6 +59,7 @@ import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
 import { BgsCardPlayedEvent } from './events/bgs-card-played-event';
 import { BgsCombatStartEvent } from './events/bgs-combat-start-event';
 import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
+import { BgsGameSettingsEvent } from './events/bgs-game-settings-event';
 import { BgsGlobalInfoUpdatedEvent } from './events/bgs-global-info-updated-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
 import { BgsHeroSelectionEvent } from './events/bgs-hero-selection-event';
@@ -198,6 +200,10 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(new BgsInitMmrEvent());
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTED) {
 				this.battlegroundsUpdater.next(new BgsHeroSelectedEvent(gameEvent.cardId, gameEvent.additionalData));
+			} else if (gameEvent.type === GameEvent.GAME_START) {
+				this.battlegroundsUpdater.next(new BgsMatchStartEvent(this.mainWindowState, null, true));
+			} else if (gameEvent.type === GameEvent.GAME_SETTINGS) {
+				this.battlegroundsUpdater.next(new BgsGameSettingsEvent(gameEvent));
 			} else if (gameEvent.type === GameEvent.MATCH_METADATA) {
 				this.queuedEvents = [];
 				if (
@@ -205,7 +211,7 @@ export class BattlegroundsStoreService {
 					gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 				) {
 					this.battlegroundsUpdater.next(
-						new BgsMatchStartEvent(this.mainWindowState, gameEvent.additionalData.spectating),
+						new BgsMatchStartEvent(this.mainWindowState, gameEvent.additionalData.spectating, false),
 					);
 					if (this.memoryInterval) {
 						clearInterval(this.memoryInterval);
@@ -475,6 +481,8 @@ export class BattlegroundsStoreService {
 	private buildEventParsers(): readonly EventParser[] {
 		const eventParsers = [
 			new NoBgsMatchParser(),
+			new BgsMatchStartParser(this.prefs, this.gameStateService),
+			new BgsGameSettingsParser(),
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(this.prefs),
 			new BgsStatUpdateParser(this.allCards, this.patchesService),
@@ -486,7 +494,6 @@ export class BattlegroundsStoreService {
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
-			new BgsMatchStartParser(this.prefs, this.gameStateService),
 			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.ow, this.gameEventsService),

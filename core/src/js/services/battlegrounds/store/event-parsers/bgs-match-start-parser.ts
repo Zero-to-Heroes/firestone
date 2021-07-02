@@ -21,25 +21,28 @@ export class BgsMatchStartParser implements EventParser {
 			console.warn('reconnect, returning');
 			return currentState;
 		} else {
+			const reviewId = await this.gameState.getCurrentReviewId();
+			if (event.simpleInit) {
+				const newGame: BgsGame = BgsGame.create({
+					reviewId: reviewId,
+				} as BgsGame);
+				return currentState.update({
+					currentGame: newGame,
+				} as BattlegroundsState);
+			}
+
 			const heroesAchievementCategory = event.mainWindowState.achievements.findCategory(
 				'hearthstone_game_sub_13',
 			);
-
 			if (!heroesAchievementCategory) {
 				console.error('missing achievements category for BG', 'hearthstone_game_sub_13');
 			}
-
 			const heroAchievements: readonly VisualAchievement[] =
 				heroesAchievementCategory?.retrieveAllAchievements() ?? [];
-			const reviewId = await this.gameState.getCurrentReviewId();
-			const newGame: BgsGame = BgsGame.create({
-				reviewId: reviewId,
-			} as BgsGame);
 			console.log('created new bgs game with reviewId', reviewId);
 			const prefs: Preferences = await this.prefs.getPreferences();
 			return currentState.update({
 				inGame: true,
-				currentGame: newGame,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
 				panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
 				heroAchievements: heroAchievements,

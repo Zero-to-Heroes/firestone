@@ -45,6 +45,9 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
+		bgsOptions?: {
+			hasPrizes: boolean;
+		},
 	): Promise<void> {
 		console.log('[manastorm-bridge]', currentReviewId, 'Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
@@ -54,6 +57,7 @@ export class EndGameUploaderService {
 			deckName,
 			buildNumber,
 			scenarioId,
+			bgsOptions,
 		);
 		await this.replayUploadService.uploadGame(game);
 	}
@@ -65,6 +69,9 @@ export class EndGameUploaderService {
 		deckName: string,
 		buildNumber: number,
 		scenarioId: number,
+		bgsOptions?: {
+			hasPrizes: boolean;
+		},
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
@@ -108,6 +115,7 @@ export class EndGameUploaderService {
 			game.bannedTribes = bannedRaces;
 			game.additionalResult = replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
+			game.hasBgsPrizes = bgsOptions.hasPrizes;
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode, game);
 			// const duelsInfo = await this.memoryInspection.getDuelsInfo();

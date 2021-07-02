@@ -18,6 +18,7 @@ export class BgsGame {
 	readonly pogoHoppersCount: number;
 	readonly availableRaces: readonly Race[];
 	readonly bannedRaces: readonly Race[];
+	readonly hasPrizes: boolean;
 	readonly lastOpponentCardId: string;
 	readonly liveStats: RealTimeStatsState;
 	readonly gameEnded: boolean;

@@ -34,11 +34,13 @@ export class GameForUpload {
 	deckName: string;
 	replay: string;
 
+	availableTribes: readonly Race[];
+	bannedTribes: readonly Race[];
+	hasBgsPrizes: boolean;
+
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS
 	uncompressedXmlReplay: string;
-	availableTribes: readonly Race[];
-	bannedTribes: readonly Race[];
 
 	// TODO: we can probably remove that ID, it was used by Manastorm but doesn't make
 	// sense for Firestone anymore

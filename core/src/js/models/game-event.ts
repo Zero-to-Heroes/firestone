@@ -27,6 +27,7 @@ export class GameEvent implements GameStateEvent {
 	public static readonly GAME_RESULT = 'GAME_RESULT';
 	public static readonly MAYBE_DUNGEON_INFO_PICK = 'MAYBE_DUNGEON_INFO_PICK';
 	public static readonly GAME_START = 'GAME_START';
+	public static readonly GAME_SETTINGS = 'GAME_SETTINGS';
 	public static readonly NEW_LOG_LINE = 'NEW_LOG_LINE';
 	public static readonly WINNER = 'WINNER';
 	public static readonly TIE = 'TIE';

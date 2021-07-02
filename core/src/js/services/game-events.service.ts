@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { CopiedFromEntityIdGameEvent } from '../models/mainwindow/game-events/copied-from-entity-id-game-event';
 import { DamageGameEvent } from '../models/mainwindow/game-events/damage-game-event';
+import { GameSettingsEvent } from '../models/mainwindow/game-events/game-settings-event';
 import { MinionsDiedEvent } from '../models/mainwindow/game-events/minions-died-event';
 import { MemoryUpdate } from '../models/memory/memory-update';
 import { DeckParserService } from './decktracker/deck-parser.service';
@@ -155,6 +156,17 @@ export class GameEvents {
 				} as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.gameEventsEmitter.allEvents.next(event);
+				break;
+			case 'GAME_SETTINGS':
+				console.log(gameEvent.Type + ' event', gameEvent);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameSettingsEvent(), {
+						type: GameEvent.GAME_SETTINGS,
+						additionalData: {
+							battlegroundsPrizes: gameEvent.Value?.BattlegroundsPrizes,
+						},
+					} as GameEvent),
+				);
 				break;
 			case 'MATCH_METADATA':
 				console.log(gameEvent.Type + ' event', gameEvent.Value);
