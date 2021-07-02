@@ -8,9 +8,15 @@ export const standardSets: readonly string[] = [
 	'scholomance',
 	'core',
 	'black_temple',
+	'stormwind',
 ];
 
 export const sets: readonly ReferenceSet[] = [
+	{
+		id: 'stormwind',
+		name: 'United in Stormwind',
+		launchDate: new Date('2021-07-01'),
+	},
 	{
 		id: 'wailing_caverns',
 		name: 'Wailing Caverns',

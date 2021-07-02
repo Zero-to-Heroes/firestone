@@ -90,7 +90,7 @@ export const globalEffectCards = [
 	// CardIds.Collectible.Shaman.GrandTotemEysor,
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
 	CardIds.Collectible.Warlock.DeckOfChaos,
-	CardIds.Collectible.Warlock.NeeruFireblade,
+	CardIds.Collectible.Warlock.NeeruFireblade1,
 	CardIds.Collectible.Warlock.RenounceDarkness,
 	CardIds.NonCollectible.Neutral.ReductomaraToken,
 	CardIds.NonCollectible.Neutral.UpgradedPackMule,
@@ -178,7 +178,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Mage.ArchmageArugal,
 	CardIds.Collectible.Mage.BookOfSpecters,
 	CardIds.Collectible.Mage.ElementalAllies,
-	CardIds.Collectible.Mage.RavenFamiliar,
+	CardIds.Collectible.Mage.RavenFamiliar1,
 	CardIds.Collectible.Mage.Starscryer,
 	CardIds.Collectible.Paladin.CallToAdventure,
 	CardIds.Collectible.Paladin.Crystology,
@@ -216,12 +216,12 @@ export const publicCardCreators = [
 	CardIds.Collectible.Shaman.IceFishing,
 	CardIds.Collectible.Shaman.SpiritOfTheFrog,
 	CardIds.Collectible.Shaman.StormChaser,
-	CardIds.Collectible.Warlock.FelLordBetrug,
+	CardIds.Collectible.Warlock.FelLordBetrug1,
 	CardIds.Collectible.Warlock.FreeAdmission,
 	CardIds.Collectible.Warlock.SenseDemonsLegacy,
-	CardIds.Collectible.Warlock.SenseDemonsVanilla,
+	CardIds.Collectible.Warlock.SenseDemonsVanilla1,
 	CardIds.NonCollectible.Warlock.SupremeArchaeology_TomeOfOrigination,
-	CardIds.Collectible.Warlock.TamsinRoame,
+	CardIds.Collectible.Warlock.TamsinRoame1,
 	CardIds.Collectible.Warrior.AkaliTheRhino,
 	CardIds.Collectible.Warrior.Ancharrr,
 	CardIds.Collectible.Warrior.CorsairCache,
@@ -241,13 +241,13 @@ export const publicCardCreators = [
 	CardIds.Collectible.Neutral.CountessAshmore,
 	CardIds.Collectible.Neutral.Guidance1,
 	CardIds.Collectible.Neutral.JepettoJoybuzz,
-	CardIds.Collectible.Neutral.Kazakus,
+	CardIds.Collectible.Neutral.Kazakus1,
 	CardIds.Collectible.Neutral.KazakusGolemShaper,
 	CardIds.Collectible.Neutral.KronxDragonhoof,
 	CardIds.Collectible.Neutral.MurlocTastyfin,
 	CardIds.Collectible.Neutral.Mankrik,
 	CardIds.Collectible.Neutral.Peon1,
-	CardIds.Collectible.Neutral.PrimordialProtector,
+	CardIds.Collectible.Neutral.PrimordialProtector1,
 	CardIds.Collectible.Neutral.Sandbinder,
 	CardIds.Collectible.Neutral.SouthseaScoundrel,
 	CardIds.Collectible.Neutral.Subject9,
@@ -457,6 +457,8 @@ export const getDefaultBoosterIdForSetId = (setId: string): BoosterType => {
 		case 'the_barrens':
 		case 'wailing_caverns':
 			return BoosterType.THE_BARRENS;
+		case 'stormwind':
+			return BoosterType.STORMWIND;
 		default:
 			console.warn('no default booster type for set id', setId);
 			return null;
@@ -510,6 +512,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Forged in the Barrens';
 		case BoosterType.GOLDEN_THE_BARRENS:
 			return 'Golden Forged in the Barrens';
+		case BoosterType.STORMWIND:
+			return 'United in Stormwind';
 		case BoosterType.STANDARD_DEMONHUNTER:
 			return 'Standard Demon Hunter';
 		case BoosterType.STANDARD_DRUID:
