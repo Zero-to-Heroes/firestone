@@ -85,8 +85,8 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		}
 
 		const enemyHeroEntityId = isPlayerActive
-			? gameEvent.gameState.Opponent.Hero.entityId
-			: gameEvent.gameState.Player.Hero.entityId;
+			? gameEvent.gameState.Opponent?.Hero.entityId
+			: gameEvent.gameState.Player?.Hero.entityId;
 		const heroTarget = gameEvent.additionalData.targets
 			? Object.values(gameEvent.additionalData.targets).find(
 					(target) => target.TargetEntityId === enemyHeroEntityId,

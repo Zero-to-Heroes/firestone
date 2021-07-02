@@ -96,7 +96,7 @@ export class BgsInitService {
 	public async loadPerfectGames(): Promise<readonly GameStat[]> {
 		const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
 		console.debug('[bgs-init] perfect games', result);
-		return result
+		return (result ?? [])
 			.map((res) =>
 				GameStat.create({
 					...res,
