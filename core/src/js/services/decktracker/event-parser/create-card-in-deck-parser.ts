@@ -27,7 +27,7 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
+		const cardData = cardId?.length ? this.allCards.getCard(cardId) : null;
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
