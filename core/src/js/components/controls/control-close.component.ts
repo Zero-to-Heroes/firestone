@@ -67,6 +67,7 @@ export class ControlCloseComponent implements AfterViewInit {
 		if (this.closeAll && !isRunning && !areBothMainAndBgWindowsOpen) {
 			console.log('[control-close] closing all app windows');
 			this.ow.hideWindow(this.windowId);
+			this.prefs.updateRemotePreferences();
 			const openWindows = await this.ow.getOpenWindows();
 			for (const [name] of Object.entries(openWindows)) {
 				this.ow.closeWindowFromName(name);

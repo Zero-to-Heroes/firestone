@@ -435,6 +435,7 @@ export class PreferencesService {
 				prefsToSync[prop] = prefsWithDate[prop];
 			}
 		}
+		console.log('no-format', '[preferences] saving remote prefs', prefsToSync);
 		await this.api.callPostApi(PREF_UPDATE_URL, {
 			userId: currentUser.userId,
 			userName: currentUser.username,

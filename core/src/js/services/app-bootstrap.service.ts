@@ -294,7 +294,7 @@ export class AppBootstrapService {
 
 	private async handleExitGame() {
 		const prefs = await this.prefs.getPreferences();
-		await this.prefs.updateRemotePreferences();
+		this.prefs.updateRemotePreferences();
 		if (prefs.showSessionRecapOnExit && this.stateUpdater) {
 			this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
 		} else {
