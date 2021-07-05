@@ -133,6 +133,7 @@ export class BgsBattleComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 
+		const prefs = await this.prefs.getPreferences();
 		const battleInfo: BgsBattleInfo = {
 			playerBoard: {
 				player: this.player.player,
@@ -146,11 +147,10 @@ export class BgsBattleComponent implements AfterViewInit {
 			},
 			options: {
 				...this._faceOff.battleInfo.options,
-				numberOfSimulations: 15000,
-				maxAcceptableDuration: 20000,
+				numberOfSimulations: prefs.bgsSimulatorNumberOfSims ?? 8000,
+				maxAcceptableDuration: 6000,
 			},
 		};
-		const prefs = await this.prefs.getPreferences();
 		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'done',
