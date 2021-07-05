@@ -22,12 +22,17 @@ export class BgsMatchStartParser implements EventParser {
 			return currentState;
 		} else {
 			const reviewId = await this.gameState.getCurrentReviewId();
+			const prefs: Preferences = await this.prefs.getPreferences();
 			if (event.simpleInit) {
 				const newGame: BgsGame = BgsGame.create({
 					reviewId: reviewId,
 				} as BgsGame);
 				return currentState.update({
+					inGame: false, // We don't know yet if this is a BG game
 					currentGame: newGame,
+					panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
+					heroSelectionDone: false,
+					currentPanelId: 'bgs-hero-selection-overview',
 				} as BattlegroundsState);
 			}
 
@@ -40,7 +45,6 @@ export class BgsMatchStartParser implements EventParser {
 			const heroAchievements: readonly VisualAchievement[] =
 				heroesAchievementCategory?.retrieveAllAchievements() ?? [];
 			console.log('created new bgs game with reviewId', reviewId);
-			const prefs: Preferences = await this.prefs.getPreferences();
 			return currentState.update({
 				inGame: true,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
