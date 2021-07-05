@@ -70,6 +70,11 @@ export class OverwolfService {
 		return this.obtainDeclaredWindow(windowName);
 	}
 
+	public getBattlegroundsWindow(prefs: Preferences) {
+		const windowName = this.getBattlegroundsWindowName(prefs);
+		return this.obtainDeclaredWindow(windowName);
+	}
+
 	public getSettingsWindow(prefs: Preferences) {
 		const windowName = this.getSettingsWindowName(prefs);
 		return this.obtainDeclaredWindow(windowName);

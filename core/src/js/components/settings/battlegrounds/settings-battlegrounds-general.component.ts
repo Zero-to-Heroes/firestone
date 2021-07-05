@@ -90,6 +90,7 @@ import { Knob } from '../preference-slider.component';
 						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle }"
 						label="Set integrated mode"
 						tooltip="When turned on, the battlegrounds window becomes an overlay, and is bound to the game window. Using this is recommended for single monitor setups, or if you want to stream the app"
+						[toggleFunction]="toggleOverlay"
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowOverlayButton"
@@ -289,6 +290,8 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 
 	private preferencesSubscription: Subscription;
 
+	private reloadBgWindows;
+
 	constructor(
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
@@ -297,6 +300,7 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	) {}
 
 	ngAfterViewInit() {
+		this.reloadBgWindows = this.ow.getMainWindow().reloadBgWindows;
 		this.loadDefaultValues();
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
@@ -322,6 +326,10 @@ export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnD
 	ngOnDestroy() {
 		this.preferencesSubscription?.unsubscribe();
 	}
+
+	toggleOverlay = () => {
+		this.reloadBgWindows();
+	};
 
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();

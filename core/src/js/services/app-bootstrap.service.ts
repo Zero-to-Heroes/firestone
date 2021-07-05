@@ -122,6 +122,7 @@ export class AppBootstrapService {
 		console.log('[bootstrap] app init starting');
 		window['mainWindowHotkeyPressed'] = () => this.onHotkeyPress();
 		window['reloadWindows'] = () => this.reloadWindows();
+		window['reloadBgWindows'] = () => this.reloadBgWindows();
 		if (!this.collectionHotkeyListener) {
 			this.collectionHotkeyListener = this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
 				// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
@@ -189,6 +190,16 @@ export class AppBootstrapService {
 		// this.ow.bringToFront(mainWindow.id);
 		await this.ow.restoreWindow(settingsWindow.id);
 		this.ow.bringToFront(settingsWindow.id);
+	}
+
+	private async reloadBgWindows() {
+		console.log('reloading BG windows in app bootstrap');
+		const prefs: Preferences = await this.prefs.getPreferences();
+		this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
+		this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_WINDOW_OVERLAY);
+		const bgWindows = await this.ow.getBattlegroundsWindow(prefs);
+		await this.ow.restoreWindow(bgWindows.id);
+		this.ow.bringToFront(bgWindows.id);
 	}
 
 	private async onHotkeyPress() {
