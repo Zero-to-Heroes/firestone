@@ -12,7 +12,7 @@ import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsBoard } from '../../../../models/battlegrounds/in-game/bgs-board';
 import { GameEvents } from '../../../game-events.service';
 import { defaultStartingHp } from '../../../hs-utils';
-import { PreferencesService } from '../../../preferences.service';
+import { LogsUploaderService } from '../../../logs-uploader.service';
 import { BgsBattleSimulationService } from '../../bgs-battle-simulation.service';
 import { isSupportedScenario, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsPlayerBoardEvent, PlayerBoard } from '../events/bgs-player-board-event';
@@ -22,7 +22,7 @@ import { EventParser } from './_event-parser';
 export class BgsPlayerBoardParser implements EventParser {
 	constructor(
 		private readonly simulation: BgsBattleSimulationService,
-		private readonly prefs: PreferencesService,
+		private readonly logsUploader: LogsUploaderService,
 		private readonly gameEventsService: GameEvents,
 	) {}
 
@@ -41,9 +41,11 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		// console.debug('[bgs-simulation] received player boards', event);
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
+			const gameLogsKey = await this.logsUploader.uploadGameLogs();
 			console.error(
 				'no-format',
 				'Too many entities on the board',
+				gameLogsKey,
 				event.playerBoard?.heroCardId,
 				event.playerBoard?.board?.map((entity) => entity.CardId),
 				event.opponentBoard?.heroCardId,

@@ -13,6 +13,7 @@ import { Events } from '../../events.service';
 import { FeatureFlags } from '../../feature-flags';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { GameEvents } from '../../game-events.service';
+import { LogsUploaderService } from '../../logs-uploader.service';
 import { TwitchAuthService } from '../../mainwindow/twitch-auth.service';
 import { ManastormInfo } from '../../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../../overwolf.service';
@@ -128,6 +129,7 @@ export class BattlegroundsStoreService {
 		private gameStateService: GameStateService,
 		private init_BgsRunStatsService: BgsRunStatsService,
 		private readonly gameEventsService: GameEvents,
+		private readonly logsUploader: LogsUploaderService,
 	) {
 		window['battlegroundsStore'] = this.battlegroundsStoreEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
@@ -490,7 +492,7 @@ export class BattlegroundsStoreService {
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsNextOpponentParser(),
 			new BgsTavernUpgradeParser(this.gameEventsService),
-			new BgsPlayerBoardParser(this.simulation, this.prefs, this.gameEventsService),
+			new BgsPlayerBoardParser(this.simulation, this.logsUploader, this.gameEventsService),
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
 			new BgsTurnStartParser(),
