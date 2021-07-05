@@ -139,7 +139,7 @@ export class ReplaysListComponent implements AfterViewInit {
 		// console.log('[replays-list]', 'starting loading replays');
 		const workingReplays = [...this._replays];
 		// console.log('[replays-list] workingReplays', workingReplays);
-		const step = 100;
+		const step = 30;
 		while (workingReplays.length > 0) {
 			const currentReplays = [];
 			while (

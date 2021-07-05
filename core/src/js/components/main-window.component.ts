@@ -74,12 +74,13 @@ import { PreferencesService } from '../services/preferences.service';
 						*ngIf="!dataState.showFtue"
 						[ngClass]="{ 'hide-ads': !_showAds }"
 					>
+						<!-- Don't cache the DOM, as it can cause some lag when many replays are loaded -->
 						<replays
 							class="main-section"
 							[state]="dataState"
 							[navigation]="navigationState"
 							[prefs]="prefs"
-							*ngxCacheIf="navigationState.currentApp === 'replays'"
+							*ngIf="navigationState.currentApp === 'replays'"
 						></replays>
 						<achievements
 							class="main-section"
