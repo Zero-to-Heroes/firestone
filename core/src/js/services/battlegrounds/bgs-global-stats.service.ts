@@ -11,7 +11,7 @@ export class BgsGlobalStatsService {
 	public async loadGlobalStats(): Promise<BgsStats> {
 		const result: any = await this.api.callGetApi(BGS_STATS_RETRIEVE_URL);
 		const globalStats = BgsStats.create({
-			heroStats: result.heroStats,
+			heroStats: result?.heroStats ?? [],
 		} as BgsStats);
 		return globalStats;
 	}

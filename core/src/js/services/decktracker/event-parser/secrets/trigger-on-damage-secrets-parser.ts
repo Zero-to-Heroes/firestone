@@ -42,10 +42,6 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 		//const sourceControllerId = gameEvent.additionalData.sourceControllerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 
-		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
-		const deckWithSecretToCheck = isPlayerActive ? currentState.opponentDeck : currentState.playerDeck;
-		console.debug('[secrets-parser] deckWithSecretToCheck', deckWithSecretToCheck, isPlayerActive);
-
 		if (!localPlayer || activePlayerId == null) {
 			console.error(
 				'[secrets-parser] cannot rule out secrets without local player id or active player id',
@@ -54,11 +50,15 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			);
 		}
 
+		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
+		const deckWithSecretToCheck = isPlayerActive ? currentState.opponentDeck : currentState.playerDeck;
+		console.debug('[secrets-parser] deckWithSecretToCheck', deckWithSecretToCheck, isPlayerActive);
+
 		const secretsWeCantRuleOut = [];
 
 		const isEnemyDealing = isPlayerActive
-			? gameEvent.additionalData.sourceControllerId === localPlayer?.PlayerId
-			: gameEvent.additionalData.sourceControllerId !== localPlayer?.PlayerId;
+			? gameEvent.additionalData.sourceControllerId === localPlayer.PlayerId
+			: gameEvent.additionalData.sourceControllerId !== localPlayer.PlayerId;
 		console.debug('[secrets-parser] is enemy dealing?', isEnemyDealing, isPlayerActive, gameEvent);
 		if (!isEnemyDealing) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
