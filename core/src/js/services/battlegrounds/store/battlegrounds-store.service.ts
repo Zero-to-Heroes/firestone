@@ -220,6 +220,13 @@ export class BattlegroundsStoreService {
 						this.memoryInterval = null;
 					}
 					this.memoryInterval = setInterval(async () => {
+						if (this.state?.currentGame?.players?.length < 8) {
+							console.debug(
+								'[bgs-store] not triggering memory reading info for players yet',
+								this.state?.currentGame?.players?.map((p) => p.cardId),
+							);
+							return;
+						}
 						// Here we want to get the players info, mostly
 						let info = await this.memory.getBattlegroundsMatchWithPlayers(2);
 						if (info?.game?.Players && info.game.Players.length > 0) {
