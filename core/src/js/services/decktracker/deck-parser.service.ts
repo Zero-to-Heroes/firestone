@@ -106,7 +106,7 @@ export class DeckParserService {
 				this.spectating = event.additionalData.spectating;
 			}
 		});
-		this.events.on(Events.MEMORY_UPDATE).subscribe((data) => {
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			if (this.spectating) {
 				return;
 			}
@@ -115,6 +115,16 @@ export class DeckParserService {
 			if (changes.SelectedDeckId) {
 				console.log('[deck-parser] selected deck id', changes.SelectedDeckId);
 				this.selectedDeckId = changes.SelectedDeckId;
+				const activeDeck = await this.memory.getActiveDeck(this.selectedDeckId, 2);
+				console.log(
+					'[deck-parser] getting active deck from memory after ID selection',
+					this.selectedDeckId,
+					activeDeck,
+				);
+				if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
+					console.log('[deck-parser] updating active deck after ID selection', activeDeck, this.currentDeck);
+					this.updateDeckFromMemory(activeDeck);
+				}
 			}
 			// Resetting the selectedDeckId if empty means that if a memory update reset occurs while on
 			// the deck selection screen, or simply that another memory update event occurs (which
@@ -175,6 +185,11 @@ export class DeckParserService {
 			// play with another deck we just use the cache and load the wrongly cached deck
 			if (this.currentScene === SceneMode.GAMEPLAY) {
 				console.log('[deck-parser] leaving game, not re-reading deck from memory');
+				return;
+			}
+
+			if (this.currentScene === SceneMode.BACON) {
+				console.debug('[deck-parser] not getting deck from memory for BG');
 				return;
 			}
 
