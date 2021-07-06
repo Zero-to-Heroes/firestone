@@ -46,7 +46,14 @@ export class BgsNextOpponentParser implements EventParser {
 				(opponent?.damageTaken ?? 0),
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		} as BgsFaceOffWithSimulation);
-		//console.debug('created new face off', faceOff, currentState);
+		if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH') {
+			console.error(
+				'[bgs-next-opponent] created a face-off with an invalid player card',
+				mainPlayer,
+				opponent,
+				currentState.currentGame.players.map((p) => p.cardId),
+			);
+		}
 		return currentState.update({
 			panels: panels,
 			currentGame: currentState.currentGame.update({

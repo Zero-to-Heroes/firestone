@@ -30,6 +30,10 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 		if (this.battleResult?.tied === 0 && this.result === 'tied') {
 			this.report('tie', gameState);
 		}
+
+		if (this.playerCardId === 'TB_BaconShop_HERO_PH' || this.opponentCardId === 'TB_BaconShop_HERO_PH') {
+			console.error('invalid face off', this.playerCardId, this.opponentCardId, new Error().stack);
+		}
 	}
 
 	private async report(status: string, game: BgsGame) {

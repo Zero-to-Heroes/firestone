@@ -51,7 +51,7 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 			await this.ow.restoreWindow(this.windowName);
 		} else if (!shouldShow && !isWindowClosed(theWindow.window_state_ex)) {
 			if (this.forceLogs) {
-				console.log(
+				console.debug(
 					`[${this.name}] closing`,
 					shouldShow,
 					canShow,
@@ -69,7 +69,7 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 			}
 			await this.ow.closeWindow(this.windowName);
 		} else if (this.forceLogs && forceLogs && !shouldShow && isWindowClosed(theWindow.window_state_ex)) {
-			console.log(
+			console.debug(
 				`[${this.name}] not opening`,
 				shouldShow,
 				canShow,

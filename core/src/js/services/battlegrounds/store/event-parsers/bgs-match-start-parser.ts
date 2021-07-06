@@ -40,7 +40,11 @@ export class BgsMatchStartParser implements EventParser {
 				'hearthstone_game_sub_13',
 			);
 			if (!heroesAchievementCategory) {
-				console.error('missing achievements category for BG', 'hearthstone_game_sub_13');
+				console.error(
+					'missing achievements category for BG',
+					'hearthstone_game_sub_13',
+					event.mainWindowState.achievements.categories.map((c) => c.id),
+				);
 			}
 			const heroAchievements: readonly VisualAchievement[] =
 				heroesAchievementCategory?.retrieveAllAchievements() ?? [];

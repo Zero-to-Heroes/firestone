@@ -865,6 +865,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_HERO_SELECTION':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_HERO_SELECTION,
@@ -875,6 +876,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_HERO_SELECTED':
+				console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.BATTLEGROUNDS_HERO_SELECTED, gameEvent, {
 						// These are set after a reconnect, and usually not present when the match starts

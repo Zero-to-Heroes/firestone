@@ -22,7 +22,13 @@ export class BgsTurnStartParser implements EventParser {
 		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
 		);
-		console.log('updating turn', newCurrentTurn);
+		console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
+		if (currentState.currentGame.players.length !== 8) {
+			console.error(
+				'invalid players in game',
+				currentState.currentGame.players.map((p) => p.cardId),
+			);
+		}
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				currentTurn: newCurrentTurn,

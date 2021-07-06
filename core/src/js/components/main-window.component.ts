@@ -232,7 +232,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					(!this.navigationState || !this.navigationState.isVisible || !currentlyVisible)
 				) {
 					// amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
-					console.log('restoring window', this.isMaximized);
+					// console.log('restoring window', this.isMaximized);
 					await this.ow.restoreWindow(this.windowId);
 					this.ow.bringToFront(this.windowId);
 					if (this.isMaximized) {
