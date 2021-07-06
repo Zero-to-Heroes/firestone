@@ -87,8 +87,8 @@ export class BgsHeroSelectionParser implements EventParser {
 			globalStats: currentState.globalStats,
 			heroAchievements: currentState.heroAchievements,
 			patchNumber:
-				stats?.currentBattlegroundsMetaPatch ||
-				(await this.patchConfig.getConf()).currentBattlegroundsMetaPatch,
+				stats?.currentBattlegroundsMetaPatch ??
+				(await this.patchConfig.getConf())?.currentBattlegroundsMetaPatch,
 		} as BgsHeroSelectionOverviewPanel);
 	}
 }
