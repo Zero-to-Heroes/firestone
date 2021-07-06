@@ -25,9 +25,25 @@ export class MatchMetadataParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		const format = gameEvent.additionalData.metaData.FormatType as number;
+		const metaData = {
+			gameType: gameEvent.additionalData.metaData.GameType as number,
+			formatType: format,
+			scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
+		} as Metadata;
+		if (
+			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(
+				gameEvent.additionalData.metaData.GameType,
+			)
+		) {
+			console.debug('[match-metadata-parser] BG game, not getting current deck');
+			return Object.assign(new GameState(), currentState, {
+				metadata: metaData,
+			} as GameState);
+		}
+
 		const store: MainWindowState = gameEvent.additionalData.state;
 		// const stats: StatsState = gameEvent.additionalData?.stats;
-		const format = gameEvent.additionalData.metaData.FormatType as number;
 		const convertedFormat = formatFormat(format);
 
 		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
@@ -35,11 +51,6 @@ export class MatchMetadataParser implements EventParser {
 			console.log('[match-metadata-parser] no deck mode is active, not loading current deck');
 		}
 		console.log('[match-metadata-parser] will get current deck');
-		const metaData = {
-			gameType: gameEvent.additionalData.metaData.GameType as number,
-			formatType: format,
-			scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
-		} as Metadata;
 		// We don't always have a deckstring here, eg when we read the deck from memory
 		// We always read the decklist, whatever the prefs are, so that we trigger the side effects
 		// (yes, that's probably bad design here, especially seeing the bugs I tend to have on this area)
