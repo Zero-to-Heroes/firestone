@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
+import { DuelsState } from '../../../../models/duels/duels-state';
+import { NavigationReplays } from '../../../../models/mainwindow/navigation/navigation-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { PreferencesService } from '../../../../services/preferences.service';
 
@@ -24,7 +24,7 @@ import { PreferencesService } from '../../../../services/preferences.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsReplaysRecapForRunComponent {
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: DuelsState) {
 		if (value === this._state) {
 			return;
 		}
@@ -32,7 +32,7 @@ export class DuelsReplaysRecapForRunComponent {
 		this.updateValues();
 	}
 
-	@Input() set navigation(value: NavigationState) {
+	@Input() set navigation(value: NavigationReplays) {
 		if (value === this._navigation) {
 			return;
 		}
@@ -43,25 +43,24 @@ export class DuelsReplaysRecapForRunComponent {
 	_numberOfReplays: number;
 	replays: GameStat[];
 
-	private _state: MainWindowState;
-	private _navigation: NavigationState;
+	private _state: DuelsState;
+	private _navigation: NavigationReplays;
 
 	constructor(private readonly prefs: PreferencesService) {}
 
 	private updateValues() {
-		// console.log('tier updating values', this._state, this._category);
 		console.log('getting replays for run?', this._state, this._navigation);
-		if (!this._state.duels?.playerStats?.personalDeckStats?.length || !this._navigation) {
+		if (!this._state?.playerStats?.personalDeckStats?.length || !this._navigation) {
 			return;
 		}
 
-		const runId = this._navigation?.navigationReplays?.selectedReplay?.replayInfo?.runId;
+		const runId = this._navigation?.selectedReplay?.replayInfo?.runId;
 		if (!runId) {
 			return;
 		}
 
 		// console.log('getting replays for run', runId, this._state, this._navigation);
-		this.replays = this._state.duels.playerStats.personalDeckStats
+		this.replays = this._state.playerStats.personalDeckStats
 			.map((deck) => deck.runs)
 			.reduce((a, b) => a.concat(b), [])
 			.filter((run) => run.id === runId)

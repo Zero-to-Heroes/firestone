@@ -78,7 +78,7 @@ import { PreferencesService } from '../services/preferences.service';
 						<replays
 							class="main-section"
 							[state]="dataState"
-							[navigation]="navigationState"
+							[navigation]="navigationState?.navigationReplays"
 							[prefs]="prefs"
 							*ngIf="navigationState.currentApp === 'replays'"
 						></replays>

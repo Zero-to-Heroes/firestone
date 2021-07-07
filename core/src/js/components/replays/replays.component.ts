@@ -42,8 +42,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 				</div>
 				<div class="replays-list" *ngxCacheIf="isShowingDuelsReplay()">
 					<duels-replays-recap-for-run
-						[state]="state"
-						[navigation]="navigation"
+						[state]="state?.duels"
+						[navigation]="navigation?.navigationReplays"
 					></duels-replays-recap-for-run>
 				</div>
 				<secondary-default

@@ -13,6 +13,7 @@ import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { Preferences } from '../../models/preferences';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { arraysEqual } from '../../services/utils';
 
 @Component({
 	selector: 'replays-list',
@@ -70,21 +71,34 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class ReplaysListComponent implements AfterViewInit {
 	@Input() set state(value: ReplaysState) {
-		// console.log('[replays-list] setting state', value);
 		if (value.isLoading) {
 			return;
 		}
+
+		const shouldHideDeckstringFilter = !['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic'].includes(
+			value.getFilter('gameMode').selectedOption,
+		);
+		const shouldHideBgHeroFilter = !['battlegrounds'].includes(value.getFilter('gameMode').selectedOption);
+		const shouldHidePlayerClassFilter = [null, 'battlegrounds', 'practice'].includes(
+			value.getFilter('gameMode').selectedOption,
+		);
+		if (
+			shouldHideDeckstringFilter === this.shouldHideDeckstringFilter &&
+			shouldHideBgHeroFilter === this.shouldHideBgHeroFilter &&
+			shouldHidePlayerClassFilter === this.shouldHidePlayerClassFilter &&
+			arraysEqual(this._replays, value.groupedReplays ?? [])
+		) {
+			return;
+		}
+
 		this._state = value;
-		this.shouldHideDeckstringFilter = !['ranked', 'ranked-standard', 'ranked-wild', 'ranked-classic'].includes(
-			this._state.getFilter('gameMode').selectedOption,
-		);
-		this.shouldHideBgHeroFilter = !['battlegrounds'].includes(this._state.getFilter('gameMode').selectedOption);
-		this.shouldHidePlayerClassFilter = [null, 'battlegrounds', 'practice'].includes(
-			this._state.getFilter('gameMode').selectedOption,
-		);
+		this.shouldHidePlayerClassFilter = shouldHidePlayerClassFilter;
+		this.shouldHideBgHeroFilter = shouldHideBgHeroFilter;
+		this.shouldHideDeckstringFilter = shouldHideDeckstringFilter;
 		this.displayedReplays = [];
 		this._replays = value.groupedReplays || [];
-		this.handleProgressiveDisplay();
+
+		this.handleProgressiveDisplay(this._replays);
 	}
 
 	@Input() set prefs(value: Preferences) {
@@ -128,17 +142,17 @@ export class ReplaysListComponent implements AfterViewInit {
 	}
 
 	// We load the first replays, and load the rest only when the user scrolls down
-	private handleProgressiveDisplay() {
-		// console.log('[replays-list] handleProgressiveDisplay');
-		this.replaysIterator = this.buildIterator();
+	private handleProgressiveDisplay(replays: readonly GroupedReplays[]) {
+		console.log('[replays-list] handleProgressiveDisplay');
+		this.replaysIterator = this.buildIterator(replays);
 		this.onScroll();
 		// console.log('[replays-list] handleProgressiveDisplay done');
 	}
 
-	private *buildIterator(): IterableIterator<void> {
+	private *buildIterator(replays: readonly GroupedReplays[]): IterableIterator<void> {
 		// console.log('[replays-list]', 'starting loading replays');
-		const workingReplays = [...this._replays];
-		// console.log('[replays-list] workingReplays', workingReplays);
+		const workingReplays = [...replays];
+		console.log('[replays-list] workingReplays', workingReplays);
 		const step = 30;
 		while (workingReplays.length > 0) {
 			const currentReplays = [];
@@ -147,7 +161,7 @@ export class ReplaysListComponent implements AfterViewInit {
 				(currentReplays.length === 0 || this.getTotalReplaysLength(currentReplays) < step)
 			) {
 				currentReplays.push(...workingReplays.splice(0, 1));
-				// console.log('[replays-list] currentReplays', currentReplays);
+				console.log('[replays-list] currentReplays', currentReplays);
 			}
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
 			// console.log('[replays-list] displayedReplays', this.displayedReplays, workingReplays);
@@ -155,16 +169,10 @@ export class ReplaysListComponent implements AfterViewInit {
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-			// console.log(
-			// 	'[replays-list]',
-			// 	'loaded replays',
-			// 	this.displayedReplays,
-			// 	this.getTotalReplaysLength(this.displayedReplays),
-			// );
 			yield;
 		}
 		this.isLoading = false;
-		// console.log('[replays-list] everything loaded');
+		console.log('[replays-list] everything loaded');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
