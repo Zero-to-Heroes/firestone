@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 
 @Component({
 	selector: 'bgs-hero-detailed-stats',
@@ -86,7 +86,7 @@ import { MainWindowState } from '../../../../../models/mainwindow/main-window-st
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroDetailedStatsComponent {
-	_state: MainWindowState;
+	_state: BattlegroundsAppState;
 	_heroId: string;
 
 	gamesPlayed: number;
@@ -100,7 +100,7 @@ export class BgsHeroDetailedStatsComponent {
 	mmrGain: number;
 	mmrLoss: number;
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: BattlegroundsAppState) {
 		if (value === this._state) {
 			return;
 		}
@@ -121,7 +121,7 @@ export class BgsHeroDetailedStatsComponent {
 			return;
 		}
 
-		const stat = this._state.battlegrounds.stats.heroStats?.find((stat) => stat.id === this._heroId);
+		const stat = this._state.stats.heroStats?.find((stat) => stat.id === this._heroId);
 		if (!stat) {
 			return;
 		}

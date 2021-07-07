@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { BattlegroundsAppState } from '../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -35,7 +34,7 @@ import { groupByFunction } from '../../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPerfectGamesComponent implements AfterViewInit {
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: BattlegroundsAppState) {
 		if (value === this._state) {
 			return;
 		}
@@ -50,7 +49,7 @@ export class BattlegroundsPerfectGamesComponent implements AfterViewInit {
 	displayedReplays: readonly GameStat[] = [];
 	displayedGroupedReplays: readonly GroupedReplays[] = [];
 
-	private _state: MainWindowState;
+	private _state: BattlegroundsAppState;
 	private gamesIterator: IterableIterator<void>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -74,7 +73,7 @@ export class BattlegroundsPerfectGamesComponent implements AfterViewInit {
 	}
 
 	private *buildIterator(): IterableIterator<void> {
-		this.allReplays = this.applyFilters(this._state.battlegrounds.perfectGames ?? [], this._state.battlegrounds);
+		this.allReplays = this.applyFilters(this._state.perfectGames ?? [], this._state);
 		const workingReplays = [...this.allReplays];
 		const step = 40;
 		while (workingReplays.length > 0) {

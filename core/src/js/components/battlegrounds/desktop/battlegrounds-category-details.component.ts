@@ -26,12 +26,12 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 			<battlegrounds-personal-stats-stats
 				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-stats'"
 				[category]="category"
-				[state]="state"
+				[state]="state.stats"
 			>
 			</battlegrounds-personal-stats-stats>
 			<battlegrounds-perfect-games
 				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-perfect-games'"
-				[state]="state"
+				[state]="state.battlegrounds"
 			>
 			</battlegrounds-perfect-games>
 			<battlegrounds-personal-stats-hero-details

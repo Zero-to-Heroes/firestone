@@ -18,7 +18,8 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	template: `
 		<div class="battlegrounds-personal-stats-hero-details">
 			<bgs-player-capsule [player]="player" [displayTavernTier]="false">
-				<bgs-hero-detailed-stats [state]="_state" [heroId]="_category?.heroId"> </bgs-hero-detailed-stats>
+				<bgs-hero-detailed-stats [state]="_state.battlegrounds" [heroId]="_category?.heroId">
+				</bgs-hero-detailed-stats>
 			</bgs-player-capsule>
 			<div class="stats">
 				<ul class="tabs">
@@ -34,7 +35,8 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 				<ng-container>
 					<bgs-last-warbands
 						class="stat"
-						[state]="_state"
+						[bgState]="_state.battlegrounds"
+						[statsState]="_state.stats"
 						[category]="_category"
 						*ngxCacheIf="selectedTab === 'final-warbands'"
 					>
@@ -50,14 +52,14 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 						class="stat"
 						*ngxCacheIf="selectedTab === 'warband-stats'"
 						[category]="_category"
-						[state]="_state"
+						[state]="_state.battlegrounds"
 					>
 					</bgs-warband-stats-for-hero>
 					<bgs-winrate-stats-for-hero
 						class="stat"
 						*ngxCacheIf="selectedTab === 'winrate-stats'"
 						[category]="_category"
-						[state]="_state"
+						[state]="_state.battlegrounds"
 					>
 					</bgs-winrate-stats-for-hero>
 				</ng-container>
@@ -85,7 +87,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 	}
 
 	@Input() set state(value: MainWindowState) {
-		if (value === this._state) {
+		if (value?.battlegrounds === this._state?.battlegrounds && value?.stats === this._state?.stats) {
 			return;
 		}
 		this._state = value;

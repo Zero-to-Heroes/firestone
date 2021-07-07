@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
+import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 
 @Component({
 	selector: 'bgs-warband-stats-for-hero',
@@ -24,7 +24,7 @@ export class BgsWarbandStatsForHeroComponent {
 	communityExtractor: () => readonly NumericTurnInfo[];
 	yourExtractor: () => readonly NumericTurnInfo[];
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: BattlegroundsAppState) {
 		if (value === this._state) {
 			return;
 		}
@@ -40,7 +40,7 @@ export class BgsWarbandStatsForHeroComponent {
 		this.buildExtractors();
 	}
 
-	private _state: MainWindowState;
+	private _state: BattlegroundsAppState;
 	private _category: BattlegroundsPersonalStatsHeroDetailsCategory;
 
 	private buildExtractors() {
@@ -49,7 +49,7 @@ export class BgsWarbandStatsForHeroComponent {
 		}
 
 		this.communityExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._state.battlegrounds?.lastHeroPostMatchStats) {
+			if (!this._state?.lastHeroPostMatchStats) {
 				return [];
 			}
 
@@ -57,7 +57,7 @@ export class BgsWarbandStatsForHeroComponent {
 			// 	turn: number;
 			// 	totalStats: number;
 			// }[] = this._state.battlegrounds.stats.heroStats.find(stat => stat.id === 'average')?.warbandStats;
-			const warbandStats: readonly NumericTurnInfo[] = this._state.battlegrounds.stats.heroStats
+			const warbandStats: readonly NumericTurnInfo[] = this._state.stats.heroStats
 				.find((stat) => stat.id === this._category.heroId)
 				?.warbandStats?.map(
 					(stat) =>
@@ -71,11 +71,11 @@ export class BgsWarbandStatsForHeroComponent {
 		};
 
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._state.battlegrounds?.lastHeroPostMatchStats) {
+			if (!this._state?.lastHeroPostMatchStats) {
 				return [];
 			}
 
-			const heroStatsOverTurn: (readonly NumericTurnInfo[])[] = this._state.battlegrounds.lastHeroPostMatchStats
+			const heroStatsOverTurn: (readonly NumericTurnInfo[])[] = this._state.lastHeroPostMatchStats
 				.map((postMatch) => postMatch.stats.totalStatsOverTurn)
 				.filter((stats) => stats && stats.length) as (readonly NumericTurnInfo[])[];
 			const maxTurn = Math.max(...heroStatsOverTurn.map((stats) => stats[stats.length - 1].turn));

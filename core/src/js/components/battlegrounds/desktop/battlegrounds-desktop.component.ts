@@ -39,7 +39,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 								<span>{{ category.name }} </span>
 							</li>
 						</ul>
-						<battlegrounds-filters [state]="state" [navigation]="navigation"> </battlegrounds-filters>
+						<battlegrounds-filters [state]="state.battlegrounds" [navigation]="navigation">
+						</battlegrounds-filters>
 						<battlegrounds-category-details
 							*ngxCacheIf="navigation.navigationBattlegrounds.currentView === 'list'"
 							[category]="buildCategory()"

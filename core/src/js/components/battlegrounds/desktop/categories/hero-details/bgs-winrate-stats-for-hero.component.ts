@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
+import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 
 @Component({
 	selector: 'bgs-winrate-stats-for-hero',
@@ -25,7 +25,7 @@ export class BgsWinrateStatsForHeroComponent {
 	communityExtractor: () => readonly NumericTurnInfo[];
 	yourExtractor: () => readonly NumericTurnInfo[];
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: BattlegroundsAppState) {
 		if (value === this._state) {
 			return;
 		}
@@ -42,7 +42,7 @@ export class BgsWinrateStatsForHeroComponent {
 		this.buildExtractors();
 	}
 
-	private _state: MainWindowState;
+	private _state: BattlegroundsAppState;
 	private _category: BattlegroundsPersonalStatsHeroDetailsCategory;
 
 	private buildExtractors() {
@@ -51,11 +51,11 @@ export class BgsWinrateStatsForHeroComponent {
 		}
 
 		this.communityExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._state.battlegrounds?.stats?.heroStats) {
+			if (!this._state?.stats?.heroStats) {
 				return [];
 			}
 
-			return this._state.battlegrounds.stats.heroStats
+			return this._state.stats.heroStats
 				.find((stat) => stat.id === this._category.heroId)
 				?.combatWinrate?.filter((stat) => stat.turn > 0)
 				?.map((stat) => {
@@ -68,11 +68,11 @@ export class BgsWinrateStatsForHeroComponent {
 		};
 
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._state.battlegrounds?.lastHeroPostMatchStats) {
+			if (!this._state?.lastHeroPostMatchStats) {
 				return [];
 			}
 
-			const heroStatsOverTurn: (readonly BattleResultHistory[])[] = this._state.battlegrounds.lastHeroPostMatchStats
+			const heroStatsOverTurn: (readonly BattleResultHistory[])[] = this._state.lastHeroPostMatchStats
 				.map((postMatch) => postMatch.stats.battleResultHistory)
 				.filter((stats) => stats && stats.length) as (readonly BattleResultHistory[])[];
 			// console.log('heroStatsOverTurn', heroStatsOverTurn);

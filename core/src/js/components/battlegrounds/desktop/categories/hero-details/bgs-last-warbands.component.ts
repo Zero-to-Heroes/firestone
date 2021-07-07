@@ -10,8 +10,9 @@ import {
 import { AllCardsService, Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 import { MinionStat } from '../../../../../models/battlegrounds/post-match/minion-stat';
+import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { MainWindowStoreEvent } from '../../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../../services/overwolf.service';
 import { arraysEqual } from '../../../../../services/utils';
@@ -78,7 +79,9 @@ import { normalizeCardId } from '../../../post-match/card-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsLastWarbandsComponent implements AfterViewInit {
-	_state: MainWindowState;
+	// _state: MainWindowState;
+	_bgState: BattlegroundsAppState;
+	_statsState: StatsState;
 	_category: BattlegroundsPersonalStatsHeroDetailsCategory;
 
 	lastKnownBoards: readonly KnownBoard[];
@@ -87,12 +90,17 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 
 	private lastReviews: readonly string[];
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set bgState(value: BattlegroundsAppState) {
+		this._bgState = value;
+		this.updateValues();
+	}
+
+	@Input() set statsState(value: StatsState) {
 		//console.log('setting stats', value, this._state);
 		// if (value === this._state) {
 		// 	return;
 		// }
-		this._state = value;
+		this._statsState = value;
 		this.updateValues();
 	}
 
@@ -120,11 +128,12 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		if (!this._state) {
+		if (!this._bgState || !this._statsState) {
 			return;
 		}
-		const lastStats = this._state.battlegrounds.lastHeroPostMatchStats
-			? this._state.battlegrounds.lastHeroPostMatchStats
+
+		const lastStats = this._bgState.lastHeroPostMatchStats
+			? this._bgState.lastHeroPostMatchStats
 					.filter((postMatch) => postMatch?.stats?.boardHistory && postMatch?.stats?.boardHistory.length > 0)
 					.slice(0, 5)
 			: [];
@@ -148,7 +157,7 @@ export class BgsLastWarbandsComponent implements AfterViewInit {
 					: Entity.fromJS((boardEntity as unknown) as EntityAsJS),
 			) as readonly Entity[];
 
-			const review = this._state.stats.gameStats.stats.find(
+			const review = this._statsState.gameStats.stats.find(
 				(matchStat) => matchStat.reviewId === postMatch.reviewId,
 			);
 

@@ -8,7 +8,7 @@ import {
 	Input,
 } from '@angular/core';
 import { BattlegroundsPersonalStatsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-category';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { StatsState } from '../../../../models/mainwindow/stats/stats-state';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
@@ -145,49 +145,13 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 				[heroIcon]="negativeBattleLuck.hero"
 				[reviewId]="negativeBattleLuck.reviewId"
 			></stat-cell>
-			<!-- <div class="entry cell battle-luck">
-				<div class="record-icon">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#new_record" />
-					</svg>
-				</div>
-				<div class="label">
-					Battle luck
-					<a
-						class="explain-link"
-						href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Battle-Luck-stat"
-						helpTooltip="An indicator that tells you how lucky you were in your battles during the run. Click for more info"
-						target="_blank"
-						>What is this?</a
-					>
-				</div>
-				<div class="value">{{ battleLuck.value?.toFixed(1) }}%</div>
-			</div> -->
-			<!-- <div class="entry cell battle-luck">
-				<div class="record-icon">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#new_record" />
-					</svg>
-				</div>
-				<div class="label">
-					Negative Battle luck
-					<a
-						class="explain-link"
-						href="https://github.com/Zero-to-Heroes/firestone/wiki/Battlegrounds-Battle-Luck-stat"
-						helpTooltip="An indicator that tells you how lucky you were in your battles during the run. Click for more info"
-						target="_blank"
-						>What is this?</a
-					>
-				</div>
-				<div class="value">{{ negativeBattleLuck.value?.toFixed(1) }}%</div>
-			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 	_category: BattlegroundsPersonalStatsCategory;
-	_state: MainWindowState;
+	_state: StatsState;
 
 	totalMinionsDamageDealt: NumberValue = {} as NumberValue;
 	totalMinionsDamageTaken: NumberValue = {} as NumberValue;
@@ -216,7 +180,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: StatsState) {
 		if (value === this._state) {
 			return;
 		}
@@ -240,7 +204,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 		if (!this._state || !this._category) {
 			return;
 		}
-		console.debug('top stats', this._state.stats.bestBgsUserStats);
+		console.debug('top stats', this._state.bestBgsUserStats);
 		this.totalMinionsDamageDealt = this.getStat('totalDamageDealtToMinions');
 		this.totalMinionsDamageTaken = this.getStat('totalDamageTakenByMinions');
 		this.totalHeroDamageDealt = this.getStat('totalDamageDealtToHeroes');
@@ -267,7 +231,7 @@ export class BattlegroundsPersonalStatsStatsComponent implements AfterViewInit {
 	}
 
 	private getStat(statName: string): NumberValue {
-		const stat = this._state.stats.bestBgsUserStats?.find((stat) => stat.statName === statName);
+		const stat = this._state.bestBgsUserStats?.find((stat) => stat.statName === statName);
 		const result = {
 			value: stat?.value || 0,
 			hero: stat?.heroCardId,

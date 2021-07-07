@@ -9,11 +9,11 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { IOption } from 'ng-select';
+import { BattlegroundsAppState } from '../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BgsActiveTimeFilterType } from '../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsRankFilterType } from '../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { BgsHeroFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
@@ -84,7 +84,7 @@ const collator = new Intl.Collator('en-US');
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsFiltersComponent implements AfterViewInit {
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: BattlegroundsAppState) {
 		this._state = value;
 		this.doSetValues();
 	}
@@ -94,7 +94,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 		this.doSetValues();
 	}
 
-	_state: MainWindowState;
+	_state: BattlegroundsAppState;
 	_navigation: NavigationState;
 
 	heroSortFilterOptions: readonly HeroSortFilterOption[] = [
@@ -117,7 +117,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	] as readonly HeroSortFilterOption[];
 	activeHeroSortFilter: BgsHeroSortFilterType;
 	heroSortFilterVisible: boolean;
-	heroSortVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	heroSortVisibleHandler = (navigation: NavigationState, state: BattlegroundsAppState): boolean => {
 		return (
 			state &&
 			navigation &&
@@ -148,7 +148,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	] as readonly HeroFilterOption[];
 	activeHeroFilter: string;
 	heroFilterVisible: boolean;
-	heroVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	heroVisibleHandler = (navigation: NavigationState, state: BattlegroundsAppState): boolean => {
 		return (
 			state &&
 			navigation &&
@@ -171,7 +171,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	] as readonly MmrGroupFilterOption[];
 	activeMmrGroupFilter: MmrGroupFilterType;
 	mmrGroupFilterVisible: boolean;
-	mmrGroupVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	mmrGroupVisibleHandler = (navigation: NavigationState, state: BattlegroundsAppState): boolean => {
 		return (
 			state &&
 			navigation &&
@@ -183,7 +183,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 
 	activeTimeFilter: BgsActiveTimeFilterType;
 	timeFilterVisible: boolean;
-	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	timeVisibleHandler = (navigation: NavigationState, state: BattlegroundsAppState): boolean => {
 		return (
 			state &&
 			navigation &&
@@ -195,7 +195,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			)
 		);
 	};
-	timeOptionsBuilder = (navigation: NavigationState, state: MainWindowState): readonly IOption[] => {
+	timeOptionsBuilder = (navigation: NavigationState, state: BattlegroundsAppState): readonly IOption[] => {
 		//console.log('building time options', state);
 		return [
 			{
@@ -213,7 +213,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 			{
 				value: 'last-patch',
 				label: `Last patch`,
-				tooltip: formatPatch(state?.battlegrounds?.stats?.currentBattlegroundsMetaPatch),
+				tooltip: formatPatch(state?.stats?.currentBattlegroundsMetaPatch),
 			} as TimeFilterOption,
 		] as readonly TimeFilterOption[];
 	};
@@ -246,7 +246,7 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	] as readonly RankFilterOption[];
 	activeRankFilter: BgsRankFilterType;
 	rankFilterVisible: boolean;
-	rankVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	rankVisibleHandler = (navigation: NavigationState, state: BattlegroundsAppState): boolean => {
 		return (
 			state &&
 			navigation &&
@@ -303,11 +303,11 @@ export class BattlegroundsFiltersComponent implements AfterViewInit {
 	}
 
 	private doSetValues() {
-		this.activeTimeFilter = this._state?.battlegrounds?.activeTimeFilter;
-		this.activeHeroSortFilter = this._state.battlegrounds?.activeHeroSortFilter;
-		this.activeHeroFilter = this._state.battlegrounds?.activeHeroFilter;
-		this.activeRankFilter = this._state.battlegrounds?.activeRankFilter;
-		this.activeMmrGroupFilter = this._state.battlegrounds?.activeGroupMmrFilter;
+		this.activeTimeFilter = this._state?.activeTimeFilter;
+		this.activeHeroSortFilter = this._state.activeHeroSortFilter;
+		this.activeHeroFilter = this._state.activeHeroFilter;
+		this.activeRankFilter = this._state.activeRankFilter;
+		this.activeMmrGroupFilter = this._state.activeGroupMmrFilter;
 	}
 }
 
