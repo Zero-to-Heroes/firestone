@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { classesForPieChart, colorForClass, formatClass } from '../../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -15,12 +15,6 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 	template: `
 		<div class="decktracker-ladder-stats">
 			<decktracker-stats-for-replays [replays]="replays"></decktracker-stats-for-replays>
-			<!-- <ul class="global-stats">
-				<li class="global-stat" *ngFor="let stat of stats">
-					<div class="label">{{ stat.label }}</div>
-					<div class="value">{{ stat.value }}</div>
-				</li>
-			</ul> -->
 			<div class="graphs">
 				<div class="graph player-popularity">
 					<div class="title">Player class breakdown</div>
@@ -46,7 +40,7 @@ import { InputPieChartData, InputPieChartOptions } from '../../common/chart/inpu
 export class DecktrackerLadderStatsComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: DecktrackerState) {
 		if (value === this._state) {
 			return;
 		}
@@ -60,7 +54,7 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 	opponentPieChartData: readonly InputPieChartData[];
 	pieChartOptions: InputPieChartOptions;
 
-	private _state: MainWindowState;
+	private _state: DecktrackerState;
 
 	constructor(private ow: OverwolfService, private el: ElementRef) {}
 
@@ -69,11 +63,11 @@ export class DecktrackerLadderStatsComponent implements AfterViewInit {
 	}
 
 	private updateInfos() {
-		if (!this._state?.decktracker?.decks) {
+		if (!this._state?.decks) {
 			return;
 		}
 
-		this.replays = this._state.decktracker.decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []);
+		this.replays = this._state.decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []);
 		this.playerPieChartData = this.buildPlayerPieChartData(this.replays);
 		this.opponentPieChartData = this.buildOpponentPieChartData(this.replays);
 		this.pieChartOptions = this.buildPieChartOptions();

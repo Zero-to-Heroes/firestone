@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { formatClass } from '../../../services/hs-utils';
@@ -92,7 +92,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DecktrackerDeckRecapComponent implements AfterViewInit {
 	enableArchetype: boolean = FeatureFlags.ENABLE_RANKED_ARCHETYPE;
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: DecktrackerState) {
 		this._state = value;
 		this.updateValues();
 	}
@@ -112,7 +112,7 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 	games: number;
 	bestAgainsts: readonly BestAgainst[];
 
-	private _state: MainWindowState;
+	private _state: DecktrackerState;
 	private _navigation: NavigationState;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -128,11 +128,11 @@ export class DecktrackerDeckRecapComponent implements AfterViewInit {
 	}
 
 	private updateValues() {
-		if (!this._state?.decktracker?.decks || !this._navigation?.navigationDecktracker) {
+		if (!this._state?.decks || !this._navigation?.navigationDecktracker) {
 			return;
 		}
 
-		this.deck = this._state.decktracker.decks.find(
+		this.deck = this._state.decks.find(
 			(deck) => deck.deckstring === this._navigation.navigationDecktracker.selectedDeckstring,
 		);
 		if (!this.deck) {

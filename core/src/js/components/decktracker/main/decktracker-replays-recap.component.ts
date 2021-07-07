@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { Preferences } from '../../../models/preferences';
@@ -34,7 +34,7 @@ import { Preferences } from '../../../models/preferences';
 export class DecktrackerReplaysRecapComponent {
 	@Input() prefs: Preferences;
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: DecktrackerState) {
 		if (value === this._state) {
 			return;
 		}
@@ -53,18 +53,16 @@ export class DecktrackerReplaysRecapComponent {
 	_numberOfReplays: number;
 	replays: GameStat[];
 
-	private _state: MainWindowState;
+	private _state: DecktrackerState;
 	private _navigation: NavigationState;
 
 	private async updateValues() {
 		// console.log('tier updating values', this._state, this._category);
-		if (!this._state.decktracker?.decks || !this._navigation?.navigationDecktracker) {
+		if (!this._state?.decks || !this._navigation?.navigationDecktracker) {
 			return;
 		}
 
-		this.replays = (this._state.decktracker.decks
-			.map((deck) => deck.replays)
-			.reduce((a, b) => a.concat(b), []) as GameStat[])
+		this.replays = (this._state.decks.map((deck) => deck.replays).reduce((a, b) => a.concat(b), []) as GameStat[])
 			.filter((stat) =>
 				this._navigation.navigationDecktracker.selectedDeckstring
 					? stat.playerDecklist === this._navigation.navigationDecktracker.selectedDeckstring

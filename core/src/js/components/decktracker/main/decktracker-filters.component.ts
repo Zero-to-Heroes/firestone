@@ -11,7 +11,7 @@ import { IOption } from 'ng-select';
 import { DeckRankFilterType } from '../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { DeckSortType } from '../../../models/mainwindow/decktracker/deck-sort.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { ChangeDeckFormatFilterEvent } from '../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
@@ -90,7 +90,7 @@ import { formatPatch } from '../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerFiltersComponent implements AfterViewInit {
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: DecktrackerState) {
 		this._state = value;
 		// console.log('setting state', value);
 		this.buildTimeOptions();
@@ -121,7 +121,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		} as FormatFilterOption,
 	] as readonly FormatFilterOption[];
 	activeFormatFilter: StatGameFormatType;
-	formatVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	formatVisibleHandler = (navigation: NavigationState, state: DecktrackerState): boolean => {
 		return (
 			state &&
 			navigation &&
@@ -132,7 +132,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 
 	timeFilterOptions: readonly TimeFilterOption[] = [];
 	activeTimeFilter: DeckTimeFilterType;
-	timeVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	timeVisibleHandler = (navigation: NavigationState, state: DecktrackerState): boolean => {
 		return state && navigation && navigation.currentApp == 'decktracker';
 	};
 
@@ -167,7 +167,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		} as DeckRankOption,
 	] as readonly DeckRankOption[];
 	activeRank: DeckRankFilterType;
-	rankVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	rankVisibleHandler = (navigation: NavigationState, state: DecktrackerState): boolean => {
 		return state && navigation && navigation.currentApp == 'decktracker';
 	};
 
@@ -186,7 +186,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		} as DeckSortOption,
 	] as readonly DeckSortOption[];
 	activeSort: DeckSortType;
-	sortVisibleHandler = (navigation: NavigationState, state: MainWindowState): boolean => {
+	sortVisibleHandler = (navigation: NavigationState, state: DecktrackerState): boolean => {
 		return (
 			state &&
 			navigation &&
@@ -195,7 +195,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 		);
 	};
 
-	_state: MainWindowState;
+	_state: DecktrackerState;
 	_navigation: NavigationState;
 	showHiddenDecksLink: boolean;
 
@@ -261,7 +261,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 			{
 				value: 'last-patch',
 				label: 'Last patch',
-				tooltip: formatPatch(this._state?.decktracker?.patch),
+				tooltip: formatPatch(this._state?.patch),
 			} as TimeFilterOption,
 			{
 				value: 'past-30',
@@ -279,10 +279,10 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 	}
 
 	private async doSetValues() {
-		this.activeFormatFilter = this._state?.decktracker?.filters?.gameFormat;
-		this.activeTimeFilter = this._state?.decktracker?.filters?.time;
-		this.activeSort = this._state?.decktracker?.filters?.sort;
-		this.activeRank = this._state?.decktracker?.filters?.rank;
+		this.activeFormatFilter = this._state?.filters?.gameFormat;
+		this.activeTimeFilter = this._state?.filters?.time;
+		this.activeSort = this._state?.filters?.sort;
+		this.activeRank = this._state?.filters?.rank;
 
 		const prefs = await this.prefs.getPreferences();
 		this.showHiddenDecksLink =
@@ -302,10 +302,6 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 interface FormatFilterOption extends IOption {
 	value: StatGameFormatType;
 }
-
-// interface ModeFilterOption extends IOption {
-// 	value: StatGameModeType;
-// }
 
 interface TimeFilterOption extends IOption {
 	value: DeckTimeFilterType;

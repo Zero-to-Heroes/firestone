@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { MainWindowState } from '../../models/mainwindow/main-window-state';
+import { DecktrackerState } from '../../models/mainwindow/decktracker/decktracker-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../models/preferences';
 
@@ -13,7 +13,7 @@ import { Preferences } from '../../models/preferences';
 	template: `
 		<div class="app-section decktracker">
 			<section class="main divider">
-				<with-loading [isLoading]="!_state?.decktracker || _state?.decktracker.isLoading">
+				<with-loading [isLoading]="!_state || _state.isLoading">
 					<div class="content main-content">
 						<global-header
 							[navigation]="navigation"
@@ -30,7 +30,7 @@ import { Preferences } from '../../models/preferences';
 						<decktracker-filters [state]="_state" [navigation]="navigation"></decktracker-filters>
 						<decktracker-decks
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
-							[decks]="_state?.decktracker?.decks"
+							[decks]="_state?.decks"
 						></decktracker-decks>
 						<decktracker-ladder-stats
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'ladder-stats'"
@@ -68,20 +68,21 @@ import { Preferences } from '../../models/preferences';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DecktrackerComponent {
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: DecktrackerState) {
+		console.debug('updated state in decktracker');
 		if (this._state === value) {
 			return;
 		}
 		this._state = value;
-		this.showAds = this._state?.showAds;
+		// this.showAds = this._state?.showAds;
 	}
 
+	@Input() showAds: boolean;
 	@Input() navigation: NavigationState;
-
 	@Input() prefs: Preferences;
 
-	_state: MainWindowState;
-	showAds: boolean;
+	_state: DecktrackerState;
+	// showAds: boolean;
 
 	showReplaysRecap(): boolean {
 		return (

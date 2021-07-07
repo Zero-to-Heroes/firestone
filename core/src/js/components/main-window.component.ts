@@ -101,7 +101,8 @@ import { PreferencesService } from '../services/preferences.service';
 						></collection>
 						<decktracker
 							class="main-section"
-							[state]="dataState"
+							[state]="dataState?.decktracker"
+							[showAds]="dataState?.showAds"
 							[navigation]="navigationState"
 							[prefs]="prefs"
 							*ngxCacheIf="navigationState.currentApp === 'decktracker'"

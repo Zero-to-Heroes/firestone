@@ -49,7 +49,7 @@ export class FsFilterDropdownComponent {
 		this.doSetValues();
 	}
 
-	@Input() set state(value: MainWindowState) {
+	@Input() set state(value: any) {
 		this._state = value;
 		this.doSetValues();
 	}
@@ -59,12 +59,12 @@ export class FsFilterDropdownComponent {
 		this.doSetValues();
 	}
 
-	_state: MainWindowState;
+	_state: any;
 	_navigation: NavigationState;
 	// Can be init directly, or through the builder
 	_options: readonly IOption[] = [];
-	_optionsBuilder: (navigation: NavigationState, state: MainWindowState) => readonly IOption[];
-	_checkVisibleHandler: (navigation: NavigationState, state: MainWindowState) => boolean;
+	_optionsBuilder: (navigation: NavigationState, state: any) => readonly IOption[];
+	_checkVisibleHandler: (navigation: NavigationState, state: any) => boolean;
 
 	visible: boolean;
 
