@@ -40,6 +40,7 @@ export const guardianAnimals: (handler: Handler) => boolean = (handler: Handler)
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
 		hasType(handler, CardType.MINION) &&
+		handler.referenceCardProvider()?.race === Race[Race.BEAST] &&
 		handler.deckCardProvider()?.getEffectiveManaCost() <= 5
 	);
 };
@@ -47,7 +48,7 @@ export const guardianAnimals: (handler: Handler) => boolean = (handler: Handler)
 export const barakKodobane: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
-		(hasType(handler, CardType.MINION) || hasType(handler, CardType.SPELL)) &&
+		hasType(handler, CardType.SPELL) &&
 		handler.deckCardProvider()?.getEffectiveManaCost() <= 3
 	);
 };
