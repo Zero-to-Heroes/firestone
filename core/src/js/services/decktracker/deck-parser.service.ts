@@ -188,28 +188,24 @@ export class DeckParserService {
 				return;
 			}
 
-			if (this.currentScene === SceneMode.BACON) {
-				console.debug('[deck-parser] not getting deck from memory for BG');
-				return;
-			}
-
-			// We get this as soon as possible, since once the player has moved out from the
-			// dekc selection screen the info becomes unavailable
-			console.log('[deck-parser] reading deck from memory');
-			const [deckFromMemory] = await Promise.all([this.memory.getActiveDeck(this.selectedDeckId, 1)]);
-			if (this.currentNonGamePlayScene === SceneMode.BACON) {
+			if (this.currentScene === SceneMode.BACON || this.currentNonGamePlayScene === SceneMode.BACON) {
 				console.debug('BACON scene, returning');
 				return;
 			}
 
-			console.log('[deck-parser] deck from memory', deckFromMemory, this.currentNonGamePlayScene);
 			// Don't refresh the deck when leaving the match
 			// However scene_gameplay is also the current scene when selecting a friendly deck?
 			if (!this.currentNonGamePlayScene || this.currentNonGamePlayScene === SceneMode.GAMEPLAY) {
 				return;
 			}
-
 			console.log('[deck-parser] getting active deck from going into queue', this.currentNonGamePlayScene);
+
+			// We get this as soon as possible, since once the player has moved out from the
+			// dekc selection screen the info becomes unavailable
+			console.log('[deck-parser] reading deck from memory');
+			const [deckFromMemory] = await Promise.all([this.memory.getActiveDeck(this.selectedDeckId, 1)]);
+			console.log('[deck-parser] deck from memory', deckFromMemory, this.currentNonGamePlayScene);
+
 			// Duels info is available throughout the whole match, so we don't need to aggressively retrieve it
 			const activeDeck =
 				this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? await this.getDuelsInfo() : deckFromMemory;
