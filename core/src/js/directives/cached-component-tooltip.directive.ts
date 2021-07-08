@@ -120,6 +120,22 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
+		if (!this.tooltipRef?.instance) {
+			return;
+		}
+
+		this.tooltipRef.instance.visible = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@HostListener('window:mousewheel')
+	onScroll() {
+		if (!this.tooltipRef?.instance) {
+			return;
+		}
+
 		this.tooltipRef.instance.visible = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
