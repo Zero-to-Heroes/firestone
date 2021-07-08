@@ -241,6 +241,8 @@ export class MainWindowStoreService {
 
 	private stateEmitter = new BehaviorSubject<MainWindowState>(this.state);
 	private navigationStateEmitter = new BehaviorSubject<NavigationState>(this.navigationState);
+	// For the new store behavior
+	private mergedEmitter = new BehaviorSubject<[MainWindowState, NavigationState]>([this.state, this.navigationState]);
 	private processors: Map<string, Processor>;
 
 	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
@@ -279,6 +281,7 @@ export class MainWindowStoreService {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
 		window['mainWindowStoreNavigation'] = this.navigationStateEmitter;
+		window['mainWindowStoreMerged'] = this.mergedEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
 
@@ -323,6 +326,7 @@ export class MainWindowStoreService {
 				this.navigationHistory,
 				this.navigationState,
 			);
+			let stateWithNavigation: NavigationState;
 			// console.log('newState, newNavState', newState, newNavState);
 			if (newNavState) {
 				if (event.eventName() === NavigationBackEvent.eventName()) {
@@ -337,10 +341,7 @@ export class MainWindowStoreService {
 				// vs what they originally were when the state was stored
 				this.navigationState = newNavState;
 				// console.log('updating navigation state', this.navigationState, newNavState);
-				const stateWithNavigation: NavigationState = this.updateNavigationArrows(
-					this.navigationState,
-					newState,
-				);
+				stateWithNavigation = this.updateNavigationArrows(this.navigationState, newState);
 				this.navigationStateEmitter.next(stateWithNavigation);
 			}
 			if (newState) {
@@ -358,6 +359,7 @@ export class MainWindowStoreService {
 			} else {
 				// console.log('[store] no new state to emit');
 			}
+			this.mergedEmitter.next([this.state, stateWithNavigation ?? this.navigationState]);
 		} catch (e) {
 			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
 		}

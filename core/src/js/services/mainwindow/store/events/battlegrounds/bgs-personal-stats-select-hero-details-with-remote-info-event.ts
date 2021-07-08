@@ -2,7 +2,10 @@ import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent implements MainWindowStoreEvent {
-	constructor(public readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[]) {}
+	constructor(
+		public readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[],
+		public readonly heroId: string,
+	) {}
 
 	public static eventName(): string {
 		return 'BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent';

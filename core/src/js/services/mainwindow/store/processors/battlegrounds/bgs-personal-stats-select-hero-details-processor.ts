@@ -16,10 +16,16 @@ export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		this.events.broadcast(Events.POPULATE_HERO_DETAILS_FOR_BG, event.heroCardId);
 		const category: BattlegroundsPersonalStatsHeroDetailsCategory = currentState.battlegrounds.findCategory(
 			'bgs-category-personal-hero-details-' + event.heroCardId,
 		) as BattlegroundsPersonalStatsHeroDetailsCategory;
+		const currentHeroId = category?.heroId;
+		console.debug('[gr] new hero?', currentHeroId, event, category, currentState, navigationState);
+		if (event.heroCardId !== currentState.battlegrounds.lastHeroPostMatchStatsHeroId) {
+			console.debug('[gr] new hero');
+			this.events.broadcast(Events.POPULATE_HERO_DETAILS_FOR_BG, event.heroCardId);
+		}
+
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',

@@ -1,18 +1,11 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
-import { BattlegroundsAppState } from '../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
+import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { BgsCustomSimulationChangeMinionRequestEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-change-minion-request-event';
 import { BgsCustomSimulationMinionRemoveRequestEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-event';
 import { BgsCustomSimulationUpdateMinionRequestEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-event';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
 import { ChangeMinionRequest } from '../../battles/bgs-battle-side.component';
 
 @Component({
@@ -25,7 +18,7 @@ import { ChangeMinionRequest } from '../../battles/bgs-battle-side.component';
 		<div class="battlegrounds-simulator">
 			<bgs-battle
 				class="battle"
-				[faceOff]="faceOff"
+				[faceOff]="faceOff$ | async"
 				[hideActualBattle]="true"
 				[clickToChange]="true"
 				[allowClickToAdd]="true"
@@ -43,72 +36,57 @@ import { ChangeMinionRequest } from '../../battles/bgs-battle-side.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsSimulatorComponent implements AfterViewInit {
-	@Input() set state(value: BattlegroundsAppState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateInfo();
-	}
+export class BattlegroundsSimulatorComponent {
+	faceOff$: Observable<BgsFaceOffWithSimulation>;
 
-	faceOff: BgsFaceOffWithSimulation;
-
-	private _state: BattlegroundsAppState;
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly cdr: ChangeDetectorRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	constructor(private readonly store: AppUiStoreService) {
+		this.faceOff$ = this.store
+			.listen$(([main, nav]) => main.battlegrounds.customSimulationState)
+			.pipe(
+				filter(([state]) => !!state),
+				map(([state]) => state.faceOff),
+				distinctUntilChanged(),
+				tap((faceOff) => console.debug('[cd] emitting in ', this.constructor.name, faceOff)),
+			);
 	}
 
 	onPlayerPortraitChangeRequested() {
 		console.debug('request to change player portrait');
-		// this.stateUpdater.next(new BgsCustomSimulationChangeHeroRequestEvent('player'));
+		// this.store.send(new BgsCustomSimulationChangeHeroRequestEvent('player'));
 	}
 
 	onOpponentPortraitChangeRequested() {
 		console.debug('request to change opponent portrait');
-		// this.stateUpdater.next(new BgsCustomSimulationChangeHeroRequestEvent('opponnent'));
+		// this.store.send(new BgsCustomSimulationChangeHeroRequestEvent('opponnent'));
 	}
 
 	onPlayerMinionChangeRequested(event: ChangeMinionRequest) {
 		console.debug('request to change minion to player warband', event);
-		this.stateUpdater.next(new BgsCustomSimulationChangeMinionRequestEvent('player', event?.index));
+		this.store.send(new BgsCustomSimulationChangeMinionRequestEvent('player', event?.index));
 	}
 
 	onOpponentMinionChangeRequested(event: ChangeMinionRequest) {
 		console.debug('request to change minion to opp warband', event);
-		this.stateUpdater.next(new BgsCustomSimulationChangeMinionRequestEvent('opponent', event?.index));
+		this.store.send(new BgsCustomSimulationChangeMinionRequestEvent('opponent', event?.index));
 	}
 
 	onPlayerMinionUpdateRequested(event: ChangeMinionRequest) {
 		console.debug('request to Update minion to player warband', event);
-		this.stateUpdater.next(new BgsCustomSimulationUpdateMinionRequestEvent('player', event?.index));
+		this.store.send(new BgsCustomSimulationUpdateMinionRequestEvent('player', event?.index));
 	}
 
 	onOpponentMinionUpdateRequested(event: ChangeMinionRequest) {
 		console.debug('request to Update minion to opp warband', event);
-		this.stateUpdater.next(new BgsCustomSimulationUpdateMinionRequestEvent('opponent', event?.index));
+		this.store.send(new BgsCustomSimulationUpdateMinionRequestEvent('opponent', event?.index));
 	}
 
 	onPlayerMinionRemoveRequested(event: ChangeMinionRequest) {
 		console.debug('request to remove minion to player warband', event);
-		this.stateUpdater.next(new BgsCustomSimulationMinionRemoveRequestEvent('player', event.index));
+		this.store.send(new BgsCustomSimulationMinionRemoveRequestEvent('player', event.index));
 	}
 
 	onOpponentMinionRemoveRequested(event: ChangeMinionRequest) {
 		console.debug('request to remove minion to opp warband', event);
-		this.stateUpdater.next(new BgsCustomSimulationMinionRemoveRequestEvent('opponent', event.index));
-	}
-
-	private updateInfo() {
-		if (!this._state.customSimulationState) {
-			return;
-		}
-
-		this.faceOff = this._state.customSimulationState.faceOff;
+		this.store.send(new BgsCustomSimulationMinionRemoveRequestEvent('opponent', event.index));
 	}
 }

@@ -8,7 +8,7 @@ import {
 	ErrorHandler,
 	Injectable,
 	NgModule,
-	Type,
+	Type
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -50,7 +50,6 @@ import { BgsBattlesComponent } from '../../components/battlegrounds/battles/bgs-
 import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
-import { BattlegroundsCategoriesComponent } from '../../components/battlegrounds/desktop/battlegrounds-categories.component';
 import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
 import { BattlegroundsCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-category.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
@@ -64,7 +63,7 @@ import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent,
+	BgsHeroDetailedStatsComponent
 } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
@@ -76,6 +75,7 @@ import { BattlegroundsReplaysRecapComponent } from '../../components/battlegroun
 import { BattlegroundsSimulatorDetailsEntityUpdateComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-simulator-details-entity-update.component';
 import { BattlegroundsSimulatorDetailsComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-simulator-details.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
+import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
 import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
@@ -148,7 +148,7 @@ import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-e
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent,
+	DuelsHeroStatVignetteComponent
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsPersonalDeckDetailsComponent } from '../../components/duels/desktop/duels-personal-deck-details.component';
@@ -166,7 +166,7 @@ import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent,
+	DuelsStatCellComponent
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsHeroSearchComponent } from '../../components/duels/desktop/secondary/duels-hero-search.component';
@@ -248,6 +248,7 @@ import { TemporaryResolutionOverrideService } from '../../services/achievement/t
 import { AdService } from '../../services/ad.service';
 import { ApiRunner } from '../../services/api-runner';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
+import { AppUiStoreService } from '../../services/app-ui-store.service';
 import { ArenaStateBuilderService } from '../../services/arena/arena-state-builder.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from '../../services/battlegrounds/bgs-best-user-stats.service';
@@ -411,6 +412,7 @@ const components = [
 		BgsBattlesComponent,
 		BgsBattleComponent,
 		BgsBattleSideComponent,
+		GraphWithSingleValueComponent,
 
 		ConstructedComponent,
 		ConstructedContentComponent,
@@ -501,7 +503,6 @@ const components = [
 
 		BattlegroundsDesktopComponent,
 		BattlegroundsFiltersComponent,
-		BattlegroundsCategoriesComponent,
 		BattlegroundsCategoryComponent,
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
@@ -623,6 +624,8 @@ const components = [
 		CollaboratorsService,
 		UserService,
 		ApiRunner,
+
+		AppUiStoreService,
 
 		DevService,
 		GameEvents,

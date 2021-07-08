@@ -27,4 +27,13 @@
 	flex-grow: 1;
 	padding-right: 10px;
 	min-height: 0;
+
+	.loading {
+		color: var(--color-2);
+		font-size: 14px;
+
+		&:hover {
+			color: var(--color-1);
+		}
+	}
 }

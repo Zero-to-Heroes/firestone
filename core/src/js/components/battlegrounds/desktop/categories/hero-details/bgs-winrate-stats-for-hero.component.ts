@@ -1,8 +1,12 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
-import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/app-ui-store.service';
+import { arraysEqual } from '../../../../../services/utils';
 
 @Component({
 	selector: 'bgs-winrate-stats-for-hero',
@@ -11,96 +15,101 @@ import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../mo
 		`../../../../../../css/component/battlegrounds/desktop/categories/hero-details/bgs-winrate-stats-for-hero.component.scss`,
 	],
 	template: `
-		<graph-with-comparison
-			[communityExtractor]="communityExtractor"
-			[yourExtractor]="yourExtractor"
+		<graph-with-comparison-new
+			*ngIf="values$ | async as values"
+			[communityValues]="values.community"
+			[yourValues]="values.your"
 			communityTooltip="Average winrate (% chance to win a battle) per turn for this hero (top4 6000+ MMR)"
 			yourTooltip="Your values for this hero"
 		>
-		</graph-with-comparison>
+		</graph-with-comparison-new>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsWinrateStatsForHeroComponent {
-	communityExtractor: () => readonly NumericTurnInfo[];
-	yourExtractor: () => readonly NumericTurnInfo[];
+	values$: Observable<Value>;
 
-	@Input() set state(value: BattlegroundsAppState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		// console.log('setting state', this._state);
-		this.buildExtractors();
+	constructor(private readonly store: AppUiStoreService) {
+		this.values$ = this.store
+			.listen$(
+				([main, nav]) => main.battlegrounds.stats.heroStats,
+				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
+				([main, nav]) => currentBgHeroId(main, nav),
+			)
+			.pipe(
+				filter(([heroStats, postMatch, heroId]) => !!heroStats && !!postMatch && !!heroId),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				map(([heroStats, postMatch, heroId]) => this.buildValue(heroStats, postMatch, heroId)),
+				distinctUntilChanged((v1, v2) => this.areValuesEqual(v1, v2)),
+				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+			);
 	}
 
-	@Input() set category(value: BattlegroundsPersonalStatsHeroDetailsCategory) {
-		if (value === this._category) {
-			return;
-		}
-		this._category = value;
-		this.buildExtractors();
-	}
-
-	private _state: BattlegroundsAppState;
-	private _category: BattlegroundsPersonalStatsHeroDetailsCategory;
-
-	private buildExtractors() {
-		if (!this._state || !this._category) {
-			return;
-		}
-
-		this.communityExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._state?.stats?.heroStats) {
-				return [];
-			}
-
-			return this._state.stats.heroStats
-				.find((stat) => stat.id === this._category.heroId)
+	private buildValue(
+		heroStats: readonly BgsHeroStat[],
+		postMatch: readonly BgsPostMatchStatsForReview[],
+		heroId: string,
+	): Value {
+		const heroStatsOverTurn: (readonly BattleResultHistory[])[] = postMatch
+			.map((postMatch) => postMatch.stats.battleResultHistory)
+			.filter((stats) => stats && stats.length) as (readonly BattleResultHistory[])[];
+		// console.log('heroStatsOverTurn', heroStatsOverTurn);
+		const maxTurn = Math.max(...heroStatsOverTurn.map((stats) => stats[stats.length - 1].turn));
+		const your =
+			maxTurn <= 0
+				? []
+				: [...Array(maxTurn).keys()]
+						.filter((turn) => turn > 0)
+						.map((turn) => {
+							const statsForTurn = heroStatsOverTurn
+								.map((stats) => stats.find((stat) => stat.turn === turn))
+								.filter((stat) => stat)
+								.filter((stat) => stat.simulationResult.wonPercent != null)
+								.map((stat) => stat.simulationResult.wonPercent);
+							// console.log('statsForTurn', turn, statsForTurn);
+							return {
+								turn: turn,
+								value:
+									statsForTurn.length > 0
+										? Math.round(
+												(10 * statsForTurn.reduce((a, b) => a + b, 0)) / statsForTurn.length,
+										  ) / 10
+										: null,
+							};
+						});
+		return {
+			community: heroStats
+				.find((stat) => stat.id === heroId)
 				?.combatWinrate?.filter((stat) => stat.turn > 0)
-				?.map((stat) => {
-					return {
-						turn: stat.turn,
-						value: stat.winrate,
-					} as NumericTurnInfo;
-				})
-				.filter((stat) => stat);
-		};
-
-		this.yourExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._state?.lastHeroPostMatchStats) {
-				return [];
-			}
-
-			const heroStatsOverTurn: (readonly BattleResultHistory[])[] = this._state.lastHeroPostMatchStats
-				.map((postMatch) => postMatch.stats.battleResultHistory)
-				.filter((stats) => stats && stats.length) as (readonly BattleResultHistory[])[];
-			// console.log('heroStatsOverTurn', heroStatsOverTurn);
-			const maxTurn = Math.max(...heroStatsOverTurn.map((stats) => stats[stats.length - 1].turn));
-			if (maxTurn <= 0) {
-				return [];
-			}
-
-			const result = [...Array(maxTurn).keys()]
-				.filter((turn) => turn > 0)
-				.map((turn) => {
-					const statsForTurn = heroStatsOverTurn
-						.map((stats) => stats.find((stat) => stat.turn === turn))
-						.filter((stat) => stat)
-						.filter((stat) => stat.simulationResult.wonPercent != null)
-						.map((stat) => stat.simulationResult.wonPercent);
-					// console.log('statsForTurn', turn, statsForTurn);
-					return {
-						turn: turn,
-						value:
-							statsForTurn.length > 0
-								? statsForTurn.reduce((a, b) => a + b, 0) / statsForTurn.length
-								: null,
-					};
-				});
-
-			// console.log('your winrate', result);
-			return result;
-		};
+				?.map((stat) => ({ turn: stat.turn, value: Math.round(10 * stat.winrate) / 10 } as NumericTurnInfo))
+				.filter((stat) => stat),
+			your: your,
+		} as Value;
 	}
+
+	private areValuesEqual(v1: Value, v2: Value): boolean {
+		return (
+			arraysEqual(
+				v1.community.map((v) => v.turn),
+				v2.community.map((v) => v.turn),
+			) &&
+			arraysEqual(
+				v1.community.map((v) => v.value),
+				v2.community.map((v) => v.value),
+			) &&
+			arraysEqual(
+				v1.your.map((v) => v.turn),
+				v2.your.map((v) => v.turn),
+			) &&
+			arraysEqual(
+				v1.your.map((v) => v.value),
+				v2.your.map((v) => v.value),
+			)
+		);
+	}
+}
+
+interface Value {
+	readonly community: readonly NumericTurnInfo[];
+	readonly your: readonly NumericTurnInfo[];
 }

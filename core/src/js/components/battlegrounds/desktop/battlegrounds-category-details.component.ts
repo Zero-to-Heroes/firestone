@@ -13,25 +13,18 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 		<div class="battlegrounds-category-details" scrollable>
 			<battlegrounds-personal-stats-heroes
 				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-heroes'"
-				[category]="category"
-				[state]="state.battlegrounds"
 			>
 			</battlegrounds-personal-stats-heroes>
 			<battlegrounds-personal-stats-rating
 				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-rating'"
-				[category]="category"
-				[state]="state.battlegrounds"
 			>
 			</battlegrounds-personal-stats-rating>
 			<battlegrounds-personal-stats-stats
 				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-personal-stats'"
-				[category]="category"
-				[state]="state.stats"
 			>
 			</battlegrounds-personal-stats-stats>
 			<battlegrounds-perfect-games
 				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-perfect-games'"
-				[state]="state.battlegrounds"
 			>
 			</battlegrounds-perfect-games>
 			<battlegrounds-personal-stats-hero-details
@@ -41,14 +34,10 @@ import { NavigationState } from '../../../models/mainwindow/navigation/navigatio
 						'bgs-category-personal-hero-details'
 					) !== -1
 				"
-				[category]="category"
-				[state]="state"
-				[navigation]="navigation.navigationBattlegrounds"
 			>
 			</battlegrounds-personal-stats-hero-details>
 			<battlegrounds-simulator
 				*ngxCacheIf="navigation.navigationBattlegrounds.selectedCategoryId === 'bgs-category-simulator'"
-				[state]="state?.battlegrounds"
 			>
 			</battlegrounds-simulator>
 		</div>

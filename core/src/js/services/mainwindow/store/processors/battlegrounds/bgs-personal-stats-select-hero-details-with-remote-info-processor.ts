@@ -11,8 +11,10 @@ export class BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor implements
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
+		console.debug('[gr] reassigning', event)
 		const newBattlegrounds = currentState.battlegrounds.update({
 			lastHeroPostMatchStats: event.lastHeroPostMatchStats,
+			lastHeroPostMatchStatsHeroId: event.heroId,
 		} as BattlegroundsAppState);
 		return [
 			currentState.update({

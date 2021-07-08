@@ -64,10 +64,13 @@ export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]
 	if ((a == null && b != null) || (a != null && b == null)) {
 		return false;
 	}
+	if (a === b) {
+		return true;
+	}
 	if (!Array.isArray(a) || !Array.isArray(b)) {
 		return false;
 	}
-	return a.length === b.length && a.every((el, ix) => el === b[ix]);
+	return a.length === b.length && a.every((el, ix) => (Array.isArray(el) ? arraysEqual(el, b[ix]) : el === b[ix]));
 };
 
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {

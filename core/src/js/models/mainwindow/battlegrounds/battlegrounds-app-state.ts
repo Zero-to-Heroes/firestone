@@ -12,12 +12,13 @@ export class BattlegroundsAppState {
 	readonly categories: readonly BattlegroundsCategory[] = [];
 	readonly loading: boolean = true;
 	// The global stats coming from the DB (so without the player info)
-	readonly globalStats: BgsStats;
+	readonly globalStats: BgsStats = new BgsStats();
 	readonly matchStats: readonly GameStat[];
 	readonly perfectGames: readonly GameStat[];
 	// The stats used by the app (so a mix a globalStats + matchStats + filters)
-	readonly stats: BgsStats;
+	readonly stats: BgsStats = new BgsStats();
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
+	readonly lastHeroPostMatchStatsHeroId: string;
 	readonly customSimulationState: BgsCustomSimulationState = new BgsCustomSimulationState();
 
 	readonly activeTimeFilter: BgsActiveTimeFilterType;

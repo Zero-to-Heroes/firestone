@@ -16,6 +16,7 @@ import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../models/preferences';
+import { AppUiStoreService } from '../services/app-ui-store.service';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
 import { CARDS_VERSION } from '../services/hs-utils';
@@ -178,6 +179,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly hotkeyService: HotkeyService,
 		private readonly cards: AllCardsService,
 		private readonly preferencesService: PreferencesService,
+		private readonly store: AppUiStoreService,
 	) {
 		this.init();
 	}

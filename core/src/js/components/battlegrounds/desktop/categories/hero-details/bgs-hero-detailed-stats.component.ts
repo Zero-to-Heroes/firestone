@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/app-ui-store.service';
 
 @Component({
 	selector: 'bgs-hero-detailed-stats',
@@ -10,32 +13,32 @@ import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegr
 	template: `
 		<div class="bgs-hero-detailed-stats">
 			<div class="title">General stats</div>
-			<div class="content">
+			<div class="content" *ngIf="bgHeroStats$ | async as stats">
 				<div class="stat">
 					<div class="header">Games played</div>
 					<div class="values">
-						<div class="my-value">{{ gamesPlayed }}</div>
+						<div class="my-value">{{ stats.playerGamesPlayed }}</div>
 					</div>
 				</div>
 				<div class="stat">
 					<div class="header">Avg. position</div>
 					<div class="values">
-						<div class="my-value">{{ buildValue(averagePosition) }}</div>
-						<bgs-global-value [value]="buildValue(globalAveragePosition)"></bgs-global-value>
+						<div class="my-value">{{ buildValue(stats.playerAveragePosition) }}</div>
+						<bgs-global-value [value]="buildValue(stats.averagePosition)"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
 					<div class="header">Top 1</div>
 					<div class="values">
-						<div class="my-value">{{ buildValue(top1, 1) }}%</div>
-						<bgs-global-value [value]="buildValue(globalTop1, 1) + '%'"></bgs-global-value>
+						<div class="my-value">{{ buildValue(stats.playerTop1, 1) }}%</div>
+						<bgs-global-value [value]="buildValue(stats.top1, 1) + '%'"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
 					<div class="header">Top 4</div>
 					<div class="values">
-						<div class="my-value">{{ buildValue(top4, 1) }}</div>
-						<bgs-global-value [value]="buildValue(globalTop4, 1) + '%'"></bgs-global-value>
+						<div class="my-value">{{ buildValue(stats.playerTop4, 1) }}</div>
+						<bgs-global-value [value]="buildValue(stats.top4, 1) + '%'"></bgs-global-value>
 					</div>
 				</div>
 				<div class="stat">
@@ -44,11 +47,11 @@ import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegr
 						<div
 							class="my-value"
 							[ngClass]="{
-								'positive': netMmr > 0,
-								'negative': netMmr < 0
+								'positive': stats.playerAverageMmr > 0,
+								'negative': stats.playerAverageMmr < 0
 							}"
 						>
-							{{ buildValue(netMmr, 0) }}
+							{{ buildValue(stats.playerAverageMmr, 0) }}
 						</div>
 					</div>
 				</div>
@@ -58,11 +61,11 @@ import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegr
 						<div
 							class="my-value"
 							[ngClass]="{
-								'positive': mmrGain > 0,
-								'negative': mmrGain < 0
+								'positive': stats.playerAverageMmrGain > 0,
+								'negative': stats.playerAverageMmrGain < 0
 							}"
 						>
-							{{ buildValue(mmrGain, 0) }}
+							{{ buildValue(stats.playerAverageMmrGain, 0) }}
 						</div>
 					</div>
 				</div>
@@ -72,11 +75,11 @@ import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegr
 						<div
 							class="my-value "
 							[ngClass]="{
-								'positive': mmrLoss > 0,
-								'negative': mmrLoss < 0
+								'positive': stats.playerAverageMmrLoss > 0,
+								'negative': stats.playerAverageMmrLoss < 0
 							}"
 						>
-							{{ buildValue(mmrLoss, 0) }}
+							{{ buildValue(stats.playerAverageMmrLoss, 0) }}
 						</div>
 					</div>
 				</div>
@@ -86,56 +89,20 @@ import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegr
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroDetailedStatsComponent {
-	_state: BattlegroundsAppState;
-	_heroId: string;
+	bgHeroStats$: Observable<BgsHeroStat>;
 
-	gamesPlayed: number;
-	averagePosition: number;
-	globalAveragePosition: number;
-	top1: number;
-	globalTop1: number;
-	top4: number;
-	globalTop4: number;
-	netMmr: number;
-	mmrGain: number;
-	mmrLoss: number;
-
-	@Input() set state(value: BattlegroundsAppState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateValues();
-	}
-
-	@Input() set heroId(value: string) {
-		if (value === this._heroId) {
-			return;
-		}
-		this._heroId = value;
-		this.updateValues();
-	}
-
-	private updateValues() {
-		if (!this._state || !this._heroId) {
-			return;
-		}
-
-		const stat = this._state.stats.heroStats?.find((stat) => stat.id === this._heroId);
-		if (!stat) {
-			return;
-		}
-
-		this.gamesPlayed = stat.playerGamesPlayed;
-		this.averagePosition = stat.playerAveragePosition;
-		this.globalAveragePosition = stat.averagePosition;
-		this.top1 = stat.playerTop1;
-		this.globalTop1 = stat.top1;
-		this.top4 = stat.playerTop4;
-		this.globalTop4 = stat.top4;
-		this.netMmr = stat.playerAverageMmr;
-		this.mmrGain = stat.playerAverageMmrGain;
-		this.mmrLoss = stat.playerAverageMmrLoss;
+	constructor(private readonly store: AppUiStoreService) {
+		this.bgHeroStats$ = this.store
+			.listen$(
+				([main, nav]) => currentBgHeroId(main, nav),
+				([main, nav]) => main.battlegrounds.stats,
+			)
+			.pipe(
+				filter(([heroId, bgsStats]) => !!heroId && !!bgsStats),
+				map(([heroId, bgsStats]) => bgsStats.heroStats?.find((stat) => stat.id === heroId)),
+				distinctUntilChanged(),
+				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+			);
 	}
 
 	buildValue(value: number, decimals = 2): string {

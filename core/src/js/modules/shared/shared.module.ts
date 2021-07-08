@@ -11,13 +11,14 @@ import { ChartsModule } from 'ng2-charts';
 import {
 	PerfectScrollbarConfigInterface,
 	PerfectScrollbarModule,
-	PERFECT_SCROLLBAR_CONFIG,
+	PERFECT_SCROLLBAR_CONFIG
 } from 'ngx-perfect-scrollbar';
 import { AdsComponent } from '../../components/ads.component';
 import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-hero-portrait.component';
 import { BgsPlayerCapsuleComponent } from '../../components/battlegrounds/bgs-player-capsule.component';
+import { GraphWithComparisonNewComponent } from '../../components/battlegrounds/graph-with-comparison-new.component';
 import { GraphWithComparisonComponent } from '../../components/battlegrounds/graph-with-comparison.component';
 import { BgsHeroMiniComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-mini.component';
 import { BgsHeroOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-overview.component';
@@ -221,6 +222,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsOverlayHeroOverviewComponent,
 
 		GraphWithComparisonComponent,
+		GraphWithComparisonNewComponent,
 		SimpleBarChartComponent,
 		BasicBarChartComponent,
 		PieChartComponent,
@@ -335,6 +337,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		BgsOverlayHeroOverviewComponent,
 
 		GraphWithComparisonComponent,
+		GraphWithComparisonNewComponent,
 		SimpleBarChartComponent,
 		BasicBarChartComponent,
 		PieChartComponent,
