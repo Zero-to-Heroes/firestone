@@ -3,10 +3,12 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { captureEvent } from '@sentry/browser';
 import { isSupportedScenario } from '../../services/battlegrounds/bgs-utils';
+import { uuid } from '../../services/utils';
 import { BattleInfoMessage } from './battle-info-message.type';
 import { BgsGame } from './bgs-game';
 
 export class BgsFaceOffWithSimulation extends BgsFaceOff {
+	readonly id: string;
 	readonly playerHpLeft: number;
 	readonly playerTavern: number;
 	readonly opponentHpLeft: number;
@@ -17,7 +19,11 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 	readonly battleInfoMesage: BattleInfoMessage;
 
 	public static create(base: BgsFaceOff): BgsFaceOffWithSimulation {
-		return Object.assign(new BgsFaceOffWithSimulation(), base);
+		return Object.assign(new BgsFaceOffWithSimulation(), { id: uuid() }, base);
+	}
+
+	public update(base: BgsFaceOff): BgsFaceOffWithSimulation {
+		return Object.assign(new BgsFaceOffWithSimulation(), this, base);
 	}
 
 	public checkIntegrity(gameState: BgsGame) {

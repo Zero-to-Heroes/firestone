@@ -17,7 +17,8 @@ export class BgsNextOpponentParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsNextOpponentEvent): Promise<BattlegroundsState> {
-		console.debug('parsing next opponent', event);
+		console.debug('[bgs-next-opponent] parsing next opponent', event);
+		console.log('[bgs-next-opponent] parsing next opponent', event.cardId);
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(currentState, event.cardId);
 		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
 			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
@@ -27,12 +28,13 @@ export class BgsNextOpponentParser implements EventParser {
 		const opponent = currentState.currentGame.players.find(
 			(player) => player.getNormalizedHeroCardId() === newNextOpponentPanel.opponentOverview?.cardId,
 		);
-		//console.debug('mainPlayer', mainPlayer, opponent);
+		console.debug('[bgs-next-opponent] mainPlayer', mainPlayer, opponent);
 		if (!mainPlayer || !opponent) {
+			console.debug('[bgs-next-opponent] missing players', currentState);
 			return currentState;
 		}
 
-		//console.debug('face off players', mainPlayer, opponent, currentState);
+		console.debug('[bgs-next-opponent] face off players', mainPlayer, opponent, currentState);
 		const faceOff: BgsFaceOffWithSimulation = BgsFaceOffWithSimulation.create({
 			turn: currentState.currentGame.getCurrentTurnAdjustedForAsyncPlay(),
 			playerCardId: mainPlayer?.cardId,
@@ -46,6 +48,7 @@ export class BgsNextOpponentParser implements EventParser {
 				(opponent?.damageTaken ?? 0),
 			opponentTavern: opponent?.getCurrentTavernTier(),
 		} as BgsFaceOffWithSimulation);
+		console.debug('[bgs-next-opponent] created face off', faceOff);
 		if (faceOff.playerCardId === 'TB_BaconShop_HERO_PH') {
 			console.error(
 				'[bgs-next-opponent] created a face-off with an invalid player card',
@@ -54,12 +57,14 @@ export class BgsNextOpponentParser implements EventParser {
 				currentState.currentGame.players.map((p) => p.cardId),
 			);
 		}
-		return currentState.update({
+		const result = currentState.update({
 			panels: panels,
 			currentGame: currentState.currentGame.update({
 				faceOffs: [...currentState.currentGame.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
 			} as BgsGame),
 		} as BattlegroundsState);
+		console.debug('[bgs-next-opponent]result', result);
+		return result;
 	}
 
 	private buildInGamePanel(currentState: BattlegroundsState, cardId: string): BgsNextOpponentOverviewPanel {

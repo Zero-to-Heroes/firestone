@@ -57,7 +57,11 @@ export class BgsGame {
 
 	public updateLastFaceOff(opponentHeroCardId: string, faceOff: BgsFaceOffWithSimulation): BgsGame {
 		if (!this.faceOffs?.length) {
-			console.error('[face-off] trying to update non-existing face-off', this.faceOffs, faceOff);
+			console.error(
+				'[face-off] [bgs-next-opponent] trying to update non-existing face-off',
+				this.faceOffs,
+				faceOff,
+			);
 			return this;
 		}
 
@@ -78,7 +82,7 @@ export class BgsGame {
 			.reverse();
 		if (!matchingFaceOffs.length) {
 			console.error(
-				'[face-off] no matching face-off',
+				'[face-off] [bgs-next-opponent] no matching face-off',
 				opponentHeroCardId,
 				this.faceOffs.map(
 					(f) =>
@@ -92,9 +96,21 @@ export class BgsGame {
 		}
 
 		const lastFaceOff = matchingFaceOffs[0];
-		const updatedFaceOff = Object.assign(new BgsFaceOffWithSimulation(), lastFaceOff, faceOff);
+		console.debug(
+			'[bgs-next-opponent] found face-off',
+			lastFaceOff,
+			matchingFaceOffs,
+			this.faceOffs,
+			opponentHeroCardId,
+			faceOff,
+		);
+		const updatedFaceOff = lastFaceOff.update(faceOff);
 		updatedFaceOff.checkIntegrity(this);
-		const updatedFaceOffs: readonly BgsFaceOffWithSimulation[] = [...this.faceOffs.slice(0, -1), updatedFaceOff];
+		console.debug('[bgs-next-opponent] updated face-off', updatedFaceOff);
+		const updatedFaceOffs: readonly BgsFaceOffWithSimulation[] = this.faceOffs.map((f) =>
+			f.id === updatedFaceOff.id ? updatedFaceOff : f,
+		);
+		console.debug('[bgs-next-opponent] updated face-offs', updatedFaceOffs, this.faceOffs);
 		return this.update({
 			faceOffs: updatedFaceOffs,
 		} as BgsGame);
