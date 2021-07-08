@@ -29,7 +29,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.10.9',
+		version: '7.10.16',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -42,25 +42,25 @@ export const updates: readonly Update[] = [
 			// 		Have fun, and thanks again for all the help :)
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Mousing over a card in your decklist will now highlight related cards in your deck. For instance, mousing over a card that draws a Mech from your deck will highlight all the Mechs in your deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a bug where the deck would not be properly detected when playing a friend with the same deck several times in a row.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 		{
+			// 			category: 'decktracker',
+			// 			details: [
+			// 				{
+			// 					type: 'feature',
+			// 					text: `Mousing over a card in your decklist will now highlight related cards in your deck. For instance, mousing over a card that draws a Mech from your deck will highlight all the Mechs in your deck.`,
+			// 				},
+			// 				{
+			// 					type: 'bug',
+			// 					text: `Fix a bug where the deck would not be properly detected when playing a friend with the same deck several times in a row.`,
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -70,27 +70,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where the simulator would sometimes not show up when fighting the ghost.`,
+								text: `Fix an issue where sometimes the simulation result would be ignored (this happens when the result arrives after the next opponent has been revealed).`,
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where the simulation results would not show up in the tavern.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where no new Battle (in the Battles tab) would appear when facing the same opponent twice in a row.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the golden minions would not have a golden border in the Battles tab.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where no tooltip would appear when mousing over minions on the Battles tab.`,
-							},
-							{
-								type: 'ui',
-								text: `Improve the initial state of the Battles (before we receive the board information).`,
+								text: `Fix an issue where the simulator would ignore golden Nadina`,
 							},
 						],
 					},
@@ -98,21 +82,12 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Cards info are now kept after playing Secret Passage. This means that when the opponent gets their card backs, all the known information should be displayed once more.`,
+								type: 'bug',
+								text: `Fix an issue where incorrect cards would be flagged for Barak Kodobane and Guardian Animals.`,
 							},
-							{
-								type: 'feature',
-								text: `Flag the exact cards drawn by Ysera.`,
-							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where end-of-season card rewards would not appear in the card history.`,
+								text: `Fix an issue where the cost reduction from Skull of Gul'dan would not be flagged anymore on the opponent's hand marker.`,
 							},
 						],
 					},
