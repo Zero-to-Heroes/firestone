@@ -78,7 +78,7 @@ import { PreferencesService } from '../services/preferences.service';
 						<replays
 							class="main-section"
 							[state]="dataState"
-							[navigation]="navigationState?.navigationReplays"
+							[navigation]="navigationState"
 							[prefs]="prefs"
 							*ngIf="navigationState.currentApp === 'replays'"
 						></replays>
@@ -103,6 +103,7 @@ import { PreferencesService } from '../services/preferences.service';
 							class="main-section"
 							[state]="dataState?.decktracker"
 							[showAds]="dataState?.showAds"
+							[loading]="dataState?.isLoading"
 							[navigation]="navigationState"
 							[prefs]="prefs"
 							*ngxCacheIf="navigationState.currentApp === 'decktracker'"

@@ -13,7 +13,7 @@ import { Preferences } from '../../models/preferences';
 	template: `
 		<div class="app-section decktracker">
 			<section class="main divider">
-				<with-loading [isLoading]="!_state || _state.isLoading">
+				<with-loading [isLoading]="!_state || loading">
 					<div class="content main-content">
 						<global-header
 							[navigation]="navigation"
@@ -78,6 +78,7 @@ export class DecktrackerComponent {
 	}
 
 	@Input() showAds: boolean;
+	@Input() loading: boolean;
 	@Input() navigation: NavigationState;
 	@Input() prefs: Preferences;
 

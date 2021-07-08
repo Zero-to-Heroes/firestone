@@ -173,7 +173,7 @@ export class NavigationBackProcessor implements Processor {
 		navigationState: NavigationState,
 		dataState: MainWindowState,
 	): NavigationState {
-		switch (navigationState.navigationReplays.currentView) {
+		switch (navigationState.navigationReplays?.currentView) {
 			case 'list':
 				return null;
 			case 'match-details':
