@@ -35,7 +35,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 		<div
 			class="battlegrounds-minions-tiers overlay-container-parent battlegrounds-theme"
 			(mouseleave)="onTavernMouseLeave()"
-			(mousedown)="dragMove()"
+			(mousedown)="dragMove($event)"
 		>
 			<div class="tiers-container" *ngIf="showMinionsList">
 				<div class="logo-container" *ngIf="currentTurn">
@@ -166,7 +166,20 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		this.preferencesSubscription?.unsubscribe();
 	}
 
-	dragMove() {
+	@HostListener('mousedown', ['$event'])
+	dragMove(event: MouseEvent) {
+		const path: any[] = event.composedPath();
+		// Hack for drop-downs
+		if (
+			path.length > 2 &&
+			path[0].localName === 'div' &&
+			path[0].className?.includes('options') &&
+			path[1].localName === 'div' &&
+			path[1].className?.includes('below')
+		) {
+			return;
+		}
+
 		this.tooltipPosition = 'none';
 		// console.log('dragMode');
 		if (!(this.cdr as ViewRef)?.destroyed) {

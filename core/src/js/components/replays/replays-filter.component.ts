@@ -76,6 +76,7 @@ export class ReplaysFilterComponent implements AfterViewInit {
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');
 		});
+
 		setTimeout(() => {
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

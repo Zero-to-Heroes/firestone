@@ -307,11 +307,20 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	@HostListener('mousedown')
-	dragMove() {
-		// if (!this.isMaximized) {
+	@HostListener('mousedown', ['$event'])
+	dragMove(event: MouseEvent) {
+		const path: any[] = event.composedPath();
+		// Hack for drop-downs
+		if (
+			path.length > 2 &&
+			path[0].localName === 'div' &&
+			path[0].className?.includes('options') &&
+			path[1].localName === 'div' &&
+			path[1].className?.includes('below')
+		) {
+			return;
+		}
 		this.ow.dragMove(this.windowId);
-		// }
 	}
 
 	@HostListener('window:beforeunload')

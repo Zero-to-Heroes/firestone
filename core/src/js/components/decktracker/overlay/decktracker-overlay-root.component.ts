@@ -246,8 +246,20 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		await this.updateTooltipPosition();
 	}
 
-	@HostListener('mousedown')
-	dragMove() {
+	@HostListener('mousedown', ['$event'])
+	dragMove(event: MouseEvent) {
+		const path: any[] = event.composedPath();
+		// Hack for drop-downs
+		if (
+			path.length > 2 &&
+			path[0].localName === 'div' &&
+			path[0].className?.includes('options') &&
+			path[1].localName === 'div' &&
+			path[1].className?.includes('below')
+		) {
+			return;
+		}
+
 		// console.log('starting drag');
 		this.tooltipPosition = 'none';
 		if (!(this.cdr as ViewRef)?.destroyed) {
