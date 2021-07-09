@@ -50,9 +50,9 @@ export class ReplaysNotificationService {
 
 	private buildNotificationTemplate(stat: GameStat, xpForGame: XpForGameInfo): string {
 		const rankImage = stat.buildPlayerRankImage();
-		// console.log('[replays-notification] preparing playerRankImage', playerRankImage);
+		console.debug('[replays-notification] preparing playerRankImage', rankImage);
 		const rankText = stat.buildRankText() || '';
-		const playerRankImage = rankImage.frameImage ? `<img class="art" src="${rankImage.frameImage}" />` : ``;
+		const playerRankImage = rankImage.medalImage ? `<img class="art" src="${rankImage.medalImage}" />` : ``;
 		const bonusClass = xpForGame?.bonusXp ? 'bonus' : '';
 		const xpEl = xpForGame
 			? `
