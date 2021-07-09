@@ -17,6 +17,13 @@ export const livingSeed: (handler: Handler) => boolean = (handler: Handler): boo
 	return handler.zoneProvider()?.id === 'deck' && handler.referenceCardProvider()?.race === Race[Race.BEAST];
 };
 
+export const murlocsInDeckAndHand: (handler: Handler) => boolean = (handler: Handler): boolean => {
+	return (
+		(handler.zoneProvider()?.id === 'deck' || handler.zoneProvider()?.id === 'hand') &&
+		handler.referenceCardProvider()?.race === Race[Race.MURLOC]
+	);
+};
+
 export const fungalFortunes: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return handler.zoneProvider()?.id === 'deck' && hasType(handler, CardType.MINION);
 };
@@ -49,7 +56,8 @@ export const barakKodobane: (handler: Handler) => boolean = (handler: Handler): 
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
 		hasType(handler, CardType.SPELL) &&
-		handler.deckCardProvider()?.getEffectiveManaCost() <= 3
+		handler.deckCardProvider()?.getEffectiveManaCost() <= 3 &&
+		handler.deckCardProvider()?.getEffectiveManaCost() > 0
 	);
 };
 

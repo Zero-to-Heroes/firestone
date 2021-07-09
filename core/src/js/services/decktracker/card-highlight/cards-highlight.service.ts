@@ -16,7 +16,8 @@ import {
 	jewelOfNzoth,
 	knightOfAnointment,
 	lineHopper,
-	livingSeed,
+	livingSeed as beastsInDeck,
+	murlocsInDeckAndHand,
 	overlordSaurfang,
 	rally,
 	redscaleDragontamer,
@@ -87,7 +88,8 @@ export class CardsHighlightService {
 			case CardIds.NonCollectible.Druid.LivingSeedRank1_LivingSeedRank3Token:
 			case CardIds.Collectible.Hunter.SelectiveBreederCore:
 			case CardIds.Collectible.Hunter.WarsongWrangler:
-				return livingSeed;
+			case CardIds.Collectible.Hunter.ScavengersIngenuity:
+				return beastsInDeck;
 			case CardIds.Collectible.Druid.FungalFortunes:
 				return fungalFortunes;
 			case CardIds.Collectible.Druid.GuffRunetotem1:
@@ -119,6 +121,8 @@ export class CardsHighlightService {
 				return ringmasterWhatley;
 			case CardIds.Collectible.Warrior.OverlordSaurfang1:
 				return overlordSaurfang;
+			case CardIds.Collectible.Shaman.FiremancerFlurgl:
+				return murlocsInDeckAndHand;
 		}
 	}
 }
