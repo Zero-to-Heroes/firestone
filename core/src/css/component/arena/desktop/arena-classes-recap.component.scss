@@ -1,0 +1,65 @@
+.arena-classes-recap {
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	overflow: auto;
+	height: 100%;
+	width: 100%;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 18px;
+	padding: 10px;
+	color: var(--color-8);
+}
+
+.header {
+	font-size: 14px;
+}
+
+.stats {
+	display: flex;
+	flex-direction: column;
+	font-size: 16px;
+	flex-grow: 1;
+}
+
+.stat-cell {
+	padding-left: 10px;
+	border-bottom: 1px solid var(--color-3);
+}
+
+.entry {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 60px;
+	position: relative;
+
+	.filler {
+		flex-grow: 1;
+	}
+
+	.value {
+		color: var(--default-text-color);
+	}
+}
+
+.classes-list {
+	.value {
+		display: flex;
+		list-style: none;
+
+		li {
+			margin-left: 5px;
+		}
+
+		img {
+			width: 30px;
+			height: 30px;
+			clip-path: circle(10px at 50% 50%);
+			transform: scale(1.5);
+		}
+	}
+}

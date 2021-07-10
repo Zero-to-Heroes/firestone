@@ -51,6 +51,13 @@ declare let amplitude;
 					<div class="menu-header">Duels</div>
 				</div>
 			</li>
+			<li [ngClass]="{ 'selected': selectedModule === 'arena' }" (mousedown)="selectModule('arena')">
+				<div class="icon" inlineSVG="assets/svg/whatsnew/arena.svg"></div>
+				<div class="text">
+					<div class="text-background"></div>
+					<div class="menu-header">Arena</div>
+				</div>
+			</li>
 			<li class="main-menu-separator"></li>
 			<li [ngClass]="{ 'selected': selectedModule === 'replays' }" (mousedown)="selectModule('replays')">
 				<div class="icon" inlineSVG="assets/svg/whatsnew/replays.svg"></div>

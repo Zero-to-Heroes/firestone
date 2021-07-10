@@ -33,6 +33,10 @@ import { AchievementsFilterComponent } from '../../components/achievements/achie
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
 import { AchievementsComponent } from '../../components/achievements/achievements.component';
 import { AppComponent } from '../../components/app.component';
+import { ArenaClassesRecapComponent } from '../../components/arena/desktop/arena-classes-recap.component';
+import { ArenaDesktopComponent } from '../../components/arena/desktop/arena-desktop.component';
+import { ArenaRunComponent } from '../../components/arena/desktop/arena-run.component';
+import { ArenaRunsListComponent } from '../../components/arena/desktop/arena-runs-list.component';
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
@@ -237,6 +241,7 @@ import { TemporaryResolutionOverrideService } from '../../services/achievement/t
 import { AdService } from '../../services/ad.service';
 import { ApiRunner } from '../../services/api-runner';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
+import { ArenaStateBuilderService } from '../../services/arena/arena-state-builder.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from '../../services/battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../services/battlegrounds/bgs-builder.service';
@@ -540,6 +545,11 @@ const components = [
 		DuelsTreasureSearchComponent,
 		DuelsHeroSearchComponent,
 
+		ArenaDesktopComponent,
+		ArenaRunsListComponent,
+		ArenaRunComponent,
+		ArenaClassesRecapComponent,
+
 		FtueComponent,
 		NewVersionNotificationComponent,
 
@@ -661,6 +671,8 @@ const components = [
 		GameStateMetaInfoService,
 
 		DuelsStateBuilderService,
+
+		ArenaStateBuilderService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

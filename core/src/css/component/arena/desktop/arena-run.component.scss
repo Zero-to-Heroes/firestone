@@ -1,0 +1,137 @@
+.arena-run {
+	background: rgba(255, 255, 255, 0.08);
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 10px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	color: var(--default-text-color);
+
+	&.expanded {
+		margin-bottom: 10px;
+	}
+}
+
+.group {
+	border-right: 1px solid var(--default-text-color);
+	display: flex;
+	height: 100%;
+	padding-right: 10px;
+	margin-right: 10px;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	position: relative;
+
+	&.player-images {
+		padding-left: 0px;
+		padding-right: 10px;
+	}
+}
+
+.left-info,
+.right-info {
+	display: flex;
+	align-items: center;
+	height: 100%;
+
+	& > div:last-child {
+		border-right: none;
+		margin-right: 0;
+	}
+}
+
+.right-info {
+	margin-left: auto;
+}
+
+.mode {
+	position: relative;
+	width: 50px;
+	padding-right: 5px;
+
+	.game-mode {
+		width: 40px;
+		height: 40px;
+		margin-right: 5px;
+		position: relative;
+		top: 0px;
+	}
+}
+
+.separator {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.player-images {
+	img {
+		width: 30px;
+		height: 30px;
+		clip-path: circle(10px at 50% 50%);
+		transform: scale(1.5);
+		margin-right: 5px;
+	}
+}
+
+.result {
+	font-size: 13px;
+	line-height: 18px;
+	width: 45px;
+	justify-content: center;
+
+	.wins {
+		color: #61ff47;
+	}
+
+	.losses {
+		color: #ff4747;
+	}
+}
+
+.view-deck,
+.show-more {
+	font-size: 14px;
+
+	.icon {
+		margin-left: 8px;
+		transition: transform 0.4s ease-in-out;
+	}
+
+	&:hover {
+		color: var(--default-title-color);
+		--icon-color: var(--default-title-color);
+	}
+}
+
+.show-more .icon {
+	width: 13px;
+	height: 7px;
+}
+
+.show-more.expanded {
+	.icon {
+		transform: scaleY(-1);
+	}
+}
+
+.run-details {
+	margin-bottom: 5px;
+
+	.details {
+		padding-left: 10px;
+		list-style: none;
+
+		li {
+			// margin-top: 5px;
+		}
+
+		::ng-deep replay-info {
+			.player-name.opponent {
+				display: none;
+			}
+		}
+	}
+}

@@ -3,6 +3,7 @@ export interface PatchesConfig {
 	readonly currentConstructedMetaPatch: number;
 	readonly currentBattlegroundsMetaPatch: number;
 	readonly currentDuelsMetaPatch: number;
+	readonly currentArenaMetaPatch: number;
 }
 
 export interface PatchInfo {

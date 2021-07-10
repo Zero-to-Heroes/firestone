@@ -6,4 +6,5 @@ export type CurrentAppType =
 	| 'battlegrounds'
 	| 'general'
 	| 'duels'
+	| 'arena'
 	| 'live';

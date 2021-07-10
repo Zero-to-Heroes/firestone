@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
+import { ArenaClassFilterType } from './arena/arena-class-filter.type';
+import { ArenaTimeFilterType } from './arena/arena-time-filter.type';
 import { BgsStatsFilterId } from './battlegrounds/post-match/bgs-stats-filter-id.type';
 import { DuelsClassFilterType } from './duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from './duels/duels-game-mode-filter.type';
@@ -270,6 +272,9 @@ export class Preferences {
 	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];
 	readonly duelsPersonalDeckShowHiddenDecks: boolean;
 	readonly duelsHideStatsBelowThreshold: boolean;
+
+	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
+	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

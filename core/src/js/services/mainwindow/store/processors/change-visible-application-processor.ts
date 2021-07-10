@@ -1,5 +1,6 @@
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { NavigationAchievements } from '../../../../models/mainwindow/navigation/navigation-achievements';
+import { NavigationArena } from '../../../../models/mainwindow/navigation/navigation-arena';
 import { NavigationBattlegrounds } from '../../../../models/mainwindow/navigation/navigation-battlegrounds';
 import { NavigationCollection } from '../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationDecktracker } from '../../../../models/mainwindow/navigation/navigation-decktracker';
@@ -65,6 +66,14 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						heroSearchString: null,
 				  } as NavigationDuels)
 				: navigationState.navigationDuels;
+		const arena =
+			event.module === 'arena'
+				? navigationState.navigationArena.update({
+						selectedCategoryId: 'arena-runs',
+						menuDisplayType: 'menu',
+						expandedRunIds: [] as readonly string[],
+				  } as NavigationArena)
+				: navigationState.navigationArena;
 		const decktracker =
 			event.module === 'decktracker'
 				? navigationState.navigationDecktracker.update({
@@ -86,6 +95,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 				navigationBattlegrounds: battlegrounds,
 				navigationDuels: duels,
 				navigationDecktracker: decktracker,
+				navigationArena: arena,
 				text: this.getInitialText(event.module),
 				image: null,
 			} as NavigationState),

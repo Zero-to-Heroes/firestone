@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { ArenaState } from '../../../models/arena/arena-state';
 import { DuelsState } from '../../../models/duels/duels-state';
 import { AchievementsState } from '../../../models/mainwindow/achievements-state';
 import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktracker-state';
@@ -8,6 +9,7 @@ import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-use
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
+import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
@@ -49,6 +51,7 @@ export class StoreBootstrapService {
 		private readonly collectionBootstrap: CollectionBootstrapService,
 		private readonly patchConfig: PatchesConfigService,
 		private readonly duels: DuelsStateBuilderService,
+		private readonly arena: ArenaStateBuilderService,
 		private readonly dungeonLoot: DungeonLootParserService,
 		private readonly arenaService: ArenaRunParserService,
 	) {
@@ -171,6 +174,11 @@ export class StoreBootstrapService {
 			duelsStats?.currentDuelsMetaPatch || currentDuelsMetaPatch,
 		);
 
+		const currentArenaMetaPatch = patchConfig?.patches
+			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
+			: null;
+		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch);
+
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,
 			showFtue: !mergedPrefs.ftue.hasSeenGlobalFtue,
@@ -180,6 +188,7 @@ export class StoreBootstrapService {
 			decktracker: decktracker,
 			battlegrounds: bgsAppStateWithStats,
 			duels: newDuelsState,
+			arena: arenaState,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			globalStats: globalStats,

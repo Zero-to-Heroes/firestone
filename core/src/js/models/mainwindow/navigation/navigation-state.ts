@@ -1,5 +1,6 @@
 import { CurrentAppType } from '../current-app.type';
 import { NavigationAchievements } from './navigation-achievements';
+import { NavigationArena } from './navigation-arena';
 import { NavigationBattlegrounds } from './navigation-battlegrounds';
 import { NavigationCollection } from './navigation-collection';
 import { NavigationDecktracker } from './navigation-decktracker';
@@ -15,6 +16,7 @@ export class NavigationState {
 	readonly navigationDecktracker: NavigationDecktracker = new NavigationDecktracker();
 	readonly navigationBattlegrounds: NavigationBattlegrounds = new NavigationBattlegrounds();
 	readonly navigationDuels: NavigationDuels = new NavigationDuels();
+	readonly navigationArena: NavigationArena = new NavigationArena();
 
 	readonly backArrowEnabled = false;
 	readonly nextArrowEnabled = false;
@@ -42,6 +44,8 @@ export class NavigationState {
 				return this.navigationDecktracker.getPageName();
 			case 'duels':
 				return this.navigationDuels.getPageName();
+			case 'arena':
+				return this.navigationArena.getPageName();
 			case 'replays':
 				return this.navigationReplays.getPageName();
 			case 'general':
