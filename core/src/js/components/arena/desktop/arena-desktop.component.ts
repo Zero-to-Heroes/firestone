@@ -33,7 +33,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 								<span>{{ category.name }} </span>
 							</li>
 						</ul>
-						<!-- <arena-filters [state]="state" [navigation]="navigation"> </arena-filters> -->
+						<arena-filters [state]="state" [navigation]="navigation"> </arena-filters>
 						<arena-runs-list
 							*ngxCacheIf="navigation.navigationArena.selectedCategoryId === 'arena-runs'"
 							[state]="state"

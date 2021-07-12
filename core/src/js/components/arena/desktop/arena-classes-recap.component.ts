@@ -102,6 +102,7 @@ export class ArenaClassesRecapComponent {
 		console.debug('setting state', state);
 		let dirty = false;
 
+		// TODO: use filters
 		const arenaMatches = state.gameStats.stats.filter((stat) => stat.gameMode === 'arena');
 		if (!arraysEqual(arenaMatches, this.arenaMatches)) {
 			this.arenaMatches = arenaMatches;

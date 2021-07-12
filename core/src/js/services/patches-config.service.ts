@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PatchesConfig } from '../models/patches';
 
-const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/patches.json?v=4';
+const PATCHES_CONFIG_URL = 'https://static.zerotoheroes.com/hearthstone/data/patches.json?v=5';
 
 @Injectable()
 export class PatchesConfigService {

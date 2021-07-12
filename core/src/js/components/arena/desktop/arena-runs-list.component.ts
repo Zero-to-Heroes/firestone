@@ -34,7 +34,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 				</li>
 				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
 			</infinite-scroll>
-			<!-- <arena-empty-state *ngIf="!groupedRuns?.length"></arena-empty-state> -->
+			<arena-empty-state *ngIf="!groupedRuns?.length"></arena-empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -92,13 +92,15 @@ export class ArenaRunsListComponent implements AfterViewInit {
 	}
 
 	private updateInfos(state: MainWindowState, navigation: NavigationArena) {
-		if (!state) {
+		if (!state || !state.arena.currentArenaMetaPatch) {
 			return;
 		}
 
 		let dirty = false;
 
-		const arenaMatches = state.stats.gameStats.stats.filter((stat) => stat.gameMode === 'arena');
+		const arenaMatches = state.stats.gameStats.stats
+			.filter((stat) => stat.gameMode === 'arena')
+			.filter((stat) => !!stat.runId);
 		if (!arraysEqual(arenaMatches, this.arenaMatches)) {
 			this.arenaMatches = arenaMatches;
 			// We only pre-compute the arena runs (and not the grouped runs) because
@@ -134,10 +136,11 @@ export class ArenaRunsListComponent implements AfterViewInit {
 		const workingRuns = this.arenaRuns
 			.filter((match) => this.isCorrectHero(match, this.heroFilter))
 			.filter((match) => this.isCorrectTime(match, this.timeFilter, this._state.arena.currentArenaMetaPatch));
+		this.displayedRuns = [];
+		this.groupedRuns = [];
 		const step = 10;
 
 		while (workingRuns.length > 0) {
-			// console.log('working runs', workingRuns.length);
 			const currentRuns = [];
 			while (
 				workingRuns.length > 0 &&
@@ -169,6 +172,10 @@ export class ArenaRunsListComponent implements AfterViewInit {
 			return true;
 		}
 		const firstMatch = run.getFirstMatch();
+		if (!firstMatch) {
+			return false;
+		}
+
 		const firstMatchTimestamp = firstMatch.creationTimestamp;
 		switch (timeFilter) {
 			case 'last-patch':

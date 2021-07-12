@@ -35,8 +35,12 @@ import { AchievementsComponent } from '../../components/achievements/achievement
 import { AppComponent } from '../../components/app.component';
 import { ArenaClassesRecapComponent } from '../../components/arena/desktop/arena-classes-recap.component';
 import { ArenaDesktopComponent } from '../../components/arena/desktop/arena-desktop.component';
+import { ArenaEmptyStateComponent } from '../../components/arena/desktop/arena-empty-state.component';
 import { ArenaRunComponent } from '../../components/arena/desktop/arena-run.component';
 import { ArenaRunsListComponent } from '../../components/arena/desktop/arena-runs-list.component';
+import { ArenaClassFilterDropdownComponent } from '../../components/arena/desktop/filters/arena-class-filter-dropdown.component';
+import { ArenaFiltersComponent } from '../../components/arena/desktop/filters/arena-filters.component';
+import { ArenaTimeFilterDropdownComponent } from '../../components/arena/desktop/filters/arena-time-filter-dropdown.component';
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
@@ -546,9 +550,13 @@ const components = [
 		DuelsHeroSearchComponent,
 
 		ArenaDesktopComponent,
+		ArenaEmptyStateComponent,
 		ArenaRunsListComponent,
 		ArenaRunComponent,
 		ArenaClassesRecapComponent,
+		ArenaFiltersComponent,
+		ArenaTimeFilterDropdownComponent,
+		ArenaClassFilterDropdownComponent,
 
 		FtueComponent,
 		NewVersionNotificationComponent,

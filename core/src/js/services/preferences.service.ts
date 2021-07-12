@@ -1,4 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
+import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
 import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
 import { DuelsClassFilterType } from '../models/duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from '../models/duels/duels-game-mode-filter.type';
@@ -356,6 +358,18 @@ export class PreferencesService {
 		const names = prefs.duelsPersonalDeckNames;
 		names[deckstring] = newName;
 		const newPrefs: Preferences = { ...prefs, duelsPersonalDeckNames: names };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateArenaTimeFilter(value: ArenaTimeFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, arenaActiveTimeFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateArenaClassFilter(value: ArenaClassFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, arenaActiveClassFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

@@ -65,11 +65,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaRunComponent implements AfterViewInit {
-	// @Input() set isExpanded(value: boolean) {
-	// 	this._isExpanded = value;
-	// 	this.updateValues();
-	// }
-
 	@Input() set run(value: ArenaRun) {
 		this._run = value;
 		this.updateValues();
