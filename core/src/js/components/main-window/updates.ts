@@ -16,6 +16,7 @@ export interface UpdateSectionItem {
 		| 'replays'
 		| 'achievements'
 		| 'duels'
+		| 'arena'
 		| 'decktracker'
 		| 'battlegrounds'
 		| 'collection';
@@ -29,7 +30,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.10.16',
+		version: '7.11.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -42,52 +43,40 @@ export const updates: readonly Update[] = [
 			// 		Have fun, and thanks again for all the help :)
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Mousing over a card in your decklist will now highlight related cards in your deck. For instance, mousing over a card that draws a Mech from your deck will highlight all the Mechs in your deck.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix a bug where the deck would not be properly detected when playing a friend with the same deck several times in a row.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
 			{
-				type: 'minor',
-				header: 'Minor updates',
+				type: 'main',
+				header: 'Main updates',
 				updates: [
+					{
+						category: 'arena',
+						details: [
+							{
+								type: 'feature',
+								text: `There is a new Arena tab that tracks your runs and rewards (very similar to what we have for Duels). It's still pretty lightweight, and can/will be improved in the future. Let me know your suggestions!`,
+							},
+						],
+					},
 					{
 						category: 'battlegrounds',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where sometimes the simulation result would be ignored (this happens when the result arrives after the next opponent has been revealed).`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the simulator would ignore golden Nadina`,
+								text: `Fix an issue where Close the Portal hero power was not implemented in the simulator for minions summoned in combat.`,
 							},
 						],
 					},
+				],
+			},
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
 					{
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where incorrect cards would be flagged for Barak Kodobane and Guardian Animals.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the cost reduction from Skull of Gul'dan would not be flagged anymore on the opponent's hand marker.`,
+								type: 'content',
+								text: `Add card highlights for Firemancer Flurgl and Scavenger's Ingenuity.`,
 							},
 						],
 					},
