@@ -18,7 +18,11 @@
 		"lib": ["dom", "ES2019"],
 		"baseUrl": ".",
 		"typeRoots": ["node_modules/@types", "@overwolf/types"],
-		"types": ["node", "jest"]
+		"types": ["node", "jest"],
+		"paths": {
+			"@models/*": ["src/js/models/*"],
+			"@services/*": ["src/js/services/*"]
+		}
 	},
 	"angularCompilerOptions": {
 		"skipTemplateCodegen": false,
