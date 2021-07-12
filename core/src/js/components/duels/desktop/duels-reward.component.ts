@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { RewardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
@@ -18,7 +19,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/d
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsRewardComponent {
-	@Input() set reward(value: DuelsRewardsInfo) {
+	@Input() set reward(value: DuelsRewardsInfo | ArenaRewardInfo) {
 		this.svg = this.buildSvg(value);
 		this.amount = value.rewardAmount;
 		if (this.svg) {
@@ -32,7 +33,7 @@ export class DuelsRewardComponent {
 
 	constructor(private readonly allCards: AllCardsService) {}
 
-	private buildSvg(reward: DuelsRewardsInfo): string {
+	private buildSvg(reward: DuelsRewardsInfo | ArenaRewardInfo): string {
 		const rewardType = reward.rewardType;
 		switch (rewardType) {
 			case RewardType.ARCANE_DUST:

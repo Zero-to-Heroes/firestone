@@ -38,6 +38,7 @@ import { FilterShownAchievementsEvent } from './events/achievements/filter-shown
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
 import { ArenaClassFilterSelectedEvent } from './events/arena/arena-class-filter-selected-event';
+import { ArenaRewardsUpdatedEvent } from './events/arena/arena-rewards-updated-event';
 import { ArenaTimeFilterSelectedEvent } from './events/arena/arena-time-filter-selected-event';
 import { BgsHeroFilterSelectedEvent } from './events/battlegrounds/bgs-hero-filter-selected-event';
 import { BgsHeroSortFilterSelectedEvent } from './events/battlegrounds/bgs-hero-sort-filter-selected-event';
@@ -130,6 +131,7 @@ import { FilterShownAchievementsProcessor } from './processors/achievements/filt
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
 import { ArenaClassFilterSelectedProcessor } from './processors/arena/arena-class-filter-selected-processor';
+import { ArenaRewardsUpdatedProcessor } from './processors/arena/arena-rewards-updated-processor';
 import { ArenaTimeFilterSelectedProcessor } from './processors/arena/arena-time-filter-selected-processor';
 import { BgsHeroFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-filter-selected-processor';
 import { BgsHeroSortFilterSelectedProcessor } from './processors/battlegrounds/bgs-hero-sort-filter-selected-processor';
@@ -690,6 +692,9 @@ export class MainWindowStoreService {
 
 			ArenaClassFilterSelectedEvent.eventName(),
 			new ArenaClassFilterSelectedProcessor(this.prefs),
+
+			ArenaRewardsUpdatedEvent.eventName(),
+			new ArenaRewardsUpdatedProcessor(),
 		);
 	}
 

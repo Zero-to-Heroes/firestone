@@ -84,6 +84,7 @@ export class StoreBootstrapService {
 			[bgsBestUserStats, bgsPerfectGames],
 			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats],
+			[arenaRewards],
 		] = await Promise.all([
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
@@ -101,6 +102,7 @@ export class StoreBootstrapService {
 				this.gameStatsLoader.retrieveArchetypesStats(),
 			]),
 			Promise.all([this.duels.loadRuns(), this.duels.loadGlobalStats()]),
+			Promise.all([this.arena.loadRewards()]),
 		]);
 		console.log('loaded info');
 
@@ -177,7 +179,7 @@ export class StoreBootstrapService {
 		const currentArenaMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentArenaMetaPatch)
 			: null;
-		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch);
+		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch, arenaRewards);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,

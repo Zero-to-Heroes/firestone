@@ -8,6 +8,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
@@ -62,6 +63,7 @@ export class ArenaRunsListComponent implements AfterViewInit {
 	// This is used only to check for diffs between two state updates
 	private arenaMatches: readonly GameStat[] = [];
 	private arenaRuns: readonly ArenaRun[] = [];
+	private rewards: readonly ArenaRewardInfo[] = [];
 	private displayedRuns: readonly ArenaRun[] = [];
 	private heroFilter: ArenaClassFilterType = 'all';
 	private timeFilter: ArenaTimeFilterType = 'all-time';
@@ -97,18 +99,28 @@ export class ArenaRunsListComponent implements AfterViewInit {
 		}
 
 		let dirty = false;
+		let dirtyRuns = false;
 
 		const arenaMatches = state.stats.gameStats.stats
 			.filter((stat) => stat.gameMode === 'arena')
 			.filter((stat) => !!stat.runId);
 		if (!arraysEqual(arenaMatches, this.arenaMatches)) {
 			this.arenaMatches = arenaMatches;
+			dirtyRuns = true;
+		}
+
+		if (!arraysEqual(state.arena.rewards, this.rewards)) {
+			this.rewards = state.arena.rewards;
+			dirtyRuns = true;
+		}
+
+		if (dirtyRuns) {
 			// We only pre-compute the arena runs (and not the grouped runs) because
 			// grouped runs can be modified depending on the prefs / filters, so it's
 			// not truly something we can cache
 			// TODO: this can be improved further, and only recreate new runs (the latest run
 			// in fact)
-			this.arenaRuns = this.buildArenaRuns(arenaMatches);
+			this.arenaRuns = this.buildArenaRuns(this.arenaMatches, this.rewards);
 			dirty = true;
 		}
 
@@ -189,9 +201,15 @@ export class ArenaRunsListComponent implements AfterViewInit {
 		}
 	}
 
-	private buildArenaRuns(arenaMatches: GameStat[]): readonly ArenaRun[] {
-		const groupedByRun = groupByFunction((match: GameStat) => match.runId)(arenaMatches);
-		return Object.values(groupedByRun).map((matches: readonly GameStat[]) => {
+	private buildArenaRuns(
+		arenaMatches: readonly GameStat[],
+		rewards: readonly ArenaRewardInfo[],
+	): readonly ArenaRun[] {
+		const matchesGroupedByRun = groupByFunction((match: GameStat) => match.runId)(arenaMatches);
+		const rewardsGroupedByRun = groupByFunction((reward: ArenaRewardInfo) => reward.runId)(rewards);
+		return Object.keys(matchesGroupedByRun).map((runId: string) => {
+			const matches: readonly GameStat[] = matchesGroupedByRun[runId];
+			const rewards = rewardsGroupedByRun[runId];
 			const firstMatch = matches[0];
 			return ArenaRun.create({
 				id: firstMatch.runId,
@@ -201,6 +219,7 @@ export class ArenaRunsListComponent implements AfterViewInit {
 				wins: matches.filter((match) => match.result === 'won').length,
 				losses: matches.filter((match) => match.result === 'lost').length,
 				steps: matches,
+				rewards: rewards,
 			} as ArenaRun);
 		});
 	}

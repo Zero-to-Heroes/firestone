@@ -7,6 +7,7 @@ export interface MemoryUpdate {
 	readonly XpChanges: readonly XpChange[];
 	readonly OpenedPack: PackInfo;
 	readonly SelectedDeckId: number;
+	readonly ArenaRewards: readonly Reward[];
 
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly NewCards: readonly CardPackInfo[];
@@ -19,4 +20,10 @@ export interface XpChange {
 	readonly PreviousXp: number;
 	readonly RewardSourceId: number;
 	readonly RewardSourceType: number;
+}
+
+export interface Reward {
+	readonly Type: number;
+	readonly Amount: number;
+	readonly BoosterId: number;
 }

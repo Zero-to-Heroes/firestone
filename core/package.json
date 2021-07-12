@@ -30,6 +30,7 @@
 		"@angular/material": "^11.2.10",
 		"@angular/platform-browser": "^11.2.11",
 		"@angular/platform-browser-dynamic": "^11.2.11",
+		"@firestone-hs/api-arena-rewards": "^1.0.2",
 		"@firestone-hs/build-global-stats": "^1.0.4",
 		"@firestone-hs/categorize-deck": "^1.0.4",
 		"@firestone-hs/coliseum-components": "0.0.16",

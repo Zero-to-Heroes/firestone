@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
+import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards/dist/retrieve-arena-rewards';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ArenaState } from '../../models/arena/arena-state';
 import { ArenaCategory } from '../../models/mainwindow/arena/arena-category';
@@ -9,6 +10,8 @@ import { Events } from '../events.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
+
+const REWARDS_RETRIEVE_URL = 'https://api.firestoneapp.com/userArenaRewards/get/arenaRewards/{proxy+}';
 
 @Injectable()
 export class ArenaStateBuilderService {
@@ -26,7 +29,17 @@ export class ArenaStateBuilderService {
 		});
 	}
 
-	public async initState(currentArenaMetaPatch: PatchInfo): Promise<ArenaState> {
+	public async loadRewards(): Promise<readonly ArenaRewardInfo[]> {
+		const currentUser = await this.ow.getCurrentUser();
+		const result: any = await this.api.callPostApi(REWARDS_RETRIEVE_URL, {
+			userId: currentUser.userId,
+			userName: currentUser.username,
+		});
+		console.debug('loaded arena rewards', result);
+		return result;
+	}
+
+	public async initState(currentArenaMetaPatch: PatchInfo, rewards: readonly ArenaRewardInfo[]): Promise<ArenaState> {
 		const prefs = await this.prefs.getPreferences();
 		return ArenaState.create({
 			categories: [
@@ -42,6 +55,7 @@ export class ArenaStateBuilderService {
 			activeHeroFilter: prefs.arenaActiveClassFilter,
 			activeTimeFilter: prefs.arenaActiveTimeFilter,
 			currentArenaMetaPatch: currentArenaMetaPatch,
+			rewards: rewards,
 		} as ArenaState);
 	}
 }

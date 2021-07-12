@@ -7,6 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -38,9 +39,9 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					/>
 				</div>
 
-				<!-- <div class="group rewards" *ngIf="rewards?.length">
-					<arena-reward *ngFor="let reward of rewards" [reward]="reward"></arena-reward>
-				</div> -->
+				<div class="group rewards" *ngIf="rewards?.length">
+					<duels-reward *ngFor="let reward of rewards" [reward]="reward"></duels-reward>
+				</div>
 			</div>
 			<div class="right-info">
 				<div class="group show-more" [ngClass]="{ 'expanded': _isExpanded }" (click)="toggleShowMore()">
@@ -66,6 +67,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class ArenaRunComponent implements AfterViewInit {
 	@Input() set run(value: ArenaRun) {
+		console.debug('setting run', value);
 		this._run = value;
 		this.updateValues();
 	}
@@ -79,7 +81,7 @@ export class ArenaRunComponent implements AfterViewInit {
 	wins: number;
 	losses: number;
 	steps: readonly GameStat[];
-	// rewards: readonly DuelsRewardsInfo[];
+	rewards: readonly ArenaRewardInfo[];
 	_isExpanded: boolean;
 
 	private _run: ArenaRun;
@@ -115,7 +117,7 @@ export class ArenaRunComponent implements AfterViewInit {
 		this.losses = this._run.losses;
 		this.gameModeTooltip = `Arena ${this.wins} wins`;
 		this.gameModeImage = `assets/images/deck/ranks/arena/arena${this.wins}wins.png`;
-		// this.rewards = this._run.rewards;
+		this.rewards = this._run.rewards;
 
 		this.playerClassImage = this._run.heroCardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this._run.heroCardId}.jpg`

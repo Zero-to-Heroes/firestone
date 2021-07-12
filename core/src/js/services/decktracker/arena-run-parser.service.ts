@@ -1,19 +1,24 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { Input as ArenaRewards } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { ArenaInfo } from '../../models/arena-info';
 import { GameEvent } from '../../models/game-event';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { MemoryUpdate, Reward } from '../../models/memory/memory-update';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { ArenaRewardsUpdatedEvent } from '../mainwindow/store/events/arena/arena-rewards-updated-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { uuid } from '../utils';
+
+const UPDATE_URL = 'https://api.firestoneapp.com/userArenaRewards/post/arenaRewards/{proxy+}';
 
 @Injectable()
 export class ArenaRunParserService {
@@ -30,6 +35,7 @@ export class ArenaRunParserService {
 	private currentReviewId: string;
 	private currentGameType: GameType;
 	private arenaInfo: ArenaInfo;
+	private rewardsInput: ArenaRewards;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -70,9 +76,45 @@ export class ArenaRunParserService {
 				// this.sendLootInfo();
 			}
 		});
+
+		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+			this.debug('Received memory update', event);
+			const changes: MemoryUpdate = event.data[0];
+			if (changes.ArenaRewards?.length) {
+				this.debug('Handling rewards');
+				this.handleRewards(changes.ArenaRewards);
+			}
+		});
+
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
+	}
+
+	private async handleRewards(rewards: readonly Reward[]) {
+		if (this.rewardsInput?.runId === this.currentArenaRunId) {
+			this.log('already sent rewards for run', this.rewardsInput);
+			return;
+		}
+		if (!this.arenaInfo) {
+			this.arenaInfo = await this.memory.getArenaInfo();
+		}
+
+		const user = await this.ow.getCurrentUser();
+		this.rewardsInput = {
+			userId: user.userId,
+			userName: user.username,
+			type: 'arena',
+			reviewId: this.currentReviewId,
+			runId: this.currentArenaRunId,
+			rewards: rewards,
+			currentWins: this.arenaInfo.wins,
+			currentLosses: this.arenaInfo.losses,
+			appVersion: process.env.APP_VERSION,
+		};
+		this.log('sending rewards info', this.rewardsInput);
+		this.api.callPostApi(UPDATE_URL, this.rewardsInput);
+		this.stateUpdater.next(new ArenaRewardsUpdatedEvent(this.rewardsInput));
 	}
 
 	public setLastArenaMatch(stats: readonly GameStat[]) {
