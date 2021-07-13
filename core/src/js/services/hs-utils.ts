@@ -239,6 +239,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Neutral.CaptainsParrotVanilla,
 	CardIds.Collectible.Neutral.ClawMachine,
 	CardIds.Collectible.Neutral.CountessAshmore,
+	CardIds.Collectible.Neutral.GnomishExperimenter,
 	CardIds.Collectible.Neutral.Guidance1,
 	CardIds.Collectible.Neutral.JepettoJoybuzz,
 	CardIds.Collectible.Neutral.Kazakus1,
