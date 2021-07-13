@@ -1,4 +1,5 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
@@ -42,18 +43,32 @@ export class OpponentCardInfoIdComponent {
 	@Input() displayBuff: boolean;
 
 	@Input() set card(value: DeckCard) {
-		this._card = value;
-		this.cardId = value.cardId || value.creatorCardId || value.lastAffectedByCardId;
+		this.cardId = this.normalizeEnchantment(value.cardId || value.creatorCardId || value.lastAffectedByCardId);
+		this._card = value.update({
+			cardId: this.cardId,
+			// We probably don't need to update the other fields, as they are not displayed
+		} as DeckCard);
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
 			: undefined;
 		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
 		this.hasBuffs = value.buffCardIds?.length > 0;
-		// console.debug('set card in hand', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	constructor(private cdr: ChangeDetectorRef) {}
+
+	// In some cases, it's an enchantment that creates the card. And while we want to keep that
+	// info in our internal model that reflects the actual game state, it's better to show the
+	// user the actual card
+	private normalizeEnchantment(cardId: string): string {
+		switch (cardId) {
+			case CardIds.NonCollectible.Shaman.InstructorFireheart_HotStreakEnchantment:
+				return CardIds.Collectible.Shaman.InstructorFireheart;
+			default:
+				return cardId;
+		}
+	}
 }
