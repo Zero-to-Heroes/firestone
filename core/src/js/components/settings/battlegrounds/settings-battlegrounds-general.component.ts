@@ -6,7 +6,7 @@ import {
 	ElementRef,
 	HostListener,
 	OnDestroy,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
@@ -179,7 +179,7 @@ import { Knob } from '../preference-slider.component';
 				<div
 					class="text"
 					[ngClass]="{ 'disabled': !useLocalSimulator || !enableSimulation || !bgsFullToggle }"
-					helpTooltip="The number of simulations ran for each battle. We found 2,500 simulations to be a perfect spot. Increasing the number will increase the accuracy of the calculation but will require more resources from your PC."
+					helpTooltip="The number of simulations ran for each battle. We found 5,000 simulations to be a perfect spot. Increasing the number will increase the accuracy of the calculation but will require more resources from your PC."
 				>
 					Number of simulations
 				</div>
