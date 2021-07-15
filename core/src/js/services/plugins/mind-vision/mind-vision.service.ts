@@ -384,18 +384,18 @@ export class MindVisionService {
 			return;
 		}
 
-		this.initialized = false;
+		this.initialized = true;
 		try {
 			console.log('[mind-vision] plugin init starting', this.mindVisionPlugin);
 			this.mindVisionPlugin = new OverwolfPlugin('mind-vision', true);
 			this.mindVisionPlugin.initialize(async (status: boolean) => {
 				if (status === false) {
 					console.error("[mind-vision] Plugin couldn't be loaded??", 'retrying');
+					this.initialized = false;
 					setTimeout(() => this.initialize(), 2000);
 					return;
 				}
 				console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
-				this.initialized = true;
 			});
 			const plugin = await this.get();
 			plugin.onGlobalEvent.addListener((first: string, second: string) => {
@@ -403,6 +403,7 @@ export class MindVisionService {
 			});
 		} catch (e) {
 			console.warn('[mind-vision]Could not load plugin, retrying', e);
+			this.initialized = false;
 			setTimeout(() => this.initialize(), 2000);
 		}
 	}
