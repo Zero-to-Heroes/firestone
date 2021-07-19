@@ -156,16 +156,16 @@ export class BattlegroundsMinionsGroupComponent implements AfterViewInit {
 					return -1;
 				}
 				if (a.name?.toLowerCase() > b.name?.toLowerCase()) {
-					return -1;
+					return 1;
 				}
 				// To keep sorting consistent
 				if (a.cardId < b.cardId) {
 					return -1;
 				}
 				if (a.cardId > b.cardId) {
-					return -1;
+					return 1;
 				}
-				return 1;
+				return 0;
 			});
 	}
 

@@ -97,6 +97,15 @@ export const updates: readonly Update[] = [
 						],
 					},
 					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'ui',
+								text: `Minions inside each tribe are now ordered alphabetically.`,
+							},
+						],
+					},
+					{
 						category: 'replays',
 						details: [
 							{
