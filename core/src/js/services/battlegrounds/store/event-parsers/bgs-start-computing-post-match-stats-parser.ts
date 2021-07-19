@@ -1,6 +1,5 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
-import { Preferences } from '../../../../models/preferences';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsStartComputingPostMatchStatsEvent } from '../events/bgs-start-computing-post-match-stats-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -17,10 +16,10 @@ export class BgsStartComputingPostMatchStatsParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsStartComputingPostMatchStatsEvent,
 	): Promise<BattlegroundsState> {
-		const prefs: Preferences = await this.prefs.getPreferences();
+		// const prefs: Preferences = await this.prefs.getPreferences();
 		return currentState.update({
 			currentPanelId: 'bgs-post-match-stats',
-			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
+			forceOpen: false, // prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			currentGame: currentState.currentGame.update({
 				gameEnded: true,
 				replayXml: event.replayXml,

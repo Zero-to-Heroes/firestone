@@ -39,7 +39,7 @@ export class BgsGameEndParser implements EventParser {
 		return currentState.update({
 			panels: panels,
 			currentPanelId: 'bgs-post-match-stats',
-			forceOpen: prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
+			forceOpen: false, // prefs.bgsEnableApp && prefs.bgsForceShowPostMatchStats && prefs.bgsFullToggle ? true : false,
 			highlightedMinions: [] as readonly string[],
 			highlightedTribes: [] as readonly Race[],
 			heroSelectionDone: false,
