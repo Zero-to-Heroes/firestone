@@ -20,23 +20,23 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			<bgs-player-capsule [player]="player$ | async" [displayTavernTier]="false">
 				<bgs-hero-detailed-stats> </bgs-hero-detailed-stats>
 			</bgs-player-capsule>
-			<div class="stats" *ngIf="{ selectedTab: selectedTab$ | async } as obs">
+			<div class="stats" *ngIf="selectedTab$ | async as selectedTab">
 				<ul class="tabs">
 					<li
 						*ngFor="let tab of tabs$ | async"
 						class="tab"
-						[ngClass]="{ 'active': tab === obs.selectedTab }"
+						[ngClass]="{ 'active': tab === selectedTab }"
 						(mousedown)="selectTab(tab)"
 					>
 						{{ getLabel(tab) }}
 					</li>
 				</ul>
-				<bgs-last-warbands class="stat" *ngxCacheIf="obs.selectedTab === 'final-warbands'"> </bgs-last-warbands>
-				<bgs-mmr-evolution-for-hero class="stat" *ngxCacheIf="obs.selectedTab === 'mmr'">
+				<bgs-last-warbands class="stat" *ngxCacheIf="selectedTab === 'final-warbands'"> </bgs-last-warbands>
+				<bgs-mmr-evolution-for-hero class="stat" *ngxCacheIf="selectedTab === 'mmr'">
 				</bgs-mmr-evolution-for-hero>
-				<bgs-warband-stats-for-hero class="stat" *ngxCacheIf="obs.selectedTab === 'warband-stats'">
+				<bgs-warband-stats-for-hero class="stat" *ngxCacheIf="selectedTab === 'warband-stats'">
 				</bgs-warband-stats-for-hero>
-				<bgs-winrate-stats-for-hero class="stat" *ngxCacheIf="obs.selectedTab === 'winrate-stats'">
+				<bgs-winrate-stats-for-hero class="stat" *ngxCacheIf="selectedTab === 'winrate-stats'">
 				</bgs-winrate-stats-for-hero>
 			</div>
 		</div>

@@ -1,10 +1,9 @@
-@import '../../../global/variables';
-@import '../../../global/fonts';
+@import '../../../../global/variables';
+@import '../../../../global/fonts';
 
-.battlegrounds-filters {
+:host() {
 	display: flex;
-	height: 30px;
-	margin-bottom: 15px;
+	flex-shrink: 0;
 }
 
 ng-select.disabled {
@@ -12,11 +11,7 @@ ng-select.disabled {
 	position: absolute;
 }
 
-::ng-deep fs-filter-dropdown filter-dropdown.visible {
-	// margin-right: 15px;
-}
-
-::ng-deep fs-filter-dropdown filter-dropdown ng-select {
+::ng-deep ng-select {
 	@extend %search-active;
 	color: var(--color-1);
 	height: 30px;

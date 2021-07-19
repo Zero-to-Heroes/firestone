@@ -16,6 +16,7 @@ import { IOption } from 'ng-select';
 	styleUrls: [`../../css/component/filter-dropdown.component.scss`],
 	template: `
 		<ng-select
+			*ngIf="visible"
 			class="filter hero-sort-filter"
 			[ngClass]="{ 'disabled': !visible }"
 			[options]="options"

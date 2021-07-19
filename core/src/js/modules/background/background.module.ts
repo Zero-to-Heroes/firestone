@@ -8,7 +8,7 @@ import {
 	ErrorHandler,
 	Injectable,
 	NgModule,
-	Type
+	Type,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -39,8 +39,8 @@ import { ArenaEmptyStateComponent } from '../../components/arena/desktop/arena-e
 import { ArenaRunComponent } from '../../components/arena/desktop/arena-run.component';
 import { ArenaRunsListComponent } from '../../components/arena/desktop/arena-runs-list.component';
 import { ArenaClassFilterDropdownComponent } from '../../components/arena/desktop/filters/arena-class-filter-dropdown.component';
-import { ArenaFiltersComponent } from '../../components/arena/desktop/filters/arena-filters.component';
 import { ArenaTimeFilterDropdownComponent } from '../../components/arena/desktop/filters/arena-time-filter-dropdown.component';
+import { ArenaFiltersComponent } from '../../components/arena/desktop/filters/_arena-filters.component';
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
@@ -53,7 +53,6 @@ import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card
 import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
 import { BattlegroundsCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-category.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
-import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/desktop/battlegrounds-filters.component';
 import { BattlegroundsPerfectGamesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
 import { BattlegroundsPersonalStatsHeroesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-heroes.component';
@@ -63,12 +62,18 @@ import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent
+	BgsHeroDetailedStatsComponent,
 } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
 import { BgsWarbandStatsForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-warband-stats-for-hero.component';
 import { BgsWinrateStatsForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-winrate-stats-for-hero.component';
+import { BattlegroundsHeroFilterDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-hero-filter-dropdown.component';
+import { BattlegroundsHeroSortDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-hero-sort-dropdown.component';
+import { BattlegroundsRankFilterDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-rank-filter-dropdown.component';
+import { BattlegroundsRankGroupDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-rank-group-dropdown.component';
+import { BattlegroundsTimeFilterDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-time-filter-dropdown.component';
+import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/desktop/filters/_battlegrounds-filters.component';
 import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
 import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
@@ -148,7 +153,7 @@ import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-e
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent
+	DuelsHeroStatVignetteComponent,
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsPersonalDeckDetailsComponent } from '../../components/duels/desktop/duels-personal-deck-details.component';
@@ -166,7 +171,7 @@ import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent
+	DuelsStatCellComponent,
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsHeroSearchComponent } from '../../components/duels/desktop/secondary/duels-hero-search.component';
@@ -502,7 +507,6 @@ const components = [
 		ReplayIconToggleComponent,
 
 		BattlegroundsDesktopComponent,
-		BattlegroundsFiltersComponent,
 		BattlegroundsCategoryComponent,
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
@@ -525,6 +529,12 @@ const components = [
 		BgsHeroDetailedStatsComponent,
 		BattlegroundsEmptyStateComponent,
 		BgsGlobalValueComponent,
+		BattlegroundsFiltersComponent,
+		BattlegroundsHeroSortDropdownComponent,
+		BattlegroundsHeroFilterDropdownComponent,
+		BattlegroundsRankFilterDropdownComponent,
+		BattlegroundsRankGroupDropdownComponent,
+		BattlegroundsTimeFilterDropdownComponent,
 
 		DuelsDesktopComponent,
 		DuelsEmptyStateComponent,

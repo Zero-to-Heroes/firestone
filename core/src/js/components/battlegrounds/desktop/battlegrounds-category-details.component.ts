@@ -13,28 +13,23 @@ import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service
 		<div
 			class="battlegrounds-category-details"
 			scrollable
-			*ngIf="{ selectedCategoryId: selectedCategoryId$ | async } as obs"
+			*ngIf="selectedCategoryId$ | async as selectedCategoryId"
 		>
-			<battlegrounds-personal-stats-heroes
-				*ngxCacheIf="obs.selectedCategoryId === 'bgs-category-personal-heroes'"
-			>
+			<battlegrounds-personal-stats-heroes *ngxCacheIf="selectedCategoryId === 'bgs-category-personal-heroes'">
 			</battlegrounds-personal-stats-heroes>
-			<battlegrounds-personal-stats-rating
-				*ngxCacheIf="obs.selectedCategoryId === 'bgs-category-personal-rating'"
-			>
+			<battlegrounds-personal-stats-rating *ngxCacheIf="selectedCategoryId === 'bgs-category-personal-rating'">
 			</battlegrounds-personal-stats-rating>
-			<battlegrounds-personal-stats-stats *ngxCacheIf="obs.selectedCategoryId === 'bgs-category-personal-stats'">
+			<battlegrounds-personal-stats-stats *ngxCacheIf="selectedCategoryId === 'bgs-category-personal-stats'">
 			</battlegrounds-personal-stats-stats>
-			<battlegrounds-perfect-games *ngxCacheIf="obs.selectedCategoryId === 'bgs-category-perfect-games'">
+			<battlegrounds-perfect-games *ngxCacheIf="selectedCategoryId === 'bgs-category-perfect-games'">
 			</battlegrounds-perfect-games>
 			<battlegrounds-personal-stats-hero-details
 				*ngxCacheIf="
-					obs.selectedCategoryId &&
-					obs.selectedCategoryId.indexOf('bgs-category-personal-hero-details') !== -1
+					selectedCategoryId && selectedCategoryId.indexOf('bgs-category-personal-hero-details') !== -1
 				"
 			>
 			</battlegrounds-personal-stats-hero-details>
-			<battlegrounds-simulator *ngxCacheIf="obs.selectedCategoryId === 'bgs-category-simulator'">
+			<battlegrounds-simulator *ngxCacheIf="selectedCategoryId === 'bgs-category-simulator'">
 			</battlegrounds-simulator>
 		</div>
 	`,
