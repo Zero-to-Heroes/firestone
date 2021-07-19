@@ -20,7 +20,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<with-loading [isLoading]="!state.duels || state.duels.loading">
 					<div class="content main-content" *ngIf="state.duels">
 						<global-header
-							[navigation]="navigation"
 							*ngIf="navigation.text && navigation?.navigationDuels.menuDisplayType === 'breadcrumbs'"
 						></global-header>
 						<ul class="menu-selection" *ngIf="navigation?.navigationDuels.menuDisplayType === 'menu'">

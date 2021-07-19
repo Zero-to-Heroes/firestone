@@ -21,7 +21,6 @@ import { CollectionReferenceCard } from './collection-reference-card';
 				<with-loading [isLoading]="dataState.isLoading">
 					<div class="content main-content">
 						<global-header
-							[navigation]="_navigation"
 							*ngIf="
 								_navigation.text && _navigation?.navigationCollection.menuDisplayType === 'breadcrumbs'
 							"

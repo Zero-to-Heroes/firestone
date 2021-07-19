@@ -1,5 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { AppUiStoreService, cdLog } from '../../services/app-ui-store.service';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
@@ -15,15 +17,15 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/main-window/global-header.component.scss`,
 	],
 	template: `
-		<div class="global-header" *ngIf="navigation?.text">
-			<i class="i-13X7 arrow back" (click)="back()" *ngIf="navigation.backArrowEnabled">
+		<div class="global-header" *ngIf="text$ | async as text">
+			<i class="i-13X7 arrow back" (click)="back()" *ngIf="backArrow$ | async">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 				</svg>
 			</i>
-			<img class="image" *ngIf="navigation && navigation.image" [src]="navigation && navigation.image" />
-			<div class="text">{{ navigation?.text }}</div>
-			<i class="i-13X7 arrow next" (click)="next()" *ngIf="navigation.nextArrowEnabled">
+			<img class="image" *ngIf="image$ | async as image" [src]="image" />
+			<div class="text">{{ text }}</div>
+			<i class="i-13X7 arrow next" (click)="next()" *ngIf="nextArrowEnabled$ | async">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 				</svg>
@@ -33,25 +35,59 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GlobalHeaderComponent implements AfterViewInit {
-	@Input() navigation: NavigationState;
+	text$: Observable<string>;
+	image$: Observable<string>;
+	backArrow$: Observable<boolean>;
+	nextArrow$: Observable<boolean>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+		this.text$ = this.store
+			.listen$(([main, nav]) => nav.text)
+			.pipe(
+				filter(([text]) => !!text),
+				map(([text]) => text),
+				distinctUntilChanged(),
+				tap((text) => cdLog('emitting text in ', this.constructor.name, text)),
+			);
+		this.image$ = this.store
+			.listen$(([main, nav]) => nav.image)
+			.pipe(
+				filter(([image]) => !!image),
+				map(([image]) => image),
+				distinctUntilChanged(),
+				tap((image) => cdLog('emitting image in ', this.constructor.name, image)),
+			);
+		this.backArrow$ = this.store
+			.listen$(([main, nav]) => nav.backArrowEnabled)
+			.pipe(
+				map(([backArrowEnabled]) => backArrowEnabled),
+				distinctUntilChanged(),
+				tap((backArrowEnabled) =>
+					cdLog('emitting backArrowEnabled in ', this.constructor.name, backArrowEnabled),
+				),
+			);
+		this.nextArrow$ = this.store
+			.listen$(([main, nav]) => nav.nextArrowEnabled)
+			.pipe(
+				map(([nextArrowEnabled]) => nextArrowEnabled),
+				distinctUntilChanged(),
+				tap((nextArrowEnabled) =>
+					cdLog('emitting nextArrowEnabled in ', this.constructor.name, nextArrowEnabled),
+				),
+			);
+	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	back() {
-		if (this.navigation.backArrowEnabled) {
-			this.stateUpdater.next(new NavigationBackEvent());
-		}
+		this.stateUpdater.next(new NavigationBackEvent());
 	}
 
 	next() {
-		if (this.navigation.nextArrowEnabled) {
-			this.stateUpdater.next(new NavigationNextEvent());
-		}
+		this.stateUpdater.next(new NavigationNextEvent());
 	}
 }

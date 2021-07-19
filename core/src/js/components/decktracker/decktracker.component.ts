@@ -16,7 +16,6 @@ import { Preferences } from '../../models/preferences';
 				<with-loading [isLoading]="!_state || loading">
 					<div class="content main-content">
 						<global-header
-							[navigation]="navigation"
 							*ngIf="
 								navigation.text && navigation?.navigationDecktracker.menuDisplayType === 'breadcrumbs'
 							"

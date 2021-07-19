@@ -18,7 +18,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 			<section class="main" [ngClass]="{ 'divider': navigation.navigationAchievements.currentView === 'list' }">
 				<with-loading [isLoading]="state.isLoading">
 					<div class="content main-content">
-						<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
+						<global-header *ngIf="navigation.text"></global-header>
 
 						<achievements-categories
 							*ngxCacheIf="navigation.navigationAchievements.currentView === 'categories'"

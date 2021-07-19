@@ -21,7 +21,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<with-loading [isLoading]="!state.battlegrounds || state.battlegrounds.loading">
 					<div class="content main-content" *ngIf="state.battlegrounds">
 						<global-header
-							[navigation]="navigation"
 							*ngIf="
 								navigation.text && navigation?.navigationBattlegrounds.menuDisplayType === 'breadcrumbs'
 							"
