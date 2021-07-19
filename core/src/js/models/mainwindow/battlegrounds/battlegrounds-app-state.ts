@@ -41,9 +41,9 @@ export class BattlegroundsAppState {
 			return result;
 		}
 		return this.categories
-			.map((cat) => cat.categories)
-			.reduce((a, b) => a.concat(b), [])
-			.find((cat) => cat.findCategory(categoryId));
+			?.map((cat) => cat.categories)
+			?.reduce((a, b) => a.concat(b), [])
+			?.find((cat) => cat.findCategory(categoryId));
 	}
 
 	public findReplay(reviewId: string): GameStat {

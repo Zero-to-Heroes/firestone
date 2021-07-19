@@ -6,6 +6,7 @@ import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from './overwolf.service';
+import { arraysEqual } from './utils';
 
 type Selector<T> = (fullState: [MainWindowState, NavigationState]) => T;
 
@@ -23,8 +24,9 @@ export class AppUiStoreService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
 		return this.mainStore.asObservable().pipe(
+			// tap((mainStore) => console.debug('emitting', this, selectors)),
 			map((mainStore) => selectors.map((selector) => selector(mainStore))),
-			distinctUntilChanged(),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
 	}
 
@@ -35,7 +37,7 @@ export class AppUiStoreService {
 
 // TODO: move this somewhere else? To a facade?
 export const currentBgHeroId = (main: MainWindowState, nav: NavigationState): string => {
-	return nav.navigationBattlegrounds.selectedCategoryId.includes('bgs-category-personal-hero-details-')
+	return nav.navigationBattlegrounds.selectedCategoryId?.includes('bgs-category-personal-hero-details-')
 		? (main.battlegrounds.findCategory(
 				nav.navigationBattlegrounds.selectedCategoryId,
 		  ) as BattlegroundsPersonalStatsHeroDetailsCategory)?.heroId

@@ -20,26 +20,24 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 			<bgs-player-capsule [player]="player$ | async" [displayTavernTier]="false">
 				<bgs-hero-detailed-stats> </bgs-hero-detailed-stats>
 			</bgs-player-capsule>
-			<div class="stats">
+			<div class="stats" *ngIf="{ selectedTab: selectedTab$ | async } as obs">
 				<ul class="tabs">
 					<li
 						*ngFor="let tab of tabs$ | async"
 						class="tab"
-						[ngClass]="{ 'active': tab === selectedTab }"
+						[ngClass]="{ 'active': tab === obs.selectedTab }"
 						(mousedown)="selectTab(tab)"
 					>
 						{{ getLabel(tab) }}
 					</li>
 				</ul>
-				<ng-container *ngIf="selectedTab$ | async as selectedTab">
-					<bgs-last-warbands class="stat" *ngxCacheIf="selectedTab === 'final-warbands'"> </bgs-last-warbands>
-					<bgs-mmr-evolution-for-hero class="stat" *ngxCacheIf="selectedTab === 'mmr'">
-					</bgs-mmr-evolution-for-hero>
-					<bgs-warband-stats-for-hero class="stat" *ngxCacheIf="selectedTab === 'warband-stats'">
-					</bgs-warband-stats-for-hero>
-					<bgs-winrate-stats-for-hero class="stat" *ngxCacheIf="selectedTab === 'winrate-stats'">
-					</bgs-winrate-stats-for-hero>
-				</ng-container>
+				<bgs-last-warbands class="stat" *ngxCacheIf="obs.selectedTab === 'final-warbands'"> </bgs-last-warbands>
+				<bgs-mmr-evolution-for-hero class="stat" *ngxCacheIf="obs.selectedTab === 'mmr'">
+				</bgs-mmr-evolution-for-hero>
+				<bgs-warband-stats-for-hero class="stat" *ngxCacheIf="obs.selectedTab === 'warband-stats'">
+				</bgs-warband-stats-for-hero>
+				<bgs-winrate-stats-for-hero class="stat" *ngxCacheIf="obs.selectedTab === 'winrate-stats'">
+				</bgs-winrate-stats-for-hero>
 			</div>
 		</div>
 	`,
@@ -56,7 +54,9 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		this.tabs$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId))
 			.pipe(
-				filter(([category]) => !!category && category instanceof BattlegroundsPersonalStatsHeroDetailsCategory),
+				filter(
+					([category]) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs,
+				),
 				map(([category]) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
 				distinctUntilChanged(),
 				tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),

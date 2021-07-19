@@ -3,6 +3,7 @@ import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
+import { AppUiStoreService } from '../../../services/app-ui-store.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -43,9 +44,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						</battlegrounds-filters>
 						<battlegrounds-category-details
 							*ngxCacheIf="navigation.navigationBattlegrounds.currentView === 'list'"
-							[category]="buildCategory()"
-							[state]="state"
-							[navigation]="navigation"
 							[ngClass]="{ 'top': shouldDisplayFiltersAtTop() }"
 						>
 						</battlegrounds-category-details>
@@ -87,7 +85,18 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+		// this.tabs$ = this.store
+		// 	.listen$(([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId))
+		// 	.pipe(
+		// 		filter(
+		// 			([category]) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs,
+		// 		),
+		// 		map(([category]) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
+		// 		distinctUntilChanged(),
+		// 		tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),
+		// 	);
+	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

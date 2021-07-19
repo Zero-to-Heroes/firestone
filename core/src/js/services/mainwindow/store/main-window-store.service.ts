@@ -359,6 +359,7 @@ export class MainWindowStoreService {
 			} else {
 				// console.log('[store] no new state to emit');
 			}
+			console.debug('emitting new merged state', this.state, this.navigationState);
 			this.mergedEmitter.next([this.state, stateWithNavigation ?? this.navigationState]);
 		} catch (e) {
 			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
