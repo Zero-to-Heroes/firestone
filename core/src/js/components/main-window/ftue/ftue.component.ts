@@ -78,18 +78,25 @@ export class FtueComponent implements AfterViewInit {
 			progressIndex: 2,
 		},
 		{
+			id: 'arena',
+			title: 'Arena',
+			text: 'Check your latest Arena runs and rewards',
+			icon: `assets/svg/whatsnew/arena.svg`,
+			progressIndex: 3,
+		},
+		{
 			id: 'replays',
 			title: 'Replays',
 			text: 'Here you can find all your past games, broken into step by step actions',
 			icon: `assets/svg/ftue/replays.svg`,
-			progressIndex: 3,
+			progressIndex: 4,
 		},
 		{
 			id: 'achievements',
 			title: 'Achievements',
 			text: "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished",
 			icon: `assets/svg/ftue/achievements.svg`,
-			progressIndex: 4,
+			progressIndex: 5,
 		},
 		{
 			id: 'collection',
@@ -97,7 +104,7 @@ export class FtueComponent implements AfterViewInit {
 			text:
 				'Here you can find all the cards in the game, with detailed information (you can even play the sounds they make)',
 			icon: `assets/svg/ftue/collection.svg`,
-			progressIndex: 5,
+			progressIndex: 6,
 		},
 	];
 

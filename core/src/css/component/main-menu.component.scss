@@ -73,6 +73,15 @@
 		height: 35px;
 	}
 
+	li {
+		&.arena {
+			.icon {
+				width: 40px;
+				height: 40px;
+			}
+		}
+	}
+
 	.push-down {
 		margin-top: auto;
 		pointer-events: none;

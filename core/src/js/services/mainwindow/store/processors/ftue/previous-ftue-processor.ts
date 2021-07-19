@@ -23,6 +23,9 @@ export class PreviousFtueProcessor implements Processor {
 				nextStep = 'replays';
 				break;
 			case 'replays':
+				nextStep = 'arena';
+				break;
+			case 'arena':
 				nextStep = 'duels';
 				break;
 			case 'duels':
