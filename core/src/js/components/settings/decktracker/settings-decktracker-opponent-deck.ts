@@ -164,7 +164,7 @@ import { Knob } from '../preference-slider.component';
 					class="first-slider deck-slider"
 					field="opponentOverlayScale"
 					[enabled]="opponentTracker"
-					[min]="75"
+					[min]="50"
 					[max]="125"
 					[snapSensitivity]="5"
 					[knobs]="sizeKnobs"

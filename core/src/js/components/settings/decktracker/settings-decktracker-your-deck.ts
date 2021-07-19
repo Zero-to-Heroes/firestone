@@ -132,7 +132,7 @@ import { Knob } from '../preference-slider.component';
 					class="first-slider"
 					[field]="'decktrackerScale'"
 					[enabled]="true"
-					[min]="75"
+					[min]="50"
 					[max]="125"
 					[snapSensitivity]="5"
 					[knobs]="sizeKnobs"
