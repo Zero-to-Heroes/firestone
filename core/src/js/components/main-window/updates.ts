@@ -63,6 +63,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where Close the Portal hero power was not implemented in the simulator for minions summoned in combat.`,
 							},
+							{
+								type: 'misc',
+								text: `The BG window will stop popping up after a match ends. This was introduced to make sure users could see the post-match stats, but since these are now computed in real time it makes less sense to forcefully open a window without the user asking to.`,
+							},
 						],
 					},
 				],
@@ -75,8 +79,29 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Decrease the smallest possible size of the trackers (in the settings).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix missing images in opponent's hand for cards created by Instructor Fireheart's chain creates.`,
+							},
+							{
 								type: 'content',
 								text: `Add card highlights for Firemancer Flurgl and Scavenger's Ingenuity.`,
+							},
+							{
+								type: 'content',
+								text: `Add card guess for card drawn by Gnomish Inventor.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix resources (mana, coins) not showing on some replays.`,
 							},
 						],
 					},
