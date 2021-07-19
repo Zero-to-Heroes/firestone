@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
@@ -47,6 +48,7 @@ export class OpponentCardInfoIdComponent {
 		this._card = value.update({
 			cardId: this.cardId,
 			// We probably don't need to update the other fields, as they are not displayed
+			cardName: this.cardId === value.cardId ? value.cardName : this.allCards.getCard(this.cardId)?.name,
 		} as DeckCard);
 		this.cardUrl = this.cardId
 			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
@@ -58,7 +60,7 @@ export class OpponentCardInfoIdComponent {
 		}
 	}
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: AllCardsService) {}
 
 	// In some cases, it's an enchantment that creates the card. And while we want to keep that
 	// info in our internal model that reflects the actual game state, it's better to show the
