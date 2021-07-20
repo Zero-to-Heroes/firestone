@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { BgsHeroSortFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
+import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -62,9 +62,9 @@ export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
 			)
 			.pipe(
 				filter(([filter, categoryId, currentView]) => !!filter && !!categoryId && !!currentView),
-				tap(([filter, categoryId, currentView]) =>
-					console.debug('changing hero sort filter?', filter, categoryId, currentView),
-				),
+				// tap(([filter, categoryId, currentView]) =>
+				// 	console.debug('changing hero sort filter?', filter, categoryId, currentView),
+				// ),
 				map(([filter, categoryId, currentView]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
@@ -72,7 +72,7 @@ export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
 						categoryId === 'bgs-category-personal-heroes' &&
 						!['categories', 'category'].includes(currentView),
 				})),
-				tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}
 

@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
+import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -77,7 +77,7 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 						!['categories', 'category'].includes(currentView) &&
 						!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(categoryId),
 				})),
-				tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}
 

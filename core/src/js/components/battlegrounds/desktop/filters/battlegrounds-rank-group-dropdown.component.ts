@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
+import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { BgsMmrGroupFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-mmr-group-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -59,7 +59,7 @@ export class BattlegroundsRankGroupDropdownComponent implements AfterViewInit {
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: selectedCategoryId === 'bgs-category-personal-rating',
 				})),
-				tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}
 

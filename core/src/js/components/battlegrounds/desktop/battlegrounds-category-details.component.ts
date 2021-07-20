@@ -45,7 +45,7 @@ export class BattlegroundsCategoryDetailsComponent {
 				filter(([selectedCategoryId]) => !!selectedCategoryId),
 				map(([selectedCategoryId]) => selectedCategoryId),
 				distinctUntilChanged(),
-				tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),
+				tap((stat) => cdLog('emitting stat in ', this.constructor.name, stat)),
 			);
 	}
 }

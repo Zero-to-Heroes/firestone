@@ -2,8 +2,8 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from 
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
+import { filter, map } from 'rxjs/operators';
+import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -70,7 +70,7 @@ export class BattlegroundsHeroFilterDropdownComponent implements AfterViewInit {
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: selectedCategoryId === 'bgs-category-perfect-games',
 				})),
-				tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}
 
