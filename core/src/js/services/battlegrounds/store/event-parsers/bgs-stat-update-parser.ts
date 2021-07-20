@@ -4,6 +4,7 @@ import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-sta
 import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { PatchesConfigService } from '../../../patches-config.service';
+import { cutNumber } from '../../../utils';
 import { getHeroPower } from '../../bgs-utils';
 import { BgsStatUpdateEvent } from '../events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -85,33 +86,37 @@ export class BgsStatUpdateParser implements EventParser {
 					name: heroStat.id !== 'average' ? cards.getCard(heroStat.id)?.name : heroStat.id,
 					heroPowerCardId: getHeroPower(heroStat.id),
 					playerGamesPlayed: totalPlayerGamesPlayed,
-					playerPopularity: playerPopularity,
-					playerAveragePosition:
+					playerPopularity: cutNumber(playerPopularity),
+					playerAveragePosition: cutNumber(
 						totalPlayerGamesPlayed === 0
 							? 0
 							: bgsStatsForCurrentPatch
 									.filter((stat) => stat.playerCardId === heroStat.id)
 									.map((stat) => parseInt(stat.additionalResult))
 									.reduce((a, b) => a + b, 0) / totalPlayerGamesPlayed,
-					playerAverageMmr:
+					),
+					playerAverageMmr: cutNumber(
 						gamesWithMmr.length === 0
 							? 0
 							: gamesWithMmr
 									.map((stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithMmr.length,
-					playerAverageMmrGain:
+					),
+					playerAverageMmrGain: cutNumber(
 						gamesWithPositiveMmr.length === 0
 							? 0
 							: gamesWithPositiveMmr
 									.map((stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithPositiveMmr.length,
-					playerAverageMmrLoss:
+					),
+					playerAverageMmrLoss: cutNumber(
 						gamesWithNegativeMmr.length === 0
 							? 0
 							: gamesWithNegativeMmr
 									.map((stat) => parseInt(stat.newPlayerRank) - parseInt(stat.playerRank))
 									.reduce((a, b) => a + b, 0) / gamesWithNegativeMmr.length,
-					playerTop4:
+					),
+					playerTop4: cutNumber(
 						totalPlayerGamesPlayed === 0
 							? 0
 							: (100 *
@@ -119,8 +124,9 @@ export class BgsStatUpdateParser implements EventParser {
 										.filter((stat) => stat.playerCardId === heroStat.id)
 										.map((stat) => parseInt(stat.additionalResult))
 										.filter((position) => position <= 4).length) /
-							  totalPlayerGamesPlayed,
-					playerTop1:
+									totalPlayerGamesPlayed,
+					),
+					playerTop1: cutNumber(
 						totalPlayerGamesPlayed === 0
 							? 0
 							: (100 *
@@ -128,7 +134,8 @@ export class BgsStatUpdateParser implements EventParser {
 										.filter((stat) => stat.playerCardId === heroStat.id)
 										.map((stat) => parseInt(stat.additionalResult))
 										.filter((position) => position == 1).length) /
-							  totalPlayerGamesPlayed,
+									totalPlayerGamesPlayed,
+					),
 					lastPlayedTimestamp: totalPlayerGamesPlayed === 0 ? null : playerGamesPlayed[0].creationTimestamp,
 				} as BgsHeroStat);
 			}) ||

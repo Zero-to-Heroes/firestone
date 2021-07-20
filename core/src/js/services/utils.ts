@@ -73,6 +73,10 @@ export const arraysEqual = (a: readonly any[] | any[], b: readonly any[] | any[]
 	return a.length === b.length && a.every((el, ix) => (Array.isArray(el) ? arraysEqual(el, b[ix]) : el === b[ix]));
 };
 
+export const areDeepEqual = (a: any, b: any): boolean => {
+	return JSON.stringify(a) == JSON.stringify(b);
+};
+
 export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): number => {
 	return array.map((item) => prop(item)).reduce((a, b) => a + b, 0);
 };
@@ -123,4 +127,10 @@ export const decode = (input: string): string => {
 	const fromBase64 = Buffer.from(input, 'base64').toString();
 	const inflated = inflate(fromBase64, { to: 'string' });
 	return JSON.parse(inflated);
+};
+
+// Because floating point computations are not super reliable and lead to false
+// differences between objects
+export const cutNumber = (x: number, precision = 10): number => {
+	return Math.floor(x * precision) / precision;
 };
