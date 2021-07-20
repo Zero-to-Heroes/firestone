@@ -1,12 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { AppUiStoreService } from '../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
 import { SelectBattlegroundsCategoryEvent } from '../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { arraysEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-desktop',
@@ -16,33 +16,28 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/battlegrounds/desktop/battlegrounds-desktop.component.scss`,
 	],
 	template: `
-		<div class="app-section battlegrounds {{ category?.id }}">
+		<div class="app-section battlegrounds" *ngIf="{ value: category$ | async } as category">
 			<section class="main divider">
-				<with-loading [isLoading]="!state.battlegrounds || state.battlegrounds.loading">
-					<div class="content main-content" *ngIf="state.battlegrounds">
-						<global-header
-							*ngIf="
-								navigation.text && navigation?.navigationBattlegrounds.menuDisplayType === 'breadcrumbs'
-							"
-						></global-header>
-						<ul
-							class="menu-selection"
-							*ngIf="navigation?.navigationBattlegrounds.menuDisplayType === 'menu'"
-						>
+				<with-loading [isLoading]="loading$ | async">
+					<div class="content main-content" *ngIf="{ value: menuDisplayType$ | async } as menuDisplayType">
+						<global-header *ngIf="menuDisplayType.value === 'breadcrumbs'"></global-header>
+						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
-								*ngFor="let category of buildCategories()"
-								[ngClass]="{
-									'selected': navigation?.navigationBattlegrounds?.selectedCategoryId === category.id
-								}"
-								(mousedown)="selectCategory(category.id)"
+								*ngFor="let cat of categories$ | async"
+								[ngClass]="{ 'selected': cat.id === category.value?.id }"
+								(mousedown)="selectCategory(cat.id)"
 							>
-								<span>{{ category.name }} </span>
+								<span>{{ cat.name }} </span>
 							</li>
 						</ul>
 						<battlegrounds-filters> </battlegrounds-filters>
 						<battlegrounds-category-details
-							*ngxCacheIf="navigation.navigationBattlegrounds.currentView === 'list'"
-							[ngClass]="{ 'top': shouldDisplayFiltersAtTop() }"
+							*ngxCacheIf="(currentView$ | async) === 'list'"
+							[ngClass]="{
+								'top':
+									category.value?.id !== 'bgs-category-personal-heroes' &&
+									category.value?.id !== 'bgs-category-simulator'
+							}"
 						>
 						</battlegrounds-category-details>
 					</div>
@@ -50,25 +45,19 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			</section>
 			<section class="secondary">
 				<battlegrounds-tier-list
-					*ngIf="shouldDisplayHeroTierList()"
-					[category]="buildCategory()"
-					[state]="state"
+					*ngIf="category.value?.id === 'bgs-category-personal-heroes'"
 				></battlegrounds-tier-list>
 				<battlegrounds-heroes-records-broken
-					*ngIf="shouldDisplayRecordBrokenHeroes()"
-					[category]="buildCategory()"
-					[state]="state"
+					*ngIf="category.value?.id === 'bgs-category-personal-stats'"
 				></battlegrounds-heroes-records-broken>
 				<battlegrounds-replays-recap
-					*ngIf="shouldDisplayReplaysRecap()"
-					[category]="buildCategory()"
-					[state]="state"
-					[numberOfReplays]="numberOfReplaysToShow()"
-					[heroCardId]="heroFilterForReplays()"
+					*ngIf="
+						category.value?.id === 'bgs-category-personal-rating' ||
+						category.value?.id?.includes('bgs-category-personal-hero-details-')
+					"
 				></battlegrounds-replays-recap>
 				<battlegrounds-simulator-details
-					*ngIf="shouldDisplaySimulatorDetails()"
-					[state]="state?.battlegrounds?.customSimulationState"
+					*ngIf="category.value?.id === 'bgs-category-simulator'"
 				></battlegrounds-simulator-details>
 			</section>
 		</div>
@@ -76,79 +65,64 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsDesktopComponent implements AfterViewInit {
-	@Input() state: MainWindowState;
-	@Input() navigation: NavigationState;
-
-	category: BattlegroundsCategory;
+	loading$: Observable<boolean>;
+	// text$: Observable<string>;
+	menuDisplayType$: Observable<string>;
+	currentView$: Observable<string>;
+	categories$: Observable<readonly BattlegroundsCategory[]>;
+	category$: Observable<BattlegroundsCategory>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
-		// this.tabs$ = this.store
-		// 	.listen$(([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId))
+		this.loading$ = this.store
+			.listen$(([main, nav]) => main.battlegrounds.loading)
+			.pipe(
+				map(([loading]) => loading),
+				distinctUntilChanged(),
+				startWith(true),
+				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
+			);
+		this.menuDisplayType$ = this.store
+			.listen$(([main, nav]) => nav.navigationBattlegrounds.menuDisplayType)
+			.pipe(
+				map(([menuDisplayType]) => menuDisplayType),
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
+			);
+		// this.text$ = this.store
+		// 	.listen$(([main, nav]) => nav.text)
 		// 	.pipe(
-		// 		filter(
-		// 			([category]) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs,
-		// 		),
-		// 		map(([category]) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
+		// 		map(([text]) => text),
 		// 		distinctUntilChanged(),
-		// 		tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),
+		// 		tap((info) => cdLog('emitting text in ', this.constructor.name, info)),
 		// 	);
+		this.category$ = this.store
+			.listen$(([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId))
+			.pipe(
+				filter(([category]) => !!category),
+				map(([category]) => category),
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
+			);
+		this.currentView$ = this.store
+			.listen$(([main, nav]) => nav.navigationBattlegrounds.currentView)
+			.pipe(
+				map(([currentView]) => currentView),
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting currentView in ', this.constructor.name, info)),
+			);
+		this.categories$ = this.store
+			.listen$(([main, nav]) => main.battlegrounds.categories)
+			.pipe(
+				map(([categories]) => categories ?? []),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
+			);
 	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	buildCategories(): readonly BattlegroundsCategory[] {
-		return this.state.battlegrounds.categories ?? [];
-	}
-
-	buildCategory(): BattlegroundsCategory {
-		this.category = this.state.battlegrounds.findCategory(
-			this.navigation.navigationBattlegrounds.selectedCategoryId,
-		);
-		return this.category;
-	}
-
-	shouldDisplayHeroTierList(): boolean {
-		const category = this.buildCategory();
-		return category?.id === 'bgs-category-personal-heroes';
-	}
-
-	shouldDisplayRecordBrokenHeroes(): boolean {
-		const category = this.buildCategory();
-		return category?.id === 'bgs-category-personal-stats';
-	}
-
-	shouldDisplayReplaysRecap(): boolean {
-		const category = this.buildCategory();
-		return (
-			category?.id === 'bgs-category-personal-rating' ||
-			category?.id?.includes('bgs-category-personal-hero-details-')
-		);
-	}
-
-	shouldDisplaySimulatorDetails(): boolean {
-		const category = this.buildCategory();
-		return category?.id === 'bgs-category-simulator';
-	}
-
-	shouldDisplayFiltersAtTop(): boolean {
-		const category = this.buildCategory();
-		return category?.id !== 'bgs-category-personal-heroes' && category?.id !== 'bgs-category-simulator';
-	}
-
-	numberOfReplaysToShow(): number {
-		return 10;
-	}
-
-	heroFilterForReplays(): string {
-		const category = this.buildCategory();
-		if (category?.id?.includes('bgs-category-personal-hero-details-')) {
-			return (category as BattlegroundsPersonalStatsHeroDetailsCategory).heroId;
-		}
-		return null;
 	}
 
 	selectCategory(categoryId: string) {

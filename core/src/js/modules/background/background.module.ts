@@ -51,7 +51,6 @@ import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-bann
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
 import { BattlegroundsCategoryDetailsComponent } from '../../components/battlegrounds/desktop/battlegrounds-category-details.component';
-import { BattlegroundsCategoryComponent } from '../../components/battlegrounds/desktop/battlegrounds-category.component';
 import { BattlegroundsDesktopComponent } from '../../components/battlegrounds/desktop/battlegrounds-desktop.component';
 import { BattlegroundsPerfectGamesComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-perfect-games.component';
 import { BattlegroundsPersonalStatsHeroDetailsComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-personal-stats-hero-details.component';
@@ -507,7 +506,6 @@ const components = [
 		ReplayIconToggleComponent,
 
 		BattlegroundsDesktopComponent,
-		BattlegroundsCategoryComponent,
 		BattlegroundsCategoryDetailsComponent,
 		BattlegroundsPersonalStatsHeroesComponent,
 		BattlegroundsStatsHeroVignetteComponent,

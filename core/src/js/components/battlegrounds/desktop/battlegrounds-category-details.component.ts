@@ -45,7 +45,9 @@ export class BattlegroundsCategoryDetailsComponent {
 				filter(([selectedCategoryId]) => !!selectedCategoryId),
 				map(([selectedCategoryId]) => selectedCategoryId),
 				distinctUntilChanged(),
-				tap((stat) => cdLog('emitting stat in ', this.constructor.name, stat)),
+				tap((selectedCategoryId) =>
+					cdLog('emitting selectedCategoryId in ', this.constructor.name, selectedCategoryId),
+				),
 			);
 	}
 }

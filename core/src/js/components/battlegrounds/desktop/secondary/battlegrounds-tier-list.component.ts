@@ -1,11 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
-import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
-import { BattlegroundsPersonalHeroesCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-heroes-category';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
+import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { groupByFunction } from '../../../../services/utils';
+import { arraysEqual, groupByFunction } from '../../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-tier-list',
@@ -16,87 +15,72 @@ import { groupByFunction } from '../../../../services/utils';
 	template: `
 		<div class="battlegrounds-tier-list">
 			<div class="title">Heroes Tier List</div>
-			<bgs-hero-tier *ngFor="let tier of tiers || []; trackBy: trackByTierFn" [tier]="tier"></bgs-hero-tier>
+			<bgs-hero-tier
+				*ngFor="let tier of (tiers$ | async) || []; trackBy: trackByTierFn"
+				[tier]="tier"
+			></bgs-hero-tier>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsTierListComponent implements AfterViewInit {
-	_category: BattlegroundsCategory;
-	_state: MainWindowState;
-	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] = [];
+export class BattlegroundsTierListComponent {
+	tiers$: Observable<readonly HeroTier[]>;
 
-	stats: readonly BgsHeroStat[];
-
-	@Input() set category(value: BattlegroundsPersonalHeroesCategory) {
-		if (value === this._category) {
-			return;
-		}
-		this._category = value;
-		this.updateValues();
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+		this.tiers$ = this.store
+			.listen$(([main, nav]) => main.battlegrounds.stats.heroStats)
+			.pipe(
+				filter(([stats]) => !!stats),
+				map(([stats]) => stats),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				map((stats) => {
+					const relevant: readonly BgsHeroStat[] = stats.filter((stat) => stat.id !== 'average');
+					const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
+					const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(relevant));
+					const tiers: readonly HeroTier[] = [
+						{
+							tier: 'S' as BgsHeroTier,
+							heroes: groupedByTier
+								.find((heroes) => heroes.find((hero) => hero.tier === 'S'))
+								?.sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'A' as BgsHeroTier,
+							heroes: groupedByTier
+								.find((heroes) => heroes.find((hero) => hero.tier === 'A'))
+								?.sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'B' as BgsHeroTier,
+							heroes: groupedByTier
+								.find((heroes) => heroes.find((hero) => hero.tier === 'B'))
+								?.sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'C' as BgsHeroTier,
+							heroes: groupedByTier
+								.find((heroes) => heroes.find((hero) => hero.tier === 'C'))
+								?.sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+						{
+							tier: 'D' as BgsHeroTier,
+							heroes: groupedByTier
+								.find((heroes) => heroes.find((hero) => hero.tier === 'D'))
+								?.sort((a, b) => a.averagePosition - b.averagePosition),
+						},
+					].filter((tier) => tier.heroes);
+					return tiers;
+				}),
+				tap((info) => cdLog('emitting tiers in ', this.constructor.name, info)),
+			);
 	}
 
-	@Input() set state(value: MainWindowState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateValues();
-	}
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }) {
+	trackByTierFn(index, item: HeroTier) {
 		return item.tier;
 	}
+}
 
-	private updateValues() {
-		// console.log('tier updating values', this._state, this._category);
-		if (!this._state?.battlegrounds?.stats?.heroStats || !this._category) {
-			return;
-		}
-		this.stats = this._state?.battlegrounds.stats.heroStats.filter((stat) => stat.id !== 'average');
-		const allOverviews = this._state?.battlegrounds.stats.heroStats.filter((overview) => overview.id !== 'average');
-		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
-		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(allOverviews));
-		this.tiers = [
-			{
-				tier: 'S' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'S'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
-			},
-			{
-				tier: 'A' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'A'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
-			},
-			{
-				tier: 'B' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'B'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
-			},
-			{
-				tier: 'C' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'C'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
-			},
-			{
-				tier: 'D' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'D'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
-			},
-		].filter((tier) => tier.heroes);
-		// console.log('tier list', this.stats, allOverviews, groupedByTier, this.tiers);
-	}
+interface HeroTier {
+	readonly tier: BgsHeroTier;
+	readonly heroes: readonly BgsHeroStat[];
 }

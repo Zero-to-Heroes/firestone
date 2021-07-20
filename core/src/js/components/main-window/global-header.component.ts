@@ -25,7 +25,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 			</i>
 			<img class="image" *ngIf="image$ | async as image" [src]="image" />
 			<div class="text">{{ text }}</div>
-			<i class="i-13X7 arrow next" (click)="next()" *ngIf="nextArrowEnabled$ | async">
+			<i class="i-13X7 arrow next" (click)="next()" *ngIf="nextArrow$ | async">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 				</svg>

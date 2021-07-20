@@ -112,8 +112,6 @@ import { PreferencesService } from '../services/preferences.service';
 						</decktracker>
 						<battlegrounds-desktop
 							class="main-section"
-							[state]="dataState"
-							[navigation]="navigationState"
 							*ngxCacheIf="navigationState.currentApp === 'battlegrounds'"
 						>
 						</battlegrounds-desktop>

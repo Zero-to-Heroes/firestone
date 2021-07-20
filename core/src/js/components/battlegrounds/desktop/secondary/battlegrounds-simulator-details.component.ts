@@ -1,12 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
-import {
-	BgsCustomSimulationPicker,
-	BgsCustomSimulationState,
-} from '../../../../models/mainwindow/battlegrounds/simulator/bgs-custom-simulation-state';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { BgsCustomSimulationPicker } from '../../../../models/mainwindow/battlegrounds/simulator/bgs-custom-simulation-state';
+import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
 import { getAllCardsInGame, getEffectiveTribe, tribeValueForSort } from '../../../../services/battlegrounds/bgs-utils';
 import { BgsCustomSimulationCloseSidePanelEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-close-side-panel-event';
 import { BgsCustomSimulationMinionChosenEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-minion-chosen-event';
@@ -25,64 +24,56 @@ import { BgsMinionsGroup } from '../../minions-tiers/bgs-minions-group';
 	],
 	template: `
 		<div class="battlegrounds-simulator-details">
-			<button class="close" (click)="dismiss()" *ngIf="this.picker?.type">
-				<svg class="svg-icon-fill">
-					<use
-						xmlns:xlink="https://www.w3.org/1999/xlink"
-						xlink:href="assets/svg/sprite.svg#window-control_close"
-					></use>
-				</svg>
-			</button>
-			<div class="title" *ngIf="title">{{ title }}</div>
-			<div class="minion-selection" *ngIf="this.picker?.type === 'minion'" scrollable>
-				<bgs-minions-group
-					class="minion-group"
-					*ngFor="let group of groups"
-					[group]="group"
-					[tooltipPosition]="tooltipPosition"
-					[showTribesHighlight]="false"
-					(minionClick)="onMinionClick($event)"
-				></bgs-minions-group>
-			</div>
-			<div class="minion-update" *ngIf="this.picker?.type === 'minion-update'">
-				<battlegrounds-simulator-details-entity-update
-					[entity]="entityToUpdate"
-					[picker]="picker"
-				></battlegrounds-simulator-details-entity-update>
-			</div>
+			<ng-container *ngIf="picker$ | async as picker">
+				<button class="close" (click)="dismiss()" *ngIf="picker.type">
+					<svg class="svg-icon-fill">
+						<use
+							xmlns:xlink="https://www.w3.org/1999/xlink"
+							xlink:href="assets/svg/sprite.svg#window-control_close"
+						></use>
+					</svg>
+				</button>
+				<div class="title" *ngIf="buildTitle(picker) as title">{{ title }}</div>
+				<div class="minion-selection" *ngIf="picker.type === 'minion'" scrollable>
+					<bgs-minions-group
+						class="minion-group"
+						*ngFor="let group of groups"
+						[group]="group"
+						[tooltipPosition]="'left'"
+						[showTribesHighlight]="false"
+						(minionClick)="onMinionClick($event, picker.side, picker.minionIndex)"
+					></bgs-minions-group>
+				</div>
+				<div class="minion-update" *ngIf="picker.type === 'minion-update'">
+					<battlegrounds-simulator-details-entity-update
+						[entity]="entityToUpdate$ | async"
+						[picker]="picker"
+					></battlegrounds-simulator-details-entity-update></div
+			></ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsSimulatorDetailsComponent implements AfterViewInit {
-	@Input() set state(value: BgsCustomSimulationState) {
-		console.debug('state', value);
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateValues();
-	}
-
-	tooltipPosition: CardTooltipPositionType = 'left';
 	groups: readonly BgsMinionsGroup[];
-	title = 'Here be the picker';
-	picker: BgsCustomSimulationPicker;
-	entityToUpdate: BoardEntity;
 
-	private _state: BgsCustomSimulationState;
+	picker$: Observable<BgsCustomSimulationPicker>;
+	entityToUpdate$: Observable<BoardEntity>;
+
 	private cardsInGame: readonly ReferenceCard[];
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
-
-	async ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		await this.allCards.initializeCardsDb();
-		if (!this.cardsInGame?.length) {
-			this.updateAvailableCards();
-		}
-
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly allCards: AllCardsService,
+		private readonly store: AppUiStoreService,
+	) {
+		// For now we consider all tribes
+		this.cardsInGame = [
+			...getAllCardsInGame([], this.allCards),
+			this.allCards.getCard(CardIds.NonCollectible.Neutral.AvatarOfNzoth_FishOfNzothTokenBattlegrounds),
+			this.allCards.getCard(CardIds.NonCollectible.Neutral.Menagerist_AmalgamTokenBattlegrounds),
+		];
 		// TODO: this can be moved elsewhere once we have a search / filter option
 		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card))(this.cardsInGame);
 		this.groups = Object.keys(groupedByTribe)
@@ -93,29 +84,44 @@ export class BattlegroundsSimulatorDetailsComponent implements AfterViewInit {
 				highlightedMinions: [],
 				highlightedTribes: [],
 			}));
+		console.debug('groups', this.groups, this.cardsInGame, groupedByTribe);
+
+		this.picker$ = this.store
+			.listen$(([main, nav]) => main.battlegrounds.customSimulationState.picker)
+			.pipe(
+				map(([picker]) => picker),
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting picker in ', this.constructor.name, info)),
+			);
+		this.entityToUpdate$ = this.store
+			.listen$(([main, nav]) => main.battlegrounds.customSimulationState)
+			.pipe(
+				filter(([state]) => !!state?.picker),
+				map(([state]) => {
+					return state.picker.type === 'minion-update'
+						? state.findEntity(state.picker.side, state.picker.minionIndex)
+						: null;
+				}),
+				filter((entity) => !!entity),
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting entity in ', this.constructor.name, info)),
+			);
 	}
 
-	onMinionClick(cardId: string) {
-		console.debug('clicked', cardId);
-		this.stateUpdater.next(
-			new BgsCustomSimulationMinionChosenEvent(cardId, this.picker.side, this.picker.minionIndex),
-		);
+	async ngAfterViewInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	onMinionClick(cardId: string, side: 'player' | 'opponent', minionIndex: number) {
+		this.stateUpdater.next(new BgsCustomSimulationMinionChosenEvent(cardId, side, minionIndex));
 	}
 
 	dismiss() {
+		console.debug('dismissing');
 		this.stateUpdater.next(new BgsCustomSimulationCloseSidePanelEvent());
 	}
 
-	private async updateValues() {
-		this.picker = this._state?.picker;
-		this.title = this.buildTitle(this.picker);
-		this.entityToUpdate =
-			this.picker?.type === 'minion-update'
-				? this._state.findEntity(this.picker.side, this.picker.minionIndex)
-				: null;
-	}
-
-	private buildTitle(picker: BgsCustomSimulationPicker) {
+	buildTitle(picker: BgsCustomSimulationPicker) {
 		switch (picker?.type) {
 			case 'minion':
 				return `Choose a minion for position ${picker.minionIndex + 1}`;
@@ -126,18 +132,5 @@ export class BattlegroundsSimulatorDetailsComponent implements AfterViewInit {
 			default:
 				return null;
 		}
-	}
-
-	private updateAvailableCards() {
-		if (!this.allCards.getCards()?.length) {
-			return;
-		}
-
-		// For now we consider all tribes
-		this.cardsInGame = [
-			...getAllCardsInGame([], this.allCards),
-			this.allCards.getCard(CardIds.NonCollectible.Neutral.AvatarOfNzoth_FishOfNzothTokenBattlegrounds),
-			this.allCards.getCard(CardIds.NonCollectible.Neutral.Menagerist_AmalgamTokenBattlegrounds),
-		];
 	}
 }
