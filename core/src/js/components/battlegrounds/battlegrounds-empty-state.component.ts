@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	],
 	template: `
 		<div class="empty-state">
-			<div class="loading-icon" inlineSVG="assets/svg/ftue/battlegrounds.svg"></div>
+			<div class="loading-icon" [inlineSVG]="emptyStateIcon"></div>
 			<span class="title">{{ title }}</span>
 			<span class="subtitle">{{ subtitle }}</span>
 		</div>
@@ -18,4 +18,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class BattlegroundsEmptyStateComponent {
 	@Input() title = 'Nothing here yet';
 	@Input() subtitle = 'Start playing Battlegrounds to receive information';
+	@Input() emptyStateIcon = 'assets/svg/ftue/battlegrounds.svg';
 }

@@ -16,11 +16,11 @@ import { arraysEqual, formatDate, groupByFunction } from '../../../../services/u
 		`../../../../../css/component/battlegrounds/desktop/categories/battlegrounds-personal-stats-rating.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-personal-stats-rating">
+		<div class="battlegrounds-personal-stats-rating" *ngIf="value$ | async as value">
 			<div class="header">MMR / Matches</div>
 			<graph-with-single-value
-				[data]="(value$ | async).data"
-				[labels]="(value$ | async).labels"
+				[data]="value.data"
+				[labels]="value.labels"
 				emptyStateMessage="Start playing Battlegrounds to collect some information"
 			></graph-with-single-value>
 		</div>

@@ -16,14 +16,11 @@ import { Preferences } from '../../models/preferences';
 				<with-loading [isLoading]="!_state || loading">
 					<div class="content main-content">
 						<global-header
-							*ngIf="
-								navigation.text && navigation?.navigationDecktracker.menuDisplayType === 'breadcrumbs'
-							"
+							*ngIf="navigation?.navigationDecktracker.menuDisplayType === 'breadcrumbs'"
 						></global-header>
 						<menu-selection-decktracker
 							class="menu-selection"
 							*ngxCacheIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
-							[selectedTab]="navigation.navigationDecktracker.currentView"
 						>
 						</menu-selection-decktracker>
 						<decktracker-filters [state]="_state" [navigation]="navigation"></decktracker-filters>
@@ -41,6 +38,9 @@ import { Preferences } from '../../models/preferences';
 							[prefs]="prefs"
 							[navigation]="navigation"
 						></decktracker-deck-details>
+						<decktracker-rating-graph
+							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'ladder-ranking'"
+						></decktracker-rating-graph>
 					</div>
 				</with-loading>
 			</section>

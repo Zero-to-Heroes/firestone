@@ -1,1 +1,1 @@
-export type DecktrackerViewType = 'decks' | 'ladder-stats' | 'ranking' | 'replays' | 'deck-details';
+export type DecktrackerViewType = 'decks' | 'ladder-stats' | 'ladder-ranking' | 'replays' | 'deck-details';

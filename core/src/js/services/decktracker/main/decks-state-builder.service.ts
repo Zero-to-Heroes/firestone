@@ -58,7 +58,7 @@ export class DecksStateBuilderService {
 			)
 			.filter((stat) => filters.gameFormat === 'all' || stat.gameFormat === filters.gameFormat)
 			.filter((stat) => stat.gameMode === filters.gameMode)
-			.filter((stat) => this.isValidDate(stat, filters.time, patch));
+			.filter((stat) => DecksStateBuilderService.isValidDate(stat, filters.time, patch));
 		// Make sure that if the current filter is "season-start", the first game starts in Bronze
 		let indexOfFirstGame = replaysForDate.length;
 		if (filters.time === 'season-start') {
@@ -107,7 +107,7 @@ export class DecksStateBuilderService {
 		}
 	}
 
-	private isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType, lastPatch: PatchInfo): boolean {
+	public static isValidDate(stat: GameStat, timeFilter: DeckTimeFilterType, lastPatch: PatchInfo): boolean {
 		const now = Date.now();
 		switch (timeFilter) {
 			case 'season-start':

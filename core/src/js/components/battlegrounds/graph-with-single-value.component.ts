@@ -7,7 +7,7 @@ import {
 	Input,
 	OnDestroy,
 	ViewChild,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
@@ -36,7 +36,10 @@ import { cdLog } from '../../services/app-ui-store.service';
 					[chartType]="'line'"
 				></canvas>
 				<ng-template #emptyState>
-					<battlegrounds-empty-state [subtitle]="emptyStateMessage"></battlegrounds-empty-state
+					<battlegrounds-empty-state
+						[subtitle]="emptyStateMessage"
+						[emptyStateIcon]="emptyStateIcon"
+					></battlegrounds-empty-state
 				></ng-template>
 			</div>
 		</div>
@@ -49,6 +52,7 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 	@Input() data: readonly ChartDataSets[];
 	@Input() labels: Label;
 	@Input() emptyStateMessage: string;
+	@Input() emptyStateIcon = 'assets/svg/ftue/battlegrounds.svg';
 
 	colors: Color[] = [];
 	colors$$: Subscription;

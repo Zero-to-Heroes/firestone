@@ -599,3 +599,12 @@ export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {
 			return 7;
 	}
 };
+
+export const ladderRankToInt = (rank: string): number => {
+	if (!rank?.length || !rank.includes('-')) {
+		return null;
+	}
+
+	const [league, rankInLeague] = rank.split('-').map((info) => parseInt(info));
+	return -(league - 5) * 10 + (10 - rankInLeague);
+};

@@ -79,7 +79,7 @@ import { BattlegroundsReplaysRecapComponent } from '../../components/battlegroun
 import { BattlegroundsSimulatorDetailsEntityUpdateComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-simulator-details-entity-update.component';
 import { BattlegroundsSimulatorDetailsComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-simulator-details.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
-import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value';
+import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
 import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
 import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
@@ -140,6 +140,7 @@ import { DecktrackerDecksComponent } from '../../components/decktracker/main/dec
 import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
 import { DecktrackerLadderStatsComponent } from '../../components/decktracker/main/decktracker-ladder-stats.component';
 import { DecktrackerPersonalStatsRankingComponent } from '../../components/decktracker/main/decktracker-personal-stats-ranking.component';
+import { DecktrackerRatingGraphComponent } from '../../components/decktracker/main/decktracker-rating-graph.component';
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { DecktrackerStatsForReplaysComponent } from '../../components/decktracker/main/decktracker-stats-for-replays.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
@@ -494,6 +495,7 @@ const components = [
 		DecktrackerLadderStatsComponent,
 		DecktrackerStatsForReplaysComponent,
 		MenuSelectionDecktrackerComponent,
+		DecktrackerRatingGraphComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,
