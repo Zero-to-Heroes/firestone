@@ -15,6 +15,7 @@ import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
+import { FeatureFlags } from '../feature-flags';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
 import { PatchesConfigService } from '../patches-config.service';
@@ -120,7 +121,7 @@ export class BgsInitService {
 			this.buildPersonalStatsCategory(),
 			this.buildPerfectGamesCategory(),
 			this.buildSimulatorCategory(),
-		];
+		].filter((cat) => cat);
 		return BattlegroundsAppState.create({
 			categories: categories,
 			globalStats: bgsGlobalStats,
@@ -171,6 +172,9 @@ export class BgsInitService {
 	}
 
 	private buildSimulatorCategory(): BattlegroundsCategory {
+		if (!FeatureFlags.ENABLE_BGS_FULL_SIMULATOR) {
+			return null;
+		}
 		return BattlegroundsSimulatorCategory.create({
 			enabled: true,
 		} as BattlegroundsSimulatorCategory);

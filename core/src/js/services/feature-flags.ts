@@ -1,6 +1,6 @@
+// When changing these feature flags, don't forget to update the new-version component
 export class FeatureFlags {
 	// Deprecated, features are part of prod now
-	// When changing these feature flags, don't forget to update the new-version component
 	public static readonly ENABLE_CLIPBOARD_SHARE = true;
 	public static readonly ENABLE_REDDIT_SHARE = true;
 	public static readonly ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY = true;
@@ -15,11 +15,12 @@ export class FeatureFlags {
 	public static readonly ENABLE_BEST_KNOWN_PACK = true;
 	public static readonly ENABLE_GOLDEN_CARDS = true;
 
+	public static readonly ENABLE_BGS_FULL_SIMULATOR = true;
+
 	public static readonly ENABLE_MULTI_GRAPHS = false;
 	// Properly test the memory footprint of these features before release
 	public static readonly SHOW_CONSTRUCTED_SECONDARY_WINDOW = false; // Doesn't work anymore?
 	public static readonly ENABLE_RANKED_ARCHETYPE = false; // Doesn't work anymore?
-
 	// Deprecated, feature is sidelined for now
 	public static readonly ENABLE_CONSTRUCTED_RANKING_GRAPH = false;
 }
