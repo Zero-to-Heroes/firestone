@@ -66,7 +66,6 @@ import { arraysEqual } from '../../../services/utils';
 })
 export class BattlegroundsDesktopComponent implements AfterViewInit {
 	loading$: Observable<boolean>;
-	// text$: Observable<string>;
 	menuDisplayType$: Observable<string>;
 	currentView$: Observable<string>;
 	categories$: Observable<readonly BattlegroundsCategory[]>;
@@ -90,13 +89,6 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
 			);
-		// this.text$ = this.store
-		// 	.listen$(([main, nav]) => nav.text)
-		// 	.pipe(
-		// 		map(([text]) => text),
-		// 		distinctUntilChanged(),
-		// 		tap((info) => cdLog('emitting text in ', this.constructor.name, info)),
-		// 	);
 		this.category$ = this.store
 			.listen$(([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId))
 			.pipe(

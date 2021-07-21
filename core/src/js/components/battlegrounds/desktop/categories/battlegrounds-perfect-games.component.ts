@@ -75,7 +75,7 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 		perfectGames: readonly GameStat[],
 		rankFilter: string,
 		heroFilter: string,
-		step: number = 40,
+		step = 40,
 	): IterableIterator<void> {
 		this.allReplays = this.applyFilters(perfectGames ?? [], rankFilter, heroFilter);
 		const workingReplays = [...this.allReplays];
