@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 	selector: 'arena-empty-state',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-empty-state.component.scss`,
+		`../../../../css/component/arena/desktop/arena-empty-state.component.scss`,
 	],
 	template: `
 		<div class="empty-state">

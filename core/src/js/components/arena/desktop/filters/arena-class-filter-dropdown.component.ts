@@ -1,8 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../../models/arena/arena-class-filter.type';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../../models/mainwindow/navigation/navigation-state';
+import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { classes, formatClass } from '../../../../services/hs-utils';
 import { ArenaClassFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-class-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -18,49 +19,48 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/arena/desktop/filters/arena-filter-dropdown.component.scss`,
+		`../../../../../css/component/filter-dropdown.component.scss`,
 	],
 	template: `
 		<filter-dropdown
-			class="arena-class-filter-dropdown"
-			[options]="options"
-			[filter]="filter"
-			[placeholder]="placeholder"
-			[visible]="true"
+			*ngIf="filter$ | async as value"
+			[options]="value.options"
+			[filter]="value.filter"
+			[placeholder]="value.placeholder"
+			[visible]="value.visible"
 			(onOptionSelected)="onSelected($event)"
 		></filter-dropdown>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaClassFilterDropdownComponent implements AfterViewInit {
-	@Input() set state(value: MainWindowState) {
-		if (value === this._state) {
-			return;
-		}
-
-		this._state = value;
-		this.updateInfo(this._state, this._navigation);
-	}
-
-	@Input() set navigation(value: NavigationState) {
-		if (value === this._navigation) {
-			return;
-		}
-
-		this._navigation = value;
-		this.updateInfo(this._state, this._navigation);
-	}
-
-	options: readonly IOption[];
-	filter: string;
-	placeholder: string;
-
-	private _state: MainWindowState;
-	private _navigation: NavigationState;
+	filter$: Observable<{ filter: string; placeholder: string; options: readonly IOption[]; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+		this.filter$ = this.store
+			.listen$(([main, nav]) => main.arena.activeHeroFilter)
+			.pipe(
+				filter(([filter]) => !!filter),
+				map(([filter]) => {
+					const options = ['all', ...(classes as ArenaClassFilterType[])].map(
+						(option) =>
+							({
+								value: option,
+								label: option === 'all' ? 'All classes' : formatClass(option),
+							} as ClassFilterOption),
+					);
+					return {
+						filter: filter,
+						options: options,
+						placeholder: options.find((option) => option.value === filter)?.label ?? 'All classes',
+						visible: true,
+					};
+				}),
+				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+			);
+	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -68,24 +68,6 @@ export class ArenaClassFilterDropdownComponent implements AfterViewInit {
 
 	onSelected(option: ClassFilterOption) {
 		this.stateUpdater.next(new ArenaClassFilterSelectedEvent(option.value));
-	}
-
-	private updateInfo(state: MainWindowState, navigation: NavigationState) {
-		if (!state) {
-			return;
-		}
-
-		this.options =
-			this.options ??
-			['all', ...(classes as ArenaClassFilterType[])].map(
-				(option) =>
-					({
-						value: option,
-						label: option === 'all' ? 'All classes' : formatClass(option),
-					} as ClassFilterOption),
-			);
-		this.filter = state.arena.activeHeroFilter;
-		this.placeholder = this.options.find((option) => option.value === this.filter)?.label ?? 'All classes';
 	}
 }
 

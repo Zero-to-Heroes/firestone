@@ -1,10 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
 import { ArenaCategoryType } from '../../../models/mainwindow/arena/arena-category.type';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { NavigationState } from '../../../models/mainwindow/navigation/navigation-state';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
+import { arraysEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'arena-desktop',
@@ -14,58 +14,69 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/arena/desktop/arena-desktop.component.scss`,
 	],
 	template: `
-		<div class="app-section arena">
+		<div class="app-section arena" *ngIf="{ value: category$ | async } as category">
 			<section class="main divider">
-				<with-loading [isLoading]="!state.arena || state.arena.loading">
-					<div class="content main-content" *ngIf="state.arena">
-						<global-header
-							*ngIf="navigation.text && navigation?.navigationArena.menuDisplayType === 'breadcrumbs'"
-						></global-header>
-						<ul class="menu-selection" *ngIf="navigation?.navigationArena.menuDisplayType === 'menu'">
+				<with-loading [isLoading]="loading$ | async">
+					<div class="content main-content" *ngIf="{ value: menuDisplayType$ | async } as menuDisplayType">
+						<global-header *ngIf="menuDisplayType.value === 'breadcrumbs'"></global-header>
+						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
-								*ngFor="let category of buildCategories()"
-								[ngClass]="{
-									'selected': navigation?.navigationArena?.selectedCategoryId === category.id
-								}"
-								(mousedown)="selectCategory(category.id)"
+								*ngFor="let cat of categories$ | async"
+								[ngClass]="{ 'selected': cat.id === category.value?.id }"
+								(mousedown)="selectCategory(cat.id)"
 							>
-								<span>{{ category.name }} </span>
+								<span>{{ cat.name }} </span>
 							</li>
 						</ul>
-						<arena-filters [state]="state" [navigation]="navigation"> </arena-filters>
-						<arena-runs-list
-							*ngxCacheIf="navigation.navigationArena.selectedCategoryId === 'arena-runs'"
-							[state]="state"
-							[navigation]="navigation.navigationArena"
-						>
-						</arena-runs-list>
+						<arena-filters> </arena-filters>
+						<arena-runs-list *ngxCacheIf="category.value?.id === 'arena-runs'"> </arena-runs-list>
 					</div>
 				</with-loading>
 			</section>
 			<section class="secondary">
-				<arena-classes-recap
-					*ngxCacheIf="navigation.navigationArena.selectedCategoryId === 'arena-runs'"
-					[state]="state.stats"
-				></arena-classes-recap>
+				<arena-classes-recap *ngxCacheIf="category.value?.id === 'arena-runs'"></arena-classes-recap>
 			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaDesktopComponent implements AfterViewInit {
-	@Input() state: MainWindowState;
-	@Input() navigation: NavigationState;
+export class ArenaDesktopComponent {
+	loading$: Observable<boolean>;
+	menuDisplayType$: Observable<string>;
+	category$: Observable<ArenaCategory>;
+	categories$: Observable<readonly ArenaCategory[]>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	buildCategories(): readonly ArenaCategory[] {
-		return this.state?.arena?.categories ?? [];
+	constructor(private readonly store: AppUiStoreService) {
+		this.loading$ = this.store
+			.listen$(([main, nav]) => main.arena.loading)
+			.pipe(
+				map(([loading]) => loading),
+				distinctUntilChanged(),
+				startWith(true),
+				tap((info) => cdLog('emitting loading in ', this.constructor.name, info)),
+			);
+		this.menuDisplayType$ = this.store
+			.listen$(([main, nav]) => nav.navigationArena.menuDisplayType)
+			.pipe(
+				map(([menuDisplayType]) => menuDisplayType),
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
+			);
+		this.category$ = this.store
+			.listen$(([main, nav]) => main.arena.findCategory(nav.navigationArena.selectedCategoryId))
+			.pipe(
+				filter(([category]) => !!category),
+				map(([category]) => category),
+				distinctUntilChanged(),
+				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
+			);
+		this.categories$ = this.store
+			.listen$(([main, nav]) => main.arena.categories)
+			.pipe(
+				map(([categories]) => categories ?? []),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
+			);
 	}
 
 	selectCategory(categoryId: ArenaCategoryType) {

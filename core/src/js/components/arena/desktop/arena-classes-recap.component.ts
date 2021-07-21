@@ -1,8 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
+import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
-import { StatsState } from '../../../models/mainwindow/stats/stats-state';
+import { PatchInfo } from '../../../models/patches';
+import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
 import { formatClass } from '../../../services/hs-utils';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 
@@ -12,16 +17,21 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	template: `
 		<div class="arena-classes-recap">
 			<div class="header">Stats overview</div>
-			<div class="stats">
-				<duels-stat-cell class="stat-cell" label="Total runs" [value]="totalRuns"> </duels-stat-cell>
-				<duels-stat-cell class="stat-cell" label="Avg. wins per run" [value]="averageWinsPerRun" [decimals]="1">
+			<div class="stats" *ngIf="stats$ | async as stats">
+				<duels-stat-cell class="stat-cell" label="Total runs" [value]="stats.totalRuns"> </duels-stat-cell>
+				<duels-stat-cell
+					class="stat-cell"
+					label="Avg. wins per run"
+					[value]="stats.averageWinsPerRun"
+					[decimals]="1"
+				>
 				</duels-stat-cell>
 				<div class="stat-cell classes-list">
 					<div class="entry">
 						<div class="label">Most played classes</div>
 						<div class="filler"></div>
-						<ul class="value">
-							<li class="played-class" *ngFor="let mostPlayedClass of mostPlayedClasses">
+						<ul class="value" *ngIf="stats.mostPlayedClasses?.length">
+							<li class="played-class" *ngFor="let mostPlayedClass of stats.mostPlayedClasses">
 								<img
 									[src]="mostPlayedClass.icon"
 									class="icon"
@@ -29,39 +39,43 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 								/>
 							</li>
 						</ul>
+						<div class="value" *ngIf="!stats.mostPlayedClasses?.length">-</div>
 					</div>
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
 						<div class="label">Best winrate classes</div>
 						<div class="filler"></div>
-						<ul class="value">
-							<li class="played-class" *ngFor="let theClass of bestWinrateClasses">
+						<ul class="value" *ngIf="stats.bestWinrateClasses?.length">
+							<li class="played-class" *ngFor="let theClass of stats.bestWinrateClasses">
 								<img [src]="theClass.icon" class="icon" [helpTooltip]="theClass.tooltip" />
 							</li>
 						</ul>
+						<div class="value" *ngIf="!stats.bestWinrateClasses?.length">-</div>
 					</div>
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
 						<div class="label">Most faced classes</div>
 						<div class="filler"></div>
-						<ul class="value">
-							<li class="played-class" *ngFor="let mostFacedClass of mostFacedClasses">
+						<ul class="value" *ngIf="stats.mostFacedClasses?.length">
+							<li class="played-class" *ngFor="let mostFacedClass of stats.mostFacedClasses">
 								<img [src]="mostFacedClass.icon" class="icon" [helpTooltip]="mostFacedClass.tooltip" />
 							</li>
 						</ul>
+						<div class="value" *ngIf="!stats.mostFacedClasses?.length">-</div>
 					</div>
 				</div>
 				<div class="stat-cell classes-list">
 					<div class="entry">
 						<div class="label">Best winrate against</div>
 						<div class="filler"></div>
-						<ul class="value">
-							<li class="played-class" *ngFor="let mostFacedClass of bestWinrateAgainstClasses">
+						<ul class="value" *ngIf="stats.bestWinrateAgainstClasses?.length">
+							<li class="played-class" *ngFor="let mostFacedClass of stats.bestWinrateAgainstClasses">
 								<img [src]="mostFacedClass.icon" class="icon" [helpTooltip]="mostFacedClass.tooltip" />
 							</li>
 						</ul>
+						<div class="value" *ngIf="!stats.bestWinrateAgainstClasses?.length">-</div>
 					</div>
 				</div>
 			</div>
@@ -70,79 +84,39 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArenaClassesRecapComponent {
-	@Input() set state(value: StatsState) {
-		if (value === this._state) {
-			return;
-		}
+	stats$: Observable<StatInfo>;
 
-		this._state = value;
-		this.updateValues(value);
-	}
-
-	totalRuns: number;
-	averageWinsPerRun: number;
-	mostPlayedClasses: readonly MostPlayedClass[];
-	bestWinrateClasses: readonly MostPlayedClass[];
-	mostFacedClasses: readonly MostFacedClass[];
-	bestWinrateAgainstClasses: readonly MostFacedClass[];
-
-	// This is used only to check for diffs between two state updates
-	private arenaMatches: readonly GameStat[] = [];
-	private arenaRuns: readonly ArenaRun[] = [];
-
-	private _state: StatsState;
-
-	constructor(private readonly allCards: AllCardsService, private readonly cdr: ChangeDetectorRef) {}
-
-	private updateValues(state: StatsState) {
-		if (!state?.gameStats?.stats) {
-			return;
-		}
-
-		console.debug('setting state', state);
-		let dirty = false;
-
-		// TODO: use filters
-		const arenaMatches = state.gameStats.stats.filter((stat) => stat.gameMode === 'arena');
-		if (!arraysEqual(arenaMatches, this.arenaMatches)) {
-			this.arenaMatches = arenaMatches;
-			this.arenaRuns = this.buildArenaRuns(arenaMatches);
-			dirty = true;
-		}
-		console.debug('arenaMatches', arenaMatches);
-
-		if (!dirty) {
-			return;
-		}
-
-		this.totalRuns = this.arenaRuns.length;
-		if (this.totalRuns === 0) {
-			return;
-		}
-
-		this.averageWinsPerRun = this.arenaRuns.map((run) => run.wins).reduce((a, b) => a + b, 0) / this.totalRuns;
-
-		this.mostPlayedClasses = [];
-		this.bestWinrateClasses = [];
-		this.mostFacedClasses = [];
-		this.bestWinrateAgainstClasses = [];
-
-		// Get lots of errors otherwise when changing the filtesr
-		setTimeout(() => {
-			this.mostPlayedClasses = this.buildPlayerClass(this.arenaRuns, (a, b) => b.length - a.length);
-			this.bestWinrateClasses = this.buildPlayerClass(
-				this.arenaRuns,
-				(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
+	constructor(private readonly allCards: AllCardsService, private readonly store: AppUiStoreService) {
+		this.stats$ = this.store
+			.listen$(
+				([main, nav]) => main.stats.gameStats.stats.filter((stat) => stat.gameMode === 'arena'),
+				([main, nav]) => main.arena.activeTimeFilter,
+				([main, nav]) => main.arena.activeHeroFilter,
+				([main, nav]) => main.arena.currentArenaMetaPatch,
+			)
+			.pipe(
+				filter(([stats, timeFilter, heroFilter, patch]) => !!stats?.length),
+				distinctUntilChanged((a, b) => this.areEqual(a, b)),
+				map(([arenaMatches, timeFilter, heroFilter, patch]) => {
+					const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, patch);
+					const totalRuns = arenaRuns.length;
+					return {
+						totalRuns: totalRuns,
+						averageWinsPerRun: arenaRuns.map((run) => run.wins).reduce((a, b) => a + b, 0) / totalRuns,
+						mostPlayedClasses: this.buildPlayerClass(arenaRuns, (a, b) => b.length - a.length),
+						bestWinrateClasses: this.buildPlayerClass(
+							arenaRuns,
+							(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
+						),
+						mostFacedClasses: this.buildFacedClass(arenaRuns, (a, b) => b.length - a.length),
+						bestWinrateAgainstClasses: this.buildFacedClass(
+							arenaRuns,
+							(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
+						),
+					};
+				}),
+				tap((info) => cdLog('emitting arena classes recap in ', this.constructor.name, info)),
 			);
-			this.mostFacedClasses = this.buildFacedClass(this.arenaRuns, (a, b) => b.length - a.length);
-			this.bestWinrateAgainstClasses = this.buildFacedClass(
-				this.arenaRuns,
-				(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
-			);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
 	}
 
 	private buildPlayerClass(
@@ -218,9 +192,14 @@ export class ArenaClassesRecapComponent {
 		return (100 * wins) / totalMatches;
 	}
 
-	private buildArenaRuns(arenaMatches: GameStat[]): readonly ArenaRun[] {
+	private buildArenaRuns(
+		arenaMatches: GameStat[],
+		timeFilter: ArenaTimeFilterType,
+		heroFilter: ArenaClassFilterType,
+		patch: PatchInfo,
+	): readonly ArenaRun[] {
 		const groupedByRun = groupByFunction((match: GameStat) => match.runId)(arenaMatches);
-		return Object.values(groupedByRun).map((matches: readonly GameStat[]) => {
+		const runs = Object.values(groupedByRun).map((matches: readonly GameStat[]) => {
 			const firstMatch = matches[0];
 			return ArenaRun.create({
 				id: firstMatch.runId,
@@ -232,33 +211,48 @@ export class ArenaClassesRecapComponent {
 				steps: matches,
 			} as ArenaRun);
 		});
+		return runs
+			.filter((match) => this.isCorrectHero(match, heroFilter))
+			.filter((match) => this.isCorrectTime(match, timeFilter, patch));
+	}
+
+	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
+		return !heroFilter || heroFilter === 'all' || run.getFirstMatch()?.playerClass?.toLowerCase() === heroFilter;
+	}
+
+	private isCorrectTime(run: ArenaRun, timeFilter: ArenaTimeFilterType, patch: PatchInfo): boolean {
+		if (timeFilter === 'all-time') {
+			return true;
+		}
+		const firstMatch = run.getFirstMatch();
+		if (!firstMatch) {
+			return false;
+		}
+
+		const firstMatchTimestamp = firstMatch.creationTimestamp;
+		switch (timeFilter) {
+			case 'last-patch':
+				return firstMatch.buildNumber >= patch.number;
+			case 'past-three':
+				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
+			case 'past-seven':
+				return Date.now() - firstMatchTimestamp < 7 * 24 * 60 * 60 * 1000;
+			default:
+				return true;
+		}
+	}
+
+	private areEqual(
+		a: [readonly GameStat[], string, string, PatchInfo],
+		b: [readonly GameStat[], string, string, PatchInfo],
+	): boolean {
+		// console.debug('areEqual', a, b);
+		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3]) {
+			return false;
+		}
+		return arraysEqual(a[0], b[0]);
 	}
 }
-
-// @Component({
-// 	selector: 'duels-stat-cell',
-// 	styleUrls: [`../../../../../css/component/duels/desktop/secondary/duels-classes-recap.component.scss`],
-// 	template: `
-// 		<div class="entry">
-// 			<div class="label">{{ label }}</div>
-// 			<div class="filler"></div>
-// 			<div class="value">{{ formatValue() }}</div>
-// 		</div>
-// 	`,
-// 	changeDetection: ChangeDetectionStrategy.OnPush,
-// })
-// export class DuelsStatCellComponent {
-// 	@Input() label: string;
-// 	@Input() value: number;
-// 	@Input() decimals: number;
-
-// 	formatValue() {
-// 		if (!this.decimals) {
-// 			return this.value;
-// 		}
-// 		return this.value?.toFixed(this.decimals);
-// 	}
-// }
 
 interface MostPlayedClass {
 	readonly icon: string;
@@ -273,4 +267,13 @@ interface MostFacedClass {
 	readonly totalMatches: number;
 	readonly tooltip: string;
 	readonly winrate: number;
+}
+
+interface StatInfo {
+	readonly totalRuns: number;
+	readonly averageWinsPerRun: number;
+	readonly mostPlayedClasses: readonly MostPlayedClass[];
+	readonly bestWinrateClasses: readonly MostPlayedClass[];
+	readonly mostFacedClasses: readonly MostFacedClass[];
+	readonly bestWinrateAgainstClasses: readonly MostFacedClass[];
 }

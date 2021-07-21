@@ -122,12 +122,7 @@ import { PreferencesService } from '../services/preferences.service';
 							*ngxCacheIf="navigationState.currentApp === 'duels'"
 						>
 						</duels-desktop>
-						<arena-desktop
-							class="main-section"
-							[state]="dataState"
-							[navigation]="navigationState"
-							*ngxCacheIf="navigationState.currentApp === 'arena'"
-						>
+						<arena-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'arena'">
 						</arena-desktop>
 					</section>
 				</div>

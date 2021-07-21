@@ -1,24 +1,13 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
+import { Subscription } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
-import { DuelsRun } from '../../../models/duels/duels-run';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { NavigationArena } from '../../../models/mainwindow/navigation/navigation-arena';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -26,63 +15,77 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 	styleUrls: [`../../../../css/component/arena/desktop/arena-runs-list.component.scss`],
 	template: `
 		<div class="arena-runs-container">
-			<infinite-scroll *ngIf="groupedRuns?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
-				<li *ngFor="let groupedRun of groupedRuns; trackBy: trackByGroupedRun" class="grouped-runs">
+			<infinite-scroll *ngIf="allReplays?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
+				<li *ngFor="let groupedRun of displayedGroupedReplays; trackBy: trackByGroupedRun" class="grouped-runs">
 					<div class="header">{{ groupedRun.header }}</div>
 					<ul class="runs">
 						<arena-run *ngFor="let run of groupedRun.runs; trackBy: trackByRun" [run]="run"></arena-run>
 					</ul>
 				</li>
-				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
+				<div class="loading" *ngIf="isLoading" (click)="onScroll()">Click to load more runs</div>
 			</infinite-scroll>
-			<arena-empty-state *ngIf="!groupedRuns?.length"></arena-empty-state>
+			<arena-empty-state *ngIf="!allReplays?.length"></arena-empty-state>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArenaRunsListComponent implements AfterViewInit {
-	@Input() set state(value: MainWindowState) {
-		if (!value || value?.arena?.loading) {
-			return;
-		}
-		this._state = value;
-		this.updateInfos(this._state, this._navigation);
-	}
-
-	@Input() set navigation(value: NavigationArena) {
-		this._navigation = value;
-		this.updateInfos(this._state, this._navigation);
-	}
-
-	groupedRuns: readonly GroupedRun[] = [];
+export class ArenaRunsListComponent implements OnDestroy {
 	isLoading: boolean;
+	allReplays: readonly ArenaRun[];
+	displayedGroupedReplays: readonly GroupedRun[] = [];
 
-	private _state: MainWindowState;
-	private _navigation: NavigationArena;
+	private sub$$: Subscription;
+	private displayedReplays: readonly ArenaRun[] = [];
+	private gamesIterator: IterableIterator<void>;
 
-	// This is used only to check for diffs between two state updates
-	private arenaMatches: readonly GameStat[] = [];
-	private arenaRuns: readonly ArenaRun[] = [];
-	private rewards: readonly ArenaRewardInfo[] = [];
-	private displayedRuns: readonly ArenaRun[] = [];
-	private heroFilter: ArenaClassFilterType = 'all';
-	private timeFilter: ArenaTimeFilterType = 'all-time';
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+		// TODO perf: split this into two observables, so that we don't reocmpute the
+		// arena runs when a filter changes?
+		this.sub$$ = this.store
+			.listen$(
+				([main, nav]) =>
+					main.stats.gameStats.stats
+						.filter((stat) => stat.gameMode === 'arena')
+						.filter((stat) => !!stat.runId),
+				([main, nav]) => main.arena.rewards,
+				([main, nav]) => main.arena.activeTimeFilter,
+				([main, nav]) => main.arena.activeHeroFilter,
+				([main, nav]) => main.arena.currentArenaMetaPatch,
+			)
+			.pipe(
+				filter(([stats, rewards, timeFilter, heroFilter, patch]) => !!stats?.length),
+				distinctUntilChanged((a, b) => this.areEqual(a, b)),
+				map(([arenaMatches, rewards, timeFilter, heroFilter, patch]) => {
+					return [this.buildArenaRuns(arenaMatches, rewards), timeFilter, heroFilter, patch] as [
+						readonly ArenaRun[],
+						ArenaTimeFilterType,
+						ArenaClassFilterType,
+						PatchInfo,
+					];
+				}),
+				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+			)
+			.subscribe(([arenaRuns, timeFilter, heroFilter, patch]) => {
+				// Otherwise the generator is simply closed at the end of the first onScroll call
+				setTimeout(() => {
+					this.displayedReplays = [];
+					this.displayedGroupedReplays = [];
+					this.gamesIterator = this.buildIterator(arenaRuns, timeFilter, heroFilter, patch, 8);
+					// console.debug('gamesIterator', this.gamesIterator);
+					this.onScroll();
+				});
+			});
+	}
 
-	private runsIterator: IterableIterator<void>;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly el: ElementRef,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	ngOnDestroy() {
+		this.sub$$?.unsubscribe();
 	}
 
 	onScroll() {
-		this.runsIterator && this.runsIterator.next();
+		this.gamesIterator && this.gamesIterator.next();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackByGroupedRun(item: GroupedRun) {
@@ -93,86 +96,49 @@ export class ArenaRunsListComponent implements AfterViewInit {
 		return item.id;
 	}
 
-	private updateInfos(state: MainWindowState, navigation: NavigationArena) {
-		if (!state || !state.arena.currentArenaMetaPatch) {
-			return;
-		}
-
-		let dirty = false;
-		let dirtyRuns = false;
-
-		const arenaMatches = state.stats.gameStats.stats
-			.filter((stat) => stat.gameMode === 'arena')
-			.filter((stat) => !!stat.runId);
-		if (!arraysEqual(arenaMatches, this.arenaMatches)) {
-			this.arenaMatches = arenaMatches;
-			dirtyRuns = true;
-		}
-
-		if (!arraysEqual(state.arena.rewards, this.rewards)) {
-			this.rewards = state.arena.rewards;
-			dirtyRuns = true;
-		}
-
-		if (dirtyRuns) {
-			// We only pre-compute the arena runs (and not the grouped runs) because
-			// grouped runs can be modified depending on the prefs / filters, so it's
-			// not truly something we can cache
-			// TODO: this can be improved further, and only recreate new runs (the latest run
-			// in fact)
-			this.arenaRuns = this.buildArenaRuns(this.arenaMatches, this.rewards);
-			dirty = true;
-		}
-
-		if (this.heroFilter !== state.arena.activeHeroFilter) {
-			this.heroFilter = state.arena.activeHeroFilter;
-			dirty = true;
-		}
-
-		if (this.timeFilter !== state.arena.activeTimeFilter) {
-			this.timeFilter = state.arena.activeTimeFilter;
-			dirty = true;
-		}
-
-		if (dirty) {
-			this.handleProgressiveDisplay();
-		}
-	}
-
-	private handleProgressiveDisplay() {
-		this.runsIterator = this.buildIterator();
-		this.onScroll();
-	}
-
-	private *buildIterator(): IterableIterator<void> {
-		const workingRuns = this.arenaRuns
-			.filter((match) => this.isCorrectHero(match, this.heroFilter))
-			.filter((match) => this.isCorrectTime(match, this.timeFilter, this._state.arena.currentArenaMetaPatch));
-		this.displayedRuns = [];
-		this.groupedRuns = [];
-		const step = 10;
-
-		while (workingRuns.length > 0) {
-			const currentRuns = [];
-			while (
-				workingRuns.length > 0 &&
-				(currentRuns.length === 0 || this.getTotalRunsLength(currentRuns) < step)
-			) {
-				currentRuns.push(...workingRuns.splice(0, 1));
+	private *buildIterator(
+		arenaMatches: readonly ArenaRun[],
+		timeFilter: ArenaTimeFilterType,
+		heroFilter: ArenaClassFilterType,
+		patch: PatchInfo,
+		step = 40,
+	): IterableIterator<void> {
+		this.allReplays = arenaMatches
+			.filter((match) => this.isCorrectHero(match, heroFilter))
+			.filter((match) => this.isCorrectTime(match, timeFilter, patch));
+		const workingReplays = [...this.allReplays];
+		while (workingReplays.length > 0) {
+			// console.debug('workingReplays', workingReplays.length);
+			const currentReplays: ArenaRun[] = [];
+			while (workingReplays.length > 0 && currentReplays.length < step) {
+				currentReplays.push(...workingReplays.splice(0, 1));
 			}
-			this.displayedRuns = [...this.displayedRuns, ...currentRuns];
-			this.groupedRuns = this.groupRuns(this.displayedRuns);
-			this.isLoading = workingRuns.length > 0;
+			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
+			this.displayedGroupedReplays = this.groupRuns(this.displayedReplays);
+			this.isLoading = this.allReplays.length > step;
+			// console.debug('built grouped replays', this.displayedGroupedReplays, workingReplays);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			yield;
 		}
 		this.isLoading = false;
+		// console.debug('all replays loaded');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		return;
+	}
+
+	private areEqual(
+		a: [readonly GameStat[], readonly ArenaRewardInfo[], string, string, PatchInfo],
+		b: [readonly GameStat[], readonly ArenaRewardInfo[], string, string, PatchInfo],
+	): boolean {
+		// console.debug('areEqual', a, b);
+		if (a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4]) {
+			return false;
+		}
+		return arraysEqual(a[0], b[0]) && arraysEqual(a[1], b[1]);
 	}
 
 	private isCorrectHero(run: ArenaRun, heroFilter: ArenaClassFilterType): boolean {
@@ -239,10 +205,6 @@ export class ArenaRunsListComponent implements AfterViewInit {
 			header: date,
 			runs: runsByDate[date],
 		}));
-	}
-
-	private getTotalRunsLength(currentReplays: readonly DuelsRun[]): number {
-		return currentReplays ? currentReplays.length : 0;
 	}
 }
 

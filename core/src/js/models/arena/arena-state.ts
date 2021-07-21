@@ -20,4 +20,9 @@ export class ArenaState {
 	public update(base: ArenaState): ArenaState {
 		return Object.assign(new ArenaState(), this, base);
 	}
+
+	public findCategory(categoryId: string): ArenaCategory {
+		const result = this.categories?.find((cat) => cat.id === categoryId);
+		return result;
+	}
 }
