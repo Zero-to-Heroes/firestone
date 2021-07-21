@@ -1,6 +1,5 @@
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../../../models/preferences';
-import { FeatureFlags } from '../../../feature-flags';
 import { OverwolfService } from '../../../overwolf.service';
 import { PreferencesService } from '../../../preferences.service';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
@@ -16,10 +15,7 @@ export class BgsMouseOverOverlay implements BattlegroundsOverlay {
 	}
 
 	public async handleDisplayPreferences(preferences: Preferences) {
-		this.bgsActive =
-			FeatureFlags.ENABLE_BG_OPPONENT_MOUSE_OVER &&
-			preferences.bgsEnableOpponentBoardMouseOver &&
-			preferences.bgsFullToggle;
+		this.bgsActive = preferences.bgsEnableOpponentBoardMouseOver && preferences.bgsFullToggle;
 	}
 
 	public async updateOverlay(state: BattlegroundsState) {

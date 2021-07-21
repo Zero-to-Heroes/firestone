@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardPackResult, PackResult } from '@firestone-hs/retrieve-pack-stats';
-import { FeatureFlags } from '../../services/feature-flags';
 
 @Component({
 	selector: 'pack-display',
@@ -17,22 +16,16 @@ import { FeatureFlags } from '../../services/feature-flags';
 				*ngFor="let card of cards; let i = index; trackBy: trackByFn"
 				[style.left.%]="getLeft(i)"
 				[cardTooltip]="card.cardId"
-				[cardTooltipType]="!enablePack ? 'NORMAL' : card.cardType"
-				[cardTooltipText]="!enablePack && card.cardType === 'GOLDEN' ? 'Golden' : ''"
+				[cardTooltipType]="card.cardType"
+				[cardTooltipText]="''"
 			>
 				<img
-					*ngIf="!enablePack || card.cardType === 'NORMAL'"
+					*ngIf="card.cardType === 'NORMAL'"
 					[src]="
 						'https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/' + card.cardId + '.png?v=3'
 					"
 				/>
-				<video
-					*ngIf="enablePack && card.cardType === 'GOLDEN'"
-					#videoPlayer
-					loop="loop"
-					[autoplay]="true"
-					[preload]="true"
-				>
+				<video *ngIf="card.cardType === 'GOLDEN'" #videoPlayer loop="loop" [autoplay]="true" [preload]="true">
 					<source
 						src="{{
 							'https://static.zerotoheroes.com/hearthstone/fullcard/en/golden/' +
@@ -48,8 +41,6 @@ import { FeatureFlags } from '../../services/feature-flags';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackDisplayComponent {
-	enablePack = FeatureFlags.ENABLE_GOLDEN_CARDS;
-
 	@Input() set pack(value: PackResult) {
 		this.cards = value.cards;
 		// if (!(this.cdr as ViewRef)?.destroyed) {

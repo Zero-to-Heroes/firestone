@@ -4,7 +4,6 @@ import { PackInfo } from '../../models/collection/pack-info';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { Preferences } from '../../models/preferences';
 import { Set } from '../../models/set';
-import { FeatureFlags } from '../../services/feature-flags';
 import {
 	boosterIdToSetId,
 	dustFor,
@@ -67,8 +66,6 @@ import { InputPieChartData } from '../common/chart/input-pie-chart-data';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetStatsComponent implements AfterViewInit {
-	enableBestKnownPack = FeatureFlags.ENABLE_BEST_KNOWN_PACK;
-
 	@Input() set set(value: Set) {
 		this._set = value;
 		this.updateInfos();

@@ -13,7 +13,6 @@ import { BattleInfoMessage } from '../../../models/battlegrounds/battle-info-mes
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { Preferences } from '../../../models/preferences';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -109,8 +108,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		this.preferences = preferences || (await this.prefs.getPreferences());
 		// console.log('updating prefs', preferences);
-		this.showSimulationSample =
-			this.preferences.bgsEnableSimulationSampleInOverlay && FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
+		this.showSimulationSample = this.preferences.bgsEnableSimulationSampleInOverlay;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

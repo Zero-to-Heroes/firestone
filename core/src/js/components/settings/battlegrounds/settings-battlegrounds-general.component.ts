@@ -6,11 +6,10 @@ import {
 	ElementRef,
 	HostListener,
 	OnDestroy,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { Knob } from '../preference-slider.component';
@@ -47,14 +46,12 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, you will know your chances to win / tie / lose each battle at the start of the battle"
 					></preference-toggle>
 					<preference-toggle
-						*ngIf="enableBgsHideSimResultsOnRecruit"
 						field="bgsHideSimResultsOnRecruit"
 						[ngClass]="{ 'disabled': !bgsFullToggle || bgsShowSimResultsOnlyOnRecruit }"
 						label="Hide simulation after battle"
 						tooltip="When active, simulation results will be hidden once the battle phase ends"
 					></preference-toggle>
 					<preference-toggle
-						*ngIf="enableBgsShowSimResultsOnlyOnRecruit"
 						field="bgsShowSimResultsOnlyOnRecruit"
 						[ngClass]="{ 'disabled': !bgsFullToggle || bgsHideSimResultsOnRecruit }"
 						label="Show simulation only in tavern"
@@ -74,7 +71,6 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 					<preference-toggle
 						field="bgsShowHeroSelectionAchievements"
-						*ngIf="showHeroSelectionAchievements"
 						[ngClass]="{ 'disabled': !bgsFullToggle }"
 						label="Show achievements"
 						tooltip="Shows the missing achievements for each hero at the hero selection stage."
@@ -122,21 +118,18 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableOpponentBoardMouseOver"
-					*ngIf="opponentMouseOver"
 					[ngClass]="{ 'disabled': !bgsFullToggle }"
 					label="Show last opponent board"
 					tooltip="Show the last known opponent's board (and additional info) when mousing over their portrait in the leaderboard"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableMinionListOverlay"
-					*ngIf="minionsListOverlay"
 					[ngClass]="{ 'disabled': !bgsFullToggle }"
 					label="Show minions list"
 					tooltip="Show the list of minions, grouped by tavern tier"
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableMinionListMouseOver"
-					*ngIf="minionsListOverlay"
 					[ngClass]="{ 'disabled': !bgsFullToggle || !bgsEnableMinionListOverlay }"
 					label="Show minions list on mouse over"
 					tooltip="When deactivated, you will have to click on the tavern tier icons to show the minions list"
@@ -146,7 +139,6 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsShowTribesHighlight"
-					*ngIf="showTribesHighlight"
 					[ngClass]="{ 'disabled': !bgsFullToggle }"
 					label="Show tribes highlight"
 					tooltip="Adds buttons to highlight specific tribes in Bob's Tavern"
@@ -159,7 +151,6 @@ import { Knob } from '../preference-slider.component';
 				></preference-toggle>
 				<preference-toggle
 					field="bgsEnableSimulationSampleInOverlay"
-					*ngIf="enableOverlayPlaySetting"
 					[ngClass]="{
 						'disabled': !enableSimulation || !bgsEnableBattleSimulationOverlay || !bgsFullToggle
 					}"
@@ -249,14 +240,6 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsBattlegroundsGeneralComponent implements AfterViewInit, OnDestroy {
-	opponentMouseOver: boolean = FeatureFlags.ENABLE_BG_OPPONENT_MOUSE_OVER;
-	minionsListOverlay: boolean = FeatureFlags.ENABLE_BG_MINIONS_LIST;
-	showTribesHighlight: boolean = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT;
-	enableOverlayPlaySetting: boolean = FeatureFlags.ENABLE_BG_SIMULATION_PLAY_ON_OVERLAY;
-	enableBgsHideSimResultsOnRecruit: boolean = FeatureFlags.ENABLE_BG_SIMULATION_HIDE_ON_RECRUIT;
-	enableBgsShowSimResultsOnlyOnRecruit: boolean = FeatureFlags.ENABLE_BG_SIMULATION_SHOW_ONLY_ON_RECRUIT;
-	showHeroSelectionAchievements: boolean = FeatureFlags.ENABLE_BG_SHOW_ACHIEVEMENTS;
-
 	useLocalSimulator: boolean;
 	enableSimulation: boolean;
 	bgsEnableBattleSimulationOverlay: boolean;

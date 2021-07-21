@@ -10,7 +10,6 @@ import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Preferences } from '../../../models/preferences';
 import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
-import { FeatureFlags } from '../../feature-flags';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { GameEvents } from '../../game-events.service';
 import { LogsUploaderService } from '../../logs-uploader.service';
@@ -523,11 +522,10 @@ export class BattlegroundsStoreService {
 			new BgsResetHighlightsParser(),
 			new BgsReconnectStatusParser(),
 			new BgsSpectatingParser(),
+
+			new BgsRealTimeStatsUpdatedParser(),
 		];
 
-		if (FeatureFlags.ENABLE_REAL_TIME_STATS) {
-			eventParsers.push(new BgsRealTimeStatsUpdatedParser());
-		}
 		return eventParsers;
 	}
 

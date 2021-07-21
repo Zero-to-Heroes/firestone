@@ -9,7 +9,6 @@ import {
 import { BgsPanelId } from '../../models/battlegrounds/bgs-panel-id.type';
 import { BgsStageChangeEvent } from '../../services/battlegrounds/store/events/bgs-stage-change-event';
 import { BattlegroundsStoreEvent } from '../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { FeatureFlags } from '../../services/feature-flags';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -36,7 +35,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				[ngClass]="{ 'selected': selectedPanel === 'bgs-post-match-stats' }"
 				(mousedown)="selectStage('bgs-post-match-stats')"
 			>
-				<span>{{ enableLiveStats && !matchOver ? 'Live stats' : 'Post-Match Stats' }}</span>
+				<span>{{ !matchOver ? 'Live stats' : 'Post-Match Stats' }}</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
 				<span>Battles</span>
@@ -46,8 +45,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuSelectionBgsComponent implements AfterViewInit {
-	enableLiveStats = FeatureFlags.ENABLE_REAL_TIME_STATS;
-
 	@Input() selectedPanel: BgsPanelId;
 	@Input() matchOver: boolean;
 

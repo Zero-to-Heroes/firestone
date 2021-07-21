@@ -17,7 +17,6 @@ import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-
 import { Preferences } from '../../../models/preferences';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -263,8 +262,8 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
-		this.showMinionsList = FeatureFlags.ENABLE_BG_MINIONS_LIST && preferences.bgsEnableMinionListOverlay;
-		this.showTribesHighlight = FeatureFlags.ENABLE_BG_TRIBE_HIGHLIGHT && preferences.bgsShowTribesHighlight;
+		this.showMinionsList = preferences.bgsEnableMinionListOverlay;
+		this.showTribesHighlight = preferences.bgsShowTribesHighlight;
 		this.enableMouseOver = preferences.bgsEnableMinionListMouseOver;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

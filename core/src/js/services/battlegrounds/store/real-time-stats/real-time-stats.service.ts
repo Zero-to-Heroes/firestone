@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
-import { FeatureFlags } from '../../../feature-flags';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
 import { ProcessingQueue } from '../../../processing-queue.service';
 import { RTStatBgsAttackFirstParser } from './event-parsers/battlegrounds/rtstats-bgs-attack-first-parser';
@@ -51,9 +50,6 @@ export class RealTimeStatsService {
 		private readonly events: Events,
 		private readonly allCards: AllCardsService,
 	) {
-		if (!FeatureFlags.ENABLE_REAL_TIME_STATS) {
-			return;
-		}
 		this.init();
 	}
 

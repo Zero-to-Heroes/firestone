@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Preferences } from '../../../models/preferences';
-import { FeatureFlags } from '../../../services/feature-flags';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { Knob } from '../preference-slider.component';
@@ -84,7 +83,7 @@ import { Knob } from '../preference-slider.component';
 				</div>
 			</div>
 
-			<div class="reset-container" *ngIf="showDecktrackerResetPositions">
+			<div class="reset-container">
 				<button
 					(mousedown)="reset()"
 					helpTooltip="Reset the decktracker positions. This can solve an issue where your tracker doesn't show up anymore on screen."
@@ -100,7 +99,6 @@ import { Knob } from '../preference-slider.component';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDestroy {
-	showDecktrackerResetPositions = FeatureFlags.ENABLE_DECKTRACKER_RESET_POSITIONS;
 	resetText = 'Reset positions';
 	confirmationShown = false;
 	showResetConfirmationText = false;
