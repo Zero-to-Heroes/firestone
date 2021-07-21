@@ -213,6 +213,9 @@ export class DuelsStatCellComponent {
 	@Input() decimals: number;
 
 	formatValue() {
+		if (this.value == null || isNaN(this.value)) {
+			return '-';
+		}
 		if (!this.decimals) {
 			return this.value;
 		}
