@@ -11,7 +11,7 @@ import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { PatchInfo } from '../../../models/patches';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
-import { ladderRankToInt } from '../../../services/hs-utils';
+import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
 
 @Component({
 	selector: 'decktracker-rating-graph',
@@ -24,6 +24,7 @@ import { ladderRankToInt } from '../../../services/hs-utils';
 			<graph-with-single-value
 				[data]="value.data"
 				[labels]="value.labels"
+				[labelFormattingFn]="value.labelFormattingFn"
 				emptyStateMessage="Please make sure a unique game mode (Standard, Wild or Classic) is selected above"
 				emptyStateIcon="assets/svg/ftue/decktracker.svg"
 			></graph-with-single-value>
@@ -42,7 +43,6 @@ export class DecktrackerRatingGraphComponent {
 						.filter((stat) => stat.gameMode === 'ranked')
 						.filter((stat) => stat.playerRank),
 				// TODO: missing a way to select between non-legend and legend graphs
-				// TODO: add a way to group per day?
 				([main, nav]) => main.decktracker.filters.gameFormat,
 				([main, nav]) => main.decktracker.filters.time,
 				([main, nav]) => main.decktracker.filters.rankingGroup,
@@ -135,6 +135,13 @@ export class DecktrackerRatingGraphComponent {
 					},
 				],
 				labels: Array.from(Array(dataForGraph.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex),
+				labelFormattingFn: (label, index, labels) => {
+					if (!label) {
+						return label;
+					}
+
+					return ladderIntRankToString(+label);
+				},
 			} as Value;
 		}
 	}
@@ -153,4 +160,5 @@ export class DecktrackerRatingGraphComponent {
 interface Value {
 	readonly data: ChartDataSets[];
 	readonly labels: Label;
+	readonly labelFormattingFn?: (label: string, index: number, labels: string[]) => string;
 }

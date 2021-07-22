@@ -9,7 +9,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { ChartDataSets, ChartOptions } from 'chart.js';
+import { ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
@@ -54,9 +54,18 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 	@Input() emptyStateMessage: string;
 	@Input() emptyStateIcon = 'assets/svg/ftue/battlegrounds.svg';
 
+	@Input() set labelFormattingFn(value: (label: string, index: number, labels: string[]) => string) {
+		console.debug('setting formatting', value);
+		this._labelFormattingFn = value;
+		this.lineChartOptions = this.buildOptions();
+		console.debug('rebuilt options', this.lineChartOptions);
+	}
+
 	colors: Color[] = [];
 	colors$$: Subscription;
 	lineChartOptions: ChartOptions = this.buildOptions();
+
+	private _labelFormattingFn: (label: string, index: number, labels: string[]) => string;
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {
 		this.colors$$ = fromEvent(window, 'resize')
@@ -166,6 +175,7 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 							fontFamily: 'Open Sans',
 							fontStyle: 'normal',
 							beginAtZero: true,
+							callback: this._labelFormattingFn ?? ((label, index, labels) => label),
 						},
 					},
 				],
@@ -187,6 +197,10 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 				cornerRadius: 0,
 				displayColors: false,
 				enabled: true,
+				callbacks: {
+					label: (tooltipItem: ChartTooltipItem, data) =>
+						this._labelFormattingFn ? this._labelFormattingFn(tooltipItem.value, 0, []) : tooltipItem.label,
+				},
 			},
 		};
 	}

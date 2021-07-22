@@ -612,3 +612,32 @@ export const ladderRankToInt = (rank: string): number => {
 	const [league, rankInLeague] = rank.split('-').map((info) => parseInt(info));
 	return -(league - 5) * 10 + (10 - rankInLeague);
 };
+
+export const ladderIntRankToString = (rank: number): string => {
+	if (rank == null) {
+		return null;
+	}
+
+	const league = rankToLeague(rank);
+	if (rank >= 50) {
+		return 'Legend';
+	}
+
+	const rankInLeague = 10 - (rank % 10);
+	return `${league} ${rankInLeague}`;
+};
+
+const rankToLeague = (rank: number): string => {
+	if (rank < 10) {
+		return 'Bronze';
+	} else if (rank < 20) {
+		return 'Silver';
+	} else if (rank < 30) {
+		return 'Gold';
+	} else if (rank < 40) {
+		return 'Platinum';
+	} else if (rank < 50) {
+		return 'Diamond';
+	}
+	return 'Legend';
+};
