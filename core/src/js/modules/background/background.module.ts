@@ -137,12 +137,16 @@ import { DecktrackerDeckDetailsComponent } from '../../components/decktracker/ma
 import { DecktrackerDeckRecapComponent } from '../../components/decktracker/main/decktracker-deck-recap.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
-import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
 import { DecktrackerLadderStatsComponent } from '../../components/decktracker/main/decktracker-ladder-stats.component';
 import { DecktrackerPersonalStatsRankingComponent } from '../../components/decktracker/main/decktracker-personal-stats-ranking.component';
 import { DecktrackerRatingGraphComponent } from '../../components/decktracker/main/decktracker-rating-graph.component';
 import { DecktrackerReplaysRecapComponent } from '../../components/decktracker/main/decktracker-replays-recap.component';
 import { DecktrackerStatsForReplaysComponent } from '../../components/decktracker/main/decktracker-stats-for-replays.component';
+import { DecktrackerDeckSortDropdownComponent } from '../../components/decktracker/main/filters/decktracker-deck-sort-dropdown.component';
+import { DecktrackerFormatFilterDropdownComponent } from '../../components/decktracker/main/filters/decktracker-format-filter-dropdown.component';
+import { DecktrackerRankFilterDropdownComponent } from '../../components/decktracker/main/filters/decktracker-rank-filter-dropdown.component';
+import { DecktrackerTimeFilterDropdownComponent } from '../../components/decktracker/main/filters/decktracker-time-filter-dropdown.component';
+import { DecktrackerFiltersComponent } from '../../components/decktracker/main/filters/_decktracker-filters.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
 import { DeckTrackerOverlayOpponentComponent } from '../../components/decktracker/overlay/decktracker-overlay-opponent.component';
 import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/overlay/decktracker-overlay-player.component';
@@ -483,7 +487,6 @@ const components = [
 		DecktrackerComponent,
 		DecktrackerDecksComponent,
 		DecktrackerDeckSummaryComponent,
-		DecktrackerFiltersComponent,
 		DecktrackerDeckDetailsComponent,
 		DeckWinrateMatrixComponent,
 		DeckMatchupInfoComponent,
@@ -496,6 +499,11 @@ const components = [
 		DecktrackerStatsForReplaysComponent,
 		MenuSelectionDecktrackerComponent,
 		DecktrackerRatingGraphComponent,
+		DecktrackerFiltersComponent,
+		DecktrackerFormatFilterDropdownComponent,
+		DecktrackerTimeFilterDropdownComponent,
+		DecktrackerRankFilterDropdownComponent,
+		DecktrackerDeckSortDropdownComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

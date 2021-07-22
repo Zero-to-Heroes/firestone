@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
 import { BgsStatsFilterId } from '../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -37,7 +38,7 @@ export class PreferencesService {
 	public static readonly DECKTRACKER_OVERLAY_SIZE = 'DECKTRACKER_OVERLAY_SIZE';
 	public static readonly TWITCH_CONNECTION_STATUS = 'TWITCH_CONNECTION_STATUS';
 
-	private preferencesEventBus = new EventEmitter<any>();
+	private preferencesEventBus = new BehaviorSubject<Preferences>(new Preferences());
 
 	constructor(
 		private indexedDb: GenericIndexedDbService,

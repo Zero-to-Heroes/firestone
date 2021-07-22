@@ -23,7 +23,7 @@ import { Preferences } from '../../models/preferences';
 							*ngxCacheIf="navigation.navigationDecktracker.menuDisplayType === 'menu'"
 						>
 						</menu-selection-decktracker>
-						<decktracker-filters [state]="_state" [navigation]="navigation"></decktracker-filters>
+						<decktracker-filters></decktracker-filters>
 						<decktracker-decks
 							*ngxCacheIf="navigation.navigationDecktracker.currentView === 'decks'"
 							[decks]="_state?.decks"
