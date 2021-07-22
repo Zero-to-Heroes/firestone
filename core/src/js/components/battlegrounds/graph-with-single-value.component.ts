@@ -55,10 +55,13 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 	@Input() emptyStateIcon = 'assets/svg/ftue/battlegrounds.svg';
 
 	@Input() set labelFormattingFn(value: (label: string, index: number, labels: string[]) => string) {
-		console.debug('setting formatting', value);
 		this._labelFormattingFn = value;
 		this.lineChartOptions = this.buildOptions();
-		console.debug('rebuilt options', this.lineChartOptions);
+	}
+
+	@Input() set reverse(value: boolean) {
+		this._reverse = value;
+		this.lineChartOptions = this.buildOptions();
 	}
 
 	colors: Color[] = [];
@@ -66,6 +69,7 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 	lineChartOptions: ChartOptions = this.buildOptions();
 
 	private _labelFormattingFn: (label: string, index: number, labels: string[]) => string;
+	private _reverse = true;
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {
 		this.colors$$ = fromEvent(window, 'resize')
@@ -175,6 +179,7 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 							fontFamily: 'Open Sans',
 							fontStyle: 'normal',
 							beginAtZero: true,
+							reverse: this._reverse,
 							callback: this._labelFormattingFn ?? ((label, index, labels) => label),
 						},
 					},

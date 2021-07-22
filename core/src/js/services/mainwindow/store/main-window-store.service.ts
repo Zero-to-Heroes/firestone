@@ -73,6 +73,7 @@ import { UpdateCardSearchResultsEvent } from './events/collection/update-card-se
 import { CurrentUserEvent } from './events/current-user-event';
 import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
+import { ChangeDeckRankCategoryFilterEvent } from './events/decktracker/change-deck-rank-category-filter-event';
 import { ChangeDeckRankFilterEvent } from './events/decktracker/change-deck-rank-filter-event';
 import { ChangeDeckRankGroupEvent } from './events/decktracker/change-deck-rank-group-event';
 import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
@@ -173,6 +174,7 @@ import { UpdateCardSearchResultsProcessor } from './processors/collection/update
 import { CurrentUserProcessor } from './processors/current-user-process.ts';
 import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change-deck-format-filter-processor';
 import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
+import { ChangeDeckRankCategoryFilterProcessor } from './processors/decktracker/change-deck-rank-category-filter-processor';
 import { ChangeDeckRankFilterProcessor } from './processors/decktracker/change-deck-rank-filter-processor';
 import { ChangeDeckRankGroupProcessor } from './processors/decktracker/change-deck-rank-group-processor';
 import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
@@ -586,6 +588,9 @@ export class MainWindowStoreService {
 
 			ChangeDeckRankGroupEvent.eventName(),
 			new ChangeDeckRankGroupProcessor(this.prefs, this.replaysStateBuilder),
+
+			ChangeDeckRankCategoryFilterEvent.eventName(),
+			new ChangeDeckRankCategoryFilterProcessor(this.prefs, this.replaysStateBuilder),
 
 			ChangeDeckModeFilterEvent.eventName(),
 			new ChangeDeckModeFilterProcessor(this.decksStateBuilder, this.prefs),

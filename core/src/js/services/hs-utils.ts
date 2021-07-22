@@ -605,17 +605,22 @@ export const ladderRankToInt = (rank: string): number => {
 		return null;
 	}
 
-	if (rank.includes('legend')) {
-		return 50;
+	if (rank.includes('legend-')) {
+		// So that top 1 is at the top
+		return +rank.split('legend-')[1];
 	}
 
 	const [league, rankInLeague] = rank.split('-').map((info) => parseInt(info));
 	return -(league - 5) * 10 + (10 - rankInLeague);
 };
 
-export const ladderIntRankToString = (rank: number): string => {
+export const ladderIntRankToString = (rank: number, isLegend = false): string => {
 	if (rank == null) {
 		return null;
+	}
+
+	if (isLegend) {
+		return `${rank}`;
 	}
 
 	const league = rankToLeague(rank);

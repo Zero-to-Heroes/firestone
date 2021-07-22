@@ -7,6 +7,7 @@ import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
+import { DeckRankingCategoryType } from '../../../models/mainwindow/decktracker/deck-ranking-category.type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { PatchInfo } from '../../../models/patches';
@@ -25,7 +26,8 @@ import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-uti
 				[data]="value.data"
 				[labels]="value.labels"
 				[labelFormattingFn]="value.labelFormattingFn"
-				emptyStateMessage="Please make sure a unique game mode (Standard, Wild or Classic) is selected above"
+				[reverse]="value.reverse"
+				emptyStateMessage="Please make sure a unique game mode (Standard, Wild or Classic) is selected above, and check the Bronze / Legend filter."
 				emptyStateIcon="assets/svg/ftue/decktracker.svg"
 			></graph-with-single-value>
 		</div>
@@ -46,13 +48,17 @@ export class DecktrackerRatingGraphComponent {
 				([main, nav]) => main.decktracker.filters.gameFormat,
 				([main, nav]) => main.decktracker.filters.time,
 				([main, nav]) => main.decktracker.filters.rankingGroup,
+				([main, nav]) => main.decktracker.filters.rankingCategory,
 				([main, nav]) => main.decktracker.patch,
 			)
 			.pipe(
-				filter(([stats, formatFilter, timeFilter, rakingGroup, patch]) => !!stats && !!patch?.number),
+				filter(
+					([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
+						!!stats && !!patch?.number,
+				),
 				distinctUntilChanged((a, b) => this.compare(a, b)),
-				map(([stats, formatFilter, timeFilter, rakingGroup, patch]) =>
-					this.buildValue(stats, formatFilter, timeFilter, rakingGroup, patch),
+				map(([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
+					this.buildValue(stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch),
 				),
 				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
 			);
@@ -63,6 +69,7 @@ export class DecktrackerRatingGraphComponent {
 		formatFilter: StatGameFormatType,
 		timeFilter: DeckTimeFilterType,
 		rakingGroup: MmrGroupFilterType,
+		rankingCategory: DeckRankingCategoryType,
 		patch: PatchInfo,
 	): Value {
 		if (formatFilter === 'all' || formatFilter === 'unknown') {
@@ -72,7 +79,22 @@ export class DecktrackerRatingGraphComponent {
 			};
 		}
 
-		const data = [...stats].filter((stat) => stat.gameFormat === formatFilter).reverse();
+		const data = [...stats]
+			.filter((stat) => stat.gameFormat === formatFilter)
+			.filter((stat) => stat.playerRank)
+			.filter((stat) =>
+				rankingCategory === 'legend'
+					? stat.playerRank.includes('legend-')
+					: !stat.playerRank.includes('legend-'),
+			)
+			.reverse();
+		if (!data.length) {
+			return {
+				data: [],
+				labels: [],
+			};
+		}
+
 		const fakeMatchWithCurrentMmr: GameStat = data[data.length - 1].newPlayerRank
 			? GameStat.create({
 					...data[data.length - 1],
@@ -94,6 +116,8 @@ export class DecktrackerRatingGraphComponent {
 						...dataWithTime.slice(1),
 				  ]
 				: dataWithTime;
+		let values: number[] = [];
+		let labels: readonly string[];
 		if (rakingGroup === 'per-day') {
 			const groupedByDay: { [date: string]: readonly GameStat[] } = groupByFunction((match: GameStat) =>
 				formatDate(new Date(match.creationTimestamp)),
@@ -102,10 +126,9 @@ export class DecktrackerRatingGraphComponent {
 				formatDate(new Date(finalData[0].creationTimestamp)),
 				formatDate(new Date(finalData[finalData.length - 1].creationTimestamp)),
 			);
-			const labels = Array.from(Array(daysSinceStart), (_, i) =>
+			labels = Array.from(Array(daysSinceStart), (_, i) =>
 				addDaysToDate(finalData[0].creationTimestamp, i),
 			).map((date) => formatDate(date));
-			const values = [];
 			for (const date of labels) {
 				const valuesForDay = groupedByDay[date] ?? [];
 				let rankForDay = ladderRankToInt(valuesForDay.filter((game) => game.playerRank)[0]?.playerRank);
@@ -114,43 +137,35 @@ export class DecktrackerRatingGraphComponent {
 				}
 				values.push(rankForDay);
 			}
-			return {
-				data: [
-					{
-						data: values,
-						label: 'Rating',
-					},
-				],
-				labels: labels,
-			} as Value;
 		} else {
-			const dataForGraph = finalData
-				.map((match) => ladderRankToInt(match.playerRank))
-				.filter((rank) => rank != null);
-			return {
-				data: [
-					{
-						data: dataForGraph,
-						label: 'Rating',
-					},
-				],
-				labels: Array.from(Array(dataForGraph.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex),
-				labelFormattingFn: (label, index, labels) => {
-					if (!label) {
-						return label;
-					}
-
-					return ladderIntRankToString(+label);
-				},
-			} as Value;
+			values = finalData.map((match) => ladderRankToInt(match.playerRank)).filter((rank) => rank != null);
+			labels = Array.from(Array(values.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex);
 		}
+		return {
+			data: [
+				{
+					data: values,
+					label: 'Rating',
+					fill: rankingCategory === 'legend' ? 'start' : 'origin',
+				},
+			],
+			labels: labels,
+			labelFormattingFn: (label, index, labels) => {
+				if (!label) {
+					return label;
+				}
+
+				return ladderIntRankToString(+label, rankingCategory === 'legend');
+			},
+			reverse: rankingCategory === 'legend',
+		} as Value;
 	}
 
 	private compare(
-		a: [GameStat[], StatGameFormatType, DeckTimeFilterType, MmrGroupFilterType, PatchInfo],
-		b: [GameStat[], StatGameFormatType, DeckTimeFilterType, MmrGroupFilterType, PatchInfo],
+		a: [GameStat[], StatGameFormatType, DeckTimeFilterType, MmrGroupFilterType, DeckRankingCategoryType, PatchInfo],
+		b: [GameStat[], StatGameFormatType, DeckTimeFilterType, MmrGroupFilterType, DeckRankingCategoryType, PatchInfo],
 	): boolean {
-		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3] || a[4]?.number !== b[4]?.number) {
+		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4] || a[5]?.number !== b[5]?.number) {
 			return false;
 		}
 		return arraysEqual(a[0], b[0]);
@@ -161,4 +176,5 @@ interface Value {
 	readonly data: ChartDataSets[];
 	readonly labels: Label;
 	readonly labelFormattingFn?: (label: string, index: number, labels: string[]) => string;
+	readonly reverse?: boolean;
 }

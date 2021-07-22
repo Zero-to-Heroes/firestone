@@ -26,6 +26,7 @@ export class DecktrackerStateLoaderService {
 			sort: existingFilters.sort ?? 'last-played',
 			rank: existingFilters.rank ?? 'all',
 			rankingGroup: existingFilters.rankingGroup ?? 'per-match',
+			rankingCategory: existingFilters.rankingCategory ?? 'leagues',
 		};
 		const decks: readonly DeckSummary[] = this.decksStateBuilder.buildState(stats, filters, patch, prefs);
 		patch = patch || currentState.patch;
