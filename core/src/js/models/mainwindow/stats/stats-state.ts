@@ -3,8 +3,14 @@ import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-
 import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
 import { BgsPostMatchStats } from '../../battlegrounds/post-match/bgs-post-match-stats';
 import { GameStats } from './game-stats';
+import { StatsCategory } from './stats-category';
+import { StatsFilters } from './stats-filters';
 
 export class StatsState {
+	readonly loading: boolean = true;
+	readonly categories: readonly StatsCategory[] = [];
+	readonly filters: StatsFilters = new StatsFilters();
+
 	readonly gameStats: GameStats = new GameStats();
 	readonly archetypesConfig: readonly ArchetypeConfig[];
 	readonly archetypesStats: ArchetypeStats;
@@ -23,5 +29,10 @@ export class StatsState {
 		return this.update({
 			gameStats: newGameStats,
 		} as StatsState);
+	}
+
+	public findCategory(categoryId: string): StatsCategory {
+		const result = this.categories?.find((cat) => cat.id === categoryId);
+		return result;
 	}
 }

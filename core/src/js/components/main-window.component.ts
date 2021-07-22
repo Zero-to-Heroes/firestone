@@ -124,6 +124,8 @@ import { PreferencesService } from '../services/preferences.service';
 						</duels-desktop>
 						<arena-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'arena'">
 						</arena-desktop>
+						<stats-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'stats'">
+						</stats-desktop>
 					</section>
 				</div>
 			</section>
@@ -391,7 +393,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		}
 		return this.dataState.showFtue
 			? 'general'
-			: ['decktracker', 'arena'].includes(this.navigationState?.currentApp)
+			: ['decktracker', 'arena', 'stats'].includes(this.navigationState?.currentApp)
 			? 'decktracker-desktop'
 			: this.navigationState?.currentApp;
 	}

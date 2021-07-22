@@ -8,7 +8,7 @@ import {
 	ErrorHandler,
 	Injectable,
 	NgModule,
-	Type,
+	Type
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -61,7 +61,7 @@ import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent,
+	BgsHeroDetailedStatsComponent
 } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
@@ -159,7 +159,7 @@ import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-e
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent,
+	DuelsHeroStatVignetteComponent
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsPersonalDeckDetailsComponent } from '../../components/duels/desktop/duels-personal-deck-details.component';
@@ -177,7 +177,7 @@ import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent,
+	DuelsStatCellComponent
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsHeroSearchComponent } from '../../components/duels/desktop/secondary/duels-hero-search.component';
@@ -249,6 +249,10 @@ import { SettingsReplaysComponent } from '../../components/settings/replays/sett
 import { SettingsAdvancedToggleComponent } from '../../components/settings/settings-advanced-toggle.component';
 import { SettingsAppSelectionComponent } from '../../components/settings/settings-app-selection.component';
 import { SettingsComponent } from '../../components/settings/settings.component';
+import { StatsXpSeasonFilterDropdownComponent } from '../../components/stats/desktop/filters/stats-xp-season-filter-dropdown.component';
+import { StatsFiltersComponent } from '../../components/stats/desktop/filters/_stats-filters.component';
+import { StatsDesktopComponent } from '../../components/stats/desktop/stats-desktop.component';
+import { StatsXpGraphComponent } from '../../components/stats/desktop/stats-xp-graph.component';
 import { OutOfCardsCallbackComponent } from '../../components/third-party/out-of-cards-callback.component';
 import { TwitchAuthCallbackComponent } from '../../components/twitch-auth/twitch-auth-callback.component';
 import { AchievementsManager } from '../../services/achievement/achievements-manager.service';
@@ -322,6 +326,7 @@ import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
+import { StatsStateBuilderService } from '../../services/stats/stats-state-builder.service';
 import { UserService } from '../../services/user.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
@@ -588,6 +593,11 @@ const components = [
 		ArenaTimeFilterDropdownComponent,
 		ArenaClassFilterDropdownComponent,
 
+		StatsDesktopComponent,
+		StatsXpGraphComponent,
+		StatsFiltersComponent,
+		StatsXpSeasonFilterDropdownComponent,
+
 		FtueComponent,
 		NewVersionNotificationComponent,
 
@@ -714,6 +724,8 @@ const components = [
 		DuelsStateBuilderService,
 
 		ArenaStateBuilderService,
+
+		StatsStateBuilderService,
 
 		GlobalStatsService,
 		GlobalStatsNotifierService,

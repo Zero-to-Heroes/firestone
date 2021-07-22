@@ -18,6 +18,7 @@ import { MmrGroupFilterType } from '../models/mainwindow/battlegrounds/mmr-group
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
+import { StatsXpGraphSeasonFilterType } from '../models/mainwindow/stats/stats-xp-graph-season-filter.type';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { ApiRunner } from './api-runner';
@@ -371,6 +372,12 @@ export class PreferencesService {
 	public async updateArenaClassFilter(value: ArenaClassFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, arenaActiveClassFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+	
+	public async updateStatsXpGraphFilter(value: StatsXpGraphSeasonFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, statsXpGraphSeasonFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

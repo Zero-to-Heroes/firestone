@@ -17,6 +17,7 @@ import { BgsRankFilterType } from './mainwindow/battlegrounds/bgs-rank-filter.ty
 import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-type';
 import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
+import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
 import { Ftue } from './preferences/ftue';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
@@ -276,6 +277,8 @@ export class Preferences {
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';
+
+	readonly statsXpGraphSeasonFilter: StatsXpGraphSeasonFilterType = 'all-seasons';
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

@@ -7,4 +7,5 @@ export type CurrentAppType =
 	| 'general'
 	| 'duels'
 	| 'arena'
+	| 'stats'
 	| 'live';

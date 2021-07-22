@@ -127,6 +127,7 @@ import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-so
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
+import { StatsXpGraphFilterSelectedEvent } from './events/stats/stats-xp-graph-filter-selected-event';
 import { StoreInitEvent } from './events/store-init-event';
 import { NavigationHistory } from './navigation-history';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
@@ -228,6 +229,7 @@ import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/tr
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
+import { StatsXpGraphFilterSelectedProcessor } from './processors/stats/stats-xp-graph-filter-selected-processor';
 import { StoreInitProcessor } from './processors/store-init-processor';
 import { StateHistory } from './state-history';
 import { StoreBootstrapService } from './store-bootstrap.service';
@@ -738,6 +740,10 @@ export class MainWindowStoreService {
 
 			ArenaRewardsUpdatedEvent.eventName(),
 			new ArenaRewardsUpdatedProcessor(),
+
+			// Stats
+			StatsXpGraphFilterSelectedEvent.eventName(),
+			new StatsXpGraphFilterSelectedProcessor(this.prefs),
 		);
 	}
 

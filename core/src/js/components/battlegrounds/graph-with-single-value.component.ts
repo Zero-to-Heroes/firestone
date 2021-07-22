@@ -7,7 +7,7 @@ import {
 	Input,
 	OnDestroy,
 	ViewChild,
-	ViewRef,
+	ViewRef
 } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
@@ -204,7 +204,7 @@ export class GraphWithSingleValueComponent implements AfterViewInit, OnDestroy {
 				enabled: true,
 				callbacks: {
 					label: (tooltipItem: ChartTooltipItem, data) =>
-						this._labelFormattingFn ? this._labelFormattingFn(tooltipItem.value, 0, []) : tooltipItem.label,
+						this._labelFormattingFn ? this._labelFormattingFn(tooltipItem.value, 0, []) : tooltipItem.value,
 				},
 			},
 		};

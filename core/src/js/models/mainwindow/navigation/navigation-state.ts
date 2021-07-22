@@ -6,6 +6,7 @@ import { NavigationCollection } from './navigation-collection';
 import { NavigationDecktracker } from './navigation-decktracker';
 import { NavigationDuels } from './navigation-duels';
 import { NavigationReplays } from './navigation-replays';
+import { NavigationStats } from './navigation-stats';
 
 export class NavigationState {
 	readonly isVisible: boolean = false;
@@ -17,6 +18,7 @@ export class NavigationState {
 	readonly navigationBattlegrounds: NavigationBattlegrounds = new NavigationBattlegrounds();
 	readonly navigationDuels: NavigationDuels = new NavigationDuels();
 	readonly navigationArena: NavigationArena = new NavigationArena();
+	readonly navigationStats: NavigationStats = new NavigationStats();
 
 	readonly backArrowEnabled = false;
 	readonly nextArrowEnabled = false;

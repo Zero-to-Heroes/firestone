@@ -1,0 +1,19 @@
+@import '../../../../global/variables';
+@import '../../../../global/fonts';
+
+:host() {
+	display: flex;
+	flex-shrink: 0;
+}
+
+.stats-filters {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 0;
+	width: 100%;
+	position: relative;
+
+	.filter {
+		margin-bottom: 15px;
+	}
+}

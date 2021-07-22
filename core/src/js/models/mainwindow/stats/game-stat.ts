@@ -36,6 +36,7 @@ export class GameStat {
 	readonly bgsAvailableTribes: readonly Race[];
 	readonly bgsBannedTribes: readonly Race[];
 	readonly bgsPerfectGame: boolean;
+	readonly levelAfterMatch: string;
 
 	readonly postMatchStats?: BgsPostMatchStats;
 

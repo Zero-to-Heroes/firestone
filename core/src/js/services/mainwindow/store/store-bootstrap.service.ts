@@ -6,7 +6,6 @@ import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktra
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
-import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
@@ -24,6 +23,7 @@ import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
 import { PreferencesService } from '../../preferences.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
+import { StatsStateBuilderService } from '../../stats/stats-state-builder.service';
 import { UserService } from '../../user.service';
 import { CollectionBootstrapService } from './collection-bootstrap.service';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
@@ -54,6 +54,7 @@ export class StoreBootstrapService {
 		private readonly arena: ArenaStateBuilderService,
 		private readonly dungeonLoot: DungeonLootParserService,
 		private readonly arenaService: ArenaRunParserService,
+		private readonly stats: StatsStateBuilderService,
 	) {
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -122,12 +123,13 @@ export class StoreBootstrapService {
 			bgsGlobalStats?.currentBattlegroundsMetaPatch || currentBattlegroundsMetaPatch,
 		);
 
-		const newStatsState = StatsState.create({
-			gameStats: matchStats,
-			archetypesConfig: archetypesConfig,
-			archetypesStats: archetypesStats,
-			bestBgsUserStats: bgsBestUserStats,
-		} as StatsState);
+		const newStatsState = this.stats.initState(
+			prefs,
+			matchStats,
+			archetypesConfig,
+			archetypesStats,
+			bgsBestUserStats,
+		);
 		const currentRankedMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentConstructedMetaPatch)
 			: null;
