@@ -74,6 +74,7 @@ import { CurrentUserEvent } from './events/current-user-event';
 import { ChangeDeckFormatFilterEvent } from './events/decktracker/change-deck-format-filter-event';
 import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
 import { ChangeDeckRankFilterEvent } from './events/decktracker/change-deck-rank-filter-event';
+import { ChangeDeckRankGroupEvent } from './events/decktracker/change-deck-rank-group-event';
 import { ChangeDeckSortEvent } from './events/decktracker/change-deck-sort-event';
 import { ChangeDeckTimeFilterEvent } from './events/decktracker/change-deck-time-filter-event';
 import { DecktrackerDeleteDeckEvent } from './events/decktracker/decktracker-delete-deck-event';
@@ -173,6 +174,7 @@ import { CurrentUserProcessor } from './processors/current-user-process.ts';
 import { ChangeDeckFormatFilterProcessor } from './processors/decktracker/change-deck-format-filter-processor';
 import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
 import { ChangeDeckRankFilterProcessor } from './processors/decktracker/change-deck-rank-filter-processor';
+import { ChangeDeckRankGroupProcessor } from './processors/decktracker/change-deck-rank-group-processor';
 import { ChangeDeckSortProcessor } from './processors/decktracker/change-deck-sort-processor';
 import { ChangeDeckTimeFilterProcessor } from './processors/decktracker/change-deck-time-filter-processor';
 import { DecktrackerDeleteDeckProcessor } from './processors/decktracker/decktracker-delete-deck-processor';
@@ -581,6 +583,9 @@ export class MainWindowStoreService {
 
 			ChangeDeckRankFilterEvent.eventName(),
 			new ChangeDeckRankFilterProcessor(this.decksStateBuilder, this.prefs, this.replaysStateBuilder),
+
+			ChangeDeckRankGroupEvent.eventName(),
+			new ChangeDeckRankGroupProcessor(this.prefs, this.replaysStateBuilder),
 
 			ChangeDeckModeFilterEvent.eventName(),
 			new ChangeDeckModeFilterProcessor(this.decksStateBuilder, this.prefs),

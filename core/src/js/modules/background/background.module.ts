@@ -145,6 +145,7 @@ import { DecktrackerStatsForReplaysComponent } from '../../components/decktracke
 import { DecktrackerDeckSortDropdownComponent } from '../../components/decktracker/main/filters/decktracker-deck-sort-dropdown.component';
 import { DecktrackerFormatFilterDropdownComponent } from '../../components/decktracker/main/filters/decktracker-format-filter-dropdown.component';
 import { DecktrackerRankFilterDropdownComponent } from '../../components/decktracker/main/filters/decktracker-rank-filter-dropdown.component';
+import { DecktrackerRankGroupDropdownComponent } from '../../components/decktracker/main/filters/decktracker-rank-group-dropdown.component';
 import { DecktrackerTimeFilterDropdownComponent } from '../../components/decktracker/main/filters/decktracker-time-filter-dropdown.component';
 import { DecktrackerFiltersComponent } from '../../components/decktracker/main/filters/_decktracker-filters.component';
 import { MenuSelectionDecktrackerComponent } from '../../components/decktracker/main/menu-selection-decktracker.component';
@@ -504,6 +505,7 @@ const components = [
 		DecktrackerTimeFilterDropdownComponent,
 		DecktrackerRankFilterDropdownComponent,
 		DecktrackerDeckSortDropdownComponent,
+		DecktrackerRankGroupDropdownComponent,
 
 		ReplaysComponent,
 		ReplaysListComponent,

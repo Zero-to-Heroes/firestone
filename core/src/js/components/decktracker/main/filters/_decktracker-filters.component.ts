@@ -16,6 +16,7 @@ import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.serv
 	template: `
 		<div class="filters decktracker-filters">
 			<decktracker-format-filter-dropdown class="filter format-filter"></decktracker-format-filter-dropdown>
+			<decktracker-rank-group-dropdown class="filter rank-group"></decktracker-rank-group-dropdown>
 			<decktracker-time-filter-dropdown class="filter time-filter"></decktracker-time-filter-dropdown>
 			<decktracker-rank-filter-dropdown class="filter rank-filter"></decktracker-rank-filter-dropdown>
 			<decktracker-deck-sort-dropdown class="filter deck-sort"></decktracker-deck-sort-dropdown>

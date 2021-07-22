@@ -605,6 +605,10 @@ export const ladderRankToInt = (rank: string): number => {
 		return null;
 	}
 
+	if (rank.includes('legend')) {
+		return 50;
+	}
+
 	const [league, rankInLeague] = rank.split('-').map((info) => parseInt(info));
 	return -(league - 5) * 10 + (10 - rankInLeague);
 };

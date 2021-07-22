@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
 import { AppUiStoreService, cdLog } from '@services/app-ui-store.service';
-import { arraysEqual } from '@services/utils';
+import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { MmrGroupFilterType } from '../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-format.type';
 import { PatchInfo } from '../../../models/patches';
@@ -44,13 +45,14 @@ export class DecktrackerRatingGraphComponent {
 				// TODO: add a way to group per day?
 				([main, nav]) => main.decktracker.filters.gameFormat,
 				([main, nav]) => main.decktracker.filters.time,
+				([main, nav]) => main.decktracker.filters.rankingGroup,
 				([main, nav]) => main.decktracker.patch,
 			)
 			.pipe(
-				filter(([stats, formatFilter, timeFilter, patch]) => !!stats && !!patch?.number),
+				filter(([stats, formatFilter, timeFilter, rakingGroup, patch]) => !!stats && !!patch?.number),
 				distinctUntilChanged((a, b) => this.compare(a, b)),
-				map(([stats, formatFilter, timeFilter, patch]) =>
-					this.buildValue(stats, formatFilter, timeFilter, patch),
+				map(([stats, formatFilter, timeFilter, rakingGroup, patch]) =>
+					this.buildValue(stats, formatFilter, timeFilter, rakingGroup, patch),
 				),
 				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
 			);
@@ -60,6 +62,7 @@ export class DecktrackerRatingGraphComponent {
 		stats: readonly GameStat[],
 		formatFilter: StatGameFormatType,
 		timeFilter: DeckTimeFilterType,
+		rakingGroup: MmrGroupFilterType,
 		patch: PatchInfo,
 	): Value {
 		if (formatFilter === 'all' || formatFilter === 'unknown') {
@@ -91,23 +94,56 @@ export class DecktrackerRatingGraphComponent {
 						...dataWithTime.slice(1),
 				  ]
 				: dataWithTime;
-		const dataForGraph = finalData.map((match) => ladderRankToInt(match.playerRank)).filter((rank) => rank != null);
-		return {
-			data: [
-				{
-					data: dataForGraph,
-					label: 'Rating',
-				},
-			],
-			labels: Array.from(Array(dataForGraph.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex),
-		} as Value;
+		if (rakingGroup === 'per-day') {
+			const groupedByDay: { [date: string]: readonly GameStat[] } = groupByFunction((match: GameStat) =>
+				formatDate(new Date(match.creationTimestamp)),
+			)(finalData);
+			const daysSinceStart = daysBetweenDates(
+				formatDate(new Date(finalData[0].creationTimestamp)),
+				formatDate(new Date(finalData[finalData.length - 1].creationTimestamp)),
+			);
+			const labels = Array.from(Array(daysSinceStart), (_, i) =>
+				addDaysToDate(finalData[0].creationTimestamp, i),
+			).map((date) => formatDate(date));
+			const values = [];
+			for (const date of labels) {
+				const valuesForDay = groupedByDay[date] ?? [];
+				let rankForDay = ladderRankToInt(valuesForDay.filter((game) => game.playerRank)[0]?.playerRank);
+				if (rankForDay == null) {
+					rankForDay = [...values].reverse().filter((value) => value != null)[0];
+				}
+				values.push(rankForDay);
+			}
+			return {
+				data: [
+					{
+						data: values,
+						label: 'Rating',
+					},
+				],
+				labels: labels,
+			} as Value;
+		} else {
+			const dataForGraph = finalData
+				.map((match) => ladderRankToInt(match.playerRank))
+				.filter((rank) => rank != null);
+			return {
+				data: [
+					{
+						data: dataForGraph,
+						label: 'Rating',
+					},
+				],
+				labels: Array.from(Array(dataForGraph.length), (_, i) => i + 1).map((matchIndex) => '' + matchIndex),
+			} as Value;
+		}
 	}
 
 	private compare(
-		a: [GameStat[], StatGameFormatType, DeckTimeFilterType, PatchInfo],
-		b: [GameStat[], StatGameFormatType, DeckTimeFilterType, PatchInfo],
+		a: [GameStat[], StatGameFormatType, DeckTimeFilterType, MmrGroupFilterType, PatchInfo],
+		b: [GameStat[], StatGameFormatType, DeckTimeFilterType, MmrGroupFilterType, PatchInfo],
 	): boolean {
-		if (a[1] !== b[1] || a[2] !== b[2] || a[3]?.number !== b[3]?.number) {
+		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3] || a[4]?.number !== b[4]?.number) {
 			return false;
 		}
 		return arraysEqual(a[0], b[0]);

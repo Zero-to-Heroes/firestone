@@ -85,6 +85,18 @@ export const formatDate = (theDate: Date): string => {
 	return `${theDate.toISOString().slice(0, 10)}`;
 };
 
+export const daysBetweenDates = (date1: string, date2: string): number => {
+	const date1Date = new Date(date1);
+	const date2Date = new Date(date2);
+	return Math.round(Math.abs(date1Date.getTime() - date2Date.getTime()) / (1000 * 60 * 60 * 24));
+};
+
+export const addDaysToDate = (timeStamp: number, days: number): Date => {
+	const newDate = new Date(timeStamp);
+	newDate.setDate(newDate.getDate() + days);
+	return newDate;
+};
+
 export const formatPatch = (input: PatchInfo): string => {
 	if (!input) {
 		return '';
