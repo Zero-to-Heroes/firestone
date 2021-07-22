@@ -34,7 +34,6 @@ export class BattlegroundsReplaysRecapComponent {
 				([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId),
 			)
 			.pipe(
-				tap(([replays, category]) => console.debug('considering', replays, category)),
 				filter(([replays, category]) => !!replays?.length && !!category),
 				map(([replays, category]) => {
 					const heroId = (category as BattlegroundsPersonalStatsHeroDetailsCategory).heroId;

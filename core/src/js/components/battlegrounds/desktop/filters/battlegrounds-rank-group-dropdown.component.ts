@@ -44,7 +44,7 @@ export class BattlegroundsRankGroupDropdownComponent implements AfterViewInit {
 			{
 				value: 'per-day',
 				label: 'Group per day',
-				tooltip: 'Show the rating at the end of each day',
+				tooltip: 'Show the rating at the start of each day',
 			} as MmrGroupFilterOption,
 		] as readonly MmrGroupFilterOption[];
 		this.filter$ = this.store

@@ -7,7 +7,7 @@ import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegro
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
-import { arraysEqual, formatDate, groupByFunction } from '../../../../services/utils';
+import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-rating',
@@ -83,14 +83,25 @@ export class BattlegroundsPersonalStatsRatingComponent {
 				  ]
 				: dataWithTime;
 		if (mmrFilter === 'per-day') {
-			const groupedByDay = groupByFunction((match: GameStat) => formatDate(new Date(match.creationTimestamp)))(
-				finalData,
+			const groupedByDay: { [date: string]: readonly GameStat[] } = groupByFunction((match: GameStat) =>
+				formatDate(new Date(match.creationTimestamp)),
+			)(finalData);
+			const daysSinceStart = daysBetweenDates(
+				formatDate(new Date(finalData[0].creationTimestamp)),
+				formatDate(new Date(finalData[finalData.length - 1].creationTimestamp)),
 			);
-			//console.log('groupedByDay', groupedByDay);
-			const values = Object.values(groupedByDay).map((games: readonly GameStat[]) =>
-				parseInt(games[games.length - 1].playerRank),
-			);
-			const labels = Object.keys(groupedByDay);
+			const labels = Array.from(Array(daysSinceStart), (_, i) =>
+				addDaysToDate(finalData[0].creationTimestamp, i),
+			).map((date) => formatDate(date));
+			const values = [];
+			for (const date of labels) {
+				const valuesForDay = groupedByDay[date] ?? [];
+				let rankForDay = parseInt(valuesForDay[0]?.playerRank);
+				if (rankForDay == null || isNaN(rankForDay)) {
+					rankForDay = [...values].reverse().filter((value) => value != null)[0];
+				}
+				values.push(rankForDay);
+			}
 			return {
 				data: [
 					{
