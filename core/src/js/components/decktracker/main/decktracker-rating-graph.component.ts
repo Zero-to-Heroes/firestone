@@ -80,7 +80,6 @@ export class DecktrackerRatingGraphComponent {
 		const dataWithTime = dataWithCurrentMmr.filter((stat) =>
 			DecksStateBuilderService.isValidDate(stat, timeFilter, patch),
 		);
-		console.debug('filtering time', dataWithTime);
 		// Remove the first match if we're on a "last patch" filter
 		const finalData =
 			timeFilter === 'last-patch'
@@ -92,11 +91,6 @@ export class DecktrackerRatingGraphComponent {
 						...dataWithTime.slice(1),
 				  ]
 				: dataWithTime;
-		console.debug('finalData', finalData);
-		console.debug(
-			'mapping',
-			finalData.map((match) => [match.playerRank, ladderRankToInt(match.playerRank)]),
-		);
 		const dataForGraph = finalData.map((match) => ladderRankToInt(match.playerRank)).filter((rank) => rank != null);
 		return {
 			data: [
