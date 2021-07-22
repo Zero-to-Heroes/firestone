@@ -51,7 +51,7 @@ export class BgsRunStatsService {
 			this.computeRunStats(event.data[0], event.data[1], event.data[2], event.data[3]);
 		});
 		this.events.on(Events.POPULATE_HERO_DETAILS_FOR_BG).subscribe(async (event) => {
-			console.debug('[gr] POPULATE_HERO_DETAILS_FOR_BG', event)
+			console.debug('[gr] POPULATE_HERO_DETAILS_FOR_BG', event);
 			this.computeHeroDetailsForBg(event.data[0]);
 		});
 		setTimeout(() => {
@@ -75,7 +75,9 @@ export class BgsRunStatsService {
 	private async computeHeroDetailsForBg(heroCardId: string) {
 		console.debug('[gr] ready to reprodcess', heroCardId);
 		const lastHeroPostMatchStats = await this.retrieveLastBgsRunStats(heroCardId);
-		this.stateUpdater.next(new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats, heroCardId));
+		this.stateUpdater.next(
+			new BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent(lastHeroPostMatchStats, heroCardId),
+		);
 	}
 
 	private async retrieveLastBgsRunStats(

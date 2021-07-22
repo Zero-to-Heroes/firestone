@@ -6,7 +6,7 @@ import {
 	HostListener,
 	Input,
 	ViewChild,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem, ChartTooltipModel } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
