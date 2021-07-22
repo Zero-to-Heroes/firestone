@@ -30,7 +30,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.11.0',
+		version: '7.12.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -48,24 +48,20 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'arena',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `There is a new Arena tab that tracks your runs and rewards (very similar to what we have for Duels). It's still pretty lightweight, and can/will be improved in the future. Let me know your suggestions!`,
+								text: `Full Battle Simulator is now live! (it is still in a very early beta stage though). You can pick any minions you like for both sides, and modify them to fit your needs (stats, divine shield, poison, etc.). It is still missing the ability to choose your hero power, and the UI is still all over the place, but all of these will be fixed soon :)`,
 							},
 						],
 					},
 					{
-						category: 'battlegrounds',
+						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where Close the Portal hero power was not implemented in the simulator for minions summoned in combat.`,
-							},
-							{
-								type: 'misc',
-								text: `The BG window will stop popping up after a match ends. This was introduced to make sure users could see the post-match stats, but since these are now computed in real time it makes less sense to forcefully open a window without the user asking to.`,
+								type: 'feature',
+								text: `You can now see a graph of your rank evolution, game-by-game or day-by-day. It's been split in two graphs: one for the Bronze-Diamond leagues, and one for Legend, to make things easier to see.`,
 							},
 						],
 					},
@@ -79,20 +75,12 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'feature',
-								text: `Decrease the smallest possible size of the trackers (in the settings).`,
-							},
-							{
 								type: 'bug',
-								text: `Fix missing images in opponent's hand for cards created by Instructor Fireheart's chain creates.`,
+								text: `Properly show Quel'Delar's icon in the opponent's hand after it has been forged (mostly for Duels).`,
 							},
 							{
 								type: 'content',
-								text: `Add card highlights for Firemancer Flurgl and Scavenger's Ingenuity.`,
-							},
-							{
-								type: 'content',
-								text: `Add card guess for card drawn by Gnomish Inventor.`,
+								text: `Update the deck's contents (and add a global effect) after Hemet, Jungle Hunter or Skulking Geist has been played.`,
 							},
 						],
 					},
@@ -100,17 +88,12 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
-								type: 'ui',
-								text: `Minions inside each tribe are now ordered alphabetically.`,
+								type: 'feature',
+								text: `When showing the MMR graph grouped by day, plot ALL the days, even the ones where no games were played.`,
 							},
-						],
-					},
-					{
-						category: 'replays',
-						details: [
 							{
 								type: 'bug',
-								text: `Fix resources (mana, coins) not showing on some replays.`,
+								text: `Fix a bug where minions in the tier lists were not ordered alphabetically.`,
 							},
 						],
 					},
