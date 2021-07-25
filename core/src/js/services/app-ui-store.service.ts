@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
+import { BattlegroundsAppState } from '../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
@@ -26,6 +27,10 @@ export class AppUiStoreService {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
+	// Selectors here should do minimal work - just select the data from the state, and not 
+	// perform any mapping.
+	// This is because the selectors are called every time a new state is emitted, so 
+	// costly operations can still amount to a lot of overhead
 	public listen$<S extends Selector<any>[]>(
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
@@ -42,11 +47,17 @@ export class AppUiStoreService {
 }
 
 // TODO: move this somewhere else? To a facade?
-export const currentBgHeroId = (main: MainWindowState, nav: NavigationState): string => {
-	return nav.navigationBattlegrounds.selectedCategoryId?.includes('bgs-category-personal-hero-details-')
-		? (main.battlegrounds.findCategory(
-				nav.navigationBattlegrounds.selectedCategoryId,
-		  ) as BattlegroundsPersonalStatsHeroDetailsCategory)?.heroId
+// export const currentBgHeroId = (main: MainWindowState, nav: NavigationState): string => {
+// 	return nav.navigationBattlegrounds.selectedCategoryId?.includes('bgs-category-personal-hero-details-')
+// 		? (main.battlegrounds.findCategory(
+// 				nav.navigationBattlegrounds.selectedCategoryId,
+// 		  ) as BattlegroundsPersonalStatsHeroDetailsCategory)?.heroId
+// 		: null;
+// };
+
+export const currentBgHeroId = (battlegrounds: BattlegroundsAppState, selectedCategoryId: string): string => {
+	return selectedCategoryId?.includes('bgs-category-personal-hero-details-')
+		? (battlegrounds.findCategory(selectedCategoryId) as BattlegroundsPersonalStatsHeroDetailsCategory)?.heroId
 		: null;
 };
 

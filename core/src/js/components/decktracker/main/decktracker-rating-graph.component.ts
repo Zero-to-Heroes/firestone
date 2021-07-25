@@ -40,11 +40,7 @@ export class DecktrackerRatingGraphComponent {
 	constructor(private readonly store: AppUiStoreService) {
 		this.value$ = this.store
 			.listen$(
-				([main, nav]) =>
-					main.stats.gameStats.stats
-						.filter((stat) => stat.gameMode === 'ranked')
-						.filter((stat) => stat.playerRank),
-				// TODO: missing a way to select between non-legend and legend graphs
+				([main, nav]) => main.stats.gameStats.stats,
 				([main, nav]) => main.decktracker.filters.gameFormat,
 				([main, nav]) => main.decktracker.filters.time,
 				([main, nav]) => main.decktracker.filters.rankingGroup,
@@ -52,6 +48,24 @@ export class DecktrackerRatingGraphComponent {
 				([main, nav]) => main.decktracker.patch,
 			)
 			.pipe(
+				map(
+					([stats, gameFormat, time, rankingGroup, rankingCategory, patch]) =>
+						[
+							stats.filter((stat) => stat.gameMode === 'ranked').filter((stat) => stat.playerRank),
+							gameFormat,
+							time,
+							rankingGroup,
+							rankingCategory,
+							patch,
+						] as [
+							GameStat[],
+							StatGameFormatType,
+							DeckTimeFilterType,
+							MmrGroupFilterType,
+							DeckRankingCategoryType,
+							PatchInfo,
+						],
+				),
 				filter(
 					([stats, formatFilter, timeFilter, rakingGroup, rankingCategory, patch]) =>
 						!!stats && !!patch?.number,

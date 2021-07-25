@@ -33,10 +33,7 @@ export class BattlegroundsPersonalStatsRatingComponent {
 	constructor(private readonly store: AppUiStoreService) {
 		this.value$ = this.store
 			.listen$(
-				([main, nav]) =>
-					main.stats.gameStats.stats
-						.filter((stat) => stat.gameMode === 'battlegrounds')
-						.filter((stat) => stat.playerRank),
+				([main, nav]) => main.stats.gameStats.stats,
 				([main, nav]) => main.battlegrounds.activeTimeFilter,
 				([main, nav]) => main.battlegrounds.activeGroupMmrFilter,
 				([main, nav]) => main.battlegrounds.globalStats.currentBattlegroundsMetaPatch?.number,
@@ -45,6 +42,15 @@ export class BattlegroundsPersonalStatsRatingComponent {
 				filter(
 					([stats, timeFilter, mmrFilter, currentBattlegroundsMetaPatch]) =>
 						!!stats && !!currentBattlegroundsMetaPatch,
+				),
+				map(
+					([stats, timeFilter, mmrFilter, currentBattlegroundsMetaPatch]) =>
+						[
+							stats.filter((stat) => stat.gameMode === 'battlegrounds').filter((stat) => stat.playerRank),
+							timeFilter,
+							mmrFilter,
+							currentBattlegroundsMetaPatch,
+						] as [GameStat[], BgsActiveTimeFilterType, MmrGroupFilterType, number],
 				),
 				distinctUntilChanged((a, b) => this.compare(a, b)),
 				map(([stats, timeFilter, mmrFilter, currentBattlegroundsMetaPatch]) =>

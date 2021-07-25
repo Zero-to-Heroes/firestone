@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from 
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
+import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../services/app-ui-store.service';
@@ -52,12 +53,14 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
 		this.tabs$ = this.store
-			.listen$(([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId))
+			.listen$(
+				([main, nav]) => main.battlegrounds,
+				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
+			)
 			.pipe(
-				filter(
-					([category]) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs,
-				),
-				map(([category]) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
+				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
+				filter((category) => !!category && !!(category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
+				map((category) => (category as BattlegroundsPersonalStatsHeroDetailsCategory).tabs),
 				distinctUntilChanged(),
 				tap((stat) => cdLog('emitting tabs in ', this.constructor.name, stat)),
 			);
@@ -72,9 +75,14 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 		this.player$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.stats.heroStats,
-				([main, nav]) => currentBgHeroId(main, nav),
+				([main, nav]) => main.battlegrounds,
+				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
+				map(
+					([heroStats, battlegrounds, selectedCategoryId]) =>
+						[heroStats, currentBgHeroId(battlegrounds, selectedCategoryId)] as [BgsHeroStat[], string],
+				),
 				filter(([heroStats, heroId]) => !!heroStats && !!heroId),
 				map(([heroStats, heroId]) => heroStats?.find((stat) => stat.id === heroId)),
 				distinctUntilChanged(),

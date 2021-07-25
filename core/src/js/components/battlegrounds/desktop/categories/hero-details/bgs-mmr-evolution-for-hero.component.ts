@@ -32,11 +32,18 @@ export class BgsMmrEvolutionForHeroComponent {
 	constructor(private readonly store: AppUiStoreService) {
 		this.value$ = this.store
 			.listen$(
-				([main, nav]) => main.stats.gameStats.stats.filter((stat) => stat.gameMode === 'battlegrounds'),
-				([main, nav]) => currentBgHeroId(main, nav),
+				([main, nav]) => main.battlegrounds,
+				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
+				([main, nav]) => main.stats.gameStats.stats,
 			)
-			.pipe()
 			.pipe(
+				map(
+					([battlegrounds, selectedCategoryId, stats]) =>
+						[
+							stats.filter((stat) => stat.gameMode === 'battlegrounds'),
+							currentBgHeroId(battlegrounds, selectedCategoryId),
+						] as [GameStat[], string],
+				),
 				filter(([heroStats, heroId]) => !!heroStats && !!heroId),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([heroStats, heroId]) => this.buildValue(heroStats, heroId)),

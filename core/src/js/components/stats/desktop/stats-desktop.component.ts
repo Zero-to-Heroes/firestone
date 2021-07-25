@@ -61,10 +61,13 @@ export class StatsDesktopComponent {
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
 			);
 		this.category$ = this.store
-			.listen$(([main, nav]) => main.stats.findCategory(nav.navigationStats.selectedCategoryId))
+			.listen$(
+				([main, nav]) => main.stats,
+				([main, nav]) => nav.navigationStats.selectedCategoryId,
+			)
 			.pipe(
-				filter(([category]) => !!category),
-				map(([category]) => category),
+				map(([stats, selectedCategoryId]) => stats.findCategory(selectedCategoryId)),
+				filter((category) => !!category),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
 			);

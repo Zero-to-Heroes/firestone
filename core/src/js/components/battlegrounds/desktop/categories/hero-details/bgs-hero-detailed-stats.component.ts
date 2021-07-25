@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { BgsStats } from '../../../../../models/battlegrounds/stats/bgs-stats';
 import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/app-ui-store.service';
 
 @Component({
@@ -94,10 +95,15 @@ export class BgsHeroDetailedStatsComponent {
 	constructor(private readonly store: AppUiStoreService) {
 		this.bgHeroStats$ = this.store
 			.listen$(
-				([main, nav]) => currentBgHeroId(main, nav),
+				([main, nav]) => main.battlegrounds,
+				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => main.battlegrounds.stats,
 			)
 			.pipe(
+				map(
+					([battlegrounds, selectedCategoryId, bgsStats]) =>
+						[currentBgHeroId(battlegrounds, selectedCategoryId), bgsStats] as [string, BgsStats],
+				),
 				filter(([heroId, bgsStats]) => !!heroId && !!bgsStats),
 				map(([heroId, bgsStats]) => bgsStats.heroStats?.find((stat) => stat.id === heroId)),
 				distinctUntilChanged(),

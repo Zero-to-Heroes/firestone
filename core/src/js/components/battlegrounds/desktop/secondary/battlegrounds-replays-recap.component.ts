@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
@@ -31,9 +32,17 @@ export class BattlegroundsReplaysRecapComponent {
 		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.replays.allReplays,
-				([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId),
+				([main, nav]) => main.battlegrounds,
+				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
+				map(
+					([replays, battlegrounds, selectedCategoryId]) =>
+						[replays, battlegrounds.findCategory(selectedCategoryId)] as [
+							GameStat[],
+							BattlegroundsCategory,
+						],
+				),
 				filter(([replays, category]) => !!replays?.length && !!category),
 				map(([replays, category]) => {
 					const heroId = (category as BattlegroundsPersonalStatsHeroDetailsCategory).heroId;

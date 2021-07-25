@@ -63,10 +63,13 @@ export class ArenaDesktopComponent {
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
 			);
 		this.category$ = this.store
-			.listen$(([main, nav]) => main.arena.findCategory(nav.navigationArena.selectedCategoryId))
+			.listen$(
+				([main, nav]) => main.arena,
+				([main, nav]) => nav.navigationArena.selectedCategoryId,
+			)
 			.pipe(
-				filter(([category]) => !!category),
-				map(([category]) => category),
+				map(([arena, selectedCategoryId]) => arena.findCategory(selectedCategoryId)),
+				filter((category) => !!category),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
 			);

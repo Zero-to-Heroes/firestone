@@ -89,7 +89,7 @@ export class ArenaClassesRecapComponent {
 	constructor(private readonly allCards: AllCardsService, private readonly store: AppUiStoreService) {
 		this.stats$ = this.store
 			.listen$(
-				([main, nav]) => main.stats.gameStats.stats.filter((stat) => stat.gameMode === 'arena'),
+				([main, nav]) => main.stats.gameStats.stats,
 				([main, nav]) => main.arena.activeTimeFilter,
 				([main, nav]) => main.arena.activeHeroFilter,
 				([main, nav]) => main.arena.currentArenaMetaPatch,
@@ -97,7 +97,12 @@ export class ArenaClassesRecapComponent {
 			.pipe(
 				filter(([stats, timeFilter, heroFilter, patch]) => !!stats?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				map(([arenaMatches, timeFilter, heroFilter, patch]) => {
+				map(([stats, timeFilter, heroFilter, patch]) => {
+					const arenaMatches = stats.filter((stat) => stat.gameMode === 'arena');
+					if (!arenaMatches.length) {
+						return null;
+					}
+
 					const arenaRuns = this.buildArenaRuns(arenaMatches, timeFilter, heroFilter, patch);
 					const totalRuns = arenaRuns.length;
 					return {
@@ -115,6 +120,7 @@ export class ArenaClassesRecapComponent {
 						),
 					};
 				}),
+				filter((result) => !!result),
 				tap((info) => cdLog('emitting arena classes recap in ', this.constructor.name, info)),
 			);
 	}

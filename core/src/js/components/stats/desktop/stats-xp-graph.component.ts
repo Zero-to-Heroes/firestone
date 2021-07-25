@@ -37,10 +37,17 @@ export class StatsXpGraphComponent {
 	constructor(private readonly store: AppUiStoreService) {
 		this.value$ = this.store
 			.listen$(
-				([main, nav]) => main.stats.gameStats.stats.filter((stat) => stat.levelAfterMatch),
+				([main, nav]) => main.stats.gameStats.stats,
 				([main, nav]) => main.stats.filters.xpGraphSeasonFilter,
 			)
 			.pipe(
+				map(
+					([stats, seasonFilter]) =>
+						[stats.filter((stat) => stat.levelAfterMatch), seasonFilter] as [
+							GameStat[],
+							StatsXpGraphSeasonFilterType,
+						],
+				),
 				filter(([stats, seasonFilter]) => !!stats?.length && !!seasonFilter),
 				distinctUntilChanged((a, b) => this.compare(a, b)),
 				map(([stats, seasonFilter]) => this.buildValue(stats, seasonFilter)),

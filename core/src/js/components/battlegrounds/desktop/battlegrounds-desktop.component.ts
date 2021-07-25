@@ -90,10 +90,13 @@ export class BattlegroundsDesktopComponent implements AfterViewInit {
 				tap((info) => cdLog('emitting menuDisplayType in ', this.constructor.name, info)),
 			);
 		this.category$ = this.store
-			.listen$(([main, nav]) => main.battlegrounds.findCategory(nav.navigationBattlegrounds.selectedCategoryId))
+			.listen$(
+				([main, nav]) => main.battlegrounds,
+				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
+			)
 			.pipe(
-				filter(([category]) => !!category),
-				map(([category]) => category),
+				map(([battlegrounds, selectedCategoryId]) => battlegrounds.findCategory(selectedCategoryId)),
+				filter((category) => !!category),
 				distinctUntilChanged(),
 				tap((info) => cdLog('emitting category in ', this.constructor.name, info)),
 			);

@@ -43,10 +43,7 @@ export class ArenaRunsListComponent implements OnDestroy {
 		// arena runs when a filter changes?
 		this.sub$$ = this.store
 			.listen$(
-				([main, nav]) =>
-					main.stats.gameStats.stats
-						.filter((stat) => stat.gameMode === 'arena')
-						.filter((stat) => !!stat.runId),
+				([main, nav]) => main.stats.gameStats.stats,
 				([main, nav]) => main.arena.rewards,
 				([main, nav]) => main.arena.activeTimeFilter,
 				([main, nav]) => main.arena.activeHeroFilter,
@@ -55,7 +52,10 @@ export class ArenaRunsListComponent implements OnDestroy {
 			.pipe(
 				filter(([stats, rewards, timeFilter, heroFilter, patch]) => !!stats?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				map(([arenaMatches, rewards, timeFilter, heroFilter, patch]) => {
+				map(([stats, rewards, timeFilter, heroFilter, patch]) => {
+					const arenaMatches = stats
+						.filter((stat) => stat.gameMode === 'arena')
+						.filter((stat) => !!stat.runId);
 					return [this.buildArenaRuns(arenaMatches, rewards), timeFilter, heroFilter, patch] as [
 						readonly ArenaRun[],
 						ArenaTimeFilterType,

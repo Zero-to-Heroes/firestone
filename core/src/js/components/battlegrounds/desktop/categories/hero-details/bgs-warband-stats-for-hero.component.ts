@@ -33,9 +33,18 @@ export class BgsWarbandStatsForHeroComponent {
 			.listen$(
 				([main, nav]) => main.battlegrounds.stats.heroStats,
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
-				([main, nav]) => currentBgHeroId(main, nav),
+				([main, nav]) => main.battlegrounds,
+				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(
+				map(
+					([heroStats, postMatch, battlegrounds, selectedCategoryId]) =>
+						[heroStats, postMatch, currentBgHeroId(battlegrounds, selectedCategoryId)] as [
+							BgsHeroStat[],
+							BgsPostMatchStatsForReview[],
+							string,
+						],
+				),
 				filter(([heroStats, postMatch, heroId]) => !!heroStats && !!postMatch && !!heroId),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([heroStats, postMatch, heroId]) => this.buildValue(heroStats, postMatch, heroId)),
