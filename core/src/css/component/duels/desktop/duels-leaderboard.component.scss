@@ -1,0 +1,65 @@
+:host() {
+	display: flex;
+	min-height: 0;
+}
+
+.duels-leaderboard {
+	display: flex;
+	min-height: 0;
+	flex-grow: 1;
+
+	.duels-leaderboard-entry-container {
+		display: flex;
+		min-height: 0;
+		flex-grow: 1;
+
+		.entries {
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+			overflow-y: scroll;
+			flex-grow: 1;
+			color: var(--color-1);
+
+			.duels-leaderboard-entry {
+				display: flex;
+				height: 40px;
+				min-height: 40px;
+				border-bottom: 1px solid var(--color-3);
+				align-items: center;
+
+				.rank {
+					width: 100px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				.rating {
+					width: 150px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+				}
+
+				.name {
+					padding-left: 50px;
+				}
+
+				&.top-10 {
+					background: rgba(217, 195, 171, 0.08);
+					.rank {
+						color: var(--color-common-1);
+					}
+				}
+
+				&.top-3 {
+					background: rgba(255, 185, 72, 0.08);
+					.rank {
+						color: var(--color-common-2);
+					}
+				}
+			}
+		}
+	}
+}

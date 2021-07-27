@@ -162,6 +162,7 @@ import {
 	DuelsHeroStatVignetteComponent
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
+import { DuelsLeaderboardComponent } from '../../components/duels/desktop/duels-leaderboard.component';
 import { DuelsPersonalDeckDetailsComponent } from '../../components/duels/desktop/duels-personal-deck-details.component';
 import { DuelsPersonalDecksVignetteComponent } from '../../components/duels/desktop/duels-personal-deck-vignette.component';
 import { DuelsPersonalDecksComponent } from '../../components/duels/desktop/duels-personal-decks.component';
@@ -583,6 +584,7 @@ const components = [
 		DuelsTierComponent,
 		DuelsTreasureSearchComponent,
 		DuelsHeroSearchComponent,
+		DuelsLeaderboardComponent,
 
 		ArenaDesktopComponent,
 		ArenaEmptyStateComponent,

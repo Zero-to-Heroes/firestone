@@ -8,8 +8,9 @@ import {
 	HeroPowerStat,
 	HeroStat,
 	SignatureTreasureStat,
-	TreasureStat,
+	TreasureStat
 } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
@@ -23,14 +24,14 @@ import {
 	HeroPowerDuelsDeckStatInfo,
 	LootDuelsDeckStatInfo,
 	SignatureTreasureDuelsDeckStatInfo,
-	TreasureDuelsDeckStatInfo,
+	TreasureDuelsDeckStatInfo
 } from '../../models/duels/duels-personal-deck';
 import {
 	DuelsDeckStat,
 	DuelsHeroPlayerStat,
 	DuelsPlayerStats,
 	DuelsTreasureStat,
-	DuelsTreasureStatForClass,
+	DuelsTreasureStatForClass
 } from '../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../models/duels/duels-run';
 import { DuelsState } from '../../models/duels/duels-state';
@@ -42,6 +43,7 @@ import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
+import { FeatureFlags } from '../feature-flags';
 import { formatClass } from '../hs-utils';
 import { DuelsTopDeckRunDetailsLoadedEvent } from '../mainwindow/store/events/duels/duels-top-deck-run-details-loaded-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
@@ -53,6 +55,7 @@ import { getDuelsHeroCardId } from './duels-utils';
 const DUELS_RUN_INFO_URL = 'https://p6r07hp5jf.execute-api.us-west-2.amazonaws.com/Prod/{proxy+}';
 const DUELS_GLOBAL_STATS_URL = 'https://static.zerotoheroes.com/api/duels-global-stats.gz.json?v=15';
 const DUELS_RUN_DETAILS_URL = 'https://static-api.firestoneapp.com/retrieveDuelsSingleRun/';
+const DUELS_LEADERBOARD_URL = 'https://api.firestoneapp.com/duelsLeaderboard/get/duelsLeaderboard/{proxy+}';
 
 @Injectable()
 export class DuelsStateBuilderService {
@@ -76,17 +79,15 @@ export class DuelsStateBuilderService {
 		});
 	}
 
-	private async loadTopDeckRunDetails(runId: string, deckId: number) {
-		const results: any = await this.api.callGetApi(`${DUELS_RUN_DETAILS_URL}/${runId}?v=3`);
-		// console.log('[duels-state-builder] laoded run details', results);
-		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
-		this.mainWindowStateUpdater.next(
-			new DuelsTopDeckRunDetailsLoadedEvent({
-				id: deckId,
-				runId: runId,
-				steps: steps,
-			} as DuelsDeckStat),
-		);
+	public async loadLeaderboard(): Promise<readonly DuelsLeaderboardEntry[]> {
+		const user = await this.ow.getCurrentUser();
+		const input: Input = {
+			userId: user.userId,
+			userName: user.username,
+		};
+		const results: any = await this.api.callPostApi(DUELS_LEADERBOARD_URL, input);
+		console.log('[duels-state-builder] loaded leaderboard', results);
+		return results?.results;
 	}
 
 	public async loadRuns(): Promise<[readonly DuelsRunInfo[], readonly DuelsRewardsInfo[]]> {
@@ -121,6 +122,7 @@ export class DuelsStateBuilderService {
 		globalStats: DuelsGlobalStats,
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
+		leaderboard: readonly DuelsLeaderboardEntry[],
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		return DuelsState.create({
@@ -128,11 +130,25 @@ export class DuelsStateBuilderService {
 			globalStats: globalStats,
 			duelsRunInfos: duelsRunInfo,
 			duelsRewardsInfo: duelsRewardsInfo,
+			leaderboard: leaderboard,
 		} as DuelsState);
 	}
 
+	private async loadTopDeckRunDetails(runId: string, deckId: number) {
+		const results: any = await this.api.callGetApi(`${DUELS_RUN_DETAILS_URL}/${runId}?v=3`);
+		// console.log('[duels-state-builder] laoded run details', results);
+		const steps: readonly (GameStat | DuelsRunInfo)[] = results?.results;
+		this.mainWindowStateUpdater.next(
+			new DuelsTopDeckRunDetailsLoadedEvent({
+				id: deckId,
+				runId: runId,
+				steps: steps,
+			} as DuelsDeckStat),
+		);
+	}
+
 	private buildCategories(): readonly DuelsCategory[] {
-		return [
+		const result = [
 			DuelsCategory.create({
 				id: 'duels-runs',
 				name: 'My Runs',
@@ -169,6 +185,18 @@ export class DuelsStateBuilderService {
 				categories: null,
 			} as DuelsCategory),
 		];
+		if (FeatureFlags.ENABLE_DUELS_LEADERBOARD) {
+			result.push(
+				DuelsCategory.create({
+					id: 'duels-leaderboard',
+					name: 'Leaderboard',
+					enabled: true,
+					icon: undefined,
+					categories: null,
+				} as DuelsCategory),
+			);
+		}
+		return result;
 	}
 
 	public async updateState(
