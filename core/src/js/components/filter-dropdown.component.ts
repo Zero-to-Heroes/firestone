@@ -16,9 +16,9 @@ import { IOption } from 'ng-select';
 	styleUrls: [`../../css/component/filter-dropdown.component.scss`],
 	template: `
 		<ng-select
-			*ngIf="visible"
+			*ngIf="_visible"
 			class="filter hero-sort-filter"
-			[ngClass]="{ 'disabled': !visible }"
+			[ngClass]="{ 'disabled': !_visible }"
 			[options]="options"
 			[ngModel]="filter"
 			[placeholder]="placeholder"
@@ -45,12 +45,22 @@ import { IOption } from 'ng-select';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDropdownComponent implements AfterViewInit {
+	@Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
+
 	@Input() options: readonly IOption[];
-	@Input() visible: boolean;
 	@Input() placeholder: string;
 	@Input() filter: string;
 
-	@Output() onOptionSelected: EventEmitter<IOption> = new EventEmitter<IOption>();
+	@Input() set visible(value: boolean) {
+		this._visible = value;
+		if (value) {
+			setTimeout(() => {
+				this.addCarets();
+			});
+		}
+	}
+
+	_visible: boolean;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {}
 
@@ -61,8 +71,18 @@ export class FilterDropdownComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
+		this.addCarets();
+	}
+
+	private addCarets() {
+		const carets = this.el.nativeElement.querySelectorAll('.single .caret');
+		// console.debug('carets', carets);
+		if (!!carets?.length) {
+			return;
+		}
+
 		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
-		// console.log('updating filter visuals', singleEls, this);
+		// console.debug('updating filter visuals', singleEls, this);
 		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">

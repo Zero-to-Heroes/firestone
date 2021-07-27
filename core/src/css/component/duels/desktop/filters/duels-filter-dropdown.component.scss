@@ -68,36 +68,40 @@ ng-select.disabled {
 			display: none;
 		}
 
-		& > div .options ul li {
-			color: var(--color-1);
-			border-bottom: 1px solid var(--color-3);
-			padding: 0;
-			padding-left: 9px;
-			padding-right: 10px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			height: 30px;
+		& > div .options {
+			max-height: 350px;
 
-			&.selected {
-				background-color: inherit;
-				color: inherit;
+			ul li {
+				color: var(--color-1);
+				border-bottom: 1px solid var(--color-3);
+				padding: 0;
+				padding-left: 9px;
+				padding-right: 10px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 30px;
 
-				&:hover {
+				&.selected {
+					background-color: inherit;
 					color: inherit;
+
+					&:hover {
+						color: inherit;
+					}
 				}
-			}
 
-			&.highlighted,
-			&:hover {
-				background-color: var(--color-4);
-			}
+				&.highlighted,
+				&:hover {
+					background-color: var(--color-4);
+				}
 
-			span {
-				max-width: 100%;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
+				span {
+					max-width: 100%;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
 			}
 		}
 	}

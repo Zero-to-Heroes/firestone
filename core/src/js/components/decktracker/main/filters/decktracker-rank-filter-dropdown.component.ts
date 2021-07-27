@@ -14,9 +14,11 @@ import { ChangeDeckRankFilterEvent } from '../../../../services/mainwindow/store
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
 		`../../../../../css/component/filter-dropdown.component.scss`,
+		`../../../../../css/component/decktracker/main/filters/decktracker-rank-filter-dropdown.component.scss`,
 	],
 	template: `
 		<filter-dropdown
+			class="filter"
 			*ngIf="filter$ | async as value"
 			[options]="value.options"
 			[filter]="value.filter"
