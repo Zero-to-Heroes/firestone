@@ -8,7 +8,6 @@ import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/even
 import { StatsXpGraphFilterSelectedEvent } from '../../../../services/mainwindow/store/events/stats/stats-xp-graph-filter-selected-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
-
 @Component({
 	selector: 'stats-xp-season-filter-dropdown',
 	styleUrls: [
@@ -47,12 +46,12 @@ export class StatsXpSeasonFilterDropdownComponent implements AfterViewInit {
 						{
 							value: 'season-1',
 							label: 'Season 1',
-							tooltip: 'Until 2021-03-30 '
+							tooltip: 'Until 2021-03-30 ',
 						},
 						{
 							value: 'season-2',
 							label: 'Season 2',
-							tooltip: 'From 2021-04-01 to 2021-08-03'
+							tooltip: 'From 2021-04-01 to 2021-08-03',
 						},
 					] as readonly FilterOption[];
 					return {

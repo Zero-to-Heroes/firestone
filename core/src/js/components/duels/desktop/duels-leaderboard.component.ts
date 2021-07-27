@@ -22,7 +22,7 @@ import { arraysEqual } from '../../../services/utils';
 						<div class="name">{{ value.playerName }}</div>
 					</li>
 				</ul>
-			</div> 
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

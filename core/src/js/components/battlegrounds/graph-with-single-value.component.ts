@@ -7,7 +7,7 @@ import {
 	Input,
 	OnDestroy,
 	ViewChild,
-	ViewRef
+	ViewRef,
 } from '@angular/core';
 import { ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color, Label } from 'ng2-charts';

@@ -170,7 +170,12 @@ export class StoreBootstrapService {
 		const currentDuelsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentDuelsMetaPatch)
 			: null;
-		const duelsStats: DuelsState = this.duels.initState(duelsGlobalStats, duelsRunInfo, duelsRewardsInfo, duelsLeaderboard);
+		const duelsStats: DuelsState = this.duels.initState(
+			duelsGlobalStats,
+			duelsRunInfo,
+			duelsRewardsInfo,
+			duelsLeaderboard,
+		);
 		const newDuelsState = await this.duels.updateState(
 			duelsStats,
 			matchStats,

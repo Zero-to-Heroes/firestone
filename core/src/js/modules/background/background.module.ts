@@ -8,7 +8,7 @@ import {
 	ErrorHandler,
 	Injectable,
 	NgModule,
-	Type
+	Type,
 } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -61,7 +61,7 @@ import { BattlegroundsSimulatorComponent } from '../../components/battlegrounds/
 import { BattlegroundsStatsHeroVignetteComponent } from '../../components/battlegrounds/desktop/categories/battlegrounds-stats-hero-vignette.component';
 import {
 	BgsGlobalValueComponent,
-	BgsHeroDetailedStatsComponent
+	BgsHeroDetailedStatsComponent,
 } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-hero-detailed-stats.component';
 import { BgsLastWarbandsComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-last-warbands.component';
 import { BgsMmrEvolutionForHeroComponent } from '../../components/battlegrounds/desktop/categories/hero-details/bgs-mmr-evolution-for-hero.component';
@@ -159,7 +159,7 @@ import { DuelsEmptyStateComponent } from '../../components/duels/desktop/duels-e
 import { DuelsGroupedTopDecksComponent } from '../../components/duels/desktop/duels-grouped-top-decks.component';
 import {
 	DuelsGlobalValueComponent,
-	DuelsHeroStatVignetteComponent
+	DuelsHeroStatVignetteComponent,
 } from '../../components/duels/desktop/duels-hero-stat-vignette.component';
 import { DuelsHeroStatsComponent } from '../../components/duels/desktop/duels-hero-stats.component';
 import { DuelsLeaderboardComponent } from '../../components/duels/desktop/duels-leaderboard.component';
@@ -178,7 +178,7 @@ import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
 	DuelsClassesRecapComponent,
-	DuelsStatCellComponent
+	DuelsStatCellComponent,
 } from '../../components/duels/desktop/secondary/duels-classes-recap.component';
 import { DuelsDeckStatsComponent } from '../../components/duels/desktop/secondary/duels-deck-stats.component';
 import { DuelsHeroSearchComponent } from '../../components/duels/desktop/secondary/duels-hero-search.component';

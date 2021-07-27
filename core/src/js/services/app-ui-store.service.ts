@@ -27,9 +27,9 @@ export class AppUiStoreService {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	// Selectors here should do minimal work - just select the data from the state, and not 
+	// Selectors here should do minimal work - just select the data from the state, and not
 	// perform any mapping.
-	// This is because the selectors are called every time a new state is emitted, so 
+	// This is because the selectors are called every time a new state is emitted, so
 	// costly operations can still amount to a lot of overhead
 	public listen$<S extends Selector<any>[]>(
 		...selectors: S

@@ -374,7 +374,7 @@ export class PreferencesService {
 		const newPrefs: Preferences = { ...prefs, arenaActiveClassFilter: value };
 		await this.savePreferences(newPrefs);
 	}
-	
+
 	public async updateStatsXpGraphFilter(value: StatsXpGraphSeasonFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, statsXpGraphSeasonFilter: value };

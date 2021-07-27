@@ -11,7 +11,7 @@ import {
 	computeXpFromLevel,
 	getSeason,
 	xpSeason1,
-	xpSeason2
+	xpSeason2,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
 
 @Component({
