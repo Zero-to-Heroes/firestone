@@ -19,6 +19,7 @@ export interface UpdateSectionItem {
 		| 'arena'
 		| 'decktracker'
 		| 'battlegrounds'
+		| 'profile'
 		| 'collection';
 	readonly details: UpdateSectionItemDetails[];
 }
@@ -30,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.12.0',
+		version: '7.12.1',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -62,6 +63,24 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `You can now see a graph of your rank evolution, game-by-game or day-by-day. It's been split in two graphs: one for the Bronze-Diamond leagues, and one for Legend, to make things easier to see.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `The leaderboard is here! It shows the top 100 players who use Firestone to record their games. It shows players who have one active run in the last 30 days. This is still an early beta, so please don't hesitate to send your feedback :)`,
+							},
+						],
+					},
+					{
+						category: 'profile',
+						details: [
+							{
+								type: 'feature',
+								text: `To start the new Profile tab, here is a graph of your total XP over time. More account-wide stats will be coming soon, so let me know (on Discord or by opening a bug) what you would like to see there :)`,
 							},
 						],
 					},
