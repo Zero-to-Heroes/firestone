@@ -207,50 +207,23 @@ export const getHeroPower = (heroCardId: string): string => {
 };
 
 export const normalizeHeroCardId = (heroCardId: string): string => {
-	if (heroCardId === 'TB_BaconShop_HERO_59t') {
-		return 'TB_BaconShop_HERO_59';
+	if (!heroCardId) {
+		return heroCardId;
 	}
-	return heroCardId;
-};
 
-// const REMOVED_CARD_IDS = [
-// 	'GVG_085', // Annoy-o-Tron
-// 	'BGS_025', // Mounted Raptor
-// 	'GIL_681', // Nightmare Amalgam
-// 	'GVG_058', // Shielded Minibot
-// 	'ULD_179', // Phallanx Commander
-// 	'OG_145', // Psych-o-Tron
-// 	'UNG_037', // Tortollian Shellraiser
-// 	'GIL_655', // Festeroot Hulk
-// 	'BGS_024', // Piloted Sky Golem
-// 	'UNG_010', // Sated Threshadon
-// 	'OG_300', // Boogeymonster
-// 	CardIds.Collectible.Neutral.Zoobot,
-// 	CardIds.NonCollectible.Neutral.ZoobotBattlegrounds,
-// 	CardIds.Collectible.Neutral.MenagerieMagician,
-// 	CardIds.NonCollectible.Neutral.MenagerieMagicianBattlegrounds,
-// 	CardIds.Collectible.Paladin.CobaltGuardian,
-// 	CardIds.NonCollectible.Neutral.GentleMegasaur,
-// 	CardIds.NonCollectible.Neutral.GentleMegasaurBattlegrounds,
-// 	CardIds.NonCollectible.Neutral.NatPagleExtremeAngler_TreasureChestToken,
-// 	CardIds.NonCollectible.Neutral.NatPagleExtremeAngler_TreasureChestTokenBattlegrounds,
-// 	CardIds.NonCollectible.Neutral.PilotedShredder,
-// 	CardIds.NonCollectible.Neutral.PilotedShredderBattlegrounds,
-// 	CardIds.Collectible.Neutral.WhirlwindTempest,
-// 	CardIds.NonCollectible.Neutral.WhirlwindTempestBattlegrounds,
-// 	CardIds.Collectible.Rogue.PogoHopper,
-// 	CardIds.NonCollectible.Rogue.PogoHopperBattlegrounds,
-// 	CardIds.Collectible.Paladin.RighteousProtector,
-// 	CardIds.NonCollectible.Paladin.RighteousProtectorBattlegrounds,
-// 	CardIds.Collectible.Neutral.TheBeast,
-// 	CardIds.NonCollectible.Neutral.TheBeastBattlegrounds,
-// 	CardIds.Collectible.Neutral.CrowdFavorite,
-// 	CardIds.NonCollectible.Neutral.CrowdFavoriteBattlegrounds,
-// 	CardIds.NonCollectible.Neutral.ShifterZerus,
-// 	CardIds.NonCollectible.Neutral.ShifterZerusBattlegrounds,
-// 	CardIds.Collectible.Warlock.FloatingWatcher,
-// 	CardIds.NonCollectible.Warlock.FloatingWatcherBattlegrounds,
-// ];
+	// Generic handling of BG hero skins, hoping they will keep the same pattern
+	const bgHeroSkinMatch = heroCardId.match(/(.*)_SKIN_.*/g);
+	if (bgHeroSkinMatch) {
+		return bgHeroSkinMatch.groups[1];
+	}
+
+	switch (heroCardId) {
+		case 'TB_BaconShop_HERO_59t':
+			return 'TB_BaconShop_HERO_59';
+		default:
+			return heroCardId;
+	}
+};
 
 export const getAllCardsInGame = (
 	availableTribes: readonly Race[],

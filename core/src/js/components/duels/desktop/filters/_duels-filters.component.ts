@@ -30,10 +30,12 @@ import { DuelsTreasureSortOption } from './duels-treasure-sort-option';
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
-		`../../../../../css/component/duels/desktop/filters/duels-filters.component.scss`,
+		`../../../../../css/component/duels/desktop/filters/_duels-filters.component.scss`,
 	],
 	template: `
 		<div class="filters duels-filters" *ngIf="anyVisible()">
+			<!-- <duels-game-mode-filter-dropdown class="game-mode-filter"></duels-game-mode-filter-dropdown> -->
+
 			<duels-filter-dropdown
 				*ngFor="let option of options"
 				class="{{ option.class }}"

@@ -49,7 +49,7 @@ export class OutOfCardsService {
 			this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 				if (event.type === GameEvent.SCENE_CHANGED_MINDVISION) {
 					const newScene: SceneMode = event.additionalData.scene;
-					if (newScene === SceneMode.COLLECTIONMANAGER) {
+					if (newScene === SceneMode.COLLECTIONMANAGER || newScene === SceneMode.BACON_COLLECTION) {
 						this.queueCollectionRefresh();
 					}
 				}

@@ -173,7 +173,7 @@ import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top
 import { DuelsTreasureStatVignetteComponent } from '../../components/duels/desktop/duels-treasure-stat-vignette.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
 import { DuelsFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-filter-dropdown.component';
-import { DuelsFiltersComponent } from '../../components/duels/desktop/filters/duels-filters.component';
+import { DuelsFiltersComponent } from '../../components/duels/desktop/filters/_duels-filters.component';
 import { LootBundleComponent } from '../../components/duels/desktop/loot-bundle.component';
 import { LootInfoComponent } from '../../components/duels/desktop/loot-info.component';
 import {
