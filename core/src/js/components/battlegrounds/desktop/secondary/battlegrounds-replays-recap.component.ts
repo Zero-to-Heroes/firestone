@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
+import { normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({
@@ -28,7 +30,7 @@ import { arraysEqual } from '../../../../services/utils';
 export class BattlegroundsReplaysRecapComponent {
 	replays$: Observable<readonly GameStat[]>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreService, private readonly allCards: AllCardsService) {
 		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.replays.allReplays,
@@ -50,7 +52,12 @@ export class BattlegroundsReplaysRecapComponent {
 						replays
 							.filter((replay) => replay.gameMode === 'battlegrounds')
 							.filter((replay) => replay.playerRank != null)
-							.filter((replay) => !heroId || heroId === replay.playerCardId)
+							.filter(
+								(replay) =>
+									!heroId ||
+									normalizeHeroCardId(heroId, true, this.allCards) ===
+										normalizeHeroCardId(replay.playerCardId, true, this.allCards),
+							)
 							// TODO: how to allow this to be a parameter?
 							.slice(0, 10)
 					);

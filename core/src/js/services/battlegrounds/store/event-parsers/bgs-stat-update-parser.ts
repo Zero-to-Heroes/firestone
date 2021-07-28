@@ -5,7 +5,7 @@ import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { PatchesConfigService } from '../../../patches-config.service';
 import { cutNumber } from '../../../utils';
-import { getHeroPower } from '../../bgs-utils';
+import { getHeroPower, normalizeHeroCardId } from '../../bgs-utils';
 import { BgsStatUpdateEvent } from '../events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
@@ -63,11 +63,14 @@ export class BgsStatUpdateParser implements EventParser {
 	) {
 		const heroStats =
 			globalStats?.heroStats?.map((heroStat) => {
-				const playerGamesPlayed = bgsStatsForCurrentPatch.filter((stat) => stat.playerCardId === heroStat.id);
+				const playerGamesPlayed = bgsStatsForCurrentPatch.filter(
+					(stat) =>
+						normalizeHeroCardId(stat.playerCardId, true, cards) ===
+						normalizeHeroCardId(heroStat.id, true, cards),
+				);
 				const totalPlayerGamesPlayed = playerGamesPlayed.length;
 				const playerPopularity = (100 * totalPlayerGamesPlayed) / bgsStatsForCurrentPatch.length;
-				const gamesWithMmr = bgsStatsForCurrentPatch
-					.filter((stat) => stat.playerCardId === heroStat.id)
+				const gamesWithMmr = playerGamesPlayed
 					.filter((stat) => stat.newPlayerRank != null && stat.playerRank != null)
 					.filter((stat) =>
 						BgsStatUpdateParser.isValidMmrDelta(parseInt(stat.newPlayerRank) - parseInt(stat.playerRank)),
@@ -90,8 +93,7 @@ export class BgsStatUpdateParser implements EventParser {
 					playerAveragePosition: cutNumber(
 						totalPlayerGamesPlayed === 0
 							? 0
-							: bgsStatsForCurrentPatch
-									.filter((stat) => stat.playerCardId === heroStat.id)
+							: playerGamesPlayed
 									.map((stat) => parseInt(stat.additionalResult))
 									.reduce((a, b) => a + b, 0) / totalPlayerGamesPlayed,
 					),
@@ -120,8 +122,7 @@ export class BgsStatUpdateParser implements EventParser {
 						totalPlayerGamesPlayed === 0
 							? 0
 							: (100 *
-									bgsStatsForCurrentPatch
-										.filter((stat) => stat.playerCardId === heroStat.id)
+									playerGamesPlayed
 										.map((stat) => parseInt(stat.additionalResult))
 										.filter((position) => position <= 4).length) /
 									totalPlayerGamesPlayed,
@@ -130,8 +131,7 @@ export class BgsStatUpdateParser implements EventParser {
 						totalPlayerGamesPlayed === 0
 							? 0
 							: (100 *
-									bgsStatsForCurrentPatch
-										.filter((stat) => stat.playerCardId === heroStat.id)
+									playerGamesPlayed
 										.map((stat) => parseInt(stat.additionalResult))
 										.filter((position) => position == 1).length) /
 									totalPlayerGamesPlayed,
