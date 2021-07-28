@@ -611,9 +611,8 @@ export class DeckParserService {
 				return 'SCH_199t26';
 			case Board.BARRENS:
 				return 'SCH_199t27';
-			// Not handled yet
 			case Board.STORMWIND_2:
-				return cardId;
+				return 'SCH_199t28';
 			default:
 				return cardId;
 		}
