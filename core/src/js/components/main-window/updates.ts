@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.12.1',
+		version: '7.12.3',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -48,12 +48,21 @@ export const updates: readonly Update[] = [
 				type: 'main',
 				header: 'Main updates',
 				updates: [
+					// {
+					// 	category: 'battlegrounds',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `Full Battle Simulator is now live! (it is still in a very early beta stage though). You can pick any minions you like for both sides, and modify them to fit your needs (stats, divine shield, poison, etc.). It is still missing the ability to choose your hero power, and the UI is still all over the place, but all of these will be fixed soon :)`,
+					// 		},
+					// 	],
+					// },
 					{
-						category: 'battlegrounds',
+						category: 'general',
 						details: [
 							{
-								type: 'feature',
-								text: `Full Battle Simulator is now live! (it is still in a very early beta stage though). You can pick any minions you like for both sides, and modify them to fit your needs (stats, divine shield, poison, etc.). It is still missing the ability to choose your hero power, and the UI is still all over the place, but all of these will be fixed soon :)`,
+								type: 'content',
+								text: `The app has been updated for United in Stormwind.`,
 							},
 						],
 					},
@@ -66,24 +75,24 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'feature',
-								text: `The leaderboard is here! It shows the top 100 players who use Firestone to record their games. It shows players who have one active run in the last 30 days. This is still an early beta, so please don't hesitate to send your feedback :)`,
-							},
-						],
-					},
-					{
-						category: 'profile',
-						details: [
-							{
-								type: 'feature',
-								text: `To start the new Profile tab, here is a graph of your total XP over time. More account-wide stats will be coming soon, so let me know (on Discord or by opening a bug) what you would like to see there :)`,
-							},
-						],
-					},
+					// {
+					// 	category: 'duels',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `The leaderboard is here! It shows the top 100 players who use Firestone to record their games. It shows players who have one active run in the last 30 days. This is still an early beta, so please don't hesitate to send your feedback :)`,
+					// 		},
+					// 	],
+					// },
+					// {
+					// 	category: 'profile',
+					// 	details: [
+					// 		{
+					// 			type: 'feature',
+					// 			text: `To start the new Profile tab, here is a graph of your total XP over time. More account-wide stats will be coming soon, so let me know (on Discord or by opening a bug) what you would like to see there :)`,
+					// 		},
+					// 	],
+					// },
 				],
 			},
 			{

@@ -56,7 +56,7 @@ export class BgsWinrateChartComponent {
 			return;
 		}
 		this._player = value;
-		this.id = this._player.cardId;
+		this.id = this._player.baseCardId ?? this._player.cardId;
 		this.updateInfo();
 	}
 
@@ -70,7 +70,7 @@ export class BgsWinrateChartComponent {
 			}
 
 			const result = this._globalStats.heroStats
-				.find((stat) => stat.id === this._player.cardId)
+				.find((stat) => stat.id === (this._player.baseCardId ?? this._player.cardId))
 				?.combatWinrate?.filter((stat) => stat.turn > 0)
 				.map((stat) => {
 					return {

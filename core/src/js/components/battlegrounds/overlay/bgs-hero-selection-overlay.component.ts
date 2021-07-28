@@ -15,7 +15,7 @@ import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/her
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { Preferences } from '../../../models/preferences';
 import { VisualAchievement } from '../../../models/visual-achievement';
-import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
+import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -113,7 +113,8 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 		}
 
 		this.heroOverviews = this._panel.heroOptionCardIds.map((cardId) => {
-			const existingStat = this._panel.heroOverview.find((overview) => overview.id === cardId);
+			const normalized = normalizeHeroCardId(cardId, true);
+			const existingStat = this._panel.heroOverview.find((overview) => overview.id === normalized);
 			const statWithDefault =
 				existingStat ||
 				BgsHeroStat.create({
@@ -121,13 +122,14 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 					tribesStat: [] as readonly { tribe: string; percent: number }[],
 				} as BgsHeroStat);
 			const achievementsForHero: readonly VisualAchievement[] = this._showAchievements
-				? getAchievementsForHero(cardId, this._panel.heroAchievements, this.allCards)
+				? getAchievementsForHero(normalized, this._panel.heroAchievements, this.allCards)
 				: [];
 			return {
 				...statWithDefault,
 				achievements: achievementsForHero,
 			};
 		});
+		console.debug('built hero overviews', this.heroOverviews);
 		if (this.heroOverviews.length === 2) {
 			this.heroOverviews = [null, ...this.heroOverviews, null];
 		} else if (this.heroOverviews.length === 3) {

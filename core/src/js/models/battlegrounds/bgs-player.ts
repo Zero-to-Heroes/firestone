@@ -9,6 +9,7 @@ import { BgsTriple } from './in-game/bgs-triple';
 
 export class BgsPlayer implements IBgsPlayer {
 	readonly cardId: string;
+	readonly baseCardId?: string;
 	readonly displayedCardId: string;
 	readonly heroPowerCardId: string;
 	readonly name: string;

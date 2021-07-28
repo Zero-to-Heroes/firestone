@@ -81,6 +81,7 @@ export class BgsHeroOverviewComponent {
 		}
 		this.player = BgsPlayer.create({
 			cardId: value.id,
+			baseCardId: value.baseCardId,
 		} as BgsPlayer);
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
 		this.tribes = [...value.tribesStat]

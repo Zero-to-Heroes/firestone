@@ -1,10 +1,10 @@
 import { Map } from 'immutable';
 import { Season } from './_season';
 
-export class Season2 implements Season {
-	public readonly startDate: Date = new Date(2021, 4, 1);
-	public readonly endDate: Date = new Date(2021, 8, 3);
-	public readonly bonusXp = 4500;
+export class Season3 implements Season {
+	public readonly startDate: Date = new Date(2021, 8, 4);
+	public readonly endDate: Date = new Date(2021, 12, 1);
+	public readonly bonusXp = 1500;
 	public readonly xpPerLevel: Map<number, number> = Map([
 		[1, 0],
 		[2, 100],

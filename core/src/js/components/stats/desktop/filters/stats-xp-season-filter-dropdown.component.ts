@@ -53,6 +53,11 @@ export class StatsXpSeasonFilterDropdownComponent implements AfterViewInit {
 							label: 'Season 2',
 							tooltip: 'From 2021-04-01 to 2021-08-03',
 						},
+						{
+							value: 'season-3',
+							label: 'Season 3',
+							tooltip: 'From 2021-08-04',
+						},
 					] as readonly FilterOption[];
 					return {
 						filter: filter,

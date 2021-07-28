@@ -201,20 +201,27 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Druid.GuffRunetotem_NaturalBalance;
 		case CardIds.NonCollectible.Demonhunter.KurtrusAshfallen2:
 			return CardIds.NonCollectible.Demonhunter.KurtrusAshfallen_FinalShowdown;
+		case CardIds.NonCollectible.Neutral.Galewing:
+			return CardIds.NonCollectible.Neutral.Galewing_DungarsGryphon;
 		case '':
 			return null; // new heroes
 	}
 };
 
-export const normalizeHeroCardId = (heroCardId: string): string => {
+export const normalizeHeroCardId = (heroCardId: string, fullNormalize = false): string => {
 	if (!heroCardId) {
 		return heroCardId;
 	}
 
 	// Generic handling of BG hero skins, hoping they will keep the same pattern
-	const bgHeroSkinMatch = heroCardId.match(/(.*)_SKIN_.*/g);
-	if (bgHeroSkinMatch) {
-		return bgHeroSkinMatch.groups[1];
+	// In fact, keep the hero skin. It will be up to all the data processing jobs to
+	// properly map it to the correct base hero
+	if (fullNormalize) {
+		const bgHeroSkinMatch = heroCardId.match(/(.*)_SKIN_.*/);
+		console.debug('normalizing', heroCardId, bgHeroSkinMatch);
+		if (bgHeroSkinMatch) {
+			return bgHeroSkinMatch[1];
+		}
 	}
 
 	switch (heroCardId) {

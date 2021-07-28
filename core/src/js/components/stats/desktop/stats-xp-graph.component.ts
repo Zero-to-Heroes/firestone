@@ -12,6 +12,7 @@ import {
 	getSeason,
 	xpSeason1,
 	xpSeason2,
+	xpSeason3,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
 
 @Component({
@@ -106,6 +107,8 @@ export class StatsXpGraphComponent {
 				return getSeason(stat.creationTimestamp) === xpSeason1;
 			case 'season-2':
 				return getSeason(stat.creationTimestamp) === xpSeason2;
+			case 'season-3':
+				return getSeason(stat.creationTimestamp) === xpSeason3;
 			case 'all-seasons':
 			default:
 				return true;

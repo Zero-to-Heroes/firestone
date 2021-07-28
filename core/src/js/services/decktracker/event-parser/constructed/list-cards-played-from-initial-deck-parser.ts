@@ -37,9 +37,7 @@ export class ListCardsPlayedFromInitialDeckParser implements EventParser {
 				CardIds.NonCollectible.Neutral.TheCoin4,
 				CardIds.NonCollectible.Neutral.TheCoin5,
 				CardIds.NonCollectible.Neutral.TheCoin6,
-				'SW_COIN1',
 				CardIds.NonCollectible.Neutral.TheCoin7,
-				'SW_COIN2',
 			].includes(baseCardId)
 		) {
 			return currentState;

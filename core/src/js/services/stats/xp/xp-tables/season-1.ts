@@ -4,6 +4,7 @@ import { Season } from './_season';
 export class Season1 implements Season {
 	public readonly startDate: Date = new Date(2020, 10, 1);
 	public readonly endDate: Date = new Date(2021, 3, 30);
+	public readonly bonusXp = 4500;
 	public readonly xpPerLevel: Map<number, number> = Map([
 		[1, 0],
 		[2, 100],
@@ -66,4 +67,11 @@ export class Season1 implements Season {
 		[59, 4400],
 		[60, 4500],
 	]);
+
+	public getXpForLevel(level: number): number {
+		if (this.xpPerLevel.includes(level)) {
+			return this.xpPerLevel.get(level);
+		}
+		return this.bonusXp;
+	}
 }

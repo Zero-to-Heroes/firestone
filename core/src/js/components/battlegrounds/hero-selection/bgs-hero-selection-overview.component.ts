@@ -5,7 +5,7 @@ import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bg
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
-import { getAchievementsForHero } from '../../../services/battlegrounds/bgs-utils';
+import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -117,7 +117,8 @@ export class BgsHeroSelectionOverviewComponent {
 		].filter((tier) => tier.heroes);
 		// console.log('setting hero overviews', this._panel);
 		this.heroOverviews = selectionOptions.map((cardId) => {
-			const existingStat = this._panel.heroOverview.find((overview) => overview.id === cardId);
+			const normalized = normalizeHeroCardId(cardId, true);
+			const existingStat = this._panel.heroOverview.find((overview) => overview.id === normalized);
 			const statWithDefault =
 				existingStat ||
 				BgsHeroStat.create({
@@ -125,14 +126,18 @@ export class BgsHeroSelectionOverviewComponent {
 					tribesStat: [] as readonly { tribe: string; percent: number }[],
 				} as BgsHeroStat);
 			const achievementsForHero: readonly VisualAchievement[] = this._showAchievements
-				? getAchievementsForHero(cardId, this._panel.heroAchievements, this.allCards)
+				? getAchievementsForHero(normalized, this._panel.heroAchievements, this.allCards)
 				: [];
 			// console.debug('achievementsForHero', achievementsForHero, this._showAchievements);
 			return {
 				...statWithDefault,
+				id: cardId,
+				name: this.allCards.getCard(cardId)?.name,
+				baseCardId: normalized,
 				achievements: achievementsForHero,
 			};
 		});
+		console.debug('hero overviews', this.heroOverviews);
 
 		if (this.heroOverviews.length === 2) {
 			this.heroOverviews = [null, ...this.heroOverviews, null];

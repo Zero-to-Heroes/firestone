@@ -1,5 +1,6 @@
 export class BgsHeroStat {
 	readonly id: string;
+	readonly baseCardId?: string;
 	readonly heroPowerCardId: string;
 	readonly name: string;
 	readonly popularity: number;
