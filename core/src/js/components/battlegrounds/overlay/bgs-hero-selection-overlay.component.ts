@@ -118,7 +118,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 			const statWithDefault =
 				existingStat ||
 				BgsHeroStat.create({
-					id: cardId,
+					id: normalized,
 					tribesStat: [] as readonly { tribe: string; percent: number }[],
 				} as BgsHeroStat);
 			const achievementsForHero: readonly VisualAchievement[] = this._showAchievements
@@ -129,7 +129,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 				achievements: achievementsForHero,
 			};
 		});
-		console.debug('built hero overviews', this.heroOverviews);
+		// console.debug('built hero overviews', this.heroOverviews);
 		if (this.heroOverviews.length === 2) {
 			this.heroOverviews = [null, ...this.heroOverviews, null];
 		} else if (this.heroOverviews.length === 3) {

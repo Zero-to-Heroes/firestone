@@ -208,7 +208,11 @@ export const getHeroPower = (heroCardId: string): string => {
 	}
 };
 
-export const normalizeHeroCardId = (heroCardId: string, fullNormalize = false): string => {
+export const normalizeHeroCardId = (
+	heroCardId: string,
+	fullNormalize = false,
+	allCards: AllCardsService = null,
+): string => {
 	if (!heroCardId) {
 		return heroCardId;
 	}
@@ -216,9 +220,21 @@ export const normalizeHeroCardId = (heroCardId: string, fullNormalize = false): 
 	// Generic handling of BG hero skins, hoping they will keep the same pattern
 	// In fact, keep the hero skin. It will be up to all the data processing jobs to
 	// properly map it to the correct base hero
-	if (fullNormalize) {
+	// TMP: deactivated until I have a way to generate the card images for the
+	// new skins
+	if (true || fullNormalize) {
+		if (allCards) {
+			const heroCard = allCards.getCard(heroCardId);
+			if (!!heroCard?.battlegroundsHeroParentDbfId) {
+				const parentCard = allCards.getCardFromDbfId(heroCard.battlegroundsHeroParentDbfId);
+				if (!!parentCard) {
+					return parentCard.id;
+				}
+			}
+		}
+		// Fallback to regex
 		const bgHeroSkinMatch = heroCardId.match(/(.*)_SKIN_.*/);
-		console.debug('normalizing', heroCardId, bgHeroSkinMatch);
+		// console.debug('normalizing', heroCardId, bgHeroSkinMatch);
 		if (bgHeroSkinMatch) {
 			return bgHeroSkinMatch[1];
 		}

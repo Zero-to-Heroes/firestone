@@ -416,17 +416,17 @@ export class MainWindowStoreService {
 					.currentApp === navigationState.currentApp) ||
 			// We allow a "back" to the parent in case there is no back history
 			NavigationBackProcessor.buildParentState(navigationState, dataState) != null;
-		console.log(
-			'isBackArrowEnabled?',
-			backArrowEnabled,
-			this.navigationHistory.currentIndexInHistory > 0,
-			this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state?.currentApp ===
-				navigationState.currentApp,
-			NavigationBackProcessor.buildParentState(navigationState, dataState),
-			this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state,
-			this.navigationHistory,
-			navigationState,
-		);
+		// console.debug(
+		// 	'isBackArrowEnabled?',
+		// 	backArrowEnabled,
+		// 	this.navigationHistory.currentIndexInHistory > 0,
+		// 	this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state?.currentApp ===
+		// 		navigationState.currentApp,
+		// 	NavigationBackProcessor.buildParentState(navigationState, dataState),
+		// 	this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state,
+		// 	this.navigationHistory,
+		// 	navigationState,
+		// );
 		const nextArrowEnabled =
 			this.navigationHistory.currentIndexInHistory < this.navigationHistory.stateHistory.length - 1;
 		return navigationState.update({

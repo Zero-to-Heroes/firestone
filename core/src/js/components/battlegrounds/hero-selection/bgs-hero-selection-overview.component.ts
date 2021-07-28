@@ -118,11 +118,12 @@ export class BgsHeroSelectionOverviewComponent {
 		// console.log('setting hero overviews', this._panel);
 		this.heroOverviews = selectionOptions.map((cardId) => {
 			const normalized = normalizeHeroCardId(cardId, true);
+			// console.debug('normalized', normalized, cardId);
 			const existingStat = this._panel.heroOverview.find((overview) => overview.id === normalized);
 			const statWithDefault =
 				existingStat ||
 				BgsHeroStat.create({
-					id: cardId,
+					id: normalized,
 					tribesStat: [] as readonly { tribe: string; percent: number }[],
 				} as BgsHeroStat);
 			const achievementsForHero: readonly VisualAchievement[] = this._showAchievements
@@ -131,13 +132,13 @@ export class BgsHeroSelectionOverviewComponent {
 			// console.debug('achievementsForHero', achievementsForHero, this._showAchievements);
 			return {
 				...statWithDefault,
-				id: cardId,
+				id: normalized,
 				name: this.allCards.getCard(cardId)?.name,
 				baseCardId: normalized,
 				achievements: achievementsForHero,
 			};
 		});
-		console.debug('hero overviews', this.heroOverviews);
+		// console.debug('hero overviews', this.heroOverviews);
 
 		if (this.heroOverviews.length === 2) {
 			this.heroOverviews = [null, ...this.heroOverviews, null];
