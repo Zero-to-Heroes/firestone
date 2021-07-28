@@ -184,6 +184,20 @@ export class DuelsStateBuilderService {
 				icon: undefined,
 				categories: null,
 			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-deck-details',
+				name: null,
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
+			DuelsCategory.create({
+				id: 'duels-personal-deck-details',
+				name: null,
+				enabled: true,
+				icon: undefined,
+				categories: null,
+			} as DuelsCategory),
 		];
 		if (FeatureFlags.ENABLE_DUELS_LEADERBOARD) {
 			result.push(

@@ -365,8 +365,21 @@ export class MainWindowStoreService {
 			} else {
 				// console.log('[store] no new state to emit');
 			}
-			// console.debug('emitting new merged state', this.state, this.navigationState);
-			this.mergedEmitter.next([this.state, stateWithNavigation ?? this.navigationState]);
+			// console.debug(
+			// 	'emitting new merged state',
+			// 	event.eventName(),
+			// 	event,
+			// 	this.state,
+			// 	stateWithNavigation,
+			// 	this.navigationState,
+			// 	this.updateNavigationArrows(this.navigationState, newState),
+			// );
+			this.mergedEmitter.next([
+				this.state,
+				// Because some events don't emit a new navigationState, in which case the arrows
+				// are lost
+				stateWithNavigation ?? this.updateNavigationArrows(this.navigationState, newState),
+			]);
 		} catch (e) {
 			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
 		}
@@ -403,17 +416,17 @@ export class MainWindowStoreService {
 					.currentApp === navigationState.currentApp) ||
 			// We allow a "back" to the parent in case there is no back history
 			NavigationBackProcessor.buildParentState(navigationState, dataState) != null;
-		// console.log(
-		// 	'isBackArrowEnabled?',
-		// 	backArrowEnabled,
-		// 	this.navigationHistory.currentIndexInHistory > 0,
-		// 	this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state?.currentApp ===
-		// 		navigationState.currentApp,
-		// 	NavigationBackProcessor.buildParentState(navigationState, dataState),
-		// 	this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state,
-		// 	this.navigationHistory,
-		// 	navigationState,
-		// );
+		console.log(
+			'isBackArrowEnabled?',
+			backArrowEnabled,
+			this.navigationHistory.currentIndexInHistory > 0,
+			this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state?.currentApp ===
+				navigationState.currentApp,
+			NavigationBackProcessor.buildParentState(navigationState, dataState),
+			this.navigationHistory.stateHistory[this.navigationHistory.currentIndexInHistory - 1]?.state,
+			this.navigationHistory,
+			navigationState,
+		);
 		const nextArrowEnabled =
 			this.navigationHistory.currentIndexInHistory < this.navigationHistory.stateHistory.length - 1;
 		return navigationState.update({

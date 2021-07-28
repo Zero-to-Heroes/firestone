@@ -23,6 +23,7 @@ import { arraysEqual } from '../../../services/utils';
 			<section class="main divider">
 				<with-loading [isLoading]="loading$ | async">
 					<div class="content main-content" *ngIf="{ value: menuDisplayType$ | async } as menuDisplayType">
+						{{ value }}
 						<global-header *ngIf="menuDisplayType.value === 'breadcrumbs'"></global-header>
 						<ul class="menu-selection" *ngIf="menuDisplayType.value === 'menu'">
 							<li
@@ -186,6 +187,8 @@ export class DuelsDesktopComponent implements AfterViewInit {
 			.listen$(([main, nav]) => main.duels.categories)
 			.pipe(
 				map(([categories]) => categories ?? []),
+				// Subcategories are not displayed in the menu
+				map((categories) => categories.filter((cat) => !!cat.name)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((info) => cdLog('emitting categories in ', this.constructor.name, info)),
 			);
