@@ -63,11 +63,14 @@ export class BgsStatUpdateParser implements EventParser {
 	) {
 		const heroStats =
 			globalStats?.heroStats?.map((heroStat) => {
-				const playerGamesPlayed = bgsStatsForCurrentPatch.filter(
-					(stat) =>
-						normalizeHeroCardId(stat.playerCardId, true, cards) ===
-						normalizeHeroCardId(heroStat.id, true, cards),
-				);
+				const playerGamesPlayed =
+					heroStat.id === 'average'
+						? []
+						: bgsStatsForCurrentPatch.filter(
+								(stat) =>
+									normalizeHeroCardId(stat.playerCardId, true, cards) ===
+									normalizeHeroCardId(heroStat.id, true, cards),
+						  );
 				const totalPlayerGamesPlayed = playerGamesPlayed.length;
 				const playerPopularity = (100 * totalPlayerGamesPlayed) / bgsStatsForCurrentPatch.length;
 				const gamesWithMmr = playerGamesPlayed
