@@ -270,6 +270,7 @@ export class Preferences {
 	readonly duelsActiveTopDecksClassFilter: DuelsClassFilterType = 'all';
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsActiveMmrFilter: string = 'all';
+	readonly duelsActiveLeaderboardModeFilter: 'paid-duels' | 'duels' = 'paid-duels';
 	readonly duelsPersonalDeckNames: { [deckstring: string]: string } = {};
 	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];
 	readonly duelsPersonalDeckShowHiddenDecks: boolean;

@@ -10,7 +10,7 @@ import {
 	SignatureTreasureStat,
 	TreasureStat,
 } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
+import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
@@ -79,7 +79,7 @@ export class DuelsStateBuilderService {
 		});
 	}
 
-	public async loadLeaderboard(): Promise<readonly DuelsLeaderboardEntry[]> {
+	public async loadLeaderboard(): Promise<DuelsLeaderboard> {
 		const user = await this.ow.getCurrentUser();
 		const input: Input = {
 			userId: user.userId,
@@ -122,7 +122,7 @@ export class DuelsStateBuilderService {
 		globalStats: DuelsGlobalStats,
 		duelsRunInfo: readonly DuelsRunInfo[],
 		duelsRewardsInfo: readonly DuelsRewardsInfo[],
-		leaderboard: readonly DuelsLeaderboardEntry[],
+		leaderboard: DuelsLeaderboard,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
 		return DuelsState.create({
@@ -259,6 +259,7 @@ export class DuelsStateBuilderService {
 			activeTopDecksClassFilter: prefs.duelsActiveTopDecksClassFilter,
 			activeTopDecksDustFilter: prefs.duelsActiveTopDecksDustFilter,
 			activeMmrFilter: prefs.duelsActiveMmrFilter,
+			activeLeaderboardModeFilter: prefs.duelsActiveLeaderboardModeFilter,
 			currentDuelsMetaPatch: currentDuelsMetaPatch ?? currentState.currentDuelsMetaPatch,
 		} as DuelsState);
 	}

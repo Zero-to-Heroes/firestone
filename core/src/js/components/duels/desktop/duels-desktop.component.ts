@@ -34,7 +34,7 @@ import { arraysEqual } from '../../../services/utils';
 								<span>{{ cat.name }} </span>
 							</li>
 						</ul>
-						<duels-filters [state]="state" [navigation]="navigation"> </duels-filters>
+						<duels-filters> </duels-filters>
 						<duels-runs-list
 							*ngxCacheIf="category.value?.id === 'duels-runs'"
 							[state]="state.duels"

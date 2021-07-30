@@ -32,10 +32,13 @@ export class DuelsLeaderboardComponent {
 
 	constructor(private readonly store: AppUiStoreService) {
 		this.values$ = this.store
-			.listen$(([main, nav]) => main.duels.leaderboard)
+			.listen$(
+				([main, nav]) => main.duels.leaderboard,
+				([main, nav]) => main.duels.activeLeaderboardModeFilter,
+			)
 			.pipe(
-				filter(([stats]) => !!stats?.length),
-				map(([stats]) => stats),
+				filter(([stats, filter]) => !!stats && !!filter),
+				map(([stats, filter]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				tap((stat) => cdLog('emitting leaderboard in ', this.constructor.name, stat)),
 			);

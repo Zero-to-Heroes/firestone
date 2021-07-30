@@ -2,14 +2,14 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from 
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
+import { DuelsHeroSortFilterType } from '../../../../models/duels/duels-hero-sort-filter.type';
 import { AppUiStoreService } from '../../../../services/app-ui-store.service';
-import { DuelsGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-game-mode-filter-selected-event';
+import { DuelsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
 @Component({
-	selector: 'duels-game-mode-filter-dropdown',
+	selector: 'duels-hero-sort-dropdown',
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
@@ -18,7 +18,7 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
-			class="duels-game-mode-filter-dropdown"
+			class="duels-hero-filter-dropdown"
 			[options]="options"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
@@ -28,8 +28,8 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
-	options: readonly GameModeFilterOption[];
+export class DuelsHeroSortDropdownComponent implements AfterViewInit {
+	options: readonly HeroSortFilterOption[];
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -38,24 +38,21 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
 		this.options = [
 			{
-				value: 'all',
-				label: 'All modes',
-				tooltip:
-					'Community stats are only available for Heroic. Your own stats will show both Casual and Heroic.',
-			} as GameModeFilterOption,
+				value: 'player-winrate',
+				label: 'Your winrate',
+			} as HeroSortFilterOption,
 			{
-				value: 'duels',
-				label: `Casual`,
-				tooltip: 'Community stats are only available for Heroic. Your own stats will only show Casual.',
-			} as GameModeFilterOption,
+				value: 'global-winrate',
+				label: 'Global winrate',
+			} as HeroSortFilterOption,
 			{
-				value: 'paid-duels',
-				label: `Heroic`,
-			} as GameModeFilterOption,
-		] as readonly GameModeFilterOption[];
+				value: 'games-played',
+				label: 'Games played',
+			} as HeroSortFilterOption,
+		] as readonly HeroSortFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.activeGameModeFilter,
+				([main, nav]) => main.duels.activeHeroSortFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
@@ -63,13 +60,7 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: [
-						'duels-stats',
-						'duels-runs',
-						'duels-treasures',
-						'duels-personal-decks',
-						'duels-personal-deck-details',
-					].includes(selectedCategoryId),
+					visible: ['duels-stats'].includes(selectedCategoryId),
 				})),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
@@ -79,11 +70,11 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	onSelected(option: GameModeFilterOption) {
-		this.stateUpdater.next(new DuelsGameModeFilterSelectedEvent(option.value));
+	onSelected(option: HeroSortFilterOption) {
+		this.stateUpdater.next(new DuelsHeroSortFilterSelectedEvent(option.value));
 	}
 }
-interface GameModeFilterOption extends IOption {
-	value: DuelsGameModeFilterType;
-	tooltip?: string;
+
+interface HeroSortFilterOption extends IOption {
+	value: DuelsHeroSortFilterType;
 }

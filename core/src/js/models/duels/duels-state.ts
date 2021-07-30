@@ -1,5 +1,5 @@
 import { DuelsGlobalStats } from '@firestone-hs/duels-global-stats/dist/stat';
-import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
+import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsCategory } from '../mainwindow/duels/duels-category';
@@ -23,7 +23,7 @@ export class DuelsState {
 	readonly runs: readonly DuelsRun[];
 	readonly globalStats: DuelsGlobalStats;
 	readonly playerStats: DuelsPlayerStats;
-	readonly leaderboard: readonly DuelsLeaderboardEntry[];
+	readonly leaderboard: DuelsLeaderboard;
 	// Used to store additional deck data loaded during the course of the app's use,
 	// like the 12-wins additional data. If we store it directly in the deck stats,
 	// it will be erased every time we recompute everything from the global stats
@@ -39,6 +39,7 @@ export class DuelsState {
 	readonly activeTopDecksClassFilter: DuelsClassFilterType;
 	readonly activeTopDecksDustFilter: DuelsTopDecksDustFilterType;
 	readonly activeMmrFilter: string;
+	readonly activeLeaderboardModeFilter: 'paid-duels' | 'duels';
 
 	public static create(base: DuelsState): DuelsState {
 		return Object.assign(new DuelsState(), base);
