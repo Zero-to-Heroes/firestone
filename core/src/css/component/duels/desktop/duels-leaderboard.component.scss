@@ -12,6 +12,12 @@
 		display: flex;
 		min-height: 0;
 		flex-grow: 1;
+		flex-direction: column;
+
+		.text {
+			font-size: 13px;
+			margin-bottom: 15px;
+		}
 
 		.entries {
 			display: flex;
@@ -20,6 +26,7 @@
 			overflow-y: scroll;
 			flex-grow: 1;
 			color: var(--color-1);
+			margin-bottom: 20px;
 
 			.duels-leaderboard-entry {
 				display: flex;

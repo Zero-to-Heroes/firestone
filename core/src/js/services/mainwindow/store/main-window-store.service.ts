@@ -89,6 +89,7 @@ import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode
 import { DuelsHeroSearchEvent } from './events/duels/duels-hero-search-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsHidePersonalDeckSummaryEvent } from './events/duels/duels-hide-personal-deck-summary-event';
+import { DuelsLeaderboardGameModeFilterSelectedEvent } from './events/duels/duels-leaderboard-game-mode-filter-selected-event';
 import { DuelsMmrFilterSelectedEvent } from './events/duels/duels-mmr-filter-selected-event';
 import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
 import { DuelsRestorePersonalDeckSummaryEvent } from './events/duels/duels-restore-personal-deck-summary-event';
@@ -191,6 +192,7 @@ import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-g
 import { DuelsHeroSearchProcessor } from './processors/duels/duels-hero-search-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsHidePersonalDeckSummaryProcessor } from './processors/duels/duels-hide-personal-deck-summary-processor';
+import { DuelsLeaderboardGameModeFilterSelectedProcessor } from './processors/duels/duels-leaderboard-game-mode-filter-selected-processor';
 import { DuelsMmrFilterSelectedProcessor } from './processors/duels/duels-mmr-filter-selected-processor';
 import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
 import { DuelsRestorePersonalDeckSummaryProcessor } from './processors/duels/duels-restore-personal-deck-summary-processor';
@@ -698,6 +700,9 @@ export class MainWindowStoreService {
 
 			DuelsGameModeFilterSelectedEvent.eventName(),
 			new DuelsGameModeFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsLeaderboardGameModeFilterSelectedEvent.eventName(),
+			new DuelsLeaderboardGameModeFilterSelectedProcessor(this.prefs),
 
 			DuelsTimeFilterSelectedEvent.eventName(),
 			new DuelsTimeFilterSelectedProcessor(this.duelsBuilder, this.prefs),

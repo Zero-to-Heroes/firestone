@@ -176,6 +176,7 @@ import { DuelsClassFilterDropdownComponent } from '../../components/duels/deskto
 import { DuelsDustFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-dust-filter-dropdown.component';
 import { DuelsGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-game-mode-filter-dropdown.component';
 import { DuelsHeroSortDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-sort-dropdown.component';
+import { DuelsLeaderboardGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-leaderboard-game-mode-filter-dropdown.component';
 import { DuelsMmrFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-mmr-filter-dropdown.component';
 import { DuelsStatTypeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-stat-type-filter-dropdown.component';
 import { DuelsTimeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-time-filter-dropdown.component';
@@ -571,16 +572,6 @@ const components = [
 		DuelsHeroStatsComponent,
 		DuelsHeroStatVignetteComponent,
 		DuelsGlobalValueComponent,
-		DuelsFiltersComponent,
-		DuelsGameModeFilterDropdownComponent,
-		DuelsTreasuresSortDropdownComponent,
-		DuelsStatTypeFilterDropdownComponent,
-		DuelsTreasurePassiveTypeFilterDropdownComponent,
-		DuelsHeroSortDropdownComponent,
-		DuelsTimeFilterDropdownComponent,
-		DuelsClassFilterDropdownComponent,
-		DuelsDustFilterDropdownComponent,
-		DuelsMmrFilterDropdownComponent,
 		DuelsTreasureStatsComponent,
 		DuelsTreasureStatVignetteComponent,
 		DuelsTopDecksComponent,
@@ -601,6 +592,17 @@ const components = [
 		DuelsTreasureSearchComponent,
 		DuelsHeroSearchComponent,
 		DuelsLeaderboardComponent,
+		DuelsFiltersComponent,
+		DuelsGameModeFilterDropdownComponent,
+		DuelsTreasuresSortDropdownComponent,
+		DuelsStatTypeFilterDropdownComponent,
+		DuelsTreasurePassiveTypeFilterDropdownComponent,
+		DuelsHeroSortDropdownComponent,
+		DuelsTimeFilterDropdownComponent,
+		DuelsClassFilterDropdownComponent,
+		DuelsDustFilterDropdownComponent,
+		DuelsMmrFilterDropdownComponent,
+		DuelsLeaderboardGameModeFilterDropdownComponent,
 
 		ArenaDesktopComponent,
 		ArenaEmptyStateComponent,

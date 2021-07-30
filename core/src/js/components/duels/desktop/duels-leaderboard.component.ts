@@ -11,6 +11,10 @@ import { arraysEqual } from '../../../services/utils';
 	template: `
 		<div class="duels-leaderboard">
 			<div class="duels-leaderboard-entry-container">
+				<div class="text">
+					The leaderboard includes the top 100 Firestone users who have played at least one game in the past
+					30 days, across all regions.
+				</div>
 				<ul class="entries" scrollable>
 					<li
 						class="duels-leaderboard-entry"

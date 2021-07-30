@@ -331,6 +331,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateDuelsLeaderboardGameModeFilter(value: DuelsGameModeFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsActiveLeaderboardModeFilter: value as any };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateDuelsTimeFilter(value: DuelsTimeFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActiveTimeFilter: value };

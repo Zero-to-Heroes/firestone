@@ -17,6 +17,9 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	template: `
 		<div class="filters duels-filters">
 			<duels-game-mode-filter-dropdown class="filter game-mode-filter"></duels-game-mode-filter-dropdown>
+			<duels-leaderboard-game-mode-filter-dropdown
+				class="filter game-leaderboard-mode-filter"
+			></duels-leaderboard-game-mode-filter-dropdown>
 			<duels-treasures-sort-dropdown class="filter treasures-sort"></duels-treasures-sort-dropdown>
 			<duels-stat-type-filter-dropdown class="filter stat-type-filter"></duels-stat-type-filter-dropdown>
 			<duels-treasure-passive-type-filter-dropdown
