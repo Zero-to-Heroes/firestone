@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
@@ -14,7 +14,7 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Paladin.GallopingSavior,
 	];
 
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.gameState && gameEvent.type === GameEvent.NUM_CARDS_PLAYED_THIS_TURN;

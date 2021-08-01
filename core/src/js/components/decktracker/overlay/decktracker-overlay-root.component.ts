@@ -11,7 +11,6 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -20,7 +19,6 @@ import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { Events } from '../../../services/events.service';
-import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -163,11 +161,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		private renderer: Renderer2,
 		private events: Events,
 		private init_DebugService: DebugService,
-		private cards: AllCardsService,
 	) {}
 
 	async ngAfterViewInit() {
-		this.cards.initializeCardsDb(CARDS_VERSION);
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;

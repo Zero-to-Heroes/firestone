@@ -1,5 +1,5 @@
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';
 import { QualifierType } from '../_qualifier.type';
@@ -17,12 +17,12 @@ export class DeckbuildingCardNameReq implements Requirement {
 		private readonly qualifier: QualifierType,
 		private readonly textQualifier: TextQualifierType,
 		text: string,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 	) {
 		this.text = text.split('|');
 	}
 
-	public static create(rawReq: RawRequirement, cards: AllCardsService): Requirement {
+	public static create(rawReq: RawRequirement, cards: CardsFacadeService): Requirement {
 		return new DeckbuildingCardNameReq(
 			parseInt(rawReq.values[0]),
 			rawReq.values[1] as QualifierType,

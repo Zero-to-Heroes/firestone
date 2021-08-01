@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
 import { RewardType } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
+import { CardsFacadeService } from '@services/cards-facade.service';
 
 @Component({
 	selector: 'duels-reward',
@@ -31,7 +31,7 @@ export class DuelsRewardComponent {
 	amount: number;
 	tooltip: string;
 
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	private buildSvg(reward: DuelsRewardsInfo | ArenaRewardInfo): string {
 		const rewardType = reward.rewardType;

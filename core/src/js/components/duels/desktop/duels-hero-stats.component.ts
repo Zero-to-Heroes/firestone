@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { isEqual } from 'lodash-es';
 import { DuelsHeroPlayerStat, DuelsPlayerStats } from '../../../models/duels/duels-player-stats';
 import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
@@ -73,7 +73,7 @@ export class DuelsHeroStatsComponent implements AfterViewInit {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 

@@ -1,7 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService, Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { RunStep } from '../../models/duels/run-step';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -277,7 +278,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly sanitizer: DomSanitizer,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	ngAfterViewInit() {

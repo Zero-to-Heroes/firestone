@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
@@ -9,7 +9,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsOpponentRevealedParser implements EventParser {
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsOpponentRevealedEvent';

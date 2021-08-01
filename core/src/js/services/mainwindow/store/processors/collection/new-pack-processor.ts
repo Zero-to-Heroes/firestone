@@ -1,5 +1,5 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { CardPackResult, PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
@@ -11,7 +11,7 @@ import { NewPackEvent } from '../../events/collection/new-pack-event';
 import { Processor } from '../processor';
 
 export class NewPackProcessor implements Processor {
-	constructor(private collectionManager: CollectionManager, private allCards: AllCardsService) {}
+	constructor(private collectionManager: CollectionManager, private allCards: CardsFacadeService) {}
 
 	public async process(
 		event: NewPackEvent,

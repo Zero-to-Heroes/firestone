@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -12,7 +12,7 @@ export class SecretCreatedInGameParser implements EventParser {
 	constructor(
 		private readonly helper: DeckManipulationHelper,
 		private readonly secretConfig: SecretConfigService,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

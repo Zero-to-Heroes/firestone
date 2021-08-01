@@ -1,12 +1,12 @@
 import { BooleanTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/boolean-turn-info';
 import { GameType } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../../../models/game-event';
 import { RealTimeStatsState } from '../../real-time-stats';
 import { EventParser } from '../_event-parser';
 
 export class RTStatBgsAttackFirstParser implements EventParser {
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
 		return (

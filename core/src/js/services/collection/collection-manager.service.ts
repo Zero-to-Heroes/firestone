@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Card } from '../../models/card';
 import { CardBack } from '../../models/card-back';
 import { Coin } from '../../models/coin';
@@ -31,7 +31,7 @@ export class CollectionManager {
 		private readonly db: IndexedDbService,
 		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly setsService: SetsService,
 		private readonly packStatsService: PackStatsService,
 	) {

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
@@ -153,7 +153,7 @@ export class BgsHeroSelectionOverviewComponent {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ads: AdService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}

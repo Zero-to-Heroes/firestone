@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { extractTotalDuration, extractTotalTurns, Replay } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GameType } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
@@ -12,7 +12,7 @@ export class GameParserService {
 	plugin: any;
 	initialized: boolean;
 
-	constructor(private cards: AllCardsService) {}
+	constructor(private cards: CardsFacadeService) {}
 
 	public toFormatType(formatType: number): StatGameFormatType {
 		switch (formatType) {

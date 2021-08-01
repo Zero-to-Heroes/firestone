@@ -10,7 +10,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
@@ -70,7 +70,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 		private cdr: ChangeDetectorRef,
 		private events: Events,
 		private ow: OverwolfService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 	) {}
 
 	ngAfterViewInit() {

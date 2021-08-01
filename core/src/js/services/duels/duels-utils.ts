@@ -1,5 +1,5 @@
 import { allDuelsTreasureCardIds, CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 
 const PASSIVES = [];
 
@@ -61,7 +61,7 @@ const SIGNATURE_TREASURES = [
 	CardIds.NonCollectible.Warrior.SpikedArmsTavernBrawlToken,
 ];
 
-export const isSignatureTreasure = (cardId: string, allCards: AllCardsService): boolean => {
+export const isSignatureTreasure = (cardId: string, allCards: CardsFacadeService): boolean => {
 	const card = allCards.getCard(cardId);
 	return (
 		SIGNATURE_TREASURES.includes(cardId) ||
@@ -69,7 +69,7 @@ export const isSignatureTreasure = (cardId: string, allCards: AllCardsService): 
 	);
 };
 
-export const isPassive = (cardId: string, allCards: AllCardsService): boolean => {
+export const isPassive = (cardId: string, allCards: CardsFacadeService): boolean => {
 	return PASSIVES.includes(cardId) || allCards.getCard(cardId)?.mechanics?.includes('DUNGEON_PASSIVE_BUFF');
 };
 

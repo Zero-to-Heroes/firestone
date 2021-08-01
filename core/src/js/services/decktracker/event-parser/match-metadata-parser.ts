@@ -1,5 +1,5 @@
 import { formatFormat, GameType } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -17,7 +17,7 @@ export class MatchMetadataParser implements EventParser {
 	constructor(
 		private deckParser: DeckParserService,
 		private prefs: PreferencesService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {

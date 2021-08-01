@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { getBaseCardId } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { CardMetaInfo } from '../../../models/decktracker/card-meta-info';
 import { DeckCard } from '../../../models/decktracker/deck-card';
@@ -11,7 +11,7 @@ import { EntityGameState, GameEvent, GameState as EventGameState, PlayerGameStat
 
 @Injectable()
 export class DeckManipulationHelper {
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	public removeSingleCardFromZone(
 		zone: readonly DeckCard[],

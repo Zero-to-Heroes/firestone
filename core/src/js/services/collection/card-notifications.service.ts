@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
@@ -8,7 +8,7 @@ import { PreferencesService } from '../preferences.service';
 export class CardNotificationsService {
 	constructor(
 		private readonly notificationService: OwNotificationsService,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 	) {}
 

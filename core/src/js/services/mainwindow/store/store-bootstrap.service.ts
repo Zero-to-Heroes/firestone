@@ -12,12 +12,12 @@ import { ArenaStateBuilderService } from '../../arena/arena-state-builder.servic
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
+import { CardsInitService } from '../../cards-init.service';
 import { ArenaRunParserService } from '../../decktracker/arena-run-parser.service';
 import { DungeonLootParserService } from '../../decktracker/dungeon-loot-parser.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
-import { Events } from '../../events.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
@@ -35,7 +35,7 @@ export class StoreBootstrapService {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private readonly events: Events,
+		private readonly cardsInit: CardsInitService,
 		private readonly achievementsRepository: AchievementsRepository,
 		private readonly achievementsHelper: AchievementUpdateHelper,
 		private readonly ow: OverwolfService,

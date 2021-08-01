@@ -142,12 +142,12 @@ export class CardComponent implements AfterViewInit {
 			this.showPlaceholder = true;
 		}
 		const imagePath = this._highRes ? '512' : 'compressed';
-		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png?v=3`;
+		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png?v=6`;
 		if (this._bgs) {
 			if (this._premium) {
-				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs_premium.png?v=3`;
+				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs_premium.png?v=6`;
 			} else {
-				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs.png?v=3`;
+				this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._card.id}_bgs.png?v=6`;
 			}
 		}
 		this.secondaryClass = this._highRes ? 'high-res' : '';

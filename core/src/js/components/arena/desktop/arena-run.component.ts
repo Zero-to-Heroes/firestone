@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ArenaRewardInfo } from '@firestone-hs/api-arena-rewards';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { ArenaRun } from '../../../models/arena/arena-run';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -89,7 +89,7 @@ export class ArenaRunComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 

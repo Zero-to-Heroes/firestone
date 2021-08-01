@@ -11,7 +11,8 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { MinionStat } from '../../models/battlegrounds/post-match/minion-stat';
 import { OverwolfService } from '../../services/overwolf.service';
 import { isWindowHidden } from '../../services/utils';
@@ -139,7 +140,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly ow: OverwolfService,
 	) {}
 

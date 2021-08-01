@@ -1,11 +1,10 @@
 import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { AllCardsService } from '@firestone-hs/replay-parser';
-import cardsJson from '../../../../test/cards.json';
+import { buildTestCardsService } from '../test-utils';
 import { GameForUpload } from './game-for-upload';
 import { GameParserService } from './game-parser.service';
 
 describe('Test correct result is computed', () => {
-	const cards = buildCardsService();
+	const cards = buildTestCardsService();
 
 	test('Basic test', async () => {
 		const service = new GameParserService(cards);
@@ -17,12 +16,6 @@ describe('Test correct result is computed', () => {
 		expect(game.result).toBe('won');
 	});
 });
-
-function buildCardsService() {
-	const service = new AllCardsService();
-	service['service']['allCards'] = [...(cardsJson as any[])];
-	return service;
-}
 
 const replayXml = `
 <?xml version="1.0" encoding="utf-8"?>

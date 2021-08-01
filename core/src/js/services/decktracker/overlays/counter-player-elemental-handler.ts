@@ -1,12 +1,12 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { OverwolfService } from '../../overwolf.service';
 import { PreferencesService } from '../../preferences.service';
 import { AbstractOverlayHandler } from './_abstract-overlay-handler';
 
 export class ElementalPlayerCounterOverlayHandler extends AbstractOverlayHandler {
-	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
+	constructor(ow: OverwolfService, allCards: CardsFacadeService, prefs: PreferencesService) {
 		super(
 			OverwolfService.COUNTER_PLAYER_ELEMENTAL_WINDOW,
 			(prefs) => prefs.playerElementalCounter,

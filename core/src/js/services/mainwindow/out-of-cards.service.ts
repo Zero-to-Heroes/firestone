@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { SceneMode } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Card } from '../../models/card';
 import { GameEvent } from '../../models/game-event';
 import { ApiRunner } from '../api-runner';
@@ -24,7 +24,7 @@ export class OutOfCardsService {
 		private prefs: PreferencesService,
 		private api: ApiRunner,
 		// These are not needed for generating tokens
-		@Optional() private allCards: AllCardsService,
+		@Optional() private allCards: CardsFacadeService,
 		@Optional() private memory: MemoryInspectionService,
 		@Optional() private events: Events,
 		@Optional() private ow: OverwolfService,

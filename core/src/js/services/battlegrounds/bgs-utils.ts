@@ -1,7 +1,7 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { capitalizeFirstLetter } from '../utils';
@@ -211,7 +211,7 @@ export const getHeroPower = (heroCardId: string): string => {
 export const normalizeHeroCardId = (
 	heroCardId: string,
 	fullNormalize = false,
-	allCards: AllCardsService = null,
+	allCards: CardsFacadeService = null,
 ): string => {
 	if (!heroCardId) {
 		return heroCardId;
@@ -250,7 +250,7 @@ export const normalizeHeroCardId = (
 
 export const getAllCardsInGame = (
 	availableTribes: readonly Race[],
-	allCards: AllCardsService,
+	allCards: CardsFacadeService,
 ): readonly ReferenceCard[] => {
 	return allCards
 		.getCards()
@@ -345,7 +345,7 @@ export const tribeValueForSort = (tribe: string): number => {
 export const getAchievementsForHero = (
 	heroCardId: string,
 	heroAchievements: readonly VisualAchievement[],
-	allCards: AllCardsService,
+	allCards: CardsFacadeService,
 ): readonly VisualAchievement[] => {
 	const dbHero = allCards.getCard(heroCardId);
 	const heroName = formatHeroNameForAchievements(dbHero);

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Subscription } from 'rxjs';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -60,5 +60,5 @@ export class DeckListComponent {
 
 	private preferencesSubscription: Subscription;
 
-	constructor(private readonly deckHandler: DeckHandlerService, private readonly allCards: AllCardsService) {}
+	constructor(private readonly deckHandler: DeckHandlerService, private readonly allCards: CardsFacadeService) {}
 }

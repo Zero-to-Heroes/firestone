@@ -1,5 +1,5 @@
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { formatClass } from '../../hs-utils';
@@ -7,7 +7,7 @@ import { formatClass } from '../../hs-utils';
 export const modifyDeckForSpecialCards = (
 	cardId: string,
 	deckState: DeckState,
-	allCards: AllCardsService,
+	allCards: CardsFacadeService,
 ): DeckState => {
 	switch (cardId) {
 		case CardIds.Collectible.Druid.CelestialAlignment:
@@ -47,7 +47,7 @@ export const modifyDeckForSpecialCards = (
 	}
 };
 
-const handleCelestialAlignment = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleCelestialAlignment = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	const withDeck = updateCostInDeck(
 		(card, refCard) => true,
 		(card) => 1,
@@ -62,7 +62,7 @@ const handleCelestialAlignment = (deckState: DeckState, allCards: AllCardsServic
 	);
 };
 
-const handleEmbiggen = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleEmbiggen = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card) => Math.min(10, card.getEffectiveManaCost() + 1),
@@ -71,7 +71,7 @@ const handleEmbiggen = (deckState: DeckState, allCards: AllCardsService): DeckSt
 	);
 };
 
-const handleLibram = (deckState: DeckState, allCards: AllCardsService, costReduction: number): DeckState => {
+const handleLibram = (deckState: DeckState, allCards: CardsFacadeService, costReduction: number): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.name?.includes('Libram of'),
 		(card) => Math.max(0, card.getEffectiveManaCost() - costReduction),
@@ -80,7 +80,7 @@ const handleLibram = (deckState: DeckState, allCards: AllCardsService, costReduc
 	);
 };
 
-const handleIncantersFlow = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleIncantersFlow = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
 		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
@@ -89,7 +89,7 @@ const handleIncantersFlow = (deckState: DeckState, allCards: AllCardsService): D
 	);
 };
 
-const handleFrizzKindleroost = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleFrizzKindleroost = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.race === Race.DRAGON.toString(),
 		(card) => Math.max(0, card.getEffectiveManaCost() - 2),
@@ -98,7 +98,7 @@ const handleFrizzKindleroost = (deckState: DeckState, allCards: AllCardsService)
 	);
 };
 
-const handleLunasPocketGalaxy = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleLunasPocketGalaxy = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card) => 1,
@@ -107,7 +107,7 @@ const handleLunasPocketGalaxy = (deckState: DeckState, allCards: AllCardsService
 	);
 };
 
-const handleScepterOfSummoning = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleScepterOfSummoning = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCostInDeck(
 		(card, refCard) => (refCard?.type === 'Minion' || card?.cardType === 'Minion') && card?.actualManaCost >= 5,
 		(card) => 5,
@@ -116,7 +116,7 @@ const handleScepterOfSummoning = (deckState: DeckState, allCards: AllCardsServic
 	);
 };
 
-const handleWyrmrestPurifier = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleWyrmrestPurifier = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.playerClass === 'Neutral',
 		(card) =>
@@ -135,7 +135,7 @@ const handleWyrmrestPurifier = (deckState: DeckState, allCards: AllCardsService)
 	);
 };
 
-const handleExploreUngoro = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleExploreUngoro = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	const refCard = allCards.getCard(CardIds.NonCollectible.Warrior.ExploreUngoro_ChooseYourPathToken);
 	return updateCardInDeck(
 		(card, refCard) => true,
@@ -153,7 +153,7 @@ const handleExploreUngoro = (deckState: DeckState, allCards: AllCardsService): D
 	);
 };
 
-const handleDeckOfLunacy = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleDeckOfLunacy = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
 		(card) =>
@@ -171,7 +171,7 @@ const handleDeckOfLunacy = (deckState: DeckState, allCards: AllCardsService): De
 	);
 };
 
-const handleHemet = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleHemet = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCardInDeck(
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
@@ -182,7 +182,7 @@ const handleHemet = (deckState: DeckState, allCards: AllCardsService): DeckState
 	);
 };
 
-const handleSkulkingGeist = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleSkulkingGeist = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCardInDeckAndHand(
 		// We use the initial cost here, see
 		// https://www.reddit.com/r/hearthstone/comments/oo8cjr/if_a_cards_costs_are_reduced_during_a_game_does/h5wxgqr/?context=3
@@ -193,7 +193,7 @@ const handleSkulkingGeist = (deckState: DeckState, allCards: AllCardsService): D
 	);
 };
 
-const handleDeckOfChaos = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handleDeckOfChaos = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => refCard?.type === 'Minion' || card?.cardType === 'Minion',
 		(card, refCard) =>
@@ -205,7 +205,7 @@ const handleDeckOfChaos = (deckState: DeckState, allCards: AllCardsService): Dec
 	);
 };
 
-const handlePrinceLiam = (deckState: DeckState, allCards: AllCardsService): DeckState => {
+const handlePrinceLiam = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
 	return updateCardInDeck(
 		(card, refCard) => card?.getEffectiveManaCost() === 1,
 		(card) =>
@@ -228,7 +228,7 @@ const updateCostInDeck = (
 	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
 	costUpdator: (card: DeckCard) => number,
 	deckState: DeckState,
-	allCards: AllCardsService,
+	allCards: CardsFacadeService,
 ): DeckState => {
 	const currentDeck = deckState.deck;
 	const newDeck: readonly DeckCard[] = currentDeck.map((card) => {
@@ -249,7 +249,7 @@ const updateCostInHand = (
 	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
 	costUpdator: (card: DeckCard) => number,
 	deckState: DeckState,
-	allCards: AllCardsService,
+	allCards: CardsFacadeService,
 ): DeckState => {
 	const currentHand = deckState.hand;
 	const newHand: readonly DeckCard[] = currentHand.map((card) => {
@@ -270,7 +270,7 @@ const updateCardInDeck = (
 	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
 	cardUpdater: (card: DeckCard, refCard: ReferenceCard) => DeckCard,
 	deckState: DeckState,
-	allCards: AllCardsService,
+	allCards: CardsFacadeService,
 ): DeckState => {
 	const currentDeck = deckState.deck;
 	const newDeck: readonly DeckCard[] = currentDeck
@@ -291,7 +291,7 @@ const updateCardInDeckAndHand = (
 	cardSelector: (card: DeckCard, refCard: ReferenceCard) => boolean,
 	cardUpdater: (card: DeckCard, refCard: ReferenceCard) => DeckCard,
 	deckState: DeckState,
-	allCards: AllCardsService,
+	allCards: CardsFacadeService,
 ): DeckState => {
 	const newDeck: readonly DeckCard[] = deckState.deck
 		.map((card) => {

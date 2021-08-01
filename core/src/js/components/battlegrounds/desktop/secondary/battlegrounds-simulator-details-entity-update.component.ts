@@ -8,8 +8,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService, Entity, EntityAsJS } from '@firestone-hs/replay-parser';
+import { Entity, EntityAsJS } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsCustomSimulationPicker } from '../../../../models/mainwindow/battlegrounds/simulator/bgs-custom-simulation-state';
 import { BgsCustomSimulationUpdateMinionEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-update-minion-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -107,7 +108,7 @@ export class BattlegroundsSimulatorDetailsEntityUpdateComponent implements After
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 

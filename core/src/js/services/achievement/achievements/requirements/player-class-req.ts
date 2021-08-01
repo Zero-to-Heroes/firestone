@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
@@ -6,9 +6,9 @@ import { Requirement } from './_requirement';
 export class PlayerClassReq implements Requirement {
 	private isCorrectPlayerClass: boolean;
 
-	constructor(private readonly playerClass: string, private readonly cards: AllCardsService) {}
+	constructor(private readonly playerClass: string, private readonly cards: CardsFacadeService) {}
 
-	public static create(rawReq: RawRequirement, cards: AllCardsService): Requirement {
+	public static create(rawReq: RawRequirement, cards: CardsFacadeService): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 1) {
 			console.error('invalid parameters for PlayerClassReq', rawReq);
 		}

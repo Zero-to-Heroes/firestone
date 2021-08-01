@@ -10,10 +10,10 @@ import {
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
-import { AllCardsService, Entity as ParserEntity } from '@firestone-hs/replay-parser';
+import { Entity as ParserEntity } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsBoard } from '../../../models/battlegrounds/in-game/bgs-board';
 import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
-import { CARDS_VERSION } from '../../../services/hs-utils';
 
 @Component({
 	selector: 'bgs-chart-warband-composition',
@@ -177,11 +177,9 @@ export class BgsChartWarbandCompositionComponent {
 	constructor(
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly appRef: ApplicationRef,
-	) {
-		allCards.initializeCardsDb(CARDS_VERSION);
-	}
+	) {}
 
 	isTribe(tribe: string): boolean {
 		if (!this._availableTribes?.length) {

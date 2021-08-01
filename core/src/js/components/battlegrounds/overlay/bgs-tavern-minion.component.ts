@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
@@ -62,7 +62,7 @@ export class BgsTavernMinionComponent {
 	minionTop: number;
 	minionRight: number;
 
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	private updateValues() {
 		this.highlightedFromTribe = false;

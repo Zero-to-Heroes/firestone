@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -30,7 +30,7 @@ import { arraysEqual } from '../../../../services/utils';
 export class BattlegroundsReplaysRecapComponent {
 	replays$: Observable<readonly GameStat[]>;
 
-	constructor(private readonly store: AppUiStoreService, private readonly allCards: AllCardsService) {
+	constructor(private readonly store: AppUiStoreService, private readonly allCards: CardsFacadeService) {
 		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.replays.allReplays,

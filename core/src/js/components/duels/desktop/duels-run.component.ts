@@ -7,9 +7,9 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { RunStep } from '../../../models/duels/run-step';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
@@ -155,7 +155,7 @@ export class DuelsRunComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 

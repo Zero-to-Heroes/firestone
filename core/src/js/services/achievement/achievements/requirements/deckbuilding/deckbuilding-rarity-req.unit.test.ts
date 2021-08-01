@@ -1,13 +1,12 @@
 import { RarityTYpe } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
-import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
+import { buildTestCardsService } from '../../../../test-utils';
 import { DeckbuildingRarityReq } from './deckbuilding-rarity-req';
 
 describe('deckbuilding-rarity-req', () => {
-	const cards = buildCardsService();
+	const cards = buildTestCardsService();
 
 	describe('rarity is epic', () => {
 		describe('qualifier is AT_LEAST', () => {
@@ -197,9 +196,3 @@ describe('deckbuilding-rarity-req', () => {
 		expect(req['rarity']).toBe('epic');
 	});
 });
-
-function buildCardsService() {
-	const service = new AllCardsService();
-	service['service']['allCards'] = [...(cardsJson as any[])];
-	return service;
-}

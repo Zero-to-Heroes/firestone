@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { Option } from './option';
 
@@ -43,5 +43,5 @@ export class LootBundleComponent {
 	bundleName: string;
 	cards: readonly VisualDeckCard[];
 
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 }

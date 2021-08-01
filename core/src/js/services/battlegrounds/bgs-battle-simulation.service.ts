@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable, Optional } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import Worker from 'worker-loader!../../workers/bgs-simulation.worker';
 import { Preferences } from '../../models/preferences';
-import { CARDS_VERSION } from '../hs-utils';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { normalizeHeroCardId } from './bgs-utils';
@@ -27,7 +26,7 @@ export class BgsBattleSimulationService {
 	constructor(
 		private readonly http: HttpClient,
 		@Optional() private readonly ow: OverwolfService,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 		@Optional() private readonly prefs: PreferencesService,
 	) {
 		if (ow?.isOwEnabled()) {
@@ -39,8 +38,7 @@ export class BgsBattleSimulationService {
 	}
 
 	private async init() {
-		await this.cards.initializeCardsDb(CARDS_VERSION);
-		this.cardsData = new CardsData(this.cards.service, false);
+		this.cardsData = new CardsData(this.cards.getService(), false);
 		this.cardsData.inititialize();
 	}
 

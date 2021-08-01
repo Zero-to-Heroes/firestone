@@ -8,13 +8,11 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { DebugService } from '../../services/debug.service';
-import { CARDS_VERSION } from '../../services/hs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AttackCounterDefinition } from './definitions/attack-counter';
@@ -69,9 +67,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private init_DebugService: DebugService,
-		private cards: AllCardsService,
 	) {
-		cards.initializeCardsDb(CARDS_VERSION);
 		const nativeElement = el.nativeElement;
 		this.activeCounter = nativeElement.getAttribute('counter');
 		this.side = nativeElement.getAttribute('side');

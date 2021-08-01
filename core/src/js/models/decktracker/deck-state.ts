@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { AttackOnBoard } from './attack-on-board';
 import { BoardSecret } from './board-secret';
 import { DeckCard } from './deck-card';
@@ -108,7 +108,7 @@ export class DeckState {
 	}
 
 	// TODO: Probably not the place for these methods
-	public containsGalakrond(allCards?: AllCardsService): boolean {
+	public containsGalakrond(allCards?: CardsFacadeService): boolean {
 		if (this.galakrondInvokesCount > 0) {
 			return true;
 		}
@@ -126,7 +126,7 @@ export class DeckState {
 			);
 	}
 
-	public containsCthun(allCards: AllCardsService): boolean {
+	public containsCthun(allCards: CardsFacadeService): boolean {
 		if (this.cthunSize > 0) {
 			return true;
 		}
@@ -144,7 +144,7 @@ export class DeckState {
 			);
 	}
 
-	public containsJade(allCards?: AllCardsService): boolean {
+	public containsJade(allCards?: CardsFacadeService): boolean {
 		if (this.jadeGolemSize > 0) {
 			return true;
 		}
@@ -160,7 +160,7 @@ export class DeckState {
 			);
 	}
 
-	public containsWatchpost(allCards?: AllCardsService, lookAtWatchpostsPlayed = false): boolean {
+	public containsWatchpost(allCards?: CardsFacadeService, lookAtWatchpostsPlayed = false): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
@@ -174,7 +174,7 @@ export class DeckState {
 			);
 	}
 
-	public containsLibram(allCards?: AllCardsService, lookAtLibramsPlayed = false): boolean {
+	public containsLibram(allCards?: CardsFacadeService, lookAtLibramsPlayed = false): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
 			.filter((card) => card.cardId)

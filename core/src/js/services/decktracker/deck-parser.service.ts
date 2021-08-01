@@ -12,7 +12,7 @@ import {
 	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
 } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckDefinition, decode, encode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { Metadata } from '../../models/decktracker/metadata';
@@ -61,7 +61,7 @@ export class DeckParserService {
 		private gameEvents: GameEventsEmitterService,
 		private events: Events,
 		private memory: MemoryInspectionService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 		private ow: OverwolfService,
 		private handler: DeckHandlerService,
 		private api: ApiRunner,

@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
@@ -6,7 +6,7 @@ import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
 export class LocalPlayerParser implements EventParser {
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && state.playerDeck && gameEvent.type === GameEvent.LOCAL_PLAYER;

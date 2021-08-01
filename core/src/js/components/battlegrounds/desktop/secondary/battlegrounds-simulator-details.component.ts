@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsCustomSimulationPicker } from '../../../../models/mainwindow/battlegrounds/simulator/bgs-custom-simulation-state';
@@ -65,7 +65,7 @@ export class BattlegroundsSimulatorDetailsComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly store: AppUiStoreService,
 	) {
 		// For now we consider all tribes

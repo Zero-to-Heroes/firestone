@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { isEqual } from 'lodash';
 import { DuelsPlayerStats, DuelsTreasureStat } from '../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../models/duels/duels-state';
@@ -64,7 +64,7 @@ export class DuelsTreasureStatsComponent implements AfterViewInit {
 	private displayedStats: readonly DuelsTreasureStat[];
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
+	constructor(private readonly ow: OverwolfService, private readonly allCards: CardsFacadeService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

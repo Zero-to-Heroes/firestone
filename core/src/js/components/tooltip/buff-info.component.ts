@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
-import { CARDS_VERSION } from '../../services/hs-utils';
+import { CardsFacadeService } from '@services/cards-facade.service';
 
 @Component({
 	selector: 'buff-info',
@@ -31,10 +30,10 @@ export class BuffInfoComponent {
 		this.updateBuff(value);
 	}
 
-	constructor(private readonly allCards: AllCardsService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly cdr: ChangeDetectorRef) {}
 
 	private async updateBuff(value: { bufferCardId: string; buffCardId: string; count: number }) {
-		await this.allCards.initializeCardsDb(CARDS_VERSION);
+		// await this.allCards.initializeCardsDb(CARDS_VERSION);
 		const card = this.allCards.getCard(value.buffCardId);
 		this.count = value.count;
 		this.name = card.name;

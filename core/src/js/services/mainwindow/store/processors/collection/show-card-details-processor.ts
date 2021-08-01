@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationCollection } from '../../../../../models/mainwindow/navigation/navigation-collection';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -7,7 +7,7 @@ import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-
 import { Processor } from '../processor';
 
 export class ShowCardDetailsProcessor implements Processor {
-	constructor(private cards: AllCardsService) {}
+	constructor(private cards: CardsFacadeService) {}
 
 	public async process(
 		event: ShowCardDetailsEvent,

@@ -1,12 +1,11 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
-import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
+import { buildTestCardsService } from '../../../../test-utils';
 import { DeckbuildingNumberOfMinionsReq } from './deckbuilding-number-of-minions-req';
 
 describe('deckbuilding-number-of-minions-req', () => {
-	const cards = buildCardsService();
+	const cards = buildTestCardsService();
 
 	describe('qualifier is AT_LEAST', () => {
 		const deckstring = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
@@ -75,9 +74,3 @@ describe('deckbuilding-number-of-minions-req', () => {
 		expect(req['qualifier']).toBe('AT_LEAST');
 	});
 });
-
-function buildCardsService() {
-	const service = new AllCardsService();
-	service['service']['allCards'] = [...(cardsJson as any[])];
-	return service;
-}

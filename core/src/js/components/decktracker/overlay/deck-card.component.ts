@@ -8,7 +8,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -180,7 +180,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 		private readonly cardsHighlightService: CardsHighlightService,
 	) {}
 
@@ -226,7 +226,6 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		await this.cards.initializeCardsDb();
 		this.cardId = this._card.cardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=3)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;

@@ -1,15 +1,5 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-} from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BundleType, DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { Option } from './option';
 
 @Component({
@@ -46,7 +36,7 @@ import { Option } from './option';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LootInfoComponent implements AfterViewInit {
+export class LootInfoComponent {
 	@Input() set loot(value: DuelsRunInfo) {
 		this.bundleType = value.bundleType;
 		this.options = [
@@ -73,16 +63,4 @@ export class LootInfoComponent implements AfterViewInit {
 
 	bundleType: BundleType;
 	options: readonly Option[];
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
 }

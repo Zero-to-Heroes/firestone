@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -38,7 +38,7 @@ export class BattlegroundsHeroFilterDropdownComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly store: AppUiStoreService,
 	) {
 		this.options = [

@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationBattlegrounds } from '../../../../../models/mainwindow/navigation/navigation-battlegrounds';
@@ -8,7 +8,7 @@ import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../events/battlegroun
 import { Processor } from '../processor';
 
 export class BgsPersonalStatsSelectHeroDetailsProcessor implements Processor {
-	constructor(private readonly events: Events, private readonly allCards: AllCardsService) {}
+	constructor(private readonly events: Events, private readonly allCards: CardsFacadeService) {}
 
 	public async process(
 		event: BgsPersonalStatsSelectHeroDetailsEvent,

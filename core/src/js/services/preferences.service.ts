@@ -42,8 +42,8 @@ export class PreferencesService {
 	private preferencesEventBus = new BehaviorSubject<Preferences>(new Preferences());
 
 	constructor(
-		private indexedDb: GenericIndexedDbService,
-		private ow: OverwolfService,
+		private readonly indexedDb: GenericIndexedDbService,
+		private readonly ow: OverwolfService,
 		private readonly api: ApiRunner,
 	) {
 		// It will create one per window that uses the service, but we don't really care

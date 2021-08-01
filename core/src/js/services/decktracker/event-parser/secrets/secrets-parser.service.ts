@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
@@ -19,7 +19,7 @@ import { TriggerOnTurnStartSecretsParser } from './trigger-on-turn-start-secrets
 export class SecretsParserService {
 	private secretParsers = this.buildSecretParsers();
 
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	// In case there is only one secret in play, we can tick the options off based
 	// on pure conditions logic
@@ -62,14 +62,14 @@ export class SecretsParserService {
 		return [
 			new TriggerOnAttackSecretsParser(this.helper, this.allCards),
 			new TriggerOnDamageSecretsParser(this.helper, this.allCards),
-			new TriggerOnFriendlyMinionDiedSecretsParser(this.helper, this.allCards),
-			new TriggerOnHeroPowerSecretsParser(this.helper, this.allCards),
+			new TriggerOnFriendlyMinionDiedSecretsParser(this.helper),
+			new TriggerOnHeroPowerSecretsParser(this.helper),
 			new TriggerOnMinionPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnNumCardPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnNumCardDrawSecretsParser(this.helper, this.allCards),
 			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
-			new TriggerOnTurnStartSecretsParser(this.helper, this.allCards),
-			new TriggerOnTurnEndSecretsParser(this.helper, this.allCards),
+			new TriggerOnTurnStartSecretsParser(this.helper),
+			new TriggerOnTurnEndSecretsParser(this.helper),
 		];
 	}
 }

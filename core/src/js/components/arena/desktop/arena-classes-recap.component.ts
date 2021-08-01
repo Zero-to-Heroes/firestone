@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../models/arena/arena-class-filter.type';
@@ -86,7 +86,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 export class ArenaClassesRecapComponent {
 	stats$: Observable<StatInfo>;
 
-	constructor(private readonly allCards: AllCardsService, private readonly store: AppUiStoreService) {
+	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreService) {
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

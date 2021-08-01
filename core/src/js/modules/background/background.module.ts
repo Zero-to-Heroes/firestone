@@ -284,6 +284,8 @@ import { BgsInitService } from '../../services/battlegrounds/bgs-init.service';
 import { BgsRunStatsService } from '../../services/battlegrounds/bgs-run-stats.service';
 import { BattlegroundsStoreService } from '../../services/battlegrounds/store/battlegrounds-store.service';
 import { RealTimeStatsService } from '../../services/battlegrounds/store/real-time-stats/real-time-stats.service';
+import { CardsFacadeService } from '../../services/cards-facade.service';
+import { CardsInitService } from '../../services/cards-init.service';
 import { CardNotificationsService } from '../../services/collection/card-notifications.service';
 import { CardsMonitorService } from '../../services/collection/cards-monitor.service';
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
@@ -678,6 +680,8 @@ const components = [
 		ApiRunner,
 
 		AppUiStoreService,
+		CardsInitService,
+		CardsFacadeService,
 
 		DevService,
 		GameEvents,

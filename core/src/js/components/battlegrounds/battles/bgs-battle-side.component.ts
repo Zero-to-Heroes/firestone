@@ -10,8 +10,9 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { GameTag, GameType } from '@firestone-hs/reference-data';
-import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
@@ -112,7 +113,7 @@ export class BgsBattleSideComponent {
 
 	entities: readonly Entity[];
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: AllCardsService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {}
 
 	trackByFn(index, item: Entity) {
 		return item.id;

@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject } from 'rxjs';
 import { AttackOnBoard } from '../../models/decktracker/attack-on-board';
 import { DeckCard } from '../../models/decktracker/deck-card';
@@ -166,7 +166,7 @@ export class GameStateService {
 		private dynamicZoneHelper: DynamicZoneHelperService,
 		private gameStateMetaInfos: GameStateMetaInfoService,
 		private zoneOrdering: ZoneOrderingService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 		private prefs: PreferencesService,
 		private twitch: TwitchAuthService,
 		private deckCardService: DeckCardService,
@@ -573,7 +573,7 @@ export class GameStateService {
 
 	private buildEventParsers(): readonly EventParser[] {
 		const parsers: EventParser[] = [
-			new GameStartParser(this.deckParser, this.prefs, this.allCards),
+			new GameStartParser(),
 			new WhizbangDeckParser(this.deckParser, this.deckHandler),
 			new MatchMetadataParser(this.deckParser, this.prefs, this.allCards),
 			new MulliganOverParser(),
@@ -636,7 +636,7 @@ export class GameStateService {
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
 			new CthunRevealedParser(this.helper, this.allCards),
-			new MindrenderIlluciaParser(this.helper, this.allCards),
+			new MindrenderIlluciaParser(),
 			new GlobalMinionEffectParser(this.helper, this.allCards),
 			new CopiedFromEntityIdParser(this.helper, this.allCards),
 

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Card } from '../../models/card';
 import { ReferenceSet } from '../../models/collection/reference-set';
 import { Set, SetCard } from '../../models/set';
-import { CARDS_VERSION } from '../hs-utils';
 import { sets, standardSets } from './sets.ref';
 
 @Injectable()
@@ -23,14 +22,10 @@ export class SetsService {
 		'HERO_10',
 	];
 
-	constructor(private allCards: AllCardsService) {
+	constructor(private allCards: CardsFacadeService) {
 		// We don't call it in the constructor because we want the app to be in control
 		// of how they load the cards, and for it to be aware of when cards have been loaded
 		// this.retrieveAllCards();
-	}
-
-	public async initializeCardsDb(): Promise<void> {
-		return this.allCards.initializeCardsDb(CARDS_VERSION);
 	}
 
 	public getSetIds(): string[] {

@@ -7,7 +7,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -116,7 +116,7 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 

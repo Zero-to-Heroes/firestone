@@ -11,10 +11,10 @@ import {
 	TreasureStat,
 } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsLeaderboard } from '@firestone-hs/duels-leaderboard';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DuelsRewardsInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-rewards-info';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { Input } from '@firestone-hs/retrieve-users-duels-runs/dist/input';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckDefinition, decode } from 'deckstrings';
 import { DuelsGroupedDecks } from '../../models/duels/duels-grouped-decks';
 import {
@@ -67,7 +67,7 @@ export class DuelsStateBuilderService {
 		private readonly api: ApiRunner,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly events: Events,
 	) {
 		this.events

@@ -6,8 +6,8 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Events } from '../../services/events.service';
 import { boosterIdToBoosterName, getDefaultBoosterIdForSetId, getPackDustValue } from '../../services/hs-utils';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -63,7 +63,7 @@ export class PackHistoryItemComponent implements AfterViewInit {
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private events: Events,
-		private cards: AllCardsService,
+		private cards: CardsFacadeService,
 	) {}
 
 	ngAfterViewInit() {

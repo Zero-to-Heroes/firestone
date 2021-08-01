@@ -1,5 +1,5 @@
 import { RarityTYpe } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';
 import { QualifierType } from '../_qualifier.type';
@@ -13,10 +13,10 @@ export class DeckbuildingRarityReq implements Requirement {
 		private readonly targetNumberOfCards: number,
 		private readonly qualifier: QualifierType,
 		private readonly rarity: RarityTYpe,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 	) {}
 
-	public static create(rawReq: RawRequirement, cards: AllCardsService): Requirement {
+	public static create(rawReq: RawRequirement, cards: CardsFacadeService): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 3) {
 			console.error('invalid parameters for DeckbuildingRarityReq', rawReq);
 		}

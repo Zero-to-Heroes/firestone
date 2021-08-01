@@ -1,6 +1,6 @@
 import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { Events } from '../../services/events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -17,7 +17,7 @@ export class PackMonitor {
 
 	constructor(
 		private events: Events,
-		private cards: AllCardsService,
+		private cards: CardsFacadeService,
 		private gameEvents: GameEventsEmitterService,
 		private ow: OverwolfService,
 		private notifications: CardNotificationsService,

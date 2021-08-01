@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Input as ArenaRewards } from '@firestone-hs/api-arena-rewards/dist/sqs-event';
 import { GameType, SceneMode } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { ArenaInfo } from '../../models/arena-info';
 import { GameEvent } from '../../models/game-event';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -42,7 +42,7 @@ export class ArenaRunParserService {
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 		private ow: OverwolfService,
 		private events: Events,
 		private prefs: PreferencesService,

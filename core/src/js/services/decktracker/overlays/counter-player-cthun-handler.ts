@@ -1,10 +1,10 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { OverwolfService } from '../../overwolf.service';
 import { PreferencesService } from '../../preferences.service';
 import { AbstractOverlayHandler } from './_abstract-overlay-handler';
 
 export class CthunPlayerCounterOverlayHandler extends AbstractOverlayHandler {
-	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
+	constructor(ow: OverwolfService, allCards: CardsFacadeService, prefs: PreferencesService) {
 		super(
 			OverwolfService.COUNTER_PLAYER_CTHUN_WINDOW,
 			(prefs) => prefs.playerCthunCounter,

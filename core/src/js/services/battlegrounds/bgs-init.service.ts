@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
@@ -38,7 +38,7 @@ export class BgsInitService {
 		private readonly events: Events,
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly ow: OverwolfService,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 		private readonly patchesService: PatchesConfigService,
 		private readonly api: ApiRunner,
 		private readonly prefs: PreferencesService,

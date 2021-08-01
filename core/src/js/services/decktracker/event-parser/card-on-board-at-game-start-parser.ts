@@ -1,5 +1,5 @@
 import { CardType } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -9,7 +9,7 @@ import { EventParser } from './event-parser';
 
 // Needed to not show the shrine as part of the deck
 export class CardOnBoardAtGameStart implements EventParser {
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START;

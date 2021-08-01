@@ -123,6 +123,7 @@ export class AppBootstrapService {
 		window['mainWindowHotkeyPressed'] = () => this.onHotkeyPress();
 		window['reloadWindows'] = () => this.reloadWindows();
 		window['reloadBgWindows'] = () => this.reloadBgWindows();
+
 		if (!this.collectionHotkeyListener) {
 			this.collectionHotkeyListener = this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
 				// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);

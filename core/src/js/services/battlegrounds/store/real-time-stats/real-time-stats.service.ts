@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../models/game-event';
 import { Events } from '../../../events.service';
 import { GameEventsEmitterService } from '../../../game-events-emitter.service';
@@ -48,7 +48,7 @@ export class RealTimeStatsService {
 	constructor(
 		private readonly gameEvents: GameEventsEmitterService,
 		private readonly events: Events,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}

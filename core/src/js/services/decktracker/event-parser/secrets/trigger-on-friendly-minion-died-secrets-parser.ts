@@ -1,5 +1,4 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
@@ -20,7 +19,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		CardIds.Collectible.Rogue.CheatDeath,
 	];
 
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.gameState && gameEvent.type === GameEvent.MINIONS_DIED;

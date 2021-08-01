@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
@@ -260,7 +260,7 @@ export class MainWindowStoreService {
 	);
 
 	constructor(
-		private cards: AllCardsService,
+		private cards: CardsFacadeService,
 		private sets: SetsService,
 		private achievementsRepository: AchievementsRepository,
 		private collectionManager: CollectionManager,
@@ -489,7 +489,7 @@ export class MainWindowStoreService {
 			new ShowCardDetailsProcessor(this.cards),
 
 			ShowCardBackDetailsEvent.eventName(),
-			new ShowCardBackDetailsProcessor(this.cards),
+			new ShowCardBackDetailsProcessor(),
 
 			UpdateCardSearchResultsEvent.eventName(),
 			new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),

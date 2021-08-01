@@ -8,10 +8,8 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
-import { CARDS_VERSION } from '../../services/hs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
@@ -41,10 +39,7 @@ export class ConstructedComponent implements AfterViewInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-		private readonly allCards: AllCardsService,
-	) {
-		allCards.initializeCardsDb(CARDS_VERSION);
-	}
+	) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;

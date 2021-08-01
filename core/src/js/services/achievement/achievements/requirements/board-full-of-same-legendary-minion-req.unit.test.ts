@@ -1,11 +1,10 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
-import cardsJson from '../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent, GameState } from '../../../../models/game-event';
+import { buildTestCardsService } from '../../../test-utils';
 import { BoardFullOfSameLegendaryMinionReq } from './board-full-of-same-legendary-minion-req';
 
 describe('board-full-of-same-legendary-minion-req', () => {
-	const cards = buildCardsService();
+	const cards = buildTestCardsService();
 
 	test('is completed when any event has a board full of 7 copies of the same leg minion', () => {
 		const req = new BoardFullOfSameLegendaryMinionReq(cards);
@@ -120,9 +119,3 @@ describe('board-full-of-same-legendary-minion-req', () => {
 		// Just check that no error or exception is raised
 	});
 });
-
-function buildCardsService() {
-	const service = new AllCardsService();
-	service['service']['allCards'] = [...(cardsJson as any[])];
-	return service;
-}

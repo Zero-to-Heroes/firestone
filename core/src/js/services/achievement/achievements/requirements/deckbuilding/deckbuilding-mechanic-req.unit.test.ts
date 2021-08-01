@@ -1,12 +1,11 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
-import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
+import { buildTestCardsService } from '../../../../test-utils';
 import { DeckbuildingMechanicReq } from './deckbuilding-mechanic-req';
 
 describe('deckbuilding-mechanic-req', () => {
-	const cards = buildCardsService();
+	const cards = buildTestCardsService();
 
 	describe('mechanic is LIFESTEAL', () => {
 		describe('qualifier is AT_LEAST', () => {
@@ -135,9 +134,3 @@ describe('deckbuilding-mechanic-req', () => {
 		expect(req['qualifier']).toBe('AT_LEAST');
 	});
 });
-
-function buildCardsService() {
-	const service = new AllCardsService();
-	service['service']['allCards'] = [...(cardsJson as any[])];
-	return service;
-}

@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Label } from 'aws-sdk/clients/cloudhsm';
 import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color } from 'ng2-charts';
@@ -305,7 +305,7 @@ export class BgsChartHpComponent {
 	constructor(
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	togglePlayer(playerCardId: string) {

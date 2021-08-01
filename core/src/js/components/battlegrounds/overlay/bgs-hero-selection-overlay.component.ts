@@ -8,7 +8,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
@@ -17,7 +17,6 @@ import { Preferences } from '../../../models/preferences';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
-import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -55,13 +54,11 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 		private init_DebugService: DebugService,
 	) {}
 
 	async ngAfterViewInit() {
-		// console.debug('init cards db', this.allCards, this.allCards?.initializeCardsDb);
-		await this.allCards.initializeCardsDb(CARDS_VERSION);
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;

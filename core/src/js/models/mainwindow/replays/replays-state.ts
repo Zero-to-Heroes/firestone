@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { classes, formatClass } from '../../../services/hs-utils';
 import { DeckSummary } from '../decktracker/deck-summary';
@@ -24,7 +24,7 @@ export class ReplaysState {
 		return this.filters.find((filter) => filter.type === type);
 	}
 
-	public static buildFilters(decks: readonly DeckSummary[], allCards: AllCardsService): readonly ReplaysFilter[] {
+	public static buildFilters(decks: readonly DeckSummary[], allCards: CardsFacadeService): readonly ReplaysFilter[] {
 		const collator = new Intl.Collator('en-US');
 		return [
 			ReplaysFilter.create({

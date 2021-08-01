@@ -3,21 +3,16 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	EventEmitter,
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
-import { AdService } from '../../../services/ad.service';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 
 @Component({
 	selector: 'bgs-post-match-stats-tabs',
@@ -107,17 +102,7 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
-	constructor(
-		private readonly el: ElementRef,
-		private readonly cdr: ChangeDetectorRef,
-		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
-		private readonly owUtils: OwUtilsService,
-		private readonly ads: AdService,
-	) {
-		// console.log('in construftor');
-		this.init();
-	}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
@@ -146,9 +131,5 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 			case 'winrate-per-turn':
 				return 'Winrate';
 		}
-	}
-
-	private async init() {
-		this.allCards.initializeCardsDb(CARDS_VERSION);
 	}
 }

@@ -6,7 +6,7 @@ import {
 	EventEmitter,
 	Input,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { isPassive } from '../../../services/duels/duels-utils';
 import { DuelsViewDeckDetailsEvent } from '../../../services/mainwindow/store/events/duels/duels-view-deck-details-event';
@@ -168,7 +168,7 @@ export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 

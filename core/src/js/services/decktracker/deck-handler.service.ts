@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { decode } from 'deckstrings';
 import { DeckCard } from '../../models/decktracker/deck-card';
 
 @Injectable()
 export class DeckHandlerService {
-	constructor(private allCards: AllCardsService) {}
+	constructor(private allCards: CardsFacadeService) {}
 
 	public buildDeckList(deckstring: string, deckSize = 30): readonly DeckCard[] {
 		if (!deckstring) {

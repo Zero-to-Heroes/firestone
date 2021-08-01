@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AllCardsService, Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { Entity, EntityAsJS, EntityDefinition } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { Map } from 'immutable';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
@@ -75,7 +76,7 @@ export class BgsLastWarbandsComponent {
 	loading = true;
 	visible = false;
 
-	constructor(private readonly allCards: AllCardsService, private readonly store: AppUiStoreService) {
+	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreService) {
 		this.boards$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,

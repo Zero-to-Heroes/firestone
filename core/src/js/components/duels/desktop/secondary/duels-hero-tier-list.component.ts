@@ -1,8 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsState } from '../../../../models/duels/duels-state';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
@@ -20,7 +18,7 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroTierListComponent implements AfterViewInit {
+export class DuelsHeroTierListComponent {
 	_state: DuelsState;
 	tiers: DuelsTier[] = [];
 
@@ -32,13 +30,7 @@ export class DuelsHeroTierListComponent implements AfterViewInit {
 		this.updateValues();
 	}
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly allCards: AllCardsService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
+	constructor(private readonly ow: OverwolfService) {}
 
 	private updateValues() {
 		if (!this._state) {

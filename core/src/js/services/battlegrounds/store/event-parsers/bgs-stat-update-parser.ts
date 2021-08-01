@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../../models/battlegrounds/stats/bgs-stats';
@@ -11,7 +11,7 @@ import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsStatUpdateParser implements EventParser {
-	constructor(private readonly cards: AllCardsService, private readonly patchesService: PatchesConfigService) {}
+	constructor(private readonly cards: CardsFacadeService, private readonly patchesService: PatchesConfigService) {}
 
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsStatUpdateEvent';
@@ -59,7 +59,7 @@ export class BgsStatUpdateParser implements EventParser {
 	public static buildHeroStats(
 		globalStats: BgsStats,
 		bgsStatsForCurrentPatch: readonly GameStat[],
-		cards: AllCardsService,
+		cards: CardsFacadeService,
 	) {
 		const heroStats =
 			globalStats?.heroStats?.map((heroStat) => {

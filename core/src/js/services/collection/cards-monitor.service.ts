@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
@@ -23,7 +23,7 @@ export class CardsMonitorService {
 	private pendingTimeout;
 
 	constructor(
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
 		private readonly collectionManager: CollectionManager,

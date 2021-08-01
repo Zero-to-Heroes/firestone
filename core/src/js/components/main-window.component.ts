@@ -9,17 +9,16 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AppUiStoreService } from '@services/app-ui-store.service';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { GameState } from '../models/decktracker/game-state';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../models/preferences';
-import { AppUiStoreService } from '../services/app-ui-store.service';
 import { DebugService } from '../services/debug.service';
 import { HotkeyService } from '../services/hotkey.service';
-import { CARDS_VERSION } from '../services/hs-utils';
 import { OverwolfService } from '../services/overwolf.service';
 import { OwUtilsService } from '../services/plugins/ow-utils.service';
 import { PreferencesService } from '../services/preferences.service';
@@ -29,11 +28,7 @@ import { PreferencesService } from '../services/preferences.service';
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper
-			*ngIf="dataState && navigationState && cardsInitDone"
-			[activeTheme]="activeTheme"
-			[allowResize]="true"
-		>
+		<window-wrapper *ngIf="dataState && navigationState" [activeTheme]="activeTheme" [allowResize]="true">
 			<section class="layout">
 				<div class="navigation" [ngClass]="{ 'navigation-ftue': dataState.showFtue }">
 					<div class="logo" inlineSVG="assets/svg/firestone_logo_no_text.svg"></div>
@@ -145,7 +140,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	navigationState: NavigationState;
 	windowId: string;
 	activeTheme: CurrentAppType | 'decktracker-desktop';
-	cardsInitDone: boolean;
 	displayingNewVersionNotification: boolean;
 	forceShowReleaseNotes: boolean;
 	prefs: Preferences;
@@ -172,12 +166,10 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly debug: DebugService,
 		private readonly owUtils: OwUtilsService,
 		private readonly hotkeyService: HotkeyService,
-		private readonly cards: AllCardsService,
+		private readonly cards: CardsFacadeService,
 		private readonly preferencesService: PreferencesService,
 		private readonly store: AppUiStoreService,
-	) {
-		this.init();
-	}
+	) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
@@ -209,10 +201,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		// console.log('retrieved storeBus');
 		this.dataStoreSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
-				// First update the state before restoring the window
-				// if (this.dataState) {
-				// 	return;
-				// }
 				this.dataState = newState;
 				this.activeTheme = this.buildActiveTheme();
 				this._showAds = this.showAds();
@@ -396,13 +384,5 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			: ['decktracker', 'arena', 'stats'].includes(this.navigationState?.currentApp)
 			? 'decktracker-desktop'
 			: this.navigationState?.currentApp;
-	}
-
-	private async init() {
-		await this.cards.initializeCardsDb(CARDS_VERSION);
-		this.cardsInitDone = true;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }

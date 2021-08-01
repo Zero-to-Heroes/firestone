@@ -1,13 +1,12 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
-import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
+import { buildTestCardsService } from '../../../../test-utils';
 import { DeckbuildingNoCardWithLetterInNameReq } from './deckbuilding-no-card-with-letter-in-name-req';
 
 describe('deckbuilding-no-card-with-letter-in-name-req', () => {
 	const deckstring = 'AAECAZ8FAvoGxaEDDrMBowKzA7sD0gTlB6wI/vMC3fUCmfcChPwC2f4Ck6gDyqsDAA==';
-	const cards = buildCardsService();
+	const cards = buildTestCardsService();
 
 	test('is completed when deckstring has no card with letter in name', () => {
 		const req = new DeckbuildingNoCardWithLetterInNameReq('e', cards);
@@ -71,9 +70,3 @@ describe('deckbuilding-no-card-with-letter-in-name-req', () => {
 		expect(req['letterToAvoid']).toBe('e');
 	});
 });
-
-function buildCardsService() {
-	const service = new AllCardsService();
-	service['service']['allCards'] = [...(cardsJson as any[])];
-	return service;
-}

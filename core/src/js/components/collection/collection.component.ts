@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardBack } from '../../models/card-back';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { Preferences } from '../../models/preferences';
 import { Set, SetCard } from '../../models/set';
-import { SetsService } from '../../services/collection/sets-service.service';
 import { CollectionReferenceCard } from './collection-reference-card';
 
 @Component({
@@ -146,9 +145,7 @@ export class CollectionComponent {
 		);
 	}
 
-	constructor(private cards: SetsService, private readonly allCards: AllCardsService) {
-		this.init();
-	}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	private updateValues() {
 		if (!this.dataState || !this._navigation) {
@@ -213,11 +210,5 @@ export class CollectionComponent {
 				};
 			})
 			.sort((a, b) => a.dbfId - b.dbfId);
-	}
-
-	private async init() {
-		// First initialize the cards DB, as some of the dependencies injected in
-		// app-bootstrap won't be able to start without the cards DB in place
-		await this.cards.initializeCardsDb();
 	}
 }

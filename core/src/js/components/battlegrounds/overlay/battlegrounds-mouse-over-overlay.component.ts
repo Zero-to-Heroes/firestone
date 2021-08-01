@@ -10,7 +10,6 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Race } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
@@ -18,7 +17,6 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
-import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -87,10 +85,7 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private init_DebugService: DebugService,
-		private allCards: AllCardsService,
-	) {
-		allCards.initializeCardsDb(CARDS_VERSION);
-	}
+	) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;

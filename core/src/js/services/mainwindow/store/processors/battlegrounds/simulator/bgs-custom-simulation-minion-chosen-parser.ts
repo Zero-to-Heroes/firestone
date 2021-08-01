@@ -1,8 +1,8 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { buildSingleBoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/utils';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsFaceOffWithSimulation } from '../../../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BattlegroundsAppState } from '../../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BgsCustomSimulationState } from '../../../../../../models/mainwindow/battlegrounds/simulator/bgs-custom-simulation-state';
@@ -13,7 +13,7 @@ import { BgsCustomSimulationMinionChosenEvent } from '../../../events/battlegrou
 import { Processor } from '../../processor';
 
 export class BgsCustomSimulationMinionChosenParser implements Processor {
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	public async process(
 		event: BgsCustomSimulationMinionChosenEvent,
@@ -31,7 +31,7 @@ export class BgsCustomSimulationMinionChosenParser implements Processor {
 		const newMinion: BoardEntity = buildSingleBoardEntity(
 			event.cardId,
 			null,
-			this.allCards.service,
+			this.allCards.getService(),
 			true,
 			maxEntityId + 1,
 		);

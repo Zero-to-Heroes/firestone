@@ -10,14 +10,12 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { GameState } from '../../models/decktracker/game-state';
 import { Preferences } from '../../models/preferences';
 import { DebugService } from '../../services/debug.service';
-import { CARDS_VERSION } from '../../services/hs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
@@ -90,10 +88,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		private el: ElementRef,
 		private renderer: Renderer2,
 		private init_DebugService: DebugService,
-		private cards: AllCardsService,
-	) {
-		cards.initializeCardsDb(CARDS_VERSION);
-	}
+	) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;

@@ -1,5 +1,5 @@
 import { SceneMode } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
@@ -13,7 +13,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 	private onGameScreen: boolean;
 	private gameStarted: boolean;
 
-	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
+	constructor(ow: OverwolfService, allCards: CardsFacadeService, prefs: PreferencesService) {
 		super(
 			OverwolfService.DECKTRACKER_WINDOW,
 			(prefs) => true,

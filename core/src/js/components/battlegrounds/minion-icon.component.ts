@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
-import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
+import { Entity } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 
 @Component({
 	selector: 'minion-icon',
@@ -40,5 +41,5 @@ export class MinionIconComponent {
 		this.frameSvg = this.premium ? 'assets/svg/bg_ellipsis_premium.svg' : 'assets/svg/bg_ellipsis.svg';
 	}
 
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
@@ -60,7 +60,7 @@ export class OpponentCardInfoIdComponent {
 		}
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: AllCardsService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly allCards: CardsFacadeService) {}
 
 	// In some cases, it's an enchantment that creates the card. And while we want to keep that
 	// info in our internal model that reflects the actual game state, it's better to show the

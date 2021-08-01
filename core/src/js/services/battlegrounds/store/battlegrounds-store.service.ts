@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -116,7 +116,7 @@ export class BattlegroundsStoreService {
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 		private events: Events,
 		private simulation: BgsBattleSimulationService,
 		private ow: OverwolfService,

@@ -8,7 +8,7 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { CardHistory } from '../../models/card-history';
 import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
@@ -65,7 +65,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private events: Events,
-		private cards: AllCardsService,
+		private cards: CardsFacadeService,
 	) {}
 
 	ngAfterViewInit() {

@@ -9,12 +9,10 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { AdService } from '../../services/ad.service';
 import { DebugService } from '../../services/debug.service';
-import { CARDS_VERSION } from '../../services/hs-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
@@ -52,7 +50,6 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
-		private readonly cards: AllCardsService,
 		private readonly prefs: PreferencesService,
 		private readonly ads: AdService,
 	) {
@@ -60,7 +57,6 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async init() {
-		await this.cards.initializeCardsDb(CARDS_VERSION);
 		this.cardsLoaded = true;
 		this.ow.getTwitterUserInfo();
 		this.ow.getRedditUserInfo();

@@ -1,5 +1,5 @@
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BoardSecret } from '../../../../models/decktracker/board-secret';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
@@ -10,7 +10,7 @@ import { EventParser } from '../event-parser';
 export class TriggerOnNumCardDrawSecretsParser implements EventParser {
 	private secretsTriggeringOnCardDraw = [CardIds.Collectible.Rogue.Shenanigans];
 
-	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.gameState && gameEvent.type === GameEvent.NUM_CARDS_DRAW_THIS_TURN;

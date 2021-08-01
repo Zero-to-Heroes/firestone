@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
@@ -18,7 +18,6 @@ import { AdService } from '../../../services/ad.service';
 import { BgsChangePostMatchStatsTabsNumberEvent } from '../../../services/battlegrounds/store/events/bgs-change-post-match-stats-tabs-number-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { FeatureFlags } from '../../../services/feature-flags';
-import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 import { normalizeCardId } from './card-utils';
@@ -184,7 +183,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly el: ElementRef,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly owUtils: OwUtilsService,
 		private readonly ads: AdService,
 	) {
@@ -235,7 +234,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	private async init() {
-		this.allCards.initializeCardsDb(CARDS_VERSION);
 		this.showAds = await this.ads.shouldDisplayAds();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

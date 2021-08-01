@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
@@ -71,7 +71,10 @@ import { GenericChallenge } from './generic-challenge';
 
 @Injectable()
 export class ChallengeBuilderService {
-	constructor(private readonly cards: AllCardsService, private readonly memoryInspection: MemoryInspectionService) {}
+	constructor(
+		private readonly cards: CardsFacadeService,
+		private readonly memoryInspection: MemoryInspectionService,
+	) {}
 
 	public buildChallenge(raw: RawAchievement): Challenge {
 		// The case for the HS achievements, which are not computed by Firestone

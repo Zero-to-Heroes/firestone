@@ -14,7 +14,7 @@ import {
 } from '@firestone-hs/categorize-deck/dist/archetype-service';
 import { ArchetypeResults, DeckList } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
 import { formatFormat } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameStateEvent } from '../../models/decktracker/game-state-event';
 import { GameEvent } from '../../models/game-event';
@@ -98,7 +98,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {}
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 
 @Injectable()
 export class DeckCardService {
-	constructor(private cards: AllCardsService) {}
+	constructor(private cards: CardsFacadeService) {}
 
 	// Doesn't handle dynamic zones, so should be called before dynamic zones are built
 	public fillMissingCardInfoInDeck(deckState: DeckState): DeckState {

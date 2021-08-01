@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
@@ -23,7 +23,7 @@ export abstract class AbstractOverlayHandler implements OverlayHandler {
 		) => boolean,
 		private readonly ow: OverwolfService,
 		private readonly prefs: PreferencesService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly forceLogs = false,
 	) {}
 

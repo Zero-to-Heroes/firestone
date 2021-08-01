@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardClass, GameType } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Input } from '@firestone-hs/save-dungeon-loot-info/dist/input';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsInfo } from '../../models/duels-info';
 import { GameEvent } from '../../models/game-event';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -48,7 +48,7 @@ export class DungeonLootParserService {
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private memory: MemoryInspectionService,
-		private allCards: AllCardsService,
+		private allCards: CardsFacadeService,
 		private ow: OverwolfService,
 		private events: Events,
 		private prefs: PreferencesService,

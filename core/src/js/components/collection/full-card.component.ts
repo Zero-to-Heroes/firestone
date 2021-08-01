@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { SetCard } from '../../models/set';
 import { SetsService } from '../../services/collection/sets-service.service';
 import { formatClass } from '../../services/hs-utils';
@@ -143,7 +143,7 @@ export class FullCardComponent {
 		private readonly prefs: PreferencesService,
 		private readonly elRef: ElementRef,
 		private readonly cards: SetsService,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly sanitizer: DomSanitizer,
 		private readonly cdr: ChangeDetectorRef,
 	) {}

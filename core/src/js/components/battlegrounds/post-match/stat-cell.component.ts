@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../../services/mainwindow/store/events/replays/show-replay-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -68,7 +68,7 @@ export class StatCellComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly cards: AllCardsService) {}
+	constructor(private readonly ow: OverwolfService, private readonly cards: CardsFacadeService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

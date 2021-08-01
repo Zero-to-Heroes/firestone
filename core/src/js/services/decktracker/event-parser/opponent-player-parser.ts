@@ -1,5 +1,5 @@
 import { formatFormat } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -17,7 +17,7 @@ export class OpponentPlayerParser implements EventParser {
 		private readonly aiDecks: AiDeckService,
 		private readonly deckParser: DeckParserService,
 		private readonly helper: DeckManipulationHelper,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 	) {}
 

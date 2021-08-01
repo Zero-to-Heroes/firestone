@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
@@ -12,7 +12,7 @@ import { BgsStatUpdateParser } from './store/event-parsers/bgs-stat-update-parse
 
 @Injectable()
 export class BgsBuilderService {
-	constructor(private readonly cards: AllCardsService, private readonly prefs: PreferencesService) {}
+	constructor(private readonly cards: CardsFacadeService, private readonly prefs: PreferencesService) {}
 
 	public async updateStats(
 		currentState: BattlegroundsAppState,

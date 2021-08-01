@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { inflate } from 'pako';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
-import { CARDS_VERSION } from '../../../../services/hs-utils';
 import fakeBgsState from './bgsState.json';
 import fakeState from './gameState.json';
 import { TwitchBgsCurrentBattle, TwitchBgsState } from './twitch-bgs-state';
@@ -54,7 +52,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	private twitch;
 	private token: string;
 
-	constructor(private cdr: ChangeDetectorRef, private http: HttpClient, private allCards: AllCardsService) {}
+	constructor(private cdr: ChangeDetectorRef, private http: HttpClient) {}
 
 	async ngAfterViewInit() {
 		if (!(window as any).Twitch) {
@@ -75,7 +73,6 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			});
 		});
 		console.log('init done');
-		await this.allCards.initializeCardsDb(CARDS_VERSION);
 		// this.addDebugGameState();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

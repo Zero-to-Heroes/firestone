@@ -1,14 +1,14 @@
 import { ComplexTurnInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/complex-turn-info';
 import { ValueHeroInfo } from '@firestone-hs/hs-replay-xml-parser/dist/lib/model/value-hero-info';
 import { CardIds } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameEvent } from '../../../../../models/game-event';
 import { DamageGameEvent } from '../../../../../models/mainwindow/game-events/damage-game-event';
 import { RealTimeStatsState } from '../real-time-stats';
 import { EventParser } from './_event-parser';
 
 export class RTStatsTotalDamageDealtByHeroesParser implements EventParser {
-	constructor(private readonly allCards: AllCardsService) {}
+	constructor(private readonly allCards: CardsFacadeService) {}
 
 	applies(gameEvent: GameEvent, currentState: RealTimeStatsState): boolean {
 		return gameEvent.type === GameEvent.DAMAGE;

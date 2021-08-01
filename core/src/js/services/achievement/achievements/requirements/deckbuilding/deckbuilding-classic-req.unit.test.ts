@@ -1,12 +1,11 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
-import cardsJson from '../../../../../../../test/cards.json';
 import { GameEvent } from '../../../../../models/game-event';
+import { buildTestCardsService } from '../../../../test-utils';
 import { DeckbuildingClassicReq } from './deckbuilding-classic-req';
 
 describe('deckbuilding-classic-req', () => {
 	const deckstring = 'AAECAf0EApUDuAgOTXHDAbsC7gKLA6sEtATmBJYF7AXsB78IyQ0A';
-	const cards = buildCardsService();
+	const cards = buildTestCardsService();
 
 	test('is completed when deckstring contains only classic and basic cards', () => {
 		const req = new DeckbuildingClassicReq(cards);
@@ -59,9 +58,3 @@ describe('deckbuilding-classic-req', () => {
 		expect(req.isCompleted()).toBeFalsy();
 	});
 });
-
-function buildCardsService() {
-	const service = new AllCardsService();
-	service['service']['allCards'] = [...(cardsJson as any[])];
-	return service;
-}

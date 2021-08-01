@@ -10,14 +10,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { Preferences } from '../../../models/preferences';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
-import { CARDS_VERSION } from '../../../services/hs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
@@ -100,10 +99,8 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private init_DebugService: DebugService,
-		private allCards: AllCardsService,
-	) {
-		this.init();
-	}
+		private allCards: CardsFacadeService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
@@ -113,7 +110,6 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			if (!newState) {
 				return;
 			}
-			await this.allCards.initializeCardsDb(CARDS_VERSION);
 
 			if (
 				newState?.currentGame?.availableRaces?.length > 0 &&
@@ -285,10 +281,6 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		await this.ow.changeWindowPosition(this.windowId, newLeft - 15, 15);
 		await this.restoreWindowPosition();
 		await this.updateTooltipPosition();
-	}
-
-	private async init() {
-		await this.allCards.initializeCardsDb(CARDS_VERSION);
 	}
 
 	private async restoreWindowPosition(forceTrackerReposition = false): Promise<void> {

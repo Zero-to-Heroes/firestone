@@ -9,7 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/reference-data';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
 import { Subscription } from 'rxjs';
@@ -109,7 +109,7 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: AllCardsService,
+		private readonly allCards: CardsFacadeService,
 	) {}
 
 	async ngAfterViewInit() {

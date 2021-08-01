@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { DuelsRun } from '../../../../models/duels/duels-run';
 import { DuelsState } from '../../../../models/duels/duels-state';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
@@ -88,7 +88,7 @@ export class DuelsClassesRecapComponent {
 
 	private _state: DuelsState;
 
-	constructor(private readonly allCards: AllCardsService, private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly allCards: CardsFacadeService, private readonly cdr: ChangeDetectorRef) {}
 
 	private updateValues() {
 		const runs = this._state.runs;

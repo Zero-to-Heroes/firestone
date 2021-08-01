@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { CardsFacadeService } from '@services/cards-facade.service';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameStateEvent } from '../../../models/decktracker/game-state-event';
 import { GameEvent } from '../../../models/game-event';
@@ -13,7 +13,7 @@ export class ConstructedWindowHandler extends AbstractOverlayHandler {
 	private closedByUser: boolean;
 	private gameStarted: boolean;
 
-	constructor(ow: OverwolfService, allCards: AllCardsService, prefs: PreferencesService) {
+	constructor(ow: OverwolfService, allCards: CardsFacadeService, prefs: PreferencesService) {
 		super(
 			OverwolfService.CONSTRUCTED_WINDOW,
 			(prefs) =>
