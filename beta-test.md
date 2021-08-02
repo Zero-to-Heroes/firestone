@@ -12,7 +12,7 @@ Just ping me (@sebastientromp) [on Discord](https://discord.gg/FhEHn8w).
 
 # How to install new releases
 
--   Install the version from https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&app_channel=beta. This will let you benefit from auto-updates for beta builds.
+-   Install the version from https://download.overwolf.com/install/Download?ExtensionId=lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob&extension_channel=beta.This will let you benefit from auto-updates for beta builds.
 
 ## The manual way (no auto updates)
 
