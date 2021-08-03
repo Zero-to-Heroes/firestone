@@ -3,6 +3,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { globalEffectQuestlines, globalEffectQuestlinesTriggers } from '../../hs-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -32,8 +33,31 @@ export class QuestCreatedInGameParser implements EventParser {
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, card);
+
+		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
+		console.debug('should consider?', cardId);
+		if (globalEffectQuestlinesTriggers.includes(cardId)) {
+			const globalEffectCard = this.cards.getCard(
+				globalEffectQuestlines.find((q) => q.questStepCreated === cardId).stepReward,
+			);
+			console.debug('globalEffectCard', globalEffectCard);
+			newGlobalEffects = this.helper.addSingleCardToZone(
+				deck.globalEffects,
+				DeckCard.create({
+					cardId: globalEffectCard.id,
+					cardName: globalEffectCard.name,
+					manaCost: globalEffectCard.cost,
+					rarity: globalEffectCard.rarity,
+					creatorCardId: cardId,
+					zone: 'SECRET',
+				} as DeckCard),
+			);
+			console.debug('newGlobalEffects', newGlobalEffects);
+		}
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			otherZone: newOtherZone,
+			globalEffects: newGlobalEffects,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

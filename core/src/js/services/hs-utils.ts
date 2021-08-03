@@ -67,6 +67,7 @@ export const globalEffectCards = [
 	CardIds.Collectible.Druid.CelestialAlignment,
 	CardIds.Collectible.Druid.SurvivalOfTheFittest2,
 	CardIds.Collectible.Hunter.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
+	CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
 	CardIds.Collectible.Mage.DeckOfLunacy,
 	CardIds.Collectible.Mage.LunasPocketGalaxy,
 	CardIds.Collectible.Mage.IncantersFlow,
@@ -80,12 +81,14 @@ export const globalEffectCards = [
 	CardIds.Collectible.Paladin.LothraxionTheRedeemed,
 	CardIds.NonCollectible.Paladin.MenAtArmsTavernBrawlToken,
 	CardIds.NonCollectible.Paladin.RadiantLightspawn,
+	CardIds.NonCollectible.Paladin.RiseToTheOccasion_LightbornCarielToken,
 	CardIds.Collectible.Priest.ArchbishopBenedictus,
 	CardIds.Collectible.Priest.DarkInquisitorXanesh,
 	CardIds.Collectible.Priest.LadyInWhite,
 	CardIds.NonCollectible.Rogue.TheCavernsBelow_CrystalCoreToken,
 	// We handle the effects triggered instead of the card played
 	// CardIds.Collectible.Shaman.GrandTotemEysor,
+	CardIds.NonCollectible.Shaman.CommandTheElements_StormcallerBrukanToken,
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
 	CardIds.Collectible.Warlock.DeckOfChaos,
 	CardIds.Collectible.Warlock.NeeruFireblade1,
@@ -112,6 +115,19 @@ export const globalEffectTriggers = [
 ];
 
 export const globalEffectTriggersEffects = globalEffectTriggers.map((effect) => effect.effectPrefab);
+
+export const globalEffectQuestlines = [
+	{
+		questStepCreated: CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_TakeTheHighGroundToken,
+		stepReward: CardIds.Collectible.Hunter.DefendTheDwarvenDistrict,
+	},
+	{
+		questStepCreated: CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_KnockEmDownToken,
+		stepReward: CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_TakeTheHighGroundToken,
+	},
+];
+
+export const globalEffectQuestlinesTriggers = globalEffectQuestlines.map((effect) => effect.questStepCreated);
 
 export const cardsRevealedWhenDrawn = [
 	CardIds.NonCollectible.Druid.YseraUnleashed_DreamPortalToken,
