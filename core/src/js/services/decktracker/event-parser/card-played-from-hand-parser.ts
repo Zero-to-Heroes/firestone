@@ -110,7 +110,13 @@ export class CardPlayedFromHandParser implements EventParser {
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(card?.cardId)) {
-			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, cardWithZone);
+			newGlobalEffects = this.helper.addSingleCardToZone(
+				deck.globalEffects,
+				cardWithZone?.update({
+					// So that if the card is sent back to hand, we can track multiple plays of it
+					entityId: null,
+				} as DeckCard),
+			);
 		}
 
 		const isElemental =

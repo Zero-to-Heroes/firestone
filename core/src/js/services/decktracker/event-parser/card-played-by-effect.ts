@@ -63,7 +63,13 @@ export class CardPlayedByEffectParser implements EventParser {
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(cardId)) {
-			newGlobalEffects = this.helper.addSingleCardToZone(deck.globalEffects, cardWithZone);
+			newGlobalEffects = this.helper.addSingleCardToZone(
+				deck.globalEffects,
+				cardWithZone?.update({
+					// So that if the card is sent back to hand, we can track multiple plays of it
+					entityId: null,
+				} as DeckCard),
+			);
 		}
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,

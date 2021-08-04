@@ -216,12 +216,6 @@ export class DeckManipulationHelper {
 			cardTemplate.entityId != null &&
 			zone.filter((card) => card.entityId === cardTemplate.entityId).length > 0
 		) {
-			// console.debug(
-			// 	'card already added to zone',
-			// 	zone,
-			// 	cardTemplate,
-			// 	zone.filter(card => card.entityId === cardTemplate.entityId),
-			// );
 			return zone;
 		}
 		const newCard = DeckCard.create({
