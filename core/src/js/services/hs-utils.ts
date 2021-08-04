@@ -63,6 +63,7 @@ export const colorForClass = (playerClass: string): string => {
 };
 
 export const globalEffectCards = [
+	CardIds.NonCollectible.Demonhunter.DemonslayerKurtrusToken,
 	CardIds.Collectible.Druid.Embiggen,
 	CardIds.Collectible.Druid.CelestialAlignment,
 	CardIds.Collectible.Druid.SurvivalOfTheFittest2,
@@ -174,6 +175,7 @@ export const forceHideInfoWhenDrawnInfluencers = [
 ];
 
 export const publicCardCreators = [
+	CardIds.Collectible.Demonhunter.Felgorger,
 	CardIds.Collectible.Demonhunter.VengefulSpirit2,
 	CardIds.Collectible.Druid.FungalFortunes,
 	CardIds.Collectible.Druid.JuicyPsychmelon,
