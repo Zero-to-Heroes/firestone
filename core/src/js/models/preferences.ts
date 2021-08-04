@@ -210,6 +210,10 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentElwynnBoarCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerBolnerCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerBolnerCounterWidgetPosition: { left: number; top: number };
+
 	readonly replaysShowNotification: boolean = false;
 	readonly replaysFilterDeckstring: string;
 	readonly replaysFilterGameMode: string;

@@ -53,6 +53,7 @@ export class OverwolfService {
 	public static COUNTER_PLAYER_ELEMENTAL_WINDOW = 'CounterPlayerElemental';
 	public static COUNTER_PLAYER_ELWYNN_BOAR_WINDOW = 'CounterPlayerElwynnBoar';
 	public static COUNTER_OPPONENT_ELWYNN_BOAR_WINDOW = 'CounterOpponentElwynnBoar';
+	public static COUNTER_PLAYER_BOLNER_WINDOW = 'CounterPlayerBolner';
 	public static BGS_COUNTER_PLAYER_POGO_WINDOW = 'BgsCounterPlayerPogo';
 
 	public isOwEnabled(): boolean {

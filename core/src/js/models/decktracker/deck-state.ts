@@ -219,4 +219,26 @@ export class DeckState {
 			.filter((card) => card.cardId)
 			.some((card) => card.cardId === CardIds.Collectible.Neutral.ElwynnBoar);
 	}
+
+	public hasBolner() {
+		return [...this.hand, ...this.board]
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.Collectible.Shaman.BolnerHammerbeak);
+	}
+
+	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {
+		if (!this.cardsPlayedThisTurn?.length) {
+			return null;
+		}
+
+		const battlecryCards = this.cardsPlayedThisTurn.filter((card) => {
+			const ref = allCards.getCard(card.cardId);
+			return !!ref.mechanics?.length && ref.mechanics.includes('BATTLECRY');
+		});
+		if (!battlecryCards?.length) {
+			return null;
+		}
+
+		return battlecryCards[0];
+	}
 }

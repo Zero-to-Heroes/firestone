@@ -19,4 +19,5 @@ export type CounterType =
 	| 'elemental'
 	| 'watchpost'
 	| 'libram'
+	| 'bolner'
 	| 'elwynn-boar';

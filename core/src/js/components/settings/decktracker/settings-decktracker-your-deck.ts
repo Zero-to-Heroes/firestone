@@ -134,6 +134,11 @@ import { Knob } from '../preference-slider.component';
 						label="Elwynn Boar deaths"
 						tooltip="Show the number of times an Elwynn Boar died for you"
 					></preference-toggle>
+					<preference-toggle
+						field="playerBolnerCounter"
+						label="Bolner Hammerbeak"
+						tooltip="When you have Bolner Hammerbeak in hand, show the first Battlecry card that was played this turn, if any"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

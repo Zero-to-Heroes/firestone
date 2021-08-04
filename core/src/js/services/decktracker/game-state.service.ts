@@ -110,6 +110,7 @@ import { LibramOpponentCounterOverlayHandler } from './overlays/counter-opponent
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
 import { WatchpostOpponentCounterOverlayHandler } from './overlays/counter-opponent-watchpost-handler';
 import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
+import { BolnerPlayerCounterOverlayHandler } from './overlays/counter-player-bolner-handler';
 import { CthunPlayerCounterOverlayHandler } from './overlays/counter-player-cthun-handler';
 import { ElementalPlayerCounterOverlayHandler } from './overlays/counter-player-elemental-handler';
 import { ElwynnBoarPlayerCounterOverlayHandler } from './overlays/counter-player-elwynn-boar-handler';
@@ -568,6 +569,7 @@ export class GameStateService {
 			new ElementalPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new ElwynnBoarPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new ElwynnBoarOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new BolnerPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 		];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {

@@ -16,7 +16,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		<div *ngIf="standardCounter" class="counter generic-counter {{ counterClass }}" [helpTooltip]="helpTooltipText">
 			<img class="image" [src]="image" />
 			<div class="frame"></div>
-			<div class="value">{{ value }}</div>
+			<div class="value" *ngIf="value != null">{{ value }}</div>
 		</div>
 		<div
 			*ngIf="!standardCounter"

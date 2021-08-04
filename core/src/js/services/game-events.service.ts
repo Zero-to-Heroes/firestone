@@ -141,9 +141,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
-			console.debug('[debug] game event', gameEvent.Type, gameEvent);
-		}
+		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
+		// 	console.debug('[debug] game event', gameEvent.Type, gameEvent);
+		// }
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');

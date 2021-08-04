@@ -152,6 +152,7 @@ module.exports = function (env, argv) {
 		buildHtmlWebpackPluginConf('counter_player_elemental.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_elwynn_boar.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_elwynn_boar.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_player_bolner.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('bgs_counter_player_pogo.html', 'gamecounters'),
 		// new BundleAnalyzerPlugin(),
 	];

@@ -12,11 +12,13 @@ import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
+import { CardsFacadeService } from '../../services/cards-facade.service';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
+import { BolnerHammerbeakIndicator } from './definitions/bolner-hammerbeak-indicator';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
@@ -68,6 +70,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private init_DebugService: DebugService,
+		private allCards: CardsFacadeService,
 	) {
 		const nativeElement = el.nativeElement;
 		this.activeCounter = nativeElement.getAttribute('counter');
@@ -162,6 +165,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				return LibramCounterDefinition.create(gameState, side);
 			case 'elwynn-boar':
 				return ElwynnBoarCounterDefinition.create(gameState, side);
+			case 'bolner':
+				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards);
 			default:
 				console.error('unexpected activeCounter for non-bgs', activeCounter);
 		}
