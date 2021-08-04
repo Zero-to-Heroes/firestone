@@ -7,10 +7,11 @@ export class CardsInitService {
 	private inInit = false;
 
 	constructor(private readonly cards: AllCardsService) {
-		this.init();
+		// this.init();
 	}
 
 	public async init() {
+		console.debug('starting init', new Error().stack);
 		if (this.inInit) {
 			console.log('already in init', new Error().stack);
 			return;
