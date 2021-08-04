@@ -36,7 +36,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
-		// console.debug('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
+		console.debug('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
 
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(
 			deck.hand,
@@ -44,7 +44,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		// console.debug('removed card from hand', removedCard, currentState, gameEvent);
+		console.debug('removed card from hand', removedCard, currentState, gameEvent);
 		let newDeck =
 			removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
 		// console.debug('removed card from hand', removedCard, deck.deck, newDeck);
@@ -88,12 +88,12 @@ export class CardPlayedFromHandParser implements EventParser {
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId);
-		// console.debug('is card countered', isCardCountered, additionalInfo, gameEvent);
+		console.debug('is card countered', isCardCountered, additionalInfo, gameEvent);
 
-		// console.debug('card with zone', cardWithZone, refCard, cardId);
+		console.debug('card with zone', cardWithZone, refCard, cardId);
 		const newBoard: readonly DeckCard[] =
 			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardWithZone) : deck.board;
-		// console.debug('new board', newBoard, isOnBoard && !isCardCountered);
+		console.debug('new board', newBoard, isOnBoard && !isCardCountered);
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(
@@ -106,7 +106,7 @@ export class CardPlayedFromHandParser implements EventParser {
 						  } as DeckCard)
 						: cardWithZone,
 			  );
-		// console.debug('new other', newOtherZone, isOnBoard);
+		console.debug('new other', newOtherZone, isOnBoard);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(card?.cardId)) {
@@ -131,13 +131,16 @@ export class CardPlayedFromHandParser implements EventParser {
 				? deck.cardsPlayedThisTurn
 				: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
 			globalEffects: newGlobalEffects,
-			spellsPlayedThisMatch: deck.spellsPlayedThisMatch + (!isCardCountered && refCard?.type === 'Spell' ? 1 : 0),
+			spellsPlayedThisMatch:
+				!isCardCountered && refCard?.type === 'Spell'
+					? [...deck.spellsPlayedThisMatch, cardWithZone]
+					: deck.spellsPlayedThisMatch,
 			watchpostsPlayedThisMatch:
 				deck.watchpostsPlayedThisMatch + (!isCardCountered && this.isWatchpost(refCard) ? 1 : 0),
 			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
 			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 		} as DeckState);
-		//console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
+		// console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
 			? newPlayerDeck
 			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards);

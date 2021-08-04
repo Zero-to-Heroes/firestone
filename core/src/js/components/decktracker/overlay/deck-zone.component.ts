@@ -50,6 +50,7 @@ import { groupByFunction } from '../../../services/utils';
 						[colorManaCost]="colorManaCost"
 						[showUpdatedCost]="_showUpdatedCost"
 						[zone]="_zone"
+						[side]="side"
 					></deck-card>
 				</li>
 			</ul>

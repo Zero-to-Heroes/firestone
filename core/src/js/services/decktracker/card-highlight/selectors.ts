@@ -1,4 +1,5 @@
 import { CardType, Race, SpellSchool } from '@firestone-hs/reference-data';
+import { DeckState } from '../../../models/decktracker/deck-state';
 import { Handler } from './cards-highlight.service';
 
 export const doubleJump: (handler: Handler) => boolean = (handler: Handler): boolean => {
@@ -28,15 +29,24 @@ export const varianKingOfStormwind: (handler: Handler) => boolean = (handler: Ha
 	return handler.zoneProvider()?.id === 'deck' && (hasRush(handler) || hasTaunt(handler) || hasDivineShield(handler));
 };
 
+export const jaceDarkweaver: (handler: Handler, deckState: DeckState) => boolean = (
+	handler: Handler,
+	deckState: DeckState,
+): boolean => {
+	return (
+		handler.zoneProvider()?.id === 'other' &&
+		hasType(handler, CardType.SPELL) &&
+		hasSpellSchool(handler, SpellSchool.FEL) &&
+		deckState.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(handler.deckCardProvider()?.entityId)
+	);
+};
+
 export const fungalFortunes: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return handler.zoneProvider()?.id === 'deck' && hasType(handler, CardType.MINION);
 };
 
 export const guffRunetotem: (handler: Handler) => boolean = (handler: Handler): boolean => {
-	return (
-		hasType(handler, CardType.SPELL) &&
-		handler.referenceCardProvider()?.spellSchool === SpellSchool[SpellSchool.NATURE]
-	);
+	return hasType(handler, CardType.SPELL) && hasSpellSchool(handler, SpellSchool.NATURE);
 };
 
 export const knightOfAnointment: (handler: Handler) => boolean = (handler: Handler): boolean => {
@@ -159,6 +169,10 @@ const hasTaunt = (handler: Handler): boolean => {
 
 const hasDivineShield = (handler: Handler): boolean => {
 	return (handler.referenceCardProvider()?.mechanics ?? []).includes('DIVINE_SHIELD');
+};
+
+const hasSpellSchool = (handler: Handler, spellSchool: SpellSchool): boolean => {
+	return handler.referenceCardProvider()?.spellSchool === SpellSchool[spellSchool];
 };
 
 const isCorrupted = (handler: Handler): boolean => {

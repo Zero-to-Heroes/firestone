@@ -70,7 +70,7 @@ export class DeckState {
 	readonly jadeGolemSize: number = 0;
 	readonly pogoHopperSize: number = 0;
 	readonly fatigue: number = 0;
-	readonly spellsPlayedThisMatch: number = 0;
+	readonly spellsPlayedThisMatch: readonly DeckCard[] = [];
 	readonly watchpostsPlayedThisMatch: number = 0;
 	readonly libramsPlayedThisMatch: number = 0;
 	readonly elementalsPlayedThisTurn: number = 0;

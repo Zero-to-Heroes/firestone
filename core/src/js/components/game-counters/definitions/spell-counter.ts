@@ -16,7 +16,7 @@ export class SpellCounterDefinition implements CounterDefinition {
 			return null;
 		}
 
-		const spellsPlayed = deck.spellsPlayedThisMatch || 0;
+		const spellsPlayed = deck.spellsPlayedThisMatch?.length ?? 0;
 		return {
 			type: 'spells',
 			value: spellsPlayed,

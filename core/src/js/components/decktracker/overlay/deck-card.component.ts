@@ -149,6 +149,8 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@Input() side: 'player' | 'opponent';
+
 	_tooltipPosition: CardTooltipPositionType;
 	cardId: string;
 	cardImage: string;
@@ -214,7 +216,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onMouseEnter(event: MouseEvent) {
-		this.cardsHighlightService.onMouseEnter(this.cardId);
+		this.cardsHighlightService.onMouseEnter(this.cardId, this.side);
 	}
 
 	onMouseLeave(event: MouseEvent) {

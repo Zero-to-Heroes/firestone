@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
+import { map } from 'rxjs/operators';
+import { DeckState } from '../../../models/decktracker/deck-state';
+import { GameState } from '../../../models/decktracker/game-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { AppUiStoreService } from '../../app-ui-store.service';
 import { PreferencesService } from '../../preferences.service';
 import {
 	arcaneLuminary,
@@ -13,6 +17,7 @@ import {
 	fungalFortunes,
 	guardianAnimals,
 	guffRunetotem,
+	jaceDarkweaver,
 	jewelOfNzoth,
 	knightOfAnointment,
 	lineHopper,
@@ -30,7 +35,14 @@ import {
 export class CardsHighlightService {
 	private handlers: { [uniqueId: string]: Handler } = {};
 
-	constructor(private readonly prefs: PreferencesService) {}
+	private gameState: GameState;
+
+	constructor(private readonly prefs: PreferencesService, private readonly store: AppUiStoreService) {
+		this.store
+			.listenDeckState$((gameState) => gameState)
+			.pipe(map(([loading]) => loading))
+			.subscribe((gameState) => (this.gameState = gameState));
+	}
 
 	register(_uniqueId: string, handler: Handler) {
 		this.handlers[_uniqueId] = handler;
@@ -40,33 +52,22 @@ export class CardsHighlightService {
 		delete this.handlers[_uniqueId];
 	}
 
-	async onMouseEnter(cardId: string) {
+	async onMouseEnter(cardId: string, side: 'player' | 'opponent') {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.overlayHighlightRelatedCards) {
 			return;
 		}
 
-		const selector: (handler: Handler) => boolean = this.buildSelector(cardId);
+		if (!side) {
+			console.warn('no side provided', cardId, side);
+		}
+
+		const selector: (handler: Handler, deckState?: DeckState) => boolean = this.buildSelector(cardId);
 		if (selector) {
-			// console.debug('applying selector', selector, 'to', this.handlers);
 			Object.values(this.handlers)
-				// .map((handler) => {
-				// 	// if (handler.referenceCardProvider().id === 'DMF_523') {
-				// 		// console.debug('applying', handler, 'to', cardId, selector(handler));
-				// 		// console.debug(
-				// 		// 	'selector pieces',
-				// 		// 	handler.zoneProvider(),
-				// 		// 	handler.referenceCardProvider()?.type,
-				// 		// 	handler.referenceCardProvider()?.race,
-				// 		// 	[Race[Race.DRAGON], Race[Race.MECH], Race[Race.PIRATE]],
-				// 		// 	[Race[Race.DRAGON], Race[Race.MECH], Race[Race.PIRATE]].includes(
-				// 		// 		handler.referenceCardProvider()?.race,
-				// 		// 	),
-				// 		// );
-				// 	// }
-				// 	return handler;
-				// })
-				.filter((handler) => selector(handler))
+				.filter((handler) =>
+					selector(handler, side === 'player' ? this.gameState.playerDeck : this.gameState.opponentDeck),
+				)
 				.forEach((handler) => handler.highlightCallback());
 		}
 	}
@@ -75,7 +76,7 @@ export class CardsHighlightService {
 		Object.values(this.handlers).forEach((handler) => handler.unhighlightCallback());
 	}
 
-	private buildSelector(cardId: string): (handler: Handler) => boolean {
+	private buildSelector(cardId: string): (handler: Handler, deckState?: DeckState) => boolean {
 		switch (cardId) {
 			case CardIds.Collectible.Demonhunter.DoubleJump:
 				return doubleJump;
@@ -126,6 +127,8 @@ export class CardsHighlightService {
 				return murlocsInDeckAndHand;
 			case CardIds.Collectible.Neutral.VarianKingOfStormwind:
 				return varianKingOfStormwind;
+			case CardIds.Collectible.Demonhunter.JaceDarkweaver:
+				return jaceDarkweaver;
 		}
 	}
 }

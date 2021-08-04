@@ -78,8 +78,9 @@ export class SecretPlayedFromHandParser implements EventParser {
 					? deck.cardsPlayedThisTurn
 					: ([...deck.cardsPlayedThisTurn, cardWithZone] as readonly DeckCard[]),
 			spellsPlayedThisMatch:
-				deck.spellsPlayedThisMatch +
-				(!isCardCountered && gameEvent.type !== GameEvent.SECRET_PUT_IN_PLAY ? 1 : 0),
+				isCardCountered || gameEvent.type === GameEvent.SECRET_PUT_IN_PLAY
+					? deck.spellsPlayedThisMatch
+					: [...deck.spellsPlayedThisMatch, cardWithZone],
 		} as DeckState);
 		// console.log('[secret-turn-end] updated deck after secret played', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
