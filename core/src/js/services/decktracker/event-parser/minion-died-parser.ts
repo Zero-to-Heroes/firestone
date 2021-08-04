@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -38,6 +39,8 @@ export class MinionDiedParser implements EventParser {
 			const newPlayerDeck = Object.assign(new DeckState(), deck, {
 				board: newBoard,
 				otherZone: newOther,
+				elwynnBoarsDeadThisMatch:
+					deck.elwynnBoarsDeadThisMatch + (cardId === CardIds.Collectible.Neutral.ElwynnBoar ? 1 : 0),
 			} as DeckState);
 			result = Object.assign(new GameState(), result, {
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

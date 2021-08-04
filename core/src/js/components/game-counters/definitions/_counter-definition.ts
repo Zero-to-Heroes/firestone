@@ -18,4 +18,5 @@ export type CounterType =
 	| 'spells'
 	| 'elemental'
 	| 'watchpost'
-	| 'libram';
+	| 'libram'
+	| 'elwynn-boar';

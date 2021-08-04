@@ -45,7 +45,7 @@ const entry = {
 	'bgspostmatchstats.worker': './src/js/workers/bgs-post-match-stats.worker.ts',
 };
 
-module.exports = function(env, argv) {
+module.exports = function (env, argv) {
 	const plugins = [
 		// Define environment variables to export to Angular
 		new DefinePlugin({
@@ -150,6 +150,8 @@ module.exports = function(env, argv) {
 		buildHtmlWebpackPluginConf('counter_opponent_attack.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_spells.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_elemental.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_player_elwynn_boar.html', 'gamecounters'),
+		buildHtmlWebpackPluginConf('counter_opponent_elwynn_boar.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('bgs_counter_player_pogo.html', 'gamecounters'),
 		// new BundleAnalyzerPlugin(),
 	];
@@ -272,8 +274,8 @@ const buildHtmlWebpackPluginConf = (filename, chunkName) => {
 	// small enough that it should not matter (and we're serving them from
 	// the local filesystem, so in the end it doesn't really matter)
 	const excludedChunks = Object.keys(entry)
-		.filter(chunk => chunk !== chunkName)
-		.filter(chunk => chunk !== 'polyfills');
+		.filter((chunk) => chunk !== chunkName)
+		.filter((chunk) => chunk !== 'polyfills');
 	return new HtmlWebpackPlugin({
 		filename: filename,
 		template: `src/html/${filename}`,

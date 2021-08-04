@@ -456,6 +456,26 @@
 				"start_position": { "top": 500, "left": 600 },
 				"in_game_only": true
 			},
+			"CounterPlayerElwynnBoar": {
+				"file": "Files/counter_player_elwynn_boar.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
+			"CounterOpponentElwynnBoar": {
+				"file": "Files/counter_opponent_elwynn_boar.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 200, "height": 200 },
+				"min_size": { "width": 200, "height": 200 },
+				"start_position": { "top": 500, "left": 600 },
+				"in_game_only": true
+			},
 
 			"OutOfCardsAuthWindow": {
 				"file": "Files/outofcards-callback.html",

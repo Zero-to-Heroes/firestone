@@ -129,6 +129,11 @@ import { Knob } from '../preference-slider.component';
 						label="Librams"
 						tooltip="Show the total number of librams you played this match. Shows up only if relevant cards are found in the deck or hand"
 					></preference-toggle>
+					<preference-toggle
+						field="playerElwynnBoarCounter"
+						label="Elwynn Boar deaths"
+						tooltip="Show the number of times an Elwynn Boar died for you"
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

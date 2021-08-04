@@ -75,6 +75,7 @@ export class DeckState {
 	readonly libramsPlayedThisMatch: number = 0;
 	readonly elementalsPlayedThisTurn: number = 0;
 	readonly elementalsPlayedLastTurn: number = 0;
+	readonly elwynnBoarsDeadThisMatch: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
@@ -206,5 +207,16 @@ export class DeckState {
 			.some((card) => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId));
 		// console.log('spell counter', 'has', result, allCardsInDeck, DeckState.SPELL_COUNTER_CARD_IDS);
 		return result;
+	}
+
+	public containsElwynnBoar(): boolean {
+		if (this.elwynnBoarsDeadThisMatch > 0) {
+			return true;
+		}
+
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		return allCardsInDeck
+			.filter((card) => card.cardId)
+			.some((card) => card.cardId === CardIds.Collectible.Neutral.ElwynnBoar);
 	}
 }

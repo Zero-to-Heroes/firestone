@@ -102,6 +102,7 @@ import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ConstructedWindowHandler } from './overlays/constructed-window-handler';
 import { AttackOpponentCounterOverlayHandler } from './overlays/counter-opponent-attack-handler';
 import { CthunOpponentCounterOverlayHandler } from './overlays/counter-opponent-cthun-handler';
+import { ElwynnBoarOpponentCounterOverlayHandler } from './overlays/counter-opponent-elwynn-boar-handler';
 import { FatigueOpponentCounterOverlayHandler } from './overlays/counter-opponent-fatigue-handler';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
 import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-opponent-jade-golem-handler';
@@ -111,6 +112,7 @@ import { WatchpostOpponentCounterOverlayHandler } from './overlays/counter-oppon
 import { AttackPlayerCounterOverlayHandler } from './overlays/counter-player-attack-handler';
 import { CthunPlayerCounterOverlayHandler } from './overlays/counter-player-cthun-handler';
 import { ElementalPlayerCounterOverlayHandler } from './overlays/counter-player-elemental-handler';
+import { ElwynnBoarPlayerCounterOverlayHandler } from './overlays/counter-player-elwynn-boar-handler';
 import { FatiguePlayerCounterOverlayHandler } from './overlays/counter-player-fatigue-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
 import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
@@ -564,6 +566,8 @@ export class GameStateService {
 			new FatigueOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new SpellsPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new ElementalPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new ElwynnBoarPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new ElwynnBoarOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 		];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {

@@ -19,6 +19,7 @@ import { AttackCounterDefinition } from './definitions/attack-counter';
 import { BgsPogoCounterDefinition } from './definitions/bgs-pogo-counter';
 import { CthunCounterDefinition } from './definitions/cthun-counter';
 import { ElementalCounterDefinition } from './definitions/elemental-counter';
+import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
@@ -159,6 +160,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				return WatchpostCounterDefinition.create(gameState, side);
 			case 'libram':
 				return LibramCounterDefinition.create(gameState, side);
+			case 'elwynn-boar':
+				return ElwynnBoarCounterDefinition.create(gameState, side);
 			default:
 				console.error('unexpected activeCounter for non-bgs', activeCounter);
 		}

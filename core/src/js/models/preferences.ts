@@ -203,6 +203,13 @@ export class Preferences {
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
 
+	readonly playerElwynnBoarCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerElwynnBoarCounterWidgetPosition: { left: number; top: number };
+	readonly opponentElwynnBoarCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentElwynnBoarCounterWidgetPosition: { left: number; top: number };
+
 	readonly replaysShowNotification: boolean = false;
 	readonly replaysFilterDeckstring: string;
 	readonly replaysFilterGameMode: string;
