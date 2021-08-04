@@ -198,6 +198,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Mage.ElementalAllies,
 	CardIds.Collectible.Mage.RavenFamiliar1,
 	CardIds.Collectible.Mage.Starscryer,
+	CardIds.Collectible.Paladin.AllianceBannerman,
 	CardIds.Collectible.Paladin.CallToAdventure,
 	CardIds.Collectible.Paladin.Crystology,
 	CardIds.Collectible.Paladin.HowlingCommander,
