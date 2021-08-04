@@ -23,6 +23,7 @@ import {
 	redscaleDragontamer,
 	ringmasterWhatley,
 	tuskpiercer,
+	varianKingOfStormwind,
 } from './selectors';
 
 @Injectable()
@@ -123,6 +124,8 @@ export class CardsHighlightService {
 				return overlordSaurfang;
 			case CardIds.Collectible.Shaman.FiremancerFlurgl:
 				return murlocsInDeckAndHand;
+			case CardIds.Collectible.Neutral.VarianKingOfStormwind:
+				return varianKingOfStormwind;
 		}
 	}
 }

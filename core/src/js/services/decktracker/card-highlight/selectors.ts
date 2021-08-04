@@ -24,6 +24,10 @@ export const murlocsInDeckAndHand: (handler: Handler) => boolean = (handler: Han
 	);
 };
 
+export const varianKingOfStormwind: (handler: Handler) => boolean = (handler: Handler): boolean => {
+	return handler.zoneProvider()?.id === 'deck' && (hasRush(handler) || hasTaunt(handler) || hasDivineShield(handler));
+};
+
 export const fungalFortunes: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return handler.zoneProvider()?.id === 'deck' && hasType(handler, CardType.MINION);
 };
@@ -143,6 +147,18 @@ const hasFrenzy = (handler: Handler): boolean => {
 
 const hasCorrupt = (handler: Handler): boolean => {
 	return (handler.referenceCardProvider()?.mechanics ?? []).includes('CORRUPT');
+};
+
+const hasRush = (handler: Handler): boolean => {
+	return (handler.referenceCardProvider()?.mechanics ?? []).includes('RUSH');
+};
+
+const hasTaunt = (handler: Handler): boolean => {
+	return (handler.referenceCardProvider()?.mechanics ?? []).includes('TAUNT');
+};
+
+const hasDivineShield = (handler: Handler): boolean => {
+	return (handler.referenceCardProvider()?.mechanics ?? []).includes('DIVINE_SHIELD');
 };
 
 const isCorrupted = (handler: Handler): boolean => {
