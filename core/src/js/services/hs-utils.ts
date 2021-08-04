@@ -89,6 +89,7 @@ export const globalEffectCards = [
 	// We handle the effects triggered instead of the card played
 	// CardIds.Collectible.Shaman.GrandTotemEysor,
 	CardIds.NonCollectible.Shaman.CommandTheElements_StormcallerBrukanToken,
+	CardIds.Collectible.Shaman.GraniteForgeborn,
 	CardIds.Collectible.Warlock.DarkPharaohTekahn,
 	CardIds.Collectible.Warlock.DeckOfChaos,
 	CardIds.Collectible.Warlock.NeeruFireblade1,
@@ -235,6 +236,7 @@ export const publicCardCreators = [
 	CardIds.Collectible.Shaman.FarSightLegacy,
 	CardIds.Collectible.Shaman.FarSightVanilla,
 	CardIds.Collectible.Shaman.IceFishing,
+	CardIds.Collectible.Shaman.InvestmentOpportunity,
 	CardIds.Collectible.Shaman.SpiritOfTheFrog,
 	CardIds.NonCollectible.Shaman.CommandTheElements_StormcallerBrukanToken,
 	CardIds.Collectible.Shaman.StormChaser,
