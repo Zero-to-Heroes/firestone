@@ -33,6 +33,11 @@ export class AdvancedSettingDirective implements AfterViewInit, OnDestroy {
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
 			const preferences: Preferences = event.preferences;
+			if (!preferences) {
+				console.warn('no pref received', event);
+				return;
+			}
+
 			this.updateVisibility(preferences.advancedModeToggledOn);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

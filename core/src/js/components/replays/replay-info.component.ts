@@ -319,7 +319,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		const deckName = info.playerDeckName ? ` with ${info.playerDeckName}` : '';
 		const tooltip = isPlayer ? name + deckName : null;
 		if (prefs?.replaysShowClassIcon) {
-			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass.toLowerCase()}.png`;
+			const image = `https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/classes/${heroCard.playerClass?.toLowerCase()}.png`;
 			return [image, tooltip];
 		} else {
 			const image = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCard.id}.jpg`;
