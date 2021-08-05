@@ -45,6 +45,7 @@ export class CardPlayedByEffectParser implements EventParser {
 			manaCost: refCard?.cost,
 			rarity: refCard?.rarity?.toLowerCase(),
 			zone: isOnBoard ? 'PLAY' : null,
+			temporaryCard: false,
 		} as DeckCard);
 		//console.debug('card with zone', cardWithZone, refCard, cardId);
 		const newBoard: readonly DeckCard[] = isOnBoard

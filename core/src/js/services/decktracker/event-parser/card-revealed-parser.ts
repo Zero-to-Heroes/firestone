@@ -28,6 +28,7 @@ export class CardRevealedParser implements EventParser {
 			zone: 'SETASIDE',
 			temporaryCard: true,
 		} as DeckCard);
+		console.debug('card revealed', card);
 
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

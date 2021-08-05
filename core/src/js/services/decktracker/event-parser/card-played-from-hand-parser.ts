@@ -72,6 +72,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				zone: isOnBoard ? 'PLAY' : null,
 				manaCost: card.manaCost ?? refCard?.cost,
 				rarity: card.rarity?.toLowerCase() ?? refCard?.rarity?.toLowerCase(),
+				temporaryCard: false,
 			} as DeckCard) ||
 			DeckCard.create({
 				entityId: entityId,
@@ -80,6 +81,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				manaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: isOnBoard ? 'PLAY' : null,
+				temporaryCard: false,
 			} as DeckCard);
 
 		const isCardCountered =

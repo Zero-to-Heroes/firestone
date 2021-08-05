@@ -27,6 +27,7 @@ export class CardRecruitedParser implements EventParser {
 		)[0];
 		const cardWithZone = card.update({
 			zone: 'PLAY',
+			temporaryCard: false,
 		} as DeckCard);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);

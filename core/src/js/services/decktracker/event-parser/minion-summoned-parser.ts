@@ -29,6 +29,7 @@ export class MinionSummonedParser implements EventParser {
 			rarity: dbCard.rarity,
 			creatorCardId: creatorCardId,
 			zone: 'PLAY',
+			temporaryCard: false,
 		} as DeckCard);
 		// console.log('adding card', card);
 

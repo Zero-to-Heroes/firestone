@@ -26,6 +26,7 @@ export class HeroPowerChangedParser implements EventParser {
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity,
 			zone: 'PLAY',
+			temporaryCard: false,
 		} as DeckCard);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			heroPower: card,

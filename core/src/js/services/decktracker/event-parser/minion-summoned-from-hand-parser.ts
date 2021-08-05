@@ -53,6 +53,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 		const cardWithZone =
 			card?.update({
 				zone: isOnBoard ? 'PLAY' : null,
+				temporaryCard: false,
 			} as DeckCard) ||
 			DeckCard.create({
 				entityId: entityId,
@@ -61,6 +62,7 @@ export class MinionSummonedFromHandParser implements EventParser {
 				manaCost: refCard?.cost,
 				rarity: refCard?.rarity?.toLowerCase(),
 				zone: isOnBoard ? 'PLAY' : null,
+				temporaryCard: false,
 			} as DeckCard);
 		const newBoard: readonly DeckCard[] = isOnBoard
 			? this.helper.addSingleCardToZone(deck.board, cardWithZone)
