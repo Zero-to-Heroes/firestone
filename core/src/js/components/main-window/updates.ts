@@ -31,68 +31,48 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.12.3',
+		version: '7.12.10',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `
-			// 		This release has some moderate logging enabled to try and help me debug some issues that seem to arise randomly: Reckoning being greyed out inappropriately, and the tavern timing turn in BG being off by 1 in the future. <br/>
-			// 		So if you encounter one of these issues, by all mean please open a bug report! :) <br/>
-			// 		You might therefore face some lags (mostly in BG), but overall I think things should be fine. <br/>
-			// 		<br/>
-			// 		Have fun, and thanks again for all the help :)
-			// 	`,
-			// },
+			{
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `
+					This release adds lots of Quality of Life improvements, which are one of my favorite things to do. I hope you'll enjoy it :)
+				`,
+			},
 			{
 				type: 'main',
 				header: 'Main updates',
 				updates: [
-					// {
-					// 	category: 'battlegrounds',
-					// 	details: [
-					// 		{
-					// 			type: 'feature',
-					// 			text: `Full Battle Simulator is now live! (it is still in a very early beta stage though). You can pick any minions you like for both sides, and modify them to fit your needs (stats, divine shield, poison, etc.). It is still missing the ability to choose your hero power, and the UI is still all over the place, but all of these will be fixed soon :)`,
-					// 		},
-					// 	],
-					// },
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'content',
-								text: `The app has been updated for United in Stormwind.`,
-							},
-						],
-					},
 					{
 						category: 'decktracker',
 						details: [
 							{
 								type: 'feature',
-								text: `You can now see a graph of your rank evolution, game-by-game or day-by-day. It's been split in two graphs: one for the Bronze-Diamond leagues, and one for Legend, to make things easier to see.`,
+								text: `Mousing over Barian, King of Stormwind in the decklist now highlights all Taunt / Rush / Divine Shield minions from your deck.`,
+							},
+							{
+								type: 'feature',
+								text: `Mousing over Jace Darkweaver now highlights all Fel spells played this game.`,
+							},
+							{
+								type: 'feature',
+								text: `There is now a counter for dead Elwynn Boars that appears when a Boar is played, or if you have a Boar in the deck.`,
+							},
+							{
+								type: 'feature',
+								text: `A widget now appears to remind you of the first Battlecry minion played this turn when you have Bolner Hammerbeak on board or in hand.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where playing a Questline would sometimes cause the secret helper to pop up.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where playing a Sigil would sometimes not update the opponent's hand.`,
 							},
 						],
 					},
-					// {
-					// 	category: 'duels',
-					// 	details: [
-					// 		{
-					// 			type: 'feature',
-					// 			text: `The leaderboard is here! It shows the top 100 players who use Firestone to record their games. It shows players who have one active run in the last 30 days. This is still an early beta, so please don't hesitate to send your feedback :)`,
-					// 		},
-					// 	],
-					// },
-					// {
-					// 	category: 'profile',
-					// 	details: [
-					// 		{
-					// 			type: 'feature',
-					// 			text: `To start the new Profile tab, here is a graph of your total XP over time. More account-wide stats will be coming soon, so let me know (on Discord or by opening a bug) what you would like to see there :)`,
-					// 		},
-					// 	],
-					// },
 				],
 			},
 			{
@@ -103,25 +83,48 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
-								type: 'bug',
-								text: `Properly show Quel'Delar's icon in the opponent's hand after it has been forged (mostly for Duels).`,
+								type: 'feature',
+								text: `(Mage) Second flame is now properly flagged in hand. Cards drawn / discovered from Sorcerer's Gambit questline steps are also flagged in hand.`,
 							},
-							{
-								type: 'content',
-								text: `Update the deck's contents (and add a global effect) after Hemet, Jungle Hunter or Skulking Geist has been played.`,
-							},
-						],
-					},
-					{
-						category: 'battlegrounds',
-						details: [
 							{
 								type: 'feature',
-								text: `When showing the MMR graph grouped by day, plot ALL the days, even the ones where no games were played.`,
+								text: `(Demon Hunter) Cost reduction buffs from the Questline now show in the opponent's hand.`,
+							},
+							{
+								type: 'feature',
+								text: `(Hunter) The exact cards drawn by Devouring Swarm and Rats of Extraordinary Size are now properly flagged in hand. Global effects for the Hunter Questline have been added as well.`,
+							},
+							{
+								type: 'feature',
+								text: `(Priest) Cards drawn by Call of the Grave and the Seek Guidance Questline are now properly flagged in hand.`,
+							},
+							{
+								type: 'feature',
+								text: `(Priest) Cards drawn by Blessed Goods and Alliance Bannerman are now properly flagged in hand. Lightborn Cariel has been added as a Global Effect when played.`,
+							},
+							{
+								type: 'feature',
+								text: `(Rogue) All cards drawn by the various Spy Gizmos are now properly flagged in hand, as well as the Coins from Loan Shark and the draw from Sketchy Information.`,
+							},
+							{
+								type: 'feature',
+								text: `(Shaman) Stormcaller Bru'kan is now properly flagged in hand, as well as cards drawn by Investment Opportunity. Global effects have been added for Bru'kan and Granite Forgeborn.`,
+							},
+							{
+								type: 'feature',
+								text: `(Warrior) The cards drawn by Raid the docks and Harbor Scamp are now properly flagged in hand.`,
+							},
+							{
+								type: 'feature',
+								text: `(Warlock) Blightborn Tamsin now appears in the Global Effects section after being played, and it is now properly flagged in hand.`,
+							},
+							{
+								type: 'feature',
+								text: `(Neutral) Cards drawn / discovered by Deeprun Engineer, Mailbox Dancer, Pandaren Importer, Entrapped Sorceress are now properly flagged in hand.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a bug where minions in the tier lists were not ordered alphabetically.`,
+								text: `Fix an issue where playing the same card multiple times (when bounced back to hand) would only add the Global Effect once.`,
 							},
 						],
 					},
