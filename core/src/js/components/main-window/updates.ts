@@ -49,7 +49,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Mousing over Barian, King of Stormwind in the decklist now highlights all Taunt / Rush / Divine Shield minions from your deck.`,
+								text: `Mousing over Varian, King of Stormwind in the decklist now highlights all Taunt / Rush / Divine Shield minions from your deck.`,
 							},
 							{
 								type: 'feature',
@@ -84,10 +84,6 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `(Mage) Second flame is now properly flagged in hand. Cards drawn / discovered from Sorcerer's Gambit questline steps are also flagged in hand.`,
-							},
-							{
-								type: 'feature',
 								text: `(Demon Hunter) Cost reduction buffs from the Questline now show in the opponent's hand.`,
 							},
 							{
@@ -96,11 +92,15 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `(Mage) Second flame is now properly flagged in hand. Cards drawn / discovered from Sorcerer's Gambit questline steps are also flagged in hand.`,
+							},
+							{
+								type: 'feature',
 								text: `(Priest) Cards drawn by Call of the Grave and the Seek Guidance Questline are now properly flagged in hand.`,
 							},
 							{
 								type: 'feature',
-								text: `(Priest) Cards drawn by Blessed Goods and Alliance Bannerman are now properly flagged in hand. Lightborn Cariel has been added as a Global Effect when played.`,
+								text: `(Paladin) Cards drawn by Blessed Goods and Alliance Bannerman are now properly flagged in hand. Lightborn Cariel has been added as a Global Effect when played.`,
 							},
 							{
 								type: 'feature',
