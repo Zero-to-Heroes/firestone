@@ -24,6 +24,7 @@ import {
 	livingSeed as beastsInDeck,
 	murlocsInDeckAndHand,
 	overlordSaurfang,
+	piratesInDeck,
 	rally,
 	redscaleDragontamer,
 	ringmasterWhatley,
@@ -129,6 +130,8 @@ export class CardsHighlightService {
 				return varianKingOfStormwind;
 			case CardIds.Collectible.Demonhunter.JaceDarkweaver:
 				return jaceDarkweaver;
+			case CardIds.Collectible.Warrior.HarborScamp:
+				return piratesInDeck;
 		}
 	}
 }

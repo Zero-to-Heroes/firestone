@@ -15,14 +15,17 @@ export const lineHopper: (handler: Handler) => boolean = (handler: Handler): boo
 };
 
 export const livingSeed: (handler: Handler) => boolean = (handler: Handler): boolean => {
-	return handler.zoneProvider()?.id === 'deck' && handler.referenceCardProvider()?.race === Race[Race.BEAST];
+	return handler.zoneProvider()?.id === 'deck' && isRace(handler, Race.BEAST);
 };
 
 export const murlocsInDeckAndHand: (handler: Handler) => boolean = (handler: Handler): boolean => {
 	return (
-		(handler.zoneProvider()?.id === 'deck' || handler.zoneProvider()?.id === 'hand') &&
-		handler.referenceCardProvider()?.race === Race[Race.MURLOC]
+		(handler.zoneProvider()?.id === 'deck' || handler.zoneProvider()?.id === 'hand') && isRace(handler, Race.MURLOC)
 	);
+};
+
+export const piratesInDeck: (handler: Handler) => boolean = (handler: Handler): boolean => {
+	return handler.zoneProvider()?.id === 'deck' && isRace(handler, Race.PIRATE);
 };
 
 export const varianKingOfStormwind: (handler: Handler) => boolean = (handler: Handler): boolean => {
@@ -53,7 +56,7 @@ export const knightOfAnointment: (handler: Handler) => boolean = (handler: Handl
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
 		hasType(handler, CardType.SPELL) &&
-		handler.referenceCardProvider()?.spellSchool === SpellSchool[SpellSchool.HOLY]
+		hasSpellSchool(handler, SpellSchool.HOLY)
 	);
 };
 
@@ -61,7 +64,7 @@ export const guardianAnimals: (handler: Handler) => boolean = (handler: Handler)
 	return (
 		handler.zoneProvider()?.id === 'deck' &&
 		hasType(handler, CardType.MINION) &&
-		handler.referenceCardProvider()?.race === Race[Race.BEAST] &&
+		isRace(handler, Race.BEAST) &&
 		handler.deckCardProvider()?.getEffectiveManaCost() <= 5
 	);
 };
@@ -181,4 +184,8 @@ const isCorrupted = (handler: Handler): boolean => {
 
 const isSecret = (handler: Handler): boolean => {
 	return (handler.referenceCardProvider()?.mechanics ?? []).includes('SECRET');
+};
+
+const isRace = (handler: Handler, race: Race): boolean => {
+	return handler.referenceCardProvider()?.race === Race[race];
 };
