@@ -96,7 +96,7 @@ export class BgsLastWarbandsComponent {
 				map(([stats, gameStats]) =>
 					stats.map((stat) => this.buildLastKnownBoard(stat, gameStats)).filter((board) => board),
 				),
-				tap((boards) => console.debug('[cd] emitting in ', this.constructor.name, boards)),
+				tap((boards) => console.debug('[cd] emitting boards in ', this.constructor.name, boards)),
 			);
 	}
 

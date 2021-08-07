@@ -14,6 +14,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
+import { AllCardsService as RefCards } from '@firestone-hs/reference-data';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { captureException, init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -682,6 +684,9 @@ const components = [
 		AppUiStoreService,
 		CardsInitService,
 		CardsFacadeService,
+		RefCards,
+		// For coliseum-components
+		{ provide: AllCardsService, useClass: CardsFacadeService },
 
 		DevService,
 		GameEvents,

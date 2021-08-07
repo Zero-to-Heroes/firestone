@@ -1,4 +1,4 @@
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AllCardsService } from '@firestone-hs/reference-data';
 import cardsJson from '../../../test/cards.json';
 import { CardsFacadeService } from './cards-facade.service';
 

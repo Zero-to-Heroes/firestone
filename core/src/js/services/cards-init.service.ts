@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
+import { AllCardsService } from '@firestone-hs/reference-data';
 import { CARDS_VERSION } from './hs-utils';
 
 @Injectable()
