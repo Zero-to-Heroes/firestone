@@ -551,6 +551,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Golden Forged in the Barrens';
 		case BoosterType.STORMWIND:
 			return 'United in Stormwind';
+		case BoosterType.GOLDEN_STORMWIND:
+			return 'Golden United in Stormwind';
 		case BoosterType.STANDARD_DEMONHUNTER:
 			return 'Standard Demon Hunter';
 		case BoosterType.STANDARD_DRUID:
