@@ -540,6 +540,8 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CREATE_CARD_IN_DECK, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
+						creatorEntityId:
+							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorEntityId,
 					}),
 				);
 				break;

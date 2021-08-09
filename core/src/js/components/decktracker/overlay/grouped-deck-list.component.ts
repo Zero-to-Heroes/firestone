@@ -21,6 +21,7 @@ import { SetCard } from '../../../models/set';
 				[colorManaCost]="colorManaCost"
 				[showUpdatedCost]="showUpdatedCost"
 				[showGiftsSeparately]="showGiftsSeparately"
+				[showStatsChange]="showStatsChange"
 				[side]="side"
 				[collection]="collection"
 			></deck-zone>
@@ -32,6 +33,7 @@ export class GroupedDeckListComponent implements OnDestroy {
 	@Input() colorManaCost: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGiftsSeparately: boolean;
+	@Input() showStatsChange: boolean;
 	@Input() side: 'player' | 'opponent';
 	@Input() collection: readonly SetCard[];
 
@@ -121,10 +123,11 @@ export class GroupedDeckListComponent implements OnDestroy {
 				// console.log('pushing');
 				base.push(
 					VisualDeckCard.create({
-						cardId: groupedFromDecklist.get(cardId)[0].cardId,
-						cardName: groupedFromDecklist.get(cardId)[0].cardName,
-						manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
-						rarity: groupedFromDecklist.get(cardId)[0].rarity,
+						...groupedFromDecklist.get(cardId)[0],
+						// cardId: groupedFromDecklist.get(cardId)[0].cardId,
+						// cardName: groupedFromDecklist.get(cardId)[0].cardName,
+						// manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
+						// rarity: groupedFromDecklist.get(cardId)[0].rarity,
 						// highlight: isAtLeastOneCardInHand ? 'in-hand' : 'normal',
 						highlight: 'normal',
 						creatorCardIds: creatorCardIds,
@@ -148,10 +151,11 @@ export class GroupedDeckListComponent implements OnDestroy {
 				// console.log('pushing dim version');
 				base.push(
 					VisualDeckCard.create({
-						cardId: groupedFromDecklist.get(cardId)[0].cardId,
-						cardName: groupedFromDecklist.get(cardId)[0].cardName,
-						manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
-						rarity: groupedFromDecklist.get(cardId)[0].rarity,
+						...groupedFromDecklist.get(cardId)[0],
+						// cardId: groupedFromDecklist.get(cardId)[0].cardId,
+						// cardName: groupedFromDecklist.get(cardId)[0].cardName,
+						// manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
+						// rarity: groupedFromDecklist.get(cardId)[0].rarity,
 						highlight: this._darkenUsedCards ? 'dim' : 'normal',
 					} as VisualDeckCard),
 				);
@@ -173,10 +177,11 @@ export class GroupedDeckListComponent implements OnDestroy {
 				// console.log('pushing');
 				base.push(
 					VisualDeckCard.create({
-						cardId: groupedFromDeck.get(cardId)[i].cardId,
-						cardName: groupedFromDeck.get(cardId)[i].cardName,
-						manaCost: groupedFromDeck.get(cardId)[i].manaCost,
-						rarity: groupedFromDeck.get(cardId)[i].rarity,
+						...groupedFromDecklist.get(cardId)[i],
+						// cardId: groupedFromDeck.get(cardId)[i].cardId,
+						// cardName: groupedFromDeck.get(cardId)[i].cardName,
+						// manaCost: groupedFromDeck.get(cardId)[i].manaCost,
+						// rarity: groupedFromDeck.get(cardId)[i].rarity,
 						highlight: !isInBaseDeck && this._darkenUsedCards && isInOtherZone ? 'dim' : 'normal',
 						creatorCardIds: creatorCardIds,
 					} as VisualDeckCard),

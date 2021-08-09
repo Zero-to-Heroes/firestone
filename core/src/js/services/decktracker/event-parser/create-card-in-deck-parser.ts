@@ -15,6 +15,7 @@ export class CreateCardInDeckParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		// console.debug('creating card in deck', gameEvent, currentState);
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
@@ -35,12 +36,17 @@ export class CreateCardInDeckParser implements EventParser {
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
+			bonusDamage: gameEvent.additionalData.creatorEntityId
+				? buildBonusDamage(deck.findCard(gameEvent.additionalData.creatorEntityId))
+				: null,
 		} as DeckCard);
+		// console.debug('card', card);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 		});
+		// console.debug('newPlayerDeck', newPlayerDeck);
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
 		}
@@ -64,3 +70,11 @@ export class CreateCardInDeckParser implements EventParser {
 		return 'Unknown card';
 	}
 }
+
+const buildBonusDamage = (card: DeckCard): number => {
+	console.debug('building bonus damage', card?.cardId, card);
+	if (card?.cardId === CardIds.Collectible.Mage.Ignite) {
+		return 1 + (card.bonusDamage ?? 0);
+	}
+	return null;
+};

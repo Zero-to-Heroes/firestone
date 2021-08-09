@@ -63,6 +63,11 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, cards that have been created are displayed in their own lines (one line for each different creator)"
 					></preference-toggle>
 					<preference-toggle
+						field="overlayShowStatsChange"
+						label="Show stats change"
+						tooltip="When active, some cards in the decklist will show when their stats have changed (for now only supported for Ignite)"
+					></preference-toggle>
+					<preference-toggle
 						field="overlayShowCostReduction"
 						label="Update cost in deck"
 						tooltip="When active, the mana cost of cards in the deck whose cost has been modified reflects the new cost value."

@@ -123,6 +123,11 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.updateInfos();
 	}
 
+	@Input() set showStatsChange(value: boolean) {
+		this._showStatsChange = value;
+		this.updateInfos();
+	}
+
 	@Input() set card(card: VisualDeckCard) {
 		this._card = card;
 		this.updateInfos();
@@ -174,6 +179,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	mouseOverRight = 0;
 
 	private _showUpdatedCost: boolean;
+	private _showStatsChange: boolean;
 	private _card: VisualDeckCard;
 	private _referenceCard: ReferenceCard;
 	private _uniqueId: string;
@@ -232,7 +238,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=3)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
-		this.cardName = this._card.cardName;
+		this.cardName = this._card.cardName + this.buildSuffix(this._card);
 		this.numberOfCopies = this._card.totalQuantity;
 		this.rarity = this._card.rarity;
 		this.creatorCardIds = this._card.creatorCardIds;
@@ -286,6 +292,16 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private buildSuffix(_card: VisualDeckCard) {
+		if (!this._showStatsChange) {
+			return '';
+		}
+		if (_card.bonusDamage) {
+			return ` (+${_card.bonusDamage})`;
+		}
+		return '';
 	}
 
 	private updateGiftTooltip() {

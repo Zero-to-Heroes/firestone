@@ -36,6 +36,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[showUpdatedCost]="showUpdatedCost"
 					[showGlobalEffectsZone]="showGlobalEffectsZone"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[showStatsChange]="showStatsChange"
 					[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
 					[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
 					[tooltipPosition]="_tooltipPosition"
@@ -48,6 +49,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[colorManaCost]="colorManaCost"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[showStatsChange]="showStatsChange"
 					[cardsGoToBottom]="cardsGoToBottom"
 					[darkenUsedCards]="darkenUsedCards"
 					[tooltipPosition]="_tooltipPosition"
@@ -66,6 +68,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() showUpdatedCost: boolean;
 	@Input() showGlobalEffectsZone: boolean;
 	@Input() showGiftsSeparately: boolean;
+	@Input() showStatsChange: boolean;
 	@Input() cardsGoToBottom: boolean;
 	@Input() darkenUsedCards: boolean;
 	@Input() hideGeneratedCardsInOtherZone: boolean;

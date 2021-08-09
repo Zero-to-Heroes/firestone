@@ -73,6 +73,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 							[showUpdatedCost]="showUpdatedCost"
 							[showGlobalEffectsZone]="showGlobalEffectsZone"
 							[showGiftsSeparately]="showGiftsSeparately"
+							[showStatsChange]="showStatsChange"
 							[cardsGoToBottom]="cardsGoToBottom"
 							[tooltipPosition]="tooltipPosition"
 							[darkenUsedCards]="darkenUsedCards"
@@ -126,6 +127,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	colorManaCost: boolean;
 	showUpdatedCost: boolean;
 	showGiftsSeparately: boolean;
+	showStatsChange: boolean;
 	cardsGoToBottom: boolean;
 	showGlobalEffectsZone: boolean;
 	darkenUsedCards: boolean;
@@ -171,7 +173,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			this.deckStatsRecap = (event.state as GameState).deckStatsRecap;
 			this.matchupStatsRecap = (event.state as GameState).matchupStatsRecap;
 			// this.gameState = event ? event.state : undefined;
-			// console.log('received game state', event);
+			// console.debug('received game state', event);
 			this.deck = event.state ? this.deckExtractor(event.state) : null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -288,6 +290,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.showUpdatedCost = preferences.overlayShowCostReduction;
 		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
+		this.showStatsChange = preferences.overlayShowStatsChange;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
 		this.showGlobalEffectsZone = this.showGlobalEffectsExtractor(preferences);
 		this.showDeckWinrate = this.showDeckWinrateExtractor(preferences);

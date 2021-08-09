@@ -49,6 +49,7 @@ import { groupByFunction } from '../../../services/utils';
 						[tooltipPosition]="_tooltipPosition"
 						[colorManaCost]="colorManaCost"
 						[showUpdatedCost]="_showUpdatedCost"
+						[showStatsChange]="_showStatsChange"
 						[zone]="_zone"
 						[side]="side"
 					></deck-card>
@@ -76,6 +77,11 @@ export class DeckZoneComponent implements AfterViewInit {
 		this.refreshZone();
 	}
 
+	@Input() set showStatsChange(value: boolean) {
+		this._showStatsChange = value;
+		this.refreshZone();
+	}
+
 	@Input() set zone(zone: DeckZone) {
 		this._zone = zone;
 		this.refreshZone();
@@ -99,6 +105,7 @@ export class DeckZoneComponent implements AfterViewInit {
 	open = true;
 
 	private _showGiftsSeparately = true;
+	private _showStatsChange = true;
 	private _zone: DeckZone;
 
 	constructor(private readonly cdr: ChangeDetectorRef, @Optional() private readonly prefs: PreferencesService) {}
@@ -182,16 +189,16 @@ export class DeckZoneComponent implements AfterViewInit {
 	}
 
 	private buildGroupingKey(card: VisualDeckCard, quantitiesLeftForCard: { [cardId: string]: number }): string {
+		const keyWithBonus = this._showStatsChange ? card.cardId + '_' + card.bonusDamage : card.cardId;
 		const keyWithGift = this._showGiftsSeparately
-			? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
-			: card.cardId;
+			? keyWithBonus + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
+			: keyWithBonus;
 		const keyWithGraveyard = card.zone === 'GRAVEYARD' ? keyWithGift + '-graveyard' : keyWithGift;
 		const keyWithCost = keyWithGraveyard + '-' + card.getEffectiveManaCost();
 		if (!this._collection?.length) {
 			return keyWithCost;
 		}
 
-		// const cardInCollection = this._collection.find(c => c.id === card.cardId);
 		const quantityToAllocate = quantitiesLeftForCard[card.cardId];
 		quantitiesLeftForCard[card.cardId] = quantityToAllocate - 1;
 		if (quantityToAllocate > 0) {

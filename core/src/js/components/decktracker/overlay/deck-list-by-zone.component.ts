@@ -21,6 +21,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					[colorManaCost]="colorManaCost"
 					[showUpdatedCost]="showUpdatedCost"
 					[showGiftsSeparately]="showGiftsSeparately"
+					[showStatsChange]="showStatsChange"
 					[side]="side"
 				></deck-zone>
 			</li>
@@ -32,6 +33,7 @@ export class DeckListByZoneComponent implements OnDestroy {
 	@Input() colorManaCost: boolean;
 	@Input() showUpdatedCost: boolean;
 	@Input() showGiftsSeparately: boolean;
+	@Input() showStatsChange: boolean;
 	@Input() side: 'player' | 'opponent';
 
 	@Input() set showGlobalEffectsZone(value: boolean) {

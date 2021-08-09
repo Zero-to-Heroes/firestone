@@ -22,16 +22,20 @@ export class CardChangedInDeckParser implements EventParser {
 		// console.log('changing card in deck');
 		// const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
+		const [newDeck, theCard] = this.helper.removeSingleCardFromZone(
 			previousDeck,
 			cardId,
 			entityId,
 			deck.deckList.length === 0,
 			true,
-		)[0];
+		);
 		// When card is changed in deck (eg Galakrond), a new card is created
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
-		const newCard = DeckCard.create({
+		// Ignite for instance receives a CARD_CHANGED_IN_DECK event, and we want to
+		// keep all the other attributes.
+		// I'm not sure yet if there are instances where we want to remove the
+		// previous attributes
+		const newCard = theCard.update({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: cardData.name,

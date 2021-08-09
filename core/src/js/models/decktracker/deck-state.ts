@@ -103,9 +103,11 @@ export class DeckState {
 	}
 
 	public findCard(entityId: number): DeckCard {
-		return [...this.hand, ...this.deck, ...this.board, ...this.otherZone].find(
+		const result = [...this.hand, ...this.deck, ...this.board, ...this.otherZone].find(
 			(card) => card.entityId === entityId,
 		);
+		// console.debug('finding card', entityId, result, this);
+		return result;
 	}
 
 	// TODO: Probably not the place for these methods
