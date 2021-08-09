@@ -36,6 +36,8 @@ export const modifyDeckForSpecialCards = (
 			return handleFrizzKindleroost(deckState, allCards);
 		case CardIds.Collectible.Neutral.HemetJungleHunter:
 			return handleHemet(deckState, allCards);
+		case CardIds.Collectible.Neutral.LadyPrestor:
+			return handleLadyPrestor(deckState, allCards);
 		case CardIds.Collectible.Neutral.SkulkingGeist:
 			return handleSkulkingGeist(deckState, allCards);
 		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
@@ -165,6 +167,24 @@ const handleDeckOfLunacy = (deckState: DeckState, allCards: CardsFacadeService):
 				rarity: 'unknown',
 				cardType: 'Spell',
 				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost() + 3,
+			} as DeckCard),
+		deckState,
+		allCards,
+	);
+};
+
+const handleLadyPrestor = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
+	return updateCardInDeck(
+		(card, refCard) => refCard?.type === 'Minion',
+		(card) =>
+			card.update({
+				cardId: undefined,
+				cardName: `Unknown Dragon`,
+				creatorCardId: CardIds.Collectible.Neutral.LadyPrestor,
+				actualManaCost: card.getEffectiveManaCost(),
+				rarity: 'unknown',
+				cardType: 'Minion',
+				cardMatchCondition: (other: ReferenceCard) => other.cost === card.getEffectiveManaCost(),
 			} as DeckCard),
 		deckState,
 		allCards,

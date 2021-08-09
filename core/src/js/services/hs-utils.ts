@@ -100,6 +100,7 @@ export const globalEffectCards = [
 
 	CardIds.Collectible.Neutral.FrizzKindleroost,
 	CardIds.Collectible.Neutral.HemetJungleHunter,
+	CardIds.Collectible.Neutral.LadyPrestor,
 	CardIds.Collectible.Neutral.LorekeeperPolkelt,
 	CardIds.Collectible.Neutral.PrinceKeleseth,
 	CardIds.Collectible.Neutral.SkulkingGeist,
