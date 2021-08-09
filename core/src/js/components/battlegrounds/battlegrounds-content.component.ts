@@ -9,7 +9,7 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { BgsPanel } from '../../models/battlegrounds/bgs-panel';
 import { Preferences } from '../../models/preferences';
@@ -121,7 +121,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		// console.log('after view init in bgs content');
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});

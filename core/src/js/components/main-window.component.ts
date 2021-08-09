@@ -3,7 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
@@ -256,7 +255,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		subscriber['identifier'] = 'decktracker-overlay-root';
 		this.deckSubscription = deckEventBus.subscribe(subscriber);
 
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handlePreferences(event.preferences);
 		});

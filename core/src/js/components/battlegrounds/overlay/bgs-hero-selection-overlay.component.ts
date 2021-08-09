@@ -3,7 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewRef,
@@ -73,7 +72,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 			this.updateInfos();
 		});
 
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.setDisplayPreferences(event.preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -139,6 +138,10 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
+		if (!preferences) {
+			return;
+		}
+
 		this._showAchievements = preferences.bgsShowHeroSelectionAchievements;
 		this.updateInfos();
 	}

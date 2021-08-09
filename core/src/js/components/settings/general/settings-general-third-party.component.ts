@@ -3,12 +3,11 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -111,7 +110,7 @@ export class SettingsGeneralThirdPartyComponent implements AfterViewInit, OnDest
 	}
 
 	ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(async (event) => {
 			// console.log('updated prefs', event);
 			await this.loadDefaultValues();

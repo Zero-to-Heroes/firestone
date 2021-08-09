@@ -3,14 +3,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
@@ -63,7 +62,7 @@ export class OpponentCardInfoComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	async ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});

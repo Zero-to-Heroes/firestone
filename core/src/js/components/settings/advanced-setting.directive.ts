@@ -32,9 +32,8 @@ export class AdvancedSettingDirective implements AfterViewInit, OnDestroy {
 		this.loadDefaultValues();
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
-			const preferences: Preferences = event.preferences;
+			const preferences: Preferences = event?.preferences;
 			if (!preferences) {
-				console.warn('no pref received', event);
 				return;
 			}
 

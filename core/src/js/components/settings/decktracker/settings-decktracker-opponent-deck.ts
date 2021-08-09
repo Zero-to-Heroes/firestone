@@ -266,6 +266,10 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
+			if (!event) {
+				return;
+			}
+
 			const preferences: Preferences = event.preferences;
 			this.overlayGroupByZone = preferences.overlayGroupByZone;
 			this.opponentTracker = preferences.opponentTracker;

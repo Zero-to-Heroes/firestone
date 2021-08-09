@@ -4,13 +4,12 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -96,7 +95,7 @@ export class BgsLeaderboardEmptyCardComponent implements AfterViewInit, OnDestro
 	) {}
 
 	async ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});

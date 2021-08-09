@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardBack } from '../../models/card-back';
 import { NavigationCollection } from '../../models/mainwindow/navigation/navigation-collection';
 import { Preferences } from '../../models/preferences';
@@ -83,7 +83,7 @@ export class TheCoinsComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});

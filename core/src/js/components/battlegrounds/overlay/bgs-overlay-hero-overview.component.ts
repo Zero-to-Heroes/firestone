@@ -4,7 +4,6 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostBinding,
 	HostListener,
 	Input,
@@ -12,7 +11,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -78,7 +77,7 @@ export class BgsOverlayHeroOverviewComponent implements AfterViewInit, OnDestroy
 	) {}
 
 	async ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});

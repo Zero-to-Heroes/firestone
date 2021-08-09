@@ -3,7 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
@@ -77,7 +76,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		subscriber['identifier'] = 'opponent-hand-overlay';
 		this.deckSubscription = deckEventBus.subscribe(subscriber);
 
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.setDisplayPreferences(event.preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -107,6 +106,10 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
+		if (!preferences) {
+			return;
+		}
+
 		this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
 		this.displayGuess = preferences.dectrackerShowOpponentGuess;
 		this.displayBuff = preferences.dectrackerShowOpponentBuffInHand;

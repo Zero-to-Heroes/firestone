@@ -3,7 +3,6 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	ViewEncapsulation,
@@ -134,7 +133,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		// this.cardsInGame = getAllCardsInGame([Race.DEMON, Race.DRAGON], this.allCards);
 		// this.tiers = this.buildTiers();
 
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.setDisplayPreferences(event.preferences);
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -258,6 +257,10 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
+		if (!preferences) {
+			return;
+		}
+
 		this.showMinionsList = preferences.bgsEnableMinionListOverlay;
 		this.showTribesHighlight = preferences.bgsShowTribesHighlight;
 		this.enableMouseOver = preferences.bgsEnableMinionListMouseOver;

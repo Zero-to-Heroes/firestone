@@ -49,12 +49,6 @@ import { PreferencesService } from '../../../services/preferences.service';
 					messageWhenToggleValue="Notifications now TURNED OFF globally."
 					[valueToDisplayMessageOn]="false"
 				></preference-toggle>
-
-				<preference-toggle
-					field="shareGamesWithVS"
-					label="Contribute to the VS meta report"
-					tooltip="When turned on, you contribute to build the Vicious Syndicate meta report. The server parses your games and extracts some global info (like the game's rank, the cards played) and anonymously sends this aggregated data to Vicious Syndicate. We don't get paid for this, but we do get some exposure since they then talk about us :)"
-				></preference-toggle>
 			</section>
 		</div>
 

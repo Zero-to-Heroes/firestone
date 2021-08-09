@@ -4,14 +4,13 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../directives/card-tooltip-position.type';
 import { BoardSecret } from '../../models/decktracker/board-secret';
 import { DeckCard } from '../../models/decktracker/deck-card';
@@ -74,7 +73,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.refreshScroll();
 		});

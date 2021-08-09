@@ -17,7 +17,6 @@ type GameStateSelector<T> = (gameState: GameState) => T;
 @Injectable()
 export class AppUiStoreService {
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
-	// private prefs$: Observable<Preferences>;
 	private prefs: BehaviorSubject<{ name: string; preferences: Preferences }>;
 	private deckStore: BehaviorSubject<{ state: GameState }>;
 
@@ -25,8 +24,6 @@ export class AppUiStoreService {
 
 	constructor(private readonly ow: OverwolfService, private zone: NgZone) {
 		this.mainStore = this.ow.getMainWindow()?.mainWindowStoreMerged;
-		// const prefsSubject: BehaviorSubject<Preferences> = this.ow.getMainWindow()?.preferencesEventBus;
-		// this.prefs$ = prefsSubject.asObservable();
 		this.prefs = this.ow.getMainWindow()?.preferencesEventBus;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -60,15 +57,6 @@ export class AppUiStoreService {
 		this.stateUpdater.next(event);
 	}
 }
-
-// TODO: move this somewhere else? To a facade?
-// export const currentBgHeroId = (main: MainWindowState, nav: NavigationState): string => {
-// 	return nav.navigationBattlegrounds.selectedCategoryId?.includes('bgs-category-personal-hero-details-')
-// 		? (main.battlegrounds.findCategory(
-// 				nav.navigationBattlegrounds.selectedCategoryId,
-// 		  ) as BattlegroundsPersonalStatsHeroDetailsCategory)?.heroId
-// 		: null;
-// };
 
 export const currentBgHeroId = (battlegrounds: BattlegroundsAppState, selectedCategoryId: string): string => {
 	return selectedCategoryId?.includes('bgs-category-personal-hero-details-')

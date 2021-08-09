@@ -153,14 +153,14 @@ export class BattlegroundsStoreService {
 
 		this.handleDisplayPreferences();
 		setTimeout(() => {
-			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+			const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 			preferencesEventBus.subscribe((event) => {
-				if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
+				if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 					console.log('[bgs-store] rebuilding event emitters');
 					this.buildEventEmitters();
 					return;
 				}
-				if (event) {
+				if (event?.preferences) {
 					this.handleDisplayPreferences(event.preferences);
 				}
 			});

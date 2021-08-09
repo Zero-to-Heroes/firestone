@@ -3,13 +3,12 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { uuid } from '../../services/utils';
@@ -80,11 +79,16 @@ export class PreferenceToggleComponent implements AfterViewInit, OnDestroy {
 	}
 
 	ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
+			if (!event?.preferences) {
+				return;
+			}
+
 			if (this.value === event.preferences[this.field]) {
 				return;
 			}
+
 			this.value = event.preferences[this.field];
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

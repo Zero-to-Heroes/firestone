@@ -114,11 +114,6 @@ export class HeroPortraitsComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		// const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		// this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-		// 	this.handleDisplayPreferences(event.preferences);
-		// });
-		// await this.handleDisplayPreferences();
 	}
 
 	ngOnDestroy() {

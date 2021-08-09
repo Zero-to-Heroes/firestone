@@ -4,7 +4,6 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	Renderer2,
@@ -70,7 +69,7 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 			// }
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});

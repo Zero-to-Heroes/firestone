@@ -4,7 +4,6 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
@@ -13,7 +12,7 @@ import {
 } from '@angular/core';
 import { sortBy } from 'lodash';
 import { IOption } from 'ng-select';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Card } from '../../models/card';
 import { Preferences } from '../../models/preferences';
 import { Set, SetCard } from '../../models/set';
@@ -213,7 +212,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			caretEl.classList.add('caret');
 		});
 
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});

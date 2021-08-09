@@ -198,7 +198,11 @@ export class SettingsDecktrackerYourDeckComponent implements AfterViewInit, OnDe
 		this.loadDefaultValues();
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
-			const preferences: Preferences = event.preferences;
+			const preferences: Preferences = event?.preferences;
+			if (!preferences) {
+				return;
+			}
+
 			this.overlayGroupByZone = preferences.overlayGroupByZone;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

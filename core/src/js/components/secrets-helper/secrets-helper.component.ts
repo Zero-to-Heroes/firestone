@@ -4,7 +4,6 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	OnDestroy,
 	Renderer2,
@@ -106,7 +105,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		subscriber['identifier'] = 'secrets-helper';
 		this.deckSubscription = deckEventBus.subscribe(subscriber);
 
-		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
 		});
