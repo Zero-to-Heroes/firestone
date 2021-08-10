@@ -65,7 +65,7 @@ export class CreateCardInDeckParser implements EventParser {
 		}
 		if (creatorCardId) {
 			const creator = this.allCards.getCard(creatorCardId);
-			return `Created by ${creator.name}`;
+			return `Created by ${creator?.name ?? 'unknown'}`;
 		}
 		return 'Unknown card';
 	}

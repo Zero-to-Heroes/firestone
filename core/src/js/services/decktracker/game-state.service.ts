@@ -66,6 +66,7 @@ import { GameStartParser } from './event-parser/game-start-parser';
 import { GlobalMinionEffectParser } from './event-parser/global-minion-effect-parser';
 import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
 import { JadeGolemParser } from './event-parser/jade-golem-parser';
+import { LinkedEntityParser } from './event-parser/linked-entity-parser';
 import { LocalPlayerParser } from './event-parser/local-player-parser';
 import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
@@ -605,6 +606,7 @@ export class GameStateService {
 			new MinionBackOnBoardParser(this.helper),
 			new MinionSummonedParser(this.helper, this.allCards),
 			new CardRevealedParser(this.helper, this.allCards),
+			new LinkedEntityParser(this.helper),
 			new MinionDiedParser(this.helper),
 			new BurnedCardParser(this.helper),
 			new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),

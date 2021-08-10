@@ -488,6 +488,15 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'LINKED_ENTITY':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.LINKED_ENTITY, gameEvent, {
+						linkedEntityId: gameEvent.Value.AdditionalProps.LinkedEntityId,
+						linkedEntityControllerId: gameEvent.Value.AdditionalProps.LinkedEntityControllerId,
+						linkedEntityZone: gameEvent.Value.AdditionalProps.LinkedEntityZone,
+					}),
+				);
+				break;
 			case 'CARD_CHANGED_ON_BOARD':
 				const summonAdditionProps2 = gameEvent.Value.AdditionalProps
 					? {

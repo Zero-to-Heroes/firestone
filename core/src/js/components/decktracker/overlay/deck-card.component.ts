@@ -238,7 +238,10 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${this._card.cardId}.jpg?v=3)`;
 		this.manaCost = this._showUpdatedCost ? this._card.getEffectiveManaCost() : this._card.manaCost;
 		this.manaCostReduction = this.manaCost != null && this.manaCost < this._card.manaCost;
-		this.cardName = this._card.cardName + this.buildSuffix(this._card);
+		this.cardName = !!this._card.cardName?.length
+			? this._card.cardName + this.buildSuffix(this._card)
+			: 'Unknown card';
+		// console.debug('cardName', this.cardName, this._card);
 		this.numberOfCopies = this._card.totalQuantity;
 		this.rarity = this._card.rarity;
 		this.creatorCardIds = this._card.creatorCardIds;
