@@ -722,6 +722,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_CHANGED_IN_DECK, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						lastInfluencedByCardId: gameEvent.Value.AdditionalProps.LastInfluencedByCardId,
 					}),
 				);
 				break;

@@ -18,7 +18,10 @@ export class CardDrawParser implements EventParser {
 		//console.debug('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId;
+
+		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
+
+		const lastInfluencedByCardId = gameEvent.additionalData?.lastInfluencedByCardId ?? card.lastAffectedByCardId;
 
 		const isCardDrawnBySecretPassage = forceHideInfoWhenDrawnInfluencers.includes(
 			gameEvent.additionalData?.lastInfluencedByCardId,
@@ -36,7 +39,6 @@ export class CardDrawParser implements EventParser {
 				(cardsRevealedWhenDrawn.includes(cardId) || publicCardCreators.includes(lastInfluencedByCardId)));
 		const isCreatorPublic = isCardInfoPublic || publicCardCreators.includes(lastInfluencedByCardId);
 
-		const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
 		//console.debug('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);
 
 		const creatorCardId = gameEvent.additionalData?.creatorCardId;
@@ -52,7 +54,7 @@ export class CardDrawParser implements EventParser {
 		const newDeck: readonly DeckCard[] = isCardInfoPublic
 			? this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId, deck.deckList.length === 0, true)[0]
 			: this.helper.removeSingleCardFromZone(previousDeck, null, -1, deck.deckList.length === 0, true)[0];
-		// console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
+		//console.debug('newDeck', newDeck, isCardInfoPublic, previousDeck);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithCreator);
 		//console.debug('added card to hand', newHand);

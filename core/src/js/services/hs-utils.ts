@@ -236,6 +236,7 @@ export const publicCardCreators = [
 	CardIds.NonCollectible.Rogue.SecretPassage_SecretEntranceEnchantment,
 	CardIds.Collectible.Rogue.SketchyInformation,
 	CardIds.Collectible.Rogue.Stowaway,
+	CardIds.NonCollectible.Rogue.FindTheImposter_SpyOMaticToken,
 	CardIds.Collectible.Rogue.Swindle,
 	CardIds.Collectible.Rogue.ThistleTea,
 	CardIds.Collectible.Shaman.Bogshaper,

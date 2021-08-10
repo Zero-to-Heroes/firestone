@@ -15,10 +15,11 @@ export class CardRevealedParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		// const creatorCardId = gameEvent.additionalData.creatorCardId;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const dbCard = this.cards.getCard(cardId);
+		const dbCard = this.cards.getCard(cardId, false);
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
@@ -27,6 +28,7 @@ export class CardRevealedParser implements EventParser {
 			rarity: dbCard.rarity,
 			zone: 'SETASIDE',
 			temporaryCard: true,
+			// lastAffectedByCardId: creatorCardId,
 		} as DeckCard);
 		console.debug('card revealed', card);
 

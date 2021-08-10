@@ -19,8 +19,7 @@ export class CardChangedInDeckParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		// console.log('changing card in deck');
-		// const card = this.helper.findCardInZone(deck.deck, cardId, entityId, true);
+		//console.debug('changing card in deck', gameEvent, currentState);
 		const previousDeck = deck.deck;
 		const [newDeck, theCard] = this.helper.removeSingleCardFromZone(
 			previousDeck,
@@ -29,21 +28,28 @@ export class CardChangedInDeckParser implements EventParser {
 			deck.deckList.length === 0,
 			true,
 		);
+		//console.debug('newDeck, theCard', newDeck, theCard);
 		// When card is changed in deck (eg Galakrond), a new card is created
-		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
+		const realCardId = !!cardId?.length ? cardId : theCard.cardId;
+		//console.debug('realCardId', realCardId);
+		const cardData = cardId != null ? this.allCards.getCard(realCardId) : null;
 		// Ignite for instance receives a CARD_CHANGED_IN_DECK event, and we want to
 		// keep all the other attributes.
 		// I'm not sure yet if there are instances where we want to remove the
 		// previous attributes
 		const newCard = theCard.update({
-			cardId: cardId,
-			entityId: entityId,
+			cardId: realCardId,
+			entityId: entityId ?? theCard.entityId,
 			cardName: cardData.name,
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 			creatorCardId: gameEvent.additionalData?.creatorCardId,
+			lastAffectedByCardId: gameEvent.additionalData.lastInfluencedByCardId,
+			temporaryCard: false,
 		} as DeckCard);
+		//console.debug('newCard', newCard);
 		const deckWithNewCard: readonly DeckCard[] = this.helper.addSingleCardToZone(newDeck, newCard);
+		//console.debug('deckWithNewCard', deckWithNewCard);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: deckWithNewCard,
