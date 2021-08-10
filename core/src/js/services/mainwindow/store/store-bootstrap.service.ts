@@ -206,6 +206,20 @@ export class StoreBootstrapService {
 	}
 
 	private mergePrefs(prefs: Preferences, prefsFromRemote: Preferences): Preferences {
+		if (
+			prefs?.lastUpdateDate &&
+			(!prefsFromRemote?.lastUpdateDate ||
+				// Can happen if the remote prefs was not updated when closing the app
+				prefsFromRemote.lastUpdateDate.getTime() < prefs.lastUpdateDate.getTime())
+		) {
+			console.warn(
+				'not using remote prefs, they are older than local prefs',
+				prefsFromRemote?.lastUpdateDate,
+				prefs?.lastUpdateDate,
+			);
+			return prefs;
+		}
+
 		const merged: Preferences = {
 			...(prefsFromRemote ?? prefs),
 		} as Preferences;

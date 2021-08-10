@@ -439,12 +439,16 @@ export class PreferencesService {
 	}
 
 	public async savePreferences(userPrefs: Preferences, eventName: string = null) {
-		await this.indexedDb.saveUserPreferences(userPrefs);
+		const finalPrefs = {
+			...userPrefs,
+			lastUpdateDate: new Date(),
+		};
+		await this.indexedDb.saveUserPreferences(finalPrefs);
 		// console.log('broadcasting new prefs', userPrefs);
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		eventBus.next({
 			name: eventName,
-			preferences: userPrefs,
+			preferences: finalPrefs,
 		});
 	}
 
@@ -452,15 +456,11 @@ export class PreferencesService {
 		const userPrefs = await this.getPreferences();
 		console.log('[preferences] prefs from DB', userPrefs);
 		const currentUser = await this.ow.getCurrentUser();
-		const prefsWithDate: Preferences = {
-			...userPrefs,
-			lastUpdateDate: new Date(),
-		};
 		const prefsToSync = new Preferences();
-		for (const prop in prefsWithDate) {
+		for (const prop in userPrefs) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, prefsToSync, prop);
 			if (!meta) {
-				prefsToSync[prop] = prefsWithDate[prop];
+				prefsToSync[prop] = userPrefs[prop];
 			}
 		}
 		console.log('no-format', '[preferences] saving remote prefs', prefsToSync);
@@ -473,12 +473,17 @@ export class PreferencesService {
 
 	public async loadRemotePrefs(): Promise<Preferences | undefined> {
 		const currentUser = await this.ow.getCurrentUser();
-		const result: any = await this.api.callPostApi(PREF_RETRIEVE_URL, {
+		const result: Preferences = await this.api.callPostApi(PREF_RETRIEVE_URL, {
 			userId: currentUser.userId,
 			userName: currentUser.username,
 		});
-		// console.debug('result from remote', result);
-		return result;
+		console.debug('remote prefs', result);
+		const resultWithDate: Preferences = {
+			...result,
+			lastUpdateDate: new Date(result.lastUpdateDate),
+		};
+		console.debug('remote prefs', result, resultWithDate);
+		return resultWithDate;
 	}
 
 	private buildCounterPropertyName(activeCounter: string, side: string): string {
