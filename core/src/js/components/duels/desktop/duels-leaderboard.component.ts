@@ -11,19 +11,15 @@ import { arraysEqual } from '../../../services/utils';
 	template: `
 		<div class="duels-leaderboard">
 			<div class="duels-leaderboard-entry-container">
-				<div class="text">
-					The leaderboard includes the top 100 Firestone users who have played at least one game in the past
-					30 days, across all regions.
-				</div>
 				<ul class="entries" scrollable>
 					<li
 						class="duels-leaderboard-entry"
-						[ngClass]="{ 'top-3': value.rank <= 3, 'top-10': value.rank <= 10 }"
+						[ngClass]="{ 'your': value.isPlayer, 'top-3': value.rank <= 3, 'top-10': value.rank <= 10 }"
 						*ngFor="let value of values$ | async; trackBy: trackValue"
 					>
 						<div class="rank">{{ value.rank }}</div>
 						<div class="rating">{{ value.rating }}</div>
-						<div class="name">{{ value.playerName }}</div>
+						<div class="name">{{ value.playerName }} {{ value.isPlayer ? ' (You)' : '' }}</div>
 					</li>
 				</ul>
 			</div>
