@@ -11,6 +11,11 @@ import { arraysEqual } from '../../../services/utils';
 	template: `
 		<div class="duels-leaderboard">
 			<div class="duels-leaderboard-entry-container">
+				<li class="duels-leaderboard-entry header">
+					<div class="rank">Rank</div>
+					<div class="rating">Rating</div>
+					<div class="name">Name</div>
+				</li>
 				<ul class="entries" scrollable>
 					<li
 						class="duels-leaderboard-entry"
