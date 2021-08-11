@@ -1,3 +1,4 @@
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -19,7 +20,7 @@ export class CardRevealedParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const dbCard = this.cards.getCard(cardId, false);
+		const dbCard = this.cards.getCard(cardId, false) ?? ({} as ReferenceCard);
 		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,

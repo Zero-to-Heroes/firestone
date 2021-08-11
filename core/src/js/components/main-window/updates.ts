@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.12.13',
+		version: '7.13.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -40,41 +40,30 @@ export const updates: readonly Update[] = [
 			// 		This release adds lots of Quality of Life improvements, which are one of my favorite things to do. I hope you'll enjoy it :)
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'decktracker',
-			// 			details: [
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Mousing over Varian, King of Stormwind in the decklist now highlights all Taunt / Rush / Divine Shield minions from your deck.`,
-			// 				},
-			// 				{
-			// 					type: 'feature',
-			// 					text: `Mousing over Jace Darkweaver now highlights all Fel spells played this game.`,
-			// 				},
-			// 				{
-			// 					type: 'feature',
-			// 					text: `There is now a counter for dead Elwynn Boars that appears when a Boar is played, or if you have a Boar in the deck.`,
-			// 				},
-			// 				{
-			// 					type: 'feature',
-			// 					text: `A widget now appears to remind you of the first Battlecry minion played this turn when you have Bolner Hammerbeak on board or in hand.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where playing a Questline would sometimes cause the secret helper to pop up.`,
-			// 				},
-			// 				{
-			// 					type: 'bug',
-			// 					text: `Fix an issue where playing a Sigil would sometimes not update the opponent's hand.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'feature',
+								text: `Firestone Duels leaderboards are live! They show you the top 100 Firestone players of each mode (Casual / Heroic), as well as your own ranking.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an info leak that would reveal an Encumbered Pack Mule in the opponent's deck if they drew it before mulligan.`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -84,20 +73,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Show current bonus damage for Ignite spells shuffled in the deck.`,
+								text: `Improve card detection when playing Spy-o-Matic. The 3 choices offered during the discover are now added to the opponent's decklist, and the card drawn is properly flagged in the opponent's hand.`,
 							},
 							{
 								type: 'feature',
-								text: `Add support for Lady Prestor.`,
+								text: `When an Ignite is shuffled into a deck, add an indicator that shows its current bonus damage.`,
 							},
-						],
-					},
-					{
-						category: 'collection',
-						details: [
 							{
-								type: 'content',
-								text: `Add support for United in Stormwind pack.`,
+								type: 'feature',
+								text: `Add support for Lady Prestor. Playing her now updates all the known minions in the decklist to indicate random Dragons.`,
 							},
 						],
 					},
