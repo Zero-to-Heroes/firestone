@@ -150,7 +150,9 @@ import { arraysEqual } from '../../../services/utils';
 					[state]="state.duels"
 					[navigation]="navigation.navigationDuels"
 				></duels-deck-stats>
-				<secondary-default *ngxCacheIf="category.value?.id === 'duels-top-decks'"></secondary-default>
+				<secondary-default
+					*ngxCacheIf="category.value?.id === 'duels-top-decks' || category.value?.id === 'duels-leaderboard'"
+				></secondary-default>
 			</section>
 		</div>
 	`,
