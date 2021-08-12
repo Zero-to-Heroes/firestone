@@ -45,6 +45,7 @@ export class BgsPlayerBoardParser implements EventParser {
 			console.error(
 				'no-format',
 				'Too many entities on the board',
+				currentState.spectating,
 				currentState.currentGame.reviewId,
 				gameLogsKey,
 				event.playerBoard?.heroCardId,
