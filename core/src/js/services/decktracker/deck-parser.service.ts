@@ -259,8 +259,8 @@ export class DeckParserService {
 			metadata,
 			this.previousDeck,
 		);
-		if (shouldUseCachedDeck && this.currentDeck?.deck) {
-			console.log('[deck-parser] returning cached deck', this.currentDeck);
+		if (shouldUseCachedDeck && this.currentDeck?.deck && this.currentDeck.scenarioId === metadata.scenarioId) {
+			console.log('[deck-parser] returning cached deck', this.currentDeck, metadata);
 			return this.currentDeck;
 		}
 		if (
