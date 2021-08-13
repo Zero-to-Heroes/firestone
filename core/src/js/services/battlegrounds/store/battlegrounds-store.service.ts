@@ -501,7 +501,7 @@ export class BattlegroundsStoreService {
 			new BgsPlayerBoardParser(this.simulation, this.logsUploader, this.gameEventsService),
 			new BgsTripleCreatedParser(),
 			new BgsOpponentRevealedParser(this.allCards),
-			new BgsTurnStartParser(),
+			new BgsTurnStartParser(this.logsUploader),
 			new BgsGameEndParser(this.prefs, this.memory),
 			new BgsStageChangeParser(),
 			new BgsBattleResultParser(this.events, this.ow, this.gameEventsService),

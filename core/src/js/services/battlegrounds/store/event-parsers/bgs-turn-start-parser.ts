@@ -2,11 +2,14 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
+import { LogsUploaderService } from '../../../logs-uploader.service';
 import { BgsTurnStartEvent } from '../events/bgs-turn-start-event';
 import { BattlegroundsStoreEvent } from '../events/_battlegrounds-store-event';
 import { EventParser } from './_event-parser';
 
 export class BgsTurnStartParser implements EventParser {
+	constructor(private readonly logsUploader: LogsUploaderService) {}
+
 	public applies(gameEvent: BattlegroundsStoreEvent, state: BattlegroundsState): boolean {
 		return state && state.currentGame && gameEvent.type === 'BgsTurnStartEvent';
 	}
@@ -24,10 +27,14 @@ export class BgsTurnStartParser implements EventParser {
 		);
 		console.log('updating turn', newCurrentTurn, currentState.currentGame.players.length);
 		if (currentState.currentGame.players.length !== 8) {
-			console.error(
-				'invalid players in game',
-				currentState.currentGame.players.map((p) => p.cardId),
-			);
+			setTimeout(async () => {
+				const gameLogsKey = await this.logsUploader.uploadGameLogs();
+				console.error(
+					'invalid players in game',
+					gameLogsKey,
+					currentState.currentGame.players.map((p) => p.cardId),
+				);
+			});
 		}
 		return currentState.update({
 			currentGame: currentState.currentGame.update({

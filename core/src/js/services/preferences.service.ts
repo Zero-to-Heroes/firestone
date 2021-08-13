@@ -478,6 +478,10 @@ export class PreferencesService {
 			userName: currentUser.username,
 		});
 		console.debug('remote prefs', result);
+		if (!result) {
+			return result;
+		}
+
 		const resultWithDate: Preferences = {
 			...result,
 			lastUpdateDate: new Date(result.lastUpdateDate),

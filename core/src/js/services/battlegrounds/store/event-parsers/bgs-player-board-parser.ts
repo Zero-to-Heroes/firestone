@@ -41,18 +41,20 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		// console.debug('[bgs-simulation] received player boards', event);
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
-			const gameLogsKey = await this.logsUploader.uploadGameLogs();
-			console.error(
-				'no-format',
-				'Too many entities on the board',
-				currentState.spectating,
-				currentState.currentGame.reviewId,
-				gameLogsKey,
-				event.playerBoard?.heroCardId,
-				event.playerBoard?.board?.map((entity) => entity.CardId),
-				event.opponentBoard?.heroCardId,
-				event.opponentBoard?.board?.map((entity) => entity.CardId),
-			);
+			setTimeout(async () => {
+				const gameLogsKey = await this.logsUploader.uploadGameLogs();
+				console.error(
+					'no-format',
+					'Too many entities on the board',
+					currentState.spectating,
+					currentState.currentGame.reviewId,
+					gameLogsKey,
+					event.playerBoard?.heroCardId,
+					event.playerBoard?.board?.map((entity) => entity.CardId),
+					event.opponentBoard?.heroCardId,
+					event.opponentBoard?.board?.map((entity) => entity.CardId),
+				);
+			});
 			return currentState.update({
 				currentGame: currentState.currentGame.updateLastFaceOff(
 					normalizeHeroCardId(event.opponentBoard.heroCardId),

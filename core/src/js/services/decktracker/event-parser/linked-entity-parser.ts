@@ -37,17 +37,18 @@ export class LinkedEntityParser implements EventParser {
 			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard);
 			console.debug('found original card, updating', updatedCard);
 		} else {
+			// Can happen for BG heroes
 			if (gameEvent.additionalData.linkedEntityZone !== Zone.DECK) {
-				console.error(
-					'invalid linked entity zone?',
-					cardId,
-					controllerId,
-					localPlayer,
-					entityId,
-					gameEvent.additionalData.linkedEntityId,
-					gameEvent.additionalData.linkedEntityZone,
-					gameEvent,
-				);
+				// console.warn(
+				// 	'invalid linked entity zone?',
+				// 	cardId,
+				// 	controllerId,
+				// 	localPlayer,
+				// 	entityId,
+				// 	gameEvent.additionalData.linkedEntityId,
+				// 	gameEvent.additionalData.linkedEntityZone,
+				// 	gameEvent,
+				// );
 				return currentState;
 			}
 			// We don't add the initial cards in the deck, so if no card is found, we create it

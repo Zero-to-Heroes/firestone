@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { GameState } from '../models/decktracker/game-state';
 import { BattlegroundsAppState } from '../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
@@ -47,7 +47,7 @@ export class AppUiStoreService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
 		return this.deckStore.asObservable().pipe(
-			tap((gameState) => console.debug('emitting gameState', gameState, this)),
+			// tap((gameState) => console.debug('emitting gameState', gameState, this)),
 			map((gameState) => selectors.map((selector) => selector(gameState.state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
