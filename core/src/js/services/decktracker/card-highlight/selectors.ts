@@ -40,7 +40,7 @@ export const jaceDarkweaver: (handler: Handler, deckState: DeckState) => boolean
 		handler.zoneProvider()?.id === 'other' &&
 		hasType(handler, CardType.SPELL) &&
 		hasSpellSchool(handler, SpellSchool.FEL) &&
-		deckState.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(handler.deckCardProvider()?.entityId)
+		deckState?.spellsPlayedThisMatch.map((spell) => spell.entityId).includes(handler.deckCardProvider()?.entityId)
 	);
 };
 

@@ -4,7 +4,7 @@ import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs/internal/Observable';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
 
 @Component({

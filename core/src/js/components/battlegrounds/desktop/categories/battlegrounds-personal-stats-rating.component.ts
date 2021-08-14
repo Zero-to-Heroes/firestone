@@ -7,7 +7,7 @@ import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegro
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 
 @Component({

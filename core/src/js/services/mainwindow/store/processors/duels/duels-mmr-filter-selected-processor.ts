@@ -1,4 +1,3 @@
-import { DuelsState } from '../../../../../models/duels/duels-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
@@ -18,14 +17,15 @@ export class DuelsMmrFilterSelectedProcessor implements Processor {
 		await this.prefs.updateDuelsMmrFilter(event.value);
 		// Try to not update the whole data inside the service, but let the UI handle
 		// the filtering, so that things happen more reactively
-		const duels = currentState.duels.update({
-			activeMmrFilter: event.value,
-		} as DuelsState);
+		// const duels = currentState.duels.update({
+		// 	activeMmrFilter: event.value,
+		// } as DuelsState);
 		console.log('updated duels top decks mmr filter', event.value);
 		return [
-			currentState.update({
-				duels: duels,
-			} as MainWindowState),
+			// currentState.update({
+			// 	duels: duels,
+			// } as MainWindowState),
+			null,
 			null,
 		];
 	}

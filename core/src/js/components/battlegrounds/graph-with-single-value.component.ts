@@ -13,7 +13,7 @@ import { ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, tap } from 'rxjs/operators';
-import { cdLog } from '../../services/app-ui-store.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'graph-with-single-value',

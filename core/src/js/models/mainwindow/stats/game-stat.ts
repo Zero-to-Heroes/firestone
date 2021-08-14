@@ -52,6 +52,10 @@ export class GameStat {
 		return this.gameMode === 'duels' || this.gameMode === 'paid-duels';
 	}
 
+	public isBattlegrounds(): boolean {
+		return this.gameMode === 'battlegrounds';
+	}
+
 	public buildPlayerRankImage(): {
 		frameImage?: string;
 		medalImage?: string;

@@ -178,3 +178,12 @@ export const getDuelsHeroCardId = (playerClass: string): string => {
 			return CardIds.NonCollectible.Warlock.ArchwitchWillowTavernBrawl;
 	}
 };
+
+export const getDuelsModeName = (mode: 'duels' | 'paid-duels'): string => {
+	switch (mode) {
+		case 'duels':
+			return 'Casual';
+		case 'paid-duels':
+			return 'Heroic';
+	}
+};

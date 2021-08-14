@@ -5,8 +5,8 @@ import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegrounds/battlegrounds-category';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
 import { normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({

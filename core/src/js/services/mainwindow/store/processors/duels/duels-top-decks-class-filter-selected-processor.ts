@@ -15,17 +15,7 @@ export class DuelsTopDecksClassFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsTopDecksClassFilter(event.value);
-		const duels = await this.duelsService.updateState(
-			currentState.duels,
-			currentState.stats.gameStats,
-			currentState.binder,
-		);
 		console.log('updated duels top decks class filter', event.value);
-		return [
-			currentState.update({
-				duels: duels,
-			} as MainWindowState),
-			null,
-		];
+		return [null, null];
 	}
 }

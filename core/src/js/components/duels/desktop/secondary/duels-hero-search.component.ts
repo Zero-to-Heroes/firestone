@@ -4,16 +4,15 @@ import {
 	Component,
 	EventEmitter,
 	HostListener,
-	Input,
 	OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { NavigationDuels } from '../../../../models/mainwindow/navigation/navigation-duels';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { DuelsHeroSearchEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-search-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-hero-search',
@@ -38,32 +37,37 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsHeroSearchComponent implements AfterViewInit, OnDestroy {
-	@Input() set navigation(value: NavigationDuels) {
-		this.searchString = value?.heroSearchString;
-	}
-
 	searchString: string;
 	searchForm = new FormControl();
 
+	private searchFormSub$$: Subscription;
+	private searchStringSub$$: Subscription;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private subscription: Subscription;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+		this.searchStringSub$$ = this.store
+			.listen$(([main, nav]) => nav.navigationDuels.heroSearchString)
+			.pipe(tap((stat) => cdLog('emitting in ', this.constructor.name, stat)))
+			.subscribe(([heroSearchString]) => {
+				// TODO: force change detectiopn here?
+				this.searchString = heroSearchString;
+			});
+	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.subscription = this.searchForm.valueChanges
+		this.searchFormSub$$ = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
-				// console.log('value changed?', data);
 				this.onSearchStringChange();
 			});
 	}
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.subscription?.unsubscribe();
+		this.searchFormSub$$?.unsubscribe();
+		this.searchStringSub$$?.unsubscribe();
 	}
 
 	onSearchStringChange() {

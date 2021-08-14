@@ -83,7 +83,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<div class="data games-data">{{ games }}</div>
 					<div class="text games-text">games</div>
 				</div>
-				<deck-mana-curve class="recap mana-curve" [deck]="deck"></deck-mana-curve>
+				<deck-mana-curve class="recap mana-curve" [deckstring]="deck?.deckstring"></deck-mana-curve>
 			</div>
 		</div>
 	`,

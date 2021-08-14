@@ -3,10 +3,10 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ArenaTimeFilterType } from '../../../../models/arena/arena-time-filter.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { ArenaTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 import { formatPatch } from '../../../../services/utils';
 
 /** This approach seems to be the cleanest way to properly narrow down the values needed from

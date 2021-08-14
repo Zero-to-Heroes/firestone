@@ -1,12 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { DuelsGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-game-mode-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-game-mode-filter-dropdown',
@@ -35,7 +35,11 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.options = [
 			{
 				value: 'all',
@@ -55,11 +59,12 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 		] as readonly GameModeFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.activeGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+				distinctUntilChanged((a, b) => a.filter === b.filter),
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
@@ -71,7 +76,9 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 						'duels-personal-deck-details',
 					].includes(selectedCategoryId),
 				})),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+				// Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}
 
@@ -80,6 +87,7 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 	}
 
 	onSelected(option: GameModeFilterOption) {
+		// console.debug('sending event');
 		this.stateUpdater.next(new DuelsGameModeFilterSelectedEvent(option.value));
 	}
 }

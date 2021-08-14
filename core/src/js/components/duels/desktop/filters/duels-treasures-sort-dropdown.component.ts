@@ -1,12 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { DuelsTreasureSortFilterType } from '../../../../models/duels/duels-treasure-sort-filter.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsTreasureSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-treasures-sort-dropdown',
@@ -35,7 +34,11 @@ export class DuelsTreasuresSortDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.options = [
 			{
 				value: 'global-winrate',
@@ -56,7 +59,7 @@ export class DuelsTreasuresSortDropdownComponent implements AfterViewInit {
 		] as readonly TreasureSortFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.activeTreasureSortFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
@@ -64,8 +67,10 @@ export class DuelsTreasuresSortDropdownComponent implements AfterViewInit {
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible: ['duels-treasures'].includes(selectedCategoryId),
+					visible: false && ['duels-treasures'].includes(selectedCategoryId),
 				})),
+				// Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}
@@ -80,5 +85,5 @@ export class DuelsTreasuresSortDropdownComponent implements AfterViewInit {
 }
 
 interface TreasureSortFilterOption extends IOption {
-	value: DuelsTreasureSortFilterType;
+	value: any; //DuelsTreasureSortFilterType;
 }

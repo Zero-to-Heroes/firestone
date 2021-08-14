@@ -1,7 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
+import { DuelsClassFilterType } from '../../../models/duels/duels-class-filter.type';
 import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
-import { DuelsState } from '../../../models/duels/duels-state';
+import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
+import { DuelsTopDecksDustFilterType } from '../../../models/duels/duels-top-decks-dust-filter.type';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-top-decks',
@@ -13,7 +18,7 @@ import { DuelsState } from '../../../models/duels/duels-state';
 		<div class="duels-runs-container">
 			<infinite-scroll *ngIf="allDecks?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
 				<duels-grouped-top-decks
-					*ngFor="let stat of displayedDecks"
+					*ngFor="let stat of displayedGroupedDecks"
 					[groupedDecks]="stat"
 				></duels-grouped-top-decks>
 				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
@@ -23,45 +28,61 @@ import { DuelsState } from '../../../models/duels/duels-state';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTopDecksComponent {
-	@Input() set state(value: DuelsState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.displayedDecks = [];
-		this.updateValues();
+export class DuelsTopDecksComponent implements OnDestroy {
+	isLoading: boolean;
+	allDecks: readonly DuelsGroupedDecks[];
+	displayedGroupedDecks: readonly DuelsGroupedDecks[];
+
+	private sub$$: Subscription;
+	private iterator: IterableIterator<void>;
+
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+		this.sub$$ = this.store
+			.listen$(
+				([main, nav]) => main.duels.topDecks,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+			)
+			.pipe(
+				filter(
+					([topDecks, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) => !!topDecks?.length,
+				),
+				map(([topDecks, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) =>
+					topDecks
+						.map((deck) =>
+							this.applyFilters(deck, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber),
+						)
+						.filter((group) => group.decks.length > 0),
+				),
+				tap((stat) => cdLog('emitting top decks in ', this.constructor.name, stat)),
+			)
+			.subscribe((topDecks) => {
+				// Otherwise the generator is simply closed at the end of the first onScroll call
+				setTimeout(() => {
+					this.displayedGroupedDecks = [];
+					// One item is a full list of grouped replays for the day
+					// So we don't want to be too aggressive with full runs
+					this.iterator = this.buildIterator(topDecks, 4);
+					// console.debug('gamesIterator', this.gamesIterator);
+					this.onScroll();
+				});
+			});
 	}
 
-	allDecks: readonly DuelsGroupedDecks[];
-	displayedDecks: readonly DuelsGroupedDecks[];
-	isLoading: boolean;
-
-	private iterator: IterableIterator<void>;
-	private _state: DuelsState;
-
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	ngOnDestroy() {
+		this.sub$$?.unsubscribe();
+	}
 
 	onScroll() {
 		this.iterator && this.iterator.next();
 	}
 
-	private updateValues() {
-		if (!this._state?.playerStats) {
-			return;
-		}
-		this.iterator = this.buildIterator();
-		this.onScroll();
-	}
-
-	private *buildIterator(): IterableIterator<void> {
-		this.allDecks = this._state.playerStats.deckStats
-			.map((grouped) => this.applyFilters(grouped))
-			.filter((grouped) => grouped.decks.length > 0);
+	private *buildIterator(topDecks: readonly DuelsGroupedDecks[], step = 10): IterableIterator<void> {
+		this.allDecks = topDecks;
 		const workingRuns = [...this.allDecks];
-		// One item is a full list of grouped replays for the day
-		// So we don't want to be too aggressive with full runs
-		const step = 1;
 		const minShownReplays = 30;
 		while (workingRuns.length > 0) {
 			const currentRuns = [];
@@ -71,7 +92,7 @@ export class DuelsTopDecksComponent {
 			) {
 				currentRuns.push(...workingRuns.splice(0, 1));
 			}
-			this.displayedDecks = [...this.displayedDecks, ...currentRuns];
+			this.displayedGroupedDecks = [...this.displayedGroupedDecks, ...currentRuns];
 			this.isLoading = this.allDecks.length > step;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -85,15 +106,55 @@ export class DuelsTopDecksComponent {
 		return;
 	}
 
-	private applyFilters(grouped: DuelsGroupedDecks): DuelsGroupedDecks {
+	private applyFilters(
+		grouped: DuelsGroupedDecks,
+		mmrFilter: string,
+		classFilter: DuelsClassFilterType,
+		timeFilter: DuelsTimeFilterType,
+		dustFilter: DuelsTopDecksDustFilterType,
+		lastPatchNumber: number,
+	): DuelsGroupedDecks {
 		return {
 			...grouped,
-			decks: grouped.decks.filter((deck) => this.mmrFilter(deck, this._state.activeMmrFilter)),
+			decks: grouped.decks
+				.filter((deck) => this.mmrFilter(deck, mmrFilter))
+				.filter((deck) => this.classFilter(deck, classFilter))
+				.filter((deck) => this.timeFilter(deck, timeFilter, lastPatchNumber))
+				.filter((deck) => this.dustFilter(deck, dustFilter)),
 		};
 	}
 
-	private mmrFilter(deck: DuelsDeckStat, activeMmrFilter: string): boolean {
-		return !activeMmrFilter || activeMmrFilter === 'all' || deck.rating >= +activeMmrFilter;
+	private mmrFilter(deck: DuelsDeckStat, filter: string): boolean {
+		return !filter || filter === 'all' || deck.rating >= +filter;
+	}
+
+	private classFilter(deck: DuelsDeckStat, filter: DuelsClassFilterType): boolean {
+		return !filter || filter === 'all' || deck.playerClass === filter;
+	}
+
+	private dustFilter(deck: DuelsDeckStat, filter: DuelsTopDecksDustFilterType): boolean {
+		return (
+			!filter ||
+			filter === 'all' ||
+			(filter === '1000' && deck.dustCost <= 1000) ||
+			(filter === '0' && deck.dustCost === 0)
+		);
+	}
+
+	private timeFilter(deck: DuelsDeckStat, filter: DuelsTimeFilterType, lastPatchNumber: number): boolean {
+		if (!filter) {
+			return true;
+		}
+		switch (filter) {
+			case 'all-time':
+				return true;
+			case 'last-patch':
+				return deck.buildNumber === lastPatchNumber;
+			case 'past-seven':
+				return new Date(deck.periodStart) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+			case 'past-three':
+				return new Date(deck.periodStart) >= new Date(Date.now() - 3 * 24 * 60 * 60 * 1000);
+		}
 	}
 
 	private getTotalRunsLength(groups: readonly DuelsGroupedDecks[]): number {

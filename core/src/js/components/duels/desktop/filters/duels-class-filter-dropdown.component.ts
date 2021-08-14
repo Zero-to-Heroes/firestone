@@ -1,13 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsClassFilterType } from '../../../../models/duels/duels-class-filter.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { classes, formatClass } from '../../../../services/hs-utils';
 import { DuelsTopDecksClassFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-class-filter-dropdown',
@@ -36,7 +36,11 @@ export class DuelsClassFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.options = ['all', ...(classes as DuelsClassFilterType[])].map(
 			(option) =>
 				({
@@ -46,7 +50,7 @@ export class DuelsClassFilterDropdownComponent implements AfterViewInit {
 		);
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.activeTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
@@ -62,6 +66,8 @@ export class DuelsClassFilterDropdownComponent implements AfterViewInit {
 						'duels-top-decks',
 					].includes(selectedCategoryId),
 				})),
+				// Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}

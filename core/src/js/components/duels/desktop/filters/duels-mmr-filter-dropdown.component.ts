@@ -1,11 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-mmr-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-mmr-filter-dropdown',
@@ -34,7 +34,11 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.options = [
 			{
 				value: 'all',
@@ -59,7 +63,7 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 		] as readonly RankFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.activeMmrFilter,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
@@ -69,6 +73,8 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: ['duels-top-decks'].includes(selectedCategoryId),
 				})),
+				// Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}

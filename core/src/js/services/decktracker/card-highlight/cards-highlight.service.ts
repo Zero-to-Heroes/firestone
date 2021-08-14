@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CardIds, ReferenceCard } from '@firestone-hs/reference-data';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
-import { AppUiStoreService } from '../../app-ui-store.service';
 import { PreferencesService } from '../../preferences.service';
+import { AppUiStoreService } from '../../ui-store/app-ui-store.service';
 import {
 	arcaneLuminary,
 	arcanologist,
@@ -41,7 +41,10 @@ export class CardsHighlightService {
 	constructor(private readonly prefs: PreferencesService, private readonly store: AppUiStoreService) {
 		this.store
 			.listenDeckState$((gameState) => gameState)
-			.pipe(map(([loading]) => loading))
+			.pipe(
+				map(([gameState]) => gameState),
+				filter((gameState) => !!gameState),
+			)
 			.subscribe((gameState) => (this.gameState = gameState));
 	}
 
@@ -54,6 +57,11 @@ export class CardsHighlightService {
 	}
 
 	async onMouseEnter(cardId: string, side: 'player' | 'opponent') {
+		// Happens when using the deck-list component outside of a game
+		if (!this.gameState) {
+			return;
+		}
+
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.overlayHighlightRelatedCards) {
 			return;

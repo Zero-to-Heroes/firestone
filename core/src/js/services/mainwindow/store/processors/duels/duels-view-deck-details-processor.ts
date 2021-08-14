@@ -15,7 +15,7 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 		stateHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		const deck = currentState.duels.playerStats.deckStats
+		const deck = currentState.duels.topDecks
 			.map((grouped) => grouped.decks)
 			.reduce((a, b) => a.concat(b), [])
 			.find((deck) => deck.id === event.deckId);
@@ -40,7 +40,7 @@ export class DuelsViewDeckDetailsProcessor implements Processor {
 	}
 
 	private getDeckName(currentState: MainWindowState, deckId: number): string {
-		const deck = currentState?.duels?.playerStats?.deckStats
+		const deck = currentState?.duels?.topDecks
 			?.map((grouped) => grouped.decks)
 			?.reduce((a, b) => a.concat(b), [])
 			?.find((deck) => deck.id === deckId);

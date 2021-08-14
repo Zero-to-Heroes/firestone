@@ -258,6 +258,7 @@ export class BgsBattleComponent implements AfterViewInit {
 			reborn: entity.getTag(GameTag.REBORN) === 1,
 			taunt: entity.getTag(GameTag.TAUNT) === 1,
 			enchantments: entity['enchantments'],
+			definitelyDead: false,
 		};
 	}
 

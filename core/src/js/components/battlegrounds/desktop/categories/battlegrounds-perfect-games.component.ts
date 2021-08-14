@@ -4,7 +4,7 @@ import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../../services/utils';
 
 @Component({
@@ -63,12 +63,7 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 	}
 
 	onScroll() {
-		// console.debug('loading more replays', this.gamesIterator);
-		const result = this.gamesIterator && this.gamesIterator.next();
-		// console.debug('loaded', result);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.gamesIterator && this.gamesIterator.next();
 	}
 
 	private *buildIterator(
@@ -80,7 +75,6 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 		this.allReplays = this.applyFilters(perfectGames ?? [], rankFilter, heroFilter);
 		const workingReplays = [...this.allReplays];
 		while (workingReplays.length > 0) {
-			// console.debug('workingReplays', workingReplays.length);
 			const currentReplays = [];
 			while (workingReplays.length > 0 && currentReplays.length < step) {
 				currentReplays.push(...workingReplays.splice(0, 1));
@@ -88,14 +82,12 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
 			this.displayedGroupedReplays = this.groupReplays(this.displayedReplays);
 			this.isLoading = this.allReplays.length > step;
-			// console.debug('built grouped replays', this.displayedGroupedReplays, workingReplays);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			yield;
 		}
 		this.isLoading = false;
-		// console.debug('all replays loaded');
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

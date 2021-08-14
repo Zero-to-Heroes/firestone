@@ -1,4 +1,3 @@
-import { DuelsState } from '../../../../../models/duels/duels-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreferencesService } from '../../../../preferences.service';
@@ -15,13 +14,14 @@ export class DuelsLeaderboardGameModeFilterSelectedProcessor implements Processo
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsLeaderboardGameModeFilter(event.value);
-		const duels = currentState.duels.update({
-			activeLeaderboardModeFilter: event.value,
-		} as DuelsState);
+		// const duels = currentState.duels.update({
+		// 	activeLeaderboardModeFilter: event.value,
+		// } as DuelsState);
 		return [
-			currentState.update({
-				duels: duels,
-			} as MainWindowState),
+			// currentState.update({
+			// 	duels: duels,
+			// } as MainWindowState),
+			null,
 			null,
 		];
 	}

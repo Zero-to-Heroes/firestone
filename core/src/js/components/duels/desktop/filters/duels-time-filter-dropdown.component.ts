@@ -1,12 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsTimeFilterType } from '../../../../models/duels/duels-time-filter.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { DuelsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 import { formatPatch } from '../../../../services/utils';
 
 @Component({
@@ -34,10 +34,14 @@ export class DuelsTimeFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.activeTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 				([main, nav]) => main.duels.currentDuelsMetaPatch,
 			)
@@ -77,6 +81,8 @@ export class DuelsTimeFilterDropdownComponent implements AfterViewInit {
 						options: options,
 					};
 				}),
+				// Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}

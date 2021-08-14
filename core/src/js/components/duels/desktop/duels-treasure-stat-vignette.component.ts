@@ -1,70 +1,62 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, EventEmitter, Input, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { DuelsTreasureStat } from '../../../models/duels/duels-player-stats';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
-@Component({
-	selector: 'duels-treasure-stat-vignette',
-	styleUrls: [
-		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/duels/desktop/duels-treasure-stat-vignette.component.scss`,
-	],
-	template: `
-		<div class="duels-treasure-stat-vignette">
-			<div class="box-side">
-				<div class="name-container">
-					<div class="name" [helpTooltip]="name">{{ name }}</div>
-					<div class="info" [helpTooltip]="numberOfGamesTooltip">
-						<svg>
-							<use xlink:href="assets/svg/sprite.svg#info" />
-						</svg>
-					</div>
-				</div>
-				<img [src]="icon" class="portrait" [cardTooltip]="cardId" />
-				<div class="stats">
-					<div class="stats">
-						<div class="item winrate">
-							<div class="label">Global winrate</div>
-							<div class="values">
-								<div class="value player">{{ buildPercents(globalWinrate) }}</div>
-							</div>
-						</div>
-						<div class="item pickrate">
-							<div class="label">Global pick rate</div>
-							<div class="values">
-								<div class="value player">{{ buildPercents(globalPickRate) }}</div>
-							</div>
-						</div>
-						<div class="item pickrate">
-							<div class="label">Global offering</div>
-							<div class="values">
-								<div class="value player">{{ buildPercents(globalOfferingRate) }}</div>
-							</div>
-						</div>
-						<div class="item pickrate">
-							<div class="label">Your pick rate</div>
-							<div class="values">
-								<div class="value player">{{ buildPercents(playerPickRate) }}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-})
+// @Component({
+// 	selector: 'duels-treasure-stat-vignette',
+// 	styleUrls: [
+// 		`../../../../css/global/components-global.scss`,
+// 		`../../../../css/component/duels/desktop/duels-treasure-stat-vignette.component.scss`,
+// 	],
+// 	template: `
+// 		<div class="duels-treasure-stat-vignette">
+// 			<div class="box-side">
+// 				<div class="name-container">
+// 					<div class="name" [helpTooltip]="name">{{ name }}</div>
+// 					<div class="info" [helpTooltip]="numberOfGamesTooltip">
+// 						<svg>
+// 							<use xlink:href="assets/svg/sprite.svg#info" />
+// 						</svg>
+// 					</div>
+// 				</div>
+// 				<img [src]="icon" class="portrait" [cardTooltip]="cardId" />
+// 				<div class="stats">
+// 					<div class="stats">
+// 						<div class="item winrate">
+// 							<div class="label">Global winrate</div>
+// 							<div class="values">
+// 								<div class="value player">{{ buildPercents(globalWinrate) }}</div>
+// 							</div>
+// 						</div>
+// 						<div class="item pickrate">
+// 							<div class="label">Global pick rate</div>
+// 							<div class="values">
+// 								<div class="value player">{{ buildPercents(globalPickRate) }}</div>
+// 							</div>
+// 						</div>
+// 						<div class="item pickrate">
+// 							<div class="label">Global offering</div>
+// 							<div class="values">
+// 								<div class="value player">{{ buildPercents(globalOfferingRate) }}</div>
+// 							</div>
+// 						</div>
+// 						<div class="item pickrate">
+// 							<div class="label">Your pick rate</div>
+// 							<div class="values">
+// 								<div class="value player">{{ buildPercents(playerPickRate) }}</div>
+// 							</div>
+// 						</div>
+// 					</div>
+// 				</div>
+// 			</div>
+// 		</div>
+// 	`,
+// 	changeDetection: ChangeDetectionStrategy.OnPush,
+// })
+// Deprecated
 export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
-	@Input() set stat(value: DuelsTreasureStat) {
+	@Input() set stat(value: any) {
 		// TODO: stat per class
 		if (!value || value === this._stat) {
 			return;
@@ -84,7 +76,7 @@ export class DuelsTreasureStatVignetteComponent implements AfterViewInit {
 		}
 	}
 
-	_stat: DuelsTreasureStat;
+	_stat: any;
 	cardId: string;
 	name: string;
 	playerClass: string;

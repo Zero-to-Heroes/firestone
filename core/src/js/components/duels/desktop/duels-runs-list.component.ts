@@ -1,18 +1,9 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewRef } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
-import { DuelsState } from '../../../models/duels/duels-state';
-import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -21,18 +12,23 @@ import { groupByFunction } from '../../../services/utils';
 	template: `
 		<div class="duels-runs-container">
 			<infinite-scroll *ngIf="allRuns?.length" class="runs-list" (scrolled)="onScroll()" scrollable>
-				<li *ngFor="let groupedRun of displayedGroupedRuns; trackBy: trackByGroupedRun" class="grouped-runs">
-					<div class="header">{{ groupedRun.header }}</div>
-					<ul class="runs">
-						<duels-run
-							*ngFor="let run of groupedRun.runs; trackBy: trackByRun"
-							[run]="run"
-							[displayLoot]="_displayLoot"
-							[displayShortLoot]="_displayShortLoot"
-							[isExpanded]="isExpanded(run.id)"
-						></duels-run>
-					</ul>
-				</li>
+				<ng-container *ngIf="{ expandedRunIds: expandedRunIds$ | async } as value">
+					<li
+						*ngFor="let groupedRun of displayedGroupedRuns; trackBy: trackByGroupedRun"
+						class="grouped-runs"
+					>
+						<div class="header">{{ groupedRun.header }}</div>
+						<ul class="runs">
+							<duels-run
+								*ngFor="let run of groupedRun.runs; trackBy: trackByRun"
+								[run]="run"
+								[displayLoot]="displayLoot"
+								[displayShortLoot]="displayShortLoot"
+								[isExpanded]="value.expandedRunIds?.includes(run.id)"
+							></duels-run>
+						</ul>
+					</li>
+				</ng-container>
 				<div class="loading" *ngIf="isLoading">Loading more runs...</div>
 			</infinite-scroll>
 			<duels-empty-state *ngIf="!allRuns?.length"></duels-empty-state>
@@ -40,70 +36,75 @@ import { groupByFunction } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsRunsListComponent implements AfterViewInit {
-	@Input() set state(value: DuelsState) {
-		if (value.loading) {
-			return;
-		}
-		this._state = value;
-		this.displayedRuns = [];
-		this.displayedGroupedRuns = [];
-		this.handleProgressiveDisplay();
-	}
-
+export class DuelsRunsListComponent implements OnDestroy {
+	// https://stackoverflow.com/a/52436938/548701
 	@Input() set deckstring(value: string) {
-		this._deckstring = value;
-		this.displayedRuns = [];
-		this.displayedGroupedRuns = [];
-		this.handleProgressiveDisplay();
+		this.deckstring$.next(value);
 	}
+	@Input() displayLoot: boolean;
+	@Input() displayShortLoot: boolean;
 
-	@Input() set navigation(value: NavigationDuels) {
-		this.expandedRunIds = value.expandedRunIds || [];
-		this.displayedRuns = [];
-		this.displayedGroupedRuns = [];
-		this.handleProgressiveDisplay();
-	}
+	expandedRunIds$: Observable<readonly string[]>;
 
-	@Input() set displayLoot(value: boolean) {
-		this._displayLoot = value;
-	}
-
-	@Input() set displayShortLoot(value: boolean) {
-		this._displayShortLoot = value;
-	}
-
-	_displayLoot: boolean;
-	_displayShortLoot: boolean;
-	displayedGroupedRuns: readonly GroupedRun[] = [];
-	allRuns: readonly DuelsRun[] = [];
-	_state: DuelsState;
-	_navigation: NavigationDuels;
-	_deckstring: string;
 	isLoading: boolean;
-	expandedRunIds: readonly string[] = [];
+	allRuns: readonly DuelsRun[] = [];
+	displayedGroupedRuns: readonly GroupedRun[] = [];
 
+	_deckstring: string;
+
+	private deckstring$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+	private sub$$: Subscription;
 	private displayedRuns: readonly DuelsRun[] = [];
 	private runsIterator: IterableIterator<void>;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+		this.expandedRunIds$ = this.store
+			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
+			.pipe(
+				map(([expandedRunIds]) => expandedRunIds),
+				tap((expandedRunIds) => cdLog('emitting expandedRunIds in ', this.constructor.name, expandedRunIds)),
+			);
+		this.sub$$ = combineLatest(
+			this.store
+				.listen$(
+					([main, nav]) => main.duels.runs,
+					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+					([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+					// TODO: MMR filter
+				)
+				.pipe(
+					filter(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) => !!runs?.length),
+					map(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) =>
+						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+					),
+				),
+			this.deckstring$.asObservable(),
+		)
+			.pipe(
+				map(([runs, deckstring]) =>
+					!deckstring?.length ? runs : runs.filter((run) => run.initialDeckList === deckstring),
+				),
+				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+			)
+			.subscribe((runs) => {
+				// Otherwise the generator is simply closed at the end of the first onScroll call
+				setTimeout(() => {
+					this.displayedRuns = [];
+					this.displayedGroupedRuns = [];
+					this.runsIterator = this.buildIterator(runs, 8);
+					this.onScroll();
+				});
+			});
+	}
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly el: ElementRef,
-		private readonly cdr: ChangeDetectorRef,
-	) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	ngOnDestroy() {
+		this.sub$$?.unsubscribe();
 	}
 
 	onScroll() {
 		this.runsIterator && this.runsIterator.next();
-	}
-
-	isExpanded(runId: string): boolean {
-		return this.expandedRunIds.includes(runId);
 	}
 
 	trackByGroupedRun(item: GroupedRun) {
@@ -114,25 +115,12 @@ export class DuelsRunsListComponent implements AfterViewInit {
 		return item.id;
 	}
 
-	private handleProgressiveDisplay() {
-		if (!this._state) {
-			return;
-		}
-		this.runsIterator = this.buildIterator();
-		this.onScroll();
-	}
-
-	private *buildIterator(): IterableIterator<void> {
-		this.allRuns = this._state.runs.filter((run) => !this._deckstring || run.initialDeckList === this._deckstring);
+	private *buildIterator(runs: readonly DuelsRun[], step = 40): IterableIterator<void> {
+		this.allRuns = runs;
 		const workingRuns = [...this.allRuns];
-		const step = 40;
 		while (workingRuns.length > 0) {
-			// console.log('working runs', workingRuns.length);
 			const currentRuns = [];
-			while (
-				workingRuns.length > 0 &&
-				(currentRuns.length === 0 || this.getTotalRunsLength(currentRuns) < step)
-			) {
+			while (workingRuns.length > 0 && currentRuns.length < step) {
 				currentRuns.push(...workingRuns.splice(0, 1));
 			}
 			this.displayedRuns = [...this.displayedRuns, ...currentRuns];
@@ -165,10 +153,6 @@ export class DuelsRunsListComponent implements AfterViewInit {
 			header: date,
 			runs: runsByDate[date],
 		}));
-	}
-
-	private getTotalRunsLength(currentReplays: readonly DuelsRun[]): number {
-		return currentReplays ? currentReplays.length : 0;
 	}
 }
 

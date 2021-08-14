@@ -172,7 +172,6 @@ import { DuelsRewardComponent } from '../../components/duels/desktop/duels-rewar
 import { DuelsRunComponent } from '../../components/duels/desktop/duels-run.component';
 import { DuelsRunsListComponent } from '../../components/duels/desktop/duels-runs-list.component';
 import { DuelsTopDecksComponent } from '../../components/duels/desktop/duels-top-decks.component';
-import { DuelsTreasureStatVignetteComponent } from '../../components/duels/desktop/duels-treasure-stat-vignette.component';
 import { DuelsTreasureStatsComponent } from '../../components/duels/desktop/duels-treasure-stat.component';
 import { DuelsClassFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-class-filter-dropdown.component';
 import { DuelsDustFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-dust-filter-dropdown.component';
@@ -275,7 +274,6 @@ import { TemporaryResolutionOverrideService } from '../../services/achievement/t
 import { AdService } from '../../services/ad.service';
 import { ApiRunner } from '../../services/api-runner';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
-import { AppUiStoreService } from '../../services/app-ui-store.service';
 import { ArenaStateBuilderService } from '../../services/arena/arena-state-builder.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { BgsBestUserStatsService } from '../../services/battlegrounds/bgs-best-user-stats.service';
@@ -341,6 +339,7 @@ import { SettingsCommunicationService } from '../../services/settings/settings-c
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
 import { StatsStateBuilderService } from '../../services/stats/stats-state-builder.service';
+import { AppUiStoreService } from '../../services/ui-store/app-ui-store.service';
 import { UserService } from '../../services/user.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
@@ -577,7 +576,7 @@ const components = [
 		DuelsHeroStatVignetteComponent,
 		DuelsGlobalValueComponent,
 		DuelsTreasureStatsComponent,
-		DuelsTreasureStatVignetteComponent,
+		// DuelsTreasureStatVignetteComponent,
 		DuelsTopDecksComponent,
 		DuelsDeckStatVignetteComponent,
 		DuelsGroupedTopDecksComponent,

@@ -3,11 +3,11 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { ArenaClassFilterType } from '../../../../models/arena/arena-class-filter.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { classes, formatClass } from '../../../../services/hs-utils';
 import { ArenaClassFilterSelectedEvent } from '../../../../services/mainwindow/store/events/arena/arena-class-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 
 /** This approach seems to be the cleanest way to properly narrow down the values needed from
  * the state. The other approaches are cool and data-driven, but as of now they seem more

@@ -9,6 +9,7 @@ export class DuelsRun {
 	readonly steps: readonly (GameStat | DuelsRunInfo)[];
 	readonly rewards: readonly DuelsRewardsInfo[];
 	readonly creationTimestamp: number;
+	readonly buildNumberAtStart: number;
 	readonly heroCardId: string;
 	readonly heroPowerCardId: string;
 	readonly signatureTreasureCardId: string;

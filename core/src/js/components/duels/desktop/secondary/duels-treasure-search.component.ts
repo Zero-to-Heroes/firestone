@@ -4,16 +4,15 @@ import {
 	Component,
 	EventEmitter,
 	HostListener,
-	Input,
 	OnDestroy,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { NavigationDuels } from '../../../../models/mainwindow/navigation/navigation-duels';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { DuelsTreasureSearchEvent } from '../../../../services/mainwindow/store/events/duels/duels-treasure-search-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-treasure-search',
@@ -38,21 +37,26 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsTreasureSearchComponent implements AfterViewInit, OnDestroy {
-	@Input() set navigation(value: NavigationDuels) {
-		this.searchString = value?.treasureSearchString;
-	}
-
 	searchString: string;
 	searchForm = new FormControl();
 
+	private searchFormSub$$: Subscription;
+	private searchStringSub$$: Subscription;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-	private subscription: Subscription;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+		this.searchStringSub$$ = this.store
+			.listen$(([main, nav]) => nav.navigationDuels.treasureSearchString)
+			.pipe(tap((stat) => cdLog('emitting in ', this.constructor.name, stat)))
+			.subscribe(([searchString]) => {
+				// TODO: force change detectiopn here?
+				this.searchString = searchString;
+			});
+	}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.subscription = this.searchForm.valueChanges
+		this.searchFormSub$$ = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
@@ -63,7 +67,8 @@ export class DuelsTreasureSearchComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy() {
-		this.subscription?.unsubscribe();
+		this.searchFormSub$$?.unsubscribe();
+		this.searchStringSub$$?.unsubscribe();
 	}
 
 	onSearchStringChange() {

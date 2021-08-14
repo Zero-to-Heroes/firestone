@@ -7,7 +7,7 @@ import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
-import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 
 @Component({

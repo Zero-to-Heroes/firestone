@@ -175,11 +175,11 @@ export class StoreBootstrapService {
 			duelsRunInfo,
 			duelsRewardsInfo,
 			duelsLeaderboard,
+			collectionState,
 		);
 		const newDuelsState = await this.duels.updateState(
 			duelsStats,
 			matchStats,
-			collectionState,
 			duelsStats?.currentDuelsMetaPatch || currentDuelsMetaPatch,
 		);
 

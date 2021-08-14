@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
 
 @Component({
@@ -35,16 +35,18 @@ import { arraysEqual } from '../../../services/utils';
 export class DuelsLeaderboardComponent {
 	values$: Observable<readonly DuelsLeaderboardEntry[]>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
 		this.values$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.leaderboard,
-				([main, nav]) => main.duels.activeLeaderboardModeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveLeaderboardModeFilter,
 			)
 			.pipe(
 				filter(([stats, filter]) => !!stats && !!filter),
 				map(([stats, filter]) => (filter === 'paid-duels' ? stats.heroic : stats.casual)),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((stat) => cdLog('emitting leaderboard in ', this.constructor.name, stat)),
 			);
 	}

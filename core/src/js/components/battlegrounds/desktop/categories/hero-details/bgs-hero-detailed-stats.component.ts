@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../../../models/battlegrounds/stats/bgs-stats';
-import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'bgs-hero-detailed-stats',

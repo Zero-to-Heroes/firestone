@@ -2,10 +2,10 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from 
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { areDeepEqual, arraysEqual } from '../../../../services/utils';
 
 @Component({

@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../../services/utils';
 
 @Component({

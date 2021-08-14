@@ -1,4 +1,3 @@
-import { DuelsState } from '../../../../../models/duels/duels-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
@@ -23,16 +22,17 @@ export class DuelsRestorePersonalDeckSummaryProcessor implements Processor {
 			(deckCode) => deckCode !== event.deckstring,
 		);
 		await this.prefs.setDuelsPersonalDeckHiddenDeckCodes(newHiddenDecks);
-		const newState: DuelsState = await this.duelsStateBuilder.updateState(
-			currentState.duels,
-			currentState.stats.gameStats,
-			currentState.binder,
-			currentState.duels.currentDuelsMetaPatch,
-		);
+		// const newState: DuelsState = await this.duelsStateBuilder.updateState(
+		// 	currentState.duels,
+		// 	currentState.stats.gameStats,
+		// 	currentState.binder,
+		// 	currentState.duels.currentDuelsMetaPatch,
+		// );
 		return [
-			Object.assign(new MainWindowState(), currentState, {
-				duels: newState,
-			} as MainWindowState),
+			// Object.assign(new MainWindowState(), currentState, {
+			// 	duels: newState,
+			// } as MainWindowState),
+			null,
 			null,
 		];
 	}

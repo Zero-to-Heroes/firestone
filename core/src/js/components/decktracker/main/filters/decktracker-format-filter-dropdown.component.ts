@@ -3,10 +3,10 @@ import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { StatGameFormatType } from '../../../../models/mainwindow/stats/stat-game-format.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { ChangeDeckFormatFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-format-filter-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'decktracker-format-filter-dropdown',

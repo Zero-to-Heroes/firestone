@@ -39,13 +39,6 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 						[id]="'duels-hero-vignette' + _stat.cardId"
 						tooltipTitle="Win distribution"
 					></basic-bar-chart>
-					<!-- <simple-bar-chart
-						*ngIf="globalWinDistribution?.data?.length > 0"
-						class="win-distribution"
-						[data]="globalWinDistribution"
-						[id]="'duels-hero-vignette' + _stat.cardId"
-						tooltipTitle="Win distribution"
-					></simple-bar-chart> -->
 					<div class="item winrate">
 						<div class="label">Global winrate</div>
 						<div class="values">
@@ -55,7 +48,9 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 					<div class="item winrate">
 						<div class="label">Your winrate</div>
 						<div class="values">
-							<div class="value player">{{ buildPercents(playerWinrate) }}</div>
+							<div class="value player">
+								{{ playerWinrate != null ? buildPercents(playerWinrate) : '--' }}
+							</div>
 						</div>
 					</div>
 					<div class="stats">
@@ -74,6 +69,7 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 })
 export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 	@Input() set stat(value: DuelsHeroPlayerStat) {
+		// console.debug('setting stat', value);
 		if (!value || value === this._stat) {
 			return;
 		}
@@ -87,15 +83,16 @@ export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 		this.globalWinrate = value.globalWinrate;
 		this.playerGamesPlayed = value.playerTotalMatches || 0;
 		this.globalWinDistribution = {
-			data: value.globalWinDistribution.map((input) => ({
-				label: '' + input.winNumber,
-				// To never show an empty bar
-				value: Math.max(input.value, 0.5),
-			})),
+			data:
+				value.globalWinDistribution?.map((input) => ({
+					label: '' + input.winNumber,
+					// To never show an empty bar
+					value: Math.max(input.value, 0.5),
+				})) ?? [],
 		} as SimpleBarChartData;
-		this.numberOfGamesTooltip = `${value.globalTotalMatches.toLocaleString()} matches recorded (${this.buildPercents(
+		this.numberOfGamesTooltip = `${value.globalTotalMatches.toLocaleString()} runs recorded (${this.buildPercents(
 			value.globalPopularity,
-		)}% popularity)`;
+		)} popularity)`;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -5,12 +5,12 @@ import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsCustomSimulationPicker } from '../../../../models/mainwindow/battlegrounds/simulator/bgs-custom-simulation-state';
-import { AppUiStoreService, cdLog } from '../../../../services/app-ui-store.service';
 import { getAllCardsInGame, getEffectiveTribe, tribeValueForSort } from '../../../../services/battlegrounds/bgs-utils';
 import { BgsCustomSimulationCloseSidePanelEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-close-side-panel-event';
 import { BgsCustomSimulationMinionChosenEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-minion-chosen-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction } from '../../../../services/utils';
 import { BgsMinionsGroup } from '../../minions-tiers/bgs-minions-group';
 

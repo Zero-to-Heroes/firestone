@@ -1,10 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { DuelsTreasureStat } from '../../../../models/duels/duels-player-stats';
-import { DuelsState } from '../../../../models/duels/duels-state';
-import { duelsTreasureRank, isPassive } from '../../../../services/duels/duels-utils';
-import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
+import { Observable } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
+import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import {
+	buildDuelsHeroTreasurePlayerStats,
+	filterDuelsTreasureStats,
+} from '../../../../services/ui-store/duels-ui-helper';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
 @Component({
@@ -14,75 +17,73 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 		`../../../../../css/component/duels/desktop/secondary/duels-treasure-tier-list.component.scss`,
 	],
 	template: `
-		<div class="duels-treasure-tier-list">
+		<div class="duels-treasure-tier-list" *ngIf="tiers$ | async as tiers">
 			<div class="title" helpTooltip="The tiers are computed for your current filters">Tier List</div>
 			<duels-tier class="duels-tier" *ngFor="let tier of tiers" [tier]="tier"></duels-tier>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureTierListComponent implements AfterViewInit {
-	_state: DuelsState;
-	tiers: DuelsTier[] = [];
+export class DuelsTreasureTierListComponent {
+	tiers$: Observable<readonly DuelsTier[]>;
 
-	@Input() set state(value: DuelsState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateValues();
-	}
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly allCards: CardsFacadeService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	private updateValues() {
-		if (!this._state) {
-			return;
-		}
-		const stats = this.buildStats();
-
-		this.tiers = [
-			{
-				label: 'S',
-				tooltip: 'Must pick',
-				items: this.filterItems(stats, 60, 101),
-			},
-			{
-				label: 'A',
-				tooltip: 'Strong pick',
-				items: this.filterItems(stats, 57, 60),
-			},
-			{
-				label: 'B',
-				tooltip: 'Good pick',
-				items: this.filterItems(stats, 54, 57),
-			},
-			{
-				label: 'C',
-				tooltip: 'Fair pick',
-				items: this.filterItems(stats, 50, 54),
-			},
-			{
-				label: 'D',
-				tooltip: 'Preferably avoid',
-				items: this.filterItems(stats, 45, 50),
-			},
-			{
-				label: 'E',
-				tooltip: 'Defnitely avoid',
-				items: this.filterItems(stats, 0, 45),
-			},
-		].filter((tier) => tier.items?.length);
+	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreService) {
+		this.tiers$ = this.store
+			.listen$(
+				([main, nav]) => main.duels.globalStats.treasures,
+				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+			)
+			.pipe(
+				filter(([treasures, statType]) => !!treasures?.length),
+				map(([treasures, statType, gameMode, timeFilter, classFilter]) =>
+					filterDuelsTreasureStats(treasures, timeFilter, classFilter, statType, this.allCards),
+				),
+				map((treasures) => {
+					const stats = [...buildDuelsHeroTreasurePlayerStats(treasures)].sort(
+						(a, b) => b.globalWinrate - a.globalWinrate,
+					);
+					return [
+						{
+							label: 'S',
+							tooltip: 'Must pick',
+							items: this.filterItems(stats, 60, 101),
+						},
+						{
+							label: 'A',
+							tooltip: 'Strong pick',
+							items: this.filterItems(stats, 57, 60),
+						},
+						{
+							label: 'B',
+							tooltip: 'Good pick',
+							items: this.filterItems(stats, 54, 57),
+						},
+						{
+							label: 'C',
+							tooltip: 'Fair pick',
+							items: this.filterItems(stats, 50, 54),
+						},
+						{
+							label: 'D',
+							tooltip: 'Preferably avoid',
+							items: this.filterItems(stats, 45, 50),
+						},
+						{
+							label: 'E',
+							tooltip: 'Defnitely avoid',
+							items: this.filterItems(stats, 0, 45),
+						},
+					].filter((tier) => tier.items?.length);
+				}),
+				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+			);
 	}
 
 	private filterItems(
-		stats: readonly DuelsTreasureStat[],
+		stats: readonly DuelsHeroPlayerStat[],
 		threshold: number,
 		upper: number,
 	): readonly DuelsTierItem[] {
@@ -93,36 +94,5 @@ export class DuelsTreasureTierListComponent implements AfterViewInit {
 				cardId: stat.cardId,
 				icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${stat.cardId}.jpg`,
 			}));
-	}
-
-	private buildStats(): readonly DuelsTreasureStat[] {
-		switch (this._state.activeTreasureStatTypeFilter) {
-			case 'treasure-1':
-				return this._state.playerStats.treasureStats.filter(
-					(stat) => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
-				);
-			case 'treasure-2':
-				return this._state.playerStats.treasureStats.filter(
-					(stat) => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
-				);
-			case 'treasure-3':
-				return this._state.playerStats.treasureStats.filter(
-					(stat) => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
-				);
-			case 'passive-1':
-				return this._state.playerStats.treasureStats.filter(
-					(stat) => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
-				);
-			case 'passive-2':
-				return this._state.playerStats.treasureStats.filter(
-					(stat) => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
-				);
-			case 'passive-3':
-				return this._state.playerStats.treasureStats.filter(
-					(stat) => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
-				);
-			default:
-				return [];
-		}
 	}
 }

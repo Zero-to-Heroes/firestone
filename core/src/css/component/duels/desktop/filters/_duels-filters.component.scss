@@ -12,10 +12,15 @@
 	margin-bottom: 0;
 	width: 100%;
 	position: relative;
+	// Until all filters are refactored
+	min-height: 0;
 
 	duels-filter-dropdown,
 	.filter {
-		margin-bottom: 15px;
+		// So that the margin is not applied if the filter is not displayed (no ng-select element)
+		::ng-deep filter-dropdown ng-select {
+			margin-bottom: 15px;
+		}
 	}
 }
 

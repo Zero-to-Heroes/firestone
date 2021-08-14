@@ -9,7 +9,6 @@ import { DuelsHeroSortFilterType } from '../models/duels/duels-hero-sort-filter.
 import { DuelsStatTypeFilterType } from '../models/duels/duels-stat-type-filter.type';
 import { DuelsTimeFilterType } from '../models/duels/duels-time-filter.type';
 import { DuelsTopDecksDustFilterType } from '../models/duels/duels-top-decks-dust-filter.type';
-import { DuelsTreasureSortFilterType } from '../models/duels/duels-treasure-sort-filter.type';
 import { DuelsTreasureStatTypeFilterType } from '../models/duels/duels-treasure-stat-type-filter.type';
 import { BgsActiveTimeFilterType } from '../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { BgsHeroSortFilterType } from '../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
@@ -307,11 +306,11 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateDuelsTreasureSortFilter(value: DuelsTreasureSortFilterType) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, duelsActiveTreasureSortFilter: value };
-		await this.savePreferences(newPrefs);
-	}
+	// public async updateDuelsTreasureSortFilter(value: DuelsTreasureSortFilterType) {
+	// 	const prefs = await this.getPreferences();
+	// 	const newPrefs: Preferences = { ...prefs, duelsActiveTreasureSortFilter: value };
+	// 	await this.savePreferences(newPrefs);
+	// }
 
 	public async updateDuelsTreasurePassiveTypeFilter(value: DuelsTreasureStatTypeFilterType) {
 		const prefs = await this.getPreferences();

@@ -137,7 +137,7 @@ export class GroupedDeckListComponent implements OnDestroy {
 				.map((card) => card.creatorCardId)
 				.filter((creator) => creator);
 			if (!groupedFromDeck.get(cardId)?.length) {
-				console.warn('no entries in grouped deck list 2', cardId, groupedFromDecklist.get(cardId));
+				console.warn('no entries in grouped deck list 2', cardId, groupedFromDeck.get(cardId));
 				continue;
 			}
 			for (let i = 0; i < cardsInDeck; i++) {

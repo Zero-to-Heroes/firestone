@@ -1,8 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsDeckSummary } from '../../../models/duels/duels-personal-deck';
-import { DuelsState } from '../../../models/duels/duels-state';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 
 @Component({
 	selector: 'duels-personal-decks',
@@ -11,39 +12,51 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/duels/desktop/duels-personal-decks.component.scss`,
 	],
 	template: `
-		<div *ngIf="_decks?.length" class="duels-decks">
-			<ul class="deck-list">
-				<li *ngFor="let deck of _decks">
-					<duels-personal-deck-vignette [deck]="deck"></duels-personal-deck-vignette>
-				</li>
-			</ul>
+		<div *ngIf="decks$ | async as decks; else emptyState" class="duels-decks">
+			<duels-personal-deck-vignette
+				class="item"
+				*ngFor="let deck of decks; trackBy: trackByDeck"
+				[deck]="deck"
+			></duels-personal-deck-vignette>
 		</div>
-		<duels-empty-state *ngIf="!_decks?.length"></duels-empty-state>
+		<ng-template #emptyState>
+			<duels-empty-state></duels-empty-state>
+		</ng-template>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsPersonalDecksComponent implements AfterViewInit {
-	@Input() set state(value: DuelsState) {
-		if (value === this._state) {
-			return;
-		}
-		this._state = value;
-		this.updateValues();
+export class DuelsPersonalDecksComponent {
+	decks$: Observable<readonly DuelsDeckSummary[]>;
+
+	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+		this.decks$ = this.store
+			.listen$(
+				([main, nav]) => main.duels.personalDeckStats,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+			)
+			.pipe(
+				filter(([decks, timeFilter, classFilter, gameMode, lastPatchNumber]) => !!decks?.length),
+				map(([decks, timeFilter, classFilter, gameMode, lastPatchNumber]) =>
+					decks
+						.map((deck) => {
+							return {
+								...deck,
+								runs: filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+							};
+						})
+						.filter((deck) => !!deck.runs.length),
+				),
+				map((decks) => (!!decks.length ? decks : null)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting personal decks in ', this.constructor.name, info)),
+			);
 	}
 
-	_state: DuelsState;
-
-	_decks: readonly DuelsDeckSummary[];
-
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private ow: OverwolfService, private el: ElementRef) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	private updateValues() {
-		this._decks = this._state?.playerStats?.personalDeckStats ?? [];
+	trackByDeck(index: number, deck: DuelsDeckSummary): string {
+		return deck.initialDeckList;
 	}
 }

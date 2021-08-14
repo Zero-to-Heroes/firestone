@@ -9,7 +9,7 @@ export interface DuelsPlayerStats {
 	readonly heroStats: readonly DuelsHeroPlayerStat[];
 	readonly heroPowerStats: readonly DuelsHeroPlayerStat[];
 	readonly signatureTreasureStats: readonly DuelsHeroPlayerStat[];
-	readonly treasureStats: readonly DuelsTreasureStat[];
+	readonly treasureStats: readonly DuelsHeroPlayerStat[];
 	readonly deckStats: readonly DuelsGroupedDecks[];
 	readonly personalDeckStats: readonly DuelsDeckSummary[];
 }
@@ -27,22 +27,22 @@ export interface DuelsHeroPlayerStat {
 	readonly playerWinrate: number;
 }
 
-export interface DuelsTreasureStat {
-	readonly periodStart: string;
-	readonly cardId: string;
-	readonly globalTotalOffered: number;
-	readonly globalTotalPicked: number;
-	readonly globalOfferingRate: number;
-	readonly globalPickRate: number;
-	readonly globalTotalMatches: number;
-	readonly globalTotalWins: number;
-	readonly globalTotalLosses: number;
-	readonly globalTotalTies: number;
-	readonly globalWinrate: number;
-	readonly playerPickRate: number;
-	readonly playerWinrate: number;
-	readonly statsForClass: readonly DuelsTreasureStatForClass[];
-}
+// export interface DuelsTreasurePlayerStat {
+// 	readonly periodStart: string;
+// 	readonly cardId: string;
+// 	readonly globalTotalOffered: number;
+// 	readonly globalTotalPicked: number;
+// 	readonly globalOfferingRate: number;
+// 	readonly globalPickRate: number;
+// 	readonly globalTotalMatches: number;
+// 	readonly globalTotalWins: number;
+// 	readonly globalTotalLosses: number;
+// 	readonly globalTotalTies: number;
+// 	readonly globalWinrate: number;
+// 	readonly playerPickRate: number;
+// 	readonly playerWinrate: number;
+// 	readonly statsForClass: readonly DuelsTreasureStatForClass[];
+// }
 
 export interface DuelsTreasureStatForClass {
 	readonly periodStart: string;

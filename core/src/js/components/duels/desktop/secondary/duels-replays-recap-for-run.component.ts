@@ -50,7 +50,7 @@ export class DuelsReplaysRecapForRunComponent {
 
 	private updateValues() {
 		console.log('getting replays for run?', this._state, this._navigation);
-		if (!this._state?.playerStats?.personalDeckStats?.length || !this._navigation) {
+		if (!this._state?.personalDeckStats?.length || !this._navigation) {
 			return;
 		}
 
@@ -60,7 +60,7 @@ export class DuelsReplaysRecapForRunComponent {
 		}
 
 		// console.log('getting replays for run', runId, this._state, this._navigation);
-		this.replays = this._state.playerStats.personalDeckStats
+		this.replays = this._state.personalDeckStats
 			.map((deck) => deck.runs)
 			.reduce((a, b) => a.concat(b), [])
 			.filter((run) => run.id === runId)

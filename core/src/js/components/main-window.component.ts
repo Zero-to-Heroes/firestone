@@ -8,8 +8,8 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AppUiStoreService } from '@services/app-ui-store.service';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { GameState } from '../models/decktracker/game-state';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
@@ -109,12 +109,7 @@ import { PreferencesService } from '../services/preferences.service';
 							*ngxCacheIf="navigationState.currentApp === 'battlegrounds'"
 						>
 						</battlegrounds-desktop>
-						<duels-desktop
-							class="main-section"
-							[state]="dataState"
-							[navigation]="navigationState"
-							*ngxCacheIf="navigationState.currentApp === 'duels'"
-						>
+						<duels-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'duels'">
 						</duels-desktop>
 						<arena-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'arena'">
 						</arena-desktop>

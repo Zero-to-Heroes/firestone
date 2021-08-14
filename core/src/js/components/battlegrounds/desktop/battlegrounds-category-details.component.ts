@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'battlegrounds-category-details',

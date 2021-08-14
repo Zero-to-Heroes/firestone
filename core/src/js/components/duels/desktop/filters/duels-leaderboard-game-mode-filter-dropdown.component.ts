@@ -1,12 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
-import { AppUiStoreService } from '../../../../services/app-ui-store.service';
 import { DuelsLeaderboardGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-leaderboard-game-mode-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-leaderboard-game-mode-filter-dropdown',
@@ -35,7 +35,11 @@ export class DuelsLeaderboardGameModeFilterDropdownComponent implements AfterVie
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.options = [
 			{
 				value: 'duels',
@@ -48,7 +52,7 @@ export class DuelsLeaderboardGameModeFilterDropdownComponent implements AfterVie
 		] as readonly GameModeFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.activeLeaderboardModeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveLeaderboardModeFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			)
 			.pipe(
@@ -58,6 +62,8 @@ export class DuelsLeaderboardGameModeFilterDropdownComponent implements AfterVie
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: ['duels-leaderboard'].includes(selectedCategoryId),
 				})),
+				// Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}

@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { DeckHandlerService } from '../../../services/decktracker/deck-handler.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -25,12 +24,13 @@ import { CardsByCost } from './cards-by-cost';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckManaCurveComponent implements AfterViewInit {
-	@Input() set deck(value: DeckSummary) {
+	@Input() set deckstring(value: string) {
+		console.debug('setting deckstring', value);
 		if (!value) {
 			return;
 		}
 
-		const cards = this.deckHandler.buildDeckList(value.deckstring);
+		const cards = this.deckHandler.buildDeckList(value);
 		const groupedByCost = groupByFunction((card: DeckCard) => '' + Math.min(7, card.manaCost))(cards);
 		const cardsByCost: CardsByCost[] = [];
 		for (let i = 0; i < 8; i++) {

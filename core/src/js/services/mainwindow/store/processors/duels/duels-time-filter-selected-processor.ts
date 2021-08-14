@@ -15,16 +15,17 @@ export class DuelsTimeFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsTimeFilter(event.value);
-		const duels = await this.duelsService.updateState(
-			currentState.duels,
-			currentState.stats.gameStats,
-			currentState.binder,
-		);
+		// const duels = await this.duelsService.updateState(
+		// 	currentState.duels,
+		// 	currentState.stats.gameStats,
+		// 	currentState.binder,
+		// );
 		console.log('updated duels hero sort filter', event.value);
 		return [
-			currentState.update({
-				duels: duels,
-			} as MainWindowState),
+			// currentState.update({
+			// 	duels: duels,
+			// } as MainWindowState),
+			null,
 			null,
 		];
 	}

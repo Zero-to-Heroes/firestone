@@ -15,15 +15,16 @@ export class DuelsTreasurePassiveTypeFilterSelectedProcessor implements Processo
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsTreasurePassiveTypeFilter(event.value);
-		const duels = await this.duelsService.updateState(
-			currentState.duels,
-			currentState.stats.gameStats,
-			currentState.binder,
-		);
+		// const duels = await this.duelsService.updateState(
+		// 	currentState.duels,
+		// 	currentState.stats.gameStats,
+		// 	currentState.binder,
+		// );
 		return [
-			currentState.update({
-				duels: duels,
-			} as MainWindowState),
+			// currentState.update({
+			// 	duels: duels,
+			// } as MainWindowState),
+			null,
 			null,
 		];
 	}

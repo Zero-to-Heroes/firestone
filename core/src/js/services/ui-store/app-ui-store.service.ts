@@ -1,15 +1,15 @@
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { GameState } from '../models/decktracker/game-state';
-import { BattlegroundsAppState } from '../models/mainwindow/battlegrounds/battlegrounds-app-state';
-import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
-import { MainWindowState } from '../models/mainwindow/main-window-state';
-import { NavigationState } from '../models/mainwindow/navigation/navigation-state';
-import { Preferences } from '../models/preferences';
-import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from './overwolf.service';
-import { arraysEqual } from './utils';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { GameState } from '../../models/decktracker/game-state';
+import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
+import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
+import { MainWindowState } from '../../models/mainwindow/main-window-state';
+import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
+import { Preferences } from '../../models/preferences';
+import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { OverwolfService } from '../overwolf.service';
+import { arraysEqual } from '../utils';
 
 type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 type GameStateSelector<T> = (gameState: GameState) => T;
@@ -47,6 +47,7 @@ export class AppUiStoreService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
 		return this.deckStore.asObservable().pipe(
+			filter((gameState) => !!gameState),
 			// tap((gameState) => console.debug('emitting gameState', gameState, this)),
 			map((gameState) => selectors.map((selector) => selector(gameState.state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),

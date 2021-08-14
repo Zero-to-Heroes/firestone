@@ -20,7 +20,7 @@ import { IOption } from 'ng-select';
 			class="filter hero-sort-filter"
 			[ngClass]="{ 'disabled': !_visible }"
 			[options]="options"
-			[ngModel]="filter"
+			[ngModel]="_filter"
 			[placeholder]="placeholder"
 			(selected)="select($event)"
 			(opened)="refresh()"
@@ -34,7 +34,7 @@ import { IOption } from 'ng-select';
 						<use xlink:href="assets/svg/sprite.svg#info" />
 					</svg>
 				</div>
-				<i class="i-30 selected-icon" *ngIf="option.value === filter">
+				<i class="i-30 selected-icon" *ngIf="option.value === _filter">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#selected_dropdown" />
 					</svg>
@@ -49,7 +49,15 @@ export class FilterDropdownComponent implements AfterViewInit {
 
 	@Input() options: readonly IOption[];
 	@Input() placeholder: string;
-	@Input() filter: string;
+
+	@Input() set filter(value: string) {
+		this._filter = value;
+		// console.debug('setting filter', value);
+		// Don't know why this is required, but it is.
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	@Input() set visible(value: boolean) {
 		this._visible = value;
@@ -61,6 +69,7 @@ export class FilterDropdownComponent implements AfterViewInit {
 	}
 
 	_visible: boolean;
+	_filter: string;
 
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly el: ElementRef) {}
 

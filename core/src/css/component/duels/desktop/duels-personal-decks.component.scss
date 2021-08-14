@@ -11,22 +11,18 @@
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	flex-wrap: wrap;
+	overflow-y: scroll;
 
-	ul {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		width: 100%;
-		display: flex;
-		justify-content: flex-start;
-		flex-wrap: wrap;
-		overflow-y: scroll;
-
-		li {
-			width: 155px;
-			// height: 200px;
-			margin-right: 13px;
-			margin-bottom: 13px;
-		}
+	.item {
+		width: 155px;
+		// height: 200px;
+		margin-right: 13px;
+		margin-bottom: 13px;
 	}
 }

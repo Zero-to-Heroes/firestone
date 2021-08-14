@@ -1,9 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { Observable } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../../models/duels/duels-run';
-import { DuelsState } from '../../../../models/duels/duels-state';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { formatClass } from '../../../../services/hs-utils';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { filterDuelsRuns } from '../../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../../services/utils';
 @Component({
 	selector: 'duels-classes-recap',
@@ -11,16 +14,21 @@ import { groupByFunction } from '../../../../services/utils';
 	template: `
 		<div class="duels-classes-recap">
 			<div class="header">Stats overview</div>
-			<div class="stats">
-				<duels-stat-cell class="stat-cell" label="Total runs" [value]="totalRuns"> </duels-stat-cell>
-				<duels-stat-cell class="stat-cell" label="Avg. wins per run" [value]="averageWinsPerRun" [decimals]="1">
+			<div class="stats" *ngIf="stat$ | async as stat">
+				<duels-stat-cell class="stat-cell" label="Total runs" [value]="stat.totalRuns"> </duels-stat-cell>
+				<duels-stat-cell
+					class="stat-cell"
+					label="Avg. wins per run"
+					[value]="stat.averageWinsPerRun"
+					[decimals]="1"
+				>
 				</duels-stat-cell>
 				<div class="stat-cell classes-list">
 					<div class="entry">
 						<div class="label">Most played classes</div>
 						<div class="filler"></div>
 						<ul class="value">
-							<li class="played-class" *ngFor="let mostPlayedClass of mostPlayedClasses">
+							<li class="played-class" *ngFor="let mostPlayedClass of stat.mostPlayedClasses">
 								<img
 									[src]="mostPlayedClass.icon"
 									class="icon"
@@ -35,7 +43,7 @@ import { groupByFunction } from '../../../../services/utils';
 						<div class="label">Best winrate classes</div>
 						<div class="filler"></div>
 						<ul class="value">
-							<li class="played-class" *ngFor="let theClass of bestWinrateClasses">
+							<li class="played-class" *ngFor="let theClass of stat.bestWinrateClasses">
 								<img [src]="theClass.icon" class="icon" [helpTooltip]="theClass.tooltip" />
 							</li>
 						</ul>
@@ -46,7 +54,7 @@ import { groupByFunction } from '../../../../services/utils';
 						<div class="label">Most faced classes</div>
 						<div class="filler"></div>
 						<ul class="value">
-							<li class="played-class" *ngFor="let mostFacedClass of mostFacedClasses">
+							<li class="played-class" *ngFor="let mostFacedClass of stat.mostFacedClasses">
 								<img [src]="mostFacedClass.icon" class="icon" [helpTooltip]="mostFacedClass.tooltip" />
 							</li>
 						</ul>
@@ -57,7 +65,7 @@ import { groupByFunction } from '../../../../services/utils';
 						<div class="label">Best winrate against</div>
 						<div class="filler"></div>
 						<ul class="value">
-							<li class="played-class" *ngFor="let mostFacedClass of bestWinrateAgainstClasses">
+							<li class="played-class" *ngFor="let mostFacedClass of stat.bestWinrateAgainstClasses">
 								<img [src]="mostFacedClass.icon" class="icon" [helpTooltip]="mostFacedClass.tooltip" />
 							</li>
 						</ul>
@@ -69,56 +77,46 @@ import { groupByFunction } from '../../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsClassesRecapComponent {
-	@Input() set state(value: DuelsState) {
-		if (value.loading) {
-			return;
-		}
-		this._state = value;
-		this.updateValues();
-	}
+	stat$: Observable<Stat>;
 
-	totalRuns: number;
-	averageWinsPerRun: number;
-	mostPlayedClasses: readonly MostPlayedClass[];
-	bestWinrateClasses: readonly MostPlayedClass[];
-	mostFacedClasses: readonly MostFacedClass[];
-	bestWinrateAgainstClasses: readonly MostFacedClass[];
-
-	// winratesAgainst: readonly { [playerClass: string]: number }[];
-
-	private _state: DuelsState;
-
-	constructor(private readonly allCards: CardsFacadeService, private readonly cdr: ChangeDetectorRef) {}
-
-	private updateValues() {
-		const runs = this._state.runs;
-		this.totalRuns = runs.length;
-		if (this.totalRuns === 0) {
-			return;
-		}
-		this.averageWinsPerRun = runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / this.totalRuns;
-
-		this.mostPlayedClasses = [];
-		this.bestWinrateClasses = [];
-		this.mostFacedClasses = [];
-		this.bestWinrateAgainstClasses = [];
-
-		// Get lots of errors otherwise when changing the filtesr
-		setTimeout(() => {
-			this.mostPlayedClasses = this.buildPlayerClass(runs, (a, b) => b.length - a.length);
-			this.bestWinrateClasses = this.buildPlayerClass(
-				runs,
-				(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
+		this.stat$ = this.store
+			.listen$(
+				([main, nav]) => main.duels.runs,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+			)
+			.pipe(
+				filter(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) => !!runs?.length),
+				map(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) =>
+					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+				),
+				map((runs) => {
+					return {
+						totalRuns: runs.length,
+						averageWinsPerRun: runs.map((run) => run.wins).reduce((a, b) => a + b, 0) / runs.length,
+						mostPlayedClasses: this.buildPlayerClass(runs, (a, b) => b.length - a.length),
+						bestWinrateClasses: this.buildPlayerClass(
+							runs,
+							(a, b) => this.buildWinrate(b) - this.buildWinrate(a),
+						),
+						mostFacedClasses: this.buildFacedClass(runs, (a, b) => b.length - a.length),
+						bestWinrateAgainstClasses: this.buildFacedClass(
+							runs,
+							(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
+						),
+					};
+				}),
+				// FIXME (same as all filters)
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
 			);
-			this.mostFacedClasses = this.buildFacedClass(runs, (a, b) => b.length - a.length);
-			this.bestWinrateAgainstClasses = this.buildFacedClass(
-				runs,
-				(a, b) => this.buildWinrateForMatches(b) - this.buildWinrateForMatches(a),
-			);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
 	}
 
 	private buildPlayerClass(
@@ -221,6 +219,15 @@ export class DuelsStatCellComponent {
 		}
 		return this.value?.toFixed(this.decimals);
 	}
+}
+
+interface Stat {
+	readonly totalRuns: number;
+	readonly averageWinsPerRun: number;
+	readonly mostPlayedClasses: readonly MostPlayedClass[];
+	readonly bestWinrateClasses: readonly MostPlayedClass[];
+	readonly mostFacedClasses: readonly MostFacedClass[];
+	readonly bestWinrateAgainstClasses: readonly MostFacedClass[];
 }
 
 interface MostPlayedClass {

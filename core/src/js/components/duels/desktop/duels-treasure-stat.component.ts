@@ -1,13 +1,19 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { DuelsHeroStat, DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { isEqual } from 'lodash';
-import { DuelsPlayerStats, DuelsTreasureStat } from '../../../models/duels/duels-player-stats';
-import { DuelsState } from '../../../models/duels/duels-state';
-import { DuelsTreasureStatTypeFilterType } from '../../../models/duels/duels-treasure-stat-type-filter.type';
-import { NavigationDuels } from '../../../models/mainwindow/navigation/navigation-duels';
-import { duelsTreasureRank, isPassive } from '../../../services/duels/duels-utils';
-import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-filter.type';
+import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
+import { DuelsRun } from '../../../models/duels/duels-run';
+import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import {
+	buildDuelsHeroTreasurePlayerStats,
+	filterDuelsRuns,
+	filterDuelsTreasureStats,
+} from '../../../services/ui-store/duels-ui-helper';
+import { arraysEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'duels-treasure-stats',
@@ -16,122 +22,88 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/duels/desktop/duels-treasure-stats.component.scss`,
 	],
 	template: `
-		<div *ngIf="stats?.length" class="duels-treasure-stats" scrollable>
-			<duels-treasure-stat-vignette
-				*ngFor="let stat of stats; trackBy: trackByFn"
-				[stat]="stat.stat"
-				[ngClass]="{ 'hidden': !stat.visible }"
-			></duels-treasure-stat-vignette>
+		<div *ngIf="stats$ | async as stats; else emptyState" class="duels-treasure-stats" scrollable>
+			<duels-hero-stat-vignette *ngFor="let stat of stats" [stat]="stat"></duels-hero-stat-vignette>
 		</div>
-		<duels-empty-state *ngIf="!stats?.length"></duels-empty-state>
+		<ng-template #emptyState>
+			<duels-empty-state></duels-empty-state>
+		</ng-template>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsTreasureStatsComponent implements AfterViewInit {
-	@Input() set state(value: DuelsState) {
-		const stats = value?.playerStats;
-		if (stats === this._playerStats) {
-			return;
-		}
-		this._playerStats = stats;
-		this.updateValues();
+export class DuelsTreasureStatsComponent {
+	stats$: Observable<readonly DuelsHeroPlayerStat[]>;
+
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
+		this.stats$ = this.store
+			.listen$(
+				([main, nav]) => main.duels.globalStats?.treasures,
+				([main, nav]) => main.duels.runs,
+				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+			)
+			.pipe(
+				map(
+					([
+						duelStats,
+						runs,
+						statType,
+						gameMode,
+						treasureSorting,
+						timeFilter,
+						classFilter,
+						hideThreshold,
+						lastPatchNumber,
+					]) =>
+						[
+							filterDuelsTreasureStats(duelStats, timeFilter, classFilter, statType, this.allCards),
+							filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+							treasureSorting,
+							hideThreshold,
+						] as [readonly DuelsTreasureStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
+				),
+				distinctUntilChanged((a, b) => this.areEqual(a, b)),
+				map(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
+					[...buildDuelsHeroTreasurePlayerStats(duelStats, duelsRuns)]
+						.sort(this.sortBy(treasureSorting))
+						.filter((stat) =>
+							hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+						),
+				),
+				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
+			);
 	}
 
-	@Input() set navigation(value: NavigationDuels) {
-		const searchString = value?.treasureSearchString;
-		// console.debug('update search string', searchString);
-		if (searchString === this._searchString) {
-			return;
-		}
-		this._searchString = searchString;
-		this.updateValues(true);
-	}
-
-	@Input() set statType(value: DuelsTreasureStatTypeFilterType) {
-		if (value === this._statType) {
-			return;
-		}
-		this._statType = value;
-		this.updateValues();
-	}
-
-	stats: readonly DuelsTreasureStatContainer[];
-
-	private _playerStats: DuelsPlayerStats;
-	private _searchString: string;
-	private _statType: DuelsTreasureStatTypeFilterType;
-
-	private displayedStats: readonly DuelsTreasureStat[];
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-
-	constructor(private readonly ow: OverwolfService, private readonly allCards: CardsFacadeService) {}
-
-	ngAfterViewInit() {
-		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-	}
-
-	trackByFn(stat: DuelsTreasureStatContainer) {
-		return stat?.stat?.cardId;
-	}
-
-	private updateValues(searchStringUpdated = false) {
-		if (!this._playerStats || !this._statType) {
-			return;
-		}
-
-		// Usually we don't really mind, but here there are a lot of graphs to be rendered every time,
-		// so we only want to refresh the data if it really has changed
-		const newStats = this.getStats();
-		if (!searchStringUpdated && isEqual(newStats, this.displayedStats)) {
-			return;
-		}
-
-		this.displayedStats = newStats;
-		this.stats = this._searchString
-			? this.displayedStats.map((stat) => ({
-					stat: stat,
-					visible: this.allCards
-						.getCard(stat.cardId)
-						?.name?.toLowerCase()
-						?.includes(this._searchString.toLowerCase()),
-			  }))
-			: this.displayedStats.map((stat) => ({
-					stat: stat,
-					visible: true,
-			  }));
-	}
-
-	private getStats(): readonly DuelsTreasureStat[] {
-		switch (this._statType) {
-			case 'treasure-1':
-				return this._playerStats.treasureStats.filter(
-					(stat) => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
-				);
-			case 'treasure-2':
-				return this._playerStats.treasureStats.filter(
-					(stat) => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
-				);
-			case 'treasure-3':
-				return this._playerStats.treasureStats.filter(
-					(stat) => !isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
-				);
-			case 'passive-1':
-				return this._playerStats.treasureStats.filter(
-					(stat) => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 1,
-				);
-			case 'passive-2':
-				return this._playerStats.treasureStats.filter(
-					(stat) => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) >= 2,
-				);
-			case 'passive-3':
-				return this._playerStats.treasureStats.filter(
-					(stat) => isPassive(stat.cardId, this.allCards) && duelsTreasureRank(stat.cardId) === 3,
-				);
+	private sortBy(heroSorting: DuelsHeroSortFilterType): (a: DuelsHeroPlayerStat, b: DuelsHeroPlayerStat) => number {
+		switch (heroSorting) {
+			case 'games-played':
+				return (a, b) => b.playerTotalMatches - a.playerTotalMatches;
+			case 'global-winrate':
+				return (a, b) => b.globalWinrate - a.globalWinrate;
+			case 'player-winrate':
+				return (a, b) => b.playerWinrate - a.playerWinrate;
 		}
 	}
-}
 
-interface DuelsTreasureStatContainer {
-	readonly stat: DuelsTreasureStat;
-	readonly visible: boolean;
+	private areEqual(
+		a: [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
+		b: [readonly DuelsHeroStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
+	): boolean {
+		if (a[2] !== b[2] || a[3] !== b[3]) {
+			return false;
+		}
+		return arraysEqual(a[0], b[0]) && arraysEqual(a[1], b[1]);
+	}
 }

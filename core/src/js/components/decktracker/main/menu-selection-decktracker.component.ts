@@ -2,11 +2,11 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from 
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { DecktrackerViewType } from '../../../models/mainwindow/decktracker/decktracker-view.type';
-import { AppUiStoreService, cdLog } from '../../../services/app-ui-store.service';
 import { FeatureFlags } from '../../../services/feature-flags';
 import { SelectDecksViewEvent } from '../../../services/mainwindow/store/events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'menu-selection-decktracker',

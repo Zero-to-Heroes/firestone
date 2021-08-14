@@ -96,6 +96,7 @@ export class BgsPlayer implements IBgsPlayer {
 				logEntity.Tags.find((tag) => tag.Name === GameTag.WINDFURY)?.Value === 3,
 			friendly: true,
 			frenzyApplied: false,
+			definitelyDead: false,
 		};
 	}
 
