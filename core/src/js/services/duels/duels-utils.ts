@@ -99,6 +99,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.FromTheSwampTavernBrawl:
 		case CardIds.NonCollectible.Neutral.HagathasEmbrace:
 		case CardIds.NonCollectible.Neutral.KhadgarsScryingOrb:
+		case CardIds.NonCollectible.Neutral.LegendaryLootTavernBrawl:
 		case CardIds.NonCollectible.Neutral.MummyMagic:
 		case CardIds.NonCollectible.Neutral.OrbOfRevelationTavernBrawl:
 		case CardIds.NonCollectible.Neutral.RallyTheTroopsTavernBrawl:
@@ -112,10 +113,14 @@ export const duelsTreasureRank = (cardId: string): number => {
 		// Passives Ultra Rare
 		case CardIds.NonCollectible.Neutral.BandOfBeesTavernBrawl:
 		case CardIds.NonCollectible.Neutral.CapturedFlag:
+		case CardIds.NonCollectible.Neutral.DeathlyDeathTavernBrawl:
 		case CardIds.NonCollectible.Neutral.DoubleTime:
 		case CardIds.NonCollectible.Neutral.ElixirOfVigor:
+		case CardIds.NonCollectible.Neutral.GreedyGainsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.ManastormTavernBrawl:
+		case CardIds.NonCollectible.Neutral.OoopsAllSpellsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.OrbOfRevelationTavernBrawl:
+		case CardIds.NonCollectible.Neutral.PartyReplacementTavernBrawl:
 		case CardIds.NonCollectible.Neutral.RallyTheTroopsTavernBrawl:
 		case CardIds.NonCollectible.Neutral.RobeOfTheMagi:
 		case CardIds.NonCollectible.Neutral.Stargazing:
