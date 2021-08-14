@@ -136,14 +136,14 @@ export class GroupedDeckListComponent implements OnDestroy {
 			const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
 				.map((card) => card.creatorCardId)
 				.filter((creator) => creator);
-			if (!groupedFromDecklist.get(cardId)?.length) {
+			if (!groupedFromDeck.get(cardId)?.length) {
 				console.warn('no entries in grouped deck list 2', cardId, groupedFromDecklist.get(cardId));
 				continue;
 			}
 			for (let i = 0; i < cardsInDeck; i++) {
 				base.push(
 					VisualDeckCard.create({
-						...groupedFromDecklist.get(cardId)[i],
+						...groupedFromDeck.get(cardId)[i],
 						highlight: !isInBaseDeck && this._darkenUsedCards && isInOtherZone ? 'dim' : 'normal',
 						creatorCardIds: creatorCardIds,
 					} as VisualDeckCard),
