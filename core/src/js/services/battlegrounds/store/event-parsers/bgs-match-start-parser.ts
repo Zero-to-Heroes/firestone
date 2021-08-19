@@ -17,7 +17,7 @@ export class BgsMatchStartParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsMatchStartEvent): Promise<BattlegroundsState> {
-		console.log('received BGS match start event', event);
+		console.log('received BGS match start event', event.spectating, event.simpleInit);
 		if (currentState.reconnectOngoing) {
 			console.warn('reconnect, returning');
 			return currentState;

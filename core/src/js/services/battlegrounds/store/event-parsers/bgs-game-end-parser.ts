@@ -23,6 +23,15 @@ export class BgsGameEndParser implements EventParser {
 	}
 
 	public async parse(currentState: BattlegroundsState, event: BgsGameEndEvent): Promise<BattlegroundsState> {
+		if (event.reviewId !== currentState.currentGame.reviewId) {
+			console.log(
+				'[bgs-game-end] a new game already started, doing nothing here',
+				currentState.currentGame.reviewId,
+				event.reviewId,
+			);
+			return currentState;
+		}
+
 		const prefs: Preferences = await this.prefs.getPreferences();
 		console.log('will build post-match info', prefs.bgsForceShowPostMatchStats);
 		const newBestUserStats: readonly BgsBestStat[] = event.newBestStats;
