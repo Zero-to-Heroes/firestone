@@ -5,7 +5,7 @@ export class DuelsMmrFilterSelectedEvent implements MainWindowStoreEvent {
 		return 'DuelsMmrFilterSelectedEvent';
 	}
 
-	constructor(public readonly value: string) {}
+	constructor(public readonly value: 100 | 50 | 25 | 10 | 1) {}
 
 	public eventName(): string {
 		return 'DuelsMmrFilterSelectedEvent';

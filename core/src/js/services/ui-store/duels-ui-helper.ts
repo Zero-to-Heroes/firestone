@@ -1,4 +1,4 @@
-import { DuelsHeroStat, DuelsTreasureStat } from '@firestone-hs/duels-global-stats/dist/stat';
+import { DuelsHeroStat, DuelsTreasureStat, MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { DuelsRunInfo } from '@firestone-hs/retrieve-users-duels-runs/dist/duels-run-info';
 import { DuelsClassFilterType } from '../../models/duels/duels-class-filter.type';
 import { DuelsGameModeFilterType } from '../../models/duels/duels-game-mode-filter.type';
@@ -172,6 +172,16 @@ export const getCurrentDeck = (
 		} as DeckInfo;
 	}
 	return getTopDeck(topDecks, deckDetails ?? [], deckId);
+};
+
+export const getDuelsMmrFilterNumber = (
+	mmrPercentiles: readonly MmrPercentile[],
+	mmrFilter: 100 | 50 | 25 | 10 | 1,
+) => {
+	return (
+		mmrPercentiles.find((p) => p.percentile === +mmrFilter)?.mmr ??
+		mmrPercentiles.find((p) => p.percentile === 100).mmr
+	);
 };
 
 const isCorrectClass = (stat: DuelsHeroStat | GameStat, classFilter: DuelsClassFilterType): boolean => {

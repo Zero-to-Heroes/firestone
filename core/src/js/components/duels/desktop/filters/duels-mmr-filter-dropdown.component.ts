@@ -1,11 +1,12 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import { MmrPercentile } from '@firestone-hs/duels-global-stats/dist/stat';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { DuelsMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-mmr-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-mmr-filter-dropdown',
@@ -18,7 +19,7 @@ import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.se
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
 			class="duels-mmr-filter-dropdown"
-			[options]="options"
+			[options]="options$ | async"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
@@ -28,8 +29,7 @@ import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.se
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
-	options: readonly RankFilterOption[];
-
+	options$: Observable<readonly RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -39,44 +39,43 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
-		this.options = [
-			{
-				value: 'all',
-				label: 'All ranks',
-			} as RankFilterOption,
-			{
-				value: '4000',
-				label: '4,000+',
-			} as RankFilterOption,
-			{
-				value: '6000',
-				label: '6,000+',
-			} as RankFilterOption,
-			{
-				value: '8000',
-				label: '8,000+',
-			} as RankFilterOption,
-			{
-				value: '10000',
-				label: '10,000+',
-			} as RankFilterOption,
-		] as readonly RankFilterOption[];
-		this.filter$ = this.store
-			.listen$(
+		this.options$ = this.store
+			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
+			.pipe(
+				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
+				tap(([mmrPercentiles]) => console.debug('percentiles', mmrPercentiles)),
+				map(([mmrPercentiles]) =>
+					mmrPercentiles.map(
+						(percentile) =>
+							({
+								value: '' + percentile.percentile,
+								label: this.buildPercentileLabel(percentile),
+							} as RankFilterOption),
+					),
+				),
+				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
+			);
+		this.filter$ = combineLatest(
+			this.options$,
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
-			)
-			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([filter, selectedCategoryId]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
+			),
+		).pipe(
+			filter(([options, [filter, selectedCategoryId]]) => !!filter && !!selectedCategoryId),
+			map(([options, [filter, selectedCategoryId]]) => {
+				return {
+					filter: '' + filter,
+					placeholder: options.find((option) => option.value === '' + filter)?.label ?? options[0].label,
 					visible: ['duels-top-decks'].includes(selectedCategoryId),
-				})),
-				// Don't know why this is necessary, but without it, the filter doesn't update
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-			);
+				};
+			}),
+			// Don't know why this is necessary, but without it, the filter doesn't update
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting mmr filter in ', this.constructor.name, filter)),
+		);
 	}
 
 	ngAfterViewInit() {
@@ -84,10 +83,31 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 	}
 
 	onSelected(option: RankFilterOption) {
-		this.stateUpdater.next(new DuelsMmrFilterSelectedEvent(option.value));
+		console.debug('selected', option);
+		this.stateUpdater.next(new DuelsMmrFilterSelectedEvent(+option.value as 100 | 50 | 25 | 10 | 1));
+	}
+
+	private buildPercentileLabel(percentile: MmrPercentile): string {
+		console.debug('building label', percentile, this.getNiceMmrValue(percentile.mmr, 2));
+		switch (percentile.percentile) {
+			case 100:
+				return 'All ranks';
+			case 50:
+				return `Top 50% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+			case 25:
+				return `Top 25% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+			case 10:
+				return `Top 10% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+			case 1:
+				return `Top 1% (${this.getNiceMmrValue(percentile.mmr, 1)}+)`;
+		}
+	}
+
+	private getNiceMmrValue(mmr: number, significantDigit: number) {
+		return Math.pow(10, significantDigit) * Math.round(mmr / Math.pow(10, significantDigit));
 	}
 }
 
 interface RankFilterOption extends IOption {
-	value: 'all' | string;
+	value: string; // Actually a number that describes the percentile (100, 50, 1, etc.)
 }

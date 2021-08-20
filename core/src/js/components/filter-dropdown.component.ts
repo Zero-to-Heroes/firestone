@@ -52,7 +52,6 @@ export class FilterDropdownComponent implements AfterViewInit {
 
 	@Input() set filter(value: string) {
 		this._filter = value;
-		// console.debug('setting filter', value);
 		// Don't know why this is required, but it is.
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

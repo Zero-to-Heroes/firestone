@@ -7,6 +7,7 @@ import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
 import { DuelsTopDecksDustFilterType } from '../../../models/duels/duels-top-decks-dust-filter.type';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { getDuelsMmrFilterNumber } from '../../../services/ui-store/duels-ui-helper';
 
 @Component({
 	selector: 'duels-top-decks',
@@ -40,6 +41,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.topDecks,
+				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
@@ -48,12 +50,20 @@ export class DuelsTopDecksComponent implements OnDestroy {
 			)
 			.pipe(
 				filter(
-					([topDecks, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) => !!topDecks?.length,
+					([topDecks, mmrPercentiles, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) =>
+						!!topDecks?.length && !!mmrPercentiles?.length,
 				),
-				map(([topDecks, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) =>
+				map(([topDecks, mmrPercentiles, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) =>
 					topDecks
 						.map((deck) =>
-							this.applyFilters(deck, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber),
+							this.applyFilters(
+								deck,
+								getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter),
+								classFilter,
+								timeFilter,
+								dustFilter,
+								lastPatchNumber,
+							),
 						)
 						.filter((group) => group.decks.length > 0),
 				),
@@ -108,7 +118,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 
 	private applyFilters(
 		grouped: DuelsGroupedDecks,
-		mmrFilter: string,
+		mmrFilter: number,
 		classFilter: DuelsClassFilterType,
 		timeFilter: DuelsTimeFilterType,
 		dustFilter: DuelsTopDecksDustFilterType,
@@ -124,8 +134,8 @@ export class DuelsTopDecksComponent implements OnDestroy {
 		};
 	}
 
-	private mmrFilter(deck: DuelsDeckStat, filter: string): boolean {
-		return !filter || filter === 'all' || deck.rating >= +filter;
+	private mmrFilter(deck: DuelsDeckStat, filter: number): boolean {
+		return !filter || deck.rating >= filter;
 	}
 
 	private classFilter(deck: DuelsDeckStat, filter: DuelsClassFilterType): boolean {

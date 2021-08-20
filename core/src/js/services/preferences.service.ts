@@ -354,7 +354,7 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
-	public async updateDuelsMmrFilter(value: string) {
+	public async updateDuelsMmrFilter(value: 100 | 50 | 25 | 10 | 1) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActiveMmrFilter: value };
 		await this.savePreferences(newPrefs);
