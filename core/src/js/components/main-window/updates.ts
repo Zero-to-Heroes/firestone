@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.13.0',
+		version: '7.14.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -49,16 +49,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Firestone Duels leaderboards are live! They show you the top 100 Firestone players of each mode (Casual / Heroic), as well as your own ranking.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an info leak that would reveal an Encumbered Pack Mule in the opponent's deck if they drew it before mulligan.`,
+								text: `New filters are available to dig deeper into the stats. You can now filter things by MMR percentile, by Hero Power, or Signature Treasure. Please be aware though that certain filter combinations don't have a lot of data, so the results can be unreliable in these cases.`,
 							},
 						],
 					},
@@ -69,19 +60,15 @@ export const updates: readonly Update[] = [
 				header: 'Minor updates',
 				updates: [
 					{
-						category: 'decktracker',
+						category: 'battlegrounds',
 						details: [
 							{
-								type: 'feature',
-								text: `Improve card detection when playing Spy-o-Matic. The 3 choices offered during the discover are now added to the opponent's decklist, and the card drawn is properly flagged in the opponent's hand.`,
+								type: 'bug',
+								text: `Fix a bug where poisonous minions would still give their targets a chance to revive through deathrattle buffs like Goldrinn's.`,
 							},
 							{
-								type: 'feature',
-								text: `When an Ignite is shuffled into a deck, add an indicator that shows its current bonus damage.`,
-							},
-							{
-								type: 'feature',
-								text: `Add support for Lady Prestor. Playing her now updates all the known minions in the decklist to indicate random Dragons.`,
+								type: 'bug',
+								text: `Fix a bug where quickly starting a new game after the first could cause the tracker to bug out in the new lobby.`,
 							},
 						],
 					},
