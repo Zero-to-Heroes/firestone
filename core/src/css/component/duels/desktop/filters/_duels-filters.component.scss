@@ -22,13 +22,16 @@
 			margin-bottom: 15px;
 		}
 	}
+
+	preference-toggle {
+		margin-bottom: 15px;
+	}
 }
 
 .hide-below-threshold-link,
 .show-hidden-decks-link {
 	align-self: flex-end;
 	flex-grow: 1;
-	opacity: 0.5;
 	height: 30px;
 	display: flex;
 	align-items: flex-end;
@@ -38,6 +41,12 @@
 	right: 45px;
 
 	::ng-deep .preference-toggle.preference-toggle.preference-toggle {
+		opacity: 0.5;
+
+		&.toggled-on {
+			opacity: 0.8;
+		}
+
 		.toggle b {
 			border-color: var(--color-1);
 			&::before {
@@ -52,16 +61,14 @@
 	}
 
 	&:hover {
-		opacity: 0.8;
+		::ng-deep .preference-toggle.preference-toggle.preference-toggle {
+			opacity: 1;
+		}
 	}
 }
 
 .hide-below-threshold-link {
-	opacity: 0.5;
-	height: 30px;
-	display: flex;
 	align-items: center;
-	justify-content: flex-end;
 	position: relative;
 	top: 0;
 	right: 0;

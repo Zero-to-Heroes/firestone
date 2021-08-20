@@ -22,7 +22,7 @@ import { uuid } from '../../services/utils';
 		`../../../css/component/settings/preference-toggle.component.scss`,
 	],
 	template: `
-		<div class="preference-toggle">
+		<div class="preference-toggle" [ngClass]="{ 'toggled-on': value }">
 			<input
 				hidden
 				type="checkbox"
