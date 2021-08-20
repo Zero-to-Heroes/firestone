@@ -16,7 +16,6 @@ export class LinkedEntityParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		console.debug('linkedEntity', gameEvent, currentState);
 		const linkedEntityControllerId = gameEvent.additionalData.linkedEntityControllerId;
 
 		const isPlayerForFind = controllerId === localPlayer.PlayerId;
@@ -26,16 +25,13 @@ export class LinkedEntityParser implements EventParser {
 		const deckInWhichToAddTheCard = isPlayerForAdd ? currentState.playerDeck : currentState.opponentDeck;
 
 		const newCard = deckInWhichToFindTheCard.findCard(entityId);
-		console.debug('newCard', newCard);
 		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId);
-		console.debug('originalCard', originalCard);
 		let newPlayerDeck: DeckState;
 		if (originalCard) {
 			const updatedCard = originalCard.update({
 				cardId: newCard.cardId,
 			} as DeckCard);
 			newPlayerDeck = this.helper.updateCardInDeck(deckInWhichToAddTheCard, updatedCard);
-			console.debug('found original card, updating', updatedCard);
 		} else {
 			// Can happen for BG heroes
 			if (gameEvent.additionalData.linkedEntityZone !== Zone.DECK) {
@@ -64,7 +60,6 @@ export class LinkedEntityParser implements EventParser {
 				true,
 			)[0];
 			const newDeck = this.helper.addSingleCardToZone(intermediaryDeck, updatedCard);
-			console.debug('no card present, creating new card in deck', newDeck);
 			newPlayerDeck = deckInWhichToAddTheCard.update({
 				deck: newDeck,
 			} as DeckState);

@@ -87,7 +87,6 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 	}
 
 	private buildPercentileLabel(percentile: MmrPercentile): string {
-		console.debug('building label', percentile, this.getNiceMmrValue(percentile.mmr, 2));
 		switch (percentile.percentile) {
 			case 100:
 				return 'All ranks';
