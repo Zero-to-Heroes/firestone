@@ -38,12 +38,14 @@ export class DuelsHeroStatsComponent {
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
+				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.runs,
 				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
 			)
@@ -51,18 +53,20 @@ export class DuelsHeroStatsComponent {
 				map(
 					([
 						duelStats,
+						mmrPercentiles,
 						runs,
 						statType,
 						gameMode,
 						heroSorting,
 						timeFilter,
 						classFilter,
+						mmrFilter,
 						hideThreshold,
 						lastPatchNumber,
 					]) =>
 						[
-							filterDuelsHeroStats(duelStats, timeFilter, classFilter),
-							filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+							filterDuelsHeroStats(duelStats, timeFilter, classFilter, mmrFilter),
+							filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber, 0),
 							statType,
 							heroSorting,
 							hideThreshold,

@@ -18,16 +18,23 @@ export const filterDuelsHeroStats = (
 	heroStats: readonly DuelsHeroStat[],
 	timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
+	mmrFilter: 100 | 50 | 25 | 10 | 1,
 ): readonly DuelsHeroStat[] => {
-	return (
+	console.debug(
+		'top hero stats',
 		heroStats
 			.filter((stat) => stat.date === timeFilter)
-			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
-			// We always show the "Heroic" stats, even when the filter is set to "Casual"
-			// The only thing that will change are the player stats
-			// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
-			.filter((stat) => isCorrectClass(stat, classFilter))
+			.filter((stat) => stat.mmrPercentile === 1)
+			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter)),
+		heroStats,
 	);
+	return heroStats
+		.filter((stat) => stat.date === timeFilter)
+		.filter((stat) => stat.mmrPercentile === mmrFilter)
+		.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter));
+	// We always show the "Heroic" stats, even when the filter is set to "Casual"
+	// The only thing that will change are the player stats
+	// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
 };
 
 export const filterDuelsTreasureStats = (
@@ -35,6 +42,7 @@ export const filterDuelsTreasureStats = (
 	timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
 	statType: DuelsTreasureStatTypeFilterType,
+	mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
 ): readonly DuelsTreasureStat[] => {
 	return (
@@ -42,12 +50,12 @@ export const filterDuelsTreasureStats = (
 			// Avoid generating errors when the API hasn't properly formatted the data yet
 			.filter((stat) => !(+stat.treasureCardId > 0))
 			.filter((stat) => stat.date === timeFilter)
+			.filter((stat) => stat.mmrPercentile === mmrFilter)
 			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
 			.filter((stat) => isCorrectType(stat, statType, allCards))
-			// We always show the "Heroic" stats, even when the filter is set to "Casual"
-			// The only thing that will change are the player stats
-			// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
-			.filter((stat) => isCorrectClass(stat, classFilter))
+		// We always show the "Heroic" stats, even when the filter is set to "Casual"
+		// The only thing that will change are the player stats
+		// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
 	);
 };
 
@@ -57,8 +65,10 @@ export const filterDuelsRuns = (
 	classFilter: DuelsClassFilterType,
 	gameMode: DuelsGameModeFilterType,
 	lastPatchNumber: number,
+	mmrFilter: number,
 ) => {
 	return runs
+		.filter((run) => run.ratingAtStart >= mmrFilter)
 		.filter((run) => isCorrectRunDate(run, timeFilter, lastPatchNumber))
 		.filter((run) => (classFilter === 'all' ? true : run.heroCardId === getDuelsHeroCardId(classFilter)))
 		.filter((run) => (gameMode === 'all' ? true : run.type === gameMode));
@@ -112,6 +122,7 @@ export const buildDuelsHeroPlayerStats = (
 	const grouped: { [cardId: string]: readonly DuelsHeroStat[] } = groupByFunction(
 		getGroupingKeyForHeroStat(statType),
 	)(duelStats);
+	console.debug('grouped', grouped, duelStats);
 
 	return Object.keys(grouped).map((key) => {
 		const group = grouped[key];
@@ -152,6 +163,7 @@ export const getCurrentDeck = (
 	classFilter: DuelsClassFilterType,
 	gameMode: DuelsGameModeFilterType,
 	lastPatchNumber: number,
+	mmrFilter: number,
 	deckDetails: readonly DuelsDeckStat[] = [],
 ): DeckInfo => {
 	if (!!deckstring?.length) {
@@ -159,7 +171,7 @@ export const getCurrentDeck = (
 		if (!deck) {
 			return null;
 		}
-		const runs = filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, lastPatchNumber);
+		const runs = filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, lastPatchNumber, mmrFilter);
 		return {
 			personal: true,
 			run: null,
@@ -182,15 +194,6 @@ export const getDuelsMmrFilterNumber = (
 		mmrPercentiles.find((p) => p.percentile === +mmrFilter)?.mmr ??
 		mmrPercentiles.find((p) => p.percentile === 100).mmr
 	);
-};
-
-const isCorrectClass = (stat: DuelsHeroStat | GameStat, classFilter: DuelsClassFilterType): boolean => {
-	switch (classFilter) {
-		case 'all':
-			return true;
-		default:
-			return stat.playerClass === classFilter;
-	}
 };
 
 const isCorrectType = (

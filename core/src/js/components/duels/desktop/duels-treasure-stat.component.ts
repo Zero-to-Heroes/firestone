@@ -42,12 +42,14 @@ export class DuelsTreasureStatsComponent {
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.treasures,
+				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.runs,
 				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
 			)
@@ -55,18 +57,27 @@ export class DuelsTreasureStatsComponent {
 				map(
 					([
 						duelStats,
+						mmrPercentiles,
 						runs,
 						statType,
 						gameMode,
 						treasureSorting,
 						timeFilter,
 						classFilter,
+						mmrFilter,
 						hideThreshold,
 						lastPatchNumber,
 					]) =>
 						[
-							filterDuelsTreasureStats(duelStats, timeFilter, classFilter, statType, this.allCards),
-							filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+							filterDuelsTreasureStats(
+								duelStats,
+								timeFilter,
+								classFilter,
+								statType,
+								mmrFilter,
+								this.allCards,
+							),
+							filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber, 0),
 							treasureSorting,
 							hideThreshold,
 						] as [readonly DuelsTreasureStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],

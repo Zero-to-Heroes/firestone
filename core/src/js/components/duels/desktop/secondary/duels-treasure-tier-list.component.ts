@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
@@ -27,7 +27,11 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 export class DuelsTreasureTierListComponent {
 	tiers$: Observable<readonly DuelsTier[]>;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.tiers$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats.treasures,
@@ -35,11 +39,12 @@ export class DuelsTreasureTierListComponent {
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 			)
 			.pipe(
 				filter(([treasures, statType]) => !!treasures?.length),
-				map(([treasures, statType, gameMode, timeFilter, classFilter]) =>
-					filterDuelsTreasureStats(treasures, timeFilter, classFilter, statType, this.allCards),
+				map(([treasures, statType, gameMode, timeFilter, classFilter, mmrFilter]) =>
+					filterDuelsTreasureStats(treasures, timeFilter, classFilter, statType, mmrFilter, this.allCards),
 				),
 				map((treasures) => {
 					const stats = [...buildDuelsHeroTreasurePlayerStats(treasures)].sort(
@@ -78,6 +83,8 @@ export class DuelsTreasureTierListComponent {
 						},
 					].filter((tier) => tier.items?.length);
 				}),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
 			);
 	}

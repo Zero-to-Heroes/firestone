@@ -44,7 +44,7 @@ export class DuelsPersonalDecksComponent {
 						.map((deck) => {
 							return {
 								...deck,
-								runs: filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+								runs: filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, lastPatchNumber, 0),
 							};
 						})
 						.filter((deck) => !!deck.runs.length),

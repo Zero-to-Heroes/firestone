@@ -69,7 +69,7 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 				return {
 					filter: '' + filter,
 					placeholder: options.find((option) => option.value === '' + filter)?.label ?? options[0].label,
-					visible: ['duels-top-decks'].includes(selectedCategoryId),
+					visible: ['duels-stats', 'duels-treasures', 'duels-top-decks'].includes(selectedCategoryId),
 				};
 			}),
 			// Don't know why this is necessary, but without it, the filter doesn't update

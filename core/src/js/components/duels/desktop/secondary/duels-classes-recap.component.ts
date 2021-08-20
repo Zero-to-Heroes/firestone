@@ -95,7 +95,7 @@ export class DuelsClassesRecapComponent {
 			.pipe(
 				filter(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) => !!runs?.length),
 				map(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) =>
-					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+					filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber, 0),
 				),
 				map((runs) => {
 					return {

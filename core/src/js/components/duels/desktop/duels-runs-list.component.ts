@@ -77,7 +77,7 @@ export class DuelsRunsListComponent implements OnDestroy {
 				.pipe(
 					filter(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) => !!runs?.length),
 					map(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) =>
-						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber),
+						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber, 0),
 					),
 				),
 			this.deckstring$.asObservable(),

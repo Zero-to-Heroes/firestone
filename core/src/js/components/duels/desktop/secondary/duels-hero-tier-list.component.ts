@@ -33,12 +33,13 @@ export class DuelsHeroTierListComponent {
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 			)
 			.pipe(
-				filter(([duelsStats, statType, gameMode, timeFilter, classFilter]) => !!duelsStats?.length),
+				filter(([duelsStats, statType, gameMode, timeFilter, classFilter, mmrFilter]) => !!duelsStats?.length),
 				map(
-					([duelStats, statType, gameMode, timeFilter, classFilter]) =>
-						[filterDuelsHeroStats(duelStats, timeFilter, classFilter), statType] as [
+					([duelStats, statType, gameMode, timeFilter, classFilter, mmrFilter]) =>
+						[filterDuelsHeroStats(duelStats, timeFilter, classFilter, mmrFilter), statType] as [
 							readonly DuelsHeroStat[],
 							DuelsStatTypeFilterType,
 						],

@@ -100,6 +100,7 @@ export class DuelsDeckStatsComponent {
 							classFilter,
 							gameMode,
 							patchNumber,
+							0,
 							deckDetails,
 						),
 				),

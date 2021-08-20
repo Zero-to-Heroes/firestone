@@ -155,6 +155,7 @@ export class DuelsPersonalDeckDetailsComponent {
 							classFilter,
 							gameMode,
 							patchNumber,
+							0,
 							deckDetails,
 						),
 				),
