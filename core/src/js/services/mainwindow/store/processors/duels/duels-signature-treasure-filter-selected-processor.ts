@@ -1,19 +1,20 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
 import { PreferencesService } from '../../../../preferences.service';
-import { DuelsHeroPowerFilterSelectedEvent } from '../../events/duels/duels-hero-power-filter-selected-event';
+import { DuelsSignatureTreasureFilterSelectedEvent } from '../../events/duels/duels-signature-treasure-filter-selected-event';
 import { Processor } from '../processor';
 
-export class DuelsHeroPowerFilterSelectedProcessor implements Processor {
+export class DuelsSignatureTreasureFilterSelectedProcessor implements Processor {
 	constructor(private readonly prefs: PreferencesService) {}
 
 	public async process(
-		event: DuelsHeroPowerFilterSelectedEvent,
+		event: DuelsSignatureTreasureFilterSelectedEvent,
 		currentState: MainWindowState,
-		stateHistory,
+		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		await this.prefs.updateDuelsHeroPowerFilter(event.value);
+		await this.prefs.updateDuelsSignatureTreasureFilter(event.value);
+		console.log('updated duels signature treasure filter', event.value);
 		return [null, null];
 	}
 }

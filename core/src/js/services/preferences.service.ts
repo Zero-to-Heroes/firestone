@@ -366,6 +366,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateDuelsSignatureTreasureFilter(value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsActiveSignatureTreasureFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateDuelsDeckName(deckstring: string, newName: string) {
 		const prefs = await this.getPreferences();
 		const names = prefs.duelsPersonalDeckNames;

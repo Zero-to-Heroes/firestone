@@ -19,17 +19,10 @@ export const filterDuelsHeroStats = (
 	timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
 	heroPowerFilter: 'all' | string,
+	signatureTreasureFilter: 'all' | string,
 	statType: DuelsStatTypeFilterType,
 	mmrFilter: 100 | 50 | 25 | 10 | 1,
 ): readonly DuelsHeroStat[] => {
-	console.debug(
-		'top hero stats',
-		heroStats
-			.filter((stat) => stat.date === timeFilter)
-			.filter((stat) => stat.mmrPercentile === 1)
-			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter)),
-		heroStats,
-	);
 	return heroStats
 		.filter((stat) => stat.date === timeFilter)
 		.filter((stat) => stat.mmrPercentile === mmrFilter)
@@ -40,6 +33,12 @@ export const filterDuelsHeroStats = (
 			heroPowerFilter === 'all' || statType !== 'signature-treasure'
 				? true
 				: stat.heroPowerCardId === heroPowerFilter,
+		)
+		.filter((stat) =>
+			// Similar
+			signatureTreasureFilter === 'all' || statType !== 'hero-power'
+				? true
+				: stat.signatureTreasureCardId === signatureTreasureFilter,
 		);
 	// We always show the "Heroic" stats, even when the filter is set to "Casual"
 	// The only thing that will change are the player stats
@@ -51,6 +50,7 @@ export const filterDuelsTreasureStats = (
 	timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
 	heroPowerFilter: 'all' | string,
+	sigTreasureFilter: 'all' | string,
 	statType: DuelsTreasureStatTypeFilterType,
 	mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
@@ -63,6 +63,7 @@ export const filterDuelsTreasureStats = (
 			.filter((stat) => stat.mmrPercentile === mmrFilter)
 			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
 			.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
+			.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
 			.filter((stat) => isCorrectType(stat, statType, allCards))
 		// We always show the "Heroic" stats, even when the filter is set to "Casual"
 		// The only thing that will change are the player stats
@@ -78,6 +79,7 @@ export const filterDuelsRuns = (
 	lastPatchNumber: number,
 	mmrFilter: number,
 	heroPowerFilter: 'all' | string = 'all',
+	signatureTreasureFilter: 'all' | string = 'all',
 	statType: DuelsStatTypeFilterType = null,
 ) => {
 	return runs
@@ -91,6 +93,12 @@ export const filterDuelsRuns = (
 			heroPowerFilter === 'all' || statType !== 'signature-treasure'
 				? true
 				: stat.heroPowerCardId === heroPowerFilter,
+		)
+		.filter((stat) =>
+			// Similar
+			signatureTreasureFilter === 'all' || statType !== 'hero-power'
+				? true
+				: stat.signatureTreasureCardId === signatureTreasureFilter,
 		);
 };
 

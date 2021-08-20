@@ -45,6 +45,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
+				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
@@ -57,6 +58,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 						mmrFilter,
 						classFilter,
 						heroPowerFilter,
+						sigTreasureFilter,
 						timeFilter,
 						dustFilter,
 						lastPatchNumber,
@@ -69,6 +71,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 						mmrFilter,
 						classFilter,
 						heroPowerFilter,
+						sigTreasureFilter,
 						timeFilter,
 						dustFilter,
 						lastPatchNumber,
@@ -80,6 +83,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 									getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter),
 									classFilter,
 									heroPowerFilter,
+									sigTreasureFilter,
 									timeFilter,
 									dustFilter,
 									lastPatchNumber,
@@ -141,6 +145,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 		mmrFilter: number,
 		classFilter: DuelsClassFilterType,
 		heroPowerFilter: 'all' | string,
+		sigTreasureFilter: 'all' | string,
 		timeFilter: DuelsTimeFilterType,
 		dustFilter: DuelsTopDecksDustFilterType,
 		lastPatchNumber: number,
@@ -151,6 +156,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 				.filter((deck) => this.mmrFilter(deck, mmrFilter))
 				.filter((deck) => this.classFilter(deck, classFilter))
 				.filter((deck) => this.heroPowerFilter(deck, heroPowerFilter))
+				.filter((deck) => this.sigTreasureFilter(deck, sigTreasureFilter))
 				.filter((deck) => this.timeFilter(deck, timeFilter, lastPatchNumber))
 				.filter((deck) => this.dustFilter(deck, dustFilter)),
 		};
@@ -166,6 +172,10 @@ export class DuelsTopDecksComponent implements OnDestroy {
 
 	private heroPowerFilter(deck: DuelsDeckStat, filter: 'all' | string): boolean {
 		return !filter || filter === 'all' || deck.heroPowerCardId === filter;
+	}
+
+	private sigTreasureFilter(deck: DuelsDeckStat, filter: 'all' | string): boolean {
+		return !filter || filter === 'all' || deck.signatureTreasureCardId === filter;
 	}
 
 	private dustFilter(deck: DuelsDeckStat, filter: DuelsTopDecksDustFilterType): boolean {

@@ -31,7 +31,7 @@ export const classesForPieChart = [
 
 export const formatClass = (playerClass: string): string => {
 	let update = playerClass?.toLowerCase();
-	if (playerClass === 'demonhunter') {
+	if (update === 'demonhunter') {
 		update = 'demon hunter';
 	}
 	return capitalizeEachWord(update);

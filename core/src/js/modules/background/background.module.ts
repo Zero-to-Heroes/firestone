@@ -180,6 +180,7 @@ import { DuelsHeroPowerFilterDropdownComponent } from '../../components/duels/de
 import { DuelsHeroSortDropdownComponent } from '../../components/duels/desktop/filters/duels-hero-sort-dropdown.component';
 import { DuelsLeaderboardGameModeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-leaderboard-game-mode-filter-dropdown.component';
 import { DuelsMmrFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-mmr-filter-dropdown.component';
+import { DuelsSignatureTreasureFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-signature-treasure-filter-dropdown.component';
 import { DuelsStatTypeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-stat-type-filter-dropdown.component';
 import { DuelsTimeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-time-filter-dropdown.component';
 import { DuelsTreasurePassiveTypeFilterDropdownComponent } from '../../components/duels/desktop/filters/duels-treasure-passive-type-filter-dropdown.component';
@@ -608,6 +609,7 @@ const components = [
 		DuelsMmrFilterDropdownComponent,
 		DuelsLeaderboardGameModeFilterDropdownComponent,
 		DuelsHeroPowerFilterDropdownComponent,
+		DuelsSignatureTreasureFilterDropdownComponent,
 
 		ArenaDesktopComponent,
 		ArenaEmptyStateComponent,

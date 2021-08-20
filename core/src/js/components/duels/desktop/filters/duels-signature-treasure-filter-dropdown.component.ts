@@ -5,13 +5,13 @@ import { filter, map, tap } from 'rxjs/operators';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { formatClass } from '../../../../services/hs-utils';
-import { DuelsHeroPowerFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-power-filter-selected-event';
+import { DuelsSignatureTreasureFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-signature-treasure-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
-	selector: 'duels-hero-power-filter-dropdown',
+	selector: 'duels-signature-treasure-filter-dropdown',
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
@@ -20,7 +20,7 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 	template: `
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
-			class="duels-hero-power-filter-dropdown"
+			class="duels-signature-treasure-filter-dropdown"
 			[options]="options$ | async"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
@@ -30,7 +30,7 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DuelsHeroPowerFilterDropdownComponent implements AfterViewInit {
+export class DuelsSignatureTreasureFilterDropdownComponent implements AfterViewInit {
 	options$: Observable<readonly IOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
@@ -46,13 +46,13 @@ export class DuelsHeroPowerFilterDropdownComponent implements AfterViewInit {
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.heroes)
 			.pipe(
 				filter(([stats]) => !!stats?.length),
-				map(([stats]) => [...new Set(stats.map((stat) => stat.heroPowerCardId))]),
-				map((heroPowerCardIds) => [
+				map(([stats]) => [...new Set(stats.map((stat) => stat.signatureTreasureCardId))]),
+				map((signatureTreasureCardIds) => [
 					{
 						value: 'all',
-						label: 'All Hero Powers',
+						label: 'All Sig. Treasures',
 					},
-					...heroPowerCardIds
+					...signatureTreasureCardIds
 						.sort((a, b) => {
 							const aCard = this.allCards.getCard(a);
 							const bCard = this.allCards.getCard(b);
@@ -87,22 +87,22 @@ export class DuelsHeroPowerFilterDropdownComponent implements AfterViewInit {
 							}
 							return 0;
 						})
-						.map((heroPowerCardId) => {
-							const card = this.allCards.getCard(heroPowerCardId);
+						.map((signatureTreasureCardId) => {
+							const card = this.allCards.getCard(signatureTreasureCardId);
 							return {
-								value: heroPowerCardId,
-								label: `${card?.name ?? heroPowerCardId} (${formatClass(card.playerClass)})`,
+								value: signatureTreasureCardId,
+								label: `${card?.name ?? signatureTreasureCardId} (${formatClass(card.playerClass)})`,
 							};
 						}),
 				]),
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting hero power options in ', this.constructor.name, filter)),
+				tap((filter) => cdLog('emitting signature treasure options in ', this.constructor.name, filter)),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(
-				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
+				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 				([main, nav]) => nav.navigationDuels.selectedCategoryId,
 			),
@@ -117,7 +117,7 @@ export class DuelsHeroPowerFilterDropdownComponent implements AfterViewInit {
 			}),
 			// Don't know why this is necessary, but without it, the filter doesn't update
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((filter) => cdLog('emitting hero power filter in ', this.constructor.name, filter)),
+			tap((filter) => cdLog('emitting signature treasure filter in ', this.constructor.name, filter)),
 		);
 	}
 
@@ -125,7 +125,7 @@ export class DuelsHeroPowerFilterDropdownComponent implements AfterViewInit {
 		if (!['duels-stats', 'duels-treasures', 'duels-top-decks'].includes(selectedCategoryId)) {
 			return false;
 		}
-		if (selectedCategoryId === 'duels-stats' && statTypeFilter !== 'signature-treasure') {
+		if (selectedCategoryId === 'duels-stats' && statTypeFilter !== 'hero-power') {
 			return false;
 		}
 		return true;
@@ -137,6 +137,6 @@ export class DuelsHeroPowerFilterDropdownComponent implements AfterViewInit {
 
 	onSelected(option: IOption) {
 		console.debug('selected', option);
-		this.stateUpdater.next(new DuelsHeroPowerFilterSelectedEvent(option.value));
+		this.stateUpdater.next(new DuelsSignatureTreasureFilterSelectedEvent(option.value));
 	}
 }

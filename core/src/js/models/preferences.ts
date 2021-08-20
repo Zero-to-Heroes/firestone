@@ -282,6 +282,7 @@ export class Preferences {
 	readonly duelsActiveTopDecksDustFilter: DuelsTopDecksDustFilterType = 'all';
 	readonly duelsActiveMmrFilter: 100 | 50 | 25 | 10 | 1 = 100;
 	readonly duelsActiveHeroPowerFilter: 'all' | string = 'all';
+	readonly duelsActiveSignatureTreasureFilter: 'all' | string = 'all';
 	readonly duelsActiveLeaderboardModeFilter: 'paid-duels' | 'duels' = 'paid-duels';
 	readonly duelsPersonalDeckNames: { [deckstring: string]: string } = {};
 	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];

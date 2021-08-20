@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { DuelsGameModeFilterType } from '../../../../models/duels/duels-game-mode-filter.type';
 import { DuelsGameModeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-game-mode-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -64,7 +64,6 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 			)
 			.pipe(
 				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				distinctUntilChanged((a, b) => a.filter === b.filter),
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,

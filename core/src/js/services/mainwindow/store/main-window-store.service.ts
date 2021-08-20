@@ -95,6 +95,7 @@ import { DuelsMmrFilterSelectedEvent } from './events/duels/duels-mmr-filter-sel
 import { DuelsPersonalDeckRenameEvent } from './events/duels/duels-personal-deck-rename-event';
 import { DuelsRestorePersonalDeckSummaryEvent } from './events/duels/duels-restore-personal-deck-summary-event';
 import { DuelsSelectCategoryEvent } from './events/duels/duels-select-category-event';
+import { DuelsSignatureTreasureFilterSelectedEvent } from './events/duels/duels-signature-treasure-filter-selected-event';
 import { DuelsStatTypeFilterSelectedEvent } from './events/duels/duels-stat-type-filter-selected-event';
 import { DuelsTimeFilterSelectedEvent } from './events/duels/duels-time-filter-selected-event';
 import { DuelsToggleExpandedRunEvent } from './events/duels/duels-toggle-expanded-run-event';
@@ -199,6 +200,7 @@ import { DuelsMmrFilterSelectedProcessor } from './processors/duels/duels-mmr-fi
 import { DuelsPersonalDeckRenameProcessor } from './processors/duels/duels-personal-deck-rename-processor';
 import { DuelsRestorePersonalDeckSummaryProcessor } from './processors/duels/duels-restore-personal-deck-summary-processor';
 import { DuelsSelectCategoryProcessor } from './processors/duels/duels-select-category-processor';
+import { DuelsSignatureTreasureFilterSelectedProcessor } from './processors/duels/duels-signature-treasure-filter-selected-processor';
 import { DuelsStatTypeFilterSelectedProcessor } from './processors/duels/duels-stat-type-filter-selected-processor';
 import { DuelsTimeFilterSelectedProcessor } from './processors/duels/duels-time-filter-selected-processor';
 import { DuelsToggleExpandedRunProcessor } from './processors/duels/duels-toggle-expanded-run-processor';
@@ -722,7 +724,10 @@ export class MainWindowStoreService {
 			new DuelsMmrFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsHeroPowerFilterSelectedEvent.eventName(),
-			new DuelsHeroPowerFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+			new DuelsHeroPowerFilterSelectedProcessor(this.prefs),
+
+			DuelsSignatureTreasureFilterSelectedEvent.eventName(),
+			new DuelsSignatureTreasureFilterSelectedProcessor(this.prefs),
 
 			DuelsPersonalDeckRenameEvent.eventName(),
 			new DuelsPersonalDeckRenameProcessor(this.duelsBuilder, this.prefs),
