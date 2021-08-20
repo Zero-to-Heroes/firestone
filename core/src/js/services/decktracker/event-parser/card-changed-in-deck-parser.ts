@@ -28,6 +28,11 @@ export class CardChangedInDeckParser implements EventParser {
 			deck.deckList.length === 0,
 			true,
 		);
+		if (!theCard) {
+			console.warn('could not find card in deck', cardId, entityId);
+			return currentState;
+		}
+
 		//console.debug('newDeck, theCard', newDeck, theCard);
 		// When card is changed in deck (eg Galakrond), a new card is created
 		const realCardId = !!cardId?.length ? cardId : theCard.cardId;
