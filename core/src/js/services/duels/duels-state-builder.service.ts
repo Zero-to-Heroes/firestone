@@ -25,6 +25,7 @@ import { DuelsCategory } from '../../models/mainwindow/duels/duels-category';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { PatchInfo } from '../../models/patches';
+import { Preferences } from '../../models/preferences';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
@@ -140,7 +141,8 @@ export class DuelsStateBuilderService {
 			)
 			.filter((run) => run);
 		console.log('[duels-state-builder] built runs', runs?.length);
-		const personalDeckStats: readonly DuelsDeckSummary[] = this.buildPersonalDeckStats(runs);
+		const prefs = await this.prefs.getPreferences();
+		const personalDeckStats: readonly DuelsDeckSummary[] = this.buildPersonalDeckStats(runs, prefs);
 		console.log('[duels-state-builder] built deck stats');
 		return currentState.update({
 			runs: runs,
@@ -254,9 +256,9 @@ export class DuelsStateBuilderService {
 		return result;
 	}
 
-	private buildPersonalDeckStats(runs: readonly DuelsRun[]): readonly DuelsDeckSummary[] {
+	private buildPersonalDeckStats(runs: readonly DuelsRun[], prefs: Preferences): readonly DuelsDeckSummary[] {
 		const groupedByDecklist: { [deckstring: string]: readonly DuelsRun[] } = groupByFunction(
-			(run: DuelsRun) => run.initialDeckList + '-' + run.type,
+			(run: DuelsRun) => run.initialDeckList,
 		)(runs.filter((run) => run.initialDeckList));
 		const decks: readonly DuelsDeckSummary[] = Object.keys(groupedByDecklist)
 			.filter((deckstring) => deckstring)
@@ -282,15 +284,21 @@ export class DuelsStateBuilderService {
 					heroCardId: heroCardId,
 					playerClass: playerClass,
 					deckStatsForTypes: decksForTypes,
-					// TODO: use prefs in component to override deck name
-					deckName: `${mainStats.global.averageWinsPerRun.toFixed(1)} wins ${formatClass(
-						playerClass,
-					)} (${getDuelsModeName(firstMatch.type)})`,
+					// FIXME: use prefs in component to override deck name
+					deckName:
+						this.getDeckName(firstMatch.initialDeckList, prefs) ??
+						`${mainStats.global.averageWinsPerRun.toFixed(1)} wins ${formatClass(
+							playerClass,
+						)} (${getDuelsModeName(firstMatch.type)})`,
 					runs: groupedByDecklist[deckstring],
 				} as DuelsDeckSummary;
 			});
 		console.log('[duels-state-builder] decks', decks?.length);
 		return decks;
+	}
+
+	private getDeckName(initialDeckList: string, prefs: Preferences): string {
+		return prefs.duelsPersonalDeckNames[initialDeckList] ?? null;
 	}
 
 	private buildMainPersonalDecktats(
