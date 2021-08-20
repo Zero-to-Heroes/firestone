@@ -44,28 +44,48 @@ export class DuelsTopDecksComponent implements OnDestroy {
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
 			)
 			.pipe(
 				filter(
-					([topDecks, mmrPercentiles, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) =>
-						!!topDecks?.length && !!mmrPercentiles?.length,
+					([
+						topDecks,
+						mmrPercentiles,
+						mmrFilter,
+						classFilter,
+						heroPowerFilter,
+						timeFilter,
+						dustFilter,
+						lastPatchNumber,
+					]) => !!topDecks?.length && !!mmrPercentiles?.length,
 				),
-				map(([topDecks, mmrPercentiles, mmrFilter, classFilter, timeFilter, dustFilter, lastPatchNumber]) =>
-					topDecks
-						.map((deck) =>
-							this.applyFilters(
-								deck,
-								getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter),
-								classFilter,
-								timeFilter,
-								dustFilter,
-								lastPatchNumber,
-							),
-						)
-						.filter((group) => group.decks.length > 0),
+				map(
+					([
+						topDecks,
+						mmrPercentiles,
+						mmrFilter,
+						classFilter,
+						heroPowerFilter,
+						timeFilter,
+						dustFilter,
+						lastPatchNumber,
+					]) =>
+						topDecks
+							.map((deck) =>
+								this.applyFilters(
+									deck,
+									getDuelsMmrFilterNumber(mmrPercentiles, mmrFilter),
+									classFilter,
+									heroPowerFilter,
+									timeFilter,
+									dustFilter,
+									lastPatchNumber,
+								),
+							)
+							.filter((group) => group.decks.length > 0),
 				),
 				tap((stat) => cdLog('emitting top decks in ', this.constructor.name, stat)),
 			)
@@ -120,6 +140,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 		grouped: DuelsGroupedDecks,
 		mmrFilter: number,
 		classFilter: DuelsClassFilterType,
+		heroPowerFilter: 'all' | string,
 		timeFilter: DuelsTimeFilterType,
 		dustFilter: DuelsTopDecksDustFilterType,
 		lastPatchNumber: number,
@@ -129,6 +150,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 			decks: grouped.decks
 				.filter((deck) => this.mmrFilter(deck, mmrFilter))
 				.filter((deck) => this.classFilter(deck, classFilter))
+				.filter((deck) => this.heroPowerFilter(deck, heroPowerFilter))
 				.filter((deck) => this.timeFilter(deck, timeFilter, lastPatchNumber))
 				.filter((deck) => this.dustFilter(deck, dustFilter)),
 		};
@@ -140,6 +162,10 @@ export class DuelsTopDecksComponent implements OnDestroy {
 
 	private classFilter(deck: DuelsDeckStat, filter: DuelsClassFilterType): boolean {
 		return !filter || filter === 'all' || deck.playerClass === filter;
+	}
+
+	private heroPowerFilter(deck: DuelsDeckStat, filter: 'all' | string): boolean {
+		return !filter || filter === 'all' || deck.heroPowerCardId === filter;
 	}
 
 	private dustFilter(deck: DuelsDeckStat, filter: DuelsTopDecksDustFilterType): boolean {

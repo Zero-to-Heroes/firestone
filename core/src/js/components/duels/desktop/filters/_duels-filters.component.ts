@@ -28,6 +28,7 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 			<duels-mmr-filter-dropdown class="filter mmr-filter"></duels-mmr-filter-dropdown>
 			<duels-time-filter-dropdown class="filter time-filter"></duels-time-filter-dropdown>
 			<duels-class-filter-dropdown class="filter class-filter"></duels-class-filter-dropdown>
+			<duels-hero-power-filter-dropdown class="filter hero-power-filter"></duels-hero-power-filter-dropdown>
 			<duels-dust-filter-dropdown class="filter dust-filter"></duels-dust-filter-dropdown>
 			<duels-hero-sort-dropdown class="filter hero-sort"></duels-hero-sort-dropdown>
 

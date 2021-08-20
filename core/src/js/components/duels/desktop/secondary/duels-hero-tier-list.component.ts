@@ -33,16 +33,27 @@ export class DuelsHeroTierListComponent {
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 			)
 			.pipe(
-				filter(([duelsStats, statType, gameMode, timeFilter, classFilter, mmrFilter]) => !!duelsStats?.length),
+				filter(
+					([duelsStats, statType, gameMode, timeFilter, classFilter, heroPowerFilter, mmrFilter]) =>
+						!!duelsStats?.length,
+				),
 				map(
-					([duelStats, statType, gameMode, timeFilter, classFilter, mmrFilter]) =>
-						[filterDuelsHeroStats(duelStats, timeFilter, classFilter, mmrFilter), statType] as [
-							readonly DuelsHeroStat[],
-							DuelsStatTypeFilterType,
-						],
+					([duelStats, statType, gameMode, timeFilter, classFilter, heroPowerFilter, mmrFilter]) =>
+						[
+							filterDuelsHeroStats(
+								duelStats,
+								timeFilter,
+								classFilter,
+								heroPowerFilter,
+								statType,
+								mmrFilter,
+							),
+							statType,
+						] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType],
 				),
 				// distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				map(([duelsStats, statType]) => {

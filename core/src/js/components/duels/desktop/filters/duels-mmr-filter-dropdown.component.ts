@@ -43,7 +43,6 @@ export class DuelsMmrFilterDropdownComponent implements AfterViewInit {
 			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
 			.pipe(
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
-				tap(([mmrPercentiles]) => console.debug('percentiles', mmrPercentiles)),
 				map(([mmrPercentiles]) =>
 					mmrPercentiles.map(
 						(percentile) =>

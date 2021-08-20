@@ -360,6 +360,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateDuelsHeroPowerFilter(value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, duelsActiveHeroPowerFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateDuelsDeckName(deckstring: string, newName: string) {
 		const prefs = await this.getPreferences();
 		const names = prefs.duelsPersonalDeckNames;

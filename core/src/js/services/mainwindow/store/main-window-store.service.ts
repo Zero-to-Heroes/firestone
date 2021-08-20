@@ -86,6 +86,7 @@ import { SelectDeckDetailsEvent } from './events/decktracker/select-deck-details
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { ToggleShowHiddenDecksEvent } from './events/decktracker/toggle-show-hidden-decks-event';
 import { DuelsGameModeFilterSelectedEvent } from './events/duels/duels-game-mode-filter-selected-event';
+import { DuelsHeroPowerFilterSelectedEvent } from './events/duels/duels-hero-power-filter-selected-event';
 import { DuelsHeroSearchEvent } from './events/duels/duels-hero-search-event';
 import { DuelsHeroSortFilterSelectedEvent } from './events/duels/duels-hero-sort-filter-selected-event';
 import { DuelsHidePersonalDeckSummaryEvent } from './events/duels/duels-hide-personal-deck-summary-event';
@@ -189,6 +190,7 @@ import { SelectDeckDetailsProcessor } from './processors/decktracker/select-deck
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { ToggleShowHiddenDecksProcessor } from './processors/decktracker/toggle-show-hidden-decks-processor';
 import { DuelsGameModeFilterSelectedProcessor } from './processors/duels/duels-game-mode-filter-selected-processor';
+import { DuelsHeroPowerFilterSelectedProcessor } from './processors/duels/duels-hero-power-filter-selected-processor';
 import { DuelsHeroSearchProcessor } from './processors/duels/duels-hero-search-processor';
 import { DuelsHeroSortFilterSelectedProcessor } from './processors/duels/duels-hero-sort-filter-selected-processor';
 import { DuelsHidePersonalDeckSummaryProcessor } from './processors/duels/duels-hide-personal-deck-summary-processor';
@@ -718,6 +720,9 @@ export class MainWindowStoreService {
 
 			DuelsMmrFilterSelectedEvent.eventName(),
 			new DuelsMmrFilterSelectedProcessor(this.duelsBuilder, this.prefs),
+
+			DuelsHeroPowerFilterSelectedEvent.eventName(),
+			new DuelsHeroPowerFilterSelectedProcessor(this.duelsBuilder, this.prefs),
 
 			DuelsPersonalDeckRenameEvent.eventName(),
 			new DuelsPersonalDeckRenameProcessor(this.duelsBuilder, this.prefs),

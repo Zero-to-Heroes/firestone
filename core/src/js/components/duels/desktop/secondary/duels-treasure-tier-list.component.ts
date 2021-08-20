@@ -39,12 +39,21 @@ export class DuelsTreasureTierListComponent {
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
+				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 			)
 			.pipe(
 				filter(([treasures, statType]) => !!treasures?.length),
-				map(([treasures, statType, gameMode, timeFilter, classFilter, mmrFilter]) =>
-					filterDuelsTreasureStats(treasures, timeFilter, classFilter, statType, mmrFilter, this.allCards),
+				map(([treasures, statType, gameMode, timeFilter, classFilter, heroPowerFilter, mmrFilter]) =>
+					filterDuelsTreasureStats(
+						treasures,
+						timeFilter,
+						classFilter,
+						heroPowerFilter,
+						statType,
+						mmrFilter,
+						this.allCards,
+					),
 				),
 				map((treasures) => {
 					const stats = [...buildDuelsHeroTreasurePlayerStats(treasures)].sort(
