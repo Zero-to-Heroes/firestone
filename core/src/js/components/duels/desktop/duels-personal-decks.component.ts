@@ -35,16 +35,18 @@ export class DuelsPersonalDecksComponent {
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
+				([main, nav, prefs]) => prefs.duelsPersonalDeckNames,
 				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
 			)
 			.pipe(
-				filter(([decks, timeFilter, classFilter, gameMode, lastPatchNumber]) => !!decks?.length),
-				map(([decks, timeFilter, classFilter, gameMode, lastPatchNumber]) =>
+				filter(([decks, timeFilter, classFilter, gameMode, deckNames, lastPatchNumber]) => !!decks?.length),
+				map(([decks, timeFilter, classFilter, gameMode, deckNames, lastPatchNumber]) =>
 					decks
 						.map((deck) => {
 							return {
 								...deck,
 								runs: filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, lastPatchNumber, 0),
+								deckName: deckNames[deck.initialDeckList] ?? deck.deckName,
 							};
 						})
 						.filter((deck) => !!deck.runs.length),

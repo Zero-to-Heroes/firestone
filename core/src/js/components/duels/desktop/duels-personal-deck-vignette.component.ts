@@ -152,5 +152,9 @@ export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 
 	doRename() {
 		this.stateUpdater.next(new DuelsPersonalDeckRenameEvent(this.deckstring, this.deckName));
+		this.renaming = false;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
