@@ -72,6 +72,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix a bug where the "last patch" filter doesn't work since 21.0.3`,
+							},
+						],
+					},
 				],
 			},
 			// {

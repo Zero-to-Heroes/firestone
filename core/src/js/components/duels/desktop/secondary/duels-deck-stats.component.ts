@@ -63,46 +63,26 @@ export class DuelsDeckStatsComponent {
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
 				filter(
-					([
-						decks,
-						topDecks,
-						deckDetails,
-						deckstring,
-						deckId,
-						timeFilter,
-						classFilter,
-						gameMode,
-						patchNumber,
-					]) => (!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
+					([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
+						(!!deckstring?.length && !!decks?.length) || (deckId && !!topDecks?.length),
 				),
-				map(
-					([
+				map(([decks, topDecks, deckDetails, deckstring, deckId, timeFilter, classFilter, gameMode, patch]) =>
+					getCurrentDeck(
 						decks,
-						topDecks,
-						deckDetails,
 						deckstring,
+						topDecks,
 						deckId,
 						timeFilter,
 						classFilter,
 						gameMode,
-						patchNumber,
-					]) =>
-						getCurrentDeck(
-							decks,
-							deckstring,
-							topDecks,
-							deckId,
-							timeFilter,
-							classFilter,
-							gameMode,
-							patchNumber,
-							0,
-							deckDetails,
-						),
+						patch,
+						0,
+						deckDetails,
+					),
 				),
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((info) => cdLog('emitting deck in ', this.constructor.name, info)),

@@ -49,7 +49,7 @@ export class DuelsHeroStatsComponent {
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
 				map(
@@ -66,7 +66,7 @@ export class DuelsHeroStatsComponent {
 						sigTreasureFilter,
 						mmrFilter,
 						hideThreshold,
-						lastPatchNumber,
+						patch,
 					]) =>
 						[
 							filterDuelsHeroStats(
@@ -83,7 +83,7 @@ export class DuelsHeroStatsComponent {
 								timeFilter,
 								classFilter,
 								gameMode,
-								lastPatchNumber,
+								patch,
 								0,
 								heroPowerFilter,
 								sigTreasureFilter,

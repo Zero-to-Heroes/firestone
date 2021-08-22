@@ -80,7 +80,7 @@ export class BgsInitService {
 		const bgsStatsForCurrentPatch = this.bgsBuilder.filterBgsMatchStats(
 			bgsMatchStats,
 			prefs,
-			currentBattlegroundsMetaPatch.number,
+			currentBattlegroundsMetaPatch,
 		);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
 			statsWithPatch,

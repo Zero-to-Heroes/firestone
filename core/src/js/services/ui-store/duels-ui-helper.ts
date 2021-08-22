@@ -10,6 +10,7 @@ import { DuelsStatTypeFilterType } from '../../models/duels/duels-stat-type-filt
 import { DuelsTimeFilterType } from '../../models/duels/duels-time-filter.type';
 import { DuelsTreasureStatTypeFilterType } from '../../models/duels/duels-treasure-stat-type-filter.type';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
+import { PatchInfo } from '../../models/patches';
 import { CardsFacadeService } from '../cards-facade.service';
 import { duelsTreasureRank, getDuelsHeroCardId, isPassive } from '../duels/duels-utils';
 import { groupByFunction } from '../utils';
@@ -76,7 +77,7 @@ export const filterDuelsRuns = (
 	timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
 	gameMode: DuelsGameModeFilterType,
-	lastPatchNumber: number,
+	patch: PatchInfo,
 	mmrFilter: number,
 	heroPowerFilter: 'all' | string = 'all',
 	signatureTreasureFilter: 'all' | string = 'all',
@@ -84,7 +85,7 @@ export const filterDuelsRuns = (
 ) => {
 	return runs
 		.filter((run) => run.ratingAtStart >= mmrFilter)
-		.filter((run) => isCorrectRunDate(run, timeFilter, lastPatchNumber))
+		.filter((run) => isCorrectRunDate(run, timeFilter, patch))
 		.filter((run) => (gameMode === 'all' ? true : run.type === gameMode))
 		.filter((run) => (classFilter === 'all' ? true : run.heroCardId === getDuelsHeroCardId(classFilter)))
 		.filter((stat) =>
@@ -190,7 +191,7 @@ export const getCurrentDeck = (
 	timeFilter: DuelsTimeFilterType,
 	classFilter: DuelsClassFilterType,
 	gameMode: DuelsGameModeFilterType,
-	lastPatchNumber: number,
+	patch: PatchInfo,
 	mmrFilter: number,
 	deckDetails: readonly DuelsDeckStat[] = [],
 ): DeckInfo => {
@@ -199,7 +200,7 @@ export const getCurrentDeck = (
 		if (!deck) {
 			return null;
 		}
-		const runs = filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, lastPatchNumber, mmrFilter);
+		const runs = filterDuelsRuns(deck.runs, timeFilter, classFilter, gameMode, patch, mmrFilter);
 		return {
 			personal: true,
 			run: null,
@@ -245,12 +246,12 @@ const isCorrectType = (
 	}
 };
 
-const isCorrectRunDate = (run: DuelsRun, timeFilter: DuelsTimeFilterType, lastPatchNumber: number): boolean => {
+const isCorrectRunDate = (run: DuelsRun, timeFilter: DuelsTimeFilterType, patch: PatchInfo): boolean => {
 	switch (timeFilter) {
 		case 'all-time':
 			return true;
 		case 'last-patch':
-			return run.buildNumberAtStart === lastPatchNumber;
+			return run.buildNumberAtStart === patch.number && run.creationTimestamp > new Date(patch.date).getTime();
 		case 'past-seven':
 			return new Date(run.creationTimestamp) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 		case 'past-three':

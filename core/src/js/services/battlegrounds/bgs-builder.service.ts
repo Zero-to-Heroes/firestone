@@ -23,11 +23,7 @@ export class BgsBuilderService {
 			(stat) => stat.gameMode === 'battlegrounds',
 		);
 		const prefs = await this.prefs.getPreferences();
-		const activeBgsMatchStats = this.filterBgsMatchStats(
-			bgsMatchStats,
-			prefs,
-			currentBattlegroundsMetaPatch?.number,
-		);
+		const activeBgsMatchStats = this.filterBgsMatchStats(bgsMatchStats, prefs, currentBattlegroundsMetaPatch);
 		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
 			currentState.globalStats,
 			activeBgsMatchStats,
@@ -61,21 +57,24 @@ export class BgsBuilderService {
 	public filterBgsMatchStats(
 		bgsMatchStats: readonly GameStat[],
 		prefs: Preferences,
-		currentBattlegroundsMetaPatch: number,
+		currentBattlegroundsMetaPatch: PatchInfo,
 	): readonly GameStat[] {
 		return bgsMatchStats
 			.filter((stat) => this.timeFilter(stat, prefs, currentBattlegroundsMetaPatch))
 			.filter((stat) => this.rankFilter(stat, prefs));
 	}
 
-	private timeFilter(stat: GameStat, prefs: Preferences, currentBattlegroundsMetaPatch: number) {
+	private timeFilter(stat: GameStat, prefs: Preferences, currentBattlegroundsMetaPatch: PatchInfo) {
 		if (!prefs.bgsActiveTimeFilter) {
 			return true;
 		}
 
 		switch (prefs.bgsActiveTimeFilter) {
 			case 'last-patch':
-				return stat.buildNumber >= currentBattlegroundsMetaPatch;
+				return (
+					stat.buildNumber >= currentBattlegroundsMetaPatch.number &&
+					stat.creationTimestamp > new Date(currentBattlegroundsMetaPatch.date).getTime()
+				);
 			case 'past-30':
 				return Date.now() - stat.creationTimestamp <= 30 * 24 * 60 * 60 * 1000;
 			case 'past-7':

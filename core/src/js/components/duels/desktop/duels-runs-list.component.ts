@@ -71,13 +71,13 @@ export class DuelsRunsListComponent implements OnDestroy {
 					([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 					([main, nav, prefs]) => prefs.duelsActiveTopDecksClassFilter,
 					([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
-					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+					([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 					// TODO: MMR filter
 				)
 				.pipe(
-					filter(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) => !!runs?.length),
-					map(([runs, timeFilter, classFilter, gameMode, lastPatchNumber]) =>
-						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, lastPatchNumber, 0),
+					filter(([runs, timeFilter, classFilter, gameMode, patch]) => !!runs?.length),
+					map(([runs, timeFilter, classFilter, gameMode, patch]) =>
+						filterDuelsRuns(runs, timeFilter, classFilter, gameMode, patch, 0),
 					),
 				),
 			this.deckstring$.asObservable(),

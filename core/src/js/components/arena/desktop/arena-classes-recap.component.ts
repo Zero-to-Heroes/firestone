@@ -238,7 +238,10 @@ export class ArenaClassesRecapComponent {
 		const firstMatchTimestamp = firstMatch.creationTimestamp;
 		switch (timeFilter) {
 			case 'last-patch':
-				return firstMatch.buildNumber >= patch.number;
+				return (
+					firstMatch.buildNumber >= patch.number &&
+					firstMatch.creationTimestamp > new Date(patch.date).getTime()
+				);
 			case 'past-three':
 				return Date.now() - firstMatchTimestamp < 3 * 24 * 60 * 60 * 1000;
 			case 'past-seven':

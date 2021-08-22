@@ -6,6 +6,7 @@ import { DuelsGroupedDecks } from '../../../models/duels/duels-grouped-decks';
 import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
 import { DuelsTopDecksDustFilterType } from '../../../models/duels/duels-top-decks-dust-filter.type';
+import { PatchInfo } from '../../../models/patches';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { getDuelsMmrFilterNumber } from '../../../services/ui-store/duels-ui-helper';
 
@@ -48,7 +49,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTopDecksDustFilter,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch?.number,
+				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
 			)
 			.pipe(
 				filter(
@@ -61,7 +62,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 						sigTreasureFilter,
 						timeFilter,
 						dustFilter,
-						lastPatchNumber,
+						patch,
 					]) => !!topDecks?.length && !!mmrPercentiles?.length,
 				),
 				map(
@@ -74,7 +75,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 						sigTreasureFilter,
 						timeFilter,
 						dustFilter,
-						lastPatchNumber,
+						patch,
 					]) =>
 						topDecks
 							.map((deck) =>
@@ -86,7 +87,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 									sigTreasureFilter,
 									timeFilter,
 									dustFilter,
-									lastPatchNumber,
+									patch,
 								),
 							)
 							.filter((group) => group.decks.length > 0),
@@ -148,7 +149,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 		sigTreasureFilter: 'all' | string,
 		timeFilter: DuelsTimeFilterType,
 		dustFilter: DuelsTopDecksDustFilterType,
-		lastPatchNumber: number,
+		patch: PatchInfo,
 	): DuelsGroupedDecks {
 		return {
 			...grouped,
@@ -157,7 +158,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 				.filter((deck) => this.classFilter(deck, classFilter))
 				.filter((deck) => this.heroPowerFilter(deck, heroPowerFilter))
 				.filter((deck) => this.sigTreasureFilter(deck, sigTreasureFilter))
-				.filter((deck) => this.timeFilter(deck, timeFilter, lastPatchNumber))
+				.filter((deck) => this.timeFilter(deck, timeFilter, patch))
 				.filter((deck) => this.dustFilter(deck, dustFilter)),
 		};
 	}
@@ -187,7 +188,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 		);
 	}
 
-	private timeFilter(deck: DuelsDeckStat, filter: DuelsTimeFilterType, lastPatchNumber: number): boolean {
+	private timeFilter(deck: DuelsDeckStat, filter: DuelsTimeFilterType, patch: PatchInfo): boolean {
 		if (!filter) {
 			return true;
 		}
@@ -195,7 +196,10 @@ export class DuelsTopDecksComponent implements OnDestroy {
 			case 'all-time':
 				return true;
 			case 'last-patch':
-				return deck.buildNumber === lastPatchNumber;
+				return (
+					deck.buildNumber === patch.number &&
+					new Date(deck.periodStart).getTime() > new Date(patch.date).getTime()
+				);
 			case 'past-seven':
 				return new Date(deck.periodStart) >= new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 			case 'past-three':
