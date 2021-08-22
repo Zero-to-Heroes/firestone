@@ -1,21 +1,35 @@
 :host() {
 	height: 12%;
 	width: 100%;
-	background: rgba(255, 255, 255, 0.01);
 	position: relative;
 }
 
-.card {
+.card,
+.mouse-leave-container {
 	pointer-events: all;
 	height: 100%;
 	width: 100%;
 	position: relative;
+	align-items: center;
+	justify-content: center;
+	display: flex;
 	// background: rgba(0, 0, 0, 0.5); // dev
 
 	img {
 		height: 100%;
 		width: 100%;
 	}
+}
+
+.card {
+	// background: rgba(0, 255, 0, 0.5); // dev
+}
+
+.mouse-leave-container {
+	background: rgba(255, 255, 255, 0.01);
+	width: calc(100% - 45px);
+	height: calc(100% - 15px);
+	// background: rgba(255, 0, 0, 0.5); // dev
 }
 
 .last-opponent-icon {

@@ -41,6 +41,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 				>
 				</bgs-leaderboard-empty-card>
 			</ul>
+			<!-- TODO: add an element around the leaderboard to fix the mouseleave not triggering issue? -->
 			<div class="board-container top-board">
 				<ul class="board">
 					<bgs-tavern-minion

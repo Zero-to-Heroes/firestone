@@ -23,21 +23,23 @@ import { BgsOverlayHeroOverviewComponent } from './bgs-overlay-hero-overview.com
 		'../../../../css/component/battlegrounds/overlay/bgs-leaderboard-empty-card.component.scss',
 	],
 	template: `
-		<div
-			class="card"
-			componentTooltip
-			[componentType]="componentType"
-			[componentInput]="_bgsPlayer"
-			[componentTooltipPosition]="position"
-		>
-			<!-- transparent image with 1:1 intrinsic aspect ratio -->
-			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+		<div class="card">
 			<div
-				class="last-opponent-icon"
-				*ngIf="isLastOpponent && showLastOpponentIcon"
-				helpTooltip="Was last round's opponent"
-				inlineSVG="assets/svg/last_opponent.svg"
-			></div>
+				class="mouse-leave-container"
+				componentTooltip
+				[componentType]="componentType"
+				[componentInput]="_bgsPlayer"
+				[componentTooltipPosition]="position"
+			>
+				<!-- transparent image with 1:1 intrinsic aspect ratio -->
+				<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+				<div
+					class="last-opponent-icon"
+					*ngIf="isLastOpponent && showLastOpponentIcon"
+					helpTooltip="Was last round's opponent"
+					inlineSVG="assets/svg/last_opponent.svg"
+				></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

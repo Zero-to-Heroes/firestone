@@ -12,8 +12,10 @@
 .bgs-leaderboard {
 	position: absolute;
 	height: 73%;
-	width: 9%;
-	left: 2%;
+	// Leave some room for the mouse to cleanly exit the zone while still passing through
+	// an area without a mouseover behavior, so that it resets
+	width: 11%;
+	left: 1%;
 	top: 15%;
 	display: flex;
 	flex-direction: column;
