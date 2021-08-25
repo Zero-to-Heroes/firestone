@@ -50,6 +50,22 @@ export class DuelsDustFilterDropdownComponent implements AfterViewInit {
 				label: 'Own all cards',
 			} as DustFilterOption,
 			{
+				value: '40',
+				label: '40 dust',
+			} as DustFilterOption,
+			{
+				value: '100',
+				label: '100 dust',
+			} as DustFilterOption,
+			{
+				value: '200',
+				label: '200 dust',
+			} as DustFilterOption,
+			{
+				value: '500',
+				label: '500 dust',
+			} as DustFilterOption,
+			{
 				value: '1000',
 				label: '1000 dust',
 			} as DustFilterOption,

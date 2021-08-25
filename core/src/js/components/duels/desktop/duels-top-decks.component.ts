@@ -180,12 +180,16 @@ export class DuelsTopDecksComponent implements OnDestroy {
 	}
 
 	private dustFilter(deck: DuelsDeckStat, filter: DuelsTopDecksDustFilterType): boolean {
-		return (
-			!filter ||
-			filter === 'all' ||
-			(filter === '1000' && deck.dustCost <= 1000) ||
-			(filter === '0' && deck.dustCost === 0)
-		);
+		if (!filter) {
+			return true;
+		}
+
+		switch (filter) {
+			case 'all':
+				return true;
+			default:
+				return deck.dustCost <= parseInt(filter);
+		}
 	}
 
 	private timeFilter(deck: DuelsDeckStat, filter: DuelsTimeFilterType, patch: PatchInfo): boolean {
