@@ -108,6 +108,7 @@ export class DeckParserService {
 		});
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			if (this.spectating) {
+				console.log('[deck-parser] spectating, not registering memory update');
 				return;
 			}
 
@@ -135,12 +136,17 @@ export class DeckParserService {
 				this.selectedDeckId = null;
 			}
 			if (changes.CurrentScene) {
-				// console.log('[deck-parser] new scene', changes.CurrentScene);
 				this.currentNonGamePlayScene =
 					!changes.CurrentScene || changes.CurrentScene === SceneMode.GAMEPLAY
 						? this.currentNonGamePlayScene
 						: changes.CurrentScene;
 				this.currentScene = changes.CurrentScene;
+				console.log(
+					'[deck-parser] new scene',
+					changes.CurrentScene,
+					this.currentNonGamePlayScene,
+					this.currentScene,
+				);
 			}
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
@@ -374,7 +380,13 @@ export class DeckParserService {
 				(await this.isDuelsDeck(lines[lines.length - 4])) ||
 				(await this.isDuelsDeck(lines[lines.length - 3]));
 			if (!isLastSectionDeckSelectLine) {
-				console.log('[deck-parser] not a deck selection', [...lines].reverse().slice(0, 4).join(','));
+				console.log(
+					'[deck-parser] not a deck selection',
+					lines[lines.length - 4],
+					lines[lines.length - 3],
+					lines[lines.length - 2],
+					lines[lines.length - 1],
+				);
 				return;
 			}
 			// deck name
@@ -400,7 +412,7 @@ export class DeckParserService {
 			return false;
 		}
 		// ...and that we are on the Duels screen
-		console.debug('[deck-parser] current scene', this.currentNonGamePlayScene);
+		console.log('[deck-parser] current scene', this.currentNonGamePlayScene);
 		return this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN;
 	}
 
