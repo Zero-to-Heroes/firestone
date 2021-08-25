@@ -32,6 +32,7 @@ export class AchievementsMonitor {
 	private lastReceivedTimestamp;
 	private achievementQuotas: { [achievementId: number]: number };
 	private previousAchievements: readonly HsAchievementInfo[];
+	private spectating: boolean;
 
 	private achievementsProgressInterval;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -58,6 +59,9 @@ export class AchievementsMonitor {
 				}
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				this.stopAchievementsProgressDetection();
+			} else if (gameEvent.type === GameEvent.SPECTATING) {
+				this.spectating = gameEvent.additionalData.spectating;
+				console.log('[achievements-monitor] spectating?', this.spectating);
 			}
 		});
 
@@ -220,6 +224,10 @@ export class AchievementsMonitor {
 	}
 
 	private async handleEvent(gameEvent: GameEvent) {
+		if (this.spectating) {
+			return;
+		}
+
 		// TODO: handle reconnects
 		for (const challenge of await this.achievementLoader.getChallengeModules()) {
 			try {
