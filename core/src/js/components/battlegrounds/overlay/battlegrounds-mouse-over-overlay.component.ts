@@ -40,6 +40,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 					position="global-top-left"
 				>
 				</bgs-leaderboard-empty-card>
+				<div class="mouse-leave-fix top"></div>
+				<div class="mouse-leave-fix right"></div>
 			</ul>
 			<!-- TODO: add an element around the leaderboard to fix the mouseleave not triggering issue? -->
 			<div class="board-container top-board">
