@@ -151,7 +151,6 @@ export const buildDuelsHeroPlayerStats = (
 	const grouped: { [cardId: string]: readonly DuelsHeroStat[] } = groupByFunction(
 		getGroupingKeyForHeroStat(statType),
 	)(duelStats);
-	console.debug('grouped', grouped, duelStats);
 
 	return Object.keys(grouped).map((key) => {
 		const group = grouped[key];

@@ -71,7 +71,7 @@ export class DuelsStateBuilderService {
 			userName: user.username,
 		};
 		const results: any = await this.api.callPostApi(DUELS_LEADERBOARD_URL, input);
-		console.log('[duels-state-builder] loaded leaderboard', results);
+		console.log('[duels-state-builder] loaded leaderboard', results?.results?.heroic?.length);
 		return results?.results;
 	}
 
@@ -99,7 +99,7 @@ export class DuelsStateBuilderService {
 
 	public async loadGlobalStats(): Promise<DuelsStat> {
 		const result: DuelsStat = await this.api.callGetApi(DUELS_GLOBAL_STATS_URL);
-		console.debug('[duels-state-builder] loaded global stats', result);
+		console.log('[duels-state-builder] loaded global stats', result?.treasures?.length);
 		return result;
 	}
 
