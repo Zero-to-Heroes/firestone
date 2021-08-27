@@ -36,7 +36,7 @@
 	}
 
 	.menu-selection {
-		margin-bottom: 15px;
+		margin-bottom: 10px;
 		flex-shrink: 0;
 		flex-grow: 0;
 
@@ -56,8 +56,6 @@
 		width: 400px;
 		height: calc(100% - 340px);
 		flex-shrink: 0;
-		background: rgba(255, 255, 255, 0.08);
-		padding-left: 10px;
 
 		& > * {
 			min-height: 0;
@@ -65,6 +63,8 @@
 			flex-shrink: 0;
 			display: flex;
 			height: 100%;
+			padding-left: 10px;
+			background: rgba(255, 255, 255, 0.08);
 		}
 	}
 }

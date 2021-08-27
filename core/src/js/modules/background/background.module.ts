@@ -49,6 +49,9 @@ import { BattlegroundsComponent } from '../../components/battlegrounds/battlegro
 import { BgsBattleSideComponent } from '../../components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from '../../components/battlegrounds/battles/bgs-battle.component';
 import { BgsBattlesComponent } from '../../components/battlegrounds/battles/bgs-battles.component';
+import { BgsHeroPortraitSimulatorComponent } from '../../components/battlegrounds/battles/bgs-hero-portrait-simulator.component';
+import { BgsPlusButtonComponent } from '../../components/battlegrounds/battles/bgs-plus-button.component';
+import { BgsSimulatorHeroSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-hero-selection.component';
 import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
@@ -443,6 +446,9 @@ const components = [
 		BgsBattlesComponent,
 		BgsBattleComponent,
 		BgsBattleSideComponent,
+		BgsHeroPortraitSimulatorComponent,
+		BgsPlusButtonComponent,
+		BgsSimulatorHeroSelectionComponent,
 		GraphWithSingleValueComponent,
 
 		ConstructedComponent,
@@ -672,7 +678,12 @@ const components = [
 
 		AdvancedSettingDirective,
 	],
-	entryComponents: [BgsCardTooltipComponent, TwitchBgsHeroOverviewComponent, ...components],
+	entryComponents: [
+		BgsCardTooltipComponent,
+		TwitchBgsHeroOverviewComponent,
+		BgsSimulatorHeroSelectionComponent,
+		...components,
+	],
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 		AppBootstrapService,

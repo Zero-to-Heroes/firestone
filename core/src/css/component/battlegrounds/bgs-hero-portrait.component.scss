@@ -10,6 +10,28 @@
 	width: 100%;
 }
 
+.hero-portrait-frame {
+	position: relative;
+	width: 100px;
+	height: 115px;
+
+	.icon {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 80% 20%, 90% 56%, 90% 100%);
+	}
+
+	.frame {
+		z-index: 1;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+	}
+}
+
 .rating {
 	background: url(https://static.zerotoheroes.com/hearthstone/asset/firestone/images/rating_banner.png);
 	position: absolute;
@@ -64,6 +86,10 @@
 
 	&.damaged {
 		color: #ff4747;
+	}
+
+	&.new {
+		bottom: 6%;
 	}
 }
 

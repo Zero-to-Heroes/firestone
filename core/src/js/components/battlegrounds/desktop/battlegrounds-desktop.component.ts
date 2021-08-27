@@ -56,9 +56,10 @@ import { arraysEqual } from '../../../services/utils';
 						category.value?.id?.includes('bgs-category-personal-hero-details-')
 					"
 				></battlegrounds-replays-recap>
-				<battlegrounds-simulator-details
+				<!-- <battlegrounds-simulator-details
 					*ngIf="category.value?.id === 'bgs-category-simulator'"
-				></battlegrounds-simulator-details>
+				></battlegrounds-simulator-details> -->
+				<secondary-default *ngxCacheIf="category.value?.id === 'bgs-category-simulator'"></secondary-default>
 			</section>
 		</div>
 	`,

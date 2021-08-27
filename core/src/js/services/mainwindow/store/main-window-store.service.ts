@@ -54,6 +54,7 @@ import { BgsCustomSimulationChangeMinionRequestEvent } from './events/battlegrou
 import { BgsCustomSimulationCloseSidePanelEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-close-side-panel-event';
 import { BgsCustomSimulationMinionChosenEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-minion-chosen-event';
 import { BgsCustomSimulationMinionRemoveRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-event';
+import { BgsCustomSimulationUpdateEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-event';
 import { BgsCustomSimulationUpdateMinionEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-event';
 import { BgsCustomSimulationUpdateMinionRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
@@ -161,6 +162,7 @@ import { BgsCustomSimulationMinionChosenParser } from './processors/battleground
 import { BgsCustomSimulationMinionRemoveRequestParser } from './processors/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-parser';
 import { BgsCustomSimulationUpdateMinionProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-processor';
 import { BgsCustomSimulationUpdateMinionRequestProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-processor';
+import { BgsCustomSimulationUpdateProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
@@ -667,6 +669,9 @@ export class MainWindowStoreService {
 
 			SelectBattlegroundsPersonalStatsHeroTabEvent.eventName(),
 			new SelectBattlegroundsPersonalStatsHeroProcessor(),
+
+			BgsCustomSimulationUpdateEvent.eventName(),
+			new BgsCustomSimulationUpdateProcessor(),
 
 			BgsCustomSimulationChangeMinionRequestEvent.eventName(),
 			new BgsCustomSimulationChangeMinionRequestProcessor(),

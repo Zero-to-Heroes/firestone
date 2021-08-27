@@ -81,6 +81,19 @@ export const sumOnArray = <T>(array: readonly T[], prop: (item: T) => number): n
 	return array.map((item) => prop(item)).reduce((a, b) => a + b, 0);
 };
 
+export const sortByProperties = <T>(sorter: (t: T) => any[]): ((a: T, b: T) => number) => {
+	return (a: T, b: T): number => {
+		const aProps = sorter(a);
+		const bProps = sorter(b);
+		for (let i = 0; i < aProps.length; i++) {
+			if (aProps[i] !== bProps[i]) {
+				return aProps[i] < bProps[i] ? -1 : 1;
+			}
+		}
+		return 0;
+	};
+};
+
 export const formatDate = (theDate: Date): string => {
 	return `${theDate.toISOString().slice(0, 10)}`;
 };

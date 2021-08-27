@@ -57,6 +57,7 @@
 		"chartjs-plugin-datalabels": "^0.7.0",
 		"cross-fetch": "^3.0.6",
 		"deckstrings": "^2.2.1",
+		"deepmerge": "^4.2.2",
 		"elementtree": "^0.1.7",
 		"immutable": "3.8.2",
 		"jszip": "^3.7.1",

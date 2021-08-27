@@ -1,0 +1,50 @@
+.container {
+	position: relative;
+
+	.hero {
+		.change-icon {
+			top: -5px;
+			left: 40px;
+		}
+	}
+
+	.hero-power {
+		position: absolute;
+		bottom: -4px;
+		z-index: 1;
+		left: -25px;
+		width: 53px;
+		height: 65px;
+
+		.hero-power-container {
+			width: 100%;
+			height: 100%;
+		}
+
+		.image {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			clip-path: ellipse(40% 30% at 50% 55%);
+
+			&.empty-icon {
+				background: var(--color-5);
+			}
+		}
+
+		.frame {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+		}
+
+		.change-icon {
+			top: 20px;
+			right: -5px;
+		}
+	}
+}

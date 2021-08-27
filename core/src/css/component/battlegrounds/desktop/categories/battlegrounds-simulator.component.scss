@@ -1,7 +1,6 @@
 :host {
 	height: 100%;
 	display: flex;
-	// padding-top: 10px;
 }
 
 .battlegrounds-simulator {
@@ -9,10 +8,13 @@
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	// So that the "close" buttons at the top are not cropped
-	padding-top: 10px;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 20px;
+	margin-right: 15px;
+	margin-bottom: 15px;
 
 	.battle {
 		font-size: 13px;
+		height: 100%;
 	}
 }

@@ -26,17 +26,19 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 		`../../../../css/component/battlegrounds/battles/bgs-battle-side.component.scss`,
 	],
 	template: `
-		<div class="bgs-battle-side">
+		<div class="bgs-battle-side" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
 			<div class="hero">
-				<bgs-hero-portrait
+				<bgs-hero-portrait-simulator
 					class="portrait"
-					[ngClass]="{ 'click-to-change': clickToChange }"
-					[icon]="icon"
+					[heroCardId]="heroCardId"
+					[heroPowerCardId]="heroPowerCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
-					(click)="onPortraitClick()"
-				></bgs-hero-portrait>
-				<tavern-level-icon [level]="tavernTier" class="tavern"></tavern-level-icon>
+					[tavernTier]="showTavernTier && tavernTier"
+					[tooltipPosition]="tooltipPosition"
+					(portraitChangeRequested)="onPortraitClick()"
+					(heroPowerChangeRequested)="onHeroPowerClick()"
+				></bgs-hero-portrait-simulator>
 			</div>
 			<div class="board" cdkDropListGroup (cdkDropListDropped)="drop($event)">
 				<!-- See https://stackoverflow.com/questions/65726138/how-can-i-use-angular-material-drag-n-drop-with-flex-layout -->
@@ -73,12 +75,13 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 						</svg>
 					</button>
 				</div>
-				<div
-					class="click-to-add"
-					*ngIf="((entities && entities.length) || 0) < 7 && allowClickToAdd"
-					(click)="onClickToAdd()"
-				>
-					Click to add
+				<div class="click-to-add" *ngIf="((entities && entities.length) || 0) < 7 && allowClickToAdd">
+					<bgs-plus-button
+						class="change-icon"
+						(click)="onClickToAdd()"
+						helpTooltip="Click to add a minion"
+					></bgs-plus-button>
+					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
 				</div>
 			</div>
 		</div>
@@ -90,6 +93,7 @@ export class BgsBattleSideComponent {
 
 	@Output() entitiesUpdated: EventEmitter<readonly Entity[]> = new EventEmitter<readonly Entity[]>();
 	@Output() portraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
+	@Output() heroPowerChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() changeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
 	@Output() updateMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
 	@Output() removeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
@@ -103,10 +107,14 @@ export class BgsBattleSideComponent {
 	@Input() allowClickToAdd: boolean;
 	@Input() clickToChange = false;
 	@Input() closeOnMinion = false;
+	@Input() showTavernTier = true;
+	@Input() fullScreenMode = false;
+	@Input() tooltipPosition: string;
 
 	_player: BgsBoardInfo;
 
-	icon: string;
+	heroCardId: string;
+	heroPowerCardId: string;
 	health: number;
 	maxHealth: number;
 	tavernTier: number;
@@ -148,6 +156,11 @@ export class BgsBattleSideComponent {
 		this.portraitChangeRequested.next();
 	}
 
+	onHeroPowerClick() {
+		console.debug('hero power click');
+		this.heroPowerChangeRequested.next();
+	}
+
 	onClickToAdd() {
 		console.debug('adding', this.allowClickToAdd);
 		this.changeMinionRequested.next(null);
@@ -181,7 +194,9 @@ export class BgsBattleSideComponent {
 			return;
 		}
 
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${this._player.player?.cardId}.png?v=2`;
+		this.heroCardId = this._player.player?.cardId;
+		this.heroPowerCardId = this._player.player?.heroPowerId;
+		console.debug('heroCardId', this.heroCardId, this._player);
 		this.health = this._player.player.hpLeft;
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;

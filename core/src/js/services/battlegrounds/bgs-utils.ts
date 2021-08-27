@@ -203,6 +203,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Demonhunter.KurtrusAshfallen_FinalShowdown;
 		case CardIds.NonCollectible.Neutral.Galewing:
 			return CardIds.NonCollectible.Neutral.Galewing_DungarsGryphon;
+		case CardIds.NonCollectible.Neutral.TradePrinceGallywixBattlegrounds:
+			return CardIds.NonCollectible.Rogue.SmartSavingsBattlegrounds;
 		case '':
 			return null; // new heroes
 	}
@@ -302,6 +304,8 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 			return Race.PIRATE;
 		case CardIds.NonCollectible.Neutral.AgamagganTheGreatBoar:
 		case CardIds.NonCollectible.Neutral.AgamagganTheGreatBoarBattlegrounds:
+		case CardIds.NonCollectible.Neutral.ProphetOfTheBoar:
+		case CardIds.NonCollectible.Neutral.ProphetOfTheBoarBattlegrounds:
 			return Race.QUILBOAR;
 		default:
 			return getEffectiveTribeEnum(card);

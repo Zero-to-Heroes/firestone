@@ -4,6 +4,7 @@ import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsCustomSimulationChangeMinionRequestEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-change-minion-request-event';
 import { BgsCustomSimulationMinionRemoveRequestEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-event';
+import { BgsCustomSimulationUpdateEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-update-event';
 import { BgsCustomSimulationUpdateMinionRequestEvent } from '../../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-event';
 import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
 import { ChangeMinionRequest } from '../../battles/bgs-battle-side.component';
@@ -23,6 +24,9 @@ import { ChangeMinionRequest } from '../../battles/bgs-battle-side.component';
 				[clickToChange]="true"
 				[allowClickToAdd]="true"
 				[closeOnMinion]="true"
+				[fullScreenMode]="true"
+				[showTavernTier]="false"
+				[simulationUpdater]="simulationUpdater"
 				(playerPortraitChangeRequested)="onPlayerPortraitChangeRequested()"
 				(opponentPortraitChangeRequested)="onOpponentPortraitChangeRequested()"
 				(playerMinionChangeRequested)="onPlayerMinionChangeRequested($event)"
@@ -38,6 +42,7 @@ import { ChangeMinionRequest } from '../../battles/bgs-battle-side.component';
 })
 export class BattlegroundsSimulatorComponent {
 	faceOff$: Observable<BgsFaceOffWithSimulation>;
+	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 
 	constructor(private readonly store: AppUiStoreService) {
 		this.faceOff$ = this.store
@@ -48,6 +53,10 @@ export class BattlegroundsSimulatorComponent {
 				distinctUntilChanged(),
 				tap((faceOff) => console.debug('[cd] emitting in ', this.constructor.name, faceOff)),
 			);
+
+		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
+			this.store.send(new BgsCustomSimulationUpdateEvent(currentFaceOff, partialUpdate));
+		};
 	}
 
 	onPlayerPortraitChangeRequested() {

@@ -1,0 +1,12 @@
+:host() {
+	position: absolute;
+	width: 19px;
+	height: 19px;
+	z-index: 2;
+}
+
+.change-icon {
+	&:hover {
+		--icon-color-secondary: var(--color-3);
+	}
+}

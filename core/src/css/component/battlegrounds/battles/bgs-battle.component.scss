@@ -1,6 +1,7 @@
 .bgs-battle {
 	display: flex;
 	flex-direction: column;
+	position: relative;
 
 	.battle-content {
 		display: flex;
@@ -111,6 +112,73 @@
 					color: var(--color-7);
 					opacity: 1;
 				}
+			}
+		}
+	}
+
+	&.full-screen-mode {
+		height: 100%;
+
+		.battle-content {
+			height: 100%;
+		}
+
+		.battle-boards {
+			justify-content: space-between;
+		}
+
+		.simulations {
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			height: 65px;
+
+			.controls {
+				padding-right: 30px;
+				margin-right: 30px;
+				border-right: 1px solid var(--color-2);
+
+				.button {
+					background: var(--color-2);
+					color: var(--color-5);
+					border: none;
+
+					&:hover {
+						background: var(--color-1);
+					}
+				}
+			}
+		}
+
+		bgs-battle-side.player {
+			::ng-deep .bgs-battle-side {
+				.board {
+					margin-top: 0;
+					margin-bottom: 30px;
+				}
+
+				.hero {
+					order: 2;
+				}
+			}
+		}
+
+		.reset {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 12px;
+			z-index: 9;
+
+			.icon {
+				--icon-color: var(--default-title-color);
+			}
+
+			&:hover {
+				color: var(--default-title-color);
 			}
 		}
 	}

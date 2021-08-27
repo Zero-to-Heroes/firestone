@@ -54,4 +54,8 @@
 
 	--variable-title-font-size: 13px;
 	--variable-title-font-size-big: 20px;
+
+	--popup-background-image: radial-gradient(340px at 50% 50%, rgba(94, 11, 70, 0.7) 0%, rgba(43, 24, 39, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/bg_popup.png');
+	--confirmation-backdrop-color: var(--color-7);
 }

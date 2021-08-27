@@ -59,7 +59,7 @@ body {
 
 		&.cdk-overlay-backdrop-showing {
 			background: var(--confirmation-backdrop-color);
-			opacity: 0.7;
+			opacity: 0.9;
 			pointer-events: all !important;
 		}
 	}

@@ -5,8 +5,15 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 	styleUrls: [`../../../css/component/battlegrounds/bgs-hero-portrait.component.scss`],
 	template: `
 		<div class="hero-portrait">
-			<img [src]="_icon" class="portrait" />
-			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth }" *ngIf="_health">
+			<img *ngIf="!heroIcon" [src]="_icon" class="portrait" />
+			<div *ngIf="heroIcon" class="hero-portrait-frame">
+				<img class="icon" [src]="heroIcon" />
+				<img
+					class="frame"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png?v=3"
+				/>
+			</div>
+			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth, 'new': !!heroIcon }" *ngIf="_health">
 				<img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" />
 				<div class="value">{{ _health }}</div>
 			</div>
@@ -18,12 +25,23 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroPortraitComponent {
-	_icon: string;
 	_health: number;
 	_maxHealth: number;
+	heroIcon: string;
 
 	@Input() rating: number;
 
+	@Input() set heroCardId(value: string) {
+		this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
+		console.debug('setting hero icon', value, this.heroIcon);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	/** @deprecated */
+	_icon: string;
+	/** @deprecated */
 	@Input() set icon(value: string) {
 		if (value === this._icon) {
 			return;
