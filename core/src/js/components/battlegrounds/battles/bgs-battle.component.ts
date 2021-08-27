@@ -22,6 +22,7 @@ import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { ChangeMinionRequest } from './bgs-battle-side.component';
+import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
 
 declare let amplitude;
@@ -50,7 +51,8 @@ declare let amplitude;
 						[fullScreenMode]="fullScreenMode"
 						[tooltipPosition]="'right'"
 						(entitiesUpdated)="onOpponentEntitiesUpdated($event)"
-						(portraitChangeRequested)="onOpponentPortraitChangeRequested()"
+						(portraitChangeRequested)="onPortraitChangeRequested('opponent')"
+						(heroPowerChangeRequested)="onHeroPowerChangeRequested('opponent')"
 						(changeMinionRequested)="onOpponentMinionChangeRequested($event)"
 						(updateMinionRequested)="onOpponentMinionUpdateRequested($event)"
 						(removeMinionRequested)="onOpponentMinionRemoveRequested($event)"
@@ -81,7 +83,8 @@ declare let amplitude;
 						[fullScreenMode]="fullScreenMode"
 						[tooltipPosition]="'top-right'"
 						(entitiesUpdated)="onPlayerEntitiesUpdated($event)"
-						(portraitChangeRequested)="onPlayerPortraitChangeRequested()"
+						(portraitChangeRequested)="onPortraitChangeRequested('player')"
+						(heroPowerChangeRequested)="onHeroPowerChangeRequested('player')"
 						(changeMinionRequested)="onPlayerMinionChangeRequested($event)"
 						(updateMinionRequested)="onPlayerMinionUpdateRequested($event)"
 						(removeMinionRequested)="onPlayerMinionRemoveRequested($event)"
@@ -203,30 +206,41 @@ export class BgsBattleComponent implements AfterViewInit {
 		this.newPlayerEntities = newEntities;
 	}
 
-	onPlayerPortraitChangeRequested() {
+	onPortraitChangeRequested(side: 'player' | 'opponent') {
 		const portal = new ComponentPortal(BgsSimulatorHeroSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.currentHero = this.player.player.cardId;
 		modalRef.instance.closeHandler = () => {
-			console.debug('close clicked');
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		};
+		modalRef.instance.currentHero = side === 'player' ? this.player.player.cardId : this.opponent.player.cardId;
 		modalRef.instance.applyHandler = (newHeroCardId: string) => {
 			this.overlayRef.detach();
-			this.simulationUpdater(this._faceOff, {
-				playerCardId: newHeroCardId,
-				battleInfo: {
-					playerBoard: {
-						player: {
-							cardId: newHeroCardId,
-							heroPowerId: getHeroPower(newHeroCardId),
+			side === 'player'
+				? this.simulationUpdater(this._faceOff, {
+						playerCardId: newHeroCardId,
+						battleInfo: {
+							playerBoard: {
+								player: {
+									cardId: newHeroCardId,
+									heroPowerId: getHeroPower(newHeroCardId),
+								},
+							},
 						},
-					},
-				},
-			} as BgsFaceOffWithSimulation);
+				  } as BgsFaceOffWithSimulation)
+				: this.simulationUpdater(this._faceOff, {
+						opponentCardId: newHeroCardId,
+						battleInfo: {
+							opponentBoard: {
+								player: {
+									cardId: newHeroCardId,
+									heroPowerId: getHeroPower(newHeroCardId),
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation);
 		};
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -234,31 +248,39 @@ export class BgsBattleComponent implements AfterViewInit {
 		}
 	}
 
-	onOpponentPortraitChangeRequested() {
-		const portal = new ComponentPortal(BgsSimulatorHeroSelectionComponent);
+	onHeroPowerChangeRequested(side: 'player' | 'opponent') {
+		const portal = new ComponentPortal(BgsSimulatorHeroPowerSelectionComponent);
 		const modalRef = this.overlayRef.attach(portal);
-		modalRef.instance.currentHero = this.opponent.player.cardId;
-
 		modalRef.instance.closeHandler = () => {
-			console.debug('close clicked');
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		};
+		modalRef.instance.currentHero =
+			side === 'player' ? this.player.player.heroPowerId : this.opponent.player.heroPowerId;
 		modalRef.instance.applyHandler = (newHeroCardId: string) => {
 			this.overlayRef.detach();
-			this.simulationUpdater(this._faceOff, {
-				opponentCardId: newHeroCardId,
-				battleInfo: {
-					opponentBoard: {
-						player: {
-							cardId: newHeroCardId,
-							heroPowerId: getHeroPower(newHeroCardId),
+			side === 'player'
+				? this.simulationUpdater(this._faceOff, {
+						battleInfo: {
+							playerBoard: {
+								player: {
+									heroPowerId: newHeroCardId,
+								},
+							},
 						},
-					},
-				},
-			} as BgsFaceOffWithSimulation);
+				  } as BgsFaceOffWithSimulation)
+				: this.simulationUpdater(this._faceOff, {
+						opponentCardId: newHeroCardId,
+						battleInfo: {
+							opponentBoard: {
+								player: {
+									heroPowerId: newHeroCardId,
+								},
+							},
+						},
+				  } as BgsFaceOffWithSimulation);
 		};
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {

@@ -51,6 +51,7 @@ import { BgsBattleComponent } from '../../components/battlegrounds/battles/bgs-b
 import { BgsBattlesComponent } from '../../components/battlegrounds/battles/bgs-battles.component';
 import { BgsHeroPortraitSimulatorComponent } from '../../components/battlegrounds/battles/bgs-hero-portrait-simulator.component';
 import { BgsPlusButtonComponent } from '../../components/battlegrounds/battles/bgs-plus-button.component';
+import { BgsSimulatorHeroPowerSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-hero-selection.component';
 import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
@@ -449,6 +450,7 @@ const components = [
 		BgsHeroPortraitSimulatorComponent,
 		BgsPlusButtonComponent,
 		BgsSimulatorHeroSelectionComponent,
+		BgsSimulatorHeroPowerSelectionComponent,
 		GraphWithSingleValueComponent,
 
 		ConstructedComponent,
@@ -682,6 +684,7 @@ const components = [
 		BgsCardTooltipComponent,
 		TwitchBgsHeroOverviewComponent,
 		BgsSimulatorHeroSelectionComponent,
+		BgsSimulatorHeroPowerSelectionComponent,
 		...components,
 	],
 	providers: [

@@ -7,12 +7,12 @@ import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { sortByProperties } from '../../../services/utils';
 
 @Component({
-	selector: 'bgs-simulator-hero-selection',
+	selector: 'bgs-simulator-hero-power-selection',
 	styleUrls: [
 		`../../../../css/global/scrollbar.scss`,
 		`../../../../css/component/controls/controls.scss`,
 		`../../../../css/component/controls/control-close.component.scss`,
-		`../../../../css/component/battlegrounds/battles/bgs-simulator-hero-selection.component.scss`,
+		`../../../../css/component/battlegrounds/battles/bgs-simulator-hero-power-selection.component.scss`,
 	],
 	template: `
 		<div class="container">
@@ -25,17 +25,13 @@ import { sortByProperties } from '../../../services/utils';
 				</svg>
 			</button>
 
-			<div class="title">Hero</div>
+			<div class="title">Hero Power</div>
 			<div class="current-hero">
 				<div *ngIf="heroIcon" class="hero-portrait-frame">
 					<img class="icon" [src]="heroIcon" />
-					<img
-						class="frame"
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png?v=3"
-					/>
 				</div>
 				<div *ngIf="!heroIcon" class="hero-portrait-frame">
-					<div class="empty-hero" inlineSVG="assets/svg/bg_empty_hero.svg"></div>
+					<div class="empty-hero" inlineSVG="assets/svg/bg_empty_hero_power.svg"></div>
 				</div>
 				<div class="description">
 					<div class="name">{{ heroName }}</div>
@@ -43,11 +39,15 @@ import { sortByProperties } from '../../../services/utils';
 				</div>
 			</div>
 			<div class="hero-selection">
-				<div class="header">Heroes</div>
+				<div class="header">Hero Powers</div>
 				<div class="search">
 					<label class="search-label" [ngClass]="{ 'search-active': !!searchString.value?.length }">
 						<div class="icon" inlineSVG="assets/svg/search.svg"></div>
-						<input [formControl]="searchForm" (mousedown)="onMouseDown($event)" placeholder="Search Hero" />
+						<input
+							[formControl]="searchForm"
+							(mousedown)="onMouseDown($event)"
+							placeholder="Search Hero / Hero Power"
+						/>
 					</label>
 				</div>
 				<div class="heroes" scrollable>
@@ -56,13 +56,9 @@ import { sortByProperties } from '../../../services/utils';
 						class="hero-portrait-frame"
 						[ngClass]="{ 'selected': hero.id === currentHeroId }"
 						(click)="selectHero(hero)"
-						[cardTooltip]="hero.heroPower.id"
+						[cardTooltip]="hero.id"
 					>
 						<img class="icon" [src]="hero.icon" />
-						<img
-							class="frame"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png?v=3"
-						/>
 					</div>
 				</div>
 			</div>
@@ -73,20 +69,19 @@ import { sortByProperties } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorHeroSelectionComponent {
+export class BgsSimulatorHeroPowerSelectionComponent {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string) => void;
 
-	@Input() set currentHero(heroCardId: string) {
-		this.currentHeroId = heroCardId;
-		if (!!heroCardId) {
-			this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${heroCardId}.jpg`;
-			this.heroName = this.allCards.getCard(heroCardId)?.name;
-			const heroPower = getHeroPower(heroCardId);
-			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPower)?.text);
+	@Input() set currentHero(heroPowerCardId: string) {
+		this.currentHeroId = heroPowerCardId;
+		if (!!heroPowerCardId) {
+			this.heroIcon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${heroPowerCardId}.png`;
+			this.heroName = this.allCards.getCard(heroPowerCardId)?.name;
+			this.heroPowerText = this.sanitizeText(this.allCards.getCard(heroPowerCardId)?.text);
 		} else {
 			this.heroIcon = null;
-			this.heroName = 'Select a hero';
+			this.heroName = 'Select a hero power';
 			this.heroPowerText = null;
 		}
 
@@ -97,7 +92,7 @@ export class BgsSimulatorHeroSelectionComponent {
 
 	searchForm = new FormControl();
 
-	allHeroes$: Observable<readonly Hero[]>;
+	allHeroes$: Observable<readonly HeroPower[]>;
 	currentHeroId: string;
 	heroIcon: string;
 	heroName: string;
@@ -115,23 +110,27 @@ export class BgsSimulatorHeroSelectionComponent {
 					.getCards()
 					.filter((card) => card.battlegroundsHero)
 					.filter(
-						(card) => !searchString?.length || card.name.toLowerCase().includes(searchString.toLowerCase()),
+						(card) =>
+							!searchString?.length ||
+							card.name.toLowerCase().includes(searchString.toLowerCase()) ||
+							allCards
+								.getCard(getHeroPower(card.id))
+								.name.toLowerCase()
+								.includes(searchString.toLowerCase()),
 					)
+					.map((card) => allCards.getCard(getHeroPower(card.id)))
 					.map((card) => ({
 						id: card.id,
-						icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${card.id}.jpg`,
+						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${card.id}.png`,
 						name: card.name,
-						heroPower: {
-							id: getHeroPower(card.id),
-							text: this.sanitizeText(allCards.getCard(getHeroPower(card.id))?.text),
-						},
+						text: card.text,
 					}))
-					.sort(sortByProperties((hero: Hero) => [hero.name])),
+					.sort(sortByProperties((hero: HeroPower) => [hero.name])),
 			),
 			startWith([]),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((heroes) => console.debug('heroes', heroes)),
+			tap((heroes) => console.debug('hero powers', heroes)),
 		);
 		this.subscription = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
@@ -142,12 +141,12 @@ export class BgsSimulatorHeroSelectionComponent {
 			});
 	}
 
-	selectHero(hero: Hero) {
+	selectHero(hero: HeroPower) {
 		console.debug('selected hero', hero);
 		this.currentHeroId = hero.id;
 		this.heroIcon = hero.icon;
 		this.heroName = hero.name;
-		this.heroPowerText = hero.heroPower.text;
+		this.heroPowerText = hero.text;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -182,12 +181,9 @@ export class BgsSimulatorHeroSelectionComponent {
 	}
 }
 
-interface Hero {
+interface HeroPower {
 	id: string;
 	icon: string;
 	name: string;
-	heroPower: {
-		id: string;
-		text: string;
-	};
+	text: string;
 }
