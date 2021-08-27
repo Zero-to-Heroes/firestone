@@ -239,7 +239,6 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		}
 
 		this.cardsInGame = getAllCardsInGame(state.currentGame.availableRaces, this.allCards);
-		// console.debug('cardsInGame', this.cardsInGame, state.currentGame.availableRaces);
 	}
 
 	private buildTiers(): readonly Tier[] {
