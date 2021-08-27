@@ -24,23 +24,26 @@ export const filterDuelsHeroStats = (
 	statType: DuelsStatTypeFilterType,
 	mmrFilter: 100 | 50 | 25 | 10 | 1,
 ): readonly DuelsHeroStat[] => {
-	return heroStats
-		.filter((stat) => stat.date === timeFilter)
-		.filter((stat) => stat.mmrPercentile === mmrFilter)
-		.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
-		.filter((stat) =>
-			// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
-			// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
-			heroPowerFilter === 'all' || statType !== 'signature-treasure'
-				? true
-				: stat.heroPowerCardId === heroPowerFilter,
-		)
-		.filter((stat) =>
-			// Similar
-			signatureTreasureFilter === 'all' || statType !== 'hero-power'
-				? true
-				: stat.signatureTreasureCardId === signatureTreasureFilter,
-		);
+	return (
+		heroStats
+			.filter((stat) => stat.date === timeFilter)
+			// For backward compatibility
+			.filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
+			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
+			.filter((stat) =>
+				// Don't consider the hero power filter when filtering heroes, as there is always only one hero for
+				// a given hero power (so we only have one result at the end, which isn't really useful for comparison)
+				heroPowerFilter === 'all' || statType !== 'signature-treasure'
+					? true
+					: stat.heroPowerCardId === heroPowerFilter,
+			)
+			.filter((stat) =>
+				// Similar
+				signatureTreasureFilter === 'all' || statType !== 'hero-power'
+					? true
+					: stat.signatureTreasureCardId === signatureTreasureFilter,
+			)
+	);
 	// We always show the "Heroic" stats, even when the filter is set to "Casual"
 	// The only thing that will change are the player stats
 	// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
@@ -56,20 +59,23 @@ export const filterDuelsTreasureStats = (
 	mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
 ): readonly DuelsTreasureStat[] => {
-	return (
-		treasures
-			// Avoid generating errors when the API hasn't properly formatted the data yet
-			.filter((stat) => !(+stat.treasureCardId > 0))
-			.filter((stat) => stat.date === timeFilter)
-			.filter((stat) => stat.mmrPercentile === mmrFilter)
-			.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
-			.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
-			.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
-			.filter((stat) => isCorrectType(stat, statType, allCards))
-		// We always show the "Heroic" stats, even when the filter is set to "Casual"
-		// The only thing that will change are the player stats
-		// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
-	);
+	const result = treasures
+		.filter((stat) => !!stat)
+		// Avoid generating errors when the API hasn't properly formatted the data yet
+		.filter((stat) => !(+stat.treasureCardId > 0))
+		.filter((stat) => stat.date === timeFilter)
+		.filter((stat) => stat.mmrPercentile === mmrFilter || mmrFilter >= 100)
+		.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
+		.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
+		.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
+		.filter((stat) => isCorrectType(stat, statType, allCards));
+	// We always show the "Heroic" stats, even when the filter is set to "Casual"
+	// The only thing that will change are the player stats
+	// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))
+	if (!result.length) {
+		console.log('no treasure to show', treasures?.length);
+	}
+	return result;
 };
 
 export const filterDuelsRuns = (
@@ -83,6 +89,10 @@ export const filterDuelsRuns = (
 	signatureTreasureFilter: 'all' | string = 'all',
 	statType: DuelsStatTypeFilterType = null,
 ) => {
+	if (!runs?.length) {
+		return [];
+	}
+
 	return runs
 		.filter((run) => run.ratingAtStart >= mmrFilter)
 		.filter((run) => isCorrectRunDate(run, timeFilter, patch))

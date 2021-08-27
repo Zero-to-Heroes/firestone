@@ -41,9 +41,9 @@ export class DuelsTreasureStatsComponent {
 	) {
 		this.stats$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.globalStats?.treasures,
-				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
-				([main, nav]) => main.duels.runs,
+				([main, nav]) => main.duels?.globalStats?.treasures,
+				([main, nav]) => main.duels?.globalStats?.mmrPercentiles,
+				([main, nav]) => main.duels?.runs,
 				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
@@ -53,7 +53,7 @@ export class DuelsTreasureStatsComponent {
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
 				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
-				([main, nav, prefs]) => main.duels.currentDuelsMetaPatch,
+				([main, nav, prefs]) => main.duels?.currentDuelsMetaPatch,
 			)
 			.pipe(
 				map(
@@ -98,6 +98,9 @@ export class DuelsTreasureStatsComponent {
 						] as [readonly DuelsTreasureStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
 				),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
+				tap(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
+					console.log('filtered treasures ', duelStats.length, duelsRuns.length),
+				),
 				map(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
 					[...buildDuelsHeroTreasurePlayerStats(duelStats, duelsRuns)]
 						.sort(this.sortBy(treasureSorting))
