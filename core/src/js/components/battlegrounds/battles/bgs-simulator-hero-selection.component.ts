@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs/operators';
@@ -73,7 +73,7 @@ import { sortByProperties } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorHeroSelectionComponent {
+export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string) => void;
 
@@ -140,6 +140,10 @@ export class BgsSimulatorHeroSelectionComponent {
 				// console.log('value changed?', data);
 				this.searchString.next(data);
 			});
+	}
+
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
 	}
 
 	selectHero(hero: Hero) {

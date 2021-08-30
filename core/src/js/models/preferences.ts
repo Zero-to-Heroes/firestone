@@ -270,6 +270,8 @@ export class Preferences {
 		'warband-composition-by-turn',
 	];
 	readonly bgsNumberOfDisplayedTabs: number = 1;
+	readonly bgsActiveSimulatorMinionTribeFilter: 'all' | 'blank' | string = 'all';
+	readonly bgsActiveSimulatorMinionTierFilter: 'all' | '1' | '2' | '3' | '4' | '5' | '6' = 'all';
 
 	// readonly duelsRunUuid: string;
 	readonly duelsActiveHeroSortFilter: DuelsHeroSortFilterType = 'global-winrate';

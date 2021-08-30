@@ -312,8 +312,8 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 	}
 };
 
-export const getEffectiveTribe = (card: ReferenceCard): string => {
-	const tribe: Race = getEffectiveTribeEnum(card);
+export const getEffectiveTribe = (card: ReferenceCard, groupMinionsIntoTheirTribeGroup: boolean): string => {
+	const tribe: Race = groupMinionsIntoTheirTribeGroup ? getTribeForInclusion(card) : getEffectiveTribeEnum(card);
 	return Race[tribe];
 };
 

@@ -57,6 +57,8 @@ import { BgsCustomSimulationMinionRemoveRequestEvent } from './events/battlegrou
 import { BgsCustomSimulationUpdateEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-event';
 import { BgsCustomSimulationUpdateMinionEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-event';
 import { BgsCustomSimulationUpdateMinionRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-event';
+import { BgsSimulatorMinionTierFilterSelectedEvent } from './events/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-event';
+import { BgsSimulatorMinionTribeFilterSelectedEvent } from './events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
@@ -163,6 +165,8 @@ import { BgsCustomSimulationMinionRemoveRequestParser } from './processors/battl
 import { BgsCustomSimulationUpdateMinionProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-processor';
 import { BgsCustomSimulationUpdateMinionRequestProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-processor';
 import { BgsCustomSimulationUpdateProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-processor';
+import { BgsSimulatorMinionTierFilterSelectedProcessor } from './processors/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-processor';
+import { BgsSimulatorMinionTribeFilterSelectedProcessor } from './processors/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
@@ -690,6 +694,12 @@ export class MainWindowStoreService {
 
 			BgsCustomSimulationCloseSidePanelEvent.eventName(),
 			new BgsCustomSimulationCloseSidePanelProcessor(),
+
+			BgsSimulatorMinionTribeFilterSelectedEvent.eventName(),
+			new BgsSimulatorMinionTribeFilterSelectedProcessor(this.prefs),
+
+			BgsSimulatorMinionTierFilterSelectedEvent.eventName(),
+			new BgsSimulatorMinionTierFilterSelectedProcessor(this.prefs),
 
 			// Duels
 			DungeonLootInfoUpdatedEvent.eventName(),

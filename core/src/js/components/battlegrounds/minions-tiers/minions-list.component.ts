@@ -91,7 +91,7 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 			return;
 		}
 
-		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card))(this._cards);
+		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card, false))(this._cards);
 		this.groups = Object.keys(groupedByTribe)
 			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
 			.map((tribeString) => ({

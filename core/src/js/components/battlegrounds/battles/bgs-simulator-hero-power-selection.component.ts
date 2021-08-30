@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, startWith, tap } from 'rxjs/operators';
@@ -69,7 +69,7 @@ import { sortByProperties } from '../../../services/utils';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsSimulatorHeroPowerSelectionComponent {
+export class BgsSimulatorHeroPowerSelectionComponent implements OnDestroy {
 	@Input() closeHandler: () => void;
 	@Input() applyHandler: (newHeroCardId: string) => void;
 
@@ -141,8 +141,12 @@ export class BgsSimulatorHeroPowerSelectionComponent {
 			});
 	}
 
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
+	}
+
 	selectHero(hero: HeroPower) {
-		console.debug('selected hero', hero);
+		console.debug('selected hero power', hero);
 		this.currentHeroId = hero.id;
 		this.heroIcon = hero.icon;
 		this.heroName = hero.name;
@@ -157,7 +161,7 @@ export class BgsSimulatorHeroPowerSelectionComponent {
 	}
 
 	validate() {
-		console.debug('selecting hero');
+		console.debug('selecting hero power');
 		this.applyHandler(this.currentHeroId);
 	}
 

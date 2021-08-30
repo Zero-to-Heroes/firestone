@@ -15,12 +15,14 @@ export class BgsCustomSimulationUpdateProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		console.debug('handling simulation update event', event);
-		const merged = deepmerge(
-			event.currentFaceOff as Partial<BgsFaceOffWithSimulation>,
-			event.partialUpdate as Partial<BgsFaceOffWithSimulation>,
-			{
-				arrayMerge: (destinationArray, sourceArray, options) => sourceArray,
-			},
+		const merged = BgsFaceOffWithSimulation.create(
+			deepmerge(
+				event.currentFaceOff as Partial<BgsFaceOffWithSimulation>,
+				event.partialUpdate as Partial<BgsFaceOffWithSimulation>,
+				{
+					arrayMerge: (destinationArray, sourceArray, options) => sourceArray,
+				},
+			),
 		);
 		console.debug('merged', merged, event.currentFaceOff, event.partialUpdate);
 

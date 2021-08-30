@@ -137,6 +137,9 @@
 				padding-right: 30px;
 				margin-right: 30px;
 				border-right: 1px solid var(--color-2);
+				height: 40px;
+				display: flex;
+				align-items: center;
 
 				.button {
 					background: var(--color-2);

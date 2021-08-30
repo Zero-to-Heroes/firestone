@@ -50,9 +50,13 @@ import { BgsBattleSideComponent } from '../../components/battlegrounds/battles/b
 import { BgsBattleComponent } from '../../components/battlegrounds/battles/bgs-battle.component';
 import { BgsBattlesComponent } from '../../components/battlegrounds/battles/bgs-battles.component';
 import { BgsHeroPortraitSimulatorComponent } from '../../components/battlegrounds/battles/bgs-hero-portrait-simulator.component';
+import { BgsMinusButtonComponent } from '../../components/battlegrounds/battles/bgs-minus-button.component';
 import { BgsPlusButtonComponent } from '../../components/battlegrounds/battles/bgs-plus-button.component';
 import { BgsSimulatorHeroPowerSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-hero-selection.component';
+import { BgsSimulatorMinionSelectionComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-selection.component';
+import { BattlegroundsSimulatorMinionTierFilterDropdownComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-tier-filter-dropdown.component';
+import { BattlegroundsSimulatorMinionTribeFilterDropdownComponent } from '../../components/battlegrounds/battles/bgs-simulator-minion-tribe-filter-dropdown.component';
 import { BgsBannedTribeComponent } from '../../components/battlegrounds/bgs-banned-tribe.component';
 import { BgsBannedTribesComponent } from '../../components/battlegrounds/bgs-banned-tribes.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
@@ -444,14 +448,18 @@ const components = [
 		BattlegroundsMinionsListComponent,
 		BattlegroundsMinionsGroupComponent,
 		BgsBannedTribeComponent,
+		GraphWithSingleValueComponent,
 		BgsBattlesComponent,
 		BgsBattleComponent,
 		BgsBattleSideComponent,
 		BgsHeroPortraitSimulatorComponent,
 		BgsPlusButtonComponent,
+		BgsMinusButtonComponent,
 		BgsSimulatorHeroSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
-		GraphWithSingleValueComponent,
+		BgsSimulatorMinionSelectionComponent,
+		BattlegroundsSimulatorMinionTribeFilterDropdownComponent,
+		BattlegroundsSimulatorMinionTierFilterDropdownComponent,
 
 		ConstructedComponent,
 		ConstructedContentComponent,
@@ -684,6 +692,7 @@ const components = [
 		BgsCardTooltipComponent,
 		TwitchBgsHeroOverviewComponent,
 		BgsSimulatorHeroSelectionComponent,
+		BgsSimulatorMinionSelectionComponent,
 		BgsSimulatorHeroPowerSelectionComponent,
 		...components,
 	],

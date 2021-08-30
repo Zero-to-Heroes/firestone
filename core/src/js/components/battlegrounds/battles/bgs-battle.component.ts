@@ -1,15 +1,6 @@
 import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	Input,
-	Output,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
@@ -21,9 +12,10 @@ import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-
 import { getHeroPower } from '../../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { ChangeMinionRequest } from './bgs-battle-side.component';
+import { removeFromReadonlyArray, replaceInArray } from '../../../services/utils';
 import { BgsSimulatorHeroPowerSelectionComponent } from './bgs-simulator-hero-power-selection.component';
 import { BgsSimulatorHeroSelectionComponent } from './bgs-simulator-hero-selection.component';
+import { BgsSimulatorMinionSelectionComponent } from './bgs-simulator-minion-selection.component';
 
 declare let amplitude;
 @Component({
@@ -50,12 +42,12 @@ declare let amplitude;
 						[closeOnMinion]="closeOnMinion"
 						[fullScreenMode]="fullScreenMode"
 						[tooltipPosition]="'right'"
-						(entitiesUpdated)="onOpponentEntitiesUpdated($event)"
+						(entitiesUpdated)="onEntitiesUpdated('opponent', $event)"
 						(portraitChangeRequested)="onPortraitChangeRequested('opponent')"
 						(heroPowerChangeRequested)="onHeroPowerChangeRequested('opponent')"
-						(changeMinionRequested)="onOpponentMinionChangeRequested($event)"
-						(updateMinionRequested)="onOpponentMinionUpdateRequested($event)"
-						(removeMinionRequested)="onOpponentMinionRemoveRequested($event)"
+						(addMinionRequested)="onMinionAddRequested('opponent')"
+						(updateMinionRequested)="onMinionUpdateRequested('opponent', $event)"
+						(removeMinionRequested)="onMinionRemoveRequested('opponent', $event)"
 					></bgs-battle-side>
 					<div class="versus" *ngIf="!fullScreenMode">Vs.</div>
 					<div class="simulations" *ngIf="fullScreenMode">
@@ -82,12 +74,12 @@ declare let amplitude;
 						[closeOnMinion]="closeOnMinion"
 						[fullScreenMode]="fullScreenMode"
 						[tooltipPosition]="'top-right'"
-						(entitiesUpdated)="onPlayerEntitiesUpdated($event)"
+						(entitiesUpdated)="onEntitiesUpdated('player', $event)"
 						(portraitChangeRequested)="onPortraitChangeRequested('player')"
 						(heroPowerChangeRequested)="onHeroPowerChangeRequested('player')"
-						(changeMinionRequested)="onPlayerMinionChangeRequested($event)"
-						(updateMinionRequested)="onPlayerMinionUpdateRequested($event)"
-						(removeMinionRequested)="onPlayerMinionRemoveRequested($event)"
+						(addMinionRequested)="onMinionAddRequested('player')"
+						(updateMinionRequested)="onMinionUpdateRequested('player', $event)"
+						(removeMinionRequested)="onMinionRemoveRequested('player', $event)"
 					></bgs-battle-side>
 				</div>
 				<div class="simulations" *ngIf="!fullScreenMode">
@@ -121,20 +113,10 @@ declare let amplitude;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsBattleComponent implements AfterViewInit {
-	@Output() opponentPortraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-	@Output() playerPortraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-
-	@Output()
-	opponentMinionChangeRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() playerMinionChangeRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-
-	@Output()
-	opponentMinionUpdateRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() playerMinionUpdateRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-
-	@Output()
-	opponentMinionRemoveRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() playerMinionRemoveRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Input() simulationUpdater: (
+		currentFaceOff: BgsFaceOffWithSimulation,
+		partialUpdate: BgsFaceOffWithSimulation,
+	) => void;
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		this._faceOff = value;
@@ -147,24 +129,24 @@ export class BgsBattleComponent implements AfterViewInit {
 	@Input() allowClickToAdd = false;
 	@Input() closeOnMinion = false;
 	@Input() showTavernTier = true;
-	@Input() simulationUpdater: (
-		currentFaceOff: BgsFaceOffWithSimulation,
-		partialUpdate: BgsFaceOffWithSimulation,
-	) => void;
 
 	turnNumber: number;
 	_faceOff: BgsFaceOffWithSimulation;
 	opponent: BgsBoardInfo;
 	player: BgsBoardInfo;
+
 	actualBattle: BgsFaceOffWithSimulation;
+	actualPlayer: BgsBoardInfo;
+	actualOpponent: BgsBoardInfo;
 	actualResult: string;
+
 	isPremium: boolean;
 	tooltip: string;
 
 	newBattle: BgsFaceOffWithSimulation;
 
-	private newOpponentEntities: readonly Entity[];
-	private newPlayerEntities: readonly Entity[];
+	// private newOpponentEntities: readonly Entity[];
+	// private newPlayerEntities: readonly Entity[];
 
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -198,12 +180,26 @@ export class BgsBattleComponent implements AfterViewInit {
 		}
 	}
 
-	onOpponentEntitiesUpdated(newEntities: readonly Entity[]) {
-		this.newOpponentEntities = newEntities;
-	}
-
-	onPlayerEntitiesUpdated(newEntities: readonly Entity[]) {
-		this.newPlayerEntities = newEntities;
+	onEntitiesUpdated(side: 'player' | 'opponent', newEntities: readonly Entity[]) {
+		console.debug('onEntitiesUpdated', side, newEntities);
+		const existingSide =
+			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
+		console.debug('minionIndex', side, existingSide, this._faceOff);
+		side === 'player'
+			? this.simulationUpdater(this._faceOff, {
+					battleInfo: {
+						playerBoard: {
+							board: this.buildBoard(newEntities),
+						} as BgsBoardInfo,
+					},
+			  } as BgsFaceOffWithSimulation)
+			: this.simulationUpdater(this._faceOff, {
+					battleInfo: {
+						opponentBoard: {
+							board: this.buildBoard(newEntities),
+						} as BgsBoardInfo,
+					},
+			  } as BgsFaceOffWithSimulation);
 	}
 
 	onPortraitChangeRequested(side: 'player' | 'opponent') {
@@ -288,34 +284,147 @@ export class BgsBattleComponent implements AfterViewInit {
 		}
 	}
 
-	onPlayerMinionChangeRequested(event) {
-		this.playerMinionChangeRequested.next(event);
+	onMinionAddRequested(side: 'player' | 'opponent') {
+		console.debug('onMinionAddRequested', side);
+		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
+		const modalRef = this.overlayRef.attach(portal);
+		modalRef.instance.closeHandler = () => {
+			this.overlayRef.detach();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		};
+		const existingSide =
+			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
+		modalRef.instance.currentMinion = null;
+		modalRef.instance.entityId = this._faceOff.getNextEntityId();
+		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
+			this.overlayRef.detach();
+			console.debug('minionIndex', existingSide);
+			side === 'player'
+				? this.simulationUpdater(this._faceOff, {
+						battleInfo: {
+							playerBoard: {
+								board: [
+									...this._faceOff.battleInfo.playerBoard.board,
+									newEntity,
+								] as readonly BoardEntity[],
+							} as BgsBoardInfo,
+						},
+				  } as BgsFaceOffWithSimulation)
+				: this.simulationUpdater(this._faceOff, {
+						battleInfo: {
+							opponentBoard: {
+								board: [
+									...this._faceOff.battleInfo.opponentBoard.board,
+									newEntity,
+								] as readonly BoardEntity[],
+							} as BgsBoardInfo,
+						},
+				  } as BgsFaceOffWithSimulation);
+		};
+		this.positionStrategy.apply();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	onOpponentMinionChangeRequested(event) {
-		this.opponentMinionChangeRequested.next(event);
+	onMinionUpdateRequested(side: 'player' | 'opponent', event: { index: number }) {
+		console.debug('onMinionUpdateRequested', side, event);
+		const portal = new ComponentPortal(BgsSimulatorMinionSelectionComponent);
+		const modalRef = this.overlayRef.attach(portal);
+		modalRef.instance.closeHandler = () => {
+			this.overlayRef.detach();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		};
+		const existingSide =
+			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
+		modalRef.instance.currentMinion = existingSide.board[event.index];
+		modalRef.instance.entityId = this._faceOff.getNextEntityId();
+		modalRef.instance.applyHandler = (newEntity: BoardEntity) => {
+			this.overlayRef.detach();
+			const minionIndex = event?.index;
+			console.debug(
+				'minionIndex',
+				minionIndex,
+				event,
+				existingSide,
+				...this._faceOff.battleInfo.opponentBoard.board.slice(0, minionIndex),
+				newEntity,
+				...this._faceOff.battleInfo.opponentBoard.board.slice(minionIndex + 1),
+			);
+			side === 'player'
+				? this.simulationUpdater(this._faceOff, {
+						battleInfo: {
+							playerBoard: {
+								board: replaceInArray(
+									this._faceOff.battleInfo.playerBoard.board,
+									minionIndex,
+									newEntity,
+								),
+							} as BgsBoardInfo,
+						},
+				  } as BgsFaceOffWithSimulation)
+				: this.simulationUpdater(this._faceOff, {
+						battleInfo: {
+							opponentBoard: {
+								board: replaceInArray(
+									this._faceOff.battleInfo.opponentBoard.board,
+									minionIndex,
+									newEntity,
+								),
+							} as BgsBoardInfo,
+						},
+				  } as BgsFaceOffWithSimulation);
+		};
+		this.positionStrategy.apply();
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	onPlayerMinionUpdateRequested(event) {
-		this.playerMinionUpdateRequested.next(event);
-	}
+	onMinionRemoveRequested(side: 'player' | 'opponent', event: { index: number }) {
+		console.debug('onMinionRemoveRequested', side, event);
+		const existingSide =
+			side === 'player' ? this._faceOff.battleInfo.playerBoard : this._faceOff.battleInfo.opponentBoard;
+		const minionIndex = event?.index ?? existingSide.board.length;
+		console.debug(
+			'minionIndex',
+			minionIndex,
+			side,
+			event,
+			existingSide,
+			this._faceOff,
+			[...this._faceOff.battleInfo.opponentBoard.board].splice(minionIndex, 1),
+		);
 
-	onOpponentMinionUpdateRequested(event) {
-		this.opponentMinionUpdateRequested.next(event);
-	}
-
-	onPlayerMinionRemoveRequested(event) {
-		this.playerMinionRemoveRequested.next(event);
-	}
-
-	onOpponentMinionRemoveRequested(event) {
-		this.opponentMinionRemoveRequested.next(event);
+		side === 'player'
+			? this.simulationUpdater(this._faceOff, {
+					battleInfo: {
+						playerBoard: {
+							board: [
+								...removeFromReadonlyArray(this._faceOff.battleInfo.playerBoard.board, minionIndex),
+							] as readonly BoardEntity[],
+						} as BgsBoardInfo,
+					},
+			  } as BgsFaceOffWithSimulation)
+			: this.simulationUpdater(this._faceOff, {
+					battleInfo: {
+						opponentBoard: {
+							board: [
+								...removeFromReadonlyArray(this._faceOff.battleInfo.opponentBoard.board, minionIndex),
+							] as readonly BoardEntity[],
+						} as BgsBoardInfo,
+					},
+			  } as BgsFaceOffWithSimulation);
 	}
 
 	resetBoards() {
 		this.newBattle = this.actualBattle;
-		this.player = { ...this.player };
-		this.opponent = { ...this.opponent };
+		this.player = this.actualPlayer;
+		this.opponent = this.actualOpponent;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -339,12 +448,12 @@ export class BgsBattleComponent implements AfterViewInit {
 			playerBoard: {
 				player: this.player.player,
 				secrets: this.player.secrets,
-				board: this.newPlayerEntities ? this.buildBoard(this.newPlayerEntities) : this.player.board,
+				board: this.player.board,
 			},
 			opponentBoard: {
 				player: this.player.player,
 				secrets: this.player.secrets,
-				board: this.newOpponentEntities ? this.buildBoard(this.newOpponentEntities) : this.opponent.board,
+				board: this.opponent.board,
 			},
 			options: {
 				...this._faceOff.battleInfo.options,
@@ -410,9 +519,12 @@ export class BgsBattleComponent implements AfterViewInit {
 					tavernTier: this._faceOff.playerTavern,
 				} as BgsPlayerEntity,
 			} as BgsBoardInfo);
-		this.actualBattle = this._faceOff;
 		this.newBattle = this._faceOff;
 		this.turnNumber = this._faceOff.turn;
-		this.actualResult = this._faceOff.result;
+
+		this.actualBattle = this.actualBattle ?? this._faceOff;
+		this.actualPlayer = this.actualPlayer ?? this.player;
+		this.actualOpponent = this.actualOpponent ?? this.opponent;
+		this.actualResult = this.actualResult ?? this._faceOff.result;
 	}
 }

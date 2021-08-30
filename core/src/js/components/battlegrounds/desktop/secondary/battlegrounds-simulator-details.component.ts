@@ -75,7 +75,9 @@ export class BattlegroundsSimulatorDetailsComponent implements AfterViewInit {
 			this.allCards.getCard(CardIds.NonCollectible.Neutral.Menagerist_AmalgamTokenBattlegrounds),
 		];
 		// TODO: this can be moved elsewhere once we have a search / filter option
-		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card))(this.cardsInGame);
+		const groupedByTribe = groupByFunction((card: ReferenceCard) => getEffectiveTribe(card, true))(
+			this.cardsInGame,
+		);
 		this.groups = Object.keys(groupedByTribe)
 			.sort((a: string, b: string) => tribeValueForSort(a) - tribeValueForSort(b)) // Keep consistent ordering
 			.map((tribeString) => ({

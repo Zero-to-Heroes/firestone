@@ -300,6 +300,18 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateBgsActiveSimulatorMinionTribeFilter(value: string) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsActiveSimulatorMinionTribeFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateBgsActiveSimulatorMinionTierFilter(value: 'all' | '1' | '2' | '3' | '4' | '5' | '6') {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsActiveSimulatorMinionTierFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateDuelsHeroSortFilter(value: DuelsHeroSortFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActiveHeroSortFilter: value };

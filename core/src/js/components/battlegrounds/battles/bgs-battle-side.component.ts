@@ -53,8 +53,6 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					[componentType]="componentType"
 					[componentInput]="entity"
 					[componentTooltipPosition]="'right'"
-					(exClick)="clickMinion(entity, i)"
-					(exDoubleClick)="doubleClickMinion(entity, i)"
 				>
 					<card-on-board
 						class="minion"
@@ -66,19 +64,23 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 						(cdkDropListDropped)="drop($event)"
 					>
 					</card-on-board>
-					<button class="close" (click)="removeMinion(entity, i)" *ngIf="closeOnMinion">
-						<svg class="svg-icon-fill">
-							<use
-								xmlns:xlink="https://www.w3.org/1999/xlink"
-								xlink:href="assets/svg/sprite.svg#window-control_close"
-							></use>
-						</svg>
-					</button>
+					<bgs-plus-button
+						class="button update"
+						(click)="updateMinion(entity, i)"
+						*ngIf="closeOnMinion"
+						helpTooltip="Update minion"
+					></bgs-plus-button>
+					<bgs-minus-button
+						class="button remove"
+						(click)="removeMinion(entity, i)"
+						*ngIf="closeOnMinion"
+						helpTooltip="Remove minion"
+					></bgs-minus-button>
 				</div>
 				<div class="click-to-add" *ngIf="((entities && entities.length) || 0) < 7 && allowClickToAdd">
 					<bgs-plus-button
 						class="change-icon"
-						(click)="onClickToAdd()"
+						(click)="addMinion()"
 						helpTooltip="Click to add a minion"
 					></bgs-plus-button>
 					<div class="empty-minion" inlineSVG="assets/svg/bg_empty_minion.svg"></div>
@@ -91,12 +93,12 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 export class BgsBattleSideComponent {
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
+	@Output() addMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Output() updateMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
+	@Output() removeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
 	@Output() entitiesUpdated: EventEmitter<readonly Entity[]> = new EventEmitter<readonly Entity[]>();
 	@Output() portraitChangeRequested: EventEmitter<void> = new EventEmitter<void>();
 	@Output() heroPowerChangeRequested: EventEmitter<void> = new EventEmitter<void>();
-	@Output() changeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() updateMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
-	@Output() removeMinionRequested: EventEmitter<ChangeMinionRequest> = new EventEmitter<ChangeMinionRequest>();
 
 	@Input() set player(value: BgsBoardInfo) {
 		this._player = value;
@@ -161,22 +163,15 @@ export class BgsBattleSideComponent {
 		this.heroPowerChangeRequested.next();
 	}
 
-	onClickToAdd() {
+	addMinion() {
 		console.debug('adding', this.allowClickToAdd);
-		this.changeMinionRequested.next(null);
+		this.addMinionRequested.next(null);
 	}
 
-	clickMinion(entity: Entity, index: number) {
-		this.changeMinionRequested.next({
-			entity: entity,
-			index: index,
-		});
-	}
-
-	doubleClickMinion(entity: Entity, index: number) {
-		console.debug('double clicked', entity);
+	updateMinion(entity: Entity, index: number) {
+		console.debug('updating', entity);
 		this.updateMinionRequested.next({
-			entity: entity,
+			// entity: entity,
 			index: index,
 		});
 	}
@@ -184,7 +179,6 @@ export class BgsBattleSideComponent {
 	removeMinion(entity: Entity, index: number) {
 		console.debug('clicked', entity);
 		this.removeMinionRequested.next({
-			entity: entity,
 			index: index,
 		});
 	}
@@ -227,6 +221,6 @@ export class BgsBattleSideComponent {
 }
 
 export interface ChangeMinionRequest {
-	entity: Entity;
+	// entity: Entity;
 	index: number;
 }

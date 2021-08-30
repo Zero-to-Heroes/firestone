@@ -16,5 +16,25 @@
 	.battle {
 		font-size: 13px;
 		height: 100%;
+
+		& ::ng-deep .result.result.result bgs-battle-status {
+			.battle-simulation {
+				align-items: center;
+			}
+			.probas,
+			.damage-container {
+				border: none;
+				padding: 0;
+				margin-bottom: 0;
+			}
+			.damage-container {
+				display: flex;
+			}
+			.proba-items {
+				border-right: 1px solid var(--color-2);
+				padding-right: 30px;
+				margin-right: 30px;
+			}
+		}
 	}
 }
