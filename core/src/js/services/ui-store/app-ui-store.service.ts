@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
@@ -13,12 +14,14 @@ import { arraysEqual } from '../utils';
 
 type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 type GameStateSelector<T> = (gameState: GameState) => T;
+type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
 
 @Injectable()
 export class AppUiStoreService {
 	private mainStore: BehaviorSubject<[MainWindowState, NavigationState]>;
 	private prefs: BehaviorSubject<{ name: string; preferences: Preferences }>;
 	private deckStore: BehaviorSubject<{ state: GameState }>;
+	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -26,6 +29,7 @@ export class AppUiStoreService {
 		this.mainStore = this.ow.getMainWindow()?.mainWindowStoreMerged;
 		this.prefs = this.ow.getMainWindow()?.preferencesEventBus;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
+		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
@@ -45,13 +49,24 @@ export class AppUiStoreService {
 
 	public listenDeckState$<S extends GameStateSelector<any>[]>(
 		...selectors: S
-	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
+	): Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }> {
 		return this.deckStore.asObservable().pipe(
 			filter((gameState) => !!gameState),
 			// tap((gameState) => console.debug('emitting gameState', gameState, this)),
 			map((gameState) => selectors.map((selector) => selector(gameState.state))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
+		) as Observable<{ [K in keyof S]: S[K] extends GameStateSelector<infer T> ? T : never }>;
+	}
+
+	public listenBattlegrounds$<S extends BattlegroundsStateSelector<any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
+		return combineLatest(this.battlegroundsStore.asObservable(), this.prefs.asObservable()).pipe(
+			// tap((gameState) => console.debug('emitting bg state', gameState, this)),
+			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
+			// tap((hop) => console.debug('emitting bg state after selectors', hop, this)),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+		) as Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }>;
 	}
 
 	public send(event: MainWindowStoreEvent) {

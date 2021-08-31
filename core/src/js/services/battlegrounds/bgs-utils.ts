@@ -1,6 +1,8 @@
-import { CardIds, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { CardIds, GameTag, Race, ReferenceCard } from '@firestone-hs/reference-data';
+import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
+import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-message.type';
 import { VisualAchievement } from '../../models/visual-achievement';
@@ -470,4 +472,26 @@ const hasMinionOnBoard = (boardInfo: BgsBoardInfo, cardId: string): boolean => {
 	}
 
 	return boardInfo.board.find((entity) => entity.cardId === cardId) != null;
+};
+
+export const buildEntityFromBoardEntity = (minion: BoardEntity, allCards: CardsFacadeService): Entity => {
+	return Entity.fromJS({
+		id: minion.entityId,
+		cardID: minion.cardId,
+		damageForThisAction: 0,
+		tags: {
+			[GameTag[GameTag.ATK]]: minion.attack,
+			[GameTag[GameTag.HEALTH]]: minion.health,
+			[GameTag[GameTag.TAUNT]]: minion.taunt ? 1 : 0,
+			[GameTag[GameTag.DIVINE_SHIELD]]: minion.divineShield ? 1 : 0,
+			[GameTag[GameTag.POISONOUS]]: minion.poisonous ? 1 : 0,
+			[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,
+			[GameTag[GameTag.WINDFURY]]: minion.windfury || minion.megaWindfury ? 1 : 0,
+			[GameTag[GameTag.MEGA_WINDFURY]]: minion.megaWindfury ? 1 : 0,
+			[GameTag[GameTag.PREMIUM]]: allCards.getCard(minion.cardId)?.battlegroundsNormalDbfId ? 1 : 0,
+		},
+		// This probably won't work with positioning auras, but I don't think there are many
+		// left (used to have Dire Wolf Alpha)
+		enchantments: minion.enchantments,
+	} as any);
 };

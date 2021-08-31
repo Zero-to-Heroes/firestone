@@ -7,32 +7,6 @@
 		display: flex;
 	}
 
-	.turn-label {
-		display: flex;
-		font-size: 14px;
-		margin-bottom: 10px;
-		color: var(--default-title-color);
-
-		.turn {
-		}
-
-		.result {
-			&.won {
-				color: #61ff47;
-			}
-			&.lost {
-				color: #ff4747;
-			}
-
-			&:before {
-				content: '-';
-				color: var(--default-text-color);
-				margin-left: 5px;
-				margin-right: 5px;
-			}
-		}
-	}
-
 	.battle-boards {
 		display: flex;
 		flex-direction: column;
@@ -111,6 +85,181 @@
 					border: 1px solid var(--default-title-color);
 					color: var(--color-7);
 					opacity: 1;
+				}
+			}
+		}
+	}
+
+	&.inline {
+		margin-left: 75px;
+		border: 1px solid;
+		border-image: linear-gradient(-45deg, rgba(159, 182, 215, 0), #ffb948) 1;
+
+		.turn-label {
+			position: absolute;
+		}
+
+		.battle-content {
+			background: rgba(255, 255, 255, 0.08);
+		}
+
+		.battle-boards {
+			position: relative;
+			width: 590px;
+			flex-grow: 0;
+
+			.versus {
+				font-size: 20px;
+				position: absolute;
+				top: calc(50% - 5px);
+				left: 89px;
+			}
+
+			::ng-deep bgs-battle-side {
+				.bgs-battle-side {
+					align-items: center;
+				}
+
+				.hero {
+					.portrait {
+						width: auto;
+					}
+					bgs-plus-button {
+						display: none;
+					}
+				}
+
+				.board {
+					height: 90px;
+
+					.minion-container {
+						margin-right: 10px;
+					}
+				}
+
+				&.opponent {
+					position: relative;
+					left: -65px;
+
+					.hero {
+						margin-right: 10px;
+						position: relative;
+						top: -5px;
+					}
+
+					.hero-portrait-frame {
+						width: 138px;
+						height: 156px;
+					}
+
+					.hero-power {
+						left: 0;
+						bottom: 0;
+					}
+
+					bgs-plus-button,
+					bgs-minus-button {
+						display: none;
+					}
+
+					.click-to-add {
+						display: none;
+					}
+				}
+
+				&.player {
+					position: relative;
+					left: -50px;
+
+					.hero {
+						margin-right: 20px;
+						position: relative;
+						top: 2px;
+					}
+
+					.hero-portrait-frame {
+						width: 103px;
+						height: 116px;
+					}
+
+					.hero-power {
+						bottom: 0;
+					}
+
+					.click-to-add {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+
+						.change-icon {
+							top: 5px;
+						}
+					}
+				}
+			}
+		}
+
+		.simulations {
+			margin-top: 20px;
+			margin-bottom: 20px;
+			flex-grow: 1;
+
+			.result {
+				flex-direction: column;
+				align-items: flex-start;
+
+				.label {
+					width: auto;
+				}
+			}
+
+			.controls {
+				justify-content: space-between;
+
+				.simulate {
+					background: var(--color-2);
+					color: var(--color-5);
+					border: none;
+					width: 80px;
+
+					&:hover {
+						background: var(--color-1);
+					}
+				}
+
+				.reset {
+					display: flex;
+					align-items: flex-end;
+					justify-content: center;
+					font-size: 12px;
+					z-index: 9;
+					position: relative;
+					top: 5px;
+
+					.icon {
+						--icon-color: var(--default-title-color);
+						width: 25px;
+						position: relative;
+						left: 5px;
+					}
+
+					&:hover {
+						color: var(--default-title-color);
+					}
+				}
+			}
+
+			bgs-battle-status {
+				width: 100%;
+
+				::ng-deep {
+					.battle-simulation {
+						width: 100%;
+					}
+					.probas {
+						width: 100%;
+						max-width: 205px;
+					}
 				}
 			}
 		}

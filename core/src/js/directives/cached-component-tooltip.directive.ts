@@ -58,6 +58,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 	private updatePositionStrategy() {
 		// console.debug('updatePositionStrategy', this.viewInit, this._componentInput, this._componentType);
 		if (!this.viewInit || !this._componentInput || !this._componentType) {
+			console.warn('not ready yet', this.viewInit, this._componentInput, this._componentType);
 			return;
 		}
 		if (this.positionStrategy) {
@@ -97,8 +98,6 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		// console.debug('mouseenter', this.overlayRef);
-
 		if (!this.tooltipRef) {
 			// Create tooltip portal
 			this.tooltipPortal = new ComponentPortal(this._componentType);

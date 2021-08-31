@@ -3,12 +3,6 @@
 	height: 100%;
 	flex-grow: 1;
 	min-width: 0;
-
-	&.no-ads {
-		.left {
-			height: calc(100% + 25px);
-		}
-	}
 }
 
 .left {
@@ -77,30 +71,34 @@
 	width: calc(100% - 410px);
 	position: relative;
 	top: 0px;
-	overflow: auto;
 
-	.explanations {
-		margin-bottom: 20px;
-
-		a {
-			font-family: Open Sans;
-			font-style: normal;
-			font-weight: normal;
-			line-height: normal;
-			color: #ffb948;
-			opacity: 0.8;
-
-			&:hover {
-				opacity: 1;
-			}
-		}
+	.close-button {
+		position: absolute;
+		top: 15px;
+		right: 0;
 	}
 
-	bgs-battle {
-		padding: 20px;
+	.battle {
+		margin-top: 15px;
+	}
 
-		&:not(:last-child) {
-			border-bottom: 1px solid var(--color-3);
+	.battles-header {
+		color: var(--default-title-color);
+		font-size: 13px;
+		margin-top: 20px;
+	}
+
+	.battles-list {
+		overflow: auto;
+		min-height: 0;
+	}
+
+	bgs-battle-recap {
+		margin-bottom: 10px;
+
+		&.highlighted {
+			border: 1px solid;
+			border-image: linear-gradient(-45deg, rgba(159, 182, 215, 0), #ffb948) 1;
 		}
 	}
 }

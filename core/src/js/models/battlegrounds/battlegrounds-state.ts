@@ -31,4 +31,11 @@ export class BattlegroundsState {
 	public update(base: BattlegroundsState): BattlegroundsState {
 		return Object.assign(new BattlegroundsState(), this, base);
 	}
+
+	public updatePanel(newPanel: BgsPanel): BattlegroundsState {
+		const panels: readonly BgsPanel[] = this.panels.map((panel) => (panel.id === newPanel.id ? newPanel : panel));
+		return this.update({
+			panels: panels,
+		} as BattlegroundsState);
+	}
 }

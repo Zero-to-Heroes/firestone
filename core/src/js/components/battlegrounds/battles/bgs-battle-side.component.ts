@@ -9,10 +9,11 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
-import { GameTag, GameType } from '@firestone-hs/reference-data';
+import { GameType } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { buildEntityFromBoardEntity } from '../../../services/battlegrounds/bgs-utils';
 import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 
@@ -195,27 +196,7 @@ export class BgsBattleSideComponent {
 		this.maxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this._player.player?.cardId);
 		this.tavernTier = this._player.player.tavernTier;
 
-		this.entities = (this._player.board ?? []).map((minion) =>
-			Entity.fromJS({
-				id: minion.entityId,
-				cardID: minion.cardId,
-				damageForThisAction: 0,
-				tags: {
-					[GameTag[GameTag.ATK]]: minion.attack,
-					[GameTag[GameTag.HEALTH]]: minion.health,
-					[GameTag[GameTag.TAUNT]]: minion.taunt ? 1 : 0,
-					[GameTag[GameTag.DIVINE_SHIELD]]: minion.divineShield ? 1 : 0,
-					[GameTag[GameTag.POISONOUS]]: minion.poisonous ? 1 : 0,
-					[GameTag[GameTag.REBORN]]: minion.reborn ? 1 : 0,
-					[GameTag[GameTag.WINDFURY]]: minion.windfury || minion.megaWindfury ? 1 : 0,
-					[GameTag[GameTag.MEGA_WINDFURY]]: minion.megaWindfury ? 1 : 0,
-					[GameTag[GameTag.PREMIUM]]: this.allCards.getCard(minion.cardId)?.battlegroundsNormalDbfId ? 1 : 0,
-				},
-				// This probably won't work with positioning auras, but I don't think there are many
-				// left (used to have Dire Wolf Alpha)
-				enchantments: minion.enchantments,
-			} as any),
-		);
+		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
 		//console.debug('built entities', this.entities, this._player.board);
 	}
 }

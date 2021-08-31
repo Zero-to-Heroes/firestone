@@ -46,6 +46,7 @@ import { ArenaFiltersComponent } from '../../components/arena/desktop/filters/_a
 import { BattlegroundsContentComponent } from '../../components/battlegrounds/battlegrounds-content.component';
 import { BattlegroundsEmptyStateComponent } from '../../components/battlegrounds/battlegrounds-empty-state.component';
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
+import { BgsBattleRecapComponent } from '../../components/battlegrounds/battles/bgs-battle-recap.component';
 import { BgsBattleSideComponent } from '../../components/battlegrounds/battles/bgs-battle-side.component';
 import { BgsBattleComponent } from '../../components/battlegrounds/battles/bgs-battle.component';
 import { BgsBattlesComponent } from '../../components/battlegrounds/battles/bgs-battles.component';
@@ -451,6 +452,7 @@ const components = [
 		GraphWithSingleValueComponent,
 		BgsBattlesComponent,
 		BgsBattleComponent,
+		BgsBattleRecapComponent,
 		BgsBattleSideComponent,
 		BgsHeroPortraitSimulatorComponent,
 		BgsPlusButtonComponent,

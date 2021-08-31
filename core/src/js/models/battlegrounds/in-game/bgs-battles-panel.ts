@@ -4,9 +4,11 @@ import { BgsPanelId } from '../bgs-panel-id.type';
 
 export class BgsBattlesPanel implements BgsPanel {
 	readonly id: BgsPanelId = 'bgs-battles';
-	readonly name: string = 'Battles';
+	readonly name: string = 'Battle simulations';
 	readonly icon: string;
 	readonly faceOffs: readonly BgsFaceOffWithSimulation[] = [];
+	readonly selectedFaceOffId: string;
+	readonly currentSimulations: readonly BgsFaceOffWithSimulation[] = [];
 
 	public static create(base: BgsBattlesPanel): BgsBattlesPanel {
 		return Object.assign(new BgsBattlesPanel(), base);

@@ -24,6 +24,7 @@ import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
+import { BgsBattleSimulationUpdateParser } from './event-parsers/bgs-battle-simulation-update-parser';
 import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
 import { BgsChangePostMatchStatsTabsNumberParser } from './event-parsers/bgs-change-post-match-stats-tabs-number-parser';
 import { BgsCombatStartParser } from './event-parsers/bgs-combat-start-parser';
@@ -44,6 +45,7 @@ import { BgsRealTimeStatsUpdatedParser } from './event-parsers/bgs-real-time-sta
 import { BgsReconnectStatusParser } from './event-parsers/bgs-reconnect-status-parser';
 import { BgsRecruitStartParser } from './event-parsers/bgs-recruit-start-parser';
 import { BgsResetHighlightsParser } from './event-parsers/bgs-reset-highlights-processor';
+import { BgsSelectBattleParser } from './event-parsers/bgs-select-battle-parser';
 import { BgsSpectatingParser } from './event-parsers/bgs-spectating-parser';
 import { BgsStageChangeParser } from './event-parsers/bgs-stage-change-parser';
 import { BgsStartComputingPostMatchStatsParser } from './event-parsers/bgs-start-computing-post-match-stats-parser';
@@ -522,6 +524,8 @@ export class BattlegroundsStoreService {
 			new BgsResetHighlightsParser(),
 			new BgsReconnectStatusParser(),
 			new BgsSpectatingParser(),
+			new BgsSelectBattleParser(),
+			new BgsBattleSimulationUpdateParser(),
 
 			new BgsRealTimeStatsUpdatedParser(),
 		];

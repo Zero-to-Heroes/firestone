@@ -26,7 +26,7 @@ declare let amplitude;
 		`../../../../css/component/battlegrounds/battles/bgs-battle.component.scss`,
 	],
 	template: `
-		<div class="bgs-battle" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
+		<div class="bgs-battle {{ additionalClass }}" [ngClass]="{ 'full-screen-mode': fullScreenMode }">
 			<div class="turn-label" *ngIf="turnNumber">
 				<div class="turn">Turn {{ turnNumber }}</div>
 				<div class="result {{ actualResult }}" *ngIf="actualResult">{{ actualResult }}</div>
@@ -49,7 +49,7 @@ declare let amplitude;
 						(updateMinionRequested)="onMinionUpdateRequested('opponent', $event)"
 						(removeMinionRequested)="onMinionRemoveRequested('opponent', $event)"
 					></bgs-battle-side>
-					<div class="versus" *ngIf="!fullScreenMode">Vs.</div>
+					<div class="versus" *ngIf="!fullScreenMode">VS</div>
 					<div class="simulations" *ngIf="fullScreenMode">
 						<div class="controls">
 							<div
@@ -88,18 +88,16 @@ declare let amplitude;
 						<bgs-battle-status [showReplayLink]="true" [nextBattle]="actualBattle"></bgs-battle-status>
 					</div>
 					<div class="result new">
-						<div class="label">New</div>
+						<div class="label">Simulated</div>
 						<bgs-battle-status [showReplayLink]="true" [nextBattle]="newBattle"></bgs-battle-status>
 					</div>
 					<div class="controls">
-						<div class="button reset" (click)="resetBoards()">Reset boards</div>
-						<div
-							class="button simulate"
-							(click)="simulateNewBattle()"
-							[helpTooltip]="tooltip"
-							[ngClass]="{ 'disabled': !isPremium }"
-						>
-							{{ isPremium ? 'Simulate' : 'Subscribe' }}
+						<div class="button simulate" (click)="simulateNewBattle()" [helpTooltip]="tooltip">
+							Simulate
+						</div>
+						<div class="reset" (click)="resetBoards()">
+							<div class="icon" inlineSVG="assets/svg/restore.svg"></div>
+							<div class="text">Reset</div>
 						</div>
 					</div>
 				</div>
@@ -129,6 +127,7 @@ export class BgsBattleComponent implements AfterViewInit {
 	@Input() allowClickToAdd = false;
 	@Input() closeOnMinion = false;
 	@Input() showTavernTier = true;
+	@Input() additionalClass: string;
 
 	turnNumber: number;
 	_faceOff: BgsFaceOffWithSimulation;
