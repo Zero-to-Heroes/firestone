@@ -216,8 +216,10 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 			map(([searchString, tribeFilter, tierFilter]) =>
 				this.allCards
 					.getCards()
-					.filter((card) => card.battlegroundsPremiumDbfId)
-					.filter((card) => card.techLevel)
+					.filter(
+						(card) =>
+							(card.battlegroundsPremiumDbfId && card.techLevel) || TOKEN_CARD_IDS.includes(card.id),
+					)
 					.filter(
 						(card) =>
 							!tribeFilter ||
@@ -235,7 +237,7 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 						id: card.id,
 						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${card.id}_bgs.png`,
 						name: card.name,
-						tier: card.techLevel,
+						tier: card.techLevel ?? 0,
 					}))
 					.sort(sortByProperties((minion: Minion) => [minion.tier, minion.name])),
 			),
@@ -467,3 +469,8 @@ interface Minion {
 	name: string;
 	tier: number;
 }
+
+const TOKEN_CARD_IDS = [
+	CardIds.NonCollectible.Neutral.AvatarOfNzoth_FishOfNzothTokenBattlegrounds,
+	CardIds.NonCollectible.Neutral.Menagerist_AmalgamTokenBattlegrounds,
+];
