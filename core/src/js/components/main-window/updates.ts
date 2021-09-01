@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.14.0',
+		version: '7.15.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -45,11 +45,24 @@ export const updates: readonly Update[] = [
 				header: 'Main updates',
 				updates: [
 					{
-						category: 'duels',
+						category: 'battlegrounds',
 						details: [
 							{
 								type: 'feature',
-								text: `New filters are available to dig deeper into the stats. You can now filter things by MMR percentile, by Hero Power, or Signature Treasure. Please be aware though that certain filter combinations don't have a lot of data, so the results can be unreliable in these cases.`,
+								text: `A full battle simulator is now available in the Battlegrounds tab! You can build any boards you like, and have them face each other. You can even build theoretically impossible comps, like a Divine Shield / Poisonous Ghoul (well, at least that one used to be impossible before Shudderwock).`,
+							},
+							{
+								type: 'feature',
+								text: `The full battle simulator is also available in the Battles tab on the in-game BG window. You can, as before, resimulate past battles, but now you can even tweak various attributes like the minions stats, in addition to their positioning.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the Hero and Treasure stats would be empty until you select a rank filter.`,
 							},
 						],
 					},
@@ -64,20 +77,20 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a bug where poisonous minions would still give their targets a chance to revive through deathrattle buffs like Goldrinn's.`,
+								text: `Fix a bug where Prophet of the Boar would appear in the tier list even without Quilboars in the game.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a bug where quickly starting a new game after the first could cause the tracker to bug out in the new lobby.`,
+								text: `Try to fix a bug where sometimes the opponent's last board would not disappear when mousing out of their portrait in the live leaderboard.`,
 							},
 						],
 					},
 					{
-						category: 'general',
+						category: 'achievements',
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a bug where the "last patch" filter doesn't work since 21.0.3`,
+								text: `Fix a bug where achievements could be granted while spectating.`,
 							},
 						],
 					},
