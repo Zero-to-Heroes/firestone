@@ -65,6 +65,7 @@ export class BgsMmrEvolutionForHeroComponent {
 			data: [
 				{
 					data: finalResult,
+					lineTension: 0,
 					label: 'Rating',
 				},
 			],

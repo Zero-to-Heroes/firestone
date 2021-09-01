@@ -126,6 +126,7 @@ export class GraphWithComparisonNewComponent {
 		const newChartData: ChartDataSets[] = [
 			{
 				data: yourData,
+				lineTension: 0,
 				delta: yourData?.length
 					? [yourData[0], ...yourData.slice(1).map((n, i) => (yourData[i] == null ? null : n - yourData[i]))]
 					: [],
@@ -133,6 +134,7 @@ export class GraphWithComparisonNewComponent {
 			} as any,
 			{
 				data: communityData,
+				lineTension: 0,
 				delta: communityData?.length
 					? [
 							communityData[0],
