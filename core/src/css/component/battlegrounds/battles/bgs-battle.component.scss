@@ -97,6 +97,28 @@
 
 		.turn-label {
 			position: absolute;
+			top: 3px;
+			left: 85px;
+			display: flex;
+			font-size: 14px;
+			margin-bottom: 10px;
+			color: var(--default-title-color);
+
+			.result {
+				&.won {
+					color: #61ff47;
+				}
+				&.lost {
+					color: #ff4747;
+				}
+
+				&:before {
+					content: '-';
+					color: var(--default-text-color);
+					margin-left: 5px;
+					margin-right: 5px;
+				}
+			}
 		}
 
 		.battle-content {
