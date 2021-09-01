@@ -12,6 +12,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 					class="frame"
 					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/bgs_hero_frame.png?v=3"
 				/>
+				<div class="aspect-ratio"></div>
 			</div>
 			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth, 'new': !!heroIcon }" *ngIf="_health">
 				<img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" />

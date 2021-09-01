@@ -1,6 +1,8 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { defaultStartingHp } from '../../../services/hs-utils';
 import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
 @Component({
@@ -17,17 +19,28 @@ import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.c
 			[componentInput]="_hero"
 			componentTooltipPosition="left"
 		>
-			<img [src]="icon" class="portrait" />
+			<!-- <img [src]="icon" class="portrait" /> -->
+			<bgs-hero-portrait
+				class="portrait"
+				[heroCardId]="heroCardId"
+				[health]="heroStartingHealth"
+			></bgs-hero-portrait>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroMiniComponent {
-	_hero: BgsHeroStat;
-	icon: string;
 	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
+
+	_hero: BgsHeroStat;
+	// icon: string;
+	heroCardId: string;
+	heroStartingHealth: number;
+
 	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
+		this.heroCardId = value.id;
+		this.heroStartingHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
+		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
 	}
 }

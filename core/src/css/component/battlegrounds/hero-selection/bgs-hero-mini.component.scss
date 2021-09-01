@@ -9,6 +9,31 @@
 
 	.portrait {
 		width: 100%;
+
+		::ng-deep {
+			.hero-portrait {
+				width: 100%;
+
+				.hero-portrait-frame {
+					width: 100%;
+					height: auto;
+
+					.aspect-ratio {
+						display: block;
+						padding-bottom: 115%;
+					}
+				}
+
+				.health {
+					.icon {
+						display: none;
+					}
+					.value {
+						font-size: 13px;
+					}
+				}
+			}
+		}
 	}
 
 	.results {

@@ -28,7 +28,20 @@
 	}
 
 	.portrait {
-		width: 80px;
+		// width: 80px;
+		margin-top: 10px;
+
+		::ng-deep .health {
+			right: -12%;
+			bottom: 5%;
+
+			.icon {
+				display: none;
+			}
+			.value {
+				font-size: 18px;
+			}
+		}
 	}
 
 	&.unused {
