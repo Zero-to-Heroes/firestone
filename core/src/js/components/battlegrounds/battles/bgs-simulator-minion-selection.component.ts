@@ -226,7 +226,10 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 					)
 					.filter((card) => !tierFilter || tierFilter === 'all' || card.techLevel === +tierFilter)
 					.filter(
-						(card) => !searchString?.length || card.name.toLowerCase().includes(searchString.toLowerCase()),
+						(card) =>
+							!searchString?.length ||
+							card.name.toLowerCase().includes(searchString.toLowerCase()) ||
+							card.text?.toLowerCase().includes(searchString.toLowerCase()),
 					)
 					.map((card) => ({
 						id: card.id,
