@@ -100,6 +100,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 		case CardIds.NonCollectible.Neutral.HagathasEmbrace:
 		case CardIds.NonCollectible.Neutral.KhadgarsScryingOrb:
 		case CardIds.NonCollectible.Neutral.LegendaryLootTavernBrawl:
+		case CardIds.NonCollectible.Neutral.MeekMasteryTavernBrawl:
 		case CardIds.NonCollectible.Neutral.MummyMagic:
 		case CardIds.NonCollectible.Neutral.OrbOfRevelationTavernBrawl:
 		case CardIds.NonCollectible.Neutral.RallyTheTroopsTavernBrawl:

@@ -207,6 +207,10 @@ export const getHeroPower = (heroCardId: string): string => {
 			return CardIds.NonCollectible.Neutral.Galewing_DungarsGryphon;
 		case CardIds.NonCollectible.Neutral.TradePrinceGallywixBattlegrounds:
 			return CardIds.NonCollectible.Rogue.SmartSavingsBattlegrounds;
+		case CardIds.NonCollectible.Neutral.MasterNguyen:
+			return CardIds.NonCollectible.Neutral.MasterNguyen_PowerOfTheStorm;
+		case CardIds.NonCollectible.Paladin.CarielRoame2:
+			return CardIds.NonCollectible.Neutral.ConvictionRank1_BlessedEnchantment2;
 		case '':
 			return null; // new heroes
 	}
@@ -278,29 +282,42 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 export const getTribeForInclusion = (card: ReferenceCard): Race => {
 	switch (card.id) {
 		// Some cases are only included when specific tribes are
+		case CardIds.NonCollectible.Neutral.BirdBuddy:
+		case CardIds.NonCollectible.Neutral.BirdBuddyBattlegrounds:
 		case CardIds.NonCollectible.Neutral.PackLeader:
 		case CardIds.NonCollectible.Neutral.PackLeaderBattlegrounds:
 		case CardIds.Collectible.Druid.VirmenSensei:
 		case CardIds.NonCollectible.Druid.VirmenSenseiBattlegrounds:
 			return Race.BEAST;
-		case CardIds.NonCollectible.Neutral.WrathWeaver:
-		case CardIds.NonCollectible.Neutral.WrathWeaverBattlegrounds:
+		case CardIds.NonCollectible.Neutral.ImpatientDoomsayer:
+		case CardIds.NonCollectible.Neutral.ImpatientDoomsayerBattlegrounds:
 		case CardIds.NonCollectible.Warlock.SoulJuggler:
 		case CardIds.NonCollectible.Warlock.SoulJugglerBattlegrounds:
+		case CardIds.NonCollectible.Neutral.WrathWeaver:
+		case CardIds.NonCollectible.Neutral.WrathWeaverBattlegrounds:
 			return Race.DEMON;
-		case CardIds.NonCollectible.Neutral.WaxriderTogwaggle2:
-		case CardIds.NonCollectible.Neutral.WaxriderTogwaggleBattlegrounds:
+		case CardIds.NonCollectible.Neutral.SeafoodSlinger:
+		case CardIds.NonCollectible.Neutral.SeafoodSlingerBattlegrounds:
+			return Race.MURLOC;
 		case CardIds.NonCollectible.Neutral.NadinaTheRed:
 		case CardIds.NonCollectible.Neutral.NadinaTheRedBattlegrounds:
+		case CardIds.NonCollectible.Neutral.WaxriderTogwaggle2:
+		case CardIds.NonCollectible.Neutral.WaxriderTogwaggleBattlegrounds:
+		case CardIds.NonCollectible.Neutral.WhelpSmuggler:
+		case CardIds.NonCollectible.Neutral.WhelpSmugglerBattlegrounds:
 			return Race.DRAGON;
 		case CardIds.NonCollectible.Neutral.MajordomoExecutus3:
 		case CardIds.NonCollectible.Neutral.MajordomoExecutusBattlegrounds:
+		case CardIds.NonCollectible.Neutral.MasterOfRealities2:
+		case CardIds.NonCollectible.Neutral.MasterOfRealitiesBattlegrounds:
 		case CardIds.NonCollectible.Neutral.NomiKitchenNightmare:
 		case CardIds.NonCollectible.Neutral.NomiKitchenNightmareBattlegrounds:
 			return Race.ELEMENTAL;
 		case CardIds.NonCollectible.Neutral.KangorsApprentice:
 		case CardIds.NonCollectible.Neutral.KangorsApprenticeBattlegrounds:
 			return Race.MECH;
+		case CardIds.NonCollectible.Neutral.DefiantShipwright:
+		case CardIds.NonCollectible.Neutral.DefiantShipwrightBattlegrounds:
 		case CardIds.NonCollectible.Neutral.TheTideRazor:
 		case CardIds.NonCollectible.Neutral.TheTideRazorBattlegrounds:
 			return Race.PIRATE;

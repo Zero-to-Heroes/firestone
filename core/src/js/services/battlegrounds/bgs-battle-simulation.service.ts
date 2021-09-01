@@ -118,12 +118,15 @@ export class BgsBattleSimulationService {
 				resolve(JSON.parse(ev.data));
 			};
 			worker.postMessage({
-				...battleInfo,
-				options: {
-					...battleInfo.options,
-					numberOfSimulations: Math.floor(prefs.bgsSimulatorNumberOfSims),
-				},
-			} as BgsBattleInfo);
+				battleMessage: {
+					...battleInfo,
+					options: {
+						...battleInfo.options,
+						numberOfSimulations: Math.floor(prefs.bgsSimulatorNumberOfSims),
+					},
+				} as BgsBattleInfo,
+				cards: this.cards.getService(),
+			});
 		});
 	}
 }

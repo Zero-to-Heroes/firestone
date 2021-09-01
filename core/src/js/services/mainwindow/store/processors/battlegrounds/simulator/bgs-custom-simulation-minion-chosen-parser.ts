@@ -1,7 +1,6 @@
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
-import { buildSingleBoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/utils';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { BgsFaceOffWithSimulation } from '../../../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BattlegroundsAppState } from '../../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
@@ -28,13 +27,7 @@ export class BgsCustomSimulationMinionChosenParser implements Processor {
 				: currentState.battlegrounds.customSimulationState.faceOff.battleInfo.opponentBoard;
 		const maxEntityId =
 			existingSide.board.length === 0 ? 0 : Math.max(...existingSide.board.map((e) => e.entityId));
-		const newMinion: BoardEntity = buildSingleBoardEntity(
-			event.cardId,
-			null,
-			this.allCards.getService(),
-			true,
-			maxEntityId + 1,
-		);
+		const newMinion: BoardEntity = null;
 		console.debug(
 			'newMinion',
 			newMinion,
