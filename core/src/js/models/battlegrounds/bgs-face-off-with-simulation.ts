@@ -44,7 +44,7 @@ export class BgsFaceOffWithSimulation extends BgsFaceOff {
 
 	public getNextEntityId(): number {
 		const allEntities = [...this.battleInfo.playerBoard.board, ...this.battleInfo.opponentBoard.board];
-		return !allEntities?.length ? 0 : Math.max(...allEntities.map((e) => e.entityId)) + 1;
+		return !allEntities?.length ? 1 : Math.max(...allEntities.map((e) => e.entityId)) + 1;
 	}
 
 	private async report(status: string, game: BgsGame) {

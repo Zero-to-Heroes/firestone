@@ -460,7 +460,9 @@ export class BgsBattleComponent implements AfterViewInit {
 				maxAcceptableDuration: 6000,
 			},
 		};
+		console.log('no-format', '[bgs-simulation-desktop] battle simulation request prepared', battleInfo);
 		const newSim = await this.simulationService.simulateLocalBattle(battleInfo, prefs);
+		console.log('no-format', '[bgs-simulation-desktop] battle simulation result', newSim);
 		this.newBattle = BgsFaceOffWithSimulation.create({
 			battleInfoStatus: 'done',
 			battleResult: newSim,
