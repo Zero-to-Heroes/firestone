@@ -14,7 +14,13 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 				{{ label }}
 			</div>
 			<div class="items">
-				<img class="item" *ngFor="let item of items" [src]="item.icon" [cardTooltip]="item.cardId" />
+				<img
+					class="item"
+					*ngFor="let item of items"
+					[src]="item.icon"
+					[cardTooltip]="item.cardId"
+					[cardTooltipPosition]="'left'"
+				/>
 			</div>
 		</div>
 	`,
