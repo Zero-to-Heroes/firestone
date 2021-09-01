@@ -130,6 +130,7 @@ export class GraphWithComparisonComponent {
 					? [yourData[0], ...yourData.slice(1).map((n, i) => (yourData[i] == null ? null : n - yourData[i]))]
 					: [],
 				label: this.yourLabel,
+				lineTension: 0,
 			} as any,
 			{
 				data: communityData,
@@ -142,6 +143,7 @@ export class GraphWithComparisonComponent {
 					  ]
 					: [],
 				label: this.communityLabel,
+				lineTension: 0,
 			},
 		];
 		if (areEqualDataSets(newChartData, this.lineChartData)) {

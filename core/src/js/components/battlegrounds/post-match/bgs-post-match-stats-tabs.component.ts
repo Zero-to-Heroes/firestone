@@ -47,7 +47,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					*ngxCacheIf="selectedTab === 'winrate-per-turn'"
 					[player]="_panel?.player"
 					[globalStats]="_panel?.globalStats"
-					[stats]="_panel?.stats"
+					[battleResultHistory]="_panel?.stats?.battleResultHistory"
 				>
 				</bgs-winrate-chart>
 				<bgs-chart-warband-stats

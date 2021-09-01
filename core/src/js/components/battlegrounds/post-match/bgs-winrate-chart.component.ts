@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
-import { BgsPostMatchStats } from '../../../models/battlegrounds/post-match/bgs-post-match-stats';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 
@@ -32,7 +32,7 @@ export class BgsWinrateChartComponent {
 	id: string;
 
 	private _globalStats: BgsStats;
-	private _stats: BgsPostMatchStats;
+	private _battleResultHistory: readonly BattleResultHistory[];
 	private _player: BgsPlayer;
 
 	@Input() set globalStats(value: BgsStats) {
@@ -43,11 +43,11 @@ export class BgsWinrateChartComponent {
 		this.updateInfo();
 	}
 
-	@Input() set stats(value: BgsPostMatchStats) {
-		if (value === this._stats) {
+	@Input() set battleResultHistory(value: readonly BattleResultHistory[]) {
+		if (value === this._battleResultHistory) {
 			return;
 		}
-		this._stats = value;
+		this._battleResultHistory = value;
 		this.updateInfo();
 	}
 
@@ -61,9 +61,6 @@ export class BgsWinrateChartComponent {
 	}
 
 	private updateInfo() {
-		if (!this._player || !this._globalStats) {
-			return;
-		}
 		this.communityExtractor = (): readonly NumericTurnInfo[] => {
 			if (!this._globalStats?.heroStats || !this._player?.cardId) {
 				return [];
@@ -82,10 +79,10 @@ export class BgsWinrateChartComponent {
 			return result;
 		};
 		this.yourExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._stats || !this._stats.battleResultHistory) {
+			if (!this._battleResultHistory?.length) {
 				return [];
 			}
-			const result = this._stats.battleResultHistory.map(
+			const result = this._battleResultHistory.map(
 				(turnInfo) =>
 					({
 						turn: turnInfo.turn,

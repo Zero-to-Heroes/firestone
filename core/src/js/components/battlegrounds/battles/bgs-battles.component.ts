@@ -9,17 +9,18 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { BattleResultHistory, BgsBattleSimulationResult } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
+import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/events/bgs-battle-simulation-update-event';
+import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
+import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
+import { OverwolfService } from '@services/overwolf.service';
+import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battles-panel';
-import { BgsBattleSimulationUpdateEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-update-event';
-import { BgsSelectBattleEvent } from '../../../services/battlegrounds/store/events/bgs-select-battle-event';
-import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
-import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'bgs-battles',
@@ -79,8 +80,13 @@ import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.servi
 				</div>
 			</ng-container>
 			<div class="left">
-				<!-- <div class="title">Wazzup?</div> -->
-				<div class="left-info"></div>
+				<div class="header">Avg. winrate by turn</div>
+				<div class="left-info">
+					<bgs-winrate-chart
+						class="chart"
+						[battleResultHistory]="battleResultHistory$ | async"
+					></bgs-winrate-chart>
+				</div>
 			</div>
 		</div>
 	`,
@@ -90,6 +96,7 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
 	faceOffs: readonly BgsFaceOffWithSimulation[];
 	faceOff$: Observable<BgsFaceOffWithSimulation>;
+	battleResultHistory$: Observable<readonly BattleResultHistory[]>;
 
 	@Input() set panel(value: BgsBattlesPanel) {
 		this._panel = value;
@@ -113,17 +120,17 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 	) {
 		this.faceOff$ = this.store
 			.listenBattlegrounds$(
-				([state]) => state.currentGame,
+				([state]) => state.currentGame?.faceOffs,
 				([state]) => state.panels,
 			)
 			.pipe(
-				map(([game, panels]) => {
+				map(([faceOffs, panels]) => {
 					const panel = panels?.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel;
 					const faceOffId = panel.selectedFaceOffId;
 					const currentSimulations = panel.currentSimulations ?? [];
 					const currentSimulationIndex = currentSimulations.map((s) => s.id).indexOf(faceOffId);
 					if (currentSimulationIndex === -1) {
-						const faceOff = game.faceOffs.find((f) => f.id === faceOffId);
+						const faceOff = faceOffs.find((f) => f.id === faceOffId);
 						return faceOff;
 					}
 
@@ -134,6 +141,28 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((faceOff) => console.debug('[cd] emitting face off in ', this.constructor.name, faceOff)),
+			);
+		this.battleResultHistory$ = this.store
+			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)
+			.pipe(
+				map(([faceOffs]) => faceOffs),
+				filter((faceOffs) => !!faceOffs?.length),
+				distinctUntilChanged(),
+				map((faceOffs) =>
+					faceOffs.map(
+						(faceOff) =>
+							({
+								turn: faceOff.turn,
+								simulationResult: {
+									wonPercent: faceOff.battleResult?.wonPercent,
+								} as BgsBattleSimulationResult,
+								actualResult: null,
+							} as BattleResultHistory),
+					),
+				),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((faceOff) => console.debug('[cd] emitting stats in ', this.constructor.name, faceOff)),
 			);
 
 		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
