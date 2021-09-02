@@ -26,17 +26,6 @@ export class DuelsState {
 	readonly additionalDeckDetails: readonly DuelsDeckStat[] = [];
 	readonly currentDuelsMetaPatch: PatchInfo;
 
-	// readonly activeHeroSortFilter: DuelsHeroSortFilterType;
-	// readonly activeStatTypeFilter: DuelsStatTypeFilterType;
-	// readonly activeTreasureSortFilter: DuelsTreasureSortFilterType;
-	// readonly activeTreasureStatTypeFilter: DuelsTreasureStatTypeFilterType;
-	// readonly activeTimeFilter: DuelsTimeFilterType;
-	// readonly activeGameModeFilter: DuelsGameModeFilterType;
-	// readonly activeTopDecksClassFilter: DuelsClassFilterType;
-	// readonly activeTopDecksDustFilter: DuelsTopDecksDustFilterType;
-	// readonly activeMmrFilter: string;
-	// readonly activeLeaderboardModeFilter: 'paid-duels' | 'duels';
-
 	public static create(base: DuelsState): DuelsState {
 		return Object.assign(new DuelsState(), base);
 	}

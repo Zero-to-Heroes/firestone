@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
+import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildDuelsHeroPlayerStats, filterDuelsHeroStats } from '../../../../services/ui-store/duels-ui-helper';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
@@ -25,7 +26,11 @@ import { DuelsTier, DuelsTierItem } from './duels-tier';
 export class DuelsHeroTierListComponent {
 	tiers$: Observable<readonly DuelsTier[]>;
 
-	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+	) {
 		this.tiers$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
@@ -70,6 +75,8 @@ export class DuelsHeroTierListComponent {
 								sigTreasureFilter,
 								statType,
 								mmrFilter,
+								this.allCards,
+								null,
 							),
 							statType,
 						] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType],

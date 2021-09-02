@@ -44,6 +44,7 @@ export class DuelsTreasureStatsComponent {
 				([main, nav]) => main.duels?.globalStats?.treasures,
 				([main, nav]) => main.duels?.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels?.runs,
+				([main, nav]) => nav.navigationDuels.treasureSearchString,
 				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
@@ -61,6 +62,7 @@ export class DuelsTreasureStatsComponent {
 						duelStats,
 						mmrPercentiles,
 						runs,
+						treasureSearchString,
 						statType,
 						gameMode,
 						treasureSorting,
@@ -82,6 +84,7 @@ export class DuelsTreasureStatsComponent {
 								statType,
 								mmrFilter,
 								this.allCards,
+								treasureSearchString,
 							),
 							filterDuelsRuns(
 								runs,

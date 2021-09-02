@@ -23,6 +23,8 @@ export const filterDuelsHeroStats = (
 	signatureTreasureFilter: 'all' | string,
 	statType: DuelsStatTypeFilterType,
 	mmrFilter: 100 | 50 | 25 | 10 | 1,
+	allCards: CardsFacadeService,
+	searchString: string = null,
 ): readonly DuelsHeroStat[] => {
 	return (
 		heroStats
@@ -43,6 +45,19 @@ export const filterDuelsHeroStats = (
 					? true
 					: stat.signatureTreasureCardId === signatureTreasureFilter,
 			)
+			.filter((stat) => {
+				if (!searchString?.length) {
+					return true;
+				}
+
+				let cardId = getDuelsHeroCardId(stat.playerClass);
+				if (statType === 'hero-power') {
+					cardId = stat.heroPowerCardId;
+				} else if (statType === 'signature-treasure') {
+					cardId = stat.signatureTreasureCardId;
+				}
+				return allCards.getCard(cardId)?.name.toLowerCase().includes(searchString.toLowerCase());
+			})
 	);
 	// We always show the "Heroic" stats, even when the filter is set to "Casual"
 	// The only thing that will change are the player stats
@@ -58,6 +73,7 @@ export const filterDuelsTreasureStats = (
 	statType: DuelsTreasureStatTypeFilterType,
 	mmrFilter: 100 | 50 | 25 | 10 | 1,
 	allCards: CardsFacadeService,
+	searchString: string = null,
 ): readonly DuelsTreasureStat[] => {
 	const result = treasures
 		.filter((stat) => !!stat)
@@ -68,7 +84,12 @@ export const filterDuelsTreasureStats = (
 		.filter((stat) => (classFilter === 'all' ? true : stat.playerClass === classFilter))
 		.filter((stat) => (heroPowerFilter === 'all' ? true : stat.heroPowerCardId === heroPowerFilter))
 		.filter((stat) => (sigTreasureFilter === 'all' ? true : stat.signatureTreasureCardId === sigTreasureFilter))
-		.filter((stat) => isCorrectType(stat, statType, allCards));
+		.filter((stat) => isCorrectType(stat, statType, allCards))
+		.filter(
+			(stat) =>
+				!searchString?.length ||
+				allCards.getCard(stat.treasureCardId)?.name.toLowerCase().includes(searchString.toLowerCase()),
+		);
 	// We always show the "Heroic" stats, even when the filter is set to "Casual"
 	// The only thing that will change are the player stats
 	// .filter((stat) => (gameMode === 'all' ? true : stat.gameMode === gameMode))

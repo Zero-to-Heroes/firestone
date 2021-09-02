@@ -6,6 +6,7 @@ import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-f
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
+import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 import {
@@ -34,12 +35,17 @@ import { arraysEqual } from '../../../services/utils';
 export class DuelsHeroStatsComponent {
 	stats$: Observable<readonly DuelsHeroPlayerStat[]>;
 
-	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+	constructor(
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly allCards: CardsFacadeService,
+	) {
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.globalStats?.heroes,
 				([main, nav]) => main.duels.globalStats?.mmrPercentiles,
 				([main, nav]) => main.duels.runs,
+				([main, nav]) => nav.navigationDuels.heroSearchString,
 				([main, nav, prefs]) => prefs.duelsActiveStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveHeroSortFilter,
@@ -57,6 +63,7 @@ export class DuelsHeroStatsComponent {
 						duelStats,
 						mmrPercentiles,
 						runs,
+						heroSearchString,
 						statType,
 						gameMode,
 						heroSorting,
@@ -77,6 +84,8 @@ export class DuelsHeroStatsComponent {
 								sigTreasureFilter,
 								statType,
 								mmrFilter,
+								this.allCards,
+								heroSearchString,
 							),
 							filterDuelsRuns(
 								runs,
