@@ -450,8 +450,8 @@ export class BgsBattleComponent implements AfterViewInit {
 				board: this.player.board,
 			},
 			opponentBoard: {
-				player: this.player.player,
-				secrets: this.player.secrets,
+				player: this.opponent.player,
+				secrets: this.opponent.secrets,
 				board: this.opponent.board,
 			},
 			options: {
