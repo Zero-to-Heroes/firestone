@@ -149,6 +149,7 @@ import { arraysEqual, sortByProperties } from '../../../services/utils';
 						class="hero-portrait-frame"
 						[ngClass]="{ 'selected': minion.id === _currentMinion?.id }"
 						(click)="selectMinion(minion)"
+						[cardTooltip]="minion.id"
 					>
 						<img class="icon" [src]="minion.icon" />
 					</div>
