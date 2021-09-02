@@ -201,7 +201,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 				return true;
 			case 'last-patch':
 				return (
-					deck.buildNumber === patch.number &&
+					deck.buildNumber >= patch.number &&
 					new Date(deck.periodStart).getTime() > new Date(patch.date).getTime()
 				);
 			case 'past-seven':
