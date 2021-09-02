@@ -38,7 +38,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<span>{{ !matchOver ? 'Live stats' : 'Post-Match Stats' }}</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedPanel === 'bgs-battles' }" (mousedown)="selectStage('bgs-battles')">
-				<span>Battles</span>
+				<span>Simulator</span>
 			</li>
 		</ul>
 	`,
