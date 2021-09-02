@@ -235,7 +235,7 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 					)
 					.map((card) => ({
 						id: card.id,
-						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${card.id}_bgs.png`,
+						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${card.id}_bgs.png?v=3`,
 						name: card.name,
 						tier: card.techLevel ?? 0,
 					}))
@@ -265,19 +265,24 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 			this.cardId = this.ref.battlegroundsNormalDbfId
 				? this.ref.id
 				: this.allCards.getCardFromDbfId(this.ref.battlegroundsPremiumDbfId).id;
+			console.debug('changed card id to premium', this.cardId);
 		} else {
-			this.cardId = this.ref.battlegroundsNormalDbfId
-				? this.allCards.getCardFromDbfId(this.ref.battlegroundsNormalDbfId).id
-				: this.cardId;
+			this.cardId = this.ref.battlegroundsPremiumDbfId
+				? this.ref.id
+				: this.allCards.getCardFromDbfId(this.ref.battlegroundsNormalDbfId).id;
+			console.debug('changed card id to normal', this.cardId, this.ref);
 		}
+		// Check if the user changed the stats of the base card. If not, we just use the stats
+		// from the premium card instead
+		const areStatsUpdated = this.attack !== this.ref.attack || this.health !== this.ref.health;
+		console.debug('stats updated?', areStatsUpdated, this.attack, this.health, this.ref);
 		this.ref = this.allCards.getCard(this.cardId);
-		this.attack = this.ref.attack;
-		this.health = this.ref.health;
-		this.divineShield = this.ref.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
-		this.poisonous = this.ref.mechanics?.includes(GameTag[GameTag.POISONOUS]);
-		this.taunt = this.ref.mechanics?.includes(GameTag[GameTag.TAUNT]);
-		this.windfury = this.ref.mechanics?.includes(GameTag[GameTag.WINDFURY]);
-		this.megaWindfury = this.ref.mechanics?.includes(GameTag[GameTag.MEGA_WINDFURY]);
+		console.debug('changed ref', this.ref, this.cardId);
+		if (!areStatsUpdated) {
+			this.attack = this.ref.attack;
+			this.health = this.ref.health;
+		}
+		// Don't change the existing customization
 		this.updateCard();
 	}
 
