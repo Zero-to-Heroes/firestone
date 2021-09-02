@@ -387,9 +387,11 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 		this.health = this.ref.health;
 		this.divineShield = this.ref.mechanics?.includes(GameTag[GameTag.DIVINE_SHIELD]);
 		this.poisonous = this.ref.mechanics?.includes(GameTag[GameTag.POISONOUS]);
+		this.reborn = this.ref.mechanics?.includes(GameTag[GameTag.REBORN]);
 		this.taunt = this.ref.mechanics?.includes(GameTag[GameTag.TAUNT]);
 		this.windfury = this.ref.mechanics?.includes(GameTag[GameTag.WINDFURY]);
 		this.megaWindfury = this.ref.mechanics?.includes(GameTag[GameTag.MEGA_WINDFURY]);
+		// The cards that summon 1/1s as part of their normal abilities are already handled in the sim
 		this.updateCard();
 	}
 
