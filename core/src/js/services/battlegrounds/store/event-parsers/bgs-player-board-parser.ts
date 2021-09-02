@@ -158,6 +158,7 @@ export class BgsPlayerBoardParser implements EventParser {
 		console.log(
 			'found player board to update',
 			playerToUpdate.cardId,
+			playerToUpdate.damageTaken,
 			'with new board',
 			playerBoard.board.map((entity) => entity.CardId),
 			'from old board',
