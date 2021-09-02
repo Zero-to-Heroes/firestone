@@ -77,11 +77,28 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a bug where Prophet of the Boar would appear in the tier list even without Quilboars in the game.`,
+								text: `Fix an issue where Prophet of the Boar would appear in the tier list even without Quilboars in the game.`,
 							},
 							{
 								type: 'bug',
-								text: `Try to fix a bug where sometimes the opponent's last board would not disappear when mousing out of their portrait in the live leaderboard.`,
+								text: `Fix an issue where Omega Buster would cause the simulator to not display any battle odds.`,
+							},
+							{
+								type: 'bug',
+								text: `Try to fix an issue where sometimes the opponent's last board would not disappear when mousing out of their portrait in the live leaderboard.`,
+							},
+						],
+					},
+					{
+						category: 'duels',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix the search bar on the Heroes and Treasures tabs.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix the position of the tooltip when mousing over cards in the tier lists on the Heroes and Treasures tabs.`,
 							},
 						],
 					},
@@ -90,7 +107,7 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix a bug where achievements could be granted while spectating.`,
+								text: `Fix an issue where achievements could be granted while spectating.`,
 							},
 						],
 					},
