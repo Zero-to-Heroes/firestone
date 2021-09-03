@@ -87,8 +87,6 @@ import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/de
 import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
 import { BattlegroundsReplaysRecapComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-replays-recap.component';
-import { BattlegroundsSimulatorDetailsEntityUpdateComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-simulator-details-entity-update.component';
-import { BattlegroundsSimulatorDetailsComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-simulator-details.component';
 import { BattlegroundsTierListComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-tier-list.component';
 import { GraphWithSingleValueComponent } from '../../components/battlegrounds/graph-with-single-value.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
@@ -564,8 +562,6 @@ const components = [
 		BattlegroundsPersonalStatsRatingComponent,
 		BattlegroundsPerfectGamesComponent,
 		BattlegroundsSimulatorComponent,
-		BattlegroundsSimulatorDetailsComponent,
-		BattlegroundsSimulatorDetailsEntityUpdateComponent,
 		BattlegroundsPersonalStatsStatsComponent,
 		BattlegroundsPersonalStatsHeroDetailsComponent,
 		BattlegroundsTierListComponent,

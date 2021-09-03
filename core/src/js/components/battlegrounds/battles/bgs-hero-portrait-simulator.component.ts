@@ -21,7 +21,7 @@ import {
 					[maxHealth]="maxHealth"
 				></bgs-hero-portrait>
 				<bgs-plus-button class="change-icon" (click)="onPortraitClick()"></bgs-plus-button>
-				<tavern-level-icon *ngIf="tavernTier" [level]="tavernTier" class="tavern"></tavern-level-icon>
+				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="hero-power">
 				<div
@@ -48,9 +48,16 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() health = 40;
 	@Input() maxHealth = 40;
-	@Input() tavernTier;
 	@Input() heroCardId: string;
 	@Input() tooltipPosition: string;
+
+	@Input() set tavernTier(value: number) {
+		this._tavernTier = value;
+		console.debug('setting tavern tier', this._tavernTier);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	@Input() set heroPowerCardId(value: string) {
 		this._heroPowerCardId = value;
@@ -66,6 +73,7 @@ export class BgsHeroPortraitSimulatorComponent {
 	heroIcon: string;
 	heroPowerIcon: string;
 	_heroPowerCardId: string;
+	_tavernTier: number;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 

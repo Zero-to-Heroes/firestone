@@ -21,6 +21,7 @@ import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battles-panel';
+import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
 
 @Component({
 	selector: 'bgs-battles',
@@ -53,9 +54,10 @@ import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battl
 							[allowClickToAdd]="true"
 							[closeOnMinion]="true"
 							[fullScreenMode]="false"
-							[showTavernTier]="false"
+							[showTavernTier]="true"
 							[additionalClass]="'inline'"
 							[simulationUpdater]="simulationUpdater"
+							[simulationReset]="simulationReset"
 						></bgs-battle>
 						<button class="i-30 close-button" (mousedown)="closeBattle()">
 							<svg class="svg-icon-fill">
@@ -94,6 +96,8 @@ import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battl
 })
 export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 	simulationUpdater: (currentFaceOff: BgsFaceOffWithSimulation, partialUpdate: BgsFaceOffWithSimulation) => void;
+	simulationReset: (faceOffId: string) => void;
+
 	faceOffs: readonly BgsFaceOffWithSimulation[];
 	faceOff$: Observable<BgsFaceOffWithSimulation>;
 	battleResultHistory$: Observable<readonly BattleResultHistory[]>;
@@ -178,6 +182,9 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 
 		this.simulationUpdater = (currentFaceOff, partialUpdate) => {
 			this.battlegroundsUpdater.next(new BgsBattleSimulationUpdateEvent(currentFaceOff, partialUpdate));
+		};
+		this.simulationReset = (faceOffId: string) => {
+			this.battlegroundsUpdater.next(new BgsBattleSimulationResetEvent(faceOffId));
 		};
 	}
 

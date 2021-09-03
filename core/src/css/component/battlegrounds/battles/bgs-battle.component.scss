@@ -146,6 +146,7 @@
 					.portrait {
 						width: auto;
 					}
+
 					bgs-plus-button {
 						display: none;
 					}
@@ -178,6 +179,11 @@
 						margin-right: 10px;
 						position: relative;
 						top: -5px;
+
+						.tavern {
+							width: 46px;
+							height: 46px;
+						}
 					}
 
 					.hero-portrait-frame {
@@ -199,6 +205,11 @@
 						margin-right: 20px;
 						position: relative;
 						top: 2px;
+
+						.tavern {
+							width: 35px;
+							height: 35px;
+						}
 					}
 
 					.hero-portrait-frame {
@@ -316,15 +327,24 @@
 			}
 		}
 
-		bgs-battle-side.player {
+		bgs-battle-side {
 			::ng-deep .bgs-battle-side {
-				.board {
-					margin-top: 0;
-					margin-bottom: 30px;
+				.hero .tavern {
+					width: 35px;
+					height: 35px;
 				}
+			}
 
-				.hero {
-					order: 2;
+			&.player {
+				::ng-deep .bgs-battle-side {
+					.board {
+						margin-top: 0;
+						margin-bottom: 30px;
+					}
+
+					.hero {
+						order: 2;
+					}
 				}
 			}
 		}

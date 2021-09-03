@@ -33,10 +33,10 @@ export class BgsBattleSimulationUpdateParser implements EventParser {
 			(p: BgsPanel) => p.id === 'bgs-battles',
 		) as BgsBattlesPanel;
 		const currentSimulationsIndex = panel.currentSimulations.map((s) => s.id).indexOf(merged.id);
-		const newSimulations =
+		const newSimulations: readonly BgsFaceOffWithSimulation[] =
 			currentSimulationsIndex >= 0
 				? replaceInArray(panel.currentSimulations, currentSimulationsIndex, merged)
-				: panel.currentSimulations;
+				: [...panel.currentSimulations, merged];
 
 		const newPanel = panel.update({
 			currentSimulations: newSimulations,

@@ -115,6 +115,8 @@ export class BgsBattleComponent implements AfterViewInit {
 		partialUpdate: BgsFaceOffWithSimulation,
 	) => void;
 
+	@Input() simulationReset: (faceOffId: string) => void;
+
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		this._faceOff = value;
 		if (!this._faceOff.battleInfo) {
@@ -159,7 +161,7 @@ export class BgsBattleComponent implements AfterViewInit {
 	@Input() clickToChange = false;
 	@Input() allowClickToAdd = false;
 	@Input() closeOnMinion = false;
-	@Input() showTavernTier = true;
+	@Input() showTavernTier = false;
 	@Input() additionalClass: string;
 
 	turnNumber: number;
@@ -167,10 +169,10 @@ export class BgsBattleComponent implements AfterViewInit {
 	opponent: BgsBoardInfo;
 	player: BgsBoardInfo;
 
-	actualBattle: BgsFaceOffWithSimulation;
-	actualPlayer: BgsBoardInfo;
-	actualOpponent: BgsBoardInfo;
-	actualResult: string;
+	// actualBattle: BgsFaceOffWithSimulation;
+	// actualPlayer: BgsBoardInfo;
+	// actualOpponent: BgsBoardInfo;
+	// actualResult: string;
 
 	isPremium: boolean;
 	tooltip: string;
@@ -454,12 +456,7 @@ export class BgsBattleComponent implements AfterViewInit {
 	}
 
 	resetBoards() {
-		this.newBattle = this.actualBattle;
-		this.player = this.actualPlayer;
-		this.opponent = this.actualOpponent;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
+		this.simulationReset(this._faceOff.id);
 	}
 
 	// For now do it purely in the UI, let's see later on if we want to use the store
@@ -539,10 +536,5 @@ export class BgsBattleComponent implements AfterViewInit {
 		this.player = this._faceOff.battleInfo.playerBoard;
 		this.newBattle = this._faceOff;
 		this.turnNumber = this._faceOff.turn;
-
-		this.actualBattle = this.actualBattle ?? this._faceOff;
-		this.actualPlayer = this.actualPlayer ?? this.player;
-		this.actualOpponent = this.actualOpponent ?? this.opponent;
-		this.actualResult = this.actualResult ?? this._faceOff.result;
 	}
 }

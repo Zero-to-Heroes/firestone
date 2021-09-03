@@ -24,6 +24,7 @@ import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BgsRunStatsService } from '../bgs-run-stats.service';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
+import { BgsBattleSimulationResetParser } from './event-parsers/bgs-battle-simulation-reset-parser';
 import { BgsBattleSimulationUpdateParser } from './event-parsers/bgs-battle-simulation-update-parser';
 import { BgsCardPlayedParser } from './event-parsers/bgs-card-played-parser';
 import { BgsChangePostMatchStatsTabsNumberParser } from './event-parsers/bgs-change-post-match-stats-tabs-number-parser';
@@ -526,6 +527,7 @@ export class BattlegroundsStoreService {
 			new BgsSpectatingParser(),
 			new BgsSelectBattleParser(),
 			new BgsBattleSimulationUpdateParser(),
+			new BgsBattleSimulationResetParser(),
 
 			new BgsRealTimeStatsUpdatedParser(),
 		];

@@ -110,7 +110,7 @@ export class BgsBattleSideComponent {
 	@Input() allowClickToAdd: boolean;
 	@Input() clickToChange = false;
 	@Input() closeOnMinion = false;
-	@Input() showTavernTier = true;
+	@Input() showTavernTier = false;
 	@Input() fullScreenMode = false;
 	@Input() tooltipPosition: string;
 
@@ -198,6 +198,9 @@ export class BgsBattleSideComponent {
 
 		this.entities = (this._player.board ?? []).map((minion) => buildEntityFromBoardEntity(minion, this.allCards));
 		//console.debug('built entities', this.entities, this._player.board);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 

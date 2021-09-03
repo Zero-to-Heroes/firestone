@@ -29,7 +29,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 	],
 	template: `
 		<div class="battlegrounds-mouse-over-overlay overlay-container-parent battlegrounds-theme" *ngIf="inGame">
-			<ul class="bgs-leaderboard">
+			<!-- So that we avoid showing other players infos before the start of the match -->
+			<ul class="bgs-leaderboard" *ngIf="bgsPlayers?.length === 8">
 				<bgs-leaderboard-empty-card
 					class="opponent-overlay"
 					*ngFor="let bgsPlayer of bgsPlayers; let i = index; trackBy: trackByFunction"

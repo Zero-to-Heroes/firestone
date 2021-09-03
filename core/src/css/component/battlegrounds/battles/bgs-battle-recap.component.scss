@@ -59,15 +59,26 @@
 				display: flex;
 				width: 62px;
 				margin-right: 10px;
+				position: relative;
 
 				bgs-hero-portrait ::ng-deep {
 					.hero-portrait-frame {
 						width: 62px;
 						height: 71px;
 					}
+
 					.health .value {
 						font-size: 18px;
 					}
+				}
+
+				.tavern {
+					position: absolute;
+					width: 25px;
+					height: 25px;
+					top: 15%;
+					right: -8%;
+					z-index: 1;
 				}
 			}
 

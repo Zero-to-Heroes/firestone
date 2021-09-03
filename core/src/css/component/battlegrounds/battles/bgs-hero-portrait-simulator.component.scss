@@ -2,9 +2,20 @@
 	position: relative;
 
 	.hero {
+		position: relative;
+
 		.change-icon {
 			top: -5px;
 			left: 40px;
+		}
+
+		.tavern {
+			position: absolute;
+			width: 25px;
+			height: 25px;
+			top: 15%;
+			right: -4%;
+			z-index: 1;
 		}
 	}
 

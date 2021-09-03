@@ -19,6 +19,12 @@ export class BgsCustomSimulationState {
 		return existingSide.board[minionIndex];
 	}
 
+	public resetFaceOff(): BgsCustomSimulationState {
+		return this.update({
+			faceOff: this.buildInitialFaceOff(),
+		} as BgsCustomSimulationState);
+	}
+
 	private buildInitialFaceOff(): BgsFaceOffWithSimulation {
 		return BgsFaceOffWithSimulation.create({
 			battleInfo: {

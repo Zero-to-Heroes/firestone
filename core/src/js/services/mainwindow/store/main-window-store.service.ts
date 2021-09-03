@@ -50,13 +50,8 @@ import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filt
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
-import { BgsCustomSimulationChangeMinionRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-change-minion-request-event';
-import { BgsCustomSimulationCloseSidePanelEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-close-side-panel-event';
-import { BgsCustomSimulationMinionChosenEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-minion-chosen-event';
-import { BgsCustomSimulationMinionRemoveRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-event';
+import { BgsCustomSimulationResetEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-reset-event';
 import { BgsCustomSimulationUpdateEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-event';
-import { BgsCustomSimulationUpdateMinionEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-event';
-import { BgsCustomSimulationUpdateMinionRequestEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-event';
 import { BgsSimulatorMinionTierFilterSelectedEvent } from './events/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-event';
 import { BgsSimulatorMinionTribeFilterSelectedEvent } from './events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
@@ -158,12 +153,7 @@ import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-r
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
-import { BgsCustomSimulationChangeMinionRequestProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-change-minion-request-processor';
-import { BgsCustomSimulationCloseSidePanelProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-close-side-panel-processor';
-import { BgsCustomSimulationMinionChosenParser } from './processors/battlegrounds/simulator/bgs-custom-simulation-minion-chosen-parser';
-import { BgsCustomSimulationMinionRemoveRequestParser } from './processors/battlegrounds/simulator/bgs-custom-simulation-minion-remove-request-parser';
-import { BgsCustomSimulationUpdateMinionProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-processor';
-import { BgsCustomSimulationUpdateMinionRequestProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-minion-request-processor';
+import { BgsCustomSimulationResetProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-reset-processor';
 import { BgsCustomSimulationUpdateProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-update-processor';
 import { BgsSimulatorMinionTierFilterSelectedProcessor } from './processors/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-processor';
 import { BgsSimulatorMinionTribeFilterSelectedProcessor } from './processors/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-processor';
@@ -677,23 +667,8 @@ export class MainWindowStoreService {
 			BgsCustomSimulationUpdateEvent.eventName(),
 			new BgsCustomSimulationUpdateProcessor(),
 
-			BgsCustomSimulationChangeMinionRequestEvent.eventName(),
-			new BgsCustomSimulationChangeMinionRequestProcessor(),
-
-			BgsCustomSimulationUpdateMinionRequestEvent.eventName(),
-			new BgsCustomSimulationUpdateMinionRequestProcessor(),
-
-			BgsCustomSimulationMinionChosenEvent.eventName(),
-			new BgsCustomSimulationMinionChosenParser(this.cards),
-
-			BgsCustomSimulationMinionRemoveRequestEvent.eventName(),
-			new BgsCustomSimulationMinionRemoveRequestParser(),
-
-			BgsCustomSimulationUpdateMinionEvent.eventName(),
-			new BgsCustomSimulationUpdateMinionProcessor(),
-
-			BgsCustomSimulationCloseSidePanelEvent.eventName(),
-			new BgsCustomSimulationCloseSidePanelProcessor(),
+			BgsCustomSimulationResetEvent.eventName(),
+			new BgsCustomSimulationResetProcessor(),
 
 			BgsSimulatorMinionTribeFilterSelectedEvent.eventName(),
 			new BgsSimulatorMinionTribeFilterSelectedProcessor(this.prefs),
