@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 import { PatchInfo } from '../../../models/patches';
 import { VisualAchievement } from '../../../models/visual-achievement';
+import { defaultStartingHp } from '../../../services/hs-utils';
 
 @Component({
 	selector: 'bgs-hero-overview',
@@ -16,13 +18,22 @@ import { VisualAchievement } from '../../../models/visual-achievement';
 		<div class="hero-overview" *ngIf="_hero">
 			<div class="name">{{ _hero.name }}</div>
 			<div class="tier {{ tier?.toLowerCase() }}">{{ tier }}</div>
-			<div class="portrait">
-				<img
+			<div class="portrait-container">
+				<bgs-hero-portrait
+					class="portrait"
+					[heroCardId]="_hero.id"
+					[health]="health"
+					[maxHealth]="health"
+					[cardTooltip]="_hero.heroPowerCardId"
+					[cardTooltipClass]="'bgs-hero-select'"
+				></bgs-hero-portrait>
+
+				<!-- <img
 					[src]="icon"
 					class="portrait"
 					[cardTooltip]="_hero.heroPowerCardId"
 					[cardTooltipClass]="'bgs-hero-select'"
-				/>
+				/> -->
 				<div class="achievements" *ngIf="achievementsToDisplay?.length">
 					<div
 						class="achievement"
@@ -68,22 +79,26 @@ export class BgsHeroOverviewComponent {
 
 	_hero: BgsHeroStat;
 	player: BgsPlayer;
-	icon: string;
+	health: number;
+	// heroCardId: string;
+	// icon: string;
 	tier: BgsHeroTier;
 	tribes: readonly { tribe: string; percent: string }[];
 	achievementsToDisplay: readonly InternalAchievement[];
 
 	@Input() set hero(value: BgsHeroStat) {
-		// console.log('setting hero', value, this._hero);
+		console.debug('setting hero', value);
 		this._hero = value;
 		if (!value) {
 			return;
 		}
+		this.health = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
 		this.player = BgsPlayer.create({
 			cardId: value.id,
 			// baseCardId: value.baseCardId,
 		} as BgsPlayer);
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
+		// this.heroCardId = value.id;
+		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
 			.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))

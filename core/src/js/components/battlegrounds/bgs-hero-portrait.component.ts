@@ -34,7 +34,6 @@ export class BgsHeroPortraitComponent {
 
 	@Input() set heroCardId(value: string) {
 		this.heroIcon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value}.jpg`;
-		console.debug('setting hero icon', value, this.heroIcon);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
