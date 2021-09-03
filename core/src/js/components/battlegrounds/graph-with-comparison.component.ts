@@ -252,9 +252,10 @@ export class GraphWithComparisonComponent {
 	}
 
 	private getMaxTurn(input: readonly NumericTurnInfo[]) {
-		return input.filter((stat) => stat.value).length === 0
+		// We want to show the most recent data, even if it's 0
+		return input.filter((stat) => stat.value != null).length === 0
 			? 0
-			: Math.max(...input.filter((stat) => stat.value).map((stat) => stat.turn));
+			: Math.max(...input.filter((stat) => stat.value != null).map((stat) => stat.turn));
 	}
 
 	private updateChartOptions() {
