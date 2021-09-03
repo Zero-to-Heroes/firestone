@@ -161,8 +161,15 @@ export class RewardMonitorService {
 				maxLoops--;
 			}
 			if (!this.xpForGameInfo) {
-				console.log('[rewards-monitor] could not get xpForGameInfo', this.xpForGameInfo);
-				resolve(null);
+				console.warn('[rewards-monitor] could not get xpForGameInfo, getting rewardsTrackInfo');
+				const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
+				console.log('[rewards-monitor] got rewardsTrackInfo', rewardTrackInfo);
+				const partialInfo: XpForGameInfo = {
+					currentXp: rewardTrackInfo.Xp,
+					currentLevel: rewardTrackInfo.Level,
+					bonusXp: rewardTrackInfo.XpBonusPercent,
+				} as XpForGameInfo;
+				resolve(partialInfo);
 			}
 			resolve(this.xpForGameInfo);
 		});
