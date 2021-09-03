@@ -137,19 +137,14 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 				filter(([faceOffs, panel]) => !!panel),
 				map(([faceOffs, panel]) => {
 					const faceOffId = panel.selectedFaceOffId;
-					console.debug('faceOffId', faceOffId);
 					const currentSimulations = panel.currentSimulations ?? [];
-					console.debug('currentSimulations', currentSimulations);
 					const currentSimulationIndex = currentSimulations.map((s) => s.id).indexOf(faceOffId);
-					console.debug('currentSimulationIndex', currentSimulationIndex);
 					if (currentSimulationIndex === -1) {
 						const faceOff = faceOffs.find((f) => f.id === faceOffId);
-						console.debug('faceOff', faceOff);
 						return faceOff;
 					}
 
 					const currentSimulation = currentSimulations[currentSimulationIndex];
-					console.debug('currentSimulation', currentSimulation);
 					return currentSimulation;
 				}),
 				distinctUntilChanged(),
