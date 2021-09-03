@@ -14,10 +14,13 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="battle-simulation">
-			<div class="message" *ngIf="_simulationMessage" [helpTooltip]="_simulationMessageTooltip">
-				{{ _simulationMessage }}
-			</div>
-			<div class="probas" *ngIf="!_simulationMessage">
+			<div
+				class="warning"
+				inlineSVG="assets/svg/attention.svg"
+				*ngIf="_simulationMessage"
+				[helpTooltip]="_simulationMessage"
+			></div>
+			<div class="probas">
 				<div class="title">Your chance of:</div>
 				<div class="proba-items">
 					<div class="win item">
@@ -79,7 +82,7 @@ declare let amplitude: any;
 					</div>
 				</div>
 			</div>
-			<div class="damage-container" *ngIf="!_simulationMessage">
+			<div class="damage-container">
 				<div class="title">Dmg</div>
 				<div class="damage dealt" helpTooltip="Average damage dealt">
 					<div class="damage-icon">
@@ -98,7 +101,7 @@ declare let amplitude: any;
 					<div class="damage-value">{{ damageLost || '--' }}</div>
 				</div>
 			</div>
-			<div class="damage-container lethal" *ngIf="!_simulationMessage">
+			<div class="damage-container lethal">
 				<div class="title">Lethal</div>
 				<div class="damage dealt" helpTooltip="% chance to kill the enemy hero">
 					<div class="damage-icon" inlineSVG="assets/svg/lethal.svg"></div>
@@ -127,7 +130,6 @@ export class BgsBattleStatusComponent {
 	@Input() showReplayLink: boolean;
 
 	_simulationMessage: string;
-	_simulationMessageTooltip: string;
 	battleSimulationResultWin: string;
 	battleSimulationResultTie: string;
 	battleSimulationResultLose: string;
@@ -164,16 +166,13 @@ export class BgsBattleStatusComponent {
 
 		switch (this.battle?.battleInfoMesage) {
 			case 'scallywag':
-				this._simulationMessage = `This composition is not supported`;
-				this._simulationMessageTooltip = 'Scallywag + Baron / Khadgar';
+				this._simulationMessage = `This composition is not well supported, results may be off (reason: Scallywag + Baron / Khadgar)`;
 				break;
 			case 'secret':
-				this._simulationMessage = `This composition is not supported yet`;
-				this._simulationMessageTooltip = 'Secrets are not supported yet';
+				this._simulationMessage = `This composition is not well supported, results may be off (reason: Secrets)`;
 				break;
 			case 'error':
-				this._simulationMessage = `An unknown error occured`;
-				this._simulationMessageTooltip = 'A bug report has automatically been sent out to the devs';
+				this._simulationMessage = `An unknown error occured, a bug report has automatically been sent out to the devs`;
 				break;
 			default:
 				this._simulationMessage = undefined;
