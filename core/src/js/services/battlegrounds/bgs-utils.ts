@@ -8,6 +8,8 @@ import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-messag
 import { VisualAchievement } from '../../models/visual-achievement';
 import { capitalizeFirstLetter } from '../utils';
 
+export const NON_BUYABLE_MINION_IDS = ['TB_BaconShop_HP_033t_SKIN_A'];
+
 export const getTribeName = (tribe: Race): string => capitalizeFirstLetter(Race[tribe]?.toLowerCase());
 
 export const getTribeIcon = (tribe: string | Race): string => {
@@ -264,6 +266,7 @@ export const getAllCardsInGame = (
 		.getCards()
 		.filter((card) => card.techLevel)
 		.filter((card) => card.set !== 'Vanilla')
+		.filter((card) => !NON_BUYABLE_MINION_IDS.includes(card.id))
 		.filter((card) => !availableTribes?.length || isValidTribe(availableTribes, Race[getTribeForInclusion(card)]))
 		.filter((card) => !card.battlegroundsNormalDbfId); // Ignore golden
 };
