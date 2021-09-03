@@ -24,7 +24,11 @@ import { PreferencesService } from '../services/preferences.service';
 
 @Component({
 	selector: 'main-window',
-	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
+	styleUrls: [
+		`../../css/global/components-global.scss`,
+		`../../css/global/ngx-tooltips.scss`,
+		`../../css/component/main-window.component.scss`,
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<window-wrapper *ngIf="dataState && navigationState" [activeTheme]="activeTheme" [allowResize]="true">

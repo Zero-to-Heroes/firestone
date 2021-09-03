@@ -1,21 +1,23 @@
 .ngx-charts-tooltip-content.ngx-charts-tooltip-content.ngx-charts-tooltip-content {
-	background: #ce73b4;
+	background: var(--color-2);
+	padding-right: 10px;
+	z-index: 9999999999;
 
 	.tooltip-caret {
 		&.position-left {
-			border-left-color: #ce73b4;
+			border-left-color: var(--color-2);
 		}
 
 		&.position-top {
-			border-top-color: #ce73b4;
+			border-top-color: var(--color-2);
 		}
 
 		&.position-right {
-			border-right-color: #ce73b4;
+			border-right-color: var(--color-2);
 		}
 
 		&.position-bottom {
-			border-bottom-color: #ce73b4;
+			border-bottom-color: var(--color-2);
 		}
 	}
 
