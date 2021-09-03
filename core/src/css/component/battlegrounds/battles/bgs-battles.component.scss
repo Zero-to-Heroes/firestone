@@ -32,7 +32,8 @@
 		display: flex;
 		flex-direction: column;
 		padding: 10px;
-		overflow: auto;
+		overflow: visible;
+		z-index: 999;
 
 		.chart {
 			width: 100%;
