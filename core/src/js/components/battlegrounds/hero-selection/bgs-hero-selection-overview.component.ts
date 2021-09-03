@@ -118,7 +118,7 @@ export class BgsHeroSelectionOverviewComponent {
 		// console.log('setting hero overviews', this._panel);
 		this.heroOverviews = selectionOptions.map((cardId) => {
 			const normalized = normalizeHeroCardId(cardId, true);
-			// console.debug('normalized', normalized, cardId);
+			console.debug('normalized', normalized, cardId);
 			const existingStat = this._panel.heroOverview.find((overview) => overview.id === normalized);
 			const statWithDefault =
 				existingStat ||
@@ -132,7 +132,7 @@ export class BgsHeroSelectionOverviewComponent {
 			// console.debug('achievementsForHero', achievementsForHero, this._showAchievements);
 			return {
 				...statWithDefault,
-				id: normalized,
+				id: cardId,
 				name: this.allCards.getCard(cardId)?.name,
 				baseCardId: normalized,
 				achievements: achievementsForHero,

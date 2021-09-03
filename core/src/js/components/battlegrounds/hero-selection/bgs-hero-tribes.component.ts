@@ -28,11 +28,9 @@ import { getTribeIcon } from '../../../services/battlegrounds/bgs-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroTribesComponent {
-	_hero: BgsHeroStat;
 	tribes: readonly { tribe: string; percent: string }[];
 
 	@Input() set hero(value: BgsHeroStat) {
-		this._hero = value;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
 			.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))

@@ -27,13 +27,6 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 					[cardTooltip]="_hero.heroPowerCardId"
 					[cardTooltipClass]="'bgs-hero-select'"
 				></bgs-hero-portrait>
-
-				<!-- <img
-					[src]="icon"
-					class="portrait"
-					[cardTooltip]="_hero.heroPowerCardId"
-					[cardTooltipClass]="'bgs-hero-select'"
-				/> -->
 				<div class="achievements" *ngIf="achievementsToDisplay?.length">
 					<div
 						class="achievement"
@@ -80,8 +73,6 @@ export class BgsHeroOverviewComponent {
 	_hero: BgsHeroStat;
 	player: BgsPlayer;
 	health: number;
-	// heroCardId: string;
-	// icon: string;
 	tier: BgsHeroTier;
 	tribes: readonly { tribe: string; percent: string }[];
 	achievementsToDisplay: readonly InternalAchievement[];
@@ -92,13 +83,11 @@ export class BgsHeroOverviewComponent {
 		if (!value) {
 			return;
 		}
-		this.health = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.id);
+
+		this.health = defaultStartingHp(GameType.GT_BATTLEGROUNDS, value.baseCardId);
 		this.player = BgsPlayer.create({
-			cardId: value.id,
-			// baseCardId: value.baseCardId,
+			cardId: value.baseCardId,
 		} as BgsPlayer);
-		// this.heroCardId = value.id;
-		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.id}.png?v=3`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
 			.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
