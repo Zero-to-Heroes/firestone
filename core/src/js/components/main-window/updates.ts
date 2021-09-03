@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.15.0',
+		version: '7.15.2',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -64,6 +64,10 @@ export const updates: readonly Update[] = [
 								type: 'bug',
 								text: `Fix an issue where the Hero and Treasure stats would be empty until you select a rank filter.`,
 							},
+							{
+								type: 'bug',
+								text: `Fix an issue when filtering for the latest patch.`,
+							},
 						],
 					},
 				],
@@ -86,6 +90,30 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Try to fix an issue where sometimes the opponent's last board would not disappear when mousing out of their portrait in the live leaderboard.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue with Leapfrogger.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue with Old Murk-Eye.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue where 'whenever' spawns would not trigger some spawn effects like Deflecto Bot.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue where tokens would spawn left of their origin, instead of right.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator where the minion created by Embrace Your Rage would not be counted in the board size to decide the first player.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue where lethal chances would sometimes be of 0 despite average damage being greater than the opponent's health.`,
 							},
 						],
 					},
