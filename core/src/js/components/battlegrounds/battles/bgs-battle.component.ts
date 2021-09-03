@@ -5,7 +5,6 @@ import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBoardInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-board-info';
-import { BgsPlayerEntity } from '@firestone-hs/simulate-bgs-battle/dist/bgs-player-entity';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsBattleSimulationService } from '../../../services/battlegrounds/bgs-battle-simulation.service';
@@ -118,6 +117,40 @@ export class BgsBattleComponent implements AfterViewInit {
 
 	@Input() set faceOff(value: BgsFaceOffWithSimulation) {
 		this._faceOff = value;
+		if (!this._faceOff.battleInfo) {
+			console.debug('no battle info, filling in the details to allow early simulation');
+			this._faceOff = this._faceOff.update({
+				battleInfo: {
+					playerBoard: {
+						board: [],
+						player: {
+							cardId: this._faceOff.playerCardId ?? 'TB_BaconShop_HERO_KelThuzad',
+							hpLeft: this._faceOff.playerHpLeft ?? 40,
+							tavernTier: this._faceOff.playerTavern ?? 6,
+							heroPowerId: null,
+							heroPowerUsed: true,
+						},
+					},
+					opponentBoard: {
+						board: [],
+						player: {
+							cardId: this._faceOff.opponentCardId ?? 'TB_BaconShop_HERO_KelThuzad',
+							hpLeft: this._faceOff.opponentHpLeft ?? 40,
+							tavernTier: this._faceOff.opponentTavern ?? 6,
+							heroPowerId: null,
+							heroPowerUsed: true,
+						},
+					},
+					options: {
+						numberOfSimulations: 8000,
+						maxAcceptableDuration: 6000,
+						// No restrictions on tribes yet
+						validTribes: undefined,
+					},
+				},
+			} as BgsFaceOffWithSimulation);
+			console.debug('no battle info, filling in the details to allow early simulation', this._faceOff, value);
+		}
 		this.updateInfo();
 	}
 
@@ -502,24 +535,8 @@ export class BgsBattleComponent implements AfterViewInit {
 			return;
 		}
 
-		this.opponent =
-			this._faceOff.battleInfo?.opponentBoard ??
-			({
-				player: {
-					cardId: this._faceOff.opponentCardId,
-					hpLeft: this._faceOff.opponentHpLeft,
-					tavernTier: this._faceOff.opponentTavern,
-				} as BgsPlayerEntity,
-			} as BgsBoardInfo);
-		this.player =
-			this._faceOff.battleInfo?.playerBoard ??
-			({
-				player: {
-					cardId: this._faceOff.playerCardId,
-					hpLeft: this._faceOff.playerHpLeft,
-					tavernTier: this._faceOff.playerTavern,
-				} as BgsPlayerEntity,
-			} as BgsBoardInfo);
+		this.opponent = this._faceOff.battleInfo.opponentBoard;
+		this.player = this._faceOff.battleInfo.playerBoard;
 		this.newBattle = this._faceOff;
 		this.turnNumber = this._faceOff.turn;
 

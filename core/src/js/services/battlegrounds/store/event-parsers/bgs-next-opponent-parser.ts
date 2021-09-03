@@ -3,6 +3,7 @@ import { BattlegroundsState } from '../../../../models/battlegrounds/battlegroun
 import { BgsFaceOffWithSimulation } from '../../../../models/battlegrounds/bgs-face-off-with-simulation';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';
+import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsOpponentOverview } from '../../../../models/battlegrounds/in-game/bgs-opponent-overview';
 import { defaultStartingHp } from '../../../hs-utils';
@@ -20,9 +21,6 @@ export class BgsNextOpponentParser implements EventParser {
 		console.debug('[bgs-next-opponent] parsing next opponent', event);
 		console.log('[bgs-next-opponent] parsing next opponent', event.cardId);
 		const newNextOpponentPanel: BgsNextOpponentOverviewPanel = this.buildInGamePanel(currentState, event.cardId);
-		const panels: readonly BgsPanel[] = currentState.panels.map((stage) =>
-			stage.id === newNextOpponentPanel.id ? newNextOpponentPanel : stage,
-		);
 
 		const mainPlayer = currentState.currentGame.getMainPlayer();
 		const opponent = currentState.currentGame.players.find(
@@ -57,12 +55,23 @@ export class BgsNextOpponentParser implements EventParser {
 				currentState.currentGame.players.map((p) => p.cardId),
 			);
 		}
-		const result = currentState.update({
-			panels: panels,
-			currentGame: currentState.currentGame.update({
-				faceOffs: [...currentState.currentGame.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
-			} as BgsGame),
-		} as BattlegroundsState);
+		const battlesPanel: BgsBattlesPanel = currentState.panels.find(
+			(p: BgsPanel) => p.id === 'bgs-battles',
+		) as BgsBattlesPanel;
+		const newBattlesPanel = !!battlesPanel.selectedFaceOffId
+			? battlesPanel
+			: // Show the simulator by default when going into the Simulator tab, if it's the first time
+			  battlesPanel.update({
+					selectedFaceOffId: faceOff.id,
+			  } as BgsBattlesPanel);
+		const result = currentState
+			.updatePanel(newBattlesPanel)
+			.updatePanel(newNextOpponentPanel)
+			.update({
+				currentGame: currentState.currentGame.update({
+					faceOffs: [...currentState.currentGame.faceOffs, faceOff] as readonly BgsFaceOffWithSimulation[],
+				} as BgsGame),
+			} as BattlegroundsState);
 		console.debug('[bgs-next-opponent]result', result);
 		return result;
 	}

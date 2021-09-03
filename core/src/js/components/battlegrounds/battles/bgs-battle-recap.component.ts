@@ -99,7 +99,7 @@ export class BgsBattleRecapComponent {
 		this.opponentMaxHealth = defaultStartingHp(GameType.GT_BATTLEGROUNDS, this.opponentHeroCardId);
 		this.opponentTavernTier = value.opponentTavern;
 
-		this.selectable = !!value.battleInfo;
+		this.selectable = true; // !!value.battleInfo;
 		if (value.battleInfo) {
 			this.playerEntities = value.battleInfo.playerBoard.board.map((minion) =>
 				buildEntityFromBoardEntity(minion, this.allCards),

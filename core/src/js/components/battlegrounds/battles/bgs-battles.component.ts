@@ -112,7 +112,6 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 	private _game: BgsGame;
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
-	// TODO: prevent selection when the battle hasn't happened yet (no battleinfo)
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
@@ -124,17 +123,29 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 				([state]) => state.panels,
 			)
 			.pipe(
-				map(([faceOffs, panels]) => {
-					const panel = panels?.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel;
+				map(
+					([faceOffs, panels]) =>
+						[
+							faceOffs,
+							panels.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel,
+						] as readonly [readonly BgsFaceOffWithSimulation[], BgsBattlesPanel],
+				),
+				filter(([faceOffs, panel]) => !!panel),
+				map(([faceOffs, panel]) => {
 					const faceOffId = panel.selectedFaceOffId;
+					console.debug('faceOffId', faceOffId);
 					const currentSimulations = panel.currentSimulations ?? [];
+					console.debug('currentSimulations', currentSimulations);
 					const currentSimulationIndex = currentSimulations.map((s) => s.id).indexOf(faceOffId);
+					console.debug('currentSimulationIndex', currentSimulationIndex);
 					if (currentSimulationIndex === -1) {
 						const faceOff = faceOffs.find((f) => f.id === faceOffId);
+						console.debug('faceOff', faceOff);
 						return faceOff;
 					}
 
 					const currentSimulation = currentSimulations[currentSimulationIndex];
+					console.debug('currentSimulation', currentSimulation);
 					return currentSimulation;
 				}),
 				distinctUntilChanged(),
@@ -182,10 +193,10 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 
 	selectBattle(faceOff: BgsFaceOffWithSimulation) {
 		console.debug('selecting battle?', faceOff);
-		if (!faceOff?.battleInfo) {
-			console.debug('no battle info');
-			return;
-		}
+		// if (!faceOff?.battleInfo) {
+		// 	console.debug('no battle info');
+		// 	return;
+		// }
 		this.battlegroundsUpdater.next(new BgsSelectBattleEvent(faceOff?.id));
 	}
 

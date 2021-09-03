@@ -157,6 +157,17 @@
 					.minion-container {
 						margin-right: 10px;
 					}
+
+					.click-to-add {
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						width: 60px;
+
+						.change-icon {
+							top: 5px;
+						}
+					}
 				}
 
 				&.opponent {
@@ -178,15 +189,6 @@
 						left: 0;
 						bottom: 0;
 					}
-
-					bgs-plus-button,
-					bgs-minus-button {
-						display: none;
-					}
-
-					.click-to-add {
-						display: none;
-					}
 				}
 
 				&.player {
@@ -206,16 +208,6 @@
 
 					.hero-power {
 						bottom: 0;
-					}
-
-					.click-to-add {
-						display: flex;
-						align-items: center;
-						justify-content: center;
-
-						.change-icon {
-							top: 5px;
-						}
 					}
 				}
 			}
