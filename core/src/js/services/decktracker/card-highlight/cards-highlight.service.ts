@@ -95,57 +95,72 @@ export class CardsHighlightService {
 		switch (cardId) {
 			case CardIds.Collectible.Demonhunter.DoubleJump:
 				return and(inDeck, outcast);
-			case CardIds.Collectible.Demonhunter.Tuskpiercer:
-			case CardIds.Collectible.Demonhunter.VengefulSpirit2:
-				return and(inDeck, deathrattle);
-			case CardIds.Collectible.Demonhunter.LineHopper:
-				return outcast;
-			case CardIds.Collectible.Druid.LivingSeedRank1:
-			case CardIds.NonCollectible.Druid.LivingSeedRank1_LivingSeedRank2Token:
-			case CardIds.NonCollectible.Druid.LivingSeedRank1_LivingSeedRank3Token:
-			case CardIds.Collectible.Hunter.SelectiveBreederCore:
-			case CardIds.Collectible.Hunter.WarsongWrangler:
-			case CardIds.Collectible.Hunter.ScavengersIngenuity:
-				return and(inDeck, beast);
 			case CardIds.Collectible.Druid.FungalFortunes:
 				return and(inDeck, minion);
 			case CardIds.Collectible.Druid.GuffRunetotem1:
+				return and(spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.Collectible.Druid.LadyAnacondra1:
 				return and(spell, spellSchool(SpellSchool.NATURE));
-			case CardIds.Collectible.Hunter.GuardianAnimals:
-				return and(inDeck, minion, beast, effectiveCostLess(6));
+			case CardIds.Collectible.Demonhunter.JaceDarkweaver:
+				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
+			case CardIds.Collectible.Demonhunter.LineHopper:
+				return outcast;
+			case CardIds.Collectible.Demonhunter.Tuskpiercer:
+				return and(inDeck, deathrattle);
+			case CardIds.Collectible.Demonhunter.VengefulSpirit2:
+				return and(inDeck, deathrattle);
+			case CardIds.Collectible.Druid.LivingSeedRank1:
+			case CardIds.NonCollectible.Druid.LivingSeedRank1_LivingSeedRank2Token:
+			case CardIds.NonCollectible.Druid.LivingSeedRank1_LivingSeedRank3Token:
+				return and(inDeck, beast);
 			case CardIds.Collectible.Hunter.BarakKodobane1:
 				return and(inDeck, spell, effectiveCostLess(4), effectiveCostMore(0));
+			case CardIds.Collectible.Hunter.GuardianAnimals:
+				return and(inDeck, minion, beast, effectiveCostLess(6));
 			case CardIds.Collectible.Hunter.JewelOfNzoth:
 				return and(minion, inGraveyard, deathrattle);
-			case CardIds.Collectible.Mage.Arcanologist:
-			case CardIds.Collectible.Mage.ArcanologistCore:
-			case CardIds.Collectible.Paladin.SwordOfTheFallen:
-				return and(inDeck, spell, secret);
+			case CardIds.Collectible.Hunter.ScavengersIngenuity:
+				return and(inDeck, beast);
+			case CardIds.Collectible.Hunter.SelectiveBreederCore:
+				return and(inDeck, beast);
+			case CardIds.Collectible.Hunter.WarsongWrangler:
+				return and(inDeck, beast);
 			case CardIds.Collectible.Mage.ArcaneLuminary:
 				return and(inDeck, notInInitialDeck);
+			case CardIds.Collectible.Mage.Arcanologist:
+			case CardIds.Collectible.Mage.ArcanologistCore:
+				return and(inDeck, spell, secret);
+			case CardIds.Collectible.Mage.BookOfSpecters:
+				return and(inDeck, spell);
 			case CardIds.Collectible.Paladin.KnightOfAnointment:
 				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
 			case CardIds.Collectible.Paladin.RedscaleDragontamer:
 				return and(inDeck, dragon);
-			case CardIds.Collectible.Neutral.Rally:
-				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
+			case CardIds.Collectible.Paladin.SwordOfTheFallen:
+				return and(inDeck, spell, secret);
 			case CardIds.Collectible.Priest.DarkInquisitorXanesh:
 				return and(or(inDeck, inHand), or(corrupt, corrupted));
 			case CardIds.Collectible.Shaman.CagematchCustodian:
 				return and(inDeck, cardType(CardType.WEAPON));
-			case CardIds.Collectible.Warrior.RingmasterWhatley:
-				return and(inDeck, minion, or(dragon, mech, pirate));
-			case CardIds.Collectible.Warrior.OverlordSaurfang1:
-				return and(minion, inGraveyard, frenzy);
 			case CardIds.Collectible.Shaman.FiremancerFlurgl:
 				return and(race(Race.MURLOC), or(inDeck, inHand));
-			case CardIds.Collectible.Neutral.VarianKingOfStormwind:
-				return and(inDeck, or(rush, taunt, divineShield));
-			case CardIds.Collectible.Demonhunter.JaceDarkweaver:
-				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
 			case CardIds.Collectible.Warrior.HarborScamp:
 				return and(inDeck, pirate);
+			case CardIds.Collectible.Warrior.OverlordSaurfang1:
+				return and(minion, inGraveyard, frenzy);
+			case CardIds.Collectible.Warrior.RingmasterWhatley:
+				return and(inDeck, minion, or(dragon, mech, pirate));
+
+			case CardIds.Collectible.Neutral.Rally:
+				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
+			case CardIds.Collectible.Neutral.VarianKingOfStormwind:
+				return and(inDeck, or(rush, taunt, divineShield));
+
+			// Duels
+			case CardIds.NonCollectible.Neutral.PrincessTavernBrawl:
+				return and(inDeck, minion, deathrattle);
+			case CardIds.NonCollectible.Neutral.SowTheSeedsTavernBrawl:
+				return and(inDeck, minion);
 		}
 	}
 }
