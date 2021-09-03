@@ -85,10 +85,6 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix an issue where Omega Buster would cause the simulator to not display any battle odds.`,
-							},
-							{
-								type: 'bug',
 								text: `Try to fix an issue where sometimes the opponent's last board would not disappear when mousing out of their portrait in the live leaderboard.`,
 							},
 							{
@@ -98,6 +94,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a simulator issue with Old Murk-Eye.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue with Mechano-Tank.`,
 							},
 							{
 								type: 'bug',
