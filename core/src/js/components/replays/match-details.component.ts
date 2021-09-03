@@ -51,7 +51,6 @@ export class MatchDetailsComponent implements AfterViewInit {
 		this.playerCardId = this.panel?.player?.cardId;
 		this.mmr = parseInt(value.selectedReplay?.replayInfo?.playerRank);
 		this.selectedTabs = value.selectedStatsTabs.slice(0, value.numberOfDisplayedTabs);
-		console.log('setting replay info', this.selectedTabs, value);
 	}
 
 	selectedView: string;

@@ -263,7 +263,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 
 		this.hotkey = await this.ow.getHotKey('collection');
 		this.hotkeyText = await this.hotkeyService.getHotkeyCombination('collection');
-		console.log('assigned hotkey', this.hotkey);
 		this.hotkeyPressedHandler = this.ow.getMainWindow().mainWindowHotkeyPressed;
 		// Only needed for the hotkey
 		if (!(this.cdr as ViewRef)?.destroyed) {

@@ -111,10 +111,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// console.log('input entities', this.inputEntities);
 		this._entities = this.inputEntities.map((entity) => Entity.create({ ...entity } as Entity));
 		this.previousBoardWidth = undefined;
-		if (this.debug) {
-			this.boardReady = false;
-			console.log('[bgs-board] setting board ready in entities setter', this.boardReady);
-		}
+		this.boardReady = false;
 		this.onResize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -149,9 +146,6 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
 		// issue when destroying / recreating the view?)
 		window.addEventListener('resize', () => {
-			if (this.debug) {
-				console.log('detected window resize');
-			}
 			this.onResize();
 		});
 		if (this.ow.isOwEnabled()) {
@@ -159,13 +153,6 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 			this.stateChangedListener = this.ow.addStateChangedListener(windowId, (message) => {
 				// console.log('state changed', message);
 				if (isWindowHidden(message.window_previous_state_ex) && !isWindowHidden(message.window_state_ex)) {
-					if (this.debug) {
-						console.log(
-							'showing hidden window, resizing board',
-							message.window_state_ex,
-							message.window_previous_state_ex,
-						);
-					}
 					this.onResize();
 				}
 			});
@@ -208,7 +195,6 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:resize')
 	async onResize() {
-		// console.debug('maxBoardHeight', this.maxBoardHeight);
 		// Manual sizing
 		if (this.maxBoardHeight === -1) {
 			this.boardReady = true;
@@ -234,39 +220,18 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		const boardContainer = this.el.nativeElement.querySelector('.board');
 		if (!boardContainer) {
 			if (this._entities?.length) {
-				if (this.debug) {
-					console.log('no  board container, retrying', this.el.nativeElement);
-				}
 				this.doResizeTimeout(300);
 				return;
-			}
-			if (this.debug) {
-				console.log('no entities set, doing nothing', this._entities);
 			}
 			return;
 		}
 		const rect = boardContainer.getBoundingClientRect();
-		// if (this.debug) {
-		// 	console.log('board container', boardContainer, rect);
-		// }
 		if (!rect || !rect.width || (!this.useFullWidth && !rect.height)) {
-			// if (this.debug) {
-			// 	console.log('no dimensions, retrying', rect);
-			// }
 			this.doResizeTimeout(1500);
 			return;
 		}
 		const cardElements: any[] = boardContainer.querySelectorAll('li');
 		if (cardElements.length !== (this._entities?.length || 0)) {
-			if (this.debug) {
-				console.log(
-					'card elements not displayed yet',
-					cardElements.length,
-					this._entities?.length,
-					cardElements,
-					this._entities,
-				);
-			}
 			this.doResizeTimeout(300);
 			return;
 		}
@@ -274,22 +239,12 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		// set on the DOM elements, which are teared down and recreated
 		if (this.previousBoardWidth === rect.width && this.previousBoardHeight === rect.height) {
 			this.boardReady = true;
-			if (this.debug) {
-				console.log('[bgs-board] setting board ready', this.boardReady);
-				console.log('all good, drawing cards', this.previousBoardWidth, rect);
-			}
 			// The board size is fixed, now we add the cards
 			let cardWidth = (this.previousBoardWidth / 8) * 0.85; // take the margin into account
 			let cardHeight = 1.48 * cardWidth;
 			if (!this.useFullWidth && cardHeight > this.previousBoardHeight * this.maxBoardHeight) {
-				if (this.debug) {
-					console.log('cropping cards to height', cardHeight, this.previousBoardHeight, this.maxBoardHeight);
-				}
 				cardHeight = 0.85 * this.previousBoardHeight * this.maxBoardHeight;
 				cardWidth = cardHeight / 1.48;
-			}
-			if (this.debug) {
-				console.log('will set card dimensions', cardWidth, cardHeight);
 			}
 			for (const cardElement of cardElements) {
 				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
@@ -299,9 +254,6 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 			return;
-		}
-		if (this.debug) {
-			console.log('dimensions are changing', this.previousBoardWidth, this.previousBoardHeight, rect);
 		}
 		this.previousBoardWidth = rect.width;
 		this.previousBoardHeight = rect.height;
