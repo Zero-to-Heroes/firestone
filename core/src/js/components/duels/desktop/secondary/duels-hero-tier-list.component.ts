@@ -5,6 +5,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
+import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildDuelsHeroPlayerStats, filterDuelsHeroStats } from '../../../../services/ui-store/duels-ui-helper';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
@@ -41,6 +42,7 @@ export class DuelsHeroTierListComponent {
 				([main, nav, prefs]) => prefs.duelsActiveHeroPowerFilter,
 				([main, nav, prefs]) => prefs.duelsActiveSignatureTreasureFilter,
 				([main, nav, prefs]) => prefs.duelsActiveMmrFilter,
+				([main, nav, prefs]) => prefs.duelsHideStatsBelowThreshold,
 			)
 			.pipe(
 				filter(
@@ -53,6 +55,7 @@ export class DuelsHeroTierListComponent {
 						heroPowerFilter,
 						sigTreasureFilter,
 						mmrFilter,
+						hideThreshold,
 					]) => !!duelsStats?.length,
 				),
 				map(
@@ -65,6 +68,7 @@ export class DuelsHeroTierListComponent {
 						heroPowerFilter,
 						sigTreasureFilter,
 						mmrFilter,
+						hideThreshold,
 					]) =>
 						[
 							filterDuelsHeroStats(
@@ -79,13 +83,16 @@ export class DuelsHeroTierListComponent {
 								null,
 							),
 							statType,
-						] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType],
+							hideThreshold,
+						] as [readonly DuelsHeroStat[], DuelsStatTypeFilterType, boolean],
 				),
 				// distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				map(([duelsStats, statType]) => {
-					const stats = buildDuelsHeroPlayerStats(duelsStats, statType).sort(
-						(a, b) => b.globalWinrate - a.globalWinrate,
-					);
+				map(([duelsStats, statType, hideThreshold]) => {
+					const stats = buildDuelsHeroPlayerStats(duelsStats, statType)
+						.sort((a, b) => b.globalWinrate - a.globalWinrate)
+						.filter((stat) =>
+							hideThreshold ? stat.globalTotalMatches >= DuelsStateBuilderService.STATS_THRESHOLD : true,
+						);
 					return [
 						{
 							label: 'S',
