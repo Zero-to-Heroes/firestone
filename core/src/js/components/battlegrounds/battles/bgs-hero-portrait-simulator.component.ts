@@ -7,6 +7,7 @@ import {
 	Output,
 	ViewRef,
 } from '@angular/core';
+import { CardIds } from '@firestone-hs/reference-data';
 
 @Component({
 	selector: 'bgs-hero-portrait-simulator',
@@ -16,11 +17,15 @@ import {
 			<div class="hero">
 				<bgs-hero-portrait
 					class="portrait click-to-change"
-					[heroCardId]="heroCardId"
+					[heroCardId]="_heroCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
 				></bgs-hero-portrait>
-				<bgs-plus-button class="change-icon" (click)="onPortraitClick()"></bgs-plus-button>
+				<bgs-plus-button
+					class="change-icon"
+					(click)="onPortraitClick()"
+					[useUpdateIcon]="!defaultHero"
+				></bgs-plus-button>
 				<tavern-level-icon *ngIf="_tavernTier" [level]="_tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="hero-power">
@@ -36,7 +41,11 @@ import {
 						class="frame"
 					/>
 				</div>
-				<bgs-plus-button class="change-icon" (click)="onHeroPowerClick()"></bgs-plus-button>
+				<bgs-plus-button
+					class="change-icon"
+					(click)="onHeroPowerClick()"
+					[useUpdateIcon]="!defaultHero"
+				></bgs-plus-button>
 			</div>
 		</div>
 	`,
@@ -48,8 +57,12 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() health = 40;
 	@Input() maxHealth = 40;
-	@Input() heroCardId: string;
 	@Input() tooltipPosition: string;
+
+	@Input() set heroCardId(value: string) {
+		this._heroCardId = value;
+		this.defaultHero = value === CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds;
+	}
 
 	@Input() set tavernTier(value: number) {
 		this._tavernTier = value;
@@ -70,10 +83,11 @@ export class BgsHeroPortraitSimulatorComponent {
 		}
 	}
 
-	heroIcon: string;
 	heroPowerIcon: string;
+	_heroCardId: string;
 	_heroPowerCardId: string;
 	_tavernTier: number;
+	defaultHero = true;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 

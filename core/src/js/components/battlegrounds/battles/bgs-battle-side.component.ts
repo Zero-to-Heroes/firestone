@@ -67,6 +67,7 @@ import { BgsCardTooltipComponent } from '../bgs-card-tooltip.component';
 					</card-on-board>
 					<bgs-plus-button
 						class="button update"
+						[useUpdateIcon]="true"
 						(click)="updateMinion(entity, i)"
 						*ngIf="closeOnMinion"
 						helpTooltip="Update minion"

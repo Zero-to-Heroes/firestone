@@ -1,0 +1,10 @@
+<svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+	xmlns="http://www.w3.org/2000/svg">
+	<rect x="7" y="10" width="15" height="1" rx="0.5" fill="var(--icon-color, currentcolor)"/>
+	<rect x="19" y="22" width="9" height="0.999999" rx="0.5" transform="rotate(-180 19 22)" fill="var(--icon-color, currentcolor)"/>
+	<path d="M10.4585 22C10.1993 22 9.98345 21.8014 9.96193 21.5431L9.04497 10.5397C9.02076 10.2492 9.25001 10 9.54152 10C9.80067 10 10.0166 10.1986 10.0381 10.4569L10.955 21.4603C10.9792 21.7509 10.75 22 10.4585 22Z" fill="var(--icon-color, currentcolor)"/>
+	<path d="M18.5415 22C18.8007 22 19.0166 21.8014 19.0381 21.5431L19.955 10.5397C19.9792 10.2491 19.75 10 19.4585 10C19.1993 10 18.9834 10.1986 18.9619 10.4569L18.045 21.4603C18.0208 21.7509 18.25 22 18.5415 22Z" fill="var(--icon-color, currentcolor)"/>
+	<rect x="16" y="7" width="1" height="4" rx="0.5" fill="var(--icon-color, currentcolor)"/>
+	<rect x="12" y="7" width="1" height="4" rx="0.5" fill="var(--icon-color, currentcolor)"/>
+	<rect x="17" y="7" width="1" height="5" rx="0.5" transform="rotate(90 17 7)" fill="var(--icon-color, currentcolor)"/>
+</svg>
