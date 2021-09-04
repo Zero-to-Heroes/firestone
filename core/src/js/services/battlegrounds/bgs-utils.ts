@@ -439,14 +439,12 @@ const isSupportedScenarioForPlayer = (
 	reason?: BattleInfoMessage;
 } => {
 	try {
-		// if (hasScallywag(boardInfo) && (hasBaron(boardInfo) || hasKhadgar(boardInfo))) {
-		// 	console.warn('[bgs-simulation] Unsupported Scallywag exodia, not reporting an error');
-		// 	return {
-		// 		isSupported: false,
-		// 		reason: 'scallywag',
-		// 	};
-		// } else
-		if (boardInfo?.secrets?.length > 0) {
+		if (hasScallywag(boardInfo) && (hasBaron(boardInfo) || hasKhadgar(boardInfo))) {
+			return {
+				isSupported: false,
+				reason: 'scallywag',
+			};
+		} else if (boardInfo?.secrets?.length > 0) {
 			//console.debug('not supported');
 			return {
 				isSupported: false,
