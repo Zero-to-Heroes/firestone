@@ -22,7 +22,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	switch (tribe) {
 		case 'Mech':
 		case Race.MECH:
-			referenceCardId = CardIds.Collectible.Rogue.IronSensei;
+			referenceCardId = CardIds.NonCollectible.Neutral.Pupbot;
 			break;
 		case 'Beast':
 		case Race.BEAST:
@@ -30,7 +30,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			break;
 		case 'Demon':
 		case Race.DEMON:
-			referenceCardId = CardIds.Collectible.Warlock.Malganis1;
+			referenceCardId = CardIds.NonCollectible.Neutral.FamishedFelbat;
 			break;
 		case 'Dragon':
 		case Race.DRAGON:
