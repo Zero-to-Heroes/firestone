@@ -245,7 +245,7 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 			startWith([]),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-			tap((heroes) => console.debug('minions', heroes)),
+			// tap((heroes) => console.debug('minions', heroes)),
 		);
 		this.subscription = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
