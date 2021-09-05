@@ -8,7 +8,11 @@ import { BattleInfoMessage } from '../../models/battlegrounds/battle-info-messag
 import { VisualAchievement } from '../../models/visual-achievement';
 import { capitalizeFirstLetter } from '../utils';
 
-export const NON_BUYABLE_MINION_IDS = ['TB_BaconShop_HP_033t_SKIN_A'];
+export const NON_BUYABLE_MINION_IDS = [
+	'TB_BaconShop_HP_033t_SKIN_A',
+	CardIds.Collectible.Paladin.ArgentBraggart,
+	CardIds.NonCollectible.Paladin.ArgentBraggartBattlegrounds,
+];
 
 export const getTribeName = (tribe: Race): string => capitalizeFirstLetter(Race[tribe]?.toLowerCase());
 
@@ -291,6 +295,9 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.NonCollectible.Neutral.PackLeaderBattlegrounds:
 		case CardIds.Collectible.Druid.VirmenSensei:
 		case CardIds.NonCollectible.Druid.VirmenSenseiBattlegrounds:
+		case CardIds.Collectible.Hunter.HoundmasterLegacy:
+		case CardIds.Collectible.Hunter.HoundmasterVanilla:
+		case CardIds.NonCollectible.Hunter.HoundmasterBattlegrounds:
 			return Race.BEAST;
 		case CardIds.NonCollectible.Neutral.ImpatientDoomsayer:
 		case CardIds.NonCollectible.Neutral.ImpatientDoomsayerBattlegrounds:
