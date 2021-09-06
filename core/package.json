@@ -40,7 +40,7 @@
 		"@firestone-hs/duels-leaderboard": "^1.0.4",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.81",
 		"@firestone-hs/reference-data": "^0.1.145",
-		"@firestone-hs/replay-parser": "^1.1.40",
+		"@firestone-hs/replay-parser": "^1.1.43",
 		"@firestone-hs/retrieve-pack-stats": "^1.0.2",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
