@@ -17,13 +17,15 @@ import { OwUtilsService } from '../../../services/plugins/ow-utils.service';
 	template: `
 		<div class="decktracker-deck-details">
 			<decktracker-stats-for-replays class="global-stats" [replays]="replays"></decktracker-stats-for-replays>
-			<div class="deck-list-container">
-				<copy-deckstring class="copy-deckcode" [deckstring]="deck?.deckstring" copyText="Copy deck code">
-				</copy-deckstring>
-				<deck-list class="deck-list" [deckstring]="deck?.deckstring"></deck-list>
+			<div class="container">
+				<div class="deck-list-container">
+					<copy-deckstring class="copy-deckcode" [deckstring]="deck?.deckstring" copyText="Copy deck code">
+					</copy-deckstring>
+					<deck-list class="deck-list" [deckstring]="deck?.deckstring"></deck-list>
+				</div>
+				<deck-winrate-matrix [deck]="deck" [showMatchupAsPercentagesValue]="showMatchupAsPercentages">
+				</deck-winrate-matrix>
 			</div>
-			<deck-winrate-matrix [deck]="deck" [showMatchupAsPercentagesValue]="showMatchupAsPercentages">
-			</deck-winrate-matrix>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

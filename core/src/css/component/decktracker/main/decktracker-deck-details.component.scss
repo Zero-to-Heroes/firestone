@@ -21,6 +21,11 @@
 		}
 	}
 
+	.container {
+		display: flex;
+		width: 100%;
+	}
+
 	.deck-list-container {
 		order: 2;
 		margin-left: 20px;
