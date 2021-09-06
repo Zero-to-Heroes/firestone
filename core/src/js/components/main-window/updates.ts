@@ -101,6 +101,22 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix a simulator issue with Tony Two-Tusk.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue with Whelp Smuggler.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix many simulator issues with Leapfroggers. Ribbit.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue when multiple minions are killed at the same time.`,
+							},
+							{
+								type: 'bug',
 								text: `Fix a simulator issue where 'whenever' spawns would not trigger some spawn effects like Deflecto Bot.`,
 							},
 							{
@@ -109,11 +125,36 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
-								text: `Fix a simulator where the minion created by Embrace Your Rage would not be counted in the board size to decide the first player.`,
+								text: `Fix a simulator issue where the minion created by Embrace Your Rage would not be counted in the board size to decide the first player.`,
 							},
 							{
 								type: 'bug',
 								text: `Fix a simulator issue where lethal chances would sometimes be of 0 despite average damage being greater than the opponent's health.`,
+							},
+							{
+								type: 'bug',
+								text: `Remove Houndmaster and Argent Braggart appearing in the minion list even when they shouldn't.`,
+							},
+							{
+								type: 'ui',
+								text: `Replace the "Composition not supported" message by the results from the simulator alongside a warning icon.`,
+							},
+							{
+								type: 'ui',
+								text: `Update the icons for Mechs (now Pupbot) and Demons (now Famished Fel Bat) in the banned tribes widget.`,
+							},
+							{
+								type: 'ui',
+								text: `Show the current hero skin on the Hero Selection screen tab.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'ui',
+								text: `Add green / red colors to the deck winrate matrix when displayed as percentages.`,
 							},
 						],
 					},
