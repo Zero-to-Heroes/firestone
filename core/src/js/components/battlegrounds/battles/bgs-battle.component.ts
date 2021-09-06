@@ -467,7 +467,10 @@ export class BgsBattleComponent implements AfterViewInit {
 			return;
 		}
 		amplitude.getInstance().logEvent('battle-resim');
-		this.newBattle = null;
+		this.newBattle = BgsFaceOffWithSimulation.create({
+			battleInfoStatus: 'waiting-for-result',
+			battleResult: null,
+		} as BgsFaceOffWithSimulation);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
