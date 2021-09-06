@@ -8,6 +8,7 @@ export class BgsBattlesPanel implements BgsPanel {
 	readonly icon: string;
 	readonly faceOffs: readonly BgsFaceOffWithSimulation[] = [];
 	readonly selectedFaceOffId: string;
+	readonly closedManually: boolean;
 	readonly currentSimulations: readonly BgsFaceOffWithSimulation[] = [];
 
 	public static create(base: BgsBattlesPanel): BgsBattlesPanel {

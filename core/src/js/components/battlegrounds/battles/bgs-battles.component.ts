@@ -136,11 +136,14 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 				),
 				filter(([faceOffs, panel]) => !!panel),
 				map(([faceOffs, panel]) => {
-					const faceOffId = panel.selectedFaceOffId;
+					// If the user closed it at least once, we don't force-show it anymore
+					if (!panel.selectedFaceOffId) {
+						return null;
+					}
 					const currentSimulations = panel.currentSimulations ?? [];
-					const currentSimulationIndex = currentSimulations.map((s) => s.id).indexOf(faceOffId);
+					const currentSimulationIndex = currentSimulations.map((s) => s.id).indexOf(panel.selectedFaceOffId);
 					if (currentSimulationIndex === -1) {
-						const faceOff = faceOffs.find((f) => f.id === faceOffId);
+						const faceOff = faceOffs.find((f) => f.id === panel.selectedFaceOffId);
 						return faceOff;
 					}
 
