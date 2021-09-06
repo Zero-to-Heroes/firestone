@@ -17,11 +17,27 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<div class="class-name" *ngIf="!icon">{{ className }}</div>
 			</div>
 			<div class="cell total-games">{{ games }}</div>
-			<div class="cell winrate" *ngIf="_showMatchupAsPercentages">{{ buildValue(winrate) }}</div>
-			<div class="cell winrate-first" *ngIf="_showMatchupAsPercentages" [helpTooltip]="winrateFirstTooltip">
+			<div
+				class="cell winrate"
+				[ngClass]="{ 'positive': winrate > 51, 'negative': winrate < 49 }"
+				*ngIf="_showMatchupAsPercentages"
+			>
+				{{ buildValue(winrate) }}
+			</div>
+			<div
+				class="cell winrate-first"
+				[ngClass]="{ 'positive': winrateFirst > 51, 'negative': winrateFirst < 49 }"
+				*ngIf="_showMatchupAsPercentages"
+				[helpTooltip]="winrateFirstTooltip"
+			>
 				{{ buildValue(winrateFirst) }}
 			</div>
-			<div class="cell winrate-coin" *ngIf="_showMatchupAsPercentages" [helpTooltip]="winrateCoinTooltip">
+			<div
+				class="cell winrate-coin"
+				[ngClass]="{ 'positive': winrateCoin > 51, 'negative': winrateCoin < 49 }"
+				*ngIf="_showMatchupAsPercentages"
+				[helpTooltip]="winrateCoinTooltip"
+			>
 				{{ buildValue(winrateCoin) }}
 			</div>
 

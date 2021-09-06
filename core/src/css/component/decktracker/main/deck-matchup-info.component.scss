@@ -26,4 +26,14 @@
 			color: #ff4747;
 		}
 	}
+
+	.cell {
+		&.positive {
+			color: #61ff47;
+		}
+
+		&.negative {
+			color: #ff4747;
+		}
+	}
 }
