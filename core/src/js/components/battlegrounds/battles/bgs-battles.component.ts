@@ -50,6 +50,7 @@ import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/s
 							class="battle"
 							[faceOff]="selectedFaceOff.value"
 							[hideActualBattle]="false"
+							[actualBattle]="actualBattle$ | async"
 							[clickToChange]="true"
 							[allowClickToAdd]="true"
 							[closeOnMinion]="true"
@@ -100,6 +101,7 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 
 	faceOffs: readonly BgsFaceOffWithSimulation[];
 	faceOff$: Observable<BgsFaceOffWithSimulation>;
+	actualBattle$: Observable<BgsFaceOffWithSimulation>;
 	battleResultHistory$: Observable<readonly BattleResultHistory[]>;
 
 	@Input() set panel(value: BgsBattlesPanel) {
@@ -154,6 +156,26 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((faceOff) => console.debug('[cd] emitting face off in ', this.constructor.name, faceOff)),
+			);
+		this.actualBattle$ = this.store
+			.listenBattlegrounds$(
+				([state]) => state.currentGame?.faceOffs,
+				([state]) => state.panels,
+			)
+			.pipe(
+				map(
+					([faceOffs, panels]) =>
+						[
+							faceOffs,
+							panels.find((p: BgsPanel) => p.id === 'bgs-battles') as BgsBattlesPanel,
+						] as readonly [readonly BgsFaceOffWithSimulation[], BgsBattlesPanel],
+				),
+				filter(([faceOffs, panel]) => !!panel),
+				map(([faceOffs, panel]) => faceOffs.find((f) => f.id === panel.selectedFaceOffId)),
+				distinctUntilChanged(),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((faceOff) => console.debug('[cd] emitting actual battle in ', this.constructor.name, faceOff)),
 			);
 		this.battleResultHistory$ = this.store
 			.listenBattlegrounds$(([state]) => state.currentGame?.faceOffs)

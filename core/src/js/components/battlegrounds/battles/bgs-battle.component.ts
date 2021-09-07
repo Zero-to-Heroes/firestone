@@ -156,6 +156,7 @@ export class BgsBattleComponent implements AfterViewInit {
 		this.updateInfo();
 	}
 
+	@Input() actualBattle: BgsFaceOffWithSimulation;
 	@Input() fullScreenMode = false;
 	@Input() hideActualBattle = false;
 	@Input() clickToChange = false;
@@ -168,11 +169,6 @@ export class BgsBattleComponent implements AfterViewInit {
 	_faceOff: BgsFaceOffWithSimulation;
 	opponent: BgsBoardInfo;
 	player: BgsBoardInfo;
-
-	// actualBattle: BgsFaceOffWithSimulation;
-	// actualPlayer: BgsBoardInfo;
-	// actualOpponent: BgsBoardInfo;
-	// actualResult: string;
 
 	isPremium: boolean;
 	tooltip: string;
