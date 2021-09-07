@@ -44,7 +44,7 @@
 		"@firestone-hs/retrieve-pack-stats": "^1.0.2",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",
 		"@firestone-hs/save-dungeon-loot-info": "^1.0.8",
-		"@firestone-hs/simulate-bgs-battle": "^1.1.102",
+		"@firestone-hs/simulate-bgs-battle": "^1.1.103",
 		"@sebastientromp/ngx-charts": "^19.0.5",
 		"@sentry/browser": "^6.2.5",
 		"@sentry/integrations": "^6.2.5",
