@@ -127,6 +127,9 @@
 				padding-right: 10px;
 				width: 140px;
 			}
+			::ng-deep .warning {
+				display: none;
+			}
 		}
 	}
 }
