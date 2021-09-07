@@ -45,12 +45,6 @@ export class BgsBuilderService {
 		} as BgsStats);
 		return currentState.update({
 			stats: finalStats,
-			matchStats: activeBgsMatchStats,
-			// activeTimeFilter: prefs.bgsActiveTimeFilter,
-			// activeHeroSortFilter: prefs.bgsActiveHeroSortFilter,
-			// activeHeroFilter: prefs.bgsActiveHeroFilter,
-			// activeRankFilter: prefs.bgsActiveRankFilter,
-			// activeGroupMmrFilter: prefs.bgsActiveMmrGroupFilter,
 		} as BattlegroundsAppState);
 	}
 

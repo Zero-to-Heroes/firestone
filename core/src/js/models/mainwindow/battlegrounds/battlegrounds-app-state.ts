@@ -9,19 +9,12 @@ export class BattlegroundsAppState {
 	readonly loading: boolean = true;
 	// The global stats coming from the DB (so without the player info)
 	readonly globalStats: BgsStats = new BgsStats();
-	readonly matchStats: readonly GameStat[];
 	readonly perfectGames: readonly GameStat[];
 	// The stats used by the app (so a mix a globalStats + matchStats + filters)
 	readonly stats: BgsStats = new BgsStats();
 	readonly lastHeroPostMatchStats: readonly BgsPostMatchStatsForReview[];
 	readonly lastHeroPostMatchStatsHeroId: string;
 	readonly customSimulationState: BgsCustomSimulationState = new BgsCustomSimulationState();
-
-	// readonly activeTimeFilter: BgsActiveTimeFilterType;
-	// readonly activeHeroSortFilter: BgsHeroSortFilterType;
-	// readonly activeHeroFilter: string = 'all';
-	// readonly activeRankFilter: BgsRankFilterType;
-	// readonly activeGroupMmrFilter: MmrGroupFilterType;
 
 	public static create(base: BattlegroundsAppState): BattlegroundsAppState {
 		return Object.assign(new BattlegroundsAppState(), base);
@@ -43,8 +36,6 @@ export class BattlegroundsAppState {
 	}
 
 	public findReplay(reviewId: string): GameStat {
-		return [...(this.perfectGames ?? []), ...(this.matchStats ?? [])].find(
-			(replay) => replay.reviewId === reviewId,
-		);
+		return [...(this.perfectGames ?? [])].find((replay) => replay.reviewId === reviewId);
 	}
 }
