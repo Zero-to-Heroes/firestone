@@ -38,8 +38,8 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.perfectGames,
-				([main, nav]) => main.battlegrounds.activeRankFilter,
-				([main, nav]) => main.battlegrounds.activeHeroFilter,
+				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
+				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
 			)
 			.pipe(
 				filter(([perfectGames, rankFilter, heroFilter]) => !!perfectGames?.length),

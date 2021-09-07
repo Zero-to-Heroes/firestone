@@ -60,7 +60,7 @@ export class BattlegroundsHeroFilterDropdownComponent implements AfterViewInit {
 		] as readonly HeroFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.battlegrounds.activeHeroFilter,
+				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(

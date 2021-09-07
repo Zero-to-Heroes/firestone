@@ -56,7 +56,7 @@ export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
 		] as readonly HeroSortFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.battlegrounds.activeHeroSortFilter,
+				([main, nav, prefs]) => prefs.bgsActiveHeroSortFilter,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			)

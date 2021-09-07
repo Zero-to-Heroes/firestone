@@ -35,9 +35,9 @@ export class BattlegroundsPersonalStatsRatingComponent {
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,
-				([main, nav]) => main.battlegrounds.activeTimeFilter,
-				([main, nav]) => main.battlegrounds.activeRankFilter,
-				([main, nav]) => main.battlegrounds.activeGroupMmrFilter,
+				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
+				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
+				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
 				([main, nav]) => main.battlegrounds.globalStats.currentBattlegroundsMetaPatch?.number,
 			)
 			.pipe(

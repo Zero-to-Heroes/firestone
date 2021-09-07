@@ -37,7 +37,7 @@ export class BattlegroundsTimeFilterDropdownComponent implements AfterViewInit {
 	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.battlegrounds.activeTimeFilter,
+				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav]) => main.battlegrounds.stats.currentBattlegroundsMetaPatch,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,

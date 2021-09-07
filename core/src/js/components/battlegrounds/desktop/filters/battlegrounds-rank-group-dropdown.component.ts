@@ -49,7 +49,7 @@ export class BattlegroundsRankGroupDropdownComponent implements AfterViewInit {
 		] as readonly MmrGroupFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.battlegrounds.activeGroupMmrFilter,
+				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 			)
 			.pipe(

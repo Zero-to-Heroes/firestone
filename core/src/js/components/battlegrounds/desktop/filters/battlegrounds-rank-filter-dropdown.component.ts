@@ -64,7 +64,7 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 		] as readonly RankFilterOption[];
 		this.filter$ = this.store
 			.listen$(
-				([main, nav]) => main.battlegrounds.activeRankFilter,
+				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			)
