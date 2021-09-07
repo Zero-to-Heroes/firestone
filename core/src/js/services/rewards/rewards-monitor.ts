@@ -164,11 +164,13 @@ export class RewardMonitorService {
 				console.warn('[rewards-monitor] could not get xpForGameInfo, getting rewardsTrackInfo');
 				const rewardTrackInfo = await this.memory.getRewardsTrackInfo();
 				console.log('[rewards-monitor] got rewardsTrackInfo', rewardTrackInfo);
-				const partialInfo: XpForGameInfo = {
-					currentXp: rewardTrackInfo.Xp,
-					currentLevel: rewardTrackInfo.Level,
-					bonusXp: rewardTrackInfo.XpBonusPercent,
-				} as XpForGameInfo;
+				const partialInfo: XpForGameInfo = rewardTrackInfo
+					? ({
+							currentXp: rewardTrackInfo.Xp,
+							currentLevel: rewardTrackInfo.Level,
+							bonusXp: rewardTrackInfo.XpBonusPercent,
+					  } as XpForGameInfo)
+					: null;
 				resolve(partialInfo);
 			}
 			resolve(this.xpForGameInfo);
