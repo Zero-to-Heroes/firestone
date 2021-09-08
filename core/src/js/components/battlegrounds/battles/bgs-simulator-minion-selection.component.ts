@@ -84,7 +84,7 @@ import { arraysEqual, sortByProperties } from '../../../services/utils';
 					</div>
 					<div class="attributes">
 						<checkbox
-							[label]="'Premium'"
+							[label]="'Golden'"
 							[value]="premium"
 							(valueChanged)="onPremiumChanged($event)"
 						></checkbox>
