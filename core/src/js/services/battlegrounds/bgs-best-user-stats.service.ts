@@ -8,9 +8,7 @@ const BGS_BEST_USER_STATS_ENDPOINT = 'https://0u2t28wmwe.execute-api.us-west-2.a
 
 @Injectable()
 export class BgsBestUserStatsService {
-	constructor(private readonly http: HttpClient, private readonly ow: OverwolfService) {
-		console.log('init bgs best user stats service');
-	}
+	constructor(private readonly http: HttpClient, private readonly ow: OverwolfService) {}
 
 	public async getBgsBestUserStats(): Promise<readonly BgsBestStat[]> {
 		return new Promise<readonly BgsBestStat[]>(async (resolve) => {

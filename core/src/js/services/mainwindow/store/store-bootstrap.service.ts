@@ -10,7 +10,6 @@ import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
-import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
 import { CardsInitService } from '../../cards-init.service';
@@ -44,7 +43,6 @@ export class StoreBootstrapService {
 		private readonly prefs: PreferencesService,
 		private readonly gameStatsLoader: GameStatsLoaderService,
 		private readonly bgsInit: BgsInitService,
-		private readonly bgsBuilder: BgsBuilderService,
 		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,

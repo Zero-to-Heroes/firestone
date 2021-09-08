@@ -8,7 +8,6 @@ import { AchievementHistoryStorageService } from '../../achievement/achievement-
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
 import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
-import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
 import { BgsRunStatsService } from '../../battlegrounds/bgs-run-stats.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
@@ -282,7 +281,6 @@ export class MainWindowStoreService {
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly prefs: PreferencesService,
 		private readonly decksStateBuilder: DecksStateBuilderService,
-		private readonly bgsBuilder: BgsBuilderService,
 		private readonly bgsRunStatsService: BgsRunStatsService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
 	) {

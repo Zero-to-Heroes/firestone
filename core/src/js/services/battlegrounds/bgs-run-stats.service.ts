@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { Input as BgsComputeRunStatsInput } from '@firestone-hs/compute-bgs-run-stats/dist/model/input';
@@ -15,8 +14,6 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { ShowMatchStatsEvent } from '../mainwindow/store/events/replays/show-match-stats-event';
 import { GameForUpload } from '../manastorm-bridge/game-for-upload';
 import { OverwolfService } from '../overwolf.service';
-import { MemoryInspectionService } from '../plugins/memory-inspection.service';
-import { PreferencesService } from '../preferences.service';
 import { UserService } from '../user.service';
 import { sleep } from '../utils';
 import { BgsGameEndEvent } from './store/events/bgs-game-end-event';
@@ -40,12 +37,9 @@ export class BgsRunStatsService {
 
 	constructor(
 		private readonly apiRunner: ApiRunner,
-		private readonly http: HttpClient,
 		private readonly events: Events,
 		private readonly ow: OverwolfService,
-		private readonly prefs: PreferencesService,
 		private readonly userService: UserService,
-		private readonly memoryService: MemoryInspectionService,
 	) {
 		this.events.on(Events.START_BGS_RUN_STATS).subscribe(async (event) => {
 			this.computeRunStats(event.data[0], event.data[1], event.data[2], event.data[3]);

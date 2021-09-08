@@ -16,12 +16,7 @@ import { PatchInfo } from '../../models/patches';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
-import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
-import { PatchesConfigService } from '../patches-config.service';
-import { PreferencesService } from '../preferences.service';
-import { BgsBuilderService } from './bgs-builder.service';
-import { BgsGlobalStatsService } from './bgs-global-stats.service';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
@@ -29,18 +24,13 @@ const RETRIEVE_PERFECT_GAMES_ENDPOINT = 'https://static.zerotoheroes.com/api/bgs
 
 @Injectable()
 export class BgsInitService {
-	private mainWindowStateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private bgsStateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
 	constructor(
 		private readonly events: Events,
-		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly ow: OverwolfService,
 		private readonly cards: CardsFacadeService,
-		private readonly patchesService: PatchesConfigService,
 		private readonly api: ApiRunner,
-		private readonly prefs: PreferencesService,
-		private readonly bgsBuilder: BgsBuilderService,
 	) {
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe((event) => {
 			const newGameStats: GameStats = event.data[0];
@@ -49,29 +39,8 @@ export class BgsInitService {
 		});
 		setTimeout(() => {
 			this.bgsStateUpdater = this.ow.getMainWindow().battlegroundsUpdater;
-			this.mainWindowStateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		});
 	}
-
-	// public async init(matchStats: GameStats): Promise<BgsStats> {
-	// 	console.log('[bgs-init] bgs init starting');
-	// 	const [bgsGlobalStats, prefs] = await Promise.all([
-	// 		this.bgsGlobalStats.loadGlobalStats(),
-	// 		this.prefs.getPreferences(),
-	// 	]);
-	// 	console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
-	// 	const patchConfig = await this.patchesService.getConf();
-	// 	const currentBattlegroundsMetaPatch = patchConfig?.patches
-	// 		? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
-	// 		: null;
-
-	// 	const statsWithPatch = bgsGlobalStats?.update({
-	// 		currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
-	// 	} as BgsStats);
-
-	// 	this.bgsStateUpdater.next(new BgsInitEvent(bgsStatsForCurrentPatch));
-	// 	return statsWithPatch;
-	// }
 
 	public async loadPerfectGames(): Promise<readonly GameStat[]> {
 		const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
