@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { BgsHeroStat } from '../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsStats } from '../../models/battlegrounds/stats/bgs-stats';
 import { BattlegroundsAppState } from '../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { BattlegroundsCategory } from '../../models/mainwindow/battlegrounds/battlegrounds-category';
@@ -13,6 +12,7 @@ import { BattlegroundsSimulatorCategory } from '../../models/mainwindow/battlegr
 import { BgsHeroStatsFilterId } from '../../models/mainwindow/battlegrounds/categories/bgs-hero-stats-filter-id';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { PatchInfo } from '../../models/patches';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { FeatureFlags } from '../feature-flags';
@@ -22,8 +22,6 @@ import { PatchesConfigService } from '../patches-config.service';
 import { PreferencesService } from '../preferences.service';
 import { BgsBuilderService } from './bgs-builder.service';
 import { BgsGlobalStatsService } from './bgs-global-stats.service';
-import { BgsStatUpdateParser } from './store/event-parsers/bgs-stat-update-parser';
-import { BgsInitEvent } from './store/events/bgs-init-event';
 import { BgsStatUpdateEvent } from './store/events/bgs-stat-update-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
 
@@ -55,45 +53,25 @@ export class BgsInitService {
 		});
 	}
 
-	public async init(matchStats: GameStats): Promise<BgsStats> {
-		console.log('[bgs-init] bgs init starting');
-		const [bgsGlobalStats, prefs] = await Promise.all([
-			this.bgsGlobalStats.loadGlobalStats(),
-			this.prefs.getPreferences(),
-		]);
-		console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
-		const patchConfig = await this.patchesService.getConf();
-		const currentBattlegroundsMetaPatch = patchConfig?.patches
-			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
-			: null;
+	// public async init(matchStats: GameStats): Promise<BgsStats> {
+	// 	console.log('[bgs-init] bgs init starting');
+	// 	const [bgsGlobalStats, prefs] = await Promise.all([
+	// 		this.bgsGlobalStats.loadGlobalStats(),
+	// 		this.prefs.getPreferences(),
+	// 	]);
+	// 	console.log('[bgs-init] loaded global stats', bgsGlobalStats?.heroStats?.length);
+	// 	const patchConfig = await this.patchesService.getConf();
+	// 	const currentBattlegroundsMetaPatch = patchConfig?.patches
+	// 		? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
+	// 		: null;
 
-		const statsWithPatch = bgsGlobalStats?.update({
-			currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
-		} as BgsStats);
+	// 	const statsWithPatch = bgsGlobalStats?.update({
+	// 		currentBattlegroundsMetaPatch: currentBattlegroundsMetaPatch,
+	// 	} as BgsStats);
 
-		const bgsMatchStats = matchStats?.stats?.filter((stat) => stat.gameMode === 'battlegrounds');
-		if (!bgsMatchStats || bgsMatchStats.length === 0) {
-			console.log('[bgs-init] no bgs match stats');
-			this.bgsStateUpdater.next(new BgsInitEvent([], statsWithPatch));
-			return statsWithPatch;
-		}
-		const bgsStatsForCurrentPatch = this.bgsBuilder.filterBgsMatchStats(
-			bgsMatchStats,
-			prefs,
-			currentBattlegroundsMetaPatch,
-		);
-		const heroStatsWithPlayer: readonly BgsHeroStat[] = BgsStatUpdateParser.buildHeroStats(
-			statsWithPatch,
-			bgsStatsForCurrentPatch,
-			this.cards,
-		);
-
-		const statsWithPlayer = statsWithPatch?.update({
-			heroStats: heroStatsWithPlayer,
-		} as BgsStats);
-		this.bgsStateUpdater.next(new BgsInitEvent(bgsStatsForCurrentPatch, statsWithPlayer));
-		return statsWithPatch;
-	}
+	// 	this.bgsStateUpdater.next(new BgsInitEvent(bgsStatsForCurrentPatch));
+	// 	return statsWithPatch;
+	// }
 
 	public async loadPerfectGames(): Promise<readonly GameStat[]> {
 		const result = await this.api.callGetApi<readonly GameStat[]>(RETRIEVE_PERFECT_GAMES_ENDPOINT);
@@ -114,6 +92,7 @@ export class BgsInitService {
 	public async initBattlegoundsAppState(
 		bgsGlobalStats: BgsStats,
 		perfectGames: readonly GameStat[],
+		patch: PatchInfo,
 	): Promise<BattlegroundsAppState> {
 		const categories: readonly BattlegroundsCategory[] = [
 			this.buildPersonalHeroesCategory(bgsGlobalStats),
@@ -127,6 +106,7 @@ export class BgsInitService {
 			globalStats: bgsGlobalStats,
 			perfectGames: perfectGames,
 			loading: false,
+			currentBattlegroundsMetaPatch: patch,
 		} as BattlegroundsAppState);
 	}
 

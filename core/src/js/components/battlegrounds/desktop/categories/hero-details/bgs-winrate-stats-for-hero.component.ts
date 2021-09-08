@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
@@ -29,29 +29,31 @@ import { arraysEqual } from '../../../../../services/utils';
 export class BgsWinrateStatsForHeroComponent {
 	values$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreService) {
-		this.values$ = this.store
-			.listen$(
-				([main, nav]) => main.battlegrounds.stats.heroStats,
+	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+		this.values$ = combineLatest(
+			this.store.bgHeroStats$(),
+			this.store.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			)
-			.pipe(
-				map(
-					([heroStats, postMatch, battlegrounds, selectedCategoryId]) =>
-						[heroStats, postMatch, currentBgHeroId(battlegrounds, selectedCategoryId)] as [
-							BgsHeroStat[],
-							BgsPostMatchStatsForReview[],
-							string,
-						],
-				),
-				filter(([heroStats, postMatch, heroId]) => !!heroStats && !!postMatch && !!heroId),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([heroStats, postMatch, heroId]) => this.buildValue(heroStats, postMatch, heroId)),
-				distinctUntilChanged((v1, v2) => this.areValuesEqual(v1, v2)),
-				tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
-			);
+			),
+		).pipe(
+			map(
+				([heroStats, [postMatch, battlegrounds, selectedCategoryId]]) =>
+					[heroStats, postMatch, currentBgHeroId(battlegrounds, selectedCategoryId)] as [
+						BgsHeroStat[],
+						BgsPostMatchStatsForReview[],
+						string,
+					],
+			),
+			filter(([heroStats, postMatch, heroId]) => !!heroStats && !!postMatch && !!heroId),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map(([heroStats, postMatch, heroId]) => this.buildValue(heroStats, postMatch, heroId)),
+			distinctUntilChanged((v1, v2) => this.areValuesEqual(v1, v2)),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((values: Value) => cdLog('emitting in ', this.constructor.name, values)),
+		);
 	}
 
 	private buildValue(

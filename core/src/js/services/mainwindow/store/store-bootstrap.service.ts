@@ -11,6 +11,7 @@ import { AchievementsRepository } from '../../achievement/achievements-repositor
 import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
 import { BgsBestUserStatsService } from '../../battlegrounds/bgs-best-user-stats.service';
 import { BgsBuilderService } from '../../battlegrounds/bgs-builder.service';
+import { BgsGlobalStatsService } from '../../battlegrounds/bgs-global-stats.service';
 import { BgsInitService } from '../../battlegrounds/bgs-init.service';
 import { CardsInitService } from '../../cards-init.service';
 import { ArenaRunParserService } from '../../decktracker/arena-run-parser.service';
@@ -44,6 +45,7 @@ export class StoreBootstrapService {
 		private readonly gameStatsLoader: GameStatsLoaderService,
 		private readonly bgsInit: BgsInitService,
 		private readonly bgsBuilder: BgsBuilderService,
+		private readonly bgsGlobalStats: BgsGlobalStatsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly globalStats: GlobalStatsService,
@@ -82,7 +84,7 @@ export class StoreBootstrapService {
 				collectionState,
 				prefsFromRemote,
 			],
-			[bgsBestUserStats, bgsPerfectGames],
+			[bgsBestUserStats, bgsPerfectGames, bgsGlobalStats],
 			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats, duelsLeaderboard],
 			[arenaRewards],
@@ -96,7 +98,11 @@ export class StoreBootstrapService {
 				this.collectionBootstrap.initCollectionState(),
 				this.prefs.loadRemotePrefs(),
 			]),
-			Promise.all([this.bestBgsStats.getBgsBestUserStats(), this.bgsInit.loadPerfectGames()]),
+			Promise.all([
+				this.bestBgsStats.getBgsBestUserStats(),
+				this.bgsInit.loadPerfectGames(),
+				this.bgsGlobalStats.loadGlobalStats(),
+			]),
 			Promise.all([
 				this.gameStatsLoader.retrieveStats(),
 				this.gameStatsLoader.retrieveArchetypesConfig(),
@@ -110,17 +116,15 @@ export class StoreBootstrapService {
 		console.debug('remote prefs', prefsFromRemote);
 
 		const mergedPrefs = this.mergePrefs(prefs, prefsFromRemote);
-		const [bgsGlobalStats] = await Promise.all([this.bgsInit.init(matchStats)]);
 
 		const patchConfig = await this.patchConfig.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
 			? patchConfig.patches.find((patch) => patch.number === patchConfig.currentBattlegroundsMetaPatch)
 			: null;
-		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(bgsGlobalStats, bgsPerfectGames);
-		const bgsAppStateWithStats = await this.bgsBuilder.updateStats(
-			battlegroundsAppState,
-			matchStats,
-			bgsGlobalStats?.currentBattlegroundsMetaPatch || currentBattlegroundsMetaPatch,
+		const battlegroundsAppState = await this.bgsInit.initBattlegoundsAppState(
+			bgsGlobalStats,
+			bgsPerfectGames,
+			currentBattlegroundsMetaPatch,
 		);
 
 		const newStatsState = this.stats.initState(
@@ -195,7 +199,7 @@ export class StoreBootstrapService {
 			binder: collectionState,
 			achievements: newAchievementState,
 			decktracker: decktracker,
-			battlegrounds: bgsAppStateWithStats,
+			battlegrounds: battlegroundsAppState,
 			duels: newDuelsState,
 			arena: arenaState,
 			socialShareUserInfo: socialShareUserInfo,

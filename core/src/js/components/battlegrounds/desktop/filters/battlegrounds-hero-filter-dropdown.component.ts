@@ -1,8 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
@@ -40,6 +40,7 @@ export class BattlegroundsHeroFilterDropdownComponent implements AfterViewInit {
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.options = [
 			{
@@ -70,6 +71,8 @@ export class BattlegroundsHeroFilterDropdownComponent implements AfterViewInit {
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible: selectedCategoryId === 'bgs-category-perfect-games',
 				})),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}

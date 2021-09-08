@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { BgsHeroSortFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-hero-sort-filter.type';
 import { BgsHeroSortFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-sort-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -35,7 +35,11 @@ export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.options = [
 			{
 				value: 'average-position',
@@ -72,6 +76,8 @@ export class BattlegroundsHeroSortDropdownComponent implements AfterViewInit {
 						categoryId === 'bgs-category-personal-heroes' &&
 						!['categories', 'category'].includes(currentView),
 				})),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}

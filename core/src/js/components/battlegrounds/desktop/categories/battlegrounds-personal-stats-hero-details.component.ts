@@ -1,5 +1,5 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsPlayer } from '../../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -51,7 +51,11 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.tabs$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds,
@@ -72,29 +76,31 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 				distinctUntilChanged(),
 				tap((stat) => cdLog('emitting selected tab in ', this.constructor.name, stat)),
 			);
-		this.player$ = this.store
-			.listen$(
-				([main, nav]) => main.battlegrounds.stats.heroStats,
+		this.player$ = combineLatest(
+			this.store.bgHeroStats$(),
+			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-			)
-			.pipe(
-				map(
-					([heroStats, battlegrounds, selectedCategoryId]) =>
-						[heroStats, currentBgHeroId(battlegrounds, selectedCategoryId)] as [BgsHeroStat[], string],
-				),
-				filter(([heroStats, heroId]) => !!heroStats && !!heroId),
-				map(([heroStats, heroId]) => heroStats?.find((stat) => stat.id === heroId)),
-				distinctUntilChanged(),
-				map((heroStat) =>
-					BgsPlayer.create({
-						cardId: heroStat.id,
-						displayedCardId: heroStat.id,
-						heroPowerCardId: heroStat.heroPowerCardId,
-					} as BgsPlayer),
-				),
-				tap((stat) => cdLog('emitting player in ', this.constructor.name, stat)),
-			);
+			),
+		).pipe(
+			map(
+				([heroStats, [battlegrounds, selectedCategoryId]]) =>
+					[heroStats, currentBgHeroId(battlegrounds, selectedCategoryId)] as [BgsHeroStat[], string],
+			),
+			filter(([heroStats, heroId]) => !!heroStats && !!heroId),
+			map(([heroStats, heroId]) => heroStats?.find((stat) => stat.id === heroId)),
+			distinctUntilChanged(),
+			map((heroStat) =>
+				BgsPlayer.create({
+					cardId: heroStat.id,
+					displayedCardId: heroStat.id,
+					heroPowerCardId: heroStat.heroPowerCardId,
+				} as BgsPlayer),
+			),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((stat) => cdLog('emitting player in ', this.constructor.name, stat)),
+		);
 	}
 
 	ngAfterViewInit() {

@@ -1,7 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
@@ -35,7 +35,11 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
 		this.options = [
 			{
 				value: 'all',
@@ -77,6 +81,8 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 						!['categories', 'category'].includes(currentView) &&
 						!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(categoryId),
 				})),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 			);
 	}

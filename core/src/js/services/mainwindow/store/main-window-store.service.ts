@@ -565,7 +565,6 @@ export class MainWindowStoreService {
 			new RecomputeGameStatsProcessor(
 				this.decktrackerStateLoader,
 				this.replaysStateBuilder,
-				this.bgsBuilder,
 				this.duelsBuilder,
 				this.events,
 				this.prefs,
@@ -638,19 +637,19 @@ export class MainWindowStoreService {
 			new SelectBattlegroundsCategoryProcessor(),
 
 			BgsTimeFilterSelectedEvent.eventName(),
-			new BgsTimeFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+			new BgsTimeFilterSelectedProcessor(this.prefs),
 
 			BgsRankFilterSelectedEvent.eventName(),
-			new BgsRankFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+			new BgsRankFilterSelectedProcessor(this.prefs),
 
 			BgsHeroSortFilterSelectedEvent.eventName(),
-			new BgsHeroSortFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+			new BgsHeroSortFilterSelectedProcessor(this.prefs),
 
 			BgsHeroFilterSelectedEvent.eventName(),
-			new BgsHeroFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+			new BgsHeroFilterSelectedProcessor(this.prefs),
 
 			BgsMmrGroupFilterSelectedEvent.eventName(),
-			new BgsMmrGroupFilterSelectedProcessor(this.bgsBuilder, this.prefs),
+			new BgsMmrGroupFilterSelectedProcessor(this.prefs),
 
 			BgsPostMatchStatsComputedEvent.eventName(),
 			new BgsPostMatchStatsComputedProcessor(this.replaysStateBuilder),

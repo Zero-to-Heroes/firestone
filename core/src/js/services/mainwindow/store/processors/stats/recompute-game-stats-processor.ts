@@ -1,5 +1,4 @@
 import { DuelsState } from '../../../../../models/duels/duels-state';
-import { BattlegroundsAppState } from '../../../../../models/mainwindow/battlegrounds/battlegrounds-app-state';
 import { DecktrackerState } from '../../../../../models/mainwindow/decktracker/decktracker-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../../../../models/mainwindow/navigation/navigation-state';
@@ -7,7 +6,6 @@ import { ReplaysState } from '../../../../../models/mainwindow/replays/replays-s
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
-import { BgsBuilderService } from '../../../../battlegrounds/bgs-builder.service';
 import { DecktrackerStateLoaderService } from '../../../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../../../duels/duels-state-builder.service';
@@ -20,7 +18,6 @@ export class RecomputeGameStatsProcessor implements Processor {
 	constructor(
 		private readonly decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
-		private readonly bgsBuilder: BgsBuilderService,
 		private readonly duelsBuilder: DuelsStateBuilderService,
 		private readonly events: Events,
 		private readonly prefs: PreferencesService,
@@ -49,22 +46,13 @@ export class RecomputeGameStatsProcessor implements Processor {
 			prefs,
 		);
 		console.log('[recompute-game-stats-processor] decktracker');
+
 		const replayState: ReplaysState = await this.replaysStateBuilder.buildState(
 			currentState.replays,
 			newStatsState,
 			decktracker.decks,
 		);
 		console.log('[recompute-game-stats-processor] newStatsState');
-
-		// Rebuild stats for battlegrounds state
-		const battlegrounds: BattlegroundsAppState = event.gameStat.isBattlegrounds()
-			? await this.bgsBuilder.updateStats(
-					currentState.battlegrounds,
-					newGameStats,
-					currentState.battlegrounds.stats?.currentBattlegroundsMetaPatch,
-			  )
-			: currentState.battlegrounds;
-		console.log('[recompute-game-stats-processor] battlegrounds');
 
 		const duels: DuelsState = event.gameStat.isDuels()
 			? await this.duelsBuilder.updateState(currentState.duels, newGameStats)
@@ -76,7 +64,6 @@ export class RecomputeGameStatsProcessor implements Processor {
 				stats: newStatsState,
 				decktracker: decktracker,
 				replays: replayState,
-				battlegrounds: battlegrounds,
 				duels: duels,
 			} as MainWindowState),
 			null,

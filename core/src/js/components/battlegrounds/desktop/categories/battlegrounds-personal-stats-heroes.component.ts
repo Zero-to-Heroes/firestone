@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
@@ -6,7 +6,7 @@ import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mai
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
-import { areDeepEqual, arraysEqual } from '../../../../services/utils';
+import { areDeepEqual } from '../../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-heroes',
@@ -30,22 +30,23 @@ export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit 
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
-		this.stats$ = this.store
-			.listen$(([main, nav]) => main.battlegrounds.stats.heroStats)
-			.pipe(
-				filter(([stats]) => !!stats?.length),
-				map(([stats]) => stats.filter((stat) => stat.id !== 'average')),
-				distinctUntilChanged((a, b) => {
-					// console.debug('changed?', a, b);
-					return arraysEqual(a, b);
-				}),
-				distinctUntilChanged((a, b) => {
-					// console.debug('changed deep?', a, b, JSON.stringify(a), JSON.stringify(b));
-					return areDeepEqual(a, b);
-				}),
-				tap((stats) => cdLog('emitting stats in ', this.constructor.name, stats)),
-			);
+	constructor(
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+		private readonly cdr: ChangeDetectorRef,
+	) {
+		this.stats$ = this.store.bgHeroStats$().pipe(
+			filter((stats) => !!stats?.length),
+			map((stats) => stats.filter((stat) => stat.id !== 'average')),
+			// FIXME
+			distinctUntilChanged((a, b) => {
+				// console.debug('changed deep?', a, b, JSON.stringify(a), JSON.stringify(b));
+				return areDeepEqual(a, b);
+			}),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((stats) => cdLog('emitting stats in ', this.constructor.name, stats)),
+		);
 	}
 
 	ngAfterViewInit() {

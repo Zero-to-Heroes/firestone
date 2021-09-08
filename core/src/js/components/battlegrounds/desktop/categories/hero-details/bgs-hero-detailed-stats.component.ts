@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
-import { BgsStats } from '../../../../../models/battlegrounds/stats/bgs-stats';
 import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 
 @Component({
@@ -92,23 +91,25 @@ import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../servic
 export class BgsHeroDetailedStatsComponent {
 	bgHeroStats$: Observable<BgsHeroStat>;
 
-	constructor(private readonly store: AppUiStoreService) {
-		this.bgHeroStats$ = this.store
-			.listen$(
+	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+		this.bgHeroStats$ = combineLatest(
+			this.store.bgHeroStats$(),
+			this.store.listen$(
 				([main, nav]) => main.battlegrounds,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
-				([main, nav]) => main.battlegrounds.stats,
-			)
-			.pipe(
-				map(
-					([battlegrounds, selectedCategoryId, bgsStats]) =>
-						[currentBgHeroId(battlegrounds, selectedCategoryId), bgsStats] as [string, BgsStats],
-				),
-				filter(([heroId, bgsStats]) => !!heroId && !!bgsStats),
-				map(([heroId, bgsStats]) => bgsStats.heroStats?.find((stat) => stat.id === heroId)),
-				distinctUntilChanged(),
-				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
-			);
+			),
+		).pipe(
+			map(
+				([bgsStats, [battlegrounds, selectedCategoryId]]) =>
+					[currentBgHeroId(battlegrounds, selectedCategoryId), bgsStats] as [string, readonly BgsHeroStat[]],
+			),
+			filter(([heroId, bgsStats]) => !!heroId && !!bgsStats),
+			map(([heroId, bgsStats]) => bgsStats.find((stat) => stat.id === heroId)),
+			distinctUntilChanged(),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
+		);
 	}
 
 	buildValue(value: number, decimals = 2): string {
