@@ -14,7 +14,7 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 			<div class="infos">
 				<div class="name">{{ _hero.name }}</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
-				<bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes>
+				<!-- <bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes> -->
 			</div>
 		</div>
 	`,
@@ -23,15 +23,15 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 export class BgsHeroSelectionTooltipComponent {
 	_hero: BgsHeroStat;
 	heroPowerImage: string;
-	tribes: readonly { tribe: string; percent: string }[];
+	// tribes: readonly { tribe: string; percent: string }[];
 
 	@Input() set config(value: BgsHeroStat) {
 		this._hero = value;
 		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/${value.heroPowerCardId}.png?v=3`;
-		this.tribes = [...value.tribesStat]
-			.sort((a, b) => b.percent - a.percent)
-			.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
-			.slice(0, 5);
+		// this.tribes = [...value.tribesStat]
+		// 	.sort((a, b) => b.percent - a.percent)
+		// 	.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
+		// 	.slice(0, 5);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

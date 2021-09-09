@@ -440,7 +440,7 @@ export class BattlegroundsStoreService {
 			try {
 				if (parser.applies(gameEvent, newState)) {
 					//console.debug('will apply parser', gameEvent, parser);
-					newState = await parser.parse(newState, gameEvent, this.deckState);
+					newState = (await parser.parse(newState, gameEvent, this.deckState)) ?? newState;
 					//console.debug('has applied parser', gameEvent, parser);
 				}
 			} catch (e) {

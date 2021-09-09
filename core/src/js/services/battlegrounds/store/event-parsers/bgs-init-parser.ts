@@ -6,7 +6,6 @@ import { BgsHeroSelectionOverviewPanel } from '../../../../models/battlegrounds/
 import { BgsBattlesPanel } from '../../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsNextOpponentOverviewPanel } from '../../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { BgsPostMatchStatsPanel } from '../../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
-import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { Preferences } from '../../../../models/preferences';
 import { PreferencesService } from '../../../preferences.service';
 import { BgsInitEvent } from '../events/bgs-init-event';
@@ -24,7 +23,7 @@ export class BgsInitParser implements EventParser {
 		const prefs = await this.prefs.getPreferences();
 		const emptyPanels: readonly BgsPanel[] = BgsInitParser.buildEmptyPanels(currentState, prefs);
 		return currentState.update({
-			globalStats: event.bgsGlobalStats,
+			// globalStats: event.bgsGlobalStats,
 			panels: currentState.panels || emptyPanels,
 		} as BattlegroundsState);
 	}
@@ -39,9 +38,9 @@ export class BgsInitParser implements EventParser {
 	}
 
 	private static buildBgsHeroSelectionOverview(): BgsHeroSelectionOverviewPanel {
-		const heroOverview: readonly BgsHeroStat[] = [];
+		// const heroOverview: readonly BgsHeroStat[] = [];
 		return BgsHeroSelectionOverviewPanel.create({
-			heroOverview: heroOverview,
+			heroOptionCardIds: [] as readonly string[],
 		} as BgsHeroSelectionOverviewPanel);
 	}
 
@@ -65,7 +64,7 @@ export class BgsInitParser implements EventParser {
 		return BgsPostMatchStatsPanel.create({
 			stats: null,
 			newBestUserStats: null,
-			globalStats: currentState.globalStats,
+			// globalStats: currentState.globalStats,
 			player: player,
 			selectedStats: prefs.bgsSelectedTabs2,
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],

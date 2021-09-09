@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { PatchInfo } from '../../../models/patches';
 
 @Component({
 	selector: 'bgs-hero-stats',
@@ -14,71 +13,31 @@ import { PatchInfo } from '../../../models/patches';
 			<div class="title">Stats</div>
 			<div class="entry">
 				<div class="label" helpTooltip="Average final position">Avg position:</div>
-				<div
-					class="global-value"
-					[helpTooltip]="
-						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
-					"
-				>
+				<div class="global-value">
 					{{ buildValue(_hero?.averagePosition) }}
 				</div>
-				<div
-					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
-				>
-					({{ buildValue(_hero?.playerAveragePosition) }})
-				</div>
+				<div class="player-value">({{ buildValue(_hero?.playerAveragePosition) }})</div>
 			</div>
 			<div class="entry">
 				<div class="label" helpTooltip="Percentage of times ending in top 4">Top 4:</div>
-				<div
-					class="global-value"
-					[helpTooltip]="
-						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
-					"
-				>
+				<div class="global-value">
 					{{ buildPercents(_hero?.top4) }}
 				</div>
-				<div
-					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
-				>
-					({{ buildPercents(_hero?.playerTop4) }})
-				</div>
+				<div class="player-value">({{ buildPercents(_hero?.playerTop4) }})</div>
 			</div>
 			<div class="entry">
 				<div class="label" helpTooltip="Percentage of times winning the run">Top 1:</div>
-				<div
-					class="global-value"
-					[helpTooltip]="
-						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
-					"
-				>
+				<div class="global-value">
 					{{ buildPercents(_hero?.top1) }}
 				</div>
-				<div
-					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
-				>
-					({{ buildPercents(_hero?.playerTop1) }})
-				</div>
+				<div class="player-value">({{ buildPercents(_hero?.playerTop1) }})</div>
 			</div>
 			<div class="entry">
 				<div class="label" helpTooltip="Percentage of times this hero is played">Popularity:</div>
-				<div
-					class="global-value"
-					[helpTooltip]="
-						'Value for the top 10% of players since patch ' + patchNumber?.number + ' (6000+ MMR)'
-					"
-				>
+				<div class="global-value">
 					{{ buildPercents(_hero?.popularity) }}
 				</div>
-				<div
-					class="player-value"
-					[helpTooltip]="'Your value, based on all your games since patch ' + patchNumber?.number"
-				>
-					({{ buildPercents(_hero?.playerPopularity) }})
-				</div>
+				<div class="player-value">({{ buildPercents(_hero?.playerPopularity) }})</div>
 			</div>
 		</div>
 	`,
@@ -86,7 +45,6 @@ import { PatchInfo } from '../../../models/patches';
 })
 export class BgsHeroStatsComponent {
 	_hero: BgsHeroStat;
-	@Input() patchNumber: PatchInfo;
 
 	@Input() set hero(value: BgsHeroStat) {
 		this._hero = value;

@@ -76,7 +76,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		// console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
-				// console.log('received state a', this.state);
+				// console.debug('received state a', this.state);
 				this.state = { ...newState } as BattlegroundsState;
 				this.adRefershToken = this.state?.currentGame?.reviewId;
 				if (!(this.cdr as ViewRef)?.destroyed) {

@@ -8,16 +8,15 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { Preferences } from '../../../models/preferences';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'bgs-hero-selection-overlay',
@@ -29,7 +28,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<div class="app-container overlay-container-parent battlegrounds-theme bgs-hero-selection-overlay">
 			<bgs-hero-overview
-				*ngFor="let hero of heroOverviews || []; trackBy: trackByHeroFn"
+				*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
 				[hero]="hero"
 				[achievements]="hero?.achievements"
 				[hideEmptyState]="true"
@@ -39,53 +38,74 @@ import { PreferencesService } from '../../../services/preferences.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestroy {
+	heroOverviews$: Observable<InternalBgsHeroStat[]>;
 	windowId: string;
-	heroOverviews: InternalBgsHeroStat[];
-
-	private _panel: BgsHeroSelectionOverviewPanel;
-	private _showAchievements: boolean;
 
 	private gameInfoUpdatedListener: (message: any) => void;
-	private preferencesSubscription: Subscription;
-	private storeSubscription: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private allCards: CardsFacadeService,
-		private init_DebugService: DebugService,
-	) {}
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreService,
+		private readonly init_DebugService: DebugService,
+	) {
+		this.heroOverviews$ = combineLatest(
+			this.store.bgHeroStats$(),
+			this.store.listenBattlegrounds$(
+				([main, prefs]) => main.panels,
+				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
+			),
+		).pipe(
+			map(
+				([stats, [panels, showAchievements]]) =>
+					[
+						stats,
+						panels.find(
+							(panel) => panel.id === 'bgs-hero-selection-overview',
+						) as BgsHeroSelectionOverviewPanel,
+						showAchievements,
+					] as readonly [readonly BgsHeroStat[], BgsHeroSelectionOverviewPanel, boolean],
+			),
+			filter(([stats, panel, showAchievements]) => !!panel?.heroOptionCardIds?.length),
+			map(([stats, panel, showAchievements]) => {
+				const heroOverviews = panel?.heroOptionCardIds.map((cardId) => {
+					const normalized = normalizeHeroCardId(cardId, true);
+					const existingStat = stats.find((overview) => overview.id === normalized);
+					const statWithDefault =
+						existingStat ||
+						BgsHeroStat.create({
+							id: normalized,
+						} as BgsHeroStat);
+					const achievementsForHero: readonly VisualAchievement[] = showAchievements
+						? getAchievementsForHero(normalized, panel.heroAchievements, this.allCards)
+						: [];
+					return {
+						...statWithDefault,
+						id: cardId,
+						name: this.allCards.getCard(cardId)?.name,
+						baseCardId: normalized,
+						achievements: achievementsForHero,
+					};
+				});
+				if (heroOverviews.length === 2) {
+					return [null, ...heroOverviews, null];
+				} else if (heroOverviews.length === 3) {
+					return [...heroOverviews, null];
+				} else {
+					return heroOverviews;
+				}
+			}),
+		);
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-
-		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
-			if (!newState) {
-				return;
-			}
-
-			this._panel = newState?.panels?.find(
-				(panel) => panel.id === 'bgs-hero-selection-overview',
-			) as BgsHeroSelectionOverviewPanel;
-			this.updateInfos();
-		});
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.setDisplayPreferences(event.preferences);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
 			}
 		});
-		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.changeWindowSize();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -95,55 +115,10 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.preferencesSubscription?.unsubscribe();
-		this.storeSubscription?.unsubscribe();
 	}
 
 	trackByHeroFn(index, item: BgsHeroStat) {
 		return item?.id;
-	}
-
-	private updateInfos() {
-		if (!this._panel?.heroOptionCardIds?.length) {
-			return;
-		}
-
-		this.heroOverviews = this._panel.heroOptionCardIds.map((cardId) => {
-			const normalized = normalizeHeroCardId(cardId, true);
-			const existingStat = this._panel.heroOverview.find((overview) => overview.id === normalized);
-			const statWithDefault =
-				existingStat ||
-				BgsHeroStat.create({
-					id: normalized,
-					tribesStat: [] as readonly { tribe: string; percent: number }[],
-				} as BgsHeroStat);
-			const achievementsForHero: readonly VisualAchievement[] = this._showAchievements
-				? getAchievementsForHero(normalized, this._panel.heroAchievements, this.allCards)
-				: [];
-			return {
-				...statWithDefault,
-				achievements: achievementsForHero,
-			};
-		});
-		// console.debug('built hero overviews', this.heroOverviews);
-		if (this.heroOverviews.length === 2) {
-			this.heroOverviews = [null, ...this.heroOverviews, null];
-		} else if (this.heroOverviews.length === 3) {
-			this.heroOverviews = [...this.heroOverviews, null];
-		}
-
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private setDisplayPreferences(preferences: Preferences) {
-		if (!preferences) {
-			return;
-		}
-
-		this._showAchievements = preferences.bgsShowHeroSelectionAchievements;
-		this.updateInfos();
 	}
 
 	private async changeWindowSize(): Promise<void> {

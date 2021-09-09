@@ -1,1 +1,1 @@
-export type BgsActiveTimeFilterType = 'all-time' | 'past-30' | 'past-7' | 'last-patch';
+export type BgsActiveTimeFilterType = 'all-time' | 'past-three' | 'past-seven' | 'last-patch';

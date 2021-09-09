@@ -19,7 +19,7 @@ export class BgsHeroStat {
 	readonly playerTop1: number;
 	readonly lastPlayedTimestamp: number;
 	// readonly playerTop1Percentage: number;
-	readonly tribesStat: readonly { tribe: string; percent: number }[];
+	// readonly tribesStat: readonly { tribe: string; percent: number }[];
 	readonly warbandStats: readonly { turn: number; totalStats: number }[];
 	readonly combatWinrate: readonly { turn: number; winrate: number }[];
 

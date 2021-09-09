@@ -71,6 +71,7 @@ export class GraphWithComparisonNewComponent {
 	}
 
 	@Input() set communityValues(value: readonly NumericTurnInfo[]) {
+		console.debug('setting communityValues', value, this._communityValues);
 		if (value === this._communityValues) {
 			return;
 		}
@@ -79,6 +80,7 @@ export class GraphWithComparisonNewComponent {
 	}
 
 	@Input() set yourValues(value: readonly NumericTurnInfo[]) {
+		console.debug('setting yourValues', value, this._yourValues);
 		if (value === this._yourValues) {
 			return;
 		}
@@ -105,10 +107,6 @@ export class GraphWithComparisonNewComponent {
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
 
 	private updateValues() {
-		if (!this._yourValues || !this._communityValues) {
-			return;
-		}
-
 		// Turn 0 is before any battle, so it's not really interesting for us
 		const community = this.removeZero(this._communityValues || []);
 		const your = this.removeZero(this._yourValues || []);
@@ -146,11 +144,13 @@ export class GraphWithComparisonNewComponent {
 				label: this.communityLabel,
 			},
 		];
+		console.debug('will set lineChartData?', newChartData, this.lineChartData);
 		if (areEqualDataSets(newChartData, this.lineChartData)) {
 			return;
 		}
 
 		this.lineChartData = newChartData;
+		console.debug('set lineChartData', this.lineChartData);
 		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter((turn) => turn > 0).map((turn) => '' + turn);
 		const maxValue = Math.max(
 			...this.lineChartData.map((data) => data.data as number[]).reduce((a, b) => a.concat(b), []),

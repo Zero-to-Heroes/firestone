@@ -38,7 +38,7 @@ export class BattlegroundsPersonalStatsRatingComponent {
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
-				([main, nav]) => main.battlegrounds.globalStats.currentBattlegroundsMetaPatch?.number,
+				([main, nav]) => main.battlegrounds.currentBattlegroundsMetaPatch?.number,
 			)
 			.pipe(
 				filter(

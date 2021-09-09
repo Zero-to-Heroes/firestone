@@ -80,22 +80,15 @@ export class BgsInitService {
 	}
 
 	private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
-		// console.log('building stats', bgsGlobalStats);
-		const heroDetailCategories: readonly BattlegroundsCategory[] = bgsGlobalStats?.heroStats
-			.filter((heroStat) => heroStat.id !== 'average')
-			.map((heroStat) =>
-				BattlegroundsPersonalStatsHeroDetailsCategory.create({
-					id: 'bgs-category-personal-hero-details-' + heroStat.id,
-					name: this.cards.getCard(heroStat.id)?.name,
-					heroId: heroStat.id,
-					tabs: [
-						'winrate-stats',
-						'mmr',
-						'warband-stats',
-						'final-warbands',
-					] as readonly BgsHeroStatsFilterId[],
-				} as BattlegroundsPersonalStatsHeroDetailsCategory),
-			);
+		const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats.map((heroStat) => heroStat.cardId))];
+		const heroDetailCategories: readonly BattlegroundsCategory[] = uniqueHeroes.map((heroCardId) =>
+			BattlegroundsPersonalStatsHeroDetailsCategory.create({
+				id: 'bgs-category-personal-hero-details-' + heroCardId,
+				name: this.cards.getCard(heroCardId)?.name,
+				heroId: heroCardId,
+				tabs: ['winrate-stats', 'mmr', 'warband-stats', 'final-warbands'] as readonly BgsHeroStatsFilterId[],
+			} as BattlegroundsPersonalStatsHeroDetailsCategory),
+		);
 		return BattlegroundsPersonalHeroesCategory.create({
 			enabled: true,
 			categories: heroDetailCategories,

@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 import { GameType } from '@firestone-hs/reference-data';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
-import { PatchInfo } from '../../../models/patches';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { defaultStartingHp } from '../../../services/hs-utils';
 
@@ -41,7 +39,7 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 					</div>
 				</div>
 			</div>
-			<bgs-hero-stats [hero]="_hero" [patchNumber]="patchNumber"></bgs-hero-stats>
+			<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 			<div class="winrate">
 				<div
 					class="title"
@@ -51,9 +49,8 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 				>
 					Winrate per turn
 				</div>
-				<bgs-winrate-chart [globalStats]="globalStats" [player]="player"></bgs-winrate-chart>
+				<bgs-winrate-chart [heroStat]="_hero"></bgs-winrate-chart>
 			</div>
-			<bgs-hero-tribes class="tribes-overview" [hero]="_hero"></bgs-hero-tribes>
 		</div>
 		<div class="hero-overview empty" *ngIf="!_hero && !hideEmptyState">
 			<i class="placeholder">
@@ -66,15 +63,12 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroOverviewComponent {
-	@Input() patchNumber: PatchInfo;
-	@Input() globalStats: BgsStats;
 	@Input() hideEmptyState: boolean;
 
 	_hero: BgsHeroStat;
 	player: BgsPlayer;
 	health: number;
 	tier: BgsHeroTier;
-	tribes: readonly { tribe: string; percent: string }[];
 	achievementsToDisplay: readonly InternalAchievement[];
 
 	@Input() set hero(value: BgsHeroStat) {
@@ -87,10 +81,6 @@ export class BgsHeroOverviewComponent {
 		this.player = BgsPlayer.create({
 			cardId: value.baseCardId,
 		} as BgsPlayer);
-		this.tribes = [...value.tribesStat]
-			.sort((a, b) => b.percent - a.percent)
-			.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
-			.slice(0, 5);
 		this.tier = value.tier;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -98,36 +88,27 @@ export class BgsHeroOverviewComponent {
 	}
 
 	@Input() set achievements(value: readonly VisualAchievement[]) {
-		this.achievementsToDisplay = [];
-		if (!value) {
-			return;
+		this.achievementsToDisplay = value
+			.map((ach) => ach.completionSteps)
+			.reduce((a, b) => a.concat(b), [])
+			.filter((step) => step)
+			.map((step) => ({
+				completed: !!step.numberOfCompletions,
+				text: `Achievement ${!!step.numberOfCompletions ? 'completed' : 'missing'}: ${step.completedText}`,
+			}))
+			.sort((a, b) => {
+				if (a.completed) {
+					return 1;
+				}
+				if (b.completed) {
+					return -1;
+				}
+				return 0;
+			})
+			.slice(0, 4);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
 		}
-
-		setTimeout(() => {
-			this.achievementsToDisplay = value
-				.map((ach) => ach.completionSteps)
-				.reduce((a, b) => a.concat(b), [])
-				.filter((step) => step)
-				.map((step) => ({
-					completed: !!step.numberOfCompletions,
-					text: `Achievement ${!!step.numberOfCompletions ? 'completed' : 'missing'}: ${step.completedText}`,
-				}))
-				.sort((a, b) => {
-					if (a.completed) {
-						return 1;
-					}
-					if (b.completed) {
-						return -1;
-					}
-					return 0;
-				})
-				.slice(0, 4);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-			//console.debug('setting achievements in tilmeout', this.achievementsToDisplay, value);
-		});
-		//console.debug('setting achievements', this.achievementsToDisplay, value);
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
@@ -162,15 +143,6 @@ export class BgsHeroOverviewComponent {
 
 	trackByFn(index, item: InternalAchievement) {
 		return index;
-	}
-
-	private getTribe(tribe: string): string {
-		if (tribe === 'mechanical') {
-			tribe = 'mech';
-		} else if (tribe === 'blank') {
-			tribe = 'no tribe';
-		}
-		return tribe.charAt(0).toUpperCase() + tribe.slice(1);
 	}
 }
 

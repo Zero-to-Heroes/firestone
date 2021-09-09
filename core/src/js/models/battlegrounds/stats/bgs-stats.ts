@@ -1,11 +1,11 @@
-import { PatchInfo } from '../../patches';
-import { BgsHeroStat } from './bgs-hero-stat';
+import { BgsGlobalHeroStat2, MmrPercentile } from '@firestone-hs/bgs-global-stats';
 
 export class BgsStats {
-	readonly heroStats: readonly BgsHeroStat[] = [];
-	readonly currentBattlegroundsMetaPatch: PatchInfo;
+	readonly lastUpdateDate: string;
+	readonly mmrPercentiles: readonly MmrPercentile[];
+	readonly heroStats: readonly BgsGlobalHeroStat2[];
 
-	public static create(result: any) {
+	public static create(result: BgsStats) {
 		return Object.assign(new BgsStats(), result);
 	}
 

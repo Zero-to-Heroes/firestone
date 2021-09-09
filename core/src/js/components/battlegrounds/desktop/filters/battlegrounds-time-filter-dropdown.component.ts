@@ -58,12 +58,12 @@ export class BattlegroundsTimeFilterDropdownComponent implements AfterViewInit {
 							label: 'Past 100 days',
 						} as TimeFilterOption,
 						{
-							value: 'past-30',
-							label: 'Past 30 days',
+							value: 'past-seven',
+							label: 'Past 7 days',
 						} as TimeFilterOption,
 						{
-							value: 'past-7',
-							label: 'Past 7 days',
+							value: 'past-three',
+							label: 'Past 3 days',
 						} as TimeFilterOption,
 						{
 							value: 'last-patch',

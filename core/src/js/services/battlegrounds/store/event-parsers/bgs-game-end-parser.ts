@@ -79,7 +79,7 @@ export class BgsGameEndParser implements EventParser {
 		return BgsPostMatchStatsPanel.create({
 			stats: postMatchStats,
 			newBestUserStats: newBestUserStats,
-			globalStats: currentState.globalStats,
+			// globalStats: currentState.globalStats,
 			player: player,
 			selectedStats: prefs.bgsSelectedTabs2,
 			tabs: ['hp-by-turn', 'winrate-per-turn', 'warband-total-stats-by-turn', 'warband-composition-by-turn'],

@@ -61,11 +61,7 @@ import { PreferencesService } from '../../services/preferences.service';
 			<section class="content-container">
 				<div class="title">{{ currentPanel?.name }}</div>
 				<ng-container>
-					<bgs-hero-selection-overview
-						*ngxCacheIf="currentPanel?.id === 'bgs-hero-selection-overview'"
-						[panel]="currentPanel"
-						[showAchievements]="showHeroSelectionAchievements"
-					>
+					<bgs-hero-selection-overview *ngxCacheIf="currentPanel?.id === 'bgs-hero-selection-overview'">
 					</bgs-hero-selection-overview>
 					<bgs-next-opponent-overview
 						*ngxCacheIf="currentPanel?.id === 'bgs-next-opponent-overview'"
@@ -96,7 +92,6 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	_state: BattlegroundsState;
 	currentPanel: BgsPanel;
 	enableSimulation: boolean;
-	showHeroSelectionAchievements: boolean;
 	windowId: string;
 
 	closeHandler: () => void;
@@ -142,7 +137,6 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 		preferences = preferences || (await this.prefs.getPreferences());
 		// console.log('updating prefs', preferences);
 		this.enableSimulation = preferences.bgsEnableSimulation;
-		this.showHeroSelectionAchievements = preferences.bgsShowHeroSelectionAchievements;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

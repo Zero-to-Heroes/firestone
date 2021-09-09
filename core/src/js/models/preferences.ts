@@ -303,4 +303,17 @@ export class Preferences {
 	readonly outOfCardsShowNotifOnSync: boolean = false;
 
 	readonly ftue: Ftue = new Ftue();
+
+	// Conversion for backwards compability. This can be removed after a while
+	public static updateTimeFilter(timeFilter: BgsActiveTimeFilterType): BgsActiveTimeFilterType {
+		switch (timeFilter) {
+			case 'all-time':
+			case 'last-patch':
+			case 'past-three':
+			case 'past-seven':
+				return timeFilter;
+			default:
+				return 'all-time';
+		}
+	}
 }

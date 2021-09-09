@@ -636,12 +636,9 @@ export class DeckParserService {
 
 	public normalizeDeckstring(deckstring: string, heroCardId?: string): string {
 		try {
-			// console.log('normalizing deckstring', deckstring, heroCardId);
 			const deck = decode(deckstring);
-			// console.log('deck from deckstring', deckstring, deck);
 			deck.heroes = deck.heroes?.map((heroDbfId) => this.normalizeHero(heroDbfId, heroCardId));
 			const newDeckstring = encode(deck);
-			// console.log('normalized deck', newDeckstring, deck);
 			return newDeckstring;
 		} catch (e) {
 			if (deckstring) {

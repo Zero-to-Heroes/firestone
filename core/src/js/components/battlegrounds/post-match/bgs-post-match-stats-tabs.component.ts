@@ -7,12 +7,16 @@ import {
 	Input,
 	ViewRef,
 } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map, tap } from 'rxjs/operators';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 import { BgsStatsFilterId } from '../../../models/battlegrounds/post-match/bgs-stats-filter-id.type';
+import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'bgs-post-match-stats-tabs',
@@ -32,7 +36,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					{{ getLabel(tab) }}
 				</li>
 			</ul>
-			<ng-container>
+			<ng-container *ngIf="{ heroStat: heroStat$ | async } as value">
 				<bgs-chart-hp
 					class="stat"
 					*ngxCacheIf="selectedTab === 'hp-by-turn'"
@@ -45,16 +49,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<bgs-winrate-chart
 					class="stat"
 					*ngxCacheIf="selectedTab === 'winrate-per-turn'"
-					[player]="_panel?.player"
-					[globalStats]="_panel?.globalStats"
+					[heroStat]="value.heroStat"
 					[battleResultHistory]="_panel?.stats?.battleResultHistory"
 				>
 				</bgs-winrate-chart>
 				<bgs-chart-warband-stats
 					class="stat"
 					*ngxCacheIf="selectedTab === 'warband-total-stats-by-turn'"
-					[player]="_panel?.player"
-					[globalStats]="_panel?.globalStats"
+					[heroStat]="value.heroStat"
 					[stats]="_panel?.stats"
 				>
 				</bgs-chart-warband-stats>
@@ -77,6 +79,10 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 	_game: BgsGame;
 	tabs: readonly BgsStatsFilterId[];
 
+	heroStat$: Observable<BgsHeroStat>;
+
+	private currentHeroId$$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+
 	@Input() selectedTab: BgsStatsFilterId;
 	@Input() selectTabHandler: (tab: BgsStatsFilterId, tabIndex: number) => void;
 	@Input() mainPlayerCardId?: string;
@@ -94,6 +100,7 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 			return;
 		}
 		this._panel = value;
+		this.currentHeroId$$.next(value.player.cardId);
 		this.tabs = value.tabs;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -102,7 +109,17 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly ow: OverwolfService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly store: AppUiStoreService,
+	) {
+		this.heroStat$ = combineLatest(this.store.bgHeroStats$(), this.currentHeroId$$.asObservable()).pipe(
+			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),
+			map(([heroStats, heroId]) => heroStats.find((stat) => stat.id === heroId)),
+			tap((filter) => cdLog('emitting heroStat in ', this.constructor.name, filter)),
+		);
+	}
 
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;

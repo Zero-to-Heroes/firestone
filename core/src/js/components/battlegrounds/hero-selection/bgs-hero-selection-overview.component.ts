@@ -1,11 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
+import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -18,14 +20,15 @@ import { groupByFunction } from '../../../services/utils';
 	template: `
 		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
 			<div class="left">
-				<bgs-hero-tier *ngFor="let tier of tiers || []; trackBy: trackByTierFn" [tier]="tier"></bgs-hero-tier>
+				<bgs-hero-tier
+					*ngFor="let tier of (tiers$ | async) || []; trackBy: trackByTierFn"
+					[tier]="tier"
+				></bgs-hero-tier>
 			</div>
 			<div class="hero-selection-overview">
 				<bgs-hero-overview
-					*ngFor="let hero of heroOverviews || []; trackBy: trackByHeroFn"
+					*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
 					[hero]="hero"
-					[globalStats]="globalStats"
-					[patchNumber]="patchNumber"
 					[achievements]="hero?.achievements"
 					[style.width.%]="getOverviewWidth()"
 				></bgs-hero-overview>
@@ -35,55 +38,83 @@ import { groupByFunction } from '../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionOverviewComponent {
-	heroOverviews: InternalBgsHeroStat[];
-	smallOverviews: readonly BgsHeroStat[];
-	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] = [];
-	patchNumber: number;
-	globalStats: BgsStats;
+	tiers$: Observable<readonly { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[]>;
+	heroOverviews$: Observable<readonly InternalBgsHeroStat[]>;
+
 	showAds = true;
 
-	private _panel: BgsHeroSelectionOverviewPanel;
-	private _showAchievements: boolean;
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ads: AdService,
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreService,
+	) {
+		this.tiers$ = this.store.bgHeroStats$().pipe(
+			filter((stats) => !!stats),
+			map((stats) => this.buildTiers(stats)),
+		);
+		this.heroOverviews$ = combineLatest(
+			this.store.listenBattlegrounds$(
+				([main, prefs]) => main.panels,
+				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
+			),
+			this.store.bgHeroStats$(),
+		).pipe(
+			map(
+				([[panels, showAchievements], stats]) =>
+					[
+						panels.find(
+							(panel) => panel.id === 'bgs-hero-selection-overview',
+						) as BgsHeroSelectionOverviewPanel,
+						stats,
+						showAchievements,
+					] as [BgsHeroSelectionOverviewPanel, readonly BgsHeroStat[], boolean],
+			),
+			filter(([panel, stats, showAchievements]) => !!panel && !!stats?.length),
+			map(([panel, stats, showAchievements]) => {
+				const selectionOptions =
+					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
+				const heroOverviews = selectionOptions.map((cardId) => {
+					const normalized = normalizeHeroCardId(cardId, true);
+					const existingStat = stats.find((overview) => overview.id === normalized);
+					const statWithDefault =
+						existingStat ||
+						BgsHeroStat.create({
+							id: normalized,
+							// tribesStat: [] as readonly { tribe: string; percent: number }[],
+						} as BgsHeroStat);
+					const achievementsForHero: readonly VisualAchievement[] = showAchievements
+						? getAchievementsForHero(normalized, panel.heroAchievements, this.allCards)
+						: [];
+					// console.debug('achievementsForHero', achievementsForHero, this._showAchievements);
+					return {
+						...statWithDefault,
+						id: cardId,
+						name: this.allCards.getCard(cardId)?.name,
+						baseCardId: normalized,
+						achievements: achievementsForHero,
+						combatWinrate: statWithDefault.combatWinrate.slice(0, 15),
+					};
+				});
+				if (heroOverviews.length === 2) {
+					return [null, ...heroOverviews, null];
+				} else if (heroOverviews.length === 3) {
+					return [...heroOverviews, null];
+				} else {
+					return heroOverviews;
+				}
+			}),
+		);
 
-	@Input() set showAchievements(value: boolean) {
-		// console.debug('showing achievements', this._showAchievements, value);
-		if (value === this._showAchievements) {
-			return;
-		}
-		this._showAchievements = value;
-		this.updateInfos();
+		this.init();
 	}
 
-	@Input() set panel(value: BgsHeroSelectionOverviewPanel) {
-		if (value === this._panel) {
-			return;
-		}
-		if (!value?.heroOverview) {
-			return;
-		}
-		// console.log('setting panel', value, this._panel);
-		this._panel = value;
-		this.updateInfos();
-	}
-
-	private updateInfos() {
-		if (!this._panel) {
-			return;
-		}
-
-		this.globalStats = this._panel.globalStats;
-		this.patchNumber = this._panel.patchNumber;
-		const allOverviews = this._panel.heroOverview.filter((overview) => overview.id !== 'average');
+	private buildTiers(
+		stats: readonly BgsHeroStat[],
+	): readonly { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] {
 		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
-		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(allOverviews));
-		// When spectating a game, we don't have the initial options
-		const selectionOptions =
-			this._panel?.heroOptionCardIds ??
-			(this._panel.selectedHeroCardId ? [this._panel.selectedHeroCardId] : null);
-		if (!selectionOptions || !groupedByTier) {
-			return;
-		}
-		this.tiers = [
+		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(stats));
+		return [
 			{
 				tier: 'S' as BgsHeroTier,
 				heroes: groupedByTier
@@ -115,55 +146,10 @@ export class BgsHeroSelectionOverviewComponent {
 					?.sort((a, b) => a.averagePosition - b.averagePosition),
 			},
 		].filter((tier) => tier.heroes);
-		// console.log('setting hero overviews', this._panel);
-		this.heroOverviews = selectionOptions.map((cardId) => {
-			const normalized = normalizeHeroCardId(cardId, true);
-			console.debug('normalized', normalized, cardId);
-			const existingStat = this._panel.heroOverview.find((overview) => overview.id === normalized);
-			const statWithDefault =
-				existingStat ||
-				BgsHeroStat.create({
-					id: normalized,
-					tribesStat: [] as readonly { tribe: string; percent: number }[],
-				} as BgsHeroStat);
-			const achievementsForHero: readonly VisualAchievement[] = this._showAchievements
-				? getAchievementsForHero(normalized, this._panel.heroAchievements, this.allCards)
-				: [];
-			// console.debug('achievementsForHero', achievementsForHero, this._showAchievements);
-			return {
-				...statWithDefault,
-				id: cardId,
-				name: this.allCards.getCard(cardId)?.name,
-				baseCardId: normalized,
-				achievements: achievementsForHero,
-			};
-		});
-		// console.debug('hero overviews', this.heroOverviews);
-
-		if (this.heroOverviews.length === 2) {
-			this.heroOverviews = [null, ...this.heroOverviews, null];
-		} else if (this.heroOverviews.length === 3) {
-			this.heroOverviews = [...this.heroOverviews, null];
-		}
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	constructor(
-		private readonly cdr: ChangeDetectorRef,
-		private readonly ads: AdService,
-		private readonly allCards: CardsFacadeService,
-	) {
-		this.init();
 	}
 
 	getOverviewWidth(): number {
 		return 24;
-	}
-
-	isAvailableHero(hero: BgsHeroStat): boolean {
-		return this.heroOverviews.map((h) => h.id).indexOf(hero.id) !== -1;
 	}
 
 	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }) {

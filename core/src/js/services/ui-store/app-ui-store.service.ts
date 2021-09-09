@@ -19,7 +19,7 @@ import { CardsFacadeService } from '../cards-facade.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../overwolf.service';
 import { arraysEqual } from '../utils';
-import { buildHeroStats, filterBgsMatchStats } from './bgs-ui-helper';
+import { buildHeroStats } from './bgs-ui-helper';
 
 type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 type GameStateSelector<T> = (gameState: GameState) => T;
@@ -75,17 +75,17 @@ export class AppUiStoreService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
 		return combineLatest(this.battlegroundsStore.asObservable(), this.prefs.asObservable()).pipe(
-			// tap((gameState) => console.debug('emitting bg state', gameState, this)),
+			filter(([state, prefs]) => !!state),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
-			// tap((hop) => console.debug('emitting bg state after selectors', hop, this)),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			// tap((hop) => console.debug('emitting bg state after selectors', hop, this)),
 		) as Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }>;
 	}
 
 	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {
 		return this.bgsHeroStats.asObservable().pipe(
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			tap((all) => console.debug('[cd] reemitting info for bgsHeroStats$', all)),
+			// tap((all) => console.debug('[cd] reemitting info for bgsHeroStats$', all)),
 		);
 	}
 
@@ -127,10 +127,10 @@ export class AppUiStoreService {
 				// Do two steps, so that if we're playing constructed nothing triggers here
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([stats, matches, timeFilter, rankFilter, heroSort, patch]) => {
-					const bgMatches = filterBgsMatchStats(matches, timeFilter, rankFilter, patch);
-					return buildHeroStats(stats, bgMatches, this.allCards, heroSort);
+					// console.debug('buildHeroStats', stats, matches, timeFilter, rankFilter, heroSort, patch);
+					return buildHeroStats(stats, matches, timeFilter, rankFilter, heroSort, patch, this.allCards);
 				}),
-				tap((all) => console.debug('[cd] populating internal behavior subject', all)),
+				tap((all) => console.debug('[cd] populating bgsHeroStats internal behavior subject')),
 			)
 			.subscribe((stats) => this.bgsHeroStats.next(stats));
 	}

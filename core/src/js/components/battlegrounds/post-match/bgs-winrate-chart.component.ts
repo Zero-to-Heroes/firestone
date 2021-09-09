@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BattleResultHistory } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { NumericTurnInfo } from '../../../models/battlegrounds/post-match/numeric-turn-info';
-import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
+import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { areDeepEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-winrate-chart',
@@ -11,85 +11,70 @@ import { BgsStats } from '../../../models/battlegrounds/stats/bgs-stats';
 		`../../../../css/component/battlegrounds/post-match/bgs-winrate-chart.component.scss`,
 	],
 	template: `
-		<graph-with-comparison
+		<graph-with-comparison-new
 			[id]="id"
 			communityLabel="Average for hero"
 			yourLabel="Current run"
-			[communityExtractor]="communityExtractor"
-			[yourExtractor]="yourExtractor"
+			[yourValues]="yourValues"
+			[communityValues]="communityValues"
 			[maxYValue]="80"
 			[stepSize]="20"
 			communityTooltip="Average winrate (the % chance to win a battle) for each run (7000+ MMR)"
 			yourTooltip="Your values for this run"
 		>
-		</graph-with-comparison>
+		</graph-with-comparison-new>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsWinrateChartComponent {
-	communityExtractor: () => readonly NumericTurnInfo[];
-	yourExtractor: () => readonly NumericTurnInfo[];
+	communityValues: readonly NumericTurnInfo[];
+	yourValues: readonly NumericTurnInfo[];
 	id: string;
 
-	private _globalStats: BgsStats;
-	private _battleResultHistory: readonly BattleResultHistory[];
-	private _player: BgsPlayer;
-
-	@Input() set globalStats(value: BgsStats) {
-		if (value === this._globalStats) {
+	@Input() set heroStat(value: BgsHeroStat) {
+		if (!value) {
 			return;
 		}
-		this._globalStats = value;
-		this.updateInfo();
+		const communityValues = value.combatWinrate
+			?.filter((stat) => stat.turn > 0)
+			.map((stat) => {
+				return {
+					turn: stat.turn,
+					value: Math.round(stat.winrate),
+				} as NumericTurnInfo;
+			})
+			.filter((stat) => stat);
+		if (areDeepEqual(this.communityValues, communityValues)) {
+			return;
+		}
+		console.debug('setting heroStat', value.name, communityValues, this.communityValues, value);
+		this.id = value.id;
+		this.communityValues = communityValues;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr?.detectChanges();
+		}
 	}
 
 	@Input() set battleResultHistory(value: readonly BattleResultHistory[]) {
-		if (value === this._battleResultHistory) {
+		if (!value?.length) {
 			return;
 		}
-		this._battleResultHistory = value;
-		this.updateInfo();
-	}
-
-	@Input() set player(value: BgsPlayer) {
-		if (value === this._player) {
+		const yourValues = value.map(
+			(turnInfo) =>
+				({
+					turn: turnInfo.turn,
+					value: turnInfo.simulationResult?.wonPercent || 0,
+				} as NumericTurnInfo),
+		);
+		if (areDeepEqual(this.yourValues, yourValues)) {
 			return;
 		}
-		this._player = value;
-		this.id = this._player.baseCardId ?? this._player.cardId;
-		this.updateInfo();
+		console.debug('setting battleResultHistory', this.yourValues, yourValues);
+		this.yourValues = yourValues;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr?.detectChanges();
+		}
 	}
 
-	private updateInfo() {
-		this.communityExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._globalStats?.heroStats || !this._player?.cardId) {
-				return [];
-			}
-
-			const result = this._globalStats.heroStats
-				.find((stat) => stat.id === (this._player.baseCardId ?? this._player.cardId))
-				?.combatWinrate?.filter((stat) => stat.turn > 0)
-				.map((stat) => {
-					return {
-						turn: stat.turn,
-						value: stat.winrate,
-					} as NumericTurnInfo;
-				})
-				.filter((stat) => stat);
-			return result;
-		};
-		this.yourExtractor = (): readonly NumericTurnInfo[] => {
-			if (!this._battleResultHistory?.length) {
-				return [];
-			}
-			const result = this._battleResultHistory.map(
-				(turnInfo) =>
-					({
-						turn: turnInfo.turn,
-						value: turnInfo.simulationResult?.wonPercent || 0,
-					} as NumericTurnInfo),
-			);
-			return result;
-		};
-	}
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 }
