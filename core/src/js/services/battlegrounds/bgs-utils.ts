@@ -30,7 +30,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			break;
 		case 'Beast':
 		case Race.BEAST:
-			referenceCardId = CardIds.NonCollectible.Neutral.MamaBear;
+			referenceCardId = CardIds.NonCollectible.Neutral.GoldrinnTheGreatWolf;
 			break;
 		case 'Demon':
 		case Race.DEMON:
@@ -46,7 +46,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			break;
 		case 'Pirate':
 		case Race.PIRATE:
-			referenceCardId = 'BGS_080';
+			referenceCardId = CardIds.NonCollectible.Neutral.DreadAdmiralEliza;
 			break;
 		case 'Elemental':
 		case Race.ELEMENTAL:
