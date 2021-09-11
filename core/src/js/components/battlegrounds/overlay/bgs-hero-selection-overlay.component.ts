@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -96,6 +96,8 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 					return heroOverviews;
 				}
 			}),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 		);
 	}
 
