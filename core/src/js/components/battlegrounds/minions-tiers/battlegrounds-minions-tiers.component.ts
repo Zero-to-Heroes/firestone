@@ -55,9 +55,23 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 						<div class="number">{{ currentTier.tavernTier }}</div>
 					</div>
 				</ul>
-				<bgs-minions-list
+				<!-- <bgs-minions-list
 					*ngIf="displayedTier || lockedTier"
 					[cards]="(displayedTier || lockedTier).cards"
+					[showTribesHighlight]="showTribesHighlight"
+					[highlightedMinions]="highlightedMinions"
+					[highlightedTribes]="highlightedTribes"
+					[tooltipPosition]="tooltipPosition"
+				></bgs-minions-list> -->
+
+				<bgs-minions-list
+					*ngFor="let tier of tiers; trackBy: trackByFn"
+					class="minions-list"
+					[ngClass]="{
+						'active':
+							tier.tavernTier === displayedTier?.tavernTier || tier.tavernTier === lockedTier?.tavernTier
+					}"
+					[cards]="tier.cards"
 					[showTribesHighlight]="showTribesHighlight"
 					[highlightedMinions]="highlightedMinions"
 					[highlightedTribes]="highlightedTribes"
@@ -111,11 +125,11 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			}
 
 			if (
-				newState?.currentGame?.availableRaces?.length > 0 &&
-				(!this.cardsInGame?.length ||
-					!arraysEqual(this.previousAvailableRaces, newState.currentGame.availableRaces))
+				// newState?.currentGame?.availableRaces?.length > 0 &&
+				!this.cardsInGame?.length ||
+				!arraysEqual(this.previousAvailableRaces, newState.currentGame.availableRaces)
 			) {
-				await this.updateAvailableCards(newState);
+				await this.updateAvailableCards(newState.currentGame.availableRaces);
 				this.previousAvailableRaces = newState.currentGame.availableRaces;
 			}
 			//console.log('available cards', this.cardsInGame);
@@ -233,12 +247,12 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		return this.lockedTier && tavernTier && this.lockedTier.tavernTier === tavernTier.tavernTier;
 	}
 
-	private updateAvailableCards(state: BattlegroundsState) {
+	private updateAvailableCards(availableRaces: readonly Race[]) {
 		if (!this.allCards.getCards()?.length) {
 			return;
 		}
 
-		this.cardsInGame = getAllCardsInGame(state.currentGame.availableRaces, this.allCards);
+		this.cardsInGame = getAllCardsInGame(availableRaces, this.allCards);
 	}
 
 	private buildTiers(): readonly Tier[] {

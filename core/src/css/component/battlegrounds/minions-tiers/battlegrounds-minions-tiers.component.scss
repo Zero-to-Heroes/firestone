@@ -135,3 +135,11 @@
 		}
 	}
 }
+
+.minions-list {
+	display: none;
+
+	&.active {
+		display: flex;
+	}
+}
