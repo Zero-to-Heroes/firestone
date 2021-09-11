@@ -10,15 +10,15 @@ import {
 } from '@angular/core';
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
-import { Preferences } from '../../../models/preferences';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { arraysEqual, groupByFunction } from '../../../services/utils';
+import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { groupByFunction } from '../../../services/utils';
 
 @Component({
 	selector: 'battlegrounds-minions-tiers',
@@ -34,49 +34,43 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 			(mouseleave)="onTavernMouseLeave()"
 			(mousedown)="dragMove($event)"
 		>
-			<div class="tiers-container" *ngIf="showMinionsList">
-				<div class="logo-container" *ngIf="currentTurn">
-					<div class="background-main-part"></div>
-					<div class="background-second-part"></div>
-					<div class="turn-number">Turn {{ currentTurn }}</div>
-				</div>
-				<ul class="tiers">
-					<div
-						class="tier"
-						*ngFor="let currentTier of tiers; trackBy: trackByFn"
-						[ngClass]="{
-							'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
-							'locked': isLocked(currentTier)
-						}"
-						(mouseover)="onTavernMouseOver(currentTier)"
-						(click)="onTavernClick(currentTier)"
-					>
-						<img class="icon" src="assets/images/bgs/star.png" />
-						<div class="number">{{ currentTier.tavernTier }}</div>
+			<div class="tiers-container" *ngIf="showMinionsList$ | async">
+				<ng-container *ngIf="{ tiers: tiers$ | async, currentTurn: currentTurn$ | async } as value">
+					<div class="logo-container" *ngIf="value.currentTurn">
+						<div class="background-main-part"></div>
+						<div class="background-second-part"></div>
+						<div class="turn-number">Turn {{ value.currentTurn }}</div>
 					</div>
-				</ul>
-				<!-- <bgs-minions-list
-					*ngIf="displayedTier || lockedTier"
-					[cards]="(displayedTier || lockedTier).cards"
-					[showTribesHighlight]="showTribesHighlight"
-					[highlightedMinions]="highlightedMinions"
-					[highlightedTribes]="highlightedTribes"
-					[tooltipPosition]="tooltipPosition"
-				></bgs-minions-list> -->
-
-				<bgs-minions-list
-					*ngFor="let tier of tiers; trackBy: trackByFn"
-					class="minions-list"
-					[ngClass]="{
-						'active':
-							tier.tavernTier === displayedTier?.tavernTier || tier.tavernTier === lockedTier?.tavernTier
-					}"
-					[cards]="tier.cards"
-					[showTribesHighlight]="showTribesHighlight"
-					[highlightedMinions]="highlightedMinions"
-					[highlightedTribes]="highlightedTribes"
-					[tooltipPosition]="tooltipPosition"
-				></bgs-minions-list>
+					<ul class="tiers">
+						<div
+							class="tier"
+							*ngFor="let currentTier of value.tiers; trackBy: trackByFn"
+							[ngClass]="{
+								'selected': displayedTier && displayedTier.tavernTier === currentTier.tavernTier,
+								'locked': isLocked(currentTier)
+							}"
+							(mouseover)="onTavernMouseOver(currentTier)"
+							(click)="onTavernClick(currentTier)"
+						>
+							<img class="icon" src="assets/images/bgs/star.png" />
+							<div class="number">{{ currentTier.tavernTier }}</div>
+						</div>
+					</ul>
+					<bgs-minions-list
+						*ngFor="let tier of value.tiers; trackBy: trackByFn"
+						class="minions-list"
+						[ngClass]="{
+							'active':
+								tier.tavernTier === displayedTier?.tavernTier ||
+								tier.tavernTier === lockedTier?.tavernTier
+						}"
+						[cards]="tier.cards"
+						[showTribesHighlight]="showTribesHighlight"
+						[highlightedMinions]="highlightedMinions$ | async"
+						[highlightedTribes]="highlightedTribes$ | async"
+						[tooltipPosition]="tooltipPosition"
+					></bgs-minions-list>
+				</ng-container>
 			</div>
 		</div>
 	`,
@@ -86,80 +80,67 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit, OnDestroy {
 	private static readonly WINDOW_WIDTH = 1300;
 
-	windowId: string;
+	tiers$: Observable<readonly Tier[]>;
+	highlightedTribes$: Observable<readonly Race[]>;
+	highlightedMinions$: Observable<readonly string[]>;
+	currentTurn$: Observable<number>;
+	showTribesHighlight$: Observable<boolean>;
+	showMinionsList$: Observable<boolean>;
 
-	state: BattlegroundsState;
-	highlightedTribes: readonly Race[];
-	highlightedMinions: readonly string[];
-	cardsInGame: readonly ReferenceCard[];
-	tiers: readonly Tier[];
+	private windowId: string;
+	private enableMouseOver: boolean;
+
 	displayedTier: Tier;
 	lockedTier: Tier;
-	showTribesHighlight: boolean;
-	showMinionsList: boolean;
-	enableMouseOver: boolean;
-	currentTurn: number;
 	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameInfoUpdatedListener: (message: any) => void;
-	private deckSubscription: Subscription;
-	private preferencesSubscription: Subscription;
-	private previousAvailableRaces: readonly Race[];
-	private storeSubscription: Subscription;
+	private prefSubscription: Subscription;
 
 	constructor(
-		private prefs: PreferencesService,
-		private cdr: ChangeDetectorRef,
-		private ow: OverwolfService,
-		private init_DebugService: DebugService,
-		private allCards: CardsFacadeService,
-	) {}
+		private readonly init_DebugService: DebugService,
+		private readonly prefs: PreferencesService,
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly allCards: CardsFacadeService,
+		private readonly store: AppUiStoreService,
+	) {
+		this.tiers$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => main.currentGame.availableRaces)
+			.pipe(
+				map(([races]) => {
+					console.debug('mapping new races', races);
+					const cardsInGame = getAllCardsInGame(races, this.allCards);
+					return this.buildTiers(cardsInGame);
+				}),
+			);
+		this.highlightedTribes$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
+			.pipe(map(([tribes]) => tribes));
+		this.highlightedMinions$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
+			.pipe(map(([tribes]) => tribes));
+		this.currentTurn$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
+			.pipe(map(([currentTurn]) => currentTurn));
+		this.showTribesHighlight$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => prefs.bgsShowTribesHighlight)
+			.pipe(map(([info]) => info));
+		this.showMinionsList$ = this.store
+			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListOverlay)
+			.pipe(map(([info]) => info));
+		this.prefSubscription = this.store
+			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListMouseOver)
+			.subscribe(([info]) => (this.enableMouseOver = info));
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-
-		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-		this.storeSubscription = storeBus.subscribe(async (newState: BattlegroundsState) => {
-			if (!newState) {
-				return;
-			}
-
-			if (
-				// newState?.currentGame?.availableRaces?.length > 0 &&
-				!this.cardsInGame?.length ||
-				!arraysEqual(this.previousAvailableRaces, newState.currentGame.availableRaces)
-			) {
-				await this.updateAvailableCards(newState.currentGame.availableRaces);
-				this.previousAvailableRaces = newState.currentGame.availableRaces;
-			}
-			//console.log('available cards', this.cardsInGame);
-			this.tiers = this.buildTiers();
-			this.highlightedTribes = newState.highlightedTribes;
-			this.highlightedMinions = newState.highlightedMinions;
-			this.currentTurn = newState.currentGame?.currentTurn;
-			//console.log('updating tiers', this.tiers, newState, this.cardsInGame);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		// console.error('debug: remove static init');
-		// await this.allCards.initializeCardsDb();
-		// this.cardsInGame = getAllCardsInGame([Race.DEMON, Race.DRAGON], this.allCards);
-		// this.tiers = this.buildTiers();
-
-		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
-		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
-			this.setDisplayPreferences(event.preferences);
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
 			}
 		});
-		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.changeWindowSize();
 		await this.updateTooltipPosition();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -170,8 +151,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
-		this.deckSubscription?.unsubscribe();
-		this.preferencesSubscription?.unsubscribe();
+		this.prefSubscription?.unsubscribe();
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -247,39 +227,18 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		return this.lockedTier && tavernTier && this.lockedTier.tavernTier === tavernTier.tavernTier;
 	}
 
-	private updateAvailableCards(availableRaces: readonly Race[]) {
-		if (!this.allCards.getCards()?.length) {
-			return;
-		}
-
-		this.cardsInGame = getAllCardsInGame(availableRaces, this.allCards);
-	}
-
-	private buildTiers(): readonly Tier[] {
-		if (!this.cardsInGame) {
+	private buildTiers(cardsInGame: readonly ReferenceCard[]): readonly Tier[] {
+		if (!cardsInGame?.length) {
 			return [];
 		}
 
 		const groupedByTier: { [tierLevel: string]: readonly ReferenceCard[] } = groupByFunction(
 			(card: ReferenceCard) => '' + card.techLevel,
-		)(this.cardsInGame);
+		)(cardsInGame);
 		return Object.keys(groupedByTier).map((tierLevel) => ({
 			tavernTier: parseInt(tierLevel),
 			cards: groupedByTier[tierLevel],
 		}));
-	}
-
-	private setDisplayPreferences(preferences: Preferences) {
-		if (!preferences) {
-			return;
-		}
-
-		this.showMinionsList = preferences.bgsEnableMinionListOverlay;
-		this.showTribesHighlight = preferences.bgsShowTribesHighlight;
-		this.enableMouseOver = preferences.bgsEnableMinionListMouseOver;
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async changeWindowSize(): Promise<void> {
