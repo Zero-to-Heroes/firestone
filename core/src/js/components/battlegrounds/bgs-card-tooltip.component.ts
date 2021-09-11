@@ -31,9 +31,9 @@ export class BgsCardTooltipComponent {
 		this.attack = this._entity.getTag(GameTag.ATK);
 		this.health = this._entity.getTag(GameTag.HEALTH);
 		if (this._entity.getTag(GameTag.PREMIUM) === 1) {
-			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._entity.cardID}_bgs_premium.png?v=3`;
+			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._entity.cardID}_bgs_premium.png?v=5`;
 		} else {
-			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._entity.cardID}_bgs.png?v=3`;
+			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._entity.cardID}_bgs.png?v=5`;
 		}
 		// console.log('setting card in tooltip', value);
 		if (!(this.cdr as ViewRef)?.destroyed) {

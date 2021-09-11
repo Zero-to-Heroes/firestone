@@ -236,7 +236,7 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 					)
 					.map((card) => ({
 						id: card.id,
-						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${card.id}_bgs.png?v=3`,
+						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${card.id}_bgs.png?v=5`,
 						name: card.name,
 						tier: card.techLevel ?? 0,
 					}))
