@@ -54,6 +54,14 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'feature',
+								text: `Add a start of combat and final player damage states to the simulation viewer.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where Yo-Ho Ogre would not have Taunt by default when adding him in the simulator.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix a simulator issue where Rat Pack deathrattle would trigger after the Leapfrogger effect.`,
 							},
@@ -64,6 +72,48 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a simulator issue where some minions (like Imp Mama or Ghastcoiler) could spawn a few golden minions.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue where Impulsive Trickster would cause the sim to be bug out when summoned in combat (from Imp Mama for instance).`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue where Skewer Rat's tokens would not be taunted.`,
+							},
+							{
+								type: 'ui',
+								text: `Fixed image for Kangor's Apprentice.`,
+							},
+							{
+								type: 'ui',
+								text: `Changed the default image for Pirates and Beasts in the banned tribes widget.`,
+							},
+							{
+								type: 'misc',
+								text: `Reduce the CPU usage when quickly mousing over the minions tiers on the minions list overlay.`,
+							},
+						],
+					},
+					{
+						category: 'decktracker',
+						details: [
+							{
+								type: 'feature',
+								text: `Add support for Ooops, All Spells in Duels.`,
+							},
+							{
+								type: 'bug',
+								text: `The "turns to win/lose" were incorrectly computed on ranked decks. These stats have been reset, and new matches will now properly compute them. Sorry for the inconvenience.`,
+							},
+						],
+					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where sometimes a tooltip would not disappear.`,
 							},
 						],
 					},
