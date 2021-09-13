@@ -109,7 +109,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame.availableRaces)
 			.pipe(
 				map(([races]) => {
-					console.debug('mapping new races', races);
+					console.log('mapping new races', races);
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					return this.buildTiers(cardsInGame);
 				}),
