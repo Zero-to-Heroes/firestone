@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.15.2',
+		version: '7.16.0',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -40,38 +40,12 @@ export const updates: readonly Update[] = [
 			// 		This release adds lots of Quality of Life improvements, which are one of my favorite things to do. I hope you'll enjoy it :)
 			// 	`,
 			// },
-			{
-				type: 'main',
-				header: 'Main updates',
-				updates: [
-					{
-						category: 'battlegrounds',
-						details: [
-							{
-								type: 'feature',
-								text: `A full battle simulator is now available in the Battlegrounds tab! You can build any boards you like, and have them face each other. You can even build theoretically impossible comps, like a Divine Shield / Poisonous Ghoul (well, at least that one used to be impossible before Shudderwock).`,
-							},
-							{
-								type: 'feature',
-								text: `The full battle simulator is also available in the Battles tab on the in-game BG window. You can, as before, resimulate past battles, but now you can even tweak various attributes like the minions stats, in addition to their positioning.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where the Hero and Treasure stats would be empty until you select a rank filter.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue when filtering for the latest patch.`,
-							},
-						],
-					},
-				],
-			},
+			// {
+			// 	type: 'main',
+			// 	header: 'Main updates',
+			// 	updates: [
+			// 	],
+			// },
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -81,98 +55,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix an issue where Prophet of the Boar would appear in the tier list even without Quilboars in the game.`,
+								text: `Fix a simulator issue where Rat Pack deathrattle would trigger after the Leapfrogger effect.`,
 							},
 							{
 								type: 'bug',
-								text: `Try to fix an issue where sometimes the opponent's last board would not disappear when mousing out of their portrait in the live leaderboard.`,
+								text: `Fix a simulator issue where Whelp Smuggler's health buff would not be applied for Glyph Guardian.`,
 							},
 							{
 								type: 'bug',
-								text: `Remove Houndmaster and Argent Braggart appearing in the minion list even when they shouldn't.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue with Mechano-Tank.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue with Tony Two-Tusk.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue with Whelp Smuggler.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix many simulator issues with Leapfroggers. Ribbit.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue with Old Murk-Eye.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue when multiple minions are killed at the same time.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where 'whenever' spawns would not trigger some spawn effects like Deflecto Bot.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where tokens would spawn left of their origin, instead of right.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where the minion created by Embrace Your Rage would not be counted in the board size to decide the first player.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where lethal chances would sometimes be of 0 despite average damage being greater than the opponent's health.`,
-							},
-							{
-								type: 'ui',
-								text: `Replace the "Composition not supported" message by the results from the simulator alongside a warning icon.`,
-							},
-							{
-								type: 'ui',
-								text: `Update the icons for Mechs (now Pupbot) and Demons (now Famished Fel Bat) in the banned tribes widget.`,
-							},
-							{
-								type: 'ui',
-								text: `Show the current hero skin on the Hero Selection screen tab.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'ui',
-								text: `Add green / red colors to the deck winrate matrix when displayed as percentages.`,
-							},
-						],
-					},
-					{
-						category: 'duels',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix the search bar on the Heroes and Treasures tabs.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix the position of the tooltip when mousing over cards in the tier lists on the Heroes and Treasures tabs.`,
-							},
-						],
-					},
-					{
-						category: 'achievements',
-						details: [
-							{
-								type: 'bug',
-								text: `Fix an issue where achievements could be granted while spectating.`,
+								text: `Fix a simulator issue where some minions (like Imp Mama or Ghastcoiler) could spawn a few golden minions.`,
 							},
 						],
 					},
