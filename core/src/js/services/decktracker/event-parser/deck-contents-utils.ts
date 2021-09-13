@@ -30,20 +30,22 @@ export const modifyDeckForSpecialCards = (
 			return handleLibram(deckState, allCards, 2);
 		case CardIds.Collectible.Warlock.DeckOfChaos:
 			return handleDeckOfChaos(deckState, allCards);
-		case CardIds.Collectible.Neutral.WyrmrestPurifier:
-			return handleWyrmrestPurifier(deckState, allCards);
+		case CardIds.Collectible.Warrior.ExploreUngoro:
+			return handleExploreUngoro(deckState, allCards);
 		case CardIds.Collectible.Neutral.FrizzKindleroost:
 			return handleFrizzKindleroost(deckState, allCards);
 		case CardIds.Collectible.Neutral.HemetJungleHunter:
 			return handleHemet(deckState, allCards);
 		case CardIds.Collectible.Neutral.LadyPrestor:
 			return handleLadyPrestor(deckState, allCards);
-		case CardIds.Collectible.Neutral.SkulkingGeist:
-			return handleSkulkingGeist(deckState, allCards);
+		case CardIds.NonCollectible.Neutral.OoopsAllSpellsTavernBrawl:
+			return handleOoopsAllSpells(deckState, allCards);
 		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
 			return handleScepterOfSummoning(deckState, allCards);
-		case CardIds.Collectible.Warrior.ExploreUngoro:
-			return handleExploreUngoro(deckState, allCards);
+		case CardIds.Collectible.Neutral.SkulkingGeist:
+			return handleSkulkingGeist(deckState, allCards);
+		case CardIds.Collectible.Neutral.WyrmrestPurifier:
+			return handleWyrmrestPurifier(deckState, allCards);
 		default:
 			return deckState;
 	}
@@ -198,6 +200,21 @@ const handleHemet = (deckState: DeckState, allCards: CardsFacadeService): DeckSt
 		(card, refCard) => refCard.cost <= 3,
 		(card) => null,
 		deckState,
+		allCards,
+	);
+};
+
+const handleOoopsAllSpells = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
+	const stateWithoutSpells = updateCardInDeck(
+		(card, refCard) => refCard.type === 'Minion',
+		(card) => null,
+		deckState,
+		allCards,
+	);
+	return updateCostInDeck(
+		(card, refCard) => refCard?.type === 'Spell' || card?.cardType === 'Spell',
+		(card) => Math.max(0, card.getEffectiveManaCost() - 1),
+		stateWithoutSpells,
 		allCards,
 	);
 };
