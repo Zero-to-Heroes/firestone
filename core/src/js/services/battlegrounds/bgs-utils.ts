@@ -30,7 +30,7 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 			break;
 		case 'Beast':
 		case Race.BEAST:
-			referenceCardId = CardIds.NonCollectible.Neutral.GoldrinnTheGreatWolf;
+			referenceCardId = CardIds.NonCollectible.Neutral.Leapfrogger;
 			break;
 		case 'Demon':
 		case Race.DEMON:
