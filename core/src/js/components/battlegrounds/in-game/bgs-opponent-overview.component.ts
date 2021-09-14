@@ -23,7 +23,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 			<div class="portrait">
 				<bgs-hero-portrait
 					class="icon"
-					[icon]="icon"
+					[heroCardId]="heroCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
 					[cardTooltip]="heroPowerCardId"
@@ -64,7 +64,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsOpponentOverviewComponent implements AfterViewInit {
-	icon: string;
+	heroCardId: string;
 	health: number;
 	maxHealth: number;
 	heroPowerCardId: string;
@@ -93,7 +93,8 @@ export class BgsOpponentOverviewComponent implements AfterViewInit {
 			console.warn('[opponent-overview] setting empty value');
 			return;
 		}
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
+		this.heroCardId = value.getDisplayCardId();
+		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
 		this.health = value.initialHealth - value.damageTaken;
 		this.maxHealth = value.initialHealth;
 		this.heroPowerCardId = value.getDisplayHeroPowerCardId();

@@ -12,9 +12,22 @@
 	}
 
 	.portrait {
-		width: 60%;
+		width: 55%;
 		position: relative;
 		top: 5px;
+
+		::ng-deep .hero-portrait {
+			width: 100%;
+
+			.hero-portrait-frame {
+				width: 100%;
+				height: auto;
+
+				.aspect-ratio {
+					display: block;
+				}
+			}
+		}
 	}
 
 	::ng-deep bgs-hero-portrait .health .value {

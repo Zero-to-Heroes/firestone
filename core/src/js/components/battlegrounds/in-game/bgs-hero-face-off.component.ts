@@ -13,7 +13,7 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 			<div class="hero">
 				<bgs-hero-portrait
 					class="portrait"
-					[icon]="icon"
+					[heroCardId]="heroCardId"
 					[health]="health"
 					[maxHealth]="maxHealth"
 					[cardTooltip]="heroPowerIcon"
@@ -29,7 +29,8 @@ import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroFaceOffComponent {
-	icon: string;
+	heroCardId: string;
+	// icon: string;
 	heroPowerIcon: string;
 	name: string;
 	health: number;
@@ -41,7 +42,8 @@ export class BgsHeroFaceOffComponent {
 	@Input() isNextOpponent: boolean;
 
 	@Input() set opponent(value: BgsPlayer) {
-		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
+		this.heroCardId = value.getDisplayCardId();
+		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
 		this.heroPowerIcon = value.getDisplayHeroPowerCardId();
 		this.name = value.name;
 		this.health = Math.max(value.initialHealth - value.damageTaken, 0);

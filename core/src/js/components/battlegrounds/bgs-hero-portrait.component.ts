@@ -5,8 +5,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 	styleUrls: [`../../../css/component/battlegrounds/bgs-hero-portrait.component.scss`],
 	template: `
 		<div class="hero-portrait">
-			<img *ngIf="!heroIcon" [src]="_icon" class="portrait" />
-			<div *ngIf="heroIcon" class="hero-portrait-frame">
+			<div class="hero-portrait-frame">
 				<img class="icon" [src]="heroIcon" />
 				<img
 					class="frame"
