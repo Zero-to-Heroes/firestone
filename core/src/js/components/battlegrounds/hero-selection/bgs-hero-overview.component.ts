@@ -40,17 +40,6 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 				</div>
 			</div>
 			<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
-			<div class="winrate">
-				<div
-					class="title"
-					[helpTooltip]="
-						'Battle winrate per turn (it gives you an indication of when this hero is the strongest)'
-					"
-				>
-					Winrate per turn
-				</div>
-				<bgs-winrate-chart [heroStat]="_hero" [showYAxis]="false"></bgs-winrate-chart>
-			</div>
 		</div>
 		<div class="hero-overview empty" *ngIf="!_hero && !hideEmptyState">
 			<i class="placeholder">

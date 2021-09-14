@@ -40,6 +40,7 @@ export class BgsWinrateChartComponent {
 		}
 		const communityValues = value.combatWinrate
 			?.filter((stat) => stat.turn > 0)
+			.filter((stat) => stat.turn <= 13)
 			.map((stat) => {
 				return {
 					turn: stat.turn,

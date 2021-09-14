@@ -114,31 +114,6 @@
 		}
 	}
 
-	.winrate {
-		margin-top: 20px;
-		width: 100%;
-
-		::ng-deep graph-with-comparison-new {
-			background: rgba(255, 255, 255, 0.08);
-
-			.legend {
-				display: none;
-			}
-			.container-1 {
-				height: 0;
-				padding-top: 56%;
-
-				& > div {
-					position: absolute !important;
-					top: 0;
-					left: 0;
-					right: 0;
-					bottom: 0;
-				}
-			}
-		}
-	}
-
 	&.empty {
 		display: flex;
 		align-items: center;

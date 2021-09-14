@@ -29,6 +29,17 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 				</div>
 				<div class="player-value" helpTooltip="Your value">({{ buildValue(playerAveragePosition) }})</div>
 			</div>
+			<div class="winrate">
+				<div
+					class="title"
+					[helpTooltip]="
+						'Battle winrate per turn (it gives you an indication of when this hero is the strongest)'
+					"
+				>
+					Winrate per turn
+				</div>
+				<bgs-winrate-chart [heroStat]="_hero" [showYAxis]="false"></bgs-winrate-chart>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +49,7 @@ export class BgsHeroStatsComponent {
 	averagePosition: number;
 	playerAveragePosition: number;
 	cardId: string;
+	_hero: BgsHeroStat;
 
 	private placementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
 	private playerPlacementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
@@ -47,6 +59,7 @@ export class BgsHeroStatsComponent {
 			return;
 		}
 		this.cardId = value.id;
+		this._hero = value;
 		this.averagePosition = value.averagePosition;
 		this.playerAveragePosition = value.playerAveragePosition;
 		this.placementDistribution$.next(value.placementDistribution);
