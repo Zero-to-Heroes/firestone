@@ -259,7 +259,7 @@ export class Preferences {
 	readonly bgsOverlayButtonPosition: { left: number; top: number };
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
-	readonly bgsActiveRankFilter: BgsRankFilterType = 'all';
+	readonly bgsActiveRankFilter: BgsRankFilterType = 100;
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';

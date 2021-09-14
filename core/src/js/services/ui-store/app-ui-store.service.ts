@@ -112,7 +112,7 @@ export class AppUiStoreService {
 							stats,
 							matches.filter((stat) => stat.gameMode === 'battlegrounds'),
 							timeFilter,
-							rankFilter,
+							rankFilter <= 100 ? rankFilter : 100,
 							heroSort,
 							patch,
 						] as readonly [

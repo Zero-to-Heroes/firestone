@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
-import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 import { arraysEqual, groupByFunction } from '../../../../services/utils';
 
 @Component({
@@ -38,20 +39,22 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.perfectGames,
+				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveHeroFilter,
 			)
 			.pipe(
-				filter(([perfectGames, rankFilter, heroFilter]) => !!perfectGames?.length),
+				filter(([perfectGames, mmrPercentiles, rankFilter, heroFilter]) => !!perfectGames?.length),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
 				tap((stat) => cdLog('emitting in ', this.constructor.name, stat)),
 			)
-			.subscribe(([gameStats, rankFilter, heroFilter]) => {
+			.subscribe(([gameStats, mmrPercentiles, rankFilter, heroFilter]) => {
 				// Otherwise the generator is simply closed at the end of the first onScroll call
 				setTimeout(() => {
 					this.displayedReplays = [];
 					this.displayedGroupedReplays = [];
-					this.gamesIterator = this.buildIterator(gameStats, rankFilter, heroFilter, 8);
+					const mmrThreshold = getMmrThreshold(rankFilter, mmrPercentiles);
+					this.gamesIterator = this.buildIterator(gameStats, mmrThreshold, heroFilter, 8);
 					// console.debug('gamesIterator', this.gamesIterator);
 					this.onScroll();
 				});
@@ -68,7 +71,7 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 
 	private *buildIterator(
 		perfectGames: readonly GameStat[],
-		rankFilter: string,
+		rankFilter: number,
 		heroFilter: string,
 		step = 40,
 	): IterableIterator<void> {
@@ -94,31 +97,28 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 		return;
 	}
 
-	private areEqual(a: [readonly GameStat[], string, string], b: [readonly GameStat[], string, string]): boolean {
+	private areEqual(
+		a: [readonly GameStat[], readonly MmrPercentile[], number, string],
+		b: [readonly GameStat[], readonly MmrPercentile[], number, string],
+	): boolean {
 		// console.debug('areEqual', a, b);
-		if (a[1] !== b[1] || a[2] !== b[2]) {
+		if (a[2] !== b[2] || a[3] !== b[3]) {
 			return false;
 		}
-		return arraysEqual(a[0], b[0]);
+		return arraysEqual(a[0], b[0]) && arraysEqual(a[1], b[1]);
 	}
 
-	private applyFilters(replays: readonly GameStat[], rankFilter: string, heroFilter: string): readonly GameStat[] {
+	private applyFilters(replays: readonly GameStat[], rankFilter: number, heroFilter: string): readonly GameStat[] {
 		return replays
 			.filter((replay) => this.rankFilter(replay, rankFilter))
 			.filter((replay) => this.heroFilter(replay, heroFilter));
 	}
 
-	private rankFilter(stat: GameStat, rankFilter: BgsRankFilterType) {
+	private rankFilter(stat: GameStat, rankFilter: number) {
 		if (!rankFilter) {
 			return true;
 		}
-
-		switch (rankFilter) {
-			case 'all':
-				return true;
-			default:
-				return stat.playerRank && parseInt(stat.playerRank) >= parseInt(rankFilter);
-		}
+		return stat.playerRank && parseInt(stat.playerRank) >= rankFilter;
 	}
 
 	private heroFilter(stat: GameStat, heroFilter: string) {

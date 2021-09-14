@@ -4,10 +4,10 @@ import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
-import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 
 @Component({
@@ -35,6 +35,7 @@ export class BattlegroundsPersonalStatsRatingComponent {
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,
+				([main, nav]) => main.battlegrounds.globalStats.mmrPercentiles,
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav, prefs]) => prefs.bgsActiveMmrGroupFilter,
@@ -42,18 +43,18 @@ export class BattlegroundsPersonalStatsRatingComponent {
 			)
 			.pipe(
 				filter(
-					([stats, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
+					([stats, mmrPercentiles, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
 						!!stats && !!currentBattlegroundsMetaPatch,
 				),
 				map(
-					([stats, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
+					([stats, mmrPercentiles, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
 						[
 							stats.filter((stat) => stat.gameMode === 'battlegrounds').filter((stat) => stat.playerRank),
 							timeFilter,
-							mmrFilter,
+							getMmrThreshold(mmrFilter <= 100 ? mmrFilter : 100, mmrPercentiles),
 							mmrGroupFilter,
 							currentBattlegroundsMetaPatch,
-						] as [GameStat[], BgsActiveTimeFilterType, BgsRankFilterType, MmrGroupFilterType, number],
+						] as [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, number],
 				),
 				distinctUntilChanged((a, b) => this.compare(a, b)),
 				map(([stats, timeFilter, mmrFilter, mmrGroupFilter, currentBattlegroundsMetaPatch]) =>
@@ -66,11 +67,11 @@ export class BattlegroundsPersonalStatsRatingComponent {
 	private buildValue(
 		stats: readonly GameStat[],
 		timeFilter: BgsActiveTimeFilterType,
-		mmrFilter: BgsRankFilterType,
+		mmrFilter: number,
 		mmrGroupFilter: MmrGroupFilterType,
 		currentBattlegroundsMetaPatch: number,
 	): Value {
-		const data = [...stats].filter((stat) => this.isCorrectMmr(stat.playerRank, mmrFilter)).reverse();
+		const data = [...stats].filter((stat) => +stat.playerRank >= mmrFilter).reverse();
 		if (!data.length) {
 			return {
 				data: [],
@@ -141,15 +142,6 @@ export class BattlegroundsPersonalStatsRatingComponent {
 		}
 	}
 
-	private isCorrectMmr(playerRank: string, mmrFilter: BgsRankFilterType): boolean {
-		switch (mmrFilter) {
-			case 'all':
-				return true;
-			default:
-				return +playerRank >= +mmrFilter;
-		}
-	}
-
 	private timeFilter(stat: GameStat, timeFilter: string, currentBattlegroundsMetaPatch: number): boolean {
 		if (!timeFilter) {
 			return true;
@@ -169,8 +161,8 @@ export class BattlegroundsPersonalStatsRatingComponent {
 	}
 
 	private compare(
-		a: [GameStat[], BgsActiveTimeFilterType, BgsRankFilterType, MmrGroupFilterType, number],
-		b: [GameStat[], BgsActiveTimeFilterType, BgsRankFilterType, MmrGroupFilterType, number],
+		a: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, number],
+		b: [GameStat[], BgsActiveTimeFilterType, number, MmrGroupFilterType, number],
 	): boolean {
 		if (a[1] !== b[1] || a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4]) {
 			return false;

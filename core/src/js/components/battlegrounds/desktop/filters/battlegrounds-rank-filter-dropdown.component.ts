@@ -1,12 +1,13 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
+import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
 import { IOption } from 'ng-select';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
 import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'battlegrounds-rank-filter-dropdown',
@@ -19,7 +20,7 @@ import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.se
 		<filter-dropdown
 			*ngIf="filter$ | async as value"
 			class="battlegrounds-rank-filter-dropdown"
-			[options]="options"
+			[options]="options$ | async"
 			[filter]="value.filter"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
@@ -29,8 +30,7 @@ import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.se
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
-	options: readonly RankFilterOption[];
-
+	options$: Observable<readonly RankFilterOption[]>;
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -40,51 +40,43 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 		private readonly store: AppUiStoreService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
-		this.options = [
-			{
-				value: 'all',
-				label: 'All ranks',
-			} as RankFilterOption,
-			{
-				value: '2000',
-				label: '2,000+',
-			} as RankFilterOption,
-			{
-				value: '4000',
-				label: '4,000+',
-			} as RankFilterOption,
-			{
-				value: '6000',
-				label: '6,000+',
-			} as RankFilterOption,
-			{
-				value: '8000',
-				label: '8,000+',
-			} as RankFilterOption,
-			{
-				value: '10000',
-				label: '10,000+',
-			} as RankFilterOption,
-		] as readonly RankFilterOption[];
-		this.filter$ = this.store
-			.listen$(
+		this.options$ = this.store
+			.listen$(([main, nav, prefs]) => main.duels.globalStats?.mmrPercentiles)
+			.pipe(
+				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
+				map(([mmrPercentiles]) =>
+					mmrPercentiles.map(
+						(percentile) =>
+							({
+								value: '' + percentile.percentile,
+								label: this.buildPercentileLabel(percentile),
+							} as RankFilterOption),
+					),
+				),
+				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
+			);
+		this.filter$ = combineLatest(
+			this.options$,
+			this.store.listen$(
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
-			)
-			.pipe(
-				filter(([filter, categoryId, currentView]) => !!filter && !!categoryId && !!currentView),
-				map(([filter, categoryId, currentView]) => ({
-					filter: filter,
-					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible:
-						!['categories', 'category'].includes(currentView) &&
-						!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(categoryId),
-				})),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
-			);
+			),
+		).pipe(
+			filter(([options, [filter, categoryId, currentView]]) => !!filter && !!categoryId && !!currentView),
+			map(([options, [filter, categoryId, currentView]]) => ({
+				filter: '' + filter,
+				placeholder: options.find((option) => +option.value === filter)?.label ?? options[0].label,
+				visible:
+					!['categories', 'category'].includes(currentView) &&
+					!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(categoryId),
+			})),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+		);
 	}
 
 	ngAfterViewInit() {
@@ -92,10 +84,29 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 	}
 
 	onSelected(option: RankFilterOption) {
-		this.stateUpdater.next(new BgsRankFilterSelectedEvent(option.value));
+		this.stateUpdater.next(new BgsRankFilterSelectedEvent(+option.value as BgsRankFilterType));
+	}
+
+	private buildPercentileLabel(percentile: MmrPercentile): string {
+		switch (percentile.percentile) {
+			case 100:
+				return 'All ranks';
+			case 50:
+				return `Top 50% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+			case 25:
+				return `Top 25% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+			case 10:
+				return `Top 10% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
+			case 1:
+				return `Top 1% (${this.getNiceMmrValue(percentile.mmr, 1)}+)`;
+		}
+	}
+
+	private getNiceMmrValue(mmr: number, significantDigit: number) {
+		return Math.pow(10, significantDigit) * Math.round(mmr / Math.pow(10, significantDigit));
 	}
 }
 
 interface RankFilterOption extends IOption {
-	value: BgsRankFilterType;
+	value: string;
 }
