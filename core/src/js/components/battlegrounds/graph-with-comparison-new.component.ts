@@ -70,8 +70,12 @@ export class GraphWithComparisonNewComponent {
 		this.updateChartOptions();
 	}
 
+	@Input() set showYAxis(value: boolean) {
+		this._showYAxis = value;
+		this.updateChartOptions();
+	}
+
 	@Input() set communityValues(value: readonly NumericTurnInfo[]) {
-		console.debug('setting communityValues', value, this._communityValues);
 		if (value === this._communityValues) {
 			return;
 		}
@@ -80,7 +84,6 @@ export class GraphWithComparisonNewComponent {
 	}
 
 	@Input() set yourValues(value: readonly NumericTurnInfo[]) {
-		console.debug('setting yourValues', value, this._yourValues);
 		if (value === this._yourValues) {
 			return;
 		}
@@ -103,6 +106,7 @@ export class GraphWithComparisonNewComponent {
 	private _dirty = true;
 	private _maxYValue: number;
 	private _stepSize: number;
+	private _showYAxis = true;
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
 
@@ -144,13 +148,11 @@ export class GraphWithComparisonNewComponent {
 				label: this.communityLabel,
 			},
 		];
-		console.debug('will set lineChartData?', newChartData, this.lineChartData);
 		if (areEqualDataSets(newChartData, this.lineChartData)) {
 			return;
 		}
 
 		this.lineChartData = newChartData;
-		console.debug('set lineChartData', this.lineChartData);
 		this.lineChartLabels = [...Array(lastTurn + 1).keys()].filter((turn) => turn > 0).map((turn) => '' + turn);
 		const maxValue = Math.max(
 			...this.lineChartData.map((data) => data.data as number[]).reduce((a, b) => a.concat(b), []),
@@ -206,7 +208,6 @@ export class GraphWithComparisonNewComponent {
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.height;
 		const gradient = this.getBackgroundColor();
-		// console.log('gradient', gradient);
 		this.lineChartColors = [
 			{
 				backgroundColor: 'transparent',
@@ -278,6 +279,7 @@ export class GraphWithComparisonNewComponent {
 					{
 						gridLines: {
 							color: '#841063',
+							display: this._showYAxis,
 						},
 						ticks: {
 							fontColor: '#D9C3AB',
@@ -291,6 +293,9 @@ export class GraphWithComparisonNewComponent {
 						position: 'left',
 						gridLines: {
 							color: '#40032E',
+							drawBorder: this._showYAxis,
+							drawTicks: this._showYAxis,
+							offsetGridLines: this._showYAxis,
 						},
 						ticks: {
 							fontColor: '#D9C3AB',
@@ -299,6 +304,14 @@ export class GraphWithComparisonNewComponent {
 							beginAtZero: true,
 							max: this._maxYValue,
 							stepSize: this._stepSize,
+							// maxTicksLimit: this._showYAxis ? null : 1,
+							display: this._showYAxis,
+							callback: (value, index, values) => {
+								if (this._showYAxis || isNaN(parseInt('' + value))) {
+									return value;
+								}
+								return +value % this._stepSize === 0 ? value : null;
+							},
 						},
 					},
 				],

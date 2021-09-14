@@ -1,8 +1,22 @@
+:host() {
+	width: 100%;
+}
+
 .stats {
 	// margin-top: 20px;
 	margin-top: 0.1vh;
 	display: flex;
 	flex-direction: column;
+
+	.placement-distribution {
+		width: 100%;
+		height: 75px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		background: rgba(255, 255, 255, 0.08);
+		padding: 10px;
+		padding-bottom: 0;
+	}
 
 	.entry {
 		display: flex;
@@ -10,25 +24,18 @@
 		align-items: center;
 	}
 
-	.stat-icon {
-		width: 25%;
-
-		.image {
-			width: 100%;
-		}
-	}
-
 	.label {
 		// flex-grow: 1;
 	}
 
 	.global-value {
+		color: var(--color-8);
 		margin-left: 5px;
 		font-weight: bold;
 	}
 
 	.player-value {
-		color: #ce73b4;
+		color: var(--default-title-color);
 		margin-left: 5px;
 		font-weight: bold;
 		font-size: 10px;

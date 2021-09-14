@@ -41,6 +41,7 @@ import { BgsPostMatchStatsComponent } from '../../components/battlegrounds/post-
 import { BgsWinrateChartComponent } from '../../components/battlegrounds/post-match/bgs-winrate-chart.component';
 import { StatCellComponent } from '../../components/battlegrounds/post-match/stat-cell.component';
 import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
+import { BasicBarChart2Component } from '../../components/common/chart/basic-bar-chart-2.component';
 import { BasicBarChartComponent } from '../../components/common/chart/basic-bar-chart.component';
 import { PieChartComponent } from '../../components/common/chart/pie-chart.component';
 import { SimpleBarChartComponent } from '../../components/common/chart/simple-bar-chart.component';
@@ -225,6 +226,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		GraphWithComparisonNewComponent,
 		SimpleBarChartComponent,
 		BasicBarChartComponent,
+		BasicBarChart2Component,
 		PieChartComponent,
 
 		FilterDropdownComponent,
@@ -340,6 +342,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		GraphWithComparisonNewComponent,
 		SimpleBarChartComponent,
 		BasicBarChartComponent,
+		BasicBarChart2Component,
 		PieChartComponent,
 
 		FilterDropdownComponent,

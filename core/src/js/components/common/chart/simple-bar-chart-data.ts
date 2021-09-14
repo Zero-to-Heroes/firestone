@@ -5,4 +5,5 @@ export interface SimpleBarChartData {
 export interface SimpleBarChartDataElement {
 	readonly label: string;
 	readonly value: number;
+	readonly rawValue?: number;
 }

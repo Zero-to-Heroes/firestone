@@ -1,5 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
+import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { arraysEqual, sumOnArray } from '../../../services/utils';
+import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
 @Component({
 	selector: 'bgs-hero-stats',
@@ -10,51 +15,95 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 	],
 	template: `
 		<div class="stats">
-			<div class="title">Stats</div>
+			<div class="title">Finishes</div>
+			<basic-bar-chart-2
+				class="placement-distribution"
+				[data]="placementChartData$ | async"
+				[id]="'placementDistribution' + cardId"
+				[midLineValue]="100 / 8"
+			></basic-bar-chart-2>
 			<div class="entry">
 				<div class="label" helpTooltip="Average final position">Avg position:</div>
-				<div class="global-value">
-					{{ buildValue(_hero?.averagePosition) }}
+				<div class="global-value" helpTooltip="Global value">
+					{{ buildValue(averagePosition) }}
 				</div>
-				<div class="player-value">({{ buildValue(_hero?.playerAveragePosition) }})</div>
-			</div>
-			<div class="entry">
-				<div class="label" helpTooltip="Percentage of times ending in top 4">Top 4:</div>
-				<div class="global-value">
-					{{ buildPercents(_hero?.top4) }}
-				</div>
-				<div class="player-value">({{ buildPercents(_hero?.playerTop4) }})</div>
-			</div>
-			<div class="entry">
-				<div class="label" helpTooltip="Percentage of times winning the run">Top 1:</div>
-				<div class="global-value">
-					{{ buildPercents(_hero?.top1) }}
-				</div>
-				<div class="player-value">({{ buildPercents(_hero?.playerTop1) }})</div>
-			</div>
-			<div class="entry">
-				<div class="label" helpTooltip="Percentage of times this hero is played">Popularity:</div>
-				<div class="global-value">
-					{{ buildPercents(_hero?.popularity) }}
-				</div>
-				<div class="player-value">({{ buildPercents(_hero?.playerPopularity) }})</div>
+				<div class="player-value" helpTooltip="Your value">({{ buildValue(playerAveragePosition) }})</div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroStatsComponent {
-	_hero: BgsHeroStat;
+	placementChartData$: Observable<SimpleBarChartData[]>;
+	averagePosition: number;
+	playerAveragePosition: number;
+	cardId: string;
+
+	private placementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
+	private playerPlacementDistribution$: BehaviorSubject<readonly PlacementDistribution[]> = new BehaviorSubject(null);
 
 	@Input() set hero(value: BgsHeroStat) {
-		this._hero = value;
-		// console.log('setting hero', value);
-		if (!(this.cdr as ViewRef)?.destroyed) {
-			this.cdr.detectChanges();
+		if (!value) {
+			return;
 		}
+		this.cardId = value.id;
+		this.averagePosition = value.averagePosition;
+		this.playerAveragePosition = value.playerAveragePosition;
+		this.placementDistribution$.next(value.placementDistribution);
+		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+		this.placementChartData$ = combineLatest(
+			this.placementDistribution$.asObservable(),
+			this.playerPlacementDistribution$.asObservable(),
+			this.store.bgHeroStats$(),
+		).pipe(
+			map(
+				([global, player, globalStats]) =>
+					[
+						global,
+						player,
+						Math.max(
+							...globalStats
+								.map((stat) => {
+									const totalStatMatches = sumOnArray(
+										stat.placementDistribution,
+										(info) => info.totalMatches,
+									);
+									const highestStatValue = Math.max(
+										...stat.placementDistribution.map(
+											(info) => info.totalMatches / totalStatMatches,
+										),
+									);
+									return highestStatValue;
+								})
+								.reduce((a, b) => a.concat(b), []),
+						),
+					] as [readonly PlacementDistribution[], readonly PlacementDistribution[], number],
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map(([global, player, maxGlobalValue]) => {
+				const totalGlobalMatches = sumOnArray(global, (info) => info.totalMatches);
+				const globalChartData: SimpleBarChartData = {
+					data: global.map((info) => ({
+						label: '' + info.rank,
+						value: (100 * info.totalMatches) / totalGlobalMatches,
+						rawValue: info.totalMatches,
+					})),
+				};
+				const totalPlayerMatches = sumOnArray(player, (info) => info.totalMatches);
+				const playerChartData: SimpleBarChartData = {
+					data: player.map((info) => ({
+						label: '' + info.rank,
+						value: totalPlayerMatches ? (100 * info.totalMatches) / totalPlayerMatches : 0,
+						rawValue: info.totalMatches,
+					})),
+				};
+				return [globalChartData, playerChartData];
+			}),
+		);
+	}
 
 	getIcon(tribe: string): string {
 		let referenceCardId: string;
@@ -91,4 +140,9 @@ export class BgsHeroStatsComponent {
 	buildValue(value: number): string {
 		return value == null || isNaN(value) ? '-' : value.toFixed(2);
 	}
+}
+
+interface PlacementDistribution {
+	readonly rank: number;
+	readonly totalMatches: number;
 }

@@ -123,8 +123,25 @@ const buildHeroStat = (
 							.filter((position) => position == 1).length) /
 						totalPlayerGamesPlayed,
 		),
+		playerPlacementDistribution: buildPlayerPlacementDistribution(playerGamesPlayed),
 		lastPlayedTimestamp: totalPlayerGamesPlayed === 0 ? null : playerGamesPlayed[0].creationTimestamp,
 	} as BgsHeroStat);
+};
+
+const buildPlayerPlacementDistribution = (
+	playerGamesPlayed: GameStat[],
+): readonly { rank: number; totalMatches: number }[] => {
+	const groupedByFinish: { [rank: string]: readonly GameStat[] } = groupByFunction(
+		(stat: GameStat) => stat.additionalResult,
+	)(playerGamesPlayed.filter((stat) => !!stat.additionalResult));
+	const result = [];
+	for (let i = 1; i <= 8; i++) {
+		result.push({
+			rank: i,
+			totalMatches: groupedByFinish['' + i]?.length ?? 0,
+		});
+	}
+	return result;
 };
 
 const convertToBgsHeroStat = (
@@ -188,6 +205,7 @@ const convertToBgsHeroStat = (
 			turn: info.turn,
 			winrate: info.totalWinrate / info.dataPoints,
 		})) as readonly { turn: number; winrate: number }[],
+		placementDistribution: stat.placementDistribution,
 	} as BgsHeroStat;
 };
 

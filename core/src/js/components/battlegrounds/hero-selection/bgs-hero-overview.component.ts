@@ -49,7 +49,7 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 				>
 					Winrate per turn
 				</div>
-				<bgs-winrate-chart [heroStat]="_hero"></bgs-winrate-chart>
+				<bgs-winrate-chart [heroStat]="_hero" [showYAxis]="false"></bgs-winrate-chart>
 			</div>
 		</div>
 		<div class="hero-overview empty" *ngIf="!_hero && !hideEmptyState">

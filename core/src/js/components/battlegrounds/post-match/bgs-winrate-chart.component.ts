@@ -18,7 +18,8 @@ import { areDeepEqual } from '../../../services/utils';
 			[yourValues]="yourValues"
 			[communityValues]="communityValues"
 			[maxYValue]="80"
-			[stepSize]="20"
+			[stepSize]="50"
+			[showYAxis]="showYAxis"
 			communityTooltip="Average winrate (the % chance to win a battle) for each run (7000+ MMR)"
 			yourTooltip="Your values for this run"
 		>
@@ -30,6 +31,8 @@ export class BgsWinrateChartComponent {
 	communityValues: readonly NumericTurnInfo[];
 	yourValues: readonly NumericTurnInfo[];
 	id: string;
+
+	@Input() showYAxis = true;
 
 	@Input() set heroStat(value: BgsHeroStat) {
 		if (!value) {
@@ -47,7 +50,6 @@ export class BgsWinrateChartComponent {
 		if (areDeepEqual(this.communityValues, communityValues)) {
 			return;
 		}
-		console.debug('setting heroStat', value.name, communityValues, this.communityValues, value);
 		this.id = value.id;
 		this.communityValues = communityValues;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -69,7 +71,6 @@ export class BgsWinrateChartComponent {
 		if (areDeepEqual(this.yourValues, yourValues)) {
 			return;
 		}
-		console.debug('setting battleResultHistory', this.yourValues, yourValues);
 		this.yourValues = yourValues;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();

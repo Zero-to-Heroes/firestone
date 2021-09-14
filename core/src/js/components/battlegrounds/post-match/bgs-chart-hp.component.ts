@@ -163,7 +163,6 @@ export class BgsChartHpComponent {
 			enabled: false,
 			custom: thisAsThat((that: any, tooltip: any) => {
 				// Tooltip Element
-				// console.log('requesting tooltip', tooltip, this, that);
 				const tooltipId = `chartjs-tooltip-hp-${this.tooltipSuffix ?? 'default'}`;
 				let tooltipEl = document.getElementById(tooltipId);
 
@@ -219,7 +218,6 @@ export class BgsChartHpComponent {
 				const tooltipHeight = 220;
 				if (positionY + tooltip.caretY + tooltipHeight > that._chart.canvas.height) {
 					position = 'top';
-					// console.log('will adjust');
 					tooltipEl.classList.remove('bottom');
 					tooltipEl.classList.add('top');
 				} else {
@@ -458,23 +456,6 @@ export class BgsChartHpComponent {
 		}
 		return playerOrder;
 	}
-
-	// private buildChartData(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): ChartDataSets[] {
-	// 	if (!value || !Object.keys(value)) {
-	// 		console.error('Could not build chart data for', value);
-	// 		return [];
-	// 	}
-	// 	return Object.keys(value).map(playerId => ({
-	// 		data: value[playerId]?.filter(turnInfo => turnInfo).map(turnInfo => turnInfo.value) || [],
-	// 		cardId: playerId,
-	// 		label: playerId,
-	// 		borderCapStyle: 'square',
-	// 		borderJoinStyle: 'miter',
-	// 		lineTension: 0,
-	// 		borderWidth: 2,
-	// 		hidden: false,
-	// 	}));
-	// }
 
 	private buildChartLabels(value: { [playerCardId: string]: readonly NumericTurnInfo[] }): Label[] {
 		if (!value || !Object.values(value)) {
