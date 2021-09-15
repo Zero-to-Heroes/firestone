@@ -20,10 +20,7 @@ import { groupByFunction } from '../../../services/utils';
 	template: `
 		<div class="container" [ngClass]="{ 'no-ads': !showAds }">
 			<div class="left">
-				<bgs-hero-tier
-					*ngFor="let tier of (tiers$ | async) || []; trackBy: trackByTierFn"
-					[tier]="tier"
-				></bgs-hero-tier>
+				<battlegrounds-tier-list></battlegrounds-tier-list>
 			</div>
 			<div class="hero-selection-overview">
 				<bgs-hero-overview
@@ -81,12 +78,10 @@ export class BgsHeroSelectionOverviewComponent {
 						existingStat ||
 						BgsHeroStat.create({
 							id: normalized,
-							// tribesStat: [] as readonly { tribe: string; percent: number }[],
 						} as BgsHeroStat);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, panel.heroAchievements, this.allCards)
 						: [];
-					// console.debug('achievementsForHero', achievementsForHero, this._showAchievements);
 					return {
 						...statWithDefault,
 						id: cardId,

@@ -12,7 +12,7 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 		<div class="hero-selection-tooltip">
 			<img class="hero-power" [src]="heroPowerImage" />
 			<div class="infos">
-				<div class="name">{{ _hero.name }}</div>
+				<div class="name">{{ _hero.name }} ({{ totalMatches.toLocaleString('en-US') }} matches)</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 				<!-- <bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes> -->
 			</div>
@@ -23,10 +23,12 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 export class BgsHeroSelectionTooltipComponent {
 	_hero: BgsHeroStat;
 	heroPowerImage: string;
+	totalMatches: number;
 	// tribes: readonly { tribe: string; percent: string }[];
 
 	@Input() set config(value: BgsHeroStat) {
 		this._hero = value;
+		this.totalMatches = value.totalMatches;
 		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/${value.heroPowerCardId}.png?v=3`;
 		// this.tribes = [...value.tribesStat]
 		// 	.sort((a, b) => b.percent - a.percent)

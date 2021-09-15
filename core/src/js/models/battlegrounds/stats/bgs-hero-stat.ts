@@ -3,6 +3,7 @@ export class BgsHeroStat {
 	readonly baseCardId?: string;
 	readonly heroPowerCardId: string;
 	readonly name: string;
+	readonly totalMatches: number;
 	readonly popularity: number;
 	readonly averagePosition: number;
 	readonly top4: number;

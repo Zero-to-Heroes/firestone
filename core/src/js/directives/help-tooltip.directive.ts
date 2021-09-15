@@ -43,6 +43,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@Input() bindTooltipToGameWindow = false;
 	@Input() stayOpenOnClick = false;
 	@Input() helpTooltipVisibleBeforeHover = false;
+	@Input() helpTooltipClasses: string;
 	@Input('helpTooltipShowArrow') showArrow = false;
 
 	private tooltipPortal: ComponentPortal<any>;
@@ -172,6 +173,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		// Pass content to tooltip component instance
 		this.tooltipRef.instance.text = this._text;
 		this.tooltipRef.instance.showArrow = this.showArrow;
+		this.tooltipRef.instance.classes = this.helpTooltipClasses;
 		this.tooltipRef.instance.setTarget(this.target);
 		// console.debug('setting tooltip text', this._text, tooltipRef);
 		this.positionStrategy.apply();

@@ -24,12 +24,11 @@ export const buildHeroStats = (
 		return [];
 	}
 	const updatedTimeFilter: BgsActiveTimeFilterType = Preferences.updateTimeFilter(timeFilter);
-	// TODO: add MMR, tribe filters
+	// TODO: add tribe filters
 	const filteredGlobalStats = globalStats.heroStats
 		.filter((stat) => stat.date === updatedTimeFilter)
 		// Backward compatilibity
 		.filter((stat) => stat.mmrPercentile === rankFilter);
-	// console.debug('building hero stats', filteredGlobalStats);
 	const groupedByHero = groupByFunction((stat: BgsGlobalHeroStat2) => stat.cardId)(filteredGlobalStats);
 	const totalMatches = sumOnArray(filteredGlobalStats, (stat) => stat.totalMatches);
 	const mmrThreshold: number = getMmrThreshold(rankFilter, globalStats.mmrPercentiles);
@@ -151,37 +150,15 @@ const convertToBgsHeroStat = (
 	totalMatches: number,
 	allCards: CardsFacadeService,
 ): BgsHeroStat => {
-	// const debug = stat.cardId === CardIds.NonCollectible.Neutral.MasterNguyen;
-	// debug && console.debug('stat', stat);
-
 	const avgPosition =
 		sumOnArray(stat.placementDistribution, (info) => info.rank * info.totalMatches) /
 		sumOnArray(stat.placementDistribution, (info) => info.totalMatches);
-	// debug &&
-	// 	console.debug(
-	// 		'avgPosition',
-	// 		avgPosition,
-	// 		sumOnArray(stat.placementDistribution, (info) => info.rank * info.totalMatches),
-	// 		sumOnArray(stat.placementDistribution, (info) => info.totalMatches),
-	// 	);
 	const placementTotalMatches = sumOnArray(stat.placementDistribution, (info) => info.totalMatches);
-	// debug && console.debug('placementTotalMatches', placementTotalMatches);
-	// debug &&
-	// 	console.debug(
-	// 		'top1',
-	// 		sumOnArray(
-	// 			stat.placementDistribution.filter((info) => info.rank === 1),
-	// 			(info) => info.totalMatches,
-	// 		) / placementTotalMatches,
-	// 		sumOnArray(
-	// 			stat.placementDistribution.filter((info) => info.rank === 1),
-	// 			(info) => info.totalMatches,
-	// 		),
-	// 	);
 	return {
 		id: stat.cardId,
 		heroPowerCardId: getHeroPower(stat.cardId),
 		name: allCards.getCard(stat.cardId)?.name,
+		totalMatches: stat.totalMatches,
 		popularity: (100 * stat.totalMatches) / totalMatches,
 		tier: buildBgsHeroTier(avgPosition),
 		top1:
@@ -225,7 +202,6 @@ const buildBgsHeroTier = (averagePosition: number): BgsHeroTier => {
 };
 
 const mergeHeroStats = (stats: readonly BgsGlobalHeroStat2[]): BgsGlobalHeroStat2 => {
-	// console.debug('merging hero stats', stats);
 	const ref = stats[0];
 
 	const combatWinrate: { turn: number; dataPoints: number; totalWinrate: number }[] = [];
@@ -243,7 +219,6 @@ const mergeHeroStats = (stats: readonly BgsGlobalHeroStat2[]): BgsGlobalHeroStat
 			// FIXME when missing info
 			.map((cw) => cw.find((info) => info.turn === i))
 			.filter((info) => info);
-		// console.debug('cwForTurn', cwForTurn, i, stats);
 		combatWinrate.push({
 			turn: i,
 			dataPoints: sumOnArray(cwForTurn, (info) => info.dataPoints),

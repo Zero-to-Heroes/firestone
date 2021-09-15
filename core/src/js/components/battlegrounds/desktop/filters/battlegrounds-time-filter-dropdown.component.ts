@@ -55,19 +55,19 @@ export class BattlegroundsTimeFilterDropdownComponent implements AfterViewInit {
 					const options: readonly TimeFilterOption[] = [
 						{
 							value: 'all-time',
-							label: 'Past 100 days',
+							label: getBgsTimeFilterLabelFor('all-time'),
 						} as TimeFilterOption,
 						{
 							value: 'past-seven',
-							label: 'Past 7 days',
+							label: getBgsTimeFilterLabelFor('past-seven'),
 						} as TimeFilterOption,
 						{
 							value: 'past-three',
-							label: 'Past 3 days',
+							label: getBgsTimeFilterLabelFor('past-three'),
 						} as TimeFilterOption,
 						{
 							value: 'last-patch',
-							label: `Last patch`,
+							label: getBgsTimeFilterLabelFor('last-patch'),
 							tooltip: formatPatch(patch),
 						} as TimeFilterOption,
 					];
@@ -102,3 +102,17 @@ export class BattlegroundsTimeFilterDropdownComponent implements AfterViewInit {
 interface TimeFilterOption extends IOption {
 	value: BgsActiveTimeFilterType;
 }
+
+export const getBgsTimeFilterLabelFor = (filter: BgsActiveTimeFilterType): string => {
+	switch (filter) {
+		case 'past-seven':
+			return 'Past 7 days';
+		case 'past-three':
+			return 'Past 3 days';
+		case 'last-patch':
+			return 'Last patch';
+		case 'all-time':
+		default:
+			return 'Past 30 days';
+	}
+};

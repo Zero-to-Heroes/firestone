@@ -69,11 +69,8 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		// console.log('windowId', this.windowId);
 		this.hotkeyPressedHandler = this.ow.getMainWindow().bgsHotkeyPressed;
-		//console.log('hotkeyPressHandler define', this.hotkeyPressedHandler);
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
-		// console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
 				// console.debug('received state a', this.state);

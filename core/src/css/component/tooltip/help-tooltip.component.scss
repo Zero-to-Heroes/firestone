@@ -37,3 +37,17 @@
 	--icon-color: var(--tooltip-background-color);
 	fill: var(--tooltip-background-color);
 }
+
+.help-tooltip.bgs-heroes-tier-list-tooltip {
+	.text {
+		max-width: 350px;
+
+		::ng-deep .content {
+			text-align: left;
+
+			li {
+				margin-left: 30px;
+			}
+		}
+	}
+}

@@ -45,13 +45,16 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 			.pipe(
 				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
 				map(([mmrPercentiles]) =>
-					mmrPercentiles.map(
-						(percentile) =>
-							({
-								value: '' + percentile.percentile,
-								label: this.buildPercentileLabel(percentile),
-							} as RankFilterOption),
-					),
+					mmrPercentiles
+						// Not enough data for the top 1% yet
+						.filter((percentile) => percentile.percentile > 1)
+						.map(
+							(percentile) =>
+								({
+									value: '' + percentile.percentile,
+									label: getBgsRankFilterLabelFor(percentile),
+								} as RankFilterOption),
+						),
 				),
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
@@ -86,27 +89,27 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 	onSelected(option: RankFilterOption) {
 		this.stateUpdater.next(new BgsRankFilterSelectedEvent(+option.value as BgsRankFilterType));
 	}
-
-	private buildPercentileLabel(percentile: MmrPercentile): string {
-		switch (percentile.percentile) {
-			case 100:
-				return 'All ranks';
-			case 50:
-				return `Top 50% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
-			case 25:
-				return `Top 25% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
-			case 10:
-				return `Top 10% (${this.getNiceMmrValue(percentile.mmr, 2)}+)`;
-			case 1:
-				return `Top 1% (${this.getNiceMmrValue(percentile.mmr, 1)}+)`;
-		}
-	}
-
-	private getNiceMmrValue(mmr: number, significantDigit: number) {
-		return Math.pow(10, significantDigit) * Math.round(mmr / Math.pow(10, significantDigit));
-	}
 }
 
 interface RankFilterOption extends IOption {
 	value: string;
 }
+
+export const getBgsRankFilterLabelFor = (percentile: MmrPercentile): string => {
+	switch (percentile.percentile) {
+		case 100:
+			return 'All ranks';
+		case 50:
+			return `Top 50% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
+		case 25:
+			return `Top 25% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
+		case 10:
+			return `Top 10% (${getNiceMmrValue(percentile.mmr, 2)}+)`;
+		case 1:
+			return `Top 1% (${getNiceMmrValue(percentile.mmr, 1)}+)`;
+	}
+};
+
+const getNiceMmrValue = (mmr: number, significantDigit: number) => {
+	return Math.pow(10, significantDigit) * Math.round(mmr / Math.pow(10, significantDigit));
+};

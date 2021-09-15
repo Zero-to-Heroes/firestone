@@ -5,7 +5,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 	selector: 'help-tooltip',
 	styleUrls: [`../../../css/component/tooltip/help-tooltip.component.scss`],
 	template: `
-		<div class="help-tooltip">
+		<div class="help-tooltip {{ _classes }}">
 			<div class="text" [innerHTML]="_text"></div>
 			<svg
 				class="tooltip-arrow"
@@ -29,6 +29,7 @@ export class HelpTooltipComponent {
 			this.cdr.detectChanges();
 		}
 	}
+
 	@Input() set showArrow(value: boolean) {
 		this._showArrow = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -36,8 +37,16 @@ export class HelpTooltipComponent {
 		}
 	}
 
+	@Input() set classes(value: string) {
+		this._classes = value ?? '';
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	_text: SafeHtml;
 	_showArrow = false;
+	_classes: string;
 
 	arrowTop: number;
 	arrowLeft: number;
