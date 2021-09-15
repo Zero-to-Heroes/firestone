@@ -40,12 +40,29 @@ export const updates: readonly Update[] = [
 			// 		This release adds lots of Quality of Life improvements, which are one of my favorite things to do. I hope you'll enjoy it :)
 			// 	`,
 			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 	],
-			// },
+			{
+				type: 'main',
+				header: 'Main updates',
+				updates: [
+					{
+						category: 'battlegrounds',
+						details: [
+							{
+								type: 'feature',
+								text: `Hero stats have been revamped to include their placement distribution, and the tribes composition has been removed.`,
+							},
+							{
+								type: 'feature',
+								text: `Show hero stats when mousing over its portrait on the hero selection screen.`,
+							},
+							{
+								type: 'feature',
+								text: `Changing the rank or time filters on the main app now updates all the displayed stats, including the heroes tier list and the stats on the hero selection screen. It updates both the global stats shown, and you own (so choosing a top 50% MMR filter only takes into account your own games that have done at this MMR).`,
+							},
+						],
+					},
+				],
+			},
 			{
 				type: 'minor',
 				header: 'Minor updates',
@@ -53,6 +70,14 @@ export const updates: readonly Update[] = [
 					{
 						category: 'battlegrounds',
 						details: [
+							{
+								type: 'feature',
+								text: `The rank filter has been updated to show percentiles in addition to absolute MMR.`,
+							},
+							{
+								type: 'feature',
+								text: `Add a tooltip on the hero tier list that recaps all the filters that are currently active.`,
+							},
 							{
 								type: 'feature',
 								text: `Add a start of combat and final player damage states to the simulation viewer.`,
@@ -88,6 +113,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Changed the default image for Pirates and Beasts in the banned tribes widget.`,
+							},
+							{
+								type: 'ui',
+								text: `How properly show the active hero skin on the Live Stats tab.`,
 							},
 							{
 								type: 'misc',

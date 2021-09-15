@@ -21,7 +21,7 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 })
 export class BgsHeroSelectionTooltipComponent {
 	_hero: BgsHeroStat;
-	_visible: boolean = true;
+	_visible = true;
 	heroPowerImage: string;
 	totalMatches: number;
 
