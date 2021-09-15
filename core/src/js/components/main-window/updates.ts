@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.16.0',
+		version: '7.16.3',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -116,7 +116,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'ui',
-								text: `How properly show the active hero skin on the Live Stats tab.`,
+								text: `Now properly show the active hero skin on the Live Stats tab.`,
 							},
 							{
 								type: 'misc',
