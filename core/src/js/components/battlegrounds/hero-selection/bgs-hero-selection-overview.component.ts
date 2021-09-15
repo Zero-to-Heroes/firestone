@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
@@ -57,6 +57,7 @@ export class BgsHeroSelectionOverviewComponent {
 			),
 			this.store.bgHeroStats$(),
 		).pipe(
+			// tap((info) => console.debug('info in hero selection', info)),
 			map(
 				([[panels, showAchievements], stats]) =>
 					[
@@ -68,6 +69,7 @@ export class BgsHeroSelectionOverviewComponent {
 					] as [BgsHeroSelectionOverviewPanel, readonly BgsHeroStat[], boolean],
 			),
 			filter(([panel, stats, showAchievements]) => !!panel && !!stats?.length),
+			// tap((info) => console.debug('info 2 in hero selection', info)),
 			map(([panel, stats, showAchievements]) => {
 				const selectionOptions =
 					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
@@ -99,6 +101,9 @@ export class BgsHeroSelectionOverviewComponent {
 					return heroOverviews;
 				}
 			}),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((info) => console.debug('[cd] emitting stats in ', this.constructor.name, info)),
 		);
 
 		this.init();
