@@ -9,12 +9,11 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component.scss`,
 	],
 	template: `
-		<div class="hero-selection-tooltip">
+		<div class="hero-selection-tooltip" [ngClass]="{ 'hidden': !_visible }">
 			<img class="hero-power" [src]="heroPowerImage" />
 			<div class="infos">
 				<div class="name">{{ _hero.name }} ({{ totalMatches.toLocaleString('en-US') }} matches)</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
-				<!-- <bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes> -->
 			</div>
 		</div>
 	`,
@@ -22,18 +21,24 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 })
 export class BgsHeroSelectionTooltipComponent {
 	_hero: BgsHeroStat;
+	_visible: boolean = true;
 	heroPowerImage: string;
 	totalMatches: number;
-	// tribes: readonly { tribe: string; percent: string }[];
 
 	@Input() set config(value: BgsHeroStat) {
 		this._hero = value;
 		this.totalMatches = value.totalMatches;
 		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/${value.heroPowerCardId}.png?v=3`;
-		// this.tribes = [...value.tribesStat]
-		// 	.sort((a, b) => b.percent - a.percent)
-		// 	.map((stat) => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
-		// 	.slice(0, 5);
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set visible(value: boolean) {
+		if (value === this._visible) {
+			return;
+		}
+		this._visible = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

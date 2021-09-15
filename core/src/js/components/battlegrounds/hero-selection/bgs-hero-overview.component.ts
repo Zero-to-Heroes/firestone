@@ -1,9 +1,11 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
 import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
 import { defaultStartingHp } from '../../../services/hs-utils';
+import { BgsHeroSelectionTooltipComponent } from './bgs-hero-selection-tooltip.component';
 
 @Component({
 	selector: 'bgs-hero-overview',
@@ -16,6 +18,14 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 		<div class="hero-overview" *ngIf="_hero">
 			<div class="name">{{ _hero.name }}</div>
 			<div class="tier {{ tier?.toLowerCase() }}">{{ tier }}</div>
+			<!-- Used only for the in-game overlay -->
+			<div
+				class="portrait-tooltip"
+				cachedComponentTooltip
+				[componentType]="componentType"
+				[componentInput]="_hero"
+				componentTooltipPosition="top"
+			></div>
 			<div class="portrait-container">
 				<bgs-hero-portrait
 					class="portrait"
@@ -52,6 +62,8 @@ import { defaultStartingHp } from '../../../services/hs-utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroOverviewComponent {
+	componentType: ComponentType<any> = BgsHeroSelectionTooltipComponent;
+
 	@Input() hideEmptyState: boolean;
 
 	_hero: BgsHeroStat;

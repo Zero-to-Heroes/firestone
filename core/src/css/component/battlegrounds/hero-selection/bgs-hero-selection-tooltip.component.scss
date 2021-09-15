@@ -1,3 +1,7 @@
+:host() {
+	pointer-events: none;
+}
+
 .hero-selection-tooltip {
 	display: flex;
 	background: var(--color-4);
@@ -12,7 +16,11 @@
 	color: var(--default-text-color);
 	font-size: 13px;
 	line-height: 22px;
-	// border: 1px solid #c4c4c4;
+	pointer-events: none;
+
+	&.hidden {
+		display: none;
+	}
 
 	.hero-power {
 		width: 210px;

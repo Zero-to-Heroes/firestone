@@ -76,6 +76,12 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Shows the missing achievements for each hero at the hero selection stage."
 					></preference-toggle>
 					<preference-toggle
+						field="bgsShowHeroSelectionTooltip"
+						[ngClass]="{ 'disabled': !bgsFullToggle }"
+						label="Show hero tooltip"
+						tooltip="Shows hero stats when mousing over the hero portrait on the game's hero selection screen."
+					></preference-toggle>
+					<preference-toggle
 						field="bgsUseLocalPostMatchStats"
 						[ngClass]="{ 'disabled': !bgsEnableApp || !bgsFullToggle }"
 						label="Compute post-match stats locally"

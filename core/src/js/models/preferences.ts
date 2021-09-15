@@ -232,6 +232,7 @@ export class Preferences {
 	readonly bgsUseLocalPostMatchStats = true;
 	readonly bgsEnableSimulation = true;
 	readonly bgsShowHeroSelectionAchievements = true;
+	readonly bgsShowHeroSelectionTooltip = true;
 	readonly bgsHideSimResultsOnRecruit = true;
 	readonly bgsShowSimResultsOnlyOnRecruit = false;
 	readonly bgsEnableSimulationSampleInOverlay = false;

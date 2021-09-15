@@ -16,7 +16,7 @@ import { VisualAchievement } from '../../../models/visual-achievement';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'bgs-hero-selection-overlay',
@@ -26,7 +26,10 @@ import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.servi
 		'../../../../css/component/battlegrounds/overlay/bgs-hero-selection-overlay.component.scss',
 	],
 	template: `
-		<div class="app-container overlay-container-parent battlegrounds-theme bgs-hero-selection-overlay">
+		<div
+			class="app-container overlay-container-parent battlegrounds-theme bgs-hero-selection-overlay"
+			[ngClass]="{ 'with-hero-tooltips': heroTooltipActive$ | async }"
+		>
 			<bgs-hero-overview
 				*ngFor="let hero of (heroOverviews$ | async) || []; trackBy: trackByHeroFn"
 				[hero]="hero"
@@ -39,6 +42,7 @@ import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.servi
 })
 export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestroy {
 	heroOverviews$: Observable<InternalBgsHeroStat[]>;
+	heroTooltipActive$: Observable<boolean>;
 	windowId: string;
 
 	private gameInfoUpdatedListener: (message: any) => void;
@@ -50,6 +54,14 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 		private readonly store: AppUiStoreService,
 		private readonly init_DebugService: DebugService,
 	) {
+		this.heroTooltipActive$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.bgsShowHeroSelectionTooltip)
+			.pipe(
+				map(([pref]) => pref),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((info) => cdLog('emitting heroTooltipActive in ', this.constructor.name, info)),
+			);
 		this.heroOverviews$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listenBattlegrounds$(
@@ -103,6 +115,8 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.ow.setWindowPassthrough(this.windowId);
+
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				await this.changeWindowSize();
@@ -130,12 +144,12 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 		}
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
-		const height = gameHeight * 0.5;
+		const height = gameHeight * 0.85;
 		const width = gameHeight * 1.1;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		const dpi = gameInfo.logicalWidth / gameWidth;
 		const newLeft = dpi * 0.5 * (gameWidth - width);
-		const newTop = dpi * 0.3 * gameHeight;
+		const newTop = 0;
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 }
