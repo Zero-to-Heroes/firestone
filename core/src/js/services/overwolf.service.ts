@@ -934,6 +934,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async getSystemInformation(): Promise<any> {
+		return new Promise<any>((resolve) => {
+			overwolf.utils.getSystemInformation((res) => {
+				resolve(res.systemInfo);
+			});
+		});
+	}
+
 	public listenOnFile(id: string, path: string, options: any, callback: (lineInfo: ListenObject) => any) {
 		overwolf.io.listenOnFile(id, path, options, callback);
 	}

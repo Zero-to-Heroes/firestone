@@ -11,6 +11,7 @@ import Worker from 'worker-loader!../../workers/bgs-simulation.worker';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
+import { sumOnArray } from '../utils';
 import { normalizeHeroCardId } from './bgs-utils';
 import { BattlegroundsBattleSimulationEvent } from './store/events/battlegrounds-battle-simulation-event';
 import { BattlegroundsStoreEvent } from './store/events/_battlegrounds-store-event';
@@ -22,6 +23,8 @@ const BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT = 'https://bmphmnu4gk.execute-api.us
 export class BgsBattleSimulationService {
 	private stateUpdater: EventEmitter<BattlegroundsStoreEvent>;
 	private cardsData: CardsData;
+
+	private cpuCount: number;
 
 	constructor(
 		private readonly http: HttpClient,
@@ -40,6 +43,12 @@ export class BgsBattleSimulationService {
 	private async init() {
 		this.cardsData = new CardsData(this.cards.getService(), false);
 		this.cardsData.inititialize();
+		if (this.ow?.isOwEnabled()) {
+			const systemInfo = await this.ow.getSystemInformation();
+			console.log('systemInfo', systemInfo);
+			this.cpuCount = systemInfo?.PhysicalCPUCount ?? 1;
+			console.log('CPU count', this.cpuCount);
+		}
 	}
 
 	public async startBgsBattleSimulation(battleInfo: BgsBattleInfo, races: readonly Race[]) {
@@ -111,6 +120,53 @@ export class BgsBattleSimulationService {
 	}
 
 	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult> {
+		const numberOfWorkers = Math.max(1, (this.cpuCount ?? 1) - 1);
+		console.debug('[bgs-simulation] will run parallel simulations', numberOfWorkers);
+		const results = await Promise.all(
+			[...Array(numberOfWorkers).keys()].map((i) =>
+				this.simulateLocalBattleInstance(
+					battleInfo,
+					prefs,
+					Math.floor(prefs.bgsSimulatorNumberOfSims / numberOfWorkers),
+				),
+			),
+		);
+		console.debug('[bgs-simulation] sim results', results);
+		return this.mergeSimulationResults(results);
+	}
+
+	private mergeSimulationResults(results: SimulationResult[]): SimulationResult {
+		const wonLethal = sumOnArray(results, (result) => result.wonLethal);
+		const won = sumOnArray(results, (result) => result.won);
+		const tied = sumOnArray(results, (result) => result.tied);
+		const lost = sumOnArray(results, (result) => result.lost);
+		const lostLethal = sumOnArray(results, (result) => result.lostLethal);
+		const totalBattles = won + tied + lost;
+		const damageWon = sumOnArray(results, (result) => result.damageWon);
+		const damageLost = sumOnArray(results, (result) => result.damageLost);
+		return {
+			wonLethal: wonLethal,
+			won: won,
+			tied: tied,
+			lost: lost,
+			lostLethal: lostLethal,
+			damageWon: damageWon,
+			damageLost: damageLost,
+			averageDamageWon: damageWon / won,
+			averageDamageLost: damageLost / lost,
+			wonLethalPercent: (100 * wonLethal) / totalBattles,
+			wonPercent: (100 * won) / totalBattles,
+			tiedPercent: (100 * tied) / totalBattles,
+			lostPercent: (100 * lost) / totalBattles,
+			lostLethalPercent: (100 * lostLethal) / totalBattles,
+		};
+	}
+
+	public async simulateLocalBattleInstance(
+		battleInfo: BgsBattleInfo,
+		prefs: Preferences,
+		numberOfSims: number,
+	): Promise<SimulationResult> {
 		return new Promise<SimulationResult>((resolve) => {
 			const worker = new Worker();
 			worker.onmessage = (ev: MessageEvent) => {
@@ -122,7 +178,7 @@ export class BgsBattleSimulationService {
 					...battleInfo,
 					options: {
 						...battleInfo.options,
-						numberOfSimulations: Math.floor(prefs.bgsSimulatorNumberOfSims),
+						numberOfSimulations: numberOfSims,
 					},
 				} as BgsBattleInfo,
 				cards: this.cards.getService(),
