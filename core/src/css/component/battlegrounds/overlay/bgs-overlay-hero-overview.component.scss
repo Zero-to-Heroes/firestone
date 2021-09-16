@@ -54,15 +54,15 @@
 
 			.portrait {
 				position: relative;
-				top: 0;
-				width: 80px;
+				top: 10px;
+				width: 70px;
 				margin-right: 20px;
 
 				.health {
 					width: 40px;
 					height: 23px;
-					bottom: 19px;
-					right: 10px;
+					bottom: 0px;
+					right: -10px;
 
 					.value {
 						font-size: 22px;

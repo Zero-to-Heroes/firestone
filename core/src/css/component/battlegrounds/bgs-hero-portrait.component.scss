@@ -4,6 +4,7 @@
 
 .hero-portrait {
 	position: relative;
+	width: 100%;
 }
 
 .portrait {
@@ -12,8 +13,7 @@
 
 .hero-portrait-frame {
 	position: relative;
-	width: 100px;
-	height: 115px;
+	width: 100%;
 
 	.icon {
 		position: absolute;
@@ -32,7 +32,6 @@
 	}
 
 	.aspect-ratio {
-		display: none;
 		padding-bottom: 115%;
 	}
 }

@@ -14,7 +14,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 				<div class="aspect-ratio"></div>
 			</div>
 			<div class="health" [ngClass]="{ 'damaged': _health < _maxHealth, 'new': !!heroIcon }" *ngIf="_health">
-				<img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" />
+				<!-- <img src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/health.png" class="icon" /> -->
 				<div class="value">{{ _health }}</div>
 			</div>
 			<div class="rating" *ngIf="rating != null">
