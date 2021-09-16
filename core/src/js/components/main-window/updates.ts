@@ -57,6 +57,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `It's now possible to filter by available tribes on the Hero stats screen. Just be sure to look at the number of matches for certain combinations, as data is less reliable with fewer match samples.`,
+							},
+							{
+								type: 'feature',
 								text: `Changing the rank or time filters on the main app now updates all the displayed stats, including the heroes tier list and the stats on the hero selection screen. It updates both the global stats shown, and you own (so choosing a top 50% MMR filter only takes into account your own games that have done at this MMR).`,
 							},
 						],
@@ -134,6 +138,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `The "turns to win/lose" were incorrectly computed on ranked decks. These stats have been reset, and new matches will now properly compute them. Sorry for the inconvenience.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the "Upgrade this and shuffle it into your deck" treasure in Duels would not properly show the upgraded card in the decklist.`,
 							},
 						],
 					},
