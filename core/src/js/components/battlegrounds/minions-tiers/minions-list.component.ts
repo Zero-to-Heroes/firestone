@@ -29,9 +29,9 @@ import { BgsMinionsGroup } from './bgs-minions-group';
 				*ngFor="let group of groups"
 				[group]="group"
 				[tooltipPosition]="_tooltipPosition"
-				[showTribesHighlight]="showTribesHighlight"
+				[showTribesHighlight]="_showTribesHighlight"
 			></bgs-minions-group>
-			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="showTribesHighlight">
+			<div class="reset-all-button" (click)="resetHighlights()" *ngIf="_showTribesHighlight">
 				<div class="background-second-part"></div>
 				<div class="background-main-part"></div>
 				<div class="content">
@@ -66,11 +66,17 @@ export class BattlegroundsMinionsListComponent implements AfterViewInit {
 		this.updateInfos();
 	}
 
-	@Input() showTribesHighlight: boolean;
+	@Input() set showTribesHighlight(value: boolean) {
+		this._showTribesHighlight = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	_cards: readonly ReferenceCard[];
 	_highlightedMinions: readonly string[];
 	_highlightedTribes: readonly Race[];
+	_showTribesHighlight: boolean;
 	groups: readonly BgsMinionsGroup[];
 	_tooltipPosition: string;
 

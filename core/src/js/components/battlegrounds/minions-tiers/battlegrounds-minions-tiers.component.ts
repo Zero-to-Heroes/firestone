@@ -11,7 +11,7 @@ import {
 import { Race, ReferenceCard } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
@@ -65,7 +65,7 @@ import { groupByFunction } from '../../../services/utils';
 								tier.tavernTier === lockedTier?.tavernTier
 						}"
 						[cards]="tier.cards"
-						[showTribesHighlight]="showTribesHighlight"
+						[showTribesHighlight]="showTribesHighlight$ | async"
 						[highlightedMinions]="highlightedMinions$ | async"
 						[highlightedTribes]="highlightedTribes$ | async"
 						[tooltipPosition]="tooltipPosition"
@@ -116,19 +116,39 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			);
 		this.highlightedTribes$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedTribes)
-			.pipe(map(([tribes]) => tribes));
+			.pipe(
+				map(([tribes]) => tribes),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			);
 		this.highlightedMinions$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.highlightedMinions)
-			.pipe(map(([tribes]) => tribes));
+			.pipe(
+				map(([tribes]) => tribes),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			);
 		this.currentTurn$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame?.currentTurn)
-			.pipe(map(([currentTurn]) => currentTurn));
+			.pipe(
+				map(([currentTurn]) => currentTurn),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			);
 		this.showTribesHighlight$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsShowTribesHighlight)
-			.pipe(map(([info]) => info));
+			.pipe(
+				map(([info]) => info),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			);
 		this.showMinionsList$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListOverlay)
-			.pipe(map(([info]) => info));
+			.pipe(
+				map(([info]) => info),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			);
 		this.prefSubscription = this.store
 			.listenBattlegrounds$(([main, prefs]) => prefs.bgsEnableMinionListMouseOver)
 			.subscribe(([info]) => (this.enableMouseOver = info));
