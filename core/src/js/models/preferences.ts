@@ -1,3 +1,4 @@
+import { Race } from '@firestone-hs/reference-data';
 import 'reflect-metadata';
 import { OutOfCardsToken } from '../services/mainwindow/out-of-cards.service';
 import { ArenaClassFilterType } from './arena/arena-class-filter.type';
@@ -261,6 +262,7 @@ export class Preferences {
 
 	readonly bgsActiveTimeFilter: BgsActiveTimeFilterType = 'last-patch';
 	readonly bgsActiveRankFilter: BgsRankFilterType = 100;
+	readonly bgsActiveTribesFilter: readonly Race[] = [];
 	readonly bgsActiveHeroSortFilter: BgsHeroSortFilterType = 'average-position';
 	readonly bgsActiveHeroFilter: string = 'all';
 	readonly bgsActiveMmrGroupFilter: MmrGroupFilterType = 'per-match';

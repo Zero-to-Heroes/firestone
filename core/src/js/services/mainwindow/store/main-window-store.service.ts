@@ -47,6 +47,7 @@ import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoEvent } from './events/b
 import { BgsPostMatchStatsComputedEvent } from './events/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsRankFilterSelectedEvent } from './events/battlegrounds/bgs-rank-filter-selected-event';
 import { BgsTimeFilterSelectedEvent } from './events/battlegrounds/bgs-time-filter-selected-event';
+import { BgsTribesFilterSelectedEvent } from './events/battlegrounds/bgs-tribes-filter-selected-event';
 import { SelectBattlegroundsCategoryEvent } from './events/battlegrounds/select-battlegrounds-category-event';
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from './events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { BgsCustomSimulationResetEvent } from './events/battlegrounds/simulator/bgs-custom-simulation-reset-event';
@@ -150,6 +151,7 @@ import { BgsPersonalStatsSelectHeroDetailsWithRemoteInfoProcessor } from './proc
 import { BgsPostMatchStatsComputedProcessor } from './processors/battlegrounds/bgs-post-match-stats-computed-event';
 import { BgsRankFilterSelectedProcessor } from './processors/battlegrounds/bgs-rank-filter-selected-processor';
 import { BgsTimeFilterSelectedProcessor } from './processors/battlegrounds/bgs-time-filter-selected-processor';
+import { BgsTribesFilterSelectedProcessor } from './processors/battlegrounds/bgs-tribes-filter-selected-processor';
 import { SelectBattlegroundsCategoryProcessor } from './processors/battlegrounds/select-battlegrounds-category-processor';
 import { SelectBattlegroundsPersonalStatsHeroProcessor } from './processors/battlegrounds/select-battlegrounds-personal-stats-hero-processor';
 import { BgsCustomSimulationResetProcessor } from './processors/battlegrounds/simulator/bgs-custom-simulation-reset-processor';
@@ -639,6 +641,9 @@ export class MainWindowStoreService {
 
 			BgsRankFilterSelectedEvent.eventName(),
 			new BgsRankFilterSelectedProcessor(this.prefs),
+
+			BgsTribesFilterSelectedEvent.eventName(),
+			new BgsTribesFilterSelectedProcessor(this.prefs),
 
 			BgsHeroSortFilterSelectedEvent.eventName(),
 			new BgsHeroSortFilterSelectedProcessor(this.prefs),

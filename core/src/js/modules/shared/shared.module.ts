@@ -62,6 +62,7 @@ import { DeckTrackerDeckListComponent } from '../../components/decktracker/overl
 import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
 import { LeaderboardEmptyCardComponent } from '../../components/decktracker/overlay/twitch/leaderboard-empty-card.component';
 import { TwitchBgsHeroOverviewComponent } from '../../components/decktracker/overlay/twitch/twitch-bgs-hero-overview.component';
+import { FilterDropdownMultiselectComponent } from '../../components/filter-dropdown-multiselect.component';
 import { FilterDropdownComponent } from '../../components/filter-dropdown.component';
 import { FilterComponent } from '../../components/filter.component';
 import { FsFilterDropdownComponent } from '../../components/fs-filter-dropdown.component';
@@ -230,6 +231,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		PieChartComponent,
 
 		FilterDropdownComponent,
+		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
 
 		StatCellComponent,
@@ -346,6 +348,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		PieChartComponent,
 
 		FilterDropdownComponent,
+		FilterDropdownMultiselectComponent,
 		FsFilterDropdownComponent,
 
 		StatCellComponent,

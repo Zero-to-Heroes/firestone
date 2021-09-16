@@ -1,37 +1,38 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { MmrPercentile } from '@firestone-hs/bgs-global-stats';
+import { Race } from '@firestone-hs/reference-data';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { BgsRankFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-rank-filter.type';
-import { BgsRankFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-rank-filter-selected-event';
+import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
+import { BgsTribesFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-tribes-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
-	selector: 'battlegrounds-rank-filter-dropdown',
+	selector: 'battlegrounds-tribes-filter-dropdown',
 	styleUrls: [
 		`../../../../../css/global/filters.scss`,
 		`../../../../../css/component/app-section.component.scss`,
 		`../../../../../css/component/filter-dropdown.component.scss`,
 	],
 	template: `
-		<filter-dropdown
+		<filter-dropdown-multiselect
 			*ngIf="filter$ | async as value"
-			class="battlegrounds-rank-filter-dropdown"
+			class="battlegrounds-tribes-filter-dropdown"
 			[options]="options$ | async"
-			[filter]="value.filter"
+			[selected]="value.selected"
 			[placeholder]="value.placeholder"
 			[visible]="value.visible"
 			(onOptionSelected)="onSelected($event)"
-		></filter-dropdown>
+		></filter-dropdown-multiselect>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
-	options$: Observable<readonly RankFilterOption[]>;
-	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
+export class BattlegroundsTribesFilterDropdownComponent implements AfterViewInit {
+	options$: Observable<readonly IOption[]>;
+	filter$: Observable<{ selected: readonly string[]; placeholder: string; visible: boolean }>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -41,44 +42,51 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.options$ = this.store
-			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.mmrPercentiles)
+			.listen$(([main, nav, prefs]) => main.battlegrounds.globalStats?.allTribes)
 			.pipe(
-				filter(([mmrPercentiles]) => !!mmrPercentiles?.length),
-				map(([mmrPercentiles]) =>
-					mmrPercentiles
-						// Not enough data for the top 1% yet
-						.filter((percentile) => percentile.percentile > 1)
+				tap((info) => console.debug('global stats', info)),
+				filter(([allTribes]) => !!allTribes?.length),
+				map(([allTribes]) =>
+					allTribes
 						.map(
-							(percentile) =>
+							(tribe) =>
 								({
-									value: '' + percentile.percentile,
-									label: getBgsRankFilterLabelFor(percentile),
-								} as RankFilterOption),
-						),
+									value: '' + tribe,
+									label: getTribeName(tribe),
+								} as IOption),
+						)
+						.sort((a, b) => (a.label < b.label ? -1 : 1)),
 				),
 				// FIXME: Don't know why this is necessary, but without it, the filter doesn't update
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting rank filter in ', this.constructor.name, filter)),
+				tap((filter) => cdLog('emitting tribe options in ', this.constructor.name, filter)),
 			);
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(
-				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
+				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
+				([main, nav, prefs]) => main.battlegrounds.globalStats.allTribes,
 				([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId,
 				([main, nav]) => nav.navigationBattlegrounds.currentView,
 			),
 		).pipe(
-			filter(([options, [filter, categoryId, currentView]]) => !!filter && !!categoryId && !!currentView),
-			map(([options, [filter, categoryId, currentView]]) => ({
-				filter: '' + filter,
-				placeholder: options.find((option) => +option.value === filter)?.label ?? options[0].label,
+			tap((info) => console.debug('update', info)),
+			filter(
+				([options, [tribesFilter, allTribes, categoryId, currentView]]) =>
+					!!tribesFilter && allTribes?.length && !!categoryId && !!currentView,
+			),
+			map(([options, [tribesFilter, allTribes, categoryId, currentView]]) => ({
+				selected: tribesFilter?.length
+					? tribesFilter.map((tribe) => '' + tribe)
+					: allTribes.map((tribe) => '' + tribe),
+				placeholder: 'All tribes',
 				visible:
 					!['categories', 'category'].includes(currentView) &&
 					!['bgs-category-personal-stats', 'bgs-category-simulator'].includes(categoryId),
 			})),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-			// tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
+			tap((filter) => cdLog('emitting filter in ', this.constructor.name, filter)),
 		);
 	}
 
@@ -86,13 +94,9 @@ export class BattlegroundsRankFilterDropdownComponent implements AfterViewInit {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	onSelected(option: RankFilterOption) {
-		this.stateUpdater.next(new BgsRankFilterSelectedEvent(+option.value as BgsRankFilterType));
+	onSelected(values: readonly string[]) {
+		this.stateUpdater.next(new BgsTribesFilterSelectedEvent(values.map((value) => +value as Race)));
 	}
-}
-
-interface RankFilterOption extends IOption {
-	value: string;
 }
 
 export const getBgsRankFilterLabelFor = (percentile: MmrPercentile): string => {

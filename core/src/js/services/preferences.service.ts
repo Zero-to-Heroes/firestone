@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { Race } from '@firestone-hs/reference-data';
 import { BehaviorSubject } from 'rxjs';
 import { ArenaClassFilterType } from '../models/arena/arena-class-filter.type';
 import { ArenaTimeFilterType } from '../models/arena/arena-time-filter.type';
@@ -279,6 +280,12 @@ export class PreferencesService {
 	public async updateBgsRankFilter(value: BgsRankFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveRankFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateBgsTribesFilter(value: readonly Race[]) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, bgsActiveTribesFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

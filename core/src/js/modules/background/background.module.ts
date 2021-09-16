@@ -83,6 +83,7 @@ import { BattlegroundsHeroSortDropdownComponent } from '../../components/battleg
 import { BattlegroundsRankFilterDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-rank-filter-dropdown.component';
 import { BattlegroundsRankGroupDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-rank-group-dropdown.component';
 import { BattlegroundsTimeFilterDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-time-filter-dropdown.component';
+import { BattlegroundsTribesFilterDropdownComponent } from '../../components/battlegrounds/desktop/filters/battlegrounds-tribes-filter-dropdown.component';
 import { BattlegroundsFiltersComponent } from '../../components/battlegrounds/desktop/filters/_battlegrounds-filters.component';
 import { BattlegroundsHeroRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-hero-records-broken.component';
 import { BattlegroundsHeroesRecordsBrokenComponent } from '../../components/battlegrounds/desktop/secondary/battlegrounds-heroes-records-broken.component';
@@ -578,6 +579,7 @@ const components = [
 		BattlegroundsHeroSortDropdownComponent,
 		BattlegroundsHeroFilterDropdownComponent,
 		BattlegroundsRankFilterDropdownComponent,
+		BattlegroundsTribesFilterDropdownComponent,
 		BattlegroundsRankGroupDropdownComponent,
 		BattlegroundsTimeFilterDropdownComponent,
 

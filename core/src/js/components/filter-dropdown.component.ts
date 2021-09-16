@@ -18,7 +18,6 @@ import { IOption } from 'ng-select';
 		<ng-select
 			*ngIf="_visible"
 			class="filter hero-sort-filter"
-			[ngClass]="{ 'disabled': !_visible }"
 			[options]="options"
 			[ngModel]="_filter"
 			[placeholder]="placeholder"
