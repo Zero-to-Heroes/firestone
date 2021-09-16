@@ -54,6 +54,7 @@ export class AppUiStoreService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }> {
 		return combineLatest(this.mainStore.asObservable(), this.prefs.asObservable()).pipe(
+			filter(([[main, nav], prefs]) => !!main && !!nav && !!prefs),
 			// tap(([[main, nav], prefs]) => console.debug('emitting', [main, nav, prefs?.preferences], this)),
 			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
@@ -75,7 +76,7 @@ export class AppUiStoreService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }> {
 		return combineLatest(this.battlegroundsStore.asObservable(), this.prefs.asObservable()).pipe(
-			filter(([state, prefs]) => !!state),
+			filter(([state, prefs]) => !!state && !!prefs),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			// tap((hop) => console.debug('emitting bg state after selectors', hop, this)),

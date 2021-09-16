@@ -13,8 +13,8 @@ import { SimpleBarChartData, SimpleBarChartDataElement } from './simple-bar-char
 			<div class="bar-container" *ngFor="let container of barContainers">
 				<div class="bars">
 					<div
-						class="bar {{ bar.class }}"
 						*ngFor="let bar of container.bars"
+						class="bar {{ bar.class }}"
 						[style.height.%]="bar.height"
 						[helpTooltip]="bar.tooltip"
 					></div>
