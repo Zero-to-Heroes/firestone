@@ -82,7 +82,7 @@ export class StoreBootstrapService {
 				collectionState,
 				prefsFromRemote,
 			],
-			[bgsBestUserStats, bgsPerfectGames, bgsGlobalStats],
+			[bgsBestUserStats, bgsPerfectGames],
 			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats, duelsLeaderboard],
 			[arenaRewards],
@@ -96,11 +96,7 @@ export class StoreBootstrapService {
 				this.collectionBootstrap.initCollectionState(),
 				this.prefs.loadRemotePrefs(),
 			]),
-			Promise.all([
-				this.bestBgsStats.getBgsBestUserStats(),
-				this.bgsInit.loadPerfectGames(),
-				this.bgsGlobalStats.loadGlobalStats(),
-			]),
+			Promise.all([this.bestBgsStats.getBgsBestUserStats(), this.bgsInit.loadPerfectGames()]),
 			Promise.all([
 				this.gameStatsLoader.retrieveStats(),
 				this.gameStatsLoader.retrieveArchetypesConfig(),
@@ -112,8 +108,9 @@ export class StoreBootstrapService {
 		console.log('loaded info');
 
 		console.debug('remote prefs', prefsFromRemote);
-
 		const mergedPrefs = this.mergePrefs(prefs, prefsFromRemote);
+
+		const bgsGlobalStats = await this.bgsGlobalStats.loadGlobalStats(mergedPrefs.bgsActiveTribesFilter);
 
 		const patchConfig = await this.patchConfig.getConf();
 		const currentBattlegroundsMetaPatch = patchConfig?.patches
