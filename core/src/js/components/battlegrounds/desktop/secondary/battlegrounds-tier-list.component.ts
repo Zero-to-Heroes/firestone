@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { Race } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
+import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
@@ -15,10 +17,10 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 		`../../../../../css/component/battlegrounds/desktop/secondary/battlegrounds-tier-list.component.scss`,
 	],
 	template: `
-		<div class="battlegrounds-tier-list" *ngIf="{ stats: stats$ | async } as value">
+		<div class="battlegrounds-tier-list" *ngIf="stats$ | async as stats">
 			<div class="title">
-				Heroes Tier List ({{ value.stats.totalMatches.toLocaleString('en-US') }} matches)
-				<div class="info" [helpTooltip]="value.stats.tooltip" helpTooltipClasses="bgs-heroes-tier-list-tooltip">
+				Heroes Tier List ({{ stats.totalMatches.toLocaleString('en-US') }} matches)
+				<div class="info" [helpTooltip]="stats.tooltip" helpTooltipClasses="bgs-heroes-tier-list-tooltip">
 					<svg>
 						<use xlink:href="assets/svg/sprite.svg#info" />
 					</svg>
@@ -26,7 +28,7 @@ import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-d
 			</div>
 			<div class="heroes">
 				<bgs-hero-tier
-					*ngFor="let tier of value.stats.tiers || []; trackBy: trackByTierFn"
+					*ngFor="let tier of stats.tiers || []; trackBy: trackByTierFn"
 					[tier]="tier"
 				></bgs-hero-tier>
 			</div>
@@ -46,16 +48,20 @@ export class BattlegroundsTierListComponent {
 			this.store.bgHeroStats$(),
 			this.store.listen$(
 				([main, nav, prefs]) => main.battlegrounds.globalStats.mmrPercentiles,
+				([main, nav, prefs]) => main.battlegrounds.globalStats.allTribes,
 				([main, nav, prefs]) => prefs.bgsActiveTimeFilter,
 				([main, nav, prefs]) => prefs.bgsActiveRankFilter,
+				([main, nav, prefs]) => prefs.bgsActiveTribesFilter,
 			),
 		).pipe(
-			filter(([stats, [mmrPercentiles, timeFilter, rankFilter]]) => !!stats),
-			map(([stats, [mmrPercentiles, timeFilter, rankFilter]]) => ({
+			filter(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => !!stats),
+			map(([stats, [mmrPercentiles, allTribes, timeFilter, rankFilter, tribesFilter]]) => ({
 				stats: stats,
 				mmrPercentiles: mmrPercentiles,
+				allTribes: allTribes,
 				timeFilter: timeFilter,
 				rankFilter: rankFilter,
+				tribesFilter: tribesFilter,
 			})),
 			map((info) => {
 				const stats = info.stats;
@@ -105,6 +111,7 @@ export class BattlegroundsTierListComponent {
 								<li class="filter rank">${getBgsRankFilterLabelFor(
 									info.mmrPercentiles.find((percentile) => percentile.percentile === info.rankFilter),
 								)}</li>
+								<li class="filter tribesFilter">${this.buildTribesFilterText(info.tribesFilter, info.allTribes)}</li>
 							</ul>
 						</div>
 					`,
@@ -118,6 +125,16 @@ export class BattlegroundsTierListComponent {
 
 	trackByTierFn(index, item: HeroTier) {
 		return item.tier;
+	}
+
+	private buildTribesFilterText(tribesFilter: readonly Race[], allTribes: readonly Race[]): string {
+		if (!tribesFilter?.length || tribesFilter.length === allTribes.length) {
+			return 'All tribes';
+		}
+		return tribesFilter
+			.map((tribe) => getTribeName(tribe))
+			.sort()
+			.join(', ');
 	}
 }
 
