@@ -18,6 +18,10 @@ export class BgsBattleSimulationParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BattlegroundsBattleSimulationEvent,
 	): Promise<BattlegroundsState> {
+		if (!event.opponentHeroCardId || !normalizeHeroCardId(event.opponentHeroCardId)) {
+			console.error('[bgs-battle-simulation] missing opponentCardId', event);
+		}
+
 		const gameAfterFaceOff: BgsGame = currentState.currentGame.updateLastFaceOff(
 			normalizeHeroCardId(event.opponentHeroCardId),
 			{

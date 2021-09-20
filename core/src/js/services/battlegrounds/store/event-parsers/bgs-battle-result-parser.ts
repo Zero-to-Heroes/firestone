@@ -30,6 +30,11 @@ export class BgsBattleResultParser implements EventParser {
 			}
 			return currentState;
 		}
+
+		if (!event.opponentCardId || !normalizeHeroCardId(event.opponentCardId)) {
+			console.error('[bgs-battle-result] missing opponentCardId', event);
+		}
+
 		const gameAfterFirstFaceOff: BgsGame = currentState.currentGame.updateLastFaceOff(
 			// If we're facing the ghost, the plugin returns the original hero card id here
 			normalizeHeroCardId(event.opponentCardId),

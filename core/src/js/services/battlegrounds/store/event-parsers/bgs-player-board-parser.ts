@@ -86,6 +86,10 @@ export class BgsPlayerBoardParser implements EventParser {
 			options: null,
 		};
 		const isSupported = isSupportedScenario(battleInfo);
+		if (!event.opponentBoard?.heroCardId || !normalizeHeroCardId(event.opponentBoard?.heroCardId)) {
+			console.error('[bgs-player-board-parser] missing opponentCardId', event);
+		}
+
 		const stateAfterFaceOff = currentState.currentGame.updateLastFaceOff(
 			normalizeHeroCardId(event.opponentBoard.heroCardId),
 			{
