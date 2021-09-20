@@ -1052,7 +1052,6 @@ export class GameEvents {
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {
 							winner: gameEvent.Value.Winner,
-							report: gameEvent.Value.GameStateReport,
 						},
 					} as GameEvent),
 				);
@@ -1233,6 +1232,7 @@ export class GameEvents {
 			return;
 		}
 		console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
+		console.debug('[game-events] [existing] all events', this.existingLogLines);
 		if (this.existingLogLines.length > 0) {
 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
 		}
