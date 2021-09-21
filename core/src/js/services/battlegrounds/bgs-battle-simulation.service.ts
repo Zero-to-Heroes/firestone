@@ -4,7 +4,7 @@ import { Race } from '@firestone-hs/reference-data';
 import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-info';
 import { BgsBattleOptions } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle-options';
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
-import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
+import { OutcomeSamples, SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { GameSample } from '@firestone-hs/simulate-bgs-battle/dist/simulation/spectator/game-sample';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import Worker from 'worker-loader!../../workers/bgs-simulation.worker';
@@ -144,6 +144,20 @@ export class BgsBattleSimulationService {
 		const totalBattles = won + tied + lost;
 		const damageWon = sumOnArray(results, (result) => result.damageWon);
 		const damageLost = sumOnArray(results, (result) => result.damageLost);
+		const outcomeSamples: OutcomeSamples = {
+			won: results
+				.map((result) => result.outcomeSamples.won)
+				.reduce((a, b) => a.concat(b), [])
+				.slice(0, 1),
+			tied: results
+				.map((result) => result.outcomeSamples.tied)
+				.reduce((a, b) => a.concat(b), [])
+				.slice(0, 1),
+			lost: results
+				.map((result) => result.outcomeSamples.lost)
+				.reduce((a, b) => a.concat(b), [])
+				.slice(0, 1),
+		};
 		return {
 			wonLethal: wonLethal,
 			won: won,
@@ -159,6 +173,7 @@ export class BgsBattleSimulationService {
 			tiedPercent: (100 * tied) / totalBattles,
 			lostPercent: (100 * lost) / totalBattles,
 			lostLethalPercent: (100 * lostLethal) / totalBattles,
+			outcomeSamples: outcomeSamples,
 		};
 	}
 
