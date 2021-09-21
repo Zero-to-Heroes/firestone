@@ -22,14 +22,19 @@ export class DeckCardService {
 	}
 
 	private doFillCard(card: DeckCard): DeckCard {
+		if (card.cardName != null && card.manaCost != null && card.rarity != null) {
+			return card;
+		}
+
 		const dbCard = this.cards.getCard(card.cardId);
 		if (!dbCard) {
 			return card;
 		}
+
 		return card.update({
 			cardName: card.cardName ?? dbCard.name,
 			manaCost: card.manaCost ?? dbCard.cost,
-			rarity: card.rarity || dbCard.rarity ? (card.rarity || dbCard.rarity)?.toLowerCase() : undefined,
+			rarity: card.rarity ?? dbCard.rarity ? (card.rarity ?? dbCard.rarity).toLowerCase() : undefined,
 		} as DeckCard);
 	}
 }
