@@ -207,7 +207,7 @@ export class BgsBattleStatusComponent {
 				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
 		}
 
-		// console.log('setting next battle', this._previousBattle, this._previousStatus);
+		// console.log('setting battle', this.battle);
 		if (this.battle?.battleResult?.wonPercent != null && this.battle?.battleInfoStatus !== 'empty') {
 			this.battleSimulationResultWin = this.battle.battleResult.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = this.battle.battleResult.tiedPercent.toFixed(1) + '%';
@@ -215,8 +215,13 @@ export class BgsBattleStatusComponent {
 			this.winSimulationSample = this.battle.battleResult.outcomeSamples?.won;
 			this.tieSimulationSample = this.battle.battleResult.outcomeSamples?.tied;
 			this.loseSimulationSample = this.battle.battleResult.outcomeSamples?.lost;
-			this.damageWon = this.battle.battleResult.averageDamageWon?.toFixed(1);
-			this.damageLost = this.battle.battleResult.averageDamageLost?.toFixed(1);
+			this.damageWon =
+				this.battle.battleResult.averageDamageWon != null
+					? this.battle.battleResult.averageDamageWon.toFixed(1)
+					: '--';
+			this.damageLost = this.battle.battleResult.averageDamageLost
+				? this.battle.battleResult.averageDamageLost.toFixed(1)
+				: '--';
 			// If we have no chance of winning / losing the battle, showcasing the lethal chance
 			// makes no sense
 			this.battleSimulationWonLethalChance = this.battle.battleResult.wonLethalPercent;
@@ -243,7 +248,7 @@ export class BgsBattleStatusComponent {
 	) {}
 
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
-		console.log('viewing simulation result', category);
+		console.debug('viewing simulation result', category);
 		const simulationSample: GameSample = this.pickSimulationResult(category);
 		// console.log('sim sample', simulationSample);
 		if (!simulationSample) {
