@@ -47,13 +47,13 @@ export class SecretPlayedFromHandParser implements EventParser {
 				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId);
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 
 		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousOtherZone,
-			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.Collectible.Paladin.OhMyYogg
+			isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 				? // Since Yogg transforms the card
 				  cardWithZone.update({
 						entityId: undefined,

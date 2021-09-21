@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -36,7 +37,7 @@ export class QuestCreatedInGameParser implements EventParser {
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		console.debug('should consider?', cardId);
-		if (globalEffectQuestlinesTriggers.includes(cardId)) {
+		if (globalEffectQuestlinesTriggers.includes(cardId as CardIds)) {
 			const globalEffectCard = this.cards.getCard(
 				globalEffectQuestlines.find((q) => q.questStepCreated === cardId).stepReward,
 			);

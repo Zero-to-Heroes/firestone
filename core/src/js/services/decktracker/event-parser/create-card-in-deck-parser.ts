@@ -23,7 +23,7 @@ export class CreateCardInDeckParser implements EventParser {
 		// There is the risk that, if C'Thun is enchanted and that enchantment creates a card in deck, this
 		// hack will discard it. For now it's supposed to be enough of a fringe case to not matter vs
 		// properly flagging the cards created by C'Thun
-		if (gameEvent.additionalData.creatorCardId === CardIds.Collectible.Neutral.CthunTheShattered) {
+		if (gameEvent.additionalData.creatorCardId === CardIds.CthunTheShattered) {
 			return currentState;
 		}
 
@@ -73,7 +73,7 @@ export class CreateCardInDeckParser implements EventParser {
 
 const buildBonusDamage = (card: DeckCard): number => {
 	console.debug('building bonus damage', card?.cardId, card);
-	if (card?.cardId === CardIds.Collectible.Mage.Ignite) {
+	if (card?.cardId === CardIds.Ignite) {
 		return 1 + (card.bonusDamage ?? 0);
 	}
 	return null;

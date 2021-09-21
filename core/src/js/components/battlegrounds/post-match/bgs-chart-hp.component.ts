@@ -421,7 +421,7 @@ export class BgsChartHpComponent {
 
 	private buildPlayerOrder(): readonly string[] {
 		const turnAtWhichEachPlayerDies = Object.keys(this._stats.hpOverTurn)
-			.filter((playerCardId) => playerCardId !== CardIds.NonCollectible.Neutral.BaconphheroHeroicBattlegrounds)
+			.filter((playerCardId) => playerCardId !== CardIds.BaconphheroHeroicBattlegrounds)
 			.map((playerCardId) => ({
 				playerCardId: playerCardId,
 				turnDeath: this._stats.hpOverTurn[playerCardId].find((turnInfo) => turnInfo.value <= 0)?.turn ?? 99,
@@ -445,7 +445,7 @@ export class BgsChartHpComponent {
 			const candidatesToRemove = turnAtWhichEachPlayerDies
 				.filter((info) => info.turnDeath === 99)
 				.filter((info) =>
-					info.playerCardId === CardIds.NonCollectible.Neutral.PatchwerkBattlegrounds
+					info.playerCardId === CardIds.PatchwerkBattlegrounds
 						? info.lastKnownHp === 55
 						: info.lastKnownHp === 40,
 				)

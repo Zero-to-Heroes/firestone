@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
+import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { OverwolfService } from '../overwolf.service';
 

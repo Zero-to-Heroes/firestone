@@ -61,7 +61,7 @@ export class BgsHeroPortraitSimulatorComponent {
 
 	@Input() set heroCardId(value: string) {
 		this._heroCardId = value;
-		this.defaultHero = value === CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds;
+		this.defaultHero = value === CardIds.KelthuzadBattlegrounds;
 	}
 
 	@Input() set tavernTier(value: number) {

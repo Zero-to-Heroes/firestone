@@ -219,7 +219,8 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 					.getCards()
 					.filter(
 						(card) =>
-							(card.battlegroundsPremiumDbfId && card.techLevel) || TOKEN_CARD_IDS.includes(card.id),
+							(card.battlegroundsPremiumDbfId && card.techLevel) ||
+							TOKEN_CARD_IDS.includes(card.id as CardIds),
 					)
 					.filter(
 						(card) =>
@@ -414,12 +415,8 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 			windfury: this.windfury,
 			megaWindfury: this.megaWindfury,
 			enchantments: [
-				this.summonMechs
-					? { cardId: CardIds.NonCollectible.Neutral.ReplicatingMenace_ReplicatingMenaceEnchantment }
-					: null,
-				this.summonPlants
-					? { cardId: CardIds.NonCollectible.Neutral.LivingSpores_LivingSporesEnchantment }
-					: null,
+				this.summonMechs ? { cardId: CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment } : null,
+				this.summonPlants ? { cardId: CardIds.LivingSpores_LivingSporesEnchantment } : null,
 			].filter((e) => !!e),
 		} as BoardEntity);
 	}
@@ -449,10 +446,10 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 		this.megaWindfury = this._entity.megaWindfury;
 		this.summonMechs = this._entity.enchantments
 			.map((e) => e.cardId)
-			.includes(CardIds.NonCollectible.Neutral.ReplicatingMenace_ReplicatingMenaceEnchantment);
+			.includes(CardIds.ReplicatingMenace_ReplicatingMenaceEnchantment);
 		this.summonPlants = this._entity.enchantments
 			.map((e) => e.cardId)
-			.includes(CardIds.NonCollectible.Neutral.LivingSpores_LivingSporesEnchantment);
+			.includes(CardIds.LivingSpores_LivingSporesEnchantment);
 		this.updateCard();
 	}
 
@@ -479,6 +476,6 @@ interface Minion {
 }
 
 const TOKEN_CARD_IDS = [
-	CardIds.NonCollectible.Neutral.AvatarOfNzoth_FishOfNzothTokenBattlegrounds,
-	CardIds.NonCollectible.Neutral.Menagerist_AmalgamTokenBattlegrounds,
+	CardIds.AvatarOfNzoth_FishOfNzothTokenBattlegrounds,
+	CardIds.Menagerist_AmalgamTokenBattlegrounds,
 ];

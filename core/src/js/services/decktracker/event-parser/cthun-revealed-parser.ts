@@ -9,10 +9,10 @@ import { EventParser } from './event-parser';
 
 export class CthunRevealedParser implements EventParser {
 	private readonly CTHUN_PIECES = [
-		CardIds.NonCollectible.Neutral.CthunTheShattered_BodyOfCthunToken,
-		CardIds.NonCollectible.Neutral.CthunTheShattered_EyeOfCthunToken,
-		CardIds.NonCollectible.Neutral.CthunTheShattered_HeartOfCthunToken,
-		CardIds.NonCollectible.Neutral.CthunTheShattered_MawOfCthunToken,
+		CardIds.CthunTheShattered_BodyOfCthunToken,
+		CardIds.CthunTheShattered_EyeOfCthunToken,
+		CardIds.CthunTheShattered_HeartOfCthunToken,
+		CardIds.CthunTheShattered_MawOfCthunToken,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -23,7 +23,7 @@ export class CthunRevealedParser implements EventParser {
 			state.opponentDeck &&
 			gameEvent.type === GameEvent.SUB_SPELL_START &&
 			gameEvent.additionalData.prefabId === 'DMFFX_SpawnToDeck_CthunTheShattered_CardFromScript_FX' &&
-			gameEvent.cardId === CardIds.Collectible.Neutral.CthunTheShattered
+			gameEvent.cardId === CardIds.CthunTheShattered
 		);
 	}
 

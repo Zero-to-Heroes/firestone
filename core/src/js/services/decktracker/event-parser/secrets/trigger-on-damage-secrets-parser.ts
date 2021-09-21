@@ -10,10 +10,10 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnDamageSecretsParser implements EventParser {
 	private secretsTriggeringOnDamage = [
-		CardIds.Collectible.Paladin.EyeForAnEyeLegacy,
-		CardIds.Collectible.Paladin.EyeForAnEyeVanilla,
-		CardIds.Collectible.Paladin.ReckoningCore,
-		CardIds.Collectible.Rogue.Evasion,
+		CardIds.EyeForAnEyeLegacy,
+		CardIds.EyeForAnEyeVanilla,
+		CardIds.ReckoningCore,
+		CardIds.Evasion,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -61,25 +61,25 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			: gameEvent.additionalData.sourceControllerId !== localPlayer.PlayerId;
 		console.debug('[secrets-parser] is enemy dealing?', isEnemyDealing, isPlayerActive, gameEvent);
 		if (!isEnemyDealing) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
+			secretsWeCantRuleOut.push(CardIds.ReckoningCore);
 		} else {
 			const sourceCard = this.allCards.getCard(gameEvent.additionalData.sourceCardId);
 			console.debug('[secrets-parser] enmy is dealing from source', sourceCard);
 
 			if (sourceCard?.type !== 'Minion') {
-				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
+				secretsWeCantRuleOut.push(CardIds.ReckoningCore);
 			} else {
 				const dealingEntityId = gameEvent.additionalData.sourceEntityId;
 				// If the minion dealing damage dies in the process, we can't rule out Reckoning
 				if (additionalInfo?.minionsWillDie?.map((minion) => minion.entityId)?.includes(dealingEntityId)) {
-					secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
+					secretsWeCantRuleOut.push(CardIds.ReckoningCore);
 				}
 				const maxDamage = Math.max(
 					...Object.values(gameEvent.additionalData.targets).map((target) => target.Damage),
 				);
 				console.debug('[secrets-parser] source is minion with damage', maxDamage);
 				if (maxDamage < 3) {
-					secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.ReckoningCore);
+					secretsWeCantRuleOut.push(CardIds.ReckoningCore);
 				}
 			}
 		}
@@ -93,9 +93,9 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 			  )
 			: null;
 		if (!heroTarget) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEyeLegacy);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEyeVanilla);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Evasion);
+			secretsWeCantRuleOut.push(CardIds.EyeForAnEyeLegacy);
+			secretsWeCantRuleOut.push(CardIds.EyeForAnEyeVanilla);
+			secretsWeCantRuleOut.push(CardIds.Evasion);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnDamage.filter(

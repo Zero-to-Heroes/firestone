@@ -1,5 +1,5 @@
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { Race } from '@firestone-hs/reference-data';
+import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { BattlegroundsState } from '../../../../models/battlegrounds/battlegrounds-state';
 import { BgsGame } from '../../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../../models/battlegrounds/bgs-panel';

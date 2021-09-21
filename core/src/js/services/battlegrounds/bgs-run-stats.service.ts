@@ -1,7 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
-import { Input as BgsComputeRunStatsInput } from '@firestone-hs/compute-bgs-run-stats/dist/model/input';
-import { buildNewStats } from '@firestone-hs/compute-bgs-run-stats/dist/stats-builder';
+import { BgsBestStat, buildNewStats, Input as BgsComputeRunStatsInput } from '@firestone-hs/user-bgs-post-match-stats';
 import Worker from 'worker-loader!../../workers/bgs-post-match-stats.worker';
 import { BgsGame } from '../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsForReview } from '../../models/battlegrounds/bgs-post-match-stats-for-review';

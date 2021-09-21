@@ -7,10 +7,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnStartSecretsParser implements EventParser {
-	private secretsTriggeringOnTurnStart = [
-		CardIds.Collectible.Paladin.CompetitiveSpirit1,
-		CardIds.Collectible.Hunter.OpenTheCages,
-	];
+	private secretsTriggeringOnTurnStart = [CardIds.CompetitiveSpirit1, CardIds.OpenTheCages];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
@@ -34,7 +31,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
 			// console.log('[turn-start] board empty', deckWithSecretToCheck, isPlayerActive, gameEvent);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.CompetitiveSpirit1);
+			secretsWeCantRuleOut.push(CardIds.CompetitiveSpirit1);
 		}
 
 		// Only triggers if board has between 2 and 6 minions
@@ -42,7 +39,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 			deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length < 2 ||
 			deckWithSecretToCheck.board.length === 7
 		) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.OpenTheCages);
+			secretsWeCantRuleOut.push(CardIds.OpenTheCages);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnStart.filter(

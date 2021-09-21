@@ -20,7 +20,7 @@ export class ElwynnBoarCounterDefinition implements CounterDefinition {
 		return {
 			type: 'elwynn-boar',
 			value: boarDeaths,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Collectible.Neutral.ElwynnBoar}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.ElwynnBoar}.jpg`,
 			cssClass: 'elwynn-boar-counter',
 			tooltip: `${boarDeaths} boars have died for ${side === 'player' ? 'you' : 'your opponent'}`,
 			standardCounter: true,

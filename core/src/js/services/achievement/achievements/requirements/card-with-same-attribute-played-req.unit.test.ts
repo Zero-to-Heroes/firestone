@@ -14,7 +14,7 @@ describe('card-with-same-attribute-played-req', () => {
 					const req = new CardWithSameAttributePlayedReq(2, 'AT_LEAST', 'NAME', 'SPELL', cards);
 					const event = Object.assign(new GameEvent(), {
 						type: GameEvent.CARD_PLAYED,
-						cardId: CardIds.Collectible.Mage.FireballLegacy,
+						cardId: CardIds.FireballLegacy,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
 					} as GameEvent);
@@ -28,7 +28,7 @@ describe('card-with-same-attribute-played-req', () => {
 					const req = new CardWithSameAttributePlayedReq(2, 'AT_LEAST', 'NAME', 'SPELL', cards);
 					const event = Object.assign(new GameEvent(), {
 						type: GameEvent.CARD_PLAYED,
-						cardId: CardIds.Collectible.Paladin.SoundTheBells,
+						cardId: CardIds.SoundTheBells,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
 					} as GameEvent);
@@ -42,7 +42,7 @@ describe('card-with-same-attribute-played-req', () => {
 					const req = new CardWithSameAttributePlayedReq(2, 'AT_LEAST', 'NAME', 'SPELL', cards);
 					const event = Object.assign(new GameEvent(), {
 						type: GameEvent.CARD_PLAYED,
-						cardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+						cardId: CardIds.ManaWyrmLegacy,
 						controllerId: 1,
 						localPlayer: { PlayerId: 1 },
 					} as GameEvent);
@@ -58,7 +58,7 @@ describe('card-with-same-attribute-played-req', () => {
 					req.test(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.CARD_PLAYED,
-							cardId: CardIds.Collectible.Mage.FireballLegacy,
+							cardId: CardIds.FireballLegacy,
 							controllerId: 1,
 							localPlayer: { PlayerId: 1 },
 						} as GameEvent),
@@ -66,7 +66,7 @@ describe('card-with-same-attribute-played-req', () => {
 					req.test(
 						Object.assign(new GameEvent(), {
 							type: GameEvent.CARD_PLAYED,
-							cardId: CardIds.Collectible.Mage.RollingFireball,
+							cardId: CardIds.RollingFireball,
 							controllerId: 1,
 							localPlayer: { PlayerId: 1 },
 						} as GameEvent),
@@ -78,7 +78,7 @@ describe('card-with-same-attribute-played-req', () => {
 					const req = new CardWithSameAttributePlayedReq(2, 'AT_LEAST', 'NAME', 'SPELL', cards);
 					const event = Object.assign(new GameEvent(), {
 						type: GameEvent.CARD_PLAYED,
-						cardId: CardIds.Collectible.Mage.FireballLegacy,
+						cardId: CardIds.FireballLegacy,
 						controllerId: 2,
 						localPlayer: { PlayerId: 1 },
 					} as GameEvent);

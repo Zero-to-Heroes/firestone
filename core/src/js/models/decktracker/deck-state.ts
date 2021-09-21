@@ -8,42 +8,35 @@ import { DynamicZone } from './view/dynamic-zone';
 
 export class DeckState {
 	private static readonly GALAKROND_CARD_IDS = [
-		CardIds.Collectible.Priest.GalakrondTheUnspeakable,
-		CardIds.NonCollectible.Priest.GalakrondTheUnspeakable_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Priest.GalakrondTheUnspeakable_GalakrondAzerothsEndToken,
-		CardIds.Collectible.Rogue.GalakrondTheNightmare,
-		CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondAzerothsEndToken,
-		CardIds.Collectible.Shaman.GalakrondTheTempest,
-		CardIds.NonCollectible.Shaman.GalakrondTheTempest_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Shaman.GalakrondTheTempest_GalakrondAzerothsEndToken,
-		CardIds.Collectible.Warlock.GalakrondTheWretched,
-		CardIds.NonCollectible.Warlock.GalakrondTheWretched_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Warlock.GalakrondTheWretched_GalakrondAzerothsEndToken,
-		CardIds.Collectible.Warrior.GalakrondTheUnbreakable,
-		CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
-		CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
+		CardIds.GalakrondTheUnspeakable,
+		CardIds.GalakrondTheUnspeakable_GalakrondTheApocalypseToken,
+		CardIds.GalakrondTheUnspeakable_GalakrondAzerothsEndToken,
+		CardIds.GalakrondTheNightmare,
+		CardIds.GalakrondTheNightmare_GalakrondTheApocalypseToken,
+		CardIds.GalakrondTheNightmare_GalakrondAzerothsEndToken,
+		CardIds.GalakrondTheTempest,
+		CardIds.GalakrondTheTempest_GalakrondTheApocalypseToken,
+		CardIds.GalakrondTheTempest_GalakrondAzerothsEndToken,
+		CardIds.GalakrondTheWretched,
+		CardIds.GalakrondTheWretched_GalakrondTheApocalypseToken,
+		CardIds.GalakrondTheWretched_GalakrondAzerothsEndToken,
+		CardIds.GalakrondTheUnbreakable,
+		CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
+		CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
 	];
 
-	private static readonly POGO_CARD_IDS = [
-		CardIds.Collectible.Rogue.PogoHopper1,
-		CardIds.NonCollectible.Rogue.PogoHopper2,
-		CardIds.NonCollectible.Rogue.PogoHopperBattlegrounds,
-	];
+	private static readonly POGO_CARD_IDS = [CardIds.PogoHopper1, CardIds.PogoHopper2, CardIds.PogoHopperBattlegrounds];
 
-	private static readonly SPELL_COUNTER_CARD_IDS = [
-		CardIds.Collectible.Neutral.YoggSaronHopesEnd,
-		CardIds.Collectible.Neutral.YoggSaronMasterOfFate,
-	];
+	private static readonly SPELL_COUNTER_CARD_IDS = [CardIds.YoggSaronHopesEnd, CardIds.YoggSaronMasterOfFate];
 
 	private static readonly NEW_CTHUN_CARD_IDS = [
-		CardIds.Collectible.Neutral.CthunTheShattered,
-		CardIds.NonCollectible.Neutral.CthunTheShattered_BodyOfCthunToken,
-		CardIds.NonCollectible.Neutral.BodyOfCthun_CthunsBodyToken,
-		CardIds.NonCollectible.Neutral.CthunTheShattered_EyeOfCthunToken,
-		CardIds.NonCollectible.Neutral.CthunTheShattered_HeartOfCthunToken,
-		CardIds.NonCollectible.Neutral.CthunTheShattered_MawOfCthunToken,
-		CardIds.Collectible.Mage.MaskOfCthun,
+		CardIds.CthunTheShattered,
+		CardIds.CthunTheShattered_BodyOfCthunToken,
+		CardIds.BodyOfCthun_CthunsBodyToken,
+		CardIds.CthunTheShattered_EyeOfCthunToken,
+		CardIds.CthunTheShattered_HeartOfCthunToken,
+		CardIds.CthunTheShattered_MawOfCthunToken,
+		CardIds.MaskOfCthun,
 	];
 
 	readonly isFirstPlayer: boolean;
@@ -121,8 +114,8 @@ export class DeckState {
 			.filter((card) => card.cardId)
 			.some(
 				(card) =>
-					DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId) !== -1 ||
-					card.cardId === CardIds.Collectible.Neutral.KronxDragonhoof ||
+					DeckState.GALAKROND_CARD_IDS.indexOf(card.cardId as CardIds) !== -1 ||
+					card.cardId === CardIds.KronxDragonhoof ||
 					(allCards &&
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
@@ -137,10 +130,10 @@ export class DeckState {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
-			.filter((card) => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId))
+			.filter((card) => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId as CardIds))
 			.some(
 				(card) =>
-					card.cardId === CardIds.Collectible.Neutral.Cthun2 ||
+					card.cardId === CardIds.Cthun2 ||
 					(allCards &&
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf("C'Thun") !== -1),
@@ -169,7 +162,7 @@ export class DeckState {
 			.filter((card) => card.cardId)
 			.some(
 				(card) =>
-					card.cardId === CardIds.Collectible.Neutral.KargalBattlescar1 ||
+					card.cardId === CardIds.KargalBattlescar1 ||
 					(lookAtWatchpostsPlayed &&
 						allCards &&
 						allCards.getCard(card.cardId)?.name &&
@@ -183,7 +176,7 @@ export class DeckState {
 			.filter((card) => card.cardId)
 			.some(
 				(card) =>
-					card.cardId === CardIds.Collectible.Paladin.LadyLiadrin ||
+					card.cardId === CardIds.LadyLiadrin ||
 					(lookAtLibramsPlayed &&
 						allCards &&
 						allCards.getCard(card.cardId)?.name &&
@@ -199,14 +192,14 @@ export class DeckState {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
-			.some((card) => DeckState.POGO_CARD_IDS.indexOf(card.cardId) !== -1);
+			.some((card) => DeckState.POGO_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
 	}
 
 	public containsSpellCounterMinion(): boolean {
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
 		const result = allCardsInDeck
 			.filter((card) => card.cardId)
-			.some((card) => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId));
+			.some((card) => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId as CardIds));
 		// console.log('spell counter', 'has', result, allCardsInDeck, DeckState.SPELL_COUNTER_CARD_IDS);
 		return result;
 	}
@@ -217,15 +210,13 @@ export class DeckState {
 		}
 
 		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
-		return allCardsInDeck
-			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.Collectible.Neutral.ElwynnBoar);
+		return allCardsInDeck.filter((card) => card.cardId).some((card) => card.cardId === CardIds.ElwynnBoar);
 	}
 
 	public hasBolner() {
 		return [...this.hand, ...this.board]
 			.filter((card) => card.cardId)
-			.some((card) => card.cardId === CardIds.Collectible.Shaman.BolnerHammerbeak);
+			.some((card) => card.cardId === CardIds.BolnerHammerbeak);
 	}
 
 	public firstBattlecryPlayedThisTurn(allCards: CardsFacadeService): DeckCard {

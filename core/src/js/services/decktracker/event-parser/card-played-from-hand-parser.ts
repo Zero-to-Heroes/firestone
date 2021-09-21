@@ -89,7 +89,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId);
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 		// console.debug('is card countered', isCardCountered, additionalInfo, gameEvent);
 
 		// console.debug('card with zone', cardWithZone, refCard, cardId);
@@ -100,8 +100,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(
 					deck.otherZone,
-					isCardCountered &&
-						additionalInfo?.secretWillTrigger?.cardId === CardIds.Collectible.Paladin.OhMyYogg
+					isCardCountered && additionalInfo?.secretWillTrigger?.cardId === CardIds.OhMyYogg
 						? // Since Yogg transforms the card
 						  cardWithZone.update({
 								entityId: undefined,
@@ -111,7 +110,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		// console.debug('new other', newOtherZone, isOnBoard);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		if (!isCardCountered && globalEffectCards.includes(card?.cardId)) {
+		if (!isCardCountered && globalEffectCards.includes(card?.cardId as CardIds)) {
 			newGlobalEffects = this.helper.addSingleCardToZone(
 				deck.globalEffects,
 				cardWithZone?.update({

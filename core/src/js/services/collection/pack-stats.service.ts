@@ -60,11 +60,11 @@ export class PackStatsService {
 	private isPackAllGalakronds(pack: PackResult): boolean {
 		return (
 			pack.setId === 'dragons' &&
-			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Priest.GalakrondTheUnspeakable) &&
-			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Shaman.GalakrondTheTempest) &&
-			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Warlock.GalakrondTheWretched) &&
-			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Warrior.GalakrondTheUnbreakable) &&
-			pack.cards.map((card) => card.cardId).includes(CardIds.Collectible.Rogue.GalakrondTheNightmare)
+			pack.cards.map((card) => card.cardId).includes(CardIds.GalakrondTheUnspeakable) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.GalakrondTheTempest) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.GalakrondTheWretched) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.GalakrondTheUnbreakable) &&
+			pack.cards.map((card) => card.cardId).includes(CardIds.GalakrondTheNightmare)
 		);
 	}
 }

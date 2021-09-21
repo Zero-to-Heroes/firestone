@@ -10,41 +10,41 @@ export const modifyDeckForSpecialCards = (
 	allCards: CardsFacadeService,
 ): DeckState => {
 	switch (cardId) {
-		case CardIds.Collectible.Druid.CelestialAlignment:
+		case CardIds.CelestialAlignment:
 			return handleCelestialAlignment(deckState, allCards);
-		case CardIds.Collectible.Druid.Embiggen:
+		case CardIds.Embiggen:
 			return handleEmbiggen(deckState, allCards);
-		case CardIds.Collectible.Mage.DeckOfLunacy:
+		case CardIds.DeckOfLunacy:
 			return handleDeckOfLunacy(deckState, allCards);
-		case CardIds.Collectible.Mage.IncantersFlow:
+		case CardIds.IncantersFlow:
 			return handleIncantersFlow(deckState, allCards);
-		case CardIds.Collectible.Mage.LunasPocketGalaxy:
+		case CardIds.LunasPocketGalaxy:
 			return handleLunasPocketGalaxy(deckState, allCards);
-		case CardIds.Collectible.Paladin.PrinceLiam:
+		case CardIds.PrinceLiam:
 			return handlePrinceLiam(deckState, allCards);
-		case CardIds.Collectible.Paladin.AldorAttendant:
-		case CardIds.NonCollectible.Paladin.LordaeronAttendantToken:
+		case CardIds.AldorAttendant:
+		case CardIds.LordaeronAttendantToken:
 			return handleLibram(deckState, allCards, 1);
-		case CardIds.Collectible.Paladin.AldorTruthseeker:
-		case CardIds.NonCollectible.Paladin.RadiantLightspawn:
+		case CardIds.AldorTruthseeker:
+		case CardIds.RadiantLightspawn:
 			return handleLibram(deckState, allCards, 2);
-		case CardIds.Collectible.Warlock.DeckOfChaos:
+		case CardIds.DeckOfChaos:
 			return handleDeckOfChaos(deckState, allCards);
-		case CardIds.Collectible.Warrior.ExploreUngoro:
+		case CardIds.ExploreUngoro:
 			return handleExploreUngoro(deckState, allCards);
-		case CardIds.Collectible.Neutral.FrizzKindleroost:
+		case CardIds.FrizzKindleroost:
 			return handleFrizzKindleroost(deckState, allCards);
-		case CardIds.Collectible.Neutral.HemetJungleHunter:
+		case CardIds.HemetJungleHunter:
 			return handleHemet(deckState, allCards);
-		case CardIds.Collectible.Neutral.LadyPrestor:
+		case CardIds.LadyPrestor:
 			return handleLadyPrestor(deckState, allCards);
-		case CardIds.NonCollectible.Neutral.OoopsAllSpellsTavernBrawl:
+		case CardIds.OoopsAllSpellsTavernBrawl:
 			return handleOoopsAllSpells(deckState, allCards);
-		case CardIds.NonCollectible.Neutral.ScepterOfSummoning:
+		case CardIds.ScepterOfSummoning:
 			return handleScepterOfSummoning(deckState, allCards);
-		case CardIds.Collectible.Neutral.SkulkingGeist:
+		case CardIds.SkulkingGeist:
 			return handleSkulkingGeist(deckState, allCards);
-		case CardIds.Collectible.Neutral.WyrmrestPurifier:
+		case CardIds.WyrmrestPurifier:
 			return handleWyrmrestPurifier(deckState, allCards);
 		default:
 			return deckState;
@@ -127,7 +127,7 @@ const handleWyrmrestPurifier = (deckState: DeckState, allCards: CardsFacadeServi
 			card.update({
 				cardId: undefined,
 				cardName: `Unknown ${formatClass(deckState.hero?.playerClass)} card`,
-				creatorCardId: CardIds.Collectible.Neutral.WyrmrestPurifier,
+				creatorCardId: CardIds.WyrmrestPurifier,
 				rarity: undefined,
 				cardType: undefined,
 				manaCost: undefined,
@@ -140,14 +140,14 @@ const handleWyrmrestPurifier = (deckState: DeckState, allCards: CardsFacadeServi
 };
 
 const handleExploreUngoro = (deckState: DeckState, allCards: CardsFacadeService): DeckState => {
-	const refCard = allCards.getCard(CardIds.NonCollectible.Warrior.ExploreUngoro_ChooseYourPathToken);
+	const refCard = allCards.getCard(CardIds.ExploreUngoro_ChooseYourPathToken);
 	return updateCardInDeck(
 		(card, refCard) => true,
 		(card) =>
 			card.update({
 				cardId: refCard.id,
 				cardName: refCard.name,
-				creatorCardId: CardIds.Collectible.Warrior.ExploreUngoro,
+				creatorCardId: CardIds.ExploreUngoro,
 				manaCost: refCard.cost,
 				rarity: refCard.rarity,
 				cardType: refCard.type,
@@ -164,7 +164,7 @@ const handleDeckOfLunacy = (deckState: DeckState, allCards: CardsFacadeService):
 			card.update({
 				cardId: undefined,
 				cardName: `Unknown ${Math.min(10, card.getEffectiveManaCost() + 3)} mana spell`,
-				creatorCardId: CardIds.Collectible.Mage.DeckOfLunacy,
+				creatorCardId: CardIds.DeckOfLunacy,
 				actualManaCost: Math.min(10, card.getEffectiveManaCost() + 3) - 3,
 				rarity: 'unknown',
 				cardType: 'Spell',
@@ -182,7 +182,7 @@ const handleLadyPrestor = (deckState: DeckState, allCards: CardsFacadeService): 
 			card.update({
 				cardId: undefined,
 				cardName: `Unknown Dragon`,
-				creatorCardId: CardIds.Collectible.Neutral.LadyPrestor,
+				creatorCardId: CardIds.LadyPrestor,
 				actualManaCost: card.getEffectiveManaCost(),
 				rarity: 'unknown',
 				cardType: 'Minion',
@@ -249,7 +249,7 @@ const handlePrinceLiam = (deckState: DeckState, allCards: CardsFacadeService): D
 			card.update({
 				cardId: undefined,
 				cardName: `Unknown Legendary Minion`,
-				creatorCardId: CardIds.Collectible.Paladin.PrinceLiam,
+				creatorCardId: CardIds.PrinceLiam,
 				rarity: 'legendary',
 				cardType: 'Minion',
 				manaCost: undefined,

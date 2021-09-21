@@ -12,7 +12,7 @@ describe('total-minions-summoned-req', () => {
 			const req = new TotalMinionsSummonedReq(2, 'AT_MOST', cards);
 			const event = Object.assign(new GameEvent(), {
 				type: GameEvent.MINION_SUMMONED,
-				cardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+				cardId: CardIds.ManaWyrmLegacy,
 				controllerId: 1,
 				localPlayer: { PlayerId: 1 },
 			} as GameEvent);
@@ -26,7 +26,7 @@ describe('total-minions-summoned-req', () => {
 			const req = new TotalMinionsSummonedReq(2, 'AT_MOST', cards);
 			const event = Object.assign(new GameEvent(), {
 				type: GameEvent.MINION_SUMMONED,
-				cardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+				cardId: CardIds.ManaWyrmLegacy,
 				controllerId: 1,
 				localPlayer: { PlayerId: 1 },
 			} as GameEvent);
@@ -43,7 +43,7 @@ describe('total-minions-summoned-req', () => {
 			const req = new TotalMinionsSummonedReq(2, 'AT_MOST', cards);
 			const event = Object.assign(new GameEvent(), {
 				type: GameEvent.MINION_SUMMONED,
-				cardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+				cardId: CardIds.ManaWyrmLegacy,
 				controllerId: 1,
 				localPlayer: { PlayerId: 1 },
 			} as GameEvent);
@@ -58,7 +58,7 @@ describe('total-minions-summoned-req', () => {
 			const req = new TotalMinionsSummonedReq(2, 'AT_MOST', cards);
 			const event = Object.assign(new GameEvent(), {
 				type: GameEvent.CARD_PLAYED,
-				cardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+				cardId: CardIds.ManaWyrmLegacy,
 				controllerId: 2,
 				localPlayer: { PlayerId: 1 },
 			} as GameEvent);

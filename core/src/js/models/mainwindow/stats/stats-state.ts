@@ -1,6 +1,6 @@
 import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
+import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsPostMatchStats } from '../../battlegrounds/post-match/bgs-post-match-stats';
 import { GameStats } from './game-stats';
 import { StatsCategory } from './stats-category';

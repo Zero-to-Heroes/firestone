@@ -67,8 +67,8 @@ export class OpponentCardInfoIdComponent {
 	// user the actual card
 	private normalizeEnchantment(cardId: string): string {
 		switch (cardId) {
-			case CardIds.NonCollectible.Shaman.InstructorFireheart_HotStreakEnchantment:
-				return CardIds.Collectible.Shaman.InstructorFireheart;
+			case CardIds.InstructorFireheart_HotStreakEnchantment:
+				return CardIds.InstructorFireheart;
 			default:
 				return cardId;
 		}

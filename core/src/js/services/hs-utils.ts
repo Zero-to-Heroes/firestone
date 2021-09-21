@@ -63,50 +63,50 @@ export const colorForClass = (playerClass: string): string => {
 };
 
 export const globalEffectCards = [
-	CardIds.NonCollectible.Demonhunter.DemonslayerKurtrusToken,
-	CardIds.Collectible.Druid.Embiggen,
-	CardIds.Collectible.Druid.CelestialAlignment,
-	CardIds.Collectible.Druid.SurvivalOfTheFittest2,
-	CardIds.Collectible.Hunter.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
-	CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
-	CardIds.Collectible.Mage.DeckOfLunacy,
-	CardIds.Collectible.Mage.LunasPocketGalaxy,
-	CardIds.Collectible.Mage.IncantersFlow,
-	CardIds.NonCollectible.Mage.InfiniteArcaneTavernBrawlToken,
-	CardIds.NonCollectible.Mage.SorcerersGambit_ArcanistDawngraspToken,
-	CardIds.Collectible.Mage.Wildfire,
-	CardIds.Collectible.Paladin.AldorAttendant,
-	CardIds.Collectible.Paladin.AldorTruthseeker,
-	CardIds.NonCollectible.Paladin.HumbleBlessingsTavernBrawl,
-	CardIds.Collectible.Paladin.InvigoratingSermon,
-	CardIds.NonCollectible.Paladin.LordaeronAttendantToken,
-	CardIds.Collectible.Paladin.LothraxionTheRedeemed,
-	CardIds.NonCollectible.Paladin.MenAtArmsTavernBrawlToken,
-	CardIds.NonCollectible.Paladin.RadiantLightspawn,
-	CardIds.NonCollectible.Paladin.RiseToTheOccasion_LightbornCarielToken,
-	CardIds.Collectible.Priest.ArchbishopBenedictus,
-	CardIds.Collectible.Priest.DarkInquisitorXanesh,
-	CardIds.Collectible.Priest.LadyInWhite,
-	CardIds.NonCollectible.Rogue.TheCavernsBelow_CrystalCoreToken,
+	CardIds.DemonslayerKurtrusToken,
+	CardIds.Embiggen,
+	CardIds.CelestialAlignment,
+	CardIds.SurvivalOfTheFittest2,
+	CardIds.ShandoWildclaw, // TODO: only show the effect if the "beast in your deck +1/+1 option, is chosen"
+	CardIds.DefendTheDwarvenDistrict_TavishMasterMarksmanToken,
+	CardIds.DeckOfLunacy,
+	CardIds.LunasPocketGalaxy,
+	CardIds.IncantersFlow,
+	CardIds.InfiniteArcaneTavernBrawlToken,
+	CardIds.SorcerersGambit_ArcanistDawngraspToken,
+	CardIds.Wildfire,
+	CardIds.AldorAttendant,
+	CardIds.AldorTruthseeker,
+	CardIds.HumbleBlessingsTavernBrawl,
+	CardIds.InvigoratingSermon,
+	CardIds.LordaeronAttendantToken,
+	CardIds.LothraxionTheRedeemed,
+	CardIds.MenAtArmsTavernBrawlToken,
+	CardIds.RadiantLightspawn,
+	CardIds.RiseToTheOccasion_LightbornCarielToken,
+	CardIds.ArchbishopBenedictus,
+	CardIds.DarkInquisitorXanesh,
+	CardIds.LadyInWhite,
+	CardIds.TheCavernsBelow_CrystalCoreToken,
 	// We handle the effects triggered instead of the card played
-	// CardIds.Collectible.Shaman.GrandTotemEysor,
-	CardIds.NonCollectible.Shaman.CommandTheElements_StormcallerBrukanToken,
-	CardIds.Collectible.Shaman.GraniteForgeborn,
-	CardIds.NonCollectible.Warlock.TheDemonSeed_BlightbornTamsinToken,
-	CardIds.Collectible.Warlock.DarkPharaohTekahn,
-	CardIds.Collectible.Warlock.DeckOfChaos,
-	CardIds.Collectible.Warlock.NeeruFireblade1,
-	CardIds.Collectible.Warlock.RenounceDarkness,
+	// CardIds.GrandTotemEysor,
+	CardIds.CommandTheElements_StormcallerBrukanToken,
+	CardIds.GraniteForgeborn,
+	CardIds.TheDemonSeed_BlightbornTamsinToken,
+	CardIds.DarkPharaohTekahn,
+	CardIds.DeckOfChaos,
+	CardIds.NeeruFireblade1,
+	CardIds.RenounceDarkness,
 
-	CardIds.Collectible.Neutral.FrizzKindleroost,
-	CardIds.Collectible.Neutral.HemetJungleHunter,
-	CardIds.Collectible.Neutral.LadyPrestor,
-	CardIds.Collectible.Neutral.LorekeeperPolkelt,
-	CardIds.Collectible.Neutral.PrinceKeleseth,
-	CardIds.Collectible.Neutral.SkulkingGeist,
-	CardIds.NonCollectible.Neutral.ReductomaraToken,
-	CardIds.NonCollectible.Neutral.UpgradedPackMule,
-	CardIds.Collectible.Neutral.WyrmrestPurifier,
+	CardIds.FrizzKindleroost,
+	CardIds.HemetJungleHunter,
+	CardIds.LadyPrestor,
+	CardIds.LorekeeperPolkelt,
+	CardIds.PrinceKeleseth,
+	CardIds.SkulkingGeist,
+	CardIds.ReductomaraToken,
+	CardIds.UpgradedPackMule,
+	CardIds.WyrmrestPurifier,
 ];
 
 export const globalEffectTriggers = [
@@ -116,7 +116,7 @@ export const globalEffectTriggers = [
 		// We could also create a brand new event on the parser side, but I'd rather first
 		// see how other minions/effects will be handled in the future
 		effectPrefab: 'DMF_GrandTotemAmikwe_Battlecry_DeckBoosh_Super.prefab',
-		cardId: CardIds.Collectible.Shaman.GrandTotemEysor,
+		cardId: CardIds.GrandTotemEysor,
 	},
 ];
 
@@ -124,225 +124,222 @@ export const globalEffectTriggersEffects = globalEffectTriggers.map((effect) => 
 
 export const globalEffectQuestlines = [
 	{
-		questStepCreated: CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_TakeTheHighGroundToken,
-		stepReward: CardIds.Collectible.Hunter.DefendTheDwarvenDistrict,
+		questStepCreated: CardIds.DefendTheDwarvenDistrict_TakeTheHighGroundToken,
+		stepReward: CardIds.DefendTheDwarvenDistrict,
 	},
 	{
-		questStepCreated: CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_KnockEmDownToken,
-		stepReward: CardIds.NonCollectible.Hunter.DefendTheDwarvenDistrict_TakeTheHighGroundToken,
+		questStepCreated: CardIds.DefendTheDwarvenDistrict_KnockEmDownToken,
+		stepReward: CardIds.DefendTheDwarvenDistrict_TakeTheHighGroundToken,
 	},
 ];
 
 export const globalEffectQuestlinesTriggers = globalEffectQuestlines.map((effect) => effect.questStepCreated);
 
 export const cardsRevealedWhenDrawn = [
-	CardIds.NonCollectible.Druid.YseraUnleashed_DreamPortalToken,
-	CardIds.NonCollectible.Mage.DeckOfWonders_ScrollOfWonderToken,
-	CardIds.NonCollectible.Neutral.AncientShade_AncientCurseToken,
-	CardIds.NonCollectible.Neutral.Chromie_BattleForMountHyjalToken,
-	CardIds.NonCollectible.Neutral.Chromie_CullingOfStratholmeToken,
-	CardIds.NonCollectible.Neutral.Chromie_EscapeFromDurnholdeToken,
-	CardIds.NonCollectible.Neutral.Chromie_OpeningTheDarkPortalToken,
-	CardIds.NonCollectible.Neutral.FlyBy_KadoomBotToken,
-	CardIds.NonCollectible.Neutral.HakkarTheSoulflayer_CorruptedBloodToken,
-	CardIds.NonCollectible.Neutral.Undermine_ImprovisedExplosiveToken,
-	CardIds.NonCollectible.Neutral.PortalKeeper_FelhoundPortalToken,
-	CardIds.NonCollectible.Neutral.SeaforiumBomber_BombToken,
-	CardIds.NonCollectible.Neutral.SandTrap,
-	CardIds.NonCollectible.Neutral.TwistPlagueOfMurlocs_SurpriseMurlocsToken,
-	CardIds.NonCollectible.Neutral.TheDarkness_DarknessCandleToken,
-	CardIds.NonCollectible.Rogue.BeneathTheGrounds_NerubianAmbushToken,
-	CardIds.NonCollectible.Rogue.FaldoreiStrider_SpiderAmbush,
-	CardIds.NonCollectible.Rogue.ShadowOfDeath_ShadowToken,
-	CardIds.NonCollectible.Rogue.TicketMaster_TicketsToken,
-	CardIds.NonCollectible.Rogue.Waxadred_WaxadredsCandleToken,
-	CardIds.NonCollectible.Warlock.SchoolSpirits_SoulFragmentToken,
-	CardIds.NonCollectible.Warrior.Undermine_ImprovisedExplosiveTavernBrawlToken,
-	CardIds.NonCollectible.Warrior.IronJuggernaut_BurrowingMineToken,
+	CardIds.YseraUnleashed_DreamPortalToken,
+	CardIds.DeckOfWonders_ScrollOfWonderToken,
+	CardIds.AncientShade_AncientCurseToken,
+	CardIds.Chromie_BattleForMountHyjalToken,
+	CardIds.Chromie_CullingOfStratholmeToken,
+	CardIds.Chromie_EscapeFromDurnholdeToken,
+	CardIds.Chromie_OpeningTheDarkPortalToken,
+	CardIds.FlyBy_KadoomBotToken,
+	CardIds.HakkarTheSoulflayer_CorruptedBloodToken,
+	CardIds.Undermine_ImprovisedExplosiveToken,
+	CardIds.PortalKeeper_FelhoundPortalToken,
+	CardIds.SeaforiumBomber_BombToken,
+	CardIds.SandTrap,
+	CardIds.TwistPlagueOfMurlocs_SurpriseMurlocsToken,
+	CardIds.TheDarkness_DarknessCandleToken,
+	CardIds.BeneathTheGrounds_NerubianAmbushToken,
+	CardIds.FaldoreiStrider_SpiderAmbush,
+	CardIds.ShadowOfDeath_ShadowToken,
+	CardIds.TicketMaster_TicketsToken,
+	CardIds.Waxadred_WaxadredsCandleToken,
+	CardIds.SchoolSpirits_SoulFragmentToken,
+	CardIds.Undermine_ImprovisedExplosiveTavernBrawlToken,
+	CardIds.IronJuggernaut_BurrowingMineToken,
 ];
 
-export const forcedHiddenCardCreators = [
-	CardIds.NonCollectible.Neutral.MaskOfMimicry,
-	CardIds.NonCollectible.Neutral.MaskOfMimicryTavernBrawl,
-];
+export const forcedHiddenCardCreators = [CardIds.MaskOfMimicry, CardIds.MaskOfMimicryTavernBrawl];
 
 export const forceHideInfoWhenDrawnInfluencers = [
 	// Doesn't trigger Mankrik's Wife, so it probably behaves like Secret Passage
-	CardIds.Collectible.Hunter.TrackingCore,
-	CardIds.Collectible.Hunter.TrackingLegacy,
-	CardIds.Collectible.Hunter.TrackingVanilla,
+	CardIds.TrackingCore,
+	CardIds.TrackingLegacy,
+	CardIds.TrackingVanilla,
 	// From what I've tested, Glide / Plot Twist seem to behave properly (cast when drawn
 	// effects apply)
-	CardIds.Collectible.Rogue.SecretPassage,
+	CardIds.SecretPassage,
 	// Cards that discover a card in your deck do count as drawing but cards that discover a copy do not.
-	CardIds.Collectible.Priest.ShadowVisions,
+	CardIds.ShadowVisions,
 ];
 
 export const publicCardCreators = [
-	CardIds.Collectible.Demonhunter.Felgorger,
-	CardIds.Collectible.Demonhunter.VengefulSpirit2,
-	CardIds.Collectible.Druid.FungalFortunes,
-	CardIds.Collectible.Druid.JuicyPsychmelon,
-	CardIds.Collectible.Druid.LunarVisions,
-	CardIds.Collectible.Druid.PredatoryInstincts,
-	CardIds.Collectible.Druid.GuessTheWeight,
-	CardIds.Collectible.Hunter.ArcaneFletcher,
-	CardIds.Collectible.Hunter.BarakKodobane1,
-	CardIds.Collectible.Hunter.CallPet,
-	CardIds.Collectible.Hunter.DivingGryphon,
-	CardIds.Collectible.Hunter.KingsElekk,
-	CardIds.Collectible.Hunter.MastersCall,
-	CardIds.Collectible.Hunter.PackKodo,
-	CardIds.Collectible.Hunter.ScavengersIngenuity,
-	CardIds.Collectible.Hunter.TolvirWarden,
-	CardIds.Collectible.Hunter.Ursatron,
-	CardIds.Collectible.Hunter.WarsongWrangler,
-	CardIds.Collectible.Mage.AncientMysteries,
-	CardIds.Collectible.Mage.Arcanologist,
-	CardIds.Collectible.Mage.ArcanologistCore,
-	CardIds.Collectible.Mage.ArchmageArugal,
-	CardIds.Collectible.Mage.BookOfSpecters,
-	CardIds.Collectible.Mage.ElementalAllies,
-	CardIds.Collectible.Mage.RavenFamiliar1,
-	CardIds.Collectible.Mage.SorcerersGambit,
-	CardIds.NonCollectible.Mage.SorcerersGambit_StallForTimeToken,
-	CardIds.Collectible.Mage.Starscryer,
-	CardIds.Collectible.Paladin.AllianceBannerman,
-	CardIds.Collectible.Paladin.CallToAdventure,
-	CardIds.Collectible.Paladin.Crystology,
-	CardIds.Collectible.Paladin.HowlingCommander,
-	CardIds.Collectible.Paladin.KnightOfAnointment,
-	CardIds.Collectible.Paladin.NorthwatchCommander,
-	CardIds.Collectible.Paladin.PrismaticLens,
-	CardIds.Collectible.Paladin.SalhetsPride,
-	CardIds.Collectible.Paladin.SmallTimeRecruits,
-	CardIds.Collectible.Priest.BwonsamdiTheDead,
-	CardIds.Collectible.Priest.DeadRinger,
-	CardIds.Collectible.Priest.GhuunTheBloodGod,
-	CardIds.NonCollectible.Priest.Insight_InsightToken,
-	CardIds.Collectible.Priest.SeekGuidance,
-	CardIds.NonCollectible.Priest.SeekGuidance_DiscoverTheVoidShardToken,
-	CardIds.Collectible.Priest.ThriveInTheShadowsCore,
-	CardIds.Collectible.Rogue.CavernShinyfinder,
-	CardIds.Collectible.Rogue.CursedCastaway,
-	CardIds.Collectible.Rogue.ElvenMinstrel,
-	CardIds.Collectible.Rogue.GalakrondTheNightmare,
-	CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondTheApocalypseToken,
-	CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondAzerothsEndToken,
-	CardIds.Collectible.Rogue.GrandEmpressShekzara,
-	CardIds.Collectible.Rogue.NecriumApothecary,
-	CardIds.Collectible.Rogue.RollTheBones,
-	CardIds.Collectible.Rogue.RaidingParty,
-	CardIds.NonCollectible.Rogue.SecretPassage_SecretEntranceEnchantment,
-	CardIds.Collectible.Rogue.SketchyInformation,
-	CardIds.Collectible.Rogue.Stowaway,
-	CardIds.NonCollectible.Rogue.FindTheImposter_SpyOMaticToken,
-	CardIds.Collectible.Rogue.Swindle,
-	CardIds.Collectible.Rogue.ThistleTea,
-	CardIds.Collectible.Shaman.Bogshaper,
-	CardIds.Collectible.Shaman.CagematchCustodian,
-	CardIds.Collectible.Shaman.ElementaryReaction,
-	CardIds.Collectible.Shaman.PrimalDungeoneer,
-	CardIds.Collectible.Shaman.FarSightLegacy,
-	CardIds.Collectible.Shaman.FarSightVanilla,
-	CardIds.Collectible.Shaman.IceFishing,
-	CardIds.Collectible.Shaman.InvestmentOpportunity,
-	CardIds.Collectible.Shaman.SpiritOfTheFrog,
-	CardIds.NonCollectible.Shaman.CommandTheElements_StormcallerBrukanToken,
-	CardIds.Collectible.Shaman.StormChaser,
-	CardIds.Collectible.Warlock.FelLordBetrug1,
-	CardIds.Collectible.Warlock.FreeAdmission,
-	CardIds.Collectible.Warlock.SenseDemonsLegacy,
-	CardIds.Collectible.Warlock.SenseDemonsVanilla1,
-	CardIds.NonCollectible.Warlock.SupremeArchaeology_TomeOfOrigination,
-	CardIds.Collectible.Warlock.TamsinRoame1,
-	CardIds.Collectible.Warrior.AkaliTheRhino,
-	CardIds.Collectible.Warrior.Ancharrr,
-	CardIds.Collectible.Warrior.CorsairCache,
-	CardIds.Collectible.Warrior.ForgeOfSouls,
-	CardIds.Collectible.Warrior.GalakrondTheUnbreakable,
-	CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
-	CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
-	CardIds.Collectible.Warrior.HarborScamp,
-	CardIds.Collectible.Warrior.StageDive,
-	CardIds.NonCollectible.Warrior.StageDive_StageDive,
-	CardIds.Collectible.Warrior.TownCrier1,
-	CardIds.Collectible.Warrior.RaidTheDocks,
-	CardIds.Collectible.Warrior.RingmasterWhatley,
-	CardIds.Collectible.Warrior.VarianWrynn1,
-	CardIds.Collectible.Neutral.BrightEyedScout,
-	CardIds.Collectible.Neutral.CaptainsParrotLegacy,
-	CardIds.Collectible.Neutral.CaptainsParrotVanilla,
-	CardIds.Collectible.Neutral.ClawMachine,
-	CardIds.Collectible.Neutral.CountessAshmore,
-	CardIds.Collectible.Neutral.GnomishExperimenter,
-	CardIds.Collectible.Neutral.Guidance1,
-	CardIds.Collectible.Neutral.JepettoJoybuzz,
-	CardIds.Collectible.Neutral.Kazakus1,
-	CardIds.Collectible.Neutral.KazakusGolemShaper,
-	CardIds.Collectible.Neutral.KronxDragonhoof,
-	CardIds.Collectible.Neutral.MurlocTastyfin,
-	CardIds.Collectible.Neutral.Mankrik,
-	CardIds.Collectible.Neutral.Peon1,
-	CardIds.Collectible.Neutral.PrimordialProtector1,
-	CardIds.Collectible.Neutral.Sandbinder,
-	CardIds.Collectible.Neutral.SouthseaScoundrel,
-	CardIds.Collectible.Neutral.Subject9,
-	CardIds.Collectible.Neutral.TaelanFordringCore,
-	CardIds.Collectible.Neutral.TentacledMenace,
-	CardIds.Collectible.Neutral.TheCurator,
-	CardIds.Collectible.Neutral.UtgardeGrapplesniper,
-	CardIds.Collectible.Neutral.VenomousScorpid,
-	CardIds.Collectible.Neutral.WitchwoodPiper,
-	CardIds.NonCollectible.Neutral.WondrousWand,
-	CardIds.Collectible.Neutral.Wrathion1,
+	CardIds.Felgorger,
+	CardIds.VengefulSpirit2,
+	CardIds.FungalFortunes,
+	CardIds.JuicyPsychmelon,
+	CardIds.LunarVisions,
+	CardIds.PredatoryInstincts,
+	CardIds.GuessTheWeight,
+	CardIds.ArcaneFletcher,
+	CardIds.BarakKodobane1,
+	CardIds.CallPet,
+	CardIds.DivingGryphon,
+	CardIds.KingsElekk,
+	CardIds.MastersCall,
+	CardIds.PackKodo,
+	CardIds.ScavengersIngenuity,
+	CardIds.TolvirWarden,
+	CardIds.Ursatron,
+	CardIds.WarsongWrangler,
+	CardIds.AncientMysteries,
+	CardIds.Arcanologist,
+	CardIds.ArcanologistCore,
+	CardIds.ArchmageArugal,
+	CardIds.BookOfSpecters,
+	CardIds.ElementalAllies,
+	CardIds.RavenFamiliar1,
+	CardIds.SorcerersGambit,
+	CardIds.SorcerersGambit_StallForTimeToken,
+	CardIds.Starscryer,
+	CardIds.AllianceBannerman,
+	CardIds.CallToAdventure,
+	CardIds.Crystology,
+	CardIds.HowlingCommander,
+	CardIds.KnightOfAnointment,
+	CardIds.NorthwatchCommander,
+	CardIds.PrismaticLens,
+	CardIds.SalhetsPride,
+	CardIds.SmallTimeRecruits,
+	CardIds.BwonsamdiTheDead,
+	CardIds.DeadRinger,
+	CardIds.GhuunTheBloodGod,
+	CardIds.Insight_InsightToken,
+	CardIds.SeekGuidance,
+	CardIds.SeekGuidance_DiscoverTheVoidShardToken,
+	CardIds.ThriveInTheShadowsCore,
+	CardIds.CavernShinyfinder,
+	CardIds.CursedCastaway,
+	CardIds.ElvenMinstrel,
+	CardIds.GalakrondTheNightmare,
+	CardIds.GalakrondTheNightmare_GalakrondTheApocalypseToken,
+	CardIds.GalakrondTheNightmare_GalakrondAzerothsEndToken,
+	CardIds.GrandEmpressShekzara,
+	CardIds.NecriumApothecary,
+	CardIds.RollTheBones,
+	CardIds.RaidingParty,
+	CardIds.SecretPassage_SecretEntranceEnchantment,
+	CardIds.SketchyInformation,
+	CardIds.Stowaway,
+	CardIds.FindTheImposter_SpyOMaticToken,
+	CardIds.Swindle,
+	CardIds.ThistleTea,
+	CardIds.Bogshaper,
+	CardIds.CagematchCustodian,
+	CardIds.ElementaryReaction,
+	CardIds.PrimalDungeoneer,
+	CardIds.FarSightLegacy,
+	CardIds.FarSightVanilla,
+	CardIds.IceFishing,
+	CardIds.InvestmentOpportunity,
+	CardIds.SpiritOfTheFrog,
+	CardIds.CommandTheElements_StormcallerBrukanToken,
+	CardIds.StormChaser,
+	CardIds.FelLordBetrug1,
+	CardIds.FreeAdmission,
+	CardIds.SenseDemonsLegacy,
+	CardIds.SenseDemonsVanilla1,
+	CardIds.SupremeArchaeology_TomeOfOrigination,
+	CardIds.TamsinRoame1,
+	CardIds.AkaliTheRhino,
+	CardIds.Ancharrr,
+	CardIds.CorsairCache,
+	CardIds.ForgeOfSouls,
+	CardIds.GalakrondTheUnbreakable,
+	CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken,
+	CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken,
+	CardIds.HarborScamp,
+	CardIds.StageDive,
+	CardIds.StageDive_StageDive,
+	CardIds.TownCrier1,
+	CardIds.RaidTheDocks,
+	CardIds.RingmasterWhatley,
+	CardIds.VarianWrynn1,
+	CardIds.BrightEyedScout,
+	CardIds.CaptainsParrotLegacy,
+	CardIds.CaptainsParrotVanilla,
+	CardIds.ClawMachine,
+	CardIds.CountessAshmore,
+	CardIds.GnomishExperimenter,
+	CardIds.Guidance1,
+	CardIds.JepettoJoybuzz,
+	CardIds.Kazakus1,
+	CardIds.KazakusGolemShaper,
+	CardIds.KronxDragonhoof,
+	CardIds.MurlocTastyfin,
+	CardIds.Mankrik,
+	CardIds.Peon1,
+	CardIds.PrimordialProtector1,
+	CardIds.Sandbinder,
+	CardIds.SouthseaScoundrel,
+	CardIds.Subject9,
+	CardIds.TaelanFordringCore,
+	CardIds.TentacledMenace,
+	CardIds.TheCurator,
+	CardIds.UtgardeGrapplesniper,
+	CardIds.VenomousScorpid,
+	CardIds.WitchwoodPiper,
+	CardIds.WondrousWand,
+	CardIds.Wrathion1,
 ];
 
 export const getGalakrondCardFor = (className: string, invokeCount: number): string => {
 	switch (className) {
 		case 'priest':
 			if (invokeCount >= 4) {
-				return CardIds.NonCollectible.Priest.GalakrondTheUnspeakable_GalakrondAzerothsEndToken;
+				return CardIds.GalakrondTheUnspeakable_GalakrondAzerothsEndToken;
 			} else if (invokeCount >= 2) {
-				return CardIds.NonCollectible.Priest.GalakrondTheUnspeakable_GalakrondTheApocalypseToken;
+				return CardIds.GalakrondTheUnspeakable_GalakrondTheApocalypseToken;
 			}
-			return CardIds.Collectible.Priest.GalakrondTheUnspeakable;
+			return CardIds.GalakrondTheUnspeakable;
 		case 'rogue':
 			if (invokeCount >= 4) {
-				return CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondAzerothsEndToken;
+				return CardIds.GalakrondTheNightmare_GalakrondAzerothsEndToken;
 			} else if (invokeCount >= 2) {
-				return CardIds.NonCollectible.Rogue.GalakrondTheNightmare_GalakrondTheApocalypseToken;
+				return CardIds.GalakrondTheNightmare_GalakrondTheApocalypseToken;
 			}
-			return CardIds.Collectible.Rogue.GalakrondTheNightmare;
+			return CardIds.GalakrondTheNightmare;
 		case 'shaman':
 			if (invokeCount >= 4) {
-				return CardIds.NonCollectible.Shaman.GalakrondTheTempest_GalakrondAzerothsEndToken;
+				return CardIds.GalakrondTheTempest_GalakrondAzerothsEndToken;
 			} else if (invokeCount >= 2) {
-				return CardIds.NonCollectible.Shaman.GalakrondTheTempest_GalakrondTheApocalypseToken;
+				return CardIds.GalakrondTheTempest_GalakrondTheApocalypseToken;
 			}
-			return CardIds.Collectible.Shaman.GalakrondTheTempest;
+			return CardIds.GalakrondTheTempest;
 		case 'warlock':
 			if (invokeCount >= 4) {
-				return CardIds.NonCollectible.Warlock.GalakrondTheWretched_GalakrondAzerothsEndToken;
+				return CardIds.GalakrondTheWretched_GalakrondAzerothsEndToken;
 			} else if (invokeCount >= 2) {
-				return CardIds.NonCollectible.Warlock.GalakrondTheWretched_GalakrondTheApocalypseToken;
+				return CardIds.GalakrondTheWretched_GalakrondTheApocalypseToken;
 			}
-			return CardIds.Collectible.Warlock.GalakrondTheWretched;
+			return CardIds.GalakrondTheWretched;
 		case 'warrior':
 			if (invokeCount >= 4) {
-				return CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondAzerothsEndToken;
+				return CardIds.GalakrondTheUnbreakable_GalakrondAzerothsEndToken;
 			} else if (invokeCount >= 2) {
-				return CardIds.NonCollectible.Warrior.GalakrondTheUnbreakable_GalakrondTheApocalypseToken;
+				return CardIds.GalakrondTheUnbreakable_GalakrondTheApocalypseToken;
 			}
-			return CardIds.Collectible.Warrior.GalakrondTheUnbreakable;
+			return CardIds.GalakrondTheUnbreakable;
 	}
-	return CardIds.Collectible.Rogue.GalakrondTheNightmare;
+	return CardIds.GalakrondTheNightmare;
 };
 
 export const defaultStartingHp = (gameType: GameType, heroCardId: string): number => {
 	if ([GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(gameType)) {
 		switch (heroCardId) {
-			case CardIds.NonCollectible.Neutral.PatchwerkBattlegrounds:
+			case CardIds.PatchwerkBattlegrounds:
 				return 55;
 			default:
 				return 40;
@@ -603,10 +600,10 @@ export const getPackDustValue = (pack: PackResult): number => {
 };
 
 export const COUNTERSPELLS = [
-	CardIds.Collectible.Mage.CounterspellLegacy,
-	CardIds.Collectible.Mage.CounterspellCore,
-	CardIds.Collectible.Mage.CounterspellVanilla,
-	CardIds.Collectible.Paladin.OhMyYogg,
+	CardIds.CounterspellLegacy,
+	CardIds.CounterspellCore,
+	CardIds.CounterspellVanilla,
+	CardIds.OhMyYogg,
 ];
 
 export const getDefaultHeroDbfIdForClass = (playerClass: string): number => {

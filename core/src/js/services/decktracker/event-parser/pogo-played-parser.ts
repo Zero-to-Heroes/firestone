@@ -5,17 +5,13 @@ import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
 export class PogoPlayedParser implements EventParser {
-	private static POGO_CARD_IDS = [
-		CardIds.Collectible.Rogue.PogoHopper1,
-		CardIds.NonCollectible.Rogue.PogoHopper2,
-		CardIds.NonCollectible.Rogue.PogoHopperBattlegrounds,
-	];
+	private static POGO_CARD_IDS = [CardIds.PogoHopper1, CardIds.PogoHopper2, CardIds.PogoHopperBattlegrounds];
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
 			gameEvent.type === GameEvent.CARD_PLAYED &&
-			PogoPlayedParser.POGO_CARD_IDS.includes(gameEvent.cardId)
+			PogoPlayedParser.POGO_CARD_IDS.includes(gameEvent.cardId as CardIds)
 		);
 	}
 

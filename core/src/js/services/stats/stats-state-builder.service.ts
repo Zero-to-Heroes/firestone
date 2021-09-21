@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
+import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { StatsCategory } from '../../models/mainwindow/stats/stats-category';
 import { StatsState } from '../../models/mainwindow/stats/stats-state';

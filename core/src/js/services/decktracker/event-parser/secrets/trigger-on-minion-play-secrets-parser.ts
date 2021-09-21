@@ -9,19 +9,19 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnMinionPlay = [
-		CardIds.Collectible.Hunter.HiddenCache,
-		CardIds.Collectible.Hunter.SnipeLegacy,
-		CardIds.Collectible.Hunter.SnipeVanilla,
-		CardIds.Collectible.Mage.PotionOfPolymorph,
-		CardIds.Collectible.Mage.MirrorEntityLegacy,
-		CardIds.Collectible.Mage.MirrorEntityCore,
-		CardIds.Collectible.Mage.MirrorEntityVanilla,
-		CardIds.Collectible.Mage.FrozenClone,
-		CardIds.Collectible.Mage.ExplosiveRunes,
-		CardIds.Collectible.Paladin.RepentanceLegacy,
-		CardIds.Collectible.Paladin.RepentanceVanilla,
-		CardIds.Collectible.Paladin.SacredTrial,
-		CardIds.Collectible.Rogue.Ambush,
+		CardIds.HiddenCache,
+		CardIds.SnipeLegacy,
+		CardIds.SnipeVanilla,
+		CardIds.PotionOfPolymorph,
+		CardIds.MirrorEntityLegacy,
+		CardIds.MirrorEntityCore,
+		CardIds.MirrorEntityVanilla,
+		CardIds.FrozenClone,
+		CardIds.ExplosiveRunes,
+		CardIds.RepentanceLegacy,
+		CardIds.RepentanceVanilla,
+		CardIds.SacredTrial,
+		CardIds.Ambush,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
@@ -45,27 +45,27 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		// We take the stance here that the most likely scenario is that the opponent has a
 		// minion in hand (which is even more likely if they actually played HiddenCache)
 		if (deckWithSecretToCheck.hand.length === 0) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.HiddenCache);
+			secretsWeCantRuleOut.push(CardIds.HiddenCache);
 		}
 
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntityLegacy);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntityCore);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntityVanilla);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Ambush);
+			secretsWeCantRuleOut.push(CardIds.MirrorEntityLegacy);
+			secretsWeCantRuleOut.push(CardIds.MirrorEntityCore);
+			secretsWeCantRuleOut.push(CardIds.MirrorEntityVanilla);
+			secretsWeCantRuleOut.push(CardIds.Ambush);
 		}
 
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;
 		// console.log('enemy board', enemyBoard, isMinionPlayedByPlayer, currentState, gameEvent);
 		if (enemyBoard.length < 3) {
 			// console.log('ruling out sacred trial', enemyBoard);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.SacredTrial);
+			secretsWeCantRuleOut.push(CardIds.SacredTrial);
 		}
 		// TODO: handle the case where the max hand size has been bumped to 12
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Duplicate);
+			secretsWeCantRuleOut.push(CardIds.Duplicate);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnMinionPlay.filter(

@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -36,7 +37,8 @@ export class CardDrawParser implements EventParser {
 			// 3. As a result, the card info is considered public, and we show it
 			isPlayer ||
 			(!isCardDrawnBySecretPassage &&
-				(cardsRevealedWhenDrawn.includes(cardId) || publicCardCreators.includes(lastInfluencedByCardId)));
+				(cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
+					publicCardCreators.includes(lastInfluencedByCardId)));
 		const isCreatorPublic = isCardInfoPublic || publicCardCreators.includes(lastInfluencedByCardId);
 
 		//console.debug('found card in zone', card, deck, cardId, entityId, isCardInfoPublic);

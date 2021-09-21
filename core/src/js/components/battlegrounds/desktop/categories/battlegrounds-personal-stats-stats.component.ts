@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
+import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';

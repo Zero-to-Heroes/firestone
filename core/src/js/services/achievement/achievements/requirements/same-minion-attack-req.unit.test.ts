@@ -14,7 +14,7 @@ describe('same-minion-attack-req', () => {
 				type: GameEvent.ATTACKING_MINION,
 				localPlayer: { PlayerId: 1 },
 				additionalData: {
-					attackerCardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+					attackerCardId: CardIds.ManaWyrmLegacy,
 					attackerEntityId: 1,
 					attackerControllerId: 1,
 				},
@@ -31,7 +31,7 @@ describe('same-minion-attack-req', () => {
 				type: GameEvent.ATTACKING_MINION,
 				localPlayer: { PlayerId: 1 },
 				additionalData: {
-					attackerCardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+					attackerCardId: CardIds.ManaWyrmLegacy,
 					attackerEntityId: 1,
 					attackerControllerId: 1,
 				},
@@ -49,7 +49,7 @@ describe('same-minion-attack-req', () => {
 				type: GameEvent.ATTACKING_MINION,
 				localPlayer: { PlayerId: 1 },
 				additionalData: {
-					attackerCardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+					attackerCardId: CardIds.ManaWyrmLegacy,
 					attackerEntityId: 1,
 					attackerControllerId: 1,
 				},
@@ -65,7 +65,7 @@ describe('same-minion-attack-req', () => {
 				type: GameEvent.ATTACKING_MINION,
 				localPlayer: { PlayerId: 1 },
 				additionalData: {
-					attackerCardId: CardIds.Collectible.Warrior.GarroshHellscreamHeroSkins,
+					attackerCardId: CardIds.GarroshHellscreamHeroSkins,
 					attackerEntityId: 1,
 					attackerControllerId: 1,
 				},
@@ -83,7 +83,7 @@ describe('same-minion-attack-req', () => {
 					type: GameEvent.ATTACKING_MINION,
 					localPlayer: { PlayerId: 1 },
 					additionalData: {
-						attackerCardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+						attackerCardId: CardIds.ManaWyrmLegacy,
 						attackerEntityId: 1,
 						attackerControllerId: 1,
 					},
@@ -94,7 +94,7 @@ describe('same-minion-attack-req', () => {
 					type: GameEvent.ATTACKING_MINION,
 					localPlayer: { PlayerId: 1 },
 					additionalData: {
-						attackerCardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+						attackerCardId: CardIds.ManaWyrmLegacy,
 						attackerEntityId: 2,
 						attackerControllerId: 1,
 					},
@@ -109,7 +109,7 @@ describe('same-minion-attack-req', () => {
 				type: GameEvent.ATTACKING_MINION,
 				localPlayer: { PlayerId: 1 },
 				additionalData: {
-					attackerCardId: CardIds.Collectible.Mage.ManaWyrmLegacy,
+					attackerCardId: CardIds.ManaWyrmLegacy,
 					attackerEntityId: 1,
 					attackerControllerId: 2,
 				},

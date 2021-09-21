@@ -8,11 +8,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnNumCardPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [
-		CardIds.Collectible.Hunter.RatTrap,
-		CardIds.Collectible.Paladin.HiddenWisdom,
-		CardIds.Collectible.Paladin.GallopingSavior,
-	];
+	private secretsTriggeringOnAttack = [CardIds.RatTrap, CardIds.HiddenWisdom, CardIds.GallopingSavior];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
@@ -27,16 +23,16 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 
 		const toExclude = [];
 		if (gameEvent.additionalData.cardsPlayed < 3) {
-			toExclude.push(CardIds.Collectible.Hunter.RatTrap);
-			toExclude.push(CardIds.Collectible.Paladin.HiddenWisdom);
-			toExclude.push(CardIds.Collectible.Paladin.GallopingSavior);
+			toExclude.push(CardIds.RatTrap);
+			toExclude.push(CardIds.HiddenWisdom);
+			toExclude.push(CardIds.GallopingSavior);
 		}
 		if (deckWithSecretToCheck.board.length === 7) {
-			toExclude.push(CardIds.Collectible.Hunter.RatTrap);
-			toExclude.push(CardIds.Collectible.Paladin.GallopingSavior);
+			toExclude.push(CardIds.RatTrap);
+			toExclude.push(CardIds.GallopingSavior);
 		}
 		if (deckWithSecretToCheck.hand.length === 10) {
-			toExclude.push(CardIds.Collectible.Paladin.HiddenWisdom);
+			toExclude.push(CardIds.HiddenWisdom);
 		}
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
 			(secret) => toExclude.indexOf(secret) === -1,

@@ -20,7 +20,7 @@ export class WatchpostCounterDefinition implements CounterDefinition {
 		return {
 			type: 'watchpost',
 			value: cardsPlayed,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Collectible.Neutral.FarWatchPost}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.FarWatchPost}.jpg`,
 			cssClass: 'watchpost',
 			tooltip: `${side === 'player' ? 'You have' : 'Your opponent has'} played ${cardsPlayed} watchpost${
 				cardsPlayed > 1 ? 's' : ''

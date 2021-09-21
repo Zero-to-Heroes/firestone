@@ -7,10 +7,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnTurnEndSecretsParser implements EventParser {
-	private secretsTriggeringOnTurnEnd = [
-		CardIds.Collectible.Mage.RiggedFaireGame,
-		CardIds.Collectible.Rogue.Plagiarize,
-	];
+	private secretsTriggeringOnTurnEnd = [CardIds.RiggedFaireGame, CardIds.Plagiarize];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
@@ -39,18 +36,18 @@ export class TriggerOnTurnEndSecretsParser implements EventParser {
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
 			// console.log('[secret-turn-end] hand full');
-			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Plagiarize);
+			secretsWeCantRuleOut.push(CardIds.Plagiarize);
 		}
 
 		const hasOpponentPlayedCards = playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn.length > 0;
 		// console.log('[secret-turn-end] cards played this turn', playerWhoseCardsPlayedToCheck.cardsPlayedThisTurn);
 		if (!hasOpponentPlayedCards) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Plagiarize);
+			secretsWeCantRuleOut.push(CardIds.Plagiarize);
 		}
 
 		const hasHeroTakenDamage = deckWithSecretToCheck.damageTakenThisTurn > 0;
 		if (hasHeroTakenDamage) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.RiggedFaireGame);
+			secretsWeCantRuleOut.push(CardIds.RiggedFaireGame);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnEnd.filter(

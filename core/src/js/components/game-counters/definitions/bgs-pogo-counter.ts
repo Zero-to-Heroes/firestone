@@ -15,7 +15,7 @@ export class BgsPogoCounterDefinition implements CounterDefinition {
 		return {
 			type: 'bgsPogo',
 			value: pogoHopperSize,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Collectible.Rogue.PogoHopper1}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.PogoHopper1}.jpg`,
 			cssClass: 'pogo-counter',
 			tooltip: `${side === 'player' ? 'You have' : 'Your opponent has'} played ${pogoHopperSize} Pogo-Hoppers`,
 			standardCounter: true,

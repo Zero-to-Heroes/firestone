@@ -25,7 +25,7 @@ export class BgsPlayer implements IBgsPlayer {
 	readonly highestWinStreak: number;
 
 	public static create(base: BgsPlayer): BgsPlayer {
-		const startingHealth = base.cardId === CardIds.NonCollectible.Neutral.PatchwerkBattlegrounds ? 55 : 40;
+		const startingHealth = base.cardId === CardIds.PatchwerkBattlegrounds ? 55 : 40;
 		return Object.assign(new BgsPlayer(), { initialHealth: startingHealth }, base);
 	}
 

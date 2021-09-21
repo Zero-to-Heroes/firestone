@@ -1,6 +1,6 @@
-import { BgsBestStat } from '@firestone-hs/compute-bgs-run-stats/dist/model/bgs-best-stat';
 import { BgsPostMatchStats as IBgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { Race } from '@firestone-hs/reference-data';
+import { BgsBestStat } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsPanel } from '../bgs-panel';
 import { BgsPanelId } from '../bgs-panel-id.type';
 import { BgsPlayer } from '../bgs-player';

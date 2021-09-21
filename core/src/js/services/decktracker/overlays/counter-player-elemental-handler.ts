@@ -12,9 +12,9 @@ export class ElementalPlayerCounterOverlayHandler extends AbstractOverlayHandler
 			(prefs) => prefs.playerElementalCounter,
 			(state) =>
 				this.containsCards(state?.playerDeck?.hand, [
-					CardIds.Collectible.Mage.ManaCyclone,
-					CardIds.Collectible.Mage.GrandFinale,
-					CardIds.Collectible.Neutral.Ozruk,
+					CardIds.ManaCyclone,
+					CardIds.GrandFinale,
+					CardIds.Ozruk,
 				]) && !state.isBattlegrounds(),
 			ow,
 			prefs,

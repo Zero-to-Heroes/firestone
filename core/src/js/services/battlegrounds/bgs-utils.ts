@@ -10,8 +10,8 @@ import { capitalizeFirstLetter } from '../utils';
 
 export const NON_BUYABLE_MINION_IDS = [
 	'TB_BaconShop_HP_033t_SKIN_A',
-	CardIds.Collectible.Paladin.ArgentBraggart,
-	CardIds.NonCollectible.Paladin.ArgentBraggartBattlegrounds,
+	CardIds.ArgentBraggart,
+	CardIds.ArgentBraggartBattlegrounds,
 ];
 
 export const getTribeName = (tribe: Race): string => capitalizeFirstLetter(Race[tribe]?.toLowerCase());
@@ -26,42 +26,42 @@ export const getReferenceTribeCardId = (tribe: string | Race): string => {
 	switch (tribe) {
 		case 'Mech':
 		case Race.MECH:
-			referenceCardId = CardIds.NonCollectible.Neutral.Pupbot;
+			referenceCardId = CardIds.Pupbot;
 			break;
 		case 'Beast':
 		case Race.BEAST:
-			referenceCardId = CardIds.NonCollectible.Neutral.Leapfrogger;
+			referenceCardId = CardIds.Leapfrogger;
 			break;
 		case 'Demon':
 		case Race.DEMON:
-			referenceCardId = CardIds.NonCollectible.Neutral.FamishedFelbat;
+			referenceCardId = CardIds.FamishedFelbat;
 			break;
 		case 'Dragon':
 		case Race.DRAGON:
-			referenceCardId = CardIds.NonCollectible.Neutral.RazorgoreTavernBrawl;
+			referenceCardId = CardIds.RazorgoreTavernBrawl;
 			break;
 		case 'Murloc':
 		case Race.MURLOC:
-			referenceCardId = CardIds.NonCollectible.Neutral.KingBagurgle;
+			referenceCardId = CardIds.KingBagurgle;
 			break;
 		case 'Pirate':
 		case Race.PIRATE:
-			referenceCardId = CardIds.NonCollectible.Neutral.DreadAdmiralEliza;
+			referenceCardId = CardIds.DreadAdmiralEliza;
 			break;
 		case 'Elemental':
 		case Race.ELEMENTAL:
-			referenceCardId = CardIds.NonCollectible.Neutral.LilRag;
+			referenceCardId = CardIds.LilRag;
 			break;
 		case 'Quilboar':
 		case Race.QUILBOAR:
-			referenceCardId = CardIds.NonCollectible.Neutral.Charlga;
+			referenceCardId = CardIds.Charlga;
 			break;
 		case 'All':
 		case Race.ALL:
-			referenceCardId = CardIds.NonCollectible.Neutral.Amalgadon;
+			referenceCardId = CardIds.Amalgadon;
 			break;
 		default:
-			referenceCardId = CardIds.NonCollectible.Neutral.ZappSlywick;
+			referenceCardId = CardIds.ZappSlywick;
 			break;
 	}
 	return referenceCardId;
@@ -75,12 +75,12 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_011';
 		case 'TB_BaconShop_HERO_08':
 			return 'TB_BaconShop_HP_069';
-		case CardIds.NonCollectible.Neutral.RagnarosTheFirelordBattlegrounds:
-			return CardIds.NonCollectible.Neutral.DieInsectsBattlegrounds2;
+		case CardIds.RagnarosTheFirelordBattlegrounds:
+			return CardIds.DieInsectsBattlegrounds2;
 		case 'TB_BaconShop_HERO_12':
 			return 'TB_BaconShop_HP_041';
-		case CardIds.NonCollectible.Neutral.QueenWagtoggleBattlegrounds:
-			return CardIds.NonCollectible.Neutral.WaxWarbandBattlegrounds;
+		case CardIds.QueenWagtoggleBattlegrounds:
+			return CardIds.WaxWarbandBattlegrounds;
 		case 'TB_BaconShop_HERO_15':
 			return 'TB_BaconShop_HP_010';
 		case 'TB_BaconShop_HERO_16':
@@ -163,8 +163,8 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_068';
 		case 'TB_BaconShop_HERO_64':
 			return 'TB_BaconShop_HP_074';
-		case CardIds.NonCollectible.Neutral.CaptainHooktuskBattlegrounds:
-			return CardIds.NonCollectible.Neutral.TrashForTreasureBattlegrounds;
+		case CardIds.CaptainHooktuskBattlegrounds:
+			return CardIds.TrashForTreasureBattlegrounds;
 		case 'TB_BaconShop_HERO_68':
 			return 'TB_BaconShop_HP_076';
 		case 'TB_BaconShop_HERO_70':
@@ -175,48 +175,48 @@ export const getHeroPower = (heroCardId: string): string => {
 			return 'TB_BaconShop_HP_081';
 		case 'TB_BaconShop_HERO_74':
 			return 'TB_BaconShop_HP_082';
-		case CardIds.NonCollectible.Neutral.ChenvaalaBattlegrounds:
-			return CardIds.NonCollectible.Neutral.AvalancheBattlegrounds;
-		case CardIds.NonCollectible.Neutral.RakanishuBattlegrounds:
-			return CardIds.NonCollectible.Neutral.TavernLightingBattlegrounds;
-		case CardIds.NonCollectible.Neutral.AlakirBattlegrounds:
-			return CardIds.NonCollectible.Neutral.SwattingInsectsBattlegrounds;
-		case CardIds.NonCollectible.Neutral.ZephrysTheGreatBattlegrounds:
-			return CardIds.NonCollectible.Neutral.ThreeWishesBattlegrounds;
-		case CardIds.NonCollectible.Neutral.SilasDarkmoonBattlegrounds:
-			return CardIds.NonCollectible.Neutral.ComeOneComeAllBattlegrounds;
-		case CardIds.NonCollectible.Neutral.CthunBattlegrounds:
-			return CardIds.NonCollectible.Neutral.SaturdayCthunsBattlegrounds;
-		case CardIds.NonCollectible.Neutral.NzothBattlegrounds:
-			return CardIds.NonCollectible.Neutral.AvatarOfNzothBattlegrounds;
-		case CardIds.NonCollectible.Neutral.YshaarjBattlegrounds:
-			return CardIds.NonCollectible.Neutral.EmbraceYourRageBattlegrounds;
-		case CardIds.NonCollectible.Neutral.TickatusBattlegrounds:
-			return CardIds.NonCollectible.Neutral.PrizeWallBattlegrounds;
-		case CardIds.NonCollectible.Neutral.GreyboughBattlegrounds:
-			return CardIds.NonCollectible.Neutral.SproutItOutBattlegrounds;
-		case CardIds.NonCollectible.Neutral.OverlordSaurfang2:
-			return CardIds.NonCollectible.Warrior.OverlordSaurfang_ForTheHorde;
-		case CardIds.NonCollectible.Neutral.DeathSpeakerBlackthorn2:
-			return CardIds.NonCollectible.Neutral.DeathSpeakerBlackthorn_Bloodbound;
-		case CardIds.NonCollectible.Neutral.Voljin2:
-			return CardIds.NonCollectible.Neutral.Voljin_SpiritSwap1;
-		case CardIds.NonCollectible.Neutral.Xyrella2:
-			return CardIds.NonCollectible.Priest.Xyrella_SeeTheLight;
-		case CardIds.NonCollectible.Neutral.MutanusTheDevourer2:
-			return CardIds.NonCollectible.Neutral.MutanusTheDevourer_Devour;
-		case CardIds.NonCollectible.Druid.GuffRunetotem2:
-			return CardIds.NonCollectible.Druid.GuffRunetotem_NaturalBalance;
-		case CardIds.NonCollectible.Demonhunter.KurtrusAshfallen2:
-			return CardIds.NonCollectible.Demonhunter.KurtrusAshfallen_FinalShowdown;
-		case CardIds.NonCollectible.Neutral.Galewing:
-			return CardIds.NonCollectible.Neutral.Galewing_DungarsGryphon;
-		case CardIds.NonCollectible.Neutral.TradePrinceGallywixBattlegrounds:
-			return CardIds.NonCollectible.Rogue.SmartSavingsBattlegrounds;
-		case CardIds.NonCollectible.Neutral.MasterNguyen:
-			return CardIds.NonCollectible.Neutral.MasterNguyen_PowerOfTheStorm;
-		case CardIds.NonCollectible.Paladin.CarielRoame2:
-			return CardIds.NonCollectible.Neutral.ConvictionRank1_BlessedEnchantment2;
+		case CardIds.ChenvaalaBattlegrounds:
+			return CardIds.AvalancheBattlegrounds;
+		case CardIds.RakanishuBattlegrounds:
+			return CardIds.TavernLightingBattlegrounds;
+		case CardIds.AlakirBattlegrounds:
+			return CardIds.SwattingInsectsBattlegrounds;
+		case CardIds.ZephrysTheGreatBattlegrounds:
+			return CardIds.ThreeWishesBattlegrounds;
+		case CardIds.SilasDarkmoonBattlegrounds:
+			return CardIds.ComeOneComeAllBattlegrounds;
+		case CardIds.CthunBattlegrounds:
+			return CardIds.SaturdayCthunsBattlegrounds;
+		case CardIds.NzothBattlegrounds:
+			return CardIds.AvatarOfNzothBattlegrounds;
+		case CardIds.YshaarjBattlegrounds:
+			return CardIds.EmbraceYourRageBattlegrounds;
+		case CardIds.TickatusBattlegrounds:
+			return CardIds.PrizeWallBattlegrounds;
+		case CardIds.GreyboughBattlegrounds:
+			return CardIds.SproutItOutBattlegrounds;
+		case CardIds.OverlordSaurfang2:
+			return CardIds.OverlordSaurfang_ForTheHorde;
+		case CardIds.DeathSpeakerBlackthorn2:
+			return CardIds.DeathSpeakerBlackthorn_Bloodbound;
+		case CardIds.Voljin2:
+			return CardIds.Voljin_SpiritSwap1;
+		case CardIds.Xyrella2:
+			return CardIds.Xyrella_SeeTheLight;
+		case CardIds.MutanusTheDevourer2:
+			return CardIds.MutanusTheDevourer_Devour;
+		case CardIds.GuffRunetotem2:
+			return CardIds.GuffRunetotem_NaturalBalance;
+		case CardIds.KurtrusAshfallen2:
+			return CardIds.KurtrusAshfallen_FinalShowdown;
+		case CardIds.Galewing:
+			return CardIds.Galewing_DungarsGryphon;
+		case CardIds.TradePrinceGallywixBattlegrounds:
+			return CardIds.SmartSavingsBattlegrounds;
+		case CardIds.MasterNguyen:
+			return CardIds.MasterNguyen_PowerOfTheStorm;
+		case CardIds.CarielRoame2:
+			return CardIds.ConvictionRank1_BlessedEnchantment2;
 		case '':
 			return null; // new heroes
 	}
@@ -289,52 +289,52 @@ const isValidTribe = (validTribes: readonly Race[], race: string): boolean => {
 export const getTribeForInclusion = (card: ReferenceCard): Race => {
 	switch (card.id) {
 		// Some cases are only included when specific tribes are
-		case CardIds.NonCollectible.Neutral.BirdBuddy:
-		case CardIds.NonCollectible.Neutral.BirdBuddyBattlegrounds:
-		case CardIds.NonCollectible.Neutral.PackLeader:
-		case CardIds.NonCollectible.Neutral.PackLeaderBattlegrounds:
-		case CardIds.Collectible.Druid.VirmenSensei:
-		case CardIds.NonCollectible.Druid.VirmenSenseiBattlegrounds:
-		case CardIds.Collectible.Hunter.HoundmasterLegacy:
-		case CardIds.Collectible.Hunter.HoundmasterVanilla:
-		case CardIds.NonCollectible.Hunter.HoundmasterBattlegrounds:
+		case CardIds.BirdBuddy:
+		case CardIds.BirdBuddyBattlegrounds:
+		case CardIds.PackLeader:
+		case CardIds.PackLeaderBattlegrounds:
+		case CardIds.VirmenSensei:
+		case CardIds.VirmenSenseiBattlegrounds:
+		case CardIds.HoundmasterLegacy:
+		case CardIds.HoundmasterVanilla:
+		case CardIds.HoundmasterBattlegrounds:
 			return Race.BEAST;
-		case CardIds.NonCollectible.Neutral.ImpatientDoomsayer:
-		case CardIds.NonCollectible.Neutral.ImpatientDoomsayerBattlegrounds:
-		case CardIds.NonCollectible.Warlock.SoulJuggler:
-		case CardIds.NonCollectible.Warlock.SoulJugglerBattlegrounds:
-		case CardIds.NonCollectible.Neutral.WrathWeaver:
-		case CardIds.NonCollectible.Neutral.WrathWeaverBattlegrounds:
+		case CardIds.ImpatientDoomsayer:
+		case CardIds.ImpatientDoomsayerBattlegrounds:
+		case CardIds.SoulJuggler:
+		case CardIds.SoulJugglerBattlegrounds:
+		case CardIds.WrathWeaver:
+		case CardIds.WrathWeaverBattlegrounds:
 			return Race.DEMON;
-		case CardIds.NonCollectible.Neutral.SeafoodSlinger:
-		case CardIds.NonCollectible.Neutral.SeafoodSlingerBattlegrounds:
+		case CardIds.SeafoodSlinger:
+		case CardIds.SeafoodSlingerBattlegrounds:
 			return Race.MURLOC;
-		case CardIds.NonCollectible.Neutral.NadinaTheRed:
-		case CardIds.NonCollectible.Neutral.NadinaTheRedBattlegrounds:
-		case CardIds.NonCollectible.Neutral.WaxriderTogwaggle2:
-		case CardIds.NonCollectible.Neutral.WaxriderTogwaggleBattlegrounds:
-		case CardIds.NonCollectible.Neutral.WhelpSmuggler:
-		case CardIds.NonCollectible.Neutral.WhelpSmugglerBattlegrounds:
+		case CardIds.NadinaTheRed:
+		case CardIds.NadinaTheRedBattlegrounds:
+		case CardIds.WaxriderTogwaggle2:
+		case CardIds.WaxriderTogwaggleBattlegrounds:
+		case CardIds.WhelpSmuggler:
+		case CardIds.WhelpSmugglerBattlegrounds:
 			return Race.DRAGON;
-		case CardIds.NonCollectible.Neutral.MajordomoExecutus3:
-		case CardIds.NonCollectible.Neutral.MajordomoExecutusBattlegrounds:
-		case CardIds.NonCollectible.Neutral.MasterOfRealities2:
-		case CardIds.NonCollectible.Neutral.MasterOfRealitiesBattlegrounds:
-		case CardIds.NonCollectible.Neutral.NomiKitchenNightmare:
-		case CardIds.NonCollectible.Neutral.NomiKitchenNightmareBattlegrounds:
+		case CardIds.MajordomoExecutus3:
+		case CardIds.MajordomoExecutusBattlegrounds:
+		case CardIds.MasterOfRealities2:
+		case CardIds.MasterOfRealitiesBattlegrounds:
+		case CardIds.NomiKitchenNightmare:
+		case CardIds.NomiKitchenNightmareBattlegrounds:
 			return Race.ELEMENTAL;
-		case CardIds.NonCollectible.Neutral.KangorsApprentice:
-		case CardIds.NonCollectible.Neutral.KangorsApprenticeBattlegrounds:
+		case CardIds.KangorsApprentice:
+		case CardIds.KangorsApprenticeBattlegrounds:
 			return Race.MECH;
-		case CardIds.NonCollectible.Neutral.DefiantShipwright:
-		case CardIds.NonCollectible.Neutral.DefiantShipwrightBattlegrounds:
-		case CardIds.NonCollectible.Neutral.TheTideRazor:
-		case CardIds.NonCollectible.Neutral.TheTideRazorBattlegrounds:
+		case CardIds.DefiantShipwright:
+		case CardIds.DefiantShipwrightBattlegrounds:
+		case CardIds.TheTideRazor:
+		case CardIds.TheTideRazorBattlegrounds:
 			return Race.PIRATE;
-		case CardIds.NonCollectible.Neutral.AgamagganTheGreatBoar:
-		case CardIds.NonCollectible.Neutral.AgamagganTheGreatBoarBattlegrounds:
-		case CardIds.NonCollectible.Neutral.ProphetOfTheBoar:
-		case CardIds.NonCollectible.Neutral.ProphetOfTheBoarBattlegrounds:
+		case CardIds.AgamagganTheGreatBoar:
+		case CardIds.AgamagganTheGreatBoarBattlegrounds:
+		case CardIds.ProphetOfTheBoar:
+		case CardIds.ProphetOfTheBoarBattlegrounds:
 			return Race.QUILBOAR;
 		default:
 			return getEffectiveTribeEnum(card);
@@ -393,17 +393,17 @@ export const getAchievementsForHero = (
 // Because inconsistencies
 const formatHeroNameForAchievements = (hero: ReferenceCard): string => {
 	switch (hero?.id) {
-		case CardIds.NonCollectible.Neutral.MaievShadowsongBattlegrounds:
+		case CardIds.MaievShadowsongBattlegrounds:
 			return 'Maiev';
-		case CardIds.NonCollectible.Neutral.KingMuklaBattlegrounds:
+		case CardIds.KingMuklaBattlegrounds:
 			return 'Mukla';
-		case CardIds.NonCollectible.Neutral.DinotamerBrannBattlegrounds:
+		case CardIds.DinotamerBrannBattlegrounds:
 			return 'Brann';
-		case CardIds.NonCollectible.Neutral.ArannaStarseekerBattlegrounds:
+		case CardIds.ArannaStarseekerBattlegrounds:
 			return 'Aranna';
-		case CardIds.NonCollectible.Neutral.RagnarosTheFirelordBattlegrounds:
+		case CardIds.RagnarosTheFirelordBattlegrounds:
 			return 'Ragnaros';
-		case CardIds.NonCollectible.Neutral.AFKayBattlegrounds:
+		case CardIds.AFKayBattlegrounds:
 			return 'A.F.Kay'; // No whitespace
 		default:
 			return hero?.name?.replace(/,/g, '');
@@ -423,8 +423,8 @@ export const isSupportedScenario = (
 		reason: playerSupport.reason ?? oppSupport.reason,
 	};
 	if (
-		battleInfo.playerBoard?.player?.heroPowerId === CardIds.NonCollectible.Neutral.PrestidigitationBattlegrounds ||
-		battleInfo.opponentBoard?.player?.heroPowerId === CardIds.NonCollectible.Neutral.PrestidigitationBattlegrounds
+		battleInfo.playerBoard?.player?.heroPowerId === CardIds.PrestidigitationBattlegrounds ||
+		battleInfo.opponentBoard?.player?.heroPowerId === CardIds.PrestidigitationBattlegrounds
 	) {
 		console.log(
 			'[bgs-simulation] is supported?',
@@ -472,23 +472,19 @@ const isSupportedScenarioForPlayer = (
 
 const hasScallywag = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.Scallywag) ||
-		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.ScallywagBattlegrounds)
+		hasMinionOnBoard(boardInfo, CardIds.Scallywag) || hasMinionOnBoard(boardInfo, CardIds.ScallywagBattlegrounds)
 	);
 };
 
 const hasBaron = (boardInfo: BgsBoardInfo) => {
 	return (
-		hasMinionOnBoard(boardInfo, CardIds.Collectible.Neutral.BaronRivendare2) ||
-		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Neutral.BaronRivendareBattlegrounds)
+		hasMinionOnBoard(boardInfo, CardIds.BaronRivendare2) ||
+		hasMinionOnBoard(boardInfo, CardIds.BaronRivendareBattlegrounds)
 	);
 };
 
 const hasKhadgar = (boardInfo: BgsBoardInfo) => {
-	return (
-		hasMinionOnBoard(boardInfo, CardIds.Collectible.Mage.Khadgar1) ||
-		hasMinionOnBoard(boardInfo, CardIds.NonCollectible.Mage.KhadgarBattlegrounds)
-	);
+	return hasMinionOnBoard(boardInfo, CardIds.Khadgar1) || hasMinionOnBoard(boardInfo, CardIds.KhadgarBattlegrounds);
 };
 
 const hasMinionOnBoard = (boardInfo: BgsBoardInfo, cardId: string): boolean => {

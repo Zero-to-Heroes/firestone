@@ -39,8 +39,7 @@ export class MinionDiedParser implements EventParser {
 			const newPlayerDeck = Object.assign(new DeckState(), deck, {
 				board: newBoard,
 				otherZone: newOther,
-				elwynnBoarsDeadThisMatch:
-					deck.elwynnBoarsDeadThisMatch + (cardId === CardIds.Collectible.Neutral.ElwynnBoar ? 1 : 0),
+				elwynnBoarsDeadThisMatch: deck.elwynnBoarsDeadThisMatch + (cardId === CardIds.ElwynnBoar ? 1 : 0),
 			} as DeckState);
 			result = Object.assign(new GameState(), result, {
 				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

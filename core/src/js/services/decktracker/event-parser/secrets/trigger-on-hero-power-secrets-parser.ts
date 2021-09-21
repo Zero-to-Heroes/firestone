@@ -7,7 +7,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnHeroPowerSecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [CardIds.Collectible.Hunter.DartTrap];
+	private secretsTriggeringOnAttack = [CardIds.DartTrap];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
 

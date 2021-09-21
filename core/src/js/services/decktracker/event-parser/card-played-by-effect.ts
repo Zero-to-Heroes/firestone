@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -60,10 +61,10 @@ export class CardPlayedByEffectParser implements EventParser {
 				additionalInfo?.secretWillTrigger?.reactingToEntityId === entityId) ||
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
-			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId);
+			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
-		if (!isCardCountered && globalEffectCards.includes(cardId)) {
+		if (!isCardCountered && globalEffectCards.includes(cardId as CardIds)) {
 			newGlobalEffects = this.helper.addSingleCardToZone(
 				deck.globalEffects,
 				cardWithZone?.update({

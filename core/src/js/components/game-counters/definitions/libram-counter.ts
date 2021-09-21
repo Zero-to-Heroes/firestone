@@ -20,7 +20,7 @@ export class LibramCounterDefinition implements CounterDefinition {
 		return {
 			type: 'libram',
 			value: cardsPlayed,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Collectible.Paladin.LibramOfWisdom1}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.LibramOfWisdom1}.jpg`,
 			cssClass: 'watchpost',
 			tooltip: `${side === 'player' ? 'You have' : 'Your opponent has'} played ${cardsPlayed} libram${
 				cardsPlayed > 1 ? 's' : ''

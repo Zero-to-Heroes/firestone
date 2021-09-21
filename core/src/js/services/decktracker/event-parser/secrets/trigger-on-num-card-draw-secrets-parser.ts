@@ -8,7 +8,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnNumCardDrawSecretsParser implements EventParser {
-	private secretsTriggeringOnCardDraw = [CardIds.Collectible.Rogue.Shenanigans];
+	private secretsTriggeringOnCardDraw = [CardIds.Shenanigans];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: CardsFacadeService) {}
 
@@ -23,7 +23,7 @@ export class TriggerOnNumCardDrawSecretsParser implements EventParser {
 
 		const toExclude = [];
 		if (gameEvent.additionalData.cardsDrawn < 2 || currentState.opponentDeck.isActivePlayer) {
-			toExclude.push(CardIds.Collectible.Rogue.Shenanigans);
+			toExclude.push(CardIds.Shenanigans);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnCardDraw.filter(

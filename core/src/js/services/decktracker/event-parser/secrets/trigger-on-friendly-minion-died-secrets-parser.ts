@@ -9,14 +9,14 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 	private secretsTriggeringOnFriendlyMinionDeath = [
-		CardIds.Collectible.Mage.Effigy1,
-		CardIds.Collectible.Mage.Duplicate,
-		CardIds.Collectible.Paladin.GetawayKodo,
-		CardIds.Collectible.Paladin.RedemptionLegacy,
-		CardIds.Collectible.Paladin.RedemptionVanilla,
-		CardIds.Collectible.Paladin.Avenge1,
-		CardIds.Collectible.Paladin.AvengeCore,
-		CardIds.Collectible.Rogue.CheatDeath,
+		CardIds.Effigy1,
+		CardIds.Duplicate,
+		CardIds.GetawayKodo,
+		CardIds.RedemptionLegacy,
+		CardIds.RedemptionVanilla,
+		CardIds.Avenge1,
+		CardIds.AvengeCore,
+		CardIds.CheatDeath,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
@@ -47,15 +47,15 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		// TODO: handle the case where the max hand size has been bumped to 12
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Duplicate);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.GetawayKodo);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.CheatDeath);
+			secretsWeCantRuleOut.push(CardIds.Duplicate);
+			secretsWeCantRuleOut.push(CardIds.GetawayKodo);
+			secretsWeCantRuleOut.push(CardIds.CheatDeath);
 		}
 
 		// If it's the only minion on board, we trigger nothing
 		if (deckWithSecretToCheck.board.filter((entity) => !entity.dormant).length === deadEnemyMinions.length) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.Avenge1);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AvengeCore);
+			secretsWeCantRuleOut.push(CardIds.Avenge1);
+			secretsWeCantRuleOut.push(CardIds.AvengeCore);
 		}
 		// TODO: Redemption will not trigger if deathrattles fill up the board
 

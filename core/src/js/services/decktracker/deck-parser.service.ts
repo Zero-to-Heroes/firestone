@@ -563,7 +563,7 @@ export class DeckParserService {
 	}
 
 	private updateCardId(cardId: string, matchInfo: MatchInfo): string {
-		if (cardId !== CardIds.Collectible.Neutral.TransferStudent || !matchInfo) {
+		if (cardId !== CardIds.TransferStudent || !matchInfo) {
 			return cardId;
 		}
 

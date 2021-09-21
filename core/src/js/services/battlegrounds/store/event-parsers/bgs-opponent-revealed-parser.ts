@@ -18,7 +18,7 @@ export class BgsOpponentRevealedParser implements EventParser {
 	public async parse(currentState: BattlegroundsState, event: BgsOpponentRevealedEvent): Promise<BattlegroundsState> {
 		console.log('opponent revealed', event.cardId);
 		const normalizedCardId = normalizeHeroCardId(event.cardId);
-		if (normalizedCardId === CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds) {
+		if (normalizedCardId === CardIds.KelthuzadBattlegrounds) {
 			return currentState;
 		}
 

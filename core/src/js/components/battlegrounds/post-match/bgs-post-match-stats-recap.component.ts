@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { StatName } from '@firestone-hs/compute-bgs-run-stats/dist/model/stat-name.type';
 import { CardIds } from '@firestone-hs/reference-data';
+import { StatName } from '@firestone-hs/user-bgs-post-match-stats';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPostMatchStatsPanel } from '../../../models/battlegrounds/post-match/bgs-post-match-stats-panel';
 
@@ -202,7 +202,7 @@ export class BgsPostMatchStatsRecapComponent {
 			.reduce((a, b) => a + b, 0);
 		if (this._stats.stats.damageToEnemyHeroOverTurn) {
 			const damageDealtToHero = this._stats.stats.damageToEnemyHeroOverTurn
-				.filter((info) => info.value.enemyHeroCardId !== CardIds.NonCollectible.Neutral.KelthuzadBattlegrounds)
+				.filter((info) => info.value.enemyHeroCardId !== CardIds.KelthuzadBattlegrounds)
 				.map((info) => (info.value.value != null ? info.value.value : ((info.value as any) as number))); // For backward compatibilitymap(info => info.value);
 			this.maxSingleTurnHeroDamageDealt = Math.max(...damageDealtToHero, this.maxSingleTurnHeroDamageDealt);
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
@@ -224,9 +224,7 @@ export class BgsPostMatchStatsRecapComponent {
 		// is a refresh)
 		const rerolls = this._stats.stats.rerollsOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
 		this.rerolls =
-			this._stats.player.cardId === CardIds.NonCollectible.Neutral.InfiniteTokiBattlegrounds
-				? rerolls - this.heroPowers
-				: rerolls;
+			this._stats.player.cardId === CardIds.InfiniteTokiBattlegrounds ? rerolls - this.heroPowers : rerolls;
 		this.minionsKilled = this._stats.stats.totalEnemyMinionsKilled;
 		this.heroesKilled = this._stats.stats.totalEnemyHeroesKilled;
 		const battlesGoingFirst = this._stats.stats.wentFirstInBattleOverTurn.filter((value) => value.value === true)

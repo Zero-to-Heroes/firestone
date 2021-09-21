@@ -10,18 +10,18 @@ import { EventParser } from '../event-parser';
 
 export class TriggerOnSpellPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [
-		CardIds.Collectible.Hunter.CatTrick,
-		CardIds.Collectible.Hunter.PressurePlate,
-		CardIds.Collectible.Mage.CounterspellLegacy,
-		CardIds.Collectible.Mage.CounterspellCore,
-		CardIds.Collectible.Mage.CounterspellVanilla,
-		CardIds.Collectible.Mage.NetherwindPortal,
-		CardIds.Collectible.Mage.SpellbenderLegacy,
-		CardIds.Collectible.Mage.SpellbenderVanilla,
-		CardIds.Collectible.Mage.ManaBind,
-		CardIds.Collectible.Paladin.NeverSurrender,
-		CardIds.Collectible.Paladin.OhMyYogg,
-		CardIds.Collectible.Rogue.DirtyTricks,
+		CardIds.CatTrick,
+		CardIds.PressurePlate,
+		CardIds.CounterspellLegacy,
+		CardIds.CounterspellCore,
+		CardIds.CounterspellVanilla,
+		CardIds.NetherwindPortal,
+		CardIds.SpellbenderLegacy,
+		CardIds.SpellbenderVanilla,
+		CardIds.ManaBind,
+		CardIds.NeverSurrender,
+		CardIds.OhMyYogg,
+		CardIds.DirtyTricks,
 	];
 
 	private secretWillTrigger: {
@@ -74,7 +74,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 
 		// If a counterspell has been triggered, the other secrets won't trigger
 		if (
-			COUNTERSPELLS.includes(this.secretWillTrigger?.cardId) &&
+			COUNTERSPELLS.includes(this.secretWillTrigger?.cardId as CardIds) &&
 			gameEvent.cardId === this.secretWillTrigger?.cardId
 		) {
 			return currentState;
@@ -86,8 +86,8 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 
 		const targetCardId = gameEvent.additionalData.targetCardId;
 		if (!targetCardId) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SpellbenderLegacy);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SpellbenderVanilla);
+			secretsWeCantRuleOut.push(CardIds.SpellbenderLegacy);
+			secretsWeCantRuleOut.push(CardIds.SpellbenderVanilla);
 		} else {
 			const targetCard = this.allCards.getCard(targetCardId);
 			if (
@@ -95,7 +95,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 				!targetCard.type ||
 				targetCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()
 			) {
-				secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SpellbenderVanilla);
+				secretsWeCantRuleOut.push(CardIds.SpellbenderVanilla);
 			}
 		}
 
@@ -103,24 +103,24 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		// It's an edge case, so leaving it aside for a first implementation
 		const deckWithBoard = isSpellPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		if (deckWithBoard.board.length === 0) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PressurePlate);
+			secretsWeCantRuleOut.push(CardIds.PressurePlate);
 		}
 
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.CatTrick);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.NetherwindPortal);
+			secretsWeCantRuleOut.push(CardIds.CatTrick);
+			secretsWeCantRuleOut.push(CardIds.NetherwindPortal);
 		}
 
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NeverSurrender);
+			secretsWeCantRuleOut.push(CardIds.NeverSurrender);
 		}
 
 		// TODO: handle the case where the max hand size has been bumped to 12
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
 		if (isHandFull) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.ManaBind);
+			secretsWeCantRuleOut.push(CardIds.ManaBind);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(

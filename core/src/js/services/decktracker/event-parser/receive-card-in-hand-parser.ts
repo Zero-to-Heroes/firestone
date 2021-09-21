@@ -1,3 +1,4 @@
+import { CardIds } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -34,7 +35,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const buffCardId = gameEvent.additionalData.buffCardId;
 		const isCardInfoPublic =
 			isPlayer ||
-			cardsRevealedWhenDrawn.includes(cardId) ||
+			cardsRevealedWhenDrawn.includes(cardId as CardIds) ||
 			publicCardCreators.indexOf(lastInfluencedByCardId) !== -1;
 		// console.debug('cardInfOPublic?', isCardInfoPublic, isPlayer, lastInfluencedByCardId);
 

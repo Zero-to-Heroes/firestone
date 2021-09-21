@@ -21,7 +21,7 @@ export class ElementalCounterDefinition implements CounterDefinition {
 		return {
 			type: 'elemental',
 			value: `${elementalsPlayedLastTurn}/${elementalsPlayedThisTurn}`,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Collectible.Mage.ManaCyclone}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.ManaCyclone}.jpg`,
 			cssClass: 'spell-counter',
 			tooltip: `${
 				side === 'player' ? 'You have' : 'Your opponent has'

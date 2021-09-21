@@ -20,7 +20,7 @@ export class SpellCounterDefinition implements CounterDefinition {
 		return {
 			type: 'spells',
 			value: spellsPlayed,
-			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.Collectible.Neutral.YoggSaronMasterOfFate}.jpg`,
+			image: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${CardIds.YoggSaronMasterOfFate}.jpg`,
 			cssClass: 'spell-counter',
 			tooltip: `${side === 'player' ? 'You have' : 'Your opponent has'} played ${spellsPlayed} spell${
 				spellsPlayed > 1 ? 's' : ''
