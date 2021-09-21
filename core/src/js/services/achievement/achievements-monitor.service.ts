@@ -14,6 +14,7 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { HsAchievementInfo, HsAchievementsInfo } from './achievements-info';
 import { AchievementsManager } from './achievements-manager.service';
@@ -38,15 +39,16 @@ export class AchievementsMonitor {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private gameEvents: GameEventsEmitterService,
-		private achievementLoader: AchievementsLoaderService,
-		private events: Events,
-		private store: MainWindowStoreService,
-		private remoteAchievements: RemoteAchievementsService,
-		private achievementsStorage: AchievementsLocalDbService,
-		private achievementsManager: AchievementsManager,
-		private memory: MemoryInspectionService,
-		private ow: OverwolfService,
+		private readonly gameEvents: GameEventsEmitterService,
+		private readonly achievementLoader: AchievementsLoaderService,
+		private readonly events: Events,
+		private readonly store: MainWindowStoreService,
+		private readonly remoteAchievements: RemoteAchievementsService,
+		private readonly achievementsStorage: AchievementsLocalDbService,
+		private readonly achievementsManager: AchievementsManager,
+		private readonly memory: MemoryInspectionService,
+		private readonly ow: OverwolfService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.lastReceivedTimestamp = Date.now();
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
@@ -65,9 +67,10 @@ export class AchievementsMonitor {
 			}
 		});
 
-		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+		this.events.on(Events.MEMORY_UPDATE).subscribe(async (event) => {
+			const prefs = await this.prefs.getPreferences();
 			const changes: MemoryUpdate = event.data[0];
-			if (changes.DisplayingAchievementToast) {
+			if (changes.DisplayingAchievementToast && prefs.achievementsDisplayNotifications) {
 				setTimeout(() => {
 					this.detectNewAchievementFromMemory();
 				}, 500);
@@ -224,7 +227,8 @@ export class AchievementsMonitor {
 	}
 
 	private async handleEvent(gameEvent: GameEvent) {
-		if (this.spectating) {
+		const prefs = await this.prefs.getPreferences();
+		if (this.spectating || !prefs.achievementsEnabled) {
 			return;
 		}
 

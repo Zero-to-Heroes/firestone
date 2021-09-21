@@ -38,6 +38,7 @@ export class Preferences {
 
 	readonly currentMainVisibleSection: CurrentAppType = 'decktracker';
 
+	readonly achievementsEnabled = false;
 	readonly achievementsLiveTracking: boolean = true;
 	readonly achievementsDisplayNotifications = true;
 	readonly resetAchievementsOnAppStart = false;

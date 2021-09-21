@@ -14,9 +14,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<h2 class="title">Update when you see achievements notifications</h2>
 			<section class="toggle-label">
 				<preference-toggle
+					field="achievementsEnabled"
+					label="Enable FS achievements"
+					tooltip="Enable Firestone-exclusive achievements tracking."
+				></preference-toggle>
+				<preference-toggle
 					field="achievementsDisplayNotifications"
 					label="Show notifications"
-					tooltip="Display a notification whenever you unlock an achievement"
+					tooltip="Display a notification whenever you unlock an achievement. Turning this off also turns Hearthstone's own in-game achievements tracking."
 				></preference-toggle>
 				<preference-toggle
 					*ngIf="isDev"
