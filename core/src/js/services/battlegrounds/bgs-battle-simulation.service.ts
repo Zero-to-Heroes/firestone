@@ -120,7 +120,7 @@ export class BgsBattleSimulationService {
 	}
 
 	public async simulateLocalBattle(battleInfo: BgsBattleInfo, prefs: Preferences): Promise<SimulationResult> {
-		const numberOfWorkers = Math.max(1, (this.cpuCount ?? 1) - 1);
+		const numberOfWorkers = 1; // Math.max(1, (this.cpuCount ?? 1) - 1);
 		console.debug('[bgs-simulation] will run parallel simulations', numberOfWorkers);
 		const results = await Promise.all(
 			[...Array(numberOfWorkers).keys()].map((i) =>
