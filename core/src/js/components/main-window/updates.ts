@@ -48,6 +48,10 @@ export const updates: readonly Update[] = [
 						category: 'battlegrounds',
 						details: [
 							{
+								type: 'content',
+								text: `App has been updated for patch 21.3.`,
+							},
+							{
 								type: 'feature',
 								text: `Hero stats have been revamped to include their placement distribution, and the tribes composition has been removed.`,
 							},
@@ -62,6 +66,19 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Changing the rank or time filters on the main app now updates all the displayed stats, including the heroes tier list and the stats on the hero selection screen. It updates both the global stats shown, and you own (so choosing a top 50% MMR filter only takes into account your own games that have done at this MMR).`,
+							},
+							{
+								type: 'misc',
+								text: `Improve performances of the BGS simulator. If your number of simulations was previously set below 10,000, you can consider increasing it.`,
+							},
+						],
+					},
+					{
+						category: 'achievements',
+						details: [
+							{
+								type: 'misc',
+								text: `Firestone-exclusive achievements tracking is now disabled by default. If you want to continue tracking these achievements, please enable it in the Settings. The reason is that many people don't care about FS achievements, and monitoring them would take up some resources for nothing.`,
 							},
 						],
 					},
@@ -109,6 +126,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'bug',
 								text: `Fix a simulator issue where Skewer Rat's tokens would not be taunted.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix a simulator issue where minions killed by Prestor would still deal damage to the attacker.`,
 							},
 							{
 								type: 'ui',
