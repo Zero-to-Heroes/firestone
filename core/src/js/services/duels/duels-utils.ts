@@ -85,6 +85,7 @@ export const duelsTreasureRank = (cardId: string): number => {
 	switch (cardId) {
 		// Passives
 		case CardIds.AvengingArmamentsTavernBrawl:
+		case CardIds.AllTogetherNowTavernBrawl:
 		case CardIds.BattleTotem2:
 		case CardIds.BookOfWonders:
 		case CardIds.Caltrops:

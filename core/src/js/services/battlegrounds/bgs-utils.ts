@@ -326,8 +326,8 @@ export const getTribeForInclusion = (card: ReferenceCard): Race => {
 		case CardIds.KangorsApprentice:
 		case CardIds.KangorsApprenticeBattlegrounds:
 			return Race.MECH;
-		case CardIds.DefiantShipwright:
-		case CardIds.DefiantShipwrightBattlegrounds:
+		case CardIds.DefiantShipwright1:
+		case CardIds.DefiantShipwright2:
 		case CardIds.TheTideRazor:
 		case CardIds.TheTideRazorBattlegrounds:
 			return Race.PIRATE;

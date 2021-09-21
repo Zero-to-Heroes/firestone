@@ -7,6 +7,7 @@ import { EventParser } from './event-parser';
 // but we also need to update everything else, like the decklist
 export class MindrenderIlluciaParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return false;
 		return (
 			state &&
 			(gameEvent.type === GameEvent.MINDRENDER_ILLUCIA_START ||
