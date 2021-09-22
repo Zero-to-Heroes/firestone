@@ -9,14 +9,16 @@ import {
 } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
+import { VisualAchievementCategory } from '../../../models/visual-achievement-category';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-hero-selection-overlay',
@@ -64,33 +66,47 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 			);
 		this.heroOverviews$ = combineLatest(
 			this.store.bgHeroStats$(),
+			this.store.listen$(([main, nav]) => main.achievements),
 			this.store.listenBattlegrounds$(
 				([main, prefs]) => main.panels,
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
 		).pipe(
 			map(
-				([stats, [panels, showAchievements]]) =>
+				([stats, [achievements], [panels, showAchievements]]) =>
 					[
 						stats,
+						achievements.findCategory('hearthstone_game_sub_13'),
 						panels.find(
 							(panel) => panel.id === 'bgs-hero-selection-overview',
 						) as BgsHeroSelectionOverviewPanel,
 						showAchievements,
-					] as readonly [readonly BgsHeroStat[], BgsHeroSelectionOverviewPanel, boolean],
+					] as readonly [
+						readonly BgsHeroStat[],
+						VisualAchievementCategory,
+						BgsHeroSelectionOverviewPanel,
+						boolean,
+					],
 			),
-			filter(([stats, panel, showAchievements]) => !!panel?.heroOptionCardIds?.length),
-			map(([stats, panel, showAchievements]) => {
-				const heroOverviews = panel?.heroOptionCardIds.map((cardId) => {
+			filter(([stats, heroesAchievementCategory, panel, showAchievements]) => !!panel?.heroOptionCardIds?.length),
+			map(
+				([stats, heroesAchievementCategory, panel, showAchievements]) =>
+					[
+						panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null),
+						heroesAchievementCategory,
+						stats,
+						showAchievements,
+					] as [readonly string[], VisualAchievementCategory, readonly BgsHeroStat[], boolean],
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
+				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory?.retrieveAllAchievements();
+				const heroOverviews = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, true);
 					const existingStat = stats.find((overview) => overview.id === normalized);
-					const statWithDefault =
-						existingStat ||
-						BgsHeroStat.create({
-							id: normalized,
-						} as BgsHeroStat);
+					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized, } as BgsHeroStat);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
-						? getAchievementsForHero(normalized, panel.heroAchievements, this.allCards)
+						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
 					return {
 						...statWithDefault,
@@ -110,6 +126,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 			}),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((info) => cdLog('update hero selection overlay', this.constructor.name, info)),
 		);
 	}
 

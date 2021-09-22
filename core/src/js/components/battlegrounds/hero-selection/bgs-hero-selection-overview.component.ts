@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { Stats } from 'fs';
 import { combineLatest, Observable } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
 import { BgsHeroStat, BgsHeroTier } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { VisualAchievement } from '../../../models/visual-achievement';
+import { VisualAchievementCategory } from '../../../models/visual-achievement-category';
 import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
-import { groupByFunction } from '../../../services/utils';
+import { arraysEqual, groupByFunction } from '../../../services/utils';
 
 @Component({
 	selector: 'bgs-hero-selection-overview',
@@ -51,38 +53,44 @@ export class BgsHeroSelectionOverviewComponent {
 			map((stats) => this.buildTiers(stats)),
 		);
 		this.heroOverviews$ = combineLatest(
+			this.store.bgHeroStats$(),
+			this.store.listen$(([main, nav]) => main.achievements),
 			this.store.listenBattlegrounds$(
 				([main, prefs]) => main.panels,
 				([main, prefs]) => prefs.bgsShowHeroSelectionAchievements,
 			),
-			this.store.bgHeroStats$(),
 		).pipe(
 			// tap((info) => console.debug('info in hero selection', info)),
 			map(
-				([[panels, showAchievements], stats]) =>
+				([stats, [achievements], [panels, showAchievements]]) =>
 					[
 						panels.find(
 							(panel) => panel.id === 'bgs-hero-selection-overview',
 						) as BgsHeroSelectionOverviewPanel,
+						achievements.findCategory('hearthstone_game_sub_13'),
 						stats,
 						showAchievements,
-					] as [BgsHeroSelectionOverviewPanel, readonly BgsHeroStat[], boolean],
+					] as [BgsHeroSelectionOverviewPanel, VisualAchievementCategory, readonly BgsHeroStat[], boolean],
 			),
-			filter(([panel, stats, showAchievements]) => !!panel && !!stats?.length),
-			// tap((info) => console.debug('info 2 in hero selection', info)),
-			map(([panel, stats, showAchievements]) => {
-				const selectionOptions =
-					panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null);
+			filter(([panel, heroesAchievementCategory, stats, showAchievements]) => !!panel && !!stats?.length),
+			map(
+				([panel, heroesAchievementCategory, stats, showAchievements]) =>
+					[
+						panel?.heroOptionCardIds ?? (panel.selectedHeroCardId ? [panel.selectedHeroCardId] : null),
+						heroesAchievementCategory,
+						stats,
+						showAchievements,
+					] as [readonly string[], VisualAchievementCategory, readonly BgsHeroStat[], boolean],
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map(([selectionOptions, heroesAchievementCategory, stats, showAchievements]) => {
+				const heroAchievements: readonly VisualAchievement[] = heroesAchievementCategory?.retrieveAllAchievements();
 				const heroOverviews = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, true);
 					const existingStat = stats.find((overview) => overview.id === normalized);
-					const statWithDefault =
-						existingStat ||
-						BgsHeroStat.create({
-							id: normalized,
-						} as BgsHeroStat);
+					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized } as BgsHeroStat);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
-						? getAchievementsForHero(normalized, panel.heroAchievements, this.allCards)
+						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
 					return {
 						...statWithDefault,

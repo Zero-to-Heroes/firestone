@@ -37,24 +37,11 @@ export class BgsMatchStartParser implements EventParser {
 				} as BattlegroundsState);
 			}
 
-			const heroesAchievementCategory = event.mainWindowState.achievements.findCategory(
-				'hearthstone_game_sub_13',
-			);
-			if (!heroesAchievementCategory) {
-				console.error(
-					'missing achievements category for BG',
-					'hearthstone_game_sub_13',
-					event.mainWindowState.achievements.categories.map((c) => c.id),
-				);
-			}
-			const heroAchievements: readonly VisualAchievement[] =
-				heroesAchievementCategory?.retrieveAllAchievements() ?? [];
 			console.log('created new bgs game with reviewId', reviewId);
 			return currentState.update({
 				inGame: true,
 				forceOpen: prefs.bgsShowHeroSelectionScreen,
 				panels: BgsInitParser.buildEmptyPanels(currentState, prefs),
-				heroAchievements: heroAchievements,
 				heroSelectionDone: false,
 				currentPanelId: 'bgs-hero-selection-overview',
 				spectating: event.spectating,

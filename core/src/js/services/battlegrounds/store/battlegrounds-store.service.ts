@@ -497,7 +497,7 @@ export class BattlegroundsStoreService {
 			// new BattlegroundsResetBattleStateParser(),
 			new BgsInitParser(this.prefs),
 			new BgsStatUpdateParser(this.allCards, this.patchesService),
-			new BgsHeroSelectionParser(this.memory, this.patchesService),
+			new BgsHeroSelectionParser(this.memory),
 			new BgsHeroSelectedParser(this.allCards),
 			new BgsNextOpponentParser(),
 			new BgsTavernUpgradeParser(this.gameEventsService),
