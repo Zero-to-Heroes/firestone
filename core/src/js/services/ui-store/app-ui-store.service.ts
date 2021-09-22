@@ -142,4 +142,8 @@ export const currentBgHeroId = (battlegrounds: BattlegroundsAppState, selectedCa
 		: null;
 };
 
-export const cdLog = (...args) => console.debug('[cd]', ...args);
+export const cdLog = (...args) => {
+	if (process.env.NODE_ENV !== 'production') {
+		console.debug('[cd]', ...args);
+	}
+};
