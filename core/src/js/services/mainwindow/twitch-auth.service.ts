@@ -151,7 +151,6 @@ export class TwitchAuthService {
 			const newState = Object.assign(new GameState(), newEvent.state, {
 				playerDeck: null,
 				opponentDeck: null,
-				deckStats: null,
 			} as GameState);
 			newEvent = Object.assign({}, newEvent, {
 				state: newState,

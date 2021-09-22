@@ -1,10 +1,8 @@
-import { formatFormat } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
-import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { GameEvent } from '../../../models/game-event';
 import { PreferencesService } from '../../preferences.service';
 import { AiDeckService } from '../ai-deck-service.service';
@@ -35,16 +33,6 @@ export class OpponentPlayerParser implements EventParser {
 			playerClass: playerClass ? playerClass.toLowerCase() : null,
 		} as HeroCard);
 
-		let matchupStatsRecap = currentState.matchupStatsRecap;
-		console.log('parsing opponent', currentState.metadata);
-		if (currentState.metadata.formatType && currentState.deckStats) {
-			const convertedFormat = formatFormat(currentState.metadata.formatType);
-			const statsAgainstOpponent = currentState.deckStats.filter(
-				(stat) => stat.opponentClass === newHero.playerClass,
-			);
-			matchupStatsRecap = StatsRecap.from(statsAgainstOpponent, convertedFormat, newHero.playerClass);
-		}
-
 		// Total cards before setting the decklist
 		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;
 		// console.log('[opponent-player] total cards in actual deck + hand', cardsInDeck);
@@ -60,7 +48,6 @@ export class OpponentPlayerParser implements EventParser {
 			// console.log('[opponent-player] newPlayerDeck without ai deckstring', newPlayerDeck);
 			return currentState.update({
 				opponentDeck: newPlayerDeck,
-				matchupStatsRecap: matchupStatsRecap,
 			} as GameState);
 		}
 
@@ -97,7 +84,6 @@ export class OpponentPlayerParser implements EventParser {
 		// console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
 		return currentState.update({
 			opponentDeck: newPlayerDeck,
-			matchupStatsRecap: matchupStatsRecap,
 		} as GameState);
 	}
 

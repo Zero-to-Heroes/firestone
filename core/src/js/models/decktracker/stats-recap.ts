@@ -1,5 +1,4 @@
 import { GameStat } from '../mainwindow/stats/game-stat';
-import { StatGameFormatType } from '../mainwindow/stats/stat-game-format.type';
 
 export class StatsRecap {
 	readonly opponentClass: string | undefined;
@@ -7,9 +6,8 @@ export class StatsRecap {
 	readonly totalWins: number;
 	readonly totalLosses: number;
 	readonly winratePercent: number;
-	readonly format: StatGameFormatType;
 
-	public static from(deckStats: readonly GameStat[], format: StatGameFormatType, opponentClass?: string): StatsRecap {
+	public static from(deckStats: readonly GameStat[], opponentClass?: string): StatsRecap {
 		if (!deckStats || deckStats.length === 0) {
 			return null;
 		}

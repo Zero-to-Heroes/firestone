@@ -10,16 +10,21 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
+import { formatFormat, GameFormatString } from '@firestone-hs/reference-data';
+import { BehaviorSubject, combineLatest, Observable, Subscriber, Subscription } from 'rxjs';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
+import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { arraysEqual } from '../../../services/utils';
 
 @Component({
 	selector: 'decktracker-overlay-root',
@@ -62,8 +67,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 							[showTitleBar]="showTitleBar"
 							[showDeckWinrate]="showDeckWinrate"
 							[showMatchupWinrate]="showMatchupWinrate"
-							[deckWinrate]="deckStatsRecap"
-							[matchupWinrate]="matchupStatsRecap"
+							[deckWinrate]="deckStatsRecap$ | async"
+							[matchupWinrate]="matchupStatsRecap$ | async"
 							[tooltipPosition]="tooltipPosition"
 						></decktracker-title-bar>
 						<decktracker-deck-list
@@ -112,6 +117,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 
 	deck: DeckState;
 
+	matchupStatsRecap$: Observable<StatsRecap>;
+	deckStatsRecap$: Observable<StatsRecap>;
+
 	// gameState: GameState;
 	active = true;
 	windowId: string;
@@ -140,8 +148,10 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	showBackdrop: boolean;
 
 	showTracker: boolean;
-	deckStatsRecap: StatsRecap;
-	matchupStatsRecap: StatsRecap;
+
+	private gameFormat$$: BehaviorSubject<GameFormatString> = new BehaviorSubject(null);
+	private currentDeckstring$$: BehaviorSubject<string> = new BehaviorSubject(null);
+	private opponentClass$$: BehaviorSubject<string> = new BehaviorSubject(null);
 
 	// private hasBeenMovedByUser: boolean;
 	private showTooltips = true;
@@ -162,18 +172,58 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		private renderer: Renderer2,
 		private events: Events,
 		private init_DebugService: DebugService,
-	) {}
+		private readonly store: AppUiStoreService,
+	) {
+		this.matchupStatsRecap$ = combineLatest(
+			this.gameFormat$$.asObservable().pipe(distinctUntilChanged()),
+			this.currentDeckstring$$.asObservable().pipe(distinctUntilChanged()),
+			this.opponentClass$$.asObservable().pipe(distinctUntilChanged()),
+			this.store.listen$(([main, prefs]) => main.stats.gameStats),
+		).pipe(
+			filter(([gameFormat, deckstring, opponentClass, [gameStats]]) => !!gameStats?.stats?.length),
+			map(
+				([gameFormat, deckstring, opponentClass, [gameStats]]) =>
+					[
+						gameStats.stats
+							.filter((stat) => stat.gameMode === 'ranked')
+							.filter((stat) => stat.gameFormat === gameFormat)
+							.filter((stat) => stat.playerDecklist === deckstring)
+							.filter((stat) => stat.opponentClass === opponentClass),
+						opponentClass,
+					] as [readonly GameStat[], string],
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map(([gameStats, opponentClass]) => StatsRecap.from(gameStats, opponentClass)),
+			tap((filter) => cdLog('emitting matchupStatsRecap in ', this.constructor.name, filter)),
+		);
+		this.deckStatsRecap$ = combineLatest(
+			this.gameFormat$$.asObservable().pipe(distinctUntilChanged()),
+			this.currentDeckstring$$.asObservable().pipe(distinctUntilChanged()),
+			this.store.listen$(([main, prefs]) => main.stats.gameStats),
+		).pipe(
+			filter(([gameFormat, deckstring, [gameStats]]) => !!gameStats?.stats?.length),
+			map(([gameFormat, deckstring, [gameStats]]) =>
+				gameStats.stats
+					.filter((stat) => stat.gameMode === 'ranked')
+					.filter((stat) => stat.gameFormat === gameFormat)
+					.filter((stat) => stat.playerDecklist === deckstring),
+			),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+			map((gameStats) => StatsRecap.from(gameStats)),
+			tap((filter) => cdLog('emitting deckStatsRecap in ', this.constructor.name, filter)),
+		);
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		const subscriber = new Subscriber<any>(async (event) => {
-			this.showTracker = event.state != null;
-			this.deckStatsRecap = (event.state as GameState).deckStatsRecap;
-			this.matchupStatsRecap = (event.state as GameState).matchupStatsRecap;
-			// this.gameState = event ? event.state : undefined;
-			// console.debug('received game state', event);
+			const gameState = event.state as GameState;
+			this.showTracker = gameState != null;
+			this.currentDeckstring$$.next(gameState.playerDeck.deckstring);
+			this.opponentClass$$.next(gameState.opponentDeck?.hero?.playerClass);
+			this.gameFormat$$.next(formatFormat(gameState.metadata.formatType));
 			this.deck = event.state ? this.deckExtractor(event.state) : null;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -226,8 +276,6 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.hideTooltipSubscription?.unsubscribe();
 		this.deckSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
-		this.deckStatsRecap = null;
-		this.matchupStatsRecap = null;
 		console.log('[shutdown] unsubscribed from decktracker-ovelray-root');
 	}
 

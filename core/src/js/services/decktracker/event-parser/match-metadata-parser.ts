@@ -1,14 +1,11 @@
-import { formatFormat, GameType } from '@firestone-hs/reference-data';
+import { GameType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { Metadata } from '../../../models/decktracker/metadata';
-import { StatsRecap } from '../../../models/decktracker/stats-recap';
 import { GameEvent } from '../../../models/game-event';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PreferencesService } from '../../preferences.service';
 import { DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
@@ -42,10 +39,6 @@ export class MatchMetadataParser implements EventParser {
 			} as GameState);
 		}
 
-		const store: MainWindowState = gameEvent.additionalData.state;
-		// const stats: StatsState = gameEvent.additionalData?.stats;
-		const convertedFormat = formatFormat(format);
-
 		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
 		if (noDeckMode) {
 			console.log('[match-metadata-parser] no deck mode is active, not loading current deck');
@@ -64,28 +57,7 @@ export class MatchMetadataParser implements EventParser {
 			currentDeck && currentDeck.name,
 		);
 
-		const deckStats: readonly GameStat[] =
-			!deckstringToUse || !store?.decktracker?.decks
-				? []
-				: store.decktracker.decks
-						?.find((deck) => deck.deckstring === deckstringToUse)
-						?.replays?.filter((stat) => stat.gameMode === 'ranked')
-						?.filter((stat) => stat.gameFormat === convertedFormat) || [];
-		const statsRecap: StatsRecap = StatsRecap.from(deckStats, convertedFormat);
-		console.log('[match-metadata-parser] match metadata', convertedFormat, format, deckstringToUse);
-		let matchupStatsRecap = currentState.matchupStatsRecap;
-		if (currentState?.opponentDeck?.hero?.playerClass) {
-			const statsAgainstOpponent = currentState.deckStats.filter(
-				(stat) => stat.opponentClass === currentState?.opponentDeck?.hero.playerClass,
-			);
-			matchupStatsRecap = StatsRecap.from(
-				statsAgainstOpponent,
-				convertedFormat,
-				currentState?.opponentDeck?.hero.playerClass,
-			);
-			console.log('[match-metadata-parser] opponent present', matchupStatsRecap, currentState);
-		}
-		// console.log('[match-metadata-parser] built stats for deck', statsRecap, matchupStatsRecap);
+		console.log('[match-metadata-parser] match metadata', format, deckstringToUse);
 		const deckList: readonly DeckCard[] = await this.deckParser.postProcessDeck(
 			this.deckParser.buildDeck(currentDeck),
 		);
@@ -96,11 +68,6 @@ export class MatchMetadataParser implements EventParser {
 
 		return Object.assign(new GameState(), currentState, {
 			metadata: metaData,
-			deckStats: deckStats,
-			deckStatsRecap: statsRecap,
-			// archetypesConfig: store.stats.archetypesConfig,
-			// archetypesStats: store.stats.archetypesStats,
-			matchupStatsRecap: matchupStatsRecap,
 			playerDeck: currentState.playerDeck.update({
 				deckstring: deckstringToUse,
 				name: currentDeck ? currentDeck.name : null,
