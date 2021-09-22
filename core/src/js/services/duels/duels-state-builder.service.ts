@@ -111,7 +111,10 @@ export class DuelsStateBuilderService {
 		collectionState: BinderState,
 	): DuelsState {
 		const categories: readonly DuelsCategory[] = this.buildCategories();
-		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(globalStats.decks, collectionState);
+		const topDecks: readonly DuelsGroupedDecks[] = this.buildTopDeckStats(
+			globalStats?.decks ?? [],
+			collectionState,
+		);
 		return DuelsState.create({
 			categories: categories,
 			globalStats: globalStats,

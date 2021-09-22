@@ -96,6 +96,10 @@ interface RankFilterOption extends IOption {
 }
 
 export const getBgsRankFilterLabelFor = (percentile: MmrPercentile): string => {
+	if (!percentile) {
+		return 'All ranks';
+	}
+
 	switch (percentile.percentile) {
 		case 100:
 			return 'All ranks';

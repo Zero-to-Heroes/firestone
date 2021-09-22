@@ -80,7 +80,7 @@ export class BgsInitService {
 	}
 
 	private buildPersonalHeroesCategory(bgsGlobalStats: BgsStats): BattlegroundsCategory {
-		const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats.map((heroStat) => heroStat.cardId))];
+		const uniqueHeroes = [...new Set(bgsGlobalStats?.heroStats?.map((heroStat) => heroStat.cardId) ?? [])];
 		const heroDetailCategories: readonly BattlegroundsCategory[] = uniqueHeroes.map((heroCardId) =>
 			BattlegroundsPersonalStatsHeroDetailsCategory.create({
 				id: 'bgs-category-personal-hero-details-' + heroCardId,

@@ -90,6 +90,10 @@ export class BgsHeroOverviewComponent {
 	}
 
 	@Input() set achievements(value: readonly VisualAchievement[]) {
+		if (!value) {
+			return;
+		}
+
 		this.achievementsToDisplay = value
 			.map((ach) => ach.completionSteps)
 			.reduce((a, b) => a.concat(b), [])

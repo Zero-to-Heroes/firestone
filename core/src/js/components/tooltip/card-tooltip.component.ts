@@ -73,13 +73,13 @@ export class CardTooltipComponent {
 		this.buffs =
 			!value.buffCardIds || value.buffCardIds.length === 0
 				? undefined
-				: Object.values(groupByFunction((buffCardId: string) => buffCardId)(value.buffCardIds)).map(
-						(buff: string[]) => ({
+				: Object.values(groupByFunction((buffCardId: string) => buffCardId)(value.buffCardIds))
+						.filter((buff: string[]) => !!buff?.length)
+						.map((buff: string[]) => ({
 							buffCardId: buff[0],
 							bufferCardId: buff[0].slice(0, buff[0].length - 1),
 							count: buff.length,
-						}),
-				  );
+						}));
 		this.createdBy = (value.creatorCardId || value.lastAffectedByCardId) && !value.cardId;
 		this._cardIds = [value.cardId || value.creatorCardId || value.lastAffectedByCardId];
 		this.updateInfos();
