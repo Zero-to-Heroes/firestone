@@ -95,6 +95,38 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Show notification when collection is synchronizeed"
 				></preference-toggle>
 			</section>
+			<section class="vs">
+				<h2>
+					<img
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/images/third-party/d0nkey.png?v=2"
+						class="icon"
+					/>
+					d0nkey.top
+				</h2>
+				<div class="pitch">
+					<p>
+						<a href="https://www.d0nkey.top" target="_blank">d0nkey.top</a> is a fan website that gathers
+						all decks from official Hearthstone competitions, as well as decks from streamers to allow
+						anyone to easily find interesting decks to play. Synchronizing to d0nkey.top will let you share
+						your decks with your audience (if you're a streamer) or will help them build a better database
+						to provide more free services to the community.
+					</p>
+				</div>
+				<div class="what-text">
+					<p>
+						If you decide to sync to d0nkey.top, Firestone will send them each game you play, which will
+						appear in a specific section on the website (which is still under construction). The replays
+						will be private by default, unless you're streaming at the same time. See the
+						<a href="https://www.d0nkey.top/streamer-instructions" target="_blank">instructions page</a> for
+						how to set everything up.
+					</p>
+				</div>
+				<preference-toggle
+					class="enable-vs-button"
+					field="d0nkeySync"
+					label="Synchronize your replays to d0nkey.top"
+				></preference-toggle>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
