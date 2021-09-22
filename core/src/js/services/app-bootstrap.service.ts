@@ -174,6 +174,8 @@ export class AppBootstrapService {
 		await this.ow.hideWindow(settingsWindow.id);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
 		setTimeout(() => this.addAnalytics());
+
+		this.prefs.init();
 	}
 
 	private async reloadWindows() {

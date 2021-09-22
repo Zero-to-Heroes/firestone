@@ -25,7 +25,7 @@ import { ApiRunner } from './api-runner';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OutOfCardsToken } from './mainwindow/out-of-cards.service';
 import { OverwolfService } from './overwolf.service';
-import { capitalizeFirstLetter } from './utils';
+import { areDeepEqual, capitalizeFirstLetter } from './utils';
 
 declare let amplitude;
 
@@ -49,6 +49,10 @@ export class PreferencesService {
 		// It will create one per window that uses the service, but we don't really care
 		// We just have to always use the one from the MainWindow
 		window['preferencesEventBus'] = this.preferencesEventBus;
+	}
+
+	public init() {
+		this.startPrefsSync();
 	}
 
 	public getPreferences(): Promise<Preferences> {
@@ -507,20 +511,67 @@ export class PreferencesService {
 			userId: currentUser.userId,
 			userName: currentUser.username,
 		});
-		console.debug('remote prefs', result);
 		if (!result) {
 			return result;
 		}
 
 		const resultWithDate: Preferences = {
 			...result,
-			lastUpdateDate: new Date(result.lastUpdateDate),
+			lastUpdateDate: result.lastUpdateDate ? new Date(result.lastUpdateDate) : null,
 		};
-		console.debug('remote prefs', result, resultWithDate);
+		this.currentSyncDate = resultWithDate.lastUpdateDate;
+		this.lastSyncPrefs = resultWithDate;
+		console.debug('[preferences] remote prefs', result, resultWithDate);
 		return resultWithDate;
 	}
 
 	private buildCounterPropertyName(activeCounter: string, side: string): string {
 		return side + capitalizeFirstLetter(activeCounter) + 'CounterWidgetPosition';
+	}
+
+	private currentSyncDate: Date;
+	private lastSyncPrefs: Preferences;
+
+	private startPrefsSync() {
+		setInterval(async () => {
+			console.debug('[preferences] checking prefs update', this.currentSyncDate);
+			const userPrefs = await this.getPreferences();
+			console.debug(
+				'[preferences] got local prefs',
+				userPrefs.lastUpdateDate,
+				this.currentSyncDate,
+				this.currentSyncDate?.getTime(),
+				userPrefs.lastUpdateDate?.getTime(),
+			);
+			if (
+				!!userPrefs.lastUpdateDate &&
+				(!this.currentSyncDate || userPrefs.lastUpdateDate.getTime() > this.currentSyncDate.getTime())
+			) {
+				const userPrefsLocal = new Preferences();
+				for (const prop in userPrefs) {
+					const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, userPrefsLocal, prop);
+					if (!meta && userPrefsLocal.hasOwnProperty(prop)) {
+						userPrefsLocal[prop] = userPrefs[prop];
+						// console.debug('[preferences] assigning prop local', prop, userPrefs[prop], meta);
+					}
+				}
+
+				const remotePrefsLocal = new Preferences();
+				for (const prop in this.lastSyncPrefs) {
+					const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, remotePrefsLocal, prop);
+					if (!meta && remotePrefsLocal.hasOwnProperty(prop)) {
+						remotePrefsLocal[prop] = this.lastSyncPrefs[prop];
+						// console.debug('[preferences] assigning prop remote', prop, this.lastSyncPrefs[prop], meta);
+					}
+				}
+
+				if (!areDeepEqual(userPrefsLocal, remotePrefsLocal)) {
+					console.log('[preferences] updating remote prefs', userPrefsLocal, remotePrefsLocal);
+					this.lastSyncPrefs = userPrefs;
+					this.currentSyncDate = userPrefs.lastUpdateDate;
+					await this.updateRemotePreferences();
+				}
+			}
+		}, 5 * 60 * 1000);
 	}
 }

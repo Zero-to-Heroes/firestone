@@ -216,6 +216,7 @@ export class StoreBootstrapService {
 				prefsFromRemote?.lastUpdateDate,
 				prefs?.lastUpdateDate,
 			);
+			this.prefs.updateRemotePreferences();
 			return prefs;
 		}
 
@@ -226,7 +227,7 @@ export class StoreBootstrapService {
 		const obj = new Preferences();
 		for (const prop in merged) {
 			const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, obj, prop);
-			if (meta) {
+			if (meta && obj.hasOwnProperty(prop)) {
 				merged[prop] = prefs[prop];
 			}
 		}

@@ -56,6 +56,7 @@ export class Preferences {
 	readonly showCardsOutsideOfPacks: boolean = true;
 	readonly collectionHistoryShowOnlyNewCards: boolean = false;
 	readonly collectionUseHighResImages: boolean = false;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly collectionCardScale: number = 100;
 	readonly collectionSetShowGoldenStats: boolean = false;
 	readonly collectionUseAnimatedCardBacks: boolean = false;
@@ -305,6 +306,8 @@ export class Preferences {
 
 	readonly outOfCardsToken: OutOfCardsToken;
 	readonly outOfCardsShowNotifOnSync: boolean = false;
+
+	readonly d0nkeySync: boolean = true;
 
 	readonly ftue: Ftue = new Ftue();
 
