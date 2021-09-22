@@ -104,7 +104,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 				const heroOverviews = selectionOptions.map((cardId) => {
 					const normalized = normalizeHeroCardId(cardId, true);
 					const existingStat = stats.find((overview) => overview.id === normalized);
-					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized, } as BgsHeroStat);
+					const statWithDefault = existingStat || BgsHeroStat.create({ id: normalized } as BgsHeroStat);
 					const achievementsForHero: readonly VisualAchievement[] = showAchievements
 						? getAchievementsForHero(normalized, heroAchievements, this.allCards)
 						: [];
