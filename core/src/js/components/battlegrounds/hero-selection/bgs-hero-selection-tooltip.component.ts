@@ -12,7 +12,7 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 		<div class="hero-selection-tooltip" [ngClass]="{ 'hidden': !_visible }">
 			<img class="hero-power" [src]="heroPowerImage" />
 			<div class="infos">
-				<div class="name">{{ _hero.name }} ({{ totalMatches.toLocaleString('en-US') }} matches)</div>
+				<div class="name">{{ _hero.name }} ({{ totalMatches?.toLocaleString('en-US') || 0 }} matches)</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 			</div>
 		</div>
