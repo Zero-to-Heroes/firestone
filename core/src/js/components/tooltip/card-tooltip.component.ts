@@ -74,6 +74,8 @@ export class CardTooltipComponent {
 			!value.buffCardIds || value.buffCardIds.length === 0
 				? undefined
 				: Object.values(groupByFunction((buffCardId: string) => buffCardId)(value.buffCardIds))
+						.map((buff: string[]) => buff ?? [])
+						.map((buff: string[]) => buff.filter((b) => !!b))
 						.filter((buff: string[]) => !!buff?.length)
 						.map((buff: string[]) => ({
 							buffCardId: buff[0],
