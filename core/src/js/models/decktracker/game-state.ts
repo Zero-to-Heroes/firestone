@@ -1,7 +1,4 @@
-import { ArchetypeConfig } from '@firestone-hs/categorize-deck/dist/archetype-service';
-import { ArchetypeStats } from '@firestone-hs/cron-build-ranked-archetypes/dist/archetype-stats';
 import { GameType } from '@firestone-hs/reference-data';
-import { ConstructedState } from '../constructed/constructed-state';
 import { GameStat } from '../mainwindow/stats/game-stat';
 import { DeckState } from './deck-state';
 import { Metadata } from './metadata';
@@ -23,9 +20,9 @@ export class GameState {
 	readonly deckStats: readonly GameStat[] = [];
 	readonly deckStatsRecap: StatsRecap;
 	readonly matchupStatsRecap: StatsRecap;
-	readonly archetypesConfig: readonly ArchetypeConfig[];
-	readonly archetypesStats: ArchetypeStats;
-	readonly constructedState: ConstructedState = new ConstructedState();
+	// readonly archetypesConfig: readonly ArchetypeConfig[];
+	// readonly archetypesStats: ArchetypeStats;
+	// readonly constructedState: ConstructedState = new ConstructedState();
 
 	public static create(): GameState {
 		return Object.assign(new GameState());

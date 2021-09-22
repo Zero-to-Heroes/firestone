@@ -1,4 +1,3 @@
-import { ConstructedState } from '../../../../models/constructed/constructed-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameStateEvent } from '../../../../models/decktracker/game-state-event';
 import { ConstructedChangeTabEvent } from '../../event/constructed-change-tab-event';
@@ -10,11 +9,11 @@ export class ConstructedChangeTabParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, event: ConstructedChangeTabEvent): Promise<GameState> {
-		const constructedState = currentState.constructedState.update({
-			currentTab: event.newTab,
-		} as ConstructedState);
+		// const constructedState = currentState.constructedState.update({
+		// 	currentTab: event.newTab,
+		// } as ConstructedState);
 		return currentState.update({
-			constructedState: constructedState,
+			// constructedState: constructedState,
 		} as GameState);
 	}
 

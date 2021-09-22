@@ -21,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 								<use xlink:href="assets/svg/sprite.svg#logo" />
 							</svg>
 						</i>
-						<menu-selection-constructed [state]="_state?.constructedState"></menu-selection-constructed>
+						<menu-selection-constructed [state]="_state"></menu-selection-constructed>
 					</div>
 				</div>
 				<!-- <hotkey class="exclude-dbclick" [hotkeyName]="'constructed'"></hotkey> -->
@@ -45,16 +45,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<section class="content-container">
 				<section class="main">
 					<!-- <div class="title">getTitle()</div> -->
-					<in-game-achievements-recap
-						*ngxCacheIf="_state?.constructedState?.currentTab === 'achievements'"
-						[state]="_state?.constructedState"
-					>
-					</in-game-achievements-recap>
-					<in-game-opponent-recap
-						*ngxCacheIf="_state?.constructedState?.currentTab === 'opponent'"
-						[state]="_state"
-					>
-					</in-game-opponent-recap>
+					<in-game-achievements-recap [state]="_state"> </in-game-achievements-recap>
+					<in-game-opponent-recap [state]="_state"> </in-game-opponent-recap>
 				</section>
 				<section class="secondary">
 					<secondary-default></secondary-default>
