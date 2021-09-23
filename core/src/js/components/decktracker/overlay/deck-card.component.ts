@@ -308,23 +308,13 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private updateGiftTooltip() {
-		if (!this.cards.getCards() || this.cards.getCards().length === 0) {
-			setTimeout(() => this.updateGiftTooltip(), 200);
-			return;
-		}
 		if (this.creatorCardIds && this.creatorCardIds.length === 1) {
 			const creatorCard = this.cards.getCard(this.creatorCardIds[0]);
 			if (creatorCard) {
 				this.giftTooltip = `Created by <br /> ${creatorCard.name}`;
-				if (!(this.cdr as ViewRef)?.destroyed) {
-					this.cdr.detectChanges();
-				}
 			}
 		} else if (this.creatorCardIds && this.creatorCardIds.length > 1) {
 			this.giftTooltip = `Created by <br /> multiple entities`;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
 		}
 	}
 }

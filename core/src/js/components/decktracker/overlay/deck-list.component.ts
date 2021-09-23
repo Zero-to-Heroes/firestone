@@ -29,7 +29,6 @@ import { DeckHandlerService } from '../../../services/decktracker/deck-handler.s
 })
 export class DeckListComponent {
 	@Input() set deckstring(value: string) {
-		console.debug('set deckstring', value);
 		const decklist = this.deckHandler.buildDeckList(value);
 		this.deckState = DeckState.create({
 			deckList: decklist,
