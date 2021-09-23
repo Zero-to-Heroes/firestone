@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "7.16.9",
+	"version": "7.16.10",
 	"scripts": {
 		"lint": "node --max_old_space_size=10000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=10000 ./node_modules/jest/bin/jest.js --colors",
