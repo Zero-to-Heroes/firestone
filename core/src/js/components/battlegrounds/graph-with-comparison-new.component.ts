@@ -112,8 +112,8 @@ export class GraphWithComparisonNewComponent {
 
 	private updateValues() {
 		// Turn 0 is before any battle, so it's not really interesting for us
-		const community = this.removeZero(this._communityValues || []);
-		const your = this.removeZero(this._yourValues || []);
+		const community = this.removeTurnZero(this._communityValues || []);
+		const your = this.removeTurnZero(this._yourValues || []);
 		this.yourInfo = your && your.length > 0;
 
 		const maxTurnFromCommunity = this.getMaxTurn(community);
@@ -173,7 +173,7 @@ export class GraphWithComparisonNewComponent {
 		this.doResize();
 	}
 
-	private removeZero(input: readonly NumericTurnInfo[]): readonly NumericTurnInfo[] {
+	private removeTurnZero(input: readonly NumericTurnInfo[]): readonly NumericTurnInfo[] {
 		return input.filter((stat) => stat.turn > 0);
 	}
 
