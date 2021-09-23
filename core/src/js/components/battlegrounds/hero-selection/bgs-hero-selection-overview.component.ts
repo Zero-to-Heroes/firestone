@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { CardsFacadeService } from '@services/cards-facade.service';
-import { Stats } from 'fs';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsHeroSelectionOverviewPanel } from '../../../models/battlegrounds/hero-selection/bgs-hero-selection-overview';
@@ -98,7 +97,7 @@ export class BgsHeroSelectionOverviewComponent {
 						name: this.allCards.getCard(cardId)?.name,
 						baseCardId: normalized,
 						achievements: achievementsForHero,
-						combatWinrate: statWithDefault.combatWinrate.slice(0, 15),
+						combatWinrate: statWithDefault.combatWinrate?.slice(0, 15) ?? [],
 					};
 				});
 				if (heroOverviews.length === 2) {
