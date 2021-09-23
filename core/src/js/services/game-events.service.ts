@@ -58,7 +58,15 @@ export class GameEvents {
 				// }
 			});
 			this.plugin.onGameEvent.addListener((gameEvent) => {
-				this.dispatchGameEvent(JSON.parse(gameEvent));
+				const events: any | readonly any[] = JSON.parse(gameEvent);
+				if (!!(events as readonly any[]).length) {
+					// console.debug('[game-events] will parse multiple game events', events);
+					for (const event of events as readonly any[]) {
+						this.dispatchGameEvent(event);
+					}
+				} else {
+					this.dispatchGameEvent(events);
+				}
 			});
 			this.plugin.initRealtimeLogConversion(() => {
 				console.log('[game-events] real-time log processing ready to go');
@@ -122,18 +130,18 @@ export class GameEvents {
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
 		if (this.shouldTriggerCatchUp) {
 			await this.triggerCatchUp();
-			this.shouldTriggerCatchUp = false;
 		}
 		if (eventQueue.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
 		await this.processLogs(eventQueue);
+		this.shouldTriggerCatchUp = false;
 		return [];
 	}
 
 	private async processLogs(eventQueue: readonly string[]): Promise<void> {
 		return new Promise<void>((resolve) => {
-			// console.log('calling real time processing', eventQueue);
+			// console.debug('calling real time processing', eventQueue);
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve();
 			});
@@ -269,7 +277,6 @@ export class GameEvents {
 				);
 				break;
 			case 'MAIN_STEP_READY':
-				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MAIN_STEP_READY,
@@ -361,7 +368,6 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DISCARD_CARD, gameEvent));
 				break;
 			case 'MINIONS_DIED':
-				//console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new MinionsDiedEvent(), {
 						type: GameEvent.MINIONS_DIED,
@@ -375,7 +381,6 @@ export class GameEvents {
 				);
 				break;
 			case 'MINIONS_WILL_DIE':
-				//console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new MinionsDiedEvent(), {
 						type: GameEvent.MINIONS_WILL_DIE,
@@ -392,7 +397,6 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
 				break;
 			case 'MINION_BACK_ON_BOARD':
-				// console.log(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps?.CreatorCardId,
@@ -847,7 +851,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
-				// console.log(gameEvent.Type + ' event');
+				// console.debug(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
@@ -862,7 +866,6 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED,
@@ -873,7 +876,6 @@ export class GameEvents {
 				);
 				break;
 			case 'GALAKROND_INVOKED':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.GALAKROND_INVOKED, gameEvent, {
 						totalInvoke: gameEvent.Value.AdditionalProps.TotalInvoke,
@@ -935,7 +937,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_RECRUIT_PHASE':
-				// console.log(gameEvent.Type + ' event');
+				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_RECRUIT_PHASE,
@@ -943,7 +945,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_BATTLE_RESULT':
-				// console.log(gameEvent.Type + ' event');
+				console.log(gameEvent.Type + ' event', gameEvent.Value.Opponent, gameEvent.Value.Result);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
@@ -968,7 +970,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_OPPONENT_REVEALED':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED,
@@ -993,7 +995,7 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_PLAYER_BOARD':
-				console.debug(gameEvent.Type + ' event', gameEvent);
+				// console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_PLAYER_BOARD,
@@ -1019,7 +1021,6 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_LEADERBOARD_PLACE':
-				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE,
@@ -1116,7 +1117,7 @@ export class GameEvents {
 				);
 				break;
 			default:
-				console.log('unsupported game event', gameEvent);
+				console.warn('unsupported game event', gameEvent);
 		}
 	}
 
@@ -1133,16 +1134,11 @@ export class GameEvents {
 			this.processingQueue.clear();
 			return;
 		}
-		// console.log('received log line', data);
 		if (data.indexOf('Begin Spectating') !== -1) {
 			console.log('begin spectating', data);
-			// this.setSpectating(true);
 		}
 		if (data.indexOf('End Spectator Mode') !== -1) {
 			console.log('end spectating', data);
-			// this.setSpectating(false);
-			// We need to treat this as an "end game" event
-			// this.processingQueue.enqueue(data);
 		}
 
 		if (data.indexOf('CREATE_GAME') !== -1) {
@@ -1171,14 +1167,11 @@ export class GameEvents {
 	// Handles reading a log file mid-game, i.e. this data is already
 	// present in the log file when we're trying to read it
 	public receiveExistingLogLine(existingLine: string) {
-		// console.log('received existing', existingLine);
 		if (existingLine.indexOf('Begin Spectating') !== -1) {
 			console.log('[game-events] [existing] begin spectating', existingLine);
-			// this.setSpectating(true);
 		}
 		if (existingLine.indexOf('End Spectator Mode') !== -1) {
 			console.log('[game-events] [existing] end spectating', existingLine);
-			// this.setSpectating(false);
 		}
 
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
@@ -1186,8 +1179,6 @@ export class GameEvents {
 			// that when we finish catching up with the actual contents of the file, we are
 			// not spectating
 			console.log('[game-events] [existing] end_of_existing_data');
-			// this.setSpectating(false);
-			// this.triggerCatchUp();
 			return;
 		}
 
@@ -1205,8 +1196,6 @@ export class GameEvents {
 		}
 		this.existingLogLines.push(existingLine);
 		this.shouldTriggerCatchUp = true;
-
-		// this.triggerTimeout = setTimeout(() => this.triggerCatchUp(), 2000);
 	}
 
 	private async triggerCatchUp() {
@@ -1232,7 +1221,7 @@ export class GameEvents {
 			return;
 		}
 		console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
-		console.debug('[game-events] [existing] all events', this.existingLogLines);
+		// console.debug('[game-events] [existing] all events', this.existingLogLines);
 		if (this.existingLogLines.length > 0) {
 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
 		}
