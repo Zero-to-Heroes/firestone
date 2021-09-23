@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { formatFormat, GameFormatString } from '@firestone-hs/reference-data';
 import { BehaviorSubject, combineLatest, Observable, Subscriber, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -230,7 +230,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			}
 		});
 		subscriber['identifier'] = 'decktracker-overlay-root';
-		this.deckSubscription = deckEventBus.subscribe(subscriber);
+		// Could be a solution? Not tested yet. But I want to understand the root issue first
+		this.deckSubscription = deckEventBus.pipe(debounceTime(100)).subscribe(subscriber);
+		// this.deckSubscription = deckEventBus.subscribe(subscriber);
 
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
