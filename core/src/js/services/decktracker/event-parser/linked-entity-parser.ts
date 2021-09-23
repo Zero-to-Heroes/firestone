@@ -24,7 +24,13 @@ export class LinkedEntityParser implements EventParser {
 		const isPlayerForAdd = linkedEntityControllerId === localPlayer.PlayerId;
 		const deckInWhichToAddTheCard = isPlayerForAdd ? currentState.playerDeck : currentState.opponentDeck;
 
-		const newCard = deckInWhichToFindTheCard.findCard(entityId);
+		let newCard = deckInWhichToFindTheCard.findCard(entityId);
+		if (!newCard) {
+			newCard = DeckCard.create({
+				cardId: cardId,
+				entityId: entityId,
+			} as DeckCard);
+		}
 		const originalCard = deckInWhichToFindTheCard.findCard(gameEvent.additionalData.linkedEntityId);
 		let newPlayerDeck: DeckState;
 		if (originalCard) {
@@ -35,16 +41,6 @@ export class LinkedEntityParser implements EventParser {
 		} else {
 			// Can happen for BG heroes
 			if (gameEvent.additionalData.linkedEntityZone !== Zone.DECK) {
-				// console.warn(
-				// 	'invalid linked entity zone?',
-				// 	cardId,
-				// 	controllerId,
-				// 	localPlayer,
-				// 	entityId,
-				// 	gameEvent.additionalData.linkedEntityId,
-				// 	gameEvent.additionalData.linkedEntityZone,
-				// 	gameEvent,
-				// );
 				return currentState;
 			}
 			// We don't add the initial cards in the deck, so if no card is found, we create it
