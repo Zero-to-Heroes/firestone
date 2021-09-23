@@ -11,7 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { formatFormat, GameFormatString } from '@firestone-hs/reference-data';
-import { BehaviorSubject, combineLatest, Observable, Subscriber, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
@@ -48,48 +48,50 @@ import { arraysEqual } from '../../../services/utils';
 			></decktracker-widget-icon>
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
-				<div class="decktracker-container">
-					<div
-						class="decktracker"
-						*ngIf="showTracker"
-						[style.width.px]="overlayWidthInPx"
-						[ngClass]="{ 'hide-control-bar': !showControlBar }"
-					>
-						<div class="background"></div>
-						<decktracker-control-bar
-							[windowId]="windowId"
-							[settingsCategory]="player"
-							[closeEvent]="closeEvent"
-							(onMinimize)="onMinimize()"
-						></decktracker-control-bar>
-						<decktracker-title-bar
-							[deck]="deck"
-							[showTitleBar]="showTitleBar"
-							[showDeckWinrate]="showDeckWinrate"
-							[showMatchupWinrate]="showMatchupWinrate"
-							[deckWinrate]="deckStatsRecap$ | async"
-							[matchupWinrate]="matchupStatsRecap$ | async"
-							[tooltipPosition]="tooltipPosition"
-						></decktracker-title-bar>
-						<decktracker-deck-list
-							[deckState]="deck"
-							[displayMode]="displayMode"
-							[colorManaCost]="colorManaCost"
-							[showUpdatedCost]="showUpdatedCost"
-							[showGlobalEffectsZone]="showGlobalEffectsZone"
-							[showGiftsSeparately]="showGiftsSeparately"
-							[showStatsChange]="showStatsChange"
-							[cardsGoToBottom]="cardsGoToBottom"
-							[tooltipPosition]="tooltipPosition"
-							[darkenUsedCards]="darkenUsedCards"
-							[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
-							[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
-							[side]="player"
+				<ng-container *ngIf="{ deck: deck$ | async } as value">
+					<div class="decktracker-container">
+						<div
+							class="decktracker"
+							*ngIf="!!value.deck"
+							[style.width.px]="overlayWidthInPx"
+							[ngClass]="{ 'hide-control-bar': !showControlBar }"
 						>
-						</decktracker-deck-list>
-						<div class="backdrop" *ngIf="showBackdrop"></div>
+							<div class="background"></div>
+							<decktracker-control-bar
+								[windowId]="windowId"
+								[settingsCategory]="player"
+								[closeEvent]="closeEvent"
+								(onMinimize)="onMinimize()"
+							></decktracker-control-bar>
+							<decktracker-title-bar
+								[deck]="value.deck"
+								[showTitleBar]="showTitleBar"
+								[showDeckWinrate]="showDeckWinrate"
+								[showMatchupWinrate]="showMatchupWinrate"
+								[deckWinrate]="deckStatsRecap$ | async"
+								[matchupWinrate]="matchupStatsRecap$ | async"
+								[tooltipPosition]="tooltipPosition"
+							></decktracker-title-bar>
+							<decktracker-deck-list
+								[deckState]="value.deck"
+								[displayMode]="displayMode"
+								[colorManaCost]="colorManaCost"
+								[showUpdatedCost]="showUpdatedCost"
+								[showGlobalEffectsZone]="showGlobalEffectsZone"
+								[showGiftsSeparately]="showGiftsSeparately"
+								[showStatsChange]="showStatsChange"
+								[cardsGoToBottom]="cardsGoToBottom"
+								[tooltipPosition]="tooltipPosition"
+								[darkenUsedCards]="darkenUsedCards"
+								[hideGeneratedCardsInOtherZone]="hideGeneratedCardsInOtherZone"
+								[sortCardsByManaCostInOtherZone]="sortCardsByManaCostInOtherZone"
+								[side]="player"
+							>
+							</decktracker-deck-list>
+							<div class="backdrop" *ngIf="showBackdrop"></div>
+						</div>
 					</div>
-				</div>
+				</ng-container>
 			</div>
 		</div>
 	`,
@@ -115,8 +117,8 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
 
-	deck: DeckState;
-
+	// deck: DeckState;
+	deck$: Observable<DeckState>;
 	matchupStatsRecap$: Observable<StatsRecap>;
 	deckStatsRecap$: Observable<StatsRecap>;
 
@@ -147,11 +149,11 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
-	showTracker: boolean;
+	// showTracker: boolean;
 
-	private gameFormat$$: BehaviorSubject<GameFormatString> = new BehaviorSubject(null);
-	private currentDeckstring$$: BehaviorSubject<string> = new BehaviorSubject(null);
-	private opponentClass$$: BehaviorSubject<string> = new BehaviorSubject(null);
+	// private gameFormat$$: BehaviorSubject<GameFormatString> = new BehaviorSubject(null);
+	// private currentDeckstring$$: BehaviorSubject<string> = new BehaviorSubject(null);
+	// private opponentClass$$: BehaviorSubject<string> = new BehaviorSubject(null);
 
 	// private hasBeenMovedByUser: boolean;
 	private showTooltips = true;
@@ -174,17 +176,34 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		private init_DebugService: DebugService,
 		private readonly store: AppUiStoreService,
 	) {
+		this.deck$ = this.store
+			.listenDeckState$((gameState) => gameState)
+			.pipe(
+				debounceTime(50),
+				filter(([gameState]) => !!gameState),
+				map(([gameState]) => this.deckExtractor(gameState)),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting deck in ', this.constructor.name, filter)),
+			);
 		this.matchupStatsRecap$ = combineLatest(
-			this.gameFormat$$.asObservable().pipe(distinctUntilChanged()),
-			this.currentDeckstring$$.asObservable().pipe(distinctUntilChanged()),
-			this.opponentClass$$.asObservable().pipe(distinctUntilChanged()),
+			this.store.listenDeckState$((gameState) => gameState),
 			this.store.listen$(([main, prefs]) => main.stats.gameStats),
 		).pipe(
-			filter(([gameFormat, deckstring, opponentClass, [gameStats]]) => !!gameStats?.stats?.length),
+			filter(([[gameState], [gameStats]]) => !!gameStats?.stats?.length),
 			map(
-				([gameFormat, deckstring, opponentClass, [gameStats]]) =>
+				([[gameState], [gameStats]]) =>
 					[
-						gameStats.stats
+						formatFormat(gameState.metadata.formatType),
+						gameState.playerDeck.deckstring,
+						gameState.opponentDeck?.hero?.playerClass,
+						gameStats.stats,
+					] as [GameFormatString, string, string, readonly GameStat[]],
+			),
+			map(
+				([gameFormat, deckstring, opponentClass, gameStats]) =>
+					[
+						gameStats
 							.filter((stat) => stat.gameMode === 'ranked')
 							.filter((stat) => stat.gameFormat === gameFormat)
 							.filter((stat) => stat.playerDecklist === deckstring)
@@ -197,13 +216,20 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			tap((filter) => cdLog('emitting matchupStatsRecap in ', this.constructor.name, filter)),
 		);
 		this.deckStatsRecap$ = combineLatest(
-			this.gameFormat$$.asObservable().pipe(distinctUntilChanged()),
-			this.currentDeckstring$$.asObservable().pipe(distinctUntilChanged()),
+			this.store.listenDeckState$((gameState) => gameState),
 			this.store.listen$(([main, prefs]) => main.stats.gameStats),
 		).pipe(
-			filter(([gameFormat, deckstring, [gameStats]]) => !!gameStats?.stats?.length),
-			map(([gameFormat, deckstring, [gameStats]]) =>
-				gameStats.stats
+			filter(([[gameState], [gameStats]]) => !!gameStats?.stats?.length),
+			map(
+				([[gameState], [gameStats]]) =>
+					[formatFormat(gameState.metadata.formatType), gameState.playerDeck.deckstring, gameStats.stats] as [
+						GameFormatString,
+						string,
+						readonly GameStat[],
+					],
+			),
+			map(([gameFormat, deckstring, gameStats]) =>
+				gameStats
 					.filter((stat) => stat.gameMode === 'ranked')
 					.filter((stat) => stat.gameFormat === gameFormat)
 					.filter((stat) => stat.playerDecklist === deckstring),
@@ -216,23 +242,6 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-
-		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
-		const subscriber = new Subscriber<any>(async (event) => {
-			const gameState = event.state as GameState;
-			this.showTracker = gameState != null;
-			this.currentDeckstring$$.next(gameState.playerDeck.deckstring);
-			this.opponentClass$$.next(gameState.opponentDeck?.hero?.playerClass);
-			this.gameFormat$$.next(formatFormat(gameState.metadata.formatType));
-			this.deck = event.state ? this.deckExtractor(event.state) : null;
-			if (!(this.cdr as ViewRef)?.destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-		subscriber['identifier'] = 'decktracker-overlay-root';
-		// Could be a solution? Not tested yet. But I want to understand the root issue first
-		this.deckSubscription = deckEventBus.pipe(debounceTime(100)).subscribe(subscriber);
-		// this.deckSubscription = deckEventBus.subscribe(subscriber);
 
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
