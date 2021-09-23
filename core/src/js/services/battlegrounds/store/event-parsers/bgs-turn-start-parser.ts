@@ -31,6 +31,8 @@ export class BgsTurnStartParser implements EventParser {
 				const gameLogsKey = await this.logsUploader.uploadGameLogs();
 				console.error(
 					'invalid players in game',
+					event.turnNumber,
+					newCurrentTurn,
 					gameLogsKey,
 					currentState.currentGame.players.map((p) => p.cardId),
 				);
