@@ -284,6 +284,7 @@ export const publicCardCreators = [
 	CardIds.TownCrier1,
 	CardIds.Ursatron,
 	CardIds.UtgardeGrapplesniper,
+	CardIds.VarianKingOfStormwind,
 	CardIds.VarianWrynn1,
 	CardIds.VengefulSpirit2,
 	CardIds.VenomousScorpid,
