@@ -172,7 +172,7 @@ export class NavigationBackProcessor implements Processor {
 					} as NavigationCollection),
 					// This is starting to be weird. It would probably be best to have an FSM,
 					// and derive the name of the current navigation from the state we are in
-					text: selectedSet.name,
+					text: selectedSet?.name,
 				} as NavigationState);
 			default:
 				return null;

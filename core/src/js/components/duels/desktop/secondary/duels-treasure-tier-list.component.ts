@@ -36,7 +36,7 @@ export class DuelsTreasureTierListComponent {
 	) {
 		this.tiers$ = this.store
 			.listen$(
-				([main, nav]) => main.duels.globalStats.treasures,
+				([main, nav]) => main.duels.globalStats?.treasures,
 				([main, nav, prefs]) => prefs.duelsActiveTreasureStatTypeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveGameModeFilter,
 				([main, nav, prefs]) => prefs.duelsActiveTimeFilter,

@@ -203,6 +203,10 @@ export class CollectionManager {
 	}
 
 	public buildPityTimers(packStats: readonly PackResult[]): readonly PityTimer[] {
+		if (!packStats?.length) {
+			return [];
+		}
+
 		const groupedBySet: { [setId: string]: readonly PackResult[] } = groupByFunction((pack: PackResult) =>
 			pack.boosterId
 				? // Doing this should automatically remove the multi-set boosters

@@ -75,6 +75,10 @@ export const filterDuelsTreasureStats = (
 	allCards: CardsFacadeService,
 	searchString: string = null,
 ): readonly DuelsTreasureStat[] => {
+	if (!treasures?.length) {
+		return [];
+	}
+
 	const result = treasures
 		.filter((stat) => !!stat)
 		// Avoid generating errors when the API hasn't properly formatted the data yet

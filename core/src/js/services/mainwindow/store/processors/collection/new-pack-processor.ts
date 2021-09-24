@@ -38,22 +38,27 @@ export class NewPackProcessor implements Processor {
 		const newPackStats: readonly PackResult[] = [newPack, ...currentState.binder.packStats];
 
 		const setToUpdate = currentState.binder.allSets.find((set) => set.id === event.setId);
+		if (!setToUpdate) {
+			console.log('could not find set, probably a bundle', event.setId, event.boosterId);
+		}
 		const pityTimer: PityTimer = this.collectionManager
 			.buildPityTimers(newPackStats.filter((stat) => stat.setId === event.setId))
 			.find((pityTimer) => pityTimer.setId === event.setId);
-		const updatedSet: Set = setToUpdate.update({
+		const updatedSet: Set = setToUpdate?.update({
 			pityTimer: pityTimer,
 		} as Set);
-		const newSets: readonly Set[] = currentState.binder.allSets.map((set) =>
-			set.id === updatedSet.id ? updatedSet : set,
-		);
+		const newSets: readonly Set[] = updatedSet
+			? currentState.binder.allSets.map((set) => (set.id === updatedSet.id ? updatedSet : set))
+			: currentState.binder.allSets;
 		const newBinder = Object.assign(new BinderState(), currentState.binder, {
 			allSets: newSets,
 			packStats: newPackStats,
 		} as BinderState);
-		const newCollection = navigationState.navigationCollection.update({
-			selectedSetId: updatedSet.id,
-		} as NavigationCollection);
+		const newCollection = updatedSet
+			? navigationState.navigationCollection.update({
+					selectedSetId: updatedSet.id,
+			  } as NavigationCollection)
+			: navigationState.navigationCollection;
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				binder: newBinder,

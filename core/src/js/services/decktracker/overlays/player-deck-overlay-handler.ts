@@ -22,7 +22,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 			ow,
 			prefs,
 			allCards,
-			true,
+			false,
 		);
 		this.name = 'decktracker-player';
 	}

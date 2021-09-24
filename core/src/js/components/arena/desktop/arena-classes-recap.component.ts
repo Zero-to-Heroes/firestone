@@ -204,6 +204,10 @@ export class ArenaClassesRecapComponent {
 		heroFilter: ArenaClassFilterType,
 		patch: PatchInfo,
 	): readonly ArenaRun[] {
+		if (!arenaMatches?.length) {
+			return [];
+		}
+
 		const groupedByRun = groupByFunction((match: GameStat) => match.runId)(arenaMatches);
 		const runs = Object.values(groupedByRun).map((matches: readonly GameStat[]) => {
 			const firstMatch = matches[0];

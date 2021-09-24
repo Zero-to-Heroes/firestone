@@ -22,7 +22,7 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 			ow,
 			prefs,
 			allCards,
-			true,
+			false,
 		);
 		this.name = 'opponent-deck';
 	}

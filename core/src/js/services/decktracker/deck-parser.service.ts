@@ -347,7 +347,13 @@ export class DeckParserService {
 			const isDbfId = !isNaN(+cardId);
 			const card = isDbfId ? this.allCards.getCardFromDbfId(+cardId) : this.allCards.getCard(cardId as string);
 			if (!card?.dbfId) {
-				console.warn('[deck-parser] could not find card for dbfId', cardId, isDbfId);
+				console.warn(
+					'[deck-parser] could not find card for dbfId',
+					cardId,
+					isDbfId,
+					card,
+					this.allCards.getCards()?.length,
+				);
 			}
 			return card?.dbfId;
 		});
