@@ -101,6 +101,7 @@ export const race = (race: Race) => (handler: Handler): boolean => {
 	return handler.referenceCardProvider()?.race === Race[race];
 };
 export const beast = race(Race.BEAST);
+export const demon = race(Race.DEMON);
 export const dragon = race(Race.DRAGON);
 export const mech = race(Race.MECH);
 export const pirate = race(Race.PIRATE);

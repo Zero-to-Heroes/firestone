@@ -14,6 +14,7 @@ import {
 	corrupt,
 	corrupted,
 	deathrattle,
+	demon,
 	divineShield,
 	dragon,
 	effectiveCostLess,
@@ -93,68 +94,71 @@ export class CardsHighlightService {
 
 	private buildSelector(cardId: string): (handler: Handler, deckState?: DeckState) => boolean {
 		switch (cardId) {
-			case CardIds.DoubleJump:
-				return and(inDeck, outcast);
-			case CardIds.FungalFortunes:
-				return and(inDeck, minion);
-			case CardIds.GuffRunetotem1:
-				return and(spell, spellSchool(SpellSchool.NATURE));
-			case CardIds.LadyAnacondra1:
-				return and(spell, spellSchool(SpellSchool.NATURE));
-			case CardIds.JaceDarkweaver:
-				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
-			case CardIds.LineHopper:
-				return outcast;
-			case CardIds.Tuskpiercer:
-				return and(inDeck, deathrattle);
-			case CardIds.VengefulSpirit2:
-				return and(inDeck, deathrattle);
-			case CardIds.LivingSeedRank1:
-			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
-			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
-				return and(inDeck, beast);
-			case CardIds.BarakKodobane1:
-				return and(inDeck, spell, effectiveCostLess(4), effectiveCostMore(0));
-			case CardIds.GuardianAnimals:
-				return and(inDeck, minion, beast, effectiveCostLess(6));
-			case CardIds.JewelOfNzoth:
-				return and(minion, inGraveyard, deathrattle);
-			case CardIds.ScavengersIngenuity:
-				return and(inDeck, beast);
-			case CardIds.SelectiveBreederCore:
-				return and(inDeck, beast);
-			case CardIds.WarsongWrangler:
-				return and(inDeck, beast);
 			case CardIds.ArcaneLuminary:
 				return and(inDeck, notInInitialDeck);
 			case CardIds.Arcanologist:
 			case CardIds.ArcanologistCore:
 				return and(inDeck, spell, secret);
+			case CardIds.BarakKodobane1:
+				return and(inDeck, spell, effectiveCostLess(4), effectiveCostMore(0));
 			case CardIds.BookOfSpecters:
 				return and(inDeck, spell);
-			case CardIds.KnightOfAnointment:
-				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
-			case CardIds.RedscaleDragontamer:
-				return and(inDeck, dragon);
-			case CardIds.SwordOfTheFallen:
-				return and(inDeck, spell, secret);
-			case CardIds.DarkInquisitorXanesh:
-				return and(or(inDeck, inHand), or(corrupt, corrupted));
 			case CardIds.CagematchCustodian:
 				return and(inDeck, cardType(CardType.WEAPON));
+			case CardIds.DarkInquisitorXanesh:
+				return and(or(inDeck, inHand), or(corrupt, corrupted));
+			case CardIds.DoubleJump:
+				return and(inDeck, outcast);
 			case CardIds.FiremancerFlurgl:
 				return and(race(Race.MURLOC), or(inDeck, inHand));
+			case CardIds.FungalFortunes:
+				return and(inDeck, minion);
+			case CardIds.GuardianAnimals:
+				return and(inDeck, minion, beast, effectiveCostLess(6));
+			case CardIds.GuffRunetotem1:
+				return and(spell, spellSchool(SpellSchool.NATURE));
 			case CardIds.HarborScamp:
 				return and(inDeck, pirate);
+			case CardIds.JaceDarkweaver:
+				return and(inOther, spell, spellSchool(SpellSchool.FEL), spellPlayedThisMatch);
+			case CardIds.JewelOfNzoth:
+				return and(minion, inGraveyard, deathrattle);
+			case CardIds.KanrethadEbonlocke_KanrethadPrimeToken:
+				return and(demon, inGraveyard, minion);
+			case CardIds.KnightOfAnointment:
+				return and(inDeck, spell, spellSchool(SpellSchool.HOLY));
+			case CardIds.LadyAnacondra1:
+				return and(spell, spellSchool(SpellSchool.NATURE));
+			case CardIds.LadyVashj_VashjPrimeToken:
+				return and(inDeck, spell);
+			case CardIds.LineHopper:
+				return outcast;
+			case CardIds.LivingSeedRank1:
+			case CardIds.LivingSeedRank1_LivingSeedRank2Token:
+			case CardIds.LivingSeedRank1_LivingSeedRank3Token:
+				return and(inDeck, beast);
 			case CardIds.OverlordSaurfang1:
 				return and(minion, inGraveyard, frenzy);
-			case CardIds.RingmasterWhatley:
-				return and(inDeck, minion, or(dragon, mech, pirate));
-
 			case CardIds.Rally:
 				return and(inGraveyard, minion, effectiveCostLess(4), effectiveCostMore(0));
+			case CardIds.RedscaleDragontamer:
+				return and(inDeck, dragon);
+			case CardIds.RingmasterWhatley:
+				return and(inDeck, minion, or(dragon, mech, pirate));
+			case CardIds.ScavengersIngenuity:
+				return and(inDeck, beast);
+			case CardIds.SelectiveBreederCore:
+				return and(inDeck, beast);
+			case CardIds.SwordOfTheFallen:
+				return and(inDeck, spell, secret);
+			case CardIds.Tuskpiercer:
+				return and(inDeck, deathrattle);
 			case CardIds.VarianKingOfStormwind:
 				return and(inDeck, or(rush, taunt, divineShield));
+			case CardIds.VengefulSpirit2:
+				return and(inDeck, deathrattle);
+			case CardIds.WarsongWrangler:
+				return and(inDeck, beast);
 
 			// Duels
 			case CardIds.PrincessTavernBrawl:
