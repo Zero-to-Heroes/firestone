@@ -3,6 +3,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
+import { modifyDeckForSpecialCards } from './deck-contents-utils';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
@@ -37,8 +38,11 @@ export class PassiveTriggeredParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			globalEffects: newGlobalEffects,
 		});
+
+		const deckAfterSpecialCaseUpdate: DeckState = modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards);
+
 		return Object.assign(new GameState(), currentState, {
-			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 		});
 	}
 
