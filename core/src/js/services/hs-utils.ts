@@ -262,6 +262,7 @@ export const publicCardCreators = [
 	CardIds.SeekGuidance_DiscoverTheVoidShardToken,
 	CardIds.SenseDemonsLegacy,
 	CardIds.SenseDemonsVanilla1,
+	CardIds.ShroudOfConcealment,
 	CardIds.SketchyInformation,
 	CardIds.SmallTimeRecruits,
 	CardIds.Starscryer,
