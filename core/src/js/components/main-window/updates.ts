@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.17.0',
+		version: '7.16.11',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -84,6 +84,26 @@ export const updates: readonly Update[] = [
 						category: 'decktracker',
 						details: [
 							{
+								type: 'feature',
+								text: `Add a hero power damage counter for Mordresh Fire Eye and Jan'alai.`,
+							},
+							{
+								type: 'feature',
+								text: `Add card highlights for the "Prime" minions.`,
+							},
+							{
+								type: 'feature',
+								text: `Flag cards drawn by Shroud of Concealment.`,
+							},
+							{
+								type: 'feature',
+								text: `Flag cards drawn by Varian, King of Stormwind.`,
+							},
+							{
+								type: 'feature',
+								text: `Flag both Encumbered Pack Mules when one is drawn.`,
+							},
+							{
 								type: 'bug',
 								text: `Fix Ooops, All Spells! not modifying the contents of the deck.`,
 							},
@@ -92,10 +112,6 @@ export const updates: readonly Update[] = [
 					{
 						category: 'general',
 						details: [
-							{
-								type: 'feature',
-								text: `Add card highlights for the "Prime" minions.`,
-							},
 							{
 								type: 'bug',
 								text: `Restore the post-match XP popup.`,
