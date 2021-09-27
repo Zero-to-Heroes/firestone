@@ -135,6 +135,11 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Show the number of times an Elwynn Boar died for you"
 					></preference-toggle>
 					<preference-toggle
+						field="playerHeroPowerDamageCounter"
+						label="Hero Power damage"
+						tooltip="Show the total damage done by your hero power this match. Shows up only if Mordresh Fire Eye or Jan'Alai the Dragonhawk are in your deck."
+					></preference-toggle>
+					<preference-toggle
 						field="playerBolnerCounter"
 						label="Bolner Hammerbeak"
 						tooltip="When you have Bolner Hammerbeak in hand, show the first Battlecry card that was played this turn, if any"

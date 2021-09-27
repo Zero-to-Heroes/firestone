@@ -24,6 +24,7 @@ import { ElementalCounterDefinition } from './definitions/elemental-counter';
 import { ElwynnBoarCounterDefinition } from './definitions/elwynn-boar-counter';
 import { FatigueCounterDefinition } from './definitions/fatigue-counter';
 import { GalakrondCounterDefinition } from './definitions/galakrond-counter';
+import { HeroPowerDamageCounterDefinition } from './definitions/hero-power-damage-counter';
 import { JadeCounterDefinition } from './definitions/jade-counter';
 import { LibramCounterDefinition } from './definitions/libram-counter';
 import { PogoCounterDefinition } from './definitions/pogo-counter';
@@ -167,6 +168,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				return ElwynnBoarCounterDefinition.create(gameState, side);
 			case 'bolner':
 				return BolnerHammerbeakIndicator.create(gameState, side, this.allCards);
+			case 'hero-power-damage':
+				return HeroPowerDamageCounterDefinition.create(gameState, side);
 			default:
 				console.error('unexpected activeCounter for non-bgs', activeCounter);
 		}

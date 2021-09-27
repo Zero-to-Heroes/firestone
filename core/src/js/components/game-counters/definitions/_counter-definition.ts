@@ -20,4 +20,5 @@ export type CounterType =
 	| 'watchpost'
 	| 'libram'
 	| 'bolner'
+	| 'hero-power-damage'
 	| 'elwynn-boar';

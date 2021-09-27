@@ -27,6 +27,8 @@ export class DeckState {
 
 	private static readonly POGO_CARD_IDS = [CardIds.PogoHopper1, CardIds.PogoHopper2, CardIds.PogoHopperBattlegrounds];
 
+	private static readonly HERO_POWER_DAMAGE_CARD_IDS = [CardIds.MordreshFireEye, CardIds.JanalaiTheDragonhawk];
+
 	private static readonly SPELL_COUNTER_CARD_IDS = [CardIds.YoggSaronHopesEnd, CardIds.YoggSaronMasterOfFate];
 
 	private static readonly NEW_CTHUN_CARD_IDS = [
@@ -69,6 +71,7 @@ export class DeckState {
 	readonly elementalsPlayedThisTurn: number = 0;
 	readonly elementalsPlayedLastTurn: number = 0;
 	readonly elwynnBoarsDeadThisMatch: number = 0;
+	readonly heroPowerDamageThisMatch: number = 0;
 	// readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
@@ -120,6 +123,13 @@ export class DeckState {
 						allCards.getCard(card.cardId)?.text &&
 						allCards.getCard(card.cardId)?.text?.indexOf('Invoke Galakrond') !== -1),
 			);
+	}
+
+	public containsHeroPowerDamageCard(allCards?: CardsFacadeService): boolean {
+		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		return allCardsInDeck
+			.filter((card) => card.cardId)
+			.some((card) => DeckState.HERO_POWER_DAMAGE_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
 	}
 
 	public containsCthun(allCards: CardsFacadeService): boolean {

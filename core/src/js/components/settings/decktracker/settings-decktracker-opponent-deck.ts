@@ -160,6 +160,11 @@ import { Knob } from '../preference-slider.component';
 						label="Elwynn Boar deaths"
 						tooltip="Show the number of times an Elwynn Boar died for your opponent"
 					></preference-toggle>
+					<preference-toggle
+						field="opponentHeroPowerDamageCounter"
+						label="Hero Power damage"
+						tooltip="Show the total damage done by your opponent's hero power this match. It shows up only if the opponent's class is Mage and they have dealt at least one damage."
+					></preference-toggle>
 				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>

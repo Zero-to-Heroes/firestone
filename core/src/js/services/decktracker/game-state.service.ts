@@ -65,6 +65,7 @@ import { GameRunningParser } from './event-parser/game-running-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
 import { GlobalMinionEffectParser } from './event-parser/global-minion-effect-parser';
 import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
+import { HeroPowerDamageParser } from './event-parser/hero-power-damage-parser';
 import { JadeGolemParser } from './event-parser/jade-golem-parser';
 import { LinkedEntityParser } from './event-parser/linked-entity-parser';
 import { LocalPlayerParser } from './event-parser/local-player-parser';
@@ -106,6 +107,7 @@ import { CthunOpponentCounterOverlayHandler } from './overlays/counter-opponent-
 import { ElwynnBoarOpponentCounterOverlayHandler } from './overlays/counter-opponent-elwynn-boar-handler';
 import { FatigueOpponentCounterOverlayHandler } from './overlays/counter-opponent-fatigue-handler';
 import { GalakroundOpponentCounterOverlayHandler } from './overlays/counter-opponent-galakrond-handler';
+import { HeroPowerDamageOpponentCounterOverlayHandler } from './overlays/counter-opponent-hero-power-damage-handler';
 import { JadeGolemOpponentCounterOverlayHandler } from './overlays/counter-opponent-jade-golem-handler';
 import { LibramOpponentCounterOverlayHandler } from './overlays/counter-opponent-libram-handler';
 import { PogoOpponentCounterOverlayHandler } from './overlays/counter-opponent-pogo-handler';
@@ -117,6 +119,7 @@ import { ElementalPlayerCounterOverlayHandler } from './overlays/counter-player-
 import { ElwynnBoarPlayerCounterOverlayHandler } from './overlays/counter-player-elwynn-boar-handler';
 import { FatiguePlayerCounterOverlayHandler } from './overlays/counter-player-fatigue-handler';
 import { GalakroundPlayerCounterOverlayHandler } from './overlays/counter-player-galakrond-handler';
+import { HeroPowerDamagePlayerCounterOverlayHandler } from './overlays/counter-player-hero-power-damage-handler';
 import { JadeGolemPlayerCounterOverlayHandler } from './overlays/counter-player-jade-golem-handler';
 import { LibramPlayerCounterOverlayHandler } from './overlays/counter-player-libram-handler';
 import { PogoPlayerCounterOverlayHandler } from './overlays/counter-player-pogo-handler';
@@ -571,6 +574,8 @@ export class GameStateService {
 			new ElwynnBoarPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new ElwynnBoarOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 			new BolnerPlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new HeroPowerDamagePlayerCounterOverlayHandler(this.ow, this.allCards, this.prefs),
+			new HeroPowerDamageOpponentCounterOverlayHandler(this.ow, this.allCards, this.prefs),
 		];
 
 		if (FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW) {
@@ -643,6 +648,7 @@ export class GameStateService {
 			new EntityUpdateParser(this.helper, this.allCards),
 			new PassiveTriggeredParser(this.helper, this.allCards),
 			new DamageTakenParser(),
+			new HeroPowerDamageParser(this.allCards),
 			new CthunRevealedParser(this.helper, this.allCards),
 			new MindrenderIlluciaParser(),
 			new GlobalMinionEffectParser(this.helper, this.allCards),

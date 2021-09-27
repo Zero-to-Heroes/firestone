@@ -157,6 +157,7 @@ export class Preferences {
 	readonly opponentWatchpostCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentWatchpostCounterWidgetPosition: { left: number; top: number };
+
 	// These are turned off by default because you can quite easily see the info from the tracker
 	readonly playerLibramCounter: boolean = false;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -171,40 +172,49 @@ export class Preferences {
 	readonly opponentPogoCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentPogoCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerJadeGolemCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerJadeGolemCounterWidgetPosition: { left: number; top: number };
 	readonly opponentJadeGolemCounterCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentJadeGolemWidgetPosition: { left: number; top: number };
+
 	readonly playerAttackCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerAttackCounterWidgetPosition: { left: number; top: number };
 	readonly opponentAttackCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentAttackCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerCthunCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerCthunCounterWidgetPosition: { left: number; top: number };
 	readonly opponentCthunCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentCthunCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerFatigueCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerFatigueCounterWidgetPosition: { left: number; top: number };
 	readonly opponentFatigueCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly opponentFatigueCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerSpellCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerSpellCounterWidgetPosition: { left: number; top: number };
+
 	readonly playerElementalCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerElementalCounterWidgetPosition: { left: number; top: number };
 
-	readonly playerBgsPogoCounter: boolean = true;
+	readonly playerHeroPowerDamageCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
+	readonly playerHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
+	readonly opponentHeroPowerDamageCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly opponentHeroPowerDamageCounterWidgetPosition: { left: number; top: number };
 
 	readonly playerElwynnBoarCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -216,6 +226,10 @@ export class Preferences {
 	readonly playerBolnerCounter: boolean = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly playerBolnerCounterWidgetPosition: { left: number; top: number };
+
+	readonly playerBgsPogoCounter: boolean = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly playerBgsPogoCounterWidgetPosition: { left: number; top: number };
 
 	readonly replaysShowNotification: boolean = false;
 	readonly replaysFilterDeckstring: string;
