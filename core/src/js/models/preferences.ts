@@ -18,6 +18,12 @@ import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-
 import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
+import { MercenariesHeroLevelFilterType } from './mercenaries/mercenaries-hero-level-filter.type';
+import { MercenariesModeFilterType } from './mercenaries/mercenaries-mode-filter.type';
+import { MercenariesPveDifficultyFilterType } from './mercenaries/mercenaries-pve-difficulty-filter.type';
+import { MercenariesPvpMmrFilterType } from './mercenaries/mercenaries-pvp-mmr-filter.type';
+import { MercenariesRoleFilterType } from './mercenaries/mercenaries-role-filter.type';
+import { MercenariesStarterFilterType } from './mercenaries/mercenaries-starter-filter.type';
 import { Ftue } from './preferences/ftue';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
@@ -309,6 +315,13 @@ export class Preferences {
 	readonly duelsPersonalDeckHiddenDeckCodes: readonly string[] = [];
 	readonly duelsPersonalDeckShowHiddenDecks: boolean;
 	readonly duelsHideStatsBelowThreshold: boolean;
+
+	readonly mercenariesActiveModeFilter: MercenariesModeFilterType = 'pve';
+	readonly mercenariesActiveRoleFilter: MercenariesRoleFilterType = 'all';
+	readonly mercenariesActivePveDifficultyFilter: MercenariesPveDifficultyFilterType = 'all';
+	readonly mercenariesActivePvpMmrFilter: MercenariesPvpMmrFilterType = 100;
+	readonly mercenariesActiveStarterFilter: MercenariesStarterFilterType = 'all';
+	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';

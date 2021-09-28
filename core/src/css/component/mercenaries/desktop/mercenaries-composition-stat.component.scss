@@ -1,0 +1,83 @@
+.mercenaries-composition-stat {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+	background: rgba(255, 255, 255, 0.08);
+	padding: 10px;
+	position: relative;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.heroes-container {
+		display: flex;
+		margin-right: 15px;
+
+		&.starter {
+			padding-right: 15px;
+			border-right: 1px solid var(--color-3);
+		}
+
+		&.bench {
+			opacity: 0.5;
+		}
+
+		.portrait {
+			flex-grow: 0;
+			flex-shrink: 0;
+			display: flex;
+			flex-direction: column;
+			width: 55px;
+			position: relative;
+			top: 0;
+			left: 0;
+			z-index: 9;
+
+			.icon {
+				position: absolute;
+				top: 11%;
+				left: 13%;
+				width: 76%;
+				clip-path: ellipse(40% 44% at 50% 50%);
+			}
+
+			.frame {
+				width: 100%;
+				z-index: 1;
+			}
+		}
+	}
+
+	.stats {
+		display: flex;
+		font-size: 12px;
+		align-items: center;
+		width: 100%;
+
+		.item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin-right: 15px;
+			width: 90px;
+
+			.label {
+				margin-right: 5px;
+			}
+
+			.values {
+				display: flex;
+			}
+
+			.value {
+				font-weight: bold;
+				// color: #ce73b4;
+				color: var(--default-title-color);
+			}
+		}
+	}
+}

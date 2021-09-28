@@ -36,7 +36,7 @@ export class BattlegroundsHeroesRecordsBrokenComponent {
 				map(([bestBgsUserStats]) => {
 					const groupingByHero = groupByFunction((stat: BgsBestStat) => stat.heroCardId);
 					const validRecords = bestBgsUserStats.filter((stat) => stat.heroCardId);
-					const statsByHero: readonly BgsBestStat[][] = Object.values(groupingByHero(validRecords));
+					const statsByHero: (readonly BgsBestStat[])[] = Object.values(groupingByHero(validRecords));
 					return statsByHero
 						.filter((stats) => stats.length > 0)
 						.map(

@@ -120,37 +120,37 @@ export class BgsHeroSelectionOverviewComponent {
 		stats: readonly BgsHeroStat[],
 	): readonly { tier: BgsHeroTier; heroes: readonly BgsHeroStat[] }[] {
 		const groupingByTier = groupByFunction((overview: BgsHeroStat) => overview.tier);
-		const groupedByTier: BgsHeroStat[][] = Object.values(groupingByTier(stats));
+		const groupedByTier: (readonly BgsHeroStat[])[] = Object.values(groupingByTier(stats));
 		return [
 			{
 				tier: 'S' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'S'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
+				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'S')) ?? [])].sort(
+					(a, b) => a.averagePosition - b.averagePosition,
+				),
 			},
 			{
 				tier: 'A' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'A'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
+				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'A')) ?? [])].sort(
+					(a, b) => a.averagePosition - b.averagePosition,
+				),
 			},
 			{
 				tier: 'B' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'B'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
+				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'B')) ?? [])].sort(
+					(a, b) => a.averagePosition - b.averagePosition,
+				),
 			},
 			{
 				tier: 'C' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'C'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
+				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'C')) ?? [])].sort(
+					(a, b) => a.averagePosition - b.averagePosition,
+				),
 			},
 			{
 				tier: 'D' as BgsHeroTier,
-				heroes: groupedByTier
-					.find((heroes) => heroes.find((hero) => hero.tier === 'D'))
-					?.sort((a, b) => a.averagePosition - b.averagePosition),
+				heroes: [...(groupedByTier.find((heroes) => heroes.find((hero) => hero.tier === 'D')) ?? [])].sort(
+					(a, b) => a.averagePosition - b.averagePosition,
+				),
 			},
 		].filter((tier) => tier.heroes);
 	}

@@ -1,6 +1,7 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
 import { ArenaState } from '../arena/arena-state';
 import { DuelsState } from '../duels/duels-state';
+import { MercenariesState } from '../mercenaries/mercenaries-state';
 import { CurrentUser } from '../overwolf/profile/current-user';
 import { AchievementsState } from './achievements-state';
 import { BattlegroundsAppState } from './battlegrounds/battlegrounds-app-state';
@@ -21,6 +22,7 @@ export class MainWindowState {
 	readonly battlegrounds: BattlegroundsAppState = new BattlegroundsAppState();
 	readonly duels: DuelsState = new DuelsState();
 	readonly arena: ArenaState = new ArenaState();
+	readonly mercenaries: MercenariesState = new MercenariesState();
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly globalStats: GlobalStats = new GlobalStats();

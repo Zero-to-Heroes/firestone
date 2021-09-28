@@ -112,6 +112,15 @@ import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
+import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
+import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
+import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercenaries-mode-filter-selected-event';
+import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
+import { MercenariesPvpMmrFilterSelectedEvent } from './events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
+import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercenaries-role-filter-selected-event';
+import { MercenariesSelectCategoryEvent } from './events/mercenaries/mercenaries-select-category-event';
+import { MercenariesSelectCompositionEvent } from './events/mercenaries/mercenaries-select-composition-event';
+import { MercenariesStarterFilterSelectedEvent } from './events/mercenaries/mercenaries-starter-filter-selected-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { ChangeMatchStatsNumberOfTabsEvent } from './events/replays/change-match-stats-number-of-tabs-event';
@@ -216,6 +225,15 @@ import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
+import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
+import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
+import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
+import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
+import { MercenariesPvpMmrFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pvp-mmr-filter-selected-processor';
+import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries/mercenaries-role-filter-selected-processor';
+import { MercenariesSelectCategoryProcessor } from './processors/mercenaries/mercenaries-select-category-processor';
+import { MercenariesSelectCompositionProcessor } from './processors/mercenaries/mercenaries-select-composition-processor';
+import { MercenariesStarterFilterSelectedProcessor } from './processors/mercenaries/mercenaries-starter-filter-selected-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { Processor } from './processors/processor';
@@ -682,6 +700,34 @@ export class MainWindowStoreService {
 
 			BgsSimulatorMinionTierFilterSelectedEvent.eventName(),
 			new BgsSimulatorMinionTierFilterSelectedProcessor(this.prefs),
+
+			// Mercenaries
+			MercenariesModeFilterSelectedEvent.eventName(),
+			new MercenariesModeFilterSelectedProcessor(this.prefs),
+
+			MercenariesRoleFilterSelectedEvent.eventName(),
+			new MercenariesRoleFilterSelectedProcessor(this.prefs),
+
+			MercenariesPveDifficultyFilterSelectedEvent.eventName(),
+			new MercenariesPveDifficultyFilterSelectedProcessor(this.prefs),
+
+			MercenariesPvpMmrFilterSelectedEvent.eventName(),
+			new MercenariesPvpMmrFilterSelectedProcessor(this.prefs),
+
+			MercenariesStarterFilterSelectedEvent.eventName(),
+			new MercenariesStarterFilterSelectedProcessor(this.prefs),
+
+			MercenariesHeroLevelFilterSelectedEvent.eventName(),
+			new MercenariesHeroLevelFilterSelectedProcessor(this.prefs),
+
+			MercenariesHeroSelectedEvent.eventName(),
+			new MercenariesHeroSelectedProcessor(this.cards),
+
+			MercenariesSelectCompositionEvent.eventName(),
+			new MercenariesSelectCompositionProcessor(),
+
+			MercenariesSelectCategoryEvent.eventName(),
+			new MercenariesSelectCategoryProcessor(),
 
 			// Duels
 			DungeonLootInfoUpdatedEvent.eventName(),

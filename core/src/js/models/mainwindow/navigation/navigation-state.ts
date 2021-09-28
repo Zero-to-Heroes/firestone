@@ -5,6 +5,7 @@ import { NavigationBattlegrounds } from './navigation-battlegrounds';
 import { NavigationCollection } from './navigation-collection';
 import { NavigationDecktracker } from './navigation-decktracker';
 import { NavigationDuels } from './navigation-duels';
+import { NavigationMercenaries } from './navigation-mercenaries';
 import { NavigationReplays } from './navigation-replays';
 import { NavigationStats } from './navigation-stats';
 
@@ -16,6 +17,7 @@ export class NavigationState {
 	readonly navigationAchievements: NavigationAchievements = new NavigationAchievements();
 	readonly navigationDecktracker: NavigationDecktracker = new NavigationDecktracker();
 	readonly navigationBattlegrounds: NavigationBattlegrounds = new NavigationBattlegrounds();
+	readonly navigationMercenaries: NavigationMercenaries = new NavigationMercenaries();
 	readonly navigationDuels: NavigationDuels = new NavigationDuels();
 	readonly navigationArena: NavigationArena = new NavigationArena();
 	readonly navigationStats: NavigationStats = new NavigationStats();
@@ -50,6 +52,8 @@ export class NavigationState {
 				return this.navigationArena.getPageName();
 			case 'replays':
 				return this.navigationReplays.getPageName();
+			case 'mercenaries':
+				return this.navigationMercenaries.getPageName();
 			case 'general':
 				return '';
 		}

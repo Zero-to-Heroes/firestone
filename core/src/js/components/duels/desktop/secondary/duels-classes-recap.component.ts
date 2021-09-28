@@ -159,7 +159,8 @@ export class DuelsClassesRecapComponent {
 			runs
 				.map((run) => run.steps)
 				.reduce((a, b) => a.concat(b), [])
-				.filter((step) => (step as GameStat).buildNumber),
+				.filter((step) => (step as GameStat).buildNumber)
+				.map((step) => step as GameStat),
 		);
 		const mostFacedClasses = Object.values(groupedByFacedClass).sort(sortFunction).slice(0, 3);
 		return mostFacedClasses.map((gamesForClass) => {

@@ -221,6 +221,20 @@ import { OpponentCardInfosComponent } from '../../components/matchoverlay/oppone
 import { OpponentCardTurnNumberComponent } from '../../components/matchoverlay/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/matchoverlay/opponenthand/opponent-hand-overlay.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
+import { MercenariesHeroLevelFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-level-filter-dropdown.component';
+import { MercenariesModeFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-mode-filter-dropdown.component';
+import { MercenariesPveDifficultyFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-pve-difficulty-filter-dropdown.component';
+import { MercenariesPvpMmrFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-pvp-mmr-filter-dropdown.component';
+import { MercenariesRoleFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-role-filter-dropdown.component';
+import { MercenariesStarterFilterDropdownComponent } from '../../components/mercenaries/desktop/filters/mercenaries-starter-filter-dropdown.component';
+import { MercenariesFiltersComponent } from '../../components/mercenaries/desktop/filters/_mercenaries-filters.component';
+import { MercenariesComposiionDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-composition-details.component';
+import { MercenariesCompositionStatComponent } from '../../components/mercenaries/desktop/mercenaries-composition-stat.component';
+import { MercenariesCompositionsStatsComponent } from '../../components/mercenaries/desktop/mercenaries-compositions-stats.component';
+import { MercenariesDesktopComponent } from '../../components/mercenaries/desktop/mercenaries-desktop.component';
+import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-details.component';
+import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
+import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
@@ -335,6 +349,7 @@ import { EndGameListenerService } from '../../services/manastorm-bridge/end-game
 import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game-uploader.service';
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
+import { MercenariesStateBuilderService } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { PatchesConfigService } from '../../services/patches-config.service';
 import { PlayersInfoService } from '../../services/players-info.service';
@@ -635,6 +650,22 @@ const components = [
 		ArenaTimeFilterDropdownComponent,
 		ArenaClassFilterDropdownComponent,
 
+		MercenariesDesktopComponent,
+		MercenariesHeroStatsComponent,
+		MercenariesHeroStatComponent,
+		MercenariesHeroDetailsComponent,
+		MercenariesCompositionsStatsComponent,
+		MercenariesCompositionStatComponent,
+		MercenariesComposiionDetailsComponent,
+
+		MercenariesFiltersComponent,
+		MercenariesModeFilterDropdownComponent,
+		MercenariesRoleFilterDropdownComponent,
+		MercenariesPveDifficultyFilterDropdownComponent,
+		MercenariesPvpMmrFilterDropdownComponent,
+		MercenariesStarterFilterDropdownComponent,
+		MercenariesHeroLevelFilterDropdownComponent,
+
 		StatsDesktopComponent,
 		StatsXpGraphComponent,
 		StatsFiltersComponent,
@@ -777,6 +808,8 @@ const components = [
 		DuelsStateBuilderService,
 
 		ArenaStateBuilderService,
+
+		MercenariesStateBuilderService,
 
 		StatsStateBuilderService,
 

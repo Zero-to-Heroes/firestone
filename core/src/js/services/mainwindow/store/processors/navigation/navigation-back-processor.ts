@@ -45,6 +45,8 @@ export class NavigationBackProcessor implements Processor {
 				return NavigationBackProcessor.buildParentBattlegroundsState(navigationState, dataState);
 			case 'duels':
 				return NavigationBackProcessor.buildParentDuelsState(navigationState, dataState);
+			case 'mercenaries':
+				return NavigationBackProcessor.buildParentMercenariesState(navigationState, dataState);
 			case 'arena':
 				return NavigationBackProcessor.buildParentArenaState(navigationState, dataState);
 			default:
@@ -80,6 +82,21 @@ export class NavigationBackProcessor implements Processor {
 		}
 		console.log('building parent duels state', navigationState.navigationDuels.selectedCategoryId);
 		switch (navigationState.navigationDuels.selectedCategoryId) {
+			default:
+				return null;
+		}
+	}
+
+	private static buildParentMercenariesState(
+		navigationState: NavigationState,
+		dataState: MainWindowState,
+	): NavigationState {
+		if (!navigationState || !dataState) {
+			// console.warn('Missing state for processing back navigation');
+			return null;
+		}
+		console.log('building parent mercenaries state', navigationState.navigationMercenaries.selectedCategoryId);
+		switch (navigationState.navigationMercenaries.selectedCategoryId) {
 			default:
 				return null;
 		}

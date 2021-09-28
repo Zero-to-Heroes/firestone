@@ -82,11 +82,7 @@ export class GameStatsLoaderService {
 		this.gameStats = Object.assign(new GameStats(), {
 			stats: stats,
 		} as GameStats);
-		console.log(
-			'[game-stats-loader] Retrieved game stats for user',
-			this.gameStats.stats?.length,
-			this.gameStats.stats?.length && this.gameStats.stats[0],
-		);
+		console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
 		console.debug('[game-stats-loader] full game stats', this.gameStats);
 		return this.gameStats;
 	}

@@ -33,7 +33,6 @@ export class BuffInfoComponent {
 	constructor(private readonly allCards: CardsFacadeService, private readonly cdr: ChangeDetectorRef) {}
 
 	private async updateBuff(value: { bufferCardId: string; buffCardId: string; count: number }) {
-		// await this.allCards.initializeCardsDb(CARDS_VERSION);
 		const card = this.allCards.getCard(value.buffCardId);
 		this.count = value.count;
 		this.name = card.name;

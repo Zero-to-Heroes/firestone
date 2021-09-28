@@ -1,0 +1,17 @@
+:host() {
+	display: flex;
+	flex-shrink: 0;
+}
+
+.mercenaries-filters {
+	display: flex;
+	width: 100%;
+	flex-wrap: wrap;
+
+	::ng-deep filter-dropdown ng-select {
+		margin-right: 15px;
+		width: 155px;
+		height: 30px;
+		margin-bottom: 15px;
+	}
+}

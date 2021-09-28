@@ -19,6 +19,12 @@ import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
 import { StatsXpGraphSeasonFilterType } from '../models/mainwindow/stats/stats-xp-graph-season-filter.type';
+import { MercenariesHeroLevelFilterType } from '../models/mercenaries/mercenaries-hero-level-filter.type';
+import { MercenariesModeFilterType } from '../models/mercenaries/mercenaries-mode-filter.type';
+import { MercenariesPveDifficultyFilterType } from '../models/mercenaries/mercenaries-pve-difficulty-filter.type';
+import { MercenariesPvpMmrFilterType } from '../models/mercenaries/mercenaries-pvp-mmr-filter.type';
+import { MercenariesRoleFilterType } from '../models/mercenaries/mercenaries-role-filter.type';
+import { MercenariesStarterFilterType } from '../models/mercenaries/mercenaries-starter-filter.type';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { ApiRunner } from './api-runner';
@@ -320,6 +326,42 @@ export class PreferencesService {
 	public async updateBgsActiveSimulatorMinionTierFilter(value: 'all' | '1' | '2' | '3' | '4' | '5' | '6') {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, bgsActiveSimulatorMinionTierFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesModeFilter(value: MercenariesModeFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesActiveModeFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesPveDifficultyFilter(value: MercenariesPveDifficultyFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesActivePveDifficultyFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesPvpMmrFilter(value: MercenariesPvpMmrFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesActivePvpMmrFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesRoleFilter(value: MercenariesRoleFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesActiveRoleFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesHeroLevelFilter(value: MercenariesHeroLevelFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesActiveHeroLevelFilter: value };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesStarterFilter(value: MercenariesStarterFilterType) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesActiveStarterFilter: value };
 		await this.savePreferences(newPrefs);
 	}
 

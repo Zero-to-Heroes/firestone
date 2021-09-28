@@ -6,9 +6,7 @@ import { CARDS_VERSION } from './hs-utils';
 export class CardsInitService {
 	private inInit = false;
 
-	constructor(private readonly cards: AllCardsService) {
-		// this.init();
-	}
+	constructor(private readonly cards: AllCardsService) {}
 
 	public async init() {
 		console.debug('starting init');
@@ -18,7 +16,7 @@ export class CardsInitService {
 		}
 
 		this.inInit = true;
-		await this.cards.initializeCardsDb(CARDS_VERSION);
+		await this.cards.initializeCardsDb(CARDS_VERSION, 'cards.temp.json');
 		window['cards'] = this.cards;
 	}
 }

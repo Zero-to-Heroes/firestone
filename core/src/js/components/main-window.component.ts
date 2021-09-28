@@ -113,6 +113,11 @@ import { PreferencesService } from '../services/preferences.service';
 							*ngxCacheIf="navigationState.currentApp === 'battlegrounds'"
 						>
 						</battlegrounds-desktop>
+						<mercenaries-desktop
+							class="main-section"
+							*ngxCacheIf="navigationState.currentApp === 'mercenaries'"
+						>
+						</mercenaries-desktop>
 						<duels-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'duels'">
 						</duels-desktop>
 						<arena-desktop class="main-section" *ngxCacheIf="navigationState.currentApp === 'arena'">
@@ -378,7 +383,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		}
 		return this.dataState.showFtue
 			? 'general'
-			: ['decktracker', 'arena', 'stats'].includes(this.navigationState?.currentApp)
+			: ['decktracker', 'arena', 'stats', 'mercenaries'].includes(this.navigationState?.currentApp)
 			? 'decktracker-desktop'
 			: this.navigationState?.currentApp;
 	}

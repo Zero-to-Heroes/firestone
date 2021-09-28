@@ -1,12 +1,15 @@
 import { inflate } from 'pako';
 import { PatchInfo } from '../models/patches';
 
-export const groupByFunction = (keyExtractor: (obj: any | string) => string) => (array) =>
-	array.reduce((objectsByKeyValue, obj) => {
+export const groupByFunction = <T>(keyExtractor: (obj: T) => string) => (
+	array: readonly T[],
+): { [key: string]: readonly T[] } => {
+	return array.reduce((objectsByKeyValue, obj) => {
 		const value = keyExtractor(obj);
 		objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
 		return objectsByKeyValue;
 	}, {});
+};
 
 export const uuid = () => {
 	return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

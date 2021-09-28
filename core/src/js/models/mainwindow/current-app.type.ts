@@ -4,6 +4,7 @@ export type CurrentAppType =
 	| 'decktracker'
 	| 'replays'
 	| 'battlegrounds'
+	| 'mercenaries'
 	| 'general'
 	| 'duels'
 	| 'arena'

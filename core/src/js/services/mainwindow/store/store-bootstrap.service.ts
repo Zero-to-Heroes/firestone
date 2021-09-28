@@ -6,6 +6,7 @@ import { DecktrackerState } from '../../../models/mainwindow/decktracker/decktra
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../models/mainwindow/social-share-user-info';
+import { MercenariesState } from '../../../models/mercenaries/mercenaries-state';
 import { FORCE_LOCAL_PROP, Preferences } from '../../../models/preferences';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { ArenaStateBuilderService } from '../../arena/arena-state-builder.service';
@@ -19,6 +20,7 @@ import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracke
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
+import { MercenariesStateBuilderService } from '../../mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
 import { PreferencesService } from '../../preferences.service';
@@ -55,6 +57,7 @@ export class StoreBootstrapService {
 		private readonly dungeonLoot: DungeonLootParserService,
 		private readonly arenaService: ArenaRunParserService,
 		private readonly stats: StatsStateBuilderService,
+		private readonly mercenariesService: MercenariesStateBuilderService,
 	) {
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -86,6 +89,7 @@ export class StoreBootstrapService {
 			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats, duelsLeaderboard],
 			[arenaRewards],
+			[mercenariesGlobalStats, mercenariesReferenceData],
 		] = await Promise.all([
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
@@ -104,6 +108,7 @@ export class StoreBootstrapService {
 			]),
 			Promise.all([this.duels.loadRuns(), this.duels.loadGlobalStats(), this.duels.loadLeaderboard()]),
 			Promise.all([this.arena.loadRewards()]),
+			Promise.all([this.mercenariesService.loadGlobalStats(), this.mercenariesService.loadReferenceData()]),
 		]);
 		console.log('loaded info');
 
@@ -187,6 +192,11 @@ export class StoreBootstrapService {
 			: null;
 		const arenaState: ArenaState = await this.arena.initState(currentArenaMetaPatch, arenaRewards);
 
+		const mercenariesState: MercenariesState = await this.mercenariesService.initState(
+			mercenariesGlobalStats,
+			mercenariesReferenceData,
+		);
+
 		const initialWindowState = Object.assign(new MainWindowState(), {
 			currentUser: currentUser,
 			showFtue: !mergedPrefs.ftue.hasSeenGlobalFtue,
@@ -197,6 +207,7 @@ export class StoreBootstrapService {
 			battlegrounds: battlegroundsAppState,
 			duels: newDuelsState,
 			arena: arenaState,
+			mercenaries: mercenariesState,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: newStatsState,
 			globalStats: globalStats,

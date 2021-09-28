@@ -34,8 +34,4 @@ export class CardsFacadeService {
 	public getService() {
 		return this.service;
 	}
-
-	// public async initializeCardsDb(version?: string): Promise<void> {
-	// 	return this.service.initializeCardsDb(version);
-	// }
 }

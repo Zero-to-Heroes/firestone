@@ -7,13 +7,8 @@ import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulat
 // console.log('creating worker');
 const ctx: Worker = self as any;
 
-// const cards = new AllCardsService();
-// cards.initializeCardsDb();
-
 // Respond to message from parent thread
 ctx.onmessage = async (ev) => {
-	// await cards.initializeCardsDb(CARDS_VERSION);
-
 	const battleInfo: BgsBattleInfo = ev.data.battleMessage;
 	const cards: AllCardsService = Object.assign(new AllCardsService(), ev.data.cards);
 	// console.log('cards', cards, ev);
