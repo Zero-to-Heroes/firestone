@@ -17,9 +17,12 @@ import { CardTooltipPositionType } from '../../../directives/card-tooltip-positi
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { StatsRecap } from '../../../models/decktracker/stats-recap';
+import { DeckTimeFilterType } from '../../../models/mainwindow/decktracker/deck-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
+import { PatchInfo } from '../../../models/patches';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
+import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -188,24 +191,31 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			);
 		this.matchupStatsRecap$ = combineLatest(
 			this.store.listenDeckState$((gameState) => gameState),
-			this.store.listen$(([main, prefs]) => main.stats.gameStats),
+			this.store.listen$(
+				([main, nav, prefs]) => main.stats.gameStats,
+				([main, nav, prefs]) => main.decktracker.filters.time,
+				([main, nav, prefs]) => main.decktracker.patch,
+			),
 		).pipe(
-			filter(([[gameState], [gameStats]]) => !!gameStats?.stats?.length),
+			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
 			map(
-				([[gameState], [gameStats]]) =>
+				([[gameState], [gameStats, timeFilter, patch]]) =>
 					[
 						formatFormat(gameState.metadata.formatType),
+						timeFilter,
 						gameState.playerDeck.deckstring,
 						gameState.opponentDeck?.hero?.playerClass,
 						gameStats.stats,
-					] as [GameFormatString, string, string, readonly GameStat[]],
+						patch,
+					] as [GameFormatString, DeckTimeFilterType, string, string, readonly GameStat[], PatchInfo],
 			),
 			map(
-				([gameFormat, deckstring, opponentClass, gameStats]) =>
+				([gameFormat, timeFilter, deckstring, opponentClass, gameStats, patch]) =>
 					[
 						gameStats
 							.filter((stat) => stat.gameMode === 'ranked')
 							.filter((stat) => stat.gameFormat === gameFormat)
+							.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
 							.filter((stat) => stat.playerDecklist === deckstring)
 							.filter((stat) => stat.opponentClass === opponentClass),
 						opponentClass,
@@ -213,29 +223,40 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map(([gameStats, opponentClass]) => StatsRecap.from(gameStats, opponentClass)),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting matchupStatsRecap in ', this.constructor.name, filter)),
 		);
 		this.deckStatsRecap$ = combineLatest(
 			this.store.listenDeckState$((gameState) => gameState),
-			this.store.listen$(([main, prefs]) => main.stats.gameStats),
-		).pipe(
-			filter(([[gameState], [gameStats]]) => !!gameStats?.stats?.length),
-			map(
-				([[gameState], [gameStats]]) =>
-					[formatFormat(gameState.metadata.formatType), gameState.playerDeck.deckstring, gameStats.stats] as [
-						GameFormatString,
-						string,
-						readonly GameStat[],
-					],
+			this.store.listen$(
+				([main, nav, prefs]) => main.stats.gameStats,
+				([main, nav, prefs]) => main.decktracker.filters.time,
+				([main, nav, prefs]) => main.decktracker.patch,
 			),
-			map(([gameFormat, deckstring, gameStats]) =>
+		).pipe(
+			filter(([[gameState], [gameStats, timeFilter, patch]]) => !!gameStats?.stats?.length),
+			map(
+				([[gameState], [gameStats, timeFilter, patch]]) =>
+					[
+						formatFormat(gameState.metadata.formatType),
+						timeFilter,
+						gameState.playerDeck.deckstring,
+						gameStats.stats,
+						patch,
+					] as [GameFormatString, DeckTimeFilterType, string, readonly GameStat[], PatchInfo],
+			),
+			map(([gameFormat, timeFilter, deckstring, gameStats, patch]) =>
 				gameStats
 					.filter((stat) => stat.gameMode === 'ranked')
 					.filter((stat) => stat.gameFormat === gameFormat)
+					.filter((stat) => DecksStateBuilderService.isValidDate(stat, timeFilter, patch))
 					.filter((stat) => stat.playerDecklist === deckstring),
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 			map((gameStats) => StatsRecap.from(gameStats)),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting deckStatsRecap in ', this.constructor.name, filter)),
 		);
 	}

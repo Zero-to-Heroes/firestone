@@ -89,7 +89,6 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 			this.text = 'VS. ' + readableClass;
 			this.tooltip = "This deck's winrate in ranked against " + readableClass + ' since ' + dateFrom;
 		}
-		console.log('updated data', this.winrate, this._type);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
