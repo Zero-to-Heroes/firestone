@@ -611,7 +611,7 @@ export class GameStateService {
 			new MinionBackOnBoardParser(this.helper),
 			new MinionSummonedParser(this.helper, this.allCards),
 			new CardRevealedParser(this.helper, this.allCards),
-			new LinkedEntityParser(this.helper),
+			new LinkedEntityParser(this.helper, this.allCards),
 			new MinionDiedParser(this.helper),
 			new BurnedCardParser(this.helper),
 			new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),
