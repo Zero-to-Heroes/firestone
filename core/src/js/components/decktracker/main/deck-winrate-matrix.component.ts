@@ -107,20 +107,25 @@ export class DeckWinrateMatrixComponent implements AfterViewInit {
 	}
 
 	async reset() {
-		if (!this.deck) {
+		console.debug('resetting deck stats', this._deck);
+		if (!this._deck) {
 			return;
 		}
 
 		if (!this.confirmationShown) {
+			console.debug('showing confirmation', this.confirmationShown);
 			this.confirmationShown = true;
 			this.resetText = 'Are you sure?';
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
 			return;
 		}
 
 		this.resetText = 'Reset stats';
 		this.confirmationShown = false;
 		this.showResetConfirmationText = true;
-		this.stateUpdater.next(new DecktrackerResetDeckStatsEvent(this.deck.deckstring));
+		this.stateUpdater.next(new DecktrackerResetDeckStatsEvent(this._deck.deckstring));
 	}
 
 	deleteDeck() {
