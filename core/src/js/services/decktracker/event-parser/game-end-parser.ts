@@ -1,4 +1,3 @@
-import { GameType } from '@firestone-hs/reference-data';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { Preferences } from '../../../models/preferences';
@@ -19,8 +18,11 @@ export class GameEndParser implements EventParser {
 
 	async parse(currentState: GameState): Promise<GameState> {
 		const prefs = await this.prefs.getPreferences();
-		console.log('[deck-parser] [game-end] resetting deck', currentState.metadata.gameType === GameType.GT_VS_AI);
-		this.deckParser.reset(currentState.metadata.gameType === GameType.GT_VS_AI);
+		// console.log(
+		// 	'[deck-parser] [game-end] resetting deck, shouldStorePreviousDeck?',
+		// 	currentState.metadata.gameType === GameType.GT_VS_AI,
+		// );
+		// this.deckParser.reset(currentState.metadata.gameType === GameType.GT_VS_AI);
 		if (prefs && prefs.decktrackerCloseOnGameEnd) {
 			return new GameState();
 		}

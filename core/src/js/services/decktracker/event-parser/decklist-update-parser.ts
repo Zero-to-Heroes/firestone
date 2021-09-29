@@ -3,13 +3,13 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { PreferencesService } from '../../preferences.service';
 import { AiDeckService } from '../ai-deck-service.service';
-import { DeckParserService } from '../deck-parser.service';
+import { DeckHandlerService } from '../deck-handler.service';
 import { EventParser } from './event-parser';
 
 export class DecklistUpdateParser implements EventParser {
 	constructor(
 		private readonly aiDecks: AiDeckService,
-		private readonly deckParser: DeckParserService,
+		private readonly handler: DeckHandlerService,
 		private readonly prefs: PreferencesService,
 	) {}
 
@@ -47,7 +47,7 @@ export class DecklistUpdateParser implements EventParser {
 			return currentState;
 		}
 
-		const decklist = await this.deckParser.postProcessDeck(this.deckParser.buildDeckList(newDeckstring));
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring));
 		// console.log('[decklist-update] parsed decklist', decklist);
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,

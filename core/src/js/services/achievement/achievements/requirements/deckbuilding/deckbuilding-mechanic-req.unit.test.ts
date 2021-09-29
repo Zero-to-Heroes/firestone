@@ -15,7 +15,7 @@ describe('deckbuilding-mechanic-req', () => {
 			test('is completed when deckstring contains enough minions with target mechanic', () => {
 				const req = new DeckbuildingMechanicReq(12, 'LIFESTEAL', 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -32,7 +32,7 @@ describe('deckbuilding-mechanic-req', () => {
 			test('is not completed when deckstring is empty', () => {
 				const req = new DeckbuildingMechanicReq(12, 'LIFESTEAL', 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: undefined,
@@ -49,7 +49,7 @@ describe('deckbuilding-mechanic-req', () => {
 				const noClassic = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
 				const req = new DeckbuildingMechanicReq(12, 'LIFESTEAL', 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: noClassic,
@@ -70,7 +70,7 @@ describe('deckbuilding-mechanic-req', () => {
 			test('is completed when deckstring contains less minions with target mechanic', () => {
 				const req = new DeckbuildingMechanicReq(0, 'LIFESTEAL', 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -87,7 +87,7 @@ describe('deckbuilding-mechanic-req', () => {
 			test('is not completed when deckstring is empty', () => {
 				const req = new DeckbuildingMechanicReq(0, 'LIFESTEAL', 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: undefined,
@@ -105,7 +105,7 @@ describe('deckbuilding-mechanic-req', () => {
 					'AAECAZ8FDowB+gb7/gKggAO9hgPshgP5kwOKmgOQmgO0mwOGnAODoAOYqAOWrAMIhuwC9uwCj+8C4O8CkPYC14kDoKEDoakDAA==';
 				const req = new DeckbuildingMechanicReq(0, 'LIFESTEAL', 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: noClassic,

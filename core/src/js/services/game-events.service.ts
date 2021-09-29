@@ -192,9 +192,7 @@ export class GameEvents {
 				break;
 			case 'LOCAL_PLAYER':
 				console.log(gameEvent.Type + ' event');
-				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
-					deck: this.deckParser.currentDeck,
-				} as GameEventPlayer);
+				const localPlayer: GameEventPlayer = gameEvent.Value;
 				console.log('sending LOCAL_PLAYER info', localPlayer);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
@@ -208,9 +206,10 @@ export class GameEvents {
 				// This info is not needed by the tracker, but it is needed by some achievements
 				// that rely on the rank
 				setTimeout(async () => {
-					const [playerInfo, opponentInfo] = await Promise.all([
+					const [playerInfo, opponentInfo, playerDeck] = await Promise.all([
 						this.playersInfoService.getPlayerInfo(),
 						this.playersInfoService.getOpponentInfo(),
+						this.deckParser.getCurrentDeck(10000),
 					]);
 					console.log('players info', playerInfo, opponentInfo);
 					if (!playerInfo || !opponentInfo) {
@@ -226,6 +225,9 @@ export class GameEvents {
 							additionalData: {
 								playerInfo: playerInfo,
 								opponentInfo: opponentInfo,
+							},
+							localPlayer: {
+								deck: playerDeck,
 							},
 						} as GameEvent),
 					);

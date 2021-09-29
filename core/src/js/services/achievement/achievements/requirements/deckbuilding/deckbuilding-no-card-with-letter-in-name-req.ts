@@ -25,7 +25,7 @@ export class DeckbuildingNoCardWithLetterInNameReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.LOCAL_PLAYER) {
+		if (gameEvent.type === GameEvent.PLAYERS_INFO) {
 			this.handleEvent(gameEvent);
 		}
 	}

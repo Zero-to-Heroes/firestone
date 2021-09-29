@@ -58,14 +58,7 @@ export class EndGameListenerService {
 					// we want to start reading all the important memory bits as soon
 					// as possible
 					const reviewId = await this.gameState.getCurrentReviewId();
-					// const [reviewId, xpGained] = await Promise.all([
-					// 	this.gameState.getCurrentReviewId(),
-					// 	this.rewards.getXpGained(),
-					// ]);
-					if (this.deckTimeout) {
-						clearTimeout(this.deckTimeout);
-					}
-					// this.events.broadcast(Events.GAME_END, reviewId);
+					this.stopListenToDeckUpdates();
 
 					await this.endGameUploader.upload(
 						gameEvent,
@@ -83,36 +76,41 @@ export class EndGameListenerService {
 		});
 	}
 
-	private deckTimeout;
-	private listenToDeckUpdate(retriesLeft = 30) {
-		if (retriesLeft <= 0) {
-			console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
-			return;
-		}
+	private listening: boolean;
 
-		if (this.deckTimeout) {
-			clearTimeout(this.deckTimeout);
-		}
+	private async listenToDeckUpdate() {
+		this.listening = true;
+		const currentDeck = await Promise.race([this.deckService.getCurrentDeck(10000), this.listenerTimeout()]);
 		if (
-			!this.deckService.currentDeck?.deckstring &&
+			!currentDeck?.deckstring &&
 			this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
 			this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY
 		) {
-			// console.log('[manastorm-bridge] no deckstring, waiting', this.currentGameMode);
-			this.deckTimeout = setTimeout(() => this.listenToDeckUpdate(retriesLeft - 1), 2000);
+			console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
 			return;
 		}
-		this.currentDeckstring = this.deckService.currentDeck.deckstring;
-		console.log(
-			'[manastorm-bridge] got local player info, adding deckstring',
-			this.currentDeckstring,
-			this.deckService.currentDeck,
-		);
+		this.currentDeckstring = currentDeck.deckstring;
+		console.log('[manastorm-bridge] got local player info, adding deckstring', this.currentDeckstring, currentDeck);
 		// First remove the diacritics, then remove the weird unicode characters (deck names can't be fun!)
-		this.currentDeckname = this.deckService.currentDeck.name
+		this.currentDeckname = currentDeck?.name
 			?.normalize('NFKD')
 			// Allow some characters
 			?.replace(/[^\w^\{^\}^\[^\]$^/^\s]/g, '')
 			?.replace(/[^\x20-\x7E]/g, '');
+	}
+
+	private stopListenToDeckUpdates() {
+		this.listening = false;
+	}
+
+	private listenerTimeout(): Promise<any> {
+		return new Promise<any>((resolve) => {
+			const interval = setInterval(() => {
+				if (!this.listening) {
+					clearInterval(interval);
+					resolve(null);
+				}
+			}, 100);
+		});
 	}
 }

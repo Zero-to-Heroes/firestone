@@ -13,7 +13,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 				const deckstring3cardsWith3Words = 'AAEBAZICAtgBlboCDrds4soCswGL5QK2swK/AcSYA/AP2Qr+rgKiFPUM3A/S0wIA';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring3cardsWith3Words,
@@ -30,7 +30,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 				const deckstring4cardsWith3Words = 'AAEBAZICAA+3bOLKArMBi+UCtrMCvwHEmAPwD9kK/q4CohT1DNwP0tMClboCAA==';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring4cardsWith3Words,
@@ -47,7 +47,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 				const deckstring3cardsWith4Words = 'AAEBAZICAtuwAsUODrds4soCswGL5QK2swK/AcSYA/AP2Qr+rgKiFPUM3A/J7AIA';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring3cardsWith4Words,
@@ -64,7 +64,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 				const deckstring4cardsWith4Words = 'AAEBAZICAA+3bOLKArMBi+UCtrMCvwHEmAPwD9kK/q4CohT1DNwPxQ7J7AIA';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring4cardsWith4Words,
@@ -81,7 +81,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 				const deckstring2cardsWith4Words = 'AAEBAZICAA+3bOLKArMBi+UCtrMCvwHEmAPwD9kK/q4CohT1DNwP27ACyewCAA==';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring2cardsWith4Words,
@@ -98,7 +98,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 				const deckstring4cardsWith2Words = 'AAEBAZICAA+3bOLKArMB9QWL5QK2swK/AcSYA/AP2Qr+rgKiFPUMggXcDwA=';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring4cardsWith2Words,
@@ -114,7 +114,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 			test('is not completed when deckstring is empty', () => {
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: undefined,
@@ -131,7 +131,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 				const deckstring = 'AAECAf0EBu4CyQOmhwOWmgOKngPYoAMMwwGxCKP9AoOWA6aYA5+bA6CbA+KbA4ukA76kA9alA/SrAwA=';
 				const req = new DeckbuildingTextNumberOfWordsReq(30, 'AT_LEAST', 8, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -151,7 +151,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 					'AAEBAZICBLdszpQDyZwDkdACDbazAsSrApiGA7AQqaID3hXVgwPfFZvNAsCGA6TCAoSwAtS7AgA=';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring3cardsWith3Words,
@@ -169,7 +169,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 					'AAEBAZICBrdsswHOlAPEqwLJnAOR0AIMtrMCmIYDsBCpogPeFdWDA98Vm80CwIYDpMIChLAC1LsCAA==';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring4cardsWith3Words,
@@ -187,7 +187,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 					'AAEBAZICBrdszpQDxKsCyqsDyZwDkdACDPUFmIYDsBCpogPeFdWDA98Vm80CwIYDpMIChLAC1LsCAA==';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring3cardsWith2Words,
@@ -205,7 +205,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 					'AAEBAZICCLdszpQDxKsCyqsD4gaYhgPJnAOR0AIL9QWwEKmiA94V1YMD3xWbzQLAhgOkwgKEsALUuwIA';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring4cardsWith2Words,
@@ -223,7 +223,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 					'AAEBAZICBM6UA8usAsmcA5HQAg31BcSrApiGA7AQqaID3hXVgwPfFZvNAsCGA6TCAoSwAtS7AgA=';
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring2cardsWith2Words,
@@ -239,7 +239,7 @@ describe('deckbuilding-text-number-of-words-req', () => {
 			test('is not completed when deckstring is empty', () => {
 				const req = new DeckbuildingTextNumberOfWordsReq(3, 'AT_LEAST', 3, 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: undefined,

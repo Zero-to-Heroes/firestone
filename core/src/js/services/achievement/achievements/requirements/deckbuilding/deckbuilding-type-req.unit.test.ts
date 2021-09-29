@@ -14,7 +14,7 @@ describe('deckbuilding-type-req', () => {
 			test('is completed when deckstring contains as many cards of specified type', () => {
 				const req = new DeckbuildingTypeReq(0, 'SPELL', 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: fullSpellDeckstring,
@@ -36,7 +36,7 @@ describe('deckbuilding-type-req', () => {
 			test('is completed when deckstring contains less cards of specified type', () => {
 				const req = new DeckbuildingTypeReq(0, 'SPELL', 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: noSpellDeckstring,
@@ -53,7 +53,7 @@ describe('deckbuilding-type-req', () => {
 			test('is not completed when deckstring is empty', () => {
 				const req = new DeckbuildingTypeReq(0, 'SPELL', 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: undefined,
@@ -71,7 +71,7 @@ describe('deckbuilding-type-req', () => {
 					'AAECAZICBNMDyZwD9fwCtAUNzpQDmIYDqaID1YMDwIYDi+4Cz5QDnvkC7aID2QTvogO37gK7nwMA';
 				const req = new DeckbuildingTypeReq(0, 'SPELL', 'AT_MOST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: oneSpellDeckstring,
@@ -91,7 +91,7 @@ describe('deckbuilding-type-req', () => {
 		const deckstring = 'AAECAf0ECE3DAbsC7gKrBOwHpocDuaUDC3G0BLwIo/0CppgDn5sDoJsD/50DwqEDv6QD9KsDAA==';
 		const req = new DeckbuildingTypeReq(30, 'SPELL', 'AT_LEAST', cards);
 		const event = Object.assign(new GameEvent(), {
-			type: GameEvent.LOCAL_PLAYER,
+			type: GameEvent.PLAYERS_INFO,
 			localPlayer: {
 				deck: {
 					deckstring: deckstring,

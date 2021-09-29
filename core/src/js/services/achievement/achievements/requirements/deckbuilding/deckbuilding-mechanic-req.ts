@@ -34,7 +34,7 @@ export class DeckbuildingMechanicReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.LOCAL_PLAYER) {
+		if (gameEvent.type === GameEvent.PLAYERS_INFO) {
 			// console.log('[debug] [mechanic] handling local_player event?', gameEvent);
 			this.handleEvent(gameEvent);
 		}

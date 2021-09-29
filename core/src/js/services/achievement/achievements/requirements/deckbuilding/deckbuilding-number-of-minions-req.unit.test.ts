@@ -13,7 +13,7 @@ describe('deckbuilding-number-of-minions-req', () => {
 		test('is completed when deckstring contains at least target number of minions', () => {
 			const req = new DeckbuildingNumberOfMinionsReq(27, 'AT_LEAST', cards);
 			const event = Object.assign(new GameEvent(), {
-				type: GameEvent.LOCAL_PLAYER,
+				type: GameEvent.PLAYERS_INFO,
 				localPlayer: {
 					deck: {
 						deckstring: deckstring,
@@ -30,7 +30,7 @@ describe('deckbuilding-number-of-minions-req', () => {
 		test('is not completed when deckstring is empty', () => {
 			const req = new DeckbuildingNumberOfMinionsReq(27, 'AT_LEAST', cards);
 			const event = Object.assign(new GameEvent(), {
-				type: GameEvent.LOCAL_PLAYER,
+				type: GameEvent.PLAYERS_INFO,
 				localPlayer: {
 					deck: {
 						deckstring: undefined,
@@ -47,7 +47,7 @@ describe('deckbuilding-number-of-minions-req', () => {
 			const noClassic = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
 			const req = new DeckbuildingNumberOfMinionsReq(28, 'AT_LEAST', cards);
 			const event = Object.assign(new GameEvent(), {
-				type: GameEvent.LOCAL_PLAYER,
+				type: GameEvent.PLAYERS_INFO,
 				localPlayer: {
 					deck: {
 						deckstring: noClassic,

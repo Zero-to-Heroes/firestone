@@ -2,11 +2,11 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { DeckParserService } from '../deck-parser.service';
+import { DeckHandlerService } from '../deck-handler.service';
 import { EventParser } from './event-parser';
 
 export class GameRunningParser implements EventParser {
-	constructor(private readonly deckParser: DeckParserService) {}
+	constructor(private readonly handler: DeckHandlerService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && state.opponentDeck && gameEvent.type === GameEvent.GAME_RUNNING;
@@ -41,7 +41,7 @@ export class GameRunningParser implements EventParser {
 			console.log('[game-running] deck in state, returning', state.deck);
 			return state;
 		}
-		const newDeck = this.deckParser.buildEmptyDeckList(deckCount);
+		const newDeck = this.handler.buildEmptyDeckList(deckCount);
 		// console.log('[game-running] building new deck', newDeck);
 		return state.update({
 			deckList: [] as readonly DeckCard[],

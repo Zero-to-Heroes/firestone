@@ -7,13 +7,15 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 import { Metadata } from '../../../models/decktracker/metadata';
 import { GameEvent } from '../../../models/game-event';
 import { PreferencesService } from '../../preferences.service';
-import { DeckParserService } from '../deck-parser.service';
+import { DeckHandlerService } from '../deck-handler.service';
+import { DeckInfo, DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
 
 export class MatchMetadataParser implements EventParser {
 	constructor(
 		private deckParser: DeckParserService,
 		private prefs: PreferencesService,
+		private handler: DeckHandlerService,
 		private allCards: CardsFacadeService,
 	) {}
 
@@ -47,8 +49,9 @@ export class MatchMetadataParser implements EventParser {
 		// We don't always have a deckstring here, eg when we read the deck from memory
 		// We always read the decklist, whatever the prefs are, so that we trigger the side effects
 		// (yes, that's probably bad design here, especially seeing the bugs I tend to have on this area)
-		const readDeck = await this.deckParser.getCurrentDeck(metaData.gameType === GameType.GT_VS_AI, metaData);
-		const currentDeck = noDeckMode ? undefined : readDeck;
+		const currentDeck = noDeckMode
+			? undefined
+			: await this.deckParser.retrieveCurrentDeck(metaData.gameType === GameType.GT_VS_AI, metaData);
 		const deckstringToUse = currentState.playerDeck?.deckstring || currentDeck?.deckstring;
 		console.log(
 			'[match-metadata-parser] init game with deck',
@@ -58,13 +61,11 @@ export class MatchMetadataParser implements EventParser {
 		);
 
 		console.log('[match-metadata-parser] match metadata', format, deckstringToUse);
-		const deckList: readonly DeckCard[] = await this.deckParser.postProcessDeck(
-			this.deckParser.buildDeck(currentDeck),
-		);
+		const deckList: readonly DeckCard[] = await this.handler.postProcessDeck(this.buildDeck(currentDeck));
 		const hero: HeroCard = this.buildHero(currentDeck);
 
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
-		const opponentDeck: readonly DeckCard[] = this.deckParser.buildEmptyDeckList(deckList.length);
+		const opponentDeck: readonly DeckCard[] = this.handler.buildEmptyDeckList(deckList.length);
 
 		return Object.assign(new GameState(), currentState, {
 			metadata: metaData,
@@ -83,6 +84,26 @@ export class MatchMetadataParser implements EventParser {
 
 	event(): string {
 		return GameEvent.MATCH_METADATA;
+	}
+
+	private buildDeck(currentDeck: DeckInfo): readonly DeckCard[] {
+		if (currentDeck && currentDeck.deckstring) {
+			return this.handler.buildDeckList(currentDeck.deckstring);
+		}
+		if (!currentDeck || !currentDeck.deck) {
+			return [];
+		}
+		return (
+			currentDeck.deck.cards
+				// [dbfid, count] pair
+				.map((pair) => this.buildDeckCards(pair))
+				.reduce((a, b) => a.concat(b), [])
+				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
+		);
+	}
+
+	private buildDeckCards(pair): DeckCard[] {
+		return this.handler.buildDeckCards(pair);
 	}
 
 	private buildHero(currentDeck: any): HeroCard {

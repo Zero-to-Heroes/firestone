@@ -15,7 +15,7 @@ describe('deckbuilding-rarity-req', () => {
 					'AAECAZ8FBsD9AvWAA+OGA+aGA9+gA8WhAwyKAbsD0gTzBZYJp/cC/PwC3f4C+v4CsZQDhpwDk6gDAA==';
 				const req = new DeckbuildingRarityReq(30, 'AT_LEAST', 'epic' as RarityTYpe, cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: fullEpicDeckstring,
@@ -33,7 +33,7 @@ describe('deckbuilding-rarity-req', () => {
 					'AAECAZ8FBsD9AvWAA+OGA+aGA9+gA8WhAwyKAbsD0gTzBZYJp/cC/PwC3f4C+v4CsZQDhpwDk6gDAA==';
 				const req = new DeckbuildingRarityReq(29, 'AT_LEAST', 'epic' as RarityTYpe, cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: fullEpicDeckstring,
@@ -50,7 +50,7 @@ describe('deckbuilding-rarity-req', () => {
 				const notFullyEpic = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
 				const req = new DeckbuildingRarityReq(30, 'AT_LEAST', 'epic' as RarityTYpe, cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: notFullyEpic,
@@ -69,7 +69,7 @@ describe('deckbuilding-rarity-req', () => {
 				const deckstring10epic = 'AAECAf0EAA/IhwPNiQOfmwO5/wKmmAP0qwPO7wKfmAOJlgPimwOVA7T8As31Au4CtogDAA==';
 				const req = new DeckbuildingRarityReq(10, 'AT_MOST', 'epic' as RarityTYpe, cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring10epic,
@@ -86,7 +86,7 @@ describe('deckbuilding-rarity-req', () => {
 				const deckstring9epic = 'AAECAf0EAp+YA+YEDsiHA82JA5+bA7n/AqaYA/SrA87vAomWA+KbA5UDtPwCzfUC7gK2iAMA';
 				const req = new DeckbuildingRarityReq(10, 'AT_MOST', 'epic' as RarityTYpe, cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring9epic,
@@ -104,7 +104,7 @@ describe('deckbuilding-rarity-req', () => {
 					'AAECAf0EBrn/AqaYA5+YA+YEi6QDwqEDDMiHA82JA5+bA/SrA87vAomWA+KbA5UDtPwCzfUC7gK2iAMA';
 				const req = new DeckbuildingRarityReq(10, 'AT_MOST', 'epic' as RarityTYpe, cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring11epic,
@@ -121,7 +121,7 @@ describe('deckbuilding-rarity-req', () => {
 		test('is not completed when deckstring is empty', () => {
 			const req = new DeckbuildingRarityReq(30, 'AT_LEAST', 'Epic', cards);
 			const event = Object.assign(new GameEvent(), {
-				type: GameEvent.LOCAL_PLAYER,
+				type: GameEvent.PLAYERS_INFO,
 				localPlayer: {
 					deck: {
 						deckstring: undefined,
@@ -138,7 +138,7 @@ describe('deckbuilding-rarity-req', () => {
 
 			const reqC = new DeckbuildingRarityReq(10, 'AT_LEAST', 'common' as RarityTYpe, cards);
 			const eventC = Object.assign(new GameEvent(), {
-				type: GameEvent.LOCAL_PLAYER,
+				type: GameEvent.PLAYERS_INFO,
 				localPlayer: {
 					deck: {
 						deckstring: deckstring,
@@ -153,7 +153,7 @@ describe('deckbuilding-rarity-req', () => {
 
 			const reqR = new DeckbuildingRarityReq(10, 'AT_LEAST', 'rare' as RarityTYpe, cards);
 			const eventR = Object.assign(new GameEvent(), {
-				type: GameEvent.LOCAL_PLAYER,
+				type: GameEvent.PLAYERS_INFO,
 				localPlayer: {
 					deck: {
 						deckstring: deckstring,
@@ -168,7 +168,7 @@ describe('deckbuilding-rarity-req', () => {
 
 			const reqE = new DeckbuildingRarityReq(10, 'AT_LEAST', 'epic' as RarityTYpe, cards);
 			const eventE = Object.assign(new GameEvent(), {
-				type: GameEvent.LOCAL_PLAYER,
+				type: GameEvent.PLAYERS_INFO,
 				localPlayer: {
 					deck: {
 						deckstring: deckstring,

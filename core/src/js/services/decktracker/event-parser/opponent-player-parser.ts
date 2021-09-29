@@ -6,14 +6,14 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
 import { PreferencesService } from '../../preferences.service';
 import { AiDeckService } from '../ai-deck-service.service';
-import { DeckParserService } from '../deck-parser.service';
+import { DeckHandlerService } from '../deck-handler.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class OpponentPlayerParser implements EventParser {
 	constructor(
 		private readonly aiDecks: AiDeckService,
-		private readonly deckParser: DeckParserService,
+		private readonly handler: DeckHandlerService,
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
@@ -52,7 +52,7 @@ export class OpponentPlayerParser implements EventParser {
 		}
 
 		console.log('[opponent-player] got AI deckstring', aiDeckString, currentState.metadata);
-		const decklist = await this.deckParser.postProcessDeck(this.deckParser.buildDeckList(aiDeckString));
+		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(aiDeckString));
 		// console.log('[opponent-player] parsed decklist', decklist);
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can

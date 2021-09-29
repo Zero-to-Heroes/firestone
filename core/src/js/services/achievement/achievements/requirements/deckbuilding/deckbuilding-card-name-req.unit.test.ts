@@ -13,7 +13,7 @@ describe('deckbuilding-card-name', () => {
 				const deckstring = 'AAECAaIHBPYEiJsD+6UD+8QDDe0CzQO9BMQFxgXdCK+RA5CXA/+lA76uA5u2A522A7m4AwA=';
 				const req = new DeckbuildingCardNameReq(30, 'AT_LEAST', 'STARTS_WITH', 'T|H|I|J|S', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -30,7 +30,7 @@ describe('deckbuilding-card-name', () => {
 				const deckstring = 'AAECAaIHBvYExAWImwPHmwP7pQP7xAMM7QLNA70ExgXdCK+RA5CXA/+lA76uA5u2A522A7m4AwA=';
 				const req = new DeckbuildingCardNameReq(30, 'AT_LEAST', 'STARTS_WITH', 'T|H|I|J|S', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,

@@ -14,7 +14,7 @@ describe('deckbuilding-text-req', () => {
 					'AAECAf0EBLwIuaUDzPQClgUNyIcDtATNiQP/nQOfmwO5/wKmmAP0qwO/A76kA+r2As7vAu+AAwA=';
 				const req = new DeckbuildingTextReq(1, 'AT_LEAST', 'summon', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring1summonInText,
@@ -32,7 +32,7 @@ describe('deckbuilding-text-req', () => {
 					'AAEBAf0EBpzTArmlA5+bA8z0ApYF1p0DDMiHA7QEzYkD/50Duf8CppgD9KsDvwO+pAPq9gLO7wLvgAMA';
 				const req = new DeckbuildingTextReq(1, 'AT_LEAST', 'summon', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring1summonInName,
@@ -50,7 +50,7 @@ describe('deckbuilding-text-req', () => {
 					'AAEBAf0EBJzTArmlA5+bA8z0Ag3IhwO0BM2JA/+dA7wIuf8CppgD9KsDvwO+pAPq9gLO7wLvgAMA';
 				const req = new DeckbuildingTextReq(1, 'AT_LEAST', 'summon', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring2summonInText,
@@ -68,7 +68,7 @@ describe('deckbuilding-text-req', () => {
 					'AAECAf0EBLmlA5+bA8z0ApYFDciHA7QEzYkD/50Duf8CppgD9KsDvwO+pAPq9gLO7wLvgAPWnQMA';
 				const req = new DeckbuildingTextReq(1, 'AT_LEAST', 'summon', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring2summonInName,
@@ -86,7 +86,7 @@ describe('deckbuilding-text-req', () => {
 					'AAEBAf0EBpzTArwIuaUDn5sDzPQC1p0DDMiHA7QEzYkD/50Duf8CppgD9KsDvwO+pAPq9gLO7wLvgAMA';
 				const req = new DeckbuildingTextReq(2, 'AT_LEAST', 'summon', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring2summonInNameAndText,
@@ -104,7 +104,7 @@ describe('deckbuilding-text-req', () => {
 					'AAEBAf0EBpzTArwIuaUDn5sDzPQC1p0DDMiHA7QEzYkD/50Duf8CppgD9KsDvwO+pAPq9gLO7wLvgAMA';
 				const req = new DeckbuildingTextReq(3, 'AT_LEAST', 'summon', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring2summonInNameAndText,
@@ -120,7 +120,7 @@ describe('deckbuilding-text-req', () => {
 			test('is not completed when deckstring is empty', () => {
 				const req = new DeckbuildingTextReq(2, 'AT_LEAST', 'summon', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: undefined,
@@ -137,7 +137,7 @@ describe('deckbuilding-text-req', () => {
 					'AAEBAf0EBoS7ApzTArwIuaUDn5sDzPQCDMiHA7QEzYkD/50Duf8CppgD9KsDvwO+pAPq9gLO7wLvgAMA';
 				const req = new DeckbuildingTextReq(1, 'AT_LEAST', 'summoner', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstringWithOneSummonKeyword,
@@ -154,7 +154,7 @@ describe('deckbuilding-text-req', () => {
 				const deckstring = 'AAECAf0EBt4Fw/gChvsCpocD1pkD2KADDLQE+gWxCPvsAsLzAqP9AomWA6aYA+KbA8KhA4ukA4ipAwA=';
 				const req = new DeckbuildingTextReq(30, 'AT_LEAST', 'random', 'CONTAINS', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,

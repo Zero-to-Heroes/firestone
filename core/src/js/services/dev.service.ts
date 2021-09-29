@@ -12,6 +12,7 @@ import { Challenge } from './achievement/achievements/challenges/challenge';
 import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { SetsService } from './collection/sets-service.service';
+import { DeckHandlerService } from './decktracker/deck-handler.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
@@ -40,6 +41,7 @@ export class DevService {
 		private achievementLoader: AchievementsLoaderService,
 		private achievementsMonitor: AchievementsMonitor,
 		private memoryService: MemoryInspectionService,
+		private handler: DeckHandlerService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -246,7 +248,7 @@ export class DevService {
 
 			if (deckstring && event.Type === 'LOCAL_PLAYER') {
 				await sleep(500);
-				const decklist = this.deckParser.buildDeckList(deckstring);
+				const decklist = this.handler.buildDeckList(deckstring);
 				// console.log('[opponent-player] parsed decklist', decklist);
 				// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 				// whatever we can

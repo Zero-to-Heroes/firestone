@@ -11,7 +11,7 @@ describe('deckbuilding-no-card-with-letter-in-name-req', () => {
 	test('is completed when deckstring has no card with letter in name', () => {
 		const req = new DeckbuildingNoCardWithLetterInNameReq('e', cards);
 		const event = Object.assign(new GameEvent(), {
-			type: GameEvent.LOCAL_PLAYER,
+			type: GameEvent.PLAYERS_INFO,
 			localPlayer: {
 				deck: {
 					deckstring: deckstring,
@@ -28,7 +28,7 @@ describe('deckbuilding-no-card-with-letter-in-name-req', () => {
 	test('is not completed when deckstring is empty', () => {
 		const req = new DeckbuildingNoCardWithLetterInNameReq('e', cards);
 		const event = Object.assign(new GameEvent(), {
-			type: GameEvent.LOCAL_PLAYER,
+			type: GameEvent.PLAYERS_INFO,
 			localPlayer: {
 				deck: {
 					deckstring: undefined,
@@ -45,7 +45,7 @@ describe('deckbuilding-no-card-with-letter-in-name-req', () => {
 		const noClassic = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
 		const req = new DeckbuildingNoCardWithLetterInNameReq('e', cards);
 		const event = Object.assign(new GameEvent(), {
-			type: GameEvent.LOCAL_PLAYER,
+			type: GameEvent.PLAYERS_INFO,
 			localPlayer: {
 				deck: {
 					deckstring: noClassic,

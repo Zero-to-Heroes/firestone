@@ -10,7 +10,7 @@ describe('deckbuilding-classic-req', () => {
 	test('is completed when deckstring contains only classic and basic cards', () => {
 		const req = new DeckbuildingClassicReq(cards);
 		const event = Object.assign(new GameEvent(), {
-			type: GameEvent.LOCAL_PLAYER,
+			type: GameEvent.PLAYERS_INFO,
 			localPlayer: {
 				deck: {
 					deckstring: deckstring,
@@ -27,7 +27,7 @@ describe('deckbuilding-classic-req', () => {
 	test('is not completed when deckstring is empty', () => {
 		const req = new DeckbuildingClassicReq(cards);
 		const event = Object.assign(new GameEvent(), {
-			type: GameEvent.LOCAL_PLAYER,
+			type: GameEvent.PLAYERS_INFO,
 			localPlayer: {
 				deck: {
 					deckstring: undefined,
@@ -44,7 +44,7 @@ describe('deckbuilding-classic-req', () => {
 		const noClassic = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
 		const req = new DeckbuildingClassicReq(cards);
 		const event = Object.assign(new GameEvent(), {
-			type: GameEvent.LOCAL_PLAYER,
+			type: GameEvent.PLAYERS_INFO,
 			localPlayer: {
 				deck: {
 					deckstring: noClassic,

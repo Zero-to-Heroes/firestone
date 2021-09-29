@@ -14,7 +14,7 @@ describe('deckbuilding-cost-req', () => {
 					'AAECAZICCNOUA/+ZA4OgA/ihA7WsA/mtA/utA4yuAwvNAf4B0wPhA5oIuZQDzpQD05wD3KID/60D3q8DAA==';
 				const req = new DeckbuildingCostReq(8, 'AT_LEAST', 8, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -31,7 +31,7 @@ describe('deckbuilding-cost-req', () => {
 				const deckstring = 'AAECAZICCCTTlAP4oQO1rAP2rQP5rQP7rQOMrgMLzQH+AdMD4QOaCLmUA86UA9OcA9yiA/+tA96vAwA=';
 				const req = new DeckbuildingCostReq(8, 'AT_LEAST', 8, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -49,7 +49,7 @@ describe('deckbuilding-cost-req', () => {
 					'AAECAZICCNOUA/+ZA4OgA/ihA9yiA/mtA/utA4yuAwvNAf4B0wPhA5oIuZQDzpQD05wDtawD/60D3q8DAA==';
 				const req = new DeckbuildingCostReq(8, 'AT_LEAST', 8, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -67,7 +67,7 @@ describe('deckbuilding-cost-req', () => {
 					'AAECAZICCuEDxQTTlAP/mQODoAP4oQPcogP5rQP7rQOMrgMKzQH+AdMDmgi5lAPOlAPTnAO1rAP/rQPerwMA';
 				const req = new DeckbuildingCostReq(8, 'AT_LEAST', 8, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,
@@ -85,7 +85,7 @@ describe('deckbuilding-cost-req', () => {
 					'AAECAZICDNID4QPFBPMF+gyumwP4oQPcogO1rAP5rQP7rQOMrgMJ/gHTA5oIuZQDzpQD05wD/60D3q8D3b4DAA==';
 				const req = new DeckbuildingCostReq(8, 'AT_LEAST', 8, 'AT_LEAST', cards);
 				const event = Object.assign(new GameEvent(), {
-					type: GameEvent.LOCAL_PLAYER,
+					type: GameEvent.PLAYERS_INFO,
 					localPlayer: {
 						deck: {
 							deckstring: deckstring,

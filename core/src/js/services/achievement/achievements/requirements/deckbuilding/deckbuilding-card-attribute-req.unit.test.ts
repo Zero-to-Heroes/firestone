@@ -15,7 +15,7 @@ describe('deckbuilding-card-attribute-req', () => {
 				test('is completed when deckstring contains exactly tbe number of cards with valid required attribute', () => {
 					const req = new DeckbuildingCardAttributeReq(15, 'AT_LEAST', 'attack', 1, 'AT_MOST', cards);
 					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.LOCAL_PLAYER,
+						type: GameEvent.PLAYERS_INFO,
 						localPlayer: {
 							deck: {
 								deckstring: deckstring15minions,
@@ -33,7 +33,7 @@ describe('deckbuilding-card-attribute-req', () => {
 						'AAECAZICBOUHyZwDwIYDrtICDbMB8gHOlAOYDfUF/acDqaID1YMDi+4Cz5QDnvkC7aID2QQA';
 					const req = new DeckbuildingCardAttributeReq(15, 'AT_LEAST', 'attack', 1, 'AT_MOST', cards);
 					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.LOCAL_PLAYER,
+						type: GameEvent.PLAYERS_INFO,
 						localPlayer: {
 							deck: {
 								deckstring: deckstring16minions,
@@ -51,7 +51,7 @@ describe('deckbuilding-card-attribute-req', () => {
 						'AAECAZICBOUHyZwDwIYDrtICDbMB8gHOlAOYDfUF7IwDqaID1YMDi+4Cz5QDnvkC7aID2QQA';
 					const req = new DeckbuildingCardAttributeReq(15, 'AT_LEAST', 'attack', 1, 'AT_MOST', cards);
 					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.LOCAL_PLAYER,
+						type: GameEvent.PLAYERS_INFO,
 						localPlayer: {
 							deck: {
 								deckstring: deckstring14minions,
@@ -69,7 +69,7 @@ describe('deckbuilding-card-attribute-req', () => {
 						'AAECAZICBOUHyZwDwIYDrtICDbMB8gHOlAOYDeyMA6f3AqmiA9WDA4vuAs+UA575Au2iA9kEAA==';
 					const req = new DeckbuildingCardAttributeReq(15, 'AT_LEAST', 'attack', 1, 'AT_MOST', cards);
 					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.LOCAL_PLAYER,
+						type: GameEvent.PLAYERS_INFO,
 						localPlayer: {
 							deck: {
 								deckstring: deckstring15highAttackMinions,
@@ -86,7 +86,7 @@ describe('deckbuilding-card-attribute-req', () => {
 				test('is not completed when deckstring is empty', () => {
 					const req = new DeckbuildingCardAttributeReq(15, 'AT_LEAST', 'attack', 1, 'AT_MOST', cards);
 					const event = Object.assign(new GameEvent(), {
-						type: GameEvent.LOCAL_PLAYER,
+						type: GameEvent.PLAYERS_INFO,
 						localPlayer: {
 							deck: {
 								deckstring: undefined,
