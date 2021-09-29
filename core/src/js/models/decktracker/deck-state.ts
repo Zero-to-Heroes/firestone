@@ -112,7 +112,13 @@ export class DeckState {
 			return true;
 		}
 
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
 			.some(
@@ -126,7 +132,13 @@ export class DeckState {
 	}
 
 	public containsHeroPowerDamageCard(allCards?: CardsFacadeService): boolean {
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
 			.some((card) => DeckState.HERO_POWER_DAMAGE_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
@@ -137,7 +149,13 @@ export class DeckState {
 			return true;
 		}
 
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
 			.filter((card) => !DeckState.NEW_CTHUN_CARD_IDS.includes(card.cardId as CardIds))
@@ -155,7 +173,13 @@ export class DeckState {
 			return true;
 		}
 
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
 			.some(
@@ -167,7 +191,13 @@ export class DeckState {
 	}
 
 	public containsWatchpost(allCards?: CardsFacadeService, lookAtWatchpostsPlayed = false): boolean {
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
 			.some(
@@ -181,7 +211,13 @@ export class DeckState {
 	}
 
 	public containsLibram(allCards?: CardsFacadeService, lookAtLibramsPlayed = false): boolean {
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
 			.some(
@@ -199,14 +235,26 @@ export class DeckState {
 			return true;
 		}
 
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck
 			.filter((card) => card.cardId)
 			.some((card) => DeckState.POGO_CARD_IDS.indexOf(card.cardId as CardIds) !== -1);
 	}
 
 	public containsSpellCounterMinion(): boolean {
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		const result = allCardsInDeck
 			.filter((card) => card.cardId)
 			.some((card) => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId as CardIds));
@@ -219,7 +267,13 @@ export class DeckState {
 			return true;
 		}
 
-		const allCardsInDeck = [...this.deckList, ...this.hand, ...this.deck, ...this.board, ...this.otherZone];
+		const allCardsInDeck = [
+			...this.deckList,
+			...this.hand,
+			...this.deck,
+			...this.board,
+			...this.otherZone.filter((card) => card.zone !== 'SETASIDE'),
+		];
 		return allCardsInDeck.filter((card) => card.cardId).some((card) => card.cardId === CardIds.ElwynnBoar);
 	}
 
