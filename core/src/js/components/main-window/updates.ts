@@ -101,11 +101,27 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
+								text: `Flag cards drawn by Ace in the Hole (in Duels).`,
+							},
+							{
+								type: 'feature',
 								text: `Flag both Encumbered Pack Mules when one is drawn.`,
 							},
 							{
 								type: 'bug',
 								text: `Fix Ooops, All Spells! not modifying the contents of the deck.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix deck's Reset Stats button not working.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix in-game win/loss stats not taking into account the time filter in the Constructed tab.`,
+							},
+							{
+								type: 'bug',
+								text: `Fix an issue where the C'Thun counter would show up when being offered a Discover option with a C'Thun card, even if C'Thun was not present in the deck.`,
 							},
 						],
 					},
