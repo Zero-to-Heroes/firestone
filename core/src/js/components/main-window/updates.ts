@@ -109,6 +109,10 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'bug',
+								text: `Fix an issue where sometimes the previous constructed deck was used in Tavern Brawl.`,
+							},
+							{
+								type: 'bug',
 								text: `Fix Ooops, All Spells! not modifying the contents of the deck.`,
 							},
 							{
