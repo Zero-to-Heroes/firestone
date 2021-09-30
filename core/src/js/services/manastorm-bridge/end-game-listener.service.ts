@@ -81,12 +81,13 @@ export class EndGameListenerService {
 	private async listenToDeckUpdate() {
 		this.listening = true;
 		const currentDeck = await Promise.race([this.deckService.getCurrentDeck(10000), this.listenerTimeout()]);
-		if (
-			!currentDeck?.deckstring &&
-			this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
-			this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY
-		) {
-			console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
+		if (!currentDeck?.deckstring) {
+			if (
+				this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
+				this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY
+			) {
+				console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
+			}
 			return;
 		}
 		this.currentDeckstring = currentDeck.deckstring;
