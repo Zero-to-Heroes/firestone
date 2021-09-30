@@ -296,7 +296,7 @@ export class DuelsStateBuilderService {
 					runs: groupedByDecklist[deckstring],
 				} as DuelsDeckSummary;
 			});
-		console.log('[duels-state-builder] decks', decks?.length);
+		console.log('[duels-state-builder] personal decks', decks?.length);
 		return decks;
 	}
 
@@ -413,7 +413,7 @@ export class DuelsStateBuilderService {
 				} as DuelsDeckStat;
 			})
 			.sort((a, b) => new Date(b.periodStart).getTime() - new Date(a.periodStart).getTime());
-		console.log('[duels-state-builder] decks', decks?.length);
+		console.log('[duels-state-builder] top decks', decks?.length);
 		const groupedDecks: readonly DuelsGroupedDecks[] = [...this.groupDecks(decks)];
 		return groupedDecks;
 	}

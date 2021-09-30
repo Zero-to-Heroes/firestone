@@ -52,7 +52,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {
 		if (this.closedByUser || !this.gameStarted) {
-			console.log(`[${this.name}] should not show`, this.closedByUser, this.gameStarted);
+			// console.log(`[${this.name}] should not show`, this.closedByUser, this.gameStarted);
 			return false;
 		}
 
