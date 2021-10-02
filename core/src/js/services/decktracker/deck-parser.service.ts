@@ -114,6 +114,13 @@ export class DeckParserService {
 				activeDeck = null;
 			}
 
+			console.debug(
+				'[deck-parser] active deck',
+				activeDeck,
+				this.isDeckLogged(metadata.scenarioId),
+				metadata.scenarioId,
+				ARENAS,
+			);
 			let deckInfo: DeckInfo;
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
@@ -190,12 +197,12 @@ export class DeckParserService {
 						? this.currentNonGamePlayScene
 						: changes.CurrentScene;
 				this.currentScene = changes.CurrentScene;
-				console.log(
-					'[deck-parser] new scene',
-					changes.CurrentScene,
-					this.currentNonGamePlayScene,
-					this.currentScene,
-				);
+				// console.log(
+				// 	'[deck-parser] new scene',
+				// 	changes.CurrentScene,
+				// 	this.currentNonGamePlayScene,
+				// 	this.currentScene,
+				// );
 			}
 		});
 		const templatesFromRemote: readonly any[] = await this.api.callGetApi(DECK_TEMPLATES_URL);
@@ -276,7 +283,13 @@ export class DeckParserService {
 	}
 
 	private isDeckLogged(scenarioId: number): boolean {
-		return [...PRACTICE_ALL, ARENAS, ScenarioId.STANDARD_1_VS_1_GAME, ScenarioId.WIZARD_DUELS].includes(scenarioId);
+		const loggingSCenarios: readonly number[] = [
+			...PRACTICE_ALL,
+			...ARENAS,
+			ScenarioId.STANDARD_1_VS_1_GAME,
+			ScenarioId.WIZARD_DUELS,
+		];
+		return loggingSCenarios.includes(scenarioId);
 	}
 
 	private async readDeckFromLogFile(scenarioId: number, fileName = 'Decks.log'): Promise<DeckInfo> {
@@ -296,21 +309,23 @@ export class DeckParserService {
 		// console.debug('[deck-parser] reading deck contents', lines);
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
-			const isLastSectionDeckSelectLine =
-				lines[lines.length - 4].indexOf('Finding Game With Hero:') !== -1 ||
-				lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
-				(await this.isDuelsDeck(lines[lines.length - 4])) ||
-				(await this.isDuelsDeck(lines[lines.length - 3]));
-			if (!isLastSectionDeckSelectLine) {
-				console.log(
-					'[deck-parser] not a deck selection',
-					lines[lines.length - 4],
-					lines[lines.length - 3],
-					lines[lines.length - 2],
-					lines[lines.length - 1],
-				);
-				return;
-			}
+			// const isLastSectionDeckSelectLine =
+			// 	// This won't work for non-English versions
+			// 	lines[lines.length - 4].indexOf('Finding Game With Hero:') !== -1 ||
+			// 	lines[lines.length - 4].indexOf('Finding Game With Deck:') !== -1 ||
+			// 	lines[lines.length - 4].indexOf('Starting Arena Game With Deck:') !== -1 ||
+			// 	(await this.isDuelsDeck(lines[lines.length - 4])) ||
+			// 	(await this.isDuelsDeck(lines[lines.length - 3]));
+			// if (!isLastSectionDeckSelectLine) {
+			// 	console.log(
+			// 		'[deck-parser] not a deck selection',
+			// 		lines[lines.length - 4],
+			// 		lines[lines.length - 3],
+			// 		lines[lines.length - 2],
+			// 		lines[lines.length - 1],
+			// 	);
+			// 	return;
+			// }
 
 			const deckNameLogLine = (await this.isDuelsDeck(lines[lines.length - 4]))
 				? lines[lines.length - 4]
@@ -323,6 +338,9 @@ export class DeckParserService {
 			const deckstring = (match = this.deckstringRegex.exec(deckstringLogLine))
 				? this.handler.normalizeDeckstring(match[1])
 				: undefined;
+			if (!deckstring) {
+				return null;
+			}
 
 			return {
 				deckstring: deckstring,
