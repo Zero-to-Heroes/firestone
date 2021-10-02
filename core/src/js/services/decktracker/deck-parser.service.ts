@@ -6,6 +6,7 @@ import {
 	GameType,
 	PRACTICE_ALL,
 	ScenarioId,
+	SCENARIO_WITHOUT_RESTART,
 	SceneMode,
 } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
@@ -79,62 +80,65 @@ export class DeckParserService {
 	}
 
 	public async retrieveCurrentDeck(usePreviousDeckIfSameScenarioId: boolean, metadata: Metadata): Promise<DeckInfo> {
+		console.log(
+			'[deck-parser] retrieving current deck',
+			this.currentDeck,
+			usePreviousDeckIfSameScenarioId,
+			metadata,
+		);
 		if (this.spectating) {
 			console.log('[deck-parser] spectating, not returning any deck');
 			return null;
 		}
 
-		// Why not use cached deck against AI?
-		const shouldUseCachedDeck = usePreviousDeckIfSameScenarioId && metadata.gameType !== GameType.GT_VS_AI;
+		// The only case where we want to reuse cached deck is when we have Restart option
+		const shouldUseCachedDeck =
+			metadata.gameType === GameType.GT_VS_AI && !SCENARIO_WITHOUT_RESTART.includes(metadata.scenarioId);
 		if (
 			shouldUseCachedDeck &&
 			this.currentDeck?.deck &&
 			// When selecting the deck in the deck selection screen, we don't have any sceanrio ID
 			(this.selectedDeckId || this.currentDeck.scenarioId === metadata.scenarioId)
 		) {
-			console.log('[deck-parser] returning cached deck', this.currentDeck, metadata);
+			console.log('[deck-parser] returning cached deck', this.currentDeck, metadata, this.selectedDeckId);
 			return this.currentDeck;
 		}
 
-		if (!this.currentDeck?.scenarioId || metadata.scenarioId !== this.currentDeck.scenarioId) {
+		// This doesn't work for Duels for instance - we keep the same sceanrio ID, but
+		// need to regenerate the deck
+		console.log('[deck-parser] rebuilding deck', this.currentDeck?.scenarioId, metadata.scenarioId);
+		const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 2);
+		console.log('[deck-parser] active deck from memory', this.selectedDeckId, deckFromMemory);
+		let activeDeck =
+			this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? await this.getDuelsInfo() : deckFromMemory;
+		console.log('[deck-parser] active deck after duels', activeDeck, this.currentNonGamePlayScene);
+		if (this.isDuelsInfo(activeDeck) && activeDeck.Wins === 0 && activeDeck.Losses === 0) {
 			console.log(
-				'[deck-parser] changed scenarioID, rebuilding deck',
-				this.currentDeck?.scenarioId,
-				metadata.scenarioId,
+				'[deck-parser] not relying on memory reading for initial Duels deck, ignoring deck from memory',
 			);
-			const deckFromMemory = await this.memory.getActiveDeck(this.selectedDeckId, 2);
-			console.log('[deck-parser] active deck from memory', this.selectedDeckId, deckFromMemory);
-			let activeDeck =
-				this.currentNonGamePlayScene === SceneMode.PVP_DUNGEON_RUN ? await this.getDuelsInfo() : deckFromMemory;
-			console.log('[deck-parser] active deck after duels', activeDeck, this.currentNonGamePlayScene);
-			if (this.isDuelsInfo(activeDeck) && activeDeck.Wins === 0 && activeDeck.Losses === 0) {
-				console.log(
-					'[deck-parser] not relying on memory reading for initial Duels deck, ignoring deck from memory',
-				);
-				activeDeck = null;
-			}
-
-			console.debug(
-				'[deck-parser] active deck',
-				activeDeck,
-				this.isDeckLogged(metadata.scenarioId),
-				metadata.scenarioId,
-				ARENAS,
-			);
-			let deckInfo: DeckInfo;
-			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
-				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
-				deckInfo = this.updateDeckFromMemory(activeDeck, metadata.scenarioId);
-			} else if (this.isDeckLogged(metadata.scenarioId)) {
-				console.log('[deck-parser] trying to read previous deck from logs', metadata.scenarioId);
-				deckInfo = await this.readDeckFromLogFile(metadata.scenarioId);
-			} else {
-				console.warn('[deck-parser] could not read any deck from memory');
-				deckInfo = null;
-			}
-			this.currentDeck = deckInfo;
-			console.log('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
+			activeDeck = null;
 		}
+
+		console.debug(
+			'[deck-parser] active deck',
+			activeDeck,
+			this.isDeckLogged(metadata.scenarioId),
+			metadata.scenarioId,
+			ARENAS,
+		);
+		let deckInfo: DeckInfo;
+		if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
+			console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+			deckInfo = this.updateDeckFromMemory(activeDeck, metadata.scenarioId);
+		} else if (this.isDeckLogged(metadata.scenarioId)) {
+			console.log('[deck-parser] trying to read previous deck from logs', metadata.scenarioId);
+			deckInfo = await this.readDeckFromLogFile(metadata.scenarioId);
+		} else {
+			console.warn('[deck-parser] could not read any deck from memory');
+			deckInfo = null;
+		}
+		this.currentDeck = deckInfo;
+		console.log('[deck-parser] set current deck', this.currentDeck, JSON.stringify(this.currentDeck));
 		return this.currentDeck;
 	}
 
