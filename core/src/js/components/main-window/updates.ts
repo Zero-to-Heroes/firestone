@@ -72,6 +72,15 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
+					{
+						category: 'general',
+						details: [
+							{
+								type: 'bug',
+								text: `Fix an issue where the XP notification would always show the same numbers.`,
+							},
+						],
+					},
 				],
 			},
 			// {
