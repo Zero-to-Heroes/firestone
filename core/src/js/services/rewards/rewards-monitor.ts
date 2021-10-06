@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { Events } from '../events.service';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { Season3 } from '../stats/xp/xp-tables/season-3';
 import { Season } from '../stats/xp/xp-tables/_season';
@@ -15,7 +16,11 @@ export class RewardMonitorService {
 	private lastRewardTrackInfo: RewardsTrackInfo;
 	private xpForGameInfo: XpForGameInfo;
 
-	constructor(private readonly events: Events, private readonly memory: MemoryInspectionService) {
+	constructor(
+		private readonly events: Events,
+		private readonly gameEvents: GameEventsEmitterService,
+		private readonly memory: MemoryInspectionService,
+	) {
 		this.init();
 	}
 
@@ -82,6 +87,9 @@ export class RewardMonitorService {
 	}
 
 	private async init() {
+		this.gameEvents.onGameStart.subscribe(() => {
+			this.xpForGameInfo = null;
+		});
 		this.events.on(Events.MEMORY_UPDATE).subscribe(async (data) => {
 			const changes: MemoryUpdate = data.data[0];
 			if (changes?.XpChanges?.length) {
