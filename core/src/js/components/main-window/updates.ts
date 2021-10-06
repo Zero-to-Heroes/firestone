@@ -31,7 +31,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.16.11',
+		version: '7.16.17',
 		sections: [
 			// {
 			// 	type: 'intro',
@@ -64,77 +64,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'bug',
-								text: `Fix phantom battles for Turn 1 sometimes appearing in the Simulator tab, which also had the effect of messing the winrate graph for the first turn.`,
+								text: `Fix a simulator issue where the start of combat buff from Prized Promo-drake could be applied twice.`,
 							},
 							{
 								type: 'bug',
-								text: `Fix a simulator issue where Start of Combat minion effects would not properly trigger deaths and deathrattles.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where Reborn effects could be applied before all deathrattles had triggered.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where Fish of N'Zoth could trigger deathrattles of another minion that died at the same time as it.`,
-							},
-						],
-					},
-					{
-						category: 'decktracker',
-						details: [
-							{
-								type: 'feature',
-								text: `Add a hero power damage counter for Mordresh Fire Eye and Jan'alai.`,
-							},
-							{
-								type: 'feature',
-								text: `Add card highlights for the "Prime" minions.`,
-							},
-							{
-								type: 'feature',
-								text: `Flag cards drawn by Shroud of Concealment.`,
-							},
-							{
-								type: 'feature',
-								text: `Flag cards drawn by Varian, King of Stormwind.`,
-							},
-							{
-								type: 'feature',
-								text: `Flag cards drawn by Ace in the Hole (in Duels).`,
-							},
-							{
-								type: 'feature',
-								text: `Flag both Encumbered Pack Mules when one is drawn.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where sometimes the previous constructed deck was used in Tavern Brawl.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix Ooops, All Spells! not modifying the contents of the deck.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix deck's Reset Stats button not working.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix in-game win/loss stats not taking into account the time filter in the Constructed tab.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix an issue where the C'Thun counter would show up when being offered a Discover option with a C'Thun card, even if C'Thun was not present in the deck.`,
-							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
-							{
-								type: 'bug',
-								text: `Restore the post-match XP popup.`,
+								text: `Fix a simulator issue where golden Yo-Ho Ogre would not attack immediately after being hit.`,
 							},
 						],
 					},
