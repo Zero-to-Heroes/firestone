@@ -106,6 +106,12 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameType.GT_PVPDR:
 			case GameType.GT_PVPDR_PAID:
 				return prefs.decktrackerShowDuels;
+			case GameType.GT_MERCENARIES_AI_VS_AI:
+			case GameType.GT_MERCENARIES_FRIENDLY:
+			case GameType.GT_MERCENARIES_PVP:
+			case GameType.GT_MERCENARIES_PVE:
+			case GameType.GT_MERCENARIES_PVE_COOP:
+				return false;
 		}
 		console.log('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
 		return gameState.playerDeck.deckList.length > 0;

@@ -84,7 +84,12 @@ export class EndGameListenerService {
 		if (!currentDeck?.deckstring) {
 			if (
 				this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
-				this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY
+				this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
+				this.currentGameMode !== GameType.GT_MERCENARIES_AI_VS_AI &&
+				this.currentGameMode !== GameType.GT_MERCENARIES_FRIENDLY &&
+				this.currentGameMode !== GameType.GT_MERCENARIES_PVE &&
+				this.currentGameMode !== GameType.GT_MERCENARIES_PVP &&
+				this.currentGameMode !== GameType.GT_MERCENARIES_PVE_COOP
 			) {
 				console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
 			}

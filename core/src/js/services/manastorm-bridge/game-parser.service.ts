@@ -57,6 +57,16 @@ export class GameParserService {
 			case GameType.GT_BATTLEGROUNDS:
 			case GameType.GT_BATTLEGROUNDS_FRIENDLY:
 				return 'battlegrounds';
+			case GameType.GT_MERCENARIES_AI_VS_AI:
+				return 'mercenaries-ai-vs-ai';
+			case GameType.GT_MERCENARIES_FRIENDLY:
+				return 'mercenaries-friendly';
+			case GameType.GT_MERCENARIES_PVE:
+				return 'mercenaries-pve';
+			case GameType.GT_MERCENARIES_PVP:
+				return 'mercenaries-pvp';
+			case GameType.GT_MERCENARIES_PVE_COOP:
+				return 'mercenaries-pve-coop';
 			case GameType.GT_PVPDR:
 				return 'duels';
 			case GameType.GT_PVPDR_PAID:

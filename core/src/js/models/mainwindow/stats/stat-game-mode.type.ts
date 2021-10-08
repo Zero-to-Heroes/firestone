@@ -10,4 +10,9 @@ export type StatGameModeType =
 	| 'tavern-brawl'
 	| 'battlegrounds'
 	| 'duels'
+	| 'mercenaries-ai-vs-ai'
+	| 'mercenaries-pve'
+	| 'mercenaries-pve-coop'
+	| 'mercenaries-pvp'
+	| 'mercenaries-friendly'
 	| 'paid-duels';

@@ -30,4 +30,14 @@ export class GameState {
 			this.metadata.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY
 		);
 	}
+
+	public isMercenaries(): boolean {
+		return (
+			this.metadata.gameType === GameType.GT_MERCENARIES_AI_VS_AI ||
+			this.metadata.gameType === GameType.GT_MERCENARIES_FRIENDLY ||
+			this.metadata.gameType === GameType.GT_MERCENARIES_PVP ||
+			this.metadata.gameType === GameType.GT_MERCENARIES_PVE ||
+			this.metadata.gameType === GameType.GT_MERCENARIES_PVE_COOP
+		);
+	}
 }

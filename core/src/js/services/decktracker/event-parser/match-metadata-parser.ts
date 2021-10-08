@@ -30,15 +30,15 @@ export class MatchMetadataParser implements EventParser {
 			formatType: format,
 			scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
 		} as Metadata;
-		if (
-			[GameType.GT_BATTLEGROUNDS, GameType.GT_BATTLEGROUNDS_FRIENDLY].includes(
-				gameEvent.additionalData.metaData.GameType,
-			)
-		) {
+		const stateWithMetaData = currentState.update({
+			metadata: metaData,
+		} as GameState);
+		if (stateWithMetaData.isBattlegrounds()) {
 			console.debug('[match-metadata-parser] BG game, not getting current deck');
-			return Object.assign(new GameState(), currentState, {
-				metadata: metaData,
-			} as GameState);
+			return stateWithMetaData;
+		} else if (stateWithMetaData.isMercenaries()) {
+			console.debug('[match-metadata-parser] Mercs game, not getting current deck');
+			return stateWithMetaData;
 		}
 
 		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
@@ -52,7 +52,7 @@ export class MatchMetadataParser implements EventParser {
 		const currentDeck = noDeckMode
 			? undefined
 			: await this.deckParser.retrieveCurrentDeck(metaData.gameType === GameType.GT_VS_AI, metaData);
-		const deckstringToUse = currentState.playerDeck?.deckstring || currentDeck?.deckstring;
+		const deckstringToUse = stateWithMetaData.playerDeck?.deckstring || currentDeck?.deckstring;
 		console.log(
 			'[match-metadata-parser] init game with deck',
 			deckstringToUse,
@@ -67,8 +67,7 @@ export class MatchMetadataParser implements EventParser {
 		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
 		const opponentDeck: readonly DeckCard[] = this.handler.buildEmptyDeckList(deckList.length);
 
-		return Object.assign(new GameState(), currentState, {
-			metadata: metaData,
+		return stateWithMetaData.update({
 			playerDeck: currentState.playerDeck.update({
 				deckstring: deckstringToUse,
 				name: currentDeck ? currentDeck.name : null,

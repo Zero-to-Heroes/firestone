@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Entity } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
-import { GameTag, GameType } from '@firestone-hs/reference-data';
+import { GameTag } from '@firestone-hs/reference-data';
 import { OutcomeSamples } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 import { deflate } from 'pako';
 import {
@@ -142,11 +142,7 @@ export class TwitchAuthService {
 			});
 			// console.log('fixed event to send', newEvent, event);
 		}
-		if (
-			newEvent.state &&
-			(newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS ||
-				newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS_FRIENDLY)
-		) {
+		if (newEvent.state && (newEvent.state.isBattlegrounds() || newEvent.state.isMercenaries())) {
 			// Don't show anything in the deck itself
 			const newState = Object.assign(new GameState(), newEvent.state, {
 				playerDeck: null,
