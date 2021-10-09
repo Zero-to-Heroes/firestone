@@ -5,7 +5,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_BGS_FULL_SIMULATOR = true;
 
 	public static readonly ENABLE_STATS_TAB = true;
-	public static readonly ENABLE_MERCENARIES_TAB = true;
+	public static readonly ENABLE_MERCENARIES_TAB = false;
 
 	// Shelved for now
 	public static readonly ENABLE_MULTI_GRAPHS = false;
