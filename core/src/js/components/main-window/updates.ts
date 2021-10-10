@@ -38,7 +38,7 @@ export const updates: readonly Update[] = [
 				type: 'intro',
 				header: 'Message from the dev',
 				text: `
-					This release mostly prepares the app for the upcoming Mercenaries release on October 12th to keep things as smooth as possible when the mode goes live. However, this hasn't been tested against real data, so please open bug reports when you encounter weird things. And most of all, enjoy your Mercenaries time!
+					This release mostly prepares the app for the upcoming Mercenaries release on October 12th to keep things as smooth as possible when the mode goes live (which is why I've been slow on the bug fixing side. Sorry about that). However, this hasn't been tested against real data, so please open bug reports when you encounter weird things. And most of all, enjoy your Mercenaries time!
 				`,
 			},
 			{
