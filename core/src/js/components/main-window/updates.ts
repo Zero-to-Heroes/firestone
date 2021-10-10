@@ -19,6 +19,7 @@ export interface UpdateSectionItem {
 		| 'arena'
 		| 'decktracker'
 		| 'battlegrounds'
+		| 'mercenaries'
 		| 'profile'
 		| 'collection';
 	readonly details: UpdateSectionItemDetails[];
@@ -31,44 +32,25 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '7.16.17',
+		version: '8.0.0',
 		sections: [
-			// {
-			// 	type: 'intro',
-			// 	header: 'Message from the dev',
-			// 	text: `
-			// 		This release adds lots of Quality of Life improvements, which are one of my favorite things to do. I hope you'll enjoy it :)
-			// 	`,
-			// },
-			// {
-			// 	type: 'main',
-			// 	header: 'Main updates',
-			// 	updates: [
-			// 		{
-			// 			category: 'battlegrounds',
-			// 			details: [
-			// 				{
-			// 					type: 'content',
-			// 					text: `App has been updated for patch 21.3.`,
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// },
 			{
-				type: 'minor',
-				header: 'Minor updates',
+				type: 'intro',
+				header: 'Message from the dev',
+				text: `
+					This release mostly prepares the app for the upcoming Mercenaries release on October 12th to keep things as smooth as possible when the mode goes live. However, this hasn't been tested against real data, so please open bug reports when you encounter weird things. And most of all, enjoy your Mercenaries time!
+				`,
+			},
+			{
+				type: 'main',
+				header: 'Main updates',
 				updates: [
 					{
-						category: 'battlegrounds',
+						category: 'mercenaries',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix a simulator issue where the start of combat buff from Prized Promo-drake could be applied twice.`,
-							},
-							{
-								type: 'bug',
-								text: `Fix a simulator issue where golden Yo-Ho Ogre would not attack immediately after being hit.`,
+								type: 'feature',
+								text: `A very first Mercenaries tab has been created! You can see all available mercs & abilities, and stats (global + yours) will start appearing there soon after the official launch on October, 12th.`,
 							},
 						],
 					},
@@ -76,13 +58,19 @@ export const updates: readonly Update[] = [
 						category: 'general',
 						details: [
 							{
-								type: 'bug',
-								text: `Fix an issue where the XP notification would always show the same numbers.`,
+								type: 'misc',
+								text: `The app has been updated to try and properly record Mercenary game results when the new game out is out. Just keep in mind that this couldn't be tested against real data, so it's possible that bugs will arise at launch.`,
 							},
 						],
 					},
 				],
 			},
+			// {
+			// 	type: 'minor',
+			// 	header: 'Minor updates',
+			// 	updates: [
+			// 	],
+			// },
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',
