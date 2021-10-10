@@ -118,7 +118,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 							<img class="icon" [src]="buildAbilityArtUrl(ability.cardId)" />
 							<img
 								class="frame"
-								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=3"
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=4"
 							/>
 							<div class="speed">
 								<div class="value">{{ ability.speed }}</div>
