@@ -53,7 +53,7 @@ export class MercenariesCompositionStatComponent {
 		this.starterHeroes = value.heroCardIds.map((cardId) => ({
 			cardId: cardId,
 			portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
-			frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${getHeroRole(
+			frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
 				this.cards.getCard(cardId).mercenaryRole,
 			)}.png?v=2`,
 		}));
@@ -61,7 +61,7 @@ export class MercenariesCompositionStatComponent {
 			? value.benches[0].heroCardIds.map((cardId) => ({
 					cardId: cardId,
 					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`,
-					frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${getHeroRole(
+					frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
 						this.cards.getCard(cardId).mercenaryRole,
 					)}.png?v=2`,
 			  }))

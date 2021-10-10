@@ -33,7 +33,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 					<div class="top"></div>
 					<div class="bottom"></div>
 				</div>
-				<div class="portrait">
+				<div class="portrait" [cardTooltip]="stats.id">
 					<img class="icon" [src]="buildPortraitArtUrl(stats.id)" />
 					<img class="frame" [src]="buildPortraitFrameUrl(stats.role)" />
 				</div>
@@ -69,7 +69,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 				</div>
 			</div>
 			<div class="equipment-overview">
-				<div class="equipment-header">Equipment</div>
+				<div class="equipment-header">Equipments</div>
 				<div class="equipment-content">
 					<div class="equipment-item" *ngFor="let equipment of stats.equipment">
 						<div class="equipment-item-icon" [cardTooltip]="equipment.cardId">
@@ -81,28 +81,30 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 						</div>
 						<!-- <div class="equipment-item-name">{{ equipment.name }}</div> -->
 						<div class="equipment-item-stats">
-							<div class="stat">
-								<div class="header">Games played</div>
+							<div class="item winrate">
+								<div class="label">Global winrate</div>
 								<div class="values">
-									<div class="my-value">{{ equipment.playerTotalMatches }}</div>
-									<bgs-global-value [value]="equipment.globalTotalMatches"></bgs-global-value>
+									<div class="value player">{{ buildValuePercent(equipment.globalWinrate) }}</div>
 								</div>
 							</div>
-							<div class="stat">
-								<div class="header">Winrate</div>
+							<div class="item winrate">
+								<div class="label">Your winrate</div>
 								<div class="values">
-									<div
-										class="my-value percent"
-										[ngClass]="{
-											'positive': equipment.playerWinrate && equipment.playerWinrate > 50,
-											'negative': equipment.playerWinrate && equipment.playerWinrate < 50
-										}"
-									>
-										{{ buildValuePercent(equipment.playerWinrate, 0) }}
+									<div class="value player">
+										{{
+											equipment.playerWinrate != null
+												? buildValuePercent(equipment.playerWinrate)
+												: '--'
+										}}
 									</div>
-									<bgs-global-value
-										[value]="buildValuePercent(equipment.globalWinrate)"
-									></bgs-global-value>
+								</div>
+							</div>
+							<div class="stats">
+								<div class="item popularity">
+									<div class="label">Games played</div>
+									<div class="values">
+										<div class="value player">{{ buildValue(equipment.playerGamesPlayed, 0) }}</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -133,13 +135,29 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 						</div>
 						<!-- <div class="equipment-item-name">{{ equipment.name }}</div> -->
 						<div class="ability-item-stats">
-							<div class="stat">
-								<div class="header">Avg. use per game</div>
+							<div class="item winrate">
+								<div
+									class="label"
+									helpTooltip="How many times each ability is used per time by the community"
+								>
+									Global usage
+								</div>
 								<div class="values">
-									<div class="my-value">{{ buildValue(ability.playerUsePerMatch, 2) }}</div>
-									<bgs-global-value
-										[value]="buildValue(ability.globalUsePerMatch, 2)"
-									></bgs-global-value>
+									<div class="value player">{{ buildValue(ability.globalUsePerMatch, 2) }}</div>
+								</div>
+							</div>
+							<div class="item winrate">
+								<div class="label" helpTooltip="How many times each ability is used per time by you">
+									Your usage
+								</div>
+								<div class="values">
+									<div class="value player">
+										{{
+											ability.playerUsePerMatch != null
+												? buildValuePercent(ability.playerUsePerMatch)
+												: '--'
+										}}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -397,7 +415,7 @@ export class MercenariesHeroDetailsComponent {
 	}
 
 	buildPortraitFrameUrl(role: string): string {
-		return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=2`;
+		return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=2`;
 	}
 
 	buildEquipmentArtUrl(cardId: string): string {

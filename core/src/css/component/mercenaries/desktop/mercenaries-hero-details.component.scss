@@ -169,18 +169,21 @@
 		.equipment-content,
 		.ability-content {
 			display: flex;
-			flex-direction: column;
+			justify-content: space-evenly;
+			// flex-direction: column;
 		}
 
 		.equipment-item,
 		.ability-item {
 			display: flex;
+			flex-direction: column;
 			position: relative;
 			align-items: center;
 			background: rgba(255, 255, 255, 0.08);
-			margin-bottom: 10px;
-			padding: 5px;
-			height: 60px;
+			margin-bottom: 20px;
+			padding: 10px;
+			width: 180px;
+			height: 180px;
 
 			.equipment-item-icon,
 			.ability-item-icon {
@@ -188,12 +191,12 @@
 				flex-shrink: 0;
 				display: flex;
 				flex-direction: column;
-				width: 60px;
+				width: 95px;
 				position: relative;
 				top: 0;
 				left: 0;
 				z-index: 9;
-				margin-right: 20px;
+				// margin-right: 20px;
 
 				.icon {
 					position: absolute;
@@ -222,7 +225,7 @@
 					.value {
 						font-family: Sumana;
 						font-weight: 700;
-						font-size: 15px;
+						font-size: 20px;
 						color: white;
 						text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
 							-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
@@ -252,26 +255,52 @@
 			.equipment-item-stats,
 			.ability-item-stats {
 				display: flex;
+				flex-direction: column;
+				font-size: 12px;
 				align-items: center;
+				width: 100%;
 
-				.stat {
-					margin-bottom: 0;
+				.item {
+					display: flex;
+					align-items: center;
+					margin-top: 3px;
+
+					.label {
+						margin-right: 5px;
+					}
+
+					.values {
+						display: flex;
+					}
+
+					.value {
+						font-weight: bold;
+						// color: #ce73b4;
+						color: var(--default-title-color);
+					}
 				}
 			}
 		}
 	}
 
 	.abilities-overview {
-		.ability-item .ability-item-icon {
-			.frame {
-				width: 80%;
-			}
-			.icon {
-				position: absolute;
-				top: 11%;
-				left: 13%;
-				width: 70%;
-				clip-path: ellipse(40% 44% at 50% 50%);
+		.ability-item {
+			margin-bottom: 0;
+			height: 160px;
+
+			.ability-item-icon {
+				margin-bottom: 15px;
+
+				.frame {
+					width: 80%;
+				}
+				.icon {
+					position: absolute;
+					top: 11%;
+					left: 13%;
+					width: 70%;
+					clip-path: ellipse(40% 44% at 50% 50%);
+				}
 			}
 		}
 	}
