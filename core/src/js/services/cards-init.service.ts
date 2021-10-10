@@ -16,7 +16,7 @@ export class CardsInitService {
 		}
 
 		this.inInit = true;
-		await this.cards.initializeCardsDb(CARDS_VERSION);
+		await this.cards.initializeCardsDb(CARDS_VERSION, 'cards.temp.json');
 		window['cards'] = this.cards;
 	}
 }
