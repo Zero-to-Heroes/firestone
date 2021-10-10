@@ -59,17 +59,19 @@ export class MercenariesPveDifficultyFilterDropdownComponent {
 		] as readonly FilterOption[];
 		this.filter$ = this.store
 			.listen$(
+				([main, nav, prefs]) => main.mercenaries.globalStats,
 				([main, nav, prefs]) => prefs.mercenariesActivePveDifficultyFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
-				filter(([filter, modeFilter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([filter, modeFilter, selectedCategoryId]) => ({
+				filter(([globalStats, filter, modeFilter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+				map(([globalStats, filter, modeFilter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible:
 						modeFilter === 'pve' &&
+						!!globalStats?.pve?.heroStats?.length &&
 						(selectedCategoryId === 'mercenaries-hero-stats' ||
 							selectedCategoryId === 'mercenaries-hero-details' ||
 							selectedCategoryId === 'mercenaries-compositions-stats' ||

@@ -13,7 +13,7 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { normalizeMercenariesHeroCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, normalizeMercenariesHeroCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -256,30 +256,73 @@ export class MercenariesHeroDetailsComponent {
 								starterFilter,
 								levelFilter,
 							),
+							heroCardId,
 							referenceData,
-						] as [readonly MercenariesHeroStat[], readonly GameStat[], MercenariesReferenceData];
+						] as [readonly MercenariesHeroStat[], readonly GameStat[], string, MercenariesReferenceData];
 					},
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				map(([heroStats, gameStats, referenceData]) => {
-					const refHeroStat = heroStats[0];
-					const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
-					return {
-						id: refHeroStat.heroCardId,
-						name: this.allCards.getCard(refHeroStat.heroCardId)?.name ?? refHeroStat.heroCardId,
-						role: refHeroStat.heroRole,
-						globalTotalMatches: globalTotalMatches,
-						globalWinrate:
-							globalTotalMatches === 0
+				map(([heroStats, gameStats, heroCardId, referenceData]) => {
+					if (heroStats?.length) {
+						const refHeroStat = heroStats[0];
+						const globalTotalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
+						return {
+							id: refHeroStat.heroCardId,
+							name: this.allCards.getCard(refHeroStat.heroCardId)?.name ?? refHeroStat.heroCardId,
+							role: refHeroStat.heroRole,
+							globalTotalMatches: globalTotalMatches,
+							globalWinrate:
+								globalTotalMatches === 0
+									? null
+									: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) / globalTotalMatches,
+							playerTotalMatches: gameStats?.length ?? 0,
+							playerWinrate: !gameStats?.length
 								? null
-								: (100 * sumOnArray(heroStats, (stat) => stat.totalWins)) / globalTotalMatches,
-						playerTotalMatches: gameStats?.length ?? 0,
-						playerWinrate: !gameStats?.length
-							? null
-							: (100 * gameStats.filter((stat) => stat.result === 'won').length) / gameStats.length,
-						equipment: this.buildEquipment(heroStats),
-						abilities: this.buildAbilities(heroStats, referenceData),
-					} as MercenaryInfo;
+								: (100 * gameStats.filter((stat) => stat.result === 'won').length) / gameStats.length,
+							equipment: this.buildEquipment(heroStats),
+							abilities: this.buildAbilities(heroStats, referenceData),
+						} as MercenaryInfo;
+					} else {
+						const merc = referenceData.mercenaries.find(
+							(m) => this.allCards.getCardFromDbfId(m.cardDbfId).id === heroCardId,
+						);
+						const mercCard = this.allCards.getCardFromDbfId(merc.cardDbfId);
+						return {
+							id: mercCard.id,
+							name: mercCard.name,
+							role: getHeroRole(mercCard.mercenaryRole),
+							globalTotalMatches: 0,
+							globalWinrate: null,
+							globalPopularity: null,
+							playerTotalMatches: 0,
+							playerWinrate: null,
+							equipment: merc.equipments.map((equipment) => {
+								const equipmentCard = this.allCards.getCardFromDbfId(equipment.cardDbfId);
+								return {
+									cardId: equipmentCard.id,
+									name: equipmentCard.name,
+									globalTotalMatches: 0,
+									globalPopularity: null,
+									globalWinrate: null,
+									playerTotalMatches: 0,
+									playerWinrate: null,
+								} as MercenaryEquipment;
+							}),
+							abilities: merc.abilities.map((ability) => {
+								const abilityCard = this.allCards.getCardFromDbfId(ability.cardDbfId);
+								return {
+									cardId: abilityCard.id,
+									name: abilityCard.name,
+									speed: abilityCard.cost,
+									cooldown: abilityCard.mercenaryAbilityCooldown,
+									globalTotalMatches: 0,
+									globalTotalUses: 0,
+									globalUsePerMatch: null,
+									playerUsePerMatch: null,
+								} as MercenaryAbility;
+							}),
+						} as MercenaryInfo;
+					}
 				}),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),

@@ -62,18 +62,20 @@ export class MercenariesHeroLevelFilterDropdownComponent {
 		] as readonly FilterOption[];
 		this.filter$ = this.store
 			.listen$(
+				([main, nav, prefs]) => main.mercenaries.globalStats,
 				([main, nav, prefs]) => prefs.mercenariesActiveStarterFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([filter, selectedCategoryId]) => ({
+				filter(([globalStats, filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+				map(([globalStats, filter, selectedCategoryId]) => ({
 					filter: '' + filter,
 					placeholder:
 						this.options.find((option) => option.value === '' + filter)?.label ?? this.options[0].label,
 					visible:
-						selectedCategoryId === 'mercenaries-hero-stats' ||
-						selectedCategoryId === 'mercenaries-hero-details',
+						!!globalStats?.pve?.heroStats?.length &&
+						(selectedCategoryId === 'mercenaries-hero-stats' ||
+							selectedCategoryId === 'mercenaries-hero-details'),
 				})),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

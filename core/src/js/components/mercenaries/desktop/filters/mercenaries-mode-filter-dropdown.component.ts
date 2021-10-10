@@ -51,19 +51,21 @@ export class MercenariesModeFilterDropdownComponent {
 		] as readonly ModeFilterOption[];
 		this.filter$ = this.store
 			.listen$(
+				([main, nav, prefs]) => main.mercenaries.globalStats,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			)
 			.pipe(
-				filter(([filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
-				map(([filter, selectedCategoryId]) => ({
+				filter(([globalStats, filter, selectedCategoryId]) => !!filter && !!selectedCategoryId),
+				map(([globalStats, filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
 					visible:
-						selectedCategoryId === 'mercenaries-hero-stats' ||
-						selectedCategoryId === 'mercenaries-hero-details' ||
-						selectedCategoryId === 'mercenaries-compositions-stats' ||
-						selectedCategoryId === 'mercenaries-composition-details',
+						!!globalStats?.pve?.heroStats?.length &&
+						(selectedCategoryId === 'mercenaries-hero-stats' ||
+							selectedCategoryId === 'mercenaries-hero-details' ||
+							selectedCategoryId === 'mercenaries-compositions-stats' ||
+							selectedCategoryId === 'mercenaries-composition-details'),
 				})),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),

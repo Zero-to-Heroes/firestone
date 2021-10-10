@@ -59,20 +59,22 @@ export class MercenariesPvpMmrFilterDropdownComponent {
 		this.filter$ = combineLatest(
 			this.options$,
 			this.store.listen$(
+				([main, nav, prefs]) => main.mercenaries.globalStats,
 				([main, nav, prefs]) => prefs.mercenariesActivePvpMmrFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav]) => nav.navigationMercenaries.selectedCategoryId,
 			),
 		).pipe(
 			filter(
-				([options, [filter, modeFilter, selectedCategoryId]]) =>
+				([options, [globalStats, filter, modeFilter, selectedCategoryId]]) =>
 					!!options?.length && !!filter && !!selectedCategoryId,
 			),
-			map(([options, [filter, modeFilter, selectedCategoryId]]) => ({
+			map(([options, [globalStats, filter, modeFilter, selectedCategoryId]]) => ({
 				filter: '' + filter,
 				placeholder: options.find((option) => option.value === '' + filter)?.label ?? options[0].label,
 				visible:
 					modeFilter === 'pvp' &&
+					!!globalStats?.pve?.heroStats?.length &&
 					(selectedCategoryId === 'mercenaries-hero-stats' ||
 						selectedCategoryId === 'mercenaries-hero-details' ||
 						selectedCategoryId === 'mercenaries-compositions-stats' ||
