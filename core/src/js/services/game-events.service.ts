@@ -491,6 +491,8 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_REVEALED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
+						mercenariesEquipmentId: gameEvent.Value.AdditionalProps.MercenariesEquipmentId,
 					}),
 				);
 				break;

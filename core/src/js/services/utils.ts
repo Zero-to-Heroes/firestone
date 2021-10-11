@@ -162,3 +162,8 @@ export const decode = (input: string): string => {
 export const cutNumber = (x: number, precision = 10): number => {
 	return Math.floor(x * precision) / precision;
 };
+
+export type NonFunctionPropertyNames<T> = {
+	[K in keyof T]: T[K] extends Function ? never : K;
+}[keyof T];
+export type NonFunctionProperties<T> = Pick<T, NonFunctionPropertyNames<T>>;

@@ -13,7 +13,7 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { getHeroRole, normalizeMercenariesHeroCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
@@ -267,7 +267,7 @@ export class MercenariesHeroDetailsComponent {
 							),
 							filterMercenariesRuns(
 								gameStats.filter(
-									(stat) => normalizeMercenariesHeroCardId(stat.playerCardId) === heroCardId,
+									(stat) => normalizeMercenariesCardId(stat.playerCardId) === heroCardId,
 								),
 								modeFilter,
 								'all',

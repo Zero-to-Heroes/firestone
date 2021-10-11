@@ -6,6 +6,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { Metadata } from '../../../models/decktracker/metadata';
 import { GameEvent } from '../../../models/game-event';
+import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { PreferencesService } from '../../preferences.service';
 import { DeckHandlerService } from '../deck-handler.service';
 import { DeckInfo, DeckParserService } from '../deck-parser.service';
@@ -24,6 +25,13 @@ export class MatchMetadataParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		// Because Mercs is too weird, we don't want to have to take into account all the edge cases
+		// in the standard game state.
+		// Also, everything should be handled inside the MercenariesState anyway
+		if (isMercenaries(gameEvent.additionalData.metaData.GameType)) {
+			return null;
+		}
+
 		const format = gameEvent.additionalData.metaData.FormatType as number;
 		const metaData = {
 			gameType: gameEvent.additionalData.metaData.GameType as number,

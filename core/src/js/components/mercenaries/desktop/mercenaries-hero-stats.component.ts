@@ -16,7 +16,7 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
-import { getHeroRole, normalizeMercenariesHeroCardId } from '../../../services/mercenaries/mercenaries-utils';
+import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
 import {
@@ -176,7 +176,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 							heroStats,
 						);
 						const gameStatsByHero = groupByFunction((stat: GameStat) =>
-							normalizeMercenariesHeroCardId(stat.playerCardId),
+							normalizeMercenariesCardId(stat.playerCardId),
 						)(gameStats);
 						const totalMatches = sumOnArray(heroStats, (stat) => stat.totalMatches);
 						return Object.keys(heroStatsByHero)

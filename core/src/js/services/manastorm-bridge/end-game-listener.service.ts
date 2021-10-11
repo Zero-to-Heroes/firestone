@@ -5,6 +5,7 @@ import { GameSettingsEvent } from '../../models/mainwindow/game-events/game-sett
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { GameStateService } from '../decktracker/game-state.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { EndGameUploaderService } from './end-game-uploader.service';
 
 @Injectable()
@@ -85,11 +86,7 @@ export class EndGameListenerService {
 			if (
 				this.currentGameMode !== GameType.GT_BATTLEGROUNDS &&
 				this.currentGameMode !== GameType.GT_BATTLEGROUNDS_FRIENDLY &&
-				this.currentGameMode !== GameType.GT_MERCENARIES_AI_VS_AI &&
-				this.currentGameMode !== GameType.GT_MERCENARIES_FRIENDLY &&
-				this.currentGameMode !== GameType.GT_MERCENARIES_PVE &&
-				this.currentGameMode !== GameType.GT_MERCENARIES_PVP &&
-				this.currentGameMode !== GameType.GT_MERCENARIES_PVE_COOP
+				!isMercenaries(this.currentGameMode)
 			) {
 				console.warn('[manastorm-bridge] no deckstring found', this.currentGameMode);
 			}
