@@ -15,12 +15,10 @@ export class NavigationBackProcessor implements Processor {
 		history: NavigationHistory,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('going back', history.currentIndexInHistory, history);
 		const newState =
 			(history.currentIndexInHistory > 0
 				? history.stateHistory[history.currentIndexInHistory - 1].state
 				: NavigationBackProcessor.buildParentState(navigationState, currentState)) ?? navigationState;
-		console.log('new nag state', newState, history, currentState, navigationState);
 		if (!newState?.isVisible) {
 			if (history.currentIndexInHistory !== 1) {
 				// When the first event is the store init, this behavior is normal
