@@ -268,6 +268,16 @@
 				"in_game_only": true
 			},
 
+			"MercenariesOpponentTeamWindow": {
+				"file": "Files/mercenaries_opponent_team.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": false,
+				"size": { "width": 530, "height": 800 },
+				"start_position": { "top": 0, "left": 0 },
+				"in_game_only": true
+			},
+
 			"CounterPlayerLibram": {
 				"file": "Files/counter_player_libram.html",
 				"transparent": true,

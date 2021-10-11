@@ -1,6 +1,11 @@
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
+import {
+	BattleAbility,
+	BattleEquipment,
+	BattleMercenary,
+	MercenariesBattleState,
+} from '../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../cards-facade.service';
 import {
 	getHeroRole,
@@ -35,42 +40,55 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 			return battleState;
 		}
 
+		const normalizedCardId = normalizeMercenariesCardId(cardId);
 		const refMerc = mainWindowState.mercenaries.referenceData.mercenaries.find(
-			(merc) => this.allCards.getCardFromDbfId(merc.cardDbfId).id === cardId,
+			(merc) =>
+				normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) === normalizedCardId,
 		);
 		if (!refMerc) {
-			console.debug('[merc-hero-revealed-parser] not a merc, returning', cardId, event);
+			console.debug(
+				'[merc-hero-revealed-parser] not a merc, returning',
+				cardId,
+				normalizedCardId,
+				event,
+				mainWindowState.mercenaries.referenceData,
+			);
 			return battleState;
 		}
 
-		const refMercCard = this.allCards.getCard(normalizeMercenariesCardId(cardId));
+		const refMercCard = this.allCards.getCard(normalizedCardId);
 		const refMercEquipment = this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
-		const newTeam = team.updateMercenary(entityId, {
-			cardId: refMercCard.id,
-			abilities: refMerc.abilities.map((refAbility) => {
-				const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
-				return {
-					cardId: refCard.id,
-					level: getMercCardLevel(refCard.id),
-					cooldown: refCard.mercenaryAbilityCooldown ?? 0,
-					cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
-					speed: refCard.cost,
-					totalUsed: 0,
-				};
+		const newTeam = team.updateMercenary(
+			entityId,
+			BattleMercenary.create({
+				cardId: refMercCard.id,
+				abilities: refMerc.abilities.map((refAbility) => {
+					const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
+					return BattleAbility.create({
+						entityId: null,
+						cardId: refCard.id,
+						level: getMercCardLevel(refCard.id),
+						cooldown: refCard.mercenaryAbilityCooldown ?? 0,
+						cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
+						speed: refCard.cost,
+						totalUsed: null,
+					});
+				}),
+				level: getMercLevelFromExperience(
+					event.additionalData.mercenariesExperience,
+					mainWindowState.mercenaries.referenceData,
+				),
+				role: getHeroRole(refMercCard.mercenaryRole),
+				treasures: [],
+				equipment: BattleEquipment.create({
+					entityId: null,
+					cardId: refMercEquipment.id,
+					level: getMercCardLevel(refMercEquipment.id),
+				}),
 			}),
-			level: getMercLevelFromExperience(
-				event.additionalData.mercenariesExperience,
-				mainWindowState.mercenaries.referenceData,
-			),
-			role: getHeroRole(refMercCard.mercenaryRole),
-			treasures: [],
-			equipment: {
-				cardId: refMercEquipment.id,
-				level: getMercCardLevel(refMercEquipment.id),
-			},
-		});
+		);
 		return battleState.update({
 			playerTeam: isPlayer ? newTeam : battleState.playerTeam,
 			opponentTeam: isPlayer ? battleState.opponentTeam : newTeam,

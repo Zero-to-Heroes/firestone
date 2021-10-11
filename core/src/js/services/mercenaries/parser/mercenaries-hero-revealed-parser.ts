@@ -1,6 +1,8 @@
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import {
+	BattleAbility,
+	BattleEquipment,
 	BattleMercenary,
 	MercenariesBattleState,
 	MercenariesBattleTeam,
@@ -17,7 +19,7 @@ import { MercenariesParser } from './_mercenaries-parser';
 export class MercenariesHeroRevealedParser implements MercenariesParser {
 	constructor(private readonly allCards: CardsFacadeService) {}
 
-	public eventType = () => GameEvent.CARD_REVEALED;
+	public eventType = () => GameEvent.MERCENARIES_HERO_REVEALED;
 
 	public applies = (battleState: MercenariesBattleState) => battleState != null;
 
@@ -31,50 +33,58 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			console.error('[merc-hero-revealed-parser] no local player present', event);
 			return battleState;
 		}
-		if (!cardId) {
-			console.debug(
-				'[merc-hero-revealed-parser] no card id, so no iteresting info to get from that event',
-				event,
-			);
+		const opponentPlayer = event.opponentPlayer;
+		if (
+			!!event.additionalData.creatorCardId ||
+			(controllerId !== localPlayer.PlayerId && controllerId !== opponentPlayer.PlayerId)
+		) {
+			console.warn('[merc-hero-revealed-parser] probably invoking a merc while in combat', event, battleState);
 			return battleState;
 		}
 
-		const refMerc = mainWindowState.mercenaries.referenceData.mercenaries.find(
-			(merc) => this.allCards.getCardFromDbfId(merc.cardDbfId).id === cardId,
-		);
-		if (!refMerc) {
-			console.debug('[merc-hero-revealed-parser] not a merc, returning', cardId, event);
-			return battleState;
-		}
+		const normalizedCardId = normalizeMercenariesCardId(cardId);
+		const refMerc = normalizedCardId
+			? mainWindowState.mercenaries.referenceData.mercenaries.find(
+					(merc) =>
+						normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) ===
+						normalizedCardId,
+			  )
+			: null;
 
-		const refMercCard = this.allCards.getCard(normalizeMercenariesCardId(cardId));
-		const refMercEquipment = this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId);
+		const refMercCard = normalizedCardId ? this.allCards.getCard(normalizedCardId) : null;
+		const refMercEquipment = event.additionalData.mercenariesEquipmentId
+			? this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId)
+			: null;
 		const mercenary: BattleMercenary = BattleMercenary.create({
 			entityId: entityId,
-			cardId: refMercCard.id,
-			abilities: refMerc.abilities.map((refAbility) => {
+			cardId: refMercCard?.id,
+			abilities: refMerc?.abilities.map((refAbility) => {
 				const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
-				return {
+				return BattleAbility.create({
+					entityId: null,
 					cardId: refCard.id,
 					level: getMercCardLevel(refCard.id),
 					cooldown: refCard.mercenaryAbilityCooldown ?? 0,
 					cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
 					speed: refCard.cost,
-					totalUsed: 0,
-				};
+					totalUsed: null,
+				});
 			}),
 			inPlay: false,
-			level: getMercLevelFromExperience(
-				event.additionalData.mercenariesExperience,
-				mainWindowState.mercenaries.referenceData,
-			),
-			role: getHeroRole(refMercCard.mercenaryRole),
+			level: event.additionalData.mercenariesExperience
+				? getMercLevelFromExperience(
+						event.additionalData.mercenariesExperience,
+						mainWindowState.mercenaries.referenceData,
+				  )
+				: null,
+			role: refMercCard ? getHeroRole(refMercCard.mercenaryRole) : null,
 			treasures: [],
 			equipment: refMercEquipment
-				? {
+				? BattleEquipment.create({
+						entityId: null,
 						cardId: refMercEquipment.id,
 						level: getMercCardLevel(refMercEquipment.id),
-				  }
+				  })
 				: null,
 		});
 

@@ -13,6 +13,7 @@ import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../models/main
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { NavigationState } from '../../models/mainwindow/navigation/navigation-state';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
+import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
@@ -24,6 +25,7 @@ import { buildHeroStats } from './bgs-ui-helper';
 type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 type GameStateSelector<T> = (gameState: GameState) => T;
 type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
+type MercenariesStateSelector<T> = (state: [MercenariesBattleState, Preferences?]) => T;
 
 @Injectable()
 export class AppUiStoreService {
@@ -31,6 +33,7 @@ export class AppUiStoreService {
 	private prefs: BehaviorSubject<{ name: string; preferences: Preferences }>;
 	private deckStore: BehaviorSubject<{ state: GameState }>;
 	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
+	private mercenariesStore: BehaviorSubject<MercenariesBattleState>;
 
 	private bgsHeroStats: BehaviorSubject<readonly BgsHeroStat[]> = new BehaviorSubject<readonly BgsHeroStat[]>(null);
 
@@ -41,6 +44,7 @@ export class AppUiStoreService {
 		this.prefs = this.ow.getMainWindow()?.preferencesEventBus;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
 		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
+		this.mercenariesStore = this.ow.getMainWindow().mercenariesStore;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
 		this.init();
@@ -80,6 +84,16 @@ export class AppUiStoreService {
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends BattlegroundsStateSelector<infer T> ? T : never }>;
+	}
+
+	public listenMercenaries$<S extends MercenariesStateSelector<any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }> {
+		return combineLatest(this.mercenariesStore.asObservable(), this.prefs.asObservable()).pipe(
+			filter(([state, prefs]) => !!state && !!prefs?.preferences),
+			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+		) as Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }>;
 	}
 
 	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {

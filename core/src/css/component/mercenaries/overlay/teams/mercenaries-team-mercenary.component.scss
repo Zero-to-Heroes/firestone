@@ -1,0 +1,152 @@
+.mercenary {
+	display: flex;
+	flex-direction: column;
+
+	.header {
+		.role-icon {
+			height: 80%;
+			z-index: 1;
+
+			img {
+				height: 100%;
+			}
+		}
+	}
+
+	.item {
+		display: flex;
+		align-items: center;
+		height: 26px;
+		position: relative;
+		overflow: hidden;
+		// Removing the transition fixes the flicker
+		// transition: transform 0.2s ease-in-out;
+		// https://stackoverflow.com/questions/12278587/webkit-text-flickers-when-using-css-transform-scale
+		// backface-visibility: hidden; // Activating this makes the font blurry
+		// transform-style: preserve-3d;
+
+		&:hover {
+			transform: scale(1.1);
+			z-index: 9;
+			// animation: card-zoom 0.2s ease-in-out;
+		}
+
+		.background-image {
+			position: absolute;
+			top: 1px; // Otherwise there is a little band of color showing when art is blank
+			left: 0;
+			right: 0;
+			bottom: 1px;
+			background-size: cover;
+			// Because some tiles still have a white border on the right
+			background-position-x: 2.5vw;
+		}
+
+		.gradiant {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(89.48deg, rgba(0, 0, 0, 1) 0%, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
+		}
+
+		.name {
+			flex-grow: 1;
+			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			padding-left: 10px;
+			z-index: 1;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+			width: 130px;
+
+			span {
+				font-family: Open Sans;
+				font-style: normal;
+				font-weight: normal;
+				line-height: normal;
+				font-size: 13px;
+				color: #ffe3ba;
+			}
+		}
+	}
+
+	.ability,
+	.equipment {
+		padding-left: 10px;
+	}
+
+	.equipment-item-icon,
+	.ability-item-icon {
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		width: 20px;
+		position: relative;
+		top: 0;
+		left: 0;
+		z-index: 9;
+		// margin-right: 20px;
+
+		.icon {
+			position: absolute;
+			top: 11%;
+			left: 13%;
+			width: 76%;
+			clip-path: ellipse(40% 44% at 50% 50%);
+		}
+
+		.frame {
+			width: 100%;
+			z-index: 1;
+		}
+
+		.speed,
+		.cooldown {
+			position: absolute;
+			display: flex;
+			z-index: 1;
+			bottom: 0;
+			height: 20px;
+			align-items: center;
+			justify-content: center;
+			right: 55%;
+			display: none;
+
+			.value {
+				font-family: Sumana;
+				font-weight: 700;
+				font-size: 20px;
+				color: white;
+				text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+					-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+			}
+		}
+
+		.cooldown {
+			top: 0;
+			bottom: auto;
+			right: 0;
+			left: auto;
+			height: auto;
+
+			.cooldown-icon {
+				width: 30px;
+			}
+			.value {
+				position: absolute;
+			}
+		}
+	}
+
+	.ability,
+	.equipment {
+		.name {
+			opacity: 0.7;
+		}
+	}
+}

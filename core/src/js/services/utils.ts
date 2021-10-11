@@ -141,6 +141,20 @@ export const replaceInArray = <T>(array: readonly T[], index: number, element: T
 	return ret;
 };
 
+export const updateFirstElementWithoutProp = <T>(
+	array: readonly T[],
+	propSelector: (entity: T) => any,
+	base: T,
+): readonly T[] => {
+	const withoutPropertyElements = array.filter((e) => !propSelector(e));
+	if (!withoutPropertyElements.length) {
+		console.warn('could not find any element without property', propSelector, array);
+		return array;
+	}
+	const indexWithoutProperty = array.indexOf(withoutPropertyElements[0]);
+	return replaceInArray(array, indexWithoutProperty, base);
+};
+
 // For ng2-charts
 /* eslint-disable @typescript-eslint/ban-types */
 export const thisAsThat = (callBack: Function) => {

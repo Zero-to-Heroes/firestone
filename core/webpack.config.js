@@ -31,6 +31,7 @@ const entry = {
 	battlegroundsminionstiers: './src/js/modules/background/main.ts',
 	decktracker: './src/js/modules/background/main.ts',
 	decktrackeropponent: './src/js/modules/background/main.ts',
+	mercenariesopponentteam: './src/js/modules/background/main.ts',
 	secretshelper: './src/js/modules/background/main.ts',
 	gamecounters: './src/js/modules/background/main.ts',
 	opponentHand: './src/js/modules/background/main.ts',
@@ -132,6 +133,8 @@ module.exports = function (env, argv) {
 		buildHtmlWebpackPluginConf('bgs_banned_tribes.html', 'bgsbannedtribes'),
 		buildHtmlWebpackPluginConf('bgs_hero_selection_overlay.html', 'bgsheroselectionoverlay'),
 		buildHtmlWebpackPluginConf('battlegrounds_overlay_button.html', 'battlegroundsoverlaybutton'),
+		buildHtmlWebpackPluginConf('mercenaries_opponent_team.html', 'mercenariesopponentteam'),
+
 		buildHtmlWebpackPluginConf('counter_player_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_player_libram.html', 'gamecounters'),

@@ -33,6 +33,7 @@ import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
+import { MercenariesStoreService } from './mercenaries/mercenaries-store.service';
 import { OwNotificationsService } from './notifications.service';
 import { OverwolfService } from './overwolf.service';
 import { PreferencesService } from './preferences.service';
@@ -89,6 +90,7 @@ export class AppBootstrapService {
 		private init_RewardMonitorService: RewardMonitorService,
 		private init_BgsRealTimeStatsService: RealTimeStatsService,
 		private init_LogParserService: CardsMonitorService,
+		private init_MercenariesStoreService: MercenariesStoreService,
 	) {}
 
 	public async init() {

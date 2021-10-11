@@ -75,6 +75,7 @@ export class EndGameUploaderService {
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
+		// console.debug('replayXml', replayXml);
 		if (!replayXml) {
 			console.warn('[manastorm-bridge]', currentReviewId, 'could not convert replay');
 		}

@@ -43,6 +43,10 @@ export class SecretsParserService {
 			}[];
 		},
 	): Promise<GameState> {
+		if (!gameState) {
+			return null;
+		}
+
 		if (this.isSecretInPlayer(gameState)) {
 			for (const parser of this.secretParsers) {
 				if (parser.applies(gameEvent, gameState)) {
@@ -54,7 +58,7 @@ export class SecretsParserService {
 	}
 
 	private isSecretInPlayer(gameState: GameState) {
-		return gameState.playerDeck?.secrets?.length > 0 || gameState?.opponentDeck?.secrets?.length > 0;
+		return gameState.playerDeck?.secrets?.length > 0 || gameState.opponentDeck?.secrets?.length > 0;
 	}
 
 	// Ice block is never handled, because ruling it out means ending the game

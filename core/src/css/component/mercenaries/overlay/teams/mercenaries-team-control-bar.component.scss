@@ -1,0 +1,27 @@
+.control-bar {
+	height: 30px;
+	display: flex;
+	align-items: center;
+
+	.logo {
+		width: 73px;
+		height: 20px;
+		margin-left: 10px;
+		// --icon-color: #ffb948;
+		--icon-color: var(--color-1);
+	}
+
+	.controls {
+		display: flex;
+		margin-left: auto;
+		z-index: 1;
+
+		::ng-deep control-close button {
+			&:hover {
+				--icon-color: #101530;
+				color: #101530;
+				background: #9fb6d7;
+			}
+		}
+	}
+}

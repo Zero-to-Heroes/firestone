@@ -23,6 +23,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { InlineSVGModule } from 'ng-inline-svg';
 import { SelectModule } from 'ng-select';
 import { ChartsModule } from 'ng2-charts';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { AchievementCategoryComponent } from '../../components/achievements/achievement-category.component';
 import { AchievementCompletionStepComponent } from '../../components/achievements/achievement-completion-step.component';
 import { AchievementHistoryItemComponent } from '../../components/achievements/achievement-history-item.component';
@@ -237,6 +238,11 @@ import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/de
 import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
+import { MercenariesOpponentTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-opponent-team.component';
+import { MercenariesTeamControlBarComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-control-bar.component';
+import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
+import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
+import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
@@ -352,6 +358,7 @@ import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
 import { MercenariesStateBuilderService } from '../../services/mercenaries/mercenaries-state-builder.service';
+import { MercenariesStoreService } from '../../services/mercenaries/mercenaries-store.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { PatchesConfigService } from '../../services/patches-config.service';
 import { PlayersInfoService } from '../../services/players-info.service';
@@ -424,6 +431,9 @@ const components = [
 	OpponentHandOverlayComponent,
 	OutOfCardsCallbackComponent,
 	SecretsHelperComponent,
+
+	MercenariesOpponentTeamComponent,
+
 	TwitchAuthCallbackComponent,
 	SettingsComponent,
 ];
@@ -444,6 +454,7 @@ const components = [
 		NgxChartsModule,
 		SimpleNotificationsModule.forRoot(),
 		OverlayModule,
+		PerfectScrollbarModule,
 		ColiseumComponentsModule,
 		SharedDeckTrackerModule,
 	],
@@ -652,6 +663,12 @@ const components = [
 		ArenaTimeFilterDropdownComponent,
 		ArenaClassFilterDropdownComponent,
 
+		MercenariesOpponentTeamComponent,
+		MercenariesTeamRootComponent,
+		MercenariesTeamControlBarComponent,
+		MercenariesTeamListComponent,
+		MercenariesTeamMercenaryComponent,
+
 		MercenariesDesktopComponent,
 		MercenariesHeroStatsComponent,
 		MercenariesHeroStatComponent,
@@ -791,6 +808,8 @@ const components = [
 		BgsBestUserStatsService,
 		RealTimeStatsService,
 		BgsCustomSimulationService,
+
+		MercenariesStoreService,
 
 		AiDeckService,
 		SecretConfigService,

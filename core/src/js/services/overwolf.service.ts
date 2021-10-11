@@ -31,7 +31,11 @@ export class OverwolfService {
 	public static BATTLEGROUNDS_WINDOW_MINIONS_TIERS_OVERLAY = 'BattlegroundsMinionsTiersWindow';
 	public static BATTLEGROUNDS_OVERLAY_BUTTON_OVERLAY_WINDOW = 'BattlegroundsOverlayButtonWindow';
 	public static BATTLEGROUNDS_HERO_SELECTION_OVERLAY = 'BgsHeroSelectionOverlay';
+
+	public static MERCENARIES_OPPONENT_TEAM_WINDOW = 'MercenariesOpponentTeamWindow';
+
 	public static CONSTRUCTED_WINDOW = 'ConstructedWindow';
+
 	// public static BATTLEGROUNDS_WINDOW_OVERLAY = 'BattlegroundsOverlayWindow';
 	public static COUNTER_PLAYER_GALAKROND_WINDOW = 'CounterPlayerGalakrond';
 	public static COUNTER_OPPONENT_GALAKROND_WINDOW = 'CounterOpponentGalakrond';

@@ -491,8 +491,6 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_REVEALED, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
-						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
-						mercenariesEquipmentId: gameEvent.Value.AdditionalProps.MercenariesEquipmentId,
 					}),
 				);
 				break;
@@ -1090,7 +1088,16 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.GAME_STATE_UPDATE, gameEvent));
 				break;
 			case 'ENTITY_UPDATE':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.ENTITY_UPDATE, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ENTITY_UPDATE, gameEvent, {
+						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
+						mercenariesEquipmentId: gameEvent.Value.AdditionalProps.MercenariesEquipmentId,
+						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
+						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
+						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+					}),
+				);
 				break;
 			case 'WHIZBANG_DECK_ID':
 				this.gameEventsEmitter.allEvents.next(
@@ -1118,6 +1125,60 @@ export class GameEvents {
 						type: GameEvent.SPECTATING,
 						additionalData: { spectating: gameEvent.Value?.Spectating },
 					} as GameEvent),
+				);
+				break;
+
+			case 'MERCENARIES_HERO_REVEALED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_HERO_REVEALED, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
+						mercenariesEquipmentId: gameEvent.Value.AdditionalProps.MercenariesEquipmentId,
+					}),
+				);
+				break;
+			case 'MERCENARIES_ABILITY_REVEALED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_ABILITY_REVEALED, gameEvent, {
+						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
+						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
+						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+					}),
+				);
+				break;
+			case 'MERCENARIES_EQUIPMENT_REVEALED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_EQUIPMENT_REVEALED, gameEvent, {
+						equipmentOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+					}),
+				);
+				break;
+			case 'MERCENARIES_ABILITY_UPDATE':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_ABILITY_UPDATE, gameEvent, {
+						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
+						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
+						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+					}),
+				);
+				break;
+			case 'MERCENARIES_ABILITY_ACTIVATED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_ABILITY_ACTIVATED, gameEvent, {
+						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+					}),
+				);
+				break;
+			case 'MERCENARIES_EQUIPMENT_UPDATE':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_EQUIPMENT_UPDATE, gameEvent, {
+						equipmentOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+						equipmentCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
+						equipmentCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
+						equipmentSpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+					}),
 				);
 				break;
 			default:

@@ -7,8 +7,8 @@ export const normalizeMercenariesCardId = (
 	fullNormalize = false,
 	allCards: CardsFacadeService = null,
 ): string => {
-	if (!cardId) {
-		return cardId;
+	if (!cardId?.length) {
+		return null;
 	}
 	const skinMatch = cardId.match(/.*_(\d\d)/);
 	if (skinMatch) {
@@ -25,7 +25,8 @@ export const getMercCardLevel = (cardId: string): number => {
 	// Generic handling of mercenaries skins or levelling
 	const skinMatch = cardId.match(/.*_(\d\d)/);
 	if (skinMatch) {
-		return parseInt(skinMatch.groups[1]);
+		console.debug('found a match', cardId, skinMatch);
+		return parseInt(skinMatch[1]);
 	}
 	return 0;
 };

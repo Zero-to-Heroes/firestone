@@ -37,6 +37,9 @@ export class GlobalStatsNotifierService {
 
 	private async updateGlobalStats(reviewId: string, game: GameForUpload) {
 		const currentGlobalStats = this.store.state.globalStats;
+		if (game.gameMode.startsWith('mercenaries')) {
+			return currentGlobalStats;
+		}
 		const message: ReviewMessage = {
 			reviewId: reviewId,
 			gameMode: game.gameMode,

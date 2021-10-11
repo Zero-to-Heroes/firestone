@@ -100,6 +100,10 @@ export class GameStat {
 			rankIcon = 'battlegrounds';
 			rankIconTooltip = 'Battlegrounds';
 			// console.log('building rank for bg', rankIcon, rankIconTooltip);
+		} else if (this.gameMode.startsWith('mercenaries')) {
+			rankIcon = 'mercenaries';
+			rankIconTooltip = 'Mercenaries';
+			// console.log('building rank for bg', rankIcon, rankIconTooltip);
 		} else if (this.gameMode === 'practice') {
 			if (GALAKROND_EXPLORER.indexOf(this.scenarioId) !== -1) {
 				rankIcon = 'galakrond_explorers';
