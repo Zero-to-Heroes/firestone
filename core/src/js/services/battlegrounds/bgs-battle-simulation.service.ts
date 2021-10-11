@@ -45,7 +45,7 @@ export class BgsBattleSimulationService {
 		this.cardsData.inititialize();
 		if (this.ow?.isOwEnabled()) {
 			const systemInfo = await this.ow.getSystemInformation();
-			console.log('systemInfo', systemInfo);
+			// console.log('systemInfo', systemInfo);
 			this.cpuCount = systemInfo?.PhysicalCPUCount ?? 1;
 			console.log('CPU count', this.cpuCount);
 		}

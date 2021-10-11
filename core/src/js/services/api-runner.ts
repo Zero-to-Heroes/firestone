@@ -23,7 +23,7 @@ export class ApiRunner {
 			}
 			this.http.post(url, input, { headers: headers }).subscribe(
 				(result: any) => {
-					console.log('retrieved POST call', url, input);
+					console.log('retrieved POST call', url);
 					resolve(result);
 				},
 				(error) => {

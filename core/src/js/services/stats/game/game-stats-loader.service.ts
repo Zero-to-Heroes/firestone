@@ -83,7 +83,6 @@ export class GameStatsLoaderService {
 			stats: stats,
 		} as GameStats);
 		console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats.stats?.length);
-		console.debug('[game-stats-loader] full game stats', this.gameStats);
 		return this.gameStats;
 	}
 }

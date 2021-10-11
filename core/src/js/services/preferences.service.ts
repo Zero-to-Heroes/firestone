@@ -530,7 +530,7 @@ export class PreferencesService {
 
 	public async updateRemotePreferences() {
 		const userPrefs = await this.getPreferences();
-		console.log('[preferences] prefs from DB', userPrefs);
+		console.log('[preferences] prefs from DB', userPrefs != null);
 		const currentUser = await this.ow.getCurrentUser();
 		const prefsToSync = new Preferences();
 		for (const prop in userPrefs) {
@@ -539,7 +539,7 @@ export class PreferencesService {
 				prefsToSync[prop] = userPrefs[prop];
 			}
 		}
-		console.log('no-format', '[preferences] saving remote prefs', prefsToSync);
+		console.log('[preferences] saving remote prefs');
 		await this.api.callPostApi(PREF_UPDATE_URL, {
 			userId: currentUser.userId,
 			userName: currentUser.username,
