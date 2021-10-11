@@ -5,6 +5,7 @@ export class NavigationMercenaries {
 	readonly selectedCategoryId: MercenariesCategoryId = 'mercenaries-hero-stats';
 	readonly selectedHeroId: string;
 	readonly selectedCompositionId: string;
+	readonly heroSearchString: string;
 
 	public update(base: NavigationMercenaries): NavigationMercenaries {
 		return Object.assign(new NavigationMercenaries(), this, base);

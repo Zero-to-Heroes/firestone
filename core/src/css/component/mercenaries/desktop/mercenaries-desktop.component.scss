@@ -66,6 +66,19 @@
 			padding-left: 10px;
 			background: rgba(255, 255, 255, 0.08);
 		}
+
+		secondary-default {
+			flex-shrink: 1;
+		}
+
+		mercenaries-hero-search {
+			width: 100%;
+			height: auto;
+			margin-bottom: 10px;
+			background: transparent;
+			padding-left: 0;
+			flex-shrink: 0;
+		}
 	}
 }
 

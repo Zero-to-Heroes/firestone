@@ -1,3 +1,4 @@
+import { ReferenceCard } from '@firestone-hs/reference-data';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MercenariesHeroLevelFilterType } from '../../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../../models/mercenaries/mercenaries-mode-filter.type';
@@ -5,7 +6,12 @@ import { MercenariesPveDifficultyFilterType } from '../../models/mercenaries/mer
 import { MercenariesPvpMmrFilterType } from '../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
 import { MercenariesRoleFilterType } from '../../models/mercenaries/mercenaries-role-filter.type';
 import { MercenariesStarterFilterType } from '../../models/mercenaries/mercenaries-starter-filter.type';
-import { MercenariesComposition, MercenariesHeroStat } from '../mercenaries/mercenaries-state-builder.service';
+import { CardsFacadeService } from '../cards-facade.service';
+import {
+	MercenariesComposition,
+	MercenariesHeroStat,
+	MercenariesReferenceData,
+} from '../mercenaries/mercenaries-state-builder.service';
 
 export const filterMercenariesHeroStats = (
 	heroStats: readonly MercenariesHeroStat[],
@@ -15,6 +21,9 @@ export const filterMercenariesHeroStats = (
 	mmrFilter: MercenariesPvpMmrFilterType,
 	starterFilter: MercenariesStarterFilterType,
 	heroLevelFilter: MercenariesHeroLevelFilterType,
+	allCards: CardsFacadeService,
+	referenceData: MercenariesReferenceData,
+	searchString: string = null,
 ): readonly MercenariesHeroStat[] => {
 	return (
 		heroStats
@@ -27,7 +36,52 @@ export const filterMercenariesHeroStats = (
 			.filter((stat) => (roleFilter === 'all' ? true : stat.heroRole === roleFilter))
 			.filter((stat) => applyStarterFilter(stat, starterFilter))
 			.filter((stat) => applyHeroLevelFilter(stat, heroLevelFilter))
+			.filter((stat) => {
+				const referenceHero = referenceData.mercenaries.find(
+					(merc) => allCards.getCardFromDbfId(merc.cardDbfId).id === stat.heroCardId,
+				);
+				const result =
+					isValidMercSearchItem(allCards.getCardFromDbfId(referenceHero.id), searchString) ||
+					referenceHero.abilities.map((ability) =>
+						isValidMercSearchItem(allCards.getCardFromDbfId(ability.cardDbfId), searchString),
+					) ||
+					referenceHero.equipments.map((equipment) =>
+						isValidMercSearchItem(allCards.getCardFromDbfId(equipment.cardDbfId), searchString),
+					);
+				return result;
+			})
 	);
+};
+
+export const isValidMercSearchItem = (card: ReferenceCard, searchString: string): boolean => {
+	if (!searchString?.length) {
+		return true;
+	}
+
+	const lowSearchString = searchString.toLowerCase().trim();
+	if (card.name && card.name.toLowerCase().includes(lowSearchString)) {
+		return true;
+	}
+	if (card.text && card.text.toLowerCase().includes(lowSearchString)) {
+		return true;
+	}
+	if (card.race && card.race.toLowerCase().includes(lowSearchString)) {
+		return true;
+	}
+	if (card.spellSchool && card.spellSchool.toLowerCase().includes(lowSearchString)) {
+		return true;
+	}
+	if (!!card.mechanics?.length && card.mechanics.some((tag) => tag.toLowerCase().includes(lowSearchString))) {
+		return true;
+	}
+	if (
+		!!card.referencedTags?.length &&
+		card.referencedTags.some((tag) => tag.toLowerCase().includes(lowSearchString))
+	) {
+		return true;
+	}
+
+	return false;
 };
 
 export const filterMercenariesCompositions = (

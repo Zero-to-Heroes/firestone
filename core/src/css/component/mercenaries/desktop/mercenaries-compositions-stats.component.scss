@@ -1,6 +1,7 @@
 :host() {
 	display: flex;
 	min-height: 1px;
+	flex-grow: 1;
 }
 
 .mercenaries-compositions-stats {

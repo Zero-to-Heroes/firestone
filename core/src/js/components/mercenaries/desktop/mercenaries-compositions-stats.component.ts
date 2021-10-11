@@ -25,21 +25,24 @@ import { MercenaryCompositionInfo, MercenaryCompositionInfoBench, MercenaryInfo 
 	],
 	template: `
 		<div class="mercenaries-compositions-stats" scrollable>
-			<div class="header">
-				<div
-					class="starter"
-					helpTooltip="The 3 heroes that start the match. Compositions are grouped based on this starter trio"
-				>
-					Starters
+			<ng-container *ngIf="stats$ | async as stats; else emptyState">
+				<div class="header">
+					<div
+						class="starter"
+						helpTooltip="The 3 heroes that start the match. Compositions are grouped based on this starter trio"
+					>
+						Starters
+					</div>
+					<div class="bench" helpTooltip="An example of a possible bench for this composition">Bench</div>
+					<div class="stat winrate">Global winrate</div>
+					<div class="stat matches">Total matches</div>
 				</div>
-				<div class="bench" helpTooltip="An example of a possible bench for this composition">Bench</div>
-				<div class="stat winrate">Global winrate</div>
-				<div class="stat matches">Total matches</div>
-			</div>
-			<mercenaries-composition-stat
-				*ngFor="let stat of stats$ | async; trackBy: trackByFn"
-				[stat]="stat"
-			></mercenaries-composition-stat>
+				<mercenaries-composition-stat
+					*ngFor="let stat of stats; trackBy: trackByFn"
+					[stat]="stat"
+				></mercenaries-composition-stat>
+			</ng-container>
+			<ng-template #emptyState> <mercenaries-empty-state></mercenaries-empty-state></ng-template>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -139,6 +142,7 @@ export class MercenariesCompositionsStatsComponent implements AfterViewInit {
 						.sort((a, b) => b.globalWinrate - a.globalWinrate)
 						.slice(0, 15);
 				}),
+				map((stats) => (!stats?.length ? null : stats)),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
 				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
 			);

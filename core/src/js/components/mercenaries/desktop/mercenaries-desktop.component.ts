@@ -48,7 +48,12 @@ import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-stor
 				</with-loading>
 			</section>
 			<section class="secondary">
-				<secondary-default></secondary-default>
+				<ng-container *ngIf="selectedCategoryId$ | async as selectedCategoryId">
+					<mercenaries-hero-search
+						*ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'"
+					></mercenaries-hero-search>
+					<secondary-default></secondary-default>
+				</ng-container>
 			</section>
 		</div>
 	`,

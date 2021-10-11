@@ -19,9 +19,13 @@ import {
 import { getHeroRole, normalizeMercenariesHeroCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
+import {
+	filterMercenariesHeroStats,
+	filterMercenariesRuns,
+	isValidMercSearchItem,
+} from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
-import { MercenaryInfo } from './mercenary-info';
+import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
 
 @Component({
 	selector: 'mercenaries-hero-stats',
@@ -55,6 +59,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 				([main, nav]) => main.mercenaries.globalStats,
 				([main, nav]) => main.mercenaries.referenceData,
 				([main, nav]) => main.stats.gameStats,
+				([main, nav]) => nav.navigationMercenaries.heroSearchString,
 				([main, nav, prefs]) => prefs.mercenariesActiveModeFilter,
 				([main, nav, prefs]) => prefs.mercenariesActiveRoleFilter,
 				([main, nav, prefs]) => prefs.mercenariesActivePveDifficultyFilter,
@@ -68,6 +73,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 						globalStats,
 						referenceData,
 						gameStats,
+						heroSearchString,
 						modeFilter,
 						roleFilter,
 						difficultyFilter,
@@ -81,6 +87,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 						globalStats,
 						referenceData,
 						gameStats,
+						heroSearchString,
 						modeFilter,
 						roleFilter,
 						difficultyFilter,
@@ -94,6 +101,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 							modeFilter === 'pve'
 								? gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries')
 								: gameStats.stats.filter((stat) => (stat.gameMode as any) === 'mercenaries-pvp'),
+							heroSearchString,
 							modeFilter,
 							roleFilter,
 							difficultyFilter,
@@ -104,6 +112,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 							MercenariesGlobalStats,
 							MercenariesReferenceData,
 							readonly GameStat[],
+							string,
 							MercenariesModeFilterType,
 							MercenariesRoleFilterType,
 							MercenariesPveDifficultyFilterType,
@@ -118,6 +127,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 						globalStats,
 						referenceData,
 						gameStats,
+						heroSearchString,
 						modeFilter,
 						roleFilter,
 						difficultyFilter,
@@ -135,6 +145,9 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 								mmrFilter,
 								starterFilter,
 								levelFilter,
+								this.allCards,
+								referenceData,
+								heroSearchString,
 							),
 							filterMercenariesRuns(
 								gameStats,
@@ -146,16 +159,18 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 								levelFilter,
 							),
 							roleFilter,
+							heroSearchString,
 							referenceData,
 						] as [
 							readonly MercenariesHeroStat[],
 							readonly GameStat[],
 							MercenariesRoleFilterType,
+							string,
 							MercenariesReferenceData,
 						];
 					},
 				),
-				map(([heroStats, gameStats, roleFilter, referenceData]) => {
+				map(([heroStats, gameStats, roleFilter, heroSearchString, referenceData]) => {
 					if (!!heroStats.length) {
 						const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(
 							heroStats,
@@ -191,6 +206,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 							})
 							.sort((a, b) => b.globalWinrate - a.globalWinrate);
 					} else {
+						console.debug('search', heroSearchString, referenceData.mercenaries);
 						return referenceData.mercenaries
 							.map((mercenary) => {
 								const mercenaryCard = this.allCards.getCardFromDbfId(mercenary.cardDbfId);
@@ -216,9 +232,32 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 									globalPopularity: null,
 									playerTotalMatches: 0,
 									playerWinrate: null,
+									abilities: mercenary.abilities.map(
+										(ability) =>
+											({
+												cardId: this.allCards.getCardFromDbfId(ability.cardDbfId).id,
+											} as MercenaryAbility),
+									),
+									equipment: mercenary.equipments.map(
+										(equipment) =>
+											({
+												cardId: this.allCards.getCardFromDbfId(equipment.cardDbfId).id,
+											} as MercenaryEquipment),
+									),
 								} as MercenaryInfo;
 							})
-							.filter((merc) => !!merc)
+							.filter((info) => !!info)
+							.filter((info) => {
+								const result =
+									isValidMercSearchItem(allCards.getCard(info.id), heroSearchString) ||
+									info.abilities.some((ability) =>
+										isValidMercSearchItem(allCards.getCard(ability.cardId), heroSearchString),
+									) ||
+									info.equipment.some((equipment) =>
+										isValidMercSearchItem(allCards.getCard(equipment.cardId), heroSearchString),
+									);
+								return result;
+							})
 							.sort((a, b) => (a.name < b.name ? -1 : 1));
 					}
 				}),

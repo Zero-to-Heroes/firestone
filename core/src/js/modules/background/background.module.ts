@@ -232,9 +232,11 @@ import { MercenariesComposiionDetailsComponent } from '../../components/mercenar
 import { MercenariesCompositionStatComponent } from '../../components/mercenaries/desktop/mercenaries-composition-stat.component';
 import { MercenariesCompositionsStatsComponent } from '../../components/mercenaries/desktop/mercenaries-compositions-stats.component';
 import { MercenariesDesktopComponent } from '../../components/mercenaries/desktop/mercenaries-desktop.component';
+import { MercenariesEmptyStateComponent } from '../../components/mercenaries/desktop/mercenaries-empty-state.component';
 import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-details.component';
 import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
+import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
@@ -657,6 +659,8 @@ const components = [
 		MercenariesCompositionsStatsComponent,
 		MercenariesCompositionStatComponent,
 		MercenariesComposiionDetailsComponent,
+		MercenariesHeroSearchComponent,
+		MercenariesEmptyStateComponent,
 
 		MercenariesFiltersComponent,
 		MercenariesModeFilterDropdownComponent,

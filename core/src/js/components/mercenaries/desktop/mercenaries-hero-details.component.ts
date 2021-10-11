@@ -262,6 +262,8 @@ export class MercenariesHeroDetailsComponent {
 								mmrFilter,
 								starterFilter,
 								levelFilter,
+								this.allCards,
+								referenceData,
 							),
 							filterMercenariesRuns(
 								gameStats.filter(
