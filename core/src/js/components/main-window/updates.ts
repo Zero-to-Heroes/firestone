@@ -32,13 +32,13 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.0',
+		version: '8.0.8',
 		sections: [
 			{
 				type: 'intro',
 				header: 'Message from the dev',
 				text: `
-					This release mostly prepares the app for the upcoming Mercenaries release on October 12th to keep things as smooth as possible when the mode goes live (which is why I've been slow on the bug fixing side. Sorry about that). However, this hasn't been tested against real data, so please open bug reports when you encounter weird things. And most of all, enjoy your Mercenaries time!
+					There are still some issues here and there with mercenaries (the replays don't show up immediately for instance, the replay viewer should probably be deactivated for Mercenaries games, etc.), and all of these will be fixed over the coming days. Have fun!
 				`,
 			},
 			{
@@ -50,19 +50,23 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `A very first Mercenaries tab has been created! You can see all available mercs & abilities, and stats (global + yours) will start appearing there soon after the official launch on October, 12th.`,
+								text: `Show the list of known opponent mercenaries, as well as their abilities (shows the lvl 1 version of the ability if they haven't played it yet) and their equipment. It's still a very rought first version, but it gets the job done :)`,
 							},
-						],
-					},
-					{
-						category: 'general',
-						details: [
 							{
-								type: 'misc',
-								text: `The app has been updated to try and properly record Mercenary game results when the new game out is out. Just keep in mind that this couldn't be tested against real data, so it's possible that bugs will arise at launch.`,
+								type: 'feature',
+								text: `A very first Mercenaries tab has been created! You can see all available mercs & abilities, and stats (global + yours) will start appearing there soon.`,
 							},
 						],
 					},
+					// {
+					// 	category: 'general',
+					// 	details: [
+					// 		{
+					// 			type: 'misc',
+					// 			text: `The app has been updated to try and properly record Mercenary game results when the new game out is out. Just keep in mind that this couldn't be tested against real data, so it's possible that bugs will arise at launch.`,
+					// 		},
+					// 	],
+					// },
 				],
 			},
 			// {
