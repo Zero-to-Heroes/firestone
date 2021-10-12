@@ -23,7 +23,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		// if (event.module === navigationState.currentApp) {
 		// 	return [null, null];
 		// }
-		// console.log('changing application', event);
 
 		const binder =
 			event.module === 'collection'

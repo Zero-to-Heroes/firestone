@@ -128,7 +128,6 @@ export class AppBootstrapService {
 
 		if (!this.collectionHotkeyListener) {
 			this.collectionHotkeyListener = this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
-				// console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
 				if (this.currentState !== 'READY') {
 					return;
 				}
@@ -136,10 +135,9 @@ export class AppBootstrapService {
 			});
 		}
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.log('[bootstrap] updated game status', res);
 			if (this.ow.exitGame(res)) {
 				// This can happen when we're in another game, so we exit the app for good
-				// console.log('[bootstrap] left game, showing replay tab', res);
+
 				if (this.ow.inAnotherGame(res)) {
 					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW);
 					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW_OVERLAY);
@@ -157,7 +155,6 @@ export class AppBootstrapService {
 					this.handleExitGame();
 				}
 			} else if (await this.ow.inGame()) {
-				// console.log('[bootstrap] game is running, showing loading screen');
 				this.showLoadingScreen();
 			}
 		});
@@ -209,9 +206,9 @@ export class AppBootstrapService {
 
 	private async onHotkeyPress() {
 		const prefs = await this.prefs.getPreferences();
-		// console.log('pressing hotkey', prefs.collectionUseOverlay);
+
 		const window = await this.ow.getCollectionWindow(prefs);
-		// console.log('retrieved', prefs, window);
+
 		if (window.isVisible) {
 			console.log('[bootstrap] closing main window');
 			this.store.stateUpdater.next(new CloseMainWindowEvent());
@@ -232,7 +229,7 @@ export class AppBootstrapService {
 		// this.ow.hideCollectionWindow(prefs);
 
 		const shouldShowAds = await this.ads.shouldDisplayAds();
-		// console.log('shouldshow ads?', shouldShowAds);
+
 		if (shouldShowAds) {
 			await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
 			const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);

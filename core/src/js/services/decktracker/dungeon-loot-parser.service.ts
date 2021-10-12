@@ -75,7 +75,6 @@ export class DungeonLootParserService {
 			}
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.log('[bootstrap] updated game status', res);
 			if (this.ow.exitGame(res)) {
 				// this.shouldTryToGetRewards = false;
 				if (this.rewardsTimeout) {

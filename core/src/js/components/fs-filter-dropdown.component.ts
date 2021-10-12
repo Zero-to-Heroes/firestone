@@ -76,26 +76,13 @@ export class FsFilterDropdownComponent {
 
 	private doSetValues() {
 		this.visible = this._checkVisibleHandler ? this._checkVisibleHandler(this._navigation, this._state) : true;
-		// console.log(
-		// 	'setting values in filter',
-		// 	this._options,
-		// 	this._optionsBuilder,
-		// 	this._optionsBuilder && this._optionsBuilder(this._navigation, this._state),
-		// 	this._checkVisibleHandler,
-		// 	this.visible,
-		// 	this._navigation,
-		// 	this._state,
-		// 	this,
-		// );
 		if (!this.visible) {
-			// console.log('not visible, returning', this._options);
 			return;
 		}
 
 		// We want to rebuild it in case the option contents change (eg the last patch number is retrieved,
 		// or in case the options values depend on another selection)
 		this._options = this._optionsBuilder ? this._optionsBuilder(this._navigation, this._state) : this._options;
-		// console.log('build options in fs-filter', this._options);
 		const placeholder =
 			this._options && this._options.length > 0 && this.filter
 				? this._options.find((option) => option.value === this.filter)?.label

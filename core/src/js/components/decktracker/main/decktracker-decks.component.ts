@@ -45,7 +45,6 @@ export class DecktrackerDecksComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set decks(value: readonly DeckSummary[]) {
-		// console.log('[decktracker-decks] setting decks', value);
 		this._decks = value;
 	}
 
@@ -58,13 +57,12 @@ export class DecktrackerDecksComponent implements AfterViewInit {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
 		const achievementsList = this.el.nativeElement.querySelector('.deck-list');
 		if (!achievementsList) {
 			return;
 		}
 		const rect = achievementsList.getBoundingClientRect();
-		// console.log('element rect', rect);
+
 		const scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();

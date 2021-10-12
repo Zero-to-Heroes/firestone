@@ -47,7 +47,6 @@ export class GameEventsPluginService {
 				if (this.initialized) {
 					resolve();
 				} else {
-					// console.log('[game-events] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

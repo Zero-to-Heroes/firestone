@@ -96,7 +96,6 @@ export class AchievementsLocalDbService {
 		await this.waitForDbInit();
 		try {
 			const saved = await this.db.update('achievement-history', history);
-			console.log('[achievements] [storage] saved history', saved);
 		} catch (e) {
 			console.error('[achievements] [storage] error while saving history', e.message, e.name, history, e);
 		}
@@ -145,7 +144,6 @@ export class AchievementsLocalDbService {
 				if (this.dbInit) {
 					resolve();
 				} else {
-					// console.log('[achievements] [storage] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

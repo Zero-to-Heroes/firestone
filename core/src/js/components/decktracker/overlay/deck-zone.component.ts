@@ -63,7 +63,6 @@ export class DeckZoneComponent implements AfterViewInit {
 	@Input() colorManaCost: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[deck-zone] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 
@@ -145,7 +144,7 @@ export class DeckZoneComponent implements AfterViewInit {
 		const grouped: { [cardId: string]: readonly VisualDeckCard[] } = groupByFunction((card: VisualDeckCard) =>
 			this.buildGroupingKey(card, quantitiesLeftForCard),
 		)(this._zone.cards);
-		// console.log('grouped', grouped);
+
 		this.cards = Object.keys(grouped)
 			.map((groupingKey) => {
 				const cards = grouped[groupingKey];
@@ -157,7 +156,7 @@ export class DeckZoneComponent implements AfterViewInit {
 							.filter((creator) => creator),
 					),
 				];
-				// console.log('creator card ids', creatorCardIds, cards);
+
 				return Object.assign(new VisualDeckCard(), cards[0], {
 					totalQuantity: cards.length,
 					creatorCardIds: creatorCardIds,
@@ -167,7 +166,6 @@ export class DeckZoneComponent implements AfterViewInit {
 			.sort((a, b) => this.compare(a, b))
 			.sort((a, b) => this.sortByIcon(a, b));
 		if (this._zone.sortingFunction) {
-			// console.log('sorting', this._zone.sortingFunction);
 			this.cards = [...this.cards].sort(this._zone.sortingFunction);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {

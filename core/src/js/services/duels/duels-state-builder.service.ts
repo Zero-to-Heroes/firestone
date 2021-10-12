@@ -403,7 +403,6 @@ export class DuelsStateBuilderService {
 			// Same here
 			.slice(0, 1000)
 			.map((stat) => {
-				// console.debug('building top deck', stat);
 				const deck = decode(stat.decklist);
 				const dustCost = this.buildDustCost(deck, collectionState);
 				return {
@@ -527,7 +526,7 @@ export class DuelsStateBuilderService {
 			return [null, null];
 		}
 		const [wins, losses] = lastMatch.additionalResult.split('-').map((info) => parseInt(info));
-		// console.log('wins, losses', wins, losses, lastMatch.additionalResult.split('-'), lastMatch);
+
 		return lastMatch.result === 'won' ? [wins + 1, losses] : [wins, losses + 1];
 	}
 

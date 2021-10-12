@@ -81,7 +81,6 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	isScroll: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[decktracker-deck-list] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 
@@ -119,9 +118,8 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
 		const rect = this.el.nativeElement.querySelector('.deck-list').getBoundingClientRect();
-		// console.log('element rect', r ect);
+
 		const scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
@@ -129,7 +127,6 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onScroll(event) {
-		// console.log('scrolling');
 		// Force immediate clean of the tooltip
 		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);
 	}
@@ -150,7 +147,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 			const contentHeight = psContent.getBoundingClientRect().height;
 			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
-			// console.log('isScroll', this.isScroll, containerHeight, contentHeight);
+
 			this.refresh();
 		}, 1000);
 	}

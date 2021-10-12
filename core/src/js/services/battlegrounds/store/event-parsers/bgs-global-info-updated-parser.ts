@@ -19,10 +19,9 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsGlobalInfoUpdatedEvent,
 	): Promise<BattlegroundsState> {
-		// console.debug('in BgsGlobalInfoUpdatedParser', event);
 		const players = event.info?.game?.Players;
 		if (!players || players.length === 0) {
-			console.log('no players, returning&', event);
+			console.log('no players, returning');
 			return currentState;
 		}
 		const newPlayers: readonly BgsPlayer[] = currentState.currentGame.players
@@ -36,7 +35,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 				}
 				// Damage is not always present, since we don't want to spoil the battle result too early
 				const newDamage = (playerFromMemory.Damage as number) || player.damageTaken;
-				// console.debug('new damage taken', player.cardId, newDamage, playerFromMemory, player);
+
 				const newWinStreak = (playerFromMemory.WinStreak as number) || 0;
 				const newHighestWinStreak = Math.max(
 					player.highestWinStreak || 0,
@@ -81,7 +80,7 @@ export class BgsGlobalInfoUpdatedParser implements EventParser {
 		const panels: readonly BgsPanel[] = currentState.panels.map((panel) =>
 			panel.id === newPostMatchPanel.id ? newPostMatchPanel : panel,
 		);
-		// console.log('[bgs-info] updated new game', newGame);
+
 		return currentState.update({
 			currentGame: newGame,
 			panels: panels,

@@ -32,7 +32,6 @@ export class CardPlayedOrChangedOnBoardReq implements Requirement {
 			gameEvent.type === GameEvent.MINION_SUMMONED_FROM_HAND ||
 			gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD
 		) {
-			// console.log('handling card played event', this.cardId, gameEvent, this);
 			this.detectCardPlayedEvent(gameEvent);
 			return;
 		}

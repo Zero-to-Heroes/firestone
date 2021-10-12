@@ -286,7 +286,6 @@ export class OverwolfService {
 	}
 
 	public async closeWindow(windowId: string) {
-		// console.debug('[overwolf-service] closing window', windowId, new Error().stack);
 		return new Promise<any>((resolve) => {
 			overwolf.windows.close(windowId, (result) => {
 				resolve(result);
@@ -296,7 +295,6 @@ export class OverwolfService {
 
 	/** @deprecated Use closeWindow instead */
 	public async closeWindowFromName(windowName: string) {
-		// console.debug('[overwolf-service] closing window', windowName, new Error().stack);
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<any>((resolve) => {
 			overwolf.windows.close(window.id, (result) => {
@@ -306,7 +304,6 @@ export class OverwolfService {
 	}
 
 	public async restoreWindow(windowId: string) {
-		// console.debug('[overwolf-service] restoring window', windowId, new Error().stack);
 		return new Promise<any>((resolve) => {
 			try {
 				overwolf.windows.restore(windowId, async (result) => {
@@ -361,7 +358,6 @@ export class OverwolfService {
 	}
 
 	public async hideWindow(windowId: string) {
-		// console.debug('[overwolf-service] hiding window', windowId);
 		return new Promise<any>((resolve) => {
 			try {
 				overwolf.windows.hide(windowId, (result) => {
@@ -385,7 +381,6 @@ export class OverwolfService {
 	}
 
 	public minimizeWindow(windowId: string) {
-		// console.debug('[overwolf-service] minimizing window', windowId);
 		return new Promise<any>((resolve) => {
 			overwolf.windows.minimize(windowId, (result) => {
 				resolve(result);
@@ -394,7 +389,6 @@ export class OverwolfService {
 	}
 
 	public maximizeWindow(windowId: string) {
-		// console.debug('[overwolf-service] maximizing window', windowId);
 		return new Promise<any>((resolve) => {
 			overwolf.windows.maximize(windowId, (result) => {
 				resolve(result);
@@ -586,7 +580,6 @@ export class OverwolfService {
 	}
 
 	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<void> {
-		// console.debug('[overwolf-service] changing window position', windowId, Math.round(newX), Math.round(newY));
 		return new Promise<void>((resolve) => {
 			overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY));
 			resolve();
@@ -594,7 +587,6 @@ export class OverwolfService {
 	}
 
 	public async changeWindowSize(windowId: string, width: number, height: number): Promise<void> {
-		// console.debug('[overwolf-service] changing window size', windowId, Math.round(width), Math.round(height));
 		return new Promise<void>((resolve) => {
 			overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height));
 			resolve();

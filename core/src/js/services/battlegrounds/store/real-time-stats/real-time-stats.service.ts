@@ -64,7 +64,7 @@ export class RealTimeStatsService {
 				...eventQueue.filter((event) => event.type !== GameEvent.GAME_STATE_UPDATE),
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 			].filter((event) => event);
-			// console.log('will processed', eventsToProcess.length, 'events');
+
 			for (let i = 0; i < eventsToProcess.length; i++) {
 				await this.processEvent(eventsToProcess[i]);
 			}

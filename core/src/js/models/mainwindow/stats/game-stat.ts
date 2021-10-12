@@ -72,7 +72,6 @@ export class GameStat {
 			const decoration = this.buildDecoration(this.gameFormat);
 			// TODO: add a "no-rank" image
 			if (!this.playerRank) {
-				// console.log('no player rank, returning null', this);
 				return {};
 			}
 			if (this.playerRank.indexOf('legend') !== -1) {
@@ -99,11 +98,9 @@ export class GameStat {
 		} else if (this.gameMode === 'battlegrounds') {
 			rankIcon = 'battlegrounds';
 			rankIconTooltip = 'Battlegrounds';
-			// console.log('building rank for bg', rankIcon, rankIconTooltip);
 		} else if (this.gameMode.startsWith('mercenaries')) {
 			rankIcon = 'mercenaries';
 			rankIconTooltip = 'Mercenaries';
-			// console.log('building rank for bg', rankIcon, rankIconTooltip);
 		} else if (this.gameMode === 'practice') {
 			if (GALAKROND_EXPLORER.indexOf(this.scenarioId) !== -1) {
 				rankIcon = 'galakrond_explorers';
@@ -130,7 +127,6 @@ export class GameStat {
 		} else if (this.gameMode === 'arena') {
 			// TODO: no-rank image
 			if (!this.playerRank) {
-				// console.log('no player rank, returning null', this);
 				return {};
 			}
 			// New format
@@ -149,7 +145,7 @@ export class GameStat {
 		} else {
 			rankIcon = 'arenadraft';
 		}
-		// console.log('returning', rankIcon, rankIconTooltip);
+
 		return {
 			frameImage: `assets/images/deck/ranks/${rankIcon}.png`,
 			tooltip: rankIconTooltip,

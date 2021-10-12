@@ -24,12 +24,12 @@ export class LogsUploaderService {
 				return null;
 			}
 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-			// console.log('logsLocation', logsLocation);
+
 			const logLines = await this.ow.getFileContents(logsLocation);
-			// console.log('uploaded logs with size', logLines?.length, res.executionPath, res);
+
 			const jszip = new JSZip.default();
 			jszip.file('power.log', logLines);
-			// console.log('ready to zip', logLines?.length, logsLocation);
+
 			const content: Blob = await jszip.generateAsync({
 				type: 'blob',
 				compression: 'DEFLATE',
@@ -37,9 +37,9 @@ export class LogsUploaderService {
 					level: 9,
 				},
 			});
-			// console.log('generated zip', content);
+
 			const s3LogFileKey = await this.s3.postBlob(content, '.power.zip');
-			// console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
+
 			return s3LogFileKey;
 		} catch (e) {
 			console.warn('Exception while uploading logs for troubleshooting', e);

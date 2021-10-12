@@ -73,7 +73,6 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		const storeBus: BehaviorSubject<BattlegroundsState> = this.ow.getMainWindow().battlegroundsStore;
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
-				// console.debug('received state a', this.state);
 				this.state = { ...newState } as BattlegroundsState;
 				this.adRefershToken = this.state?.currentGame?.reviewId;
 				if (!(this.cdr as ViewRef)?.destroyed) {
@@ -98,7 +97,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 	@HostListener('window:keydown', ['$event'])
 	async onKeyDown(e: KeyboardEvent) {
 		const currentWindow = await this.ow.getCurrentWindow();
-		// console.log('keydown event', e, this.hotkey, currentWindow.id);
+
 		if (currentWindow.id.includes('Overlay')) {
 			return;
 		}
@@ -115,7 +114,6 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			e.ctrlKey === isCtrlKey &&
 			e.keyCode == this.hotkey.virtualKeycode
 		) {
-			//console.log('handling hotkey press', this.hotkeyPressedHandler);
 			this.hotkeyPressedHandler.next(true);
 		}
 	}
@@ -151,12 +149,10 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		if (monitorsList.displays.length === 1 || prefs.bgsUseOverlay) {
 			return;
 		}
-		console.log('monitors', monitorsList);
-		// console.log('gameInfo', gameInfo);
+
 		const mainMonitor = gameInfo?.monitorHandle?.value ?? -1;
 		if (mainMonitor !== -1) {
 			const secondMonitor = monitorsList.displays.filter((monitor) => monitor.handle.value !== mainMonitor)[0];
-			console.log('changing window position', this.windowId, secondMonitor.x, secondMonitor.y);
 			this.ow.changeWindowPosition(this.windowId, secondMonitor.x + 100, secondMonitor.y + 100);
 		}
 	}

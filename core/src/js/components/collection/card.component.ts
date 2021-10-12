@@ -130,7 +130,7 @@ export class CardComponent implements AfterViewInit {
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
 		this._imageLoaded = true;
-		// console.log('image loaded', this.image);
+
 		// this.imageLoaded.next(this._card.id);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

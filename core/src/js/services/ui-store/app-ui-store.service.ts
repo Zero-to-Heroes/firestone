@@ -141,7 +141,6 @@ export class AppUiStoreService {
 				// Do two steps, so that if we're playing constructed nothing triggers here
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
 				map(([stats, matches, timeFilter, rankFilter, heroSort, patch]) => {
-					// console.debug('buildHeroStats', stats, matches, timeFilter, rankFilter, heroSort, patch);
 					return buildHeroStats(stats, matches, timeFilter, rankFilter, heroSort, patch, this.allCards);
 				}),
 				tap((all) => console.debug('[cd] populating bgsHeroStats internal behavior subject')),

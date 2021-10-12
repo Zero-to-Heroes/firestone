@@ -101,9 +101,6 @@ export class DuelsTreasureStatsComponent {
 						] as [readonly DuelsTreasureStat[], readonly DuelsRun[], DuelsHeroSortFilterType, boolean],
 				),
 				distinctUntilChanged((a, b) => this.areEqual(a, b)),
-				tap(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
-					console.log('filtered treasures ', duelStats.length, duelsRuns.length),
-				),
 				map(([duelStats, duelsRuns, treasureSorting, hideThreshold]) =>
 					[...buildDuelsHeroTreasurePlayerStats(duelStats, duelsRuns)]
 						.sort(this.sortBy(treasureSorting))

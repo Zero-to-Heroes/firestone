@@ -14,7 +14,6 @@ export class BgsGlobalStatsService {
 	public async loadGlobalStats(tribes: readonly Race[]): Promise<BgsStats> {
 		const suffix = !tribes?.length || tribes?.length === 8 ? 'all-tribes' : [...tribes].sort().join('-');
 		const url = BGS_STATS_RETRIEVE_URL.replace('%suffix%', suffix);
-		console.log('calling URL', url);
 		const result: BgsGlobalStats2 = await this.api.callGetApi(url);
 		const globalStats = BgsStats.create(result as BgsStats);
 		console.debug('retrieved global stats', globalStats);

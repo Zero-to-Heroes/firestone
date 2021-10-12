@@ -144,7 +144,7 @@ export class CardBacksComponent implements AfterViewInit, OnDestroy {
 			case 'all':
 				return (card: CardBack) => true;
 			default:
-				console.log('unknown filter', this.cardsOwnedActiveFilter);
+				console.warn('unknown filter', this.cardsOwnedActiveFilter);
 				return (card: CardBack) => true;
 		}
 	}

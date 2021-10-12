@@ -77,7 +77,6 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, (message) => {
-			// console.log('state changed', message);
 			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
 				console.log('[ads] removing ad', message.window_state);
 				this.removeAds();
@@ -117,7 +116,6 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 
 	private async refreshAds() {
 		try {
-			// console.log('[ads] refreshing ads');
 			if (!this.shouldDisplayAds) {
 				console.log('[ads] ad-free app, not showing ads and returning');
 				return;

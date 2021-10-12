@@ -14,7 +14,7 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 		const playerToUpdate = currentState.currentGame.players.find(
 			(player) => normalizeHeroCardId(player.cardId) === normalizeHeroCardId(event.heroCardId),
 		);
-		// console.log('updating leaderboard place for', playerToUpdate, event, currentState);
+
 		if (!playerToUpdate) {
 			return currentState;
 		}
@@ -25,7 +25,7 @@ export class BgsLeaderboardPlaceParser implements EventParser {
 			displayedCardId: event.heroCardId,
 			leaderboardPlace: event.leaderboardPlace,
 		} as BgsPlayer);
-		// console.log('newPlayer', newPlayer);
+
 		const newGame = currentState.currentGame.updatePlayer(newPlayer);
 		return currentState.update({
 			currentGame: newGame,

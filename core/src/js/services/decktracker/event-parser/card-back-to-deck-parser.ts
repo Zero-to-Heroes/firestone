@@ -21,7 +21,6 @@ export class CardBackToDeckParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
-		// console.log('sending card back to deck', card, deck, gameEvent);
 
 		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
@@ -31,7 +30,7 @@ export class CardBackToDeckParser implements EventParser {
 		// decklist. This means that when a filler card goes back, it's one of these initial cards
 		// that goes back, and so we don't add them once again
 		const shouldKeepDeckAsIs = deck.deckstring && card?.inInitialDeck && !card?.cardId;
-		// console.log('shouldKeepDeckAsIs', shouldKeepDeckAsIs, deck.deckstring, card.isFiller(), deck, card);
+
 		// This is to avoid the scenario where a card is drawn by a public influence (eg Thistle Tea) and
 		// put back in the deck, then drawn again. If we don't reset the lastInfluencedBy, we
 		// could possibly have an info leak
@@ -43,7 +42,7 @@ export class CardBackToDeckParser implements EventParser {
 		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
 			? previousDeck
 			: this.helper.addSingleCardToZone(previousDeck, cardWithoutInfluence);
-		// console.log('updated deck', isPlayer, newDeck, card);
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,

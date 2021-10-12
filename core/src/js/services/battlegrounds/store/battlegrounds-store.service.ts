@@ -141,16 +141,13 @@ export class BattlegroundsStoreService {
 		this.buildEventEmitters();
 		this.buildOverlayHandlers();
 		this.battlegroundsUpdater.subscribe((event: GameEvent | BattlegroundsStoreEvent) => {
-			// console.log('[battlegrounds-state] enqueueing', event);
 			this.processingQueue.enqueue(event);
 		});
 		this.battlegroundsWindowsListener.subscribe((event: boolean) => {
-			console.log('[bgs-store] hotkey pressed');
 			this.handleHotkeyPressed(true);
 		});
 
 		this.battlegroundsHotkeyListener = this.ow.addHotKeyPressedListener('battlegrounds', async (hotkeyResult) => {
-			console.log('[bgs-store] hotkey pressed', hotkeyResult);
 			this.handleHotkeyPressed();
 		});
 
@@ -171,19 +168,16 @@ export class BattlegroundsStoreService {
 			const mainWindowStoreEmitter: BehaviorSubject<MainWindowState> = window['mainWindowStore'];
 			mainWindowStoreEmitter.subscribe((newState) => {
 				this.mainWindowState = newState;
-				// console.log('[bgs-store] received new main state', this.mainWindowState);
 			});
 
 			const deckEventBus: BehaviorSubject<any> = window['deckEventBus'];
 			deckEventBus.subscribe((event) => {
-				// console.debug('received state in BG', event);
 				this.deckState = event?.state as GameState;
 			});
 		});
 	}
 
 	private async handleHotkeyPressed(force = false) {
-		//console.log('handling hotley', force, this.overlayHandlers, this);
 		if (this.overlayHandlers) {
 			await Promise.all(this.overlayHandlers.map((handler) => handler.handleHotkeyPressed(this.state, force)));
 		}
@@ -338,7 +332,6 @@ export class BattlegroundsStoreService {
 				gameEvent.type === GameEvent.GAME_END ||
 				(gameEvent.type === GameEvent.SPECTATING && !gameEvent.additionalData.spectating)
 			) {
-				// console.log('[bgs-store] Game ended', gameEvent);
 				if (this.memoryInterval) {
 					clearInterval(this.memoryInterval);
 					this.memoryInterval = null;
@@ -377,7 +370,7 @@ export class BattlegroundsStoreService {
 
 	private async processQueue(eventQueue: readonly BattlegroundsStoreEvent[]) {
 		const gameEvent = eventQueue[0];
-		// console.debug('[bgs-store] processing', gameEvent.type, gameEvent);
+
 		try {
 			await this.processEvent(gameEvent);
 		} catch (e) {
@@ -396,7 +389,6 @@ export class BattlegroundsStoreService {
 
 	private processAllPendingEvents(turnNumber: number) {
 		for (const event of this.queuedEvents) {
-			// console.log('[bgs-store] force processing pending event', event.event.type);
 			this.battlegroundsUpdater.next(event.event);
 		}
 		this.queuedEvents = [];
@@ -409,7 +401,6 @@ export class BattlegroundsStoreService {
 		if (this.eventsThisTurn.includes(nextTrigger)) {
 			this.battlegroundsUpdater.next(gameEvent);
 		} else {
-			// console.log('requeueing', gameEvent);
 			this.queuedEvents.push({ event: gameEvent, trigger: nextTrigger });
 		}
 	}
@@ -450,7 +441,7 @@ export class BattlegroundsStoreService {
 		if (newState !== this.state) {
 			this.state = newState;
 			this.eventEmitters.forEach((emitter) => emitter(this.state));
-			// console.debug('emitted state', gameEvent.type, this.state);
+
 			this.updateOverlay();
 		} else {
 			//console.debug('no new state', newState);
@@ -460,7 +451,7 @@ export class BattlegroundsStoreService {
 	private async buildEventEmitters() {
 		const result = [(state) => this.battlegroundsStoreEventBus.next(state)];
 		const prefs = await this.prefs.getPreferences();
-		console.log('[bgs-store] is logged in to Twitch?', prefs.twitchAccessToken);
+		console.log('[bgs-store] is logged in to Twitch?', !!prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {

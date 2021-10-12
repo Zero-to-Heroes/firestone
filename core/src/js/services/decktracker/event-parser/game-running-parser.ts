@@ -16,7 +16,7 @@ export class GameRunningParser implements EventParser {
 		// For now, only bother to do some things if the list is empty
 		const newPlayer = this.buildNewPlayer(currentState.playerDeck, gameEvent.additionalData.playerDeckCount);
 		const newOpponent = this.buildNewPlayer(currentState.opponentDeck, gameEvent.additionalData.opponentDeckCount);
-		// console.log('[game-running] returning updated states', newPlayer, newOpponent);
+
 		return currentState.update({
 			playerDeck: newPlayer,
 			opponentDeck: newOpponent,
@@ -42,7 +42,7 @@ export class GameRunningParser implements EventParser {
 			return state;
 		}
 		const newDeck = this.handler.buildEmptyDeckList(deckCount);
-		// console.log('[game-running] building new deck', newDeck);
+
 		return state.update({
 			deckList: [] as readonly DeckCard[],
 			deck: newDeck,

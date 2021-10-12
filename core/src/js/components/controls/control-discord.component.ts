@@ -27,9 +27,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 })
 export class ControlDiscordComponent {
 	preventMiddleClick(event: MouseEvent) {
-		// console.log('intercepting mouse click?', event);
 		if (event.which === 2) {
-			// console.log('preventing middle click on href, as it messes up with the windowing system');
 			event.stopPropagation();
 			event.preventDefault();
 			return false;

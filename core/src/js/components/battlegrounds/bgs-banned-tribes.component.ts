@@ -60,7 +60,6 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().battlegroundsStore;
 		this.stateSubscription = deckEventBus.subscribe(async (gameState: BattlegroundsState) => {
-			// console.log('received state', gameState?.currentGame?.bannedRaces, event);
 			// if (gameState?.currentGame?.bannedRaces !== this.bannedTribes) {
 			this.buildBannedTribes(gameState);
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -108,7 +107,6 @@ export class BgsBannedTribesComponent implements AfterViewInit, OnDestroy {
 		const exceptions =
 			exceptionCards && exceptionCards.length > 0 ? 'Exceptions: ' + exceptionCards.join(', ') : '';
 		this.tooltip = `${tribeNames}s won't appear in this run. ${exceptions}`;
-		// console.log('setting banned tribes', this.bannedTribes, exceptionCards);
 	}
 
 	private getExceptions(value: Race): string[] {

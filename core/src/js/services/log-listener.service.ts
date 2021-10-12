@@ -45,7 +45,6 @@ export class LogListenerService {
 
 	async configureLogListeners() {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.log('onGameInfoUpdated: ' + JSON.stringify(res));
 			if (!res?.gameInfo) {
 				return;
 			}
@@ -71,7 +70,6 @@ export class LogListenerService {
 
 	registerLogMonitor() {
 		if (this.monitoring) {
-			// console.log('[log-listener] [' + this.logFile + '] \tlog hooks already registered, returning');
 			return;
 		}
 		console.log('[log-listener] [' + this.logFile + '] registering hooks?');
@@ -87,7 +85,6 @@ export class LogListenerService {
 	}
 
 	async listenOnFileCreation(logsLocation: string) {
-		// console.log('[log-listener] [' + this.logFile + '] listening on file creation');
 		const fileExists = await this.ow.fileExists(logsLocation);
 		if (!fileExists) {
 			await this.ow.writeFileContents(logsLocation, '');
@@ -114,7 +111,6 @@ export class LogListenerService {
 				skipToEnd: skipToEnd,
 			};
 			const handler = (lineInfo: ListenObject) => {
-				// console.log('[log-listener] [' + this.logFile + '] received line info', lineInfo);
 				if (!lineInfo.success) {
 					console.warn(
 						'[log-listener] [' + this.logFile + '] received an error on file: ',
@@ -139,7 +135,7 @@ export class LogListenerService {
 					readonly position: number;
 					readonly oef: boolean;
 				} = lineInfo.info ? JSON.parse(lineInfo.info) : null;
-				// console.log('info', info);
+
 				if (info && !info.isNew) {
 					lastLineIsNew = false;
 					if (this.existingLineHandler) {
@@ -159,14 +155,13 @@ export class LogListenerService {
 					this.callback(lineInfo.content);
 				}
 			};
-			// console.log('skipping to end?', skipToEnd);
+
 			this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
 			console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
 
 			// const plugin = await this.io.get();
 			// plugin.onFileListenerChanged.addListener(handler);
 
-			// console.log('[log-listener] [' + this.logFile + '] skipping to the end?', skipToEnd);
 			// plugin.listenOnFile(
 			// 	fileIdentifier,
 			// 	logsLocation,

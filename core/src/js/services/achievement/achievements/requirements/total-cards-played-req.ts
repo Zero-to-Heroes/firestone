@@ -36,7 +36,6 @@ export class TotalCardsPlayedReq implements Requirement {
 	}
 
 	isCompleted(): boolean {
-		// console.log('is completed?', this.qualifier, this.playCounts, this.targetQuantity);
 		if (this.qualifier === 'AT_LEAST') {
 			return this.playCounts >= this.targetQuantity;
 		} else if (this.qualifier === 'AT_MOST') {

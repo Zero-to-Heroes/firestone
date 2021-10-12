@@ -187,7 +187,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		private readonly owUtils: OwUtilsService,
 		private readonly ads: AdService,
 	) {
-		// console.log('in construftor');
 		this.init();
 	}
 
@@ -199,7 +198,6 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 	}
 
 	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
-		// console.log('taking screenshot from bgs-post-match');
 		return (copyToCliboard: boolean) => this.owUtils.captureWindow(this.parentWindow, copyToCliboard);
 	}
 

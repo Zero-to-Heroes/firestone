@@ -81,10 +81,8 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		console.log('[shutdown] unsubscribing game-counters', this.activeCounter, this.side);
 		this.stateSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
-		console.log('[shutdown] unsubscribed from game-counters');
 	}
 
 	@HostListener('mousedown')
@@ -105,7 +103,6 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 				// Ideally this should not be necessary, but it looks like that doing things in the beforeunload
 				// handler is not always enough
 				if (event.event.name === GameEvent.GAME_END) {
-					console.log('unsubscribing');
 					this.stateSubscription?.unsubscribe();
 					this.preferencesSubscription?.unsubscribe();
 					return;
@@ -114,7 +111,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 					return;
 				}
 				this.definition = this.buildDefinition(event?.state as GameState, this.activeCounter, this.side);
-				// console.log('built definition', this.definition, event?.state, this.activeCounter, this.side);
+
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -127,7 +124,7 @@ export class GameCountersComponent implements AfterViewInit, OnDestroy {
 					return;
 				}
 				this.definition = this.buildBgsDefinition(newState, this.activeCounter, this.side);
-				// console.log('built definition', this.definition, newState, this.activeCounter, this.side);
+
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

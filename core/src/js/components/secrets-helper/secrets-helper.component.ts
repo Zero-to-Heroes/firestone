@@ -111,7 +111,6 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
-				console.log('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
 			}
 		});
@@ -122,7 +121,6 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// console.log('handled after view init');
 	}
 
 	@HostListener('window:beforeunload')
@@ -132,32 +130,28 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		this.hideTooltipSubscription?.unsubscribe();
 		this.deckSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
-		console.log('[shutdown] unsubscribed from secrets-helper');
 	}
 
 	@HostListener('mousedown')
 	dragMove() {
-		// console.log('starting drag');
 		this.tooltipPosition = 'none';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		this.ow.dragMove(this.windowId, async (result) => {
-			// console.log('drag finished, updating position');
 			await this.updateTooltipPosition();
 			const window = await this.ow.getCurrentWindow();
-			// console.log('retrieved window', window);
+
 			if (!window) {
 				return;
 			}
-			console.log('updating position', window.left, window.top);
 			this.prefs.updateSecretsHelperPosition(window.left, window.top);
 		});
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
-		// console.log('updating prefs', preferences);
+
 		this.widthInPx = 227;
 		this.opacity = preferences.secretsHelperOpacity / 100;
 		this.scale = preferences.secretsHelperScale;
@@ -167,7 +161,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		this.cardsGoToBottom = preferences.secretsHelperCardsGoToBottom;
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();
-		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);
+
 		this.onResized();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -191,11 +185,9 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 
 		const currentWindow = await this.ow.getCurrentWindow();
 		const windowWidth = currentWindow.width;
-		console.log('window position', currentWindow, gameInfo, windowWidth);
 
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
-		console.log('loaded tracker position', trackerPosition);
 
 		const minAcceptableLeft = -windowWidth / 2;
 		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
@@ -209,7 +201,6 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 			maxAcceptableTop,
 			Math.max(minAcceptableTop, (trackerPosition && trackerPosition.top) ?? (await this.getDefaultTop())),
 		);
-		console.log('setting new position', trackerPosition, newLogicalLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newTop);
 		await this.updateTooltipPosition();
 	}
@@ -241,12 +232,11 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async updateTooltipPosition() {
-		// console.log('updating tooltip position');
 		const window = await this.ow.getCurrentWindow();
 		if (!window) {
 			return;
 		}
-		// console.log('retrieved current window', window);
+
 		if (!this.showTooltips) {
 			this.tooltipPosition = 'none';
 		} else if (window.left < 0) {
@@ -254,7 +244,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		} else {
 			this.tooltipPosition = 'left';
 		}
-		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

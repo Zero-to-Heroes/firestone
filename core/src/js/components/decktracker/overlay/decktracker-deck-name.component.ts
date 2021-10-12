@@ -33,7 +33,6 @@ export class DeckTrackerDeckNameComponent {
 	missingInitialDeckstring: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[decktracker-deck-list] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 

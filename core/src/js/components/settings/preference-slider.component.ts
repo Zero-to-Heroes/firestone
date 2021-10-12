@@ -85,7 +85,6 @@ export class PreferenceSliderComponent implements OnDestroy {
 				}),
 				debounceTime(20),
 				map((model) => {
-					// console.log('changing slider value', this.value, this.progress);
 					this.prefs.setValue(this.field, this.value);
 				}),
 			)
@@ -114,7 +113,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 		const valueInPercent = knob.absoluteValue
 			? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
 			: knob.percentageValue;
-		// console.log('knob percent', valueInPercent);
+
 		return Math.min(98, Math.max(0.5, valueInPercent));
 	}
 
@@ -126,14 +125,13 @@ export class PreferenceSliderComponent implements OnDestroy {
 					? this.value - knob.absoluteValue
 					: this.progress - knob.percentageValue;
 				if (Math.abs(snapTestValue) < this.snapSensitivity) {
-					// console.log('snapping', this.value, this.progress, knob, this.snapSensitivity);
 					// this.progress = knob.percentageValue;
 					const valueInPercent = knob.absoluteValue
 						? (100 * (knob.absoluteValue - this.min)) / (this.max - this.min)
 						: knob.percentageValue;
 					this.value = (valueInPercent * (this.max - this.min)) / 100 + this.min;
 					this.updateValueElements();
-					// console.log('to', this.value, this.progress);
+
 					this.prefs.setValue(this.field, this.value);
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();
@@ -154,10 +152,9 @@ export class PreferenceSliderComponent implements OnDestroy {
 
 	private updateValueElements() {
 		this.progress = ((this.value - this.min) / (this.max - this.min)) * 100;
-		console.log('updating progress', this.progress, this.value, this.min, this.max);
 		this.displayedValue = this.value.toFixed(0) + this.displayedValueUnit;
 		const width = this.el.nativeElement.querySelector('input').getBoundingClientRect().width - 8;
-		// console.log('updating left', width, this.el.nativeElement.getBoundingClientRect(), this.progress);
+
 		this.left =
 			this.knobs && this.knobs.some((knob) => knob.percentageValue === 0)
 				? Math.min(10, Math.max(2, (this.progress / 100) * width))

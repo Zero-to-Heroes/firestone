@@ -18,7 +18,7 @@ export class VisualAchievementCategory {
 			return this;
 		}
 		const matches = this.categories.map((cat) => cat.findCategory(categoryId)).filter((cat) => cat);
-		// console.log('matches', matches);
+
 		return matches.length > 0 ? matches[0] : null;
 	}
 
@@ -46,16 +46,13 @@ export class VisualAchievementCategory {
 		const achievement = this.achievements.find(
 			(ach) => ach.id === achievementId || ach.completionSteps.some((step) => step.id === achievementId),
 		);
-		//console.log('[debug] looking for achievement', achievementId, achievement, this);
 		if (achievement) {
-			//console.log('[debug] found it!!!!!!!!!!!!!!!!!!', achievementId, achievement, this);
 			return [[this], achievement];
 		}
 
 		const subHierarchy = this.categories
 			.map((cat) => cat.findAchievementHierarchy(achievementId))
 			.find((result) => result.length === 2 && result[1]);
-		//console.log('[debug] sub hierarchy', achievementId, achievement, subHierarchy, this);
 		if (!subHierarchy) {
 			return [[this], null];
 		}

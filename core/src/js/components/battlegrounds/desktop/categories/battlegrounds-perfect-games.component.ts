@@ -55,7 +55,7 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 					this.displayedGroupedReplays = [];
 					const mmrThreshold = getMmrThreshold(rankFilter, mmrPercentiles);
 					this.gamesIterator = this.buildIterator(gameStats, mmrThreshold, heroFilter, 8);
-					// console.debug('gamesIterator', this.gamesIterator);
+
 					this.onScroll();
 				});
 			});
@@ -101,7 +101,6 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 		a: [readonly GameStat[], readonly MmrPercentile[], number, string],
 		b: [readonly GameStat[], readonly MmrPercentile[], number, string],
 	): boolean {
-		// console.debug('areEqual', a, b);
 		if (a[2] !== b[2] || a[3] !== b[3]) {
 			return false;
 		}

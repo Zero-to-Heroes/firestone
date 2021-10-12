@@ -40,7 +40,6 @@ export class SecretPlayedFromHandParser implements EventParser {
 			zone: 'SECRET',
 		} as DeckCard);
 		const secretClass: string = gameEvent.additionalData.playerClass;
-		// console.log('secretClass', secretClass, gameEvent);
 
 		const isCardCountered =
 			((additionalInfo?.secretWillTrigger?.reactingToEntityId &&
@@ -82,7 +81,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 					? deck.spellsPlayedThisMatch
 					: [...deck.spellsPlayedThisMatch, cardWithZone],
 		} as DeckState);
-		// console.log('[secret-turn-end] updated deck after secret played', newPlayerDeck);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

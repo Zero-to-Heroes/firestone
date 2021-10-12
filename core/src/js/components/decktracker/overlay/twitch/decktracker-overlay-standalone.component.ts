@@ -76,10 +76,9 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
 	onResized(event: ResizedEvent) {
 		try {
-			// console.log('resize event', event);
 			// Resize the tracker
 			const scale = event.newHeight / 950;
-			// console.log('proposed scale', scale);
+
 			// Now shrink the scale is the tracker is taller than a portion of the container's height
 			const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
 			const maxTrackerHeight = containerHeight;
@@ -91,7 +90,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 			}
 			this.keepOverlayInBounds();
 		} catch (e) {
-			console.log('Caught exception while trying to resize overlay', e);
+			console.warn('Caught exception while trying to resize overlay', e);
 		}
 	}
 
@@ -127,18 +126,16 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 				this.renderer.setStyle(this.el.nativeElement.querySelector('.root'), 'transform', newTransform);
 			} catch (e) {
 				// Usually happens in edge where DOMMatrix is not defined
-				console.log('Exception while keeping overlay in bounds', e);
+				console.warn('Exception while keeping overlay in bounds', e);
 			}
 			// this.cdr.detectChanges();
-			// console.log('resizing done', rect, parentRect, matrix);
-			// console.log('updating transform', newTransform, matrixCurrentLeftMove, matrixCurrentTopMove, newTranslateLeft);
 		});
 	}
 
 	startDragging() {
 		this.tooltipPosition = 'none';
 		this.dragging = true;
-		// console.log('starting dragging');
+
 		// this.events.broadcast(Events.HIDE_TOOLTIP);
 		this.dragStart.next();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -148,7 +145,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
 	async stopDragging() {
 		this.dragging = false;
-		// console.log('stopped dragging');
+
 		this.dragEnd.next();
 		await this.updateTooltipPosition();
 		if (!(this.cdr as ViewRef)?.destroyed) {
@@ -165,8 +162,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 		} else {
 			this.tooltipPosition = 'left';
 		}
-		// console.log('updated tooltip position', rect, this.tooltipPosition);
-		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -83,13 +83,13 @@ export class FilterDropdownComponent implements AfterViewInit {
 
 	private addCarets() {
 		const carets = this.el.nativeElement.querySelectorAll('.single .caret');
-		// console.debug('carets', carets);
+
 		if (!!carets?.length) {
 			return;
 		}
 
 		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
-		// console.debug('updating filter visuals', singleEls, this);
+
 		singleEls.forEach((singleEl) => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
 			caretEl.innerHTML = `<svg class="svg-icon-fill">

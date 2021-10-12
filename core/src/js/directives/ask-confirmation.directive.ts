@@ -32,7 +32,7 @@ export class AskConfirmationDirective implements OnDestroy {
 		if (value === this._confirmationPosition || value === 'none') {
 			return;
 		}
-		// console.debug('update tooltip position in confirm directive', value);
+
 		this._confirmationPosition = value;
 		// this.updatePositionStrategy();
 	}
@@ -60,7 +60,6 @@ export class AskConfirmationDirective implements OnDestroy {
 
 	@HostListener('click', ['$event'])
 	onClick() {
-		// console.debug('registered click', this.askConfirmation, this);
 		if (!this.askConfirmation) {
 			this.confirm();
 			return;
@@ -94,13 +93,12 @@ export class AskConfirmationDirective implements OnDestroy {
 				},
 			];
 		}
-		// console.debug('built position strategy', this._confirmationPosition, positions);
+
 		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef
 			.flexibleConnectedTo(this.elementRef)
 			// Describe how to connect overlay to the elementRef
 			.withPositions(positions);
-		// console.log('[card-tooltip] elementRef', this.elementRef, positions, this.position);
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({
@@ -167,7 +165,6 @@ export class AskConfirmationDirective implements OnDestroy {
 	}
 
 	private cancel() {
-		// console.log('canceling', new Error().stack);
 		this.overlayRef.detach();
 		this.events.broadcast(Events.HIDE_MODAL);
 		// this.overlayRef.dispose();

@@ -17,7 +17,6 @@ export class DynamicZoneHelperService {
 		const shouldDeckTriggerDiscard = false;
 		if (alwaysShowDiscard || (dynamicallyShowDiscard && shouldDeckTriggerDiscard)) {
 			const newDiscardZone = this.buildDiscardZone(deckState);
-			console.log('building discard zone', newDiscardZone);
 			dynamicZones.push(newDiscardZone);
 		}
 

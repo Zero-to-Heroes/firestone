@@ -153,9 +153,7 @@ export class BgsPostMatchStatsRecapComponent {
 	private _game: BgsGame;
 
 	@Input() set stats(value: BgsPostMatchStatsPanel) {
-		//console.log('triples 1', this.triples, value);
 		if (value === this._stats) {
-			//console.log('same value, returning');
 			return;
 		}
 		this._stats = value;
@@ -176,14 +174,13 @@ export class BgsPostMatchStatsRecapComponent {
 			this?._game?.reviewId &&
 			this?._stats?.newBestUserStats.find((stat) => stat.statName === statName) != null &&
 			this?._stats?.newBestUserStats.find((stat) => stat.statName === statName).reviewId === this._game.reviewId;
-		// console.log('isNewRecord', statName, isNewRecord, this._stats);
+
 		return isNewRecord;
 	}
 
 	// When adding stats here, also add them to the api-compute-bgs-single-run-stats lambda
 	private updateStats() {
 		if (!this._stats?.player || !this._stats?.stats) {
-			// console.warn('[stats-recap] missing player', this._stats?.player, this._stats?.stats);
 			this.reset();
 			return;
 		}
@@ -208,7 +205,6 @@ export class BgsPostMatchStatsRecapComponent {
 			this.totalHeroDamageDealt = damageDealtToHero.reduce((a, b) => a + b, 0);
 		}
 		this.triples = this._stats.stats.tripleTimings?.length;
-		//console.log('triples2', this.triples, this._stats);
 		// console.error('should reactivated coins wasted');
 		this.coinsWasted = this._stats.stats.coinsWastedOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);
 		this.freezes = this._stats.stats.freezesOverTurn.map((value) => value.value).reduce((a, b) => a + b, 0);

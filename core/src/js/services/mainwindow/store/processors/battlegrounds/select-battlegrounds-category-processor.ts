@@ -20,7 +20,7 @@ export class SelectBattlegroundsCategoryProcessor implements Processor {
 			menuDisplayType: 'menu',
 			selectedCategoryId: category.id,
 		} as NavigationBattlegrounds);
-		// console.log(
+
 		// 	'selecting category',
 		// 	globalCategory.name !== category.name ? globalCategory.name + ' ' + category.name : category.name,
 		// 	category,

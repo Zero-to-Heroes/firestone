@@ -86,7 +86,6 @@ export class DuelsGameModeFilterDropdownComponent implements AfterViewInit {
 	}
 
 	onSelected(option: GameModeFilterOption) {
-		// console.debug('sending event');
 		this.stateUpdater.next(new DuelsGameModeFilterSelectedEvent(option.value));
 	}
 }

@@ -35,7 +35,7 @@ export class OpponentPlayerParser implements EventParser {
 
 		// Total cards before setting the decklist
 		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;
-		// console.log('[opponent-player] total cards in actual deck + hand', cardsInDeck);
+
 		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
 		const aiDeck = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
 		const aiDeckString = shouldLoadDecklist && aiDeck ? aiDeck.deckstring : null;
@@ -45,7 +45,7 @@ export class OpponentPlayerParser implements EventParser {
 			const newPlayerDeck = currentState.opponentDeck.update({
 				hero: newHero,
 			} as DeckState);
-			// console.log('[opponent-player] newPlayerDeck without ai deckstring', newPlayerDeck);
+
 			return currentState.update({
 				opponentDeck: newPlayerDeck,
 			} as GameState);
@@ -53,7 +53,7 @@ export class OpponentPlayerParser implements EventParser {
 
 		console.log('[opponent-player] got AI deckstring', aiDeckString, currentState.metadata);
 		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(aiDeckString));
-		// console.log('[opponent-player] parsed decklist', decklist);
+
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can
 		let newDeck = decklist;
@@ -66,7 +66,7 @@ export class OpponentPlayerParser implements EventParser {
 				newDeck = this.helper.removeSingleCardFromZone(newDeck, card.cardId, card.entityId)[0];
 			}
 		}
-		// console.log('[opponent-player] newDeck', newDeck);
+
 		const hand = aiDeckString ? this.flagCards(currentState.opponentDeck.hand) : currentState.opponentDeck.hand;
 		const deck = aiDeckString ? this.flagCards(newDeck) : newDeck;
 
@@ -81,7 +81,7 @@ export class OpponentPlayerParser implements EventParser {
 				: currentState.opponentDeck.otherZone,
 			showDecklistWarning: cardsInDeck < decklist.length,
 		} as DeckState);
-		// console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
+
 		return currentState.update({
 			opponentDeck: newPlayerDeck,
 		} as GameState);
@@ -107,14 +107,4 @@ export class OpponentPlayerParser implements EventParser {
 			} as DeckCard),
 		);
 	}
-
-	// private extractCardsInDeck(gameEvent: GameEvent): number {
-	// 	try {
-	// 		console.log('getting cards in deck', gameEvent);
-	// 		return gameEvent.additionalData.gameState.Opponent.Deck.length;
-	// 	} catch (e) {
-	// 		console.log('could not get cards in deck', gameEvent, e);
-	// 		return null;
-	// 	}
-	// }
 }

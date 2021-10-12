@@ -32,7 +32,6 @@ export class CardPlayedOrOnBoardAtGameStartReq implements Requirement {
 			gameEvent.type === GameEvent.MINION_SUMMONED_FROM_HAND ||
 			gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START
 		) {
-			// console.log('handling passive buff event', this.cardId, gameEvent, this);
 			this.detectCardPlayedEvent(gameEvent);
 			return;
 		}

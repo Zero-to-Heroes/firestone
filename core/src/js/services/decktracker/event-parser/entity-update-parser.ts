@@ -14,15 +14,13 @@ export class EntityUpdateParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// console.debug('entity updated', gameEvent, currentState);
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.debug('info', cardId, controllerId, localPlayer, entityId);
+
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// console.debug('isPlayer', isPlayer, deck);
 
 		const cardInHand = this.helper.findCardInZone(deck.hand, null, entityId);
-		// console.debug('cardInHand', cardInHand);
+
 		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
 		const cardInOther = this.helper.findCardInZone(deck.otherZone, null, entityId);
 
@@ -31,7 +29,7 @@ export class EntityUpdateParser implements EventParser {
 			cardInHand && cardInHand.cardId !== cardId && isPlayer
 				? cardInHand.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
 				: null;
-		// console.debug('newCardInHand', newCardInHand);
+
 		const newCardInDeck =
 			cardInDeck && cardInDeck.cardId !== cardId
 				? cardInDeck.update({ cardId: cardId, cardName: this.allCards.getCard(cardId)?.name } as DeckCard)
@@ -42,7 +40,7 @@ export class EntityUpdateParser implements EventParser {
 				: null;
 
 		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
-		// console.debug('newHand', newHand);
+
 		const newDeck = newCardInDeck ? this.helper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
 		const newOther = newCardInOther
 			? this.helper.replaceCardInZone(deck.otherZone, newCardInOther)

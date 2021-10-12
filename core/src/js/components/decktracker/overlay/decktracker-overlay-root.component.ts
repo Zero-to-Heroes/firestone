@@ -270,7 +270,6 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
-				console.log('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
 				await this.restoreWindowPosition(true);
 			}
@@ -298,7 +297,6 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// console.log('handled after view init');
 	}
 
 	@HostListener('window:beforeunload')
@@ -308,11 +306,9 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.hideTooltipSubscription?.unsubscribe();
 		this.deckSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
-		console.log('[shutdown] unsubscribed from decktracker-ovelray-root');
 	}
 
 	onMinimize() {
-		console.log('minimizing in root');
 		this.onDecktrackerToggle(false);
 	}
 
@@ -337,28 +333,25 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 			return;
 		}
 
-		// console.log('starting drag');
 		this.tooltipPosition = 'none';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		this.ow.dragMove(this.windowId, async (result) => {
-			// console.log('drag finished, updating position');
 			await this.updateTooltipPosition();
 			const window = await this.ow.getCurrentWindow();
-			// console.log('retrieved window', window);
+
 			if (!window) {
 				return;
 			}
 
-			console.log('updating tracker position', window.left, window.top);
 			this.trackerPositionUpdater(window.left, window.top);
 		});
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
-		// console.log('updating prefs', preferences);
+
 		this.displayMode = this.overlayDisplayModeExtractor(preferences);
 		this.showTitleBar = preferences.overlayShowTitleBar;
 		this.showControlBar = preferences.overlayShowControlBar;
@@ -380,7 +373,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.sortCardsByManaCostInOtherZone = this.sortCardsByManaCostInOtherZoneExtractor(preferences);
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();
-		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);
+
 		this.onResized();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -454,12 +447,11 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	}
 
 	private async updateTooltipPosition() {
-		// console.log('updating tooltip position');
 		const window = await this.ow.getCurrentWindow();
 		if (!window) {
 			return;
 		}
-		// console.log('retrieved current window', window);
+
 		if (!this.showTooltips) {
 			this.tooltipPosition = 'none';
 		} else if (window.left < 0) {
@@ -467,7 +459,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		} else {
 			this.tooltipPosition = 'left';
 		}
-		// console.debug('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

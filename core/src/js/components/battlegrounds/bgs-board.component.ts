@@ -108,7 +108,7 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 
 	@Input('entities') set entities(value: readonly Entity[]) {
 		this.inputEntities = value || [];
-		// console.log('input entities', this.inputEntities);
+
 		this._entities = this.inputEntities.map((entity) => Entity.create({ ...entity } as Entity));
 		this.previousBoardWidth = undefined;
 		this.boardReady = false;
@@ -151,7 +151,6 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		if (this.ow.isOwEnabled()) {
 			const windowId = (await this.ow.getCurrentWindow()).id;
 			this.stateChangedListener = this.ow.addStateChangedListener(windowId, (message) => {
-				// console.log('state changed', message);
 				if (isWindowHidden(message.window_previous_state_ex) && !isWindowHidden(message.window_state_ex)) {
 					this.onResize();
 				}
@@ -210,13 +209,12 @@ export class BgsBoardComponent implements AfterViewInit, OnDestroy {
 		}
 		if (this.ow.isOwEnabled()) {
 			const window = await this.ow.getCurrentWindow();
-			// console.log('currentWIndow', window);
+
 			if (isWindowHidden(window?.stateEx)) {
-				// console.log('window hidden, not resizing board state', window.stateEx, window);
 				return;
 			}
 		}
-		// console.log('on window resize');
+
 		const boardContainer = this.el.nativeElement.querySelector('.board');
 		if (!boardContainer) {
 			if (this._entities?.length) {

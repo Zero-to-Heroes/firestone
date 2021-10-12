@@ -14,7 +14,6 @@ export class GenericChallenge implements Challenge {
 		this.achievementId = achievementId;
 		this.resetEvents = resetEvents || [];
 		this.requirements = requirements || [];
-		// console.log('[debug] built achievement', this.achievementId, this.resetEvents, this.requirements);
 	}
 
 	public detect(gameEvent: GameEvent, callback: () => void) {
@@ -63,7 +62,6 @@ export class GenericChallenge implements Challenge {
 	}
 
 	protected testCompletion() {
-		// console.log('[debug] testing for completion', this.requirements);
 		const allRequirementsCompleted = this.requirements.every((req) => req.isCompleted());
 		if (this.callback && allRequirementsCompleted) {
 			this.resetStateAfterComplete();

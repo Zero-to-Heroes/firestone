@@ -30,7 +30,6 @@ export class GetMatchInfoOperation extends MindVisionOperationFacade<MatchInfo> 
 	}
 
 	private extractPlayerInfo(matchPlayer: any): PlayerInfo {
-		console.log('extracting player info', matchPlayer);
 		return {
 			name: matchPlayer.Name,
 			cardBackId: matchPlayer.CardBackId,

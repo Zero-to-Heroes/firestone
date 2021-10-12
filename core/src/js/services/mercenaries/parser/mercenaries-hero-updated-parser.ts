@@ -33,10 +33,6 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 			return battleState;
 		}
 		if (!cardId) {
-			console.debug(
-				'[merc-hero-revealed-parser] no card id, so no iteresting info to get from that event',
-				event,
-			);
 			return battleState;
 		}
 
@@ -46,13 +42,6 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 				normalizeMercenariesCardId(this.allCards.getCardFromDbfId(merc.cardDbfId).id) === normalizedCardId,
 		);
 		if (!refMerc) {
-			console.debug(
-				'[merc-hero-revealed-parser] not a merc, returning',
-				cardId,
-				normalizedCardId,
-				event,
-				mainWindowState.mercenaries.referenceData,
-			);
 			return battleState;
 		}
 

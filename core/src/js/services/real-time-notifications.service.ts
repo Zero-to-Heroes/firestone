@@ -11,12 +11,10 @@ export class RealTimeNotificationService {
 
 	public async getStatus(): Promise<string[]> {
 		return new Promise<string[]>((resolve) => {
-			console.log('getting status');
 			this.http.get(this.URL).subscribe((res: any) => {
 				if (res.ok) {
 					const status = JSON.parse(res._body);
 					this.notifications = status[0].status;
-					// console.log('received status', this.notifications);
 				}
 				resolve(this.notifications);
 			});

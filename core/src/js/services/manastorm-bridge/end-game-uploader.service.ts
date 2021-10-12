@@ -75,7 +75,7 @@ export class EndGameUploaderService {
 	): Promise<GameForUpload> {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
-		// console.debug('replayXml', replayXml);
+
 		if (!replayXml) {
 			console.warn('[manastorm-bridge]', currentReviewId, 'could not convert replay');
 		}
@@ -118,7 +118,7 @@ export class EndGameUploaderService {
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 			game.hasBgsPrizes = bgsOptions.hasPrizes;
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
-			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode, game);
+			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
 			// const duelsInfo = await this.memoryInspection.getDuelsInfo();
 			if (duelsInfo) {
 				console.log('[manastorm-bridge]', currentReviewId, 'got duels info', duelsInfo);

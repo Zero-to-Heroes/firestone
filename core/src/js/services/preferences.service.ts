@@ -526,7 +526,7 @@ export class PreferencesService {
 			lastUpdateDate: new Date(),
 		};
 		await this.indexedDb.saveUserPreferences(finalPrefs);
-		// console.log('broadcasting new prefs', userPrefs);
+
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		eventBus.next({
 			name: eventName,
@@ -600,7 +600,6 @@ export class PreferencesService {
 					const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, userPrefsLocal, prop);
 					if (!meta && userPrefsLocal.hasOwnProperty(prop)) {
 						userPrefsLocal[prop] = userPrefs[prop];
-						// console.debug('[preferences] assigning prop local', prop, userPrefs[prop], meta);
 					}
 				}
 
@@ -609,12 +608,11 @@ export class PreferencesService {
 					const meta = Reflect.getMetadata(FORCE_LOCAL_PROP, remotePrefsLocal, prop);
 					if (!meta && remotePrefsLocal.hasOwnProperty(prop)) {
 						remotePrefsLocal[prop] = this.lastSyncPrefs[prop];
-						// console.debug('[preferences] assigning prop remote', prop, this.lastSyncPrefs[prop], meta);
 					}
 				}
 
 				if (!areDeepEqual(userPrefsLocal, remotePrefsLocal)) {
-					console.log('[preferences] updating remote prefs', userPrefsLocal, remotePrefsLocal);
+					console.log('[preferences] updating remote prefs');
 					this.lastSyncPrefs = userPrefs;
 					this.currentSyncDate = userPrefs.lastUpdateDate;
 					await this.updateRemotePreferences();

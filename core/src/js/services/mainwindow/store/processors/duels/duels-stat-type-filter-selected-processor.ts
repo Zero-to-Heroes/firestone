@@ -15,18 +15,6 @@ export class DuelsStatTypeFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsStatTypeFilter(event.value);
-		// const duels = await this.duelsService.updateState(
-		// 	currentState.duels,
-		// 	currentState.stats.gameStats,
-		// 	currentState.binder,
-		// );
-		console.log('updated duels stat type filter', event.value);
-		return [
-			// currentState.update({
-			// 	duels: duels,
-			// } as MainWindowState),
-			null,
-			null,
-		];
+		return [null, null];
 	}
 }

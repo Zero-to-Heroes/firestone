@@ -50,7 +50,6 @@ export class SettingsModalComponent implements OnInit, OnDestroy {
 
 	private handleNewModal(data) {
 		this.currentModal = data.data[0];
-		console.log('showing modal', data, this.currentModal);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

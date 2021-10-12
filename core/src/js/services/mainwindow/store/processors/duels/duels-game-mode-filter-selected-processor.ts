@@ -14,20 +14,7 @@ export class DuelsGameModeFilterSelectedProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		console.log('updating duels hero sort filter', event.value);
 		await this.prefs.updateDuelsGameModeFilter(event.value);
-		// const duels = await this.duelsService.updateState(
-		// 	currentState.duels,
-		// 	currentState.stats.gameStats,
-		// 	currentState.binder,
-		// );
-		console.log('updated duels hero sort filter', event.value);
-		return [
-			// currentState.update({
-			// 	duels: duels,
-			// } as MainWindowState),
-			null,
-			null,
-		];
+		return [null, null];
 	}
 }

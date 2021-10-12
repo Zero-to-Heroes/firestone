@@ -61,7 +61,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
 				this.nextBattle = newState?.currentGame?.getRelevantFaceOff(this.preferences);
-				// console.debug('simultion message in listener', this.simulationMessage, newState);
+
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -106,7 +106,7 @@ export class BgsSimulationOverlayComponent implements OnInit, OnDestroy {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		this.preferences = preferences || (await this.prefs.getPreferences());
-		// console.log('updating prefs', preferences);
+
 		this.showSimulationSample = this.preferences.bgsEnableSimulationSampleInOverlay;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

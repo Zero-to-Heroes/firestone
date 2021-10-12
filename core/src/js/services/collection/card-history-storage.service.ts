@@ -16,6 +16,5 @@ export class CardHistoryStorageService {
 
 	public async newHistory(history: CardHistory) {
 		const result = await this.indexedDb.save(history);
-		console.log('new card history saved', result);
 	}
 }

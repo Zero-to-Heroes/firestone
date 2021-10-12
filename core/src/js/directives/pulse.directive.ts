@@ -12,7 +12,6 @@ export class PulseDirective {
 	private _value: FtueKey;
 
 	@Input('pulse') set pulseProperty(value: FtueKey) {
-		// console.log('setting pulse', value);
 		this._value = value;
 		this.setProperty(value);
 	}

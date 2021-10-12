@@ -51,13 +51,6 @@ export class DeckParserService {
 		this.init();
 	}
 
-	// public async queueingIntoMatch(logLine: string) {
-	// 	if (this.spectating) {
-	// 		console.log('[deck-parser] spectating, not handling queue into match');
-	// 		return;
-	// 	}
-	// }
-
 	public async getCurrentDeck(timeout?: number): Promise<DeckInfo> {
 		if (!timeout) {
 			return this.currentDeck;
@@ -192,7 +185,6 @@ export class DeckParserService {
 			// will have a null selected deck)
 			// Only reset when moving away from the scene where selecting a deck is possible
 			else if (changes.CurrentScene && changes.CurrentScene !== SceneMode.GAMEPLAY) {
-				// console.log('[deck-parser] resetting', changes.CurrentScene);
 				this.selectedDeckId = null;
 			}
 			if (changes.CurrentScene) {
@@ -201,7 +193,7 @@ export class DeckParserService {
 						? this.currentNonGamePlayScene
 						: changes.CurrentScene;
 				this.currentScene = changes.CurrentScene;
-				// console.log(
+
 				// 	'[deck-parser] new scene',
 				// 	changes.CurrentScene,
 				// 	this.currentNonGamePlayScene,
@@ -310,7 +302,7 @@ export class DeckParserService {
 			.split('\n')
 			.filter((line) => line && line.length > 0)
 			.map((line) => line.trim());
-		// console.debug('[deck-parser] reading deck contents', lines);
+
 		if (lines.length >= 4) {
 			console.log('[deck-parser] lets go', lines[lines.length - 4], 'hop', lines[lines.length - 3]);
 			// const isLastSectionDeckSelectLine =
@@ -373,7 +365,7 @@ export class DeckParserService {
 	private explodeDecklist(initialDecklist: readonly number[]): any[] {
 		console.log('[deck-parser] decklist with dbfids', initialDecklist);
 		const groupedById = groupByFunction((cardId) => '' + cardId)(initialDecklist);
-		// console.log('[deck-parser] groupedById', groupedById);
+
 		const result = Object.keys(groupedById).map((id) => [+id, groupedById[id].length]);
 		console.log('[deck-parser] exploding decklist result', result);
 		return result;

@@ -53,7 +53,6 @@ export class PackStatsService {
 			const dbCard = this.allCards.getCard(cards[i].cardId);
 			statEvent['card' + (i + 1) + 'Rarity'] = dbCard && dbCard.rarity ? dbCard.rarity?.toLowerCase() : 'free';
 		}
-		console.log('posting pack stat event', statEvent);
 		this.api.callPostApi(PACKS_UPDATE_URL, statEvent);
 	}
 

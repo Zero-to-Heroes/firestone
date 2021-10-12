@@ -18,7 +18,7 @@ export class GameEndParser implements EventParser {
 
 	async parse(currentState: GameState): Promise<GameState> {
 		const prefs = await this.prefs.getPreferences();
-		// console.log(
+
 		// 	'[deck-parser] [game-end] resetting deck, shouldStorePreviousDeck?',
 		// 	currentState.metadata.gameType === GameType.GT_VS_AI,
 		// );

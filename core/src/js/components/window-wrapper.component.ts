@@ -75,17 +75,14 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		const window = await this.ow.getCurrentWindow();
-		// console.log('window', window, window.name);
+
 		this.stateChangedListener = this.ow.addStateChangedListener(window.name, (message) => {
-			// console.log('received messageeee', message);
 			if (message.window_state_ex === 'maximized') {
-				// console.log('maximized');
 				this.maximized = true;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			} else {
-				// console.log('not maximized');
 				this.maximized = false;
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
@@ -112,7 +109,6 @@ export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 
-		console.log('doing drag resize', event, edge);
 		event.preventDefault();
 		event.stopPropagation();
 		const window = await this.ow.getCurrentWindow();

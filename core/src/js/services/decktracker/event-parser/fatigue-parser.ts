@@ -15,7 +15,7 @@ export class FatigueParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			fatigue: gameEvent.additionalData.fatigueDamage,
 		} as DeckState);
-		// console.log('updated fatigueDamage', newPlayerDeck);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

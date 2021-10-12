@@ -128,7 +128,7 @@ export class CollectionPackStatsComponent implements AfterViewInit {
 		}
 
 		const orderedPacks = [...this._packStats].sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
-		// console.debug('best poacks', orderedPacks);
+
 		this.bestPacks = orderedPacks.slice(0, 5);
 
 		this._packs = Object.values(BoosterType)

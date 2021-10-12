@@ -129,7 +129,6 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 	}
 
 	selectTab(tab: BgsStatsFilterId) {
-		// console.log('selecting tab', tab);
 		this.selectTabHandler
 			? this.selectTabHandler(tab, this.tabIndex)
 			: this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(tab, this.tabIndex));

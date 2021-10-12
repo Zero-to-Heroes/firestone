@@ -92,7 +92,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 			return;
 		}
 		const dbCard = this.cards.getCard(history.cardId);
-		// console.log('history for card', history.cardId, dbCard.name, dbCard, history);
+
 		this.rarityImg = `assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
 		const name = dbCard && dbCard.name ? dbCard.name : 'Unknown card';
 		this.cardName = (history.isPremium ? 'Golden ' : '') + name;

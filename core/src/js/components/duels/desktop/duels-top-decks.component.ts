@@ -101,7 +101,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 					// One item is a full list of grouped replays for the day
 					// So we don't want to be too aggressive with full runs
 					this.iterator = this.buildIterator(topDecks, 4);
-					// console.debug('gamesIterator', this.gamesIterator);
+
 					this.onScroll();
 				});
 			});

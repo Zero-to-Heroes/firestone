@@ -39,7 +39,13 @@ export class DeckbuildingClassicReq implements Requirement {
 				cards.length > 0 &&
 				cards.every((card) => card.set && ['core', 'expert1'].indexOf(card.set.toLowerCase()) !== -1);
 			if (this.doesDeckMeetSpec) {
-				console.log('[deckbuilding-classic-req', 'deck matches condition', this.doesDeckMeetSpec, deck, cards);
+				console.debug(
+					'[deckbuilding-classic-req',
+					'deck matches condition',
+					this.doesDeckMeetSpec,
+					deck,
+					cards,
+				);
 			}
 		} else {
 			this.doesDeckMeetSpec = false;

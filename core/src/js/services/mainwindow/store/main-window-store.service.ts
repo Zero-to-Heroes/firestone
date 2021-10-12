@@ -318,7 +318,6 @@ export class MainWindowStoreService {
 		this.processors = this.buildProcessors();
 
 		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
-			// console.log('[store] enqueuing event', event);
 			this.processingQueue.enqueue(event);
 		});
 
@@ -357,7 +356,7 @@ export class MainWindowStoreService {
 				this.navigationState,
 			);
 			let stateWithNavigation: NavigationState;
-			// console.log('newState, newNavState', newState, newNavState);
+
 			if (newNavState) {
 				if (event.eventName() === NavigationBackEvent.eventName()) {
 					this.navigationHistory.currentIndexInHistory--;
@@ -370,13 +369,13 @@ export class MainWindowStoreService {
 				// or forward with the history arrows, the state of these arrows will change
 				// vs what they originally were when the state was stored
 				this.navigationState = newNavState;
-				// console.log('updating navigation state', this.navigationState, newNavState);
+
 				stateWithNavigation = this.updateNavigationArrows(this.navigationState, newState);
 				this.navigationStateEmitter.next(stateWithNavigation);
 			}
 			if (newState) {
 				this.state = newState;
-				// console.log('[store] emitting new state', event.eventName(), this.state, this.navigationState);
+
 				this.stateEmitter.next(this.state);
 				if (Date.now() - start > 1000) {
 					console.warn(
@@ -387,9 +386,8 @@ export class MainWindowStoreService {
 					);
 				}
 			} else {
-				// console.log('[store] no new state to emit');
 			}
-			// console.debug(
+
 			// 	'emitting new merged state',
 			// 	event.eventName(),
 			// 	event,
@@ -407,7 +405,7 @@ export class MainWindowStoreService {
 		} catch (e) {
 			console.error('[store] exception while processing event', event.eventName(), event, e.message, e.stack, e);
 		}
-		// console.log('emitting new state', this.state, this.navigationState);
+
 		return eventQueue.slice(1);
 	}
 
@@ -440,7 +438,7 @@ export class MainWindowStoreService {
 					.currentApp === navigationState.currentApp) ||
 			// We allow a "back" to the parent in case there is no back history
 			NavigationBackProcessor.buildParentState(navigationState, dataState) != null;
-		// console.debug(
+
 		// 	'isBackArrowEnabled?',
 		// 	backArrowEnabled,
 		// 	this.navigationHistory.currentIndexInHistory > 0,

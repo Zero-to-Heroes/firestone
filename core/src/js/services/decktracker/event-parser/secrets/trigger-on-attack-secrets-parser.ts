@@ -91,7 +91,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		const defenderControllerId = gameEvent.additionalData.defenderControllerId;
 		const attackerControllerId = gameEvent.additionalData.attackerControllerId;
 		if (defenderControllerId === attackerControllerId) {
-			// console.log('attacker and defender are the same', gameEvent);
 			return currentState;
 		}
 
@@ -99,15 +98,12 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
 		if (isPlayerTheAttackedParty && activePlayerId === gameEvent.localPlayer.PlayerId) {
-			// console.log('active player is attacked', gameEvent);
 			return currentState;
 		}
 		if (!isPlayerTheAttackedParty && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
-			// console.log('active opponent is attacked', gameEvent);
 			return currentState;
 		}
 
-		// console.log('deck to check', deckWithSecretToCheck);
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 
 		// Check that the attacker is a minion
@@ -128,7 +124,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			gameEvent.additionalData.defenderTags.find(
 				(tag) => (tag.Name as number) === GameTag.DIVINE_SHIELD && (tag.Value as number) === 1,
 			);
-		// console.log('attacker minion?', isAttackerMinion, 'defender minion?', isDefenderMinion, gameEvent);
+
 		const enemyBoard = (isPlayerTheAttackedParty ? currentState.opponentDeck : currentState.playerDeck).board;
 
 		const secretsWeCantRuleOut = [];
@@ -190,7 +186,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 				secretsWeCantRuleOut.push(CardIds.AutodefenseMatrix1);
 			}
 		}
-		// console.log('considering secret', isDefenderMinion, isDefenderDivineShield, gameEvent);
+
 		const allEntities = [
 			gameEvent.gameState.Player.Hero,
 			...gameEvent.gameState.Player.Board,
@@ -198,7 +194,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			...gameEvent.gameState.Opponent.Board,
 		];
 		const otherTargets = allEntities.filter((entity) => [attackerId, defenderId].indexOf(entity.entityId) === -1);
-		// console.log('other targets', otherTargets, allEntities, attackerId, defenderId);
+
 		// Misdirection only triggers if there is another entity on the board that can be attacked
 		if (otherTargets.length === 0) {
 			secretsWeCantRuleOut.push(CardIds.MisdirectionLegacy);
@@ -211,7 +207,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			// console.log('marking as invalid', secret, secrets);
 			secrets = secrets.map((boardSecret) => {
 				if (isSecretToBeConsidered(deckWithSecretToCheck, boardSecret)) {
 					return this.helper.removeSecretOptionFromSecret(boardSecret, secret);
@@ -219,7 +214,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 				return boardSecret;
 			});
 			// secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
-			// console.log('marked as invalid', secret, newPlayerDeck);
 		}
 		const newPlayerDeck = deckWithSecretToCheck.update({
 			secrets: secrets as readonly BoardSecret[],

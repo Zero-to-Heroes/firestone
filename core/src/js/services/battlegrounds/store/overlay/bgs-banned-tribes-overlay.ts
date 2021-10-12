@@ -24,7 +24,6 @@ export class BgsBannedTribesOverlay implements BattlegroundsOverlay {
 		const theWindow = await this.ow.getWindowState(windowId);
 		const inGame = state && state.inGame && !state.currentGame?.gameEnded;
 		if (inGame && this.active && isWindowClosed(theWindow.window_state_ex)) {
-			// console.log(
 			// 	'[bgs-banned-tribes-overlay] showing window',
 			// 	inGame,
 			// 	state.inGame,
@@ -34,9 +33,7 @@ export class BgsBannedTribesOverlay implements BattlegroundsOverlay {
 			// );
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);
-			// console.log('[bgs-banned-tribes-overlay] restored window', window);
 		} else if ((!inGame || !this.active) && !isWindowClosed(theWindow.window_state_ex)) {
-			// console.log(
 			// 	'[bgs-banned-tribes-overlay] closing window',
 			// 	inGame,
 			// 	state.inGame,
@@ -46,7 +43,6 @@ export class BgsBannedTribesOverlay implements BattlegroundsOverlay {
 			// );
 			await this.ow.closeWindow(windowId);
 		} else if ((!inGame || !this.active) && isWindowClosed(theWindow.window_state_ex)) {
-			// console.log(
 			// 	'[bgs-banned-tribes-overlay] not opening window',
 			// 	inGame,
 			// 	state.inGame,

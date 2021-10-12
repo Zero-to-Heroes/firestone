@@ -29,7 +29,6 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input() cardTooltipBgs: boolean;
 
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
-		// console.log('[card-tooltip-directive] setting tooltip position', value);
 		if (value !== this._position) {
 			this._position = value;
 			this.updatePositionStrategy();
@@ -143,7 +142,6 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 			.flexibleConnectedTo(this.elementRef)
 			// Describe how to connect overlay to the elementRef
 			.withPositions(positions);
-		// console.log('[card-tooltip] elementRef', this.elementRef, positions, this.position);
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
@@ -164,9 +162,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		// console.log('mouseenter', this._position);
 		if (this._position === 'none') {
-			console.log('tooltip deactivated, not showing');
 			return;
 		}
 		if (!this.cardId && !this.cardTooltipCard) {
@@ -179,7 +175,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		const tooltipRef: ComponentRef<CardTooltipComponent> = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
-		// console.log('setting card', this.cardTooltipCard);
+
 		if (this.cardTooltipCard) {
 			tooltipRef.instance.cardTooltipCard = this.cardTooltipCard;
 			tooltipRef.instance.displayBuffs = this.cardTooltipDisplayBuffs;
@@ -192,7 +188,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 			tooltipRef.instance.text = this.cardTooltipText;
 		}
 		tooltipRef.instance.additionalClass = this.cardTooltipClass;
-		// console.log('tooltip class', this.cardTooltipClass);
+
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

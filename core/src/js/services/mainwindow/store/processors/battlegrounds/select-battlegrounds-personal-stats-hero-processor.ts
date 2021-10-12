@@ -14,7 +14,7 @@ export class SelectBattlegroundsPersonalStatsHeroProcessor implements Processor 
 		const navigationBattlegrounds = navigationState.navigationBattlegrounds.update({
 			selectedPersonalHeroStatsTab: event.tab,
 		} as NavigationBattlegrounds);
-		// console.log('selecting global category', navigationState, navigationBattlegrounds);
+
 		return [
 			null,
 			navigationState.update({

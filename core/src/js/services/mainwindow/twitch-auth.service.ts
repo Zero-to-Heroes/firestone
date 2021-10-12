@@ -59,7 +59,7 @@ export class TwitchAuthService {
 		window['twitchAuthUpdater'] = this.stateUpdater;
 
 		this.stateUpdater.subscribe((twitchInfo: any) => {
-			console.log('[twitch-auth] received access token', twitchInfo);
+			console.log('[twitch-auth] received access token', !!twitchInfo);
 			this.saveAccessToken(twitchInfo.access_token);
 		});
 		console.log('[twitch-auth] handler init done');
@@ -140,7 +140,6 @@ export class TwitchAuthService {
 			newEvent = Object.assign({}, newEvent, {
 				state: newState,
 			});
-			// console.log('fixed event to send', newEvent, event);
 		}
 		if (newEvent.state && (newEvent.state.isBattlegrounds() || newEvent.state.isMercenaries())) {
 			// Don't show anything in the deck itself
@@ -156,10 +155,8 @@ export class TwitchAuthService {
 	}
 
 	private async emitBgsEvent(state: BattlegroundsState) {
-		// console.log('ready to emit twitch event', newEvent);
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
-			// console.log('no twitch access token, returning');
 			return;
 		}
 		const stateToSend: TwitchBgsState = {
@@ -204,7 +201,6 @@ export class TwitchAuthService {
 				type: 'bgs-battle',
 				state: cleanedCurrentBattle,
 			};
-			// console.log('[twitch] splitting message', bgsStateEvent, bgsBattleEvent);
 
 			this.sendEvent(bgsBattleEvent);
 		}
@@ -249,7 +245,6 @@ export class TwitchAuthService {
 				// 	threshold,
 				// );
 			} else {
-				// console.log('[twitch] message compressed', currentBattle);
 			}
 		}
 		return currentBattle;
@@ -262,7 +257,6 @@ export class TwitchAuthService {
 	): TwitchBgsCurrentBattle {
 		for (const cleaner of cleaners) {
 			if (cleaner.selector(battle) >= threshold) {
-				// console.log('[twitch] deleting uninteresting sample', threshold, cleaner.selector(battle));
 				battle = {
 					...battle,
 					battleInfo: {
@@ -270,10 +264,9 @@ export class TwitchAuthService {
 						outcomeSamples: cleaner.cleaner(battle.battleInfo.outcomeSamples),
 					},
 				};
-				// console.log('deleted', battle);
 			}
 		}
-		// console.log('returning after deletion', battle);
+
 		return battle;
 	}
 
@@ -286,13 +279,12 @@ export class TwitchAuthService {
 	private hasLoggedInfoOnce = false;
 	private async sendEvent(newEvent) {
 		// return;
-		// console.log('ready to emit twitch event', newEvent);
+
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
-			// console.log('no twitch access token, returning');
 			return;
 		}
-		// console.log('sending twitch event', newEvent);
+
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
 		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			(data: any) => {
@@ -380,35 +372,6 @@ export class TwitchAuthService {
 			GameTag.TECH_LEVEL,
 			GameTag.TECH_LEVEL_MANA_GEM,
 		].includes(tag);
-		console.log(
-			'is tag serializable',
-			tag,
-			isSerializable,
-			'is taunt?',
-			GameTag.TAUNT,
-			tag === GameTag.TAUNT,
-			[
-				GameTag.PREMIUM,
-				GameTag.DAMAGE,
-				GameTag.HEALTH,
-				GameTag.ATK,
-				GameTag.COST,
-				GameTag.WINDFURY,
-				GameTag.TAUNT,
-				GameTag.DIVINE_SHIELD,
-				GameTag.CLASS,
-				GameTag.CARDTYPE,
-				GameTag.CARDRACE,
-				GameTag.DEATHRATTLE,
-				GameTag.ZONE_POSITION,
-				GameTag.POISONOUS,
-				GameTag.LIFESTEAL,
-				GameTag.REBORN,
-				GameTag.MEGA_WINDFURY,
-				GameTag.TECH_LEVEL,
-				GameTag.TECH_LEVEL_MANA_GEM,
-			].indexOf(tag),
-		);
 		return isSerializable;
 	}
 

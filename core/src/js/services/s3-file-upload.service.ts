@@ -18,7 +18,7 @@ export class S3FileUploadService {
 			ACL: 'public-read-write',
 			Body: blob,
 		};
-		// console.log('uploading blob to S3 with params', params);
+
 		return new Promise<string>((resolve) => {
 			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 				// There Was An Error With Your S3 Config
@@ -26,7 +26,6 @@ export class S3FileUploadService {
 					console.warn('An error during upload', err);
 					resolve(null);
 				} else {
-					// console.log('Uploaded logs', data2);
 					resolve(fileKey);
 				}
 			});

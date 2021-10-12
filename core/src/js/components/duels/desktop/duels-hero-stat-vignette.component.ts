@@ -69,7 +69,6 @@ import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 })
 export class DuelsHeroStatVignetteComponent implements AfterViewInit {
 	@Input() set stat(value: DuelsHeroPlayerStat) {
-		// console.debug('setting stat', value);
 		if (!value || value === this._stat) {
 			return;
 		}

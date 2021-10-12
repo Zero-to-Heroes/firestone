@@ -8,7 +8,6 @@ export class MulliganOverParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// console.log('[debug] mulligan over');
 		return Object.assign(new GameState(), currentState, {
 			mulliganOver: true,
 			currentTurn: 0,

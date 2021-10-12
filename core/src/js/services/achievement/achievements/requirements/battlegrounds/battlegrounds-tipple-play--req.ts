@@ -28,7 +28,6 @@ export class BattlegroundsTriplePlayReq implements Requirement {
 
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK || gameEvent.type === GameEvent.RECEIVE_CARD_IN_HAND) {
-			// console.log('handling passive buff event', this.cardId, gameEvent, this);
 			this.detectCardPlayedEvent(gameEvent);
 			return;
 		}

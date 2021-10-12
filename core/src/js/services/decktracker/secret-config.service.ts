@@ -23,7 +23,7 @@ export class SecretConfigService {
 		const result = config.secrets
 			.filter((secret) => secret.playerClass === playerClass)
 			.map((secret) => secret.cardId);
-		// console.log('[secrets-config] getting valid secrets', metadata, playerClass, mode, config, result);
+
 		return result;
 	}
 
@@ -36,7 +36,6 @@ export class SecretConfigService {
 		return new Promise<readonly SecretsConfig[]>((resolve) => {
 			this.http.get(`${SECRET_CONFIG_URL}`).subscribe(
 				(result: any[]) => {
-					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
 				(error) => {

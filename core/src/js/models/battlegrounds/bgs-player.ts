@@ -50,7 +50,7 @@ export class BgsPlayer implements IBgsPlayer {
 			this.tavernUpgradeHistory.length === 0
 				? 1
 				: this.tavernUpgradeHistory[this.tavernUpgradeHistory.length - 1].tavernTier;
-		// console.log('getting current tavern tier', this.cardId, result, this.tavernUpgradeHistory);
+
 		return result;
 	}
 

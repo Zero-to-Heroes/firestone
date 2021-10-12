@@ -40,7 +40,6 @@ export class BgsHeroSelectionParser implements EventParser {
 		currentState: BattlegroundsState,
 		heroCardIds: readonly string[],
 	): Promise<BgsHeroSelectionOverviewPanel> {
-		console.log('created hero overview');
 		return BgsHeroSelectionOverviewPanel.create({
 			heroOptionCardIds: heroCardIds,
 		} as BgsHeroSelectionOverviewPanel);

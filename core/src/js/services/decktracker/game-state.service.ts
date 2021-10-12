@@ -196,7 +196,6 @@ export class GameStateService {
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe(async (event) => {
 			if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-				console.log('rebuilding event emitters');
 				this.buildEventEmitters();
 				return;
 			}
@@ -269,16 +268,12 @@ export class GameStateService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		this.events.on(Events.REVIEW_FINALIZED).subscribe(async (event) => {
-			console.log('[game-state] Received review finalized event, doing nothing');
-		});
 		this.events
 			.on(Events.ACHIEVEMENT_PROGRESSION)
 			.subscribe((event) =>
 				this.processingQueue.enqueue(new ConstructedAchievementsProgressionEvent(event.data[0])),
 			);
 		// Reset the deck if it exists
-		//console.log('[game-state] Enqueueing default game_end event');
 		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}
 
@@ -290,7 +285,6 @@ export class GameStateService {
 				stateUpdateEvents.length > 0 ? stateUpdateEvents[stateUpdateEvents.length - 1] : null,
 			].filter((event) => event);
 			for (let i = 0; i < eventsToProcess.length; i++) {
-				// console.debug('event to process', eventsToProcess[i]);
 				if (eventsToProcess[i] instanceof GameEvent) {
 					await this.processEvent(eventsToProcess[i] as GameEvent, i === eventsToProcess.length - 1);
 				} else {
@@ -304,7 +298,6 @@ export class GameStateService {
 	}
 
 	private async processNonMatchEvent(event: GameStateEvent) {
-		// console.debug('process non matc hevent', event);
 		if (event.type === 'TOGGLE_SECRET_HELPER') {
 			this.state = this.state.update({
 				opponentDeck: this.state.opponentDeck.update({
@@ -412,7 +405,6 @@ export class GameStateService {
 					playerDeck: updatedPlayerDeck,
 					opponentDeck: udpatedOpponentDeck,
 				} as GameState);
-				// console.debug('[game-state] emitting new state', gameEvent.type, gameEvent, this.state);
 			}
 		} catch (e) {
 			console.error('[game-state] Could not update players decks', gameEvent.type, e.message, e.stack, e);
@@ -527,14 +519,14 @@ export class GameStateService {
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.overlayHandlers.forEach((handler) => handler.handleDisplayPreferences(preferences));
 		// this.showOpponentTracker = preferences.opponentTracker;
-		// console.log('update opp hand prefs', this.showOpponentHand, preferences);
+
 		this.updateOverlays(this.state);
 	}
 
 	private async buildEventEmitters() {
 		const result = [(event) => this.deckEventBus.next(event)];
 		const prefs = await this.prefs.getPreferences();
-		console.log('is logged in to Twitch?', prefs.twitchAccessToken);
+		console.log('is logged in to Twitch?', !!prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
 			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
 			if (!isTokenValid) {
@@ -679,7 +671,7 @@ export class GameStateService {
 			// frozen minion will unfreeze in the opponent's turn
 			(isActivePlayer && this.hasTag(entity, GameTag.FROZEN)) ||
 			this.hasTag(entity, GameTag.CANT_ATTACK);
-		// console.log(
+
 		// 	'can attack?',
 		// 	!impossibleToAttack,
 		// 	entity?.cardId,

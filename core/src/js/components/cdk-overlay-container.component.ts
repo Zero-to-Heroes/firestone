@@ -31,7 +31,6 @@ export class CdkOverlayContainer extends OverlayContainer implements OnDestroy {
 		// with decktracker, the overlay start a lot more "left" than the window.
 		// in fact, it looks like we need the overlay to have the same size as the
 		// window for it to work
-		// console.log('parent is', parent);
 		parent.appendChild(this._containerElement);
 	}
 }

@@ -131,7 +131,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	// 		// 	value: option.value,
 	// 		// }));
 
-	// 		// console.log('[achievements-list] set active filter', this.activeFilter);
+	//
 	// 		this.updateShownAchievements();
 	// 	}
 	// 	if (!(this.cdr as ViewRef)?.destroyed) {
@@ -140,7 +140,6 @@ export class AchievementsListComponent implements AfterViewInit {
 	// }
 
 	@Input() set activeFilter(value: string) {
-		// console.log('setting active filter', value);
 		this.filterFromPrefs = value;
 		this.updateShownAchievements();
 	}
@@ -153,7 +152,6 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	@Input() set selectedAchievementId(selectedAchievementId: string) {
 		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
-			// console.log(
 			// 	'[achievements-list] setting selectedAchievementId',
 			// 	selectedAchievementId,
 			// 	this._selectedAchievementId,
@@ -161,7 +159,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			const achievementToShow: Element = this.el.nativeElement.querySelector(
 				`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
 			);
-			// console.log('[achievements-list] achievementToShow?', achievementToShow, this.flag);
+
 			if (achievementToShow) {
 				setTimeout(() => {
 					achievementToShow.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'nearest' });
@@ -173,9 +171,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	selectFilter(option: IOption) {
-		console.log('[achievements-list] selected filter', option.value);
 		this.stateUpdater.next(new ChangeAchievementsActiveFilterEvent(option.value));
-		// this.activeFilter = option.value;
 	}
 
 	trackByAchievementId(achievement: VisualAchievement, index: number) {
@@ -189,7 +185,6 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	private updateShownAchievements() {
-		// console.log('[achievements-list] updating shown achievements', this.achievements, this._achievementSet);
 		if (!this.achievements) {
 			return;
 		}
@@ -212,7 +207,7 @@ export class AchievementsListComponent implements AfterViewInit {
 				</svg>
 			`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
-		// console.log('[achievements-list] updated activeAchievements', this.activeAchievements);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -222,7 +217,6 @@ export class AchievementsListComponent implements AfterViewInit {
 		this._activeFilter =
 			this.filterFromPrefs ||
 			(this.filterOptions && this.filterOptions.length > 0 ? this.filterOptions[0].value : null);
-		// console.log('updated active filter', this._activeFilter, this.filterFromPrefs, this.filterOptions);
 	}
 
 	protected buildFilterOptions(): readonly FilterOption[] {

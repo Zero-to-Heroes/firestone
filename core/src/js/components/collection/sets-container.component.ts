@@ -27,7 +27,6 @@ export class SetsContainerComponent {
 	constructor(private elRef: ElementRef) {}
 
 	@Input() set sets(sets: Set[]) {
-		// console.log('setting new sets', sets);
 		this._sets = sets;
 	}
 
@@ -40,7 +39,7 @@ export class SetsContainerComponent {
 	onHistoryClick(event: MouseEvent) {
 		const rect = this.elRef.nativeElement.querySelector('.sets-container').getBoundingClientRect();
 		const scrollbarWidth = 5;
-		// console.log('mousedown on sets container', rect, event);
+
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}

@@ -102,7 +102,7 @@ export class DeckState {
 		const result = [...this.hand, ...this.deck, ...this.board, ...this.otherZone].find(
 			(card) => card.entityId === entityId,
 		);
-		// console.debug('finding card', entityId, result, this);
+
 		return result;
 	}
 
@@ -258,7 +258,7 @@ export class DeckState {
 		const result = allCardsInDeck
 			.filter((card) => card.cardId)
 			.some((card) => DeckState.SPELL_COUNTER_CARD_IDS.includes(card.cardId as CardIds));
-		// console.log('spell counter', 'has', result, allCardsInDeck, DeckState.SPELL_COUNTER_CARD_IDS);
+
 		return result;
 	}
 

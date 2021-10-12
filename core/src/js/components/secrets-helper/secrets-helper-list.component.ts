@@ -53,7 +53,6 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 	isScroll: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[decktracker-deck-list] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 
@@ -87,9 +86,8 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
 		const rect = this.el.nativeElement.querySelector('.card-list').getBoundingClientRect();
-		// console.log('element rect', r ect);
+
 		const scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
@@ -97,7 +95,6 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 	}
 
 	onScroll(event) {
-		// console.log('scrolling');
 		// Force immediate clean of the tooltip
 		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);
 	}
@@ -125,9 +122,9 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 		const allOptionsList = this._secrets
 			.map((secret) => secret.allPossibleOptions)
 			.reduce((a, b) => a.concat(b), []);
-		// console.log('allOptions', allOptionsList);
+
 		const optionsGroupedByCard = this.groupBy(allOptionsList, (secret: SecretOption) => secret.cardId);
-		// console.log('grouped', optionsGroupedByCard);
+
 		const reducedOptions: readonly DeckCard[] = [...optionsGroupedByCard.values()]
 			.filter((options) => options && options.length > 0)
 			.map((options, index) => {
@@ -161,7 +158,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 				} as VisualDeckCard);
 			});
 		// TODO: add an optional filter step based on user preference to see or not the ruled out secrets
-		// console.log('reducedOptions', reducedOptions);
+
 		return reducedOptions;
 	}
 
@@ -175,7 +172,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 			const contentHeight = psContent.getBoundingClientRect().height;
 			const containerHeight = ps.getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
-			// console.log('isScroll', this.isScroll, containerHeight, contentHeight);
+
 			this.refresh();
 		}, 1000);
 	}

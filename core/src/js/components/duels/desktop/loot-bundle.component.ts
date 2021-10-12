@@ -26,7 +26,7 @@ export class LootBundleComponent {
 		if (!value) {
 			return;
 		}
-		// console.log('setting loot', value);
+
 		this.bundleName = this.allCards.getCard(value.cardId)?.name;
 		this.cards = value.contents.map((cardId) => {
 			const card = this.allCards.getCard(cardId);

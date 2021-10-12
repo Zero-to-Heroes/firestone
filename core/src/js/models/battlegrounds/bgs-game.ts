@@ -134,7 +134,6 @@ export class BgsGame {
 	// Not all players finish their battles at the same time. So you might still be in battle, but
 	// another player might have already gone back to the tavern and levelled up for instance
 	public getCurrentTurnAdjustedForAsyncPlay(): number {
-		// console.debug('getting current turn adjusted', this.currentTurn, this.phase, this);
 		if (this.phase === 'combat') {
 			return this.currentTurn + 1;
 		}

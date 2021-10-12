@@ -78,7 +78,6 @@ export class StateMouseOverComponent {
 		this._bgsState = value;
 		this.bgsPlayers = this._bgsState.leaderboard;
 		this.currentTurn = this._bgsState.currentTurn;
-		// console.log('set bgs players', this.bgsPlayers, value);
 	}
 
 	@Input() set gameState(value: GameState) {
@@ -102,7 +101,7 @@ export class StateMouseOverComponent {
 			this.bottomWeaponCard = this._gameState.playerDeck.weapon && this._gameState.playerDeck.weapon.cardId;
 			this.bottomHandCards = this._gameState.playerDeck.hand.map((card) => card.cardId);
 		}
-		// console.log('upodated', this.bottomHeroPowerCard, this.topHeroPowerCard);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

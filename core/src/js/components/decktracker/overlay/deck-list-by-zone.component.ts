@@ -37,7 +37,6 @@ export class DeckListByZoneComponent implements OnDestroy {
 	@Input() side: 'player' | 'opponent';
 
 	@Input() set showGlobalEffectsZone(value: boolean) {
-		console.log('setting global effect in zone', value);
 		this._showGlobalEffectsZone = value;
 		this.updateInfo();
 	}
@@ -59,7 +58,6 @@ export class DeckListByZoneComponent implements OnDestroy {
 	}
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[deck-list-by-zone] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 
@@ -94,11 +92,11 @@ export class DeckListByZoneComponent implements OnDestroy {
 			return;
 		}
 		const zones = [];
-		// console.log('should show global effects zone?', this._showGlobalEffectsZone, this._deckState.globalEffects);
+
 		if (this._showGlobalEffectsZone && this._deckState.globalEffects.length > 0) {
 			zones.push(this.buildZone(this._deckState.globalEffects, 'global-effects', 'Global Effects', null, null));
 		}
-		// console.log('deck state', deckState);
+
 		zones.push(
 			Object.assign(
 				this.buildZone(this._deckState.deck, 'deck', 'In deck', null, this._deckState.cardsLeftInDeck),
@@ -132,7 +130,6 @@ export class DeckListByZoneComponent implements OnDestroy {
 						!(this._hideGeneratedCardsInOtherZone && a.creatorCardIds && a.creatorCardIds.length > 0),
 				),
 			);
-			// console.log('zones', zones, otherZone);
 		}
 		// Otherwise, we add all the dynamic zones
 		this._deckState.dynamicZones.forEach((zone) => {
@@ -170,7 +167,6 @@ export class DeckListByZoneComponent implements OnDestroy {
 		filterFunction?: (a: VisualDeckCard) => boolean,
 		highlight?: string,
 	): DeckZone {
-		// console.log('building zone for', id, name, cards);
 		const cardsInZone = cards
 			.map((card) =>
 				Object.assign(new VisualDeckCard(), card, {

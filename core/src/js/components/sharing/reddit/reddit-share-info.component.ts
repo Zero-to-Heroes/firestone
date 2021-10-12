@@ -78,7 +78,6 @@ export class RedditShareInfoComponent implements AfterViewInit, OnDestroy {
 			.pipe(debounceTime(400))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
-				console.log('value changed', data);
 				this.onSubredditChanged(data);
 			});
 	}

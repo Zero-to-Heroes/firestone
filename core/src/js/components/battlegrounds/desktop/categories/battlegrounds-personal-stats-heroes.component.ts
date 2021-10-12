@@ -40,7 +40,6 @@ export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit 
 			map((stats) => stats.filter((stat) => stat.id !== 'average')),
 			// FIXME
 			distinctUntilChanged((a, b) => {
-				// console.debug('changed deep?', a, b, JSON.stringify(a), JSON.stringify(b));
 				return areDeepEqual(a, b);
 			}),
 			// FIXME

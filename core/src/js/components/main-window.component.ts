@@ -189,11 +189,8 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		const prefs = await this.preferencesService.getPreferences();
 		const windowName = await this.ow.getCollectionWindowName(prefs);
 		this.stateChangedListener = this.ow.addStateChangedListener(windowName, (message) => {
-			// console.log('received collection window message', message, this.isMaximized);
 			// If hidden, restore window to as it was
-			if (message.window_previous_state_ex === 'hidden') {
-				console.log('window was previously hidden, keeping the previosu state', this.isMaximized);
-			} else if (message.window_state === 'maximized') {
+			if (message.window_state === 'maximized') {
 				this.isMaximized = true;
 			} else if (message.window_state !== 'minimized') {
 				// When minimized we want to remember the last position
@@ -201,7 +198,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
-		// console.log('retrieved storeBus');
 		this.dataStoreSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				this.dataState = newState;
@@ -213,7 +209,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			});
 		});
 		const navigationStoreBus: BehaviorSubject<NavigationState> = this.ow.getMainWindow().mainWindowStoreNavigation;
-		// console.log('retrieved storeBus');
 		this.navigationStoreSubscription = navigationStoreBus.subscribe((newState: NavigationState) => {
 			setTimeout(async () => {
 				// First update the state before restoring the window
@@ -229,14 +224,12 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					(!this.navigationState || !this.navigationState.isVisible || !currentlyVisible)
 				) {
 					// amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
-					// console.log('restoring window', this.isMaximized);
 					await this.ow.restoreWindow(this.windowId);
 					this.ow.bringToFront(this.windowId);
 					if (this.isMaximized) {
 						await this.ow.maximizeWindow(this.windowId);
 					}
 				} else if (!newState.isVisible && currentlyVisible) {
-					console.log('hiding main window');
 					await this.ow.hideWindow(this.windowId);
 				}
 				if (this.navigationState && newState.currentApp !== this.navigationState.currentApp) {
@@ -281,7 +274,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		if (currentWindow.id.includes('Overlay')) {
 			return;
 		}
-		// console.log('keydown event', e, this.hotkey, await this.ow.getCurrentWindow());
 
 		if (!this.hotkey || this.hotkey.IsUnassigned) {
 			return;
@@ -296,7 +288,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			e.ctrlKey === isCtrlKey &&
 			e.keyCode == this.hotkey.virtualKeycode
 		) {
-			console.log('handling hotkey press');
 			this.hotkeyPressedHandler();
 		}
 	}
@@ -362,9 +353,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	}
 
 	takeScreenshot(): (copyToCliboard: boolean) => Promise<[string, any]> {
-		// console.log('taking screenshot from bgs-post-match');
 		return (copyToCliboard: boolean) => {
-			console.log('taking screenshot');
 			return this.owUtils.captureWindow('Firestone - MainWindow', copyToCliboard);
 		};
 	}

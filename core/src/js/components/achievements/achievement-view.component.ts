@@ -59,7 +59,6 @@ export class AchievementViewComponent implements AfterViewInit {
 	private placeholderRegex = new RegExp('.*(%%globalStats\\.(.*)\\.(.*)%%).*');
 
 	@Input() set achievement(achievement: VisualAchievement) {
-		// console.log('[achievement-view] setting achievement', achievement);
 		this._achievement = achievement;
 		this.completionDate = undefined;
 		this.achievementStatus = this._achievement.achievementStatus();
@@ -67,7 +66,6 @@ export class AchievementViewComponent implements AfterViewInit {
 	}
 
 	@Input() set globalStats(value: GlobalStats) {
-		// console.log('setting global stats in achievemen-view', value);
 		this._globalStats = value;
 		this.updateInfo();
 	}

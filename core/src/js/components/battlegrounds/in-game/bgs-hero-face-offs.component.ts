@@ -36,7 +36,6 @@ export class BgsHeroFaceOffsComponent {
 
 	@Input() set faceOffs(value: readonly BgsFaceOff[]) {
 		this.faceOffsByOpponent = groupByFunction((faceOff: BgsFaceOff) => faceOff.opponentCardId)(value);
-		// console.log('faceoffs', this.faceOffsByOpponent, value);
 	}
 
 	@Input() set players(value: readonly BgsPlayer[]) {

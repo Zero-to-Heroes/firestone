@@ -165,9 +165,8 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 		// 	opponentClass,
 		// 	format,
 		// );
-		// console.log('scores', archetypeScores);
+
 		// const topScores = archetypeScores.slice(0, 3).filter((score) => score.points > 0);
-		// console.log('top scores', topScores);
 
 		// return this.consolidateArchetypes(topScores, configForFormat, playedCards, stats);
 	}
@@ -223,7 +222,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 	// 	const configForArchetype: readonly ArchetypeConfig[] = config.filter(
 	// 		(conf) => conf.class + '_' + conf.archetype === archetypeScore.archetypeId,
 	// 	);
-	// 	// console.log('archetype', archetypeScore, archetype, configForArchetype, stats);
+	//
 	// 	if (!archetype) {
 	// 		// Can happen if the archetype doesn't have enough games played, so we don't have it in the json
 	// 		console.warn('no info for archetype', archetypeScore.archetypeId);
@@ -234,7 +233,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 
 	// 	const totalMatches = relevantLists.map((list) => list.wins + list.losses).reduce((a, b) => a + b, 0);
 	// 	const decklists = relevantLists.sort((a, b) => b.wins + b.losses - (a.wins + a.losses)).slice(0, 3);
-	// 	// console.log('decklists', decklists);
+	//
 
 	// 	return decklists.map(
 	// 		(decklist) =>
@@ -268,7 +267,7 @@ export class InGameOpponentRecapComponent implements AfterViewInit {
 	// 	playedCards: readonly string[],
 	// ): InternalDeckList[] {
 	// 	const fullLists = [...archetype.decklists].filter((decklist) => this.hasAllPlayedCards(decklist, playedCards));
-	// 	// console.log('fullLists', fullLists);
+	//
 	// 	if (fullLists?.length) {
 	// 		return fullLists;
 	// 	}

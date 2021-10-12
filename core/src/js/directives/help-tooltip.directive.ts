@@ -175,7 +175,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		this.tooltipRef.instance.showArrow = this.showArrow;
 		this.tooltipRef.instance.classes = this.helpTooltipClasses;
 		this.tooltipRef.instance.setTarget(this.target);
-		// console.debug('setting tooltip text', this._text, tooltipRef);
+
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
@@ -217,7 +217,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		if (this.stayOpenOnClick) {
 			return;
 		}
-		// console.debug('click');
+
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -231,7 +231,6 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		// console.debug('onmouseleave');
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -246,7 +245,6 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	// Hide tooltip if a scroll wheel is detected anywhere
 	@HostListener('window:mousewheel')
 	onMouseWheel() {
-		// console.debug('onmouseleave');
 		if (this.overlayRef?.hasAttached()) {
 			this.overlayRef?.detach();
 			if (!(this.cdr as ViewRef)?.destroyed) {

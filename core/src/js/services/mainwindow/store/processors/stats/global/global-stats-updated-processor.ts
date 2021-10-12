@@ -14,7 +14,7 @@ export class GlobalStatsUpdatedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		this.events.broadcast(Events.GLOBAL_STATS_UPDATED, event.stats);
-		// console.log('[global-stats-updated-processor] sending new state');
+
 		return [
 			Object.assign(new MainWindowState(), currentState, {
 				globalStats: event.stats,

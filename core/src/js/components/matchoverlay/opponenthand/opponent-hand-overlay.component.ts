@@ -85,7 +85,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
-				console.log('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
 			}
 		});
@@ -94,7 +93,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		// console.log('handled after view init');
 	}
 
 	@HostListener('window:beforeunload')
@@ -102,7 +100,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.deckSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
-		console.log('[shutdown] unsubscribed from opponent-hand-overlay');
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
@@ -123,18 +120,13 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		if (!gameInfo) {
 			return;
 		}
-		//console.log('no-format', 'game info', gameInfo);
 		const gameWidth = gameInfo.width;
 		const gameHeight = gameInfo.height;
 		const height = gameHeight * 0.8;
 		const width = gameHeight;
-		//console.log('no-format', 'height, width', height, width);
 		await this.ow.changeWindowSize(this.windowId, width, height);
-		//console.log('no-format', 'currentWindow', await this.ow.getCurrentWindow());
 		const dpi = gameInfo.logicalWidth / gameInfo.width;
 		const newLeft = dpi * 0.5 * (gameWidth - width);
-		//console.log('no-format', 'updating position', newLeft);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, 0);
-		//console.log('no-format', 'currentWindow', await this.ow.getCurrentWindow());
 	}
 }

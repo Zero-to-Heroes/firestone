@@ -15,7 +15,6 @@ export class CreateCardInDeckParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// console.debug('creating card in deck', gameEvent, currentState);
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
@@ -40,13 +39,13 @@ export class CreateCardInDeckParser implements EventParser {
 				? buildBonusDamage(deck.findCard(gameEvent.additionalData.creatorEntityId))
 				: null,
 		} as DeckCard);
-		// console.debug('card', card);
+
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 		});
-		// console.debug('newPlayerDeck', newPlayerDeck);
+
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
 		}

@@ -73,9 +73,9 @@ export class CardWithSameAttributePlayedReq implements Requirement {
 			!this.hasEcho(card)
 		) {
 			const attributeValue = card[this.attribute];
-			// console.log('handling for attribute', attributeValue, this.attribute);
+
 			this.playCounts[attributeValue] = (this.playCounts[attributeValue] || 0) + 1;
-			// console.log('playCounts', this.playCounts, this.targetQuantity);
+
 			this.isCardPlayed = Object.keys(this.playCounts).some(
 				// TODO: only support "AT_LEAST", implicitely, for now
 				(cardAttribute) => this.playCounts[cardAttribute] >= this.targetQuantity,

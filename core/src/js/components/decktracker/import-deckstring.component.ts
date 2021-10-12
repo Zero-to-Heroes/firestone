@@ -68,7 +68,7 @@ export class ImportDeckstringComponent implements AfterViewInit {
 	async importDeckstring() {
 		const clipboardContent = await this.ow.getFromClipboard();
 		const { deckstring, deckName } = this.parseClipboardContent(clipboardContent);
-		// console.debug('parsed', deckstring, deckName);
+
 		if (!deckstring) {
 			console.warn('invalid clipboard content', clipboardContent);
 			this.confirmationTitle = 'Invalid deck code';
@@ -88,12 +88,10 @@ export class ImportDeckstringComponent implements AfterViewInit {
 	}
 
 	confirmOverride() {
-		// console.log('confirmed', this.deckName, this.deckstring);
 		this.deckUpdater.next(new DeckstringOverrideEvent(this.deckName ?? 'Unkown deck', this.deckstring));
 	}
 
 	private parseClipboardContent(clipboardContent: string): { deckstring: string; deckName: string } {
-		// console.debug('parsing clipboard content', clipboardContent);
 		const lines = clipboardContent.split('\n');
 		const linesReversed = lines.reverse();
 		let deckName = null;
@@ -101,12 +99,10 @@ export class ImportDeckstringComponent implements AfterViewInit {
 		for (const line of linesReversed) {
 			if (!deckName && line.startsWith('### ')) {
 				deckName = line.split('### ')[1];
-				// console.debug('found deck name', deckName);
 			} else if (!deckstring) {
 				try {
-					// console.debug('decoding', line);
 					decode(line);
-					// console.debug('result', result);
+
 					deckstring = line;
 				} catch (e) {
 					// Do nothing, this was not a deckstring line

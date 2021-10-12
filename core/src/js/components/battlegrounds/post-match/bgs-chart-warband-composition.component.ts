@@ -143,13 +143,12 @@ export class BgsChartWarbandCompositionComponent {
 		if (!value?.boardHistory) {
 			return;
 		}
-		// console.log('[warband-composition] setting value', value);
+
 		this._stats = value;
 		this.updateValues();
 	}
 
 	@Input() set visible(value: boolean) {
-		// console.log('setting visible', value);
 		if (value === this._visible) {
 			return;
 		}
@@ -186,7 +185,6 @@ export class BgsChartWarbandCompositionComponent {
 			return true;
 		}
 
-		// console.debug('includes?', this._availableTribes, tribe, Race[tribe.toUpperCase()]);
 		return this._availableTribes.includes(Race[tribe.toUpperCase()]);
 	}
 
@@ -210,12 +208,10 @@ export class BgsChartWarbandCompositionComponent {
 
 	private doResize() {
 		if (!this._visible) {
-			console.log('not visible');
 			this._dirty = true;
 			return;
 		}
 		if (!this._dirty) {
-			console.log('not dirty');
 			return;
 		}
 		setTimeout(() => {
@@ -231,7 +227,7 @@ export class BgsChartWarbandCompositionComponent {
 			this.dimensions = [rect.width, rect.height - 15];
 			this.barPadding = Math.max(25 - this.chartData.length, Math.min(40, 40 - 2 * this.chartData.length));
 			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
-			// console.debug('dimensions', this.dimensions, this.barPadding);
+
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -258,7 +254,7 @@ export class BgsChartWarbandCompositionComponent {
 
 		setTimeout(() => {
 			this.chartData = this.buildChartData(this._stats);
-			// console.debug('chart data', this.chartData);
+
 			this.loaded = this.dimensions?.length > 0 && this.chartData?.length > 0;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

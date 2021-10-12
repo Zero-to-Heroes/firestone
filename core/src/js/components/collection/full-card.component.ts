@@ -154,7 +154,6 @@ export class FullCardComponent {
 		});
 		this.cancelPlayingSounds();
 		audioClip.audios.forEach((audio) => {
-			// console.log('playing', audioClip, audio, this.card.id, this.card.audio, this.card);
 			audio.play();
 		});
 	}

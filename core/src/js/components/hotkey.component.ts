@@ -53,7 +53,6 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private splitHotkey(): string {
-		// console.log('splitting hot key', this.hotkey);
 		const split = this.hotkey.split('+');
 		return (
 			'<span class="text">Show/Hide:</span>' +

@@ -51,7 +51,6 @@ import { capitalizeEachWord } from '../../../services/utils';
 })
 export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	@Input() set deck(value: DeckSummary) {
-		// console.log('[decktracker-deck-summary] setting value', value);
 		this._deck = value;
 		this.deckName = value.deckName || 'Deck name';
 		this.format = value.format;

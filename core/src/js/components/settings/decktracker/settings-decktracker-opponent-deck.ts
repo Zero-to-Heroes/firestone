@@ -283,7 +283,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 			this.dectrackerShowOpponentTurnDraw = preferences.dectrackerShowOpponentTurnDraw;
 			this.dectrackerShowOpponentGuess = preferences.dectrackerShowOpponentGuess;
 			this.dectrackerShowOpponentBuffInHand = preferences.dectrackerShowOpponentBuffInHand;
-			// console.log('updated prefs', this.dectrackerShowOpponentBuffInHand, preferences);
+
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -299,9 +299,8 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
 		const rect = this.el.nativeElement.querySelector('.decktracker-appearance').getBoundingClientRect();
-		// console.log('element rect', rect);
+
 		const scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
@@ -317,7 +316,7 @@ export class SettingsDecktrackerOpponentDeckComponent implements AfterViewInit, 
 		this.dectrackerShowOpponentTurnDraw = prefs.dectrackerShowOpponentTurnDraw;
 		this.dectrackerShowOpponentGuess = prefs.dectrackerShowOpponentGuess;
 		this.dectrackerShowOpponentBuffInHand = prefs.dectrackerShowOpponentBuffInHand;
-		// console.log('updated prefs', this.dectrackerShowOpponentBuffInHand, prefs);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

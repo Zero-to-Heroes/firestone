@@ -26,7 +26,6 @@ export class DamageTakenParser implements EventParser {
 			damageForOpponentPlayer && damageForOpponentPlayer.TargetControllerId === opponentPlayerId
 				? damageForOpponentPlayer.Damage
 				: 0;
-		// console.log('[damage-taken] damage taken', localPlayerDamage, opponentPlayerDamage);
 
 		const playerDeck = currentState.playerDeck.update({
 			damageTakenThisTurn: (currentState.playerDeck.damageTakenThisTurn ?? 0) + localPlayerDamage,
@@ -34,7 +33,7 @@ export class DamageTakenParser implements EventParser {
 		const opponentDeck = currentState.opponentDeck.update({
 			damageTakenThisTurn: (currentState.opponentDeck.damageTakenThisTurn ?? 0) + opponentPlayerDamage,
 		} as DeckState);
-		// console.log('[damage-taken] updated decks', playerDeck.damageTakenThisTurn, opponentDeck.damageTakenThisTurn);
+
 		return Object.assign(new GameState(), currentState, {
 			playerDeck: playerDeck,
 			opponentDeck: opponentDeck,

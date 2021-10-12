@@ -34,7 +34,7 @@ import { EffectiveProgress } from './effective-progress';
 export class InGameAchievementRecapComponent {
 	@Input() set progress(value: EffectiveProgress) {
 		this._progress = value;
-		// console.log('updating progress', this._progress);
+
 		this.updateInfo();
 	}
 

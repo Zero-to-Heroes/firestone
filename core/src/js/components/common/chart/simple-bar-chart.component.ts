@@ -107,7 +107,6 @@ export class SimpleBarChartComponent {
 			enabled: false,
 			callbacks: {
 				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
-					// console.log('beforeBody', item, data);
 					return data.datasets?.map((dataset) => dataset?.label || '') || [];
 				},
 			},
@@ -137,7 +136,6 @@ export class SimpleBarChartComponent {
 
 				// Set Text
 				if (tooltip.body) {
-					// console.log('tooltip data', tooltip, this);
 					const dataPoint = tooltip.dataPoints[0];
 					const innerHtml = `
 						<div class="body">
@@ -211,7 +209,6 @@ export class SimpleBarChartComponent {
 
 	@HostListener('window:resize')
 	onResize() {
-		// console.log('window resize');
 		// this._dirty = true;
 		this.doResize();
 	}
@@ -230,7 +227,7 @@ export class SimpleBarChartComponent {
 					label: 'Win distribution',
 				},
 			];
-			// console.log('chartData', this.chartData);
+
 			this.doResize();
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

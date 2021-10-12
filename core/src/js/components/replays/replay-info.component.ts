@@ -396,7 +396,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 			return null;
 		}
 
-		// console.debug('building from board', bgsBoard);
 		const boardEntities = bgsBoard.board.map((boardEntity) =>
 			boardEntity instanceof Entity || boardEntity.tags instanceof Map
 				? Entity.create(new Entity(), boardEntity as EntityDefinition)

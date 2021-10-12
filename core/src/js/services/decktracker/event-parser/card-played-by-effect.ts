@@ -82,7 +82,7 @@ export class CardPlayedByEffectParser implements EventParser {
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
 			? newPlayerDeck
 			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards);
-		// console.log('[secret-turn-end] updated deck', newPlayerDeck);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 		});

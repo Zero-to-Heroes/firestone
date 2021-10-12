@@ -253,7 +253,7 @@ export class DuelsRunComponent implements AfterViewInit {
 			? this.allCards.getCard(this._run.signatureTreasureCardId)
 			: null;
 		this.signatureTreasureTooltip = signatureTreasureCard ? signatureTreasureCard.name : null;
-		// console.log('setting value', value);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -104,9 +104,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
-			// console.log('marked as invalid', secret, newPlayerDeck);
 		}
 		const newPlayerDeck = deckWithSecretToCheck.update({
 			secrets: secrets as readonly BoardSecret[],

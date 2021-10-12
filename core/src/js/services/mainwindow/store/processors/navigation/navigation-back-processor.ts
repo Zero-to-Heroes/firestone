@@ -128,7 +128,6 @@ export class NavigationBackProcessor implements Processor {
 			case 'categories':
 				return null;
 			case 'category':
-				// console.log('going back', navigationState.navigationBattlegrounds.currentView);
 				return null;
 			case 'list':
 				const currentCategory: BattlegroundsCategory = dataState.battlegrounds?.findCategory(
@@ -136,7 +135,6 @@ export class NavigationBackProcessor implements Processor {
 				);
 				console.log(
 					'currentCategory',
-					currentCategory,
 					currentCategory?.id,
 					navigationState.navigationBattlegrounds.selectedCategoryId,
 				);
@@ -178,7 +176,7 @@ export class NavigationBackProcessor implements Processor {
 						set.allCards.find((card) => card.id === navigationState.navigationCollection.selectedCardId) !=
 						null,
 				);
-				console.log('selected set', selectedSet);
+				console.log('selected set', selectedSet?.id);
 				return navigationState.update({
 					navigationCollection: navigationState.navigationCollection.update({
 						currentView: 'cards',

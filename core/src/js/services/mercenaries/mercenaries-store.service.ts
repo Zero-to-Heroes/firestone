@@ -83,7 +83,7 @@ export class MercenariesStoreService {
 	// redraws in the UI
 	private async processEvent(event: GameEvent, mainWindowState: MainWindowState): Promise<void> {
 		const battleState = this.internalStore$.value;
-		// console.debug('[mercenaries-store] processing event', event.type, event, battleState);
+
 		const parsers = this.getParsersFor(event.type, battleState);
 		if (!parsers?.length) {
 			return;
@@ -92,13 +92,11 @@ export class MercenariesStoreService {
 		let state = battleState;
 		for (const parser of parsers) {
 			state = await parser.parse(state, event, mainWindowState);
-			console.debug('[mercenaries-store] processed event', event.type, event, state);
 		}
 		this.internalStore$.next(state);
 	}
 
 	private async emitState(newState: MercenariesBattleState, preferences: Preferences): Promise<void> {
-		console.debug('[mercenaries-store] emitting state', newState);
 		this.eventEmitters.forEach((emitter) => emitter(newState));
 		await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(newState, preferences)));
 	}
@@ -148,26 +146,3 @@ export class MercenariesStoreService {
 		}
 	}
 }
-
-// let i = 0;
-
-// const test = async () => {
-// 	const internalEventSubject = new BehaviorSubject<string>(null);
-// 	internalEventSubject
-// 		.asObservable()
-// 		.pipe(
-// 			distinctUntilChanged(),
-// 			filter((event) => !!event),
-// 			map(async (event) => await doSomething()),
-// 		)
-// 		.subscribe(async (info) => console.log(await info));
-// 	for (let j = 0; j < 50; j++) {
-// 		internalEventSubject.next('glut' + j);
-// 	}
-// };
-
-// const doSomething = async () => {
-// 	await sleep(500 * Math.random());
-// 	return 'hop' + i++;
-// };
-// test();

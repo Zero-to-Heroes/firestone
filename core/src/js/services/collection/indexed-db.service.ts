@@ -196,7 +196,6 @@ export class IndexedDbService {
 			};
 
 			request.onsuccess = function (evt: any) {
-				// console.log('could count', evt);
 				resolve(evt.target.result);
 			};
 		});
@@ -257,10 +256,6 @@ export class IndexedDbService {
 						autoIncrement: false,
 					});
 				}
-				// if (evt.oldVersion < 10) {
-				// 	console.log('[collection] [storage] upgrade to version 10');
-				// 	evt.currentTarget.result.createObjectStore('card-backs', { keyPath: 'id', autoIncrement: false });
-				// }
 				console.log('[collection] [storage] indexeddb upgraded');
 			})
 			.then(
@@ -283,7 +278,6 @@ export class IndexedDbService {
 				if (this.dbInit) {
 					resolve();
 				} else {
-					// console.log('[collection] [storage] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

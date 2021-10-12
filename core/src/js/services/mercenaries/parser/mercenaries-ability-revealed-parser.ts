@@ -23,10 +23,6 @@ export class MercenariesAbilityRevealedParser implements MercenariesParser {
 			return battleState;
 		}
 		if (!cardId) {
-			console.debug(
-				'[merc-ability-revealed-parser] no card id, so no iteresting info to get from that event',
-				event,
-			);
 			return battleState;
 		}
 

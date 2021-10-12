@@ -60,7 +60,6 @@ export class DuelsTreasureSearchComponent implements AfterViewInit, OnDestroy {
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
-				// console.log('value changed?', data);
 				this.onSearchStringChange();
 			});
 	}

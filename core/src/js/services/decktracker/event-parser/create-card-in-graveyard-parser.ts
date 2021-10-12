@@ -16,7 +16,7 @@ export class CreateCardInGraveyardParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
-		// console.log('[receive-card-in-hand] handling event', cardId, entityId, gameEvent);
+
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 

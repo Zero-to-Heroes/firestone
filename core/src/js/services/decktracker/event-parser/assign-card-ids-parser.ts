@@ -13,14 +13,13 @@ export class AssignCardIdParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// console.log('trying to assign card id?', gameEvent);
 		const cardId = gameEvent.additionalData.sourceCardId;
 		const entityId = gameEvent.additionalData.sourceEntityId;
 		const localPlayer = gameEvent.localPlayer;
 		const controllerId = gameEvent.additionalData.sourceControllerId;
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// console.log('assigning card id?', cardId, entityId, isPlayer, deck);
+
 		const newPlayerDeck = this.helper.assignCardIdToEntity(deck, entityId, cardId);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

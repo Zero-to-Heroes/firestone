@@ -11,7 +11,7 @@ export class GameStats {
 
 	public updateBgsPostMatchStats(reviewId: string, postMatchStats: BgsPostMatchStats): GameStats {
 		const replay = this.stats.find((replay) => replay.reviewId === reviewId);
-		// console.debug('[bgs-post-matchstats] found replay', replay, reviewId, postMatchStats);
+
 		if (!replay) {
 			console.warn('[bgs-post-matchstats] counld not find replay', reviewId);
 			return this;
@@ -24,7 +24,7 @@ export class GameStats {
 		const newStats: readonly GameStat[] = this.stats.map((r) =>
 			r.reviewId === newReplay.reviewId ? newReplay : r,
 		);
-		// console.debug('[bgs-post-matchstats] updated replays', newStats);
+
 		return this.update({
 			stats: newStats,
 		} as GameStats);

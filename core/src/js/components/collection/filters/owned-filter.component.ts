@@ -52,7 +52,7 @@ export class OwnedFilterComponent implements AfterViewInit {
 				return 'Only the ones I do not have';
 
 			default:
-				console.log('unknown filter', filter);
+				console.warn('unknown filter', filter);
 		}
 	}
 }

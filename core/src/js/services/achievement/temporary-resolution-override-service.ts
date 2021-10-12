@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { OverwolfService } from '../overwolf.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
@@ -42,27 +41,22 @@ export class TemporaryResolutionOverrideService {
 			this.listenerRegistered = true;
 		}
 		const settings = await this.owService.getVideoCaptureSettings();
-		console.log('[temp-override] Retrieved old settings', settings);
 		if (!this.oldSettings) {
 			this.oldSettings = settings;
 		}
 		// If the video resolution is 1080p or higher, override to a 720p preset settings
 		if (settings.resolution <= 1) {
-			console.log('[temp-override] Overriding settings');
 			this.owService.setVideoCaptureSettings(this.RESOLUTION_ENUM[2], 60);
 		}
 	}
 
 	private restoreSettings() {
 		if (!this.oldSettings) {
-			console.log('[temp-override] no old settings were registered, nothing to restore');
 			return;
 		}
 		// Prevent the default override mechanism when restoring the settings
 		this.restoring = true;
-		console.log('[temp-override] trying to restore previous settings', this.oldSettings);
 		this.owService.setVideoCaptureSettings(this.RESOLUTION_ENUM[this.oldSettings.resolution], this.oldSettings.fps);
-		console.log('[temp-override] restoring previous settings', this.oldSettings);
 	}
 
 	private exitGame(gameInfoResult: any): boolean {

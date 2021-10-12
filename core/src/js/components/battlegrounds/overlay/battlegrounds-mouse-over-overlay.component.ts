@@ -157,7 +157,6 @@ export class BattlegroundsMouseOverOverlayComponent implements AfterViewInit, On
 		this.deckSubscription?.unsubscribe();
 		this.preferencesSubscription?.unsubscribe();
 		this.storeSubscription?.unsubscribe();
-		console.log('[shutdown] unsubscribed from battlegrounds-mouse-over-overlay');
 	}
 
 	trackByFunction(player: BgsPlayer) {

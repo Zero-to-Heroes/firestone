@@ -73,7 +73,6 @@ export class DeckTrackerControlBarComponent {
 	}
 
 	minimize() {
-		console.log('minimizing', this.onMinimize);
 		this.onMinimize.next();
 	}
 }

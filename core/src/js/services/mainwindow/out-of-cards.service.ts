@@ -33,7 +33,7 @@ export class OutOfCardsService {
 	) {
 		window['outOfCardsAuthUpdater'] = this.stateUpdater;
 		this.stateUpdater.subscribe((token: OutOfCardsToken) => {
-			console.log('[ooc-auth] received access token', token);
+			console.log('[ooc-auth] received access token');
 			this.handleToken(token);
 		});
 

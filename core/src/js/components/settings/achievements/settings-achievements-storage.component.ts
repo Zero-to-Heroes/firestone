@@ -60,10 +60,8 @@ export class SettingsAchievementsStorageComponent implements AfterViewInit, OnDe
 	private async loadStorageInfo() {
 		const videoFolderResult = await this.ow.getOverwolfVideosFolder();
 		this.mediaFolder = videoFolderResult.path.Value;
-		console.log('videoFolderResult', videoFolderResult);
 		const sizeResult = await this.ow.getAppVideoCaptureFolderSize();
 		this.usedSizeInGB = sizeResult.totalVideosSizeMB / 1024;
-		console.log('sizeResult', sizeResult);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

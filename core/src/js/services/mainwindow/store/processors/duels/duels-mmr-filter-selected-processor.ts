@@ -15,7 +15,6 @@ export class DuelsMmrFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsMmrFilter(event.value);
-		console.log('updated duels mmr filter', event.value);
 		return [null, null];
 	}
 }

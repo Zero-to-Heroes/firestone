@@ -10,10 +10,8 @@ export class AchievementsUpdatedProcessor implements Processor {
 		event: AchievementsUpdatedEvent,
 		currentState: MainWindowState,
 	): Promise<[MainWindowState, NavigationState]> {
-		// console.debug('[achievement-updated-processor] processing achievements updated', event);
 		let newState: AchievementsState = currentState.achievements;
 		for (const update of event.achievements) {
-			// console.debug('[achievement-updated-processor] updating', update);
 			newState = newState.updateAchievement(
 				Achievement.create({
 					id: `hearthstone_game_${update.id}`,
@@ -22,7 +20,7 @@ export class AchievementsUpdatedProcessor implements Processor {
 				'hearthstone_game',
 			);
 		}
-		// console.debug('[achievement-updated-processor] rebuilt achievement state', newState);
+
 		return [
 			currentState.update({
 				achievements: newState,

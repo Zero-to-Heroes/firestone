@@ -123,7 +123,6 @@ export class DeckTrackerTwitchTitleBarComponent {
 	}
 
 	closeWindow() {
-		console.log('minimizing window');
 		(window as any).Twitch.ext.actions.minimize();
 	}
 }

@@ -137,7 +137,6 @@ export class BgsSimulatorHeroSelectionComponent implements OnDestroy {
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
-				// console.log('value changed?', data);
 				this.searchString.next(data);
 			});
 	}

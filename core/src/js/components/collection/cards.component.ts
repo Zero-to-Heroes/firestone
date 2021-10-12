@@ -307,7 +307,6 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 						displayed: false,
 				  } as SetCard),
 		);
-		// console.debug('active cards', this._activeCards);
 
 		this.gradualLoadActiveCards(this._activeCards.filter((card) => card.displayed));
 	}
@@ -331,7 +330,6 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		const workingCards = [...cards];
 		const step = 50;
 		while (workingCards.length > 0) {
-			// console.log('working with array of', workingCards.length);
 			const cardsToAdd = workingCards.splice(0, Math.min(step, workingCards.length));
 			this._activeCards.push(...cardsToAdd);
 			this.loading = true;
@@ -396,7 +394,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			case this.FILTER_DONT_OWN:
 				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium + card.ownedDiamond === 0;
 			default:
-				console.log('unknown filter', this.cardsOwnedActiveFilter);
+				console.warn('unknown filter', this.cardsOwnedActiveFilter);
 		}
 	}
 
@@ -454,7 +452,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 				return 'Only cards I do not have';
 
 			default:
-				console.log('unknown filter', filter);
+				console.warn('unknown filter', filter);
 		}
 	}
 }

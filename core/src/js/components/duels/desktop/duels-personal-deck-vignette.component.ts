@@ -83,7 +83,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DuelsPersonalDecksVignetteComponent implements AfterViewInit {
 	@Input() set deck(value: DuelsDeckSummary) {
-		// console.log('[decktracker-deck-summary] setting value', value);
 		this._deck = value;
 		// const heroCardName = this.allCards.getCard(value.heroCardId)?.name;
 		this.deckName = value.deckName;

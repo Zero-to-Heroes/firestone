@@ -36,7 +36,7 @@ export class NewTurnParser implements EventParser {
 				: currentState.opponentDeck.elementalsPlayedThisTurn,
 			elementalsPlayedThisTurn: 0,
 		} as DeckState);
-		// console.log('[debug] new turn', numericTurn, currentTurn, currentState.mulliganOver);
+
 		return Object.assign(new GameState(), currentState, {
 			currentTurn: currentTurn,
 			playerDeck: playerDeck,

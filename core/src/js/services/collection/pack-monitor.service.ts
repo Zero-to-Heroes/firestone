@@ -27,7 +27,7 @@ export class PackMonitor {
 		});
 
 		this.events.on(Events.NEW_PACK).subscribe(async (event) => {
-			console.log('[pack-monitor] resetting cards for new pack', event);
+			console.log('[pack-monitor] resetting cards for new pack');
 			const packCards: readonly InternalCardInfo[] = event.data[1];
 			this.unrevealedCards = packCards.map((card) => {
 				const dbCard = this.cards.getCard(card.cardId);
@@ -63,7 +63,6 @@ export class PackMonitor {
 
 	private handleMouseUp(data) {
 		if (this.unrevealedCards.length > 0 && data.onGame) {
-			// console.debug('[pack-monitor] Detecting revealed cards', data, this.unrevealedCards);
 			this.cardClicked(data, (index) => {
 				this.detectRevealedCard(index);
 			});
@@ -81,7 +80,7 @@ export class PackMonitor {
 			this.handlingKeyUp = true;
 			this.spacePressed++;
 			setTimeout(() => (this.handlingKeyUp = false), 50);
-			// console.debug('space pressed', this.spacePressed, this.unrevealedCards);
+
 			if (this.spacePressed !== this.unrevealedCards.length) {
 				return;
 			}
@@ -137,7 +136,7 @@ export class PackMonitor {
 		}
 		this.unrevealedCards[i].revealed = true;
 		const card = this.unrevealedCards[i];
-		// console.debug('[pack-monitor] revealing card', card, this.unrevealedCards);
+
 		if (!card.eventTriggered) {
 			card.eventTriggered = true;
 			await card.event();

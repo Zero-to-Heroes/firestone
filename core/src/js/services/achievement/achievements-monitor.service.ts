@@ -63,7 +63,6 @@ export class AchievementsMonitor {
 				this.stopAchievementsProgressDetection();
 			} else if (gameEvent.type === GameEvent.SPECTATING) {
 				this.spectating = gameEvent.additionalData.spectating;
-				console.log('[achievements-monitor] spectating?', this.spectating);
 			}
 		});
 
@@ -92,7 +91,6 @@ export class AchievementsMonitor {
 			this.assignPreviousAchievements();
 		}
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.log('[mind-vision] updated game status', res);
 			if (this.ow.exitGame(res)) {
 				this.previousAchievements = null;
 			} else if ((await this.ow.inGame()) && res.gameChanged) {
@@ -111,7 +109,7 @@ export class AchievementsMonitor {
 			return;
 		}
 
-		console.log('[achievement-monitor] detecting achievements from memory');
+		console.debug('[achievement-monitor] detecting achievements from memory');
 		const [existingAchievements, achievementsProgress] = await Promise.all([
 			this.achievementsManager.getAchievements(),
 			this.memory.getInGameAchievementsProgressInfo(),
@@ -127,7 +125,7 @@ export class AchievementsMonitor {
 				),
 			});
 		} else {
-			console.log('[achievement-monitor] retrieved achievements from memory');
+			console.debug('[achievement-monitor] retrieved achievements from memory');
 		}
 		const computedProgress: readonly HsAchievementInfo[] = achievementsProgress?.achievements?.length
 			? achievementsProgress.achievements
@@ -162,10 +160,13 @@ export class AchievementsMonitor {
 					// achievements, which is the case for BG top finishes
 					(this.previousAchievements && !this.previousAchievements.find((a) => a.id === ach.id)?.completed),
 			);
-		console.log('[achievement-monitor] unlocked achievements', unlockedAchievements);
+		console.log(
+			'[achievement-monitor] unlocked achievements',
+			unlockedAchievements?.map((a) => a.id),
+		);
 		if (!unlockedAchievements.length) {
 			if (process.env.NODE_ENV !== 'production') {
-				console.log(
+				console.debug(
 					'[achievement-monitor] nothing from memory',
 					existingAchievements, // This doesn't have 1876, which is normal since it has not been unlocked
 					achievementsProgress, // This has the correct progress
@@ -184,7 +185,10 @@ export class AchievementsMonitor {
 		const achievements = await Promise.all(
 			unlockedAchievements.map((ach) => this.achievementLoader.getAchievement(`hearthstone_game_${ach.id}`)),
 		);
-		console.log('[achievement-monitor] built achievements, emitting events', achievements);
+		console.log(
+			'[achievement-monitor] built achievements, emitting events',
+			achievements?.map((a) => a.id),
+		);
 		await Promise.all(achievements.map((ach) => this.sendUnlockEventFromAchievement(ach)));
 		this.previousAchievements = existingAchievements;
 	}
@@ -265,33 +269,26 @@ export class AchievementsMonitor {
 		);
 		const allAchievements =
 			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
-		// console.debug('[achievement-monitor] will grant achievements?', allAchievements, achievement);
+
 		for (const achv of allAchievements) {
-			// console.debug('no-format', '[achievement-monitor] starting process of completed achievement', achv.id);
 			const existingAchievement: CompletedAchievement = this.achievementsStorage.getAchievement(achv.id);
 			// From now on, stop counting how many times each achievement has been unlocked
 			if (existingAchievement.numberOfCompletions >= 1) {
-				// console.debug('[achievement-monitor] achievement can be completed only once', achievement.id);
 				continue;
 			}
 			const completedAchievement = new CompletedAchievement(
 				existingAchievement.id,
 				existingAchievement.numberOfCompletions + 1,
 			);
-			console.log(
-				'[achievement-monitor] starting process of completed achievement',
-				achievement.id,
-				existingAchievement,
-				completedAchievement,
-			);
+			console.log('[achievement-monitor] starting process of completed achievement', achievement.id);
 			const mergedAchievement = Object.assign(new Achievement(), achv, {
 				numberOfCompletions: completedAchievement.numberOfCompletions,
 			} as Achievement);
 
 			this.achievementsStorage.save(completedAchievement);
-			console.log('[achievement-monitor] saved achievement', this.achievementsStorage.getAchievement(achv.id));
+			console.log('[achievement-monitor] saved achievement', achievement.id);
 			this.remoteAchievements.publishRemoteAchievement(mergedAchievement);
-			console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
+			console.log('[achievement-monitor] broadcasting event completion event', achievement.id);
 
 			this.enqueue({ achievement: mergedAchievement } as InternalEvent);
 		}
@@ -306,16 +303,15 @@ export class AchievementsMonitor {
 		// Don't process an event if we've just received one, as it could indicate that other
 		// related events will come soon as well
 		if (Date.now() - this.lastReceivedTimestamp < 500) {
-			// console.log('[achievements-monitor] too soon, waiting before processing');
 			return eventQueue;
 		}
 		const candidate: InternalEvent = eventQueue[0];
-		// console.debug('[achievements-monitor] found a candidate', candidate);
+
 		// Is there a better candidate?
 		const betterCandidate: InternalEvent = eventQueue
 			.filter((event) => event.achievement.type === candidate.achievement.type)
 			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
-		// console.debug(
+
 		// 	'[achievements-monitor] emitted achievement completed event',
 		// 	betterCandidate,
 		// 	betterCandidate.achievement.id,
@@ -343,13 +339,12 @@ export class AchievementsMonitor {
 
 	private async assignPreviousAchievements() {
 		const existingAchievements = await this.achievementsManager.getAchievements(true);
-		// console.debug('[achievements-monitor] existing achievements', existingAchievements, this.previousAchievements);
+
 		if (!existingAchievements) {
 			return;
 		}
 
 		if (!this.previousAchievements) {
-			// console.debug('[achievements-monitor] assigning previous achievements', existingAchievements);
 			console.log('[achievements-monitor] assigning previous achievements', existingAchievements.length);
 			this.previousAchievements = existingAchievements;
 		}

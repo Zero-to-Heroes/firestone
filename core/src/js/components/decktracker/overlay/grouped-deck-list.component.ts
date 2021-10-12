@@ -41,7 +41,6 @@ export class GroupedDeckListComponent implements OnDestroy {
 	zone: DeckZone;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[grouped-deck-list] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 
@@ -56,7 +55,7 @@ export class GroupedDeckListComponent implements OnDestroy {
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
 		this.showWarning = deckState?.showDecklistWarning;
-		// console.log('setting deck state', deckState);
+
 		this.buildGroupedList();
 	}
 

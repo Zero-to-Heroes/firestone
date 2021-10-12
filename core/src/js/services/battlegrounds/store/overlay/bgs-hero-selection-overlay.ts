@@ -22,7 +22,7 @@ export class BgsHeroSelectionOverlay implements BattlegroundsOverlay {
 		const inGame = state && state.inGame && !state.currentGame?.gameEnded && !state.heroSelectionDone;
 		const windowId = OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY;
 		const theWindow = await this.ow.getWindowState(windowId);
-		// console.debug(
+
 		// 	'should show?',
 		// 	inGame,
 		// 	this.show,
@@ -32,14 +32,11 @@ export class BgsHeroSelectionOverlay implements BattlegroundsOverlay {
 		// 	state,
 		// );
 		if (inGame && this.show && isWindowClosed(theWindow.window_state_ex)) {
-			// console.debug('restoring');
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);
 		} else if (!isWindowClosed(theWindow.window_state_ex) && (!inGame || !this.show)) {
-			// console.debug('closing');
 			await this.ow.closeWindow(windowId);
 		} else {
-			// console.debug('not doing anything');
 		}
 	}
 

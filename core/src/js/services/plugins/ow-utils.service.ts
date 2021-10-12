@@ -31,13 +31,11 @@ export class OwUtilsService {
 
 	public async captureActiveWindow(): Promise<[string, any]> {
 		return new Promise<[string, any]>(async (resolve, reject) => {
-			// console.log('[ow-utils] retrieving collection');
 			const plugin = await this.get();
-			// console.log('[ow-utils] got plugin');
+
 			try {
 				const path = `${OverwolfService.getLocalAppDataFolder()}/Temp`;
 				plugin.captureActiveWindow(path, (screenshotLocation, byteArray) => {
-					// console.log('[ow-utils] took screenshot', screenshotLocation, byteArray);
 					resolve([screenshotLocation, byteArray]);
 				});
 			} catch (e) {
@@ -81,7 +79,6 @@ export class OwUtilsService {
 				if (this.initialized) {
 					resolve();
 				} else {
-					// console.log('[game-events] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

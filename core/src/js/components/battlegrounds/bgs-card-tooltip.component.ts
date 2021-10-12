@@ -35,7 +35,7 @@ export class BgsCardTooltipComponent {
 		} else {
 			this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/battlegrounds/${this._entity.cardID}_bgs.png?v=5`;
 		}
-		// console.log('setting card in tooltip', value);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -45,7 +45,7 @@ export class BgsCardTooltipComponent {
 		if (value === this._visible) {
 			return;
 		}
-		// console.log('setting visible in tooltip', value);
+
 		this._visible = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

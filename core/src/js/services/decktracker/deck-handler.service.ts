@@ -59,7 +59,7 @@ export class DeckHandlerService {
 		if (!deck || deck.length === 0) {
 			return deck;
 		}
-		// console.log('postprocessing', deck);
+
 		const matchInfo = await this.memory.getMatchInfo();
 		return deck.map((decKCard) => this.postProcessDeckCard(decKCard, matchInfo));
 	}
@@ -160,13 +160,12 @@ export class DeckHandlerService {
 
 	public normalizeHero(heroDbfId: number, heroCardId?: string): number {
 		let card: ReferenceCard;
-		// console.debug('normalizing hero', heroDbfId, heroCardId);
+
 		if (heroDbfId) {
 			card = this.allCards.getCardFromDbfId(+heroDbfId);
 		}
-		// console.debug('found card for hero', card);
+
 		if (!card || !card.id) {
-			// console.debug('fallbacking to heroCardId', heroCardId);
 			card = this.allCards.getCard(heroCardId);
 			if (!card || !card.id) {
 				return heroDbfId;

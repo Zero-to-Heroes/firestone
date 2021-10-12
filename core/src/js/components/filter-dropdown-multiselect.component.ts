@@ -154,7 +154,6 @@ export class FilterDropdownMultiselectComponent implements OnDestroy {
 
 	@HostListener('document:click', ['$event'])
 	docEvent($e: MouseEvent) {
-		// console.debug('clicking', $e);
 		if (!this.showing) {
 			return;
 		}

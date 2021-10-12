@@ -20,21 +20,19 @@ export class StandardRankedMinLeagueReq implements Requirement {
 		this.isRanked = undefined;
 		this.isStandard = undefined;
 		this.isMinLeague = undefined;
-		// console.log('[debug] [ranked-min] reset');
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.isRanked = undefined;
 		this.isStandard = undefined;
 		this.isMinLeague = undefined;
-		// console.log('[debug] [ranked-min] afterAchievementCompletionReset');
 	}
 
 	isCompleted(): boolean {
 		if (process.env.LOCAL_TEST) {
 			return true;
 		}
-		// console.log('[debug] [ranked-min] isCompleted?', this.isRanked, this.isStandard, this.isMinLeague);
+
 		return this.isRanked && this.isStandard && this.isMinLeague;
 	}
 
@@ -54,17 +52,13 @@ export class StandardRankedMinLeagueReq implements Requirement {
 		if (gameEvent.additionalData.metaData.FormatType === 2) {
 			this.isStandard = true;
 		}
-		// console.log('[debug] [ranked-min] metadata gametype', this.isRanked, gameEvent.additionalData.metaData);
-		// console.log('[debug] [ranked-min] metadata formatType', this.isStandard, gameEvent.additionalData.metaData);
 	}
 
 	private handlePlayerEvent(gameEvent: GameEvent) {
-		//console.log('handling player event', gameEvent);
 		if (
 			gameEvent.additionalData?.playerInfo?.standard?.leagueId <= this.targetRank ||
 			gameEvent.additionalData?.playerInfo?.standard?.legendRank > 0
 		) {
-			//console.log('isMinLeague', true, this.targetRank);
 			this.isMinLeague = true;
 		}
 	}

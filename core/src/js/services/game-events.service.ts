@@ -60,7 +60,6 @@ export class GameEvents {
 			this.plugin.onGameEvent.addListener((gameEvent) => {
 				const events: any | readonly any[] = JSON.parse(gameEvent);
 				if (!!(events as readonly any[]).length) {
-					// console.debug('[game-events] will parse multiple game events', events);
 					for (const event of events as readonly any[]) {
 						this.dispatchGameEvent(event);
 					}
@@ -120,7 +119,7 @@ export class GameEvents {
 			);
 		});
 		// this.ow?.addGameInfoUpdatedListener(async (res: any) => {
-		// 	// console.log('[bootstrap] updated game status', res);
+		//
 		// 	if (this.ow.exitGame(res)) {
 		// 		this.setSpectating(false);
 		// 	}
@@ -141,7 +140,6 @@ export class GameEvents {
 
 	private async processLogs(eventQueue: readonly string[]): Promise<void> {
 		return new Promise<void>((resolve) => {
-			// console.debug('calling real time processing', eventQueue);
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve();
 			});
@@ -853,7 +851,6 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
-				// console.debug(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
@@ -960,7 +957,6 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_NEXT_OPPONENT':
-				// console.debug(gameEvent.Type + ' event', gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
@@ -997,7 +993,6 @@ export class GameEvents {
 				);
 				break;
 			case 'BATTLEGROUNDS_PLAYER_BOARD':
-				// console.debug(gameEvent.Type + ' event', gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.BATTLEGROUNDS_PLAYER_BOARD,
@@ -1286,7 +1281,7 @@ export class GameEvents {
 			return;
 		}
 		console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
-		// console.debug('[game-events] [existing] all events', this.existingLogLines);
+
 		if (this.existingLogLines.length > 0) {
 			this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
 		}

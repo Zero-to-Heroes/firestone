@@ -29,7 +29,7 @@ export class ReplayUploadService {
 
 	private async postFullReview(reviewId: string, userId: string, userName: string, game: GameForUpload) {
 		const jszip = new JSZip.default();
-		console.log('ready to zip', jszip);
+		console.debug('[manastorm-bridge] ready to zip');
 		jszip.file('power.log', game.uncompressedXmlReplay);
 		const blob: Blob = await jszip.generateAsync({
 			type: 'blob',

@@ -36,7 +36,6 @@ export class CardPlayedFromHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
-		// console.debug('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
 
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(
 			deck.hand,
@@ -44,10 +43,10 @@ export class CardPlayedFromHandParser implements EventParser {
 			entityId,
 			deck.deckList.length === 0 && !gameEvent.additionalData.transientCard,
 		);
-		// console.debug('removed card from hand', removedCard, currentState, gameEvent);
+
 		let newDeck =
 			removedCard != null ? this.helper.updateDeckForAi(gameEvent, currentState, removedCard) : deck.deck;
-		// console.debug('removed card from hand', removedCard, deck.deck, newDeck);
+
 		// This happens when we create a card in the deck, then leave it there when the opponent draws it
 		// (to avoid info leaks). When they play it we won't find it in the "hand" zone, so we try
 		// and see if it is somewhere in the deck
@@ -58,7 +57,7 @@ export class CardPlayedFromHandParser implements EventParser {
 				entityId,
 				deck.deckList.length === 0,
 			);
-			// console.debug('after removing from deck', newDeckAfterReveal, removedCardFromDeck, newDeck);
+
 			if (removedCardFromDeck) {
 				newDeck = newDeckAfterReveal;
 			}
@@ -90,12 +89,10 @@ export class CardPlayedFromHandParser implements EventParser {
 				(additionalInfo?.secretWillTrigger?.reactingToCardId &&
 					additionalInfo?.secretWillTrigger?.reactingToCardId === cardId)) &&
 			COUNTERSPELLS.includes(additionalInfo?.secretWillTrigger?.cardId as CardIds);
-		// console.debug('is card countered', isCardCountered, additionalInfo, gameEvent);
 
-		// console.debug('card with zone', cardWithZone, refCard, cardId);
 		const newBoard: readonly DeckCard[] =
 			isOnBoard && !isCardCountered ? this.helper.addSingleCardToZone(deck.board, cardWithZone) : deck.board;
-		// console.debug('new board', newBoard, isOnBoard && !isCardCountered);
+
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
 			: this.helper.addSingleCardToZone(
@@ -107,7 +104,6 @@ export class CardPlayedFromHandParser implements EventParser {
 						  } as DeckCard)
 						: cardWithZone,
 			  );
-		// console.debug('new other', newOtherZone, isOnBoard);
 
 		let newGlobalEffects: readonly DeckCard[] = deck.globalEffects;
 		if (!isCardCountered && globalEffectCards.includes(card?.cardId as CardIds)) {
@@ -141,11 +137,11 @@ export class CardPlayedFromHandParser implements EventParser {
 			libramsPlayedThisMatch: deck.libramsPlayedThisMatch + (!isCardCountered && this.isLibram(refCard) ? 1 : 0),
 			elementalsPlayedThisTurn: deck.elementalsPlayedThisTurn + (!isCardCountered && isElemental ? 1 : 0),
 		} as DeckState);
-		// console.debug('is card countered?', isCardCountered, secretWillTrigger, cardId);
+
 		const deckAfterSpecialCaseUpdate: DeckState = isCardCountered
 			? newPlayerDeck
 			: modifyDeckForSpecialCards(cardId, newPlayerDeck, this.allCards);
-		// console.log('[secret-turn-end] updated deck', newPlayerDeck);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: deckAfterSpecialCaseUpdate,
 		});

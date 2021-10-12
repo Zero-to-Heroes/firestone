@@ -19,23 +19,19 @@ export class DeckbuildingMechanicReq implements Requirement {
 	}
 
 	reset(): void {
-		// console.log('[debug] [mechanic] reset');
 		this.doesDeckMeetSpec = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
-		// console.log('[debug] [mechanic] afterAchievementCompletionReset');
 		this.doesDeckMeetSpec = undefined;
 	}
 
 	isCompleted(): boolean {
-		// console.log('[debug] [mechanic] isCompleted', this.doesDeckMeetSpec);
 		return this.doesDeckMeetSpec;
 	}
 
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.PLAYERS_INFO) {
-			// console.log('[debug] [mechanic] handling local_player event?', gameEvent);
 			this.handleEvent(gameEvent);
 		}
 	}

@@ -15,7 +15,6 @@ export class DuelsTopDecksClassFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsTopDecksClassFilter(event.value);
-		console.log('updated duels top decks class filter', event.value);
 		return [null, null];
 	}
 }

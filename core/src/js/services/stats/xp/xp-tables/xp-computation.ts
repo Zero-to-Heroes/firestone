@@ -19,10 +19,6 @@ export const computeXpFromLevel = (fullLevel: string, timestamp: number): number
 		return 0;
 	}
 
-	if (season === allSeasons[0]) {
-		console.log('season 1', new Date(timestamp));
-	}
-
 	const baseXp = season.getXpForLevel(level) ?? 0;
 	return baseXp + xpInLevel;
 };

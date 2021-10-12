@@ -73,7 +73,7 @@ export class DevService {
 		// this.addCustomLogLoaderCommand();
 		// window['arena'] = async () => {
 		// 	const info = await this.memoryService.getArenaInfo();
-		// 	console.log(info);
+		// 	console.debug(info);
 		// };
 		// window['matchStart'] = async () => {
 		// 	this.gameEvents.dispatchGameEvent({
@@ -142,12 +142,12 @@ export class DevService {
 			await this.loadEvents(events, awaitEvents, deckstring, timeBetweenEvents);
 			logContents = null;
 			events = null;
-			console.log('processing done');
+			console.debug('processing done');
 		};
 		window['startDeckCycle'] = async (logName, repeats, deckString) => {
-			console.log('starting new deck cycle', logName, repeats, deckString);
+			console.debug('starting new deck cycle', logName, repeats, deckString);
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
-			console.log = console.debug = (args) => {};
+			console.debug = console.debug = (args) => {};
 			const logsLocation = `E:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${logName}.json`;
 			const logContents = await this.ow.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
@@ -161,11 +161,11 @@ export class DevService {
 			// window['startDeckCycle'](logName, deckString);
 		};
 		window['decodeDeck'] = (deckstring) => {
-			console.log(decode(deckstring));
+			console.debug(decode(deckstring));
 		};
 		window['buildDeck'] = async (decklist, hero) => {
 			const cards = decklist.split('\n');
-			console.log(cards);
+			console.debug(cards);
 			const allCards = this.cards.getAllCards();
 			const cardArray = cards
 				.map((card) => {
@@ -193,15 +193,15 @@ export class DevService {
 				.map((cards) => {
 					return [cards[0][0].dbfId, parseInt(cards[1] || 1)];
 				});
-			console.log(cardArray);
+			console.debug(cardArray);
 			const deck = {
 				cards: cardArray,
 				heroes: [hero],
 				format: 1,
 			};
 			const deckstring = encode(deck as any);
-			console.log(deckstring);
-			console.log(decode(deckstring));
+			console.debug(deckstring);
+			console.debug(decode(deckstring));
 		};
 		window['grantAchievement'] = async (id) => {
 			const challenges = await this.achievementLoader.getChallengeModules();
@@ -222,13 +222,13 @@ export class DevService {
 		// 	];
 		// 	const newAchievement = new CompletedAchievement(achievement.id, achievement.numberOfCompletions, newReplays);
 		// 	const updated = await this.storage.saveAchievement(newAchievement);
-		// 	console.log('added lots of replays to achievement', updated.id, updated);
+		// 	console.debug('added lots of replays to achievement', updated.id, updated);
 		// };
 	}
 
 	private async loadEvents(events: any, awaitEvents: boolean, deckstring?: string, timeBetweenEvents?: number) {
 		// return;
-		// console.log('sending events', events);
+
 		for (const event of events) {
 			if (event.Type === 'BATTLEGROUNDS_NEXT_OPPONENT') {
 				await sleep(1000);
@@ -236,7 +236,7 @@ export class DevService {
 			if (event.Type === 'BATTLEGROUNDS_PLAYER_BOARD') {
 				await sleep(3000);
 			}
-			// console.log('dispatching', event);
+
 			if (awaitEvents) {
 				await this.gameEvents.dispatchGameEvent({ ...event });
 				if (timeBetweenEvents) {
@@ -249,7 +249,7 @@ export class DevService {
 			if (deckstring && event.Type === 'LOCAL_PLAYER') {
 				await sleep(500);
 				const decklist = this.handler.buildDeckList(deckstring);
-				// console.log('[opponent-player] parsed decklist', decklist);
+
 				// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 				// whatever we can
 				let newDeck = decklist;
@@ -258,7 +258,7 @@ export class DevService {
 				for (const card of [...deck.hand, ...deck.otherZone, ...deck.board]) {
 					newDeck = this.helper.removeSingleCardFromZone(newDeck, card.cardId, card.entityId)[0];
 				}
-				// console.log('[opponent-player] newDeck', newDeck);
+
 				const newPlayerDeck = deck.update({
 					deckstring: deckstring,
 					deckList: decklist,
@@ -266,11 +266,11 @@ export class DevService {
 					hand: deckstring ? this.flagCards(deck.hand) : deck.hand,
 					otherZone: deckstring ? this.flagCards(deck.otherZone) : deck.otherZone,
 				} as DeckState);
-				console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
+				console.debug('[opponent-player] newPlayerDeck', newPlayerDeck);
 				this.gameState.state = currentState.update({
 					playerDeck: newPlayerDeck,
 				} as GameState);
-				console.log('updated decklist', this.gameState.state);
+				console.debug('updated decklist', this.gameState.state);
 			}
 		}
 	}
@@ -327,7 +327,7 @@ export class DevService {
 	// 		plugin.startDevMode();
 	// 		const logLines = content.split('\n');
 	// 		plugin.realtimeLogProcessing(logLines, () => {
-	// 			console.log('Jobs done');
+	// 			console.debug('Jobs done');
 	// 			plugin.stopDevMode();
 	// 			this.deckService.reset();
 	// 		});

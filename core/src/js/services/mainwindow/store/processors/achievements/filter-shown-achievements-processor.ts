@@ -26,12 +26,6 @@ export class FilterShownAchievementsProcessor implements Processor {
 				'searchString': searchString,
 			});
 		}
-		console.log(
-			'[filter-shown-achievements] filtering shown achievements in',
-			searchString,
-			navigationState.navigationAchievements.currentView,
-			navigationState.navigationAchievements.selectedCategoryId,
-		);
 
 		const selectedCategory = currentState.achievements.findCategory(
 			navigationState.navigationAchievements.selectedCategoryId,

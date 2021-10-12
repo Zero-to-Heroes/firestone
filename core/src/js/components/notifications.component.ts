@@ -89,14 +89,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				delayWhen(() => this.windowId$),
 				withLatestFrom(this.windowId$),
 				filter(([message, windowId]) => !!message),
-				tap(([message, windowId]) => {
-					console.log(
-						'Observable received message from bus in notification window',
-						message.notificationId,
-						message,
-					);
-					console.log('window id', windowId);
-				}),
 				delayWhen(([message, windowId]) => from(this.ow.restoreWindow(windowId))),
 				delayWhen(([message, windowId]) => from(this.ow.bringToFront(windowId))),
 				map(([message, windowId]) => {
@@ -176,7 +168,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			currentElement = currentElement.parentElement;
 		}
 
-		// console.log('currentElemetn', currentElement);
 		// Clicked on close, don't show the card
 		if (currentElement && currentElement.className && currentElement.className.indexOf('close') !== -1) {
 			// amplitude
@@ -232,7 +223,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			this.stateUpdater.next(eventToSend);
 		}
 		if (messageObject.cardId) {
-			// console.log('wxith card id', cardId);
 			const isAchievement = messageObject.app === 'achievement';
 			if (isAchievement) {
 				this.stateUpdater.next(new ShowAchievementDetailsEvent(messageObject.cardId));
@@ -245,7 +235,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	private async showNotification(messageObject: Message) {
 		return new Promise<void>(async (resolve) => {
-			// console.log('showing notification', messageObject.notificationId);
 			const htmlMessage: string = messageObject.content;
 			const cardId: string = messageObject.cardId;
 			const type: string = messageObject.type;
@@ -259,18 +248,18 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 			const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
 			toast.theClass = messageObject.theClass;
-			// console.log('created toast', toast.id, messageObject.notificationId);
+
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
-			// console.log('running toast message in zone', toast);
+
 			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
 				console.log('registered click on toast', messageObject);
 				let currentElement: any = event.srcElement;
 				while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
 					currentElement = currentElement.parentElement;
 				}
-				// console.log('currentElemetn', currentElement);
+
 				// Clicked on close, don't show the card
 				if (currentElement && currentElement.className && currentElement.className.indexOf('close') !== -1) {
 					// amplitude
@@ -296,19 +285,18 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					event.preventDefault();
 					event.stopPropagation();
 					this.showSettings();
-					// console.log('showing settings');
+
 					return;
 				}
-				// console.log('currentElemetn before', currentElement, event.srcElement);
+
 				while (
 					currentElement &&
 					!currentElement.classList.contains('unclickable') &&
 					currentElement.parentElement
 				) {
 					currentElement = currentElement.parentElement;
-					// console.log('currentElemetn pendant', currentElement);
 				}
-				// console.log('currentElemetn after', currentElement);
+
 				if (currentElement && currentElement.classList.contains('unclickable')) {
 					amplitude
 						.getInstance()
@@ -331,7 +319,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					this.stateUpdater.next(eventToSend);
 				}
 				if (cardId) {
-					// console.log('wxith card id', cardId);
 					const isAchievement = messageObject.app === 'achievement';
 					if (isAchievement) {
 						this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
@@ -396,7 +383,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			// const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			const width = 500;
 			const gameInfo = await this.ow.getRunningGameInfo();
-			// console.log(
+
 			// 	'game info',
 			// 	gameInfo,
 			// 	wrapper,
@@ -429,12 +416,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private waitForInit(): Promise<void> {
 		return new Promise<void>((resolve) => {
 			const theWait = () => {
-				// console.log('[notificationbs] waiting for init');
 				if (this.windowId) {
-					// console.log('wait for db init complete');
 					resolve();
 				} else {
-					// console.log('waiting for db init');
 					setTimeout(() => theWait(), 50);
 				}
 			};

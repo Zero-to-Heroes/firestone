@@ -53,7 +53,6 @@ export class RedditShareModalComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('setting socialUserInfo in reddit modal', value);
 	}
 
 	@Input() set base64Image(value: string) {
@@ -101,7 +100,6 @@ export class RedditShareModalComponent implements AfterViewInit {
 			this.shareInfo.subreddit,
 			this.shareInfo.flair,
 		);
-		console.log('shared to reddit?', result);
 		this.sharing = false;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

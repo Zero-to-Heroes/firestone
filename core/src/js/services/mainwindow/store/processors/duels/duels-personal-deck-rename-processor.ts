@@ -15,18 +15,6 @@ export class DuelsPersonalDeckRenameProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsDeckName(event.deckstring, event.newName);
-		// const duels = await this.duelsService.updateState(
-		// 	currentState.duels,
-		// 	currentState.stats.gameStats,
-		// 	currentState.binder,
-		// );
-		console.log('updated duels deck name', event);
-		return [
-			// currentState.update({
-			// 	duels: duels,
-			// } as MainWindowState),
-			null,
-			null,
-		];
+		return [null, null];
 	}
 }

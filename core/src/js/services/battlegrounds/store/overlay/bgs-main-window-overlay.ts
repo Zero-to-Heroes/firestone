@@ -43,14 +43,12 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		if (inGame && this.bgsActive && state.forceOpen) {
 			await this.ow.obtainDeclaredWindow(windowId);
 			if (battlegroundsWindow.window_state_ex !== 'maximized' && battlegroundsWindow.stateEx !== 'maximized') {
-				// console.log(
 				// 	'[bgs-main-window] restoring window',
 				// 	inGame && this.bgsActive && state.forceOpen,
 				// 	battlegroundsWindow,
 				// );
 				await this.ow.restoreWindow(windowId);
 				await this.ow.bringToFront(windowId);
-				// console.log('restored window', await this.ow.getWindowState(windowId));
 			}
 		}
 		// In fact we don't want to close the window when the game ends
@@ -59,11 +57,6 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 			!isWindowClosed(battlegroundsWindow.stateEx) &&
 			this.closedByUser
 		) {
-			console.log(
-				'[bgs-main-window] closing window',
-				inGame && this.bgsActive && state.forceOpen,
-				battlegroundsWindow,
-			);
 			await this.ow.closeWindow(windowId);
 		}
 	}
@@ -77,18 +70,15 @@ export class BgsMainWindowOverlay implements BattlegroundsOverlay {
 		//console.warn('hotkey pressed', window);
 		const inGame = state && state.inGame;
 		if (!force && !inGame) {
-			console.log('[bgs-store] not in game or shouldnt show overlay', inGame);
 			return;
 		}
 
 		if (isWindowClosed(window.stateEx) || window.stateEx === 'minimized') {
-			console.log('[bgs-store] showing BGS window', window);
 			this.closedByUser = false;
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);
 			await this.ow.bringToFront(windowId);
 		} else if (!isWindowClosed(window.stateEx)) {
-			console.log('[bgs-store] hiding BGS window', window);
 			this.closedByUser = true;
 			await this.ow.hideWindow(windowId);
 		}

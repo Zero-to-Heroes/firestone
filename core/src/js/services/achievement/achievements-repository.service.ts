@@ -72,7 +72,7 @@ export class AchievementsRepository {
 						numberOfCompletions: numberOfCompletions,
 					} as Achievement);
 			  });
-		// console.log('[perf] getting full achievements');
+
 		const fullAchievements: VisualAchievement[] = mergedAchievements
 			.filter((achievement) => this.isAchievementVisualRoot(achievement))
 			.map((achievement, index) => this.convertToVisual(achievement, index, mergedAchievements))
@@ -86,7 +86,7 @@ export class AchievementsRepository {
 				}
 				return 0;
 			});
-		// console.log('[perf] returning result');
+
 		return fullAchievements;
 	}
 
@@ -176,18 +176,18 @@ export class AchievementsRepository {
 			achievementForCompletionSteps
 				.map((achv) => achv.priority)
 				.filter((value, index, self) => self.indexOf(value) === index).length !== 1;
-		// console.log('[completion-steps] areProgressionSteps', areProgressionSteps);
+
 		const invertedCompletionSteps = [];
 		let alreadyDefinedText = achievement.text || false;
 		// Useful to make sure we have some consistency in the number of comletions
 		let maxNumberOfCompletions = 0;
 		for (let i = achievementForCompletionSteps.length - 1; i >= 0; i--) {
 			const achv = achievementForCompletionSteps[i];
-			// console.log('[completion-steps] handling step', achv);
+
 			const completions: number = areProgressionSteps
 				? Math.max(maxNumberOfCompletions, achv.numberOfCompletions)
 				: achv.numberOfCompletions;
-			// console.log('[completion-steps] completions', completions);
+
 			maxNumberOfCompletions = completions;
 			if (completions > 0 && !alreadyDefinedText) {
 				text = achv.completedText;
@@ -206,7 +206,7 @@ export class AchievementsRepository {
 				},
 			} as CompletionStep);
 		}
-		// console.log('[completion-steps] invertedCompletionSteps', invertedCompletionSteps);
+
 		return [invertedCompletionSteps.reverse() as readonly CompletionStep[], text];
 	}
 
@@ -220,7 +220,6 @@ export class AchievementsRepository {
 				if (this.categories) {
 					resolve();
 				} else {
-					// console.log('[achievement-repository] waiting for DB init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

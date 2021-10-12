@@ -17,7 +17,6 @@ export class BgsChangePostMatchStatsTabsNumberParser implements EventParser {
 		currentState: BattlegroundsState,
 		event: BgsChangePostMatchStatsTabsNumberEvent,
 	): Promise<BattlegroundsState> {
-		// console.debug('updating new stats', event, currentState);
 		const panel: BgsPostMatchStatsPanel = currentState.panels.find(
 			(panel) => panel.id === 'bgs-post-match-stats',
 		) as BgsPostMatchStatsPanel;

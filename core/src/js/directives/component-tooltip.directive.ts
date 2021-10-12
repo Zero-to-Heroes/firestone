@@ -22,7 +22,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@Input() set componentType(value: ComponentType<any>) {
 		this._componentType = value;
-		// console.log('setting component type', value);
+
 		if (value && value !== this._componentType) {
 			this.updatePositionStrategy();
 		}
@@ -30,7 +30,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@Input() set componentInput(value: any) {
 		this._componentInput = value;
-		// console.log('setting component input', value);
+
 		if (value && value !== this._componentInput) {
 			this.updatePositionStrategy();
 		}
@@ -124,7 +124,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		tooltipRef.instance.config = this._componentInput;
 
 		this.positionStrategy.apply();
-		// console.log('created tooltip instance', tooltipRef);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

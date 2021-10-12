@@ -29,7 +29,6 @@ export class PatchesConfigService {
 		return new Promise<PatchesConfig>((resolve) => {
 			this.http.get(`${PATCHES_CONFIG_URL}`).subscribe(
 				(result: PatchesConfig) => {
-					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
 				(error) => {

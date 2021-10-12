@@ -45,7 +45,6 @@ export class GenericIndexedDbService {
 				if (this.dbInit) {
 					resolve();
 				} else {
-					// console.log('[storage] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

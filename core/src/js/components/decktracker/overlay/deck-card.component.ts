@@ -113,7 +113,6 @@ import { uuid } from '../../../services/utils';
 })
 export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[deck-card] setting tooltip position', value);
 		this._tooltipPosition = value;
 		this.cdr.detectChanges();
 	}
@@ -241,14 +240,14 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.cardName = !!this._card.cardName?.length
 			? this._card.cardName + this.buildSuffix(this._card)
 			: 'Unknown card';
-		// console.debug('cardName', this.cardName, this._card);
+
 		this.numberOfCopies = this._card.totalQuantity;
 		this.rarity = this._card.rarity;
 		this.creatorCardIds = this._card.creatorCardIds;
 		this.giftTooltip = null;
 		this.updateGiftTooltip();
 		this.highlight = this._card.highlight;
-		// console.log('setting card', this.highlight, card.cardName, card);
+
 		this.isBurned = this._card.zone === 'BURNED' || this._card.milled;
 		this.isDiscarded = this._card.zone === 'DISCARD';
 		this.isGraveyard = this._card.zone === 'GRAVEYARD';
@@ -256,7 +255,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this._isMissing = this._card.isMissing;
 
 		this.cardClass = this._card.cardClass ? this._card.cardClass.toLowerCase() : null;
-		// console.log('setting card highlight', this.cardId, this.highlight, card);
+
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {
 			console.error('invalid number of copies', this._card);
@@ -265,7 +264,6 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		if (this.cardId) {
 			const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png?v=3`;
 			const image = new Image();
-			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 			image.src = imageUrl;
 			this._referenceCard = this.cards.getCard(this.cardId);
 		}

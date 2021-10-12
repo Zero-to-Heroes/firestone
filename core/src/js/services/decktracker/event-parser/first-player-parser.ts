@@ -15,7 +15,7 @@ export class FirstPlayerParser implements EventParser {
 		const newDeck = Object.assign(new DeckState(), deck, {
 			isFirstPlayer: true,
 		} as DeckState);
-		// console.log('[debug] assigning first player', newDeck);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newDeck,
 		});

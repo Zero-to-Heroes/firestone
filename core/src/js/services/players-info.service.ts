@@ -11,7 +11,6 @@ export class PlayersInfoService {
 	constructor(private events: Events, private memoryService: MemoryInspectionService) {}
 
 	public async getPlayerInfo(): Promise<PlayerInfo> {
-		// console.log('[players-info] playerInfo not present in cache, fetching it from GEP');
 		const infoFromGep = this.cachedInfo?.localPlayer ? this.cachedInfo : await this.memoryService.getMatchInfo();
 		if (!infoFromGep) {
 			console.warn('[players-info] No player info returned by mindvision', this.cachedInfo, infoFromGep);
@@ -26,14 +25,14 @@ export class PlayersInfoService {
 	// look at the cache
 	public async getOpponentInfo(): Promise<PlayerInfo> {
 		// It's usually less important to have the opponent info, so we only add this as a log
-		// console.log('[players-info] opponentInfo not present in cache, fetching it from GEP');
+
 		const infoFromGep = this.cachedInfo?.opponent ? this.cachedInfo : await this.memoryService.getMatchInfo();
 		if (!infoFromGep) {
 			console.warn('[players-info] No player info returned by mindvision');
 			return null;
 		}
 		this.shortCache(infoFromGep);
-		console.log('[players-info] retrieved player info from memory', infoFromGep.opponent);
+		console.log('[players-info] retrieved opponent info from memory', infoFromGep.opponent);
 		return infoFromGep.opponent;
 	}
 

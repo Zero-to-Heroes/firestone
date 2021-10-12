@@ -117,7 +117,6 @@ export class SetStatsComponent implements AfterViewInit {
 			.sort((a, b) => getPackDustValue(b) - getPackDustValue(a));
 		this.bestKnownPack = orderedPacks.length ? orderedPacks[0] : null;
 		this.bestKnownPackDust = this.bestKnownPack ? getPackDustValue(this.bestKnownPack) : 0;
-		// console.debug('best known pack', this.bestKnownPack, this.bestKnownPackDust);
 	}
 
 	private buildPieChartData(): readonly InputPieChartData[] {

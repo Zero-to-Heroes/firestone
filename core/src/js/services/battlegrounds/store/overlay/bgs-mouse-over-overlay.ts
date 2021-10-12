@@ -22,14 +22,13 @@ export class BgsMouseOverOverlay implements BattlegroundsOverlay {
 		const windowId = OverwolfService.BATTLEGROUNDS_WINDOW_MOUSE_OVER_OVERLAY;
 		const battlegroundsWindow = await this.ow.getWindowState(windowId);
 		const inGame = state && state.inGame && !state.currentGame?.gameEnded;
-		// console.log('[bgs-mouse-overlay] should close?', inGame, this.bgsActive, state);
+
 		if (inGame && this.bgsActive) {
 			if (battlegroundsWindow.window_state_ex !== 'normal' && battlegroundsWindow.stateEx !== 'normal') {
 				await this.ow.obtainDeclaredWindow(windowId);
 				await this.ow.restoreWindow(windowId);
 			}
 		} else {
-			// console.log(
 			// 	'[bgs-mouse-overlay] closing window',
 			// 	battlegroundsWindow,
 			// 	inGame,

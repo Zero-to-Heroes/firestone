@@ -203,7 +203,6 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 		private readonly store: AppUiStoreService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
-		// console.debug('init', this.store, store, allCards, this.allCards);
 		this.allMinions$ = combineLatest(
 			this.searchString.asObservable(),
 			this.store.listen$(
@@ -252,7 +251,6 @@ export class BgsSimulatorMinionSelectionComponent implements OnDestroy {
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
-				// console.log('value changed?', data);
 				this.searchString.next(data);
 			});
 	}

@@ -35,7 +35,7 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			this.closedByUser = false;
 			this.gameStarted = true;
-			console.log(`[${this.name}] game started`);
+			console.debug(`[${this.name}] game started`);
 			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
 			this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === SceneMode.GAMEPLAY;
@@ -52,7 +52,6 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {
 		if (this.closedByUser || !this.gameStarted) {
-			// console.log(`[${this.name}] should not show`, this.closedByUser, this.gameStarted);
 			return false;
 		}
 
@@ -63,7 +62,6 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 		// We explicitely don't check for null, so that if the memory updates are broken
 		// we still somehow show the info
 		if (this.onGameScreen === false) {
-			// console.log(`[${this.name}] not on game screen`, this.onGameScreen);
 			return false;
 		}
 

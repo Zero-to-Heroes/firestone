@@ -38,7 +38,6 @@ export class MindVisionService {
 			console.log('[mind-vision] not in game, not starting memory poll or memory reading plugin');
 		}
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// console.log('[mind-vision] updated game status', res);
 			if (this.ow.exitGame(res)) {
 				if (this.memoryUpdateListener) {
 					console.log('[mind-vision] leaving game, stopping memory poll');
@@ -172,7 +171,6 @@ export class MindVisionService {
 			const plugin = await this.get();
 			try {
 				plugin.getDuelsInfo(forceReset, (info) => {
-					// console.log('[mind-vision] retrieved duels info', info);
 					resolve(info ? JSON.parse(info) : null);
 				});
 			} catch (e) {
@@ -185,12 +183,10 @@ export class MindVisionService {
 	public async getBattlegroundsInfo(forceReset = false): Promise<{ Rating: number }> {
 		return new Promise<{ Rating: number }>(async (resolve) => {
 			if (forceReset) {
-				// console.log('forcing reset of mindvision', forceReset);
 			}
 			const plugin = await this.get();
 			try {
 				plugin.getBattlegroundsInfo(forceReset, (battlegroundsInfo) => {
-					// console.log('[mind-vision] retrieved getBattlegroundsInfo', battlegroundsInfo);
 					resolve(battlegroundsInfo ? JSON.parse(battlegroundsInfo) : null);
 				});
 			} catch (e) {

@@ -11,16 +11,15 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		// console.log('[show-achievement-details] input', event, currentState);
 		const [categoryHierarchy, visualAchievement] = currentState.achievements.findAchievementHierarchy(
 			event.achievementId,
 		);
 		if (!categoryHierarchy || categoryHierarchy.length === 0 || !visualAchievement) {
 			return [null, null];
 		}
-		// console.log('[show-achievement-details] showing achievement', event, achievementSet, visualAchievement);
+
 		const achievement = visualAchievement.completionSteps[0].id;
-		// console.log('[show-achievement-details] achievement', achievement, currentState);
+
 		const newAchievements = navigationState.navigationAchievements.update({
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',

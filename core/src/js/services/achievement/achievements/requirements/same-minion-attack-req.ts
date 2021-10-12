@@ -51,20 +51,18 @@ export class SameMinionAttackReq implements Requirement {
 		const entityId = gameEvent.additionalData.attackerEntityId;
 		const controllerId = gameEvent.additionalData.attackerControllerId;
 		const card = this.cards.getCard(cardId);
-		// console.log('handling attack event', gameEvent, card);
+
 		if (
 			controllerId === localPlayer?.PlayerId &&
 			card.type &&
 			CardType[card.type.toUpperCase()] === CardType.MINION
 		) {
-			// console.log('valid minion attack');
 			this.attackCounts[entityId] = (this.attackCounts[entityId] || 0) + 1;
-			// console.log('attack count is', entityId, this.attackCounts);
+
 			this.hasMinionAttacked = Object.keys(this.attackCounts).some(
 				// TODO: only support "AT_LEAST", implicitely, for now
 				(entityId) => this.attackCounts[entityId] >= this.targetQuantity,
 			);
-			// console.log('hasMinionAttacked', this.hasMinionAttacked);
 		}
 	}
 }

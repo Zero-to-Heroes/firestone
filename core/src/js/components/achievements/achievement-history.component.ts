@@ -44,9 +44,8 @@ export class AchievementHistoryComponent {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
 		const rect = this.el.nativeElement.querySelector('.history').getBoundingClientRect();
-		// console.log('element rect', rect);
+
 		const scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();

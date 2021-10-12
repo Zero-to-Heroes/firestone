@@ -45,7 +45,6 @@ export class GameReplayComponent implements OnInit {
 	}
 
 	async ngOnInit() {
-		// console.log('initializing coliseum');
 		try {
 			const coliseum = (window as any).coliseum;
 			await coliseum.init();
@@ -60,9 +59,7 @@ export class GameReplayComponent implements OnInit {
 	async reload(replay: string, reviewId: string) {
 		try {
 			amplitude.getInstance().logEvent('load-replay');
-			console.log('requested replay load');
 			await this.waitForViewerInit();
-			console.log('loading replay');
 			const coliseum = (window as any).coliseum;
 			coliseum.zone.run(() => {
 				coliseum.component.loadReplay(replay, {
@@ -78,7 +75,6 @@ export class GameReplayComponent implements OnInit {
 		try {
 			// Resetting the game
 			await this.waitForViewerInit();
-			console.log('[game-replay] resetting player', reviewId);
 			const coliseum = (window as any).coliseum;
 			coliseum.zone.run(() => coliseum.component.reset(reviewId));
 		} catch (e) {
@@ -109,7 +105,7 @@ export class GameReplayComponent implements OnInit {
 				.toPromise();
 			const zipContent = await loadAsync(zippedReplay as any);
 			const file = Object.keys(zipContent.files)[0];
-			// console.log('files in zip', zipContent.files, file);
+
 			const replay = await zipContent.file(file).async('string');
 			return replay;
 		} else {

@@ -109,7 +109,6 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame.availableRaces)
 			.pipe(
 				map(([races]) => {
-					console.log('mapping new races', races);
 					const cardsInGame = getAllCardsInGame(races, this.allCards);
 					return this.buildTiers(cardsInGame);
 				}),
@@ -189,7 +188,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		}
 
 		this.tooltipPosition = 'none';
-		// console.log('dragMode');
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -288,8 +287,6 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		const dpi = gameWidth / gameInfo.width;
 		const prefs = await this.prefs.getPreferences();
 		const windowPosition = prefs.bgsMinionsListPosition;
-		//console.log('window position', await this.ow.getCurrentWindow(), gameInfo);
-		//console.log('loaded tracker position', windowPosition);
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 		const newLeft =
 			windowPosition && windowPosition.left < gameWidth && windowPosition.left > -width && !forceTrackerReposition
@@ -302,16 +299,12 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 			!forceTrackerReposition
 				? windowPosition.top || 0
 				: 0;
-		console.log('updating tracker position', newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-		console.log('after window position update', await this.ow.getCurrentWindow());
-		// console.log('monitors list', await this.ow.getMonitorsList());
-		// console.log('game info', await this.ow.getRunningGameInfo());
+
 		await this.updateTooltipPosition();
 	}
 
 	private async updateTooltipPosition() {
-		// console.log('updating tooltip position');
 		const window = await this.ow.getCurrentWindow();
 		if (!window) {
 			return;

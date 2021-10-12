@@ -85,7 +85,6 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 
 	@Input() set panel(value: BgsNextOpponentOverviewPanel) {
 		if (value && !value.opponentOverview) {
-			// console.log('invalid panel', value);
 			return;
 		}
 		if (value === this._panel) {
@@ -127,7 +126,6 @@ export class BgsNextOpponentOverviewComponent implements OnDestroy {
 		this.currentTurn = this._game.currentTurn;
 		const nextOpponent = this._game.players.find((player) => player.cardId === this._panel.opponentOverview.cardId);
 		if (!nextOpponent) {
-			// console.log(
 			// 	'no next opponent yet',
 			// 	this._game.players.map(player => player.cardId),
 			// 	this._panel.opponentOverview.cardId,

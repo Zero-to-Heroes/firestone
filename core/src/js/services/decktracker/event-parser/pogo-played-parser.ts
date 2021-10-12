@@ -26,7 +26,7 @@ export class PogoPlayedParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			pogoHopperSize: (deck.pogoHopperSize || 0) + 1,
 		} as DeckState);
-		// console.log('newplayerdeck', newPlayerDeck);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

@@ -24,7 +24,7 @@ export class CardOnBoardAtGameStart implements EventParser {
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 
 		const dbCard = this.allCards.getCard(cardId);
-		// console.log('dbCard', dbCard);
+
 		if (dbCard.type && CardType[dbCard.type.toUpperCase()] === CardType.HERO) {
 			// Do nothing, as we don't want to add the starting hero to the deck tracker
 			return currentState;

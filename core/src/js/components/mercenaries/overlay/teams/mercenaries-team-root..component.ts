@@ -83,7 +83,6 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
-				console.log('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
 				await this.restoreWindowPosition();
 			}
@@ -98,16 +97,14 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('mousedown', ['$event'])
 	dragMove(event: MouseEvent) {
-		// console.log('starting drag');
 		this.tooltipPosition = 'none';
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 		this.ow.dragMove(this.windowId, async (result) => {
-			// console.log('drag finished, updating position');
 			await this.updateTooltipPosition();
 			const window = await this.ow.getCurrentWindow();
-			// console.log('retrieved window', window);
+
 			if (!window) {
 				return;
 			}

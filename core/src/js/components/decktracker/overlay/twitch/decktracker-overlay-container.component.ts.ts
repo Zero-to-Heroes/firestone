@@ -60,7 +60,6 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			return;
 		}
 		this.twitch = (window as any).Twitch.ext;
-		// this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
 		this.twitch.onAuthorized((auth) => {
 			console.log('on authorized', auth);
 			this.token = auth.token;
@@ -68,7 +67,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			this.fetchInitialState();
 			this.twitch.listen('broadcast', (target, contentType, event) => {
 				const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
-				// console.log('received event', deckEvent);
+
 				this.processEvent(deckEvent);
 			});
 		});
@@ -113,13 +112,13 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			this.bgsState = event.state;
 			// Don't overwrite the battle state if not present in the input state
 			this.bgsBattleState = this.bgsState?.currentBattle ?? this.bgsBattleState;
-			// console.log('bgs state', this.bgsState);
+
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 		} else if (event.type === 'bgs-battle') {
 			this.bgsBattleState = event.state;
-			// console.log('bgs state', this.bgsState);
+
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -134,7 +133,6 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 					}
 					break;
 				default:
-					// console.log('received deck event');
 					this.gameState = event.state;
 					if (!(this.cdr as ViewRef)?.destroyed) {
 						this.cdr.detectChanges();

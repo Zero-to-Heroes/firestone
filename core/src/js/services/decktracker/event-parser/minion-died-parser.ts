@@ -20,7 +20,6 @@ export class MinionDiedParser implements EventParser {
 		const deadMinions = gameEvent.additionalData.deadMinions;
 		let result = currentState;
 		for (const deadMinion of deadMinions) {
-			// console.debug('handling dead minion', deadMinion);
 			const cardId = deadMinion.CardId;
 			const entityId = deadMinion.EntityId;
 			const isPlayer = deadMinion.ControllerId === localPlayer?.PlayerId;

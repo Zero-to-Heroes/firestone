@@ -191,7 +191,7 @@ export class BattlegroundsPersonalStatsStatsComponent {
 			hero: stat?.heroCardId,
 			reviewId: stat?.reviewId,
 		};
-		// console.log('getting stat', statName, this._state.stats.bestBgsUserStats);
+
 		return result;
 	}
 }

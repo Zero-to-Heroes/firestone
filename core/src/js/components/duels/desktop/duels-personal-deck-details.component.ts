@@ -152,7 +152,7 @@ export class DuelsPersonalDeckDetailsComponent {
 					currentDeck === 'initial'
 						? deck.deck.initialDeckList
 						: this.getFinalDecklist(deck, expandedRunIds, currentRunIndex);
-				// console.debug('emitting decklist', deck, result);
+
 				// FIXME: for some reason this is necessary here
 				setTimeout(() => this.cdr?.detectChanges(), 0);
 				return result;

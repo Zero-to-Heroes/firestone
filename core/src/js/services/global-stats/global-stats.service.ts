@@ -43,7 +43,6 @@ export class GlobalStatsService {
 				// the time spend in games
 				const areEqual = this.areEqual(data.result, this.cachedStats);
 				if (!data || !data.result || areEqual) {
-					// console.log('[global-stats] invalid stats received', data == null, areEqual);
 					setTimeout(
 						() =>
 							this.getGlobalStatsInternal(
@@ -69,11 +68,9 @@ export class GlobalStatsService {
 
 	private areEqual(stats1: GlobalStats, stats2: GlobalStats): boolean {
 		if (!stats1 || !stats2) {
-			console.log('[global-stats] at least one stat is empty, so not equal');
 			return false;
 		}
 		if ((stats1.stats || []).length !== (stats2.stats || []).length) {
-			console.log('[global-stats] stats dont have the same length, so not equal');
 			return false;
 		}
 		const sorted1 = [...stats1.stats].sort((a, b) => a.id - b.id);
@@ -81,13 +78,11 @@ export class GlobalStatsService {
 		if (
 			JSON.stringify(sorted1.map((stat) => stat.statKey)) !== JSON.stringify(sorted2.map((stat) => stat.statKey))
 		) {
-			console.log('[global-stats] stats dont have the same keys, so not equal');
 			return false;
 		}
 		// Compare the values
 		for (let i = 0; i < sorted1.length; i++) {
 			if (JSON.stringify(sorted1[i]) !== JSON.stringify(sorted2[i])) {
-				console.log('[global-stats] stats dont have the same content, so not equal');
 				return false;
 			}
 		}

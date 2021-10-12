@@ -16,7 +16,7 @@ export class AiDeckService {
 			console.warn('[ai-decks] decks not initialized yet', opponentCardId, scenarioId);
 			return null;
 		}
-		// console.log('getting ai deck', this.aiDecks, opponentCardId, scenarioId);
+
 		const deck =
 			this.aiDecks.find(
 				(deck) =>
@@ -38,7 +38,6 @@ export class AiDeckService {
 		return new Promise<readonly string[]>((resolve) => {
 			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json?v=5`).subscribe(
 				(result: any[]) => {
-					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
 				(error) => {
@@ -53,7 +52,6 @@ export class AiDeckService {
 		return new Promise<readonly AiDeck[]>((resolve) => {
 			this.http.get(`${AI_DECKSTRINGS_URL}/${fileName}.json?v=5`).subscribe(
 				(result: any[]) => {
-					// console.log('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
 				},
 				(error) => {

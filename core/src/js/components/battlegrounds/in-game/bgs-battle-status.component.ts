@@ -152,7 +152,6 @@ export class BgsBattleStatusComponent {
 
 	@Input() set nextBattle(value: BgsFaceOffWithSimulation) {
 		if (value === this.battle) {
-			// console.log('not setting next battle', value, this._previousBattle);
 			return;
 		}
 		this.battle = value;
@@ -180,7 +179,6 @@ export class BgsBattleStatusComponent {
 		}
 
 		if (!this.battle?.battleInfoStatus || this.battle?.battleInfoStatus === 'empty') {
-			// console.log('result empty', value);
 			this.temporaryBattleTooltip = "Battle simulation will start once we see the opponent's board";
 			this.battleSimulationResultWin = '--';
 			this.battleSimulationResultTie = '--';
@@ -202,12 +200,10 @@ export class BgsBattleStatusComponent {
 			this.battleSimulationWonLethalChance = null;
 			this.battleSimulationLostLethalChance = null;
 		} else {
-			// console.log('result done', value);
 			this.temporaryBattleTooltip =
 				'Please be aware that the simulation assumes that the opponent uses their hero power, if it is an active hero power';
 		}
 
-		// console.log('setting battle', this.battle);
 		if (this.battle?.battleResult?.wonPercent != null && this.battle?.battleInfoStatus !== 'empty') {
 			this.battleSimulationResultWin = this.battle.battleResult.wonPercent.toFixed(1) + '%';
 			this.battleSimulationResultTie = this.battle.battleResult.tiedPercent.toFixed(1) + '%';
@@ -226,7 +222,7 @@ export class BgsBattleStatusComponent {
 			// makes no sense
 			this.battleSimulationWonLethalChance = this.battle.battleResult.wonLethalPercent;
 			this.battleSimulationLostLethalChance = this.battle.battleResult.lostLethalPercent;
-			// console.debug(
+
 			// 	'lethal chances',
 			// 	this.battleSimulationWonLethalChance,
 			// 	this.battleSimulationLostLethalChance,
@@ -250,7 +246,7 @@ export class BgsBattleStatusComponent {
 	async viewSimulationResult(category: 'win' | 'tie' | 'loss') {
 		console.debug('viewing simulation result', category);
 		const simulationSample: GameSample = this.pickSimulationResult(category);
-		// console.log('sim sample', simulationSample);
+
 		if (!simulationSample) {
 			return;
 		}
@@ -262,7 +258,6 @@ export class BgsBattleStatusComponent {
 		const id = this.ow?.isOwEnabled()
 			? await this.bgsSim.getIdForSimulationSample(simulationSample)
 			: await this.bgsSim.getIdForSimulationSampleWithFetch(simulationSample);
-		console.log('id', id);
 		if (id) {
 			if (this.ow?.isOwEnabled()) {
 				// Using window.open sometimes doesn't work?

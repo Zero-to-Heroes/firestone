@@ -161,10 +161,8 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 			resolution: this.owResolution(),
 			fps: this.fps,
 		};
-		console.log('changing settings with', settings);
 		const result = await this.owService.setVideoCaptureSettings(settings.resolution, settings.fps);
 		await this.owService.sendMessageWithName('MainWindow', 'capture-settings-updated');
-		console.log('recording settings changed', result);
 		if (!(await this.prefs.getPreferences()).hasSeenVideoCaptureChangeNotif) {
 			this.events.broadcast(Events.SETTINGS_DISPLAY_MODAL, 'video-capture');
 		}
@@ -184,7 +182,6 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 	}
 
 	private async updateDefaultValues() {
-		// console.log('[settings-achievements-video-capture] updating default values');
 		const settings = await this.owService.getVideoCaptureSettings();
 		if (!settings) {
 			console.warn('Could not access video capture settings');
@@ -205,13 +202,6 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 			} else {
 				this.settingsForm.controls['videoQuality'].setValue('custom', { emitEvent: false });
 			}
-			console.log(
-				'set default capture values',
-				settings,
-				this.resolution,
-				this.fps,
-				this.settingsForm.controls['videoQuality'].value,
-			);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -227,7 +217,6 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 	}
 
 	private handleVideoSettingsChange(data) {
-		console.log('[recording] video capture settings changed', data);
 		this.updateDefaultValues();
 	}
 }

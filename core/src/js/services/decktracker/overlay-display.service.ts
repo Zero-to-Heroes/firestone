@@ -45,17 +45,13 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private async processEvent(event) {
 		switch (event.name) {
-			// case GameEvent.GAME_END:
-			// 	console.log('[overlay-display] received GAME_END event from game-state, sending false');
-			// 	this.decktrackerDisplayEventBus.next(false);
-			// 	break;
 			// In case one event is missing or arrives too fast, we have fallback
 			case GameEvent.MATCH_METADATA:
 			case GameEvent.LOCAL_PLAYER:
 			case GameEvent.OPPONENT:
 			case GameEvent.GAME_RUNNING:
 			case GameEvent.FIRST_PLAYER:
-				console.log('[overlay-display] received key event from game-state', event.name);
+				console.debug('[overlay-display] received key event from game-state', event.name);
 			// Fall-through
 			default:
 				this.handleDisplayPreferences(this.gameState);
@@ -66,7 +62,7 @@ export class OverlayDisplayService implements OnDestroy {
 	private async handleDisplayPreferences(gameState: GameState, preferences: Preferences = null): Promise<void> {
 		const prefs = preferences || (await this.prefs.getPreferences());
 		const shouldDisplay = this.shouldDisplay(gameState, prefs);
-		// console.log('[overlay-display] should display?', shouldDisplay, prefs, gameState);
+
 		this.decktrackerDisplayEventBus.next(shouldDisplay);
 	}
 
@@ -113,7 +109,7 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameType.GT_MERCENARIES_PVE_COOP:
 				return false;
 		}
-		console.log('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
+		console.warn('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
 		return gameState.playerDeck.deckList.length > 0;
 	}
 }

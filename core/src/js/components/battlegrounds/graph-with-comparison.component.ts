@@ -206,7 +206,7 @@ export class GraphWithComparisonComponent {
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.height;
 		const gradient = this.getBackgroundColor();
-		// console.log('gradient', gradient);
+
 		this.lineChartColors = [
 			{
 				backgroundColor: 'transparent',

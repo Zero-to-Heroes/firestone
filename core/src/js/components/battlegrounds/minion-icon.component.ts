@@ -25,7 +25,6 @@ export class MinionIconComponent {
 	private _entity: Entity;
 
 	@Input() set entity(value: Entity) {
-		// console.log(
 		// 	'setting entity',
 		// 	value.cardID,
 		// 	value.getTag(GameTag.PREMIUM),

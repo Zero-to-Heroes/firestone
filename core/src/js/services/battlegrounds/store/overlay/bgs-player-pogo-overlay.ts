@@ -22,13 +22,11 @@ export class BgsPlayerPogoOverlay implements BattlegroundsOverlay {
 		const inGame = await this.ow.inGame();
 		const theWindow = await this.ow.getWindowState(OverwolfService.BGS_COUNTER_PLAYER_POGO_WINDOW);
 		const shouldShowWindow = state.currentGame?.replayXml == null && state.currentGame?.pogoHoppersCount > 0;
-		// console.log('should show pogo counter?', inGame, theWindow, shouldShowWindow, state);
+
 		if (inGame && shouldShowWindow && isWindowClosed(theWindow.window_state_ex) && this.showCounter) {
-			// console.log('showing pogo');
 			await this.ow.obtainDeclaredWindow(OverwolfService.BGS_COUNTER_PLAYER_POGO_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.BGS_COUNTER_PLAYER_POGO_WINDOW);
 		} else if (!isWindowClosed(theWindow.window_state_ex) && (!shouldShowWindow || !inGame || !this.showCounter)) {
-			// console.log('closing pogo');
 			await this.ow.closeWindow(OverwolfService.BGS_COUNTER_PLAYER_POGO_WINDOW);
 		}
 	}

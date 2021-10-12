@@ -33,7 +33,7 @@ export class DuelsViewPersonalDeckDetailsProcessor implements Processor {
 
 	private getDeckName(currentState: MainWindowState, deckstring: string): string {
 		const deck = currentState?.duels?.personalDeckStats?.find((deck) => deck.initialDeckList === deckstring);
-		// console.log('found deck', deck, currentState);
+
 		return deck?.deckName;
 	}
 }

@@ -248,7 +248,7 @@ export class SetComponent implements AfterViewInit {
 		this.timeoutHandler = setTimeout(() => {
 			this.flip = 'active';
 			const rect = this.elRef.nativeElement.getBoundingClientRect();
-			// console.log('broadcasting set mouse over', this._cardSet.id, rect);
+
 			this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

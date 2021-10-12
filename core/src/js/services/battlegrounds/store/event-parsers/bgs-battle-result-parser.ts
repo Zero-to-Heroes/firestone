@@ -47,7 +47,7 @@ export class BgsBattleResultParser implements EventParser {
 			lastOpponentCardId: event.opponentCardId,
 		} as BgsGame);
 		this.events.broadcast(Events.BATTLE_SIMULATION_HISTORY_UPDATED, newGame);
-		console.log('[bgs-simulation] updating with result and resetting battle info', event);
+		console.log('[bgs-simulation] updating with result and resetting battle info');
 		return currentState.update({
 			currentGame: newGame,
 		} as BattlegroundsState);

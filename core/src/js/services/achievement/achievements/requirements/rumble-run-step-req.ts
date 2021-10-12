@@ -32,7 +32,7 @@ export class RumbleRunStepReq implements Requirement {
 	test(gameEvent: GameEvent): void {
 		if (!this.assignedStep && gameEvent.type === GameEvent.RUMBLE_RUN_STEP) {
 			this.isCorrectStep = gameEvent.additionalData.step === this.targetStep;
-			// console.log('[debug] is correct step?', this.isCorrectStep, gameEvent, this.targetStep);
+
 			this.assignedStep = true;
 		}
 	}

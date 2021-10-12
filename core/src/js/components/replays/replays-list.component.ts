@@ -137,22 +137,18 @@ export class ReplaysListComponent implements AfterViewInit {
 	}
 
 	onScroll() {
-		// console.log('[replays-list]', 'arrived at the end of display, loading more elements');
 		this.replaysIterator && this.replaysIterator.next();
 	}
 
 	// We load the first replays, and load the rest only when the user scrolls down
 	private handleProgressiveDisplay(replays: readonly GroupedReplays[]) {
-		// console.log('[replays-list] handleProgressiveDisplay');
 		this.replaysIterator = this.buildIterator(replays);
 		this.onScroll();
-		// console.log('[replays-list] handleProgressiveDisplay done');
 	}
 
 	private *buildIterator(replays: readonly GroupedReplays[]): IterableIterator<void> {
-		// console.log('[replays-list]', 'starting loading replays');
 		const workingReplays = [...replays];
-		// console.log('[replays-list] workingReplays', workingReplays);
+
 		const step = 30;
 		while (workingReplays.length > 0) {
 			const currentReplays = [];
@@ -161,10 +157,9 @@ export class ReplaysListComponent implements AfterViewInit {
 				(currentReplays.length === 0 || this.getTotalReplaysLength(currentReplays) < step)
 			) {
 				currentReplays.push(...workingReplays.splice(0, 1));
-				// console.log('[replays-list] currentReplays', currentReplays);
 			}
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
-			// console.log('[replays-list] displayedReplays', this.displayedReplays, workingReplays);
+
 			this.isLoading = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -172,7 +167,7 @@ export class ReplaysListComponent implements AfterViewInit {
 			yield;
 		}
 		this.isLoading = false;
-		// console.log('[replays-list] everything loaded');
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -20,7 +20,6 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		// Can happen at the very start of the game
 		if (!localPlayer) {
-			// console.log('[turn-start] no local player, returning', gameEvent);
 			return currentState;
 		}
 
@@ -30,7 +29,6 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
-			// console.log('[turn-start] board empty', deckWithSecretToCheck, isPlayerActive, gameEvent);
 			secretsWeCantRuleOut.push(CardIds.CompetitiveSpirit1);
 		}
 
@@ -48,9 +46,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
-			// console.log('marked as invalid', secret, newPlayerDeck);
 		}
 		const newPlayerDeck = deckWithSecretToCheck.update({
 			secrets: secrets as readonly BoardSecret[],

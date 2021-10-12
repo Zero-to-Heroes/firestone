@@ -71,7 +71,7 @@ export class ArenaRunsListComponent implements OnDestroy {
 					this.displayedReplays = [];
 					this.displayedGroupedReplays = [];
 					this.gamesIterator = this.buildIterator(arenaRuns, timeFilter, heroFilter, patch, 8);
-					// console.debug('gamesIterator', this.gamesIterator);
+
 					this.onScroll();
 				});
 			});
@@ -108,7 +108,6 @@ export class ArenaRunsListComponent implements OnDestroy {
 			.filter((match) => this.isCorrectTime(match, timeFilter, patch));
 		const workingReplays = [...this.allReplays];
 		while (workingReplays.length > 0) {
-			// console.debug('workingReplays', workingReplays.length);
 			const currentReplays: ArenaRun[] = [];
 			while (workingReplays.length > 0 && currentReplays.length < step) {
 				currentReplays.push(...workingReplays.splice(0, 1));
@@ -116,14 +115,14 @@ export class ArenaRunsListComponent implements OnDestroy {
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
 			this.displayedGroupedReplays = this.groupRuns(this.displayedReplays);
 			this.isLoading = this.allReplays.length > step;
-			// console.debug('built grouped replays', this.displayedGroupedReplays, workingReplays);
+
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
 			}
 			yield;
 		}
 		this.isLoading = false;
-		// console.debug('all replays loaded');
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -134,7 +133,6 @@ export class ArenaRunsListComponent implements OnDestroy {
 		a: [readonly GameStat[], readonly ArenaRewardInfo[], string, string, PatchInfo],
 		b: [readonly GameStat[], readonly ArenaRewardInfo[], string, string, PatchInfo],
 	): boolean {
-		// console.debug('areEqual', a, b);
 		if (a[2] !== b[2] || a[3] !== b[3] || a[4] !== b[4]) {
 			return false;
 		}

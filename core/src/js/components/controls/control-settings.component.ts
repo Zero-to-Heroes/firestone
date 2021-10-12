@@ -38,13 +38,11 @@ export class ControlSettingsComponent implements AfterViewInit {
 
 	async showSettings() {
 		if (this.settingsApp) {
-			console.log('showing settings app', this.settingsApp, this.settingsSection);
 			this.settingsEventBus.next([this.settingsApp, this.settingsSection]);
 		}
 		const prefs = await this.prefs.getPreferences();
 		const windowName = await this.ow.getSettingsWindowName(prefs);
 		const settingsWindow = await this.ow.obtainDeclaredWindow(windowName);
-		console.log('settings window', settingsWindow);
 		// Window hidden, we show it
 		if (settingsWindow.stateEx !== 'normal') {
 			// Avoid flickering

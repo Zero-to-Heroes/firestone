@@ -14,7 +14,7 @@ export class ConstructedAchievementsProgressionParser implements EventParser {
 		// 	initialAchievementsProgress: currentState.constructedState.initialAchievementsProgress ?? event.progress,
 		// 	currentAchievementsProgress: event.progress,
 		// } as ConstructedState);
-		// console.log('updating achievement progress', constructedState);
+
 		return currentState.update({
 			// constructedState: constructedState,
 		} as GameState);

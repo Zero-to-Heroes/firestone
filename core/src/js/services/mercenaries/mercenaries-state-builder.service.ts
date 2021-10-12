@@ -26,13 +26,11 @@ export class MercenariesStateBuilderService {
 
 	public async loadReferenceData(): Promise<MercenariesReferenceData> {
 		const referenceData = await this.api.callGetApi<MercenariesReferenceData>(MERCENARIES_DATA);
-		console.debug('[merc-init] referenceData', referenceData);
 		return referenceData;
 	}
 
 	public async loadGlobalStats(): Promise<MercenariesGlobalStats> {
 		const globalStats = await this.api.callGetApi<MercenariesGlobalStats>(MERCENARIES_GLOBAL_STATS);
-		console.debug('[merc-init] globalStats', globalStats);
 		return globalStats;
 	}
 

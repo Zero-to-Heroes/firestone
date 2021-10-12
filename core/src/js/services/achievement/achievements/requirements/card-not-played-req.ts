@@ -28,7 +28,6 @@ export class CardNotPlayedReq implements Requirement {
 
 	test(gameEvent: GameEvent): void {
 		if (gameEvent.type === GameEvent.CARD_PLAYED) {
-			// console.log('handling passive buff event', this.cardId, gameEvent, this);
 			this.detectCardPlayedEvent(gameEvent);
 			return;
 		}

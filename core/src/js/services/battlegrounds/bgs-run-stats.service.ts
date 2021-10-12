@@ -87,7 +87,7 @@ export class BgsRunStatsService {
 			`${POST_MATCH_STATS_RETRIEVE_URL}`,
 			input,
 		);
-		console.log('[bgs-run-stats] last run stats', results);
+		console.debug('[bgs-run-stats] last run stats', results);
 		return results;
 	}
 
@@ -132,7 +132,7 @@ export class BgsRunStatsService {
 	}
 
 	private async buildStatsRemotely(input: BgsComputeRunStatsInput): Promise<void> {
-		console.log('[bgs-run-stats] preparing to build stats remotely', input.reviewId, input);
+		console.log('[bgs-run-stats] preparing to build stats remotely', input.reviewId);
 		// Because it takes some time for the review to be processed, and we don't want to
 		// use a lambda simply to wait, as it costs money :)
 		await sleep(5000);
@@ -169,14 +169,12 @@ export class BgsRunStatsService {
 			`${new Date().toISOString().slice(0, 19).replace('T', ' ')}.${new Date().getMilliseconds()}`,
 		);
 		const finalStats = this.mergeStats(existingBestStats, newBestStats);
-		//console.log('built new best stats', newBestStats, finalStats);
 
 		return [result, finalStats];
 	}
 
 	private mergeStats(existingBestStats: readonly BgsBestStat[], newBestStats: readonly BgsBestStat[]) {
 		const statsToKeep = existingBestStats.filter((existing) => !this.isStatIncluded(existing, newBestStats));
-		//console.log('statsToKeep', newBestStats, statsToKeep);
 		return [...newBestStats, ...statsToKeep];
 	}
 

@@ -15,12 +15,10 @@ export class FormatTypeReq implements Requirement {
 	}
 
 	reset(): void {
-		// console.log('[debug] [format] reset');
 		this.isCorrectFormatType = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
-		// console.log('[debug] [format] afterAchievementCompletionReset');
 		this.isCorrectFormatType = undefined;
 	}
 
@@ -28,7 +26,7 @@ export class FormatTypeReq implements Requirement {
 		if (process.env.LOCAL_TEST) {
 			return true;
 		}
-		// console.log('[debug] [format] isCompleted', this.isCorrectFormatType);
+
 		return this.isCorrectFormatType;
 	}
 
@@ -42,6 +40,5 @@ export class FormatTypeReq implements Requirement {
 		if (this.formatTypes.includes(gameEvent.additionalData.metaData.FormatType)) {
 			this.isCorrectFormatType = true;
 		}
-		// console.log('[debug] [format] metadata', this.isCorrectFormatType, gameEvent, this.formatTypes);
 	}
 }

@@ -127,7 +127,7 @@ export class CardsMonitorService {
 				: data[0].cardType === 'GOLDEN'
 				? cardInCollection.premiumCount
 				: cardInCollection.count;
-			// console.debug('handling', data, existingCount, cardId, type, cardInCollection);
+
 			for (let i = existingCount; i < existingCount + data.length; i++) {
 				this.handleNotification(cardId, type, i + 1, false);
 			}
@@ -144,14 +144,13 @@ export class CardsMonitorService {
 		const groupedBy: { [key: string]: readonly CardPackInfo[] } = groupByFunction(
 			(card: CardPackInfo) => card.CardId + card.Premium,
 		)(newCards);
-		console.log('[card-parser] groupedBy', groupedBy, newCards);
 		const collection = await this.collectionManager.getCollection(true);
 		for (const data of Object.values(groupedBy)) {
 			const cardId = data[0].CardId;
 			const type = data[0].Premium ? 'GOLDEN' : 'NORMAL';
 			const cardInCollection = collection.find((c) => c.id === cardId);
 			const existingCount = data[0].Premium ? cardInCollection.premiumCount : cardInCollection.count;
-			// console.debug('handling', data, existingCount, cardId, type, cardInCollection);
+
 			for (let i = existingCount; i < existingCount + data.length; i++) {
 				this.handleNotification(cardId, type, i + 1, showNotifs);
 			}

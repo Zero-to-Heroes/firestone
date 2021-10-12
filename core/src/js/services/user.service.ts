@@ -60,7 +60,6 @@ export class UserService {
 				if (this.currentUser) {
 					resolve();
 				} else {
-					// console.log('[achievements] [storage] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

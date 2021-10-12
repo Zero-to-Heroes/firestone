@@ -45,7 +45,7 @@ export class BgsBattleSimulationService {
 		this.cardsData.inititialize();
 		if (this.ow?.isOwEnabled()) {
 			const systemInfo = await this.ow.getSystemInformation();
-			// console.log('systemInfo', systemInfo);
+
 			this.cpuCount = systemInfo?.PhysicalCPUCount ?? 1;
 			console.log('CPU count', this.cpuCount);
 		}
@@ -85,7 +85,7 @@ export class BgsBattleSimulationService {
 	}
 
 	public async getIdForSimulationSample(sample: GameSample): Promise<string> {
-		console.log('calling sample endpoint', sample);
+		console.log('calling sample endpoint');
 		try {
 			const result: any = (await this.http
 				.post(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, sample)
@@ -99,7 +99,7 @@ export class BgsBattleSimulationService {
 	}
 
 	public async getIdForSimulationSampleWithFetch(sample: GameSample): Promise<string> {
-		console.log('calling fetch sample endpoint', sample);
+		console.log('calling fetch sample endpoint');
 		try {
 			const response = await fetch(BGS_BATTLE_SIMULATION_SAMPLE_ENDPOINT, {
 				method: 'POST',

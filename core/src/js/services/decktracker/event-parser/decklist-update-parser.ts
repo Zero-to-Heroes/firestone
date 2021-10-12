@@ -23,7 +23,6 @@ export class DecklistUpdateParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		// For now we don't handle player deck updates
 		if (isPlayer) {
-			// console.log('[decklist-update] player deck update not supported yet, returning', gameEvent);
 			return currentState;
 		}
 		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
@@ -48,12 +47,12 @@ export class DecklistUpdateParser implements EventParser {
 		}
 
 		const decklist = await this.handler.postProcessDeck(this.handler.buildDeckList(newDeckstring));
-		// console.log('[decklist-update] parsed decklist', decklist);
+
 		const newPlayerDeck = currentState.opponentDeck.update({
 			deckList: shouldLoadDecklist ? decklist : currentState.opponentDeck.deckList,
 			deck: decklist,
 		} as DeckState);
-		// console.log('[decklist-update] newPlayerDeck', newPlayerDeck);
+
 		return currentState.update({
 			opponentDeck: newPlayerDeck,
 		} as GameState);

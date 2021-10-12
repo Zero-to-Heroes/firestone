@@ -29,7 +29,6 @@ export class ProcessingQueue<T> {
 		// What happens if this happens while we're waiting for the processingFunction
 		// to complete? As it's async
 		if (this.isProcessing) {
-			// console.log('adding event while processing is ongoing', this.eventQueue, this.pendingQueue);
 			// Don't modify the queue while processing is ongoing
 			this.pendingQueue = [...this.pendingQueue, event];
 		} else {
@@ -42,20 +41,17 @@ export class ProcessingQueue<T> {
 		// What happens if this happens while we're waiting for the processingFunction
 		// to complete? As it's async
 		if (this.isProcessing) {
-			// console.log('adding event while processing is ongoing', this.eventQueue, this.pendingQueue);
 			// Don't modify the queue while processing is ongoing
 			this.pendingQueue = [...this.pendingQueue, ...events];
 		} else {
 			this.eventQueue = [...this.eventQueue, ...events];
 		}
-		// console.log('enqueued, starting process queue', this.pendingQueue, this.eventQueue);
+
 		this.processQueue();
 	}
 
 	private async processQueue() {
-		// console.log('interval - processing queue', this.queueName, this.eventQueue);
 		if (this.isProcessing) {
-			// console.log('\talready processing, returning', this.queueName);
 			return;
 		}
 		this.isProcessing = true;
@@ -75,7 +71,6 @@ export class ProcessingQueue<T> {
 		// If no event has been processed, this could mean the processing function is waiting for something
 		// so we just leave the processing loop
 		while (this.eventQueue.length !== 0 && hasEventBeenProcessed) {
-			// console.log('interval - processing queue - continuing to proces', this.queueName, this.eventQueue);
 			const queueAfterProcess = await this.processingFunction([...this.eventQueue]);
 			hasEventBeenProcessed = queueAfterProcess.length !== this.eventQueue.length;
 			this.eventQueue = [...queueAfterProcess, ...this.pendingQueue];

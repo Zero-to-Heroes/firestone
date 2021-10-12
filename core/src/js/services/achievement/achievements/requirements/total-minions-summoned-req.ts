@@ -30,7 +30,6 @@ export class TotalMinionsSummonedReq implements Requirement {
 	}
 
 	isCompleted(): boolean {
-		// console.log('is completed?', this.qualifier, this.summonCount, this.targetQuantity);
 		if (this.qualifier === 'AT_LEAST') {
 			return this.summonCount >= this.targetQuantity;
 		} else if (this.qualifier === 'AT_MOST') {

@@ -95,7 +95,6 @@ export class ReplaysFilterComponent implements AfterViewInit {
 	}
 
 	private updateFilters() {
-		// console.log('updating filters', this.category, this.replaysState);
 		if (!this.category || !this.replaysState) {
 			return;
 		}

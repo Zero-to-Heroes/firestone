@@ -165,23 +165,22 @@ export class MemoryInspectionService {
 	public async getCurrentScene(): Promise<string> {
 		return new Promise<string>(async (resolve) => {
 			const gameInfo = await this.ow.getGameEventsInfo();
-			// console.log('gameInfo', gameInfo);
+
 			resolve(gameInfo?.res?.game_info?.scene_state);
 		});
 	}
 
 	private handleInfoUpdate(info) {
-		// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 		if (info.feature === 'scene_state') {
 			console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 			this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);
 		} else if (info.feature === 'match') {
 			// This info is only sent when it changed since the last time. So we need to cache it
-			// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
+
 			if (info.info.playersInfo) {
 				const localPlayer: string = info.info.playersInfo.localPlayer;
 				const opponent: string = info.info.playersInfo.opponent;
-				// console.log('[memory service] match playersInfo: ', info.info.playersInfo, localPlayer, opponent);
+
 				if (localPlayer) {
 					this.events.broadcast(Events.PLAYER_INFO, JSON.parse(localPlayer));
 				}

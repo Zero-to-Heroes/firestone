@@ -20,9 +20,9 @@ export class VisualAchievement {
 		if (value.id !== this.id && this.completionSteps.map((step) => step.id).indexOf(value.id) === -1) {
 			return this;
 		}
-		// console.debug('[ach] [visual-achievement] updating achievement', this, value);
+
 		const completionStepsWithNewCompletions = this.updateCompletionSteps(value);
-		// console.debug(
+
 		// 	'[ach] [visual-achievement] completionStepsWithNewCompletions',
 		// 	completionStepsWithNewCompletions,
 		// );
@@ -31,7 +31,7 @@ export class VisualAchievement {
 			value,
 			this.text,
 		);
-		// console.debug('[ach] [visual-achievement] completionSteps', completionSteps, text);
+
 		return Object.assign(new VisualAchievement(), this, {
 			completionSteps: completionSteps, //this.updateCompletionSteps(value),
 			text: text,
@@ -60,7 +60,7 @@ export class VisualAchievement {
 			if (step.id !== value.id) {
 				return step;
 			}
-			// console.log('[visual-achievement] updating completion step', step, value);
+
 			return Object.assign(step, {
 				numberOfCompletions: value.numberOfCompletions || step.numberOfCompletions,
 				progress: value.progress || step.progress,

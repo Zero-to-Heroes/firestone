@@ -14,7 +14,6 @@ export class MinionSummonedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// console.log('parsing minion-summoned', gameEvent);
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
@@ -31,10 +30,9 @@ export class MinionSummonedParser implements EventParser {
 			zone: 'PLAY',
 			temporaryCard: false,
 		} as DeckCard);
-		// console.log('adding card', card);
 
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, card);
-		// console.log('new board', newBoard);
+
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
 		} as DeckState);

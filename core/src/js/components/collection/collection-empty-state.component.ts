@@ -113,7 +113,7 @@ export class CollectionEmptyStateComponent {
 		} else if (this._searchString) {
 			this.sectionSelector = this.NO_SEARCH_RESULT;
 		}
-		// console.log(
+
 		// 	'updated section selector',
 		// 	this.sectionSelector,
 		// 	this._set,

@@ -40,7 +40,6 @@ export class SecretsHelperWidgetIconComponent implements AfterViewInit {
 		}
 		this.big = true;
 		setTimeout(() => (this.big = false), 200);
-		console.log('toggling');
 		this.deckUpdater.next(
 			Object.assign(new GameEvent(), {
 				type: 'TOGGLE_SECRET_HELPER',

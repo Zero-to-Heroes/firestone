@@ -14,7 +14,6 @@ export class DuelsSignatureTreasureFilterSelectedProcessor implements Processor 
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsSignatureTreasureFilter(event.value);
-		console.log('updated duels signature treasure filter', event.value);
 		return [null, null];
 	}
 }

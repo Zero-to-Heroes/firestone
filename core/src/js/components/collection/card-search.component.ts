@@ -72,7 +72,6 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe((data) => {
-				// console.log('value changed?', data);
 				this._searchString = data;
 				this.onSearchStringChange();
 			});
@@ -86,13 +85,11 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 	@Input('searchString') set searchString(searchString: string) {
 		this.searchForm.setValue(searchString);
 		this._searchString = searchString;
-		// console.log('set searchstring', this._searchString);
 	}
 
 	@Input('searchResults') set searchResults(searchResults: readonly SetCard[]) {
 		this._searchResults = searchResults;
 		this.showSearchResults = searchResults && searchResults.length > 0;
-		// console.log('set searchResults', this._searchResults);
 	}
 
 	filterKeyPress(event: KeyboardEvent) {
@@ -103,7 +100,7 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 
 	onSearchStringChange() {
 		this.showSearchResults = false;
-		// console.log('searchstring changed', this._searchString);
+
 		if (!this._searchString || this._searchString.length < 2) {
 			return;
 		}
@@ -116,7 +113,6 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 
 	onValidateSearch(event: KeyboardEvent) {
 		if (event.keyCode === 13 && this._searchString) {
-			// console.log('validating search', this.searchResults, this._searchString);
 			this.stateUpdater.next(new SearchCardsEvent(this._searchString));
 			this.showSearchResults = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
@@ -131,7 +127,6 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 
 	onFocusLost() {
 		setTimeout(() => {
-			console.log('focus lost');
 			this.showSearchResults = false;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();

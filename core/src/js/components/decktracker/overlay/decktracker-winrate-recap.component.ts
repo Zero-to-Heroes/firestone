@@ -46,7 +46,6 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 	private _type: 'matchup' | 'deck';
 
 	@Input() set stats(value: StatsRecap) {
-		// console.log('setting stats', value);
 		if (value === this._stats) {
 			return;
 		}
@@ -55,7 +54,6 @@ export class DeckTrackerWinrateRecapComponent implements OnDestroy {
 	}
 
 	@Input() set type(value: 'matchup' | 'deck') {
-		console.log('setting type', value);
 		if (value === this._type) {
 			return;
 		}

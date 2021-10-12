@@ -73,7 +73,6 @@ export class BgsHeroOverviewComponent {
 	achievementsToDisplay: readonly InternalAchievement[];
 
 	@Input() set hero(value: BgsHeroStat) {
-		// console.debug('setting hero', value);
 		this._hero = value;
 		if (!value) {
 			return;

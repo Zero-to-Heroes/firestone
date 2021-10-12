@@ -14,7 +14,6 @@ export class BgsPostMatchStatsComputedProcessor implements Processor {
 		history,
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
-		// console.debug('[bgs-post-matchstats] computed post-match stats', event);
 		const newStats = currentState.stats.update({
 			bestBgsUserStats: event.newBestStats,
 		} as StatsState);

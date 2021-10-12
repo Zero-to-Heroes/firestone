@@ -140,7 +140,7 @@ export class TheCoinsComponent implements AfterViewInit, OnDestroy {
 			case 'all':
 				return (card: CollectionReferenceCard) => true;
 			default:
-				console.log('unknown filter', this.cardsOwnedActiveFilter);
+				console.warn('unknown filter', this.cardsOwnedActiveFilter);
 				return (card: CollectionReferenceCard) => true;
 		}
 	}

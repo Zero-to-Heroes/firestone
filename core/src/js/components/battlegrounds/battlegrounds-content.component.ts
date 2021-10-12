@@ -99,8 +99,6 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	@Input() set state(value: BattlegroundsState) {
 		this._state = value;
 		this.currentPanel = this._state?.panels?.find((panel) => panel.id === value.currentPanelId);
-
-		// console.log('sett state in -content', value, this.currentStage, this.currentPanel);
 	}
 
 	private battlegroundsUpdater: EventEmitter<BattlegroundsStoreEvent>;
@@ -115,7 +113,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.battlegroundsUpdater = (await this.ow.getMainWindow()).battlegroundsUpdater;
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		// console.log('after view init in bgs content');
+
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe((event) => {
 			this.handleDisplayPreferences(event.preferences);
@@ -135,7 +133,7 @@ export class BattlegroundsContentComponent implements AfterViewInit, OnDestroy {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
-		// console.log('updating prefs', preferences);
+
 		this.enableSimulation = preferences.bgsEnableSimulation;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

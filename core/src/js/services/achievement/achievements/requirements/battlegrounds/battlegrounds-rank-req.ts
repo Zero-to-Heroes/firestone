@@ -50,14 +50,12 @@ export class BattlegroundsRankReq implements Requirement {
 			gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS_FRIENDLY;
 		if (this.isBgs) {
 			const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
-			// console.log('[battlegrounds-rank-req]got battlegrounds info in req', this);
+
 			if (battlegroundsInfo) {
 				this.rankAtReset = battlegroundsInfo.rating;
-				// console.log('[battlegrounds-rank-req]rank at reset', this.rankAtReset);
 			}
 		} else {
 			this.rankAtReset = undefined;
-			// console.log('[battlegrounds-rank-req] not bgs, rank at reset', this.rankAtReset);
 		}
 	}
 
@@ -71,7 +69,6 @@ export class BattlegroundsRankReq implements Requirement {
 			battlegroundsInfo &&
 			battlegroundsInfo.rating >= this.targetRank &&
 			(!this.rankAtReset || battlegroundsInfo.rating !== this.rankAtReset);
-		// console.log('[battlegrounds-rank-req]', battlegroundsInfo, this.isValid, this.rankAtReset, this.targetRank);
 	}
 
 	private async getRank() {
@@ -83,11 +80,10 @@ export class BattlegroundsRankReq implements Requirement {
 	private async getRankInternal(callback): Promise<void> {
 		const rank = await this.memoryInspection.getBattlegroundsInfo();
 		if (!rank || this.rankAtReset === rank.rating) {
-			// console.log('[battlegrounds-rank-req] rank not updated, retrying', this.rankAtReset, rank);
 			setTimeout(() => this.getRankInternal(callback), 1000);
 			return;
 		}
-		// console.log('returning with real rank', rank);
+
 		callback(rank);
 	}
 }

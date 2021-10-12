@@ -19,7 +19,6 @@ export class SecretTriggeredParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// console.log('[secret-triggered]', cardId, gameEvent, deck);
 
 		const newSecrets: readonly BoardSecret[] = deck.secrets
 			.filter((secret) => secret.entityId !== entityId)
@@ -30,7 +29,7 @@ export class SecretTriggeredParser implements EventParser {
 			secrets: newSecrets,
 			otherZone: newOther,
 		} as DeckState);
-		// console.log('[secret-triggered] new deck', entityId, newPlayerDeck);
+
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

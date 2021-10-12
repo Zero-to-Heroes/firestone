@@ -28,7 +28,6 @@ export class CthunRevealedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// console.debug('handling CThun revealed', gameEvent);
 		const [, controllerId, localPlayer] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -47,12 +46,11 @@ export class CthunRevealedParser implements EventParser {
 					creatorCardId: gameEvent.cardId,
 				} as DeckCard),
 			);
-			// console.debug('added to deck', cardId, deckContents);
 		}
 		const newPlayerDeck: DeckState = deck.update({
 			deck: deckContents,
 		} as DeckState);
-		// console.debug('[cthun revealed] newPlayerDeck', newPlayerDeck);
+
 		return currentState.update({
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		} as any);

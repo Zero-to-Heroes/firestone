@@ -248,7 +248,7 @@ export const normalizeHeroCardId = (
 		}
 		// Fallback to regex
 		const bgHeroSkinMatch = heroCardId.match(/(.*)_SKIN_.*/);
-		// console.debug('normalizing', heroCardId, bgHeroSkinMatch);
+
 		if (bgHeroSkinMatch) {
 			return bgHeroSkinMatch[1];
 		}
@@ -426,15 +426,7 @@ export const isSupportedScenario = (
 		battleInfo.playerBoard?.player?.heroPowerId === CardIds.PrestidigitationBattlegrounds ||
 		battleInfo.opponentBoard?.player?.heroPowerId === CardIds.PrestidigitationBattlegrounds
 	) {
-		console.log(
-			'[bgs-simulation] is supported?',
-			result,
-			playerSupport,
-			oppSupport,
-			battleInfo?.playerBoard?.secrets,
-			battleInfo?.opponentBoard?.secrets,
-			battleInfo,
-		);
+		console.log('[bgs-simulation] is supported?', result);
 	}
 	return result;
 };

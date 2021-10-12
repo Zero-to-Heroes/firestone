@@ -31,7 +31,7 @@ export class ShowMatchStatsProcessor implements Processor {
 						} as BgsBoard),
 			  )
 			: [];
-		// console.log('mappedBoardInfo', mappedBoardInfo, matchStats.boardHistory);
+
 		const matchDetail = Object.assign(new MatchDetail(), {
 			replayInfo: selectedInfo,
 			bgsPostMatchStatsPanel: BgsPostMatchStatsPanel.create({

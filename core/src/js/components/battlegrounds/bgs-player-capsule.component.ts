@@ -76,7 +76,7 @@ export class BgsPlayerCapsuleComponent {
 			console.warn('[opponent-big] setting empty value');
 			return;
 		}
-		// console.log('setting next opponent info', value, value.getCurrentTavernTier());
+
 		this.heroCardId = value.getDisplayCardId();
 		// this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.getDisplayCardId()}.png?v=3`;
 		this.health = value.initialHealth - value.damageTaken;

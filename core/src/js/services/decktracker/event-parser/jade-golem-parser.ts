@@ -15,7 +15,6 @@ export class JadeGolemParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			jadeGolemSize: gameEvent.additionalData.golemSize,
 		} as DeckState);
-		console.log('updated deck golem size', newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

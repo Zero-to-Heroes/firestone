@@ -15,18 +15,6 @@ export class DuelsTopDecksDustFilterSelectedProcessor implements Processor {
 		navigationState: NavigationState,
 	): Promise<[MainWindowState, NavigationState]> {
 		await this.prefs.updateDuelsTopDecksDustFilter(event.value);
-		// const duels = await this.duelsService.updateState(
-		// 	currentState.duels,
-		// 	currentState.stats.gameStats,
-		// 	currentState.binder,
-		// );
-		console.log('updated duels top decks dust filter', event.value);
-		return [
-			// currentState.update({
-			// 	duels: duels,
-			// } as MainWindowState),
-			null,
-			null,
-		];
+		return [null, null];
 	}
 }

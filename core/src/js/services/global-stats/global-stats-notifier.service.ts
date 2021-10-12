@@ -54,9 +54,7 @@ export class GlobalStatsNotifierService {
 		if (!currentGlobalStats?.stats) {
 			return statsFromGame;
 		}
-		//console.log('[global-stats] built stats', statsFromGame, currentGlobalStats);
 		const mergedStats: GlobalStats = mergeStats(currentGlobalStats, statsFromGame);
-		//console.log('[global-stats] merged stats', mergedStats);
 		this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(mergedStats));
 	}
 }

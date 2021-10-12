@@ -57,9 +57,8 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		}
 
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;
-		// console.log('enemy board', enemyBoard, isMinionPlayedByPlayer, currentState, gameEvent);
+
 		if (enemyBoard.length < 3) {
-			// console.log('ruling out sacred trial', enemyBoard);
 			secretsWeCantRuleOut.push(CardIds.SacredTrial);
 		}
 		// TODO: handle the case where the max hand size has been bumped to 12
@@ -74,9 +73,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
-			// console.log('marked as invalid', secret, newPlayerDeck);
 		}
 		const newPlayerDeck = deckWithSecretToCheck.update({
 			secrets: secrets as readonly BoardSecret[],

@@ -18,24 +18,18 @@ export class CopiedFromEntityIdParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: CopiedFromEntityIdGameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.debug('copied from entity id event', cardId, controllerId, localPlayer, entityId, gameEvent);
+
 		const copiedCardEntityId = gameEvent.additionalData.copiedCardEntityId;
 		const copiedCardControllerId = gameEvent.additionalData.copiedCardControllerId;
-		// console.debug('copiedCardEntityId', copiedCardEntityId);
-		// console.debug('copiedCardControllerId', copiedCardControllerId);
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// console.debug('isPlayer', isPlayer, deck);
 
 		const isCopiedPlayer = copiedCardControllerId === localPlayer.PlayerId;
 		const copiedDeck = isCopiedPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// console.debug('isCopiedPlayer', isCopiedPlayer, copiedDeck);
 
 		const newCopy: DeckCard = deck.findCard(entityId);
 		const copiedCard: DeckCard = copiedDeck.findCard(copiedCardEntityId);
-		// console.debug('newCopy', newCopy);
-		// console.debug('copiedCard', copiedCard);
 
 		if (!copiedCard) {
 			return currentState;
@@ -47,7 +41,6 @@ export class CopiedFromEntityIdParser implements EventParser {
 			cardName: this.allCards.getCard(updatedCardId)?.name ?? copiedCard.cardId,
 		} as DeckCard);
 		const newCopiedDeck = this.helper.updateCardInDeck(copiedDeck, updatedCopiedCard);
-		// console.debug('updatedCopiedCard', updatedCopiedCard, newCopiedDeck);
 
 		// Also update the secrets
 		const copiedDeckWithSecrets: DeckState = this.updateSecrets(
@@ -55,7 +48,6 @@ export class CopiedFromEntityIdParser implements EventParser {
 			updatedCopiedCard.cardId,
 			copiedCardEntityId,
 		);
-		// console.debug('copiedDeckWithSecrets', copiedDeckWithSecrets);
 
 		return Object.assign(new GameState(), currentState, {
 			[isCopiedPlayer ? 'playerDeck' : 'opponentDeck']: copiedDeckWithSecrets,

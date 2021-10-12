@@ -23,16 +23,14 @@ export class DecksStateBuilderService {
 		patch: PatchInfo,
 		prefs: Preferences = null,
 	): readonly DeckSummary[] {
-		// console.log('[decktracker-stats-loader] update with stats');
 		if (!stats || !stats.gameStats) {
 			return [];
 		}
 		const validReplays = this.buildValidReplays(stats, filters, prefs, patch);
-		// console.log('filtering done', prefs, validDecks, stats);
+
 		const groupByDeckstring = groupBy('playerDecklist');
 		const statsByDeck = groupByDeckstring(validReplays);
-		// console.log('[decktracker-stats-loader] statsByDeck');
-		// console.log('[decktracker-stats-loader] statsByDeck', statsByDeck);
+
 		const deckstrings = Object.keys(statsByDeck);
 		const decks: readonly DeckSummary[] = deckstrings
 			.map((deckstring) => this.buildDeckSummary(deckstring, statsByDeck[deckstring], prefs))
@@ -65,7 +63,6 @@ export class DecksStateBuilderService {
 			for (let i = replaysForDate.length - 1; i >= 0; i--) {
 				if (replaysForDate[i]?.playerRank?.includes('5-')) {
 					indexOfFirstGame = i;
-					console.log('indexOfFirstGame', indexOfFirstGame);
 					break;
 				}
 			}
@@ -150,7 +147,6 @@ export class DecksStateBuilderService {
 			case 'gold':
 				return legendRank != null || (leagueId && leagueId <= 3);
 			case 'platinum':
-				// console.log('filtering', legendRank != null || leagueId >= 2, legendRank, leagueId, stat);
 				return legendRank != null || (leagueId && leagueId <= 2);
 			case 'diamond':
 				return legendRank != null || (leagueId && leagueId <= 1);
@@ -171,7 +167,7 @@ export class DecksStateBuilderService {
 				!prefs.desktopDeckStatsReset[stat.playerDecklist]?.length ||
 				prefs.desktopDeckStatsReset[stat.playerDecklist][0] < stat.creationTimestamp,
 		);
-		// console.debug(statsWithReset);
+
 		const deckName =
 			stats.filter((stat) => stat.playerDeckName).length > 0
 				? stats.filter((stat) => stat.playerDeckName)[0].playerDeckName

@@ -15,7 +15,7 @@ export class AchievementsInitProcessor implements Processor {
 		const result = Object.assign(new MainWindowState(), currentState, {
 			achievements: newAchievements,
 		} as MainWindowState);
-		// console.log('[perf] returning new state in processor');
+
 		return [result, null];
 	}
 }

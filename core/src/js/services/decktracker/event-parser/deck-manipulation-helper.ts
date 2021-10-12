@@ -110,7 +110,6 @@ export class DeckManipulationHelper {
 				.filter((card) => this.normalizeCardId(card.cardId, normalizeUpgradedCards) === normalizedCardId)
 				.every((card) => card.entityId);
 		for (const card of zone) {
-			// console.log('considering', normalizedCardId, card.cardId, card);
 			// We don't want to remove a card if it has a different entityId
 			const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 			// Here we don't want to remove a card with a known entity id, as it might conflict
@@ -224,7 +223,7 @@ export class DeckManipulationHelper {
 			buffCardIds: keepBuffs ? cardTemplate.buffCardIds : undefined,
 			metaInfo: new CardMetaInfo(),
 		} as DeckCard);
-		// console.debug('adding card to zone', [...zone, newCard], cardTemplate);
+
 		return [...zone, newCard];
 	}
 
@@ -295,11 +294,11 @@ export class DeckManipulationHelper {
 					// the cardID to identify the card" (like when dealing with the opponent's deck).
 					// The second case is handled by passing an empty cardId (which is what is returned by the
 					// parser plugin)
-					// console.log('returning null because no card id');
+
 					return null;
 				} else {
 					// Empty card Id
-					// console.log('returning empty card');
+
 					return DeckCard.create({
 						entityId: entityId,
 					} as DeckCard);
@@ -321,13 +320,11 @@ export class DeckManipulationHelper {
 		}
 		// Search by cardId only
 		if (cardId) {
-			// console.log('trying to get a card without providing an entityId', cardId, zone);
 			const found = zone.find((card) => {
 				const refCardId = this.normalizeCardId(card.cardId, normalizeUpgradedCards);
 				return refCardId === normalizedCardId && !card.entityId;
 			});
 			if (!found) {
-				// console.log('could not find card, creating card with default template', cardId, entityId);
 				const card = this.allCards.getCard(cardId);
 				return DeckCard.create({
 					cardId: cardId,
@@ -342,7 +339,7 @@ export class DeckManipulationHelper {
 	}
 
 	// public obfuscateCard(card: DeckCard): DeckCard {
-	// 	// console.log('ofuscating card', card);
+	//
 	// 	return card.update({
 	// 		// entityId: undefined,
 	// 		cardId: undefined,
@@ -352,7 +349,7 @@ export class DeckManipulationHelper {
 
 	public assignCardIdToEntity(deck: DeckState, entityId: number, cardId: string): DeckState {
 		const cardInHand = this.findCardInZone(deck.hand, null, entityId);
-		// console.log('card in hand', cardInHand);
+
 		if (cardInHand && !cardInHand.cardId) {
 			const newCard = cardInHand.update({
 				cardId: cardId,

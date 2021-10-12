@@ -93,7 +93,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DuelsDeckStatVignetteComponent implements AfterViewInit {
 	@Input() set stat(value: DuelsDeckStat) {
-		// console.log('setting stats', value);
 		if (!value || value === this._stat) {
 			return;
 		}

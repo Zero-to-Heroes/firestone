@@ -29,7 +29,6 @@ export class DuelsGroupedTopDecksComponent implements AfterViewInit {
 	@Input() set groupedDecks(value: DuelsGroupedDecks) {
 		this.header = value.header;
 		this._groupedDecks = value.decks;
-		// console.log('receiving grouped replays', value, this._replays);
 	}
 
 	constructor(private ow: OverwolfService) {}

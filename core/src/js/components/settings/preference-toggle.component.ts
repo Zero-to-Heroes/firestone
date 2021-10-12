@@ -106,7 +106,6 @@ export class PreferenceToggleComponent implements AfterViewInit, OnDestroy {
 		this.toggled = true;
 		await this.prefs.setValue(this.field, !this.value);
 		if (this.toggleFunction) {
-			// console.log('calling toggle function', this.toggleFunction);
 			this.toggleFunction(this.value);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {

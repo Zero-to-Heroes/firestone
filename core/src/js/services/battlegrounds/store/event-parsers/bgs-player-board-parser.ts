@@ -35,11 +35,10 @@ export class BgsPlayerBoardParser implements EventParser {
 			'[bgs-simulation] received player boards',
 			event.playerBoard?.board?.length,
 			event.opponentBoard?.board?.length,
-			event.playerBoard?.secrets,
-			event.opponentBoard?.secrets,
+			event.playerBoard?.secrets?.length,
+			event.opponentBoard?.secrets?.length,
 		);
 
-		// console.debug('[bgs-simulation] received player boards', event);
 		if (event.playerBoard?.board?.length > 7 || event.opponentBoard?.board?.length > 7) {
 			setTimeout(async () => {
 				const gameLogsKey = await this.logsUploader.uploadGameLogs();
@@ -68,7 +67,7 @@ export class BgsPlayerBoardParser implements EventParser {
 
 		const player: BgsPlayer = this.updatePlayer(currentState, event.playerBoard);
 		const opponent: BgsPlayer = this.updatePlayer(currentState, event.opponentBoard);
-		// console.debug('[bgs-simulation] players', player, opponent, currentState, event);
+
 		if (!player || !opponent) {
 			console.warn('[bgs-simulation] missing player or opponent, returning');
 			return currentState;

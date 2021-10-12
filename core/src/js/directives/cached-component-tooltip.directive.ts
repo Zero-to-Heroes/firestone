@@ -23,7 +23,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@Input() set componentType(value: ComponentType<any>) {
 		this._componentType = value;
-		// console.log('setting component type', value);
+
 		if (value && value !== this._componentType) {
 			this.updatePositionStrategy();
 		}
@@ -31,7 +31,7 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 	@Input() set componentInput(value: any) {
 		this._componentInput = value;
-		// console.log('setting component input', value);
+
 		if (value && value !== this._componentInput) {
 			this.updatePositionStrategy();
 		}
@@ -56,7 +56,6 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 	}
 
 	private updatePositionStrategy() {
-		// console.debug('updatePositionStrategy', this.viewInit, this._componentInput, this._componentType);
 		if (!this.viewInit || !this._componentInput || !this._componentType) {
 			console.warn('not ready yet', this.viewInit, this._componentInput, this._componentType);
 			return;
@@ -76,11 +75,10 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 			.flexibleConnectedTo(this.elementRef)
 			// Describe how to connect overlay to the elementRef
 			.withPositions(positions);
-		// console.log('[card-tooltip] elementRef', this.elementRef, positions, this.position);
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
-		// console.debug('built overlay ref', this.overlayRef);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -107,11 +105,10 @@ export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy
 
 			// Pass content to tooltip component instance
 			this.tooltipRef.instance.config = this._componentInput;
-			// console.log('created tooltipRef', this.tooltipRef);
 		}
 		this.tooltipRef.instance.visible = true;
 		this.positionStrategy.apply();
-		// console.log('created tooltip instance', this.tooltipRef);
+
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

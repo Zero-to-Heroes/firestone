@@ -39,19 +39,18 @@ export class ReplaysStateBuilderService {
 
 	// Update the filters
 	public async filterReplays(replayState: ReplaysState, stats: StatsState): Promise<ReplaysState> {
-		// console.log('filtering replays', replayState, stats, type, value);
 		const prefs = await this.prefs.getPreferences();
 		const allFilters: readonly FilterValue[] = this.buildReplayFilters(prefs);
-		// console.debug('allFilters', allFilters);
+
 		let updatedFilters = replayState.filters;
 		for (const filter of allFilters) {
 			updatedFilters = this.updateFilters(updatedFilters, filter.type, filter.value);
 		}
-		// console.debug('updated filters', updatedFilters);
+
 		const filteredStats: readonly GameStat[] = this.filterStats(stats, updatedFilters);
-		// console.debug('filteredStats', filteredStats);
+
 		const groupedReplays: readonly GroupedReplays[] = this.groupReplays(filteredStats, replayState.groupByCriteria);
-		// console.debug('groupedReplays', groupedReplays);
+
 		return Object.assign(new ReplaysState(), replayState, {
 			allReplays: filteredStats,
 			groupedReplays: groupedReplays,
@@ -119,7 +118,7 @@ export class ReplaysStateBuilderService {
 		};
 		const groupByDate = groupByFunction(groupingFunction);
 		const replaysByDate = groupByDate(allReplays);
-		// console.log('[replays-state-builder] loaded replays by date');
+
 		return Object.keys(replaysByDate).map((date) => this.buildGroupedReplays(date, replaysByDate[date]));
 	}
 

@@ -127,7 +127,7 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 	onResize() {
 		const chartContainer = this.el.nativeElement.querySelector('.container');
 		const rect = chartContainer.getBoundingClientRect();
-		// console.log('chartContainer', chartContainer, rect);
+
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.width / 2;
 		this.lineChartColors = [
@@ -146,7 +146,6 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 	}
 
 	private getBackgroundColor() {
-		// console.log('setting gradient', Math.round(this.chartHeight));
 		if (!this.chart?.nativeElement) {
 			return;
 		}
@@ -156,7 +155,7 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 		gradient.addColorStop(0, 'rgba(206, 115, 180, 1)'); // #CE73B4
 		gradient.addColorStop(0.4, 'rgba(206, 115, 180, 0.4)');
 		gradient.addColorStop(1, 'rgba(206, 115, 180, 0)');
-		// console.log('returning gradient', gradient);
+
 		return gradient;
 	}
 }

@@ -91,7 +91,6 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		this.positionWindow();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener((message) => {
-			console.log('received', message);
 			if (message.id === 'ready') {
 				this.title = 'Your abilities are ready!';
 				this.loading = false;
@@ -136,7 +135,6 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		const gameHeight = gameInfo.logicalHeight;
 		const newLeft = ~~(gameWidth * 0.4) - 440;
 		const newTop = ~~(gameHeight * 0.1);
-		console.log('changing loading window position', this.thisWindowId, newLeft, newTop);
 		this.ow.changeWindowPosition(this.thisWindowId, newLeft, newTop);
 	}
 }

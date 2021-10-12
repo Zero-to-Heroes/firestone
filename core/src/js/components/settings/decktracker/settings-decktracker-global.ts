@@ -143,7 +143,6 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 		this.loadDefaultValues();
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe((shouldDisplay) => {
-			// console.log('should display', shouldDisplay);
 			this.sliderEnabled = shouldDisplay;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -172,9 +171,8 @@ export class SettingsDecktrackerGlobalComponent implements AfterViewInit, OnDest
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		// console.log('handling history click', event);
 		const rect = this.el.nativeElement.querySelector('.decktracker-appearance').getBoundingClientRect();
-		// console.log('element rect', rect);
+
 		const scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();

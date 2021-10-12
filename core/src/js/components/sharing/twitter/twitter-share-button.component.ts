@@ -52,14 +52,12 @@ export class TwitterShareButtonComponent extends SocialShareButtonComponent {
 		modalRef.instance.base64Image = base64Image;
 		modalRef.instance.closeHandler = () => this.overlayRef.detach();
 		modalRef.instance.fileLocation = screenshotLocation;
-		console.log('instanciated modalRef', null);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 
 		const userInfo = await this.ow.getTwitterUserInfo();
 		modalRef.instance.socialUserInfo = userInfo;
-		console.log('instanciated modalRef 2', userInfo);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

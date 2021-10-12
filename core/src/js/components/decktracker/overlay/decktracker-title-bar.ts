@@ -42,7 +42,6 @@ export class DeckTrackerTitleBarComponent implements OnDestroy {
 	_tooltipPosition: CardTooltipPositionType;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
-		// console.log('[decktracker-deck-list] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 

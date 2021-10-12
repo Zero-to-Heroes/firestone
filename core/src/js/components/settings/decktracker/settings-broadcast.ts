@@ -111,12 +111,9 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 
 	ngAfterViewInit() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		console.log('registered prefs event bus', preferencesEventBus);
 		this.preferencesSubscription = preferencesEventBus.subscribe(async (event) => {
-			console.log('received pref event', event);
 			if (event?.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 				await this.loadDefaultValues();
-				console.log('broadcast prefs updated');
 			}
 		});
 		this.cdr.detach();
@@ -137,9 +134,7 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 	}
 
 	preventMiddleClick(event: MouseEvent) {
-		// console.log('intercepting mouse click?', event);
 		if (event.which === 2) {
-			// console.log('preventing middle click on href, as it messes up with the windowing system');
 			event.stopPropagation();
 			event.preventDefault();
 			return false;

@@ -40,7 +40,7 @@ export class DeckTrackerCardsRecapComponent {
 		} else if (value && value.isOpponent && value.hero && value.deckList.length > 0 && value.deck.length > 0) {
 			// Our best guess if we don't have the direct info but have a decklist
 			this.cardsInDeck = value.deck.length - value.hand.length;
-			// console.log(
+
 			// 	'computed cards in deck',
 			// 	this.cardsInDeck,
 			// 	value.deck.length,

@@ -35,7 +35,7 @@ export class ReplaysNotificationService {
 
 		const stat = Object.assign(new GameStat(), stats.stats[0]);
 		console.log('[replays-notification] preparing new game stat notification', stat);
-		// console.log('[replays-notification] will emit notif notification', stat);
+
 		this.notificationService.emitNewNotification({
 			notificationId: `replay-${stat.reviewId}`,
 			content: this.buildNotificationTemplate(stat, xpForGame),

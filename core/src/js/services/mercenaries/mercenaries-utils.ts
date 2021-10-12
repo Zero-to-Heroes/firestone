@@ -25,7 +25,6 @@ export const getMercCardLevel = (cardId: string): number => {
 	// Generic handling of mercenaries skins or levelling
 	const skinMatch = cardId.match(/.*_(\d\d)/);
 	if (skinMatch) {
-		console.debug('found a match', cardId, skinMatch);
 		return parseInt(skinMatch[1]);
 	}
 	return 0;
@@ -45,7 +44,7 @@ export const getMercLevelFromExperience = (totalXp: number, referenceData: Merce
 		currentLevel++;
 		xpToAttribute -= levelMapping.xpToNext;
 	}
-	// console.log(totalXp, 'maps to lvl', currentLevel);
+
 	return currentLevel;
 };
 
