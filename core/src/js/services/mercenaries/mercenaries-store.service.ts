@@ -5,6 +5,7 @@ import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../cards-facade.service';
+import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
@@ -39,6 +40,10 @@ export class MercenariesStoreService {
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 	) {
+		if (!FeatureFlags.ENABLE_MERCENARIES_TEAM_WIDGET) {
+			return;
+		}
+
 		this.init();
 		this.internalEventSubject$
 			.asObservable()
