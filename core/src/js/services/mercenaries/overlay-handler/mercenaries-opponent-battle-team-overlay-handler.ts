@@ -12,11 +12,11 @@ export class MercenariesOpponentBattleTeamOverlayHandler implements MercenariesO
 		// Do nothing for now
 	}
 
-	public async updateOverlay(state: MercenariesBattleState): Promise<void> {
+	public async updateOverlay(state: MercenariesBattleState, preferences: Preferences): Promise<void> {
 		// const prefs = await this.prefs.getPreferences();
 		const windowId = OverwolfService.MERCENARIES_OPPONENT_TEAM_WINDOW;
 		const theWindow = await this.ow.getWindowState(windowId);
-		const shouldShow = !!state && !state.closedManually;
+		const shouldShow = !!state && !state.closedManually && preferences.mercenariesEnableOpponentTeamWidget;
 		if (shouldShow && isWindowClosed(theWindow.window_state_ex)) {
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { concatMap, distinctUntilChanged, filter } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { concatMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { GameEvent } from '../../models/game-event';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
+import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
 import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -29,7 +30,10 @@ export class MercenariesStoreService {
 	private internalStore$ = new BehaviorSubject<MercenariesBattleState>(null);
 	private internalEventSubject$ = new BehaviorSubject<GameEvent>(null);
 
-	private mainWindowState: MainWindowState;
+	private preferences$: Observable<Preferences>;
+	private mainWindowState$: Observable<MainWindowState>;
+
+	// private mainWindowState: MainWindowState;
 	// private battleState: MercenariesBattleState = new MercenariesBattleState();
 	private parsers: { [eventType: string]: readonly MercenariesParser[] };
 	private eventEmitters: ((state: MercenariesBattleState) => void)[] = [];
@@ -46,33 +50,37 @@ export class MercenariesStoreService {
 		}
 
 		this.init();
-		this.internalEventSubject$
-			.asObservable()
-			.pipe(
-				distinctUntilChanged(),
-				filter((event) => !!event),
-				concatMap(async (event) => await this.processEvent(event)),
-			)
-			.subscribe();
-		this.internalStore$
-			.asObservable()
-			.pipe(
-				distinctUntilChanged(),
-				concatMap(async (newState) => await this.emitState(newState)),
-			)
-			.subscribe();
-		window['mercenariesStore'] = this.store$;
-		window['battleStateUpdater'] = this.internalEventSubject$;
 
-		const mainWindowStoreEmitter: BehaviorSubject<MainWindowState> = window['mainWindowStore'];
-		mainWindowStoreEmitter.subscribe((newState) => {
-			this.mainWindowState = newState;
+		// So that we're sure that all services have been initialized
+		setTimeout(() => {
+			this.preferences$ = (this.ow.getMainWindow().preferencesEventBus as BehaviorSubject<any>)
+				.asObservable()
+				.pipe(map((theEvent) => theEvent.preferences as Preferences));
+			this.mainWindowState$ = (this.ow.getMainWindow()
+				.mainWindowStore as BehaviorSubject<MainWindowState>).asObservable();
+
+			combineLatest(this.internalEventSubject$.asObservable(), this.mainWindowState$)
+				.pipe(
+					distinctUntilChanged(),
+					filter(([event, mainWindowState]) => !!event),
+					concatMap(async ([event, mainWindowState]) => await this.processEvent(event, mainWindowState)),
+				)
+				.subscribe();
+			combineLatest(this.preferences$, this.internalStore$.asObservable())
+				.pipe(
+					distinctUntilChanged(),
+					concatMap(async ([prefs, newState]) => await this.emitState(newState, prefs)),
+				)
+				.subscribe();
+
+			window['battleStateUpdater'] = this.internalEventSubject$;
+			window['mercenariesStore'] = this.store$;
 		});
 	}
 
 	// Maybe find a way to only emit the state each N milliseconds at the most to limit the
 	// redraws in the UI
-	private async processEvent(event: GameEvent): Promise<void> {
+	private async processEvent(event: GameEvent, mainWindowState: MainWindowState): Promise<void> {
 		const battleState = this.internalStore$.value;
 		// console.debug('[mercenaries-store] processing event', event.type, event, battleState);
 		const parsers = this.getParsersFor(event.type, battleState);
@@ -82,16 +90,16 @@ export class MercenariesStoreService {
 
 		let state = battleState;
 		for (const parser of parsers) {
-			state = await parser.parse(state, event, this.mainWindowState);
+			state = await parser.parse(state, event, mainWindowState);
 			console.debug('[mercenaries-store] processed event', event.type, event, state);
 		}
 		this.internalStore$.next(state);
 	}
 
-	private async emitState(newState: MercenariesBattleState): Promise<void> {
+	private async emitState(newState: MercenariesBattleState, preferences: Preferences): Promise<void> {
 		console.debug('[mercenaries-store] emitting state', newState);
 		this.eventEmitters.forEach((emitter) => emitter(newState));
-		await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(newState)));
+		await Promise.all(this.overlayHandlers.map((handler) => handler.updateOverlay(newState, preferences)));
 	}
 
 	private init() {

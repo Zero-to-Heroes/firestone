@@ -2,6 +2,5 @@ import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-
 import { Preferences } from '../../../models/preferences';
 
 export interface MercenariesOverlayHandler {
-	updateOverlay(state: MercenariesBattleState): Promise<void>;
-	handleDisplayPreferences(preferences: Preferences): Promise<void>;
+	updateOverlay(state: MercenariesBattleState, preferences: Preferences): Promise<void>;
 }

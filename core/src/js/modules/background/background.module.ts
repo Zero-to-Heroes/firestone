@@ -283,6 +283,9 @@ import { SettingsGeneralLaunchComponent } from '../../components/settings/genera
 import { SettingsGeneralMenuComponent } from '../../components/settings/general/settings-general-menu.component';
 import { SettingsGeneralThirdPartyComponent } from '../../components/settings/general/settings-general-third-party.component';
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
+import { SettingsMercenariesGeneralComponent } from '../../components/settings/mercenaries/settings-mercenaries-general.component';
+import { SettingsMercenariesMenuComponent } from '../../components/settings/mercenaries/settings-mercenaries-menu.component';
+import { SettingsMercenariesComponent } from '../../components/settings/mercenaries/settings-mercenaries.component';
 import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 import { SettingsModalComponent } from '../../components/settings/modal/settings-modal.component';
 import { PreferenceSliderComponent } from '../../components/settings/preference-slider.component';
@@ -734,6 +737,10 @@ const components = [
 		SettingsBattlegroundsComponent,
 		SettingsBattlegroundsGeneralComponent,
 		SettingsBattlegroundsMenuComponent,
+
+		SettingsMercenariesComponent,
+		SettingsMercenariesMenuComponent,
+		SettingsMercenariesGeneralComponent,
 
 		PreferenceSliderComponent,
 

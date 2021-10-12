@@ -44,6 +44,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 					*ngSwitchCase="'battlegrounds'"
 					[selectedMenu]="selectedMenu"
 				></settings-battlegrounds>
+				<settings-mercenaries
+					*ngSwitchCase="'mercenaries'"
+					[selectedMenu]="selectedMenu"
+				></settings-mercenaries>
 			</ng-container>
 			<settings-advanced-toggle></settings-advanced-toggle>
 			<settings-modal></settings-modal>

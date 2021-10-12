@@ -1,8 +1,8 @@
 import { NonFunctionProperties, updateFirstElementWithoutProp } from '../../services/utils';
 
 export class MercenariesBattleState {
-	readonly inGame: boolean;
-	readonly reconnectOngoing: boolean;
+	// readonly inGame: boolean;
+	// readonly reconnectOngoing: boolean;
 	readonly spectating: boolean;
 	readonly closedManually: boolean;
 	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();

@@ -111,10 +111,10 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
-				"size": { "width": 730, "height": 620 },
+				"size": { "width": 780, "height": 620 },
 				"start_position": { "top": 200, "left": 200 },
-				"min_size": { "width": 680, "height": 620 },
-				"max_size": { "width": 680, "height": 620 }
+				"min_size": { "width": 780, "height": 620 },
+				"max_size": { "width": 780, "height": 620 }
 			},
 			"SettingsWindow": {
 				"file": "Files/settings.html",
@@ -126,10 +126,10 @@
 				"desktop_only": true,
 				"topmost": false,
 				"disable_hardware_acceleration": true,
-				"size": { "width": 730, "height": 620 },
+				"size": { "width": 780, "height": 620 },
 				"start_position": { "top": 200, "left": 200 },
-				"min_size": { "width": 680, "height": 620 },
-				"max_size": { "width": 680, "height": 620 }
+				"min_size": { "width": 780, "height": 620 },
+				"max_size": { "width": 780, "height": 620 }
 			},
 			"CollectionOverlayWindow": {
 				"file": "Files/collection.html",

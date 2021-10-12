@@ -12,26 +12,29 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 			<li [ngClass]="{ 'selected': selectedApp === 'general' }" (mousedown)="changeSelection('general')">
 				<span>General</span>
 			</li>
-			<li
-				[ngClass]="{ 'selected': selectedApp === 'achievements' }"
-				(mousedown)="changeSelection('achievements')"
-			>
-				<span>Achievements</span>
-			</li>
-			<li [ngClass]="{ 'selected': selectedApp === 'collection' }" (mousedown)="changeSelection('collection')">
-				<span>Collection</span>
-			</li>
 			<li [ngClass]="{ 'selected': selectedApp === 'decktracker' }" (mousedown)="changeSelection('decktracker')">
 				<span>Deck Tracker</span>
-			</li>
-			<li [ngClass]="{ 'selected': selectedApp === 'replays' }" (mousedown)="changeSelection('replays')">
-				<span>Replays</span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedApp === 'battlegrounds' }"
 				(mousedown)="changeSelection('battlegrounds')"
 			>
 				<span>Battlegrounds</span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedApp === 'mercenaries' }" (mousedown)="changeSelection('mercenaries')">
+				<span>Mercenaries</span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedApp === 'replays' }" (mousedown)="changeSelection('replays')">
+				<span>Replays</span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedApp === 'collection' }" (mousedown)="changeSelection('collection')">
+				<span>Collection</span>
+			</li>
+			<li
+				[ngClass]="{ 'selected': selectedApp === 'achievements' }"
+				(mousedown)="changeSelection('achievements')"
+			>
+				<span>Achievements</span>
 			</li>
 		</ul>
 	`,
