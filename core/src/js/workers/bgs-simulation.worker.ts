@@ -4,14 +4,13 @@ import { BgsBattleInfo } from '@firestone-hs/simulate-bgs-battle/dist/bgs-battle
 import { CardsData } from '@firestone-hs/simulate-bgs-battle/dist/cards/cards-data';
 import { SimulationResult } from '@firestone-hs/simulate-bgs-battle/dist/simulation-result';
 
-
 const ctx: Worker = self as any;
 
 // Respond to message from parent thread
 ctx.onmessage = async (ev) => {
 	const battleInfo: BgsBattleInfo = ev.data.battleMessage;
 	const cards: AllCardsService = Object.assign(new AllCardsService(), ev.data.cards);
-	
+
 	const cardsData = new CardsData(cards, false);
 	cardsData.inititialize(battleInfo.options.validTribes);
 
