@@ -6,7 +6,7 @@ export class FeatureFlags {
 	public static readonly ENABLE_MERCENARIES_TAB = true;
 
 	public static readonly ENABLE_STATS_TAB = true;
-	public static readonly ENABLE_MERCENARIES_TEAM_WIDGET = false;
+	public static readonly ENABLE_MERCENARIES_TEAM_WIDGET = true;
 
 	// Shelved for now
 	public static readonly ENABLE_MULTI_GRAPHS = false;

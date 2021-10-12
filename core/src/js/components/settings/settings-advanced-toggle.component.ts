@@ -44,6 +44,9 @@ export class SettingsAdvancedToggleComponent implements AfterViewInit, OnDestroy
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe((event) => {
 			const preferences: Preferences = event.preferences;
+			if (!preferences) {
+				return;
+			}
 			this.advancedModeToggledOn = preferences.advancedModeToggledOn;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -62,6 +65,9 @@ export class SettingsAdvancedToggleComponent implements AfterViewInit, OnDestroy
 
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
+		if (!prefs) {
+			return;
+		}
 		this.advancedModeToggledOn = prefs.advancedModeToggledOn;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

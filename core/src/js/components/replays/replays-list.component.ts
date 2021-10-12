@@ -12,7 +12,6 @@ import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays'
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { Preferences } from '../../models/preferences';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { isMercenaries } from '../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { arraysEqual } from '../../services/utils';
 
@@ -81,9 +80,9 @@ export class ReplaysListComponent implements AfterViewInit {
 		);
 		const shouldHideBgHeroFilter = !['battlegrounds'].includes(value.getFilter('gameMode').selectedOption);
 		const shouldHidePlayerClassFilter =
-			[null, 'battlegrounds', 'practice', 'mercenaries-all'].includes(
+			[null, undefined, 'battlegrounds', 'practice', 'mercenaries-all'].includes(
 				value.getFilter('gameMode').selectedOption,
-			) || value.getFilter('gameMode').selectedOption.startsWith('mercenaries');
+			) || value.getFilter('gameMode').selectedOption?.startsWith('mercenaries');
 		if (
 			shouldHideDeckstringFilter === this.shouldHideDeckstringFilter &&
 			shouldHideBgHeroFilter === this.shouldHideBgHeroFilter &&

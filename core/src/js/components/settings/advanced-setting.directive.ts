@@ -51,6 +51,9 @@ export class AdvancedSettingDirective implements AfterViewInit, OnDestroy {
 
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
+		if (!prefs) {
+			return;
+		}
 		this.updateVisibility(prefs.advancedModeToggledOn);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
