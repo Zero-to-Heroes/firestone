@@ -17,6 +17,7 @@ import { MercenariesAbilityRevealedParser } from './parser/mercenaries-ability-r
 import { MercenariesAbilityUpdatedParser } from './parser/mercenaries-ability-updated-parser';
 import { MercenariesEquipmentRevealedParser } from './parser/mercenaries-equipment-revealed-parser';
 import { MercenariesEquipmentUpdatedParser } from './parser/mercenaries-equipment-updated-parser';
+import { MercenariesGameEndParser } from './parser/mercenaries-game-end-parser';
 import { MercenariesHeroRevealedParser } from './parser/mercenaries-hero-revealed-parser';
 import { MercenariesHeroUpdatedParser } from './parser/mercenaries-hero-updated-parser';
 import { MercenariesMatchMetadataParser } from './parser/mercenaries-match-metadata-parser';
@@ -126,7 +127,7 @@ export class MercenariesStoreService {
 	private registerParser() {
 		const parsers: readonly MercenariesParser[] = [
 			new MercenariesMatchMetadataParser(),
-			// new MercenariesGameEndParser(),
+			new MercenariesGameEndParser(),
 
 			new MercenariesHeroRevealedParser(this.allCards),
 			new MercenariesHeroUpdatedParser(this.allCards),
