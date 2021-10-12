@@ -10,9 +10,9 @@ export const normalizeMercenariesCardId = (
 	if (!cardId?.length) {
 		return null;
 	}
-	const skinMatch = cardId.match(/.*_(\d\d)/);
+	const skinMatch = cardId.match(/.*_(\d\d)$/);
 	if (skinMatch) {
-		return cardId.replace(/(.*)(_\d\d)/, '$1_01');
+		return cardId.replace(/(.*)(_\d\d)$/, '$1_01');
 	}
 	return cardId;
 };

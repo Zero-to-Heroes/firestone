@@ -43,6 +43,7 @@ export class MercenariesBattleTeam {
 export class BattleMercenary {
 	readonly entityId: number;
 	readonly cardId: string;
+	readonly creatorCardId: string;
 	readonly role: string;
 	readonly level: number;
 	readonly inPlay: boolean;
@@ -70,6 +71,7 @@ export class BattleMercenary {
 		const isCardIdPresent = this.abilities.some(
 			(ability) => normalizeMercenariesCardId(ability.cardId) === normalizeMercenariesCardId(cardId),
 		);
+		const hasElementWithoutEntityId = this.abilities.some((ability) => !ability.entityId);
 		const newAbilities = isEntityIdPresent
 			? this.abilities.map((ability) => (ability.entityId === entityId ? ability.update(base) : ability))
 			: isCardIdPresent
@@ -78,7 +80,9 @@ export class BattleMercenary {
 						? ability.update(base)
 						: ability,
 			  )
-			: updateFirstElementWithoutProp(this.abilities, (ability: BattleAbility) => ability.entityId, base);
+			: hasElementWithoutEntityId
+			? updateFirstElementWithoutProp(this.abilities, (ability: BattleAbility) => ability.entityId, base)
+			: [...this.abilities, base];
 		return this.update({ abilities: newAbilities });
 	}
 

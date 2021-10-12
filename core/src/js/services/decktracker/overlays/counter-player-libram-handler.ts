@@ -8,7 +8,11 @@ export class LibramPlayerCounterOverlayHandler extends AbstractOverlayHandler {
 		super(
 			OverwolfService.COUNTER_PLAYER_LIBRAM_WINDOW,
 			(prefs) => prefs.playerLibramCounter,
-			(state) => state?.playerDeck?.containsLibram(allCards) && !state.isBattlegrounds(),
+			(state) =>
+				state?.playerDeck?.containsLibram(allCards) &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

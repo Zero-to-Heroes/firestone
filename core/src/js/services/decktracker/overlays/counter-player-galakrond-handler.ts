@@ -8,7 +8,11 @@ export class GalakroundPlayerCounterOverlayHandler extends AbstractOverlayHandle
 		super(
 			OverwolfService.COUNTER_PLAYER_GALAKROND_WINDOW,
 			(prefs) => prefs.playerGalakrondCounter,
-			(state) => state?.playerDeck?.containsGalakrond(allCards) && !state.isBattlegrounds(),
+			(state) =>
+				state?.playerDeck?.containsGalakrond(allCards) &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

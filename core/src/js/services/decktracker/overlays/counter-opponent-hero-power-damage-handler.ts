@@ -9,9 +9,11 @@ export class HeroPowerDamageOpponentCounterOverlayHandler extends AbstractOverla
 			OverwolfService.COUNTER_OPPONENT_HERO_POWER_DAMAGE,
 			(prefs) => prefs.opponentHeroPowerDamageCounter,
 			(state) =>
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries() &&
 				state?.opponentDeck?.heroPowerDamageThisMatch > 0 &&
-				state.opponentDeck.hero?.playerClass === 'mage' &&
-				!state.isBattlegrounds(),
+				state.opponentDeck.hero?.playerClass === 'mage',
 			ow,
 			prefs,
 			allCards,

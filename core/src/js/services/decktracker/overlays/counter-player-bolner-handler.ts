@@ -11,7 +11,9 @@ export class BolnerPlayerCounterOverlayHandler extends AbstractOverlayHandler {
 			(state) =>
 				!!state?.playerDeck?.firstBattlecryPlayedThisTurn(allCards) &&
 				state.playerDeck.hasBolner() &&
-				!state.isBattlegrounds(),
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

@@ -19,7 +19,12 @@ export class ConstructedWindowHandler extends AbstractOverlayHandler {
 			(prefs) =>
 				FeatureFlags.SHOW_CONSTRUCTED_SECONDARY_WINDOW &&
 				(prefs.achievementsLiveTracking || prefs.guessOpponentArchetype),
-			(state) => !this.closedByUser && !state.isBattlegrounds() && state.metadata?.gameType != null,
+			(state) =>
+				!this.closedByUser &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries() &&
+				state.metadata?.gameType != null,
 			ow,
 			prefs,
 			allCards,

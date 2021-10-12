@@ -8,7 +8,11 @@ export class PogoOpponentCounterOverlayHandler extends AbstractOverlayHandler {
 		super(
 			OverwolfService.COUNTER_OPPONENT_POGO_WINDOW,
 			(prefs) => prefs.opponentPogoCounter,
-			(state) => state?.opponentDeck?.containsPogoHopper() && !state.isBattlegrounds(),
+			(state) =>
+				state?.opponentDeck?.containsPogoHopper() &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

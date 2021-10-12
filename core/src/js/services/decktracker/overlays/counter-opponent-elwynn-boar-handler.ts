@@ -8,7 +8,11 @@ export class ElwynnBoarOpponentCounterOverlayHandler extends AbstractOverlayHand
 		super(
 			OverwolfService.COUNTER_OPPONENT_ELWYNN_BOAR_WINDOW,
 			(prefs) => prefs.opponentElwynnBoarCounter,
-			(state) => state?.opponentDeck?.containsElwynnBoar() && !state.isBattlegrounds(),
+			(state) =>
+				state?.opponentDeck?.containsElwynnBoar() &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

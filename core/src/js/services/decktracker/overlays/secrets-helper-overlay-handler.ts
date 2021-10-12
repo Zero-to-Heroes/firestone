@@ -8,7 +8,8 @@ export class SecretsHelperOverlayHandler extends AbstractOverlayHandler {
 		super(
 			OverwolfService.SECRETS_HELPER_WINDOW,
 			(prefs) => prefs.secretsHelper,
-			(state) => state.opponentDeck?.secrets?.length && !state.isBattlegrounds(),
+			(state) =>
+				state && state.opponentDeck?.secrets?.length && !state.isBattlegrounds() && !state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

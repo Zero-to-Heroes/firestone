@@ -18,7 +18,11 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 			OverwolfService.DECKTRACKER_OPPONENT_WINDOW,
 			(prefs) => prefs.opponentTracker,
 			(state, prefs, showDecktrackerFromGameMode) =>
-				!this.closedByUser && !state.isBattlegrounds() && showDecktrackerFromGameMode,
+				!this.closedByUser &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries() &&
+				showDecktrackerFromGameMode,
 			ow,
 			prefs,
 			allCards,
@@ -52,7 +56,14 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 		}
 
 		if (!prefs.decktrackerCloseOnGameEnd) {
-			return shouldShowFromState && state?.gameStarted && state.metadata?.formatType && !state.isBattlegrounds();
+			return (
+				shouldShowFromState &&
+				state &&
+				state.gameStarted &&
+				state.metadata?.formatType &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries()
+			);
 		}
 
 		// We explicitely don't check for null, so that if the memory updates are broken

@@ -8,7 +8,11 @@ export class JadeGolemOpponentCounterOverlayHandler extends AbstractOverlayHandl
 		super(
 			OverwolfService.COUNTER_OPPONENT_JADE_WINDOW,
 			(prefs) => prefs.opponentJadeGolemCounterCounter,
-			(state) => state?.opponentDeck?.containsJade(allCards) && !state.isBattlegrounds(),
+			(state) =>
+				state?.opponentDeck?.containsJade(allCards) &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

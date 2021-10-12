@@ -6,7 +6,6 @@ import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { MercenariesBattleState } from '../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
-import { FeatureFlags } from '../feature-flags';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
@@ -18,6 +17,7 @@ import { MercenariesAbilityUpdatedParser } from './parser/mercenaries-ability-up
 import { MercenariesEquipmentRevealedParser } from './parser/mercenaries-equipment-revealed-parser';
 import { MercenariesEquipmentUpdatedParser } from './parser/mercenaries-equipment-updated-parser';
 import { MercenariesGameEndParser } from './parser/mercenaries-game-end-parser';
+import { MercenariesHeroDiedParser } from './parser/mercenaries-hero-died-parser';
 import { MercenariesHeroRevealedParser } from './parser/mercenaries-hero-revealed-parser';
 import { MercenariesHeroUpdatedParser } from './parser/mercenaries-hero-updated-parser';
 import { MercenariesMatchMetadataParser } from './parser/mercenaries-match-metadata-parser';
@@ -46,10 +46,6 @@ export class MercenariesStoreService {
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
 	) {
-		if (!FeatureFlags.ENABLE_MERCENARIES_TEAM_WIDGET) {
-			return;
-		}
-
 		this.init();
 
 		// So that we're sure that all services have been initialized
@@ -92,6 +88,7 @@ export class MercenariesStoreService {
 		let state = battleState;
 		for (const parser of parsers) {
 			state = await parser.parse(state, event, mainWindowState);
+			// console.debug('[merc-store] updated state', state);
 		}
 		this.internalStore$.next(state);
 	}
@@ -129,6 +126,7 @@ export class MercenariesStoreService {
 
 			new MercenariesHeroRevealedParser(this.allCards),
 			new MercenariesHeroUpdatedParser(this.allCards),
+			new MercenariesHeroDiedParser(this.allCards),
 			new MercenariesAbilityRevealedParser(this.allCards),
 			new MercenariesAbilityUpdatedParser(this.allCards),
 			new MercenariesAbilityActivatedParser(this.allCards),

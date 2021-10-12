@@ -8,7 +8,7 @@ export class AttackPlayerCounterOverlayHandler extends AbstractOverlayHandler {
 		super(
 			OverwolfService.COUNTER_PLAYER_ATTACK_WINDOW,
 			(prefs) => prefs.playerAttackCounter,
-			(state) => !state.isBattlegrounds(),
+			(state) => state && !state.isBattlegrounds() && !state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

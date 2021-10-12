@@ -34,9 +34,12 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			return battleState;
 		}
 		const opponentPlayer = event.opponentPlayer;
+		// In PvE, mercs can summon minions, and we want to know what they can do
+		// Maybe we should remove from the list the mercs that are created once they die
 		if (
-			!!event.additionalData.creatorCardId ||
-			(controllerId !== localPlayer.PlayerId && controllerId !== opponentPlayer.PlayerId)
+			// !!event.additionalData.creatorCardId ||
+			controllerId !== localPlayer.PlayerId &&
+			controllerId !== opponentPlayer.PlayerId
 		) {
 			console.warn('[merc-hero-revealed-parser] probably invoking a merc while in combat', event, battleState);
 			return battleState;
@@ -58,18 +61,20 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		const mercenary: BattleMercenary = BattleMercenary.create({
 			entityId: entityId,
 			cardId: refMercCard?.id,
-			abilities: refMerc?.abilities.map((refAbility) => {
-				const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
-				return BattleAbility.create({
-					entityId: null,
-					cardId: refCard.id,
-					level: getMercCardLevel(refCard.id),
-					cooldown: refCard.mercenaryAbilityCooldown ?? 0,
-					cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
-					speed: refCard.cost,
-					totalUsed: null,
-				});
-			}),
+			creatorCardId: event.additionalData.creatorCardId,
+			abilities:
+				refMerc?.abilities.map((refAbility) => {
+					const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
+					return BattleAbility.create({
+						entityId: null,
+						cardId: refCard.id,
+						level: getMercCardLevel(refCard.id),
+						cooldown: refCard.mercenaryAbilityCooldown ?? 0,
+						cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
+						speed: refCard.cost,
+						totalUsed: null,
+					});
+				}) ?? [],
 			inPlay: false,
 			level: event.additionalData.mercenariesExperience
 				? getMercLevelFromExperience(
@@ -77,7 +82,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 						mainWindowState.mercenaries.referenceData,
 				  )
 				: null,
-			role: refMercCard ? getHeroRole(refMercCard.mercenaryRole) : null,
+			role: refMercCard?.id ? getHeroRole(refMercCard.mercenaryRole) : null,
 			treasures: [],
 			equipment: refMercEquipment
 				? BattleEquipment.create({

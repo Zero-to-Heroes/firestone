@@ -15,7 +15,10 @@ export class ElementalPlayerCounterOverlayHandler extends AbstractOverlayHandler
 					CardIds.ManaCyclone,
 					CardIds.GrandFinale,
 					CardIds.Ozruk,
-				]) && !state.isBattlegrounds(),
+				]) &&
+				state &&
+				!state.isBattlegrounds() &&
+				!state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,

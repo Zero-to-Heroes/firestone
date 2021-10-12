@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { TagRole } from '@firestone-hs/reference-data';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 
@@ -13,7 +14,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			<div class="item header" [cardTooltip]="mercCardId" [cardTooltipPosition]="tooltipPosition">
 				<!-- <div class="background-image" [style.background-image]="cardImage"></div> -->
 				<!-- <div class="gradiant"></div> -->
-				<div class="role-icon"><img [src]="roleIcon" /></div>
+				<div class="role-icon" *ngIf="roleIcon"><img [src]="roleIcon" /></div>
 				<div class="name">
 					<span>{{ name }}</span>
 				</div>
@@ -50,7 +51,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			</div>
 			<div
 				class="equipment item"
-				*ngIf="equipment"
+				*ngIf="equipment?.cardId"
 				[cardTooltip]="equipment.cardId"
 				[cardTooltipPosition]="tooltipPosition"
 			>
@@ -78,10 +79,13 @@ export class MercenariesTeamMercenaryComponent {
 		const refMercenaryCard = this.allCards.getCard(value.cardId);
 		this.mercCardId = value.cardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.jpg?v=3)`;
-		this.roleIcon = `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png?v=2`;
+		this.roleIcon =
+			!value.role || value.role === TagRole[TagRole.NEUTRAL] || value.role === TagRole[TagRole.INVALID]
+				? null
+				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png?v=2`;
 		this.name = refMercenaryCard.name;
 		this.level = value.level;
-		this.abilities = value.abilities.map((ability) => ({
+		this.abilities = (value.abilities ?? []).map((ability) => ({
 			cardId: ability.cardId,
 			cardImage: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png?v=2)`,
 			name: this.allCards.getCard(ability.cardId).name,

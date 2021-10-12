@@ -8,7 +8,7 @@ export class FatigueOpponentCounterOverlayHandler extends AbstractOverlayHandler
 		super(
 			OverwolfService.COUNTER_OPPONENT_FATIGUE_WINDOW,
 			(prefs) => prefs.opponentFatigueCounter,
-			(state) => state.opponentDeck?.fatigue > 0 && !state.isBattlegrounds(),
+			(state) => state && state.opponentDeck?.fatigue > 0 && !state.isBattlegrounds() && !state.isMercenaries(),
 			ow,
 			prefs,
 			allCards,
