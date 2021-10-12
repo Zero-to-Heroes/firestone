@@ -365,6 +365,12 @@ export class PreferencesService {
 		await this.savePreferences(newPrefs);
 	}
 
+	public async updateMercenariesTeamOpponentPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesOpponentTeamOverlayPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
 	public async updateDuelsHeroSortFilter(value: DuelsHeroSortFilterType) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, duelsActiveHeroSortFilter: value };

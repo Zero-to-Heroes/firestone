@@ -15,12 +15,14 @@ import { BattleMercenary, MercenariesBattleTeam } from '../../../../models/merce
 			<mercenaries-team-mercenary
 				*ngFor="let mercenary of mercenaries"
 				[mercenary]="mercenary"
+				[tooltipPosition]="tooltipPosition"
 			></mercenaries-team-mercenary>
 		</perfect-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamListComponent {
+	@Input() tooltipPosition: boolean;
 	@Input() set team(value: MercenariesBattleTeam) {
 		console.debug('set team', value);
 		this.mercenaries = value.mercenaries;

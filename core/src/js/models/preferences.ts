@@ -324,9 +324,9 @@ export class Preferences {
 	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
 	readonly mercenariesEnableOpponentTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly mercnariesOpponentTeamOverlayScale: number = 100;
+	readonly mercenariesOpponentTeamOverlayScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly mercnariesOpponentTeamOverlayPosition: { left: number; top: number };
+	readonly mercenariesOpponentTeamOverlayPosition: { left: number; top: number };
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';

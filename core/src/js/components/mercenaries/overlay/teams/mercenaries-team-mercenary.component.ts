@@ -10,7 +10,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 	],
 	template: `
 		<div class="mercenary">
-			<div class="item header" [cardTooltip]="mercCardId">
+			<div class="item header" [cardTooltip]="mercCardId" [cardTooltipPosition]="tooltipPosition">
 				<!-- <div class="background-image" [style.background-image]="cardImage"></div> -->
 				<!-- <div class="gradiant"></div> -->
 				<div class="role-icon"><img [src]="roleIcon" /></div>
@@ -19,7 +19,12 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 				</div>
 				<div class="level" *ngIf="level">{{ level }}</div>
 			</div>
-			<div class="ability item" *ngFor="let ability of abilities" [cardTooltip]="ability.cardId">
+			<div
+				class="ability item"
+				*ngFor="let ability of abilities"
+				[cardTooltip]="ability.cardId"
+				[cardTooltipPosition]="tooltipPosition"
+			>
 				<div class="background-image" [style.background-image]="ability.cardImage"></div>
 				<div class="gradiant"></div>
 				<div class="ability-item-icon">
@@ -43,7 +48,12 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 					<span>{{ ability.name }}</span>
 				</div>
 			</div>
-			<div class="equipment item" *ngIf="equipment" [cardTooltip]="equipment.cardId">
+			<div
+				class="equipment item"
+				*ngIf="equipment"
+				[cardTooltip]="equipment.cardId"
+				[cardTooltipPosition]="tooltipPosition"
+			>
 				<div class="background-image" [style.background-image]="equipment.cardImage"></div>
 				<div class="gradiant"></div>
 				<div class="equipment-item-icon" [cardTooltip]="equipment.cardId">
@@ -62,6 +72,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamMercenaryComponent {
+	@Input() tooltipPosition: boolean;
 	@Input() set mercenary(value: BattleMercenary) {
 		console.debug('set team', value);
 		const refMercenaryCard = this.allCards.getCard(value.cardId);

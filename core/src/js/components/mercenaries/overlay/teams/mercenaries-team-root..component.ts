@@ -6,11 +6,15 @@ import {
 	HostListener,
 	Input,
 	OnDestroy,
+	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, filter, map, tap } from 'rxjs/operators';
+import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
+import { Preferences } from '../../../../models/preferences';
 import { OverwolfService } from '../../../../services/overwolf.service';
+import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
@@ -30,7 +34,8 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 						<div class="team" *ngIf="!!value.team" [style.width.px]="overlayWidthInPx">
 							<div class="background"></div>
 							<mercenaries-team-control-bar [windowId]="windowId"></mercenaries-team-control-bar>
-							<mercenaries-team-list [team]="value.team"> </mercenaries-team-list>
+							<mercenaries-team-list [team]="value.team" [tooltipPosition]="tooltipPosition">
+							</mercenaries-team-list>
 							<div class="backdrop" *ngIf="showBackdrop"></div>
 						</div>
 					</div>
@@ -42,11 +47,16 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 })
 export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	@Input() teamExtractor: (state: MercenariesBattleState) => MercenariesBattleTeam;
+	@Input() trackerPositionUpdater: (left: number, top: number) => void;
+	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
+	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
+	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
 
 	team$: Observable<MercenariesBattleTeam>;
 
 	windowId: string;
 	overlayWidthInPx = 190;
+	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameInfoUpdatedListener: (message: any) => void;
 
@@ -54,6 +64,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 		private readonly store: AppUiStoreService,
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
+		private readonly prefs: PreferencesService,
 	) {
 		this.team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
@@ -74,10 +85,11 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 			if (res && res.resolutionChanged) {
 				console.log('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
-				// await this.restoreWindowPosition(true);
+				await this.restoreWindowPosition();
 			}
 		});
 		await this.changeWindowSize();
+		await this.updateTooltipPosition();
 	}
 
 	ngOnDestroy() {
@@ -87,21 +99,21 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	@HostListener('mousedown', ['$event'])
 	dragMove(event: MouseEvent) {
 		// console.log('starting drag');
-		// this.tooltipPosition = 'none';
-		// if (!(this.cdr as ViewRef)?.destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
+		this.tooltipPosition = 'none';
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 		this.ow.dragMove(this.windowId, async (result) => {
 			// console.log('drag finished, updating position');
-			// await this.updateTooltipPosition();
+			await this.updateTooltipPosition();
 			const window = await this.ow.getCurrentWindow();
 			// console.log('retrieved window', window);
 			if (!window) {
 				return;
 			}
 
-			// console.log('updating tracker position', window.left, window.top);
-			// this.trackerPositionUpdater(window.left, window.top);
+			console.log('updating tracker position', window.left, window.top);
+			this.trackerPositionUpdater(window.left, window.top);
 		});
 	}
 
@@ -113,7 +125,63 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 		}
 		const gameHeight = gameInfo.logicalHeight;
 		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
-		// await this.restoreWindowPosition();
-		// await this.updateTooltipPosition();
+		await this.restoreWindowPosition();
+		await this.updateTooltipPosition();
+	}
+
+	private async restoreWindowPosition(): Promise<void> {
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!gameInfo) {
+			return;
+		}
+
+		const currentWindow = await this.ow.getCurrentWindow();
+		// window.width does not include DPI, see https://overwolf.github.io/docs/topics/windows-resolution-size-position#dpi
+		// logical* properties are not DPI aware either, so we should work with them
+		const windowWidth = currentWindow.width;
+		console.log('window position', currentWindow, gameInfo, windowWidth);
+
+		const prefs = await this.prefs.getPreferences();
+		const trackerPosition = this.trackerPositionExtractor(prefs);
+		console.log('loaded tracker position', trackerPosition);
+
+		const minAcceptableLeft = -windowWidth / 2;
+		const maxAcceptableLeft = gameInfo.logicalWidth - windowWidth / 2;
+		const minAcceptableTop = -100;
+		const maxAcceptableTop = gameInfo.logicalHeight - 100;
+		console.log('acceptable values', minAcceptableLeft, maxAcceptableLeft, minAcceptableTop, maxAcceptableTop);
+		const newLogicalLeft = Math.min(
+			maxAcceptableLeft,
+			Math.max(
+				minAcceptableLeft,
+				trackerPosition
+					? trackerPosition.left || 0
+					: this.defaultTrackerPositionLeftProvider(gameInfo.logicalWidth, windowWidth),
+			),
+		);
+		const newLogicalTop = Math.min(
+			maxAcceptableTop,
+			Math.max(
+				minAcceptableTop,
+				trackerPosition
+					? trackerPosition.top || 0
+					: this.defaultTrackerPositionTopProvider(gameInfo.logicalHeight, gameInfo.logicalHeight),
+			),
+		);
+		console.log('updating tracker position', newLogicalLeft, newLogicalTop, gameInfo.logicalWidth, gameInfo.width);
+		await this.ow.changeWindowPosition(this.windowId, newLogicalLeft, newLogicalTop);
+		console.log('after window position update', await this.ow.getCurrentWindow());
+		await this.updateTooltipPosition();
+	}
+
+	private async updateTooltipPosition() {
+		const window = await this.ow.getCurrentWindow();
+		if (!window) {
+			return;
+		}
+		this.tooltipPosition = window.left < 0 ? 'right' : 'left';
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
