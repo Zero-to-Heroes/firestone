@@ -51,6 +51,7 @@
 	padding-bottom: 15px;
 	transition: margin 0.4s ease-in-out;
 	position: relative;
+	z-index: 9;
 
 	::ng-deep replays-filter ng-select.filter.filter.filter {
 		width: 163px;

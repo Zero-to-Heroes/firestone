@@ -12,6 +12,7 @@ import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays'
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { Preferences } from '../../models/preferences';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { isMercenaries } from '../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { arraysEqual } from '../../services/utils';
 
@@ -79,9 +80,10 @@ export class ReplaysListComponent implements AfterViewInit {
 			value.getFilter('gameMode').selectedOption,
 		);
 		const shouldHideBgHeroFilter = !['battlegrounds'].includes(value.getFilter('gameMode').selectedOption);
-		const shouldHidePlayerClassFilter = [null, 'battlegrounds', 'practice'].includes(
-			value.getFilter('gameMode').selectedOption,
-		);
+		const shouldHidePlayerClassFilter =
+			[null, 'battlegrounds', 'practice', 'mercenaries-all'].includes(
+				value.getFilter('gameMode').selectedOption,
+			) || value.getFilter('gameMode').selectedOption.startsWith('mercenaries');
 		if (
 			shouldHideDeckstringFilter === this.shouldHideDeckstringFilter &&
 			shouldHideBgHeroFilter === this.shouldHideBgHeroFilter &&
@@ -148,7 +150,6 @@ export class ReplaysListComponent implements AfterViewInit {
 
 	private *buildIterator(replays: readonly GroupedReplays[]): IterableIterator<void> {
 		const workingReplays = [...replays];
-
 		const step = 30;
 		while (workingReplays.length > 0) {
 			const currentReplays = [];
@@ -159,7 +160,6 @@ export class ReplaysListComponent implements AfterViewInit {
 				currentReplays.push(...workingReplays.splice(0, 1));
 			}
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
-
 			this.isLoading = true;
 			if (!(this.cdr as ViewRef)?.destroyed) {
 				this.cdr.detectChanges();
@@ -167,7 +167,6 @@ export class ReplaysListComponent implements AfterViewInit {
 			yield;
 		}
 		this.isLoading = false;
-
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}

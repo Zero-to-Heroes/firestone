@@ -40,6 +40,10 @@ export class ReplaysState {
 						label: 'Battlegrounds',
 					} as IOption,
 					{
+						value: 'mercenaries-all',
+						label: 'Mercenaries (All)',
+					} as IOption,
+					{
 						value: 'ranked',
 						label: 'Ranked (All)',
 					} as IOption,

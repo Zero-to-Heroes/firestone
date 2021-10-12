@@ -39,6 +39,8 @@ export class GameStat {
 	readonly levelAfterMatch: string;
 
 	readonly postMatchStats?: BgsPostMatchStats;
+	readonly mercHeroTimings: readonly { cardId: string; turnInPlay: number }[];
+	readonly mercOpponentHeroTimings: readonly { cardId: string; turnInPlay: number }[];
 
 	public static create(base: GameStat): GameStat {
 		return Object.assign(new GameStat(), base);
@@ -62,9 +64,6 @@ export class GameStat {
 		tooltip?: string;
 		frameDecoration?: string;
 	} {
-		// if (!this.playerRank) {
-		// 	return [null, null, null];
-		// }
 		let rankIcon;
 		let rankIconTooltip;
 		if (this.gameMode === 'ranked') {

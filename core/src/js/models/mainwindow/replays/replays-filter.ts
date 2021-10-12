@@ -1,4 +1,5 @@
 import { IOption } from 'ng-select';
+import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
 import { GameStat } from '../stats/game-stat';
 import { StatGameFormatType } from '../stats/stat-game-format.type';
 import { ReplaysFilterCategoryType } from './replays-filter-category.type';
@@ -52,6 +53,8 @@ export class ReplaysFilter {
 				return gameMode === 'ranked' && format === 'wild';
 			case 'ranked-classic':
 				return gameMode === 'ranked' && format === 'classic';
+			case 'mercenaries-all':
+				return isMercenaries(gameMode);
 			default:
 				return gameMode === selectedOption;
 		}

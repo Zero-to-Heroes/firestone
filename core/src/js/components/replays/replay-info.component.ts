@@ -12,6 +12,7 @@ import { getReferenceTribeCardId, getTribeIcon, getTribeName } from '../../servi
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { TriggerShowMatchStatsEvent } from '../../services/mainwindow/store/events/replays/trigger-show-match-stats-event';
+import { getHeroRole, isMercenaries } from '../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../services/overwolf.service';
 import { capitalizeEachWord } from '../../services/utils';
 import { normalizeCardId } from '../battlegrounds/post-match/card-utils';
@@ -21,7 +22,7 @@ declare let amplitude;
 	selector: 'replay-info',
 	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/replays/replay-info.component.scss`],
 	template: `
-		<div class="replay-info {{ gameMode }} {{ visualResult }}">
+		<div class="replay-info {{ gameMode }} {{ visualResult }}" [ngClass]="{ 'mercenaries': isMercenariesGame }">
 			<div class="result-color-code {{ visualResult }}"></div>
 
 			<div class="left-info">
@@ -29,7 +30,7 @@ declare let amplitude;
 					<rank-image class="player-rank" [stat]="replayInfo" [gameMode]="gameMode"></rank-image>
 				</div>
 
-				<div class="group player-images">
+				<div class="group player-images" *ngIf="!isMercenariesGame">
 					<img class="player-class player" [src]="playerClassImage" [helpTooltip]="playerClassTooltip" />
 					<div class="vs" *ngIf="opponentClassImage">VS</div>
 					<img
@@ -38,6 +39,23 @@ declare let amplitude;
 						[helpTooltip]="opponentClassTooltip"
 						*ngIf="opponentClassImage"
 					/>
+					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
+				</div>
+
+				<div class="group mercenaries-player-images" *ngIf="isMercenariesGame">
+					<div class="portrait player" *ngFor="let hero of playerStartingTeam" [cardTooltip]="hero.cardId">
+						<img class="icon" [src]="hero.portraitUrl" />
+						<img class="frame" [src]="hero.frameUrl" />
+					</div>
+					<div class="vs" *ngIf="!!opponentStartingTeam?.length">VS</div>
+					<div
+						class="portrait opponent"
+						*ngFor="let hero of opponentStartingTeam"
+						[cardTooltip]="hero.cardId"
+					>
+						<img class="icon" [src]="hero.portraitUrl" />
+						<img class="frame" [src]="hero.frameUrl" />
+					</div>
 					<div class="player-name opponent" *ngIf="opponentName">{{ opponentName }}</div>
 				</div>
 
@@ -114,7 +132,7 @@ declare let amplitude;
 					<div class="text">MMR</div>
 				</div>
 
-				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg">
+				<div class="group coin" *ngIf="displayCoin && playCoinIconSvg && !isMercenariesGame">
 					<div
 						class="play-coin-icon icon"
 						[innerHTML]="playCoinIconSvg"
@@ -172,6 +190,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 
 		this.gameMode = this.replayInfo.gameMode;
+		this.isMercenariesGame = isMercenaries(this.gameMode);
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(
 			this.replayInfo,
 			true,
@@ -182,7 +201,9 @@ export class ReplayInfoComponent implements AfterViewInit {
 			false,
 			this._prefs,
 		);
-		// this.matchResultIconSvg = this.buildMatchResultIconSvg(this.replayInfo);
+		this.playerStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, true, this._prefs);
+		this.opponentStartingTeam = this.buildPlayerStartingTeam(this.replayInfo, false, this._prefs);
+
 		this.result = this.buildMatchResultText(this.replayInfo);
 		[this.playCoinIconSvg, this.playCoinTooltip] = this.buildPlayCoinIconSvg(this.replayInfo);
 		this.reviewId = this.replayInfo.reviewId;
@@ -252,11 +273,16 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	visualResult: string;
 	gameMode: StatGameModeType;
+	isMercenariesGame: boolean;
 	// deckName: string;
 	playerClassImage: string;
 	playerClassTooltip: string;
 	opponentClassImage: string;
 	opponentClassTooltip: string;
+
+	playerStartingTeam: readonly MercenaryHero[];
+	opponentStartingTeam: readonly MercenaryHero[];
+
 	opponentName: string;
 	// matchResultIconSvg: SafeHtml;
 	result: string;
@@ -327,16 +353,26 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 	}
 
-	private buildMatchResultIconSvg(info: GameStat): SafeHtml {
-		if (info.gameMode === 'battlegrounds') {
-			return null;
+	private buildPlayerStartingTeam(info: GameStat, isPlayer: boolean, prefs: Preferences): readonly MercenaryHero[] {
+		if (!info.gameMode || !info.gameMode.startsWith('mercenaries')) {
+			return [];
 		}
-		const iconName = info.result === 'won' ? 'match_result_victory' : 'match_result_defeat';
-		return this.sanitizer.bypassSecurityTrustHtml(`
-			<svg class="svg-icon-fill">
-				<use xlink:href="assets/svg/replays/replays_icons.svg#${iconName}"/>
-			</svg>
-		`);
+
+		const heroTimings = isPlayer ? info.mercHeroTimings : info.mercOpponentHeroTimings;
+		if (!heroTimings?.length) {
+			return [];
+		}
+
+		return heroTimings
+			.filter((timing) => timing.turnInPlay === 1)
+			.map((timing) => ({
+				cardId: timing.cardId,
+				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${timing.cardId}.jpg`,
+				frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
+					this.allCards.getCard(timing.cardId).mercenaryRole,
+				)}.png?v=2`,
+				role: getHeroRole(this.allCards.getCard(timing.cardId).mercenaryRole),
+			}));
 	}
 
 	private buildMatchResultText(info: GameStat): string {
@@ -441,4 +477,11 @@ interface KnownBoard {
 	// readonly title: string;
 	readonly minionStats: readonly MinionStat[];
 	// readonly date: string;
+}
+
+interface MercenaryHero {
+	readonly cardId: string;
+	readonly portraitUrl: string;
+	readonly frameUrl: string;
+	readonly role: 'caster' | 'fighter' | 'protector';
 }
