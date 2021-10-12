@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { GameEvent } from '../../../../models/game-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
 
 @Component({
@@ -23,7 +25,11 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 					[windowId]="windowId"
 				>
 				</control-settings>
-				<control-close [windowId]="windowId"></control-close>
+				<control-close
+					[windowId]="windowId"
+					[eventProvider]="closeHandler"
+					[askConfirmation]="true"
+				></control-close>
 			</div>
 		</div>
 	`,
@@ -35,20 +41,19 @@ export class MercenariesTeamControlBarComponent {
 	// @Output() onMinimize: EventEmitter<void> = new EventEmitter<void>();
 
 	@Input() windowId: string;
-	// @Input() closeEvent: string;
 
-	// closeHandler: () => void;
+	closeHandler: () => void;
 
-	// private deckUpdater: EventEmitter<GameEvent>;
+	private battleStateUpdater: BehaviorSubject<GameEvent>;
 
 	constructor(private readonly ow: OverwolfService) {
 		this.ow.closeWindow(this.windowId);
-		// this.deckUpdater = this.ow.getMainWindow().deckUpdater;
-		// this.closeHandler = () =>
-		// 	this.deckUpdater.next(
-		// 		Object.assign(new GameEvent(), {
-		// 			type: this.closeEvent,
-		// 		} as GameEvent),
-		// 	);
+		this.battleStateUpdater = this.ow.getMainWindow().battleStateUpdater;
+		this.closeHandler = () =>
+			this.battleStateUpdater.next(
+				Object.assign(new GameEvent(), {
+					type: 'MANUAL_TEAM_WIDGET_CLOSE',
+				} as GameEvent),
+			);
 	}
 }

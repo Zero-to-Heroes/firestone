@@ -19,6 +19,7 @@ import { MercenariesEquipmentUpdatedParser } from './parser/mercenaries-equipmen
 import { MercenariesHeroRevealedParser } from './parser/mercenaries-hero-revealed-parser';
 import { MercenariesHeroUpdatedParser } from './parser/mercenaries-hero-updated-parser';
 import { MercenariesMatchMetadataParser } from './parser/mercenaries-match-metadata-parser';
+import { MercenariesTeamManualCloseParser } from './parser/mercenaries-team-manual-close-parser';
 import { MercenariesParser } from './parser/_mercenaries-parser';
 
 @Injectable()
@@ -61,6 +62,7 @@ export class MercenariesStoreService {
 			)
 			.subscribe();
 		window['mercenariesStore'] = this.store$;
+		window['battleStateUpdater'] = this.internalEventSubject$;
 
 		const mainWindowStoreEmitter: BehaviorSubject<MainWindowState> = window['mainWindowStore'];
 		mainWindowStoreEmitter.subscribe((newState) => {
@@ -117,6 +119,7 @@ export class MercenariesStoreService {
 		const parsers: readonly MercenariesParser[] = [
 			new MercenariesMatchMetadataParser(),
 			// new MercenariesGameEndParser(),
+
 			new MercenariesHeroRevealedParser(this.allCards),
 			new MercenariesHeroUpdatedParser(this.allCards),
 			new MercenariesAbilityRevealedParser(this.allCards),
@@ -124,6 +127,8 @@ export class MercenariesStoreService {
 			new MercenariesAbilityActivatedParser(this.allCards),
 			new MercenariesEquipmentRevealedParser(this.allCards),
 			new MercenariesEquipmentUpdatedParser(this.allCards),
+
+			new MercenariesTeamManualCloseParser(),
 		];
 		this.parsers = {};
 		for (const parser of parsers) {

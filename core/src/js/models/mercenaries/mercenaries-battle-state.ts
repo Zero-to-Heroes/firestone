@@ -4,6 +4,7 @@ export class MercenariesBattleState {
 	readonly inGame: boolean;
 	readonly reconnectOngoing: boolean;
 	readonly spectating: boolean;
+	readonly closedManually: boolean;
 	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 	readonly opponentTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 
@@ -11,7 +12,7 @@ export class MercenariesBattleState {
 		return Object.assign(new MercenariesBattleState(), base);
 	}
 
-	public update(base: MercenariesBattleState): MercenariesBattleState {
+	public update(base: Partial<NonFunctionProperties<MercenariesBattleState>>): MercenariesBattleState {
 		return Object.assign(new MercenariesBattleState(), this, base);
 	}
 }

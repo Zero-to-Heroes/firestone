@@ -16,7 +16,7 @@ export class MercenariesOpponentBattleTeamOverlayHandler implements MercenariesO
 		// const prefs = await this.prefs.getPreferences();
 		const windowId = OverwolfService.MERCENARIES_OPPONENT_TEAM_WINDOW;
 		const theWindow = await this.ow.getWindowState(windowId);
-		const shouldShow = !!state;
+		const shouldShow = !!state && !state.closedManually;
 		if (shouldShow && isWindowClosed(theWindow.window_state_ex)) {
 			await this.ow.obtainDeclaredWindow(windowId);
 			await this.ow.restoreWindow(windowId);
