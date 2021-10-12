@@ -42,7 +42,7 @@ export class MercenariesAbilityActivatedParser implements MercenariesParser {
 		const newAbility = ability.update({
 			totalUsed: (ability.totalUsed ?? 0) + 1,
 		});
-		const newMerc = abilityOwner.updateAbility(entityId, newAbility);
+		const newMerc = abilityOwner.updateAbility(entityId, cardId, newAbility);
 		const newTeam = team.updateMercenary(newMerc.entityId, newMerc);
 		return battleState.update({
 			playerTeam: isPlayer ? newTeam : battleState.playerTeam,

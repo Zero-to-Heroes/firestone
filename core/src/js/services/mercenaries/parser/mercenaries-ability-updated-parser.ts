@@ -42,6 +42,7 @@ export class MercenariesAbilityUpdatedParser implements MercenariesParser {
 		const refAbilityCard = this.allCards.getCard(cardId);
 		const newMerc = abilityOwner.updateAbility(
 			entityId,
+			cardId,
 			BattleAbility.create({
 				entityId: entityId,
 				cardId: cardId,

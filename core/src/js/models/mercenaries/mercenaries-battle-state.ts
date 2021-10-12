@@ -1,3 +1,4 @@
+import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { NonFunctionProperties, updateFirstElementWithoutProp } from '../../services/utils';
 
 export class MercenariesBattleState {
@@ -64,10 +65,19 @@ export class BattleMercenary {
 		return this.abilities.find((ability) => ability.entityId === entityId);
 	}
 
-	public updateAbility(entityId: number, base: BattleAbility): BattleMercenary {
-		const isPresent = this.abilities.some((ability) => ability.entityId === entityId);
-		const newAbilities = isPresent
-			? this.abilities.map((abilities) => (abilities.entityId === entityId ? abilities.update(base) : abilities))
+	public updateAbility(entityId: number, cardId: string, base: BattleAbility): BattleMercenary {
+		const isEntityIdPresent = this.abilities.some((ability) => ability.entityId === entityId);
+		const isCardIdPresent = this.abilities.some(
+			(ability) => normalizeMercenariesCardId(ability.cardId) === normalizeMercenariesCardId(cardId),
+		);
+		const newAbilities = isEntityIdPresent
+			? this.abilities.map((ability) => (ability.entityId === entityId ? ability.update(base) : ability))
+			: isCardIdPresent
+			? this.abilities.map((ability) =>
+					normalizeMercenariesCardId(ability.cardId) === normalizeMercenariesCardId(cardId)
+						? ability.update(base)
+						: ability,
+			  )
 			: updateFirstElementWithoutProp(this.abilities, (ability: BattleAbility) => ability.entityId, base);
 		return this.update({ abilities: newAbilities });
 	}
