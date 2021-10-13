@@ -365,14 +365,18 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 		return heroTimings
 			.filter((timing) => timing.turnInPlay === 1)
-			.map((timing) => ({
-				cardId: timing.cardId,
-				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${timing.cardId}.jpg`,
-				frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${getHeroRole(
-					this.allCards.getCard(timing.cardId).mercenaryRole,
-				)}.png?v=2`,
-				role: getHeroRole(this.allCards.getCard(timing.cardId).mercenaryRole),
-			}));
+			.map((timing) => {
+				const initialRole = this.allCards.getCard(timing.cardId).mercenaryRole;
+				const role = initialRole ? getHeroRole(initialRole) : null;
+				return {
+					cardId: timing.cardId,
+					portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${timing.cardId}.jpg`,
+					frameUrl: role
+						? `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=2`
+						: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_neutral.png?v=2`,
+					role: role,
+				};
+			});
 	}
 
 	private buildMatchResultText(info: GameStat): string {

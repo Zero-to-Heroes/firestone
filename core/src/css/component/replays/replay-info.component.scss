@@ -27,8 +27,8 @@
 		}
 	}
 
-	.mercenaries {
-		.group.coin {
+	&.mercenaries {
+		.right-info .replay {
 			display: none;
 		}
 	}
@@ -151,6 +151,7 @@
 
 	.player-name {
 		margin-left: 15px;
+		width: auto;
 	}
 }
 
