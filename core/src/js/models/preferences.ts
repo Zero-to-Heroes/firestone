@@ -322,16 +322,24 @@ export class Preferences {
 	readonly mercenariesActivePvpMmrFilter: MercenariesPvpMmrFilterType = 100;
 	readonly mercenariesActiveStarterFilter: MercenariesStarterFilterType = 'all';
 	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
+
 	readonly mercenariesEnablePlayerTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly mercenariesPlayerTeamOverlayScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly mercenariesPlayerTeamOverlayPosition: { left: number; top: number };
+
 	readonly mercenariesEnableOpponentTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly mercenariesOpponentTeamOverlayScale: number = 100;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
 	readonly mercenariesOpponentTeamOverlayPosition: { left: number; top: number };
+
+	readonly mercenariesEnableOutOfCombatPlayerTeamWidget = true;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly mercenariesOutOfCombatPlayerTeamOverlayScale: number = 100;
+	@Reflect.metadata(FORCE_LOCAL_PROP, true)
+	readonly mercenariesOutOfCombatPlayerTeamOverlayPosition: { left: number; top: number };
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';

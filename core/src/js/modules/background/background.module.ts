@@ -239,6 +239,7 @@ import { MercenariesHeroStatComponent } from '../../components/mercenaries/deskt
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
 import { MercenariesOpponentTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-opponent-team.component';
+import { MercenariesOutOfCombatPlayerTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-out-of-combat-player-team.component';
 import { MercenariesPlayerTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-player-team.component';
 import { MercenariesTeamControlBarComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-control-bar.component';
 import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
@@ -363,6 +364,7 @@ import { GameParserService } from '../../services/manastorm-bridge/game-parser.s
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
 import { MercenariesStateBuilderService } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { MercenariesStoreService } from '../../services/mercenaries/mercenaries-store.service';
+import { MercenariesOutOfCombatService } from '../../services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { PatchesConfigService } from '../../services/patches-config.service';
 import { PlayersInfoService } from '../../services/players-info.service';
@@ -438,6 +440,7 @@ const components = [
 
 	MercenariesOpponentTeamComponent,
 	MercenariesPlayerTeamComponent,
+	MercenariesOutOfCombatPlayerTeamComponent,
 
 	TwitchAuthCallbackComponent,
 	SettingsComponent,
@@ -819,6 +822,7 @@ const components = [
 		BgsCustomSimulationService,
 
 		MercenariesStoreService,
+		MercenariesOutOfCombatService,
 
 		AiDeckService,
 		SecretConfigService,

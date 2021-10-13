@@ -24,6 +24,10 @@ export class MercenariesBattleTeam {
 	// readonly activeAuras;
 	// readonly globalTreasures;
 
+	public static create(base: Partial<NonFunctionProperties<MercenariesBattleTeam>>): MercenariesBattleTeam {
+		return Object.assign(new MercenariesBattleTeam(), base);
+	}
+
 	public update(base: Partial<NonFunctionProperties<MercenariesBattleTeam>>): MercenariesBattleTeam {
 		return Object.assign(new MercenariesBattleTeam(), this, base);
 	}
@@ -53,7 +57,7 @@ export class BattleMercenary {
 	readonly cardId: string;
 	readonly creatorCardId: string;
 	readonly isDead: boolean;
-	readonly role: string;
+	readonly role: 'caster' | 'fighter' | 'protector';
 	readonly level: number;
 	readonly inPlay: boolean;
 	readonly equipment: BattleEquipment = new BattleEquipment();

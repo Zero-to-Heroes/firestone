@@ -37,23 +37,28 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 })
 export class MercenariesTeamControlBarComponent {
 	@Input() windowId: string;
-	@Input() side: 'player' | 'opponent';
+	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 
 	closeHandler: () => void;
 
 	private battleStateUpdater: BehaviorSubject<GameEvent>;
 
 	constructor(private readonly ow: OverwolfService) {
-		this.ow.closeWindow(this.windowId);
 		this.battleStateUpdater = this.ow.getMainWindow().battleStateUpdater;
-		this.closeHandler = () =>
-			this.battleStateUpdater.next(
-				Object.assign(new GameEvent(), {
-					type:
-						this.side === 'player'
-							? 'MANUAL_TEAM_PLAYER_WIDGET_CLOSE'
-							: 'MANUAL_TEAM_OPPONENT_WIDGET_CLOSE',
-				} as GameEvent),
-			);
+		this.closeHandler = () => {
+			console.debug('performing close', this.windowId, this.side);
+			if (this.side !== 'out-of-combat-player') {
+				this.battleStateUpdater.next(
+					Object.assign(new GameEvent(), {
+						type:
+							this.side === 'player'
+								? 'MANUAL_TEAM_PLAYER_WIDGET_CLOSE'
+								: 'MANUAL_TEAM_OPPONENT_WIDGET_CLOSE',
+					} as GameEvent),
+				);
+			} else {
+				this.ow.closeWindow(this.windowId);
+			}
+		};
 	}
 }

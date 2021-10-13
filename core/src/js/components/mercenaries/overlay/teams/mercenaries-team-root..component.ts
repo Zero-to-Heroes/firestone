@@ -9,13 +9,11 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
-import { debounceTime, filter, map, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
-import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
+import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { PreferencesService } from '../../../../services/preferences.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'mercenaries-team-root',
@@ -49,14 +47,14 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
-	@Input() teamExtractor: (state: MercenariesBattleState) => MercenariesBattleTeam;
-	@Input() side: 'player' | 'opponent';
+	// @Input() teamExtractor: (state: MercenariesBattleState) => MercenariesBattleTeam;
+	@Input() side: 'player' | 'opponent' | 'out-of-combat-player';
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
 	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
 	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
 	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
 
-	team$: Observable<MercenariesBattleTeam>;
+	@Input() team$: Observable<MercenariesBattleTeam>;
 
 	windowId: string;
 	overlayWidthInPx = 225;
@@ -65,29 +63,10 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	private gameInfoUpdatedListener: (message: any) => void;
 
 	constructor(
-		private readonly store: AppUiStoreService,
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-	) {
-		this.team$ = this.store
-			.listenMercenaries$(([battleState, prefs]) => battleState)
-			.pipe(
-				tap((info) => console.debug('info', info)),
-				debounceTime(50),
-				filter(([battleState]) => !!battleState),
-				map(([battleState]) => this.teamExtractor(battleState)),
-				map((team) =>
-					team.update({
-						...team,
-						mercenaries: team.mercenaries.filter((merc) => !merc.isDead || !merc.creatorCardId),
-					}),
-				),
-				// FIXME
-				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
-				tap((filter) => cdLog('emitting team in ', this.constructor.name, filter)),
-			);
-	}
+	) {}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;

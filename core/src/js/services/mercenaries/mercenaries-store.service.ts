@@ -37,8 +37,6 @@ export class MercenariesStoreService {
 	private preferences$: Observable<Preferences>;
 	private mainWindowState$: Observable<MainWindowState>;
 
-	// private mainWindowState: MainWindowState;
-	// private battleState: MercenariesBattleState = new MercenariesBattleState();
 	private parsers: { [eventType: string]: readonly MercenariesParser[] };
 	private eventEmitters: ((state: MercenariesBattleState) => void)[] = [];
 	private overlayHandlers: MercenariesOverlayHandler[];

@@ -9,7 +9,19 @@ export interface MemoryMercenariesMap {
 	readonly Seed: number;
 	readonly PlayerTeamId: number;
 	readonly PlayerTeamName: string;
+	readonly PlayerTeam: readonly MemoryMercenary[];
 	readonly PlayerTeamMercIds: readonly number[];
 	readonly CurrentStep: number;
 	readonly MaxStep: number;
+}
+
+export interface MemoryMercenary {
+	readonly Id: number;
+	readonly Level: number;
+	readonly Abilities: readonly MemoryMercenaryAbility[];
+}
+
+export interface MemoryMercenaryAbility {
+	readonly CardId: string;
+	readonly Tier: number;
 }

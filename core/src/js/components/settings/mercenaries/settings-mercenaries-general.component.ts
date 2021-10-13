@@ -22,6 +22,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					[label]="'Opponent team widget'"
 					helpTooltip="When active, shows a recap overlay of all known opponent's heroes, abililties and equipment. "
 				></preference-toggle>
+				<preference-toggle
+					[field]="'mercenariesEnableOutOfCombatPlayerTeamWidget'"
+					[label]="'Out of combat team widget'"
+					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment on the bounty map. Useful for easily inspecting your team when choosing a path or picking a treasure. "
+				></preference-toggle>
 			</div>
 		</div>
 	`,
