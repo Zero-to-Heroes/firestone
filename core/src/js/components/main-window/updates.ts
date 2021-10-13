@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.8',
+		version: '8.0.10',
 		sections: [
 			{
 				type: 'intro',
@@ -51,6 +51,10 @@ export const updates: readonly Update[] = [
 							{
 								type: 'feature',
 								text: `Adds a team widget for the player.`,
+							},
+							{
+								type: 'feature',
+								text: `Adds a team widget on the bounty map (useful to easily get acces to your team when deciding on a path or picking a treasure).`,
 							},
 							{
 								type: 'feature',
