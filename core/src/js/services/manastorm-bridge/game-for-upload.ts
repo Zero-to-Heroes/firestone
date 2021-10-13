@@ -25,6 +25,8 @@ export class GameForUpload {
 	durationTurns: number;
 	ended: boolean;
 
+	forceOpponentName: string;
+
 	xpForGame: XpForGameInfo;
 
 	player: Player = new Player();

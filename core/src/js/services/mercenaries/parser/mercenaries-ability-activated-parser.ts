@@ -35,6 +35,10 @@ export class MercenariesAbilityActivatedParser implements MercenariesParser {
 		}
 
 		const ability = abilityOwner.getAbility(entityId);
+		if (!ability) {
+			console.debug(event, mainWindowState);
+			console.warn('could not find ability to activate', abilityOwner, entityId);
+		}
 		const newAbility = ability.update({
 			totalUsed: (ability.totalUsed ?? 0) + 1,
 		});

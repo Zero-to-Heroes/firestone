@@ -83,6 +83,9 @@ export class ReplayUploadService {
 				'real-xp-gamed': '' + game.xpForGame?.realXpGained,
 				'level-after-match': game.xpForGame ? game.xpForGame.currentLevel + '-' + game.xpForGame.currentXp : '',
 				'mercs-bounty-id': '' + game.mercsBountyId,
+				// Because for mercs the player name from the replay isn't super interesting (Innkeeper), we build a
+				// better name ourselves
+				'force-opponent-name': game.forceOpponentName,
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);

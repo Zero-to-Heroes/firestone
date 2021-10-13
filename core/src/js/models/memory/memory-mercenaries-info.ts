@@ -10,4 +10,6 @@ export interface MemoryMercenariesMap {
 	readonly PlayerTeamId: number;
 	readonly PlayerTeamName: string;
 	readonly PlayerTeamMercIds: readonly number[];
+	readonly CurrentStep: number;
+	readonly MaxStep: number;
 }

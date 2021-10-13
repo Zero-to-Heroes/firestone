@@ -147,6 +147,7 @@ export class EndGameUploaderService {
 					: game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
 					? this.getMercenariesBountyDifficulty(game.mercsBountyId)
 					: null;
+			game.forceOpponentName = this.buildOpponentName(mercenariesInfo);
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
 			// const duelsInfo = await this.memoryInspection.getDuelsInfo();
@@ -326,6 +327,25 @@ export class EndGameUploaderService {
 
 		console.log('[manastorm-bridge]', currentReviewId, 'game ready');
 		return game;
+	}
+
+	private buildOpponentName(mercenariesInfo: MemoryMercenariesInfo): string {
+		const bountyId = mercenariesInfo?.Map?.BountyId;
+		if (bountyId == null) {
+			return null;
+		}
+
+		const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
+		console.debug('referenceData ', referenceData, bountyId);
+		if (!referenceData) {
+			return null;
+		}
+
+		const allBounties = referenceData.bountySets.map((set) => set.bounties).reduce((a, b) => a.concat(b), []);
+		console.debug('allBounties', allBounties);
+		const bounty = allBounties.find((b) => b.id === bountyId);
+
+		return `${bounty.name} (${mercenariesInfo.Map.CurrentStep} / ${mercenariesInfo.Map.MaxStep})`;
 	}
 
 	private getMercenariesBountyDifficulty(mercsBountyId: number): 'normal' | 'heroic' | 'legendary' {

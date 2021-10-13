@@ -6,6 +6,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { ApiRunner } from '../../api-runner';
 import { DeckHandlerService } from '../../decktracker/deck-handler.service';
+import { isMercenaries } from '../../mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../overwolf.service';
 import { PreferencesService } from '../../preferences.service';
 import { decode } from '../../utils';
@@ -62,7 +63,9 @@ export class GameStatsLoaderService {
 						  } as any);
 				return {
 					...stat,
-					playerDecklist: this.handler.normalizeDeckstring(stat.playerDecklist, stat.playerCardId),
+					playerDecklist: isMercenaries(stat.gameMode)
+						? stat.playerDecklist
+						: this.handler.normalizeDeckstring(stat.playerDecklist, stat.playerCardId),
 					// Because old stats are corrupted
 					runId: stat.creationTimestamp < new Date('2020-12-14').getTime() ? null : stat.runId,
 					postMatchStats: postMatchStats,
