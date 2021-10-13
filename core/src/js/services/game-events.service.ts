@@ -1179,6 +1179,14 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'MERCENARIES_COOLDOWN_UPDATED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MERCENARIES_COOLDOWN_UPDATED, gameEvent, {
+						newCooldown: gameEvent.Value.AdditionalProps.NewCooldown,
+						abilityOwnerEntityId: gameEvent.Value.AdditionalProps.AbilityOwnerEntityId,
+					}),
+				);
+				break;
 			default:
 				console.warn('unsupported game event', gameEvent);
 		}

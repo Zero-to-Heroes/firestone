@@ -50,6 +50,14 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
+								text: `Adds a team widget for the player.`,
+							},
+							{
+								type: 'feature',
+								text: `The team widget now tracks how many times each ability has been used and the current cooldown left on each.`,
+							},
+							{
+								type: 'feature',
 								text: `Show the list of known opponent mercenaries, as well as their abilities (shows the lvl 1 version of the ability if they haven't played it yet) and their equipment. It's still a very rought first version, but it gets the job done :)`,
 							},
 							{
@@ -58,23 +66,31 @@ export const updates: readonly Update[] = [
 							},
 						],
 					},
-					// {
-					// 	category: 'general',
-					// 	details: [
-					// 		{
-					// 			type: 'misc',
-					// 			text: `The app has been updated to try and properly record Mercenary game results when the new game out is out. Just keep in mind that this couldn't be tested against real data, so it's possible that bugs will arise at launch.`,
-					// 		},
-					// 	],
-					// },
 				],
 			},
-			// {
-			// 	type: 'minor',
-			// 	header: 'Minor updates',
-			// 	updates: [
-			// 	],
-			// },
+			{
+				type: 'minor',
+				header: 'Minor updates',
+				updates: [
+					{
+						category: 'mercenaries',
+						details: [
+							{
+								type: 'ui',
+								text: `Highlight each mercenary's current treasures in the team widget.`,
+							},
+							{
+								type: 'ui',
+								text: `Dead mercenaries are now dimmed in the team widget.`,
+							},
+							{
+								type: 'ui',
+								text: `Show 'Unknown mercenary' instead of a blank line when playing PvP in the team widget.`,
+							},
+						],
+					},
+				],
+			},
 			// {
 			// 	type: 'future',
 			// 	header: 'Under the Hood',

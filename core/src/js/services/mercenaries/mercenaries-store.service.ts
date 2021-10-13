@@ -15,6 +15,7 @@ import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overla
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityRevealedParser } from './parser/mercenaries-ability-revealed-parser';
 import { MercenariesAbilityUpdatedParser } from './parser/mercenaries-ability-updated-parser';
+import { MercenariesCooldownUpdatedParser } from './parser/mercenaries-cooldown-updated-parser';
 import { MercenariesEquipmentRevealedParser } from './parser/mercenaries-equipment-revealed-parser';
 import { MercenariesEquipmentUpdatedParser } from './parser/mercenaries-equipment-updated-parser';
 import { MercenariesGameEndParser } from './parser/mercenaries-game-end-parser';
@@ -137,6 +138,7 @@ export class MercenariesStoreService {
 			new MercenariesAbilityActivatedParser(this.allCards),
 			new MercenariesEquipmentRevealedParser(this.allCards),
 			new MercenariesEquipmentUpdatedParser(this.allCards),
+			new MercenariesCooldownUpdatedParser(this.allCards),
 
 			new MercenariesTeamPlayerManualCloseParser(),
 			new MercenariesTeamOpponentManualCloseParser(),

@@ -125,7 +125,7 @@ export class BattleAbility {
 	readonly totalUsed: number;
 	readonly isTreasure: boolean;
 
-	public static create(base: NonFunctionProperties<BattleAbility>): BattleAbility {
+	public static create(base: Partial<NonFunctionProperties<BattleAbility>>): BattleAbility {
 		return Object.assign(new BattleAbility(), base);
 	}
 

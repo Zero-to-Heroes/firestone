@@ -59,7 +59,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	team$: Observable<MercenariesBattleTeam>;
 
 	windowId: string;
-	overlayWidthInPx = 205;
+	overlayWidthInPx = 225;
 	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameInfoUpdatedListener: (message: any) => void;

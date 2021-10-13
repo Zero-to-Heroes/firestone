@@ -24,6 +24,7 @@
 		position: relative;
 		overflow: hidden;
 		padding-left: 5px;
+		padding-right: 5px;
 
 		&:hover {
 			transform: scale(1.1);
@@ -110,49 +111,78 @@
 			width: 100%;
 			z-index: 1;
 		}
-
-		.speed,
-		.cooldown {
-			position: absolute;
-			display: flex;
-			z-index: 1;
-			bottom: 0;
-			height: 20px;
-			align-items: center;
-			justify-content: center;
-			right: 55%;
-			display: none;
-
-			.value {
-				font-family: Sumana;
-				font-weight: 700;
-				font-size: 20px;
-				color: white;
-				text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
-					-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
-			}
-		}
-
-		.cooldown {
-			top: 0;
-			bottom: auto;
-			right: 0;
-			left: auto;
-			height: auto;
-
-			.cooldown-icon {
-				width: 30px;
-			}
-			.value {
-				position: absolute;
-			}
-		}
 	}
 
 	.ability,
 	.equipment {
 		.name {
 			opacity: 0.7;
+		}
+	}
+
+	.number-of-uses {
+		width: 18px;
+		height: 19px;
+		background: #131010;
+		border: 1px solid #9fb6d7;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1px;
+		z-index: 1;
+		margin-left: 5px;
+
+		span {
+			font-family: Sumana;
+			font-style: normal;
+			font-weight: bold;
+			line-height: normal;
+			font-size: 15px;
+			color: #9fb6d7;
+		}
+
+		i {
+			width: 13px;
+			height: 12px;
+		}
+
+		&.discard {
+			i {
+				width: 13px;
+				height: 17px;
+			}
+		}
+		&.graveyard {
+			i {
+				width: 13px;
+				height: 16px;
+			}
+		}
+	}
+
+	.cooldown-left {
+		display: flex;
+		z-index: 1;
+		height: 20px;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+
+		.cooldown-icon {
+			height: 100%;
+		}
+
+		.value {
+			font-family: Sumana;
+			font-weight: 700;
+			font-size: 14px;
+			color: white;
+			text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+				-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	}
 }

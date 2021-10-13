@@ -13,6 +13,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		<div class="mercenaries-general">
 			<div class="settings-group">
 				<preference-toggle
+					[field]="'mercenariesEnablePlayerTeamWidget'"
+					[label]="'Player team widget'"
+					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment. "
+				></preference-toggle>
+				<preference-toggle
 					[field]="'mercenariesEnableOpponentTeamWidget'"
 					[label]="'Opponent team widget'"
 					helpTooltip="When active, shows a recap overlay of all known opponent's heroes, abililties and equipment. "

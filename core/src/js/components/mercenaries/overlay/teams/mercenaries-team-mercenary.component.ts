@@ -34,19 +34,27 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 						class="frame"
 						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=4"
 					/>
-					<div class="speed">
-						<div class="value">{{ ability.speed }}</div>
-					</div>
-					<div class="cooldown" *ngIf="!!ability.cooldown">
-						<img
-							class="cooldown-icon"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=3"
-						/>
-						<div class="value">{{ ability.cooldown }}</div>
-					</div>
 				</div>
 				<div class="name">
 					<span>{{ ability.name }}</span>
+				</div>
+				<div
+					class="cooldown-left"
+					*ngIf="!!ability.cooldownLeft"
+					helpTooltip="Turns left before that ability can be used again"
+				>
+					<img
+						class="cooldown-icon"
+						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=3"
+					/>
+					<div class="value">{{ ability.cooldownLeft }}</div>
+				</div>
+				<div
+					class="number-of-uses"
+					*ngIf="ability.totalUsed > 0"
+					helpTooltip="Number of times the mercenary has used this ability in this battle"
+				>
+					<span>{{ ability.totalUsed }}</span>
 				</div>
 			</div>
 			<div
@@ -93,7 +101,9 @@ export class MercenariesTeamMercenaryComponent {
 			name: this.allCards.getCard(ability.cardId).name,
 			speed: ability.speed,
 			cooldown: ability.cooldown,
+			cooldownLeft: ability.cooldownLeft,
 			isTreasure: ability.isTreasure,
+			totalUsed: ability.totalUsed,
 		}));
 		this.equipment = value.equipment
 			? {
@@ -131,7 +141,9 @@ interface Ability {
 	readonly name: string;
 	readonly speed: number;
 	readonly cooldown: number;
+	readonly cooldownLeft: number;
 	readonly isTreasure: boolean;
+	readonly totalUsed: number;
 }
 
 interface Equipment {
