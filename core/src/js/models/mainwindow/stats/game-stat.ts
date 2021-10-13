@@ -46,7 +46,7 @@ export class GameStat {
 		return Object.assign(new GameStat(), base);
 	}
 
-	public update(base: GameStat): GameStat {
+	public update(base: Partial<GameStat>): GameStat {
 		return Object.assign(new GameStat(), this, base);
 	}
 
