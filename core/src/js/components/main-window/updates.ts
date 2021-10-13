@@ -64,6 +64,10 @@ export const updates: readonly Update[] = [
 								type: 'feature',
 								text: `A very first Mercenaries tab has been created! You can see all available mercs & abilities, and stats (global + yours) will start appearing there soon.`,
 							},
+							{
+								type: 'ui',
+								text: `Improve how last Mercenaries match look in the Replays tab.`,
+							},
 						],
 					},
 				],
