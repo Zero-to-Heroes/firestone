@@ -147,6 +147,9 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
+		if (!gameEvent) {
+			return;
+		}
 		// if (gameEvent.Type !== 'GAME_STATE_UPDATE') {
 		// 	console.debug('[debug] game event', gameEvent.Type, gameEvent);
 		// }

@@ -17,7 +17,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 				<div class="role-icon" *ngIf="roleIcon"><img [src]="roleIcon" /></div>
 				<div class="name">
 					<span>{{ name }}</span>
-					<span class="level" *ngIf="level">({{ level }})</span>
+					<span class="level" *ngIf="level" helpTooltip="Current mercenary level">({{ level }})</span>
 				</div>
 			</div>
 			<div

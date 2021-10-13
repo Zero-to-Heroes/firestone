@@ -31,20 +31,13 @@ export const getMercCardLevel = (cardId: string): number => {
 };
 
 export const getMercLevelFromExperience = (totalXp: number, referenceData: MercenariesReferenceData): number => {
-	if (totalXp <= 0) {
-		return null;
-	}
-
-	let currentLevel = 1;
-	let xpToAttribute = totalXp;
+	let currentLevel = 0;
 	for (const levelMapping of referenceData.mercenaryLevels) {
-		if (xpToAttribute < levelMapping.xpToNext) {
+		if (levelMapping.xpToNext > totalXp) {
 			break;
 		}
 		currentLevel++;
-		xpToAttribute -= levelMapping.xpToNext;
 	}
-
 	return currentLevel;
 };
 
