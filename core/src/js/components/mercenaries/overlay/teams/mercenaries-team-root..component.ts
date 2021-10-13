@@ -33,7 +33,10 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 					<div class="team-container">
 						<div class="team" *ngIf="!!value.team" [style.width.px]="overlayWidthInPx">
 							<div class="background"></div>
-							<mercenaries-team-control-bar [windowId]="windowId"></mercenaries-team-control-bar>
+							<mercenaries-team-control-bar
+								[windowId]="windowId"
+								[side]="side"
+							></mercenaries-team-control-bar>
 							<mercenaries-team-list [team]="value.team" [tooltipPosition]="tooltipPosition">
 							</mercenaries-team-list>
 							<div class="backdrop" *ngIf="showBackdrop"></div>
@@ -47,6 +50,7 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 })
 export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	@Input() teamExtractor: (state: MercenariesBattleState) => MercenariesBattleTeam;
+	@Input() side: 'player' | 'opponent';
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
 	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
 	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
@@ -55,7 +59,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	team$: Observable<MercenariesBattleTeam>;
 
 	windowId: string;
-	overlayWidthInPx = 190;
+	overlayWidthInPx = 205;
 	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameInfoUpdatedListener: (message: any) => void;
@@ -73,6 +77,12 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 				debounceTime(50),
 				filter(([battleState]) => !!battleState),
 				map(([battleState]) => this.teamExtractor(battleState)),
+				map((team) =>
+					team.update({
+						...team,
+						mercenaries: team.mercenaries.filter((merc) => !merc.isDead || !merc.creatorCardId),
+					}),
+				),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting team in ', this.constructor.name, filter)),

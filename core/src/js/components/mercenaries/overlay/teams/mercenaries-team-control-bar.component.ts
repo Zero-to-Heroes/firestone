@@ -36,11 +36,8 @@ import { OverwolfService } from '../../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamControlBarComponent {
-	// settingsSection = 'your-deck';
-
-	// @Output() onMinimize: EventEmitter<void> = new EventEmitter<void>();
-
 	@Input() windowId: string;
+	@Input() side: 'player' | 'opponent';
 
 	closeHandler: () => void;
 
@@ -52,7 +49,10 @@ export class MercenariesTeamControlBarComponent {
 		this.closeHandler = () =>
 			this.battleStateUpdater.next(
 				Object.assign(new GameEvent(), {
-					type: 'MANUAL_TEAM_WIDGET_CLOSE',
+					type:
+						this.side === 'player'
+							? 'MANUAL_TEAM_PLAYER_WIDGET_CLOSE'
+							: 'MANUAL_TEAM_OPPONENT_WIDGET_CLOSE',
 				} as GameEvent),
 			);
 	}

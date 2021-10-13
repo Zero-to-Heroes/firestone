@@ -144,7 +144,7 @@ export const replaceInArray = <T>(array: readonly T[], index: number, element: T
 export const updateFirstElementWithoutProp = <T>(
 	array: readonly T[],
 	propSelector: (entity: T) => any,
-	base: T,
+	base: T | Partial<T> | NonFunctionProperties<T> | Partial<NonFunctionProperties<T>>,
 ): readonly T[] => {
 	const withoutPropertyElements = array.filter((e) => !propSelector(e));
 	if (!withoutPropertyElements.length) {
@@ -152,7 +152,7 @@ export const updateFirstElementWithoutProp = <T>(
 		return array;
 	}
 	const indexWithoutProperty = array.indexOf(withoutPropertyElements[0]);
-	return replaceInArray(array, indexWithoutProperty, base);
+	return replaceInArray(array, indexWithoutProperty, base as T);
 };
 
 // For ng2-charts

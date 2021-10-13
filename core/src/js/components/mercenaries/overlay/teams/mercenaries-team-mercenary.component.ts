@@ -10,15 +10,15 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-mercenary.component.scss',
 	],
 	template: `
-		<div class="mercenary">
+		<div class="mercenary" [ngClass]="{ 'dead': isDead }">
 			<div class="item header" [cardTooltip]="mercCardId" [cardTooltipPosition]="tooltipPosition">
 				<!-- <div class="background-image" [style.background-image]="cardImage"></div> -->
 				<!-- <div class="gradiant"></div> -->
 				<div class="role-icon" *ngIf="roleIcon"><img [src]="roleIcon" /></div>
 				<div class="name">
 					<span>{{ name }}</span>
+					<span class="level" *ngIf="level">({{ level }})</span>
 				</div>
-				<div class="level" *ngIf="level">{{ level }}</div>
 			</div>
 			<div
 				class="ability item"
@@ -28,7 +28,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 			>
 				<div class="background-image" [style.background-image]="ability.cardImage"></div>
 				<div class="gradiant"></div>
-				<div class="ability-item-icon">
+				<div class="ability-item-icon" [ngClass]="{ 'treasure': ability.isTreasure }">
 					<img class="icon" [src]="buildAbilityArtUrl(ability.cardId)" />
 					<img
 						class="frame"
@@ -87,10 +87,15 @@ export class MercenariesTeamMercenaryComponent {
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => ({
 			cardId: ability.cardId,
-			cardImage: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png?v=2)`,
-			name: this.allCards.getCard(ability.cardId).name,
+			cardImage: ability.isTreasure
+				? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png?v=2)`
+				: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png?v=2)`,
+			name: ability.cardId
+				? this.allCards.getCard(ability.cardId).name ?? 'Unrecognized Mercernary'
+				: 'Unknown Mercenary',
 			speed: ability.speed,
 			cooldown: ability.cooldown,
+			isTreasure: ability.isTreasure,
 		}));
 		this.equipment = value.equipment
 			? {
@@ -99,6 +104,7 @@ export class MercenariesTeamMercenaryComponent {
 					name: this.allCards.getCard(value.equipment.cardId).name,
 			  }
 			: null;
+		this.isDead = value.isDead;
 	}
 
 	mercCardId: string;
@@ -108,6 +114,7 @@ export class MercenariesTeamMercenaryComponent {
 	level: number;
 	abilities: readonly Ability[];
 	equipment: Equipment;
+	isDead: boolean;
 
 	constructor(private readonly allCards: CardsFacadeService) {}
 
@@ -126,6 +133,7 @@ interface Ability {
 	readonly name: string;
 	readonly speed: number;
 	readonly cooldown: number;
+	readonly isTreasure: boolean;
 }
 
 interface Equipment {

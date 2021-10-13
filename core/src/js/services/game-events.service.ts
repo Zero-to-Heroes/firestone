@@ -1129,6 +1129,7 @@ export class GameEvents {
 						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
 						mercenariesEquipmentId: gameEvent.Value.AdditionalProps.MercenariesEquipmentId,
+						isDead: gameEvent.Value.AdditionalProps.IsDead,
 					}),
 				);
 				break;
@@ -1139,6 +1140,7 @@ export class GameEvents {
 						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
 						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
 						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+						isTreasure: gameEvent.Value.AdditionalProps.IsTreasure,
 					}),
 				);
 				break;
@@ -1156,6 +1158,7 @@ export class GameEvents {
 						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
 						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
 						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+						isTreasure: gameEvent.Value.AdditionalProps.IsTreasure,
 					}),
 				);
 				break;

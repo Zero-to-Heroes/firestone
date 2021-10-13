@@ -62,6 +62,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			entityId: entityId,
 			cardId: refMercCard?.id,
 			creatorCardId: event.additionalData.creatorCardId,
+			isDead: event.additionalData.isDead,
 			abilities:
 				refMerc?.abilities.map((refAbility) => {
 					const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
@@ -73,6 +74,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 						cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
 						speed: refCard.cost,
 						totalUsed: null,
+						isTreasure: false,
 					});
 				}) ?? [],
 			inPlay: false,
@@ -83,7 +85,6 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 				  )
 				: null,
 			role: refMercCard?.id ? getHeroRole(refMercCard.mercenaryRole) : null,
-			treasures: [],
 			equipment: refMercEquipment
 				? BattleEquipment.create({
 						entityId: null,

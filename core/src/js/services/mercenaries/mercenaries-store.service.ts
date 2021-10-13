@@ -10,6 +10,7 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { MercenariesOpponentBattleTeamOverlayHandler } from './overlay-handler/mercenaries-opponent-battle-team-overlay-handler';
+import { MercenariesPlayerBattleTeamOverlayHandler } from './overlay-handler/mercenaries-player-battle-team-overlay-handler';
 import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overlay-handler';
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityRevealedParser } from './parser/mercenaries-ability-revealed-parser';
@@ -21,7 +22,8 @@ import { MercenariesHeroDiedParser } from './parser/mercenaries-hero-died-parser
 import { MercenariesHeroRevealedParser } from './parser/mercenaries-hero-revealed-parser';
 import { MercenariesHeroUpdatedParser } from './parser/mercenaries-hero-updated-parser';
 import { MercenariesMatchMetadataParser } from './parser/mercenaries-match-metadata-parser';
-import { MercenariesTeamManualCloseParser } from './parser/mercenaries-team-manual-close-parser';
+import { MercenariesTeamOpponentManualCloseParser } from './parser/mercenaries-team-opponent-manual-close-parser';
+import { MercenariesTeamPlayerManualCloseParser } from './parser/mercenaries-team-player-manual-close-parser';
 import { MercenariesParser } from './parser/_mercenaries-parser';
 
 @Injectable()
@@ -116,7 +118,10 @@ export class MercenariesStoreService {
 	}
 
 	private buildOverlayHandlers() {
-		this.overlayHandlers = [new MercenariesOpponentBattleTeamOverlayHandler(this.prefs, this.ow)];
+		this.overlayHandlers = [
+			new MercenariesPlayerBattleTeamOverlayHandler(this.prefs, this.ow),
+			new MercenariesOpponentBattleTeamOverlayHandler(this.prefs, this.ow),
+		];
 	}
 
 	private registerParser() {
@@ -133,7 +138,8 @@ export class MercenariesStoreService {
 			new MercenariesEquipmentRevealedParser(this.allCards),
 			new MercenariesEquipmentUpdatedParser(this.allCards),
 
-			new MercenariesTeamManualCloseParser(),
+			new MercenariesTeamPlayerManualCloseParser(),
+			new MercenariesTeamOpponentManualCloseParser(),
 		];
 		this.parsers = {};
 		for (const parser of parsers) {

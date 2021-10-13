@@ -63,6 +63,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 						cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
 						speed: refCard.cost,
 						totalUsed: null,
+						isTreasure: false,
 					});
 				}),
 				level: getMercLevelFromExperience(
@@ -70,7 +71,6 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 					mainWindowState.mercenaries.referenceData,
 				),
 				role: getHeroRole(refMercCard.mercenaryRole),
-				treasures: [],
 				equipment: BattleEquipment.create({
 					entityId: null,
 					cardId: refMercEquipment.id,

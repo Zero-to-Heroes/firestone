@@ -29,10 +29,11 @@ export class MercenariesHeroDiedParser implements MercenariesParser {
 			const controllerId = deadMinion.ControllerId;
 			const isPlayer = controllerId === localPlayer.PlayerId;
 			const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
-			const newTeam = team.update({
-				// We only remove the minions that were created during combat to avoid polluting too much the list
-				mercenaries: team.mercenaries.filter((merc) => !merc.creatorCardId || merc.entityId !== entityId),
-			});
+			const newTeam = team.updateMercenary(entityId, { isDead: true });
+			// team.update({
+			// 	// We only remove the minions that were created during combat to avoid polluting too much the list
+			// 	mercenaries: team.mercenaries.filter((merc) => !merc.creatorCardId || merc.entityId !== entityId),
+			// });
 			workingBattleState = workingBattleState.update({
 				playerTeam: isPlayer ? newTeam : battleState.playerTeam,
 				opponentTeam: isPlayer ? battleState.opponentTeam : newTeam,

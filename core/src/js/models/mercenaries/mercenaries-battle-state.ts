@@ -5,7 +5,8 @@ export class MercenariesBattleState {
 	// readonly inGame: boolean;
 	// readonly reconnectOngoing: boolean;
 	readonly spectating: boolean;
-	readonly closedManually: boolean;
+	readonly playerClosedManually: boolean;
+	readonly opponentClosedManually: boolean;
 	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 	readonly opponentTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 
@@ -31,11 +32,18 @@ export class MercenariesBattleTeam {
 		return this.mercenaries.find((merc) => merc.entityId === entityId);
 	}
 
-	public updateMercenary(entityId: number, base: BattleMercenary): MercenariesBattleTeam {
+	public updateMercenary(
+		entityId: number,
+		base: Partial<NonFunctionProperties<BattleMercenary>>,
+	): MercenariesBattleTeam {
 		const isPresent = this.mercenaries.some((merc) => merc.entityId === entityId);
-		const newMercenaries = isPresent
+		const newMercenaries: readonly BattleMercenary[] = isPresent
 			? this.mercenaries.map((merc) => (merc.entityId === entityId ? merc.update(base) : merc))
-			: updateFirstElementWithoutProp(this.mercenaries, (merc: BattleMercenary) => merc.entityId, base);
+			: updateFirstElementWithoutProp<BattleMercenary>(
+					this.mercenaries,
+					(merc: BattleMercenary) => merc.entityId,
+					base,
+			  );
 		return this.update({ mercenaries: newMercenaries });
 	}
 }
@@ -44,13 +52,13 @@ export class BattleMercenary {
 	readonly entityId: number;
 	readonly cardId: string;
 	readonly creatorCardId: string;
+	readonly isDead: boolean;
 	readonly role: string;
 	readonly level: number;
 	readonly inPlay: boolean;
 	readonly equipment: BattleEquipment = new BattleEquipment();
 	// TODO: update the ability infos based on the equipment
 	readonly abilities: readonly BattleAbility[] = [];
-	readonly treasures: readonly BattleTreasure[] = [];
 	// The latest entry is the move they have queued right now (only in PvE)
 	// readonly commandsHistory: readonly BattleCommand[];
 
@@ -115,6 +123,7 @@ export class BattleAbility {
 	readonly cooldownLeft: number;
 	// If totalUsed = null, we don't know for sure they have the ability, so show it differently in the UI
 	readonly totalUsed: number;
+	readonly isTreasure: boolean;
 
 	public static create(base: NonFunctionProperties<BattleAbility>): BattleAbility {
 		return Object.assign(new BattleAbility(), base);

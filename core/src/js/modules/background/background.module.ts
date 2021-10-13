@@ -239,6 +239,7 @@ import { MercenariesHeroStatComponent } from '../../components/mercenaries/deskt
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
 import { MercenariesOpponentTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-opponent-team.component';
+import { MercenariesPlayerTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-player-team.component';
 import { MercenariesTeamControlBarComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-control-bar.component';
 import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
 import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
@@ -436,6 +437,7 @@ const components = [
 	SecretsHelperComponent,
 
 	MercenariesOpponentTeamComponent,
+	MercenariesPlayerTeamComponent,
 
 	TwitchAuthCallbackComponent,
 	SettingsComponent,

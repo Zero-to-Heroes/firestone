@@ -44,6 +44,7 @@ export class MercenariesAbilityRevealedParser implements MercenariesParser {
 			level: getMercCardLevel(cardId),
 			speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost,
 			totalUsed: 0,
+			isTreasure: event.additionalData.isTreasure,
 		});
 		// Because in PvE, abilities are revealed as you encounter them
 		// In PvP that's probably the case as well by the way, so let's see how it behaves in that case

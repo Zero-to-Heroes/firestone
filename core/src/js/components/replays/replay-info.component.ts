@@ -47,7 +47,7 @@ declare let amplitude;
 						<img class="icon" [src]="hero.portraitUrl" />
 						<img class="frame" [src]="hero.frameUrl" />
 					</div>
-					<div class="vs" *ngIf="!!opponentStartingTeam?.length">VS</div>
+					<div class="vs">VS</div>
 					<div
 						class="portrait opponent"
 						*ngFor="let hero of opponentStartingTeam"

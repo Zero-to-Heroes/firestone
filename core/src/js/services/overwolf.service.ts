@@ -32,6 +32,7 @@ export class OverwolfService {
 	public static BATTLEGROUNDS_OVERLAY_BUTTON_OVERLAY_WINDOW = 'BattlegroundsOverlayButtonWindow';
 	public static BATTLEGROUNDS_HERO_SELECTION_OVERLAY = 'BgsHeroSelectionOverlay';
 
+	public static MERCENARIES_PLAYER_TEAM_WINDOW = 'MercenariesPlayerTeamWindow';
 	public static MERCENARIES_OPPONENT_TEAM_WINDOW = 'MercenariesOpponentTeamWindow';
 
 	public static CONSTRUCTED_WINDOW = 'ConstructedWindow';

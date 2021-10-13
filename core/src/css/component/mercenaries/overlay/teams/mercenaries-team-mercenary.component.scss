@@ -2,6 +2,10 @@
 	display: flex;
 	flex-direction: column;
 
+	&.dead {
+		opacity: 0.3;
+	}
+
 	.header {
 		.role-icon {
 			height: 80%;
@@ -19,11 +23,7 @@
 		height: 26px;
 		position: relative;
 		overflow: hidden;
-		// Removing the transition fixes the flicker
-		// transition: transform 0.2s ease-in-out;
-		// https://stackoverflow.com/questions/12278587/webkit-text-flickers-when-using-css-transform-scale
-		// backface-visibility: hidden; // Activating this makes the font blurry
-		// transform-style: preserve-3d;
+		padding-left: 5px;
 
 		&:hover {
 			transform: scale(1.1);
@@ -49,6 +49,7 @@
 			right: 0;
 			bottom: 0;
 			background: linear-gradient(89.48deg, rgba(0, 0, 0, 1) 0%, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
+			opacity: 0.6;
 		}
 
 		.name {
@@ -71,12 +72,17 @@
 				font-size: 13px;
 				color: #ffe3ba;
 			}
+
+			.level {
+				margin-left: 5px;
+				font-size: 10px;
+			}
 		}
 	}
 
 	.ability,
 	.equipment {
-		padding-left: 10px;
+		padding-left: 15px;
 	}
 
 	.equipment-item-icon,

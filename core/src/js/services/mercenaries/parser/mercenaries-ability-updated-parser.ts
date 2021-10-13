@@ -47,6 +47,7 @@ export class MercenariesAbilityUpdatedParser implements MercenariesParser {
 				level: getMercCardLevel(cardId),
 				speed: event.additionalData.abilitySpeed ?? refAbilityCard.cost,
 				totalUsed: 0,
+				isTreasure: event.additionalData.isTreasure,
 			}),
 		);
 		const newTeam = team.updateMercenary(newMerc.entityId, newMerc);
