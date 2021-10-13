@@ -83,16 +83,14 @@ export class MercenariesTeamMercenaryComponent {
 			!value.role || value.role === TagRole[TagRole.NEUTRAL] || value.role === TagRole[TagRole.INVALID]
 				? null
 				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png?v=2`;
-		this.name = refMercenaryCard.name;
+		this.name = value.cardId ? refMercenaryCard.name ?? 'Unrecognized Mercernary' : 'Unknown Mercenary';
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => ({
 			cardId: ability.cardId,
 			cardImage: ability.isTreasure
 				? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png?v=2)`
 				: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png?v=2)`,
-			name: ability.cardId
-				? this.allCards.getCard(ability.cardId).name ?? 'Unrecognized Mercernary'
-				: 'Unknown Mercenary',
+			name: this.allCards.getCard(ability.cardId).name,
 			speed: ability.speed,
 			cooldown: ability.cooldown,
 			isTreasure: ability.isTreasure,
