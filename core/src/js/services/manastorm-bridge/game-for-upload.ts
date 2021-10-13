@@ -38,6 +38,8 @@ export class GameForUpload {
 	bannedTribes: readonly Race[];
 	hasBgsPrizes: boolean;
 
+	mercsBountyId: number;
+
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS
 	uncompressedXmlReplay: string;

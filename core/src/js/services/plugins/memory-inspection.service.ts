@@ -10,6 +10,7 @@ import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { CoinInfo } from '../../models/memory/coin-info';
+import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
 import { HsAchievementsInfo } from '../achievement/achievements-info';
@@ -32,6 +33,7 @@ import { GetDuelsRewardsInfoOperation } from './mind-vision/get-duels-rewards-in
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/get-in-game-achievements-progress-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { GetMemoryChangesOperation } from './mind-vision/get-memory-changes-operation';
+import { GetMercenariesInfoOperation } from './mind-vision/get-mercenaries-info-operation copy';
 import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
 import { GetWhizbangDeckOperation } from './mind-vision/get-whizbang-deck-operation';
 import { IsMaybeOnDuelsRewardsScreenOperation } from './mind-vision/is-maybe-on-duels-rewards-screen-operation';
@@ -51,6 +53,7 @@ export class MemoryInspectionService {
 	private getCoinsOperation = new GetCoinsOperation(this.mindVision, this.ow, this.cards);
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
+	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
 	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
@@ -101,6 +104,10 @@ export class MemoryInspectionService {
 
 	public async getBattlegroundsInfo(numberOfRetries?: number): Promise<BattlegroundsInfo> {
 		return this.getBattlegroundsInfoOperation.call(numberOfRetries);
+	}
+
+	public async getMercenariesInfo(numberOfRetries?: number): Promise<MemoryMercenariesInfo> {
+		return this.getMercenariesInfoOperation.call(numberOfRetries);
 	}
 
 	public async getBattlegroundsEndGame(numberOfRetries?: number): Promise<BattlegroundsInfo> {

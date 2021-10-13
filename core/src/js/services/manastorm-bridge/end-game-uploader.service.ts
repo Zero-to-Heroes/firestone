@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import { parseHsReplayString } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
+import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { BgsGlobalInfoUpdatedParser } from '../battlegrounds/store/event-parsers/bgs-global-info-updated-parser';
 import { ArenaRunParserService } from '../decktracker/arena-run-parser.service';
 import { DungeonLootParserService } from '../decktracker/dungeon-loot-parser.service';
 import { LogsUploaderService } from '../logs-uploader.service';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { isMercenaries } from '../mercenaries/mercenaries-utils';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { RewardMonitorService } from '../rewards/rewards-monitor';
@@ -36,6 +39,7 @@ export class EndGameUploaderService {
 		private arenaService: ArenaRunParserService,
 		private logService: LogsUploaderService,
 		private rewards: RewardMonitorService,
+		private mainWindowStore: MainWindowStoreService,
 	) {}
 
 	public async upload(
@@ -94,8 +98,17 @@ export class EndGameUploaderService {
 		// Get the memory info first, because parsing the XML can take some time and make the
 		// info in memory stale / unavailable
 		console.log('[manastorm-bridge]', currentReviewId, 'reading memory info');
-		const [battlegroundsInfo, duelsInfo, arenaInfo, playerInfo, opponentInfo, xpForGame] = await Promise.all([
+		const [
+			battlegroundsInfo,
+			mercenariesInfo,
+			duelsInfo,
+			arenaInfo,
+			playerInfo,
+			opponentInfo,
+			xpForGame,
+		] = await Promise.all([
 			game.gameMode === 'battlegrounds' ? this.getBattlegroundsEndGame(currentReviewId) : null,
+			isMercenaries(game.gameMode) ? this.getMercenariesInfo(currentReviewId) : null,
 			game.gameMode === 'duels' || game.gameMode === 'paid-duels' ? this.memoryInspection.getDuelsInfo() : null,
 			game.gameMode === 'arena' ? this.memoryInspection.getArenaInfo() : null,
 			this.playersInfo.getPlayerInfo(),
@@ -117,6 +130,23 @@ export class EndGameUploaderService {
 			game.additionalResult = replay.additionalResult;
 			console.log('[manastorm-bridge]', currentReviewId, 'updated player rank', playerRank, newPlayerRank);
 			game.hasBgsPrizes = bgsOptions.hasPrizes;
+		} else if (isMercenaries(game.gameMode)) {
+			// Looks like we can assume the mapId is unique for a given player
+			game.runId =
+				mercenariesInfo?.Map?.PlayerTeamName +
+				'-' +
+				mercenariesInfo?.Map?.MapId +
+				'-' +
+				mercenariesInfo?.Map?.Seed;
+			game.mercsBountyId = mercenariesInfo?.Map?.BountyId;
+			game.deckName = mercenariesInfo?.Map?.PlayerTeamName;
+			game.deckstring = mercenariesInfo?.Map?.PlayerTeamMercIds.join(',');
+			playerRank =
+				game.gameMode === 'mercenaries-pvp'
+					? mercenariesInfo?.PvpRating
+					: game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
+					? this.getMercenariesBountyDifficulty(game.mercsBountyId)
+					: null;
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
 			// const duelsInfo = await this.memoryInspection.getDuelsInfo();
@@ -298,9 +328,31 @@ export class EndGameUploaderService {
 		return game;
 	}
 
+	private getMercenariesBountyDifficulty(mercsBountyId: number): 'normal' | 'heroic' | 'legendary' {
+		const referenceData = this.mainWindowStore?.state?.mercenaries?.referenceData;
+		console.debug('referenceData', referenceData, mercsBountyId);
+		if (!referenceData) {
+			return null;
+		}
+		const allBounties = referenceData.bountySets.map((set) => set.bounties).reduce((a, b) => a.concat(b), []);
+		console.debug('allBounties', allBounties);
+		const bounty = allBounties.find((b) => b.id === mercsBountyId);
+		console.debug('bounty', bounty);
+		if (!bounty) {
+			return null;
+		}
+		return bounty.heroic === 1 ? 'heroic' : 'normal';
+	}
+
 	private async getBattlegroundsEndGame(currentReviewId: string): Promise<BattlegroundsInfo> {
 		const result = await this.memoryInspection.getBattlegroundsEndGame();
 		console.log('[manastorm-bridge]', currentReviewId, 'received BG rank result', result);
+		return result;
+	}
+
+	private async getMercenariesInfo(currentReviewId: string): Promise<MemoryMercenariesInfo> {
+		const result = await this.memoryInspection.getMercenariesInfo();
+		console.log('[manastorm-bridge]', currentReviewId, 'getMercenariesInfo', result);
 		return result;
 	}
 

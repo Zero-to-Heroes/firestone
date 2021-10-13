@@ -82,6 +82,7 @@ export class ReplayUploadService {
 				'normalized-xp-gained': '' + game.xpForGame?.xpGainedWithoutBonus,
 				'real-xp-gamed': '' + game.xpForGame?.realXpGained,
 				'level-after-match': game.xpForGame ? game.xpForGame.currentLevel + '-' + game.xpForGame.currentXp : '',
+				'mercs-bounty-id': '' + game.mercsBountyId,
 			},
 		};
 		console.log('[manastorm-bridge] uploading with params', params);
