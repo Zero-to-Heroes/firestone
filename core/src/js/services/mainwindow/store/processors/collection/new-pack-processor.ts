@@ -29,7 +29,11 @@ export class NewPackProcessor implements Processor {
 					({
 						cardId: card.cardId,
 						cardType: card.cardType,
-						cardRarity: this.allCards.getCard(card.cardId)?.rarity?.toLowerCase(),
+						cardRarity:
+							this.allCards.getCard(card.cardId)?.rarity?.toLowerCase() ??
+							this.allCards.getCard(card.mercenaryCardId)?.rarity?.toLowerCase(),
+						currencyAmount: card.currencyAmount,
+						mercenaryCardId: card.mercenaryCardId,
 					} as CardPackResult),
 			),
 		};

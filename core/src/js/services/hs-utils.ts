@@ -430,6 +430,8 @@ export const boosterIdToSetId = (boosterId: BoosterType): string => {
 		case BoosterType.STORMWIND:
 		case BoosterType.GOLDEN_STORMWIND:
 			return 'stormwind';
+		case BoosterType.LETTUCE:
+			return 'lettuce';
 		case BoosterType.STANDARD_HUNTER:
 		case BoosterType.STANDARD_DRUID:
 		case BoosterType.STANDARD_MAGE:
@@ -589,6 +591,8 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 			return 'Golden Standard Pack';
 		case BoosterType.WILD_PACK:
 			return 'Wild Pack';
+		case BoosterType.LETTUCE:
+			return 'Mercenaries';
 		default:
 			console.warn('unsupported booster type', boosterId);
 			return null;
@@ -596,9 +600,13 @@ export const boosterIdToBoosterName = (boosterId: BoosterType): string => {
 };
 
 export const getPackDustValue = (pack: PackResult): number => {
-	return pack.cards
-		.map((card) => (card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity)))
-		.reduce((a, b) => a + b, 0);
+	return pack.boosterId === BoosterType.LETTUCE
+		? pack.cards.map((card) => card.currencyAmount ?? 0).reduce((a, b) => a + b, 0)
+		: pack.cards
+				.map((card) =>
+					card.cardType === 'GOLDEN' ? dustForPremium(card.cardRarity) : dustFor(card.cardRarity),
+				)
+				.reduce((a, b) => a + b, 0);
 };
 
 export const COUNTERSPELLS = [

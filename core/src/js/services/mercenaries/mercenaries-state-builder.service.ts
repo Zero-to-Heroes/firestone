@@ -7,7 +7,7 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
-const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=3';
+const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=4';
 const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.gz.json?v=7';
 
 @Injectable()
@@ -75,6 +75,11 @@ export interface MercenariesReferenceData {
 				readonly attackModifier: number;
 				readonly healthModifier: number;
 			}[];
+		}[];
+		readonly skins: readonly {
+			readonly artVariationId: number;
+			readonly cardId: number;
+			readonly isDefaultVariation: boolean;
 		}[];
 	}[];
 	readonly mercenaryLevels: readonly {

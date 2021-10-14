@@ -39,7 +39,7 @@
 		"@firestone-hs/duels-global-stats": "^1.0.7",
 		"@firestone-hs/duels-leaderboard": "^1.0.4",
 		"@firestone-hs/hs-replay-xml-parser": "0.0.85",
-		"@firestone-hs/reference-data": "^0.1.160",
+		"@firestone-hs/reference-data": "^0.1.162",
 		"@firestone-hs/replay-parser": "^1.1.44",
 		"@firestone-hs/retrieve-pack-stats": "^1.0.2",
 		"@firestone-hs/retrieve-users-duels-runs": "^1.0.3",

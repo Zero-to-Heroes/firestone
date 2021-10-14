@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BoosterType, CardIds } from '@firestone-hs/reference-data';
 import { PackResult } from '@firestone-hs/retrieve-pack-stats';
+import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { ApiRunner } from '../api-runner';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
@@ -27,6 +28,7 @@ export class PackStatsService {
 			userName: user.username,
 		};
 		const data: any = (await this.api.callPostApi<any>(PACKS_RETRIEVE_URL, input)) ?? [];
+		// console.debug('received full pack stats', data);
 		return (
 			data.results
 				// Because of how pack logging used to work, when you received the 5 galakrond cards,
@@ -37,7 +39,7 @@ export class PackStatsService {
 
 	private async publishPackStat(event: any) {
 		const setId = event.data[0];
-		const cards: any[] = event.data[1];
+		const cards: readonly InternalCardInfo[] = event.data[1];
 		const boosterId: BoosterType = event.data[2];
 		const user = await this.ow.getCurrentUser();
 		const statEvent = {
@@ -48,10 +50,15 @@ export class PackStatsService {
 			boosterId: boosterId,
 		};
 		for (let i = 0; i < cards.length; i++) {
-			statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId.toLowerCase();
-			statEvent['card' + (i + 1) + 'Type'] = cards[i].cardType.toLowerCase();
+			statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId?.toLowerCase();
+			statEvent['card' + (i + 1) + 'Type'] = cards[i].cardType?.toLowerCase();
 			const dbCard = this.allCards.getCard(cards[i].cardId);
-			statEvent['card' + (i + 1) + 'Rarity'] = dbCard && dbCard.rarity ? dbCard.rarity?.toLowerCase() : 'free';
+			statEvent['card' + (i + 1) + 'Rarity'] =
+				dbCard?.rarity?.toLowerCase() ??
+				this.allCards.getCard(cards[i].mercenaryCardId)?.rarity?.toLowerCase() ??
+				'free';
+			statEvent['card' + (i + 1) + 'CurrencyAmount'] = cards[i].currencyAmount;
+			statEvent['card' + (i + 1) + 'MercenaryCardId'] = cards[i].mercenaryCardId;
 		}
 		this.api.callPostApi(PACKS_UPDATE_URL, statEvent);
 	}

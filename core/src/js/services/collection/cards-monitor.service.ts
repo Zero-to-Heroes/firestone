@@ -1,14 +1,19 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { BoosterType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
+import { BehaviorSubject } from 'rxjs';
+import { debounceTime, filter, tap } from 'rxjs/operators';
 import { CollectionCardType } from '../../models/collection/collection-card-type.type';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
+import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { CardPackInfo, PackInfo } from '../../models/memory/pack-info';
 import { Events } from '../events.service';
-import { dustFor, dustForPremium } from '../hs-utils';
+import { boosterIdToSetId, dustFor, dustForPremium } from '../hs-utils';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { MercenariesReferenceData } from '../mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../overwolf.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
@@ -21,6 +26,9 @@ import { CollectionManager } from './collection-manager.service';
 export class CardsMonitorService {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private pendingTimeout;
+	private mainWindowStore: BehaviorSubject<MainWindowState>;
+
+	private packNotificationQueue = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		private readonly cards: CardsFacadeService,
@@ -30,6 +38,7 @@ export class CardsMonitorService {
 		private readonly prefs: PreferencesService,
 		private readonly notifications: CardNotificationsService,
 		private readonly memoryService: MemoryInspectionService,
+		private readonly allCards: CardsFacadeService,
 	) {
 		this.init();
 	}
@@ -37,11 +46,26 @@ export class CardsMonitorService {
 	private async init() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		window['triggerMemoryUpdate'] = async (cardId: string) => {
-			this.triggerMemoryDetection();
+			this.packNotificationQueue.next(true);
 		};
 
-		// We do this to force the population of the initial memory for cards
-		this.triggerMemoryDetection(false);
+		setTimeout(() => {
+			this.mainWindowStore = this.ow.getMainWindow().mainWindowStore;
+			this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
+				const changes: MemoryUpdate = event.data[0];
+				if (changes.IsOpeningPack) {
+					this.packNotificationQueue.next(true);
+				}
+			});
+		});
+
+		this.packNotificationQueue
+			.pipe(
+				debounceTime(500),
+				filter((info) => info),
+				tap((info) => this.triggerMemoryDetection(true)),
+			)
+			.subscribe();
 	}
 
 	/**
@@ -66,11 +90,7 @@ export class CardsMonitorService {
 		}
 
 		console.debug('[cards-monitor] received log line', data);
-		// To give time to log lines to appear
-		if (this.pendingTimeout) {
-			clearTimeout(this.pendingTimeout);
-		}
-		this.pendingTimeout = setTimeout(() => this.triggerMemoryDetection(), 400);
+		this.packNotificationQueue.next(true);
 	}
 
 	private async triggerMemoryDetection(process = true) {
@@ -88,6 +108,7 @@ export class CardsMonitorService {
 		else if (changes?.NewCards) {
 			this.handleNewCards(changes.NewCards, !changes.OpenedPack);
 		}
+		this.packNotificationQueue.next(false);
 	}
 
 	private async handleNewPack(pack: PackInfo) {
@@ -95,43 +116,82 @@ export class CardsMonitorService {
 		// Get the collection as it was before opening cards
 		const collection = await this.collectionManager.getCollection(true);
 		const packCards: readonly InternalCardInfo[] = pack.Cards.map((card) => {
-			const cardInCollection = collection.find((c) => c.id === card.CardId);
-			return {
-				cardId: card.CardId,
-				// No diamond card in pack, so we can leave it like this for now
-				cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
-				isNew:
-					!cardInCollection ||
-					(card.Premium ? cardInCollection.premiumCount === 0 : cardInCollection.count === 0),
-				// TODO: handle the case where two copies of the same card are in the same pack
-				isSecondCopy:
-					cardInCollection &&
-					(card.Premium ? cardInCollection.premiumCount === 1 : cardInCollection.count === 1),
-			};
+			if (boosterId === BoosterType.LETTUCE) {
+				return {
+					cardId: this.getLettuceCardId(card, this.mainWindowStore.value?.mercenaries?.referenceData),
+					// No diamond card in pack, so we can leave it like this for now
+					cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
+					currencyAmount: card.CurrencyAmount,
+					mercenaryCardId: this.getMercenaryCardId(
+						card.MercenaryId,
+						this.mainWindowStore.value?.mercenaries?.referenceData,
+					),
+				} as InternalCardInfo;
+			} else {
+				const cardInCollection = collection.find((c) => c.id === card.CardId);
+				return {
+					cardId: card.CardId,
+					// No diamond card in pack, so we can leave it like this for now
+					cardType: card.Premium ? 'GOLDEN' : 'NORMAL',
+					isNew:
+						!cardInCollection ||
+						(card.Premium ? cardInCollection.premiumCount === 0 : cardInCollection.count === 0),
+					// TODO: handle the case where two copies of the same card are in the same pack
+					isSecondCopy:
+						cardInCollection &&
+						(card.Premium ? cardInCollection.premiumCount === 1 : cardInCollection.count === 1),
+				} as InternalCardInfo;
+			}
 		});
-		const setId = this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase();
+		const setId = this.cards.getCard(packCards[0].cardId)?.set?.toLowerCase() ?? boosterIdToSetId(boosterId);
 		console.log('[cards-monitor] notifying new pack opening', setId, boosterId, packCards);
 
 		this.events.broadcast(Events.NEW_PACK, setId, packCards, boosterId);
 		this.stateUpdater.next(new NewPackEvent(setId, boosterId, packCards));
 
-		const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
-			(card: InternalCardInfo) => card.cardId + card.cardType,
-		)(packCards);
-		for (const data of Object.values(groupedBy)) {
-			const cardId = data[0].cardId;
-			const type = data[0].cardType;
-			const cardInCollection = collection.find((c) => c.id === cardId);
-			const existingCount = !cardInCollection
-				? 0
-				: data[0].cardType === 'GOLDEN'
-				? cardInCollection.premiumCount
-				: cardInCollection.count;
+		// Don't show notifs for Merc packs, at least for now.
+		// Would showing the total number of coins be interesting? It would feel very
+		// spammy I think
+		if (boosterId !== BoosterType.LETTUCE) {
+			const groupedBy: { [key: string]: readonly InternalCardInfo[] } = groupByFunction(
+				(card: InternalCardInfo) => card.cardId + card.cardType,
+			)(packCards);
+			for (const data of Object.values(groupedBy)) {
+				const cardId = data[0].cardId;
+				const type = data[0].cardType;
+				const cardInCollection = collection.find((c) => c.id === cardId);
+				const existingCount = !cardInCollection
+					? 0
+					: data[0].cardType === 'GOLDEN'
+					? cardInCollection.premiumCount
+					: cardInCollection.count;
 
-			for (let i = existingCount; i < existingCount + data.length; i++) {
-				this.handleNotification(cardId, type, i + 1, false);
+				for (let i = existingCount; i < existingCount + data.length; i++) {
+					this.handleNotification(cardId, type, i + 1, false);
+				}
 			}
 		}
+	}
+
+	private getMercenaryCardId(mercenaryId: number, referenceData: MercenariesReferenceData): string {
+		if (!referenceData) {
+			return null;
+		}
+
+		const cardDbfId = referenceData.mercenaries
+			.find((merc) => merc.id === mercenaryId)
+			?.skins?.find((skin) => skin.isDefaultVariation)?.cardId;
+		return this.allCards.getCardFromDbfId(cardDbfId).id;
+	}
+
+	private getLettuceCardId(card: CardPackInfo, referenceData: MercenariesReferenceData): string {
+		if (!referenceData) {
+			return null;
+		}
+		const cardDbfId = referenceData.mercenaries
+			.find((merc) => merc.id === card.MercenaryId)
+			?.skins?.find((skin) => skin.artVariationId === card.MercenaryArtVariationId)?.cardId;
+		return this.allCards.getCardFromDbfId(cardDbfId).id;
 	}
 
 	private async handleNewCards(newCards: readonly CardPackInfo[], showNotifs = true) {

@@ -1,5 +1,6 @@
 import { SPACE } from '@angular/cdk/keycodes';
 import { Injectable } from '@angular/core';
+import { BoosterType } from '@firestone-hs/reference-data';
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { InternalCardInfo } from '../../models/collection/internal-card-info';
 import { Events } from '../../services/events.service';
@@ -29,6 +30,9 @@ export class PackMonitor {
 		this.events.on(Events.NEW_PACK).subscribe(async (event) => {
 			console.log('[pack-monitor] resetting cards for new pack');
 			const packCards: readonly InternalCardInfo[] = event.data[1];
+			if (event.data[2] === BoosterType.LETTUCE) {
+				return;
+			}
 			this.unrevealedCards = packCards.map((card) => {
 				const dbCard = this.cards.getCard(card.cardId);
 				return {

@@ -50,7 +50,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 					>
 						<img
 							class="icon"
-							[src]="'https://static.zerotoheroes.com/hearthstone/cardPacks/' + pack.packType + '.webp'"
+							[src]="
+								'https://static.zerotoheroes.com/hearthstone/cardPacks/' + pack.packType + '.webp?v=3'
+							"
 						/>
 					</div>
 					<div class="value">{{ pack.totalObtained }}</div>

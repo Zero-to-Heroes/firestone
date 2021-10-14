@@ -5,11 +5,12 @@ export interface MemoryUpdate {
 	readonly DisplayingAchievementToast: boolean;
 	readonly CurrentScene: SceneMode;
 	readonly XpChanges: readonly XpChange[];
-	readonly OpenedPack: PackInfo;
 	readonly SelectedDeckId: number;
 	readonly ArenaRewards: readonly Reward[];
+	readonly IsOpeningPack: boolean;
 
 	// These are not populated by the regular info updates, as they are costly to compute
+	readonly OpenedPack: PackInfo;
 	readonly NewCards: readonly CardPackInfo[];
 }
 

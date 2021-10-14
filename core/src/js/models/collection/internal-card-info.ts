@@ -5,4 +5,6 @@ export interface InternalCardInfo {
 	readonly cardType: CollectionCardType;
 	readonly isNew: boolean;
 	readonly isSecondCopy: boolean;
+	readonly currencyAmount: number;
+	readonly mercenaryCardId: string;
 }

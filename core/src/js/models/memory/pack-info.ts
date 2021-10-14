@@ -7,7 +7,11 @@ export interface PackInfo {
 
 export interface CardPackInfo {
 	readonly CardId: string;
+	readonly IsNew: boolean;
 	readonly Premium: boolean;
 	readonly TotalCount: number;
-	readonly IsNew: boolean;
+	readonly CurrencyAmount: number;
+	readonly MercenaryArtVariationId: number;
+	readonly MercenaryArtVariationPremium: number;
+	readonly MercenaryId: number;
 }
