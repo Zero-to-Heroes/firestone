@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-import { MemoryMercenary } from '../../../../models/memory/memory-mercenaries-info';
+import { MemoryMercenariesMap } from '../../../../models/memory/memory-mercenaries-info';
 import {
 	BattleAbility,
 	BattleMercenary,
@@ -54,15 +54,15 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 			),
 			map(
 				([[state], [referenceData]]) =>
-					[state.mercenariesMemoryInfo.Map.PlayerTeam, referenceData] as [
-						readonly MemoryMercenary[],
+					[state.mercenariesMemoryInfo.Map, referenceData] as [
+						MemoryMercenariesMap,
 						MercenariesReferenceData,
 					],
 			),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
-			map(([playerTeam, referenceData]) =>
+			map(([mapInfo, referenceData]) =>
 				MercenariesBattleTeam.create({
-					mercenaries: playerTeam.map((playerTeamInfo) => {
+					mercenaries: mapInfo?.PlayerTeam.map((playerTeamInfo) => {
 						const refMerc = referenceData.mercenaries.find((merc) => merc.id === playerTeamInfo.Id);
 						console.debug('refMerc', playerTeamInfo.Id, refMerc, playerTeamInfo, referenceData);
 						const mercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
@@ -70,6 +70,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 							cardId: mercCard.id,
 							role: getHeroRole(mercCard.mercenaryRole),
 							level: playerTeamInfo.Level,
+							isDead: (mapInfo.DeadMercIds ?? []).includes(playerTeamInfo.Id),
 							abilities: playerTeamInfo.Abilities.map((ability) => {
 								return BattleAbility.create({
 									cardId: ability.CardId,
