@@ -10,7 +10,7 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 	selector: 'mercenaries-opponent-team',
 	styleUrls: [],
 	template: ` <mercenaries-team-root
-		[team$]="teamProvider$"
+		[team]="team$ | async"
 		[side]="'opponent'"
 		[trackerPositionUpdater]="trackerPositionUpdater"
 		[trackerPositionExtractor]="trackerPositionExtractor"
@@ -26,14 +26,14 @@ export class MercenariesOpponentTeamComponent {
 	// Because whitespace for the tooltips
 	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => -windowWidth / 2 + 250;
 	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 50;
-	teamProvider$: Observable<MercenariesBattleTeam>;
+	team$: Observable<MercenariesBattleTeam>;
 
 	constructor(
 		private readonly prefs: PreferencesService,
 		private readonly store: AppUiStoreService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
-		this.teamProvider$ = this.store
+		this.team$ = this.store
 			.listenMercenaries$(([battleState, prefs]) => battleState)
 			.pipe(
 				debounceTime(50),
@@ -45,6 +45,7 @@ export class MercenariesOpponentTeamComponent {
 						mercenaries: team.mercenaries.filter((merc) => !merc.isDead || !merc.creatorCardId),
 					}),
 				),
+				filter((team) => !!team),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting team in ', this.constructor.name, filter)),

@@ -19,7 +19,7 @@ import { arraysEqual } from '../../../../services/utils';
 	selector: 'mercenaries-out-of-combat-player-team',
 	styleUrls: [],
 	template: ` <mercenaries-team-root
-		[team$]="teamProvider$"
+		[team]="team$ | async"
 		[side]="'out-of-combat-player'"
 		[trackerPositionUpdater]="trackerPositionUpdater"
 		[trackerPositionExtractor]="trackerPositionExtractor"
@@ -34,7 +34,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesOutOfCombatPlayerTeamOverlayPosition;
 	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
 	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
-	teamProvider$: Observable<MercenariesBattleTeam>;
+	team$: Observable<MercenariesBattleTeam>;
 
 	constructor(
 		private readonly prefs: PreferencesService,
@@ -42,7 +42,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
-		this.teamProvider$ = combineLatest(
+		this.team$ = combineLatest(
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
 			this.store.listen$(([main, nav, prefs]) => main.mercenaries?.referenceData),
 		).pipe(
@@ -80,6 +80,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 					}),
 				}),
 			),
+			filter((team) => !!team),
 			// FIXME
 			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 			tap((filter) => cdLog('emitting team in ', this.constructor.name, filter)),

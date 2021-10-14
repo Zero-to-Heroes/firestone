@@ -29,33 +29,30 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 		<div class="root overlay-container-parent" [activeTheme]="'decktracker'">
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
-				<ng-container *ngIf="{ team: team$ | async } as value">
-					<div class="team-container">
-						<div class="team" *ngIf="!!value.team" [style.width.px]="overlayWidthInPx">
-							<div class="background"></div>
-							<mercenaries-team-control-bar
-								[windowId]="windowId"
-								[side]="side"
-							></mercenaries-team-control-bar>
-							<mercenaries-team-list [team]="value.team" [tooltipPosition]="tooltipPosition">
-							</mercenaries-team-list>
-							<div
-								class="show-roles-matchup-button"
-								[cardTooltip]="'pokemon_diagram'"
-								[cardTooltipPosition]="tooltipPosition"
-								*ngIf="showColorChart$ | async"
-							>
-								<div class="background-second-part"></div>
-								<div class="background-main-part"></div>
-								<div class="content">
-									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
-									Roles chart
-								</div>
+				<div class="team-container">
+					<div class="team" *ngIf="_team" [style.width.px]="overlayWidthInPx">
+						<div class="background"></div>
+						<mercenaries-team-control-bar
+							[windowId]="windowId"
+							[side]="side"
+						></mercenaries-team-control-bar>
+						<mercenaries-team-list [team]="_team" [tooltipPosition]="tooltipPosition">
+						</mercenaries-team-list>
+						<div
+							class="show-roles-matchup-button"
+							[cardTooltip]="'pokemon_diagram'"
+							[cardTooltipPosition]="tooltipPosition"
+							*ngIf="showColorChart$ | async"
+						>
+							<div class="background-second-part"></div>
+							<div class="background-main-part"></div>
+							<div class="content">
+								<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
+								Roles chart
 							</div>
-							<div class="backdrop" *ngIf="showBackdrop"></div>
 						</div>
 					</div>
-				</ng-container>
+				</div>
 			</div>
 		</div>
 	`,
@@ -69,9 +66,16 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
 	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
 
-	@Input() team$: Observable<MercenariesBattleTeam>;
+	@Input() set team(value: MercenariesBattleTeam) {
+		console.debug('set team in root', value);
+		this._team = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
 	showColorChart$: Observable<boolean>;
+	_team: MercenariesBattleTeam;
 
 	windowId: string;
 	overlayWidthInPx = 225;

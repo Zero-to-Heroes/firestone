@@ -83,7 +83,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 export class MercenariesTeamMercenaryComponent {
 	@Input() tooltipPosition: boolean;
 	@Input() set mercenary(value: BattleMercenary) {
-		console.debug('set team', value);
+		console.debug('set mercenary', value);
 		const refMercenaryCard = this.allCards.getCard(value.cardId);
 		this.mercCardId = value.cardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.jpg?v=3)`;

@@ -65,17 +65,21 @@ export class MercenariesOutOfCombatService {
 	}
 
 	private async processEvent(event: BroadcastEvent, mainWindowState: MainWindowState): Promise<void> {
-		const parsers = this.getParsersFor(event.key, this.internalStore$.value);
-		if (!parsers?.length) {
-			return;
-		}
+		try {
+			const parsers = this.getParsersFor(event.key, this.internalStore$.value);
+			if (!parsers?.length) {
+				return;
+			}
 
-		let state = this.internalStore$.value;
-		for (const parser of parsers) {
-			state = await parser.parse(state, event, mainWindowState);
-			console.debug('[merc-ooc-store] updated state', state);
+			let state = this.internalStore$.value;
+			for (const parser of parsers) {
+				state = await parser.parse(state, event, mainWindowState);
+				console.debug('[merc-ooc-store] updated state', state);
+			}
+			this.internalStore$.next(state);
+		} catch (e) {
+			console.error('[mercenaries-ooc-store] could not process event', event.key, event, e);
 		}
-		this.internalStore$.next(state);
 	}
 
 	private async emitState(newState: MercenariesOutOfCombatState, preferences: Preferences): Promise<void> {

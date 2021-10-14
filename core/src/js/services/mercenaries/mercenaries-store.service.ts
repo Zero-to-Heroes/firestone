@@ -79,19 +79,26 @@ export class MercenariesStoreService {
 	// Maybe find a way to only emit the state each N milliseconds at the most to limit the
 	// redraws in the UI
 	private async processEvent(event: GameEvent, mainWindowState: MainWindowState): Promise<void> {
-		const battleState = this.internalStore$.value;
+		try {
+			const battleState = this.internalStore$.value;
 
-		const parsers = this.getParsersFor(event.type, battleState);
-		if (!parsers?.length) {
-			return;
-		}
+			// TODO: have a way to delay some parsers, without causing the whole parser chain to get
+			// stuck; Hve getParserFor return two lists, one for immediate processing and the other
+			// for delay, and reenqueue the delayed one after a setTimeout
+			const parsers = this.getParsersFor(event.type, battleState);
+			if (!parsers?.length) {
+				return;
+			}
 
-		let state = battleState;
-		for (const parser of parsers) {
-			state = await parser.parse(state, event, mainWindowState);
-			// console.debug('[merc-store] updated state', state);
+			let state = battleState;
+			for (const parser of parsers) {
+				state = await parser.parse(state, event, mainWindowState);
+				// console.debug('[merc-store] updated state', state);
+			}
+			this.internalStore$.next(state);
+		} catch (e) {
+			console.error('[mercenaries-store] could not process event', event.type, event, e);
 		}
-		this.internalStore$.next(state);
 	}
 
 	private async emitState(newState: MercenariesBattleState, preferences: Preferences): Promise<void> {
