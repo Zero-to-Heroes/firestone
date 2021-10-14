@@ -3,34 +3,7 @@
 	padding-right: 15px;
 	height: 100%;
 
-	.toggle-label {
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-		justify-content: center;
-		align-items: flex-start;
-	}
-
-	label {
-		.info {
-			margin-left: 5px;
-			margin-top: 2px;
-			.zth-tooltip {
-				position: absolute;
-				max-width: 200px;
-
-				p {
-					width: 200px;
-					color: #2f0d0d;
-				}
-
-				&.right {
-					top: 50%;
-					transform: translateY(-50%);
-					left: 35px;
-					right: auto;
-				}
-			}
-		}
+	::ng-deep preference-toggle .preference-toggle p {
+		width: 200px;
 	}
 }

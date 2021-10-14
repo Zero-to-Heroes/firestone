@@ -25,6 +25,7 @@ import { buildHeroStats } from './bgs-ui-helper';
 
 type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
 type GameStateSelector<T> = (gameState: GameState) => T;
+type PrefsSelector<T> = (prefs: Preferences) => T;
 type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
 type MercenariesStateSelector<T> = (state: [MercenariesBattleState, Preferences?]) => T;
 type MercenariesOutOfCombatStateSelector<T> = (state: [MercenariesOutOfCombatState, Preferences?]) => T;
@@ -67,6 +68,17 @@ export class AppUiStoreService {
 			map(([[main, nav], prefs]) => selectors.map((selector) => selector([main, nav, prefs?.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends Selector<infer T> ? T : never }>;
+	}
+
+	public listenPrefs$<S extends PrefsSelector<any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }> {
+		return this.prefs.asObservable().pipe(
+			filter((prefs) => !!prefs?.preferences),
+			// tap((gameState) => console.debug('emitting gameState', gameState, this)),
+			map((prefs) => selectors.map((selector) => selector(prefs.preferences))),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+		) as Observable<{ [K in keyof S]: S[K] extends PrefsSelector<infer T> ? T : never }>;
 	}
 
 	public listenDeckState$<S extends GameStateSelector<any>[]>(

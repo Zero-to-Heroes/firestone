@@ -27,6 +27,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					[label]="'Out of combat team widget'"
 					helpTooltip="When active, shows a recap overlay of all your heroes, abililties and equipment on the bounty map. Useful for easily inspecting your team when choosing a path or picking a treasure. "
 				></preference-toggle>
+				<preference-toggle
+					[field]="'mercenariesShowColorChartButton'"
+					[label]="'Show role chart'"
+					helpTooltip="When active, adds a small button below the team widget over which you can mouse over to display a recap of the roles bonus damage triangle"
+				></preference-toggle>
 			</div>
 		</div>
 	`,

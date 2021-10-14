@@ -58,7 +58,7 @@
 			top: 0;
 			left: 0;
 			right: 0;
-			bottom: 10px;
+			bottom: 28px;
 			background: #07081f;
 		}
 
@@ -92,5 +92,80 @@
 			height: 100%;
 			min-height: 0;
 		}
+	}
+}
+
+.show-roles-matchup-button {
+	color: var(--color-2);
+	font-family: Open Sans;
+	font-size: 13px;
+	width: 120px;
+	height: 26px;
+	margin-left: auto;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	overflow: hidden;
+
+	.background-main-part,
+	.background-second-part {
+		height: 100%;
+		background: var(--color-7);
+		overflow: hidden;
+	}
+
+	&:after {
+		content: '';
+		background: var(--color-1);
+		display: block;
+		position: absolute;
+		padding-top: 300%;
+		padding-left: 350%;
+		margin-left: -20px !important;
+		margin-top: -120%;
+		opacity: 0;
+		transition: all 0.8s;
+		right: 0;
+	}
+
+	// Click effect
+	&:active:after {
+		padding: 0;
+		margin: 0;
+		opacity: 1;
+		transition: 0s;
+	}
+
+	.background-main-part {
+		width: 80px;
+	}
+	.background-second-part {
+		width: 40px;
+		border-bottom-left-radius: 33px 33px;
+		z-index: -1;
+	}
+
+	.content {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		padding-right: 10px;
+	}
+
+	.icon {
+		width: 16px;
+		height: 16px;
+		--icon-color: var(--color-2);
+		--icon-secondary-color: var(--color-7);
+		margin-right: 5px;
+	}
+
+	&:hover {
+		color: var(--color-1);
+		--icon-color: var(--color-1);
 	}
 }

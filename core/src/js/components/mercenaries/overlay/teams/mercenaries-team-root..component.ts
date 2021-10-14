@@ -9,11 +9,13 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { PreferencesService } from '../../../../services/preferences.service';
+import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'mercenaries-team-root',
@@ -37,6 +39,19 @@ import { PreferencesService } from '../../../../services/preferences.service';
 							></mercenaries-team-control-bar>
 							<mercenaries-team-list [team]="value.team" [tooltipPosition]="tooltipPosition">
 							</mercenaries-team-list>
+							<div
+								class="show-roles-matchup-button"
+								[cardTooltip]="'pokemon_diagram'"
+								[cardTooltipPosition]="tooltipPosition"
+								*ngIf="showColorChart$ | async"
+							>
+								<div class="background-second-part"></div>
+								<div class="background-main-part"></div>
+								<div class="content">
+									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
+									Roles chart
+								</div>
+							</div>
 							<div class="backdrop" *ngIf="showBackdrop"></div>
 						</div>
 					</div>
@@ -56,6 +71,8 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 
 	@Input() team$: Observable<MercenariesBattleTeam>;
 
+	showColorChart$: Observable<boolean>;
+
 	windowId: string;
 	overlayWidthInPx = 225;
 	tooltipPosition: CardTooltipPositionType = 'left';
@@ -66,7 +83,17 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly prefs: PreferencesService,
-	) {}
+		private readonly store: AppUiStoreService,
+	) {
+		this.showColorChart$ = this.store
+			.listenPrefs$((prefs) => prefs.mercenariesShowColorChartButton)
+			.pipe(
+				map(([pref]) => pref),
+				// FIXME
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting showColorChart in ', this.constructor.name, filter)),
+			);
+	}
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;

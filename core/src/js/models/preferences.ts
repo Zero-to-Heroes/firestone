@@ -322,6 +322,7 @@ export class Preferences {
 	readonly mercenariesActivePvpMmrFilter: MercenariesPvpMmrFilterType = 100;
 	readonly mercenariesActiveStarterFilter: MercenariesStarterFilterType = 'all';
 	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
+	readonly mercenariesShowColorChartButton: boolean = true;
 
 	readonly mercenariesEnablePlayerTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
