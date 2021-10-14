@@ -177,33 +177,33 @@ export class MemoryInspectionService {
 		});
 	}
 
-	private handleInfoUpdate(info) {
-		if (info.feature === 'scene_state') {
-			console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
-			this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);
-		} else if (info.feature === 'match') {
-			// This info is only sent when it changed since the last time. So we need to cache it
+	// private handleInfoUpdate(info) {
+	// 	if (info.feature === 'scene_state') {
+	// 		console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
+	// 		this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);
+	// 	} else if (info.feature === 'match') {
+	// 		// This info is only sent when it changed since the last time. So we need to cache it
 
-			if (info.info.playersInfo) {
-				const localPlayer: string = info.info.playersInfo.localPlayer;
-				const opponent: string = info.info.playersInfo.opponent;
+	// 		if (info.info.playersInfo) {
+	// 			const localPlayer: string = info.info.playersInfo.localPlayer;
+	// 			const opponent: string = info.info.playersInfo.opponent;
 
-				if (localPlayer) {
-					this.events.broadcast(Events.PLAYER_INFO, JSON.parse(localPlayer));
-				}
-				if (opponent) {
-					this.events.broadcast(Events.OPPONENT_INFO, JSON.parse(opponent));
-				}
-			}
-		} else if (
-			info.feature === 'match_info' &&
-			info.info &&
-			info.info.match_info &&
-			info.info.match_info.pseudo_match_id
-		) {
-			this.events.broadcast(Events.NEW_GAME_ID, info.info.match_info.pseudo_match_id);
-		}
-	}
+	// 			if (localPlayer) {
+	// 				this.events.broadcast(Events.PLAYER_INFO, JSON.parse(localPlayer));
+	// 			}
+	// 			if (opponent) {
+	// 				this.events.broadcast(Events.OPPONENT_INFO, JSON.parse(opponent));
+	// 			}
+	// 		}
+	// 	} else if (
+	// 		info.feature === 'match_info' &&
+	// 		info.info &&
+	// 		info.info.match_info &&
+	// 		info.info.match_info.pseudo_match_id
+	// 	) {
+	// 		this.events.broadcast(Events.NEW_GAME_ID, info.info.match_info.pseudo_match_id);
+	// 	}
+	// }
 
 	// private registerEvents() {
 	// 	if (this.listenersRegistered) {
