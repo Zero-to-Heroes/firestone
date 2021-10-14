@@ -4,6 +4,7 @@ import { MemoryUpdate } from '../../../../models/memory/memory-update';
 import { MercenariesOutOfCombatState } from '../../../../models/mercenaries/out-of-combat/mercenaries-out-of-combat-state';
 import { BroadcastEvent, Events } from '../../../events.service';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
+import { sleep } from '../../../utils';
 import { MercenariesOutOfCombatParser } from './_mercenaries-out-of-combat-parser';
 
 const SCENE_WITH_RELEVANT_MERC_INFO = [
@@ -36,7 +37,11 @@ export class MercenariesMemoryInformationParser implements MercenariesOutOfComba
 		if (!SCENE_WITH_RELEVANT_MERC_INFO.includes(newScene)) {
 			return state.update({ currentScene: newScene });
 		}
+		// Wait for bit before getting the info, as the first time you enter a map you can still have
+		// the previous run's info
 		console.debug('[merc-ooc] changing scene, refreshing merc info', newScene, SceneMode[newScene]);
+		await sleep(2000);
+		console.debug('[merc-ooc] done waiting');
 		const newMercenariesInfo = await this.memoryService.getMercenariesInfo();
 		console.debug('[merc-ooc] new merc info', newMercenariesInfo);
 		return state.update({ mercenariesMemoryInfo: newMercenariesInfo, currentScene: newScene });
