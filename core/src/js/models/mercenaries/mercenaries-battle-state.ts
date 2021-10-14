@@ -1,11 +1,13 @@
 import { Zone } from '@firestone-hs/reference-data';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { NonFunctionProperties, updateFirstElementWithoutProp } from '../../services/utils';
+import { MemoryMercenariesInfo } from '../memory/memory-mercenaries-info';
 
 export class MercenariesBattleState {
 	// readonly inGame: boolean;
 	// readonly reconnectOngoing: boolean;
 	readonly spectating: boolean;
+	readonly mercenariesFromMemory: MemoryMercenariesInfo;
 	readonly playerClosedManually: boolean;
 	readonly opponentClosedManually: boolean;
 	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();

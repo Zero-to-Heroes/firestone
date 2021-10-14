@@ -45,6 +45,9 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			return battleState;
 		}
 
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
+
 		const normalizedCardId = normalizeMercenariesCardId(cardId);
 		const refMerc = normalizedCardId
 			? mainWindowState.mercenaries.referenceData.mercenaries.find(
@@ -58,6 +61,10 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		const refMercEquipment = event.additionalData.mercenariesEquipmentId
 			? this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId)
 			: null;
+		const mercFromMemory = isPlayer
+			? battleState.mercenariesFromMemory.Map?.PlayerTeam?.find((merc) => merc.Id === refMerc?.id)
+			: null;
+		const abilityCardIdsFromMemory = (mercFromMemory?.Abilities ?? []).map((ability) => ability.CardId);
 		const mercenary: BattleMercenary = BattleMercenary.create({
 			entityId: entityId,
 			cardId: refMercCard?.id,
@@ -65,7 +72,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			isDead: event.additionalData.isDead,
 			zone: event.additionalData.zone,
 			zonePosition: event.additionalData.zonePosition,
-			abilities:
+			abilities: (
 				refMerc?.abilities.map((refAbility) => {
 					const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
 					return BattleAbility.create({
@@ -78,7 +85,10 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 						totalUsed: null,
 						isTreasure: false,
 					});
-				}) ?? [],
+				}) ?? []
+			).filter(
+				(ability) => !abilityCardIdsFromMemory?.length || abilityCardIdsFromMemory.includes(ability.cardId),
+			),
 			inPlay: false,
 			level: event.additionalData.mercenariesExperience
 				? getMercLevelFromExperience(
@@ -96,8 +106,6 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 				: null,
 		});
 
-		const isPlayer = controllerId === localPlayer.PlayerId;
-		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
 		const newTeam = team.update({
 			mercenaries: [...team.mercenaries, mercenary] as readonly BattleMercenary[],
 		} as MercenariesBattleTeam);

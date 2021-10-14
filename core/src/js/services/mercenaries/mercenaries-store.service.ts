@@ -8,6 +8,7 @@ import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { PreferencesService } from '../preferences.service';
 import { MercenariesOpponentBattleTeamOverlayHandler } from './overlay-handler/mercenaries-opponent-battle-team-overlay-handler';
 import { MercenariesPlayerBattleTeamOverlayHandler } from './overlay-handler/mercenaries-player-battle-team-overlay-handler';
@@ -48,6 +49,7 @@ export class MercenariesStoreService {
 		private readonly allCards: CardsFacadeService,
 		private readonly prefs: PreferencesService,
 		private readonly ow: OverwolfService,
+		private readonly memoryService: MemoryInspectionService,
 	) {
 		this.init();
 
@@ -134,7 +136,7 @@ export class MercenariesStoreService {
 
 	private registerParser() {
 		const parsers: readonly MercenariesParser[] = [
-			new MercenariesMatchMetadataParser(),
+			new MercenariesMatchMetadataParser(this.memoryService),
 			new MercenariesGameEndParser(),
 
 			new MercenariesHeroRevealedParser(this.allCards),
