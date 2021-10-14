@@ -73,14 +73,14 @@ export class GameEvents {
 		}
 		// TODO: progressively deprecate this, as the GEP doesn't fire events as well as
 		// mind vision
-		this.events.on(Events.SCENE_CHANGED).subscribe((event) =>
-			this.gameEventsEmitter.allEvents.next(
-				Object.assign(new GameEvent(), {
-					type: GameEvent.SCENE_CHANGED,
-					additionalData: { scene: event.data[0] },
-				} as GameEvent),
-			),
-		);
+		// this.events.on(Events.SCENE_CHANGED).subscribe((event) =>
+		// 	this.gameEventsEmitter.allEvents.next(
+		// 		Object.assign(new GameEvent(), {
+		// 			type: GameEvent.SCENE_CHANGED,
+		// 			additionalData: { scene: event.data[0] },
+		// 		} as GameEvent),
+		// 	),
+		// );
 		this.events.on(Events.MEMORY_UPDATE).subscribe((event) => {
 			const changes: MemoryUpdate = event.data[0];
 			if (changes.CurrentScene) {

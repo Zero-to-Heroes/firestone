@@ -42,10 +42,10 @@ import { MindVisionService } from './mind-vision/mind-vision.service';
 @Injectable()
 export class MemoryInspectionService {
 	// https://overwolf.github.io/docs/api/overwolf-games-events-heartstone
-	readonly g_interestedInFeatures = [
-		'scene_state', // Used to detect when the UI shows the game
-		'match_info', // For the GEP game ID
-	];
+	// readonly g_interestedInFeatures = [
+	// 	'scene_state', // Used to detect when the UI shows the game
+	// 	'match_info', // For the GEP game ID
+	// ];
 
 	private getMemoryChangesOperation = new GetMemoryChangesOperation(this.mindVision, this.ow);
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
@@ -79,7 +79,7 @@ export class MemoryInspectionService {
 		private mindVision: MindVisionService,
 		private cards: SetsService,
 	) {
-		this.init();
+		// this.init();
 	}
 
 	public async getMemoryChanges(): Promise<MemoryUpdate> {
@@ -205,46 +205,46 @@ export class MemoryInspectionService {
 		}
 	}
 
-	private registerEvents() {
-		if (this.listenersRegistered) {
-			return;
-		}
+	// private registerEvents() {
+	// 	if (this.listenersRegistered) {
+	// 		return;
+	// 	}
 
-		// general events errors
-		this.ow.addGameEventsErrorListener((info) => console.log('[memory service] Error: ', info));
+	// 	// general events errors
+	// 	this.ow.addGameEventsErrorListener((info) => console.log('[memory service] Error: ', info));
 
-		// "static" data changed
-		// This will also be triggered the first time we register
-		// for events and will contain all the current information
-		this.ow.addGameEventInfoUpdates2Listener((info) => this.handleInfoUpdate(info));
+	// 	// "static" data changed
+	// 	// This will also be triggered the first time we register
+	// 	// for events and will contain all the current information
+	// 	this.ow.addGameEventInfoUpdates2Listener((info) => this.handleInfoUpdate(info));
 
-		// an event triggerd
-		this.ow.addGameEventsListener((info) => console.log('[memory service] EVENT FIRED: ', info));
-		this.listenersRegistered = true;
-		console.log('[memory-service] added events listeners');
-	}
+	// 	// an event triggerd
+	// 	this.ow.addGameEventsListener((info) => console.log('[memory service] EVENT FIRED: ', info));
+	// 	this.listenersRegistered = true;
+	// 	console.log('[memory-service] added events listeners');
+	// }
 
-	private async setFeatures() {
-		console.log('[memory service] trying to set features for GEP');
-		const info = await this.ow.setGameEventsRequiredFeatures(this.g_interestedInFeatures);
-		if (info.status === 'error') {
-			setTimeout(() => this.setFeatures(), 2000);
-			return;
-		}
-		console.log('[memory service] Set required features:', info);
-	}
+	// private async setFeatures() {
+	// 	console.log('[memory service] trying to set features for GEP');
+	// 	const info = await this.ow.setGameEventsRequiredFeatures(this.g_interestedInFeatures);
+	// 	if (info.status === 'error') {
+	// 		setTimeout(() => this.setFeatures(), 2000);
+	// 		return;
+	// 	}
+	// 	console.log('[memory service] Set required features:', info);
+	// }
 
-	private async init() {
-		this.ow.addGameInfoUpdatedListener((res) => {
-			if (this.ow.gameLaunched(res)) {
-				this.registerEvents();
-				setTimeout(() => this.setFeatures(), 1000);
-			}
-		});
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (this.ow.gameRunning(gameInfo)) {
-			this.registerEvents();
-			setTimeout(() => this.setFeatures(), 1000);
-		}
-	}
+	// private async init() {
+	// 	this.ow.addGameInfoUpdatedListener((res) => {
+	// 		if (this.ow.gameLaunched(res)) {
+	// 			this.registerEvents();
+	// 			setTimeout(() => this.setFeatures(), 1000);
+	// 		}
+	// 	});
+	// 	const gameInfo = await this.ow.getRunningGameInfo();
+	// 	if (this.ow.gameRunning(gameInfo)) {
+	// 		this.registerEvents();
+	// 		setTimeout(() => this.setFeatures(), 1000);
+	// 	}
+	// }
 }

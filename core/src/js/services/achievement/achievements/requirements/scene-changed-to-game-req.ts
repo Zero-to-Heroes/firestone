@@ -1,3 +1,4 @@
+import { SceneMode } from '@firestone-hs/reference-data';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
@@ -22,13 +23,13 @@ export class SceneChangedToGameReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.SCENE_CHANGED) {
+		if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
 			this.handleEvent(gameEvent);
 		}
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		if (gameEvent.additionalData.scene === 'scene_gameplay') {
+		if (gameEvent.additionalData.scene === SceneMode.GAMEPLAY) {
 			this.sceneChanged = true;
 		}
 	}

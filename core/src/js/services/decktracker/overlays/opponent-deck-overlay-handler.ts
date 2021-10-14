@@ -43,11 +43,12 @@ export class OpponentDeckOverlayHandler extends AbstractOverlayHandler {
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED_MINDVISION) {
 			this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === SceneMode.GAMEPLAY;
 			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
-		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
-			this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === 'scene_gameplay';
-
-			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		}
+		// else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
+		// 	this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === 'scene_gameplay';
+
+		// 	this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
+		// }
 	}
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {

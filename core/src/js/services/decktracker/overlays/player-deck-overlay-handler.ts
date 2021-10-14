@@ -47,11 +47,11 @@ export class PlayerDeckOverlayHandler extends AbstractOverlayHandler {
 			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
 		}
 		// It looks like that, for some players, the mindvision event is not raised
-		else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
-			this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === 'scene_gameplay';
-			console.log(`[${this.name}] received GEP scene changed`, (gameEvent as GameEvent).additionalData.scene);
-			this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
-		}
+		// else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
+		// 	this.onGameScreen = (gameEvent as GameEvent).additionalData.scene === 'scene_gameplay';
+		// 	console.log(`[${this.name}] received GEP scene changed`, (gameEvent as GameEvent).additionalData.scene);
+		// 	this.updateOverlay(state, showDecktrackerFromGameMode, false, true);
+		// }
 	}
 
 	protected shouldShow(canShow: boolean, shouldShowFromState: boolean, prefs: Preferences, state: GameState) {
