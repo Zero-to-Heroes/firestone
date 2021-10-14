@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { Zone } from '@firestone-hs/reference-data';
 import { BattleMercenary, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 
 @Component({
@@ -26,7 +27,33 @@ export class MercenariesTeamListComponent {
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		console.debug('set team', value);
-		this.mercenaries = [...value.mercenaries].sort((a, b) => (a.isDead < b.isDead ? -1 : 1));
+		this.mercenaries = [...value.mercenaries].sort((a, b) => {
+			if (a.zone === Zone.PLAY && b.zone !== Zone.PLAY) {
+				return -1;
+			} else if (a.zone !== Zone.PLAY && b.zone === Zone.PLAY) {
+				return 1;
+			}
+
+			if (a.zone === Zone.SETASIDE && b.zone !== Zone.SETASIDE) {
+				return -1;
+			} else if (a.zone !== Zone.SETASIDE && b.zone === Zone.SETASIDE) {
+				return 1;
+			}
+
+			if (a.isDead < b.isDead) {
+				return -1;
+			} else if (a.isDead > b.isDead) {
+				return 1;
+			}
+
+			if (a.zonePosition < b.zonePosition) {
+				return -1;
+			} else if (a.zonePosition > b.zonePosition) {
+				return 1;
+			}
+			return 0;
+		});
+		console.debug('mercenaries', this.mercenaries);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();
 		}

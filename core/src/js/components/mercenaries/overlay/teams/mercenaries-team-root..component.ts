@@ -67,7 +67,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
 
 	@Input() set team(value: MercenariesBattleTeam) {
-		console.debug('set team in root', value);
+		// console.debug('set team in root', value);
 		this._team = value;
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();

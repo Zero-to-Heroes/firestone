@@ -63,6 +63,8 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			cardId: refMercCard?.id,
 			creatorCardId: event.additionalData.creatorCardId,
 			isDead: event.additionalData.isDead,
+			zone: event.additionalData.zone,
+			zonePosition: event.additionalData.zonePosition,
 			abilities:
 				refMerc?.abilities.map((refAbility) => {
 					const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);

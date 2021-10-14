@@ -25,6 +25,8 @@ import { MercenariesHeroUpdatedParser } from './parser/mercenaries-hero-updated-
 import { MercenariesMatchMetadataParser } from './parser/mercenaries-match-metadata-parser';
 import { MercenariesTeamOpponentManualCloseParser } from './parser/mercenaries-team-opponent-manual-close-parser';
 import { MercenariesTeamPlayerManualCloseParser } from './parser/mercenaries-team-player-manual-close-parser';
+import { MercenariesZoneChangedParser } from './parser/mercenaries-zone-changed-parser';
+import { MercenariesZonePositionChangedParser } from './parser/mercenaries-zone-position-changed-parser';
 import { MercenariesParser } from './parser/_mercenaries-parser';
 
 @Injectable()
@@ -144,6 +146,8 @@ export class MercenariesStoreService {
 			new MercenariesEquipmentRevealedParser(this.allCards),
 			new MercenariesEquipmentUpdatedParser(this.allCards),
 			new MercenariesCooldownUpdatedParser(this.allCards),
+			new MercenariesZoneChangedParser(),
+			new MercenariesZonePositionChangedParser(),
 
 			new MercenariesTeamPlayerManualCloseParser(),
 			new MercenariesTeamOpponentManualCloseParser(),

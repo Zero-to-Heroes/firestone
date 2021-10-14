@@ -2,6 +2,10 @@
 	display: flex;
 	flex-direction: column;
 
+	&.bench {
+		opacity: 0.75;
+	}
+
 	&.dead {
 		opacity: 0.3;
 	}

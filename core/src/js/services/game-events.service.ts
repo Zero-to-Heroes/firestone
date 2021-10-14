@@ -1094,6 +1094,22 @@ export class GameEvents {
 						abilityCooldownConfig: gameEvent.Value.AdditionalProps.AbilityCooldownConfig,
 						abilityCurrentCooldown: gameEvent.Value.AdditionalProps.AbilityCurrentCooldown,
 						abilitySpeed: gameEvent.Value.AdditionalProps.AbilitySpeed,
+						zonePosition: gameEvent.Value.AdditionalProps.ZonePosition,
+						zone: gameEvent.Value.AdditionalProps.Zone,
+					}),
+				);
+				break;
+			case 'ZONE_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ZONE_CHANGED, gameEvent, {
+						zone: gameEvent.Value.AdditionalProps.Zone,
+					}),
+				);
+				break;
+			case 'ZONE_POSITION_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ZONE_POSITION_CHANGED, gameEvent, {
+						zonePosition: gameEvent.Value.AdditionalProps.ZonePosition,
 					}),
 				);
 				break;
@@ -1133,6 +1149,8 @@ export class GameEvents {
 						mercenariesExperience: gameEvent.Value.AdditionalProps.MercenariesExperience,
 						mercenariesEquipmentId: gameEvent.Value.AdditionalProps.MercenariesEquipmentId,
 						isDead: gameEvent.Value.AdditionalProps.IsDead,
+						zonePosition: gameEvent.Value.AdditionalProps.ZonePosition,
+						zone: gameEvent.Value.AdditionalProps.Zone,
 					}),
 				);
 				break;

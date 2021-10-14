@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { TagRole } from '@firestone-hs/reference-data';
+import { TagRole, Zone } from '@firestone-hs/reference-data';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 
@@ -10,7 +10,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-mercenary.component.scss',
 	],
 	template: `
-		<div class="mercenary" [ngClass]="{ 'dead': isDead }">
+		<div class="mercenary" [ngClass]="{ 'dead': isDead, 'bench': isBench }">
 			<div class="item header" [cardTooltip]="mercCardId" [cardTooltipPosition]="tooltipPosition">
 				<!-- <div class="background-image" [style.background-image]="cardImage"></div> -->
 				<!-- <div class="gradiant"></div> -->
@@ -113,6 +113,7 @@ export class MercenariesTeamMercenaryComponent {
 			  }
 			: null;
 		this.isDead = value.isDead;
+		this.isBench = value.zone === Zone.SETASIDE;
 	}
 
 	mercCardId: string;
@@ -123,6 +124,7 @@ export class MercenariesTeamMercenaryComponent {
 	abilities: readonly Ability[];
 	equipment: Equipment;
 	isDead: boolean;
+	isBench: boolean;
 
 	constructor(private readonly allCards: CardsFacadeService) {}
 

@@ -1,3 +1,4 @@
+import { Zone } from '@firestone-hs/reference-data';
 import { normalizeMercenariesCardId } from '../../services/mercenaries/mercenaries-utils';
 import { NonFunctionProperties, updateFirstElementWithoutProp } from '../../services/utils';
 
@@ -57,12 +58,14 @@ export class BattleMercenary {
 	readonly cardId: string;
 	readonly creatorCardId: string;
 	readonly isDead: boolean;
+	readonly zone: Zone;
+	readonly zonePosition: number;
 	readonly role: 'caster' | 'fighter' | 'protector';
 	readonly level: number;
 	readonly inPlay: boolean;
 	readonly equipment: BattleEquipment = new BattleEquipment();
 	// TODO: update the ability infos based on the equipment
-	readonly abilities: readonly BattleAbility[] = [];
+	readonly abilities: readonly BattleAbility[];
 	// The latest entry is the move they have queued right now (only in PvE)
 	// readonly commandsHistory: readonly BattleCommand[];
 

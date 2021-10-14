@@ -53,6 +53,8 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 			entityId,
 			BattleMercenary.create({
 				cardId: refMercCard.id,
+				zone: event.additionalData.zone,
+				zonePosition: event.additionalData.zonePosition,
 				abilities: refMerc.abilities.map((refAbility) => {
 					const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
 					return BattleAbility.create({
