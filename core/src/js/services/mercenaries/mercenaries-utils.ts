@@ -38,7 +38,7 @@ export const getMercLevelFromExperience = (totalXp: number, referenceData: Merce
 		}
 		currentLevel++;
 	}
-	return currentLevel;
+	return Math.max(1, currentLevel);
 };
 
 export const getHeroRole = (roleFromEnum: string): 'caster' | 'fighter' | 'protector' => {
