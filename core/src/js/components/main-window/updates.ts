@@ -62,11 +62,7 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `Show the list of known opponent mercenaries, as well as their abilities (shows the lvl 1 version of the ability if they haven't played it yet) and their equipment. It's still a very rought first version, but it gets the job done :)`,
-							},
-							{
-								type: 'feature',
-								text: `A very first Mercenaries tab has been created! You can see all available mercs & abilities, and stats (global + yours) will start appearing there soon.`,
+								text: `A button as been added at the bottom of the team widget to show a recap of the roles chart (what roles does double damage to what other role). Like everything else, there is a setting to disable it if you don't want/need it.`,
 							},
 							{
 								type: 'ui',
