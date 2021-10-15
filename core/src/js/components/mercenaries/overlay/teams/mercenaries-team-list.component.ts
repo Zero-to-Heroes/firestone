@@ -26,7 +26,6 @@ export class MercenariesTeamListComponent {
 	@Input() tooltipPosition: boolean;
 
 	@Input() set team(value: MercenariesBattleTeam) {
-		console.debug('set team', value);
 		this.mercenaries = [...value.mercenaries].sort((a, b) => {
 			if (a.zone === Zone.PLAY && b.zone !== Zone.PLAY) {
 				return -1;

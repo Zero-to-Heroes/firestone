@@ -10,6 +10,17 @@
 		opacity: 0.3;
 	}
 
+	&:not(.bench):not(.dead) {
+		.ability,
+		.equipment {
+			::ng-deep {
+				.inactive {
+					opacity: 0.3;
+				}
+			}
+		}
+	}
+
 	.header {
 		.role-icon {
 			height: 80%;
@@ -82,111 +93,6 @@
 				margin-left: 5px;
 				font-size: 10px;
 			}
-		}
-	}
-
-	.ability,
-	.equipment {
-		padding-left: 15px;
-	}
-
-	.equipment-item-icon,
-	.ability-item-icon {
-		flex-grow: 0;
-		flex-shrink: 0;
-		display: flex;
-		flex-direction: column;
-		width: 20px;
-		position: relative;
-		top: 0;
-		left: 0;
-		z-index: 9;
-		// margin-right: 20px;
-
-		.icon {
-			position: absolute;
-			top: 11%;
-			left: 13%;
-			width: 76%;
-			clip-path: ellipse(40% 44% at 50% 50%);
-		}
-
-		.frame {
-			width: 100%;
-			z-index: 1;
-		}
-	}
-
-	.ability,
-	.equipment {
-		.name {
-			opacity: 0.7;
-		}
-	}
-
-	.number-of-uses {
-		width: 18px;
-		height: 19px;
-		background: #131010;
-		border: 1px solid #9fb6d7;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 1px;
-		z-index: 1;
-		margin-left: 5px;
-
-		span {
-			font-family: Sumana;
-			font-style: normal;
-			font-weight: bold;
-			line-height: normal;
-			font-size: 15px;
-			color: #9fb6d7;
-		}
-
-		i {
-			width: 13px;
-			height: 12px;
-		}
-
-		&.discard {
-			i {
-				width: 13px;
-				height: 17px;
-			}
-		}
-		&.graveyard {
-			i {
-				width: 13px;
-				height: 16px;
-			}
-		}
-	}
-
-	.cooldown-left {
-		display: flex;
-		z-index: 1;
-		height: 20px;
-		align-items: center;
-		justify-content: center;
-		position: relative;
-
-		.cooldown-icon {
-			height: 100%;
-		}
-
-		.value {
-			font-family: Sumana;
-			font-weight: 700;
-			font-size: 14px;
-			color: white;
-			text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
-				-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
-			height: 100%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
 		}
 	}
 }

@@ -238,9 +238,11 @@ import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/de
 import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
+import { MercenariesHighlightDirective } from '../../components/mercenaries/overlay/teams/mercenaries-highlight.directive';
 import { MercenariesOpponentTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-opponent-team.component';
 import { MercenariesOutOfCombatPlayerTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-out-of-combat-player-team.component';
 import { MercenariesPlayerTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-player-team.component';
+import { MercenariesTeamAbilityComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-ability.component';
 import { MercenariesTeamControlBarComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-control-bar.component';
 import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
 import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
@@ -362,6 +364,7 @@ import { EndGameListenerService } from '../../services/manastorm-bridge/end-game
 import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game-uploader.service';
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
+import { MercenariesSynergiesHighlightService } from '../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { MercenariesStateBuilderService } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { MercenariesStoreService } from '../../services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from '../../services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
@@ -686,6 +689,7 @@ const components = [
 		MercenariesComposiionDetailsComponent,
 		MercenariesHeroSearchComponent,
 		MercenariesEmptyStateComponent,
+		MercenariesTeamAbilityComponent,
 
 		MercenariesFiltersComponent,
 		MercenariesModeFilterDropdownComponent,
@@ -750,6 +754,7 @@ const components = [
 		PreferenceSliderComponent,
 
 		AdvancedSettingDirective,
+		MercenariesHighlightDirective,
 	],
 	entryComponents: [
 		BgsCardTooltipComponent,
@@ -846,6 +851,7 @@ const components = [
 		ArenaStateBuilderService,
 
 		MercenariesStateBuilderService,
+		MercenariesSynergiesHighlightService,
 
 		StatsStateBuilderService,
 

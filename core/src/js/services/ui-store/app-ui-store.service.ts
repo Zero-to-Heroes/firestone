@@ -19,6 +19,7 @@ import { PatchInfo } from '../../models/patches';
 import { Preferences } from '../../models/preferences';
 import { CardsFacadeService } from '../cards-facade.service';
 import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-store-event';
+import { HighlightSelector } from '../mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../overwolf.service';
 import { arraysEqual } from '../utils';
 import { buildHeroStats } from './bgs-ui-helper';
@@ -29,6 +30,7 @@ type PrefsSelector<T> = (prefs: Preferences) => T;
 type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
 type MercenariesStateSelector<T> = (state: [MercenariesBattleState, Preferences?]) => T;
 type MercenariesOutOfCombatStateSelector<T> = (state: [MercenariesOutOfCombatState, Preferences?]) => T;
+type MercenariesHighlightsSelector<T> = (state: [HighlightSelector, Preferences?]) => T;
 
 @Injectable()
 export class AppUiStoreService {
@@ -38,6 +40,7 @@ export class AppUiStoreService {
 	private battlegroundsStore: BehaviorSubject<BattlegroundsState>;
 	private mercenariesStore: BehaviorSubject<MercenariesBattleState>;
 	private mercenariesOutOfCombatStore: BehaviorSubject<MercenariesOutOfCombatState>;
+	private mercenariesSynergiesStore: BehaviorSubject<HighlightSelector>;
 
 	private bgsHeroStats: BehaviorSubject<readonly BgsHeroStat[]> = new BehaviorSubject<readonly BgsHeroStat[]>(null);
 
@@ -50,6 +53,7 @@ export class AppUiStoreService {
 		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
 		this.mercenariesStore = this.ow.getMainWindow().mercenariesStore;
 		this.mercenariesOutOfCombatStore = this.ow.getMainWindow().mercenariesOutOfCombatStore;
+		this.mercenariesSynergiesStore = this.ow.getMainWindow().mercenariesSynergiesStore;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 
 		this.init();
@@ -120,6 +124,16 @@ export class AppUiStoreService {
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesOutOfCombatStateSelector<infer T> ? T : never }>;
+	}
+
+	public listenMercenariesHighlights$<S extends MercenariesHighlightsSelector<any>[]>(
+		...selectors: S
+	): Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }> {
+		return combineLatest(this.mercenariesSynergiesStore.asObservable(), this.prefs.asObservable()).pipe(
+			filter(([highlights, prefs]) => !!prefs?.preferences),
+			map(([highlights, prefs]) => selectors.map((selector) => selector([highlights, prefs.preferences]))),
+			distinctUntilChanged((a, b) => arraysEqual(a, b)),
+		) as Observable<{ [K in keyof S]: S[K] extends MercenariesHighlightsSelector<infer T> ? T : never }>;
 	}
 
 	public bgHeroStats$(): Observable<readonly BgsHeroStat[]> {

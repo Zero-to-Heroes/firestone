@@ -2,88 +2,49 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { TagRole, Zone } from '@firestone-hs/reference-data';
 import { BattleMercenary } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
+import { Ability } from './mercenaries-team-ability.component';
 
 @Component({
 	selector: 'mercenaries-team-mercenary',
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
+		'../../../../../css/directive/mercenaries-highlight.directive.scss',
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-mercenary.component.scss',
 	],
 	template: `
 		<div class="mercenary" [ngClass]="{ 'dead': isDead, 'bench': isBench }">
-			<div class="item header" [cardTooltip]="mercCardId" [cardTooltipPosition]="tooltipPosition">
-				<!-- <div class="background-image" [style.background-image]="cardImage"></div> -->
-				<!-- <div class="gradiant"></div> -->
+			<div
+				class="item header"
+				[cardTooltip]="mercCardId"
+				[cardTooltipPosition]="tooltipPosition"
+				[mercenariesHighlight]="mercCardId"
+			>
 				<div class="role-icon" *ngIf="roleIcon"><img [src]="roleIcon" /></div>
 				<div class="name">
 					<span>{{ name }}</span>
 					<span class="level" *ngIf="level" helpTooltip="Current mercenary level">({{ level }})</span>
 				</div>
 			</div>
-			<div
-				class="ability item"
+			<mercenaries-team-ability
+				class="ability"
 				*ngFor="let ability of abilities"
-				[cardTooltip]="ability.cardId"
-				[cardTooltipPosition]="tooltipPosition"
-			>
-				<div class="background-image" [style.background-image]="ability.cardImage"></div>
-				<div class="gradiant"></div>
-				<div class="ability-item-icon" [ngClass]="{ 'treasure': ability.isTreasure }">
-					<img class="icon" [src]="buildAbilityArtUrl(ability.cardId)" />
-					<img
-						class="frame"
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=4"
-					/>
-				</div>
-				<div class="name">
-					<span>{{ ability.name }}</span>
-				</div>
-				<div
-					class="cooldown-left"
-					*ngIf="!!ability.cooldownLeft"
-					helpTooltip="Turns left before that ability can be used again"
-				>
-					<img
-						class="cooldown-icon"
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=3"
-					/>
-					<div class="value">{{ ability.cooldownLeft }}</div>
-				</div>
-				<div
-					class="number-of-uses"
-					*ngIf="ability.totalUsed > 0"
-					helpTooltip="Number of times the mercenary has used this ability in this battle"
-				>
-					<span>{{ ability.totalUsed }}</span>
-				</div>
-			</div>
-			<div
-				class="equipment item"
+				[ability]="ability"
+				[tooltipPosition]="tooltipPosition"
+			></mercenaries-team-ability>
+			<mercenaries-team-ability
 				*ngIf="equipment?.cardId"
-				[cardTooltip]="equipment.cardId"
-				[cardTooltipPosition]="tooltipPosition"
-			>
-				<div class="background-image" [style.background-image]="equipment.cardImage"></div>
-				<div class="gradiant"></div>
-				<div class="equipment-item-icon" [cardTooltip]="equipment.cardId">
-					<img class="icon" [src]="buildEquipmentArtUrl(equipment.cardId)" />
-					<img
-						class="frame"
-						src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
-					/>
-				</div>
-				<div class="name">
-					<span>{{ equipment.name }}</span>
-				</div>
-			</div>
+				class="equipment"
+				[ability]="equipment"
+				[tooltipPosition]="tooltipPosition"
+			></mercenaries-team-ability>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesTeamMercenaryComponent {
 	@Input() tooltipPosition: boolean;
+
 	@Input() set mercenary(value: BattleMercenary) {
-		console.debug('set mercenary', value);
 		const refMercenaryCard = this.allCards.getCard(value.cardId);
 		this.mercCardId = value.cardId;
 		this.cardImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${value.cardId}.jpg?v=3)`;
@@ -104,13 +65,14 @@ export class MercenariesTeamMercenaryComponent {
 			cooldownLeft: ability.cooldownLeft,
 			isTreasure: ability.isTreasure,
 			totalUsed: ability.totalUsed,
+			type: 'ability',
 		}));
 		this.equipment = value.equipment
-			? {
+			? ({
 					cardId: value.equipment.cardId,
 					cardImage: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_background.png?v=2)`,
 					name: this.allCards.getCard(value.equipment.cardId).name,
-			  }
+			  } as Ability)
 			: null;
 		this.isDead = value.isDead;
 		this.isBench = value.zone === Zone.SETASIDE;
@@ -122,34 +84,9 @@ export class MercenariesTeamMercenaryComponent {
 	name: string;
 	level: number;
 	abilities: readonly Ability[];
-	equipment: Equipment;
+	equipment: Ability;
 	isDead: boolean;
 	isBench: boolean;
 
 	constructor(private readonly allCards: CardsFacadeService) {}
-
-	buildAbilityArtUrl(cardId: string): string {
-		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
-	}
-
-	buildEquipmentArtUrl(cardId: string): string {
-		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${cardId}.jpg`;
-	}
-}
-
-interface Ability {
-	readonly cardId: string;
-	readonly cardImage: string;
-	readonly name: string;
-	readonly speed: number;
-	readonly cooldown: number;
-	readonly cooldownLeft: number;
-	readonly isTreasure: boolean;
-	readonly totalUsed: number;
-}
-
-interface Equipment {
-	readonly cardId: string;
-	readonly cardImage: string;
-	readonly name: string;
 }

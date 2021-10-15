@@ -1,0 +1,157 @@
+.item {
+	display: flex;
+	align-items: center;
+	height: 26px;
+	position: relative;
+	overflow: hidden;
+	padding-left: 15px;
+	padding-right: 5px;
+
+	&:hover {
+		transform: scale(1.1);
+		z-index: 9;
+		// animation: card-zoom 0.2s ease-in-out;
+	}
+
+	.background-image {
+		position: absolute;
+		top: 1px; // Otherwise there is a little band of color showing when art is blank
+		left: 0;
+		right: 0;
+		bottom: 1px;
+		background-size: cover;
+		// Because some tiles still have a white border on the right
+		background-position-x: 2.5vw;
+	}
+
+	.gradiant {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: linear-gradient(89.48deg, rgba(0, 0, 0, 1) 0%, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
+		opacity: 0.6;
+	}
+
+	.name {
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		padding-left: 10px;
+		z-index: 1;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		width: 130px;
+		opacity: 0.7;
+
+		span {
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			font-size: 13px;
+			color: #ffe3ba;
+		}
+
+		.level {
+			margin-left: 5px;
+			font-size: 10px;
+		}
+	}
+
+	.equipment-item-icon,
+	.ability-item-icon {
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		width: 20px;
+		position: relative;
+		top: 0;
+		left: 0;
+		z-index: 9;
+		// margin-right: 20px;
+
+		.icon {
+			position: absolute;
+			top: 11%;
+			left: 13%;
+			width: 76%;
+			clip-path: ellipse(40% 44% at 50% 50%);
+		}
+
+		.frame {
+			width: 100%;
+			z-index: 1;
+		}
+	}
+
+	.number-of-uses {
+		width: 18px;
+		height: 19px;
+		background: #131010;
+		border: 1px solid #9fb6d7;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1px;
+		z-index: 1;
+		margin-left: 5px;
+
+		span {
+			font-family: Sumana;
+			font-style: normal;
+			font-weight: bold;
+			line-height: normal;
+			font-size: 15px;
+			color: #9fb6d7;
+		}
+
+		i {
+			width: 13px;
+			height: 12px;
+		}
+
+		&.discard {
+			i {
+				width: 13px;
+				height: 17px;
+			}
+		}
+		&.graveyard {
+			i {
+				width: 13px;
+				height: 16px;
+			}
+		}
+	}
+
+	.cooldown-left {
+		display: flex;
+		z-index: 1;
+		height: 20px;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+
+		.cooldown-icon {
+			height: 100%;
+		}
+
+		.value {
+			font-family: Sumana;
+			font-weight: 700;
+			font-size: 14px;
+			color: white;
+			text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+				-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+			height: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+}
