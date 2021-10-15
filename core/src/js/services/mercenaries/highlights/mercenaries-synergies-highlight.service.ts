@@ -14,6 +14,9 @@ export class MercenariesSynergiesHighlightService {
 	}
 
 	public selectCardId(cardId: string) {
+		if (!cardId) {
+			return;
+		}
 		const selector: HighlightSelector = buildSelector(cardId, this.allCards);
 		this.highlightSubject.next(selector);
 	}

@@ -34,8 +34,9 @@ export class MercenariesMemoryInformationParser implements MercenariesOutOfComba
 	): Promise<MercenariesOutOfCombatState> {
 		const changes: MemoryUpdate = event.data[0];
 		const newScene = changes.CurrentScene;
+		const stateWithScene = state.update({ currentScene: newScene ?? state.currentScene });
 		if (!SCENE_WITH_RELEVANT_MERC_INFO.includes(newScene)) {
-			return state.update({ currentScene: newScene });
+			return stateWithScene;
 		}
 		// Wait for bit before getting the info, as the first time you enter a map you can still have
 		// the previous run's info
@@ -44,6 +45,8 @@ export class MercenariesMemoryInformationParser implements MercenariesOutOfComba
 		console.debug('[merc-ooc] done waiting');
 		const newMercenariesInfo = await this.memoryService.getMercenariesInfo();
 		console.debug('[merc-ooc] new merc info', newMercenariesInfo);
-		return state.update({ mercenariesMemoryInfo: newMercenariesInfo, currentScene: newScene });
+		return stateWithScene.update({
+			mercenariesMemoryInfo: newMercenariesInfo,
+		});
 	}
 }

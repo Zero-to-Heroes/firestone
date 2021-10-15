@@ -55,6 +55,7 @@ export class MercenariesTeamMercenaryComponent {
 		this.name = value.cardId ? refMercenaryCard.name ?? 'Unrecognized Mercernary' : 'Unknown Mercenary';
 		this.level = value.level;
 		this.abilities = (value.abilities ?? []).map((ability) => ({
+			type: 'ability',
 			cardId: ability.cardId,
 			cardImage: ability.isTreasure
 				? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png?v=2)`
@@ -65,10 +66,10 @@ export class MercenariesTeamMercenaryComponent {
 			cooldownLeft: ability.cooldownLeft,
 			isTreasure: ability.isTreasure,
 			totalUsed: ability.totalUsed,
-			type: 'ability',
 		}));
 		this.equipment = value.equipment
 			? ({
+					type: 'equipment',
 					cardId: value.equipment.cardId,
 					cardImage: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_background.png?v=2)`,
 					name: this.allCards.getCard(value.equipment.cardId).name,

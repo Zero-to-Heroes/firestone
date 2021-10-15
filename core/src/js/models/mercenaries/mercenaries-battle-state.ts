@@ -114,7 +114,7 @@ export class BattleEquipment {
 	readonly cardId: string;
 	readonly level: number;
 
-	public static create(base: NonFunctionProperties<BattleEquipment>): BattleEquipment {
+	public static create(base: Partial<NonFunctionProperties<BattleEquipment>>): BattleEquipment {
 		return Object.assign(new BattleEquipment(), base);
 	}
 

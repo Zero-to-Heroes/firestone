@@ -97,7 +97,7 @@ export class MercenariesStoreService {
 			let state = battleState;
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, mainWindowState);
-				// console.debug('[merc-store] updated state', state);
+				// console.debug('[merc-store] updated state', event.type, event, state);
 			}
 			this.internalStore$.next(state);
 		} catch (e) {

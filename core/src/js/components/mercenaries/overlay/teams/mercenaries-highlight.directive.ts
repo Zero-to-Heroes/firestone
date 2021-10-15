@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import {
@@ -32,8 +32,14 @@ export class MercenariesHighlightDirective implements AfterViewInit {
 		this.store
 			.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
 			.pipe(
+				tap((info) => console.debug('tap 1', info)),
 				filter(([[selector, prefs]]) => !!selector && !!prefs),
-				map(([[selector, prefs]]) => selector(this.allCards.getCard(this.cardId))),
+				tap((info) => console.debug('tap 2', info)),
+				map(
+					([[selector, prefs]]) =>
+						prefs.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
+				),
+				tap((info) => console.debug('tap 3', info)),
 				distinctUntilChanged(),
 			)
 			.subscribe((highlighted) => this.highlight(highlighted));

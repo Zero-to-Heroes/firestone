@@ -4,11 +4,23 @@ import { HighlightSelector } from './mercenaries-synergies-highlight.service';
 
 export const buildSelector = (cardId: string, allCards: CardsFacadeService): HighlightSelector => {
 	switch (cardId) {
+		case CardIds.AllianceWarBanner1Lettuce:
+		case CardIds.AllianceWarBanner2Lettuce:
+		case CardIds.AllianceWarBanner3Lettuce:
+		case CardIds.AllianceWarBanner4Lettuce:
+		case CardIds.AllianceWarBanner5Lettuce:
+			return alliance;
 		case CardIds.ArcaneBolt1Lettuce1:
 		case CardIds.ArcaneBolt2Lettuce1:
 		case CardIds.ArcaneBolt3Lettuce1:
 		case CardIds.ArcaneBolt4Lettuce1:
 		case CardIds.ArcaneBolt5Lettuce1:
+			return arcane;
+		case CardIds.ArcaneStaff1Lettuce:
+		case CardIds.ArcaneStaff2Lettuce:
+		case CardIds.ArcaneStaff3Lettuce:
+		case CardIds.ArcaneStaff4Lettuce:
+		case CardIds.ArcaneStaff5Lettuce:
 			return arcane;
 		case CardIds.BannerOfTheHorde1Lettuce:
 		case CardIds.BannerOfTheHorde2Lettuce:
@@ -16,6 +28,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BannerOfTheHorde4Lettuce:
 		case CardIds.BannerOfTheHorde5Lettuce:
 			return horde;
+		case CardIds.ElvenBanner1Lettuce:
+		case CardIds.ElvenBanner2Lettuce:
+		case CardIds.ElvenBanner3Lettuce:
+		case CardIds.ElvenBanner4Lettuce:
+		case CardIds.ElvenBanner5Lettuce:
+			return or(nightelf, bloodelf);
 		case CardIds.EnchantedRaven1Lettuce:
 		case CardIds.EnchantedRaven2Lettuce:
 		case CardIds.EnchantedRaven3Lettuce:
@@ -56,6 +74,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.LightningBolt4Lettuce1:
 		case CardIds.LightningBolt5Lettuce1:
 			return and(nature, dealsDamage);
+		case CardIds.ManastormILettuce:
+		case CardIds.ManastormIiLettuce:
+		case CardIds.ManastormIiiLettuce:
+		case CardIds.ManastormIvLettuce:
+		case CardIds.ManastormVLettuce:
+			return arcane;
 		case CardIds.OrcOnslaught1Lettuce:
 		case CardIds.OrcOnslaught2Lettuce:
 		case CardIds.OrcOnslaught3Lettuce:

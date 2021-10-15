@@ -4,6 +4,7 @@ import { debounceTime, distinctUntilChanged, filter, map, tap } from 'rxjs/opera
 import { MemoryMercenariesMap } from '../../../../models/memory/memory-mercenaries-info';
 import {
 	BattleAbility,
+	BattleEquipment,
 	BattleMercenary,
 	MercenariesBattleTeam,
 } from '../../../../models/mercenaries/mercenaries-battle-state';
@@ -29,9 +30,8 @@ import { arraysEqual } from '../../../../services/utils';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesOutOfCombatPlayerTeamComponent {
-	trackerPositionUpdater = (left: number, top: number) =>
-		this.prefs.updateMercenariesOutOfCombatTeamPlayerPosition(left, top);
-	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesOutOfCombatPlayerTeamOverlayPosition;
+	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamPlayerPosition(left, top);
+	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
 	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
 	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
 	team$: Observable<MercenariesBattleTeam>;
@@ -46,7 +46,6 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
 			this.store.listen$(([main, nav, prefs]) => main.mercenaries?.referenceData),
 		).pipe(
-			tap((info) => console.debug('info', info)),
 			debounceTime(50),
 			filter(
 				([[state], [referenceData]]) =>
@@ -64,7 +63,6 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 				MercenariesBattleTeam.create({
 					mercenaries: mapInfo?.PlayerTeam.map((playerTeamInfo) => {
 						const refMerc = referenceData.mercenaries.find((merc) => merc.id === playerTeamInfo.Id);
-						console.debug('refMerc', playerTeamInfo.Id, refMerc, playerTeamInfo, referenceData);
 						const mercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 						return BattleMercenary.create({
 							cardId: mercCard.id,
@@ -84,6 +82,16 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 									});
 								}),
 							],
+							equipment: (playerTeamInfo.Equipments ?? [])
+								.filter((equip) => equip.Equipped)
+								.map((equip) => {
+									const refEquipment = refMerc.equipments?.find((e) => e.equipmentId === equip.Id);
+									return BattleEquipment.create({
+										cardId: this.allCards.getCardFromDbfId(refEquipment?.cardDbfId)?.id,
+										level: equip.Tier,
+									});
+								})
+								.pop(),
 						});
 					}),
 				}),

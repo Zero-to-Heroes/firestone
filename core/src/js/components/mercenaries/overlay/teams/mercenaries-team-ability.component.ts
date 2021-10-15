@@ -5,6 +5,7 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 	selector: 'mercenaries-team-ability',
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
+		'../../../../../css/directive/mercenaries-highlight.directive.scss',
 		'../../../../../css/component/mercenaries/overlay/teams/mercenaries-team-ability.component.scss',
 	],
 	template: `

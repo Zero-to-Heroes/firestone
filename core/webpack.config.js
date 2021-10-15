@@ -34,6 +34,7 @@ const entry = {
 	mercenariesplayerteam: './src/js/modules/background/main.ts',
 	mercenariesopponentteam: './src/js/modules/background/main.ts',
 	mercenariesoutofcombatplayerteam: './src/js/modules/background/main.ts',
+	mercenariesoutofcombattreasureselection: './src/js/modules/background/main.ts',
 	secretshelper: './src/js/modules/background/main.ts',
 	gamecounters: './src/js/modules/background/main.ts',
 	opponentHand: './src/js/modules/background/main.ts',
@@ -138,6 +139,10 @@ module.exports = function (env, argv) {
 		buildHtmlWebpackPluginConf('mercenaries_player_team.html', 'mercenariesplayerteam'),
 		buildHtmlWebpackPluginConf('mercenaries_opponent_team.html', 'mercenariesopponentteam'),
 		buildHtmlWebpackPluginConf('mercenaries_out_of_combat_player_team.html', 'mercenariesoutofcombatplayerteam'),
+		buildHtmlWebpackPluginConf(
+			'mercenaries_out_of_combat_treasure_selection.html',
+			'mercenariesoutofcombattreasureselection',
+		),
 
 		buildHtmlWebpackPluginConf('counter_player_galakrond.html', 'gamecounters'),
 		buildHtmlWebpackPluginConf('counter_opponent_galakrond.html', 'gamecounters'),

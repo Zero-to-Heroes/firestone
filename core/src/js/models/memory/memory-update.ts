@@ -8,6 +8,9 @@ export interface MemoryUpdate {
 	readonly SelectedDeckId: number;
 	readonly ArenaRewards: readonly Reward[];
 	readonly IsOpeningPack: boolean;
+	// true means the treasure selection has started, null means nothing changed, and false means it has ended
+	readonly IsMercenariesSelectingTreasure: boolean;
+	readonly MercenariesPendingTreasureSelection: MercenaryTreasureSelection;
 
 	// These are not populated by the regular info updates, as they are costly to compute
 	readonly OpenedPack: PackInfo;
@@ -27,4 +30,9 @@ export interface Reward {
 	readonly Type: number;
 	readonly Amount: number;
 	readonly BoosterId: number;
+}
+
+export interface MercenaryTreasureSelection {
+	readonly MercenaryId: number;
+	readonly Options: readonly number[];
 }

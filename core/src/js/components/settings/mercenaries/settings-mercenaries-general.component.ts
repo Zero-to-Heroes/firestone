@@ -32,6 +32,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					[label]="'Show role chart'"
 					helpTooltip="When active, adds a small button below the team widget over which you can mouse over to display a recap of the roles bonus damage triangle"
 				></preference-toggle>
+				<preference-toggle
+					[field]="'mercenariesHighlightSynergies'"
+					[label]="'Highlight synergies'"
+					helpTooltip="When mousing over an ability or equipment (in the team widget) or a treasure (in the treasure selection screen), highlights all cards in the team widget that have synergies with it."
+				></preference-toggle>
 			</div>
 		</div>
 	`,

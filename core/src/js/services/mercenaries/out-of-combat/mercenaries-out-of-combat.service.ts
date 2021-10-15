@@ -10,8 +10,10 @@ import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { PreferencesService } from '../../preferences.service';
 import { MercenariesOutOfCombatTeamOverlayHandler } from './overlay/mercenaries-out-of-combat-team-overlay-handler';
+import { MercenariesOutOfCombatTreasureSelectionOverlayHandler } from './overlay/mercenaries-out-of-combat-treasure-selection-handler';
 import { MercenariesOutOfCombatOverlayHandler } from './overlay/_mercenaries-out-of-combat-overlay-handler';
 import { MercenariesMemoryInformationParser } from './parser/mercenaries-memory-information-parser';
+import { MercenariesTreasureSelectionParser } from './parser/mercenaries-treasure-selection-parser';
 import { MercenariesOutOfCombatParser } from './parser/_mercenaries-out-of-combat-parser';
 
 @Injectable()
@@ -104,12 +106,16 @@ export class MercenariesOutOfCombatService {
 	}
 
 	private buildOverlayHandlers() {
-		this.overlayHandlers = [new MercenariesOutOfCombatTeamOverlayHandler(this.ow)];
+		this.overlayHandlers = [
+			new MercenariesOutOfCombatTeamOverlayHandler(this.ow),
+			new MercenariesOutOfCombatTreasureSelectionOverlayHandler(this.ow),
+		];
 	}
 
 	private registerParser() {
 		const parsers: readonly MercenariesOutOfCombatParser[] = [
 			new MercenariesMemoryInformationParser(this.memoryService),
+			new MercenariesTreasureSelectionParser(this.allCards),
 		];
 		this.parsers = {};
 		for (const parser of parsers) {

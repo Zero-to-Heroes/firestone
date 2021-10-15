@@ -323,6 +323,7 @@ export class Preferences {
 	readonly mercenariesActiveStarterFilter: MercenariesStarterFilterType = 'all';
 	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
 	readonly mercenariesShowColorChartButton: boolean = true;
+	readonly mercenariesHighlightSynergies: boolean = true;
 
 	readonly mercenariesEnablePlayerTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)
@@ -337,10 +338,10 @@ export class Preferences {
 	readonly mercenariesOpponentTeamOverlayPosition: { left: number; top: number };
 
 	readonly mercenariesEnableOutOfCombatPlayerTeamWidget = true;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly mercenariesOutOfCombatPlayerTeamOverlayScale: number = 100;
-	@Reflect.metadata(FORCE_LOCAL_PROP, true)
-	readonly mercenariesOutOfCombatPlayerTeamOverlayPosition: { left: number; top: number };
+	// @Reflect.metadata(FORCE_LOCAL_PROP, true)
+	// readonly mercenariesOutOfCombatPlayerTeamOverlayScale: number = 100;
+	// @Reflect.metadata(FORCE_LOCAL_PROP, true)
+	// readonly mercenariesOutOfCombatPlayerTeamOverlayPosition: { left: number; top: number };
 
 	readonly arenaActiveClassFilter: ArenaClassFilterType = 'all';
 	readonly arenaActiveTimeFilter: ArenaTimeFilterType = 'all-time';

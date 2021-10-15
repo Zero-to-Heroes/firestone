@@ -247,6 +247,7 @@ import { MercenariesTeamControlBarComponent } from '../../components/mercenaries
 import { MercenariesTeamListComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-list.component';
 import { MercenariesTeamMercenaryComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-mercenary.component';
 import { MercenariesTeamRootComponent } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
+import { MercenariesOutOfCombatTreasureSelectionComponent } from '../../components/mercenaries/overlay/treasure-selection/mercenaries-out-of-combat-treasure-selection.component';
 import { NotificationsComponent } from '../../components/notifications.component';
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
@@ -444,6 +445,7 @@ const components = [
 	MercenariesOpponentTeamComponent,
 	MercenariesPlayerTeamComponent,
 	MercenariesOutOfCombatPlayerTeamComponent,
+	MercenariesOutOfCombatTreasureSelectionComponent,
 
 	TwitchAuthCallbackComponent,
 	SettingsComponent,

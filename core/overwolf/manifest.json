@@ -295,6 +295,15 @@
 				"start_position": { "top": 0, "left": 0 },
 				"in_game_only": true
 			},
+			"MercenariesOutOfCombatTreasureSelectionWindow": {
+				"file": "Files/mercenaries_out_of_combat_treasure_selection.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": false,
+				"size": { "width": 530, "height": 800 },
+				"start_position": { "top": 0, "left": 0 },
+				"in_game_only": true
+			},
 
 			"CounterPlayerLibram": {
 				"file": "Files/counter_player_libram.html",

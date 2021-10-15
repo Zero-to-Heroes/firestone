@@ -35,6 +35,7 @@ export class OverwolfService {
 	public static MERCENARIES_PLAYER_TEAM_WINDOW = 'MercenariesPlayerTeamWindow';
 	public static MERCENARIES_OPPONENT_TEAM_WINDOW = 'MercenariesOpponentTeamWindow';
 	public static MERCENARIES_OUT_OF_COMBAT_PLAYER_TEAM_WINDOW = 'MercenariesOutOfCombatPlayerTeamWindow';
+	public static MERCENARIES_OUT_OF_COMBAT_TREASURE_SELECTION_WINDOW = 'MercenariesOutOfCombatTreasureSelectionWindow';
 
 	public static CONSTRUCTED_WINDOW = 'ConstructedWindow';
 

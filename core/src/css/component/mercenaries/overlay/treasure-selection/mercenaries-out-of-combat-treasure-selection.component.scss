@@ -1,0 +1,26 @@
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	height: 100%;
+	padding-left: 10%;
+	padding-right: 10%;
+	padding-bottom: 4%;
+
+	.empty-card {
+		height: 30%;
+		width: 17%;
+		background: rgba(255, 255, 255, 0.01);
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
+	.hero-card {
+		margin-right: 8%;
+	}
+
+	.treasure-card {
+		width: 22%;
+	}
+}
