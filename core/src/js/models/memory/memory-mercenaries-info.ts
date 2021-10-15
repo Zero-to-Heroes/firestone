@@ -20,6 +20,7 @@ export interface MemoryMercenary {
 	readonly Id: number;
 	readonly Level: number;
 	readonly Abilities: readonly MemoryMercenaryAbility[];
+	readonly TreasureCardDbfIds: readonly number[];
 }
 
 export interface MemoryMercenaryAbility {
