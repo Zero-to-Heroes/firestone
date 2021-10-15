@@ -138,7 +138,10 @@ export class EndGameUploaderService {
 				mercenariesInfo?.Map?.MapId +
 				'-' +
 				mercenariesInfo?.Map?.Seed;
-			game.mercsBountyId = mercenariesInfo?.Map?.BountyId;
+			game.mercsBountyId =
+				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
+					? mercenariesInfo?.Map?.BountyId
+					: null;
 			game.deckName = mercenariesInfo?.Map?.PlayerTeamName;
 			game.deckstring = mercenariesInfo?.Map?.PlayerTeamMercIds.join(',');
 			playerRank =
@@ -147,7 +150,10 @@ export class EndGameUploaderService {
 					: game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
 					? this.getMercenariesBountyDifficulty(game.mercsBountyId)
 					: null;
-			game.forceOpponentName = this.buildOpponentName(mercenariesInfo);
+			game.forceOpponentName =
+				game.gameMode === 'mercenaries-pve' || game.gameMode === 'mercenaries-pve-coop'
+					? this.buildOpponentName(mercenariesInfo)
+					: null;
 		} else if (game.gameMode === 'duels' || game.gameMode === 'paid-duels') {
 			console.log('[manastorm-bridge]', currentReviewId, 'handline duels', game.gameMode);
 			// const duelsInfo = await this.memoryInspection.getDuelsInfo();
