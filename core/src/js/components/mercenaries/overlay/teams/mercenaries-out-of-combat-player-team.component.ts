@@ -71,11 +71,19 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 							role: getHeroRole(mercCard.mercenaryRole),
 							level: playerTeamInfo.Level,
 							isDead: (mapInfo.DeadMercIds ?? []).includes(playerTeamInfo.Id),
-							abilities: playerTeamInfo.Abilities.map((ability) => {
-								return BattleAbility.create({
-									cardId: ability.CardId,
-								});
-							}),
+							abilities: [
+								...playerTeamInfo.Abilities.map((ability) => {
+									return BattleAbility.create({
+										cardId: ability.CardId,
+									});
+								}),
+								...(playerTeamInfo.TreasureCardDbfIds ?? []).map((treasureDbfId) => {
+									return BattleAbility.create({
+										cardId: this.allCards.getCardFromDbfId(treasureDbfId).id,
+										isTreasure: true,
+									});
+								}),
+							],
 						});
 					}),
 				}),
