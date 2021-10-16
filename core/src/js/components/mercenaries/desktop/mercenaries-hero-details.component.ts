@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
@@ -190,19 +190,6 @@ export class MercenariesHeroDetailsComponent {
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
-				filter(
-					([
-						globalStats,
-						referenceData,
-						gameStats,
-						heroId,
-						modeFilter,
-						difficultyFilter,
-						mmrFilter,
-						starterFilter,
-						levelFilter,
-					]) => !!globalStats && !!heroId,
-				),
 				map(
 					([
 						globalStats,
@@ -252,10 +239,10 @@ export class MercenariesHeroDetailsComponent {
 						starterFilter,
 						levelFilter,
 					]) => {
-						const infos = modeFilter === 'pve' ? globalStats.pve : globalStats.pvp;
+						const infos = modeFilter === 'pve' ? globalStats?.pve : globalStats?.pvp;
 						return [
 							filterMercenariesHeroStats(
-								infos.heroStats.filter((stat) => stat.heroCardId === heroCardId),
+								infos?.heroStats?.filter((stat) => stat.heroCardId === heroCardId),
 								modeFilter,
 								'all',
 								difficultyFilter,

@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter } from '@angular/core';
 import { TagRole } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesHeroLevelFilterType } from '../../../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
@@ -68,20 +68,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
-				filter(
-					([
-						globalStats,
-						referenceData,
-						gameStats,
-						heroSearchString,
-						modeFilter,
-						roleFilter,
-						difficultyFilter,
-						mmrFilter,
-						starterFilter,
-						levelFilter,
-					]) => !!globalStats && !!gameStats?.stats,
-				),
+				tap((info) => console.debug('info', info)),
 				map(
 					([
 						globalStats,
@@ -135,10 +122,10 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 						starterFilter,
 						levelFilter,
 					]) => {
-						const infos = modeFilter === 'pve' ? globalStats.pve : globalStats.pvp;
+						const infos = modeFilter === 'pve' ? globalStats?.pve : globalStats?.pvp;
 						return [
 							filterMercenariesHeroStats(
-								infos.heroStats,
+								infos?.heroStats,
 								modeFilter,
 								roleFilter,
 								difficultyFilter,
@@ -172,6 +159,7 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 				),
 				map(([heroStats, gameStats, roleFilter, heroSearchString, referenceData]) => {
 					if (!!heroStats.length) {
+						console.debug('heroStats', heroStats);
 						const heroStatsByHero = groupByFunction((stat: MercenariesHeroStat) => stat.heroCardId)(
 							heroStats,
 						);

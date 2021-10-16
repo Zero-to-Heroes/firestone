@@ -26,7 +26,7 @@ export const filterMercenariesHeroStats = (
 	searchString: string = null,
 ): readonly MercenariesHeroStat[] => {
 	return (
-		heroStats
+		(heroStats ?? [])
 			// .filter((stat) => stat.date === timeFilter)
 			.filter((stat) =>
 				modeFilter === 'pvp'
