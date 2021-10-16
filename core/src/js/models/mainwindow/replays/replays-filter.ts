@@ -1,5 +1,5 @@
 import { IOption } from 'ng-select';
-import { isMercenaries } from '../../../services/mercenaries/mercenaries-utils';
+import { isMercenaries, isMercenariesPvE, isMercenariesPvP } from '../../../services/mercenaries/mercenaries-utils';
 import { GameStat } from '../stats/game-stat';
 import { StatGameFormatType } from '../stats/stat-game-format.type';
 import { ReplaysFilterCategoryType } from './replays-filter-category.type';
@@ -55,6 +55,10 @@ export class ReplaysFilter {
 				return gameMode === 'ranked' && format === 'classic';
 			case 'mercenaries-all':
 				return isMercenaries(gameMode);
+			case 'mercenaries-pve':
+				return isMercenariesPvE(gameMode);
+			case 'mercenaries-pvp':
+				return isMercenariesPvP(gameMode);
 			default:
 				return gameMode === selectedOption;
 		}

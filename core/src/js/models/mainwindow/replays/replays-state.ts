@@ -44,6 +44,14 @@ export class ReplaysState {
 						label: 'Mercenaries (All)',
 					} as IOption,
 					{
+						value: 'mercenaries-pve',
+						label: 'Mercenaries PvE',
+					} as IOption,
+					{
+						value: 'mercenaries-pvp',
+						label: 'Mercenaries PvP',
+					} as IOption,
+					{
 						value: 'ranked',
 						label: 'Ranked (All)',
 					} as IOption,

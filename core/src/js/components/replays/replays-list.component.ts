@@ -80,9 +80,16 @@ export class ReplaysListComponent implements AfterViewInit {
 		);
 		const shouldHideBgHeroFilter = !['battlegrounds'].includes(value.getFilter('gameMode').selectedOption);
 		const shouldHidePlayerClassFilter =
-			[null, undefined, 'battlegrounds', 'practice', 'mercenaries-all'].includes(
-				value.getFilter('gameMode').selectedOption,
-			) || value.getFilter('gameMode').selectedOption?.startsWith('mercenaries');
+			[
+				null,
+				undefined,
+				'battlegrounds',
+				'practice',
+				'mercenaries-all',
+				'mercenaries-pve',
+				'mercenaries-pvp',
+			].includes(value.getFilter('gameMode').selectedOption) ||
+			value.getFilter('gameMode').selectedOption?.startsWith('mercenaries');
 		if (
 			shouldHideDeckstringFilter === this.shouldHideDeckstringFilter &&
 			shouldHideBgHeroFilter === this.shouldHideBgHeroFilter &&
