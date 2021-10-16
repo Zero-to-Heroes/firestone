@@ -195,7 +195,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 			console.warn('[ads] exception while initializing ads, retrying', e);
 			setTimeout(() => {
 				this.refreshAds();
-			}, 2000);
+			}, 10000);
 		}
 	}
 
