@@ -52,7 +52,6 @@ export class MercenariesTeamListComponent {
 			}
 			return 0;
 		});
-		console.debug('mercenaries', this.mercenaries);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr?.detectChanges();
 		}

@@ -32,7 +32,7 @@ export interface UpdateSectionItemDetails {
 
 export const updates: readonly Update[] = [
 	{
-		version: '8.0.10',
+		version: '8.0.15',
 		sections: [
 			{
 				type: 'intro',
@@ -50,7 +50,15 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'feature',
-								text: `Adds a team widget for the player.`,
+								text: `Adds a battle team widget for the player.`,
+							},
+							{
+								type: 'feature',
+								text: `The battle team widget now tracks how many times each ability has been used and the current cooldown left on each.`,
+							},
+							{
+								type: 'feature',
+								text: `A button as been added at the bottom of the team widget to show a recap of the roles chart (what roles does double damage to what other role). Like everything else, there is a setting to disable it if you don't want/need it.`,
 							},
 							{
 								type: 'feature',
@@ -58,15 +66,11 @@ export const updates: readonly Update[] = [
 							},
 							{
 								type: 'feature',
-								text: `The team widget now tracks how many times each ability has been used and the current cooldown left on each.`,
-							},
-							{
-								type: 'feature',
-								text: `A button as been added at the bottom of the team widget to show a recap of the roles chart (what roles does double damage to what other role). Like everything else, there is a setting to disable it if you don't want/need it.`,
+								text: `Mousing over an ability (in the team widget) or a treasure (in the treasure selection screen) now highlights its synergies (for instance, mousing over Banner of the Horde highlights all Horde mercenaries in your team)`,
 							},
 							{
 								type: 'ui',
-								text: `Improve how last Mercenaries match look in the Replays tab.`,
+								text: `Improve how Mercenaries match look in the Replays tab.`,
 							},
 						],
 					},
@@ -81,7 +85,11 @@ export const updates: readonly Update[] = [
 						details: [
 							{
 								type: 'ui',
-								text: `Highlight each mercenary's current treasures in the team widget.`,
+								text: `Show max level abilities by default in the battle team widget (and when the opponent actually uses one ability, the real level is used instead).`,
+							},
+							{
+								type: 'ui',
+								text: `Show each mercenary's current treasures in the team widget.`,
 							},
 							{
 								type: 'ui',
@@ -90,6 +98,15 @@ export const updates: readonly Update[] = [
 							{
 								type: 'ui',
 								text: `Show 'Unknown mercenary' instead of a blank line when playing PvP in the team widget.`,
+							},
+						],
+					},
+					{
+						category: 'replays',
+						details: [
+							{
+								type: 'feature',
+								text: `Add Mercenary (PvP) and Mercenary (PvE) filters.`,
 							},
 						],
 					},
