@@ -1,5 +1,6 @@
 import { BgsPostMatchStats } from '@firestone-hs/hs-replay-xml-parser/dist/public-api';
 import { GALAKROND_EVIL, GALAKROND_EXPLORER, Race } from '@firestone-hs/reference-data';
+import { isMercenariesPvP } from '../../../services/mercenaries/mercenaries-utils';
 import { capitalizeEachWord } from '../../../services/utils';
 import { CoinPlayType } from '../replays/coin-play.type';
 import { MatchResultType } from '../replays/match-result.type';
@@ -162,38 +163,6 @@ export class GameStat {
 		}
 	}
 
-	public buildRankText(): string {
-		if (
-			(this.gameMode === 'duels' || this.gameMode === 'paid-duels') &&
-			this.additionalResult &&
-			this.additionalResult.indexOf('-') !== -1
-		) {
-			const [wins, losses] = this.additionalResult.split('-');
-			return `${wins}-${losses}`;
-		}
-		if (!this.playerRank) {
-			return null;
-		}
-		if (this.gameMode === 'ranked') {
-			if (this.playerRank.indexOf('legend-') !== -1) {
-				return this.playerRank.split('legend-')[1];
-			} else if (this.playerRank.indexOf('-') > -1) {
-				return this.playerRank.split('-')[1];
-			}
-			return this.playerRank;
-		}
-		if (this.gameMode === 'arena' && this.playerRank && this.playerRank.indexOf('-') !== -1) {
-			const wins = this.playerRank.split('-')[0];
-			const losses = this.playerRank.split('-')[1];
-			return `${wins}-${losses}`;
-		}
-		// Bug for old matches
-		if (this.gameMode === 'battlegrounds' && this.playerRank && parseInt(this.playerRank) > 100) {
-			return this.playerRank;
-		}
-		return null;
-	}
-
 	private getLeagueInfo(leagueId: number): [string, string] {
 		const leagueName = this.getLeagueName(leagueId);
 		return [
@@ -217,3 +186,41 @@ export class GameStat {
 		}
 	}
 }
+
+export const buildRankText = (playerRank: string, gameMode: string, additionalResult: string): string => {
+	console.warn('wtf 2');
+	console.debug('buildRankText', playerRank, gameMode);
+	if (
+		(gameMode === 'duels' || gameMode === 'paid-duels') &&
+		additionalResult &&
+		additionalResult.indexOf('-') !== -1
+	) {
+		const [wins, losses] = additionalResult.split('-');
+		return `${wins}-${losses}`;
+	}
+	if (!playerRank) {
+		return null;
+	}
+	if (gameMode === 'ranked') {
+		if (playerRank.indexOf('legend-') !== -1) {
+			return playerRank.split('legend-')[1];
+		} else if (playerRank.indexOf('-') > -1) {
+			return playerRank.split('-')[1];
+		}
+		return playerRank;
+	}
+	if (gameMode === 'arena' && playerRank && playerRank.indexOf('-') !== -1) {
+		const wins = playerRank.split('-')[0];
+		const losses = playerRank.split('-')[1];
+		return `${wins}-${losses}`;
+	}
+	// Bug for old matches
+	if (gameMode === 'battlegrounds' && playerRank && parseInt(playerRank) > 100) {
+		return playerRank;
+	}
+	if (isMercenariesPvP(gameMode) && !isNaN(+playerRank)) {
+		console.debug('rank', playerRank, +playerRank);
+		return playerRank;
+	}
+	return null;
+};

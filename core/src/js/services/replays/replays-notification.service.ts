@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
+import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
 import { Events } from '../events.service';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
@@ -51,7 +51,7 @@ export class ReplaysNotificationService {
 	private buildNotificationTemplate(stat: GameStat, xpForGame: XpForGameInfo): string {
 		const rankImage = stat.buildPlayerRankImage();
 		console.debug('[replays-notification] preparing playerRankImage', rankImage);
-		const rankText = stat.buildRankText() || '';
+		const rankText = buildRankText(stat.playerRank, stat.gameMode, stat.additionalResult) ?? '';
 		const playerRankImage = rankImage.medalImage ? `<img class="art" src="${rankImage.medalImage}" />` : ``;
 		const bonusClass = xpForGame?.bonusXp ? 'bonus' : '';
 		const xpEl = xpForGame
