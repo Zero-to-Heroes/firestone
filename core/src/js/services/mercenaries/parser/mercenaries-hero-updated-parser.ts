@@ -56,11 +56,12 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 				zone: event.additionalData.zone,
 				zonePosition: event.additionalData.zonePosition,
 				abilities: refMerc.abilities.map((refAbility) => {
-					const refCard = this.allCards.getCardFromDbfId(refAbility.cardDbfId);
+					const refTier = [...refAbility.tiers].sort((a, b) => a.tier - b.tier).pop();
+					const refCard = this.allCards.getCardFromDbfId(refTier.cardDbfId);
 					return BattleAbility.create({
 						entityId: null,
 						cardId: refCard.id,
-						level: getMercCardLevel(refCard.id),
+						level: refTier.tier,
 						cooldown: refCard.mercenaryAbilityCooldown ?? 0,
 						cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
 						speed: refCard.cost,
