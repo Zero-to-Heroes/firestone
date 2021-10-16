@@ -28,6 +28,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.BannerOfTheHorde4Lettuce:
 		case CardIds.BannerOfTheHorde5Lettuce:
 			return horde;
+		case CardIds.DarkShamanCowl1Lettuce:
+		case CardIds.DarkShamanCowl2Lettuce:
+		case CardIds.DarkShamanCowl3Lettuce:
+		case CardIds.DarkShamanCowl4Lettuce:
+		case CardIds.DarkShamanCowl5Lettuce:
+			return horde;
 		case CardIds.ElvenBanner1Lettuce:
 		case CardIds.ElvenBanner2Lettuce:
 		case CardIds.ElvenBanner3Lettuce:
@@ -108,6 +114,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.VelensBlessing4Lettuce:
 		case CardIds.VelensBlessing5Lettuce:
 			return holy;
+		case CardIds.WarchiefsBlessing1Lettuce:
+		case CardIds.WarchiefsBlessing2Lettuce:
+		case CardIds.WarchiefsBlessing3Lettuce:
+		case CardIds.WarchiefsBlessing4Lettuce:
+		case CardIds.WarchiefsBlessing5Lettuce:
+			return horde;
 	}
 };
 
