@@ -34,6 +34,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.DarkShamanCowl4Lettuce:
 		case CardIds.DarkShamanCowl5Lettuce:
 			return horde;
+		case CardIds.ElementaryStudies1Lettuce:
+		case CardIds.ElementaryStudies2Lettuce:
+		case CardIds.ElementaryStudies3Lettuce:
+		case CardIds.ElementaryStudies4Lettuce:
+		case CardIds.ElementaryStudies5Lettuce:
+			return or(human, elemental);
 		case CardIds.ElvenBanner1Lettuce:
 		case CardIds.ElvenBanner2Lettuce:
 		case CardIds.ElvenBanner3Lettuce:
@@ -68,6 +74,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.HeroicLeap4Lettuce:
 		case CardIds.HeroicLeap5Lettuce:
 			return human;
+		case CardIds.HolyWordSalvation1Lettuce:
+		case CardIds.HolyWordSalvation2Lettuce:
+		case CardIds.HolyWordSalvation3Lettuce:
+		case CardIds.HolyWordSalvation4Lettuce:
+		case CardIds.HolyWordSalvation5Lettuce:
+			return human;
 		case CardIds.Inferno1Lettuce:
 		case CardIds.Inferno2Lettuce:
 		case CardIds.Inferno3Lettuce:
@@ -92,6 +104,12 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.OrcOnslaught4Lettuce:
 		case CardIds.OrcOnslaught5Lettuce:
 			return orc;
+		case CardIds.OrgrimmarTabard1Lettuce:
+		case CardIds.OrgrimmarTabard2Lettuce:
+		case CardIds.OrgrimmarTabard3Lettuce:
+		case CardIds.OrgrimmarTabard4Lettuce:
+		case CardIds.OrgrimmarTabard5Lettuce:
+			return orc;
 		case CardIds.Scalelord1Lettuce:
 		case CardIds.Scalelord2Lettuce:
 		case CardIds.Scalelord3Lettuce:
@@ -102,6 +120,24 @@ export const buildSelector = (cardId: string, allCards: CardsFacadeService): Hig
 		case CardIds.SearingStrike4Lettuce:
 		case CardIds.SearingStrike5Lettuce:
 			return fire;
+		case CardIds.SplittingStrike1Lettuce:
+		case CardIds.SplittingStrike2Lettuce:
+		case CardIds.SplittingStrike3Lettuce:
+		case CardIds.SplittingStrike4Lettuce:
+		case CardIds.SplittingStrike5Lettuce:
+			return human;
+		case CardIds.StormwindTabard1Lettuce:
+		case CardIds.StormwindTabard2Lettuce:
+		case CardIds.StormwindTabard3Lettuce:
+		case CardIds.StormwindTabard4Lettuce:
+		case CardIds.StormwindTabard5Lettuce:
+			return human;
+		case CardIds.StrengthOfWrynn1Lettuce:
+		case CardIds.StrengthOfWrynn2Lettuce:
+		case CardIds.StrengthOfWrynn3Lettuce:
+		case CardIds.StrengthOfWrynn4Lettuce:
+		case CardIds.StrengthOfWrynn5Lettuce:
+			return human;
 		case CardIds.TribalWarfare1Lettuce:
 		case CardIds.TribalWarfare2Lettuce:
 		case CardIds.TribalWarfare3Lettuce:
@@ -146,6 +182,7 @@ const draenei = (card: ReferenceCard) => race(card, Race.DRAENEI);
 const alliance = or(human, dwarf, gnome, nightelf, draenei);
 const dragon = (card: ReferenceCard) => race(card, Race.DRAGON);
 const murloc = (card: ReferenceCard) => race(card, Race.MURLOC);
+const elemental = (card: ReferenceCard) => race(card, Race.ELEMENTAL);
 
 const spellSchool = (card: ReferenceCard, spellSchool: SpellSchool) =>
 	SpellSchool[spellSchool] === card.spellSchool?.toUpperCase();
