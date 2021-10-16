@@ -293,6 +293,14 @@ export class MercenariesHeroDetailsComponent {
 						const merc = referenceData.mercenaries.find(
 							(m) => this.allCards.getCardFromDbfId(m.cardDbfId).id === heroCardId,
 						);
+						if (!merc) {
+							console.warn(
+								'could not find reference merc',
+								referenceData.mercenaries?.length,
+								heroCardId,
+							);
+							return null;
+						}
 						const mercCard = this.allCards.getCardFromDbfId(merc.cardDbfId);
 						return {
 							id: mercCard.id,

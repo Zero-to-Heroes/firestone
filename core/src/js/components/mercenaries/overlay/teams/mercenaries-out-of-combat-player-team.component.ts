@@ -63,6 +63,10 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 				MercenariesBattleTeam.create({
 					mercenaries: mapInfo?.PlayerTeam.map((playerTeamInfo) => {
 						const refMerc = referenceData.mercenaries.find((merc) => merc.id === playerTeamInfo.Id);
+						if (!refMerc) {
+							console.warn('could not find reference merc', playerTeamInfo.Id);
+							return null;
+						}
 						const mercCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
 						return BattleMercenary.create({
 							cardId: mercCard.id,

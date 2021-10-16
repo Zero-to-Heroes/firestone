@@ -57,6 +57,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			  )
 			: null;
 
+		console.debug('hero revealed', event, battleState);
 		const refMercCard = normalizedCardId ? this.allCards.getCard(normalizedCardId) : null;
 		const refMercEquipment = event.additionalData.mercenariesEquipmentId
 			? this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId)
@@ -75,6 +76,10 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			abilities: (
 				refMerc?.abilities.map((refAbility) => {
 					const refTier = [...refAbility.tiers].sort((a, b) => a.tier - b.tier).pop();
+					if (!refTier) {
+						console.warn('could not find refTier', refAbility?.tiers, refAbility.abilityId, refAbility);
+						return null;
+					}
 					const refCard = this.allCards.getCardFromDbfId(refTier.cardDbfId);
 					return BattleAbility.create({
 						entityId: null,

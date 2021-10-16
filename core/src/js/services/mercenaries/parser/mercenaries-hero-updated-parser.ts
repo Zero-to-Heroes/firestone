@@ -57,6 +57,10 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 				zonePosition: event.additionalData.zonePosition,
 				abilities: refMerc.abilities.map((refAbility) => {
 					const refTier = [...refAbility.tiers].sort((a, b) => a.tier - b.tier).pop();
+					if (!refTier) {
+						console.warn('could not find refTier', refAbility?.tiers, refAbility.abilityId, refAbility);
+						return null;
+					}
 					const refCard = this.allCards.getCardFromDbfId(refTier.cardDbfId);
 					return BattleAbility.create({
 						entityId: null,
