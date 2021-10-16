@@ -1,4 +1,14 @@
-import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	Directive,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	Renderer2,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
@@ -13,11 +23,13 @@ import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.se
 	selector: '[mercenariesHighlight]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class MercenariesHighlightDirective implements AfterViewInit {
+export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
 	@Input('mercenariesHighlight') cardId = undefined;
 
 	private highlightElement;
 	private highlightService: MercenariesSynergiesHighlightService;
+
+	private subscription$$: Subscription;
 
 	constructor(
 		private readonly store: AppUiStoreService,
@@ -29,7 +41,7 @@ export class MercenariesHighlightDirective implements AfterViewInit {
 	) {
 		this.highlightService = this.ow.getMainWindow().mercenariesSynergiesHighlightService;
 
-		this.store
+		this.subscription$$ = this.store
 			.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
 			.pipe(
 				tap((info) => console.debug('tap 1', info)),
@@ -49,6 +61,12 @@ export class MercenariesHighlightDirective implements AfterViewInit {
 		this.highlightElement = this.renderer.createElement('div');
 		this.renderer.appendChild(this.el.nativeElement, this.highlightElement);
 		this.renderer.addClass(this.highlightElement, 'highlight-overlay');
+	}
+
+	@HostListener('window:beforeunload')
+	ngOnDestroy(): void {
+		console.log('[ads] removing event listeners');
+		this.subscription$$?.unsubscribe();
 	}
 
 	@HostListener('mouseenter')
