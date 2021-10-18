@@ -8,7 +8,7 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
-const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=4';
+const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=5';
 const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.gz.json?v=7';
 
 @Injectable()
@@ -111,6 +111,17 @@ export interface MercenariesReferenceData {
 			readonly sortOrder: number;
 			readonly requiredCompletedBountyId: number;
 			readonly rewardMercenaryIds: readonly number[];
+		}[];
+	}[];
+	readonly taskChains: readonly {
+		readonly id: number;
+		readonly mercenaryId: number;
+		// There is a 1-1 mapping between visitors and mercs
+		readonly mercenaryVisitorId: number;
+		readonly tasks: readonly {
+			readonly id: number;
+			readonly title: string;
+			readonly description: string;
 		}[];
 	}[];
 }

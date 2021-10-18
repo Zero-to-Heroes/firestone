@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { RarityTYpe } from '@firestone-hs/reference-data';
+import { RarityTYpe, TaskStatus } from '@firestone-hs/reference-data';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
@@ -65,11 +65,28 @@ export class MercenariesPersonalHeroStatsComponent {
 						!!referenceData && !!collectionInfo,
 				),
 				distinctUntilChanged((a, b) => arraysEqual(a, b)),
-				tap((info) => console.debug('hop', info)),
+				// tap((info) => console.debug('hop', info)),
 				map(([referenceData, collectionInfo, gameStats, heroSearchString, roleFilter]) => {
 					return collectionInfo.Mercenaries.map((memMerc) => {
 						const refMerc = referenceData.mercenaries.find((m) => m.id === memMerc.Id);
 						const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
+						const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryId === refMerc.id);
+						// console.debug('taskChain', refMerc.name, taskChain);
+						// Can have only one task per mercenary at the same time
+						const visitorInfo = collectionInfo.Visitors.find(
+							(v) => v.VisitorId === taskChain.mercenaryVisitorId,
+						);
+						// console.debug('visitorInfo', visitorInfo);
+						const currentTaskStep = visitorInfo?.TaskChainProgress;
+						const currentStep = !visitorInfo
+							? null
+							: visitorInfo.Status === TaskStatus.CLAIMED
+							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
+							: currentTaskStep;
+
+						const currentTaskDescription = currentStep
+							? [...taskChain.tasks].sort((a, b) => a.id - b.id)[currentStep].description
+							: null;
 						return {
 							mercenaryId: refMerc.id,
 							owned: memMerc.Owned,
@@ -100,7 +117,6 @@ export class MercenariesPersonalHeroStatsComponent {
 										normalizeMercenariesCardId(abilityCard.id),
 								);
 								const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
-								console.debug(refMerc.name, memAbilityCard?.id, abilityCard.id);
 								return {
 									cardId: memAbilityCard.id ?? abilityCard.id,
 									owned: !!memAbility,
@@ -127,8 +143,9 @@ export class MercenariesPersonalHeroStatsComponent {
 									sumOnArray(equipment.tiers, (tier) => tier.coinCraftCost),
 								),
 							totalCoinsLeft: memMerc.CurrencyAmount,
-							totalTasks: 0,
-							nextTaskToComplete: 0,
+							totalTasks: taskChain.tasks.length,
+							currentTask: currentStep != null ? currentStep + 1 : null,
+							currentTaskDescription: currentTaskDescription,
 						} as PersonalHeroStat;
 					}).sort((a, b) => (a.name < b.name ? -1 : 1));
 				}),
@@ -160,7 +177,8 @@ export interface PersonalHeroStat {
 	readonly abilities: readonly PersonalHeroStatAbility[];
 	readonly equipments: readonly PersonalHeroStatEquipment[];
 	readonly totalTasks: number;
-	readonly nextTaskToComplete: number;
+	readonly currentTask: number;
+	readonly currentTaskDescription: string;
 }
 
 export interface PersonalHeroStatAbility {
