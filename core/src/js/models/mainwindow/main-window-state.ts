@@ -1,4 +1,5 @@
 import { GlobalStats } from '@firestone-hs/build-global-stats/dist/model/global-stats';
+import { NonFunctionProperties } from '../../services/utils';
 import { ArenaState } from '../arena/arena-state';
 import { DuelsState } from '../duels/duels-state';
 import { MercenariesState } from '../mercenaries/mercenaries-state';
@@ -28,7 +29,7 @@ export class MainWindowState {
 	readonly globalStats: GlobalStats = new GlobalStats();
 	readonly showAds: boolean = true;
 
-	public update(base: MainWindowState): MainWindowState {
+	public update(base: Partial<NonFunctionProperties<MainWindowState>>): MainWindowState {
 		return Object.assign(new MainWindowState(), this, base);
 	}
 

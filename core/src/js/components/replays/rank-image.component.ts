@@ -21,16 +21,13 @@ import { buildRankText, GameStat } from '../../models/mainwindow/stats/game-stat
 })
 export class RankImageComponent {
 	@Input() set stat(value: GameStat) {
-		console.debug('set stat', value);
 		this.playerRank = value.playerRank;
 		const rankImage = value.buildPlayerRankImage();
 		this.playerRankImage = rankImage.frameImage;
 		this.playerRankArt = rankImage.medalImage;
 		this.playerRankImageTooltip = rankImage.tooltip;
 		this.playerRankDecoration = rankImage.frameDecoration;
-		console.debug('set stat', 'wtf', value);
 		this.rankText = buildRankText(value.playerRank, value.gameMode, value.additionalResult);
-		console.debug('build text', this.rankText);
 	}
 
 	@Input() gameMode: string;

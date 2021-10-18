@@ -3,6 +3,7 @@ import { DuelsRewardsInfo } from '@firestone-hs/save-dungeon-loot-info/dist/inpu
 import { ArenaInfo } from '../../../models/arena-info';
 import { BoostersInfo } from '../../../models/memory/boosters-info';
 import { CoinInfo } from '../../../models/memory/coin-info';
+import { MemoryMercenariesCollectionInfo } from '../../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../../models/rewards-track-info';
@@ -206,6 +207,20 @@ export class MindVisionService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse getMercenariesInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getMercenariesCollectionInfo(forceReset = false): Promise<MemoryMercenariesCollectionInfo> {
+		return new Promise<MemoryMercenariesCollectionInfo>(async (resolve) => {
+			const plugin = await this.get();
+			try {
+				plugin.getMercenariesCollectionInfo((info) => {
+					resolve(info ? JSON.parse(info) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getMercenariesCollectionInfo', e);
 				resolve(null);
 			}
 		});

@@ -2,7 +2,7 @@ import { MercenariesCategoryId } from '../../mercenaries/mercenary-category-id.t
 
 export class NavigationMercenaries {
 	readonly menuDisplayType: 'menu' | 'breadcrumbs' = 'menu';
-	readonly selectedCategoryId: MercenariesCategoryId = 'mercenaries-hero-stats';
+	readonly selectedCategoryId: MercenariesCategoryId = 'mercenaries-personal-hero-stats';
 	readonly selectedHeroId: string;
 	readonly selectedCompositionId: string;
 	readonly heroSearchString: string;

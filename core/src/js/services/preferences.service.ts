@@ -19,6 +19,7 @@ import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { DeckFilters } from '../models/mainwindow/decktracker/deck-filters';
 import { ReplaysFilterCategoryType } from '../models/mainwindow/replays/replays-filter-category.type';
 import { StatsXpGraphSeasonFilterType } from '../models/mainwindow/stats/stats-xp-graph-season-filter.type';
+import { MemoryVisitor } from '../models/memory/memory-mercenaries-collection-info';
 import { MercenariesHeroLevelFilterType } from '../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../models/mercenaries/mercenaries-mode-filter.type';
 import { MercenariesPveDifficultyFilterType } from '../models/mercenaries/mercenaries-pve-difficulty-filter.type';
@@ -380,6 +381,12 @@ export class PreferencesService {
 	public async updateMercenariesTeamOpponentPosition(left: number, top: number) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, mercenariesOpponentTeamOverlayPosition: { left, top } };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesVisitorsProgress(info: readonly MemoryVisitor[]) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesVisitorsProgress: info };
 		await this.savePreferences(newPrefs);
 	}
 

@@ -237,6 +237,8 @@ import { MercenariesEmptyStateComponent } from '../../components/mercenaries/des
 import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-details.component';
 import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
+import { MercenariesPersonalHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
+import { MercenariesPersonalHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
 import { MercenariesHighlightDirective } from '../../components/mercenaries/overlay/teams/mercenaries-highlight.directive';
 import { MercenariesOpponentTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-opponent-team.component';
@@ -366,6 +368,7 @@ import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
 import { MercenariesSynergiesHighlightService } from '../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
+import { MercenariesMemoryUpdateService } from '../../services/mercenaries/mercenaries-memory-updates.service';
 import { MercenariesStateBuilderService } from '../../services/mercenaries/mercenaries-state-builder.service';
 import { MercenariesStoreService } from '../../services/mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from '../../services/mercenaries/out-of-combat/mercenaries-out-of-combat.service';
@@ -685,6 +688,8 @@ const components = [
 		MercenariesDesktopComponent,
 		MercenariesHeroStatsComponent,
 		MercenariesHeroStatComponent,
+		MercenariesPersonalHeroStatsComponent,
+		MercenariesPersonalHeroStatComponent,
 		MercenariesHeroDetailsComponent,
 		MercenariesCompositionsStatsComponent,
 		MercenariesCompositionStatComponent,
@@ -828,6 +833,7 @@ const components = [
 		RealTimeStatsService,
 		BgsCustomSimulationService,
 
+		MercenariesMemoryUpdateService,
 		MercenariesStoreService,
 		MercenariesOutOfCombatService,
 

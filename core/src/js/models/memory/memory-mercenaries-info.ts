@@ -1,3 +1,5 @@
+import { RarityTYpe, TagRole } from '@firestone-hs/reference-data';
+
 export interface MemoryMercenariesInfo {
 	readonly PvpRating: number;
 	readonly Map: MemoryMercenariesMap;
@@ -22,6 +24,15 @@ export interface MemoryMercenary {
 	readonly Abilities: readonly MemoryMercenaryAbility[];
 	readonly Equipments: readonly MemoryMercenaryEquipment[];
 	readonly TreasureCardDbfIds: readonly number[];
+	readonly Attack: number;
+	readonly Health: number;
+	readonly CurrencyAmount: number;
+	readonly Experience: number;
+	readonly IsFullyUpgraded: boolean;
+	readonly Owned: boolean;
+	readonly Premium: number;
+	readonly Rarity: RarityTYpe;
+	readonly Role: TagRole;
 }
 
 export interface MemoryMercenaryAbility {

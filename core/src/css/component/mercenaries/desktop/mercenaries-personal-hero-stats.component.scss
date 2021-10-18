@@ -1,0 +1,85 @@
+:host() {
+	display: flex;
+	min-height: 1px;
+	flex-grow: 1;
+}
+
+.mercenaries-personal-hero-stats {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	align-content: flex-start;
+	align-items: flex-start;
+	width: 100%;
+
+	.header {
+		margin-bottom: 10px;
+		display: flex;
+		font-size: 12px;
+		color: var(--color-1);
+		padding-left: 10px;
+		padding-right: 10px;
+
+		& > div {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+		}
+
+		.level {
+			width: 25px;
+		}
+
+		.role {
+			width: 50px;
+		}
+
+		.name {
+			// Also includes the portrait size
+			width: 115px;
+			margin-right: 15px;
+		}
+
+		.xp {
+			width: 60px;
+			margin-right: 20px;
+		}
+
+		.coins {
+			width: 30px;
+			margin-right: 30px;
+		}
+
+		.tasks {
+			width: 25px;
+			margin-right: 30px;
+		}
+
+		.abilities {
+			width: 150px;
+			margin-right: 40px;
+		}
+
+		.equipments {
+			width: 150px;
+		}
+	}
+
+	.list {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		align-content: flex-start;
+		align-items: flex-start;
+		min-height: 1px;
+		overflow: auto;
+		width: 100%;
+	}
+
+	mercenaries-personal-hero-stat {
+		width: 100%;
+		height: 60px;
+		margin-bottom: 10px;
+	}
+}

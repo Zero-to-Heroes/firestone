@@ -18,6 +18,7 @@ import { MmrGroupFilterType } from './mainwindow/battlegrounds/mmr-group-filter-
 import { CurrentAppType } from './mainwindow/current-app.type';
 import { DeckFilters } from './mainwindow/decktracker/deck-filters';
 import { StatsXpGraphSeasonFilterType } from './mainwindow/stats/stats-xp-graph-season-filter.type';
+import { MemoryVisitor } from './memory/memory-mercenaries-collection-info';
 import { MercenariesHeroLevelFilterType } from './mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from './mercenaries/mercenaries-mode-filter.type';
 import { MercenariesPveDifficultyFilterType } from './mercenaries/mercenaries-pve-difficulty-filter.type';
@@ -324,6 +325,11 @@ export class Preferences {
 	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
 	readonly mercenariesShowColorChartButton: boolean = true;
 	readonly mercenariesHighlightSynergies: boolean = true;
+
+	// Not the best place to store it, but the preferences are for now stored on the
+	// server and backed up when another device is used.
+	// Ideally this will be returned by the game itself, so we won't need it at all
+	readonly mercenariesVisitorsProgress: readonly MemoryVisitor[];
 
 	readonly mercenariesEnablePlayerTeamWidget = true;
 	@Reflect.metadata(FORCE_LOCAL_PROP, true)

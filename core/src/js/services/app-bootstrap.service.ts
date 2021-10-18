@@ -34,6 +34,7 @@ import { MainWindowStoreService } from './mainwindow/store/main-window-store.ser
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
 import { MercenariesSynergiesHighlightService } from './mercenaries/highlights/mercenaries-synergies-highlight.service';
+import { MercenariesMemoryUpdateService } from './mercenaries/mercenaries-memory-updates.service';
 import { MercenariesStoreService } from './mercenaries/mercenaries-store.service';
 import { MercenariesOutOfCombatService } from './mercenaries/out-of-combat/mercenaries-out-of-combat.service';
 import { OwNotificationsService } from './notifications.service';
@@ -95,6 +96,7 @@ export class AppBootstrapService {
 		private init_MercenariesStoreService: MercenariesStoreService,
 		private init_MercenariesOutOfCombatService: MercenariesOutOfCombatService,
 		private init_MercenariesSynergiesHighlightService: MercenariesSynergiesHighlightService,
+		private init_MercenariesMemoryUpdateService: MercenariesMemoryUpdateService,
 	) {}
 
 	public async init() {

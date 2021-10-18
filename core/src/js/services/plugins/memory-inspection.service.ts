@@ -10,6 +10,7 @@ import { DuelsInfo } from '../../models/duels-info';
 import { DeckInfoFromMemory } from '../../models/mainwindow/decktracker/deck-info-from-memory';
 import { MatchInfo } from '../../models/match-info';
 import { CoinInfo } from '../../models/memory/coin-info';
+import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryMercenariesInfo } from '../../models/memory/memory-mercenaries-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { RewardsTrackInfo } from '../../models/rewards-track-info';
@@ -33,7 +34,8 @@ import { GetDuelsRewardsInfoOperation } from './mind-vision/get-duels-rewards-in
 import { GetInGameAchievementsProgressInfoOperation } from './mind-vision/get-in-game-achievements-progress-info-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
 import { GetMemoryChangesOperation } from './mind-vision/get-memory-changes-operation';
-import { GetMercenariesInfoOperation } from './mind-vision/get-mercenaries-info-operation copy';
+import { GetMercenariesCollectionInfoOperation } from './mind-vision/get-mercenaries-collection-info-operation';
+import { GetMercenariesInfoOperation } from './mind-vision/get-mercenaries-info-operation';
 import { GetRewardsTrackInfoOperation } from './mind-vision/get-rewards-track-info-operation';
 import { GetWhizbangDeckOperation } from './mind-vision/get-whizbang-deck-operation';
 import { IsMaybeOnDuelsRewardsScreenOperation } from './mind-vision/is-maybe-on-duels-rewards-screen-operation';
@@ -54,6 +56,7 @@ export class MemoryInspectionService {
 	private getMatchInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
 	private getMercenariesInfoOperation = new GetMercenariesInfoOperation(this.mindVision, this.ow);
+	private getMercenariesCollectionInfoOperation = new GetMercenariesCollectionInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsEndGameOperation = new GetBattlegroundsEndGameOperation(this.mindVision, this.ow);
 	private getBattlegroundsMatchOperation = new GetBattlegroundsMatchOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
@@ -108,6 +111,10 @@ export class MemoryInspectionService {
 
 	public async getMercenariesInfo(numberOfRetries?: number): Promise<MemoryMercenariesInfo> {
 		return this.getMercenariesInfoOperation.call(numberOfRetries);
+	}
+
+	public async getMercenariesCollectionInfo(numberOfRetries?: number): Promise<MemoryMercenariesCollectionInfo> {
+		return this.getMercenariesCollectionInfoOperation.call(numberOfRetries);
 	}
 
 	public async getBattlegroundsEndGame(numberOfRetries?: number): Promise<BattlegroundsInfo> {
@@ -176,75 +183,4 @@ export class MemoryInspectionService {
 			resolve(gameInfo?.res?.game_info?.scene_state);
 		});
 	}
-
-	// private handleInfoUpdate(info) {
-	// 	if (info.feature === 'scene_state') {
-	// 		console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
-	// 		this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);
-	// 	} else if (info.feature === 'match') {
-	// 		// This info is only sent when it changed since the last time. So we need to cache it
-
-	// 		if (info.info.playersInfo) {
-	// 			const localPlayer: string = info.info.playersInfo.localPlayer;
-	// 			const opponent: string = info.info.playersInfo.opponent;
-
-	// 			if (localPlayer) {
-	// 				this.events.broadcast(Events.PLAYER_INFO, JSON.parse(localPlayer));
-	// 			}
-	// 			if (opponent) {
-	// 				this.events.broadcast(Events.OPPONENT_INFO, JSON.parse(opponent));
-	// 			}
-	// 		}
-	// 	} else if (
-	// 		info.feature === 'match_info' &&
-	// 		info.info &&
-	// 		info.info.match_info &&
-	// 		info.info.match_info.pseudo_match_id
-	// 	) {
-	// 		this.events.broadcast(Events.NEW_GAME_ID, info.info.match_info.pseudo_match_id);
-	// 	}
-	// }
-
-	// private registerEvents() {
-	// 	if (this.listenersRegistered) {
-	// 		return;
-	// 	}
-
-	// 	// general events errors
-	// 	this.ow.addGameEventsErrorListener((info) => console.log('[memory service] Error: ', info));
-
-	// 	// "static" data changed
-	// 	// This will also be triggered the first time we register
-	// 	// for events and will contain all the current information
-	// 	this.ow.addGameEventInfoUpdates2Listener((info) => this.handleInfoUpdate(info));
-
-	// 	// an event triggerd
-	// 	this.ow.addGameEventsListener((info) => console.log('[memory service] EVENT FIRED: ', info));
-	// 	this.listenersRegistered = true;
-	// 	console.log('[memory-service] added events listeners');
-	// }
-
-	// private async setFeatures() {
-	// 	console.log('[memory service] trying to set features for GEP');
-	// 	const info = await this.ow.setGameEventsRequiredFeatures(this.g_interestedInFeatures);
-	// 	if (info.status === 'error') {
-	// 		setTimeout(() => this.setFeatures(), 2000);
-	// 		return;
-	// 	}
-	// 	console.log('[memory service] Set required features:', info);
-	// }
-
-	// private async init() {
-	// 	this.ow.addGameInfoUpdatedListener((res) => {
-	// 		if (this.ow.gameLaunched(res)) {
-	// 			this.registerEvents();
-	// 			setTimeout(() => this.setFeatures(), 1000);
-	// 		}
-	// 	});
-	// 	const gameInfo = await this.ow.getRunningGameInfo();
-	// 	if (this.ow.gameRunning(gameInfo)) {
-	// 		this.registerEvents();
-	// 		setTimeout(() => this.setFeatures(), 1000);
-	// 	}
-	// }
 }

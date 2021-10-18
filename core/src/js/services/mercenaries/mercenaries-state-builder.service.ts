@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { EventEmitter, Injectable } from '@angular/core';
+import { MemoryMercenariesCollectionInfo } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesState } from '../../models/mercenaries/mercenaries-state';
 import { MercenariesCategoryId } from '../../models/mercenaries/mercenary-category-id.type';
 import { ApiRunner } from '../api-runner';
@@ -34,14 +35,20 @@ export class MercenariesStateBuilderService {
 		return globalStats;
 	}
 
-	public initState(globalStats: MercenariesGlobalStats, referenceData: MercenariesReferenceData): MercenariesState {
+	public initState(
+		globalStats: MercenariesGlobalStats,
+		referenceData: MercenariesReferenceData,
+		mercenariesCollection: MemoryMercenariesCollectionInfo,
+	): MercenariesState {
 		const categoryIds: readonly MercenariesCategoryId[] = [
-			'mercenaries-hero-stats',
-			'mercenaries-compositions-stats',
+			'mercenaries-personal-hero-stats',
+			// 'mercenaries-hero-stats',
+			// 'mercenaries-compositions-stats',
 		];
 		return MercenariesState.create({
 			globalStats: globalStats,
 			referenceData: referenceData,
+			collectionInfo: mercenariesCollection,
 			categoryIds: categoryIds,
 			loading: false,
 		} as MercenariesState);

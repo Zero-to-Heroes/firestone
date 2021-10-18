@@ -7,7 +7,7 @@ import { MemoryInspectionService } from '../../../plugins/memory-inspection.serv
 import { sleep } from '../../../utils';
 import { MercenariesOutOfCombatParser } from './_mercenaries-out-of-combat-parser';
 
-const SCENE_WITH_RELEVANT_MERC_INFO = [
+export const SCENE_WITH_RELEVANT_MERC_INFO = [
 	SceneMode.GAMEPLAY,
 	SceneMode.LETTUCE_BOUNTY_BOARD,
 	SceneMode.LETTUCE_BOUNTY_TEAM_SELECT,

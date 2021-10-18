@@ -34,7 +34,7 @@ import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary
 		`../../../../css/component/mercenaries/desktop/mercenaries-hero-stats.component.scss`,
 	],
 	template: `
-		<div class="mercenaries-pve-stats" scrollable>
+		<div class="mercenaries-stats" scrollable>
 			<mercenaries-hero-stat
 				*ngFor="let stat of stats$ | async; trackBy: trackByFn"
 				[stat]="stat"

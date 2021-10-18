@@ -188,8 +188,6 @@ export class GameStat {
 }
 
 export const buildRankText = (playerRank: string, gameMode: string, additionalResult: string): string => {
-	console.warn('wtf 2');
-	console.debug('buildRankText', playerRank, gameMode);
 	if (
 		(gameMode === 'duels' || gameMode === 'paid-duels') &&
 		additionalResult &&
@@ -219,7 +217,6 @@ export const buildRankText = (playerRank: string, gameMode: string, additionalRe
 		return playerRank;
 	}
 	if (isMercenariesPvP(gameMode) && !isNaN(+playerRank)) {
-		console.debug('rank', playerRank, +playerRank);
 		return playerRank;
 	}
 	return null;

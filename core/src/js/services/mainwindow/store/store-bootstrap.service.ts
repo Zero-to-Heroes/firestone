@@ -20,6 +20,7 @@ import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracke
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { DuelsStateBuilderService } from '../../duels/duels-state-builder.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
+import { MercenariesMemoryUpdateService } from '../../mercenaries/mercenaries-memory-updates.service';
 import { MercenariesStateBuilderService } from '../../mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../overwolf.service';
 import { PatchesConfigService } from '../../patches-config.service';
@@ -58,6 +59,7 @@ export class StoreBootstrapService {
 		private readonly arenaService: ArenaRunParserService,
 		private readonly stats: StatsStateBuilderService,
 		private readonly mercenariesService: MercenariesStateBuilderService,
+		private readonly mercenariesMemory: MercenariesMemoryUpdateService,
 	) {
 		setTimeout(() => {
 			this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -89,7 +91,7 @@ export class StoreBootstrapService {
 			[matchStats, archetypesConfig, archetypesStats],
 			[[duelsRunInfo, duelsRewardsInfo], duelsGlobalStats, duelsLeaderboard],
 			[arenaRewards],
-			[mercenariesGlobalStats, mercenariesReferenceData],
+			[mercenariesGlobalStats, mercenariesReferenceData, mercenariesCollection],
 		] = await Promise.all([
 			Promise.all([
 				this.initializeSocialShareUserInfo(),
@@ -108,7 +110,11 @@ export class StoreBootstrapService {
 			]),
 			Promise.all([this.duels.loadRuns(), this.duels.loadGlobalStats(), this.duels.loadLeaderboard()]),
 			Promise.all([this.arena.loadRewards()]),
-			Promise.all([this.mercenariesService.loadGlobalStats(), this.mercenariesService.loadReferenceData()]),
+			Promise.all([
+				this.mercenariesService.loadGlobalStats(),
+				this.mercenariesService.loadReferenceData(),
+				this.mercenariesMemory.getMercenariesCollectionInfo(),
+			]),
 		]);
 		console.log('loaded info');
 
@@ -195,6 +201,7 @@ export class StoreBootstrapService {
 		const mercenariesState: MercenariesState = await this.mercenariesService.initState(
 			mercenariesGlobalStats,
 			mercenariesReferenceData,
+			mercenariesCollection,
 		);
 
 		const initialWindowState = Object.assign(new MainWindowState(), {

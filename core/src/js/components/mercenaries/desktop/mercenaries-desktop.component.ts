@@ -31,8 +31,12 @@ import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-stor
 								</li>
 							</ul>
 							<mercenaries-filters></mercenaries-filters>
-							<mercenaries-hero-stats *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'">
-							</mercenaries-hero-stats>
+							<mercenaries-personal-hero-stats
+								*ngxCacheIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
+							>
+							</mercenaries-personal-hero-stats>
+							<!-- <mercenaries-hero-stats *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'">
+							</mercenaries-hero-stats> -->
 							<mercenaries-hero-details *ngxCacheIf="selectedCategoryId === 'mercenaries-hero-details'">
 							</mercenaries-hero-details>
 							<mercenaries-compositions-stats
@@ -50,7 +54,7 @@ import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-stor
 			<section class="secondary">
 				<ng-container *ngIf="selectedCategoryId$ | async as selectedCategoryId">
 					<mercenaries-hero-search
-						*ngxCacheIf="selectedCategoryId === 'mercenaries-hero-stats'"
+						*ngxCacheIf="selectedCategoryId === 'mercenaries-personal-hero-stats'"
 					></mercenaries-hero-search>
 					<secondary-default></secondary-default>
 				</ng-container>
@@ -106,8 +110,10 @@ export class MercenariesDesktopComponent implements AfterViewInit {
 
 	getCatName(categoryId: MercenariesCategoryId) {
 		switch (categoryId) {
+			case 'mercenaries-personal-hero-stats':
+				return 'Your Heroes';
 			case 'mercenaries-hero-stats':
-				return 'Heroes';
+				return 'Stats';
 			case 'mercenaries-compositions-stats':
 				return 'Compositions';
 			default:

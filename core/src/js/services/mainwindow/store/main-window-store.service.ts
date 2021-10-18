@@ -112,6 +112,7 @@ import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
 import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
+import { MercenariesCollectionInformationFromMemoryEvent } from './events/mercenaries/mercenaries-collection-information-from-memory-event';
 import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/mercenaries-hero-level-filter-selected-event';
 import { MercenariesHeroSearchEvent } from './events/mercenaries/mercenaries-hero-search-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
@@ -226,6 +227,7 @@ import { DungeonLootInfoUpdatedProcessor } from './processors/duels/dungeon-loot
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
 import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
+import { MercenariesCollectionInformationFromMemoryProcessor } from './processors/mercenaries/mercenaries-collection-information-from-memory-processor';
 import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercenaries/mercenaries-hero-level-filter-selected-processor';
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
@@ -731,6 +733,9 @@ export class MainWindowStoreService {
 
 			MercenariesSelectCategoryEvent.eventName(),
 			new MercenariesSelectCategoryProcessor(),
+
+			MercenariesCollectionInformationFromMemoryEvent.eventName(),
+			new MercenariesCollectionInformationFromMemoryProcessor(),
 
 			// Duels
 			DungeonLootInfoUpdatedEvent.eventName(),
