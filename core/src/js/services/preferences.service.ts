@@ -26,6 +26,7 @@ import { MercenariesPveDifficultyFilterType } from '../models/mercenaries/mercen
 import { MercenariesPvpMmrFilterType } from '../models/mercenaries/mercenaries-pvp-mmr-filter.type';
 import { MercenariesRoleFilterType } from '../models/mercenaries/mercenaries-role-filter.type';
 import { MercenariesStarterFilterType } from '../models/mercenaries/mercenaries-starter-filter.type';
+import { MercenariesPersonalHeroesSortCriteria } from '../models/mercenaries/personal-heroes-sort-criteria.type';
 import { FORCE_LOCAL_PROP, Preferences } from '../models/preferences';
 import { Ftue } from '../models/preferences/ftue';
 import { ApiRunner } from './api-runner';
@@ -387,6 +388,12 @@ export class PreferencesService {
 	public async updateMercenariesVisitorsProgress(info: readonly MemoryVisitor[]) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, mercenariesVisitorsProgress: info };
+		await this.savePreferences(newPrefs);
+	}
+
+	public async updateMercenariesPersonalHeroesSortCriteria(info: readonly MercenariesPersonalHeroesSortCriteria[]) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, mercenariesPersonalHeroesSortCriteria: info };
 		await this.savePreferences(newPrefs);
 	}
 

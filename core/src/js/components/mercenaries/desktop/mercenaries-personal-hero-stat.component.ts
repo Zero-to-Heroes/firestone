@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { CardRarity } from '@firestone-hs/reference-data';
-import { OverwolfService } from '../../../services/overwolf.service';
 import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 
 @Component({
@@ -19,7 +18,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				</div>
 			</div>
 
-			<div class="portrait" [cardTooltip]="cardId">
+			<div class="portrait" [cardTooltip]="cardId" cardTooltipPosition="top-right">
 				<img class="icon" [src]="portraitUrl" />
 				<img class="frame" [src]="frameUrl" />
 			</div>
@@ -30,13 +29,22 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				<progress-bar [current]="xpInCurrentLevel" [total]="xpNeededForLevel"></progress-bar>
 			</div>
 
-			<div class="coins">
+			<div class="coins left">
 				<img class="icon" [src]="portraitUrl" />
 				<img
 					class="frame"
-					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=4"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
 				/>
 				<div class="amount">{{ totalCoinsLeft }}</div>
+			</div>
+
+			<div class="coins needed">
+				<img class="icon" [src]="portraitUrl" />
+				<img
+					class="frame"
+					src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_coin_empty.png?v=5"
+				/>
+				<div class="amount">{{ totalCoinsForFullUpgrade }}</div>
 			</div>
 
 			<div class="current-task" [helpTooltip]="currentTaskTooltip">
@@ -49,7 +57,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 						<img class="icon" [src]="ability.artUrl" />
 						<img
 							class="frame"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=4"
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_frame.png?v=5"
 						/>
 						<div class="speed">
 							<div class="value">{{ ability.speed }}</div>
@@ -57,7 +65,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 						<div class="cooldown" *ngIf="!!ability.cooldown">
 							<img
 								class="cooldown-icon"
-								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=3"
+								src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_cooldown.png?v=5"
 							/>
 							<div class="value">{{ ability.cooldown }}</div>
 						</div>
@@ -71,11 +79,11 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 					*ngFor="let equipment of equipments"
 					[ngClass]="{ 'equipped': equipment.equipped, 'missing': !equipment.owned }"
 				>
-					<div class="item-icon" [cardTooltip]="equipment.cardId">
+					<div class="item-icon" [cardTooltip]="equipment.cardId" cardTooltipPosition="top-right">
 						<img class="icon" [src]="equipment.artUrl" />
 						<img
 							class="frame"
-							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=3"
+							src="https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_equipment_frame.png?v=5"
 						/>
 					</div>
 				</div>
@@ -86,7 +94,7 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 })
 export class MercenariesPersonalHeroStatComponent {
 	@Input() set stat(value: PersonalHeroStat) {
-		// console.debug('setting value', value);
+		console.debug('setting value', value);
 		this.cardId = value.cardId;
 		this.owned = value.owned;
 
@@ -102,9 +110,11 @@ export class MercenariesPersonalHeroStatComponent {
 		this.xpNeededForLevel = value.xpNeededForLevel + value.xpInCurrentLevel;
 
 		this.totalCoinsLeft = value.totalCoinsLeft;
+		this.totalCoinsForFullUpgrade = value.totalCoinsForFullUpgrade;
 
 		this.currentTaskLabel = '???';
-		this.currentTaskTooltip = 'The task can only be updated once a visitor for this mercenary visits your village';
+		this.currentTaskTooltip =
+			'The task can only be updated once a visitor for this mercenary visits your village while the app is running.';
 		if (value.currentTask) {
 			this.currentTaskLabel = '' + value.currentTask;
 			this.currentTaskTooltip = value.currentTaskDescription;
@@ -127,6 +137,9 @@ export class MercenariesPersonalHeroStatComponent {
 				artUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.cardId}.jpg`,
 			};
 		});
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr?.detectChanges();
+		}
 	}
 
 	cardId: string;
@@ -142,6 +155,7 @@ export class MercenariesPersonalHeroStatComponent {
 	xpNeededForLevel: number;
 
 	totalCoinsLeft: number;
+	totalCoinsForFullUpgrade: number;
 
 	currentTaskLabel: string;
 	currentTaskTooltip: string;
@@ -149,7 +163,7 @@ export class MercenariesPersonalHeroStatComponent {
 	abilities: readonly VisualAbility[];
 	equipments: readonly VisualEquipment[];
 
-	constructor(private readonly ow: OverwolfService) {}
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	buildPercents(value: number): string {
 		return value == null ? '-' : value.toFixed(1) + '%';
@@ -162,11 +176,11 @@ export class MercenariesPersonalHeroStatComponent {
 	buildHeroFrame(role: string, premium: number): string {
 		switch (premium) {
 			case 1:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=3`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_golden_${role}.png?v=5`;
 			case 2:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png?v=3`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_diamond_${role}.png?v=5`;
 			case 0:
-				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=3`;
+				return `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${role}.png?v=5`;
 		}
 	}
 }

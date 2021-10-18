@@ -117,6 +117,7 @@ import { MercenariesHeroLevelFilterSelectedEvent } from './events/mercenaries/me
 import { MercenariesHeroSearchEvent } from './events/mercenaries/mercenaries-hero-search-event';
 import { MercenariesHeroSelectedEvent } from './events/mercenaries/mercenaries-hero-selected-event';
 import { MercenariesModeFilterSelectedEvent } from './events/mercenaries/mercenaries-mode-filter-selected-event';
+import { MercenariesPersonalHeroesSortEvent } from './events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { MercenariesPveDifficultyFilterSelectedEvent } from './events/mercenaries/mercenaries-pve-difficulty-filter-selected-event';
 import { MercenariesPvpMmrFilterSelectedEvent } from './events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
 import { MercenariesRoleFilterSelectedEvent } from './events/mercenaries/mercenaries-role-filter-selected-event';
@@ -232,6 +233,7 @@ import { MercenariesHeroLevelFilterSelectedProcessor } from './processors/mercen
 import { MercenariesHeroSearchProcessor } from './processors/mercenaries/mercenaries-hero-search-processor';
 import { MercenariesHeroSelectedProcessor } from './processors/mercenaries/mercenaries-hero-selected-processor';
 import { MercenariesModeFilterSelectedProcessor } from './processors/mercenaries/mercenaries-mode-filter-selected-processor';
+import { MercenariesPersonalHeroesSortProcessor } from './processors/mercenaries/mercenaries-personal-heroes-sort-processor';
 import { MercenariesPveDifficultyFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pve-difficulty-filter-selected-processor';
 import { MercenariesPvpMmrFilterSelectedProcessor } from './processors/mercenaries/mercenaries-pvp-mmr-filter-selected-processor';
 import { MercenariesRoleFilterSelectedProcessor } from './processors/mercenaries/mercenaries-role-filter-selected-processor';
@@ -736,6 +738,9 @@ export class MainWindowStoreService {
 
 			MercenariesCollectionInformationFromMemoryEvent.eventName(),
 			new MercenariesCollectionInformationFromMemoryProcessor(),
+
+			MercenariesPersonalHeroesSortEvent.eventName(),
+			new MercenariesPersonalHeroesSortProcessor(this.prefs),
 
 			// Duels
 			DungeonLootInfoUpdatedEvent.eventName(),

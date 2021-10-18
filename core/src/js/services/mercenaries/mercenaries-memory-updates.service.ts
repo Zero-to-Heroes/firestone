@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { SceneMode } from '@firestone-hs/reference-data';
+import { SceneMode, TaskStatus } from '@firestone-hs/reference-data';
 import { MemoryMercenariesCollectionInfo, MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MemoryUpdate } from '../../models/memory/memory-update';
 import { Events } from '../events.service';
@@ -92,7 +92,15 @@ export class MercenariesMemoryUpdateService {
 		const result = [...fromMemory];
 		for (const visitorInfo of savedVisitorsInfo) {
 			if (!result.map((v) => v.TaskId).includes(visitorInfo.TaskId)) {
-				result.push(visitorInfo);
+				// If it's not in memory anymore, this means that the task has been either abandoned or claimed
+				if (visitorInfo.Status === TaskStatus.COMPLETE) {
+					result.push({
+						...visitorInfo,
+						Status: TaskStatus.CLAIMED,
+					});
+				}
+				// If it was not in a "COMPLETE" state last time we checked the board, and is not
+				// there anymore, this means that it got abandoned, and we remove it
 			}
 		}
 		this.prefs.updateMercenariesVisitorsProgress(result);

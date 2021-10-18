@@ -1,13 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { RarityTYpe, TaskStatus } from '@firestone-hs/reference-data';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import {
+	MercenariesPersonalHeroesSortCriteria,
+	MercenariesPersonalHeroesSortCriteriaType,
+} from '../../../models/mercenaries/personal-heroes-sort-criteria.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
+import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
-import { arraysEqual, sumOnArray } from '../../../services/utils';
-import { MercenaryInfo } from './mercenary-info';
+import { areDeepEqual, sumOnArray } from '../../../services/utils';
 
 @Component({
 	selector: 'mercenaries-personal-hero-stats',
@@ -17,15 +21,37 @@ import { MercenaryInfo } from './mercenary-info';
 	],
 	template: `
 		<div class="mercenaries-personal-hero-stats" *ngIf="stats$ | async as stats; else emptyState">
-			<div class="header">
-				<div class="level">Lvl</div>
-				<div class="role">Role</div>
-				<div class="name">Name</div>
-				<div class="xp">Xp</div>
-				<div class="coins">Coins</div>
-				<div class="tasks" helpTooltip="The current task. Task 18 is the final one for all mercs">Task</div>
-				<div class="abilities">Abilities</div>
-				<div class="equipments">Equipments</div>
+			<div class="header" *ngIf="sortCriteria$ | async as sort">
+				<sortable-label class="level" [name]="'Lvl'" [sort]="sort" [criteria]="'level'"> </sortable-label>
+				<sortable-label class="role" [name]="'Role'" [sort]="sort" [criteria]="'role'"> </sortable-label>
+				<sortable-label class="name" [name]="'Name'" [sort]="sort" [criteria]="'name'"> </sortable-label>
+				<sortable-label class="xp" [name]="'Xp'" [sort]="sort" [criteria]="'xp-in-level'"> </sortable-label>
+				<sortable-label
+					class="coins left"
+					[name]="'Coins Left'"
+					[sort]="sort"
+					[criteria]="'coins-left'"
+					helpTooltip="Total coins you have in reserve for this merc"
+				>
+				</sortable-label>
+				<sortable-label
+					class="coins needed"
+					[name]="'Coins Needed'"
+					[sort]="sort"
+					[criteria]="'coins-needed-to-max'"
+					helpTooltip="Total coins you need to spend to fully max out this merc"
+				>
+				</sortable-label>
+				<sortable-label
+					class="tasks"
+					[name]="'Task progress'"
+					[sort]="sort"
+					[criteria]="'task-progress'"
+					helpTooltip="The current task. Task 18 is the final one for all mercs"
+				>
+				</sortable-label>
+				<sortable-label class="abilities" [name]="'Abilities'" [isSortable]="false"> </sortable-label>
+				<sortable-label class="equipments" [name]="'Equipments'" [isSortable]="false"> </sortable-label>
 			</div>
 			<div class="list" scrollable>
 				<mercenaries-personal-hero-stat
@@ -44,6 +70,9 @@ import { MercenaryInfo } from './mercenary-info';
 })
 export class MercenariesPersonalHeroStatsComponent {
 	stats$: Observable<readonly PersonalHeroStat[]>;
+	sortCriteria$: Observable<MercenariesPersonalHeroesSortCriteria>;
+
+	private unsortedStats$: Observable<readonly PersonalHeroStat[]>;
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -51,22 +80,23 @@ export class MercenariesPersonalHeroStatsComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
-		this.stats$ = this.store
+		this.sortCriteria$ = this.store
+			.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria)
+			.pipe(
+				map(([sortCriteria]) => sortCriteria[0]),
+				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+				tap((info) => cdLog('emitting sortCriteria in ', this.constructor.name, info)),
+			);
+		this.unsortedStats$ = this.store
 			.listen$(
 				([main, nav]) => main.mercenaries.referenceData,
 				([main, nav]) => main.mercenaries.collectionInfo,
-				([main, nav]) => main.stats.gameStats,
-				([main, nav]) => nav.navigationMercenaries.heroSearchString,
-				([main, nav, prefs]) => prefs.mercenariesActiveRoleFilter,
 			)
 			.pipe(
-				filter(
-					([referenceData, collectionInfo, gameStats, heroSearchString, roleFilter]) =>
-						!!referenceData && !!collectionInfo,
-				),
-				distinctUntilChanged((a, b) => arraysEqual(a, b)),
+				filter(([referenceData, collectionInfo]) => !!referenceData && !!collectionInfo),
+				distinctUntilChanged((a, b) => areDeepEqual(a, b)),
 				// tap((info) => console.debug('hop', info)),
-				map(([referenceData, collectionInfo, gameStats, heroSearchString, roleFilter]) => {
+				map(([referenceData, collectionInfo]) => {
 					return collectionInfo.Mercenaries.map((memMerc) => {
 						const refMerc = referenceData.mercenaries.find((m) => m.id === memMerc.Id);
 						const mercenaryCard = this.allCards.getCardFromDbfId(refMerc.cardDbfId);
@@ -147,15 +177,148 @@ export class MercenariesPersonalHeroStatsComponent {
 							currentTask: currentStep != null ? currentStep + 1 : null,
 							currentTaskDescription: currentTaskDescription,
 						} as PersonalHeroStat;
-					}).sort((a, b) => (a.name < b.name ? -1 : 1));
+					});
 				}),
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
-				tap((info) => cdLog('emitting stats in ', this.constructor.name, info)),
+				tap((info) => cdLog('emitting stats in ', this.constructor.name, info?.length)),
 			);
+		this.stats$ = combineLatest(
+			this.unsortedStats$,
+			this.store.listen$(([main, nav, prefs]) => prefs.mercenariesPersonalHeroesSortCriteria),
+		).pipe(
+			map(([stats, [sortCriteria]]) => this.sortPersonalHeroStats(stats, sortCriteria)),
+			tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
+			tap((info) => cdLog('emitting sorted stats in ', this.constructor.name, info?.length)),
+		);
 	}
 
-	trackByFn(index: number, item: MercenaryInfo) {
-		return item.id;
+	trackByFn(index: number, item: PersonalHeroStat) {
+		return item.mercenaryId;
+	}
+
+	private sortPersonalHeroStats(
+		stats: readonly PersonalHeroStat[],
+		sortCriteria: readonly MercenariesPersonalHeroesSortCriteria[],
+	): readonly PersonalHeroStat[] {
+		let currentSorted = stats;
+		// Most important criteria is first in the list, to applied last
+		const reversedCriteria = [...sortCriteria].reverse();
+		for (const criteria of reversedCriteria) {
+			currentSorted = [...currentSorted].sort(this.applySortCriteria(criteria));
+		}
+		return currentSorted;
+	}
+
+	private applySortCriteria(
+		criteria: MercenariesPersonalHeroesSortCriteria,
+	): (a: PersonalHeroStat, b: PersonalHeroStat) => number {
+		switch (criteria.criteria) {
+			case 'level':
+				return criteria.direction === 'desc'
+					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalXp > b.totalXp ? -1 : 1)
+					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalXp < b.totalXp ? -1 : 1);
+			case 'role':
+				return criteria.direction === 'desc'
+					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.role > b.role ? -1 : 1)
+					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.role < b.role ? -1 : 1);
+			case 'name':
+				return criteria.direction === 'desc'
+					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.name > b.name ? -1 : 1)
+					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.name < b.name ? -1 : 1);
+			case 'xp-in-level':
+				return criteria.direction === 'desc'
+					? (a: PersonalHeroStat, b: PersonalHeroStat) => (this.progressBar(a) > this.progressBar(b) ? -1 : 1)
+					: (a: PersonalHeroStat, b: PersonalHeroStat) =>
+							this.progressBar(a) < this.progressBar(b) ? -1 : 1;
+			case 'coins-left':
+				return criteria.direction === 'desc'
+					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalCoinsLeft > b.totalCoinsLeft ? -1 : 1)
+					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.totalCoinsLeft < b.totalCoinsLeft ? -1 : 1);
+			case 'coins-needed-to-max':
+				return criteria.direction === 'desc'
+					? (a: PersonalHeroStat, b: PersonalHeroStat) =>
+							a.totalCoinsForFullUpgrade > b.totalCoinsForFullUpgrade ? -1 : 1
+					: (a: PersonalHeroStat, b: PersonalHeroStat) =>
+							a.totalCoinsForFullUpgrade < b.totalCoinsForFullUpgrade ? -1 : 1;
+			case 'task-progress':
+				return criteria.direction === 'desc'
+					? (a: PersonalHeroStat, b: PersonalHeroStat) => (a.currentTask > b.currentTask ? -1 : 1)
+					: (a: PersonalHeroStat, b: PersonalHeroStat) => (a.currentTask < b.currentTask ? -1 : 1);
+		}
+	}
+
+	private progressBar(a: PersonalHeroStat): number {
+		return !!a.xpNeededForLevel ? a.xpInCurrentLevel / a.xpNeededForLevel : -1;
+	}
+}
+
+@Component({
+	selector: 'sortable-label',
+	styleUrls: [
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/mercenaries/desktop/sortable-label.component.scss`,
+	],
+	template: `
+		<div
+			class="sortable-label"
+			[ngClass]="{
+				'sortable': _isSortable,
+				'active-asc': _sort?.criteria === _criteria && _sort?.direction === 'asc',
+				'active-desc': _sort?.criteria === _criteria && _sort?.direction === 'desc'
+			}"
+			(click)="startSort()"
+		>
+			<div class="label">
+				<span>{{ _name }}</span>
+				<svg class="caret svg-icon-fill">
+					<use xlink:href="assets/svg/sprite.svg#arrow" />
+				</svg>
+			</div>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SortableLabelComponent {
+	@Input() set name(value: string) {
+		this._name = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set criteria(value: MercenariesPersonalHeroesSortCriteriaType) {
+		this._criteria = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set sort(value: MercenariesPersonalHeroesSortCriteria) {
+		this._sort = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	@Input() set isSortable(value: boolean) {
+		this._isSortable = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	_name: string;
+	_criteria: MercenariesPersonalHeroesSortCriteriaType;
+	_isSortable = true;
+	_sort: MercenariesPersonalHeroesSortCriteria;
+
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {}
+
+	startSort() {
+		if (!this._isSortable) {
+			return;
+		}
+		this.store.send(new MercenariesPersonalHeroesSortEvent(this._criteria));
 	}
 }
 

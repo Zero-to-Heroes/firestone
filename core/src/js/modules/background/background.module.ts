@@ -238,7 +238,10 @@ import { MercenariesHeroDetailsComponent } from '../../components/mercenaries/de
 import { MercenariesHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stat.component';
 import { MercenariesHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-hero-stats.component';
 import { MercenariesPersonalHeroStatComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stat.component';
-import { MercenariesPersonalHeroStatsComponent } from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
+import {
+	MercenariesPersonalHeroStatsComponent,
+	SortableLabelComponent,
+} from '../../components/mercenaries/desktop/mercenaries-personal-hero-stats.component';
 import { MercenariesHeroSearchComponent } from '../../components/mercenaries/desktop/secondary/mercenaries-hero-search.component';
 import { MercenariesHighlightDirective } from '../../components/mercenaries/overlay/teams/mercenaries-highlight.directive';
 import { MercenariesOpponentTeamComponent } from '../../components/mercenaries/overlay/teams/mercenaries-opponent-team.component';
@@ -698,6 +701,7 @@ const components = [
 		MercenariesEmptyStateComponent,
 		MercenariesTeamAbilityComponent,
 
+		SortableLabelComponent,
 		MercenariesFiltersComponent,
 		MercenariesModeFilterDropdownComponent,
 		MercenariesRoleFilterDropdownComponent,

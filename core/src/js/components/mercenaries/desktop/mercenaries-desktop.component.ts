@@ -111,7 +111,7 @@ export class MercenariesDesktopComponent implements AfterViewInit {
 	getCatName(categoryId: MercenariesCategoryId) {
 		switch (categoryId) {
 			case 'mercenaries-personal-hero-stats':
-				return 'Your Heroes';
+				return 'Progression';
 			case 'mercenaries-hero-stats':
 				return 'Stats';
 			case 'mercenaries-compositions-stats':

@@ -25,6 +25,7 @@ import { MercenariesPveDifficultyFilterType } from './mercenaries/mercenaries-pv
 import { MercenariesPvpMmrFilterType } from './mercenaries/mercenaries-pvp-mmr-filter.type';
 import { MercenariesRoleFilterType } from './mercenaries/mercenaries-role-filter.type';
 import { MercenariesStarterFilterType } from './mercenaries/mercenaries-starter-filter.type';
+import { MercenariesPersonalHeroesSortCriteria } from './mercenaries/personal-heroes-sort-criteria.type';
 import { Ftue } from './preferences/ftue';
 
 export const FORCE_LOCAL_PROP = 'forceLocalProp';
@@ -325,6 +326,13 @@ export class Preferences {
 	readonly mercenariesActiveHeroLevelFilter: MercenariesHeroLevelFilterType = 0;
 	readonly mercenariesShowColorChartButton: boolean = true;
 	readonly mercenariesHighlightSynergies: boolean = true;
+	// Most important criteria is first in the list
+	readonly mercenariesPersonalHeroesSortCriteria: readonly MercenariesPersonalHeroesSortCriteria[] = [
+		{
+			criteria: 'name',
+			direction: 'asc',
+		},
+	];
 
 	// Not the best place to store it, but the preferences are for now stored on the
 	// server and backed up when another device is used.

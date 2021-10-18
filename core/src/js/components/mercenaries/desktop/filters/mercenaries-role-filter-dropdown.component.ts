@@ -67,9 +67,8 @@ export class MercenariesRoleFilterDropdownComponent {
 				map(([filter, selectedCategoryId]) => ({
 					filter: filter,
 					placeholder: this.options.find((option) => option.value === filter)?.label,
-					visible:
-						selectedCategoryId === 'mercenaries-hero-stats' ||
-						selectedCategoryId === 'mercenaries-personal-hero-stats',
+					visible: selectedCategoryId === 'mercenaries-hero-stats',
+					// || selectedCategoryId === 'mercenaries-personal-hero-stats',
 				})),
 				// FIXME
 				tap((filter) => setTimeout(() => this.cdr?.detectChanges(), 0)),
