@@ -68,6 +68,9 @@ export class MercenariesMemoryUpdateService {
 	}
 
 	private async saveLocalMercenariesCollectionInfo(newMercenariesInfo: MemoryMercenariesCollectionInfo) {
+		if (!newMercenariesInfo?.Mercenaries?.length) {
+			return;
+		}
 		localStorage.setItem('mercenariesMemoryCollectionInfo', JSON.stringify(newMercenariesInfo));
 		console.debug(
 			'saved mercenariesMemoryCollectionInfo in localStorage',
