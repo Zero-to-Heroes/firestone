@@ -1,15 +1,6 @@
-import {
-	AfterViewInit,
-	ChangeDetectorRef,
-	Directive,
-	ElementRef,
-	HostListener,
-	Input,
-	OnDestroy,
-	Renderer2,
-} from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, HostListener, Input, OnDestroy, Renderer2 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import {
@@ -35,7 +26,6 @@ export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
 		private readonly store: AppUiStoreService,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly cdr: ChangeDetectorRef,
 		private readonly el: ElementRef,
 		private readonly renderer: Renderer2,
 	) {
@@ -44,14 +34,11 @@ export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
 		this.subscription$$ = this.store
 			.listenMercenariesHighlights$(([selector, prefs]) => [selector, prefs] as [HighlightSelector, Preferences])
 			.pipe(
-				tap((info) => console.debug('tap 1', info)),
 				filter(([[selector, prefs]]) => !!selector && !!prefs),
-				tap((info) => console.debug('tap 2', info)),
 				map(
 					([[selector, prefs]]) =>
 						prefs.mercenariesHighlightSynergies && selector(this.allCards.getCard(this.cardId)),
 				),
-				tap((info) => console.debug('tap 3', info)),
 				distinctUntilChanged(),
 			)
 			.subscribe((highlighted) => this.highlight(highlighted));
@@ -65,7 +52,6 @@ export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('window:beforeunload')
 	ngOnDestroy(): void {
-		console.log('[ads] removing event listeners');
 		this.subscription$$?.unsubscribe();
 	}
 

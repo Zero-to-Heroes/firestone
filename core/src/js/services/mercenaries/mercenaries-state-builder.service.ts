@@ -8,7 +8,7 @@ import { MainWindowStoreEvent } from '../mainwindow/store/events/main-window-sto
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
-const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=5';
+const MERCENARIES_DATA = 'https://static.zerotoheroes.com/hearthstone/data/mercenaries-data.json?v=6';
 const MERCENARIES_GLOBAL_STATS = 'https://static.zerotoheroes.com/api/mercenaries-global-stats.gz.json?v=7';
 
 @Injectable()

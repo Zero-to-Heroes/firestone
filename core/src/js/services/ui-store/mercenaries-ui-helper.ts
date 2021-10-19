@@ -1,5 +1,7 @@
-import { ReferenceCard } from '@firestone-hs/reference-data';
+import { ReferenceCard, TaskStatus } from '@firestone-hs/reference-data';
+import { Task } from '../../components/mercenaries/overlay/teams/mercenaries-team-root..component';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
+import { MemoryVisitor } from '../../models/memory/memory-mercenaries-collection-info';
 import { MercenariesHeroLevelFilterType } from '../../models/mercenaries/mercenaries-hero-level-filter.type';
 import { MercenariesModeFilterType } from '../../models/mercenaries/mercenaries-mode-filter.type';
 import { MercenariesPveDifficultyFilterType } from '../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
@@ -12,6 +14,7 @@ import {
 	MercenariesHeroStat,
 	MercenariesReferenceData,
 } from '../mercenaries/mercenaries-state-builder.service';
+import { getHeroRole } from '../mercenaries/mercenaries-utils';
 
 export const filterMercenariesHeroStats = (
 	heroStats: readonly MercenariesHeroStat[],
@@ -111,6 +114,37 @@ export const filterMercenariesRuns = (
 	heroLevelFilter: MercenariesHeroLevelFilterType,
 ): readonly GameStat[] => {
 	return games;
+};
+
+export const buildMercenariesTasksList = (
+	referenceData: MercenariesReferenceData,
+	visitors: readonly MemoryVisitor[],
+	allCards: CardsFacadeService,
+): readonly Task[] => {
+	return visitors
+		.filter((visitor) => visitor.Status == TaskStatus.NEW || visitor.Status === TaskStatus.ACTIVE)
+		.map((visitor) => {
+			const taskChain = referenceData.taskChains.find((chain) => chain.mercenaryVisitorId === visitor.VisitorId);
+			// This is the case for tasks that are not linked to mercenaries, like Toki's daily bounties
+			if (!taskChain) {
+				return null;
+			}
+			const task = [...taskChain.tasks].sort((a, b) => a.id - b.id)[visitor.TaskChainProgress];
+			const refMerc = referenceData.mercenaries.find((merc) => merc.id === taskChain.mercenaryId);
+			const mercenaryCard = allCards.getCardFromDbfId(refMerc.cardDbfId);
+			const mercenaryCardId = mercenaryCard.id;
+			return {
+				mercenaryCardId: mercenaryCardId,
+				title: task.title,
+				description: task.description,
+				progress: visitor.TaskProgress,
+				portraitUrl: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${mercenaryCardId}.jpg`,
+				frameUrl: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_hero_frame_${getHeroRole(
+					mercenaryCard.mercenaryRole,
+				)}.png?v=5`,
+			} as Task;
+		})
+		.filter((task) => task);
 };
 
 const applyStarterFilter = (stat: MercenariesHeroStat, starterFilter: MercenariesStarterFilterType): boolean => {

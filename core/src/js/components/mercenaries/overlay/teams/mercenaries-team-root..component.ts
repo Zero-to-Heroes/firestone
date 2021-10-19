@@ -8,11 +8,12 @@ import {
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
+import { isMercenariesPvP } from '../../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../../services/overwolf.service';
 import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
@@ -38,17 +39,61 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 						></mercenaries-team-control-bar>
 						<mercenaries-team-list [team]="_team" [tooltipPosition]="tooltipPosition">
 						</mercenaries-team-list>
-						<div
-							class="show-roles-matchup-button"
-							[cardTooltip]="'pokemon_diagram'"
-							[cardTooltipPosition]="tooltipPosition"
-							*ngIf="showColorChart$ | async"
-						>
-							<div class="background-second-part"></div>
-							<div class="background-main-part"></div>
-							<div class="content">
-								<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
-								Roles chart
+						<div class="footer">
+							<div
+								class="mouseover-button show-tasks"
+								*ngIf="showTasks$ | async"
+								(mouseenter)="showTasks()"
+								(mouseleave)="hideTasks()"
+							>
+								<div class="background-main-part"></div>
+								<div class="background-second-part"></div>
+								<div class="content">
+									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
+									Tasks
+								</div>
+								<div
+									class="task-list {{ tooltipPosition }}"
+									[ngClass]="{ 'visible': showTaskList$ | async }"
+								>
+									<div class="task" *ngFor="let task of _tasks">
+										<div
+											class="portrait"
+											*ngIf="task.mercenaryCardId"
+											[cardTooltip]="task.mercenaryCardId"
+										>
+											<img class="art" [src]="task.portraitUrl" />
+											<img class="frame" [src]="task.frameUrl" />
+										</div>
+										<div class="task-content">
+											<div class="header">{{ task.title }}</div>
+											<div class="description">{{ task.description }}</div>
+											<div class="progress">
+												<div
+													class="label"
+													helpTooltip="Quest progress at the beginning of the encounter"
+												>
+													Progress:
+												</div>
+												<div class="value">{{ task.progress }}</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div
+								class="mouseover-button show-roles-matchup-button"
+								[cardTooltip]="'pokemon_diagram'"
+								[cardTooltipPosition]="tooltipPosition"
+								*ngIf="showColorChart$ | async"
+							>
+								<div class="background-second-part"></div>
+								<div class="background-main-part"></div>
+								<div class="content">
+									<div class="icon" inlineSVG="assets/svg/created_by.svg"></div>
+									Roles chart
+								</div>
 							</div>
 						</div>
 					</div>
@@ -65,6 +110,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
 	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number) => number;
 	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number) => number;
+	@Input() showTasksExtractor: (prefs: Preferences) => boolean;
 
 	@Input() set team(value: MercenariesBattleTeam) {
 		// console.debug('set team in root', value);
@@ -74,14 +120,27 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	@Input() set tasks(value: readonly Task[]) {
+		// console.debug('set team in root', value);
+		this._tasks = value;
+		if (!(this.cdr as ViewRef)?.destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	showColorChart$: Observable<boolean>;
+	showTasks$: Observable<boolean>;
+	showTaskList$: Observable<boolean>;
+
 	_team: MercenariesBattleTeam;
+	_tasks: readonly Task[];
 
 	windowId: string;
 	overlayWidthInPx = 225;
 	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private gameInfoUpdatedListener: (message: any) => void;
+	private showTaskList$$ = new BehaviorSubject<boolean>(false);
 
 	constructor(
 		private readonly ow: OverwolfService,
@@ -97,6 +156,22 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
 				tap((filter) => cdLog('emitting showColorChart in ', this.constructor.name, filter)),
 			);
+		this.showTasks$ = combineLatest(
+			this.store.listenMercenaries$(([battleState, prefs]) => battleState?.gameMode),
+			this.store.listenPrefs$((prefs) => this.showTasksExtractor(prefs)),
+		).pipe(
+			tap((info) => console.debug('info', info)),
+			// Because when out of combat
+			map(([[gameMode], [pref]]) => pref && !isMercenariesPvP(gameMode)),
+			// FIXME
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting showTasks in ', this.constructor.name, filter)),
+		);
+		this.showTaskList$ = this.showTaskList$$.asObservable().pipe(
+			map((info) => info),
+			tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+			tap((filter) => cdLog('emitting showTaskList in ', this.constructor.name, filter)),
+		);
 	}
 
 	async ngAfterViewInit() {
@@ -113,6 +188,14 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 
 	ngOnDestroy() {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
+	}
+
+	showTasks() {
+		this.showTaskList$$.next(true);
+	}
+
+	hideTasks() {
+		this.showTaskList$$.next(false);
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -135,7 +218,7 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async changeWindowSize(): Promise<void> {
-		const width = 252 * 3; // Max scale
+		const width = 252 * 3.5; // Max scale + room for the tasks list
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
@@ -201,4 +284,13 @@ export class MercenariesTeamRootComponent implements AfterViewInit, OnDestroy {
 			this.cdr.detectChanges();
 		}
 	}
+}
+
+export interface Task {
+	readonly mercenaryCardId: string;
+	readonly title: string;
+	readonly description: string;
+	readonly progress: number;
+	readonly portraitUrl?: string;
+	readonly frameUrl?: string;
 }

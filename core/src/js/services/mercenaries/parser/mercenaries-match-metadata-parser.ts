@@ -19,6 +19,7 @@ export class MercenariesMatchMetadataParser implements MercenariesParser {
 		const mercenariesFromMemory = await this.memoryService.getMercenariesInfo();
 		return MercenariesBattleState.create({
 			spectating: event.additionalData.spectating,
+			gameMode: event.additionalData.metaData.GameType,
 			mercenariesFromMemory: mercenariesFromMemory,
 		} as MercenariesBattleState);
 	}

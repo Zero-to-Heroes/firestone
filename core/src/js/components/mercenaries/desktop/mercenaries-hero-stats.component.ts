@@ -68,7 +68,6 @@ export class MercenariesHeroStatsComponent implements AfterViewInit {
 				([main, nav, prefs]) => prefs.mercenariesActiveHeroLevelFilter,
 			)
 			.pipe(
-				tap((info) => console.debug('info', info)),
 				map(
 					([
 						globalStats,

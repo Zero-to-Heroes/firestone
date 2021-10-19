@@ -14,16 +14,20 @@ import { MercenariesReferenceData } from '../../../../services/mercenaries/merce
 import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
 import { PreferencesService } from '../../../../services/preferences.service';
 import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { buildMercenariesTasksList } from '../../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual } from '../../../../services/utils';
+import { Task } from './mercenaries-team-root..component';
 
 @Component({
 	selector: 'mercenaries-out-of-combat-player-team',
 	styleUrls: [],
 	template: ` <mercenaries-team-root
 		[team]="team$ | async"
+		[tasks]="tasks$ | async"
 		[side]="'out-of-combat-player'"
 		[trackerPositionUpdater]="trackerPositionUpdater"
 		[trackerPositionExtractor]="trackerPositionExtractor"
+		[showTasksExtractor]="showTasksExtractor"
 		[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
 		[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
 	></mercenaries-team-root>`,
@@ -32,9 +36,12 @@ import { arraysEqual } from '../../../../services/utils';
 export class MercenariesOutOfCombatPlayerTeamComponent {
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamPlayerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesPlayerTeamOverlayPosition;
+	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
 	defaultTrackerPositionLeftProvider = (gameWidth: number, windowWidth: number) => gameWidth - windowWidth / 2 - 180;
 	defaultTrackerPositionTopProvider = (gameHeight: number, windowHeight: number) => 10;
+
 	team$: Observable<MercenariesBattleTeam>;
+	tasks$: Observable<readonly Task[]>;
 
 	constructor(
 		private readonly prefs: PreferencesService,
@@ -42,6 +49,17 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
+		this.tasks$ = this.store
+			.listen$(
+				([main, nav, prefs]) => main.mercenaries.referenceData,
+				([main, nav, prefs]) => main.mercenaries.collectionInfo?.Visitors,
+			)
+			.pipe(
+				filter(([referenceData, visitors]) => !!visitors?.length),
+				map(([referenceData, visitors]) => buildMercenariesTasksList(referenceData, visitors, this.allCards)),
+				tap((filter) => setTimeout(() => this.cdr.detectChanges(), 0)),
+				tap((filter) => cdLog('emitting tasks in ', this.constructor.name, filter)),
+			);
 		this.team$ = combineLatest(
 			this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state),
 			this.store.listen$(([main, nav, prefs]) => main.mercenaries?.referenceData),

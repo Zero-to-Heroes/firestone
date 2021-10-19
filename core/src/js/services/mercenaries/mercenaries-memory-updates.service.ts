@@ -36,12 +36,12 @@ export class MercenariesMemoryUpdateService {
 		console.debug('[merc-memory] new merc info', newMercenariesInfo);
 		const prefs = await this.prefs.getPreferences();
 		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
-		console.debug('[merc-memory] savedVisitorsInfo', savedVisitorsInfo, newMercenariesInfo.Visitors);
+		console.log('no-format', '[merc-memory] savedVisitorsInfo', savedVisitorsInfo, newMercenariesInfo.Visitors);
 		const newVisitorsInformation: readonly MemoryVisitor[] = this.mergeVisitors(
 			newMercenariesInfo.Visitors,
 			savedVisitorsInfo,
 		);
-		console.debug('[merc-memory] newVisitorsInformation', newVisitorsInformation);
+		console.log('no-format', '[merc-memory] newVisitorsInformation', newVisitorsInformation);
 		return {
 			...newMercenariesInfo,
 			Visitors: newVisitorsInformation,
@@ -93,7 +93,7 @@ export class MercenariesMemoryUpdateService {
 		for (const visitorInfo of savedVisitorsInfo) {
 			if (!result.map((v) => v.TaskId).includes(visitorInfo.TaskId)) {
 				// If it's not in memory anymore, this means that the task has been either abandoned or claimed
-				if (visitorInfo.Status === TaskStatus.COMPLETE) {
+				if (visitorInfo.Status === TaskStatus.COMPLETE || visitorInfo.Status === TaskStatus.CLAIMED) {
 					result.push({
 						...visitorInfo,
 						Status: TaskStatus.CLAIMED,

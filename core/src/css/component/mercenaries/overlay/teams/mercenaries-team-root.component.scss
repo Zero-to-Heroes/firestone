@@ -85,7 +85,11 @@
 	}
 }
 
-.show-roles-matchup-button {
+.footer {
+	display: flex;
+}
+
+.mouseover-button {
 	color: var(--color-2);
 	font-family: Open Sans;
 	font-size: 13px;
@@ -96,7 +100,6 @@
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	overflow: hidden;
 
 	.background-main-part,
 	.background-second-part {
@@ -117,6 +120,7 @@
 		opacity: 0;
 		transition: all 0.8s;
 		right: 0;
+		pointer-events: none;
 	}
 
 	// Click effect
@@ -155,7 +159,113 @@
 	}
 
 	&:hover {
-		color: var(--color-1);
-		--icon-color: var(--color-1);
+		.content {
+			color: var(--color-1);
+			--icon-color: var(--color-1);
+		}
+	}
+}
+
+.show-roles-matchup-button {
+}
+
+.show-tasks {
+	width: 85px;
+	margin-left: 0;
+	margin-right: auto;
+
+	.content {
+		justify-content: flex-start;
+		padding-left: 10px;
+		padding-right: 0;
+	}
+	.background-second-part {
+		transform: scale(-1, 1);
+	}
+}
+
+.task-list {
+	position: absolute;
+	right: 85px;
+	bottom: 0;
+	width: 265px;
+	background: var(--color-7);
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	// Because the hero portraits do this already
+	padding-left: 0;
+	z-index: 1;
+	display: none;
+
+	&.right {
+		right: auto;
+		left: 85px;
+	}
+
+	&.visible {
+		display: flex;
+	}
+
+	.task {
+		display: flex;
+		position: relative;
+
+		&:not(:last-child) {
+			margin-bottom: 30px;
+		}
+
+		.portrait {
+			flex-grow: 0;
+			flex-shrink: 0;
+			display: flex;
+			flex-direction: column;
+			width: 90px;
+			position: relative;
+			top: 0;
+			left: 0;
+			z-index: 9;
+			margin-top: 0;
+			margin-bottom: 0;
+
+			.art {
+				position: absolute;
+				top: 11%;
+				left: 13%;
+				width: 76%;
+				clip-path: ellipse(40% 44% at 50% 50%);
+			}
+
+			.frame {
+				width: 100%;
+				z-index: 1;
+			}
+		}
+
+		.task-content {
+			display: flex;
+			flex-direction: column;
+
+			.header {
+				color: var(--default-title-color);
+				margin-bottom: 5px;
+			}
+
+			.description {
+				margin-bottom: 5px;
+			}
+
+			.progress {
+				display: flex;
+
+				.label {
+					margin-right: 10px;
+				}
+
+				.value {
+					color: var(--color-1);
+				}
+			}
+		}
 	}
 }

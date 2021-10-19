@@ -110,7 +110,7 @@ export class AppUiStoreService {
 		...selectors: S
 	): Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }> {
 		return combineLatest(this.mercenariesStore.asObservable(), this.prefs.asObservable()).pipe(
-			filter(([state, prefs]) => !!state && !!prefs?.preferences),
+			filter(([state, prefs]) => !!prefs?.preferences),
 			map(([state, prefs]) => selectors.map((selector) => selector([state, prefs.preferences]))),
 			distinctUntilChanged((a, b) => arraysEqual(a, b)),
 		) as Observable<{ [K in keyof S]: S[K] extends MercenariesStateSelector<infer T> ? T : never }>;
