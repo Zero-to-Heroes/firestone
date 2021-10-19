@@ -8,11 +8,14 @@ export class MercenariesBattleState {
 	// readonly reconnectOngoing: boolean;
 	readonly spectating: boolean;
 	readonly gameMode: GameType;
+	readonly currentTurn: number = 0;
+
+	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
+	readonly opponentTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
+
 	readonly mercenariesFromMemory: MemoryMercenariesInfo;
 	readonly playerClosedManually: boolean;
 	readonly opponentClosedManually: boolean;
-	readonly playerTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
-	readonly opponentTeam: MercenariesBattleTeam = new MercenariesBattleTeam();
 
 	public static create(base: MercenariesBattleState): MercenariesBattleState {
 		return Object.assign(new MercenariesBattleState(), base);

@@ -49,6 +49,8 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 		const refMercEquipment = this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const team = isPlayer ? battleState.playerTeam : battleState.opponentTeam;
+		const turnsElapsed = Math.max(0, battleState.currentTurn - 1);
+		// console.debug('turnsElapsed', turnsElapsed, battleState.currentTurn, battleState);
 		const newTeam = team.updateMercenary(
 			entityId,
 			BattleMercenary.create({
@@ -67,7 +69,7 @@ export class MercenariesHeroUpdatedParser implements MercenariesParser {
 						cardId: refCard.id,
 						level: refTier.tier,
 						cooldown: refCard.mercenaryAbilityCooldown ?? 0,
-						cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
+						cooldownLeft: Math.max(0, (refCard.mercenaryAbilityCooldown ?? 0) - turnsElapsed),
 						speed: refCard.cost,
 						totalUsed: null,
 						isTreasure: false,

@@ -65,6 +65,8 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			? battleState.mercenariesFromMemory.Map?.PlayerTeam?.find((merc) => merc.Id === refMerc?.id)
 			: null;
 		const abilityCardIdsFromMemory = (mercFromMemory?.Abilities ?? []).map((ability) => ability.CardId);
+		const turnsElapsed = Math.max(0, battleState.currentTurn - 1);
+		// console.debug('turnsElapsed', turnsElapsed, battleState.currentTurn, battleState);
 		const mercenary: BattleMercenary = BattleMercenary.create({
 			entityId: entityId,
 			cardId: refMercCard?.id,
@@ -85,7 +87,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 						cardId: refCard.id,
 						level: refTier.tier,
 						cooldown: refCard.mercenaryAbilityCooldown ?? 0,
-						cooldownLeft: refCard.mercenaryAbilityCooldown ?? 0,
+						cooldownLeft: Math.max(0, (refCard.mercenaryAbilityCooldown ?? 0) - turnsElapsed),
 						speed: refCard.cost,
 						totalUsed: null,
 						isTreasure: false,

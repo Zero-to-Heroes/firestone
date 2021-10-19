@@ -26,6 +26,7 @@ import { MercenariesHeroUpdatedParser } from './parser/mercenaries-hero-updated-
 import { MercenariesMatchMetadataParser } from './parser/mercenaries-match-metadata-parser';
 import { MercenariesTeamOpponentManualCloseParser } from './parser/mercenaries-team-opponent-manual-close-parser';
 import { MercenariesTeamPlayerManualCloseParser } from './parser/mercenaries-team-player-manual-close-parser';
+import { MercenariesTurnStartParser } from './parser/mercenaries-turn-start-parser';
 import { MercenariesZoneChangedParser } from './parser/mercenaries-zone-changed-parser';
 import { MercenariesZonePositionChangedParser } from './parser/mercenaries-zone-position-changed-parser';
 import { MercenariesParser } from './parser/_mercenaries-parser';
@@ -137,6 +138,7 @@ export class MercenariesStoreService {
 	private registerParser() {
 		const parsers: readonly MercenariesParser[] = [
 			new MercenariesMatchMetadataParser(this.memoryService),
+			new MercenariesTurnStartParser(),
 			new MercenariesGameEndParser(),
 
 			new MercenariesHeroRevealedParser(this.allCards),
