@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 	template: `
 		<div class="progress-bar">
 			<span class="current" *ngIf="total > 0">{{ current }}/{{ total }}</span>
-			<span class="current" *ngIf="total == 0">Coming soon!</span>
+			<span class="current" *ngIf="total == 0">{{ emptyTotalLabel }}</span>
 			<div class="progress-bar-content">
 				<div class="progress" [style.width.%]="(100.0 * current) / total"></div>
 			</div>
@@ -19,4 +19,5 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@a
 export class ProgressBarComponent {
 	@Input() current: number;
 	@Input() total: number;
+	@Input() emptyTotalLabel = 'Coming soon!';
 }

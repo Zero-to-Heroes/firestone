@@ -26,7 +26,11 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 			<div class="name" [helpTooltip]="name">{{ name }}</div>
 
 			<div class="xp">
-				<progress-bar [current]="xpInCurrentLevel" [total]="xpNeededForLevel"></progress-bar>
+				<progress-bar
+					[current]="xpInCurrentLevel"
+					[total]="xpNeededForLevel"
+					[emptyTotalLabel]="'Max level!'"
+				></progress-bar>
 			</div>
 
 			<div class="coins left">
