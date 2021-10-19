@@ -118,6 +118,47 @@ export class MercenariesPersonalHeroStatsComponent {
 							currentStep != null
 								? [...taskChain.tasks].sort((a, b) => a.id - b.id)[currentStep].description
 								: null;
+						const lastLevel = [...referenceData.mercenaryLevels].pop();
+						const isMaxLevel = memMerc.Level === lastLevel.currentLevel;
+
+						const abilities = refMerc.abilities.map((info) => {
+							const abilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+							const memAbility = memMerc.Abilities.find(
+								(a) =>
+									normalizeMercenariesCardId(a.CardId) === normalizeMercenariesCardId(abilityCard.id),
+							);
+							const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
+							const refAbility = refMerc.abilities.find((a) => a.abilityId === info.abilityId);
+							const currentUnlockedTier = memAbility?.Tier ?? 0;
+							const coinsToCraft = refAbility.tiers
+								.filter((a) => a.tier > currentUnlockedTier)
+								.map((tier) => tier.coinCraftCost)
+								.reduce((a, b) => a + b, 0);
+							return {
+								cardId: memAbilityCard.id ?? abilityCard.id,
+								coinsToCraft: coinsToCraft,
+								owned: !!memAbility,
+								speed: memAbilityCard.cost ?? abilityCard.cost,
+								cooldown:
+									memAbilityCard.mercenaryAbilityCooldown ?? abilityCard.mercenaryAbilityCooldown,
+							};
+						});
+						const equipments = refMerc.equipments.map((info) => {
+							const equipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
+							const memEquip = memMerc.Equipments.find((e) => e.Id === info.equipmentId);
+							const refEquip = refMerc.equipments.find((a) => a.equipmentId === info.equipmentId);
+							const currentUnlockedTier = memEquip?.Tier ?? 0;
+							const coinsToCraft = refEquip.tiers
+								.filter((a) => a.tier > currentUnlockedTier)
+								.map((tier) => tier.coinCraftCost)
+								.reduce((a, b) => a + b, 0);
+							return {
+								cardId: equipmentCard.id,
+								coinsToCraft: coinsToCraft,
+								owned: !!memEquip?.Owned,
+								isEquipped: !!memEquip ? memEquip.Equipped : false,
+							};
+						});
 						return {
 							mercenaryId: refMerc.id,
 							owned: memMerc.Owned,
@@ -128,51 +169,26 @@ export class MercenariesPersonalHeroStatsComponent {
 							role: getHeroRole(mercenaryCard.mercenaryRole),
 							currentLevel: memMerc.Level,
 							totalXp: memMerc.Experience,
-							xpNeededForLevel:
-								memMerc.Level === 30
-									? null
-									: referenceData.mercenaryLevels.find(
-											(info) => info.currentLevel === memMerc.Level + 1,
-									  )?.xpToNext - memMerc.Experience,
-							xpInCurrentLevel:
-								memMerc.Level <= 1
-									? memMerc.Experience
-									: memMerc.Experience -
-									  referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level)
-											?.xpToNext,
-							abilities: refMerc.abilities.map((info) => {
-								const abilityCard = this.allCards.getCardFromDbfId(info.cardDbfId);
-								const memAbility = memMerc.Abilities.find(
-									(a) =>
-										normalizeMercenariesCardId(a.CardId) ===
-										normalizeMercenariesCardId(abilityCard.id),
-								);
-								const memAbilityCard = this.allCards.getCard(memAbility?.CardId);
-								return {
-									cardId: memAbilityCard.id ?? abilityCard.id,
-									owned: !!memAbility,
-									speed: memAbilityCard.cost ?? abilityCard.cost,
-									cooldown:
-										memAbilityCard.mercenaryAbilityCooldown ?? abilityCard.mercenaryAbilityCooldown,
-								};
-							}),
-							equipments: refMerc.equipments.map((info) => {
-								const equipmentCard = this.allCards.getCardFromDbfId(info.cardDbfId);
-								const memEquip = memMerc.Equipments.find((e) => e.Id === info.equipmentId);
-								return {
-									cardId: equipmentCard.id,
-									owned: !!memEquip?.Owned,
-									isEquipped: !!memEquip ? memEquip.Equipped : false,
-								};
-							}),
+							isMaxLevel: isMaxLevel,
+							xpNeededForLevel: isMaxLevel
+								? 0
+								: memMerc.Level === 30
+								? null
+								: referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level + 1)
+										?.xpToNext - memMerc.Experience,
+							xpInCurrentLevel: isMaxLevel
+								? lastLevel.xpToNext
+								: memMerc.Level <= 1
+								? memMerc.Experience
+								: memMerc.Experience -
+								  referenceData.mercenaryLevels.find((info) => info.currentLevel === memMerc.Level)
+										?.xpToNext,
+							abilities: abilities,
+							equipments: equipments,
 							minCostOfNextUpgrade: null,
 							totalCoinsForFullUpgrade:
-								sumOnArray(refMerc.abilities, (ability) =>
-									sumOnArray(ability.tiers, (tier) => tier.coinCraftCost),
-								) +
-								sumOnArray(refMerc.equipments, (equipment) =>
-									sumOnArray(equipment.tiers, (tier) => tier.coinCraftCost),
-								),
+								sumOnArray(abilities, (a) => a.coinsToCraft) +
+								sumOnArray(equipments, (e) => e.coinsToCraft),
 							totalCoinsLeft: memMerc.CurrencyAmount,
 							totalTasks: taskChain.tasks.length,
 							currentTask: currentStep != null ? currentStep + 1 : null,
@@ -332,6 +348,7 @@ export interface PersonalHeroStat {
 	readonly rarity: RarityTYpe;
 	readonly role: string;
 	readonly currentLevel: number;
+	readonly isMaxLevel: boolean;
 	readonly totalXp: number;
 	readonly xpNeededForLevel: number;
 	readonly xpInCurrentLevel: number;

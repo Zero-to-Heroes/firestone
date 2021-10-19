@@ -29,7 +29,8 @@ import { PersonalHeroStat } from './mercenaries-personal-hero-stats.component';
 				<progress-bar
 					[current]="xpInCurrentLevel"
 					[total]="xpNeededForLevel"
-					[emptyTotalLabel]="'Max level!'"
+					[fullTotalLabel]="'Max level!'"
+					[fullTotalTooltip]="fullTotalTooltip"
 				></progress-bar>
 			</div>
 
@@ -112,6 +113,7 @@ export class MercenariesPersonalHeroStatComponent {
 
 		this.xpInCurrentLevel = value.xpInCurrentLevel;
 		this.xpNeededForLevel = value.xpNeededForLevel + value.xpInCurrentLevel;
+		this.fullTotalTooltip = `${value.totalXp.toLocaleString('en-US')} XP`;
 
 		this.totalCoinsLeft = value.totalCoinsLeft;
 		this.totalCoinsForFullUpgrade = value.totalCoinsForFullUpgrade;
@@ -157,6 +159,7 @@ export class MercenariesPersonalHeroStatComponent {
 
 	xpInCurrentLevel: number;
 	xpNeededForLevel: number;
+	fullTotalTooltip: string;
 
 	totalCoinsLeft: number;
 	totalCoinsForFullUpgrade: number;
