@@ -36,12 +36,12 @@ export class MercenariesMemoryUpdateService {
 		console.debug('[merc-memory] new merc info', newMercenariesInfo);
 		const prefs = await this.prefs.getPreferences();
 		const savedVisitorsInfo: readonly MemoryVisitor[] = prefs.mercenariesVisitorsProgress ?? [];
-		console.log('no-format', '[merc-memory] savedVisitorsInfo', savedVisitorsInfo, newMercenariesInfo.Visitors);
+		console.debug('[merc-memory] savedVisitorsInfo', savedVisitorsInfo, newMercenariesInfo.Visitors);
 		const newVisitorsInformation: readonly MemoryVisitor[] = this.mergeVisitors(
 			newMercenariesInfo.Visitors,
 			savedVisitorsInfo,
 		);
-		console.log('no-format', '[merc-memory] newVisitorsInformation', newVisitorsInformation);
+		console.debug('[merc-memory] newVisitorsInformation', newVisitorsInformation);
 		return {
 			...newMercenariesInfo,
 			Visitors: newVisitorsInformation,
