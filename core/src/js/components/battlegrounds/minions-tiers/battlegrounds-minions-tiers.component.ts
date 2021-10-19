@@ -17,7 +17,7 @@ import { getAllCardsInGame } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -103,7 +103,7 @@ export class BattlegroundsMinionsTiersOverlayComponent implements AfterViewInit,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.tiers$ = this.store
 			.listenBattlegrounds$(([main, prefs]) => main.currentGame.availableRaces)

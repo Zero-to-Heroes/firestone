@@ -8,7 +8,8 @@ import { DuelsRun } from '../../../models/duels/duels-run';
 import { DuelsStatTypeFilterType } from '../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import {
 	buildDuelsHeroPlayerStats,
 	filterDuelsHeroStats,
@@ -36,7 +37,7 @@ export class DuelsHeroStatsComponent {
 	stats$: Observable<readonly DuelsHeroPlayerStat[]>;
 
 	constructor(
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {

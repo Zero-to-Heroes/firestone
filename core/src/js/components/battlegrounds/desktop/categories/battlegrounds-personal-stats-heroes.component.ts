@@ -5,7 +5,8 @@ import { BgsHeroStat } from '../../../../models/battlegrounds/stats/bgs-hero-sta
 import { BgsPersonalStatsSelectHeroDetailsEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-personal-stats-select-hero-details-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { areDeepEqual } from '../../../../services/utils';
 
 @Component({
@@ -32,7 +33,7 @@ export class BattlegroundsPersonalStatsHeroesComponent implements AfterViewInit 
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.stats$ = this.store.bgHeroStats$().pipe(

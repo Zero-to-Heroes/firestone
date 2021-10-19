@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '@services/ui-store/app-ui-store.service';
+import { cdLog } from '@services/ui-store/app-ui-store.service';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
@@ -13,6 +13,7 @@ import { StatGameFormatType } from '../../../models/mainwindow/stats/stat-game-f
 import { PatchInfo } from '../../../models/patches';
 import { DecksStateBuilderService } from '../../../services/decktracker/main/decks-state-builder.service';
 import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-utils';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'decktracker-rating-graph',
@@ -37,7 +38,7 @@ import { ladderIntRankToString, ladderRankToInt } from '../../../services/hs-uti
 export class DecktrackerRatingGraphComponent {
 	value$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

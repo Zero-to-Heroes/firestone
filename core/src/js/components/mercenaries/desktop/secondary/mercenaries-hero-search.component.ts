@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { MercenariesHeroSearchEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-search-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'mercenaries-hero-search',
@@ -35,7 +36,7 @@ export class MercenariesHeroSearchComponent implements AfterViewInit, OnDestroy 
 	private searchFormSub$$: Subscription;
 	private searchStringSub$$: Subscription;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationMercenaries.heroSearchString)
 			.pipe(tap((stat) => cdLog('emitting in ', this.constructor.name, stat)))

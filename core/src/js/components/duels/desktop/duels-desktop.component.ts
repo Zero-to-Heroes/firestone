@@ -6,7 +6,8 @@ import { DuelsCategoryType } from '../../../models/mainwindow/duels/duels-catego
 import { DuelsSelectCategoryEvent } from '../../../services/mainwindow/store/events/duels/duels-select-category-event';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
 
 @Component({
@@ -84,7 +85,7 @@ export class DuelsDesktopComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.duels.loading)
 			.pipe(

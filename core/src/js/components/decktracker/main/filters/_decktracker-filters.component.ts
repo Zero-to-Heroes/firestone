@@ -4,7 +4,8 @@ import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-win
 import { OverwolfService } from '@services/overwolf.service';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'decktracker-filters',
@@ -46,7 +47,7 @@ export class DecktrackerFiltersComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.showHiddenDecksLink$ = this.store
 			.listen$(
 				([main, nav, prefs]) => nav.navigationDecktracker.currentView,

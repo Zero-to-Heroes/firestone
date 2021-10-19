@@ -8,8 +8,6 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
-import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { BehaviorSubject, Subscriber, Subscription } from 'rxjs';
 import { GameState } from '../models/decktracker/game-state';
 import { CurrentAppType } from '../models/mainwindow/current-app.type';
@@ -169,9 +167,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly debug: DebugService,
 		private readonly owUtils: OwUtilsService,
 		private readonly hotkeyService: HotkeyService,
-		private readonly cards: CardsFacadeService,
 		private readonly preferencesService: PreferencesService,
-		private readonly store: AppUiStoreService,
 	) {}
 
 	async ngAfterViewInit() {

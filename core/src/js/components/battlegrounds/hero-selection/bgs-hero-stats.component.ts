@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
-import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, sumOnArray } from '../../../services/utils';
 import { SimpleBarChartData } from '../../common/chart/simple-bar-chart-data';
 
@@ -66,7 +66,7 @@ export class BgsHeroStatsComponent {
 		this.playerPlacementDistribution$.next(value.playerPlacementDistribution);
 	}
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
 		this.placementChartData$ = combineLatest(
 			this.placementDistribution$.asObservable(),
 			this.playerPlacementDistribution$.asObservable(),

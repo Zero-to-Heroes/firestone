@@ -12,7 +12,8 @@ import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 import { DuelsHeroSearchEvent } from '../../../../services/mainwindow/store/events/duels/duels-hero-search-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-hero-search',
@@ -44,7 +45,7 @@ export class DuelsHeroSearchComponent implements AfterViewInit, OnDestroy {
 	private searchStringSub$$: Subscription;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.searchStringSub$$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.heroSearchString)
 			.pipe(tap((stat) => cdLog('emitting in ', this.constructor.name, stat)))

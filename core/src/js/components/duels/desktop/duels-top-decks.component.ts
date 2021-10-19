@@ -7,7 +7,8 @@ import { DuelsDeckStat } from '../../../models/duels/duels-player-stats';
 import { DuelsTimeFilterType } from '../../../models/duels/duels-time-filter.type';
 import { DuelsTopDecksDustFilterType } from '../../../models/duels/duels-top-decks-dust-filter.type';
 import { PatchInfo } from '../../../models/patches';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { getDuelsMmrFilterNumber } from '../../../services/ui-store/duels-ui-helper';
 
 @Component({
@@ -38,7 +39,7 @@ export class DuelsTopDecksComponent implements OnDestroy {
 	private sub$$: Subscription;
 	private iterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.topDecks,

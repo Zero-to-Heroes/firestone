@@ -8,7 +8,8 @@ import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.typ
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
 import { formatClass } from '../../../services/hs-utils';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -86,7 +87,7 @@ import { arraysEqual, groupByFunction } from '../../../services/utils';
 export class ArenaClassesRecapComponent {
 	stats$: Observable<StatInfo>;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreService) {
+	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
 		this.stats$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

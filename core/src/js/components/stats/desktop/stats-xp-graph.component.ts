@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GameStat } from '@models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '@services/ui-store/app-ui-store.service';
+import { cdLog } from '@services/ui-store/app-ui-store.service';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '@services/utils';
 import { ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
@@ -14,6 +14,7 @@ import {
 	xpSeason2,
 	xpSeason3,
 } from '../../../services/stats/xp/xp-tables/xp-computation';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'stats-xp-graph',
@@ -35,7 +36,7 @@ import {
 export class StatsXpGraphComponent {
 	value$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

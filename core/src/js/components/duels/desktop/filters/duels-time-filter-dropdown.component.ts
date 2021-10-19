@@ -6,7 +6,7 @@ import { DuelsTimeFilterType } from '../../../../models/duels/duels-time-filter.
 import { DuelsTimeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-time-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 import { formatPatch } from '../../../../services/utils';
 
 @Component({
@@ -36,7 +36,7 @@ export class DuelsTimeFilterDropdownComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.filter$ = this.store

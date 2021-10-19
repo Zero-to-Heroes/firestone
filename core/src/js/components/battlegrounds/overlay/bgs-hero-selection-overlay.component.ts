@@ -17,7 +17,8 @@ import { VisualAchievementCategory } from '../../../models/visual-achievement-ca
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
 
 @Component({
@@ -53,7 +54,7 @@ export class BgsHeroSelectionOverlayComponent implements AfterViewInit, OnDestro
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly init_DebugService: DebugService,
 	) {
 		this.heroTooltipActive$ = this.store

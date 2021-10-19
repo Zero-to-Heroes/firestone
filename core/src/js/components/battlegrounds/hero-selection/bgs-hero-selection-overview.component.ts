@@ -8,7 +8,7 @@ import { VisualAchievement } from '../../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../../models/visual-achievement-category';
 import { AdService } from '../../../services/ad.service';
 import { getAchievementsForHero, normalizeHeroCardId } from '../../../services/battlegrounds/bgs-utils';
-import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -45,7 +45,7 @@ export class BgsHeroSelectionOverviewComponent {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ads: AdService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.tiers$ = this.store.bgHeroStats$().pipe(
 			filter((stats) => !!stats),

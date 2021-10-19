@@ -5,7 +5,8 @@ import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import {
 	buildDuelsHeroTreasurePlayerStats,
 	filterDuelsTreasureStats,
@@ -31,7 +32,7 @@ export class DuelsTreasureTierListComponent {
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.tiers$ = this.store

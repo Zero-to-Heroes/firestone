@@ -6,7 +6,7 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 import { PreferencesService } from '../../preferences.service';
-import { AppUiStoreService } from '../../ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../ui-store/app-ui-store-facade.service';
 import {
 	and,
 	beast,
@@ -45,7 +45,7 @@ export class CardsHighlightService {
 
 	private gameState: GameState;
 
-	constructor(private readonly prefs: PreferencesService, private readonly store: AppUiStoreService) {
+	constructor(private readonly prefs: PreferencesService, private readonly store: AppUiStoreFacadeService) {
 		this.store
 			.listenDeckState$((gameState) => gameState)
 			.pipe(

@@ -26,7 +26,8 @@ import { DecksStateBuilderService } from '../../../services/decktracker/main/dec
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
 
 @Component({
@@ -177,7 +178,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		private renderer: Renderer2,
 		private events: Events,
 		private init_DebugService: DebugService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.deck$ = this.store
 			.listenDeckState$((gameState) => gameState)

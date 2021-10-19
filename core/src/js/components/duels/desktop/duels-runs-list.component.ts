@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../models/duels/duels-run';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../services/utils';
 
@@ -57,7 +58,7 @@ export class DuelsRunsListComponent implements OnDestroy {
 	private displayedRuns: readonly DuelsRun[] = [];
 	private runsIterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(

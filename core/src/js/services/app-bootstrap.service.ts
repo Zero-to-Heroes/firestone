@@ -43,6 +43,8 @@ import { PreferencesService } from './preferences.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
 import { RewardMonitorService } from './rewards/rewards-monitor';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
+import { AppUiStoreService } from './ui-store/app-ui-store.service';
+import { sleep } from './utils';
 
 declare let amplitude: any;
 
@@ -97,10 +99,14 @@ export class AppBootstrapService {
 		private init_MercenariesOutOfCombatService: MercenariesOutOfCombatService,
 		private init_MercenariesSynergiesHighlightService: MercenariesSynergiesHighlightService,
 		private init_MercenariesMemoryUpdateService: MercenariesMemoryUpdateService,
+		private init_AppUiStoreService: AppUiStoreService,
 	) {}
 
 	public async init() {
 		console.log('[bootstrap] in init');
+
+		await sleep(1);
+		this.init_AppUiStoreService.start();
 
 		if (!this.loadingWindowShown) {
 			console.log('[bootstrap] initializing loading window');

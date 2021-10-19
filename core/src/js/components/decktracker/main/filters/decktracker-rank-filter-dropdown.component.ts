@@ -1,12 +1,12 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
-import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DeckRankFilterType } from '../../../../models/mainwindow/decktracker/deck-rank-filter.type';
 import { ChangeDeckRankFilterEvent } from '../../../../services/mainwindow/store/events/decktracker/change-deck-rank-filter-event';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'decktracker-rank-filter-dropdown',
@@ -34,7 +34,7 @@ export class DecktrackerRankFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.decktracker.filters?.rank,

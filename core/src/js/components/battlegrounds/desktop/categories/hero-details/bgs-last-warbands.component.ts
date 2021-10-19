@@ -7,7 +7,7 @@ import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { MinionStat } from '../../../../../models/battlegrounds/post-match/minion-stat';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService } from '../../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
 import { arraysEqual } from '../../../../../services/utils';
 import { normalizeCardId } from '../../../post-match/card-utils';
 
@@ -76,7 +76,7 @@ export class BgsLastWarbandsComponent {
 	loading = true;
 	visible = false;
 
-	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreService) {
+	constructor(private readonly allCards: CardsFacadeService, private readonly store: AppUiStoreFacadeService) {
 		this.boards$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.lastHeroPostMatchStats,

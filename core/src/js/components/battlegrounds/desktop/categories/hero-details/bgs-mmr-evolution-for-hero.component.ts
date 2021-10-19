@@ -4,7 +4,8 @@ import { Label } from 'ng2-charts';
 import { Observable } from 'rxjs/internal/Observable';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
 
 @Component({
@@ -29,7 +30,7 @@ import { arraysEqual } from '../../../../../services/utils';
 export class BgsMmrEvolutionForHeroComponent {
 	value$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds,

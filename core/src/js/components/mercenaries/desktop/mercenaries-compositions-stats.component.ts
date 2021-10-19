@@ -5,14 +5,14 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { MercenariesModeFilterType } from '../../../models/mercenaries/mercenaries-mode-filter.type';
 import { MercenariesPveDifficultyFilterType } from '../../../models/mercenaries/mercenaries-pve-difficulty-filter.type';
 import { MercenariesPvpMmrFilterType } from '../../../models/mercenaries/mercenaries-pvp-mmr-filter.type';
-import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import {
 	MercenariesComposition,
 	MercenariesGlobalStats,
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesCompositions } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
 import { MercenaryCompositionInfo, MercenaryCompositionInfoBench, MercenaryInfo } from './mercenary-info';
@@ -54,9 +54,8 @@ export class MercenariesCompositionsStatsComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
 	) {
 		this.stats$ = this.store
 			.listen$(

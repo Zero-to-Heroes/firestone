@@ -6,7 +6,8 @@ import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsActiveTimeFilterType } from '../../../../models/mainwindow/battlegrounds/bgs-active-time-filter.type';
 import { MmrGroupFilterType } from '../../../../models/mainwindow/battlegrounds/mmr-group-filter-type';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFunction } from '../../../../services/utils';
 
@@ -31,7 +32,7 @@ import { addDaysToDate, arraysEqual, daysBetweenDates, formatDate, groupByFuncti
 export class BattlegroundsPersonalStatsRatingComponent {
 	value$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.value$ = this.store
 			.listen$(
 				([main, nav]) => main.stats.gameStats.stats,

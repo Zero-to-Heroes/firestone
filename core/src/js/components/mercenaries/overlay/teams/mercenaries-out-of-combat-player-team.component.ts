@@ -13,7 +13,8 @@ import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { MercenariesReferenceData } from '../../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole } from '../../../../services/mercenaries/mercenaries-utils';
 import { PreferencesService } from '../../../../services/preferences.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildMercenariesTasksList } from '../../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual } from '../../../../services/utils';
 import { Task } from './mercenaries-team-root..component';
@@ -45,7 +46,7 @@ export class MercenariesOutOfCombatPlayerTeamComponent {
 
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {

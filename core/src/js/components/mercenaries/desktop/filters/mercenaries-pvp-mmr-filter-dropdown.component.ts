@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { combineLatest, Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { MercenariesPvpMmrFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-pvp-mmr-filter-selected-event';
 import { MmrPercentile } from '../../../../services/mercenaries/mercenaries-state-builder.service';
-import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'mercenaries-pvp-mmr-filter-dropdown',
@@ -33,12 +32,7 @@ export class MercenariesPvpMmrFilterDropdownComponent {
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
-		private readonly cdr: ChangeDetectorRef,
-	) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		this.options$ = this.store
 			.listen$(([main, nav, prefs]) => main.mercenaries.globalStats?.pvp?.mmrPercentiles)
 			.pipe(

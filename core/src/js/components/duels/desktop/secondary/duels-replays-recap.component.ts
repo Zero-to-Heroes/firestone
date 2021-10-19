@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'duels-replays-recap',
@@ -25,7 +26,7 @@ import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-s
 export class DuelsReplaysRecapComponent {
 	replays$: Observable<readonly GameStat[]>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.replays$ = this.store
 			.listen$(([main, nav]) => main.duels.personalDeckStats)
 			.pipe(

@@ -3,11 +3,11 @@ import { DeckTimeFilterType } from '@models/mainwindow/decktracker/deck-time-fil
 import { ChangeDeckTimeFilterEvent } from '@services/mainwindow/store/events/decktracker/change-deck-time-filter-event';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
-import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { formatPatch } from '@services/utils';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'decktracker-time-filter-dropdown',
@@ -33,7 +33,7 @@ export class DecktrackerTimeFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.filter$ = this.store
 			.listen$(
 				([main, nav]) => main.decktracker.filters?.time,

@@ -4,7 +4,8 @@ import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsPostMatchStatsForReview } from '../../../../../models/battlegrounds/bgs-post-match-stats-for-review';
 import { NumericTurnInfo } from '../../../../../models/battlegrounds/post-match/numeric-turn-info';
 import { BgsHeroStat } from '../../../../../models/battlegrounds/stats/bgs-hero-stat';
-import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog, currentBgHeroId } from '../../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../../services/utils';
 
 @Component({
@@ -28,7 +29,7 @@ import { arraysEqual } from '../../../../../services/utils';
 export class BgsWarbandStatsForHeroComponent {
 	values$: Observable<Value>;
 
-	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		this.values$ = combineLatest(
 			this.store.bgHeroStats$(),
 			this.store.listen$(

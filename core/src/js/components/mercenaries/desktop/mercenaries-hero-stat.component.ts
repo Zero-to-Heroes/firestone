@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MercenariesHeroSelectedEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-selected-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
 import { MercenaryInfo } from './mercenary-info';
 
@@ -82,7 +82,7 @@ export class MercenariesHeroStatComponent {
 	playerWinrate: number;
 	playerGamesPlayed: number;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {}
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {}
 
 	select() {
 		this.store.send(new MercenariesHeroSelectedEvent(this.cardId));

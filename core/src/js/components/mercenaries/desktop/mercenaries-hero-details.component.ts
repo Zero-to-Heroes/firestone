@@ -15,7 +15,8 @@ import {
 } from '../../../services/mercenaries/mercenaries-state-builder.service';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { filterMercenariesHeroStats, filterMercenariesRuns } from '../../../services/ui-store/mercenaries-ui-helper';
 import { arraysEqual, groupByFunction, sumOnArray } from '../../../services/utils';
 import { MercenaryAbility, MercenaryEquipment, MercenaryInfo } from './mercenary-info';
@@ -173,7 +174,7 @@ export class MercenariesHeroDetailsComponent {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly allCards: CardsFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {

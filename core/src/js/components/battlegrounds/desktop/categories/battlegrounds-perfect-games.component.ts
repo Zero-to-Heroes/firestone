@@ -4,7 +4,8 @@ import { Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { GroupedReplays } from '../../../../models/mainwindow/replays/grouped-replays';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { getMmrThreshold } from '../../../../services/ui-store/bgs-ui-helper';
 import { arraysEqual, groupByFunction } from '../../../../services/utils';
 
@@ -35,7 +36,7 @@ export class BattlegroundsPerfectGamesComponent implements OnDestroy {
 	private displayedReplays: readonly GameStat[] = [];
 	private gamesIterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
 		this.sub$$ = this.store
 			.listen$(
 				([main, nav]) => main.battlegrounds.perfectGames,

@@ -3,7 +3,7 @@ import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesSelectCompositionEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-composition-event';
 import { getHeroRole } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { MercenaryCompositionInfo, MercenaryCompositionInfoBench } from './mercenary-info';
 
 @Component({
@@ -80,7 +80,7 @@ export class MercenariesCompositionStatComponent {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly cards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 	) {}
 
 	select() {

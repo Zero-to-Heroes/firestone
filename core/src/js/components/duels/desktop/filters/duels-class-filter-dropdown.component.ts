@@ -7,7 +7,7 @@ import { classes, formatClass } from '../../../../services/hs-utils';
 import { DuelsTopDecksClassFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-top-decks-class-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'duels-class-filter-dropdown',
@@ -38,7 +38,7 @@ export class DuelsClassFilterDropdownComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.options = ['all', ...(classes as DuelsClassFilterType[])].map(

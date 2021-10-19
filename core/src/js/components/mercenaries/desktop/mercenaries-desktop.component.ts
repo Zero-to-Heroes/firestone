@@ -5,7 +5,8 @@ import { MercenariesCategoryId } from '../../../models/mercenaries/mercenary-cat
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
 import { MercenariesSelectCategoryEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-select-category-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'mercenaries-desktop',
@@ -71,7 +72,7 @@ export class MercenariesDesktopComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.mercenaries.loading)
 			.pipe(

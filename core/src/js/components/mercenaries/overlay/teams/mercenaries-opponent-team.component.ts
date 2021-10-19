@@ -1,31 +1,34 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { debounceTime, filter, map, tap } from 'rxjs/operators';
-import { MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
+import { MercenariesBattleState, MercenariesBattleTeam } from '../../../../models/mercenaries/mercenaries-battle-state';
 import { Preferences } from '../../../../models/preferences';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { PreferencesService } from '../../../../services/preferences.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildMercenariesTasksList } from '../../../../services/ui-store/mercenaries-ui-helper';
 import { Task } from './mercenaries-team-root..component';
 
 @Component({
 	selector: 'mercenaries-opponent-team',
 	styleUrls: [],
-	template: ` <mercenaries-team-root
-		[team]="team$ | async"
-		[tasks]="tasks$ | async"
-		[side]="'opponent'"
-		[trackerPositionUpdater]="trackerPositionUpdater"
-		[trackerPositionExtractor]="trackerPositionExtractor"
-		[showTasksExtractor]="showTasksExtractor"
-		[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
-		[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
-	></mercenaries-team-root>`,
+	template: `
+		<mercenaries-team-root
+			[team]="team$ | async"
+			[tasks]="tasks$ | async"
+			[side]="'opponent'"
+			[trackerPositionUpdater]="trackerPositionUpdater"
+			[trackerPositionExtractor]="trackerPositionExtractor"
+			[showTasksExtractor]="showTasksExtractor"
+			[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
+			[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
+		></mercenaries-team-root>
+	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MercenariesOpponentTeamComponent {
-	// teamExtractor = (state: MercenariesBattleState) => state.opponentTeam;
+	teamExtractor = (state: MercenariesBattleState) => state.opponentTeam;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateMercenariesTeamOpponentPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.mercenariesOpponentTeamOverlayPosition;
 	showTasksExtractor = (prefs: Preferences) => prefs.mercenariesShowTaskButton;
@@ -38,7 +41,7 @@ export class MercenariesOpponentTeamComponent {
 
 	constructor(
 		private readonly prefs: PreferencesService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {

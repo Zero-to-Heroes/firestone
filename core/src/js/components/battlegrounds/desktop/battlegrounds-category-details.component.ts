@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'battlegrounds-category-details',
@@ -38,7 +39,7 @@ import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-stor
 export class BattlegroundsCategoryDetailsComponent {
 	selectedCategoryId$: Observable<string>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.selectedCategoryId$ = this.store
 			.listen$(([main, nav]) => nav.navigationBattlegrounds.selectedCategoryId)
 			.pipe(

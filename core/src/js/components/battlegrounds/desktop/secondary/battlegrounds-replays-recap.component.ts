@@ -6,7 +6,8 @@ import { BattlegroundsCategory } from '../../../../models/mainwindow/battlegroun
 import { BattlegroundsPersonalStatsHeroDetailsCategory } from '../../../../models/mainwindow/battlegrounds/categories/battlegrounds-personal-stats-hero-details-category';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { normalizeHeroCardId } from '../../../../services/battlegrounds/bgs-utils';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({
@@ -30,7 +31,7 @@ import { arraysEqual } from '../../../../services/utils';
 export class BattlegroundsReplaysRecapComponent {
 	replays$: Observable<readonly GameStat[]>;
 
-	constructor(private readonly store: AppUiStoreService, private readonly allCards: CardsFacadeService) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly allCards: CardsFacadeService) {
 		this.replays$ = this.store
 			.listen$(
 				([main, nav]) => main.replays.allReplays,

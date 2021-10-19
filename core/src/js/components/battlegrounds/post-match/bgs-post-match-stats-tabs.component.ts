@@ -16,7 +16,8 @@ import { BgsHeroStat } from '../../../models/battlegrounds/stats/bgs-hero-stat';
 import { BgsPostMatchStatsFilterChangeEvent } from '../../../services/battlegrounds/store/events/bgs-post-match-stats-filter-change-event';
 import { BattlegroundsStoreEvent } from '../../../services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'bgs-post-match-stats-tabs',
@@ -112,7 +113,7 @@ export class BgsPostMatchStatsTabsComponent implements AfterViewInit {
 	constructor(
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.heroStat$ = combineLatest(this.store.bgHeroStats$(), this.currentHeroId$$.asObservable()).pipe(
 			filter(([heroStats, heroId]) => !!heroStats?.length && !!heroId),

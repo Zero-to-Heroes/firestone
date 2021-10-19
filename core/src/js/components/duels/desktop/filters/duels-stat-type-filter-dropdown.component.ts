@@ -6,7 +6,7 @@ import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-typ
 import { DuelsStatTypeFilterSelectedEvent } from '../../../../services/mainwindow/store/events/duels/duels-stat-type-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'duels-stat-type-filter-dropdown',
@@ -37,7 +37,7 @@ export class DuelsStatTypeFilterDropdownComponent implements AfterViewInit {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.options = [

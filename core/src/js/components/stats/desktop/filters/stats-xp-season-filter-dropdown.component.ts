@@ -6,7 +6,7 @@ import { StatsXpGraphSeasonFilterType } from '../../../../models/mainwindow/stat
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { StatsXpGraphFilterSelectedEvent } from '../../../../services/mainwindow/store/events/stats/stats-xp-graph-filter-selected-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'stats-xp-season-filter-dropdown',
@@ -32,7 +32,7 @@ export class StatsXpSeasonFilterDropdownComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.filter$ = this.store
 			.listen$(([main, nav]) => main.stats.filters.xpGraphSeasonFilter)
 			.pipe(

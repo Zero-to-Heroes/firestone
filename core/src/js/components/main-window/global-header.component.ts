@@ -5,7 +5,8 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { NavigationBackEvent } from '../../services/mainwindow/store/events/navigation/navigation-back-event';
 import { NavigationNextEvent } from '../../services/mainwindow/store/events/navigation/navigation-next-event';
 import { OverwolfService } from '../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'global-header',
@@ -42,7 +43,7 @@ export class GlobalHeaderComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreService) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		this.text$ = this.store
 			.listen$(([main, nav]) => nav.text)
 			.pipe(

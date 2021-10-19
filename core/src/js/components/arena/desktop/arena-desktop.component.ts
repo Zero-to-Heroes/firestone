@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { ArenaCategory } from '../../../models/mainwindow/arena/arena-category';
 import { ArenaCategoryType } from '../../../models/mainwindow/arena/arena-category.type';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
 
 @Component({
@@ -46,7 +47,7 @@ export class ArenaDesktopComponent {
 	category$: Observable<ArenaCategory>;
 	categories$: Observable<readonly ArenaCategory[]>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.arena.loading)
 			.pipe(

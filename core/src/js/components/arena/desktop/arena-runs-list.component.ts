@@ -7,7 +7,8 @@ import { ArenaRun } from '../../../models/arena/arena-run';
 import { ArenaTimeFilterType } from '../../../models/arena/arena-time-filter.type';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { PatchInfo } from '../../../models/patches';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual, groupByFunction } from '../../../services/utils';
 
 @Component({
@@ -38,7 +39,7 @@ export class ArenaRunsListComponent implements OnDestroy {
 	private displayedReplays: readonly ArenaRun[] = [];
 	private gamesIterator: IterableIterator<void>;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {
 		// TODO perf: split this into two observables, so that we don't reocmpute the
 		// arena runs when a filter changes?
 		this.sub$$ = this.store

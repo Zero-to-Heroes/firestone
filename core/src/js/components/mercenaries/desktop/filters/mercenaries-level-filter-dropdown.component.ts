@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { MercenariesHeroLevelFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-hero-level-filter-selected-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'mercenaries-hero-level-filter-dropdown',
@@ -32,12 +30,7 @@ export class MercenariesHeroLevelFilterDropdownComponent {
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
-		private readonly cdr: ChangeDetectorRef,
-	) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		this.options = [
 			{
 				value: '0',

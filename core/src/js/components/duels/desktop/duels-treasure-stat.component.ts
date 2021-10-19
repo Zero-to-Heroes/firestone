@@ -7,7 +7,8 @@ import { DuelsHeroSortFilterType } from '../../../models/duels/duels-hero-sort-f
 import { DuelsHeroPlayerStat } from '../../../models/duels/duels-player-stats';
 import { DuelsRun } from '../../../models/duels/duels-run';
 import { DuelsStateBuilderService } from '../../../services/duels/duels-state-builder.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import {
 	buildDuelsHeroTreasurePlayerStats,
 	filterDuelsRuns,
@@ -36,7 +37,7 @@ export class DuelsTreasureStatsComponent {
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.stats$ = this.store

@@ -1,12 +1,11 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
-import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsSimulatorMinionTierFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-simulator-minion-tier-filter-selected-event';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'bgs-sim-minion-tier-filter',
@@ -36,11 +35,7 @@ export class BattlegroundsSimulatorMinionTierFilterDropdownComponent implements 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private collator = new Intl.Collator('en-US');
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
-	) {
+	constructor(private readonly ow: OverwolfService, private readonly store: AppUiStoreFacadeService) {
 		const tiers = [1, 2, 3, 4, 5, 6];
 		this.options = [
 			{

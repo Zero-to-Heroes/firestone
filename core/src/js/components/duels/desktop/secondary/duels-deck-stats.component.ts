@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { DeckInfo, getCurrentDeck } from '../../../../services/ui-store/duels-ui-helper';
 
 @Component({
@@ -52,7 +53,7 @@ import { DeckInfo, getCurrentDeck } from '../../../../services/ui-store/duels-ui
 export class DuelsDeckStatsComponent {
 	deckInfo$: Observable<DeckInfo>;
 
-	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		this.deckInfo$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.personalDeckStats,

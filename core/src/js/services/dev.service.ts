@@ -236,6 +236,9 @@ export class DevService {
 			if (event.Type === 'BATTLEGROUNDS_PLAYER_BOARD') {
 				await sleep(3000);
 			}
+			if (event.Type === 'TURN_START') {
+				await sleep(3000);
+			}
 
 			if (awaitEvents) {
 				await this.gameEvents.dispatchGameEvent({ ...event });

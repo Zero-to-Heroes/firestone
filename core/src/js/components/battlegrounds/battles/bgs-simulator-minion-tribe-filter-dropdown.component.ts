@@ -2,11 +2,11 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from 
 import { CardsFacadeService } from '@services/cards-facade.service';
 import { MainWindowStoreEvent } from '@services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '@services/overwolf.service';
-import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { BgsSimulatorMinionTribeFilterSelectedEvent } from '../../../services/mainwindow/store/events/battlegrounds/simulator/bgs-simulator-minion-tribe-filter-selected-event';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 import { capitalizeFirstLetter } from '../../../services/utils';
 
 @Component({
@@ -40,7 +40,7 @@ export class BattlegroundsSimulatorMinionTribeFilterDropdownComponent implements
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		const battlegroundsCards = this.allCards.getCards().filter((card) => !!card.techLevel);
 		const uniqueTribes = [...new Set(battlegroundsCards.map((card) => card.race?.toLowerCase()))].filter(

@@ -9,10 +9,10 @@ import {
 import { ReferenceCard } from '@firestone-hs/reference-data';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { MercenariesSynergiesHighlightService } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../../services/utils';
 
 @Component({
@@ -43,9 +43,8 @@ export class MercenariesOutOfCombatTreasureSelectionComponent implements AfterVi
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly allCards: CardsFacadeService,
 	) {
 		this.treasures$ = combineLatest(this.store.listenMercenariesOutOfCombat$(([state, prefs]) => state)).pipe(
 			filter(([[state]]) => !!state?.treasureSelection?.treasures?.length),

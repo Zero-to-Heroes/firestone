@@ -388,6 +388,7 @@ import { SettingsCommunicationService } from '../../services/settings/settings-c
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
 import { StatsStateBuilderService } from '../../services/stats/stats-state-builder.service';
+import { AppUiStoreFacadeService } from '../../services/ui-store/app-ui-store-facade.service';
 import { AppUiStoreService } from '../../services/ui-store/app-ui-store.service';
 import { UserService } from '../../services/user.service';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
@@ -787,6 +788,7 @@ const components = [
 		ApiRunner,
 
 		AppUiStoreService,
+		AppUiStoreFacadeService,
 		CardsInitService,
 		CardsFacadeService,
 		RefCards,

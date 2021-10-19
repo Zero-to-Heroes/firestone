@@ -8,7 +8,8 @@ import { BgsHeroStatsFilterId } from '../../../../models/mainwindow/battleground
 import { SelectBattlegroundsPersonalStatsHeroTabEvent } from '../../../../services/mainwindow/store/events/battlegrounds/select-battlegrounds-personal-stats-hero-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService, cdLog, currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog, currentBgHeroId } from '../../../../services/ui-store/app-ui-store.service';
 
 @Component({
 	selector: 'battlegrounds-personal-stats-hero-details',
@@ -53,7 +54,7 @@ export class BattlegroundsPersonalStatsHeroDetailsComponent implements AfterView
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.tabs$ = this.store

@@ -3,7 +3,8 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, startWith, tap } from 'rxjs/operators';
 import { StatsCategory } from '../../../models/mainwindow/stats/stats-category';
 import { StatsCategoryType } from '../../../models/mainwindow/stats/stats-category.type';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
 
 @Component({
@@ -44,7 +45,7 @@ export class StatsDesktopComponent {
 	category$: Observable<StatsCategory>;
 	categories$: Observable<readonly StatsCategory[]>;
 
-	constructor(private readonly store: AppUiStoreService) {
+	constructor(private readonly store: AppUiStoreFacadeService) {
 		this.loading$ = this.store
 			.listen$(([main, nav]) => main.stats.loading)
 			.pipe(

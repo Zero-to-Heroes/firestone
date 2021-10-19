@@ -14,7 +14,6 @@ import { BgsBattleSimulationUpdateEvent } from '@services/battlegrounds/store/ev
 import { BgsSelectBattleEvent } from '@services/battlegrounds/store/events/bgs-select-battle-event';
 import { BattlegroundsStoreEvent } from '@services/battlegrounds/store/events/_battlegrounds-store-event';
 import { OverwolfService } from '@services/overwolf.service';
-import { AppUiStoreService } from '@services/ui-store/app-ui-store.service';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { BgsFaceOffWithSimulation } from '../../../models/battlegrounds/bgs-face-off-with-simulation';
@@ -22,6 +21,7 @@ import { BgsGame } from '../../../models/battlegrounds/bgs-game';
 import { BgsPanel } from '../../../models/battlegrounds/bgs-panel';
 import { BgsBattlesPanel } from '../../../models/battlegrounds/in-game/bgs-battles-panel';
 import { BgsBattleSimulationResetEvent } from '../../../services/battlegrounds/store/events/bgs-battle-simulation-reset-event';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'bgs-battles',
@@ -121,7 +121,7 @@ export class BgsBattlesComponent implements AfterViewInit, OnDestroy {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly cdr: ChangeDetectorRef,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 	) {
 		this.faceOff$ = this.store
 			.listenBattlegrounds$(

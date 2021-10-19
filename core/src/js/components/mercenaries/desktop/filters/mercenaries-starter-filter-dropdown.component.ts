@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CardsFacadeService } from '@services/cards-facade.service';
 import { IOption } from 'ng-select';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { MercenariesStarterFilterType } from '../../../../models/mercenaries/mercenaries-starter-filter.type';
 import { MercenariesStarterFilterSelectedEvent } from '../../../../services/mainwindow/store/events/mercenaries/mercenaries-starter-filter-selected-event';
-import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'mercenaries-starter-filter-dropdown',
@@ -33,12 +31,7 @@ export class MercenariesStarterFilterDropdownComponent {
 
 	filter$: Observable<{ filter: string; placeholder: string; visible: boolean }>;
 
-	constructor(
-		private readonly ow: OverwolfService,
-		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
-		private readonly cdr: ChangeDetectorRef,
-	) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		this.options = [
 			{
 				value: 'all',

@@ -3,7 +3,8 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { SetCard } from '../../../models/set';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { DeckInfo, getCurrentDeck } from '../../../services/ui-store/duels-ui-helper';
 import { arraysEqual } from '../../../services/utils';
 
@@ -93,7 +94,7 @@ export class DuelsPersonalDeckDetailsComponent {
 	currentDeck$: Observable<'initial' | 'final'> = this.currentDeck.asObservable();
 	currentRunIndex = new BehaviorSubject<number>(0);
 
-	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		this.expandedRunIds$ = this.store
 			.listen$(([main, nav]) => nav.navigationDuels.expandedRunIds)
 			.pipe(map(([runIds]) => runIds));

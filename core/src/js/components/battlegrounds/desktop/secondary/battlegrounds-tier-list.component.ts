@@ -5,7 +5,8 @@ import { filter, map, tap } from 'rxjs/operators';
 import { BgsHeroStat, BgsHeroTier } from '../../../../models/battlegrounds/stats/bgs-hero-stat';
 import { getTribeName } from '../../../../services/battlegrounds/bgs-utils';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { groupByFunction, sumOnArray } from '../../../../services/utils';
 import { getBgsRankFilterLabelFor } from '../filters/battlegrounds-rank-filter-dropdown.component';
 import { getBgsTimeFilterLabelFor } from '../filters/battlegrounds-time-filter-dropdown.component';
@@ -41,7 +42,7 @@ export class BattlegroundsTierListComponent {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.stats$ = combineLatest(

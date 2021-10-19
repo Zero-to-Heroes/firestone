@@ -6,7 +6,8 @@ import { DuelsHeroPlayerStat } from '../../../../models/duels/duels-player-stats
 import { DuelsStatTypeFilterType } from '../../../../models/duels/duels-stat-type-filter.type';
 import { CardsFacadeService } from '../../../../services/cards-facade.service';
 import { DuelsStateBuilderService } from '../../../../services/duels/duels-state-builder.service';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { buildDuelsHeroPlayerStats, filterDuelsHeroStats } from '../../../../services/ui-store/duels-ui-helper';
 import { DuelsTier, DuelsTierItem } from './duels-tier';
 
@@ -28,7 +29,7 @@ export class DuelsHeroTierListComponent {
 	tiers$: Observable<readonly DuelsTier[]>;
 
 	constructor(
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {

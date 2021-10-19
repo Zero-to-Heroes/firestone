@@ -10,7 +10,8 @@ import { CardsFacadeService } from '../../../services/cards-facade.service';
 import { MercenariesPersonalHeroesSortEvent } from '../../../services/mainwindow/store/events/mercenaries/mercenaries-personal-heroes-sort-event';
 import { getHeroRole, normalizeMercenariesCardId } from '../../../services/mercenaries/mercenaries-utils';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { areDeepEqual, sumOnArray } from '../../../services/utils';
 
 @Component({
@@ -76,7 +77,7 @@ export class MercenariesPersonalHeroStatsComponent {
 
 	constructor(
 		private readonly ow: OverwolfService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 		private readonly allCards: CardsFacadeService,
 	) {
@@ -329,7 +330,7 @@ export class SortableLabelComponent {
 	_isSortable = true;
 	_sort: MercenariesPersonalHeroesSortCriteria;
 
-	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreService) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly store: AppUiStoreFacadeService) {}
 
 	startSort() {
 		if (!this._isSortable) {

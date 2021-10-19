@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { DuelsLeaderboardEntry } from '@firestone-hs/duels-leaderboard';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map, tap } from 'rxjs/operators';
-import { AppUiStoreService, cdLog } from '../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../services/ui-store/app-ui-store.service';
 import { arraysEqual } from '../../../services/utils';
 
 @Component({
@@ -35,7 +36,7 @@ import { arraysEqual } from '../../../services/utils';
 export class DuelsLeaderboardComponent {
 	values$: Observable<readonly DuelsLeaderboardEntry[]>;
 
-	constructor(private readonly store: AppUiStoreService, private readonly cdr: ChangeDetectorRef) {
+	constructor(private readonly store: AppUiStoreFacadeService, private readonly cdr: ChangeDetectorRef) {
 		this.values$ = this.store
 			.listen$(
 				([main, nav]) => main.duels.leaderboard,

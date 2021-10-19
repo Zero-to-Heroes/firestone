@@ -24,13 +24,13 @@ import { OverwolfService } from '../overwolf.service';
 import { arraysEqual } from '../utils';
 import { buildHeroStats } from './bgs-ui-helper';
 
-type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
-type GameStateSelector<T> = (gameState: GameState) => T;
-type PrefsSelector<T> = (prefs: Preferences) => T;
-type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
-type MercenariesStateSelector<T> = (state: [MercenariesBattleState, Preferences?]) => T;
-type MercenariesOutOfCombatStateSelector<T> = (state: [MercenariesOutOfCombatState, Preferences?]) => T;
-type MercenariesHighlightsSelector<T> = (state: [HighlightSelector, Preferences?]) => T;
+export type Selector<T> = (fullState: [MainWindowState, NavigationState, Preferences?]) => T;
+export type GameStateSelector<T> = (gameState: GameState) => T;
+export type PrefsSelector<T> = (prefs: Preferences) => T;
+export type BattlegroundsStateSelector<T> = (state: [BattlegroundsState, Preferences?]) => T;
+export type MercenariesStateSelector<T> = (state: [MercenariesBattleState, Preferences?]) => T;
+export type MercenariesOutOfCombatStateSelector<T> = (state: [MercenariesOutOfCombatState, Preferences?]) => T;
+export type MercenariesHighlightsSelector<T> = (state: [HighlightSelector, Preferences?]) => T;
 
 @Injectable()
 export class AppUiStoreService {
@@ -47,14 +47,32 @@ export class AppUiStoreService {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private readonly ow: OverwolfService, private allCards: CardsFacadeService) {
-		this.mainStore = this.ow.getMainWindow()?.mainWindowStoreMerged;
-		this.prefs = this.ow.getMainWindow()?.preferencesEventBus;
+		window['appStore'] = this;
+	}
+
+	// This is called after all constructors have been called, so everything should be filled
+	public start() {
+		this.mainStore = this.ow.getMainWindow().mainWindowStoreMerged;
+		this.prefs = this.ow.getMainWindow().preferencesEventBus;
 		this.deckStore = this.ow.getMainWindow().deckEventBus;
 		this.battlegroundsStore = this.ow.getMainWindow().battlegroundsStore;
 		this.mercenariesStore = this.ow.getMainWindow().mercenariesStore;
 		this.mercenariesOutOfCombatStore = this.ow.getMainWindow().mercenariesOutOfCombatStore;
 		this.mercenariesSynergiesStore = this.ow.getMainWindow().mercenariesSynergiesStore;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+
+		if (
+			!this.mainStore ||
+			!this.prefs ||
+			!this.deckStore ||
+			!this.battlegroundsStore ||
+			!this.mercenariesStore ||
+			!this.mercenariesOutOfCombatStore ||
+			!this.mercenariesSynergiesStore ||
+			!this.stateUpdater
+		) {
+			console.error('incomplete init', this);
+		}
 
 		this.init();
 	}

@@ -5,7 +5,8 @@ import { filter, map, tap } from 'rxjs/operators';
 import { DuelsRun } from '../../../../models/duels/duels-run';
 import { GameStat } from '../../../../models/mainwindow/stats/game-stat';
 import { formatClass } from '../../../../services/hs-utils';
-import { AppUiStoreService, cdLog } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
+import { cdLog } from '../../../../services/ui-store/app-ui-store.service';
 import { filterDuelsRuns } from '../../../../services/ui-store/duels-ui-helper';
 import { groupByFunction } from '../../../../services/utils';
 @Component({
@@ -81,7 +82,7 @@ export class DuelsClassesRecapComponent {
 
 	constructor(
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.stat$ = this.store

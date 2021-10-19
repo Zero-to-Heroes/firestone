@@ -6,7 +6,7 @@ import { filter, map, tap } from 'rxjs/operators';
 import { BgsHeroFilterSelectedEvent } from '../../../../services/mainwindow/store/events/battlegrounds/bgs-hero-filter-selected-event';
 import { MainWindowStoreEvent } from '../../../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Component({
 	selector: 'battlegrounds-hero-filter-dropdown',
@@ -39,7 +39,7 @@ export class BattlegroundsHeroFilterDropdownComponent implements AfterViewInit {
 	constructor(
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly cdr: ChangeDetectorRef,
 	) {
 		this.options = [

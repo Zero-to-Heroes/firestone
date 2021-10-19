@@ -8,7 +8,7 @@ import {
 	MercenariesSynergiesHighlightService,
 } from '../../../../services/mercenaries/highlights/mercenaries-synergies-highlight.service';
 import { OverwolfService } from '../../../../services/overwolf.service';
-import { AppUiStoreService } from '../../../../services/ui-store/app-ui-store.service';
+import { AppUiStoreFacadeService } from '../../../../services/ui-store/app-ui-store-facade.service';
 
 @Directive({
 	selector: '[mercenariesHighlight]',
@@ -23,7 +23,7 @@ export class MercenariesHighlightDirective implements AfterViewInit, OnDestroy {
 	private subscription$$: Subscription;
 
 	constructor(
-		private readonly store: AppUiStoreService,
+		private readonly store: AppUiStoreFacadeService,
 		private readonly ow: OverwolfService,
 		private readonly allCards: CardsFacadeService,
 		private readonly el: ElementRef,
