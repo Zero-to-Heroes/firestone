@@ -24,9 +24,7 @@ export class MercenariesBattleState {
 }
 
 export class MercenariesBattleTeam {
-	readonly mercenaries: readonly BattleMercenary[] = [];
-	// readonly activeAuras;
-	// readonly globalTreasures;
+	readonly mercenaries: readonly BattleMercenary[];
 
 	public static create(base: Partial<NonFunctionProperties<MercenariesBattleTeam>>): MercenariesBattleTeam {
 		return Object.assign(new MercenariesBattleTeam(), base);
@@ -37,16 +35,16 @@ export class MercenariesBattleTeam {
 	}
 
 	public getMercenary(entityId: number): BattleMercenary {
-		return this.mercenaries.find((merc) => merc.entityId === entityId);
+		return (this.mercenaries ?? []).find((merc) => merc.entityId === entityId);
 	}
 
 	public updateMercenary(
 		entityId: number,
 		base: Partial<NonFunctionProperties<BattleMercenary>>,
 	): MercenariesBattleTeam {
-		const isPresent = this.mercenaries.some((merc) => merc.entityId === entityId);
+		const isPresent = (this.mercenaries ?? []).some((merc) => merc.entityId === entityId);
 		const newMercenaries: readonly BattleMercenary[] = isPresent
-			? this.mercenaries.map((merc) => (merc.entityId === entityId ? merc.update(base) : merc))
+			? (this.mercenaries ?? []).map((merc) => (merc.entityId === entityId ? merc.update(base) : merc))
 			: updateFirstElementWithoutProp<BattleMercenary>(
 					this.mercenaries,
 					(merc: BattleMercenary) => merc.entityId,
@@ -66,7 +64,7 @@ export class BattleMercenary {
 	readonly role: 'caster' | 'fighter' | 'protector';
 	readonly level: number;
 	readonly inPlay: boolean;
-	readonly equipment: BattleEquipment = new BattleEquipment();
+	readonly equipment: BattleEquipment;
 	// TODO: update the ability infos based on the equipment
 	readonly abilities: readonly BattleAbility[];
 	// The latest entry is the move they have queued right now (only in PvE)
@@ -81,26 +79,26 @@ export class BattleMercenary {
 	}
 
 	public getAbility(entityId): BattleAbility {
-		return this.abilities.find((ability) => ability.entityId === entityId);
+		return (this.abilities ?? []).find((ability) => ability.entityId === entityId);
 	}
 
 	public updateAbility(entityId: number, cardId: string, base: BattleAbility): BattleMercenary {
-		const isEntityIdPresent = this.abilities.some((ability) => ability.entityId === entityId);
-		const isCardIdPresent = this.abilities.some(
+		const isEntityIdPresent = (this.abilities ?? []).some((ability) => ability.entityId === entityId);
+		const isCardIdPresent = (this.abilities ?? []).some(
 			(ability) => normalizeMercenariesCardId(ability.cardId) === normalizeMercenariesCardId(cardId),
 		);
-		const hasElementWithoutEntityId = this.abilities.some((ability) => !ability.entityId);
+		const hasElementWithoutEntityId = (this.abilities ?? []).some((ability) => !ability.entityId);
 		const newAbilities = isEntityIdPresent
-			? this.abilities.map((ability) => (ability.entityId === entityId ? ability.update(base) : ability))
+			? (this.abilities ?? []).map((ability) => (ability.entityId === entityId ? ability.update(base) : ability))
 			: isCardIdPresent
-			? this.abilities.map((ability) =>
+			? (this.abilities ?? []).map((ability) =>
 					normalizeMercenariesCardId(ability.cardId) === normalizeMercenariesCardId(cardId)
 						? ability.update(base)
 						: ability,
 			  )
 			: hasElementWithoutEntityId
-			? updateFirstElementWithoutProp(this.abilities, (ability: BattleAbility) => ability.entityId, base)
-			: [...this.abilities, base];
+			? updateFirstElementWithoutProp(this.abilities ?? [], (ability: BattleAbility) => ability.entityId, base)
+			: [...(this.abilities ?? []), base];
 		return this.update({ abilities: newAbilities });
 	}
 

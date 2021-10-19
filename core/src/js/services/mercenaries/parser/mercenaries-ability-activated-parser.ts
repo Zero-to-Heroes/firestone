@@ -1,6 +1,6 @@
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
+import { BattleAbility, MercenariesBattleState } from '../../../models/mercenaries/mercenaries-battle-state';
 import { CardsFacadeService } from '../../cards-facade.service';
 import { MercenariesParser } from './_mercenaries-parser';
 
@@ -33,15 +33,14 @@ export class MercenariesAbilityActivatedParser implements MercenariesParser {
 			console.warn('[merc-ability-activated-parser] missing owner', ownerEntityId);
 			return battleState;
 		}
-
-		const ability = abilityOwner.getAbility(entityId);
-		if (!ability) {
-			console.warn('could not find ability to activate', abilityOwner, entityId, event, battleState);
-		}
-		const newAbility = ability.update({
-			totalUsed: (ability.totalUsed ?? 0) + 1,
-		});
-		const newMerc = abilityOwner.updateAbility(entityId, cardId, newAbility);
+		const existingAbility = abilityOwner.getAbility(entityId);
+		const newMerc = abilityOwner.updateAbility(
+			entityId,
+			cardId,
+			BattleAbility.create({
+				totalUsed: (existingAbility?.totalUsed ?? 0) + 1,
+			}),
+		);
 		const newTeam = team.updateMercenary(newMerc.entityId, newMerc);
 		return battleState.update({
 			playerTeam: isPlayer ? newTeam : battleState.playerTeam,

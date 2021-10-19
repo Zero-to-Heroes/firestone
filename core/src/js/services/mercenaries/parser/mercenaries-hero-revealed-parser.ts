@@ -57,7 +57,6 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 			  )
 			: null;
 
-		console.debug('hero revealed', event, battleState);
 		const refMercCard = normalizedCardId ? this.allCards.getCard(normalizedCardId) : null;
 		const refMercEquipment = event.additionalData.mercenariesEquipmentId
 			? this.allCards.getCardFromDbfId(event.additionalData.mercenariesEquipmentId)
@@ -113,7 +112,7 @@ export class MercenariesHeroRevealedParser implements MercenariesParser {
 		});
 
 		const newTeam = team.update({
-			mercenaries: [...team.mercenaries, mercenary] as readonly BattleMercenary[],
+			mercenaries: [...(team.mercenaries ?? []), mercenary] as readonly BattleMercenary[],
 		} as MercenariesBattleTeam);
 		return battleState.update({
 			playerTeam: isPlayer ? newTeam : battleState.playerTeam,
