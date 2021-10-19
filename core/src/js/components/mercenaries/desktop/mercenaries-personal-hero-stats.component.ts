@@ -114,9 +114,10 @@ export class MercenariesPersonalHeroStatsComponent {
 							? Math.min(taskChain.tasks.length, currentTaskStep + 1)
 							: currentTaskStep;
 
-						const currentTaskDescription = currentStep
-							? [...taskChain.tasks].sort((a, b) => a.id - b.id)[currentStep].description
-							: null;
+						const currentTaskDescription =
+							currentStep != null
+								? [...taskChain.tasks].sort((a, b) => a.id - b.id)[currentStep].description
+								: null;
 						return {
 							mercenaryId: refMerc.id,
 							owned: memMerc.Owned,
