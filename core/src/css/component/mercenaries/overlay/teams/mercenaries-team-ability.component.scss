@@ -154,4 +154,38 @@
 			justify-content: center;
 		}
 	}
+
+	.ability-speed {
+		.value {
+			font-family: Sumana;
+			font-weight: 700;
+			font-size: 14px;
+			color: white;
+			text-shadow: -1px -1px 0 var(--color-7), 0px -1px 0 var(--color-7), 1px -1px 0 var(--color-7),
+				-1px 1px 0 var(--color-7), 0px 1px 0 var(--color-7), 1px 1px 0 var(--color-7);
+			height: 100%;
+			display: flex;
+			align-items: center;
+			position: absolute;
+			z-index: 1;
+			left: 11px;
+			top: 2px;
+		}
+
+		.speed-icon {
+			width: 15px;
+			position: relative;
+		}
+
+		&.buff {
+			.value {
+				color: #61ff47;
+			}
+		}
+		&.debuff {
+			.value {
+				color: #ff4747;
+			}
+		}
+	}
 }

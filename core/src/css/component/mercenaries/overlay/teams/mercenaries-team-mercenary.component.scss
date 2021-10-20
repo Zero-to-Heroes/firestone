@@ -68,6 +68,23 @@
 			opacity: 0.6;
 		}
 
+		.item-icon {
+			flex-grow: 0;
+			flex-shrink: 0;
+			display: flex;
+			flex-direction: column;
+			width: 20px;
+			position: relative;
+			top: 0;
+			left: 0;
+			z-index: 9;
+			// margin-right: 20px;
+
+			.icon {
+				width: 100%;
+			}
+		}
+
 		.name {
 			flex-grow: 1;
 			display: flex;

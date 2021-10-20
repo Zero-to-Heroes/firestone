@@ -54,19 +54,24 @@ export class MercenariesTeamMercenaryComponent {
 				: `https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_icon_golden_${value.role?.toLowerCase()}.png?v=2`;
 		this.name = value.cardId ? refMercenaryCard.name ?? 'Unrecognized Mercernary' : 'Unknown Mercenary';
 		this.level = value.level;
-		this.abilities = (value.abilities ?? []).map((ability) => ({
-			type: 'ability',
-			cardId: ability.cardId,
-			cardImage: ability.isTreasure
-				? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png?v=2)`
-				: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png?v=2)`,
-			name: this.allCards.getCard(ability.cardId).name,
-			speed: ability.speed,
-			cooldown: ability.cooldown,
-			cooldownLeft: ability.cooldownLeft,
-			isTreasure: ability.isTreasure,
-			totalUsed: ability.totalUsed,
-		}));
+		this.abilities = (value.abilities ?? []).map((ability) => {
+			const abilityCard = this.allCards.getCard(ability.cardId);
+			return {
+				type: 'ability',
+				cardId: ability.cardId,
+				cardImage: ability.isTreasure
+					? `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_treasure_background.png?v=2)`
+					: `url(https://static.zerotoheroes.com/hearthstone/asset/firestone/mercenaries_ability_background.png?v=2)`,
+				name: abilityCard.name,
+				speed: ability.speed ?? abilityCard.cost,
+				cooldown: ability.cooldown ?? abilityCard.mercenaryAbilityCooldown,
+				cooldownLeft: ability.cooldownLeft,
+				isTreasure: ability.isTreasure,
+				totalUsed: ability.totalUsed,
+				speedModifier: ability.speedModifier,
+				heroSpeedModifier: value.speedModifier,
+			};
+		});
 		this.equipment = value.equipment
 			? ({
 					type: 'equipment',

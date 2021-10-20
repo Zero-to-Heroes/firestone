@@ -70,6 +70,7 @@ export class BattleMercenary {
 	readonly equipment: BattleEquipment;
 	// TODO: update the ability infos based on the equipment
 	readonly abilities: readonly BattleAbility[];
+	readonly speedModifier: BattleSpeedModifier;
 	// The latest entry is the move they have queued right now (only in PvE)
 	// readonly commandsHistory: readonly BattleCommand[];
 
@@ -135,6 +136,7 @@ export class BattleAbility {
 	// If totalUsed = null, we don't know for sure they have the ability, so show it differently in the UI
 	readonly totalUsed: number;
 	readonly isTreasure: boolean;
+	readonly speedModifier: BattleSpeedModifier;
 
 	public static create(base: Partial<NonFunctionProperties<BattleAbility>>): BattleAbility {
 		return Object.assign(new BattleAbility(), base);
@@ -151,4 +153,12 @@ export class BattleTreasure {
 	public static create(base: NonFunctionProperties<BattleTreasure>): BattleTreasure {
 		return Object.assign(new BattleTreasure(), base);
 	}
+}
+
+export interface BattleSpeedModifier {
+	readonly value: number;
+	readonly influences: readonly {
+		cardId: string;
+		value: number;
+	}[];
 }

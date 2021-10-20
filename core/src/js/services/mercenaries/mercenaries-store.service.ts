@@ -16,6 +16,7 @@ import { MercenariesOverlayHandler } from './overlay-handler/_mercenaries-overla
 import { MercenariesAbilityActivatedParser } from './parser/mercenaries-ability-activated-parser';
 import { MercenariesAbilityRevealedParser } from './parser/mercenaries-ability-revealed-parser';
 import { MercenariesAbilityUpdatedParser } from './parser/mercenaries-ability-updated-parser';
+import { MercenariesBuffsParser } from './parser/mercenaries-buffs-parser';
 import { MercenariesCooldownUpdatedParser } from './parser/mercenaries-cooldown-updated-parser';
 import { MercenariesEquipmentRevealedParser } from './parser/mercenaries-equipment-revealed-parser';
 import { MercenariesEquipmentUpdatedParser } from './parser/mercenaries-equipment-updated-parser';
@@ -98,7 +99,7 @@ export class MercenariesStoreService {
 			let state = battleState;
 			for (const parser of parsers) {
 				state = await parser.parse(state, event, mainWindowState);
-				console.debug('[merc-store] updated state', event.type, event, state);
+				// console.debug('[merc-store] updated state', event.type, event, state);
 			}
 			this.internalStore$.next(state);
 		} catch (e) {
@@ -152,6 +153,7 @@ export class MercenariesStoreService {
 			new MercenariesCooldownUpdatedParser(this.allCards),
 			new MercenariesZoneChangedParser(),
 			new MercenariesZonePositionChangedParser(),
+			new MercenariesBuffsParser(this.allCards),
 
 			new MercenariesTeamPlayerManualCloseParser(),
 			new MercenariesTeamOpponentManualCloseParser(),
